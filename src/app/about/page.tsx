@@ -85,10 +85,11 @@ export default async function About() {
         of the request. The image is shown to you as a draft, kept only on your device; it becomes public only if you publish
         it. The book&apos;s text is never sent to a model.
       </p>
-      {/* Model-drafted wording (the image gate, Neynar score; owner, 2026-10-09; decisions not scores, branch check-decisions, 2026-11-04, pending the owner's reread). */}
+      {/* Model-drafted wording (the image gate, Neynar score; owner, 2026-10-09; decisions not scores, branch check-decisions, 2026-11-04, pending the owner's reread).
+          The assistant's words: A2 of docs/legal/assistant-any-account-step1.md, "reviewed by the coordinator, approved by the owner" (2026-11-05), as drafted. */}
       <p>
-        Neynar receives your Farcaster ID when you make an image and your account has no current check, to look up its account
-        score, which decides whether you can make images. The score isn&apos;t kept: only whether your account passed and when,
+        Neynar receives your Farcaster ID when you make an image or ask the assistant and your account has no current check, to
+        look up its account score, which decides whether you can make images and ask the assistant. The score isn&apos;t kept: only whether your account passed and when,
         for up to 90 days (a day if it didn&apos;t pass).
       </p>
       <p>Rules: {RULES}</p>
@@ -109,10 +110,11 @@ export default async function About() {
       </p>
       <h2>Signing in</h2>
       {/* Model-drafted wording. A1 of docs/legal/signin-release-2026-11-05.md, "reviewed by the coordinator, approved by
-          the owner" (2026-11-05), word for word; A2, the byline above, likewise. */}
+          the owner" (2026-11-05), word for word; A2, the byline above, likewise. The assistant's words: A1 of
+          docs/legal/assistant-any-account-step1.md, "reviewed by the coordinator, approved by the owner" (2026-11-05), as drafted. */}
       <p>
-        Reading needs no account. Saving cards and liking need a Farcaster sign-in, and the assistant a Farcaster account or one
-        linked to it. Making images needs a sign-in. Inside a
+        Reading needs no account. Saving cards and liking need a Farcaster sign-in, and the assistant a Farcaster, Lens or
+        Bluesky account that passes the site&apos;s check, or an account linked to one. Making images needs a sign-in. Inside a
         Farcaster app it happens by itself. On this website, {SIGN_IN_SERVICES.charAt(0).toLowerCase() + SIGN_IN_SERVICES.slice(1)}
       </p>
       <h2 id="services">Where it runs</h2>

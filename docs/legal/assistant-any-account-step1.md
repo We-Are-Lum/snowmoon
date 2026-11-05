@@ -1,9 +1,14 @@
-# The assistant for any account, step 1: legal and notice lines (DRAFT, for the owner's reread)
+# The assistant for any account, step 1: legal and notice lines (APPROVED)
 
-**DRAFT.** Drafted by a coding agent (Claude, a closed model by Anthropic) on branch `assistant-any-account`,
-2026-11-05, for the accounts session (snowmoon-9c), which passes them to the owner. **Not reread.** None of these lines is in
-`src/lib/legal.ts`, `src/lib/chat/notice.ts`, `src/app/about/page.tsx` or `config/consent.json` on this branch: they go in
-only with the owner's approved words, in the same release as the switch they describe (legal texts describe today).
+Drafted by a coding agent (Claude, a closed model by Anthropic) on branch `assistant-any-account`, 2026-11-05, for the
+accounts session (snowmoon-9c). **Approved, 2026-11-05: "reviewed by the coordinator, approved by the owner"**, as
+drafted, with the owner's fixes, which are applied below: Privacy §5's last sentence ("not linked to your account"), the
+notice's last sentence ("Cost records aren't linked to your account."), "or the assistant" kept in §7's Lens sentence,
+and the refusals name only links that help today (Bluesky: "a Farcaster or Lens account"; Lens: "a Farcaster account").
+Invited FIDs and admins skip Neynar for the assistant, as for images (kept). The words are in `src/lib/legal.ts`
+(Privacy uxou8g, was 9tvzf3; Terms unchanged, erie8c), `src/lib/chat/notice.ts` (item 4; notice key 1ijrpib, was
+1xrxl4h; P6e 70a28a9c8ee48471) and `src/app/about/page.tsx` (A1, A2), and ship with the switch on, in the same release
+(legal texts describe today).
 
 ## What they describe (owner, 2026-11-05)
 
@@ -42,7 +47,7 @@ ID", §7's Neynar, Lens-score and Bluesky-check sentences each name the assistan
 - After: "Your question is sent to Groq to be answered, or through Vercel AI Gateway to Groq when Groq is busy. Both
   are set to keep nothing. We keep no copy of your questions or the answers. **With your account** we record only how
   many questions you ask and when, to count the daily limit. The assistant's costs are kept only as daily totals,
-  without your **account**, to track our spending."
+  **not linked to your account**, to track our spending." (The owner's fix, 2026-11-05.)
 
 **P2. §4, the Neynar decision.**
 
@@ -121,7 +126,7 @@ Groq line are unchanged: no new service receives questions (P6i holds).
   daily limit. Cost records are kept without your ID."
 - After: "They are sent to Groq (or through Vercel AI Gateway when Groq is busy) to be answered, and never published.
   Another device won’t have them. The app records only how many you ask and when, **with your account**, to count the
-  daily limit. Cost records are kept without **it**."
+  daily limit. Cost records **aren’t linked to your account**." (The owner's fix, 2026-11-05.)
 
 Items 1 to 3 are unchanged. The changed words give a new `noticeKey`, so P6f needs the owner's reread recorded
 (`ownerReread.words`), and readers who ticked "Don't show this again" see the notice once more. P6e: the chat's code
@@ -149,7 +154,7 @@ agent's reread is enough until the switch goes on).
 
 The About assistant paragraph ("this app keeps no copy, only a count and the cost") is unchanged and still true.
 
-## The assistant's panel (not legal text; DRAFT words for the owner)
+## The assistant's panel (not legal text; approved with the refusals' fix)
 
 Built on this branch, in `src/lib/chat/who-can-ask.ts`; each follows the switch, so today's build shows the left column.
 
@@ -159,9 +164,9 @@ Built on this branch, in `src/lib/chat/who-can-ask.ts`; each follows the switch,
 | Signed in with a wallet | "Asking questions needs a Farcaster account. Sign in with one to ask." | "Asking questions needs a Farcaster, Lens or Bluesky account. Sign in with one to ask." |
 | Signed in with Lens or Bluesky, not linked | "Asking questions needs a Farcaster account. Link this account to one, or sign in with Farcaster, to ask." | (asks if it passes) |
 | Lens below the score | | "Asking questions is open to Lens accounts with a Lens score of 1,000 or more, to keep out spam accounts. Yours is below that. Link it to a Farcaster account that passes its check to ask." |
-| Bluesky too new | | "Asking questions is open to Bluesky accounts at least 30 days old, to keep out accounts made to use it. Link it to a Farcaster account that passes its check to ask." |
-| Bluesky idle | | "Asking questions is open to Bluesky accounts that posted at least 5 times in the last 30 days, to keep out unused accounts. Link it to a Farcaster account that passes its check to ask." |
-| Bluesky, a kept fail | | "Asking questions is open to Bluesky accounts at least 30 days old that posted at least 5 times in the last 30 days. Yours didn’t pass when we last checked; we can check again a day after that. Link it to a Farcaster account that passes its check to ask." |
+| Bluesky too new | | "Asking questions is open to Bluesky accounts at least 30 days old, to keep out accounts made to use it. Link it to a Farcaster or Lens account that passes its check to ask." |
+| Bluesky idle | | "Asking questions is open to Bluesky accounts that posted at least 5 times in the last 30 days, to keep out unused accounts. Link it to a Farcaster or Lens account that passes its check to ask." |
+| Bluesky, a kept fail | | "Asking questions is open to Bluesky accounts at least 30 days old that posted at least 5 times in the last 30 days. Yours didn’t pass when we last checked; we can check again a day after that. Link it to a Farcaster or Lens account that passes its check to ask." |
 | Farcaster below Neynar | | "Asking questions is open to Farcaster accounts with a Neynar score of 0.7 or more, to keep out spam accounts. Yours is 0.31." (or, from a kept fail: "Yours was below that when we last checked; we can check again in about N hours.") |
 | Neynar can't be reached | | "The assistant can’t check your account right now (Neynar, which scores Farcaster accounts, can’t be reached). Try again later." |
 | Lens / Bluesky can't be reached | | The images' words: "We can’t check your Lens account right now (the Lens API can’t be reached). Try again later." / "We can’t check your Bluesky account right now (Bluesky can’t be reached). Try again later." |
@@ -176,8 +181,9 @@ and "Keep reading without it".
 - **Terms:** no Terms line says who can ask the assistant (§4 speaks of free images and frames only), so none changes.
 - **Consent screen** (`config/consent.json`): it doesn't mention the assistant or who can ask.
 
-## Questions for the owner
+## Questions for the owner (answered 2026-11-05)
 
-1. Invited FIDs and admins skip the Neynar check for images; the assistant's gate does the same. Keep, or check
-   everyone?
-2. P6 above adds "or the assistant" to "Lens is never asked … when you open …". True, but optional: keep or drop?
+1. Invited FIDs and admins skip the Neynar check for images; the assistant's gate does the same. **Keep.**
+2. P6 above adds "or the assistant" to "Lens is never asked … when you open …". **Keep.**
+3. Refusals name only links that help today: Bluesky "Link it to a Farcaster or Lens account that passes its check to
+   ask."; Lens "Link it to a Farcaster account that passes its check to ask." **Applied.**
