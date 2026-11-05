@@ -45,9 +45,9 @@ payment from a wallet that signed for the account, and tries a payment it still 
 
 ### §6b Agents: no change
 
-Agents' frames go through Remix, which this branch doesn't connect to a person balance, so "on a Farcaster account it
-uses your free frames for the day; on a wallet account it's charged to your balance" stays true. It changes when Remix
-frames are connected.
+As built, Remix frames made from the Remix route can be paid from a person balance, but an agent's approved frame never
+is, so "on a Farcaster account it uses your free frames for the day; on a wallet account it's charged to your balance"
+stays true.
 
 ## Privacy
 

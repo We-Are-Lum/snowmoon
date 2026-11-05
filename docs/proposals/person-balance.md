@@ -1,8 +1,9 @@
 # Snowmoon: Paying per person (design)
 
 **DRAFT.** Drafted by a coding agent (Claude, a closed model by Anthropic) on branch `person-balance`, 2026-11-04, for
-the owner's task "paying per person". Nothing here is decided until the owner approves it. Nothing is applied,
-merged or switched on.
+the owner's task "paying per person". The owner answered its questions on 2026-11-04 (paying
+without the free check: yes; the account named in words; 24 hours: fine; the Terms and Privacy lines approved as
+drafted). Nothing is applied or merged.
 
 ## What the owner asked for (2026-11-04)
 
@@ -70,7 +71,7 @@ comes back.
   score or Neynar unreachable, Lens score, Bluesky check) can still pay, as wallet accounts can (owner, 2026-11-04):
   the gate lets them through `paidOnly` when their balance covers a Generate, and only the balance pays. Free
   generations still need the check, and the launch order applies to everyone. Routes that can't take a person
-  balance (Remix frames, a design's name check) keep the refusal.
+  balance (a design's name check, an agent's approved frame) keep the refusal.
 - **Credit-backs:** the same three reasons as wallets (`failed`, `refused`, `dropped`), once per debit, for exactly
   that debit, to the same person.
 - **Refunds:** never as money. Payments are final; nothing is held for anyone to withdraw. A balance can only be
@@ -92,30 +93,33 @@ public, as every Base payment is. The link is never shown on the site.
 - **Terms §6a:** a payment is added to the account that was signed in when the wallet signed to pay for it.
 - **Privacy §4:** the prepaid paragraph covers every account, and says the paying wallet's address is kept with it.
 - **Principles P6** (its prepaid exception names wallet accounts) and **`src/lib/people.ts`** ("Money follows the
-  wallet") are updated in the same release.
+  wallet") are updated on this branch.
 
 Drafts: `docs/legal/person-balance-draft.md`. They ship only in the release that switches this on.
 
 ## Switch and order
 
-`PERSON_BALANCE.enabled` in `src/lib/config.ts`, **off**. Off, the new routes answer "not available" and nothing in
-spending changes. Turning it on needs, in one deploy: the migration applied (`NEXT_person_balance.sql`), the
-Terms/Privacy lines reread by the owner, and the browser side (the sign-to-pay step and the claim), which isn't built.
+`PERSON_BALANCE.enabled` in `src/lib/config.ts`: **on** on this branch, in the same commit as the browser side and
+the approved Terms and Privacy lines. The migration (`NEXT_person_balance.sql`) must be applied before the merge
+(CLAUDE.md); until then the routes answer "not available yet" and nothing is charged to a person balance. Off: the
+routes answer 404, no panel shows and spending is as before, and the legal lines would need their earlier words back.
 
 Built on this branch: `src/lib/balance/person.ts` (the account in words, statement, intent, claim by hash, balance,
 debit, credit-back), `/api/balance`, `/api/balance/intent` and `/api/balance/claim`; the gate's `paidOnly`; Pictures'
-`reserve` and `paidPicture` paying from a person balance when the free path refuses; and the browser side
+`reserve` and `paidPicture`, and Remix's `reserve` and `generate` from the Remix route (never an agent's approved
+frame), paying from a person balance when the free path refuses; and the browser side
 (`src/components/person-balance.tsx`, `payForPerson` and `claimForPerson` in `src/lib/wallet/client.ts`), shown in
-the image composer (the composer's Generate shows the price once the person pays) and on the You page. The approved
+the image composer and the Remix panel (Generate shows the price once the person pays) and on the You page. The approved
 Terms and Privacy lines are in `src/lib/legal.ts`. Tests: `npm run test:person-balance` (the migration) and `npm run test:person-balance-code`.
 
 ## Out of scope
 
-- Remix frames (`src/lib/remix/limits.ts`) and Make's coach paying from a person balance: the contest's remixes go
-  through Pictures' path, which is wired. The others are a follow-up.
+- Make's coach paying from a person balance, and an agent's approved frame paying from one (agents can't spend
+  money, Terms §6b).
+- A wallet inside the Farcaster app (its own wallet provider): the panel needs a wallet in the browser, as a wallet
+  account's does today.
 - Moving or merging balances (wallet → FID, Bluesky → FID), and paying for someone else on purpose.
 - Any refund as money, any withdrawal, any token.
-- Agents spending a person balance (agents can't spend money, Terms §6b).
 - Payments older than 7 days (still "write to us").
 
 ## Merging with other branches
