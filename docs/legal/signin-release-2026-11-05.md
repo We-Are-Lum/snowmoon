@@ -327,6 +327,57 @@ order, as `postgres` in the Supabase SQL Editor. Item 1 is applied (0034); 3 and
   item 6 lets Lens decisions in.
 - Likely numbers at merge: 2 → 0035, 5 → 0036 (checked again against `origin/main` and production then).
 
+## Fixes after the owner's localhost sign-ins, 2026-11-05
+
+DRAFT, by a coding agent (Claude, a closed model made by Anthropic). Asked by the owner before the release merges,
+after signing in on localhost with Bluesky (nate0.bsky.social) and Lens (lens/nate0). Every new word below is DRAFT
+wording, except the Privacy §3 line (approved).
+
+- **You page** (`src/components/you-page.tsx`): the label beside the name is the account's own network (Lens,
+  Bluesky, Farcaster, Wallet); rows without a value aren't shown (a Lens or Bluesky account has no FID or address
+  row); the public-page row for a Lens or Bluesky account: "Public pages come with a Farcaster account. Link this
+  {Lens|Bluesky} account to yours, and what you make while it is linked shows on your Farcaster page."; the Wallet
+  section for one: "A {Lens|Bluesky} account has no balance here. To prepay for images and Remix frames, sign in with
+  a wallet; while it is signed in, you make them as the wallet’s account." with the wallet sign-in button; signed in
+  with a Lens or Bluesky account linked to Farcaster: "Signed in with your linked {Lens|Bluesky} account." (it said
+  "Signed in with your linked wallet."); one button style (`ic-secondary`; the link panel's "forget" button was
+  `ed-small`, unstyled on /you).
+- **Sign-in buttons** (`src/components/social-sign-in.tsx`): the Lens account list has the heading "Choose your Lens
+  account" and the same button as the one above it; the Bluesky "Continue" too.
+- **The rail and the menu** don't repeat the sign-in buttons on /you signed out (the page has them), so a sign-in
+  error shows once.
+- **The assistant**, signed out or signed in with Lens, Bluesky or a wallet: "Asking questions needs a Farcaster
+  account."
+- **Bluesky without typing a handle:** "Sign in with Bluesky" starts at Bluesky's entryway, https://bsky.social (PAR
+  with no login_hint; Bluesky's page asks which account). The finish is unchanged: the token's DID, its own DID
+  document, its PDS, and that this PDS names the issuer (bsky.social) as its authorization server; an account whose PDS
+  names another server is refused ('wrong-server'); the handle kept only if it resolves back. Checked against the live,
+  public metadata (read-only, 2026-11-05): bsky.social's issuer and endpoints pass `asMetadata`, and a Bluesky-hosted
+  PDS (puffball.us-east.host.bsky.network) names `https://bsky.social`. Under the button, "Use another server or
+  handle" opens today's handle box, filled in with the handle last signed in with on this device
+  (`snowmoon.bluesky.last-handle`, localStorage, every access in try/catch; saved only when the server's handle check
+  passed).
+- **Privacy §7, the Bluesky sign-in item (L15):** unchanged; still true word for word. From bsky.social, our server
+  still looks up the handle, the account's public record and its PDS and the sign-in server it names, and the person
+  approves on that sign-in server (bsky.social is the one the PDS names, or the sign-in is refused). Only the order
+  changes (bsky.social is asked first), and the item doesn't state an order.
+- **Privacy §3 (approved line):** the device-storage list adds "the Bluesky handle you last signed in with, to fill it
+  in next time" (owner's approval, coordinator-reviewed, 2026-11-05), fitted between "kept in that tab for at most ten
+  minutes," and "and a payment you have sent", no other word changed. Recorded on signin-lens-bluesky as
+  `LEGAL.ownerReread.privacy` 19gyyjh (was m0e1f7); on bluesky-check after the merge, 9tvzf3 (was 1tllgm9).
+  `LEGAL.effective` unchanged.
+- **One account per network in a linked group (A6)** (`src/lib/social/accounts.ts` `linkSocial`): a link is refused
+  ('same-network', 409) when the group it joins (the FID or Lens account, every account actively linked to it, and
+  those linked through a Lens account linked to it; a Lens target linked to an FID is that FID's group) already has an
+  account of the joining kind; a Lens account joining an FID brings its own linked Bluesky into the check. The check
+  and the insert are one transaction under `pg_advisory_xact_lock` on the FID and the Lens accounts involved (FID
+  first, then Lens by number, so no deadlock). Refusal: "This account already has a {Lens|Bluesky} account linked.
+  Unlink it first to link another." (DRAFT), shown where the other link refusals show.
+- **Tests:** test:signin-lens-bluesky adds B5 (bsky.social start, the handle box path, an account on a Bluesky PDS host
+  checked through its DID document, another server refused) and K4 (two Bluesky to one FID, a Bluesky via Lens plus one
+  directly, both ways, a Lens with its Bluesky, two Lens, two links racing, unlink then another). check:ui adds the
+  signed-in You page for Lens, Bluesky, Farcaster and a wallet, and the rail and menu on /you signed out.
+
 ## What's left before it can ship
 
 Who does each: **O** the owner, **C** the coordinator, **A** an agent.
@@ -355,7 +406,17 @@ Who does each: **O** the owner, **C** the coordinator, **A** an agent.
   pages); check:miniapp passed; check:principles 60 of 63, the three fails expected: P6d (accepted open item), P6k
   (Privacy awaits the reread of L12 and L16) and P6a (only on a local target: the site's own media.snowmoon.party and
   pictures.snowmoon.party count as third-party when the target is 127.0.0.1).
-- [ ] **The checks again after the switch commit** (A).
+- [x] **The checks again after the switch commit** (A, 2026-11-05 07:31–08:07 PT, `bluesky-check` at 1f882675, local
+  build at http://127.0.0.1:3210): tsc 0 errors (signin-lens-bluesky, bluesky-check, contest);
+  test:signin-lens-bluesky 21/21, test:bluesky-check 64/64, test:check-decisions 44/44, test:images-gate 130,
+  test:wallet 193, test:sql-pack 187/187; check:principles 61 of 63 (**P6k and P6l pass**; only P6d, the accepted
+  open item, and P6a, a local-target artifact, fail); check:miniapp passed; check:ui passed (59 pages) once it was
+  taught to expect the four sign-in buttons that SIGN_IN_METHODS now turns on (it had hard-coded two;
+  signin-lens-bluesky, "check:ui: the sign-in buttons it expects follow SIGN_IN_METHODS").
+- [ ] **check:snap-live runs after deploy, against production.** It doesn't work on a local target: its composer and
+  challenge-link checks compare against the public host and a production-signed link (on 127.0.0.1 they 404 or name
+  localhost). This release's `next.config.ts` change is only the local-only `NEXT_PUBLIC_SIGN_IN_ALL_FOUR` guard, not
+  the snap's headers.
 - [ ] **PR from `bluesky-check`** (one PR; it carries signin-lens-bluesky), the owner's OK, merge commit, deploy,
   live checks (check:shipped, check:principles, check:ui, check:miniapp; check:snap-live only if `next.config.ts` or
   middleware changed; this branch changes `next.config.ts`, so run it).
@@ -388,9 +449,9 @@ Before: the two migrations applied (above). Bluesky works only at **http://127.0
    ```
    mkdir ~/.snowmoon-heavy.lock
    ```
-6. Start the site with all four sign-ins shown (local only), keeping a copy of its output:
+6. Start the site, keeping a copy of its output (Lens and Bluesky are on in the config now, so no extra flag):
    ```
-   NEXT_PUBLIC_SIGN_IN_ALL_FOUR=1 npm run dev -- -H 127.0.0.1 -p 3000 2>&1 | tee /tmp/snowmoon-dev.log
+   npm run dev -- -H 127.0.0.1 -p 3000 2>&1 | tee /tmp/snowmoon-dev.log
    ```
 7. In your browser open **http://127.0.0.1:3000/you** and choose **Sign in with Lens**; sign with the wallet that
    owns your Lens account.

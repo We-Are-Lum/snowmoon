@@ -60,6 +60,12 @@
  *   the Farcaster name and no wallet option. The name is a link to the You page (/you), and the top bar shows an
  *   avatar linking there, between ? and the menu, only when signed in; /you signed out meets the floors and shows
  *   only the sign-in offer (owner, 2026-10-18).
+ * - The You page signed in (2026-11-05), at 390, light and dark, for a Lens, a Bluesky, a Farcaster and a wallet account
+ *   (planted in storage; /api/you from fixtures here): the account's own network beside its name, no row without a
+ *   value, a Lens or Bluesky account's public-page and Wallet lines about that account, one button style; "Link a
+ *   Bluesky account" starts at bsky.social, its error shows once, and "Use another server or handle" opens the handle
+ *   box filled in with the last handle; the assistant says "Asking questions needs a Farcaster account." Signed out,
+ *   /you's rail and menu don't repeat the page's sign-in buttons.
  * - The owner's image review (/you/illustrations, owner 2026-10-23) at 390, light and dark: signed out, the floors and
  *   the sign-in offer only; as the owner (API replayed from scripts/fixtures/illustration-review.json), worst first,
  *   in the owner's order (wrong, partly with a double, partly, matches, not checked), each item with its passage, its
@@ -356,8 +362,13 @@ const accountIn = (within: string) => `${within} .menu-account`;
 async function checkAccountSignedOut(page: Page, within: string, where: string) {
   const acct = page.locator(accountIn(within));
   await acct.locator('button', { hasText: 'Sign in with a wallet' }).waitFor({ timeout: 10000 }).catch(() => {});
-  const names = await acct.locator('button').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
+  // The small "Use another server or handle" link under "Sign in with Bluesky" (2026-11-05) is not a way to sign in.
+  const names = await acct.locator('button:not(.social-other)').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
   if (names.join(' | ') !== SIGN_IN_LABELS) fail(`${where}: signed out, the account offers "${names.join(' | ')}" (want ${SIGN_IN_LABELS})`);
+  if (SIGN_IN_ON.includes('bluesky')) {
+    const other = (await acct.locator('[data-method="bluesky"] button.social-other').innerText().catch(() => '')).trim();
+    if (other !== 'Use another server or handle') fail(`${where}: no "Use another server or handle" link under "Sign in with Bluesky" (${other || 'none'})`);
+  }
   // The phone menu and the wide-screen rail (owner, 2026-10-19): in the menu first in the sheet; in both, two full-width buttons at least 48px tall in the menu's
   // main font, and the owner's line under them.
   const first = await page.evaluate(() => {
@@ -424,6 +435,148 @@ async function checkSignInEquals(page: Page, scope: string, where: string, want?
   const off = offSelector(scope);
   if (off && (await page.locator(off).count())) fail(`${where}: a sign-in that is switched off (${SIGN_IN_OFF.join(', ')}) is shown`);
 }
+/**
+ * The You page signed in (2026-11-05, after the owner's Lens and Bluesky sign-ins on localhost), at 390: a Lens, a
+ * Bluesky, a Farcaster and a wallet account, each planted in storage (nothing signed) with /api/you answered from a
+ * fixture here, like the other signed-in cases. For each: the label beside the name is the account's own network; no
+ * row is shown without a value (a Lens or Bluesky account has no FID or address row); a Lens or Bluesky account's
+ * public-page row and Wallet section speak of that account (not "needs a Farcaster name", not "A Farcaster account
+ * has no balance"); every button on the page is the page's one style (ic-secondary, or ic-primary for a chosen
+ * option), apart from the "Use another server or handle" link. Lens's page offers "Link a Bluesky account": it starts
+ * at bsky.social ({ entryway: true }, answered here with a refusal, shown once), and "Use another server or handle"
+ * opens the handle box filled in with the handle last signed in with on this device. The assistant, signed in with
+ * Lens, says plainly why it needs Farcaster.
+ */
+const YOU_EMPTY_WORK = { stored: true, scenes: [], frames: [], boards: [], pictures: [] };
+const YOU_FIXTURES = {
+  lens: {
+    who: { kind: 'lens', name: 'lens/fixture', handle: null },
+    social: { here: { account: 1, kind: 'lens', name: 'lens/fixture', linked: null, offer: null, waitUntil: null }, linked: [], canAddBluesky: true },
+  },
+  bluesky: {
+    who: { kind: 'bluesky', name: 'fixture.bsky.social', handle: null },
+    social: { here: { account: 2, kind: 'bluesky', name: 'fixture.bsky.social', linked: null, offer: null, waitUntil: null }, linked: [], canAddBluesky: false },
+  },
+  farcaster: {
+    who: { kind: 'farcaster', name: '@fixture', handle: 'fixture', fid: 4242, username: 'fixture' },
+    social: { here: null, linked: [], canAddBluesky: false },
+  },
+  wallet: {
+    who: { kind: 'wallet', name: '0x1234…5678', handle: WALLET_ADDRESS, address: WALLET_ADDRESS, basename: null, short: '0x1234…5678' },
+    social: { here: null, linked: [], canAddBluesky: false },
+    prices: { imageUsd: 0.05, frameUsd: 0.2 },
+    link: { wallet: { address: WALLET_ADDRESS, short: '0x1234…5678' }, linked: null, canUnlink: false, offer: false, found: 0, to: null },
+  },
+} as const;
+const YOU_KIND = { lens: 'Lens', bluesky: 'Bluesky', farcaster: 'Farcaster', wallet: 'Wallet' } as const;
+const LAST_HANDLE = 'fixture-last.example.com';
+
+async function checkYouSignedIn(page: Page, scheme: string) {
+  const b64 = (o: object) => Buffer.from(JSON.stringify(o)).toString('base64').replace(/=+$/, '');
+  const token = `x.${b64({ sub: 'fixture', exp: 4102444800 })}.y`;
+  const planted = `Bearer ${token}`;
+  let kind: keyof typeof YOU_FIXTURES = 'lens';
+  const starts: string[] = [];
+  // Only requests carrying the planted token are answered here (the rest go on to the server): /api/you from the
+  // fixture, the wallet's balance, and 404 for the rest (agents off), so no 401 ends the planted session.
+  const answer = async (r: Route) => {
+    const req = r.request();
+    const u = new URL(req.url());
+    if (u.pathname === '/api/auth/bluesky/start') {
+      starts.push(req.postData() ?? '');
+      return r.fulfill({ status: 400, json: { error: 'Fixture: the Bluesky start was refused here.', reason: 'fixture' } });
+    }
+    if (req.headers().authorization !== planted) return r.fallback();
+    if (u.pathname === '/api/you') return r.fulfill({ json: { work: YOU_EMPTY_WORK, maintainer: false, prices: null, wallet: null, link: null, linkedWallets: [], ...YOU_FIXTURES[kind] } });
+    if (u.pathname === '/api/wallet/balance')
+      return r.fulfill({ json: { address: WALLET_ADDRESS, balanceUsd: 1.5, priceUsd: 0.05, generations: 30, markup: 0.3, open: true, payTo: WALLET_ADDRESS, usdc: WALLET_ADDRESS, packsUsd: [5, 10], linkOffer: false } });
+    if (u.pathname === '/api/chat/status') return r.fulfill({ status: 403, json: { error: 'Sign in with Farcaster to use the assistant' } });
+    return r.fulfill({ status: 404, json: { error: 'Not found' } });
+  };
+  await page.route('**/api/**', answer);
+  for (const k of Object.keys(YOU_FIXTURES) as (keyof typeof YOU_FIXTURES)[]) {
+    kind = k;
+    const where = `/you @390 (${scheme}, ${k})`;
+    await page.evaluate(
+      ({ k, token, wallet, last }) => {
+        for (const key of ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social', 'snowmoon.social.link']) localStorage.removeItem(key);
+        const exp = 4102444800;
+        if (k === 'farcaster') localStorage.setItem('snowmoon.signin', JSON.stringify({ token, fid: 4242, username: 'fixture', exp }));
+        else if (k === 'wallet') localStorage.setItem('snowmoon.wallet', JSON.stringify({ token, address: wallet, short: `${wallet.slice(0, 6)}…${wallet.slice(-4)}`, exp }));
+        else localStorage.setItem('snowmoon.social', JSON.stringify({ token, kind: k, name: k === 'lens' ? 'lens/fixture' : 'fixture.bsky.social', exp }));
+        localStorage.setItem('snowmoon.bluesky.last-handle', last);
+      },
+      { k, token, wallet: WALLET_ADDRESS, last: LAST_HANDLE },
+    );
+    await open(page, '/you');
+    const ok = await page.locator('.you-account .you-kind').first().waitFor({ timeout: 10000 }).then(() => true, () => false);
+    if (!ok) {
+      fail(`${where}: the account didn't show`);
+      continue;
+    }
+    const label = (await page.locator('.you-account .you-kind').first().innerText()).trim();
+    if (label.toLowerCase() !== YOU_KIND[k].toLowerCase()) fail(`${where}: the account is labelled "${label}", not ${YOU_KIND[k]}`);
+    const rows = await page.locator('.you-account').first().locator('.you-facts > div').evaluateAll((els) => els.map((e) => [e.querySelector('dt')?.textContent?.trim() ?? '', e.querySelector('dd')?.textContent?.trim() ?? '']));
+    for (const [dt, dd] of rows) if (!dd) fail(`${where}: the row "${dt}" has no value`);
+    const dts = rows.map(([dt]) => dt.toLowerCase());
+    if ((k === 'lens' || k === 'bluesky') && dts.some((d) => /wallet address|farcaster id|basename/.test(d))) fail(`${where}: shows a row that doesn't apply: ${dts.join(', ')}`);
+    if (k === 'farcaster' && !dts.includes('farcaster id')) fail(`${where}: no Farcaster ID row`);
+    if (k === 'wallet' && !dts.includes('wallet address')) fail(`${where}: no wallet address row`);
+    const text = await page.locator('main.you').innerText();
+    if (k === 'lens' || k === 'bluesky') {
+      if (/needs a Farcaster name/.test(text)) fail(`${where}: says the public page needs a Farcaster name`);
+      if (!text.includes('Public pages come with a Farcaster account')) fail(`${where}: the public-page row doesn't say public pages come with a Farcaster account`);
+      if (/A Farcaster account has no balance/.test(text)) fail(`${where}: the Wallet section speaks of a Farcaster account`);
+      if (!text.includes(`A ${YOU_KIND[k]} account has no balance here`)) fail(`${where}: the Wallet section doesn't speak of the ${YOU_KIND[k]} account`);
+      if (!(await page.locator('#you-wallet ~ .wallet-sign-in button, section[aria-labelledby="you-wallet"] .wallet-sign-in button').count())) fail(`${where}: the Wallet section offers no wallet sign-in`);
+    }
+    // One button style on the page: ic-secondary (ic-primary only for a chosen option), apart from the small link
+    // under "Sign in with Bluesky" and the AI labels.
+    const buttons = await page.locator('main.you button').evaluateAll((els) =>
+      els
+        .filter((e) => (e as HTMLElement).offsetParent !== null && !e.classList.contains('social-other') && !e.classList.contains('ai-label') && !e.closest('.wallet-balance'))
+        .map((e) => {
+          const st = getComputedStyle(e);
+          return { name: e.textContent?.trim() ?? '', cls: e.className, look: [st.borderTopStyle, st.borderTopWidth, st.fontFamily, st.fontSize, st.textTransform, st.borderRadius].join(' / ') };
+        }),
+    );
+    for (const b of buttons) if (!/\bic-(secondary|primary)\b/.test(b.cls)) fail(`${where}: the button "${b.name}" isn't the page's style (class "${b.cls}")`);
+    const looks = [...new Set(buttons.map((b) => b.look))];
+    if (looks.length > 1) fail(`${where}: the buttons are styled ${looks.length} ways: ${looks.join(' | ')}`);
+    if (!buttons.length) fail(`${where}: no buttons found`);
+    await checkFloors(page, where, scheme);
+    await shot(page, `phone-390-you-${k}`, scheme);
+    if (k === 'lens') {
+      // Link a Bluesky account: the main button starts at bsky.social; its refusal shows once.
+      const blue = page.locator('main.you .social-sign-in').filter({ hasText: 'Link a Bluesky account' }).first();
+      await blue.locator('button.ic-secondary').first().click();
+      await page.locator('main.you [role=alert]', { hasText: 'Fixture: the Bluesky start was refused here.' }).first().waitFor({ timeout: 10000 }).catch(() => {});
+      const last = starts.at(-1) ?? '';
+      if (last !== JSON.stringify({ entryway: true })) fail(`${where}: "Link a Bluesky account" sent ${last || 'nothing'} (want {"entryway":true}: start at bsky.social)`);
+      const shown = await page.getByText('Fixture: the Bluesky start was refused here.').count();
+      if (shown !== 1) fail(`${where}: the sign-in error shows ${shown} times (want once)`);
+      const other = blue.locator('button.social-other');
+      if ((await other.innerText().catch(() => '')).trim() !== 'Use another server or handle') fail(`${where}: no "Use another server or handle" link under the Bluesky button`);
+      else {
+        await other.click();
+        const box = blue.locator('input[type=text]');
+        const value = await box.inputValue({ timeout: 5000 }).catch(() => null);
+        if (value !== LAST_HANDLE) fail(`${where}: the handle box isn't filled in with the last handle (${value})`);
+        await checkFloors(page, `${where} (handle box)`, scheme);
+        await shot(page, 'phone-390-you-lens-handle', scheme);
+      }
+      // The assistant, signed in with Lens: why it needs Farcaster, plainly.
+      await open(page, '/assistant');
+      const said = await page.getByText('Asking questions needs a Farcaster account.').first().waitFor({ timeout: 10000 }).then(() => true, () => false);
+      if (!said) fail(`/assistant @390 (${scheme}, lens): doesn't say "Asking questions needs a Farcaster account."`);
+    }
+  }
+  await page.unroute('**/api/**', answer);
+  await page.evaluate(() => {
+    for (const key of ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social', 'snowmoon.social.link', 'snowmoon.bluesky.last-handle']) localStorage.removeItem(key);
+  });
+}
+
 /** With a wallet session: the shortened address and a Sign out that ends it (back to both options). */
 async function checkAccountWallet(page: Page, within: string, where: string) {
   const acct = page.locator(accountIn(within));
@@ -2327,6 +2480,11 @@ try {
         await shot(page, `desktop-${width}-account-wallet`, scheme);
         await checkAccountWallet(page, '.rail', `@${width} rail`);
         await checkAccountLinkedWallet(page, '.rail', `@${width} rail (linked wallet)`);
+        // Signed out on /you, the rail doesn't repeat the page's sign-in buttons (2026-11-05).
+        await page.evaluate(() => ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social'].forEach((k) => localStorage.removeItem(k)));
+        await open(page, '/you');
+        await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`/you @${width} (${scheme}): signed out, no sign-in offered`));
+        if (await page.locator('.rail .signin-choice').count()) fail(`/you @${width} (${scheme}): signed out, the rail repeats the page's sign-in buttons`);
         // Listen view.
         await open(page, '/chapter/1?view=listen');
         await page.waitForSelector('.listen-pane .listen-progress');
@@ -2422,6 +2580,12 @@ try {
     await checkSignInEquals(page, '.you-sign-in', `/you @390 (${scheme}) signed out`, SIGN_IN_ON.length);
     if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
     await shot(page, 'phone-390-you-signed-out', scheme);
+    // Signed out on /you, the menu doesn't repeat the page's sign-in buttons (2026-11-05).
+    await page.click('.topbar-icon[aria-label="Menu"]');
+    await page.waitForSelector('.menu-sheet');
+    if (await page.locator('.menu-sheet .signin-choice').count()) fail(`/you @390 (${scheme}): signed out, the menu repeats the page's sign-in buttons`);
+    await page.keyboard.press('Escape');
+    await checkYouSignedIn(page, scheme);
     await checkIllustrationReview(page, scheme);
     await checkAdmin(page, scheme);
     await checkImageZoom(page, scheme);

@@ -319,7 +319,11 @@ function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu'
   // A Lens or Bluesky sign-in (branch signin-lens-bluesky), when there is no Farcaster or wallet one.
   const social = useSocialSession();
   const name = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? (wallet.linked?.name ?? wallet.short) : social ? social.name : null;
+  // On the You page, signed out, the page itself offers the ways to sign in: the rail and the menu don't repeat them,
+  // so each button (and any error it shows) is on the screen once (2026-11-05, the owner's localhost sign-ins).
+  const onYou = usePathname() === '/you';
   if (auth.kind === 'loading') return <div className={`menu-account${at}`} aria-busy="true" />;
+  if (name === null && onYou) return null;
   if (name === null)
     return (
       <div className={`menu-account menu-account-out${at}`}>
