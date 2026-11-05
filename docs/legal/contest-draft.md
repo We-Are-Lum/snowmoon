@@ -1,9 +1,10 @@
-# Contest branch: new words and legal lines (DRAFT)
+# Contest branch: new words and legal lines (approved)
 
 Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-04, on branch `contest`, for the
-coordinator and then the owner. **DRAFT: nothing here is approved.** No line below is on the Terms or Privacy pages
-yet: `src/lib/legal.ts` is unchanged on this branch apart from the merge of two already-approved changes (see the end),
-and its keys are left as they were, so check:principles P6k shows Privacy pending until the owner's reread.
+coordinator and then the owner. **Approved (2026-11-04): reviewed by the coordinator, approved by the owner, with one fix: the Terms §6e sentence is
+the owner's own words (below).** The lines are in `src/lib/legal.ts` on this branch, and `LEGAL.ownerReread` records
+the new keys (Terms `jskf6i`, Privacy `1x81p6y`; the Privacy record covers the merged text of check-decisions and
+remix-submit plus these lines). `LEGAL.effective` stays as it is; it is set at merge.
 
 What changed in the code, and why these words are needed:
 
@@ -17,9 +18,8 @@ What changed in the code, and why these words are needed:
 4. **No like, recast or reply counts** on remix pages while the challenge and vote are open: "Posted on" links read
    "See the conversation on Farcaster/Bluesky/Lens". Nothing reads counts (`CHALLENGE.socialCounts`, off).
 
-Because of 1, the approved Privacy §4 sentence "If you withdraw a submission, it is deleted" would no longer be true
-of this branch's code. **This branch must not go live until the owner has reread the Privacy and Terms lines below**
-(legal texts describe today).
+Because of 1, the earlier Privacy §4 sentence "If you withdraw a submission, it is deleted" was no longer true of this
+branch's code; the approved line below replaces it, so the pages describe what this branch does.
 
 ## Terms §6e (The remix challenge)
 
@@ -27,10 +27,10 @@ Before (live words):
 
 > Each person can submit up to three entries, for one character or several, and can withdraw one until entries close.
 
-After (draft):
+After (approved, the owner's words):
 
-> Each person can submit one entry a day (Pacific time), for any character, and can withdraw one until entries close;
-> a withdrawn entry still uses its day.
+> Each person can submit one entry a day (Pacific time), for any character, and can withdraw any of them until entries
+> close; a withdrawn entry still uses its day.
 
 ## Privacy §4 (the remix challenge item)
 
@@ -39,7 +39,7 @@ Before (live words):
 > … and each version you submit as an entry (up to three), with its character and when you submitted it. … If you
 > withdraw a submission, it is deleted; the post stays listed until you remove it.
 
-After (draft):
+After (approved):
 
 > … and each version you submit as an entry, with its character and when you submitted it. … If you withdraw a
 > submission, it stops being an entry but is kept, marked withdrawn, with when; the post stays listed until you remove
@@ -48,9 +48,9 @@ After (draft):
 (The rest of the item, including "for a Farcaster or Bluesky post, the site checks with its network that you wrote
 it", is unchanged.)
 
-## Words on the site (all marked "Draft wording")
+## Words on the site (approved as drafted; each still carries the site's "Draft wording" mark)
 
-| Where | Before | After (draft) |
+| Where | Before | After |
 |---|---|---|
 | Rules, Submit line (`wording.ts`) | A remix becomes an entry only when you press Submit on its page, with a link to your own post about it on Farcaster, Bluesky or Lens. You can submit up to three, for one character or several. Until entries close you can withdraw one, which frees its place. | A remix becomes an entry only when you press Submit on its page, with a link to your own post about it on Farcaster, Bluesky or Lens. You can submit one remix a day (Pacific time), for any character, as many days as you like. Until entries close you can withdraw a submission; that day’s submission isn’t given back. |
 | Rules, bases line | Only remixes count: for each character, start from its base, or someone else’s remix. … | Only remixes count: for each character, start from one of its bases, or someone else’s remix. … |
@@ -80,6 +80,5 @@ branch removes NEXT_challenge_submit.sql; the SQL pack doc needs item 4 replaced
 ## The merge note (for the reread pack)
 
 On `contest`, the Privacy page merges two changes each approved on its own branch: check-decisions' (§4 decision item,
-§7 Neynar item; words `1rsayc0`) and remix-submit's (§4 entry and daily-counts items; words `16bnvqx`). The merged
-text has no reread record of its own, so `LEGAL.privacy` keeps check-decisions' key and P6k shows it pending. The lines
-above would change it again; one reread of the merged page with them covers both.
+§7 Neynar item; words `1rsayc0`) and remix-submit's (§4 entry and daily-counts items; words `16bnvqx`). The owner's
+approval of 2026-11-04 covers that merged text plus the lines above (Privacy words `1x81p6y`).

@@ -211,7 +211,7 @@ export function submittedToday(theirs: readonly Pick<Submission, 'at'>[], now: D
 
 /**
  * The entries: the candidates their makers submitted (a submission of someone else's version is ignored), by eligible
- * people. Returned newest first. A person may have up to three entries, for one character or several.
+ * people. Returned newest first. A person may have any number of entries (one a day), for one character or several.
  */
 export function chooseEntries<C extends Candidate>(candidates: C[], submissions: readonly Submission[], eligible: (person: number) => boolean): C[] {
   const submitted = new Set(distinctSubmissions(submissions).map((s) => `${s.person} ${s.versionId}`));
