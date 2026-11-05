@@ -1,7 +1,6 @@
 # Admin activity dashboard: design
 
-**DRAFT.** Drafted by a coding agent (Claude, a closed model by Anthropic), 2026-11-05, for the coordinator
-(session snowmoon-9c). Nothing here is built. Based on `origin/main` at `fd632855` (PR #117, the sign-in release;
+**DRAFT.** Drafted by a coding agent (Claude, a closed model by Anthropic), 2026-11-05, for the owner. Updated the same day with the owner's answers (below); built on this branch. Based on `origin/main` at `fd632855` (PR #117, the sign-in release;
 migrations through `0036_social_bluesky_check`). Designed from the code and migrations only; no production read.
 
 ## The brief (owner, 2026-11-05)
@@ -16,8 +15,8 @@ shows as totals; per person, only what is public anyway (their name, published w
 | --- | --- |
 | `src/app/admin/activity/page.tsx` | `notFound()` for everyone, `robots: noindex`, `dynamic = 'force-dynamic'`. Its HTML says nothing of the dashboard. |
 | `src/app/admin/activity/not-found.tsx` | `<AdminActivity fallback={<NotFound />} />`, the `ChallengeAdmin` pattern (`src/components/challenge-admin.tsx`): a signed-in admin's browser fetches the data and draws it; everyone else keeps the usual 404 page. |
-| `src/app/api/admin/activity/route.ts` | `GET` only. `getFid(request)`, then `isAdmin(fid)` (`src/lib/admins.ts`); anything else gets `404 {"error":"Not found"}`, before any query. Answers with `Cache-Control: private, no-store`. `dynamic = 'force-dynamic'`. |
-| `src/lib/admin-activity.ts` | Every query. Takes a `postgres.Sql`, never imports `ADMINS`/`isAdmin`. Returns `ActivityView` (a typed object of totals and public rows only). |
+| `src/app/api/admin/activity/route.ts` | `GET` only. Hands `getFid(request)` to `adminActivity`; answers with its status and `Cache-Control: private, no-store`. `dynamic = 'force-dynamic'`. |
+| `src/lib/admin-activity.ts` | The gate and every query, together: `adminActivity(sql, fid)` answers `404 {"error":"Not found"}` unless `isAdmin(fid)` (`src/lib/admins.ts`), before any query; then returns `ActivityView` (totals and public rows only). It sorts (by time), under the P5b exception below. |
 | `src/components/admin-activity.tsx` | Draws `ActivityView`: tables and plain bar rows, no chart library, no third-party request (P6a). No words of its own beyond labels. |
 
 **One read-only transaction.** `sql.begin('read only', async (tx) => { await tx\`set local statement_timeout = '5s'\`; … })`
@@ -106,7 +105,7 @@ Each row only what the public page already shows: thumbnail (own media only), ti
 | Images | `studio.elements` `element_type = 'image'`, `status = 'published'` | the image's byline as `/image/<id>` shows it |
 | Scene versions | `studio.adaptation_versions` (not hidden) × `studio.adaptations`; `publicCatalogue()` (`src/lib/adaptation-pages.ts`) | `sceneHandleFor(person)`; `/adaptation/<id>/by/<handle>/v/<n>` |
 | Remix frames | `studio.remix_frames` (not hidden): public to anyone with the link (Privacy §4) | `by_name`; `/remix/<id>` |
-| Bases and their first remixes | `CHALLENGE.bases` (`src/lib/config.ts`; empty today) with `basesOf`; direct forks via `remixLines` (`src/lib/challenge/lineage.ts`) | each base's byline and link; its **first** direct remix (earliest), with byline and link; how many direct remixes (public: each is a public page) |
+| Direct remixes of a base | `CHALLENGE.bases` (`src/lib/config.ts`; empty today) with `basesOf`; direct forks via `remixLines` (`src/lib/challenge/lineage.ts`) | each base's byline and link; how many direct remixes; the newest ten, with byline and link ("First remixes" stays the name of the owner's own labelled ones) |
 
 Per-day trend: published versions, remixes, images, scene versions, frames (counts).
 
@@ -124,7 +123,7 @@ Shown only while `CHALLENGE.entries` is on (same switch as `standing`).
 | Eligibility at publish | `studio.challenge_eligibility (decision, eligible, account, checked_at)` | per Pacific day and per `account` (farcaster, bluesky; lens on the contest branch): counts by `decision` (`admin`, `invited`, `passed`, `below`, `unchecked`) |
 | Sign-in check decisions | `studio.check_decisions (network, threshold, passed, decided_at)` (0034) | counts by network × passed, per day, and by `threshold` (the rule's name) |
 | Marks | `studio.challenge_marks (character, marked_at)` | marks per day per character |
-| Withdrawals (contest branch) | `studio.challenge_marks.withdrawn_at` | per day per character; only if the column exists |
+| Withdrawals (contest branch's design: `withdrawn_at` kept) | `studio.challenge_marks.withdrawn_at` | per day per character; the row appears only once the column exists |
 | Where posted | `studio.version_posts (network, added_at)` | per day per network (public on each version's page) |
 
 **Never shown:** any score (none is kept), the rule's numbers beyond its name, which person passed or failed, a person's
@@ -249,35 +248,34 @@ site". **Recommended**, one sentence, in §4 before "Deletions happen…":
 
 > Before: *(nothing)*
 >
-> After: **"Our admins see totals of what we keep, to run the site."**
+> After (the owner's wording, 2026-11-05): **"Our admins can see what we keep, to run the site."**
 
-Not "never who did what": on a day when one person acts, a total is theirs (the residual §5's costs already carry).
-It ships in the dashboard's own release (legal texts describe today), needs the owner's reread (P6k), and goes in the
+A draft until the owner approves it in the release. It ships in the dashboard's own release (legal texts describe today), needs the owner's reread (P6k), and goes in the
 dashboard branch's `legal.ts`, not here.
 
-## Open questions
+## The owner's answers (2026-11-05)
 
-1. **P5b.** It fails any file that checks `ADMINS`/`isAdmin` and contains `order by` or `.sort(`. This design keeps the
-   check in the route and the queries in `src/lib/admin-activity.ts`, which satisfies the check's letter. Its spirit
-   (admin code changes nothing anyone else sees) holds: the dashboard is read-only and private. Should P5b name this
-   page as an exception explicitly ("read-only admin views, time order only"), rather than pass by file layout?
-2. **Withdrawals:** `contest` keeps `withdrawn_at`; `remix-submit` deletes the mark. Which merges decides whether
-   withdrawals can be counted at all.
-3. **"First remixes":** read here as each base's earliest direct remix. Or every first-generation remix of a base?
-4. **Moderator actions:** counts by role only, not by which moderator. OK?
-5. **Small counts:** show exact counts (a 1 is one person, unnamed) or "fewer than 3"? Exact is proposed.
-6. **Privacy line:** add it (recommended) or not.
-7. **0036's header** still says "NOT APPLIED" on main; the design doesn't depend on it (it checks for the column), but the
-   eligibility-by-account counts need it.
+1. **Privacy line:** "Our admins can see what we keep, to run the site." A draft until approved in the release; not in
+   `legal.ts` on this branch.
+2. **P5b:** an explicit exception, not a file split. Admin-only pages and routes, gated by the existing admin check and
+   answering 404 to non-admins, may sort by time or counts; P5 is about public steering. `check:principles` P5b allows
+   a file to sort only when it holds that gate (`if (!isAdmin(…)) return …404…`), and a planted fault proves a public
+   page that sorts by counts still fails.
+3. **"Direct remixes of a base"** in the dashboard; "First remixes" stays for the owner's labelled ones.
+4. **Moderator actions by role only:** yes.
+5. **Exact counts.**
+6. **Withdrawals are counted**, per the contest branch's design (`withdrawn_at` kept); the row appears when the column exists.
+7. (0036's header still says "NOT APPLIED" on main; the eligibility-by-account counts appear once the column is there.)
 
 ## Principles
 
-- **P5 (no canon; admin powers hide and pick only):** concern, see open question 1. The page publishes, orders and hides
-  nothing; it leaves `admin_picks` alone (P5e).
+- **P5 (no canon; admin powers hide and pick only):** pass with the owner's new exception (answer 2): the page sorts only
+  for admins, behind the 404 gate, and publishes, orders and hides nothing anyone else sees; it leaves `admin_picks`
+  alone (P5e).
 - **P6 (who did what stays private; totals only; no third party):** pass by design: totals for every private table,
   public rows only per person, no outside request, no new kept data; `P6aa` checks it, with planted faults. Residual:
   one-person days.
 - **P7 (payments never order or score):** pass: balances and spend are totals, ordered by day; nothing is sorted by money
   (P7a).
 - **P1–P4, P8:** not touched (no publishing, no model call, no book text, no Minpentai).
-- **New tension:** admins seeing totals isn't stated in Privacy; the drafted line closes it, pending the owner.
+- **New tension:** admins seeing what is kept isn't stated in Privacy yet; the owner's line closes it in the release.
