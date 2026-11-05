@@ -2290,14 +2290,15 @@ try {
         // Signed out: the assistant panel is there, with what it does and a sign-in button.
         await page.waitForSelector('.panel .as-signed-out button');
         // The panel's sign-in is the menu's button (owner, 2026-10-19; the same list since 2026-10-30): full width, at least 48px,
-        // the main font; Farcaster only (questions are counted per Farcaster account).
-        const pb = await page.locator('.panel .as-signed-out .as-signin button.menu-signin').evaluate((e) => {
+        // the main font; only the ways that can ask: Farcaster, and Lens and Bluesky once ASSISTANT.anyAccount is on (2026-11-05).
+        const pb = await page.locator('.panel .as-signed-out .as-signin button.menu-signin').first().evaluate((e) => {
           const r = e.getBoundingClientRect();
           const st = getComputedStyle(e);
           return { h: r.height, w: r.width, pw: (e.closest('.as-signin') as HTMLElement).clientWidth, font: st.fontFamily, upper: st.textTransform };
         });
-        const panelWays = await page.locator('.panel .as-signed-out .as-signin button').count();
-        if (panelWays !== 1) fail(`@${width}: the assistant panel offers ${panelWays} sign-in buttons (want Farcaster only)`);
+        const panelWays = await page.locator('.panel .as-signed-out .as-signin .signin-choice').evaluateAll((els) => els.map((e) => e.getAttribute('data-method')).join(','));
+        const askWays = ASSISTANT.anyAccount ? SIGN_IN_ON.filter((m) => m === 'farcaster' || m === 'lens' || m === 'bluesky').join(',') : 'farcaster';
+        if (panelWays !== askWays) fail(`@${width}: the assistant panel offers ${panelWays || 'no'} sign-in (want the ways that can ask: ${askWays})`);
         if (pb.h < 47.5 || pb.w < pb.pw - 1 || /mono/i.test(pb.font) || pb.upper === 'uppercase') fail(`@${width}: the assistant panel's sign-in is not the menu's button (${JSON.stringify(pb)})`);
         await shot(page, `desktop-${width}-chapter`, scheme);
         // Minpentai's pages start with the assistant closed (owner, 2026-10-20); opening it there isn't remembered.
