@@ -348,7 +348,13 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
 - `P5a`: no migration adds a canon/official/featured/pinned field, and no UI
   string uses those words except to deny them. (The pick table is named for what it is, a pick.)
 - `P5b`: code that checks `MODERATOR_FIDS` or `ADMINS` does not publish, order or sort, with one exception:
-  admin code may write `studio.admin_picks`, and nothing else.
+  admin code may write `studio.admin_picks`, and nothing else. **Exception for admin-only pages (owner, 2026-11-05;
+  DRAFT wording):** "P5 is about public steering." A page or route that only admins can open, gated by the
+  existing admin check and answering 404 to everyone else (`if (!isAdmin(…)) return …404…` in the same file), may
+  sort by time or by counts, because no one else sees what it sorts. It still may not publish. A public page that
+  checks `isAdmin` and sorts still fails (the planted fault: a public page sorting by likes). The rule is in
+  `scripts/lib/p5b.ts`; `npm run test:admin-activity` proves each of its faults. A read that filters on
+  `status = 'published'` is not publishing; a status set in SQL, given in a row, or assigned in code is.
 - `P5c`: a hidden image's file leaves the public bucket.
 - `P5d`: every component that shows a pick shows its label ("Picked by @…") and the switch with "Most liked",
   "Newest" and "Liked by me"; the switch keeps the reader's choice on their device (localStorage) and never sends it.
@@ -444,6 +450,14 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   Neynar receives makers' FIDs for it and, for posts, names Bluesky and Lens (docs/legal/remix-challenge-draft.md);
   and opening sheets to everyone (`CHALLENGE.openSheets`, on) takes effect only inside the entry window and once
   Privacy §4 describes the challenge.
+- `P6aa` (branch admin-activity, owner 2026-11-05; docs/proposals/admin-activity.md): the admin activity page
+  (`/admin/activity`, `GET /api/admin/activity`) answers 404 signed out and with a bad token, sends `no-store`, and
+  holds none of its words in that answer (live); its gate comes before any read, it runs in one read-only transaction
+  and has no write handler; and every count it returns is a total: its category names no person column and its number
+  is an aggregate (static, with a planted per-FID count). `npm run test:admin-activity` adds the database half: 404 to
+  a non-admin with nothing read, a write refused, and no private person value (an asker's FID, an address, a DID, a
+  reporter or a note) anywhere in an admin's answer. The id is free on main and every branch (P6's single letters are
+  all taken).
 - `P6s` (branch challenge-three-bases, 2026-11-04, the owner's decision): bases and references may be made by closed
   models, labelled with their maker, but a closed-model base is refused until `CHALLENGE.closedBasesAllowed` is true,
   and that may be true only while a Privacy paragraph about the bases and references names OpenAI and Google
