@@ -14,8 +14,9 @@ merge the branch until this is applied and the read-backs pass.
 
 **Who runs it:** the owner, as `postgres`, in the Supabase SQL Editor, one block at a time, in the order below.
 
-**Needs first:** 0001..0036 (production has them). It needs none of the other pending migrations; if the SQL pack's
-items 3, 4 and 6 or `NEXT_person_balance` go first, it stamps their tables too, and their read-backs still pass.
+**Needs first:** 0001..0036 (production has them), and **`NEXT_person_balance` first if it ships in the same release**:
+its ledgers get the owner stamp only if they exist when this runs. It needs none of the SQL pack's other items (3, 4,
+6); if they go first, it stamps their tables too, and their read-backs still pass.
 
 **Safe with today's live code**, because it only adds (tables, functions, nullable columns, triggers); the owner-stamp
 triggers fill only the new `person_id` when code leaves it null, as all of today's code does, and catch every error, so
@@ -429,7 +430,8 @@ begin
     ('person_pay_intents', 'person'), ('person_payments', 'person'), ('person_debits', 'person'), ('person_credits', 'person')
   ) as x(tbl, num)
   loop
-    continue when to_regclass('studio.' || t.tbl) is null;
+    -- A table made after this migration (NEXT_person_balance applied later) has no stamp column: skipped.
+    continue when not exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = t.tbl and column_name = 'person_id');
     execute format('update studio.%I set person_id = $1 where person_id is null and %s = $2', t.tbl,
       case when t.num = '-account_id' then '-account_id' else quote_ident(t.num) end) using p, n;
   end loop;
@@ -459,7 +461,7 @@ begin
     ('person_debits', 'person', ''), ('person_credits', 'person', '')
   ) as x(tbl, col, sign)
   loop
-    -- Tables of a migration not applied yet (the person-balance ledgers) are skipped; that migration stamps its own.
+    -- Tables of a migration not applied yet (the person-balance ledgers) are skipped: apply NEXT_person_balance first.
     continue when to_regclass('studio.' || t.tbl) is null;
     execute format('alter table studio.%I add column if not exists person_id bigint references studio.people(id)', t.tbl);
     execute format('create index if not exists %I on studio.%I (person_id) where person_id is not null', t.tbl || '_owner', t.tbl);
@@ -1091,7 +1093,8 @@ begin
     ('person_pay_intents', 'person'), ('person_payments', 'person'), ('person_debits', 'person'), ('person_credits', 'person')
   ) as x(tbl, num)
   loop
-    continue when to_regclass('studio.' || t.tbl) is null;
+    -- A table made after this migration (NEXT_person_balance applied later) has no stamp column: skipped.
+    continue when not exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = t.tbl and column_name = 'person_id');
     execute format('update studio.%I set person_id = $1 where person_id is null and %s = $2', t.tbl,
       case when t.num = '-account_id' then '-account_id' else quote_ident(t.num) end) using p, n;
   end loop;
@@ -1121,7 +1124,7 @@ begin
     ('person_debits', 'person', ''), ('person_credits', 'person', '')
   ) as x(tbl, col, sign)
   loop
-    -- Tables of a migration not applied yet (the person-balance ledgers) are skipped; that migration stamps its own.
+    -- Tables of a migration not applied yet (the person-balance ledgers) are skipped: apply NEXT_person_balance first.
     continue when to_regclass('studio.' || t.tbl) is null;
     execute format('alter table studio.%I add column if not exists person_id bigint references studio.people(id)', t.tbl);
     execute format('create index if not exists %I on studio.%I (person_id) where person_id is not null', t.tbl || '_owner', t.tbl);

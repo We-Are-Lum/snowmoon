@@ -8,7 +8,8 @@
 -- (main, with the sign-in release's 0035 and 0036). Apply it after the SQL pack's other pending items (3
 -- NEXT_remix_count, 4 NEXT_challenge_daily, 6 NEXT_social_lens_challenge; docs/legal/sql-pack-2026-11-04.md on branch
 -- sql-pack) and after NEXT_person_balance if that goes first; it needs none of them, and their read-backs still pass
--- after it. On a database without NEXT_person_balance it stamps only the tables that exist.
+-- after it. Apply NEXT_person_balance BEFORE it: the person-balance ledgers get their owner stamp only if they exist
+-- when this runs (on a database without them it stamps the tables that exist, and stamp_unowned skips the others).
 -- Paste it in this order:
 --   A. the dry run: the migration, ending in rollback; (nothing is kept);
 --   B. the migration: the same, ending in commit;
@@ -434,7 +435,8 @@ begin
     ('person_pay_intents', 'person'), ('person_payments', 'person'), ('person_debits', 'person'), ('person_credits', 'person')
   ) as x(tbl, num)
   loop
-    continue when to_regclass('studio.' || t.tbl) is null;
+    -- A table made after this migration (NEXT_person_balance applied later) has no stamp column: skipped.
+    continue when not exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = t.tbl and column_name = 'person_id');
     execute format('update studio.%I set person_id = $1 where person_id is null and %s = $2', t.tbl,
       case when t.num = '-account_id' then '-account_id' else quote_ident(t.num) end) using p, n;
   end loop;
@@ -464,7 +466,7 @@ begin
     ('person_debits', 'person', ''), ('person_credits', 'person', '')
   ) as x(tbl, col, sign)
   loop
-    -- Tables of a migration not applied yet (the person-balance ledgers) are skipped; that migration stamps its own.
+    -- Tables of a migration not applied yet (the person-balance ledgers) are skipped: apply NEXT_person_balance first.
     continue when to_regclass('studio.' || t.tbl) is null;
     execute format('alter table studio.%I add column if not exists person_id bigint references studio.people(id)', t.tbl);
     execute format('create index if not exists %I on studio.%I (person_id) where person_id is not null', t.tbl || '_owner', t.tbl);
@@ -1090,7 +1092,8 @@ begin
     ('person_pay_intents', 'person'), ('person_payments', 'person'), ('person_debits', 'person'), ('person_credits', 'person')
   ) as x(tbl, num)
   loop
-    continue when to_regclass('studio.' || t.tbl) is null;
+    -- A table made after this migration (NEXT_person_balance applied later) has no stamp column: skipped.
+    continue when not exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = t.tbl and column_name = 'person_id');
     execute format('update studio.%I set person_id = $1 where person_id is null and %s = $2', t.tbl,
       case when t.num = '-account_id' then '-account_id' else quote_ident(t.num) end) using p, n;
   end loop;
@@ -1120,7 +1123,7 @@ begin
     ('person_debits', 'person', ''), ('person_credits', 'person', '')
   ) as x(tbl, col, sign)
   loop
-    -- Tables of a migration not applied yet (the person-balance ledgers) are skipped; that migration stamps its own.
+    -- Tables of a migration not applied yet (the person-balance ledgers) are skipped: apply NEXT_person_balance first.
     continue when to_regclass('studio.' || t.tbl) is null;
     execute format('alter table studio.%I add column if not exists person_id bigint references studio.people(id)', t.tbl);
     execute format('create index if not exists %I on studio.%I (person_id) where person_id is not null', t.tbl || '_owner', t.tbl);

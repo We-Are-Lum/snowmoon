@@ -1,5 +1,5 @@
 import type postgres from 'postgres';
-import { LINKED_ACCOUNTS } from '../config';
+import { IMAGES, LINKED_ACCOUNTS } from '../config';
 import { V2_REFUSALS, type V2Why } from './v2-wording';
 
 /**
@@ -186,8 +186,10 @@ export async function signIn(db: Db, n: number, now: Date, cfg: Config = LINKED_
 // --- Main-only actions ---------------------------------------------------------------------------------------------
 
 /** The main links a sign-in that is in no Snowmoon account (both proofs are checked by the route before this). */
-export async function link(db: Db, a: { actor: number; add: number; now: Date; how?: 'signed' | 'verified' }, cfg: Config = LINKED_ACCOUNTS): Promise<Result> {
+export async function link(db: Db, a: { actor: number; add: number; now: Date; how?: 'signed' | 'verified'; address?: string }, cfg: Config = LINKED_ACCOUNTS): Promise<Result> {
   if (!cfg.enabled) return OFF;
+  // A8: the project's pay-to address never links.
+  if (a.address && IMAGES.prepaid.payTo && a.address.toLowerCase() === IMAGES.prepaid.payTo.toLowerCase()) return no('payment-address');
   return db.tx(async (t) => {
     const m = await asMain(t, a.actor, a.now);
     if (!m.ok) return m;
@@ -207,6 +209,8 @@ export async function link(db: Db, a: { actor: number; add: number; now: Date; h
     const moves = await movesBlockedUntil(t, a.add, p, a.now, cfg);
     if (moves) return no('moves', moves);
     await t.q(`insert into studio.person_accounts (person_id, kind, account, how, linked_at) values ($1, $2, $3, $4, $5)`, [p, kind, a.add, a.how ?? 'signed', iso(a.now)]);
+    // What it made before, with no Snowmoon account, now belongs to this one ("before and after linking").
+    await t.q(`select studio.stamp_unowned($1)`, [a.add]);
     return { ok: true };
   });
 }

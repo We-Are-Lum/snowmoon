@@ -6,7 +6,8 @@ import { configLink, linkedFidFor } from './wallet/links';
 import { readSocialSession, type SocialSession } from './social/session';
 import { personForSocial } from './social/accounts';
 import { socialPerson } from './people';
-import { actingFor, link, linkedOn, readPersonOf } from './linked/accounts';
+import { linkedOn } from './linked/accounts';
+import { fromPostgres, link as linkV2, signIn as signInV2 } from './linked/v2';
 
 /**
  * Sign In with Farcaster via Quick Auth, as a bearer token.
@@ -84,25 +85,31 @@ export async function signedInAccount(request: Request): Promise<{ account: numb
 }
 
 /**
- * getPerson while linked accounts are on (LINKED_ACCOUNTS; src/lib/linked/accounts.ts): the signed-in account's
- * person's acting number (its Farcaster account, else Lens, else Bluesky, else this wallet). A wallet the app has never
- * seen gets today's automatic link once ('verified', only if it is alone; src/lib/wallet/links.ts finds the FID);
- * after that, studio.person_accounts alone decides, so an unlinked wallet is never linked again by itself.
+ * getPerson while linked accounts are on (LINKED_ACCOUNTS, v2; src/lib/linked/v2.ts): the sign-in's own number, since
+ * each row keeps the number of the sign-in that made it and its Snowmoon account is its owner stamp. Signing in puts the
+ * sign-in in its Snowmoon account (or starts one); a sign-in in its 30-day wait gets none and is refused here. A wallet
+ * the app has never seen gets the automatic link once ('verified'), only when the Farcaster account that lists it is
+ * its Snowmoon account's main sign-in (owner, 2026-11-05; v2.link checks it), and only for a wallet with no history.
  */
 async function getLinkedPerson(request: Request): Promise<number | null> {
   const me = await signedInAccount(request);
   if (!me) return null;
   const sql = db();
-  if (me.kind === 'wallet' && sql) {
-    try {
-      const known = (await readPersonOf(sql, me.account)) ?? (await sql`select 1 from studio.person_accounts where account = ${me.account} limit 1`)[0];
+  if (!sql) return me.account;
+  const d = fromPostgres(sql);
+  const now = new Date();
+  try {
+    if (me.kind === 'wallet') {
+      const known = (await sql`select 1 from studio.person_accounts where account = ${me.account} limit 1`)[0];
       if (!known) {
         const fid = await linkedFidFor(sql, -me.account, me.address!);
-        if (fid !== null) await link(sql, { account: fid, kind: 'farcaster' }, { account: me.account, kind: 'wallet', address: me.address }, 'verified');
+        if (fid !== null) await linkV2(d, { actor: fid, add: me.account, now, how: 'verified' });
       }
-    } catch (e) {
-      console.error('linked accounts: automatic wallet link failed', (e as { code?: string }).code ?? (e as Error).name);
     }
+    const r = await signInV2(d, me.account, now);
+    return r.ok ? me.account : null;
+  } catch (e) {
+    console.error('linked accounts: sign-in failed', (e as { code?: string }).code ?? (e as Error).name);
+    return null;
   }
-  return actingFor(sql, me.account);
 }

@@ -20,7 +20,8 @@ export type V2Why =
   | 'pending'
   | 'no-request'
   | 'same-account'
-  | 'social-only';
+  | 'social-only'
+  | 'payment-address';
 
 const day = (d?: Date) =>
   d ? d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'America/Los_Angeles' }) : 'later';
@@ -42,5 +43,6 @@ export const V2_REFUSALS: Record<V2Why, (until?: Date) => string> = {
   pending: () => 'A request for a new main sign-in is already waiting.',
   'no-request': () => 'There is no request to cancel.',
   'same-account': () => 'Those sign-ins are already one Snowmoon account.',
+  'payment-address': () => 'This address can\'t be linked.',
   'social-only': () => 'To submit, sign in with one of your social accounts (Farcaster, Lens or Bluesky): your entry links to your own post there.',
 };

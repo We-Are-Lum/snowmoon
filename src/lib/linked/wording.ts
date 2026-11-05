@@ -34,38 +34,14 @@ export const LINKED_WORDING = {
       n ? `Link ${n} that passes, then publish a new version and submit it.` : 'You can still remix and share it, but only an account that passes can enter.',
     ];
   },
-  /** DRAFT. A2, shown at Generate while one of the person's accounts is in its 30-day wait. */
-  wait: (until: string) =>
-    `One of your accounts was unlinked from someone else less than 30 days ago, so free images and frames are off for you until ${new Date(until).toUTCString().slice(5, 16)}. You can still sign in with a wallet and prepay.`,
-  /** DRAFT. Link refusals, by rule. */
-  link: {
-    off: 'Linking accounts isn’t open yet.',
-    same: 'That’s the account you’re signed in with.',
-    'payment-address': 'This address can’t be linked.',
-    attempts: 'Too many link attempts today. Try again tomorrow.',
-    'belongs-to-someone': 'This account already belongs to someone with other accounts. Unlink it there first.',
-    'one-of-kind': 'You can link one Farcaster account, one Lens account and one Bluesky account.',
-    wallets: 'You can link up to 3 wallets.',
-    moves: 'This account has moved twice in the last year, so it stays where it is.',
-    frozen: 'This account has a challenge entry, so it stays with you until the challenge’s rewards are paid.',
-    unknown: 'That account can’t be linked.',
-    wait: (until: string) => `This account was unlinked less than 30 days ago. It can be linked to someone else from ${new Date(until).toUTCString().slice(5, 16)}.`,
-  },
-  /** DRAFT. Unlink refusals. */
-  unlink: {
-    off: 'Linking accounts isn’t open yet.',
-    none: 'That account isn’t linked to you.',
-    last: 'This is your only account, so it can’t be unlinked.',
-    frozen: 'This account has a challenge entry, so it stays with you until the challenge’s rewards are paid.',
-  },
   /** DRAFT, for the owner's OK (2026-11-05). The You page's panel (src/components/linked-accounts.tsx). */
   panel: {
     title: 'Linked accounts',
-    intro: 'Accounts you link are one person here: your free images and frames, limits and the remix challenge count once for all of them, and your work shows under one name.',
+    intro: 'Your Snowmoon account keeps your work, challenge entries, balance and name. Each social account or wallet you link is a way in; your main sign-in manages them.',
     kinds: { farcaster: 'Farcaster', wallet: 'Wallet', lens: 'Lens', bluesky: 'Bluesky' } as Record<'farcaster' | 'wallet' | 'lens' | 'bluesky', string>,
     you: 'signed in here',
     unlink: 'Unlink',
-    unlinkAsk: 'Unlink this account? Its work will show under its own name again, and it can be linked to someone else only after 30 days.',
+    unlinkAsk: 'Unlink this sign-in? It takes nothing with it: its work stays with your Snowmoon account. For 30 days it can’t join or start another Snowmoon account.',
     unlinkYes: 'Unlink',
     cancel: 'Cancel',
     linkThis: (name: string) => `Link ${name}`,
@@ -78,5 +54,5 @@ export const LINKED_WORDING = {
     failed: 'That didn’t work. Try again in a moment.',
   },
   /** DRAFT. The confirm screen before a link (proposal section 3). */
-  confirm: 'Your work from both accounts will be shown under one name, so anyone can see they are yours.',
+  confirm: 'What you made with it belongs to your Snowmoon account and is shown under the one name you choose, so anyone can see it is yours.',
 } as const;

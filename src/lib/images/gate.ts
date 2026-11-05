@@ -9,7 +9,7 @@ import { holdsPersonBalance, personBalanceOn, personBalanceUsd } from '../balanc
 import { IMAGE_WORDING } from './wording';
 import { isSocialPerson, isWalletPerson } from '../people';
 import { freeFor } from '../social/free';
-import { kindOf, linkedOn, missingNetworks, personPasses, personWaitUntil, readPersonOf } from '../linked/accounts';
+import { kindOf, linkedOn, missingNetworks, personPasses, readPersonOf } from '../linked/accounts';
 import { LINKED_WORDING } from '../linked/wording';
 
 /**
@@ -49,7 +49,7 @@ export type Gate =
       ok: false;
       status: 403 | 503;
       error: string;
-      reason: 'not-open' | 'unreachable' | 'score' | 'prepaid-closed' | 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' | 'bluesky-new' | 'bluesky-idle' | 'bluesky-failed' | 'bluesky-unreachable' | 'wait';
+      reason: 'not-open' | 'unreachable' | 'score' | 'prepaid-closed' | 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' | 'bluesky-new' | 'bluesky-idle' | 'bluesky-failed' | 'bluesky-unreachable';
       /** Linked accounts (on): the per-network detail, shown under "Why?" (owner, 2026-11-04, 10.1). */
       why?: string;
       /** Linked accounts (on): the networks the person could still link, for "Link another account". */
@@ -80,15 +80,13 @@ export async function mayGenerate(sql: Sql, fid: number, orPay?: { reserveUsd: n
 
 /**
  * Linked accounts (LINKED_ACCOUNTS, off; src/lib/linked/accounts.ts): a person passes if any linked account has a
- * current pass; while one of their accounts is in its 30-day wait, free generations are refused; and a refusal by a
- * check offers the next step (the approved words of 2026-11-04): link a network not linked yet, or prepay.
+ * current pass (v2: a sign-in in its 30-day wait is in no Snowmoon account, so there is no wait to check here); and a
+ * refusal by a check offers the next step (the approved words of 2026-11-04): link a network not linked yet, or prepay.
  */
 async function freeGate(sql: Sql, fid: number): Promise<Gate> {
   const g = await accountGate(sql, fid);
   // A wallet pays (no free count to withhold); the launch order and closed prepaid stand as they are.
   if (!linkedOn() || isWalletPerson(fid) || (!g.ok && (g.reason === 'not-open' || g.reason === 'prepaid-closed'))) return g;
-  const until = await personWaitUntil(sql, fid);
-  if (until) return { ok: false, status: 403, error: LINKED_WORDING.wait(until.toISOString()), reason: 'wait' };
   if (g.ok) return g;
   if (await personPasses(sql, fid)) return { ok: true };
   if (g.reason === 'unreachable' || g.reason === 'lens-unreachable') return g;
