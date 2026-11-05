@@ -9,7 +9,7 @@ merged, applied to production or published during this run; legal lines go to th
 | 2 | Owed checks on changed branches (M22: the Minpentai session runs it) | 3 of 12 done; rest queued on the lock |
 | 3 | Lane A: challenge-landing task; contest branch; rehearsal; dress run | running (after item 2) |
 | 4 | Lane B: paying per person (design, migration copy blocks, draft lines) | done (branch person-balance; whole-project typecheck owed) |
-| 5 | Lens page: typecheck, running on localhost | waiting |
+| 5 | Lens page: typecheck, running on localhost | done (ready for you to sign) |
 
 ## How the run shares the Mac
 
@@ -58,9 +58,21 @@ NEXT_challenge_daily.sql, which replaces the SQL pack's NEXT_challenge_submit.sq
 rehearsal 38, daily-sql 25). Your two values are in .env.rehearsal.local (checked by count only). Typecheck, checks
 and the dress run wait for the lock.
 
+**5. Lens page** (branch `signin-lens-bluesky`, 82a07763): whole-project typecheck passes; `/admin/lens-app` loads
+on localhost (HTTP 200) with the metadata link and "Sign in with my wallet". The server was stopped afterwards.
+
 ## Blocked
 
 ## Needs the owner
+
+- **Register the Lens App** (when you like): in Terminal, one line at a time:
+
+      cd ~/snowmoon-signin-lens
+      npx next dev -p 3005 -H 127.0.0.1
+
+  then open http://127.0.0.1:3005/admin/lens-app in the browser with your wallet. Check the metadata's bytes, sign the
+  Builder sign-in, Create the App; if Lens asks you to send a transaction, check to, value and chainId on the page
+  before signing. Send me the App address and transaction it shows; stop the server with Ctrl-C.
 
 - **Deluin b's words.** "warm golden-brown" came out yellow-orange twice. Suggest "warm tan skin, straight shoulder-length
   black hair, dark brown eyes" (your own Midjourney prompt for Deluin uses "warm tan skin"). Then one front and its two
