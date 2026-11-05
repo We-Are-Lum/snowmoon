@@ -20,8 +20,8 @@ links were not opened. Full recipes: `first-remixes/recipes.json`. Each will car
 
 **References (owner, 2026-11-05):** the style reference `--sref https://s.mj.run/YwM8K-xTQo0` is the owner's own
 picture, so the first remixes that use only it can be published (recorded in each recipe). `--profile hu97rol rg1f6ql`
-are the owner's own Midjourney personalization profiles (owner, 2026-11-05), so Mu ink cape and Seila ink child are
-publishable too; the Deluin ledge picture stays a draft by the owner's pick.
+are the owner's own Midjourney personalization profiles (owner, 2026-11-05), so Mu ink cape, Seila ink child and the
+Deluin ledge picture are publishable too (owner, 2026-11-05).
 
 **Your picks (2026-11-04):** two first remixes per character where you chose them (Gladias: the council table and the sunset
 with a goatee; Deluin: the arena game board and the hood with a mug), Mu and Seila two each, Zei one. The Deluin ledge

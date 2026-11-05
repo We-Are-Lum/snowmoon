@@ -284,8 +284,8 @@
    "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
    "2_own_pictures_only": "not checkable from the file; owner to confirm"
   },
-  "use": "draft only (owner, 2026-11-04)",
-  "publishable": "draft only (the owner's pick); its references are the owner's own"
+  "use": "first remix (owner, 2026-11-05: publishable)",
+  "publishable": "yes, as a first remix (owner, 2026-11-05): its references are the owner's own personalization profiles"
  },
  {
   "file": "first-remixes/gladias-council.png",
