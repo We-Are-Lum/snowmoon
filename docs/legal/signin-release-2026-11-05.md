@@ -345,9 +345,13 @@ Who does each: **O** the owner, **C** the coordinator, **A** an agent.
 - [ ] **The two migrations applied** (O, Supabase SQL Editor, laptop): SQL pack 2A–2D, then 5A–5D. Needed before the
   localhost sign-ins too, because localhost uses the production database (as `studio_writer`).
 - [ ] **One real Lens and one real Bluesky sign-in by the owner on localhost** (O, laptop; steps below).
-- [ ] **The checks on a local build, under the heavy lock** (A): tsc, test:signin-lens-bluesky, test:bluesky-check,
-  test:check-decisions, test:images-gate, test:wallet, check:principles, check:ui, check:miniapp. Run again after the
-  switch commit.
+- [x] **The checks on a local build, under the heavy lock** (A, 2026-11-04 23:32–23:50 PT, `bluesky-check` at
+  414e493e, http://127.0.0.1:3210): tsc 0 errors on both branches; test:signin-lens-bluesky 21/21,
+  test:bluesky-check 64/64, test:check-decisions 44/44, test:images-gate 130, test:wallet 193; check:ui passed (59
+  pages); check:miniapp passed; check:principles 60 of 63, the three fails expected: P6d (accepted open item), P6k
+  (Privacy awaits the reread of L12 and L16) and P6a (only on a local target: the site's own media.snowmoon.party and
+  pictures.snowmoon.party count as third-party when the target is 127.0.0.1).
+- [ ] **The checks again after the switch commit** (A).
 - [ ] **PR from `bluesky-check`** (one PR; it carries signin-lens-bluesky), the owner's OK, merge commit, deploy,
   live checks (check:shipped, check:principles, check:ui, check:miniapp; check:snap-live only if `next.config.ts` or
   middleware changed; this branch changes `next.config.ts`, so run it).
