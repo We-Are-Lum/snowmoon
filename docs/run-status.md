@@ -1,3 +1,36 @@
+# Run status: overnight run of 2026-11-05 (from about 23:10 PT, 4 Nov)
+
+Kept by the coding agent (Claude, a closed model by Anthropic). Updated after each item. No secrets here. No merges
+beyond the two named, no migrations on production, nothing published. Spending tonight: at most $2 in total.
+
+| # | Item | Lane | State |
+|---|------|------|-------|
+| — | Merge check-decisions, then privacy-furthest-chapter | coordinator | done: #115 (9d2e24d, migration 0034) and #116 (943fc60); live checks pass (P6d only); /challenge 404; live Privacy shows both |
+| — | check:ui on main after both merges | coordinator | running (heavy lock) |
+| 1 | Verify the Lens App on Lens's side, set SOCIAL_SIGN_IN.lens.app | A | verified (below); config being set |
+| 2 | Split the sign-in release from model choice | A | in progress |
+| 3 | Sign-in release ready to merge (main in, checks, legal before/after, SQL items 2 and 5, morning checklist) | A | in progress |
+| 4 | contest: Lens check at publish; Lens and Bluesky own-post checks; "Post on …" buttons | A | waiting for 3 |
+| 5 | contest: §6e one entry a day; admins see rules/remixes; test sign-in moves to rehearsal-tools; item 4 = NEXT_challenge_daily | A | waiting |
+| 6 | Paying per person, browser side | B | in progress |
+| 7 | Linked accounts (migration copy blocks, code behind a switch, legal drafts) | B | waiting for 6 |
+| — | Deluin b front and two views ($0.25 cap) | styles | in progress |
+| — | fund-page P7c from another network | — | blocked: this Mac's network can't reach ethereum-rpc.publicnode.com; left for the owner |
+
+## Lens App: verified (2026-11-05, read-only)
+
+- tx 0x7001522f7cad6c9ebd58204998e62af93cdd62ff627b05a2584ca58ae524e576 on Lens Chain (232): success, block 6462496,
+  to LensFactory, value 0. **Paid by Lens**: sent from 0xb9646756556c0b80a7f0a5ac9dc8693f3264e348 (Lens's sponsored
+  sender, not your wallet); about 0.0014 GHO of gas.
+- App 0x3CD3dF83e3F74e855d7c4104a8ed9EBa23FaaE47: owner 0xC1aeBd6f0D37611d744B0ECD0865984fbCb4B4c4; metadata URI
+  lens://a0001df5cbdfdde5837b0896b0a4006eff7f614ff37dc240677b2508005499d4 (read from the contract); the global graph,
+  feed and namespace (same as Lens's test App); verification off; no admins (adminsFor empty), no signers
+  (getSigners and appSigners empty); no sponsorship or treasury.
+- Process note: stopping port 3005 also stopped a Chrome helper that was connected to it (a browser tab may have
+  closed). From now on only the listening process is stopped.
+
+---
+
 # Run status: long run of 2026-11-04 (from about 16:15 PT; all five items done by about 18:25)
 
 Kept by the coding agent (Claude, a closed model by Anthropic). Pushed after each item. No secrets here. Nothing is
