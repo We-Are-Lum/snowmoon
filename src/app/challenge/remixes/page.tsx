@@ -1,25 +1,33 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { CHALLENGE } from '~/lib/config';
 import { db } from '~/lib/db';
 import { bookCharacter } from '~/lib/images/designs';
 import { remixFeed } from '~/lib/challenge/remixes';
 import { CHALLENGE_WORDING as W } from '~/lib/challenge/wording';
 import { LANDING_WORDING as L } from '~/lib/challenge/landing-wording';
-import { RemixCardView } from '~/components/challenge-remix-card';
+import { RemixCardView, type RemixCardWords } from '~/components/challenge-remix-card';
 
 /**
  * "See all" (owner, 2026-11-04): every remix of the challenge's characters, newest first, filterable by character
  * (?character=<slug>, one of CHALLENGE.characters), a page of FEED_PAGE at a time (?before=<cursor>, "Older remixes").
  * No other order: no "most remixed" sort while the challenge runs, and no remix or like count on any card (the
  * owner's decision; a viewer's "most remixed" sort may come back after entries close, by the owner's decision then).
- * Read per request; readable signed out.
+ * Read per request; readable signed out once the owner opens the challenge (CHALLENGE.public). Until then it answers
+ * "not found" to everyone, admins included (./not-found.tsx is the plain one), and its HTML says nothing of the challenge.
  */
 export const dynamic = 'force-dynamic';
-export const metadata = { title: 'Every remix', description: 'Every remix in the Snowmoon remix challenge, newest first.' };
+export async function generateMetadata(): Promise<Metadata> {
+  if (!CHALLENGE.public) return { robots: { index: false, follow: false } };
+  return { title: 'Every remix', description: 'Every remix in the Snowmoon remix challenge, newest first.' };
+}
+const cardWords = (name: string): RemixCardWords => ({ name, untitled: L.untitled(name), alt: L.pictureAlt(name) });
 type Props = { searchParams: Promise<{ character?: string; before?: string }> };
 const callName = (name: string) => name.split(' ')[0];
 
 export default async function ChallengeRemixes({ searchParams }: Props) {
+  if (!CHALLENGE.public) notFound();
   const q = await searchParams;
   const chars = CHALLENGE.characters.map((s) => bookCharacter(s)).filter((c): c is NonNullable<typeof c> => Boolean(c));
   const names = Object.fromEntries(chars.map((c) => [c.slug, callName(c.name)]));
@@ -54,7 +62,7 @@ export default async function ChallengeRemixes({ searchParams }: Props) {
       {cards.length ? (
         <ul className="ch-cards ch-feed" role="list">
           {cards.map((r) => (
-            <RemixCardView key={r.versionId} r={r} name={names[r.character] ?? r.character} />
+            <RemixCardView key={r.versionId} r={r} w={cardWords(names[r.character] ?? r.character)} />
           ))}
         </ul>
       ) : (

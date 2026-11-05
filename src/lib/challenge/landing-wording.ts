@@ -20,9 +20,12 @@ export const LANDING_WORDING = {
   /** The base's tile when its style has no name. */
   baseLabel: 'Base',
   sheetLabel: 'Sheet',
-  /** The owner's first remixes beside the base (owner, 2026-11-04), and the slot for one that doesn't exist yet. */
-  firstRemixLabel: 'First remix',
-  firstRemixEmpty: 'First remix: not here yet',
+  /**
+   * The heading over the owner's first remixes of a character (owner, 2026-11-04: a heading over the row, not a label
+   * on each picture), and the slot for one that doesn't exist yet.
+   */
+  firstRemixesHead: 'First remixes by @naaate',
+  firstRemixEmpty: 'Not here yet',
   /** Before a picture is tapped. */
   pickFirst: 'Tap a picture to remix it',
   remix: 'Remix',

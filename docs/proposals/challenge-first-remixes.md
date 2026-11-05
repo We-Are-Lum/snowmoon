@@ -13,7 +13,11 @@ owner's decisions of 2026-11-04. DRAFT until the owner approves it. **Nothing is
 - They are published from the owner's account as **admin remixes**, labelled **"made outside the site; reported by
   the maker; can't be re-run exactly"**, each with its file's sha256.
 - /challenge shows each character's base and two of the owner's first remixes. Until they exist, the two slots are
-  empty ("First remix: not here yet").
+  empty ("Not here yet").
+- Later the same day: the first remixes sit in their own row under the heading **"First remixes by @naaate"** (a
+  heading over the row, not a label on each picture). They are not entries: no Entry badge, no count, never in an
+  entry list. Deluin and Gladias have three bases each (their current default look, recast a and recast b), shown in
+  a fresh random order on each visit; the other characters keep one base for now.
 
 ## What the owner sends, per picture
 

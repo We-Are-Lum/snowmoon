@@ -32,6 +32,20 @@ export function phase(now: Date = new Date(), dates: { opens: string; closes: st
 }
 
 /**
+ * Whether the challenge is open now (owner, 2026-11-04: "nothing opens by date alone"): the owner's switch
+ * (CHALLENGE.public) and inside the window. Everything the dates used to switch on by themselves reads this: entries
+ * (eligibility at publish, marking), open sheet-making and the challenge share text. The cap reads the same switch
+ * (imagesDailySpendCapUsd in src/lib/config.ts).
+ */
+export function challengeOpenNow(now: Date = new Date(), pub: boolean = CHALLENGE.public, dates: { opens: string; closes: string } = CHALLENGE.dates): boolean {
+  return pub && phase(now, dates) === 'open';
+}
+
+/** Entries are taken now: CHALLENGE.entries, and the challenge open (challengeOpenNow). */
+export const entriesOpen = (now: Date = new Date(), pub: boolean = CHALLENGE.public) => CHALLENGE.entries && challengeOpenNow(now, pub);
+
+
+/**
  * A date of the challenge as people read it, in Pacific time, built from CHALLENGE.dates only. A closing instant
  * (closes, mintCloses) is shown as its last minute: "Sunday 22 November, 23:59 Pacific".
  */
@@ -179,7 +193,12 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /** A character's bases, as configured (CHALLENGE.bases): design ids, at most CHALLENGE.maxBases, empty until picked. */
 export function basesOf(character: string, bases: Record<string, readonly string[]> = CHALLENGE.bases): string[] {
-  return (bases[character] ?? []).filter((id) => UUID.test(id)).slice(0, CHALLENGE.maxBases).map((id) => id.toLowerCase());
+  return (bases[character] ?? []).filter((id) => UUID.test(id)).slice(0, baseCountOf(character)).map((id) => id.toLowerCase());
+}
+
+/** How many bases a character may have: CHALLENGE.baseCount's number for it (one if unset), never above CHALLENGE.maxBases. */
+export function baseCountOf(character: string): number {
+  return Math.min(CHALLENGE.maxBases, Math.max(0, Math.floor(CHALLENGE.baseCount[character] ?? 1)));
 }
 
 /** What is wrong with the bases config, if anything (scripts/test-challenge.ts runs it on the committed config). */
@@ -188,7 +207,7 @@ export function basesProblems(bases: Record<string, readonly string[]> = CHALLEN
   for (const c of characters) if (!Array.isArray(bases[c])) p.push(`${c}: no bases list`);
   for (const [c, ids] of Object.entries(bases)) {
     if (!characters.includes(c)) p.push(`${c}: not a challenge character`);
-    if (ids.length > CHALLENGE.maxBases) p.push(`${c}: ${ids.length} bases, more than ${CHALLENGE.maxBases}`);
+    if (ids.length > baseCountOf(c)) p.push(`${c}: ${ids.length} bases, more than its ${baseCountOf(c)} (CHALLENGE.baseCount, at most CHALLENGE.maxBases)`);
     for (const id of ids) if (!UUID.test(id)) p.push(`${c}: "${id}" is not a design id`);
     if (new Set(ids).size !== ids.length) p.push(`${c}: a base is listed twice`);
   }
@@ -210,6 +229,11 @@ export interface Ancestor {
 /** The owner's first remixes of a character, as configured (CHALLENGE.firstRemixes): design ids, at most CHALLENGE.firstRemixesShown. */
 export function firstRemixesOf(character: string, list: Record<string, readonly string[]> = CHALLENGE.firstRemixes): string[] {
   return (list[character] ?? []).filter((id) => UUID.test(id)).slice(0, CHALLENGE.firstRemixesShown).map((id) => id.toLowerCase());
+}
+/** Whether a design is one of the owner's first remixes (any character's CHALLENGE.firstRemixes): never an entry. */
+export function isFirstRemix(ids: { elementId: string; versionId: string }, list: Record<string, readonly string[]> = CHALLENGE.firstRemixes): boolean {
+  const all = Object.values(list).flat().map((id) => id.toLowerCase());
+  return all.includes(ids.elementId.toLowerCase()) || all.includes(ids.versionId.toLowerCase());
 }
 /** What's wrong with CHALLENGE.firstRemixes: a list for each character, design ids only, at most firstRemixesShown. */
 export function firstRemixesProblems(list: Record<string, readonly string[]> = CHALLENGE.firstRemixes): string[] {

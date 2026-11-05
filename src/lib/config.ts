@@ -190,8 +190,9 @@ export const WALLET_LINKS = {
    */
   offer: true as boolean,
   /**
-   * The automatic link ('verified'), on a wallet's signed-in request: its address is sent to Neynar (user by verified
-   * address), and a wallet that exactly one Farcaster account has verified is linked to it. A linked wallet is looked
+   * The automatic link ('verified'), on a wallet's signed-in request: its address is sent to Neynar (user by custody
+   * or verified address, since 2026-11-04), and a wallet that is the custody address of, or verified by, exactly one
+   * Farcaster account is linked to it. A linked wallet is looked
    * up again at most once a day, and a verified link ends if that FID no longer verifies the address; a tapped link
    * isn't affected; a wallet the person unlinked isn't looked up again (owner, 2026-10-22). ON, in the same deploy
    * as the Privacy line that says so (section 7, reread by the owner on 2026-10-22) and migration 0026, which the
@@ -405,22 +406,41 @@ export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
  */
 export const CHALLENGE = {
   id: 'remix-2026-11',
-  /** The characters, by their file in content/snowmoon/designs/characters, in the owner's order (owner, 2026-10-31). */
-  characters: ['zei', 'bai', 'gladias', 'seila', 'deluin', 'mu'] as readonly string[],
   /**
-   * Each character's base (owner, 2026-11-04, after the restart: one base per character, all in Animated series;
-   * was three, 2026-11-03): up to CHALLENGE.maxBases published sheets to start from. Zei's and Bai's are their MJ·GPT
-   * fronts, the other four their Animated series fronts (branch challenge-styles, docs/starting-sheet-drafts/
-   * views-contact-sheet.md); none is published yet, so every list stays empty. Each entry is a design's id: its element id (any
-   * version of it) or one version's id (the id in /references/designs/<id>). Designs have no slugs. Empty until the
-   * owner picks. An entry is a fork of any base, or of a remix of one (src/lib/challenge/rules.ts, remixOfBase); while
-   * a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks before the picks.
+   * The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"). While false:
+   * - /challenge, /api/challenge/* and every way into them (the menu item, the home row, the challenge share text, and
+   *   on sheet pages the Entry badge, "Mark as my entry", the challenge lines and "Posted on") are for admins only
+   *   (ADMINS); everyone else gets "not found", as agent pages do while AGENTS.public is off;
+   * - nothing the dates would switch on opens by itself: entries (eligibility recorded at publish, marking), open
+   *   sheet-making (openSheets) and the challenge's free image cap (dailySpendCapUsd) all stay off, whatever the clock
+   *   says. `dates` stay as they are, for when the owner opens it with a new open date.
+   * Only the owner turns it on. check:principles P6u proves it: with this off and the clock past `dates.opens`, entries,
+   * open sheets and the $15 cap are off and /challenge answers 404 to a non-admin.
+   */
+  public: false as boolean,
+  /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
+  characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'] as readonly string[],
+  /**
+   * Each character's bases (owner, 2026-11-04): published sheets to start from, at most CHALLENGE.baseCount for the
+   * character (never more than CHALLENGE.maxBases). Deluin and Gladias have three each: their current default look,
+   * recast a and recast b (drafts in branch challenge-styles, docs/starting-sheet-drafts/directions/*-recast-*.jpg);
+   * the other four keep one for now (Zei's and Bai's MJ·GPT fronts, the others' Animated series fronts). No look is
+   * the "canonical" or "official" one: /challenge shows a character's bases in a fresh random order on each visit
+   * (the P5g shuffle), so none reads as the default. None is published yet, so every list stays empty. Each entry is
+   * a design's id: its element id (any version of it) or one version's id (the id in /references/designs/<id>).
+   * Designs have no slugs. An entry is a fork of any base, or of a remix of one (src/lib/challenge/rules.ts,
+   * remixOfBase); while a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks
+   * before the picks.
    */
   bases: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
-  maxBases: 1,
+  /** How many bases each character has (owner, 2026-11-04): three for Deluin and Gladias, one for the rest for now. */
+  baseCount: { zei: 1, gladias: 3, bai: 1, seila: 1, deluin: 3, mu: 1 } as Record<string, number>,
+  /** The most bases any character may have. */
+  maxBases: 3,
   /**
-   * The owner's first remixes (owner, 2026-11-04): up to CHALLENGE.firstRemixesShown per character, shown beside its
-   * base on /challenge, in the order given here. Each entry is a published design's id (element or version), an
+   * The owner's first remixes (owner, 2026-11-04): up to CHALLENGE.firstRemixesShown per character, shown on
+   * /challenge under the heading "First remixes by @naaate", below its bases, in the order given here. They are not
+   * entries: no Entry badge, no count, never in an entry list (src/lib/challenge/entries.ts leaves them out). Each entry is a published design's id (element or version), an
    * admin's remix of that character's base, imported with its self-reported recipe (scripts/import-first-remixes.ts,
    * docs/proposals/challenge-first-remixes.md). Empty until they exist: /challenge shows empty slots. Chosen by the
    * owner, not by any count (P5g's third narrow exception, pending the owner's yes).
@@ -632,12 +652,14 @@ export const IMAGES = {
 /** Minpentai Play's limits and retention (owner, 2026-10-09). Every /api/minpentai/* request counts. */
 /**
  * The site-wide free image spend cap for a moment (owner, 2026-10-31): CHALLENGE.dailySpendCapUsd from the entry
- * window's open (included) to its close (excluded), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
+ * window's open (included) to its close (excluded), once the owner has opened the challenge (CHALLENGE.public; owner,
+ * 2026-11-04), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
  * itself, with no deploy. The cap is per UTC day; the day's spend counted so far is compared with the cap now.
  */
 export function imagesDailySpendCapUsd(now: Date = new Date()): number {
   const t = now.getTime();
-  return t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
+  // Only once the owner has opened the challenge (CHALLENGE.public): the dates alone never raise the cap.
+  return CHALLENGE.public && t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
 }
 
 export const MINPENTAI_PLAY = {

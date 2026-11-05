@@ -15,15 +15,19 @@
  * In the challenge's code, randomness (Math.random, getRandomValues, randomInt) lives only in src/lib/challenge/shuffle.ts,
  * whose shuffleFresh takes a list of an unconstrained type (`<T>(items: readonly T[]`, so it can't read anything about
  * an item) and reads no likes, counts, scores, weights or settings; it is called only in the random selection
- * (src/components/challenge-remix-pick.tsx), on the whole list (`shuffleFresh(all)`), and the page hands that
- * component every remix (`remixes(sql)`, with no filter, limit or order).
+ * (src/components/challenge-remix-pick.tsx), on the whole list (`shuffleFresh(all)`), and the page's data
+ * (src/lib/challenge/view.ts) hands that component every remix (`remixes(sql)`, with no filter, limit or order).
+ * The same shuffle also orders a character's several bases (owner, 2026-11-04: Deluin's and Gladias' three, in a fresh
+ * random order on each visit so none reads as the default), in src/components/challenge-bases.tsx only, on the
+ * character's whole list of bases (`shuffleFresh(bases)`).
  */
 export const CHALLENGE_FILES = /^src\/lib\/challenge\/|^src\/app\/challenge\/|^src\/app\/api\/challenge\/|^src\/components\/(challenge-[a-z-]+|posted-on|post-link-field)\.tsx$/;
-const NOT_AN_ORDER = /\b(likes?|like_?count|likeCount|built_?on|builtOn|score|repost|recast|repl(y|ies)|followers?|cost|amount|usd|payment|paid|sponsor|donation)\b/i;
+export const NOT_AN_ORDER = /\b(likes?|like_?count|likeCount|built_?on|builtOn|score|repost|recast|repl(y|ies)|followers?|cost|amount|usd|payment|paid|sponsor|donation)\b/i;
 const BASES_FILE = 'src/lib/challenge/entries.ts';
 const SHUFFLE_FILE = 'src/lib/challenge/shuffle.ts';
 const PICK_FILE = 'src/components/challenge-remix-pick.tsx';
-const PAGE_FILE = 'src/app/challenge/page.tsx';
+const BASES_PICK_FILE = 'src/components/challenge-bases.tsx';
+const PAGE_FILE = 'src/lib/challenge/view.ts';
 const RANDOM = /Math\.random\b|getRandomValues\b|randomInt\b/;
 const WEIGHT = /\bweight|\bbias|\bboost|\bfeature[ds]?\b|\bpinned\b|\bcount\b|\bpopular/i;
 const RULES_FILE = 'src/lib/challenge/rules.ts';
@@ -63,10 +67,14 @@ export function p5gProblems(files: { file: string; text: string }[]): string[] {
     }
     for (const m of code.matchAll(/shuffleFresh\(([^)]*)\)/g)) {
       if (file === SHUFFLE_FILE) continue;
-      if (file !== PICK_FILE) problems.push(`${file}: shuffles outside the random selection (only ${PICK_FILE} may)`);
+      if (file === BASES_PICK_FILE) {
+        if (m[1].trim() !== 'bases') problems.push(`${file}: shuffles something other than the character's whole list of bases: shuffleFresh(${m[1].slice(0, 40)})`);
+        continue;
+      }
+      if (file !== PICK_FILE) problems.push(`${file}: shuffles outside the random selection and the bases (only ${PICK_FILE} and ${BASES_PICK_FILE} may)`);
       else if (m[1].trim() !== 'all') problems.push(`${file}: shuffles something other than the whole list: shuffleFresh(${m[1].slice(0, 40)})`);
     }
-    if (file === PAGE_FILE && /ChallengeRemixPick/.test(code) && !/await remixes\(sql\)/.test(code)) problems.push(`${PAGE_FILE}: the random selection isn't drawn from every remix (remixes(sql), with no filter, limit or order)`);
+    if (file === PAGE_FILE && !/await remixes\(sql\)/.test(code)) problems.push(`${PAGE_FILE}: the random selection isn't drawn from every remix (remixes(sql), with no filter, limit or order)`);
     if (file === RULES_FILE) {
       const s = functionSpan(code, 'baseStyleOrder');
       if (s) {

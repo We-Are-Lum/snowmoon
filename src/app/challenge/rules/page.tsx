@@ -1,4 +1,6 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { CHALLENGE } from '~/lib/config';
 import { db } from '~/lib/db';
 import { designByline } from '~/lib/images/byline';
@@ -15,14 +17,20 @@ import { AiTag } from '~/components/ai-tag';
  * here: the deadline, who can enter, what you do, what happens next, the rules, the admins line, each character's
  * count of entrants (a count, never a ranking) and the entries so far, newest first (docs/proposals/challenge-short-page.md
  * lists what moved). Every date from CHALLENGE.dates; marked as draft wording. Readable signed out (once the admin-only
- * gate, on its own branch, lifts). Nothing ordered by anything but time (P5, P7).
+ * gate lifts: until CHALLENGE.public is on, it answers "not found" to everyone, admins included; ./not-found.tsx is the
+ * plain one). Nothing ordered by anything but time (P5, P7).
  */
 export const revalidate = 60;
-export const metadata = { title: 'The rules: remix the cast', description: 'The remix challenge on Snowmoon Party: the draft rules.' };
+export async function generateMetadata(): Promise<Metadata> {
+  if (!CHALLENGE.public) return { robots: { index: false, follow: false } };
+  return { title: 'The rules: remix the cast', description: 'The remix challenge on Snowmoon Party: the draft rules.' };
+}
 
 const callName = (name: string) => name.split(' ')[0];
 
 export default async function ChallengeRules() {
+  // Admin-only until the owner opens it (CHALLENGE.public; owner, 2026-11-04): "not found" to everyone, admins included.
+  if (!CHALLENGE.public) notFound();
   const sql = db();
   const chars = CHALLENGE.characters.map((s) => bookCharacter(s)).filter((c): c is NonNullable<typeof c> => Boolean(c));
   const none: Standing = { entries: [], byAdmins: [], entrants: entrantCounts([]) };

@@ -65,6 +65,13 @@ function turned(w: G.World): G.World {
   return m;
 }
 const turnedKeys = (o: Record<number, number>) => Object.fromEntries(Object.entries(o).map(([k, v]) => [rk(+k), v]));
+/**
+ * Amber's view of a board (the engine's fog, at sight R; Play's rocks never break, so they show as they are). The
+ * frozen game.ts read the whole board; since 2026-11-03 (owner: option 3) the computer plans from its view only, so
+ * every computer below, frozen or not, is handed its view (Cyan's: the turned board's). The fixtures stay as frozen.
+ */
+const PLAY_E = engine(layout({}, BASE));
+const view = <T,>(w: T, R: number): T => PLAY_E.fog(w as unknown as World, { ...BASE, sight: R, reach: R }, 'A') as unknown as T;
 function playGame(lvlC: number, lvlA: number, seed: number, mod: unknown = Frozen) {
   // The two modules have the same names; a world's rock is typed 1 in the frozen one and a count in the engine.
   const G = mod as unknown as typeof Frozen;
@@ -75,8 +82,8 @@ function playGame(lvlC: number, lvlA: number, seed: number, mod: unknown = Froze
   const turns: { C: G.Placement[]; A: G.Placement[] }[] = [];
   for (;;) {
     const w = m.w, snap = { C: G.towers(w, 'C'), A: G.towers(w, 'A') };
-    const a = G.botPlan({ w, lvl: lvlA, R, rng: rA, cost, every, rule, snap, lsA: m.lsA });
-    const c = G.botPlan({ w: turned(w), lvl: lvlC, R, rng: rC, cost, every, rule, snap: { C: snap.A.map(rk), A: snap.C.map(rk) }, lsA: turnedKeys(m.lsC) });
+    const a = G.botPlan({ w: view(w, R), lvl: lvlA, R, rng: rA, cost, every, rule, snap, lsA: m.lsA });
+    const c = G.botPlan({ w: view(turned(w), R), lvl: lvlC, R, rng: rC, cost, every, rule, snap: { C: snap.A.map(rk), A: snap.C.map(rk) }, lsA: turnedKeys(m.lsC) });
     m.pend = { C: c.map((p) => ({ ...p, o: 'C' as G.Side, x: rx(p.x), y: ry(p.y), dx: -p.dx, dy: -p.dy })), A: a };
     turns.push(m.pend);
     G.apply(m); G.updLS(m);
@@ -189,8 +196,8 @@ function soloGame(level: number, seed: number, mod: unknown = G1) {
   const person = G.rng(seed ^ 0x5bd1e995), turns: G.Placement[][] = [], amber: G.Placement[][] = [];
   for (;;) {
     const w = m.w, snap = { C: G.towers(w, 'C'), A: G.towers(w, 'A') };
-    const a = G.botPlan({ w, lvl: level, R, rng: r, cost, every, rule, snap, lsA: m.lsA });
-    const c = G.botPlan({ w: turned(w), lvl: 3, R, rng: person, cost, every, rule, snap: { C: snap.A.map(rk), A: snap.C.map(rk) }, lsA: turnedKeys(m.lsC) }).map((p) => ({ ...p, o: 'C' as G.Side, x: rx(p.x), y: ry(p.y), dx: -p.dx, dy: -p.dy }));
+    const a = G.botPlan({ w: view(w, R), lvl: level, R, rng: r, cost, every, rule, snap, lsA: m.lsA });
+    const c = G.botPlan({ w: view(turned(w), R), lvl: 3, R, rng: person, cost, every, rule, snap: { C: snap.A.map(rk), A: snap.C.map(rk) }, lsA: turnedKeys(m.lsC) }).map((p) => ({ ...p, o: 'C' as G.Side, x: rx(p.x), y: ry(p.y), dx: -p.dx, dy: -p.dy }));
     m.pend = { C: c, A: a }; turns.push(c); amber.push(a);
     G.apply(m); G.updLS(m);
     do {
