@@ -7,8 +7,10 @@
  * The person columns are bigint, and the image counters take an advisory lock on the number as a 32-bit int, so the
  * base sits inside that range: a billion wallet accounts before the two could meet.
  *
- * Money follows the wallet: only a wallet account has a prepaid balance. A Lens or Bluesky account never pays from
- * one (it can sign in with a wallet to pay), and gets free generations only as decided in src/lib/social/free.ts.
+ * Money: a wallet account has its own prepaid balance (src/lib/wallet/credits.ts). With paying per person on
+ * (PERSON_BALANCE, src/lib/balance/person.ts), a Farcaster, Lens or Bluesky account has one too, under its person
+ * number, paid from a wallet that signed for it; a balance stays with the account it was paid to. A Lens or Bluesky
+ * account gets free generations only as decided in src/lib/social/free.ts.
  */
 export const SOCIAL_PERSON_BASE = 1_000_000_000;
 

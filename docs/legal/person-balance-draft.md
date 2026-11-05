@@ -1,9 +1,10 @@
 # Snowmoon: Paying per person, Terms and Privacy lines (draft)
 
-**DRAFT, for the owner's reread.** Drafted by a coding agent (Claude, a closed model by Anthropic) on branch
-`person-balance`, 2026-11-04. Design: `docs/proposals/person-balance.md`. Nothing here is in `src/lib/legal.ts`.
-`LEGAL.ownerReread` is not touched. These lines ship only in the release that turns `PERSON_BALANCE` on, together with
-the browser side, which isn't built yet (legal texts describe today).
+**APPROVED as drafted** ("reviewed by the coordinator, approved by the owner", 2026-11-04), to ship with the browser
+side. Drafted by a coding agent (Claude, a closed model by Anthropic) on branch `person-balance`, 2026-11-04. Design:
+`docs/proposals/person-balance.md`. In `src/lib/legal.ts` on branch `person-balance` since the browser side was built
+there (2026-11-04): Terms words 16ybp5w (before 15utl87), Privacy words 1529cd5 (before iqpiw8), with this record in
+`LEGAL.ownerReread`'s comments. Nothing else in the pages changed.
 
 "Before" is quoted word for word from `src/lib/legal.ts` on branch `signin-lens-bluesky` (82a07763). Where several
 sentences of a paragraph stay the same, they are kept in full in "after" so the paragraph can be pasted whole.
@@ -39,9 +40,8 @@ Still true.
 Changed: the second and third sentences (new), "Paying never makes an entry in a challenge." (new), "A balance stays with the
 account it was paid to, …" (new). The rest is as before.
 
-**For the owner:** the last two sentences of "before" must stay true once the browser side is built: for a Farcaster,
-Lens or Bluesky account, "add a payment by its transaction" works only for a wallet that has signed for that account.
-If the page can't offer that, the sentence becomes "If you sign in with a wallet, you can also add …".
+The last two sentences stay true as built: the person's panel has "Add a payment by its transaction hash", which adds a
+payment from a wallet that signed for the account, and tries a payment it still remembers when it opens.
 
 ### §6b Agents: no change
 
@@ -74,12 +74,12 @@ frames are connected.
 (A wallet sign-in already sends a smart wallet's sign-in message to the same endpoint, the same way; the current line
 doesn't say so. The owner may want that said once, for both.)
 
-### §3 Kept on your device: to check when the browser side is built
+### §3 Kept on your device: no change
 
 > … and a payment you have sent but not yet seen credited.
 
-Probably still true. The page will also keep the signed-for-your-account note (the intent's id) with that payment. If
-so: "… and a payment you have sent but not yet seen credited, with the note that your wallet signed for it."
+Still true, as built: the page keeps only the payment's transaction hash while it confirms, as a wallet account's
+does. Our server finds the wallet's signed message from the paying wallet, so nothing else is kept on the device.
 
 ## Not in these lines (on purpose)
 

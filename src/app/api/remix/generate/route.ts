@@ -58,13 +58,14 @@ export async function POST(request: Request) {
   const [v] = await sql`select 1 from studio.adaptation_versions where id = ${version} and adaptation_id = ${adaptation} and not hidden`;
   if (!v) return no('No such version', 404);
   if (!(await hasConsented(person))) return no('Agree to how your words are published first', 403, { reason: 'consent' });
-  const gate = await mayGenerate(sql, person);
+  // Paying per person (PERSON_BALANCE): someone the free check refuses may still pay from their balance (paidOnly).
+  const gate = await mayGenerate(sql, person, { reserveUsd: REMIX.reserveUsd(1) });
   if (!gate.ok) return no(gate.error, gate.status, { reason: gate.reason });
 
   const pictures = remixPictures(layout, shot);
   const prompt = remixPrompt(shot, pictures, words);
   if (prompt.length > REMIX.promptMaxChars) return no('This prompt is too long to send. Say what to change in fewer words.', 400);
-  const g = await generate(sql, person, request, prompt, pictures);
+  const g = await generate(sql, person, request, prompt, pictures, { personBalance: true, paidOnly: gate.paidOnly });
   if (!g.ok) return no(g.error, g.status, g.extra);
   const made = g.made;
 

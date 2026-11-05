@@ -22,18 +22,21 @@ page first gets the wallet to sign a statement naming that person. The steps:
 
 1. **Intent (one signature).** The page asks us for the message to sign (`GET /api/balance/intent?address=…`): a
    Sign-In with Ethereum message (EIP-4361) for snowmoon.party on Base, with a fresh nonce (today's ten-minute signed
-   nonce, `src/lib/wallet/session.ts`), the wallet's address, the statement "Add payments from this wallet to a
-   prepaid balance on Snowmoon. Payments are final." (DRAFT wording), and the request id `person:<person number>`.
-   The wallet signs it.
+   nonce, `src/lib/wallet/session.ts`), the wallet's address, the statement "Add payments from this wallet to the
+   prepaid balance of <the account in words> on Snowmoon. Payments are final." (DRAFT wording; the account is "your
+   Farcaster account @name (FID n)", "your Lens account lens/name" or "your Bluesky account @handle", owner
+   2026-11-04), and the request id `person:<person number>`. The wallet signs it.
 2. **The server checks it** (`POST /api/balance/intent`): the session's person is a Farcaster, Lens or Bluesky
    person (wallet accounts keep today's claim); the message is ours (domain, Base, our nonce, still current); the
-   request id names *this session's* person; and the signature is the address's (an ordinary wallet's is checked
+   request id names *this session's* person, and the account in words, read again now, is the same; and the signature is the address's (an ordinary wallet's is checked
    locally; a smart wallet's, EIP-1271/6492, through Base, as at sign-in). Only then does it keep an intent:
    a random id, the person, the address, the time. Insert-only.
 3. **Payment.** The wallet sends USDC or ETH on Base to `IMAGES.prepaid.payTo`, as today.
-4. **Claim** (`POST /api/balance/claim`, `{ intent, txHash }`): the server credits the payment only if
-   - the intent was made by this session's person (otherwise "not yours", and nothing is said about the intent);
-   - the intent hasn't been used (one payment per intent);
+4. **Claim** (`POST /api/balance/claim`, `{ txHash }`): the page keeps only the hash, as a wallet account's does
+   (Privacy §3 unchanged). The server tries this session's person's own unused intents, by wallet, and credits the
+   payment only if
+   - it came from the wallet of one of them (otherwise "not from a wallet that signed for your account");
+   - that intent hasn't been used (one payment per intent);
    - `readPayment(txHash, intent.address)` passes: succeeded, 3 confirmations, at most 7 days old, to us, from the
      intent's address (USDC Transfer from it; plain ETH from it; or a smart wallet's own user operation with a rise in
      payTo's balance, refusing a shared block), at least the minimum;
@@ -64,8 +67,10 @@ comes back.
   own person balance stays its own and isn't spent while it signs in as the FID.
 - **Spending order:** free first (the contest's 3 remixes a day, Pictures' daily count), then the balance, at the
   same price as wallets (estimate + markup, rounded up to $0.001). A person who doesn't pass the free check (Neynar
-  score, Lens score, Bluesky check) can still pay, as wallet accounts can today (they have no gate). **Owner to
-  confirm.**
+  score or Neynar unreachable, Lens score, Bluesky check) can still pay, as wallet accounts can (owner, 2026-11-04):
+  the gate lets them through `paidOnly` when their balance covers a Generate, and only the balance pays. Free
+  generations still need the check, and the launch order applies to everyone. Routes that can't take a person
+  balance (Remix frames, a design's name check) keep the refusal.
 - **Credit-backs:** the same three reasons as wallets (`failed`, `refused`, `dropped`), once per debit, for exactly
   that debit, to the same person.
 - **Refunds:** never as money. Payments are final; nothing is held for anyone to withdraw. A balance can only be
@@ -97,13 +102,15 @@ Drafts: `docs/legal/person-balance-draft.md`. They ship only in the release that
 spending changes. Turning it on needs, in one deploy: the migration applied (`NEXT_person_balance.sql`), the
 Terms/Privacy lines reread by the owner, and the browser side (the sign-to-pay step and the claim), which isn't built.
 
-Built on this branch (off): `src/lib/balance/person.ts` (statement, intent, claim, balance, debit, credit-back),
-`/api/balance/intent` and `/api/balance/claim`, and Pictures' `reserve` and `paidPicture` paying from a person balance
-when the free path refuses. Tests: `npm run test:person-balance` (the migration) and `npm run test:person-balance-code`.
+Built on this branch: `src/lib/balance/person.ts` (the account in words, statement, intent, claim by hash, balance,
+debit, credit-back), `/api/balance`, `/api/balance/intent` and `/api/balance/claim`; the gate's `paidOnly`; Pictures'
+`reserve` and `paidPicture` paying from a person balance when the free path refuses; and the browser side
+(`src/components/person-balance.tsx`, `payForPerson` and `claimForPerson` in `src/lib/wallet/client.ts`), shown in
+the image composer (the composer's Generate shows the price once the person pays) and on the You page. The approved
+Terms and Privacy lines are in `src/lib/legal.ts`. Tests: `npm run test:person-balance` (the migration) and `npm run test:person-balance-code`.
 
 ## Out of scope
 
-- The browser side (the wallet panel for a person: sign, send, claim, show the balance). Not built.
 - Remix frames (`src/lib/remix/limits.ts`) and Make's coach paying from a person balance: the contest's remixes go
   through Pictures' path, which is wired. The others are a follow-up.
 - Moving or merging balances (wallet → FID, Bluesky → FID), and paying for someone else on purpose.

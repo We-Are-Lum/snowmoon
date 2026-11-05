@@ -187,11 +187,15 @@ export const LINKED_WALLETS: Readonly<Record<string, number>> = {
  * prepaid balance for a Farcaster, Lens or Bluesky sign-in, paid from a browser wallet that signs a statement naming
  * the signed-in person (src/lib/balance/person.ts). Free generations are used first; then the balance, at the
  * wallets' price, under the same site-wide prepaid daily cap and no per-person cap. Wallet accounts keep their own
- * balance (IMAGES.prepaid). OFF: turning it on needs the migration applied, the Terms and Privacy lines reread
- * (docs/legal/person-balance-draft.md) and the browser side, in one deploy.
+ * balance (IMAGES.prepaid). ON on branch person-balance, with what it needs in the same release: the browser side
+ * (src/components/person-balance.tsx) and the Terms and Privacy lines approved by the owner (2026-11-04,
+ * docs/legal/person-balance-draft.md, in src/lib/legal.ts). Migration NEXT_person_balance must be applied before the
+ * merge (CLAUDE.md); until then the routes answer "not available yet" and nothing is charged to a person balance.
+ * Off: the routes answer 404, no panel shows, and spending is as before; Terms §4 and §6a and Privacy §4 and §7 would
+ * then need their earlier words back.
  */
 export const PERSON_BALANCE = {
-  enabled: false as boolean,
+  enabled: true as boolean,
   /** A payment counts for an intent only if its block is at most this long before the intent (clocks differ)… */
   earlyMinutes: 10,
   /** …and at most this long after it. */

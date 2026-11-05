@@ -48,10 +48,18 @@ export async function paidPicture(
   sql: Sql,
   fid: number,
   request: Request,
-  job: { checkText: string; spend?: Spend; make: () => Promise<Made>; /** The prompt check's token budget (a sheet's views: IMAGES.designs.guardMaxTokens). */ guardMaxTokens?: number },
+  job: {
+    checkText: string;
+    spend?: Spend;
+    make: () => Promise<Made>;
+    /** The prompt check's token budget (a sheet's views: IMAGES.designs.guardMaxTokens). */
+    guardMaxTokens?: number;
+    /** The gate let this person pay but not use free generations (mayGenerate's paidOnly). */
+    paidOnly?: boolean;
+  },
 ): Promise<Paid> {
   const spend = job.spend;
-  const r = await reserve(sql, fid, spend);
+  const r = await reserve(sql, fid, spend, { paidOnly: job.paidOnly });
   if (!r.ok) return { ok: false, status: 429, error: say(r.refusal, fid), extra: { reason: r.refusal } };
   // Paid from a person balance (PERSON_BALANCE, off) when the free path refused: its costs count as prepaid.
   const funded = r.funded ?? fundedBy(fid);

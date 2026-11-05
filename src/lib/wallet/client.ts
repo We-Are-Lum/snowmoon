@@ -201,3 +201,45 @@ export async function claim(hash: `0x${string}`, tries = 20): Promise<{ added: n
   }
   throw new WalletError('server', IMAGE_WORDING.prepaid.claimLater);
 }
+
+/**
+ * Paying per person (PERSON_BALANCE; DRAFT; docs/proposals/person-balance.md): a Farcaster, Lens or Bluesky sign-in
+ * pays its own balance from the wallet in this browser. The wallet first signs our message naming the account (in
+ * words and by number), which our server checks and keeps; then it pays on Base as a wallet account does; then our
+ * server adds the payment by its hash, finding the signed message from the paying wallet. Only the hash is kept on
+ * this device while the payment confirms (Privacy §3), as for a wallet account.
+ */
+export async function signForPerson(onSigning?: () => void): Promise<void> {
+  const { wallet, account } = await connect();
+  const m = await authFetch(`/api/balance/intent?address=${account}`).catch(() => null);
+  const out = (await m?.json().catch(() => ({}))) as { message?: string; error?: string };
+  if (!m?.ok || !out.message) throw new WalletError('server', out.error);
+  onSigning?.();
+  let signature: `0x${string}`;
+  try {
+    signature = await wallet.signMessage({ account, message: out.message });
+  } catch {
+    throw new WalletError('declined');
+  }
+  const res = await authFetch('/api/balance/intent', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ message: out.message, signature }) }).catch(() => null);
+  const kept = (await res?.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+  if (!res?.ok || !kept.ok) throw new WalletError('server', kept.error);
+}
+
+/** Sign for the signed-in account, pay `usd` on Base, wait for it to land, then ask our server to add it. */
+export async function payForPerson(opts: { usd: number; token: 'USDC' | 'ETH'; payTo: `0x${string}`; usdc: `0x${string}`; onSigning?: () => void; onSent?: (hash: `0x${string}`) => void; onWaiting?: () => void }): Promise<{ added: number; balanceUsd: number }> {
+  await signForPerson(opts.onSigning);
+  return claimForPerson(await sendOnBase({ usd: opts.usd, token: opts.token, to: opts.payTo, usdc: opts.usdc, onSent: opts.onSent, onWaiting: opts.onWaiting }));
+}
+
+/** Ask our server to add a payment to the signed-in account's own balance (retries while it confirms). */
+export async function claimForPerson(hash: `0x${string}`, tries = 20): Promise<{ added: number; balanceUsd: number }> {
+  for (let i = 0; i < tries; i++) {
+    const res = await authFetch('/api/balance/claim', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ txHash: hash }) }).catch(() => null);
+    const out = (await res?.json().catch(() => ({}))) as { added?: number; balanceUsd?: number; error?: string; retry?: boolean; reason?: string };
+    if (res?.ok && out.added !== undefined) return { added: out.added, balanceUsd: out.balanceUsd ?? 0 };
+    if (!out.retry) throw new WalletError('server', out.error, forgetsPending(out.reason));
+    await new Promise((r) => setTimeout(r, 3000));
+  }
+  throw new WalletError('server', IMAGE_WORDING.prepaid.claimLater);
+}

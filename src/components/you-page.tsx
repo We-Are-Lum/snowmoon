@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ILLUSTRATION_CHECK, IMAGES } from '~/lib/config';
+import { ILLUSTRATION_CHECK, IMAGES, PERSON_BALANCE } from '~/lib/config';
 import { authFetch, refreshWalletLink, signOut, signOutSocial, signOutWallet, useAuth, useSocialDevice, useSocialSession, useWalletAlongside, walletFetch } from '~/lib/client-auth';
 import { signInOpen } from '~/lib/config';
 import { SocialLinks, type SocialView } from './social-links';
@@ -12,6 +12,7 @@ import { AiLabel } from './recipe-sheet';
 import { SignInButton } from './sign-in';
 import { SignInChoices } from './sign-in-choices';
 import { LinkNote, WalletPanel, WalletSignInButton } from './wallet';
+import { PersonBalancePanel } from './person-balance';
 import { AgentsOnYou } from './agents/agents-you';
 import { exactDollars } from '~/lib/wallet/price-text';
 
@@ -48,6 +49,9 @@ const W = {
   framePrice: (usd: string) => `Up to $${usd} a Remix frame: the estimated cost plus ${Math.round(IMAGES.prepaid.markup * 100)}%. A frame with fewer pictures sent costs less.`,
   farcasterWallet:
     'A Farcaster account has no balance here: References and Remix use your free daily count. Sign in with a wallet too to see its balance, add funds or add a payment. While Farcaster is signed in, Pictures and Remix still make things as your Farcaster account.',
+  /** Paying per person (PERSON_BALANCE). DRAFT (coding agent, 2026-11-04). */
+  farcasterWalletPaying:
+    'Pictures and Remix frames use your free daily count first, then your prepaid balance above. Frames your agent makes use your free count only. A wallet you sign in with on its own keeps its own balance: sign in with it to see it.',
   work: 'Your work',
   workNote: 'Only you see this list. What isn’t hidden is public at its own link. Hide takes a piece out of view for everyone at once.',
   notStored: 'Saved work can’t be read on this copy of the site, so only built-in scenes are listed.',
@@ -236,6 +240,9 @@ export function YouPage() {
 
       <section className="you-section" aria-labelledby="you-wallet">
         <h2 id="you-wallet">{W.wallet}</h2>
+        {/* Paying per person (PERSON_BALANCE): a Farcaster, Lens or Bluesky sign-in's own balance. Shows itself only when
+            /api/balance answers, so not for a wallet account, and not while the switch is off. */}
+        <PersonBalancePanel onChange={() => void load()} />
         {/* A linked wallet signed in here still has its own balance (it stays with the wallet). */}
         {walletSide || (linkedHere && wallet) ? (
           <>
@@ -246,7 +253,7 @@ export function YouPage() {
           </>
         ) : (
           <>
-            <p className="you-note">{W.farcasterWallet}</p>
+            <p className="you-note">{PERSON_BALANCE.enabled && IMAGES.prepaid.payTo ? W.farcasterWalletPaying : W.farcasterWallet}</p>
             {auth.kind === 'signed-in' && auth.via === 'website' && <WalletSignInButton />}
           </>
         )}

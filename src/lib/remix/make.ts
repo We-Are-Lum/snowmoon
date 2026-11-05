@@ -9,7 +9,8 @@ import { FREE_WORDING } from '../social/free';
 import { IMAGE_WORDING } from '../images/wording';
 import { fundedBy, perDay, reserve, settle, type Refusal, type Spend } from './limits';
 import type { RemixPicture, RemixShot } from './shot';
-import { creditBack } from '../wallet/credits';
+import { creditBack as walletCreditBack, type CreditReason } from '../wallet/credits';
+import { personCreditBack } from '../balance/person';
 import { failed } from '../images/paid';
 
 /**
@@ -81,11 +82,21 @@ async function fakeMake(prompt: string, pictures: RemixPicture[]): Promise<Made>
   return { bytes, contentType: 'image/jpeg', seed: 1, requestId: `test-${randomBytes(4).toString('hex')}`, nsfw: prompt.includes('TEST-NSFW'), costUsd: 0, settings: { test: true } };
 }
 
-export async function generate(sql: Sql, person: number, request: Request, prompt: string, pictures: RemixPicture[]): Promise<Generated> {
+export async function generate(
+  sql: Sql,
+  person: number,
+  request: Request,
+  prompt: string,
+  pictures: RemixPicture[],
+  /** Paying per person (PERSON_BALANCE): the Remix route lets a person's own balance pay (limits.ts, reserve). */
+  opts: { personBalance?: boolean; paidOnly?: boolean } = {},
+): Promise<Generated> {
   const spend = remixSpend(pictures.length);
-  const funded = fundedBy(person);
-  const r = await reserve(sql, person, spend);
+  const r = await reserve(sql, person, spend, opts);
   if (!r.ok) return { ok: false, status: r.refusal === 'free-off' ? 503 : 429, error: SAY[r.refusal](person), extra: { reason: r.refusal } };
+  const funded = r.funded ?? fundedBy(person);
+  const creditBack = (_: Sql, debitId: number | undefined, reason: CreditReason) =>
+    r.personDebitId ? personCreditBack(sql, r.personDebitId, reason) : walletCreditBack(sql, debitId, reason);
   if (blockedName(prompt)) {
     await settle(sql, {}, spend, funded);
     const back = await creditBack(sql, r.debitId, 'refused');

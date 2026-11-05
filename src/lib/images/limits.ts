@@ -62,10 +62,16 @@ export async function reserve(
   sql: Sql,
   fid: number,
   spend: Spend = DEFAULT_SPEND,
+  /**
+   * The gate refused free generations but let this person pay (mayGenerate's `paidOnly`, PERSON_BALANCE on): only the
+   * balance pays, and an empty one is refused as 'balance'.
+   */
+  opts: { paidOnly?: boolean } = {},
 ): Promise<{ ok: true; left: number; debitId?: number; personDebitId?: number; funded?: Funded } | { ok: false; refusal: Refusal }> {
+  const paidOnly = Boolean(opts.paidOnly && personBalanceOn());
   // A Lens or Bluesky account without free generations (src/lib/social/free.ts) gets none, whichever route asks; with
   // PERSON_BALANCE on, it may still pay from its own balance (below).
-  const noFree = isSocialPerson(fid) && !(await freeFor(sql, fid)).free;
+  const noFree = paidOnly || (isSocialPerson(fid) && !(await freeFor(sql, fid)).free);
   if (noFree && !personBalanceOn()) return { ok: false, refusal: 'no-free' };
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.spend'))`;
@@ -94,7 +100,10 @@ export async function reserve(
       await addCost(t, 'prepaid', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
       return { ok: true as const, left: paysFor(paid.balanceAfter, priceUsd(IMAGES.reserveUsd)), personDebitId: paid.debitId, funded: 'prepaid' as const };
     };
-    if (noFree) return orPay('no-free');
+    if (noFree) {
+      const r = await orPay('no-free');
+      return !r.ok && paidOnly && r.refusal === 'no-free' ? { ok: false as const, refusal: 'balance' as const } : r;
+    }
     const left = await generationsLeft(t, fid);
     if (left <= 0) return orPay('limit');
     const [today] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'free'`;

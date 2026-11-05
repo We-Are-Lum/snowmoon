@@ -6,6 +6,7 @@ import { authFetch, useAuth, useWalletSession, webNameProof } from '~/lib/client
 import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
 import { SignInChoices } from '~/components/sign-in-choices';
 import { WalletPanel } from '~/components/wallet';
+import { PersonBalancePanel } from '~/components/person-balance';
 import { HideButton, ShareRow } from '../../remix/remix-actions';
 import { AddToStoryboard } from './add-to-storyboard';
 import { exactDollars } from '~/lib/wallet/price-text';
@@ -44,6 +45,10 @@ interface Status {
   left?: number;
   perDay?: number;
   prepaid?: { balanceUsd: number; priceUsd: number };
+  /** A Farcaster, Lens or Bluesky person's own prepaid balance (paying per person, PERSON_BALANCE). */
+  personBalance?: { balanceUsd: number; priceUsd: number };
+  /** The free check refused this person, but their balance pays (owner, 2026-11-04). */
+  paidOnly?: boolean;
   frames?: Mine[];
 }
 
@@ -126,7 +131,10 @@ export function RemixPanel({
   };
 
   const by = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : 'you';
-  const left = status?.prepaid ? `Balance $${status.prepaid.balanceUsd.toFixed(2)} · $${exactDollars(status.prepaid.priceUsd)} a frame` : status?.left !== undefined ? `${status.left} of ${status.perDay ?? 10} left today` : '';
+  // What pays a frame: a wallet account's balance; or a person's own balance once their free frames are used up, or when
+  // the free check refused them (paidOnly; PERSON_BALANCE).
+  const paying = status?.prepaid ?? (status?.personBalance && (status.paidOnly || (status.left ?? 0) <= 0) ? status.personBalance : undefined);
+  const left = paying ? `Balance $${paying.balanceUsd.toFixed(2)} · $${exactDollars(paying.priceUsd)} a frame` : status?.left !== undefined ? `${status.left} of ${status.perDay ?? 10} left today` : '';
   const frames = status?.frames ?? [];
   // The version's pictures were drawn by a closed model, Remix by the open-weight one (owner, 2026-10-18: "all the pictures in
   // the remix aren't the ChatGPT images so might be confusing"). DRAFT wording.
@@ -163,9 +171,13 @@ export function RemixPanel({
           <SignInChoices size="small" wallet={auth.kind === 'signed-out' && !auth.inApp && status.walletSignIn} />
         </div>
       ) : status.eligible === false ? (
-        <p className="ed-help" role="status">
-          {status.refusal ?? 'Remixing is not open to this account.'}
-        </p>
+        <>
+          <p className="ed-help" role="status">
+            {status.refusal ?? 'Remixing is not open to this account.'}
+          </p>
+          {/* Paying per person: someone the free check refuses can still pay (owner, 2026-11-04). */}
+          {status.personBalance && <PersonBalancePanel onChange={() => void refresh()} paidOnly />}
+        </>
       ) : !status.consented ? (
         <>
           {status.prepaid && status.prepaid.balanceUsd < status.prepaid.priceUsd && <WalletPanel onChange={() => void refresh()} />}
@@ -182,6 +194,7 @@ export function RemixPanel({
       ) : (
         <>
           {status.prepaid && status.prepaid.balanceUsd < status.prepaid.priceUsd && <WalletPanel onChange={() => void refresh()} />}
+          {paying && status.personBalance && paying.balanceUsd < paying.priceUsd && <PersonBalancePanel onChange={() => void refresh()} paidOnly={status.paidOnly} />}
           <PublishedTextField id="ed-remix-words" label="What to change, in your words" value={words} onChange={setWords} rows={3} maxLength={status.ownWordsMaxChars} />
           <p className="ed-help">
             {/* DRAFT wording (2026-10-22) for a shot made in code. */}
@@ -190,7 +203,7 @@ export function RemixPanel({
           <div className="ed-generate">
             <button type="button" className="ed-btn" onClick={generate} disabled={busy || !words.trim()}>
               {busy ? 'Making your frame…' : 'Generate'}
-              <span className="ed-btn-sub">{status.prepaid ? `$${exactDollars(status.prepaid.priceUsd)} from your balance` : status.free ? 'Free: 10 a day' : 'Free frames are paused'}</span>
+              <span className="ed-btn-sub">{paying ? `$${exactDollars(paying.priceUsd)} from your balance` : status.free ? 'Free: 10 a day' : 'Free frames are paused'}</span>
             </button>
           </div>
         </>

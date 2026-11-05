@@ -10,6 +10,7 @@ import { mentions } from '~/lib/images/design-rules';
 import { ConsentScreen, PublishedTextField, PublishFlow, type PublishStep } from './publish-words';
 import { SignInChoices } from './sign-in-choices';
 import { WalletPanel } from './wallet';
+import { PersonBalancePanel } from './person-balance';
 import { AiLabel } from './recipe-sheet';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 import { exactDollars } from '~/lib/wallet/price-text';
@@ -41,6 +42,10 @@ type Status = {
   /** A wallet account: its balance pays for each image (owner, 2026-10-13). */
   /** pricesUsd[n]: a Generate's price with n reference pictures (0: none), as reserve() charges it. */
   prepaid?: { balanceUsd: number; priceUsd: number; pricesUsd?: number[]; markup: number };
+  /** A Farcaster, Lens or Bluesky person's own prepaid balance (paying per person, PERSON_BALANCE). Same shape. */
+  personBalance?: { balanceUsd: number; priceUsd: number; pricesUsd?: number[]; markup: number };
+  /** The free check refused this person, but their balance pays (owner, 2026-11-04). */
+  paidOnly?: boolean;
   /** Wallet sign-in is offered only once paying is open (IMAGES.prepaid.payTo set). */
   walletSignIn?: boolean;
   maxBlocks: number;
@@ -343,14 +348,17 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   // A wallet account's price for this Generate, as it will be charged (Terms 6a): a picked sheet's pictures sent as
   // references raise it (owner, 2026-10-23), counted as the server counts them (src/lib/images/price.ts).
   const references = useEdit ? referenceCount(sheetChips.map((c) => c.views)) : 0;
-  const shownPrice = status?.prepaid ? (status.prepaid.pricesUsd?.[references] ?? status.prepaid.priceUsd) : null;
-  const left = status?.prepaid && shownPrice !== null ? paysFor(status.prepaid.balanceUsd, shownPrice) : (status?.left ?? 0);
+  // What pays this Generate: a wallet account's balance; or a person's own balance once their free ones are used up, or
+  // when the free check refused them (paidOnly; PERSON_BALANCE).
+  const paying = status?.prepaid ?? (status?.personBalance && (status.paidOnly || (status.left ?? 0) <= 0) ? status.personBalance : undefined);
+  const shownPrice = paying ? (paying.pricesUsd?.[references] ?? paying.priceUsd) : null;
+  const left = paying && shownPrice !== null ? paysFor(paying.balanceUsd, shownPrice) : (status?.left ?? 0);
   const ready = signedIn && status?.eligible !== false && status?.ready && status.consented;
   const showDraft = view === 'draft' && draft !== null && !published;
   const previewing = step === 'preview' || step === 'publishing';
   const by = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : 'you';
   // A wallet account sees the price it is charged on the button itself (Terms 6a: "at the price shown when you start it").
-  const count = (n: number) => (status?.prepaid && shownPrice !== null ? `${W.prepaid.priceOnButton(exactDollars(shownPrice))} · ${W.prepaid.balance(status.prepaid.balanceUsd.toFixed(2), n)}` : `${n} of ${status?.perDay ?? 0} left today`);
+  const count = (n: number) => (paying && shownPrice !== null ? `${W.prepaid.priceOnButton(exactDollars(shownPrice))} · ${W.prepaid.balance(paying.balanceUsd.toFixed(2), n)}` : `${n} of ${status?.perDay ?? 0} left today`);
   return (
     <div className="sheet-overlay ic-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div ref={sheet} className="recipe-sheet image-composer" role="dialog" aria-modal="true" aria-labelledby="composer-title">
@@ -413,7 +421,11 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
               ) : !status ? (
                 <p className="ic-note">…</p>
               ) : status.eligible === false ? (
-                <p className="ic-gate" role="status">{status.refusal ?? 'Image making is not open to this account.'}</p>
+                <>
+                  <p className="ic-gate" role="status">{status.refusal ?? 'Image making is not open to this account.'}</p>
+                  {/* Paying per person: someone the free check refuses can still pay (owner, 2026-11-04). */}
+                  {status.personBalance && <PersonBalancePanel onChange={() => void refresh()} paidOnly />}
+                </>
               ) : !status.ready ? (
                 <p className="ic-gate">Making images isn&apos;t set up on this deployment yet.</p>
               ) : status.prepaid && !status.consented ? (
@@ -437,6 +449,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
               ) : (
                 <>
                   {status.prepaid && <WalletPanel onChange={() => void refresh()} />}
+                  {status.personBalance && <PersonBalancePanel onChange={() => void refresh()} paidOnly={status.paidOnly} />}
                   <div className="ic-prompt">
                     <PublishedTextField id="ic-prompt" label={W.composer.promptLabel} value={prompt} onChange={setPrompt} rows={4} maxLength={600} />
                     <span className="ic-count" aria-hidden="true">
@@ -502,7 +515,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                     <label className="ic-reference">
                       <input type="checkbox" checked={reference} onChange={(e) => setReference(e.target.checked)} />{' '}
                       {D.reference(sheetChips.filter((c) => c.views > 0).map((c) => c.entity).join(', '))}
-                      {status.prepaid?.pricesUsd && ` · ${D.referencePrice(exactDollars(status.prepaid.pricesUsd[referenceCount(sheetChips.map((c) => c.views))]))}`}
+                      {paying?.pricesUsd && ` · ${D.referencePrice(exactDollars(paying.pricesUsd[referenceCount(sheetChips.map((c) => c.views))]))}`}
                     </label>
                   )}
                   {/* Picks are open to everyone signed in, wallet accounts too (owner, 2026-10-19 and 2026-10-23). */}

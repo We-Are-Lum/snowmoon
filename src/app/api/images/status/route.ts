@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { isAdmin } from '~/lib/admins';
 import { isSocialPerson } from '~/lib/people';
+import { holdsPersonBalance, personBalanceOn, personBalanceUsd } from '~/lib/balance/person';
 import { freeFor } from '~/lib/social/free';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
@@ -82,12 +83,19 @@ export async function GET(request: Request) {
     const [consented, left, publishes, kept, picks] = await Promise.all([
       hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited || fid < 0 ? Promise.resolve(null) : keptDecision(sql, fid, IMAGES.neynarMinScore).catch(() => null), myPicks(sql, fid),
     ]);
+    // Paying per person (PERSON_BALANCE): a Farcaster, Lens or Bluesky person's own balance, and whether it lets them
+    // make images the free check refuses (paidOnly; owner, 2026-11-04). Null while off or before the migration.
+    const person = personBalanceOn() && holdsPersonBalance(fid) ? await personBalanceUsd(sql, fid).catch(() => null) : null;
+    const prices = Array.from({ length: IMAGES.maxReferences + 1 }, (_, n) => priceUsd(generateReserveUsd(n)));
+    const personBalance = person === null ? undefined : { balanceUsd: person, priceUsd: prices[0], pricesUsd: prices, markup: IMAGES.prepaid.markup };
+    const paysWhenRefused = person !== null && person >= prices[0] && openToEveryone().open;
     if (isSocialPerson(fid)) {
-      // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides; no balance.
+      // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides.
       // Never asks Lens here (variant B: only Generate does); with no decision yet, eligible is null until Generate.
       const d = await freeFor(sql, fid, { lookUp: false });
+      const paidOnly = d !== null && !d.free && paysWhenRefused;
       return NextResponse.json(
-        { ...base, signedIn: true, fid, invited: false, eligible: d ? d.free : null, refusal: d && !d.free ? d.error : undefined, consented, left, publishesLeft: publishes, picks: offer(picks) },
+        { ...base, signedIn: true, fid, invited: false, eligible: paidOnly ? true : d ? d.free : null, paidOnly, refusal: d && !d.free ? d.error : undefined, consented, left, publishesLeft: publishes, picks: offer(picks), personBalance },
         { headers: { 'Cache-Control': 'no-store' } },
       );
     }
@@ -102,9 +110,11 @@ export async function GET(request: Request) {
       );
     }
     // The kept decision only (no score is kept, and none is asked for on a page load).
-    const eligible = invited ? true : kept === null ? null : kept.passed;
+    const failed = !invited && kept !== null && !kept.passed;
+    const paidOnly = failed && paysWhenRefused;
+    const eligible = invited ? true : kept === null ? null : kept.passed || paidOnly;
     const refusal = kept !== null && !kept.passed ? refusalFor({ score: null, decidedAt: kept.decidedAt }) : undefined;
-    return NextResponse.json({ ...base, perDay: perDay(fid), signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes, picks: offer(picks) }, { headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json({ ...base, perDay: perDay(fid), signedIn: true, fid, invited, eligible, paidOnly, refusal, consented, left, publishesLeft: publishes, picks: offer(picks), personBalance }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
     console.error('images status failed', (e as { code?: string }).code ?? (e as Error).name);
     return NextResponse.json({ ...base, ready: false, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });

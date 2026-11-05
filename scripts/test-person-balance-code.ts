@@ -31,35 +31,43 @@ let passed = 0;
 const check = (label: string, ok: boolean, detail = '') => (ok ? passed++ : failures.push(`${label}${detail ? `: ${detail}` : ''}`));
 const json = (x: unknown) => JSON.stringify(x, (_, v) => (typeof v === 'bigint' ? String(v) : v));
 
-check('the switch is off in the code as committed', PERSON_BALANCE.enabled === false);
+check('the switch is on in the code as committed (with the browser side and the approved legal lines)', PERSON_BALANCE.enabled === true);
+(PERSON_BALANCE as { enabled: boolean }).enabled = false; // the claims below start with it off
 
 const { newNonce } = await import('../src/lib/wallet/session');
-const { payMessage, verifyPayIntent, recordIntent, claim, personBalanceUsd, personCreditBack, holdsPersonBalance } = await import('../src/lib/balance/person');
+const { payMessage, verifyPayIntent, recordIntent, claim, personBalanceUsd, personCreditBack, holdsPersonBalance, accountWords, statementFor } = await import('../src/lib/balance/person');
 const me = privateKeyToAccount('0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d');
 const other = privateKeyToAccount('0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a');
 const FID = 424242;
 const SKY = -1_000_000_042;
 const offline = { verifySiweMessage: async () => false } as unknown as PublicClient;
-const msg = (person: number, o: { domain?: string; nonce?: string; address?: `0x${string}` } = {}) =>
-  payMessage({ domain: o.domain ?? 'snowmoon.party', uri: 'https://snowmoon.party', address: o.address ?? me.address, person, nonce: o.nonce ?? newNonce()! });
+const WORDS = (person: number) => (person > 0 ? `your Farcaster account @alice (FID ${person})` : person <= -1e9 ? 'your Bluesky account @alice.bsky.social' : 'a wallet');
+const msg = (person: number, o: { domain?: string; nonce?: string; address?: `0x${string}`; words?: string } = {}) =>
+  payMessage({ domain: o.domain ?? 'snowmoon.party', uri: 'https://snowmoon.party', address: o.address ?? me.address, person, words: o.words ?? WORDS(person), nonce: o.nonce ?? newNonce()! });
 
 // --- The signed statement -------------------------------------------------------------------------------------------
 check('who holds a person balance: a Farcaster ID and a Bluesky account, never a wallet account or zero', holdsPersonBalance(FID) && holdsPersonBalance(SKY) && !holdsPersonBalance(-5) && !holdsPersonBalance(-999_999_999) && !holdsPersonBalance(0));
 {
   const m = msg(FID);
-  check('a wallet\'s statement for this person is accepted', (await verifyPayIntent(m, await me.signMessage({ message: m }), 'snowmoon.party', FID, offline)) === me.address.toLowerCase());
-  check('the same statement from another person\'s session is refused', (await verifyPayIntent(m, await me.signMessage({ message: m }), 'snowmoon.party', SKY, offline)) === null);
+  check('a wallet\'s statement for this person is accepted', (await verifyPayIntent(m, await me.signMessage({ message: m }), 'snowmoon.party', FID, WORDS(FID), offline)) === me.address.toLowerCase());
+  check('the same statement from another person\'s session is refused', (await verifyPayIntent(m, await me.signMessage({ message: m }), 'snowmoon.party', SKY, WORDS(SKY), offline)) === null);
   const w = msg(-5);
-  check('a statement for a wallet account is refused', (await verifyPayIntent(w, await me.signMessage({ message: w }), 'snowmoon.party', -5, offline)) === null);
+  check('a statement for a wallet account is refused', (await verifyPayIntent(w, await me.signMessage({ message: w }), 'snowmoon.party', -5, WORDS(-5), offline)) === null);
   const d = msg(FID, { domain: 'evil.example' });
-  check('a statement for another domain is refused', (await verifyPayIntent(d, await me.signMessage({ message: d }), 'snowmoon.party', FID, offline)) === null);
+  check('a statement for another domain is refused', (await verifyPayIntent(d, await me.signMessage({ message: d }), 'snowmoon.party', FID, WORDS(FID), offline)) === null);
   const n = msg(FID, { nonce: 'a'.repeat(74) });
-  check('a nonce we did not issue is refused', (await verifyPayIntent(n, await me.signMessage({ message: n }), 'snowmoon.party', FID, offline)) === null);
-  check('someone else signing my address is refused', (await verifyPayIntent(m, await other.signMessage({ message: m }), 'snowmoon.party', FID, offline)) === null);
+  check('a nonce we did not issue is refused', (await verifyPayIntent(n, await me.signMessage({ message: n }), 'snowmoon.party', FID, WORDS(FID), offline)) === null);
+  check('someone else signing my address is refused', (await verifyPayIntent(m, await other.signMessage({ message: m }), 'snowmoon.party', FID, WORDS(FID), offline)) === null);
   const plain = m.replace(/Add payments from this wallet[^\n]*/, 'Sign in to Snowmoon.');
-  check('a different statement (a plain sign-in) is refused', (await verifyPayIntent(plain, await me.signMessage({ message: plain }), 'snowmoon.party', FID, offline)) === null);
+  check('a different statement (a plain sign-in) is refused', (await verifyPayIntent(plain, await me.signMessage({ message: plain }), 'snowmoon.party', FID, WORDS(FID), offline)) === null);
+  check('the statement names the account in words, and the request id by number', m.includes(statementFor(WORDS(FID))) && m.includes('@alice (FID 424242)') && m.includes('Request ID: person:424242'), m);
+  check('a statement whose words name another account (an old name) is refused', (await verifyPayIntent(m, await me.signMessage({ message: m }), 'snowmoon.party', FID, 'your Farcaster account @bob (FID 424242)', offline)) === null);
+  check('no words for the account (a Lens or Bluesky account we don\'t have): refused', (await verifyPayIntent(m, await me.signMessage({ message: m }), 'snowmoon.party', FID, null, offline)) === null);
+  check('words: a Farcaster account with its name', (await accountWords(null, FID, async () => 'alice')) === 'your Farcaster account @alice (FID 424242)');
+  check('words: a Farcaster account whose name can\'t be read', (await accountWords(null, FID, async () => { throw new Error('down'); })) === 'your Farcaster account FID 424242');
+  check('words: none for a wallet account', (await accountWords(null, -5)) === null);
   const sky = msg(SKY);
-  check('a Bluesky person\'s statement is accepted for that person', (await verifyPayIntent(sky, await me.signMessage({ message: sky }), 'snowmoon.party', SKY, offline)) === me.address.toLowerCase());
+  check('a Bluesky person\'s statement is accepted for that person', (await verifyPayIntent(sky, await me.signMessage({ message: sky }), 'snowmoon.party', SKY, WORDS(SKY), offline)) === me.address.toLowerCase());
 }
 
 // --- The database ---------------------------------------------------------------------------------------------------
@@ -98,30 +106,55 @@ function base(o: { from?: string; usd?: number; at?: number } = {}) {
 // --- Claims ---------------------------------------------------------------------------------------------------------
 const PB = PERSON_BALANCE as { enabled: boolean };
 const fidIntent = await recordIntent(S, FID, me.address);
-check('while off, a claim is refused and nothing is credited', (await claim(S, FID, fidIntent, tx('a'), base())).ok === false && (await personBalanceUsd(S, FID)) === 0);
+check('while off, a claim is refused and nothing is credited', (await claim(S, FID, tx('a'), base(), fidIntent)).ok === false && (await personBalanceUsd(S, FID)) === 0);
 PB.enabled = true;
 const why = (r: Awaited<ReturnType<typeof claim>>) => (r.ok ? 'ok' : r.why);
-check('another person can\'t claim through my intent', why(await claim(S, SKY, fidIntent, tx('a'), base())) === 'not-yours');
-check('a payment from another wallet is refused', why(await claim(S, FID, fidIntent, tx('a'), base({ from: other.address }))) === 'not-from-you');
-check('a payment made well before the intent is refused', why(await claim(S, FID, fidIntent, tx('a'), base({ at: Date.now() - 3600_000 }))) === 'too-early');
-const r1 = await claim(S, FID, fidIntent, tx('a'), base());
+check('another person can\'t claim through my intent', why(await claim(S, SKY, tx('a'), base(), fidIntent)) === 'not-yours');
+check('a payment from another wallet is refused', why(await claim(S, FID, tx('a'), base({ from: other.address }), fidIntent)) === 'not-from-you');
+check('a payment made well before the intent is refused', why(await claim(S, FID, tx('a'), base({ at: Date.now() - 3600_000 }), fidIntent)) === 'too-early');
+const r1 = await claim(S, FID, tx('a'), base(), fidIntent);
 check('a $5 payment from the intent\'s wallet is credited to the person', r1.ok && r1.usd === 5 && r1.balanceUsd === 5, json(r1));
-check('the same intent is used once', why(await claim(S, FID, fidIntent, tx('b'), base())) === 'used');
+check('the same intent is used once', why(await claim(S, FID, tx('b'), base(), fidIntent)) === 'used');
 const again = await recordIntent(S, FID, me.address);
-check('the same transaction through a new intent: already added', why(await claim(S, FID, again, tx('a'), base())) === 'already');
+check('the same transaction through a new intent: already added', why(await claim(S, FID, tx('a'), base(), again)) === 'already');
 {
   const { accountFor, credit } = await import('../src/lib/wallet/credits');
   const acct = await accountFor(S, me.address);
   check('the wallet signing in itself can\'t add the person\'s transaction again', !(await credit(S, acct, { txHash: tx('a'), token: 'USDC', amount: 5_000_000n, usd: 5, blockNumber: 100n })));
   check('a wallet payment, credited to the wallet account first…', await credit(S, acct, { txHash: tx('w'), token: 'USDC', amount: 5_000_000n, usd: 5, blockNumber: 100n }));
-  check('…can\'t then be claimed by a person', why(await claim(S, FID, again, tx('w'), base())) === 'already');
+  check('…can\'t then be claimed by a person', why(await claim(S, FID, tx('w'), base(), again)) === 'already');
 }
 await db.exec(`reset role; insert into studio.person_pay_intents (person, address, created_at) values (${FID}, '${me.address.toLowerCase()}', now() - interval '2 days'); set role studio_writer;`);
 const [{ id: oldIntent }] = await sql`select id::text as id from studio.person_pay_intents where created_at < now() - interval '1 day'`;
-check('a payment more than a day after the intent is refused', why(await claim(S, FID, oldIntent, tx('c'), base())) === 'too-late');
+check('a payment more than a day after the intent is refused', why(await claim(S, FID, tx('c'), base(), oldIntent)) === 'too-late');
 const skyIntent = await recordIntent(S, SKY, other.address);
-const r2 = await claim(S, SKY, skyIntent, tx('s'), base({ from: other.address, usd: 1 }));
+const r2 = await claim(S, SKY, tx('s'), base({ from: other.address, usd: 1 }), skyIntent);
 check('a Bluesky person is credited too, to its own balance only', r2.ok && (await personBalanceUsd(S, SKY)) === 1 && (await personBalanceUsd(S, FID)) === 5, json(r2));
+// By its hash alone (the page keeps only the hash, Privacy §3): the person's own signed wallets are tried.
+{
+  const P2 = 515151;
+  check('by hash, before any wallet signed for the person: no intent', why(await claim(S, P2, tx('h1'), base())) === 'no-intent');
+  await recordIntent(S, P2, other.address);
+  await recordIntent(S, P2, me.address);
+  const h = await claim(S, P2, tx('h1'), base());
+  check('by hash: found from the paying wallet\'s own intent and credited', h.ok && (await personBalanceUsd(S, P2)) === 5, json(h));
+  check('by hash: a payment from a wallet that never signed for the person is refused', why(await claim(S, P2, tx('h2'), base({ from: '0x00000000000000000000000000000000000c0ffe' }))) === 'not-from-you');
+  check('by hash: the wallet\'s one intent is used; a second payment needs a new signature', why(await claim(S, P2, tx('h3'), base())) !== 'ok');
+  check('by hash: another person can\'t take it through their own intents', why(await claim(S, FID, tx('h4'), base({ from: other.address }))) !== 'ok' && (await personBalanceUsd(S, FID)) === 5);
+  const r = await claim(S, P2, tx('h5'), base({ from: other.address, usd: 2 }));
+  check('by hash: the person\'s other wallet still has its own intent', r.ok && (await personBalanceUsd(S, P2)) === 7, json(r));
+}
+// The account in words, for a Lens and a Bluesky account (studio.social_accounts).
+{
+  await db.exec(`reset role; insert into studio.social_accounts (kind, subject, handle) values ('bluesky', 'did:plc:z72i7hdynmk6r22z27h6tvur', 'alice.bsky.social'), ('lens', '0xad2c0beade60fb9f7ec5c87bde8e4c126145f6e7', 'lens/alice'), ('bluesky', 'did:plc:abcdefghijklmnopqrstuvwx', null); set role studio_writer;`);
+  const ids = (await sql`select id::int as id, kind, handle from studio.social_accounts order by id`) as unknown as { id: number; kind: string; handle: string | null }[];
+  const { socialPerson } = await import('../src/lib/people');
+  const [sky, lens, bare] = ids.map((r) => socialPerson(r.id));
+  check('words: a Bluesky account by its handle', (await accountWords(S, sky)) === 'your Bluesky account @alice.bsky.social');
+  check('words: a Lens account by its username', (await accountWords(S, lens)) === 'your Lens account lens/alice');
+  check('words: a Bluesky account without a handle, by its DID', (await accountWords(S, bare)) === 'your Bluesky account did:plc:abcdefghijklmnopqrstuvwx');
+  check('words: none for a Lens or Bluesky account we don\'t have', (await accountWords(S, socialPerson(999))) === null);
+}
 let threw = false;
 await recordIntent(S, -5, me.address).catch(() => (threw = true));
 check('no intent for a wallet account', threw);
@@ -162,10 +195,66 @@ check('an exhausted balance gives the free refusal (limit)', !r6.ok && r6.refusa
 await db.exec(`reset role; insert into studio.image_costs (funded, kind, model, provider, verdict, calls, cost_usd) values ('prepaid', 'image', 'x', 'x', 'ok', 1, ${IMAGES.prepaid.dailyCapUsd}); set role studio_writer;`);
 await db.exec(`reset role; insert into studio.image_asks (fid) select 434343 from generate_series(1, ${IMAGES.generationsPerDay}); set role studio_writer;`);
 const capIntent = await recordIntent(S, 434343, other.address);
-await claim(S, 434343, capIntent, tx('cap'), base({ from: other.address, usd: 2 }));
+await claim(S, 434343, tx('cap'), base({ from: other.address, usd: 2 }), capIntent);
 const r7 = await reserve(S, 434343);
 check('the site-wide prepaid daily cap still applies', !r7.ok && r7.refusal === 'prepaid-spend' && (await personBalanceUsd(S, 434343)) === 2, json(r7));
 await db.exec(`reset role; delete from studio.image_costs where funded = 'prepaid'; set role studio_writer;`);
+
+// Paying without the free check (owner, 2026-11-04): the gate lets a refused person pay, only from their balance.
+{
+  const { mayGenerate } = await import('../src/lib/images/gate');
+  process.env.APP_LEGAL_PAGES = 'terms+privacy';
+  process.env.SNOWMOON_ALERT_URL = 'https://example.invalid/alert';
+  delete process.env.NEYNAR_API_KEY; // Neynar can't be asked: the free check refuses ('unreachable')
+  const G = 616161;
+  const orPay = { reserveUsd: IMAGES.reserveUsd };
+  const g0 = await mayGenerate(S, G, orPay);
+  check('the free check refuses, and with no balance the refusal stands', !g0.ok && g0.reason === 'unreachable', json(g0));
+  await recordIntent(S, G, me.address);
+  await claim(S, G, tx('g'), base({ usd: 1 }));
+  const g1 = await mayGenerate(S, G, orPay);
+  check('with a balance that covers it: let through, paid only', g1.ok && g1.paidOnly === true, json(g1));
+  const g2 = await mayGenerate(S, G);
+  check('a route that doesn\'t take a person balance (Remix, design names) still gets the refusal', !g2.ok, json(g2));
+  PB.enabled = false;
+  const g3 = await mayGenerate(S, G, orPay);
+  check('while off, the refusal stands', !g3.ok, json(g3));
+  PB.enabled = true;
+  const before = await free(G);
+  const r = await reserve(S, G, undefined, { paidOnly: true });
+  check('paid only: charged to the balance, never a free one', r.ok && r.funded === 'prepaid' && (await free(G)) === before && Math.abs((await personBalanceUsd(S, G)) - (1 - price)) < 1e-6, json(r));
+  if (r.ok) await settle(S, {}, undefined, 'prepaid');
+  const E = 626262;
+  const r0 = await reserve(S, E, undefined, { paidOnly: true });
+  check('paid only with an empty balance: refused as balance, no free one used', !r0.ok && r0.refusal === 'balance' && (await free(E)) === 0, json(r0));
+  delete process.env.APP_LEGAL_PAGES;
+  delete process.env.SNOWMOON_ALERT_URL;
+  const g4 = await mayGenerate(S, G, orPay);
+  check('the launch order still applies to everyone, paying or not', !g4.ok && g4.reason === 'not-open', json(g4));
+}
+
+// Remix frames: the Remix route lets a person's balance pay; an agent's approved frame never does (Terms 6b).
+{
+  const R = await import('../src/lib/remix/limits');
+  const { REMIX } = await import('../src/lib/config');
+  const X = 717171;
+  await recordIntent(S, X, me.address);
+  await claim(S, X, tx('x'), base({ usd: 1 }));
+  await db.exec(`reset role; insert into studio.remix_asks (person) select ${X} from generate_series(1, ${REMIX.generationsPerDay}); set role studio_writer;`);
+  const spend = { model: IMAGES.editModel, reserveUsd: REMIX.reserveUsd(2) };
+  const agent = await R.reserve(S, X, spend);
+  check('Remix, as an agent\'s frame (no person balance): free ones used up is refused, nothing charged', !agent.ok && agent.refusal === 'limit' && (await personBalanceUsd(S, X)) === 1, json(agent));
+  const route = await R.reserve(S, X, spend, { personBalance: true });
+  check('Remix, from the Remix route: free ones used up, paid from the person\'s balance at the wallets\' price', route.ok && route.funded === 'prepaid' && Math.abs((await personBalanceUsd(S, X)) - (1 - priceUsd(spend.reserveUsd))) < 1e-6, json(route));
+  if (route.ok) await R.settle(S, {}, spend, 'prepaid');
+  PB.enabled = false;
+  const off = await R.reserve(S, X, spend, { personBalance: true });
+  check('Remix, while off: refused as before', !off.ok && off.refusal === 'limit', json(off));
+  PB.enabled = true;
+  const Y = 727272;
+  const only = await R.reserve(S, Y, spend, { personBalance: true, paidOnly: true });
+  check('Remix, paid only with no balance: refused as balance, no free frame used', !only.ok && only.refusal === 'balance' && (await sql`select count(*)::int as n from studio.remix_asks where person = ${Y}`)[0].n === 0, json(only));
+}
 
 // A paid Generate that gives no picture is credited back to the same person, once.
 {
