@@ -11689,6 +11689,622 @@
     }
    },
    "at": "2026-11-05T21:11:52.747Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "baiGarance": true,
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "crop:bai-garance",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.00012735,
+   "worstUsd": 0.0015,
+   "at": "2026-11-05T21:56:23.565Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "baiGarance": true,
+   "model": "gpt-image-2.5-sunburst",
+   "from": "crop:bai-garance",
+   "kind": "image",
+   "file": "directions/bai-animated-gpt-garance.jpg",
+   "sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96",
+   "closed_model": true,
+   "maker": "OpenAI",
+   "costUsd": 0.0487,
+   "worstUsd": 0.08,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background. Keep the face, hair, skin and clothes the same.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na young woman of about eighteen, slim and wiry, dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes with a sly sideways look and a small confident smile, long amber drop earrings, a sleeveless yellow-green vest open over a dark grey tank top, both arms covered in fine brown line tattoos from shoulder to wrist, a dark bracelet, a hand device held in one hand, dark trousers and boots\n\nNo text, no lettering, no signs with words.",
+    "model": "gpt-image-2.5-sunburst",
+    "endpoint": "openai/gpt-image-2.5-sunburst",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "size": "1024x1536",
+     "quality": "high",
+     "n": 1,
+     "output_format": "png",
+     "gateway": {
+      "only": [
+       "openai"
+      ],
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "openai",
+      "zero_data_retention": false,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-05T21:56:23.617Z",
+      "kept": {
+       "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+       "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+       "source": "https://developers.openai.com/api/docs/guides/your-data",
+       "read": "2026-11-03"
+      }
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "8ba665fb1d1c552b2d9faaace93765cc57883b3ec6127fd16c4a472db50ab16d",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6PVD370JE4Z9FV9NQDA51NJ",
+    "cost_usd": 0.0487,
+    "made_at": "2026-11-05T21:56:23.569Z",
+    "width": 576,
+    "height": 768,
+    "references": [
+     {
+      "sha256": "823b88c609d3040ea05bd738752786e877f5f3f71242504890b07f7d94e8053b",
+      "what": "Brought in: a crop (box {\"left\":1560,\"top\":0,\"width\":1192,\"height\":1536}) of Garance's edit of the owner's picture (Garance darkened Bai's skin to match her sheet; he agreed to its use in the project and as a Midjourney reference, owner, 2026-11-05). The owner's picture was made outside the site with Midjourney, a closed model by Midjourney. The edit's own metadata says \"Made with Google AI\"; the tool and prompt Garance used are not reported. Edit sha256 e75c769cdc2e81b5c576cb942da54e70838a69b46a3f2d06def1005f50b9616c."
+     }
+    ],
+    "credit": [
+     "Garance (the edit used as reference)"
+    ],
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    },
+    "remade_from": {
+     "file": "directions/bai-animated-gpt.jpg",
+     "why": "owner, 2026-11-05: made again from Garance's edit, so her skin matches her sheet"
+    }
+   },
+   "response_meta": {
+    "created": 1793915809,
+    "usage": {
+     "total_tokens": 2400,
+     "input_tokens": 1028,
+     "output_tokens": 1372,
+     "input_tokens_details": {
+      "text_tokens": 228,
+      "image_tokens": 800
+     }
+    },
+    "providerMetadata": {
+     "openai": {
+      "images": [
+       {
+        "imageTokens": 800,
+        "textTokens": 228,
+        "created": 1793915808,
+        "size": "1024x1536",
+        "quality": "high",
+        "background": "opaque",
+        "outputFormat": "png"
+       }
+      ]
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "openai/gpt-image-2.5-sunburst",
+       "resolvedProvider": "openai",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: openai. System credentials planned for: openai. Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+       "finalProvider": "openai",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "openai/gpt-image-2.5-sunburst",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "openai",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793915784446,
+           "endTime": 1793915809281,
+           "statusCode": 200
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1
+      },
+      "cost": "0.0487",
+      "marketCost": "0.0487",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0487",
+      "inferenceCost": "0.0487",
+      "inputInferenceCost": "0",
+      "outputInferenceCost": "0.0487",
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6PVD370JE4Z9FV9NQDA51NJ"
+     }
+    }
+   },
+   "at": "2026-11-05T21:56:23.569Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "looks3": true,
+   "option": "a2",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "changed": {
+    "was": "dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes",
+    "now": "light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes"
+   },
+   "clothes_described": {
+    "was": "dark trousers and boots",
+    "now": "dark cargo trousers and chunky laced boots",
+    "why": "owner, 2026-11-05: every look keeps the clothes of the character's original front (Bai keeps her cargo pants)"
+   },
+   "based_on": "directions/bai-animated-gpt.jpg",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.0001971,
+   "worstUsd": 0.0015,
+   "at": "2026-11-05T21:57:28.107Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "looks3": true,
+   "option": "a2",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "changed": {
+    "was": "dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes",
+    "now": "light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes"
+   },
+   "clothes_described": {
+    "was": "dark trousers and boots",
+    "now": "dark cargo trousers and chunky laced boots",
+    "why": "owner, 2026-11-05: every look keeps the clothes of the character's original front (Bai keeps her cargo pants)"
+   },
+   "based_on": "directions/bai-animated-gpt.jpg",
+   "kind": "image",
+   "file": "directions/bai-look-a2-gemini.jpg",
+   "sha256": "a4f423406eb2a73125e242e9e36d90cf8c20a1bb40ea2553058431b39e2d7274",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.067107,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background. Keep the face, hair, skin and clothes the same.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na young woman of about eighteen, slim and wiry, light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes with a sly sideways look and a small confident smile, long amber drop earrings, a sleeveless yellow-green vest open over a dark grey tank top, both arms covered in fine brown line tattoos from shoulder to wrist, a dark bracelet, a hand device held in one hand, dark cargo trousers and chunky laced boots\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-05T21:57:28.172Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "ee0424e0e140d3f4b1592c7b42d1a9dba75bdfe3de16ddab4e2ca0d5b61bf693",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6PVF1K7WE9M99B9JN74HNB7",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-05T21:57:28.115Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    },
+    "looks3": {
+     "owner_decision": "2026-11-05: three looks for Zei, Bai, Seila and Mu, approved as proposed; only skin tone, hair and eyes change",
+     "was": "dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes",
+     "now": "light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes",
+     "current_front_made_with": "gpt-image-2.5-sunburst"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6PVF1K7WE9M99B9JN74HNB7",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 214,
+     "completion_tokens": 1120,
+     "total_tokens": 1334,
+     "cost": 0.067107,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.067107,
+     "gateway_cost": 0.067107
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 214,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1334,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 214
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793915848318,
+           "endTime": 1793915858283,
+           "statusCode": 200,
+           "providerResponseId": "yfvsaqkamteH5w-ntImYDg"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "8841028ad7751026b4cd1900d1f935d5",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.067107",
+      "marketCost": "0.067107",
+      "surchargeCost": "0",
+      "gatewayCost": "0.067107",
+      "inferenceCost": "0.067107",
+      "inputInferenceCost": "0.000107",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6PVF1K7WE9M99B9JN74HNB7"
+     }
+    }
+   },
+   "at": "2026-11-05T21:57:28.115Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "looks3": true,
+   "option": "b2",
+   "model": "openai/gpt-oss-safeguard-20b",
+   "from": "text",
+   "changed": {
+    "was": "dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes",
+    "now": "fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes"
+   },
+   "clothes_described": {
+    "was": "dark trousers and boots",
+    "now": "dark cargo trousers and chunky laced boots",
+    "why": "owner, 2026-11-05: every look keeps the clothes of the character's original front (Bai keeps her cargo pants)"
+   },
+   "based_on": "directions/bai-animated-gpt.jpg",
+   "kind": "prompt-check",
+   "allow": true,
+   "category": null,
+   "provider": "groq",
+   "costUsd": 0.000148125,
+   "worstUsd": 0.0015,
+   "at": "2026-11-05T21:57:39.648Z"
+  },
+  {
+   "char": "bai",
+   "direction": "animated",
+   "looks3": true,
+   "option": "b2",
+   "model": "gemini-3.1-flash-image",
+   "from": "text",
+   "changed": {
+    "was": "dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes",
+    "now": "fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes"
+   },
+   "clothes_described": {
+    "was": "dark trousers and boots",
+    "now": "dark cargo trousers and chunky laced boots",
+    "why": "owner, 2026-11-05: every look keeps the clothes of the character's original front (Bai keeps her cargo pants)"
+   },
+   "based_on": "directions/bai-animated-gpt.jpg",
+   "kind": "image",
+   "file": "directions/bai-look-b2-gemini.jpg",
+   "sha256": "259315795906cf7b5c994eb63dbc412657080fb3f91bc5b09486711a3e7dc903",
+   "closed_model": true,
+   "maker": "Google",
+   "costUsd": 0.0671075,
+   "worstUsd": 0.09,
+   "recipe": {
+    "prompt": "The same person as in the reference picture, full body from head to shoes, standing in a relaxed three-quarter stance with some personality, plain light grey background. Keep the face, hair, skin and clothes the same.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\na young woman of about eighteen, slim and wiry, fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes with a sly sideways look and a small confident smile, long amber drop earrings, a sleeveless yellow-green vest open over a dark grey tank top, both arms covered in fine brown line tattoos from shoulder to wrist, a dark bracelet, a hand device held in one hand, dark cargo trousers and chunky laced boots\n\nNo text, no lettering, no signs with words.",
+    "model": "gemini-3.1-flash-image",
+    "endpoint": "google/gemini-3.1-flash-image",
+    "host": "Vercel AI Gateway",
+    "settings": {
+     "modalities": [
+      "text",
+      "image"
+     ],
+     "aspect_ratio": "3:4",
+     "gateway": {
+      "only": [
+       "vertex"
+      ],
+      "zeroDataRetention": true,
+      "disallowPromptTraining": true
+     },
+     "retention": {
+      "provider": "vertex",
+      "zero_data_retention": true,
+      "no_training": true,
+      "endpoint_list_read_at": "2026-11-05T21:57:39.691Z"
+     },
+     "converted": {
+      "from": "image/png",
+      "sha256": "d6706657d99b6d28eab2b3c11d1893dae4ce21abd18b1ecb7456401992577cf2",
+      "to": "jpeg",
+      "resized_to": {
+       "width": 576,
+       "height": 768
+      },
+      "fit": "contain, padded with the picture's own corner colour"
+     }
+    },
+    "seed": null,
+    "request_id": "gen_01M6PVFCVQ7N3T8FM2EHYTSSK5",
+    "cost_usd": 0.0671,
+    "made_at": "2026-11-05T21:57:39.653Z",
+    "width": 576,
+    "height": 768,
+    "style": {
+     "version_id": "unpublished: docs/starting-sheet-drafts/directions/plan.json",
+     "title": "Animated series",
+     "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands."
+    },
+    "checks": {
+     "prompt": {
+      "model": "openai/gpt-oss-safeguard-20b",
+      "verdict": "ok"
+     },
+     "host_safety_checker": "not run"
+    },
+    "assist": {
+     "model": "claude-coding-agent",
+     "drafted": [
+      "sample subject or view line",
+      "style text",
+      "character descriptor"
+     ],
+     "source": "src/lib/images/design-rules.ts"
+    },
+    "looks3": {
+     "owner_decision": "2026-11-05: three looks for Zei, Bai, Seila and Mu, approved as proposed; only skin tone, hair and eyes change",
+     "was": "dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes",
+     "now": "fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes",
+     "current_front_made_with": "gpt-image-2.5-sunburst"
+    }
+   },
+   "response_meta": {
+    "id": "gen_01M6PVFCVQ7N3T8FM2EHYTSSK5",
+    "model": "google/gemini-3.1-flash-image",
+    "usage": {
+     "prompt_tokens": 215,
+     "completion_tokens": 1120,
+     "total_tokens": 1335,
+     "cost": 0.0671075,
+     "is_byok": false,
+     "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+     },
+     "cost_details": {
+      "upstream_inference_cost": null,
+      "upstream_inference_prompt_cost": 0,
+      "upstream_inference_completions_cost": 0
+     },
+     "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0
+     },
+     "cache_creation_input_tokens": 0,
+     "market_cost": 0.0671075,
+     "gateway_cost": 0.0671075
+    },
+    "provider_metadata": {
+     "vertex": {
+      "promptFeedback": null,
+      "groundingMetadata": null,
+      "urlContextMetadata": null,
+      "safetyRatings": null,
+      "usageMetadata": {
+       "promptTokenCount": 215,
+       "candidatesTokenCount": 1120,
+       "totalTokenCount": 1335,
+       "trafficType": "ON_DEMAND",
+       "promptTokensDetails": [
+        {
+         "modality": "TEXT",
+         "tokenCount": 215
+        }
+       ],
+       "candidatesTokensDetails": [
+        {
+         "modality": "IMAGE",
+         "tokenCount": 1120
+        }
+       ]
+      },
+      "finishMessage": null,
+      "serviceTier": null
+     },
+     "gateway": {
+      "routing": {
+       "originalModelId": "google/gemini-3.1-flash-image",
+       "resolvedProvider": "vertex",
+       "fallbacksAvailable": [],
+       "planningReasoning": "Provider set restricted to: vertex. System credentials planned for: vertex. ZDR requested: all 1 attempts support ZDR. Execution order: vertex(system). Disallow prompt training requested: all 1 attempts disallow prompt training",
+       "canonicalSlug": "google/gemini-3.1-flash-image",
+       "finalProvider": "vertex",
+       "modelAttemptCount": 1,
+       "modelAttempts": [
+        {
+         "canonicalSlug": "google/gemini-3.1-flash-image",
+         "success": true,
+         "providerAttemptCount": 1,
+         "providerAttempts": [
+          {
+           "provider": "vertex",
+           "credentialType": "system",
+           "success": true,
+           "startTime": 1793915859884,
+           "endTime": 1793915868924,
+           "statusCode": 200,
+           "providerResponseId": "1PvsavVB5ojg5Q-___TRDw"
+          }
+         ]
+        }
+       ],
+       "totalProviderAttemptCount": 1,
+       "affinity": {
+        "outcome": "skipped_below_min_prefix"
+       },
+       "clientSessionId": "b286c6b081b445c715cdf064e02025e7",
+       "clientSessionIdSource": "fingerprint"
+      },
+      "cost": "0.0671075",
+      "marketCost": "0.0671075",
+      "surchargeCost": "0",
+      "gatewayCost": "0.0671075",
+      "inferenceCost": "0.0671075",
+      "inputInferenceCost": "0.0001075",
+      "outputInferenceCost": "0.067",
+      "enabledZeroDataRetention": true,
+      "enabledDisallowPromptTraining": true,
+      "generationId": "gen_01M6PVFCVQ7N3T8FM2EHYTSSK5"
+     }
+    }
+   },
+   "at": "2026-11-05T21:57:39.653Z"
   }
  ],
  "brought_in": {
@@ -11766,5 +12382,26 @@
   },
   "file_used": "an enlarged copy of unknown origin: the card's own file (FAV_bai_zei_flatcel.jpg, 1206 x 674, sha256 0b394efb30fefcd0f02b84ac127fa6ba07b657bbd203818ddf4d0239f7bc9c86) was searched for on 2026-11-04 (Spotlight, ~/Downloads, ~/Pictures, ~/Desktop, ~/Documents, ~/snowmoon*, the owner's Drive) and not found, so the owner's upload (2576 x 1438) is used; the crop boxes are on it"
  },
- "cap_note": "raised to $1.75 by the owner, 2026-11-04 (was $1). From then on each call is gated on spent so far plus its own worst case."
+ "cap_note": "raised to $1.75 by the owner, 2026-11-04 (was $1). From then on each call is gated on spent so far plus its own worst case.",
+ "brought_in_garance": {
+  "file": "directions/brought-in/zei-bai-garance-edit.jpg",
+  "sha256": "e75c769cdc2e81b5c576cb942da54e70838a69b46a3f2d06def1005f50b9616c",
+  "size": {
+   "width": 2752,
+   "height": 1536
+  },
+  "credit": "Garance's edit of the owner's picture (Garance darkened Bai's skin to match her sheet; he agreed to its use in the project and as a Midjourney reference, owner, 2026-11-05). The owner's picture was made outside the site with Midjourney, a closed model by Midjourney. The edit's own metadata says \"Made with Google AI\"; the tool and prompt Garance used are not reported.",
+  "original_filename": "zei and bai.jpg",
+  "crop": {
+   "file": "directions/reference-crop-bai-garance.jpg",
+   "box": {
+    "left": 1560,
+    "top": 0,
+    "width": 1192,
+    "height": 1536
+   },
+   "sha256": "823b88c609d3040ea05bd738752786e877f5f3f71242504890b07f7d94e8053b",
+   "note": "cropped at this box, resized to 1024 high, JPEG; no model"
+  }
+ }
 }

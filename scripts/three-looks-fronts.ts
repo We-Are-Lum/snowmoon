@@ -27,7 +27,7 @@ import { CLOSED_IMAGE_MODELS, closedImage, retentionRefusal, type ClosedImageMod
 const ROOT = path.resolve(import.meta.dirname, '..');
 const DIR = path.join(ROOT, 'docs/starting-sheet-drafts/directions');
 const LEDGER = path.join(DIR, 'ledger.json');
-const CAP = 0.6; // this batch's own cap (owner, 2026-11-05: three looks up to $1.60; fronts only in this run)
+const CAP = 0.75; // $0.60 for the eight fronts, +$0.15 for Bai's two redone looks (owner, 2026-11-05), within the owner's $1.60; // this batch's own cap (owner, 2026-11-05: three looks up to $1.60; fronts only in this run)
 const GUARD_WORST = 0.0015;
 const DRY = process.argv.includes('--dry');
 const sha = (b: Buffer) => createHash('sha256').update(b).digest('hex');
@@ -37,7 +37,7 @@ if (!DRY && !process.env.AI_GATEWAY_API_KEY) throw new Error('no gateway key');
 const fakeRequest = new Request('http://localhost/local-script');
 
 /** Each option replaces exactly `was` (the skin, hair and eyes words) in the current front's descriptor. */
-const RECASTS: { char: string; front: string; was: string; options: { id: string; now: string }[] }[] = [
+const RECASTS: { char: string; front: string; was: string; clothes?: { was: string; now: string; why: string }; options: { id: string; now: string }[] }[] = [
   {
     char: 'zei', front: 'directions/zei-animated-gpt.jpg',
     was: 'light golden-tan skin, tall spiky black hair swept up and back with a broad teal-blue streak and close-cut sides, warm brown eyes',
@@ -52,6 +52,18 @@ const RECASTS: { char: string; front: string; was: string; options: { id: string
     options: [
       { id: 'a', now: 'light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes' },
       { id: 'b', now: 'fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes' },
+    ],
+  },
+  {
+    // Redone once (owner, 2026-11-05): a's skin came out yellowish; every look keeps the clothes of her original front,
+    // whose prompt said only "dark trousers and boots" (GPT drew cargo pants from the owner's picture), so these say what
+    // the front shows. Nothing else in the clothes changes.
+    char: 'bai', front: 'directions/bai-animated-gpt.jpg',
+    was: 'dark brown skin, a long sleek magenta ponytail pulled high with the sides of her head shaved close, dark eyes',
+    clothes: { was: 'dark trousers and boots', now: 'dark cargo trousers and chunky laced boots', why: "owner, 2026-11-05: every look keeps the clothes of the character's original front (Bai keeps her cargo pants)" },
+    options: [
+      { id: 'a2', now: 'light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes' },
+      { id: 'b2', now: 'fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes' },
     ],
   },
   {
@@ -109,9 +121,10 @@ for (const rc of RECASTS) {
   for (const o of rc.options) {
     const file = `${rc.char}-look-${o.id}-gemini.jpg`;
     if (existsSync(path.join(DIR, file))) { console.log('exists', file); continue; }
-    const newDescriptor = descriptor.replace(rc.was, o.now);
+    if (rc.clothes && descriptor.split(rc.clothes.was).length !== 2) throw new Error(`${rc.char}: the clothes words aren't in the descriptor exactly once`);
+    const newDescriptor = (rc.clothes ? descriptor.replace(rc.clothes.was, rc.clothes.now) : descriptor).replace(rc.was, o.now);
     const prompt = [subject, style, newDescriptor, parts[3]].join('\n\n');
-    const tag = { char: rc.char, direction: 'animated', looks3: true, option: o.id, model, from: 'text', changed: { was: rc.was, now: o.now }, based_on: rc.front };
+    const tag = { char: rc.char, direction: 'animated', looks3: true, option: o.id, model, from: 'text', changed: { was: rc.was, now: o.now }, ...(rc.clothes ? { clothes_described: rc.clothes } : {}), based_on: rc.front };
     if (DRY) { console.log(`${file}: ${model}, worst $${m.worstUsd} + check $${GUARD_WORST}\n  ${newDescriptor}`); continue; }
     if (blockedName(prompt)) { console.log('BLOCKED NAME', file); continue; }
     let ok = false;
