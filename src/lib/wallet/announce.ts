@@ -5,7 +5,8 @@ import { WALLET_LINKS } from '../config';
  * page"), in the owner's words. Shown to everyone until WALLET_LINKS.announceUntil (a UTC day, inclusive), then gone
  * on its own, with no further deploy.
  */
-export const LINK_NOTE = 'New: if your wallet is verified on Farcaster, it now links to that account automatically. Privacy §7.';
+// Owner, 2026-11-05 (draft wording): the wallet-on-Farcaster note is dropped; the line announces Lens and Bluesky sign-in.
+export const LINK_NOTE = 'New: sign in with Lens or Bluesky.';
 
 /** Whether the note shows at `now`: through the whole of the announceUntil day, in UTC. */
 export function linkNoteShown(now: Date = new Date()): boolean {
