@@ -2,6 +2,7 @@
 
 import { createWalletClient, custom, type EIP1193Provider } from 'viem';
 import { saveSocialLinkSession, saveSocialSession } from '../client-auth';
+import { lensMessageProblem } from './lens-message';
 
 /**
  * Lens and Bluesky sign-in in the browser (branch signin-lens-bluesky). The server does the checking
@@ -49,8 +50,12 @@ export async function signInWithLens(wallet: `0x${string}`, account: `0x${string
   const c = await fetch('/api/auth/lens/challenge', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ account, signer: wallet }) }).catch(() => null);
   const ch = (await c?.json().catch(() => ({}))) as { text?: string; ticket?: string; error?: string };
   if (!c?.ok || !ch.text || !ch.ticket) throw new SocialError(ch.error ?? SOCIAL_WORDING.server);
-  // Only a message for this site and this wallet is signed.
-  if (!ch.text.startsWith(`${location.host} wants you to sign in`) || !ch.text.toLowerCase().includes(wallet.toLowerCase())) throw new SocialError(SOCIAL_WORDING.odd);
+  // Only a message for this site, this wallet and Lens Chain is signed (src/lib/social/lens-message.ts).
+  const problem = lensMessageProblem(ch.text, { hostname: location.hostname, origin: location.origin }, wallet);
+  if (problem) {
+    console.warn('lens sign-in: message refused:', problem);
+    throw new SocialError(SOCIAL_WORDING.odd);
+  }
   let signature: `0x${string}`;
   try {
     signature = await createWalletClient({ transport: custom(p) }).signMessage({ account: wallet, message: ch.text });
