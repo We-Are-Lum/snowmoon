@@ -533,6 +533,7 @@ declare
   nums bigint[];
   seen bigint[] := array[]::bigint[];
   n bigint;
+  k text;
 begin
   perform set_config('studio.linked_backfill', 'on', true);
 
@@ -648,13 +649,18 @@ begin
   foreach n in array (select coalesce(array_agg(distinct v order by v), array[]::bigint[]) from unnest(seen) v)
   loop
     continue when n is null or n = 0 or exists (select 1 from studio.person_accounts a where a.account = n and a.unlinked_at is null);
-    continue when n <= -1000000000 and not (has_social and exists (select 1 from studio.social_accounts s where -(1000000000 + s.id) = n));
+    if n > 0 then
+      k := 'farcaster';
+    elsif n > -1000000000 then
+      k := 'wallet';
+    else
+      -- A Lens or Bluesky number: only with the sign-in release's tables (0035), and only if its row exists.
+      continue when not has_social;
+      execute 'select kind from studio.social_accounts where -(1000000000 + id) = $1' into k using n;
+      continue when k is null;
+    end if;
     insert into studio.people default values returning id into p;
-    insert into studio.person_accounts (person_id, kind, account, how) values (
-      p,
-      case when n > 0 then 'farcaster' when n > -1000000000 then 'wallet'
-        else (select s.kind from studio.social_accounts s where -(1000000000 + s.id) = n) end,
-      n, 'first');
+    insert into studio.person_accounts (person_id, kind, account, how) values (p, k, n, 'first');
   end loop;
 
   -- 11h. A main and a name for each Snowmoon account: its Farcaster ID if it has one, else its oldest sign-in (the
@@ -1196,6 +1202,7 @@ declare
   nums bigint[];
   seen bigint[] := array[]::bigint[];
   n bigint;
+  k text;
 begin
   perform set_config('studio.linked_backfill', 'on', true);
 
@@ -1311,13 +1318,18 @@ begin
   foreach n in array (select coalesce(array_agg(distinct v order by v), array[]::bigint[]) from unnest(seen) v)
   loop
     continue when n is null or n = 0 or exists (select 1 from studio.person_accounts a where a.account = n and a.unlinked_at is null);
-    continue when n <= -1000000000 and not (has_social and exists (select 1 from studio.social_accounts s where -(1000000000 + s.id) = n));
+    if n > 0 then
+      k := 'farcaster';
+    elsif n > -1000000000 then
+      k := 'wallet';
+    else
+      -- A Lens or Bluesky number: only with the sign-in release's tables (0035), and only if its row exists.
+      continue when not has_social;
+      execute 'select kind from studio.social_accounts where -(1000000000 + id) = $1' into k using n;
+      continue when k is null;
+    end if;
     insert into studio.people default values returning id into p;
-    insert into studio.person_accounts (person_id, kind, account, how) values (
-      p,
-      case when n > 0 then 'farcaster' when n > -1000000000 then 'wallet'
-        else (select s.kind from studio.social_accounts s where -(1000000000 + s.id) = n) end,
-      n, 'first');
+    insert into studio.person_accounts (person_id, kind, account, how) values (p, k, n, 'first');
   end loop;
 
   -- 11h. A main and a name for each Snowmoon account: its Farcaster ID if it has one, else its oldest sign-in (the

@@ -287,7 +287,9 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   await sql`set role studio_writer`;
   await sql`insert into studio.challenge_eligibility ${sql({ version_id: v.id, challenge: 'remix-2026-11', fid: sky, decision: e1.why, eligible: e1.eligible, account: 'bluesky' })}`;
   const [row] = await sql`select * from studio.challenge_eligibility where version_id = ${v.id}`;
-  check('K7 the decision is kept with account "bluesky", and no score or count', row?.account === 'bluesky' && row.decision === 'passed' && Object.keys(row).sort().join() === 'account,challenge,checked_at,decision,eligible,fid,version_id', JSON.stringify(row));
+  // (Branch linked-accounts: NEXT_linked_accounts adds the owner stamp and which linked account passed, neither a score
+  // nor a count; they are left out of the comparison.)
+  check('K7 the decision is kept with account "bluesky", and no score or count', row?.account === 'bluesky' && row.decision === 'passed' && Object.keys(row).filter((k) => !['person_id', 'via', 'via_account'].includes(k)).sort().join() === 'account,challenge,checked_at,decision,eligible,fid,version_id', JSON.stringify(row));
   let refused = false;
   await sql`insert into studio.challenge_eligibility ${sql({ version_id: v.id, challenge: 'other', fid: -5, decision: 'passed', eligible: true, account: 'bluesky' })}`.catch(() => (refused = true));
   check('K7 a wallet account\'s number is refused in challenge_eligibility', refused);
