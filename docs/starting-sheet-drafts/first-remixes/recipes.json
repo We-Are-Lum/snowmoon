@@ -1,0 +1,354 @@
+[
+ {
+  "file": "first-remixes/mu-snow-closeup.png",
+  "sha256": "f9c6084a06bbb492ce45336acd276ce0a6543e2b7758fab71b21a57ae3195e04",
+  "original_filename": "mu.png",
+  "size": [
+   1456,
+   816
+  ],
+  "character": "Mu",
+  "remixes_base": {
+   "proposed_by_agent_from_the_look": "Mu (her one base)",
+   "owner_confirmed": false
+  },
+  "made_by": "the owner (@naaate), by hand, with Midjourney (a closed model by Midjourney), outside the site",
+  "label": "Made with Midjourney, a closed model by Midjourney, outside the site · recipe reported by its maker; it can't be re-run exactly",
+  "from_the_file": {
+   "prompt": "an older woman in her sixties with warm brown skin, short silver-white hair, glasses and fine wrinkles, wearing a thick white-and-grey winter jacket, turning in deep snow to lead the way back, glancing over her shoulder as she softly gives an order, two young figures following behind her through snow-covered pines, quiet command, flat cel-shaded illustration, bold dark outlines, flat colour blocks, muted teal-grey world with warm accents",
+   "parameters": "--no text, letters, numbers, logos, watermark, signature, teeth, photograph, 3d render --chaos 5 --ar 16:9 --seed 6062 --sref https://s.mj.run/YwM8K-xTQo0 --sw 250 --stylize 250 --v 7 --draft",
+   "job_id": "bc6ef967-858f-4884-bd4e-bec544fbcd63",
+   "xmp_DigImageGUID": "bc6ef967-858f-4884-bd4e-bec544fbcd63",
+   "author": "naaate",
+   "created": "Wed, 04 Nov 2026 23:27:55 GMT",
+   "xmp_DigitalSourceType": "trainedAlgorithmicMedia"
+  },
+  "references": {
+   "style_references_in_parameters": [
+    "https://s.mj.run/YwM8K-xTQo0"
+   ],
+   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
+   "profiles_in_parameters": []
+  },
+  "muse_agent_added": "nothing",
+  "not_reported": [
+   "which base it remixes (agent proposal above, to confirm)",
+   "what each --sref and --profile reference is"
+  ],
+  "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
+  "checks_against_owner_conditions": {
+   "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
+   "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
+   "2_own_pictures_only": "not checkable from the file; owner to confirm"
+  }
+ },
+ {
+  "file": "first-remixes/mu-ink-cape.png",
+  "sha256": "e6a0a7d85b6bb3eba928b94b2be0cd4bdd79e61e169d2470c18ec8c520bd7701",
+  "original_filename": "mu diff style.png",
+  "size": [
+   1024,
+   1024
+  ],
+  "character": "Mu",
+  "remixes_base": {
+   "proposed_by_agent_from_the_look": "Mu (her one base)",
+   "owner_confirmed": false
+  },
+  "made_by": "the owner (@naaate), by hand, with Midjourney (a closed model by Midjourney), outside the site",
+  "label": "Made with Midjourney, a closed model by Midjourney, outside the site · recipe reported by its maker; it can't be re-run exactly",
+  "from_the_file": {
+   "prompt": "an older woman with short silver-white hair and glasses, wearing a dark officer's uniform with gold trim and chevron insignia over blue sleeves, black trousers and grey boots, standing at a command post before a large glowing tactical map of pure light with no markings, calm resolute expression, hands on her hips, surveying the room like the future will be decided here, expressive quiet authority, flat cel-shaded illustration, bold dark outlines, flat colour blocks, muted teal-grey world with warm accents",
+   "parameters": "--profile hu97rol rg1f6ql --v 8.2",
+   "job_id": "af0764ef-1e04-4228-b789-a098b178a1e6",
+   "xmp_DigImageGUID": "af0764ef-1e04-4228-b789-a098b178a1e6",
+   "author": "naaate",
+   "created": "Wed, 04 Nov 2026 22:45:22 GMT",
+   "xmp_DigitalSourceType": "trainedAlgorithmicMedia"
+  },
+  "references": {
+   "style_references_in_parameters": [],
+   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
+   "profiles_in_parameters": [
+    "hu97rol rg1f6ql"
+   ]
+  },
+  "muse_agent_added": "nothing",
+  "not_reported": [
+   "which base it remixes (agent proposal above, to confirm)",
+   "what each --sref and --profile reference is"
+  ],
+  "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
+  "checks_against_owner_conditions": {
+   "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
+   "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
+   "2_own_pictures_only": "not checkable from the file; owner to confirm"
+  }
+ },
+ {
+  "file": "first-remixes/seila-ink-child.png",
+  "sha256": "c543d404a6fa262887e6525e0fad93506371dfcfbea67bc98bb4b5f02b7b9a39",
+  "original_filename": "seala hugging child dif style.png",
+  "size": [
+   1024,
+   1024
+  ],
+  "character": "Seila",
+  "remixes_base": {
+   "proposed_by_agent_from_the_look": "Seila (her one base)",
+   "owner_confirmed": false
+  },
+  "made_by": "the owner (@naaate), by hand, with Midjourney (a closed model by Midjourney), outside the site",
+  "label": "Made with Midjourney, a closed model by Midjourney, outside the site · recipe reported by its maker; it can't be re-run exactly",
+  "from_the_file": {
+   "prompt": "a woman with warm deep-brown skin, long black braids and round glasses, wearing a long orange coat with toggle clasps over green baggy trousers and tan boots, at home in a warm future-city apartment at dinnertime, kneeling down to hug a small sad girl seen from the side, comforting her with a soft warm closed-mouth smile, tender expressive moment, lively natural poses, flat cel-shaded illustration, bold dark outlines, flat colour blocks, muted teal-grey world with warm accents",
+   "parameters": "--profile hu97rol rg1f6ql --v 8.2",
+   "job_id": "659d423c-5e07-493b-b6db-dd825cea88dc",
+   "xmp_DigImageGUID": "659d423c-5e07-493b-b6db-dd825cea88dc",
+   "author": "naaate",
+   "created": "Wed, 04 Nov 2026 22:45:41 GMT",
+   "xmp_DigitalSourceType": "trainedAlgorithmicMedia"
+  },
+  "references": {
+   "style_references_in_parameters": [],
+   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
+   "profiles_in_parameters": [
+    "hu97rol rg1f6ql"
+   ]
+  },
+  "muse_agent_added": "nothing",
+  "not_reported": [
+   "which base it remixes (agent proposal above, to confirm)",
+   "what each --sref and --profile reference is"
+  ],
+  "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
+  "checks_against_owner_conditions": {
+   "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
+   "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
+   "2_own_pictures_only": "not checkable from the file; owner to confirm"
+  }
+ },
+ {
+  "file": "first-remixes/seila-glowing-table.png",
+  "sha256": "4563c7e1e03fe5148a01411e56f5346e0560b6290775b2ef54979f539b31b020",
+  "original_filename": "seila2.png",
+  "size": [
+   1456,
+   816
+  ],
+  "character": "Seila",
+  "remixes_base": {
+   "proposed_by_agent_from_the_look": "Seila (her one base)",
+   "owner_confirmed": false
+  },
+  "made_by": "the owner (@naaate), by hand, with Midjourney (a closed model by Midjourney), outside the site",
+  "label": "Made with Midjourney, a closed model by Midjourney, outside the site · recipe reported by its maker; it can't be re-run exactly",
+  "from_the_file": {
+   "prompt": "a woman with warm deep-brown skin, long black braids and round glasses, wearing a long orange coat with toggle clasps over green baggy trousers, leaning over a table spread with a glowing map of pure shapes and light with no words, planning a journey with a bright anticipatory smile, one finger tracing a route, flat cel-shaded illustration, bold dark outlines, flat colour blocks, muted teal-grey world with warm accents",
+   "parameters": "--no text, letters, numbers, logos, watermark, signature, teeth, photograph, 3d render --chaos 5 --ar 16:9 --seed 6056 --sref https://s.mj.run/YwM8K-xTQo0 --sw 250 --stylize 250 --v 7 --draft",
+   "job_id": "97b5cb41-f0ef-4cc5-a235-70cc5659d748",
+   "xmp_DigImageGUID": "97b5cb41-f0ef-4cc5-a235-70cc5659d748",
+   "author": "naaate",
+   "created": "Wed, 04 Nov 2026 23:19:04 GMT",
+   "xmp_DigitalSourceType": "trainedAlgorithmicMedia"
+  },
+  "references": {
+   "style_references_in_parameters": [
+    "https://s.mj.run/YwM8K-xTQo0"
+   ],
+   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
+   "profiles_in_parameters": []
+  },
+  "muse_agent_added": "nothing",
+  "not_reported": [
+   "which base it remixes (agent proposal above, to confirm)",
+   "what each --sref and --profile reference is"
+  ],
+  "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
+  "checks_against_owner_conditions": {
+   "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
+   "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
+   "2_own_pictures_only": "not checkable from the file; owner to confirm"
+  }
+ },
+ {
+  "file": "first-remixes/deluin-game-board.png",
+  "sha256": "24bc72294fa52aed728ba0044257fab410f3c233bbc401c3520a99fd864e08b1",
+  "original_filename": "gladias2.png",
+  "size": [
+   1456,
+   816
+  ],
+  "character": "Deluin",
+  "remixes_base": {
+   "proposed_by_agent_from_the_look": "Deluin, current look (the prompt describes wavy shoulder-length sandy hair and the cream hooded sweater)",
+   "owner_confirmed": false
+  },
+  "made_by": "the owner (@naaate), by hand, with Midjourney (a closed model by Midjourney), outside the site",
+  "label": "Made with Midjourney, a closed model by Midjourney, outside the site · recipe reported by its maker; it can't be re-run exactly",
+  "from_the_file": {
+   "prompt": "a young man with wavy shoulder-length sandy blond hair, wearing a cream cable-knit hooded sweater, dark green trousers and brown boots, seated perfectly still at a vast glowing game board in a great arena, calm with the faintest unreadable smile, while tiny gliders and debris swarm chaotically on the far side of the board and neat fortified walls of light hold firm on his side, a huge crowd blurred far behind, patience against chaos, flat cel-shaded illustration, bold dark outlines, flat colour blocks, muted teal-grey world with warm accents",
+   "parameters": "--no text, letters, numbers, logos, watermark, signature, teeth, photograph, 3d render --chaos 5 --ar 16:9 --seed 6057 --sref https://s.mj.run/YwM8K-xTQo0 --sw 250 --stylize 250 --v 7 --draft",
+   "job_id": "ec237108-e6d4-4a8d-a26a-75c4204594e9",
+   "xmp_DigImageGUID": "ec237108-e6d4-4a8d-a26a-75c4204594e9",
+   "author": "naaate",
+   "created": "Wed, 04 Nov 2026 23:20:15 GMT",
+   "xmp_DigitalSourceType": "trainedAlgorithmicMedia"
+  },
+  "references": {
+   "style_references_in_parameters": [
+    "https://s.mj.run/YwM8K-xTQo0"
+   ],
+   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
+   "profiles_in_parameters": []
+  },
+  "muse_agent_added": "nothing",
+  "not_reported": [
+   "which base it remixes (agent proposal above, to confirm)",
+   "what each --sref and --profile reference is"
+  ],
+  "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
+  "checks_against_owner_conditions": {
+   "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
+   "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
+   "2_own_pictures_only": "not checkable from the file; owner to confirm"
+  }
+ },
+ {
+  "file": "first-remixes/deluin-ink-ledge.png",
+  "sha256": "7afc153a4533c34fba24a53597640d048d2be7f66826ee43316078a233267967",
+  "original_filename": "gladias dif style.png",
+  "size": [
+   1024,
+   1024
+  ],
+  "character": "Deluin",
+  "remixes_base": {
+   "proposed_by_agent_from_the_look": "Deluin, current look (same words)",
+   "owner_confirmed": false
+  },
+  "made_by": "the owner (@naaate), by hand, with Midjourney (a closed model by Midjourney), outside the site",
+  "label": "Made with Midjourney, a closed model by Midjourney, outside the site · recipe reported by its maker; it can't be re-run exactly",
+  "from_the_file": {
+   "prompt": "a young man with wavy shoulder-length sandy blond hair, wearing a cream cable-knit hooded sweater, dark green trousers and brown boots, sitting in a stone courtyard in a future city drinking tea from a small cup, looking up with a distant unreadable gaze and the faintest closed-mouth smile, a quiet mystery about him, steam curling from the cup, expressive stillness, flat cel-shaded illustration, bold dark outlines, flat colour blocks, muted teal-grey world with warm accents",
+   "parameters": "--profile hu97rol rg1f6ql --v 8.2",
+   "job_id": "cff4c855-8b2a-47b4-9109-94c942c8691f",
+   "xmp_DigImageGUID": "cff4c855-8b2a-47b4-9109-94c942c8691f",
+   "author": "naaate",
+   "created": "Wed, 04 Nov 2026 22:45:40 GMT",
+   "xmp_DigitalSourceType": "trainedAlgorithmicMedia"
+  },
+  "references": {
+   "style_references_in_parameters": [],
+   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
+   "profiles_in_parameters": [
+    "hu97rol rg1f6ql"
+   ]
+  },
+  "muse_agent_added": "nothing",
+  "not_reported": [
+   "which base it remixes (agent proposal above, to confirm)",
+   "what each --sref and --profile reference is"
+  ],
+  "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
+  "checks_against_owner_conditions": {
+   "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
+   "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
+   "2_own_pictures_only": "not checkable from the file; owner to confirm"
+  }
+ },
+ {
+  "file": "first-remixes/gladias-council.png",
+  "sha256": "833f4afc44b32d96adcd1839b8cf357408138438c855872f56dfdb52d7cea574",
+  "original_filename": "gladias.png",
+  "size": [
+   1456,
+   816
+  ],
+  "character": "Gladias",
+  "remixes_base": {
+   "proposed_by_agent_from_the_look": "Gladias, current look (wavy brown hair, short beard)",
+   "owner_confirmed": false
+  },
+  "made_by": "the owner (@naaate), by hand, with Midjourney (a closed model by Midjourney), outside the site",
+  "label": "Made with Midjourney, a closed model by Midjourney, outside the site · recipe reported by its maker; it can't be re-run exactly",
+  "from_the_file": {
+   "prompt": "a calm man with wavy brown hair and a short beard, a silken band around his neck, wearing a green sleeveless tunic over a cream shirt with a tan sash, sitting composed in the centre of a grand circular senate chamber, twenty senators seated in a ring around him, a small robot beside him offering a cup of water, thoughtful and unshaken mid-testimony, flat cel-shaded illustration, bold dark outlines, flat colour blocks, muted teal-grey world with warm accents",
+   "parameters": "--no text, letters, numbers, logos, watermark, signature, teeth, photograph, 3d render --chaos 5 --ar 16:9 --seed 6053 --sref https://s.mj.run/YwM8K-xTQo0 --sw 250 --stylize 250 --v 7 --draft",
+   "job_id": "168d33c4-e132-4c99-b277-65b81650c1b4",
+   "xmp_DigImageGUID": "168d33c4-e132-4c99-b277-65b81650c1b4",
+   "author": "naaate",
+   "created": "Wed, 04 Nov 2026 23:13:41 GMT",
+   "xmp_DigitalSourceType": "trainedAlgorithmicMedia"
+  },
+  "references": {
+   "style_references_in_parameters": [
+    "https://s.mj.run/YwM8K-xTQo0"
+   ],
+   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
+   "profiles_in_parameters": []
+  },
+  "muse_agent_added": "nothing",
+  "not_reported": [
+   "which base it remixes (agent proposal above, to confirm)",
+   "what each --sref and --profile reference is"
+  ],
+  "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
+  "checks_against_owner_conditions": {
+   "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
+   "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
+   "2_own_pictures_only": "not checkable from the file; owner to confirm"
+  }
+ },
+ {
+  "file": "first-remixes/zei-with-mu-snow.png",
+  "sha256": "e68a9bcbba340ef48a461ccd1d3c2a3da7fb356db7ab3cd0033e7c252f885391",
+  "original_filename": "mu and zei 3.png",
+  "size": [
+   1456,
+   816
+  ],
+  "character": "Zei",
+  "remixes_base": {
+   "proposed_by_agent_from_the_look": "Zei (his one base); Mu also appears",
+   "owner_confirmed": false
+  },
+  "made_by": "the owner (@naaate), by hand, with Midjourney (a closed model by Midjourney), outside the site",
+  "label": "Made with Midjourney, a closed model by Midjourney, outside the site · recipe reported by its maker; it can't be re-run exactly",
+  "from_the_file": {
+   "prompt": "an older woman in her sixties with warm brown skin, short silver-white hair, glasses and fine wrinkles, wearing a thick white-and-grey winter jacket, standing on a snowy hilltop in a strong cold wind, calm and resolute, beside her a slim young man with spiky black hair with one blue streak and a wiry young woman with a tall magenta ponytail, a snow-covered pine forest stretching to the horizon, silence before a battle, epic stillness, flat cel-shaded illustration, bold dark outlines, flat colour blocks, muted teal-grey world with warm accents",
+   "parameters": "--no text, letters, numbers, logos, watermark, signature, teeth, photograph, 3d render --chaos 5 --ar 16:9 --seed 6061 --sref https://s.mj.run/YwM8K-xTQo0 --sw 250 --stylize 250 --v 7 --draft",
+   "job_id": "a7f15215-1a1b-4fa2-abbc-6cdb73d665c1",
+   "xmp_DigImageGUID": "a7f15215-1a1b-4fa2-abbc-6cdb73d665c1",
+   "author": "naaate",
+   "created": "Wed, 04 Nov 2026 23:26:32 GMT",
+   "xmp_DigitalSourceType": "trainedAlgorithmicMedia"
+  },
+  "references": {
+   "style_references_in_parameters": [
+    "https://s.mj.run/YwM8K-xTQo0"
+   ],
+   "what_they_are": "not reported (owner to say; the agent does not open midjourney.com or s.mj.run)",
+   "owner_condition": "only the owner's own pictures or the project's sheets (owner, 2026-11-04)",
+   "profiles_in_parameters": []
+  },
+  "muse_agent_added": "nothing",
+  "not_reported": [
+   "which base it remixes (agent proposal above, to confirm)",
+   "what each --sref and --profile reference is"
+  ],
+  "brought_in": "2026-11-04, copied byte for byte from the owner's Downloads by the coding agent; nothing published",
+  "checks_against_owner_conditions": {
+   "1_by_hand": "Author \"naaate\" in the file; the owner says made by hand",
+   "3_inputs": "the prompt is descriptive own words, no book passage; references not reported yet",
+   "2_own_pictures_only": "not checkable from the file; owner to confirm"
+  }
+ }
+]
