@@ -119,10 +119,14 @@ if (path.basename(process.argv[1] ?? '') === 'rehearsal.ts') {
   process.on('SIGINT', stop);
   process.on('SIGTERM', stop);
   app.on('exit', (code) => process.exit(code ?? 0));
-  // The cached pages were built without a database: one visit each, once it is up, renders them from the rehearsal's.
+  // The cached pages were built without a database and stay as built for their first minute (revalidate 60); after
+  // that, one visit each renders them from the rehearsal's. So it says "ready" about a minute after it starts.
   for (let i = 0; i < 120; i++) {
     if (await fetch(REHEARSAL_ORIGIN).then((r) => r.ok, () => false)) {
+      console.log('rehearsal: started; getting the challenge pages ready (about a minute)…');
+      await new Promise((r) => setTimeout(r, 62_000));
       for (const p of ['/challenge', '/challenge/rules']) await fetch(REHEARSAL_ORIGIN + p).catch(() => null);
+      await new Promise((r) => setTimeout(r, 5000));
       console.log(`rehearsal: ready. Open ${REHEARSAL_ORIGIN}/challenge`);
       break;
     }

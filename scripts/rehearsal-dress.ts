@@ -84,7 +84,9 @@ try {
     if (i > 90) throw new Error('the server did not start');
     await new Promise((r) => setTimeout(r, 1000));
   }
-  // The cached pages were built without a database: one visit each starts a fresh render from the rehearsal's.
+  // The cached pages were built without a database and stay as built for their first minute (revalidate 60): after
+  // that, one visit each starts a fresh render from the rehearsal's (scripts/rehearsal.ts does the same).
+  await new Promise((r) => setTimeout(r, 62_000));
   for (const p of ['/challenge', '/challenge/rules']) await fetch(REHEARSAL_ORIGIN + p).catch(() => null);
   await new Promise((r) => setTimeout(r, 6000));
   const as = (fid: number) => ({ authorization: `Bearer rehearsal-test-${fid}`, 'content-type': 'application/json' });
