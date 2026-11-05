@@ -36,8 +36,8 @@ export const CHALLENGE_WORDING = {
     'Make your remix on snowmoon.party with the site’s tools. Every recipe is published.',
     // Draft wording (owner, 2026-11-04: one base per character, three for Deluin and Gladias; was three each, 2026-11-03).
     'Only remixes count: for each character, start from one of its bases, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
-    // Draft wording (owner, 2026-11-04: Submit, three per person, the post link).
-    `A remix becomes an entry only when you press Submit on its page, with a link to your own post about it on Farcaster, Bluesky or Lens. You can submit up to ${numberWord(CHALLENGE.submissionsPerPerson)}, for one character or several. Until entries close you can withdraw one, which frees its place.`,
+    // Draft wording (owner, 2026-11-04: Submit and the post link; branch contest, 2026-11-04: one a day, no total cap).
+    'A remix becomes an entry only when you press Submit on its page, with a link to your own post about it on Farcaster, Bluesky or Lens. You can submit one remix a day (Pacific time), for any character, as many days as you like. Until entries close you can withdraw a submission; that day’s submission isn’t given back.',
     // Draft wording (owner, 2026-11-03: make it clear an account below the check can't remix; launch rehearsal item 3).
     'To remix at all, sign in with a Farcaster account that passes the site’s check. An account below it can’t make the pictures, so it can’t remix or enter. It’s checked when you press Generate, and again when you publish.',
     // Draft wording (owner, 2026-11-04: the minimum is people who submitted, not submissions).
@@ -79,13 +79,13 @@ export const CHALLENGE_WORDING = {
   adminNote: 'Made by an admin during the remix challenge: admins aren’t eligible for rewards.',
   // Submit (owner, 2026-11-04). Draft wording.
   submitHead: 'Submit as an entry',
-  submitNote: () => `A remix becomes an entry only when you submit it, with the link to your post about it on Farcaster, Bluesky or Lens; the post must be yours and link to this page. You can submit up to ${numberWord(CHALLENGE.submissionsPerPerson)}, for one character or several.`,
+  submitNote: () => 'A remix becomes an entry only when you submit it, with the link to your post about it on Farcaster, Bluesky or Lens; the post must be yours and link to this page. You can submit one remix a day (Pacific time).',
   submitLabel: 'Your post’s address (Farcaster, Bluesky or Lens)',
   submit: 'Submit',
   submitted: 'Submitted: this is now one of your entries.',
-  submissionsLeft: (n: number) => `${n} of ${CHALLENGE.submissionsPerPerson} submissions left`,
+  submissionsLeft: (n: number) => (n > 0 ? 'You can submit one remix today.' : 'You’ve submitted today. You can submit again tomorrow (Pacific time).'),
   withdraw: 'Withdraw',
-  withdrawNote: 'Until entries close, withdrawing frees its place.',
+  withdrawNote: 'Until entries close you can withdraw it. Withdrawing doesn’t give back today’s submission.',
   withdrawn: 'Withdrawn: it is no longer an entry.',
   // Share and "Posted on": the words that don't name the challenge are in ./share-wording.ts.
   ...SHARE_WORDING,

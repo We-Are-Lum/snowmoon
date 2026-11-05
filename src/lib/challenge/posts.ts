@@ -1,6 +1,8 @@
 import 'server-only';
 import type postgres from 'postgres';
+import { readFileSync } from 'node:fs';
 import { CHALLENGE } from '../config';
+import { rehearsalTestPostsFile } from './rehearsal-switch';
 import { API_HOSTS, bskyPostsRequest, firstRequest, linksToVersion, parseBskyPosts, parseLensPost, parseNeynarCast, parseResolveHandle, type Network, type Post, type PostRef } from './post-links';
 
 /**
@@ -34,8 +36,25 @@ async function ask(f: Fetch, url: string, init: RequestInit, headers: Record<str
   return f(url, { ...init, headers: { accept: 'application/json', ...((init.headers as Record<string, string>) ?? {}), ...headers }, redirect: 'error', cache: 'no-store', signal: AbortSignal.timeout(TIMEOUT_MS) });
 }
 
+/**
+ * The dress run's stand-in for Neynar (src/lib/challenge/rehearsal-switch.ts, REHEARSAL_TEST_POSTS; rehearsal switch
+ * only): a cast is answered from that file, { "<full hash or farcaster.xyz address>": <Neynar's answer> }, and any
+ * other request is "not found". Nothing is sent anywhere.
+ */
+function rehearsalPosts(file: string): Fetch {
+  return async (url: string) => {
+    const u = new URL(url);
+    const id = u.hostname === 'api.neynar.com' ? u.searchParams.get('identifier') : null;
+    const casts = JSON.parse(readFileSync(file, 'utf8')) as Record<string, unknown>;
+    const body = id ? casts[id.toLowerCase()] ?? casts[id] : undefined;
+    return body ? new Response(JSON.stringify(body), { status: 200, headers: { 'content-type': 'application/json' } }) : new Response('{}', { status: 404 });
+  };
+}
+
 /** The post, from its network's API. Never throws. `f` is fetch, or a stand-in in the tests. */
 export async function fetchPost(ref: PostRef, f: Fetch = fetch): Promise<Fetched> {
+  const testPosts = f === fetch ? rehearsalTestPostsFile(process.env) : null;
+  if (testPosts) f = rehearsalPosts(testPosts);
   try {
     const first = firstRequest(ref);
     if (ref.network === 'farcaster') {

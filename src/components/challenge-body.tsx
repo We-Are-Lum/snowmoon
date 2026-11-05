@@ -20,6 +20,10 @@ export function ChallengeBody({ v }: { v: ChallengeView }) {
         <Link href="/challenge/rules" className="ch-rules-link">
           {v.rulesLink}
         </Link>
+        {' · '}
+        <Link href="/challenge/entries" className="ch-entries-link">
+          {v.entriesLink}
+        </Link>
         <span className="as-draft ch-draft"> · {v.draftShort}</span>
       </p>
 

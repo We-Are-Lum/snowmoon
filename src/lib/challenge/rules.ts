@@ -1,4 +1,5 @@
 import { CHALLENGE } from '../config';
+import { pacificDay } from './rehearsal-switch';
 import { CHALLENGE_LISTS } from './who';
 
 /**
@@ -11,7 +12,8 @@ import { CHALLENGE_LISTS } from './who';
  * - Who is eligible: the maker (a Farcaster ID; wallets can't make sheets yet) is on IMAGES.invited, or has a
  *   Neynar score of at least IMAGES.neynarMinScore. Admins (the config's admin list) can make versions but are never eligible.
  * - Entries (owner, 2026-11-04): a remix becomes an entry only when its maker presses Submit, with a link to a post
- *   about it; up to CHALLENGE.submissionsPerPerson per person, across all characters, any mix.
+ *   about it; one per person per Pacific day (CHALLENGE.submissionsPerDay, America/Los_Angeles), any character, no
+ *   total cap; a withdrawn submission still uses its day (branch contest, 2026-11-04).
  *
  * Every date shown anywhere comes from dateText() over CHALLENGE.dates; nothing writes a date itself (owner,
  * 2026-10-31; scripts/test-challenge.ts fails on a page or wording file that does).
@@ -166,6 +168,8 @@ export interface Submission {
   person: number;
   character: string;
   at: string;
+  /** When it was withdrawn (branch contest): still on record, so it still uses its day; never an entry. */
+  withdrawnAt?: string | null;
 }
 
 /** Newest first (the only order entries are ever shown in), then by id so the order never changes between views. */
@@ -177,6 +181,7 @@ export function distinctSubmissions(subs: readonly Submission[]): Submission[] {
   // The earliest row for each, kept in the order given (no re-sorting: P5g allows only newestFirst on challenge lists).
   const seen = new Map<string, Submission>();
   for (const s of subs) {
+    if (s.withdrawnAt) continue;
     const k = `${s.person} ${s.versionId}`;
     const had = seen.get(k);
     if (!had || s.at < had.at) seen.set(k, s);
@@ -184,16 +189,24 @@ export function distinctSubmissions(subs: readonly Submission[]): Submission[] {
   return [...seen.values()];
 }
 
-export type SubmitRefusal = 'already' | 'full';
+export type SubmitRefusal = 'already' | 'today';
 /**
- * Whether this person may submit this version, given what they have submitted: up to CHALLENGE.submissionsPerPerson
- * across all characters, any mix (three of one character included), each version once. Pure: the server runs it
- * under a lock (submitEntry), so two Submits at once can't pass the cap.
+ * Whether this person may submit this version now, given every submission of theirs, withdrawn ones included (branch
+ * contest, 2026-11-04, replacing "up to three in total"): one per Pacific day (CHALLENGE.submissionsPerDay; the day
+ * is America/Los_Angeles, CHALLENGE.timeZone), for any character, and no total cap. Withdrawing doesn't give back that
+ * day's submission: a withdrawn one still counts for its day. A version standing as submitted can't be submitted
+ * again. Pure: the server runs it under a lock (submitEntry), so two Submits at once can't both pass.
  */
-export function submitRefusal(p: { person: number; versionId: string }, theirs: readonly Submission[], limit: number = CHALLENGE.submissionsPerPerson): SubmitRefusal | null {
-  const mine = distinctSubmissions(theirs).filter((s) => s.person === p.person);
-  if (mine.some((s) => s.versionId === p.versionId)) return 'already';
-  return mine.length >= limit ? 'full' : null;
+export function submitRefusal(p: { person: number; versionId: string }, theirs: readonly Submission[], now: Date = new Date(), perDay: number = CHALLENGE.submissionsPerDay): SubmitRefusal | null {
+  const mine = theirs.filter((s) => s.person === p.person);
+  if (distinctSubmissions(mine).some((s) => s.versionId === p.versionId)) return 'already';
+  return submittedToday(mine, now) >= perDay ? 'today' : null;
+}
+
+/** How many submissions (withdrawn ones included) are on the Pacific day that holds `now`. */
+export function submittedToday(theirs: readonly Pick<Submission, 'at'>[], now: Date = new Date()): number {
+  const today = pacificDay(now, CHALLENGE.timeZone);
+  return theirs.filter((s) => pacificDay(new Date(s.at), CHALLENGE.timeZone) === today).length;
 }
 
 /**

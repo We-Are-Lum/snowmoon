@@ -6,7 +6,7 @@ import { baseStyleOrder, basesOf, isFirstRemix, remixOfBase } from './rules';
 import { CHALLENGE, WORK_ID } from '../config';
 import { challengeVisibleTo } from './visibility';
 import { bookCharacter } from '../images/designs';
-import { chooseEntries, distinctSubmissions, entrantCounts, fromDecision, type Decision, inWindow, newestFirst, phase, shortDateText, submitRefusal, type Candidate, type Eligibility, type Submission } from './rules';
+import { chooseEntries, distinctSubmissions, entrantCounts, fromDecision, type Decision, inWindow, newestFirst, phase, shortDateText, submitRefusal, submittedToday, type Candidate, type Eligibility, type Submission } from './rules';
 import type { Post } from './post-links';
 
 /**
@@ -14,8 +14,9 @@ import type { Post } from './post-links';
  * private submissions (studio.challenge_marks: one row per Submit, its maker's FID, the character and the version) and
  * the eligibility decided once at publish (studio.challenge_eligibility, written by src/lib/challenge/record.ts; both
  * 0033_remix_challenge.sql). A remix becomes an entry only when its maker presses Submit, with a link to a post about
- * it (read and listed as "Add where you posted it" does: src/lib/challenge/posts.ts); up to
- * CHALLENGE.submissionsPerPerson per person, checked under a lock. Viewing a page never asks Neynar or anyone else
+ * it (read and listed as "Add where you posted it" does: src/lib/challenge/posts.ts); one per person per Pacific day
+ * (CHALLENGE.submissionsPerDay), checked under a lock; a withdrawn one stays on record (withdrawn_at) and still uses
+ * its day (NEXT_challenge_daily.sql). Viewing a page never asks Neynar or anyone else
  * anything (owner, 2026-10-31; scripts/test-challenge.ts proves it). Without the eligibility table, only invited makers
  * count (decided from the lists alone); without the marks table nothing is an entry and Submit answers "not available
  * yet" (as src/lib/picks.ts does without its table).
@@ -70,16 +71,18 @@ export async function windowVersions(sql: Sql): Promise<ChallengeVersion[]> {
 // The marks table may not exist yet: remembered for a minute, like src/lib/picks.ts.
 let missingUntil = 0;
 const missing = (e: unknown) => (e as { code?: string }).code === '42P01';
+/** studio.challenge_marks without withdrawn_at: NEXT_challenge_daily.sql isn't applied yet. */
+const noColumn = (e: unknown) => (e as { code?: string }).code === '42703';
 
-/** Every submission (one row per Submit; a withdrawn one is gone). Empty without the table. */
+/** Every standing submission (one row per Submit; a withdrawn one is left out). Empty without the table or its column. */
 export async function readSubmissions(sql: Sql): Promise<Submission[]> {
   if (Date.now() < missingUntil) return [];
   try {
     const rows = await sql<{ fid: string; character: string; version_id: string; marked_at: Date }[]>`
-      select fid, character, version_id, marked_at from studio.challenge_marks where challenge = ${CHALLENGE.id} order by marked_at, id`;
+      select fid, character, version_id, marked_at from studio.challenge_marks where challenge = ${CHALLENGE.id} and withdrawn_at is null order by marked_at, id`;
     return distinctSubmissions(rows.map((r) => ({ person: Number(r.fid), character: r.character, versionId: String(r.version_id), at: new Date(r.marked_at).toISOString() })));
   } catch (e) {
-    if (missing(e)) missingUntil = Date.now() + 60_000;
+    if (missing(e) || noColumn(e)) missingUntil = Date.now() + 60_000;
     else console.error('challenge: submissions not read', (e as { code?: string }).code ?? (e as Error).name);
     return [];
   }
@@ -184,7 +187,8 @@ export const SUBMIT_WORDING = {
   /** Draft wording: a Bluesky post, while no Bluesky account can be linked to a person (see writerCheck). */
   blueskyUnknown: 'We can’t tell yet that this Bluesky post is yours. Submit a post from your Farcaster account instead.',
   already: 'You’ve already submitted this version.',
-  full: () => `You’ve submitted ${CHALLENGE.submissionsPerPerson}, the most anyone can. Withdraw one to submit another.`,
+  /** Draft wording (branch contest, 2026-11-04): one submission per Pacific day. */
+  today: 'You’ve already submitted a remix today. You can submit one each day (Pacific time), so come back tomorrow.',
   notYet: 'Submitting isn’t available yet.',
   withdrawNotYours: 'You can withdraw only your own submission.',
   withdrawNotYet: 'Withdrawing isn’t available yet.',
@@ -193,9 +197,9 @@ export const SUBMIT_WORDING = {
 /**
  * Submit (owner, 2026-11-04): the maker's own remix, made in the window, eligible as stored at publish, with a post
  * that links to its page (the caller reads and checks it first: src/lib/challenge/posts.ts, verifiedPost). Under one
- * lock per person: the cap (CHALLENGE.submissionsPerPerson, across all characters) and "each version once", then the
- * post is listed on the version's page (as "Add where you posted it" lists it) and the submission written, in one
- * transaction. Returns how many more this person may submit.
+ * lock per person: one a Pacific day (CHALLENGE.submissionsPerDay; withdrawn ones count for their day) and "each
+ * version once", then the post is listed on the version's page (as "Add where you posted it" lists it) and the
+ * submission written, in one transaction. Returns how many more this person may submit today.
  */
 export async function submitEntry(sql: Sql, fid: number, versionId: string, post: Post | null, now = new Date()): Promise<SubmitResult> {
   if (!CHALLENGE.entries || !CHALLENGE.posts) return { ok: false, why: SUBMIT_WORDING.off, status: 503 };
@@ -211,26 +215,28 @@ export async function submitEntry(sql: Sql, fid: number, versionId: string, post
   try {
     return await sql.begin(async (tx) => {
       await tx`select pg_advisory_xact_lock(hashtext('snowmoon.challenge.submit'), ${fid}::int)`;
-      const theirs = await tx<{ version_id: string; marked_at: Date; character: string }[]>`
-        select version_id, marked_at, character from studio.challenge_marks where challenge = ${CHALLENGE.id} and fid = ${fid}`;
-      const subs = theirs.map((r) => ({ person: fid, versionId: String(r.version_id), character: r.character, at: new Date(r.marked_at).toISOString() }));
-      const refusal = submitRefusal({ person: fid, versionId }, subs);
+      // Every row of theirs, withdrawn ones included: a withdrawn submission still uses its day.
+      const theirs = await tx<{ version_id: string; marked_at: Date; character: string; withdrawn_at: Date | null }[]>`
+        select version_id, marked_at, character, withdrawn_at from studio.challenge_marks where challenge = ${CHALLENGE.id} and fid = ${fid}`;
+      const subs = theirs.map((r) => ({ person: fid, versionId: String(r.version_id), character: r.character, at: new Date(r.marked_at).toISOString(), withdrawnAt: r.withdrawn_at ? new Date(r.withdrawn_at).toISOString() : null }));
+      const refusal = submitRefusal({ person: fid, versionId }, subs, now);
       if (refusal === 'already') return { ok: false as const, why: SUBMIT_WORDING.already, status: 409 };
-      if (refusal === 'full') return { ok: false as const, why: SUBMIT_WORDING.full(), status: 409 };
+      if (refusal === 'today') return { ok: false as const, why: SUBMIT_WORDING.today, status: 409 };
       await tx`insert into studio.version_posts ${tx({ version_id: versionId, network: post.network, post_id: post.id, handle: post.handle, posted_at: post.at, url: post.url, fid })}
         on conflict (version_id, network, post_id) do nothing`;
       await tx`insert into studio.challenge_marks ${tx({ challenge: CHALLENGE.id, fid, character: v.character, version_id: versionId })}`;
-      return { ok: true as const, left: CHALLENGE.submissionsPerPerson - distinctSubmissions(subs).length - 1 };
+      return { ok: true as const, left: Math.max(0, CHALLENGE.submissionsPerDay - submittedToday(subs, now) - 1) };
     });
   } catch (e) {
-    if (missing(e)) return { ok: false, why: SUBMIT_WORDING.notYet, status: 503 };
+    if (missing(e) || noColumn(e)) return { ok: false, why: SUBMIT_WORDING.notYet, status: 503 };
     throw e;
   }
 }
 
 /**
- * Withdraw a submission (proposed to the owner, 2026-11-04): its maker may, until entries close; it frees the slot,
- * and the post stays listed. Needs studio_writer's delete on studio.challenge_marks (NEXT_challenge_submit.sql);
+ * Withdraw a submission (proposed to the owner, 2026-11-04): its maker may, until entries close. It is no longer an
+ * entry, but it stays on record (withdrawn_at is set; nothing is deleted) and still uses its day (branch contest,
+ * 2026-11-04), and the post stays listed. Needs studio_writer's update of withdrawn_at (NEXT_challenge_daily.sql);
  * without it, "not available yet".
  */
 export async function withdrawEntry(sql: Sql, fid: number, versionId: string, now = new Date()): Promise<SubmitResult> {
@@ -239,22 +245,29 @@ export async function withdrawEntry(sql: Sql, fid: number, versionId: string, no
   try {
     return await sql.begin(async (tx) => {
       await tx`select pg_advisory_xact_lock(hashtext('snowmoon.challenge.submit'), ${fid}::int)`;
-      const gone = await tx`delete from studio.challenge_marks where challenge = ${CHALLENGE.id} and fid = ${fid} and version_id = ${versionId} returning id`;
+      const gone = await tx`update studio.challenge_marks set withdrawn_at = now() where challenge = ${CHALLENGE.id} and fid = ${fid} and version_id = ${versionId} and withdrawn_at is null returning id`;
       if (!gone.length) return { ok: false as const, why: SUBMIT_WORDING.withdrawNotYours, status: 404 };
-      const [n] = await tx<{ n: number }[]>`select count(distinct version_id)::int as n from studio.challenge_marks where challenge = ${CHALLENGE.id} and fid = ${fid}`;
-      return { ok: true as const, left: CHALLENGE.submissionsPerPerson - Number(n?.n ?? 0) };
+      const rows = await tx<{ marked_at: Date }[]>`select marked_at from studio.challenge_marks where challenge = ${CHALLENGE.id} and fid = ${fid}`;
+      return { ok: true as const, left: Math.max(0, CHALLENGE.submissionsPerDay - submittedToday(rows.map((r) => ({ at: new Date(r.marked_at).toISOString() })), now)) };
     });
   } catch (e) {
     const code = (e as { code?: string }).code;
-    if (missing(e) || code === '42501') return { ok: false, why: SUBMIT_WORDING.withdrawNotYet, status: 503 };
+    if (missing(e) || noColumn(e) || code === '42501') return { ok: false, why: SUBMIT_WORDING.withdrawNotYet, status: 503 };
     throw e;
   }
 }
 
-/** How many more this person may submit, and which versions they submitted (for their own pages only). */
-export async function mySubmissions(sql: Sql, fid: number): Promise<{ left: number; versions: string[] }> {
+/** How many more this person may submit today (Pacific), and which versions stand submitted (their own pages only). */
+export async function mySubmissions(sql: Sql, fid: number, now = new Date()): Promise<{ left: number; versions: string[] }> {
   const mine = (await readSubmissions(sql)).filter((s) => s.person === fid);
-  return { left: Math.max(0, CHALLENGE.submissionsPerPerson - mine.length), versions: mine.map((s) => s.versionId) };
+  let today = 0;
+  try {
+    const rows = await sql<{ marked_at: Date }[]>`select marked_at from studio.challenge_marks where challenge = ${CHALLENGE.id} and fid = ${fid}`;
+    today = submittedToday(rows.map((r) => ({ at: new Date(r.marked_at).toISOString() })), now);
+  } catch (e) {
+    if (!missing(e)) throw e;
+  }
+  return { left: Math.max(0, CHALLENGE.submissionsPerDay - today), versions: mine.map((s) => s.versionId) };
 }
 
 /** `style`: the published style the sheet's views were made in (body.style.title), for the bases' style order. */

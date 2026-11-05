@@ -3,6 +3,7 @@ import { createClient } from '@farcaster/quick-auth';
 import { readSession, type WalletSession } from './wallet/session';
 import { db } from './db';
 import { configLink, linkedFidFor } from './wallet/links';
+import { rehearsalTestFid } from './challenge/rehearsal-switch';
 
 /**
  * Sign In with Farcaster via Quick Auth, as a bearer token.
@@ -24,6 +25,10 @@ export async function getFid(request: Request): Promise<number | null> {
   const header = request.headers.get('authorization') ?? '';
   const token = header.match(/^Bearer\s+(\S+)$/i)?.[1];
   if (!token) return null;
+  // The rehearsal dress run's test persons only (src/lib/challenge/rehearsal-switch.ts): off unless the rehearsal switch
+  // is on (this machine, never on Vercel, a database on this machine) and REHEARSAL_TEST_SIGNIN=on.
+  const test = rehearsalTestFid(token, process.env);
+  if (test !== null) return test;
   try {
     const payload = await quickAuth.verifyJwt({ token, domain: domain(request) });
     return Number(payload.sub);

@@ -19,7 +19,8 @@
  * (src/lib/challenge/view.ts) hands that component every remix (`remixes(sql)`, with no filter, limit or order).
  * The same shuffle also orders a character's several bases (owner, 2026-11-04: Deluin's and Gladias' three, in a fresh
  * random order on each visit so none reads as the default), in src/components/challenge-bases.tsx only, on the
- * character's whole list of bases (`shuffleFresh(bases)`).
+ * character's whole list of bases (`shuffleFresh(bases)`), and every submission's "Shuffled" order on
+ * /challenge/entries, in src/components/challenge-entries-list.tsx only, on every entry shown (`shuffleFresh(all)`).
  */
 export const CHALLENGE_FILES = /^src\/lib\/challenge\/|^src\/app\/challenge\/|^src\/app\/api\/challenge\/|^src\/components\/(challenge-[a-z-]+|posted-on|post-link-field)\.tsx$/;
 export const NOT_AN_ORDER = /\b(likes?|like_?count|likeCount|built_?on|builtOn|score|repost|recast|repl(y|ies)|followers?|cost|amount|usd|payment|paid|sponsor|donation)\b/i;
@@ -27,6 +28,7 @@ const BASES_FILE = 'src/lib/challenge/entries.ts';
 const SHUFFLE_FILE = 'src/lib/challenge/shuffle.ts';
 const PICK_FILE = 'src/components/challenge-remix-pick.tsx';
 const BASES_PICK_FILE = 'src/components/challenge-bases.tsx';
+const ENTRIES_PICK_FILE = 'src/components/challenge-entries-list.tsx';
 const PAGE_FILE = 'src/lib/challenge/view.ts';
 const RANDOM = /Math\.random\b|getRandomValues\b|randomInt\b/;
 const WEIGHT = /\bweight|\bbias|\bboost|\bfeature[ds]?\b|\bpinned\b|\bcount\b|\bpopular/i;
@@ -67,6 +69,10 @@ export function p5gProblems(files: { file: string; text: string }[]): string[] {
     }
     for (const m of code.matchAll(/shuffleFresh\(([^)]*)\)/g)) {
       if (file === SHUFFLE_FILE) continue;
+      if (file === ENTRIES_PICK_FILE) {
+        if (m[1].trim() !== 'all') problems.push(`${file}: shuffles something other than every entry shown: shuffleFresh(${m[1].slice(0, 40)})`);
+        continue;
+      }
       if (file === BASES_PICK_FILE) {
         if (m[1].trim() !== 'bases') problems.push(`${file}: shuffles something other than the character's whole list of bases: shuffleFresh(${m[1].slice(0, 40)})`);
         continue;
@@ -93,7 +99,7 @@ export function p5gProblems(files: { file: string; text: string }[]): string[] {
  * else. Reads the card, the random selection, the feed page and the remixes' server code (comments aside). A viewer's
  * "most remixed" sort may come back after entries close, by the owner's decision then.
  */
-export const P5I_FILES = ['src/components/challenge-remix-card.tsx', 'src/components/challenge-remix-pick.tsx', 'src/app/challenge/remixes/page.tsx', 'src/lib/challenge/remixes.ts'];
+export const P5I_FILES = ['src/components/challenge-remix-card.tsx', 'src/components/challenge-remix-pick.tsx', 'src/app/challenge/remixes/page.tsx', 'src/lib/challenge/remixes.ts', 'src/app/challenge/entries/page.tsx', 'src/components/challenge-entries-list.tsx', 'src/components/posted-on.tsx'];
 const A_COUNT = /\bcount\s*\(|\b(likes?|like_?count|likeCount|built_?on|builtOn|remix_?count|remixCount|remixes_?count|versions|score|popular\w*|most[ _-]?remixed|mostRemixed|trending)\b/i;
 export function p5iProblems(files: { file: string; text: string }[]): string[] {
   const problems: string[] = [];

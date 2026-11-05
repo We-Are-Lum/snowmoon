@@ -27,6 +27,7 @@ import { LiveScreen } from '../src/components/live-screen';
 import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, imagesDailySpendCapUsd } from '../src/lib/config';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
+import { rehearsalOn, rehearsalTestFid, rehearsalTestPostsFile } from '../src/lib/challenge/rehearsal-switch';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -1537,6 +1538,51 @@ add({
 // Keys that bypass row-level security, or connect as the database owner, must
 // not sit on the Vercel project at all (owner decision, Oct 5, 2026).
 const FORBIDDEN_VARS = /^(SUPABASE_SERVICE_ROLE_KEY|SUPABASE_SECRET_KEY|SUPABASE_JWT_SECRET|POSTGRES_[A-Z0-9_]*)$/;
+// The rehearsal switch (branch contest, 2026-11-04): CHALLENGE_REHEARSAL=on runs the challenge as if opened, with admins
+// eligible and test stand-ins, on this machine only. Production must ignore it, and so must any Vercel deployment and
+// any database that isn't on this machine; the config must read it only through rehearsalOn, and the target must not
+// be running it (its /api/rehearsal/file answers 404 there, and /challenge stays as CHALLENGE.public says).
+add({
+  id: 'P6w',
+  principle: 6,
+  name: 'the rehearsal switch (CHALLENGE_REHEARSAL=on) is ignored on production, on any Vercel deployment and with a database elsewhere, and so are its test sign-in and stand-in posts',
+  load: async () => {
+    const local = 'postgres://postgres@127.0.0.1:54329/postgres';
+    const on = { CHALLENGE_REHEARSAL: 'on', STUDIO_DATABASE_URL: local, REHEARSAL_TEST_SIGNIN: 'on', REHEARSAL_TEST_POSTS: '/tmp/x.json' };
+    const cases: [string, Record<string, string>][] = [
+      ['VERCEL_ENV=production', { ...on, VERCEL_ENV: 'production' }],
+      ['VERCEL_ENV=production without VERCEL', { ...on, VERCEL_ENV: 'production', VERCEL: '' }],
+      ['VERCEL=1 (any Vercel deployment)', { ...on, VERCEL: '1' }],
+      ['VERCEL_ENV=preview', { ...on, VERCEL_ENV: 'preview' }],
+      ['NEXT_PUBLIC_VERCEL_ENV=production', { ...on, NEXT_PUBLIC_VERCEL_ENV: 'production' }],
+      ['the production pooler as the database', { ...on, STUDIO_DATABASE_URL: 'postgres://studio_writer.x:y@aws-0-us-west-1.pooler.supabase.com:6543/postgres' }],
+    ];
+    return {
+      fn: { rehearsalOn, rehearsalTestFid, rehearsalTestPostsFile },
+      cases,
+      local: on,
+      config: read('src/lib/config.ts'),
+      file: await fetch(`${BASE}/api/rehearsal/file/images/readers/${'0'.repeat(32)}.jpg`, { redirect: 'manual' }).then((r) => r.status, () => 0),
+    };
+  },
+  run: (c) => {
+    const problems: string[] = [];
+    for (const [what, env] of c.cases) {
+      if (c.fn.rehearsalOn(env)) problems.push(`the rehearsal switch is on with ${what}`);
+      if (c.fn.rehearsalTestFid('rehearsal-test-2147483601', env) !== null) problems.push(`the rehearsal's test sign-in works with ${what}`);
+      if (c.fn.rehearsalTestPostsFile(env) !== null) problems.push(`the rehearsal's stand-in posts are read with ${what}`);
+    }
+    // It must still work where it is meant to (else this check proves nothing about the cases above).
+    if (!c.fn.rehearsalOn(c.local)) problems.push('the rehearsal switch is off on this machine with a local database: the check above proves nothing');
+    if (!/typeof window === 'undefined'\s*\? rehearsalOn\(process\.env\)/.test(c.config) || /CHALLENGE_REHEARSAL/.test(c.config.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, ''))) problems.push('src/lib/config.ts reads CHALLENGE_REHEARSAL other than through rehearsalOn');
+    if (c.file !== 404) problems.push(`${BASE}/api/rehearsal/file answers ${c.file}, not 404: the target is running the rehearsal`);
+    return problems;
+  },
+  plant: (c) => {
+    // A switch that reads only CHALLENGE_REHEARSAL, ignoring VERCEL_ENV.
+    c.fn = { ...c.fn, rehearsalOn: (env: Record<string, string | undefined>) => env.CHALLENGE_REHEARSAL === 'on' };
+  },
+});
 // Sign-in checks keep the decision, never the score (owner, 2026-11-04): no table the site can write holds a score
 // column, the decision store holds no number at all, and no site code writes a score.
 add({

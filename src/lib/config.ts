@@ -1,3 +1,4 @@
+import { REHEARSAL_BASE_IDS, rehearsalChallenge, rehearsalOn, rehearsalOnInBrowser } from './challenge/rehearsal-switch';
 /**
  * One source of truth for constants (Build Brief rule 7).
  * Caps, thresholds, moderator FIDs, and model names live here as they are added.
@@ -472,12 +473,13 @@ export const CHALLENGE = {
   /**
    * Submit (owner, 2026-11-04): a remix becomes an entry only when its maker presses Submit on its page, with a link
    * to a post about it on Farcaster, Bluesky or Lens (checked as "Add where you posted it" checks it). At most this
-   * many submissions per person across all characters, any mix (three of one character included); checked on the
-   * server under a lock. minEntrants counts the different people who submitted for a character. A submission can be
-   * withdrawn until entries close, which frees its slot (needs NEXT_challenge_submit.sql; until then withdrawing
-   * answers "not available yet").
+   * many submissions per person per Pacific day (timeZone below), for any character, with no total cap (branch
+   * contest, 2026-11-04, replacing "up to three in total"); checked on the server under a lock. minEntrants counts the
+   * different people who submitted for a character. A submission can be withdrawn until entries close; withdrawing
+   * doesn't give back that day's submission (it stays on record, withdrawn: needs NEXT_challenge_daily.sql; until
+   * then Submit and Withdraw answer "not available yet").
    */
-  submissionsPerPerson: 3,
+  submissionsPerDay: 1,
   /**
    * The Neynar score an entrant's account must have when a version is published (owner, 2026-11-01). Fixed for the whole
    * challenge, whatever IMAGES.neynarMinScore becomes; only the decision (passed or below) is kept, never the score.
@@ -511,6 +513,13 @@ export const CHALLENGE = {
    */
   likes: false as boolean,
   /**
+   * Like, recast and reply counts from Farcaster, Bluesky or Lens on remix pages (branch contest, 2026-11-04): off while
+   * the challenge and the vote are open. While off, nothing reads or shows them: "Posted on" gives only "See the
+   * conversation on <network>" links. Nothing reads them yet; turning this on needs the owner's decision and its own
+   * Privacy line first.
+   */
+  socialCounts: false as boolean,
+  /**
    * On (owner, 2026-10-31), but it takes effect only inside the entry window, computed from `dates`
    * (src/lib/challenge/open-sheets.ts), and only once Privacy describes the challenge (the owner's reread). Before the
    * open and after the close, sheets are invited-only again with no deploy.
@@ -522,6 +531,27 @@ export const CHALLENGE = {
   postsPerVersion: 30,
   postsPerPersonPerDay: 20,
 };
+
+/**
+ * The rehearsal switch (src/lib/challenge/rehearsal-switch.ts): CHALLENGE_REHEARSAL=on, on this machine only, never on
+ * any Vercel deployment and only with a database on this machine. When on, the challenge is `rehearsal-<yyyymmdd>`,
+ * opens at the start of today (Pacific; every date moved by the same amount) and is public on that server, and
+ * admins are eligible (src/lib/challenge/who.ts). check:principles P6w proves production ignores it.
+ */
+export const REHEARSAL = {
+  on:
+    typeof window === 'undefined'
+      ? rehearsalOn(process.env)
+      : rehearsalOnInBrowser(process.env.NEXT_PUBLIC_CHALLENGE_REHEARSAL, process.env.NEXT_PUBLIC_VERCEL_ENV, window.location.hostname),
+};
+if (REHEARSAL.on) {
+  const r = rehearsalChallenge(CHALLENGE.dates, new Date(), CHALLENGE.timeZone);
+  CHALLENGE.id = r.id;
+  CHALLENGE.dates = r.dates;
+  CHALLENGE.public = true;
+  // The rehearsal database's stand-in bases (scripts/rehearsal-db.ts), never the real ones.
+  CHALLENGE.bases = REHEARSAL_BASE_IDS;
+}
 
 /**
  * Sign-in checks (owner, 2026-11-04: "look each account up as rarely as possible"): the Neynar score today, the Lens

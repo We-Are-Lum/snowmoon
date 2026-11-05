@@ -36,6 +36,7 @@ export interface ChallengeView {
   title: string;
   line: string;
   rulesLink: string;
+  entriesLink: string;
   draftShort: string;
   notAffiliated: string;
   characters: { slug: string; name: string; callName: string; note: string | null; bases: BaseTile[]; firsts: BaseTile[]; emptySlots: number; firstsHead: string; w: BaseWords }[];
@@ -58,6 +59,7 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
     title: W.title,
     line: L.line(),
     rulesLink: L.rulesLink,
+    entriesLink: L.entriesLink,
     draftShort: W.draftShort,
     notAffiliated: W.notAffiliated,
     characters: sheets.map(({ c, list }) => {

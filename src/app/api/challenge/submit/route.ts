@@ -12,7 +12,7 @@ import { challengeVisibleTo } from '~/lib/challenge/visibility';
  * POST { versionId, url } (or { versionId, castHash }, the cast the Farcaster app just made): the post is read from its
  * network's own API and must link to the version's page, exactly as "Add where you posted it" checks it (the pasted
  * address itself is never fetched) and, on Farcaster and Bluesky, must be the submitter's own (writerCheck); then,
- * under a lock, the cap (CHALLENGE.submissionsPerPerson across all characters), and the post is listed and the
+ * under a lock, one a Pacific day (CHALLENGE.submissionsPerDay; a withdrawn one still uses its day), and the post is listed and the
  * submission kept. DELETE { versionId }: withdraw it, until entries close.
  * GET: how many more the signed-in maker may submit, and which versions they submitted (their own only).
  * While the challenge is admin-only (CHALLENGE.public off; owner, 2026-11-04), every method answers 404 to everyone but

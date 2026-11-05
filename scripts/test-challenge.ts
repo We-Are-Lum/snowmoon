@@ -13,7 +13,7 @@
  *   the mint as a plan), and the count of distinct entrants per character.
  * - Submit (owner, 2026-11-04): a remix is an entry only once its maker submits it, with a post link (checked as "Add
  *   where you posted it" checks it); up to three per person across all characters, the 4th refused under a lock;
- *   withdraw until entries close frees a slot (NEXT_challenge_submit.sql); the minimum is three different people who
+ *   withdraw until entries close, which doesn't give back that day's submission (NEXT_challenge_daily.sql); the minimum is three different people who
  *   submitted (three by one person count once); the equal share is per person.
  * - Free remixes (owner, 2026-11-04): three a day for an account that passes the check, counted as remixes (a sheet's
  *   three views, up to six pictures, so a failed view is made again inside it), not pictures; a closed remix counts
@@ -27,7 +27,7 @@
  * - "Posted on" holds no image, avatar, embed or script.
  * - The three bases (owner, 2026-11-03): a fork of each base counts, a fork of an entry counts, a sheet from scratch
  *   and a fork of a sheet that isn't a base don't; nothing breaks while the bases are empty (as before).
- * - The migration (0033, applied 2026-11-01, with NEXT_challenge_submit): RLS, privileges, no score; submissions and
+ * - The migration (0033, applied 2026-11-01, with NEXT_challenge_daily): RLS, privileges, no score; submissions and
  *   posts work; without the tables, nothing breaks.
  */
 import path from 'node:path';
@@ -79,6 +79,8 @@ const L = await import('../src/lib/challenge/post-links');
     ['src/app/api/challenge/submit/route.ts', /const hidden = \(fid: number \| null\) => \(challengeVisibleTo\(fid\) \? null : NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\)\);/],
     ['src/app/challenge/rules/page.tsx', /if \(!CHALLENGE\.public\) notFound\(\);/],
     ['src/app/challenge/remixes/page.tsx', /if \(!CHALLENGE\.public\) notFound\(\);/],
+    ['src/app/challenge/entries/page.tsx', /if \(!CHALLENGE\.public\) notFound\(\);/],
+    ['src/app/challenge/entries/page.tsx', /if \(!CHALLENGE\.public\) return \{ robots: \{ index: false, follow: false \} \};/],
     ['src/app/challenge/rules/page.tsx', /if \(!CHALLENGE\.public\) return \{ robots: \{ index: false, follow: false \} \};/],
     ['src/app/challenge/remixes/page.tsx', /if \(!CHALLENGE\.public\) return \{ robots: \{ index: false, follow: false \} \};/],
     ['src/app/api/challenge/view/route.ts', /if \(!challengeVisibleTo\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/],
@@ -100,7 +102,7 @@ const L = await import('../src/lib/challenge/post-links');
   const { navItems } = await import('../src/lib/nav');
   check('switch: the menu has no challenge item unless told to show it', !navItems(1, 0).some((i) => i.href === '/challenge') && navItems(1, 0, true).some((i) => i.href === '/challenge'));
   // Scripts everyone is served carry no challenge words: the share buttons, "Posted on", Submit, the fork form.
-  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-submit.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx', 'src/components/challenge-bases.tsx', 'src/components/challenge-remix-pick.tsx', 'src/components/challenge-remix-card.tsx'];
+  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-submit.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx', 'src/components/challenge-bases.tsx', 'src/components/challenge-remix-pick.tsx', 'src/components/challenge-remix-card.tsx', 'src/components/challenge-entries-list.tsx'];
   const wordy = clientFiles.filter((f) => /challenge\/(landing-)?wording'/.test(read(f)));
   check('switch: no script served to everyone imports the challenge\'s words', wordy.length === 0, wordy.join());
 }
@@ -199,16 +201,27 @@ check('S1 versions made before the window are not entries, even submitted', !cho
 check('S1 a new sheet that is not a fork is not an entry, even submitted', !chosen.some((c) => c.versionId === 'n1'));
 check('S1 an ineligible person has no entry, even submitted', !chosen.some((c) => c.person === 502));
 proof('S1 an entry chosen without a submission (the old "latest counts") is caught', ((list: typeof cs) => list.filter((c) => R.isCandidate(c) && ok(c.person)))(cs).length !== R.chooseEntries(cs, [], ok).length);
-// The cap: three per person, across all characters, any mix (three of one character included); each version once.
-const three = [sub('x1', 700, 'bai'), sub('x2', 700, 'zei'), sub('x3', 700, 'mu')];
-check('S2 up to three submissions per person: the third is allowed', R.submitRefusal({ person: 700, versionId: 'x3' }, three.slice(0, 2)) === null);
-check('S2 the 4th submission is refused (any mix of characters)', R.submitRefusal({ person: 700, versionId: 'x4' }, three) === 'full');
-check('S2 three of one character are allowed, and a 4th of it refused', R.submitRefusal({ person: 701, versionId: 'y3' }, [sub('y1', 701, 'bai'), sub('y2', 701, 'bai')]) === null && R.submitRefusal({ person: 701, versionId: 'y4' }, [sub('y1', 701, 'bai'), sub('y2', 701, 'bai'), sub('y3', 701, 'bai')]) === 'full');
-check('S2 a version is submitted once', R.submitRefusal({ person: 700, versionId: 'x1' }, three.slice(0, 1)) === 'already');
-check('S2 other people\'s submissions don\'t use your slots', R.submitRefusal({ person: 702, versionId: 'z1' }, three) === null);
-check('S2 the cap is the config\'s, three (owner, 2026-11-04)', CHALLENGE.submissionsPerPerson === 3);
-proof('S2 a planted cap of four is caught', R.submitRefusal({ person: 700, versionId: 'x4' }, three, 4) !== R.submitRefusal({ person: 700, versionId: 'x4' }, three));
-proof('S2 a planted 4th submission is caught by the cap', ((planted: typeof three) => R.submitRefusal({ person: 700, versionId: 'x5' }, planted) === 'full')([...three, sub('x4', 700, 'gladias')]));
+// The daily rule (branch contest, 2026-11-04, replacing "three in total"): one submission per person per Pacific day, any
+// character, no total cap; a withdrawn one still uses its day; each version once while it stands.
+{
+  const pt = (day: number, hhmm: string) => new Date(`2026-11-${String(day).padStart(2, '0')}T${hhmm}:00-08:00`);
+  const at1 = (v: string, person: number, when: Date, withdrawnAt: string | null = null) => ({ versionId: v, person, character: 'bai', at: when.toISOString(), withdrawnAt });
+  const d10 = [at1('x1', 700, pt(10, '09:00'))];
+  check('S2 one a day: a second the same Pacific day is refused', R.submitRefusal({ person: 700, versionId: 'x2' }, d10, pt(10, '23:59')) === 'today');
+  check('S2 the next Pacific day it is allowed (midnight Pacific, not UTC)', R.submitRefusal({ person: 700, versionId: 'x2' }, d10, pt(11, '00:00')) === null && R.submitRefusal({ person: 700, versionId: 'x2' }, [at1('x1', 700, pt(10, '15:00'))], pt(10, '17:30')) === 'today');
+  proof('S2 a day counted in UTC is caught', ((now: Date) => d10.filter((x) => x.at.slice(0, 10) === now.toISOString().slice(0, 10)).length)(pt(10, '17:30')) !== R.submittedToday(d10, pt(10, '17:30')));
+  const w = [at1('x1', 700, pt(12, '08:00'), pt(12, '08:30').toISOString())];
+  check('S2 withdrawing doesn\'t give back that day\'s submission', R.submitRefusal({ person: 700, versionId: 'x2' }, w, pt(12, '20:00')) === 'today');
+  proof('S2 a count that leaves out withdrawn submissions is caught', ((theirs: typeof w) => theirs.filter((x) => !x.withdrawnAt).length)(w) !== R.submittedToday(w, pt(12, '20:00')));
+  check('S2 a withdrawn version may be submitted again on another day', R.submitRefusal({ person: 700, versionId: 'x1' }, w, pt(13, '10:00')) === null);
+  check('S2 a version that stands submitted can\'t be submitted again', R.submitRefusal({ person: 700, versionId: 'x1' }, d10, pt(14, '10:00')) === 'already');
+  const many = Array.from({ length: 12 }, (_, k) => at1(`m${k}`, 701, pt(6 + k, '12:00')));
+  check('S2 no total cap: twelve days, twelve submissions, and a thirteenth day still allowed', R.submitRefusal({ person: 701, versionId: 'm12' }, many, pt(18, '12:00')) === null && R.distinctSubmissions(many).length === 12);
+  check('S2 other people\'s submissions don\'t use your day', R.submitRefusal({ person: 702, versionId: 'z1' }, d10, pt(10, '12:00')) === null);
+  check('S2 one a day is the config\'s (CHALLENGE.submissionsPerDay)', CHALLENGE.submissionsPerDay === 1 && !('submissionsPerPerson' in CHALLENGE));
+  proof('S2 a planted two-a-day is caught', R.submitRefusal({ person: 700, versionId: 'x2' }, d10, pt(10, '12:00'), 2) !== R.submitRefusal({ person: 700, versionId: 'x2' }, d10, pt(10, '12:00')));
+  check('S2 a withdrawn submission is never an entry', R.chooseEntries([cand('x1', 700, 'bai', 1)], w, () => true).length === 0);
+}
 // The minimum: three different people who submitted for a character; three submissions by one person count once.
 const one = R.chooseEntries([cand('p1', 800, 'seila', 1), cand('p2', 800, 'seila', 2), cand('p3', 800, 'seila', 3)], [sub('p1', 800, 'seila'), sub('p2', 800, 'seila'), sub('p3', 800, 'seila')], () => true);
 check('S3 three submissions by one person are three entries but one entrant, not enough', one.length === 3 && R.entrantCounts(one).get('seila') === 1 && !R.enoughEntrants(R.entrantCounts(one).get('seila')!));
@@ -661,23 +674,24 @@ await db.exec(`create role anon nologin; create role authenticated nologin; crea
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await db.exec(read(`supabase/migrations/${f}`));
 await db.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
 await db.exec(read('supabase/migrations/0033_remix_challenge.sql'));
-// 0033 run again revokes delete on marks; NEXT_challenge_submit (withdraw) runs after it, as it would on production.
-await db.exec(read('supabase/migrations/NEXT_challenge_submit.sql'));
-await db.exec(read('supabase/migrations/NEXT_challenge_submit.sql'));
-check('the migrations are safe to run twice (0033, NEXT_challenge_submit)', true);
+// 0033 run again revokes update on marks; NEXT_challenge_daily (one a day, withdraw keeps the row) runs after it, as it
+// would on production.
+await db.exec(read('supabase/migrations/NEXT_challenge_daily.sql'));
+await db.exec(read('supabase/migrations/NEXT_challenge_daily.sql'));
+check('the migrations are safe to run twice (0033, NEXT_challenge_daily)', true);
 // What the owner's read-back (a) checked on production (2026-11-01, 17 of 17 true), here on PGlite: RLS on, the
 // privileges as written, no public access, only studio_writer's policies, and no score column.
 const PRIVS = `select c.what, c.ok from (
   select 'rls on all three' as what, (select bool_and(relrowsecurity) from pg_class where oid in ('studio.challenge_marks'::regclass, 'studio.version_posts'::regclass, 'studio.challenge_eligibility'::regclass)) as ok
-  union all select 'marks and eligibility: select and insert, no update', bool_and(has_table_privilege('studio_writer', t::regclass, 'SELECT') and has_table_privilege('studio_writer', t::regclass, 'INSERT') and not has_table_privilege('studio_writer', t::regclass, 'UPDATE')) from unnest(array['studio.challenge_marks', 'studio.challenge_eligibility']) t
-  union all select 'eligibility: no delete; marks: delete only with NEXT_challenge_submit (withdraw)', not has_table_privilege('studio_writer', 'studio.challenge_eligibility', 'DELETE') and has_table_privilege('studio_writer', 'studio.challenge_marks', 'DELETE') = exists (select 1 from pg_policies where schemaname = 'studio' and tablename = 'challenge_marks' and policyname = 'writer_delete')
+  union all select 'marks and eligibility: select and insert, no update of the whole row', bool_and(has_table_privilege('studio_writer', t::regclass, 'SELECT') and has_table_privilege('studio_writer', t::regclass, 'INSERT') and not has_table_privilege('studio_writer', t::regclass, 'UPDATE')) from unnest(array['studio.challenge_marks', 'studio.challenge_eligibility']) t
+  union all select 'eligibility and marks: no delete; marks: update of withdrawn_at only (NEXT_challenge_daily)', not has_table_privilege('studio_writer', 'studio.challenge_eligibility', 'DELETE') and not has_table_privilege('studio_writer', 'studio.challenge_marks', 'DELETE') and has_column_privilege('studio_writer', 'studio.challenge_marks', 'withdrawn_at', 'UPDATE') and not has_column_privilege('studio_writer', 'studio.challenge_marks', 'version_id', 'UPDATE')
   union all select 'posts: select, insert, delete, no update', has_table_privilege('studio_writer', 'studio.version_posts', 'DELETE') and not has_table_privilege('studio_writer', 'studio.version_posts', 'UPDATE')
   union all select 'no public access', not exists (select 1 from unnest(array['anon', 'authenticated']) r, unnest(array['studio.challenge_marks', 'studio.version_posts', 'studio.challenge_eligibility']) t, unnest(array['SELECT', 'INSERT', 'UPDATE', 'DELETE']) p where has_table_privilege(r, t::regclass, p))
   union all select 'only studio_writer policies', not exists (select 1 from pg_policies where schemaname = 'studio' and tablename in ('challenge_marks', 'version_posts', 'challenge_eligibility') and roles <> '{studio_writer}'::name[])
   union all select 'no score column', not exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'challenge_eligibility' and column_name = 'score')
 ) c`;
 const privs = await db.query<{ what: string; ok: boolean }>(PRIVS);
-check('0033 (with NEXT_challenge_submit): RLS, privileges, no public access, no score column (as the owner read back)', privs.rows.length === 7 && privs.rows.every((r) => r.ok === true), JSON.stringify(privs.rows.filter((r) => !r.ok)));
+check('0033 (with NEXT_challenge_daily): RLS, privileges, no public access, no score column (as the owner read back)', privs.rows.length === 7 && privs.rows.every((r) => r.ok === true), JSON.stringify(privs.rows.filter((r) => !r.ok)));
 {
   await db.exec(`grant update on studio.challenge_marks to studio_writer`);
   const r2 = await db.query<{ ok: boolean }>(PRIVS);
@@ -793,7 +807,9 @@ check('S5 Submit: only your own version', ((r) => !r.ok && r.why === E.SUBMIT_WO
 check('S5 Submit: not a version below the check', ((r) => !r.ok && r.why === E.SUBMIT_WORDING.notEligible)(await submit(501, f501.versionId)));
 check('S5 Submit: not an admin\'s version', !(await submit(193912, fAdmin.versionId)).ok);
 check('S5 Submit: not a sheet made from scratch', !(await submit(503, fScratch.versionId)).ok);
-check('S5 Submit: your remix, with its post', (await submit(500, f500b.versionId)).ok && (await submit(6852, f6852.versionId)).ok && (await submit(6852, fOfEntry.versionId)).ok);
+// One a Pacific day: 6852's first submission is moved back a day (as if made yesterday) before the second.
+const yesterday = (fid: number) => sql`update studio.challenge_marks set marked_at = marked_at - interval '1 day' where fid = ${fid}`;
+check('S5 Submit: your remix, with its post', (await submit(500, f500b.versionId)).ok && (await submit(6852, f6852.versionId)).ok && Boolean(await yesterday(6852)) && (await submit(6852, fOfEntry.versionId)).ok);
 check('S5 the post is listed on the version\'s page, as a post its maker added', (await P.postsFor(S, f500b.versionId)).some((x) => x.addedBy === 500));
 check('S5 Submit: the same version twice is refused', ((r) => !r.ok && r.why === E.SUBMIT_WORDING.already)(await submit(500, f500b.versionId)));
 const st = await E.standing(S);
@@ -847,39 +863,51 @@ check('entrants per character: Bai 2 (500, 6852), Zei 1 (6852), others 0, in CHA
 check('three entrants are needed (CHALLENGE.minEntrants)', CHALLENGE.minEntrants === 3 && !R.enoughEntrants(2) && R.enoughEntrants(3));
 proof('a count that adds one person twice is caught', R.entrantCounts([{ person: 1, character: 'bai' }, { person: 1, character: 'bai' }]).get('bai') === 1);
 check('the version page: Entry once submitted, Submit offered on an unsubmitted remix, the admin line on the admin\'s', (await E.versionStanding(S, f500b.versionId))?.kind === 'entry' && (await E.versionStanding(S, f500a.versionId))?.kind === 'candidate' && (await E.versionStanding(S, fAdmin.versionId))?.kind === 'admin' && (await E.versionStanding(S, f501.versionId)) === null);
-// The cap in the database: a 4th submission refused; three of one character allowed; Bai's count is people, not submissions.
+// One a day in the database: a 2nd the same Pacific day refused; the next day allowed; no total cap; Bai's count is
+// people, not submissions. Days are made by moving a person's rows back a day (as if submitted yesterday).
 {
   const f500c = await publish({ fid: 500, mode: 'version', kind: 'character', fromVersionId: f500b.versionId, body: sheet('Bai, older, scar, coat', 12) });
   const f500d = await publish({ fid: 500, mode: 'version', kind: 'character', fromVersionId: f500c.versionId, body: sheet('Bai, older, scar, hat', 13) });
-  check('S6 three of one character by one person: the 2nd and 3rd are allowed', (await submit(500, f500a.versionId)).ok && (await submit(500, f500c.versionId)).ok);
-  const fourth = await submit(500, f500d.versionId);
-  check('S6 the 4th submission is refused in the database, saying why', !fourth.ok && fourth.why === E.SUBMIT_WORDING.full());
-  const [n4] = await sql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks where fid = 500`;
-  check('S6 and nothing was written for it', n4.n === 3, String(n4.n));
+  const again = await submit(500, f500a.versionId);
+  check('S6 a 2nd submission the same Pacific day is refused in the database, saying why', !again.ok && again.why === E.SUBMIT_WORDING.today, JSON.stringify(again));
+  const [n1] = await sql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks where fid = 500`;
+  check('S6 and nothing was written for it', n1.n === 1, String(n1.n));
+  check('S6 Submit answers how many are left today (none after one)', (await E.mySubmissions(S, 500)).left === 0);
+  await yesterday(500);
+  check('S6 the next day it goes through', (await submit(500, f500a.versionId)).ok);
+  await yesterday(500);
+  check('S6 and the day after, three of one character by one person (no total cap)', (await submit(500, f500c.versionId)).ok);
   const st6 = await E.standing(S);
   check('S6 three entries by one person count once for the minimum: Bai has 2 entrants', st6.entrants.get('bai') === 2 && st6.entries.filter((e) => e.person === 500).length === 3, String(st6.entrants.get('bai')));
   check('S6 the equal share is per person: 500 and 6852, once each', [...R.equalSharePeople(st6.entries)].sort().join() === '500,6852');
-  // Two Submits at once can't pass the cap: the code takes a per-person lock before counting.
+  // Two Submits at once can't both pass: the code takes a per-person lock before counting.
   const ent = read('src/lib/challenge/entries.ts');
-  const locked = (src: string) => /pg_advisory_xact_lock\(hashtext\('snowmoon\.challenge\.submit'\), \$\{fid\}::int\)`;\s*const theirs = await tx/.test(src);
-  check('S6 the cap is checked under a per-person lock, in the same transaction as the insert', locked(ent));
-  proof('S6 a cap checked without the lock is caught', !locked(ent.replace("hashtext('snowmoon.challenge.submit')", "hashtext('elsewhere')")));
-  // Withdraw (NEXT_challenge_submit.sql, loaded here like every migration): until entries close; it frees the slot.
-  check('S7 withdraw: only your own', !(await E.withdrawEntry(S, 501, f500a.versionId)).ok);
-  check('S7 withdraw frees a slot: then the 4th submits', (await E.withdrawEntry(S, 500, f500a.versionId)).ok && (await submit(500, f500d.versionId)).ok);
-  check('S7 the withdrawn one is no longer an entry; its post stays listed', (await E.versionStanding(S, f500a.versionId))?.kind === 'candidate' && (await P.postsFor(S, f500a.versionId)).length === 1);
+  const locked = (src: string) => /pg_advisory_xact_lock\(hashtext\('snowmoon\.challenge\.submit'\), \$\{fid\}::int\)`;\s*\/\/[^\n]*\n\s*const theirs = await tx/.test(src);
+  check('S6 the day is checked under a per-person lock, in the same transaction as the insert', locked(ent));
+  proof('S6 a day checked without the lock is caught', !locked(ent.replace("hashtext('snowmoon.challenge.submit')", "hashtext('elsewhere')")));
+  // Withdraw (NEXT_challenge_daily.sql): until entries close; the row stays (withdrawn_at), and so does that day's use.
+  check('S7 withdraw: only your own', !(await E.withdrawEntry(S, 501, f500c.versionId)).ok);
+  check('S7 withdraw: the submission is no longer an entry; its post stays listed', (await E.withdrawEntry(S, 500, f500c.versionId)).ok && (await E.versionStanding(S, f500c.versionId))?.kind === 'candidate' && (await P.postsFor(S, f500c.versionId)).length === 1);
+  const [kept] = await sql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks where fid = 500 and version_id = ${f500c.versionId} and withdrawn_at is not null`;
+  check('S7 the withdrawn submission stays on record (withdrawn_at set, nothing deleted)', kept.n === 1, String(kept.n));
+  const sameDay = await submit(500, f500d.versionId);
+  check('S7 withdrawing doesn\'t give back that day\'s submission', !sameDay.ok && sameDay.why === E.SUBMIT_WORDING.today, JSON.stringify(sameDay));
+  check('S7 withdrawing twice changes nothing', !(await E.withdrawEntry(S, 500, f500c.versionId)).ok);
+  await yesterday(500);
+  check('S7 the next day another goes through', (await submit(500, f500d.versionId)).ok);
   check('S7 withdrawing after the close is refused', !(await E.withdrawEntry(S, 500, f500d.versionId, new Date(Date.parse(CHALLENGE.dates.closes)))).ok);
-  await sql`revoke delete on studio.challenge_marks from studio_writer`;
+  await sql`revoke update (withdrawn_at) on studio.challenge_marks from studio_writer`;
   await sql`set role studio_writer`;
   const noGrant = await E.withdrawEntry(S, 500, f500d.versionId);
   // PGlite is one session behind its socket: the role stays until reset.
   await sql`reset role`;
   await reconnect();
-  await sql`grant delete on studio.challenge_marks to studio_writer`;
-  check('S7 before NEXT_challenge_submit.sql is applied, withdrawing says "not available yet" (Submit still works)', !noGrant.ok && noGrant.why === E.SUBMIT_WORDING.withdrawNotYet, JSON.stringify(noGrant));
+  await sql`grant update (withdrawn_at) on studio.challenge_marks to studio_writer`;
+  check('S7 before NEXT_challenge_daily.sql is applied, withdrawing says "not available yet"', !noGrant.ok && noGrant.why === E.SUBMIT_WORDING.withdrawNotYet, JSON.stringify(noGrant));
   // Put 500's entries back as the checks below expect them: f500b only.
-  await E.withdrawEntry(S, 500, f500c.versionId);
+  await E.withdrawEntry(S, 500, f500a.versionId);
   await E.withdrawEntry(S, 500, f500d.versionId);
+  await yesterday(500);
 }
 // The publish confirmation (owner, 2026-11-03; Submit, 2026-11-04): a remix that can be entered says to submit it; Neynar down says it can't.
 {
@@ -1366,6 +1394,25 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('l4 Open Graph and twitter:card for Bluesky and Lens', (meta.twitter as { card?: string })?.card === 'summary_large_image' && JSON.stringify(meta.openGraph).includes('/api/design-card/v1?shape=og'));
   check('l5 a hidden or unpublished version: no picture, and the site embed blanked', L.NO_PREVIEW.openGraph === null && L.NO_PREVIEW.twitter === null && Object.values(L.NO_PREVIEW.other ?? {}).every((v) => v === ''));
   check('l6 likes are off (planned 12 November): the slot renders nothing', L.likesOn() === false && /if \(!likesOn\(\)\) return null;/.test(read('src/components/challenge-like.tsx')));
+}
+
+// --- Every submission, and no counts (branch contest, 2026-11-04) ---------------------------------------------------
+{
+  const page = read('src/app/challenge/entries/page.tsx');
+  const list = read('src/components/challenge-entries-list.tsx');
+  check('X1 /challenge/entries: the entries (standing), filtered by character, newest first as standing gives them', /const st = sql \? await standing\(sql\)/.test(page) && /\.filter\(\(e\) => !character \|\| e\.character === character\)/.test(page) && !/\.sort\(/.test(page));
+  check('X1 the viewer\'s "Shuffled" order is the P5g shuffle on every entry shown, in the browser', /setShown\(shuffleFresh\(all\)\)/.test(list) && /'use client'/.test(list));
+  const { p5gProblems, p5iProblems, CHALLENGE_FILES, P5I_FILES } = await import('./lib/p5g');
+  const files = walk('src').filter((f) => CHALLENGE_FILES.test(f)).map((f) => ({ file: f, text: read(f) }));
+  check('X1 P5g passes with the entries list', p5gProblems(files).length === 0, p5gProblems(files).join('; '));
+  proof('X1 entries shuffled only in part (a featured few) fail P5g', p5gProblems(files.map((x) => (x.file === 'src/components/challenge-entries-list.tsx' ? { ...x, text: x.text.replace('shuffleFresh(all)', 'shuffleFresh(all.slice(0, 6))') } : x))).length > 0);
+  proof('X1 entries sorted by likes fail P5g', p5gProblems(files.map((x) => (x.file === 'src/app/challenge/entries/page.tsx' ? { ...x, text: x.text.replace('.filter((e) => !character', '.sort((a, b) => b.likes - a.likes).filter((e) => !character') } : x))).length > 0);
+  const p5i = P5I_FILES.map((f) => ({ file: f, text: read(f) }));
+  check('X2 no like, recast or reply count on the entries page, its list or "Posted on" (P5i)', P5I_FILES.includes('src/components/posted-on.tsx') && P5I_FILES.includes('src/app/challenge/entries/page.tsx') && p5iProblems(p5i).length === 0, p5iProblems(p5i).join('; '));
+  proof('X2 a like count in "Posted on" is caught', p5iProblems(p5i.map((x) => (x.file === 'src/components/posted-on.tsx' ? { ...x, text: x.text.replace('{W.seeIt(NETWORK_NAME[p.network])}', '{p.likes} likes · {W.seeIt(NETWORK_NAME[p.network])}') } : x))).length > 0);
+  const SW = (await import('../src/lib/challenge/share-wording')).SHARE_WORDING;
+  check('X2 "Posted on" links read "See the conversation on Farcaster/Bluesky/Lens"', ['Farcaster', 'Bluesky', 'Lens'].every((n) => SW.seeIt(n) === `See the conversation on ${n}`));
+  check('X2 counts are behind CHALLENGE.socialCounts, off', CHALLENGE.socialCounts === false);
 }
 
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);

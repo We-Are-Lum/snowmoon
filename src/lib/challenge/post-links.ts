@@ -1,3 +1,4 @@
+import { REHEARSAL } from '../config';
 /**
  * "Add where you posted it" (owner, 2026-10-31), the pure half: no network, no database, so scripts/test-challenge.ts
  * can prove every rule on stand-ins.
@@ -35,6 +36,12 @@ export const API_HOSTS = ['api.neynar.com', 'public.api.bsky.app', 'api.lens.xyz
 
 /** Our own hosts: a link to one of these counts as a link to this site. */
 export const SITE_HOSTS = ['snowmoon.party', 'www.snowmoon.party'];
+/**
+ * Under the rehearsal switch only (REHEARSAL.on: this machine, never on Vercel), a link to the rehearsal's own origin,
+ * http://127.0.0.1:3000 (or localhost:3000), counts as the remix's page too.
+ */
+export const REHEARSAL_HOSTS = ['127.0.0.1:3000', 'localhost:3000'];
+const isSite = (u: URL) => SITE_HOSTS.includes(u.hostname.toLowerCase()) || (REHEARSAL.on && REHEARSAL_HOSTS.includes(u.host.toLowerCase()));
 
 export type PostRef =
   | { network: 'farcaster'; username: string; hash: string }
@@ -172,7 +179,10 @@ const isoOrNull = (v: unknown): string | null => {
   const t = Date.parse(v);
   return Number.isFinite(t) ? new Date(t).toISOString() : null;
 };
-const textLinks = (t: unknown): string[] => (typeof t === 'string' ? (t.match(/(?:https?:\/\/)?(?:www\.)?snowmoon\.party\/[^\s<>"')\]]*/gi) ?? []) : []);
+const textLinks = (t: unknown): string[] =>
+  typeof t === 'string'
+    ? [...(t.match(/(?:https?:\/\/)?(?:www\.)?snowmoon\.party\/[^\s<>"')\]]*/gi) ?? []), ...(REHEARSAL.on ? (t.match(/https?:\/\/(?:127\.0\.0\.1|localhost):3000\/[^\s<>"')\]]*/gi) ?? []) : [])]
+    : [];
 
 /** Neynar's GET /v2/farcaster/cast answer: { cast: { hash, author: { fid, username }, text, timestamp, embeds: [{ url }] } }. */
 export function parseNeynarCast(body: unknown): Post | null {
@@ -253,6 +263,6 @@ export function linksToVersion(post: Pick<Post, 'links'>, versionId: string): bo
     } catch {
       return false;
     }
-    return SITE_HOSTS.includes(u.hostname.toLowerCase()) && !u.username && !u.password && u.pathname.toLowerCase().replace(/\/+$/, '') === want;
+    return isSite(u) && !u.username && !u.password && u.pathname.toLowerCase().replace(/\/+$/, '') === want;
   });
 }

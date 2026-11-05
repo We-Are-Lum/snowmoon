@@ -36,7 +36,7 @@ export interface SubmitWords {
   withdraw: string;
   withdrawNote: string;
   withdrawn: string;
-  /** "n of 3 submissions left", for n = 0 … CHALLENGE.submissionsPerPerson. */
+  /** How many more today, for n = 0 … CHALLENGE.submissionsPerDay. */
   left: string[];
 }
 const submitWords = (submitted: boolean): SubmitWords => ({
@@ -49,7 +49,7 @@ const submitWords = (submitted: boolean): SubmitWords => ({
   withdraw: CW.withdraw,
   withdrawNote: CW.withdrawNote,
   withdrawn: CW.withdrawn,
-  left: Array.from({ length: CHALLENGE.submissionsPerPerson + 1 }, (_, n) => CW.submissionsLeft(n)),
+  left: Array.from({ length: CHALLENGE.submissionsPerDay + 1 }, (_, n) => CW.submissionsLeft(n)),
 });
 export interface SheetChallenge {
   lines: SheetLine[];
