@@ -7,13 +7,13 @@ beyond the two named, no migrations on production, nothing published. Spending t
 |---|------|------|-------|
 | — | Merge check-decisions, then privacy-furthest-chapter | coordinator | done: #115 (9d2e24d, migration 0034) and #116 (943fc60); live checks pass (P6d only); /challenge 404; live Privacy shows both |
 | — | check:ui on main after both merges | coordinator | done: passed, 59 pages (local build of 943fc60) |
-| 1 | Verify the Lens App on Lens's side, set SOCIAL_SIGN_IN.lens.app | A | verified (below); config being set |
-| 2 | Split the sign-in release from model choice | A | in progress |
-| 3 | Sign-in release ready to merge (main in, checks, legal before/after, SQL items 2 and 5, morning checklist) | A | in progress |
-| 4 | contest: Lens check at publish; Lens and Bluesky own-post checks; "Post on …" buttons | A | waiting for 3 |
+| 1 | Verify the Lens App on Lens's side, set SOCIAL_SIGN_IN.lens.app | A | done: verified (below); config set (signin-lens-bluesky 57b8e5db); `npm run verify:lens-app` passes 6/6, its self-test refuses 4 planted wrong inputs |
+| 2 | Split the sign-in release from model choice | A | done: consent own-words-v5 covers Lens and Bluesky only; the closed-model sentence moves to remix-model-choice as own-words-v6 |
+| 3 | Sign-in release ready to merge (main in, checks, legal before/after, SQL items 2 and 5, morning checklist) | A | done apart from your steps: ship as one PR from bluesky-check; 4 lines to reread (L12, L16, C1, C2); SQL 2 then 5; test:sql-pack 187/0; local checks pass (P6d, P6k-until-reread, P6a-local only). Doc: docs/legal/signin-release-2026-11-05.md; Drive v2 |
+| 4 | contest: Lens check at publish; Lens and Bluesky own-post checks; "Post on …" buttons | A | done (contest 3e66cda7, 46247f1b and others): needs new SQL pack item 6 (NEXT_social_lens_challenge); Hey's compose link exists, so all three buttons are in; one Privacy §4 word to reread ("or Lens"); contest's check:principles, check:ui, check:miniapp still owed |
 | 5 | contest: §6e one entry a day; admins see rules/remixes; test sign-in off contest; item 4 = NEXT_challenge_daily | A | **already done this evening** by the other session (contest a4e0c00d, 6f4901bd; stand-ins on `contest-rehearsal` bc4e5287; sql-pack 51272b02) |
 | 6 | Paying per person, browser side | B | **already done this evening** (person-balance 4c4fae5b; switch on; its migration must be applied before merge) |
-| 7 | Linked accounts (migration copy blocks, code behind a switch, legal drafts) | B | in progress |
+| 7 | Linked accounts (migration copy blocks, code behind a switch, legal drafts) | B | done (branch linked-accounts, adaa0af2; switch off): migration tested, 19 planted faults caught; tests pass; legal drafts for the coordinator; You page panel not built yet |
 | — | Deluin b front and two views | styles | **already done this evening** ($0.20276; files moved to b; a green shoulder bag appeared, see the recast sheet). My duplicate was stopped before spending |
 | — | fund-page P7c from another network | — | blocked: this Mac's network can't reach ethereum-rpc.publicnode.com; left for the owner |
 
