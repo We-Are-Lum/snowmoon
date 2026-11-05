@@ -1387,7 +1387,9 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility', 'check_decisions'];
+/** How each private table names the person: a FID, except check_decisions (the account, as text). */
+const personIs42 = (t: string) => (t === 'check_decisions' ? `account = '42'` : 'fid = 42');
 add({
   id: 'P6b',
   principle: 6,
@@ -1417,13 +1419,17 @@ add({
         insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 42, 'bai', '00000000-0000-0000-0000-0000000000f1');
         insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ('00000000-0000-0000-0000-0000000000f1', 'lens', '1', 'someone', now(), 'https://hey.xyz/posts/abc', 42);
         insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values ('00000000-0000-0000-0000-0000000000f1', 'remix-2026-11', 42, 'passed', true);
+      end if; end $$;
+      -- Check decisions (NEXT_check_decisions): FID 42 passed.
+      do $$ begin if to_regclass('studio.check_decisions') is not null then
+        insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '42', 'neynar-score>=0.7', true);
       end if; end $$;`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
       for (const t of PRIVATE_FID_TABLES) {
         await db.exec(`set role ${role}`);
         try {
-          const r = await db.query<{ n: number }>(`select count(*)::int as n from studio.${t} where fid = 42`);
+          const r = await db.query<{ n: number }>(`select count(*)::int as n from studio.${t} where ${personIs42(t)}`);
           if (r.rows[0].n > 0) problems.push(`${role} can read individual rows of studio.${t}`);
         } catch {
           // permission denied: private, as intended
@@ -1486,7 +1492,7 @@ add({
     return {
       enabled: IMAGES.enabled,
       // Open beyond the invited list: the gate decides by score, not by the list alone.
-      openBeyondInvited: /lookUp\(/.test(gate),
+      openBeyondInvited: /checkNeynar\(/.test(gate),
       terms: page('src/app/terms/page.tsx'),
       // The page renders the words kept in src/lib/legal.ts; read both.
       privacy: page('src/app/privacy/page.tsx') === null ? null : `${page('src/app/privacy/page.tsx')}\n${page('src/lib/legal.ts') ?? ''}`,
@@ -1511,6 +1517,42 @@ add({
 // Keys that bypass row-level security, or connect as the database owner, must
 // not sit on the Vercel project at all (owner decision, Oct 5, 2026).
 const FORBIDDEN_VARS = /^(SUPABASE_SERVICE_ROLE_KEY|SUPABASE_SECRET_KEY|SUPABASE_JWT_SECRET|POSTGRES_[A-Z0-9_]*)$/;
+// Sign-in checks keep the decision, never the score (owner, 2026-11-04): no table the site can write holds a score
+// column, the decision store holds no number at all, and no site code writes a score.
+add({
+  id: 'P6x',
+  principle: 6,
+  name: 'sign-in checks store the decision (passed, when, the rule), never a score or the numbers behind it',
+  load: async () => ({
+    extra: '',
+    code: walk('src', /\.tsx?$/).map((f) => ({ f, t: read(f).replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '') })),
+  }),
+  run: async ({ extra, code }) => {
+    const problems: string[] = [];
+    const db = await pglite(extra);
+    const writable = await db.query<{ t: string; c: string }>(`
+      select c.table_name as t, c.column_name as c from information_schema.columns c
+      where c.table_schema = 'studio' and c.column_name ~ '(^|_)scores?($|_)'
+        -- A table about a person or account (a version's ranking score, e.g. living_snapshots, is not a check).
+        and exists (select 1 from information_schema.columns p where p.table_schema = 'studio' and p.table_name = c.table_name and p.column_name ~ '(^|_)(fid|account)$')
+        and (has_table_privilege('studio_writer', format('studio.%I', c.table_name), 'INSERT') or has_table_privilege('studio_writer', format('studio.%I', c.table_name), 'UPDATE'))`);
+    for (const r of writable.rows) problems.push(`studio.${r.t}.${r.c}: the site (studio_writer) can store a score`);
+    const store = await db.query<{ c: string; d: string }>(`select column_name as c, data_type as d from information_schema.columns where table_schema = 'studio' and table_name = 'check_decisions'`);
+    if (store.rows.length === 0) problems.push('studio.check_decisions is missing (NEXT_check_decisions)');
+    for (const r of store.rows) if (/numeric|real|double|integer|bigint|smallint|json/.test(r.d)) problems.push(`studio.check_decisions.${r.c} (${r.d}) can hold a number`);
+    await db.close();
+    for (const { f, t } of code as { f: string; t: string }[]) {
+      if (/\b(insert\s+into|update)\s+studio\.image_scores\b/i.test(t)) problems.push(`${f} writes a Neynar score to studio.image_scores`);
+      if (/studio\.check_decisions[^`]*\bscore\b/i.test(t)) problems.push(`${f} writes a score into studio.check_decisions`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    c.extra = `alter table studio.check_decisions add column score numeric; grant insert on studio.image_scores to studio_writer;`;
+    (c.code as { f: string; t: string }[]).push({ f: 'src/lib/images/planted.ts', t: 'await sql`insert into studio.image_scores (fid, score) values (1, 0.9)`;' });
+  },
+});
+
 add({
   id: 'P6d',
   principle: 6,

@@ -7,6 +7,7 @@ import { workOf } from '~/lib/images/designs';
 import { moveToPrivate } from '~/lib/images/store';
 import { loadIllustrationById } from '~/lib/illustrations';
 import { forgetHidden } from '~/lib/admin-hidden';
+import { recheckMaker } from '~/lib/checks/decisions';
 
 /**
  * An admin's Hide in the reader (owner, 2026-10-29: "an admin Hide in the reader for seeded and readers' images").
@@ -44,6 +45,8 @@ export async function POST(request: Request) {
       await tx`insert into studio.removal_log ${tx({ element_id: el.elementId, step: 'hidden', by_fid: fid, role: 'moderator' })}`;
     });
     for (const sha of el.files) await moveToPrivate(sha).catch((e) => console.error('admin hide: moving the hidden file failed', (e as Error).name));
+    // The maker is checked again at their next Generate or publish (owner, 2026-11-04).
+    await recheckMaker(sql, el.byFid);
     revalidatePath('/references', 'layout');
     revalidatePath(`/image/${b.id}`);
     return NextResponse.json({ done: 'hidden' });

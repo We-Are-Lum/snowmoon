@@ -4,6 +4,8 @@ import { actsFor } from '../wallet/credit';
 import { isAdmin } from '../admins';
 import { frameById, frameRow, hideFile, unhideFile, type Frame } from './frames';
 import { boardById, boardRow, type Storyboard } from './storyboards';
+import { recheckMaker } from '../checks/decisions';
+import { CHECKS } from '../config';
 
 /**
  * Hiding a remix frame or a storyboard: by its maker, or by an admin (src/lib/admins.ts; owner, 2026-10-29: "ADMINS
@@ -28,6 +30,8 @@ export async function setHidden(sql: Sql, person: number, id: string, hide: bool
     const role = maker ? 'maker' : 'maintainer';
     const [r] = await sql`update studio.remix_frames set hidden = true, hidden_by = ${person}, hidden_role = ${role}, hidden_at = now() where id = ${id} returning *`;
     await hideFile(f.imageSha256);
+    // An admin's hide withdraws the maker's pass; the maker's own only if the owner turns it on (owner, 2026-11-04).
+    if (role === 'maintainer' || CHECKS.recheckOnOwnHide) await recheckMaker(sql, f.person);
     return { ok: true, frame: frameRow(r) };
   }
   if (!f.hidden) return { ok: true, frame: f };
