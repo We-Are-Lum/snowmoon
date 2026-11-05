@@ -10,7 +10,7 @@ import { sameString, seal, unseal } from './session';
  * OAuth package is installed). A public client: PKCE (S256), pushed authorization requests (PAR) and DPoP-bound tokens
  * (ES256), scope "atproto" only, which proves who the person is and nothing more.
  *
- * Start (startBluesky): the handle (or DID) the person typed → their DID (DNS TXT _atproto.<handle>, else
+ * Start (startBluesky): from Bluesky's entryway (bsky.social) with no handle, or from the handle (or DID) the person typed → their DID (DNS TXT _atproto.<handle>, else
  * https://<handle>/.well-known/atproto-did) → their DID document (plc.directory, or did:web) → their PDS → the PDS's
  * authorization server (/.well-known/oauth-protected-resource) → its metadata (/.well-known/oauth-authorization-server,
  * whose `issuer` must be that server). Then a PAR with a fresh PKCE verifier and a one-time DPoP key, and the browser
@@ -19,7 +19,7 @@ import { sameString, seal, unseal } from './session';
  * Finish (finishBluesky), when the browser comes back with code, state and iss:
  * - the state must be the one sealed for this tab, and `iss` must be the authorization server we sent the person to;
  * - the code is exchanged at that server's token endpoint (DPoP, PKCE verifier);
- * - the answer's `sub` must be a DID (the one typed, if a handle or DID was typed), and that DID's own PDS must name
+ * - the answer's `sub` must be a DID (the one typed, if a handle or DID was typed; any DID from the entryway), and that DID's own PDS must name
  *   this issuer as its authorization server (the spec's check that the server may speak for this DID);
  * - the handle is kept only if it resolves back to the same DID.
  * The access and refresh tokens are then dropped; nothing of the server's is kept.
@@ -233,20 +233,33 @@ interface Started {
   tokenEndpoint: string;
   clientId: string;
   redirectUri: string;
-  /** The DID typed (or the handle's), which the token's sub must equal. */
-  did: string;
+  /** The DID typed (or the handle's), which the token's sub must equal; null when started at the entryway (no handle). */
+  did: string | null;
   nonce?: string;
 }
 
-/** Start: where to send the browser, and the sealed state the page keeps in this tab. */
-export async function startBluesky(input: string, origin: string): Promise<{ url: string; sealed: string }> {
+/**
+ * Start: where to send the browser, and the sealed state the page keeps in this tab.
+ *
+ * `input` null (2026-11-05, "Sign in with Bluesky" with no handle typed): the sign-in starts at Bluesky's entryway
+ * (SOCIAL_SIGN_IN.bluesky.entryway, https://bsky.social), with no login_hint, so Bluesky's own page asks which account.
+ * Nothing about the person is known yet, so nothing is checked here; the finish checks it all, as for a typed handle:
+ * the token's DID, its own DID document, its PDS, and that this PDS names the entryway as its authorization server (an
+ * account whose PDS names another server is refused, 'wrong-server'), and the handle only if it resolves back.
+ */
+export async function startBluesky(input: string | null, origin: string): Promise<{ url: string; sealed: string }> {
   const client = clientFor(origin);
   if (!client) throw new BlueskyRefused('bad-handle');
-  const typed = input.trim().toLowerCase().replace(/^@/, '');
-  const did = isDid(typed) ? typed : await resolveHandle(typed);
-  if (!did) throw new BlueskyRefused(HANDLE.test(typed) ? 'no-did' : 'bad-handle');
-  const { pds } = await resolveDid(did);
-  const iss = await authServerOf(pds);
+  const typed = input === null ? null : input.trim().toLowerCase().replace(/^@/, '');
+  let did: string | null = null;
+  let iss: string;
+  if (typed === null) iss = SOCIAL_SIGN_IN.bluesky.entryway;
+  else {
+    did = isDid(typed) ? typed : await resolveHandle(typed);
+    if (!did) throw new BlueskyRefused(HANDLE.test(typed) ? 'no-did' : 'bad-handle');
+    const { pds } = await resolveDid(did);
+    iss = await authServerOf(pds);
+  }
   const m = await asMetadata(iss);
   const verifier = randomBytes(32).toString('base64url');
   const state = randomBytes(24).toString('base64url');
@@ -260,7 +273,8 @@ export async function startBluesky(input: string, origin: string): Promise<{ url
     state,
     redirect_uri: client.redirectUri,
     scope: SOCIAL_SIGN_IN.bluesky.scope,
-    login_hint: isDid(typed) ? did : typed,
+    // A handle or DID typed is the hint; from the entryway there is none, and Bluesky's page asks.
+    ...(typed !== null && did !== null ? { login_hint: isDid(typed) ? did : typed } : {}),
   }, key);
   const requestUri = par.body.request_uri;
   if (par.status !== 201 && par.status !== 200) throw new BlueskyRefused('par-failed');
@@ -291,7 +305,7 @@ export async function finishBluesky(p: { code?: unknown; state?: unknown; iss?: 
   const scopes = typeof t.body.scope === 'string' ? t.body.scope.split(' ') : [];
   if (t.body.token_type !== 'DPoP' || !scopes.includes('atproto')) throw new BlueskyRefused('token-failed');
   const sub = t.body.sub;
-  if (!isDid(sub) || sub !== s.did) throw new BlueskyRefused('bad-sub');
+  if (!isDid(sub) || (s.did !== null && sub !== s.did)) throw new BlueskyRefused('bad-sub');
   // The spec's check: the DID's own PDS must name this issuer as its authorization server.
   const { pds, claimedHandle } = await resolveDid(sub);
   if ((await authServerOf(pds)) !== s.iss) throw new BlueskyRefused('wrong-server');

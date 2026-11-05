@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
+import { SIGN_IN_METHODS, SOCIAL_SIGN_IN } from './config';
 
 /**
  * Sign-in on the client, one helper for every signed-in call (docs/proposals/web-sign-in.md).
@@ -25,7 +26,14 @@ const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/image
  * token sent there would be answered 401, which signs the wallet out.
  */
 const WALLET_EXACT = [/^\/api\/images\/[0-9a-f-]{36}\/hide$/];
-const takesWallet = (url: string) => WALLET_ROUTES.some((r) => url.startsWith(r)) || WALLET_EXACT.some((r) => r.test(url));
+/**
+ * Making and publishing a sheet's views take a Bluesky sign-in too, once Bluesky sign-in and its check are on (owner,
+ * 2026-11-04; src/lib/social/design-person.ts). Only then: before, a wallet token sent there would be answered 401.
+ */
+const SHEET_ROUTES = [/^\/api\/designs$/, /^\/api\/designs\/sample$/];
+const sheetsTakeBluesky = Boolean(SIGN_IN_METHODS.find((m) => m.id === 'bluesky')?.on) && SOCIAL_SIGN_IN.bluesky.check.on;
+const takesWallet = (url: string) =>
+  WALLET_ROUTES.some((r) => url.startsWith(r)) || WALLET_EXACT.some((r) => r.test(url)) || (sheetsTakeBluesky && SHEET_ROUTES.some((r) => r.test(url)));
 
 interface WebSession {
   token: string;

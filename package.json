@@ -43,6 +43,7 @@
     "test:linked-accounts-sql": "tsx scripts/test-linked-accounts-sql.ts",
     "test:linked-accounts": "tsx --conditions=react-server scripts/test-linked-accounts.ts",
     "test:signin-lens-bluesky": "tsx --conditions=react-server scripts/test-signin-lens-bluesky.ts",
+    "test:bluesky-check": "tsx --conditions=react-server scripts/test-bluesky-check.ts",
     "verify:lens-app": "tsx scripts/verify-lens-app.ts",
     "seed:designs": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/seed-designs.ts",
     "check:miniapp": "tsx scripts/check-miniapp.ts",

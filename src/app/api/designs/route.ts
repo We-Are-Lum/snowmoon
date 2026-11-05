@@ -1,7 +1,10 @@
 import { createHash } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { getFid } from '~/lib/auth';
+import { designPerson } from '~/lib/social/design-person';
+import { getSocial, getWallet } from '~/lib/auth';
+import { isSocialPerson } from '~/lib/people';
+import { socialByline } from '~/lib/social/byline';
 import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
@@ -52,7 +55,10 @@ const recipeOf = (t: SampleTicket): DesignPicture['recipe'] => ({
 });
 
 export async function POST(request: Request) {
-  const fid = await getFid(request);
+  // A Farcaster sign-in; a Bluesky one too once its check is on (src/lib/social/design-person.ts).
+  const fid = await designPerson(request);
+  // A wallet or another sign-in that can't make sheets: 403, since a 401 would sign it out.
+  if (fid === null && (getWallet(request) || getSocial(request))) return NextResponse.json({ error: 'Sign in with Farcaster to publish' }, { status: 403 });
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to publish' }, { status: 401 });
   if (!IMAGES.enabled) return no('Publishing is switched off for now', 503);
   const sql = db();
@@ -135,7 +141,8 @@ export async function POST(request: Request) {
   const named2 = await checkWords(sql, request, title);
   if (!named2.ok) return no(named2.error, named2.status);
 
-  const by = await bylineName(fid, body.nameProof);
+  // A Bluesky account is named by its handle, as checked at sign-in (src/lib/social/byline.ts).
+  const by = isSocialPerson(fid) ? (socialByline(request, fid) ?? { name: null, source: null }) : await bylineName(fid, body.nameProof);
   const put = async (p: { t: SampleTicket; bytes: Buffer }): Promise<DesignPicture> => ({ url: await putPublic(p.t.sha256, p.bytes, 'image/jpeg'), sha256: p.t.sha256, recipe: recipeOf(p.t) });
   const design: DesignBody = {
     title,

@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, SIGN_IN_METHODS, imagesDailySpendCapUsd } from '../src/lib/config';
+import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, imagesDailySpendCapUsd } from '../src/lib/config';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
@@ -1848,6 +1848,27 @@ add({
     // Bluesky on, with §4's Bluesky line gone (now that the lines are in, turning it on alone would pass).
     c.on = [...c.on, 'bluesky'];
     c.s4 = c.s4.replace(/\bBluesky account\b/g, 'account');
+  },
+});
+
+// P6y (branch bluesky-check, owner 2026-11-04; was P6v, which find-a-moment, remix-model-choice and shortlist-vote use): the Bluesky check (SOCIAL_SIGN_IN.bluesky.check) is on only once Privacy
+// §7 names Bluesky's AppView (public.api.bsky.app), says the DID is what it receives, and that only the outcome is
+// kept (docs/legal/bluesky-check-draft.md, the owner's reread). Legal texts describe today.
+add({
+  id: 'P6y',
+  principle: 6,
+  name: 'the Bluesky check is on only when Privacy §7 names the AppView, the DID it receives, and that only the outcome is kept',
+  load: async () => ({ on: SOCIAL_SIGN_IN.bluesky.check.on as boolean, s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' ') }),
+  run: (c) => {
+    if (!c.on) return [];
+    const problems: string[] = [];
+    if (!/public\.api\.bsky\.app/.test(c.s7) || !/\bDID\b/.test(c.s7)) problems.push('the Bluesky check is on (SOCIAL_SIGN_IN.bluesky.check.on), but Privacy §7 doesn\'t name Bluesky\'s AppView (public.api.bsky.app) and the DID it receives: the owner\'s reread of docs/legal/bluesky-check-draft.md first');
+    if (!/keep only whether your account passed/.test(c.s7)) problems.push('the Bluesky check is on, but Privacy §7 doesn\'t say only its outcome is kept');
+    return problems;
+  },
+  plant: (c) => {
+    c.on = true;
+    c.s7 = c.s7.replace(/public\.api\.bsky\.app/g, 'the AppView');
   },
 });
 

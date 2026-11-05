@@ -423,8 +423,9 @@ export const MODERATOR_FIDS: readonly number[] = [...ADMINS];
 export const SIGN_IN_METHODS = [
   { id: 'farcaster', on: true },
   { id: 'wallet', on: true },
-  { id: 'lens', on: false },
-  { id: 'bluesky', on: false },
+  // On for the sign-in release (owner, 2026-11-05, after the reread: "reviewed by the coordinator, approved by the owner").
+  { id: 'lens', on: true },
+  { id: 'bluesky', on: true },
 ] as const satisfies readonly { id: string; on: boolean }[];
 export type SignInMethod = (typeof SIGN_IN_METHODS)[number]['id'];
 /** The local-only test of four entries (see SIGN_IN_METHODS). */
@@ -465,15 +466,12 @@ export const SOCIAL_SIGN_IN = {
     issuer: 'https://api.lens.xyz',
     /**
      * The Lens App the sign-in is for (the challenge's `app`, the ID token's `aud`): this site's own App on Lens Chain,
-     * registered by the owner at /admin/lens-app (docs/lens-app-registration.md). EMPTY until the owner sends its
-     * address (owner, 2026-11-05: "with the Lens App address set and verified"); while it is empty, Lens sign-in
-     * refuses (the challenge answers 503 and no ID token is accepted), even locally. Before setting it, run
-     * `npm run verify:lens-app -- --address=<App> --tx=<its creating transaction> --owner=<the owner's wallet>`
-     * (read-only: code on Lens Chain, made through the LensFactory in that transaction, owned by that wallet, metadata
-     * lens://a0001df5…99d4 with sha256 bddb0e3e…9d26). It was Lens's own Test App
-     * (0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE), which the tests still use as their stand-in.
+     * "Snowmoon Party", registered by the owner at /admin/lens-app on 2026-11-05 (UTC) and verified read-only
+     * (docs/lens-app-registration.md, "Verified"; `npm run verify:lens-app`). Lens sign-in still opens only with the
+     * sign-in release (SIGN_IN_METHODS). If this is ever emptied, Lens sign-in refuses (the challenge answers 503 and
+     * no ID token is accepted). The tests stand in Lens's own Test App (0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE).
      */
-    app: '' as '' | `0x${string}`,
+    app: '0x3CD3dF83e3F74e855d7c4104a8ed9EBa23FaaE47' as '' | `0x${string}`, // ours, registered 2026-11-05 UTC, tx 0x7001522f7cad6c9ebd58204998e62af93cdd62ff627b05a2584ca58ae524e576
     /**
      * THE ONE PLACE the Lens score threshold lives (Lens's "Account Score", lens.xyz/docs/protocol/accounts/fetch;
      * 0 to about 10000 in the sample in docs/branch-reports/signin-lens-bluesky.md). Owner, 2026-11-04: "1,000 to
@@ -497,9 +495,42 @@ export const SOCIAL_SIGN_IN = {
     /** The client metadata document on the site; its URL is the client_id. */
     metadataPath: '/oauth/bluesky/client-metadata.json',
     plcDirectory: 'https://plc.directory',
+    /**
+     * Where "Sign in with Bluesky" starts when no handle is typed (2026-11-05): Bluesky's entryway authorization server.
+     * The finish still checks the account through its own DID document and PDS (src/lib/social/atproto.ts).
+     */
+    entryway: 'https://bsky.social',
     /** A sign-in started must finish within this. */
     startMinutes: 10,
     timeoutMs: 5000,
+    /**
+     * The Bluesky check (owner, 2026-11-04): a Bluesky account that isn't linked to a Farcaster or Lens account gets
+     * the free daily counts, and can remix and enter the remix challenge, only if it passes, the same way a Farcaster
+     * account passes Neynar's score (src/lib/social/bluesky-check.ts). Two signals, from Bluesky's public AppView
+     * (app.bsky.actor.getProfile and app.bsky.feed.getAuthorFeed; no key), asked with the account's DID only:
+     * 1. the account is at least `minAgeDays` days old when it is checked, so new accounts can't be made for it (a
+     *    rolling rule, owner, 2026-11-04: it replaced a fixed cut-off of 6 Nov 2026, which would have shut out every
+     *    Bluesky account made after it for good);
+     * 2. it posted at least `minRecentPosts` times (its own posts and replies, not reposts) in the last `recentDays`
+     *    days, by Bluesky's own clock (each post's indexedAt) as well as the post's, so old idle accounts can't
+     *    drain the daily cap.
+     * Only whether it passed, when, and the rule used are kept, in the shared decision store (studio.check_decisions,
+     * network 'bluesky', the DID; owner, 2026-11-04: one store, the decision, not the numbers): a pass for
+     * CHECKS.passDays, a fail asked again no sooner than CHECKS.failHours later, or at once if the rule changes. Never
+     * the dates or counts. If Bluesky can't be reached, refused, as for
+     * Neynar. Off (`on: false`) until the owner's reread of its Privacy and Terms lines, and only matters once Bluesky
+     * sign-in is on.
+     */
+    check: {
+      // On for the sign-in release (owner, 2026-11-05, after the reread of its Privacy lines L12 and L16).
+      on: true as boolean,
+      appView: 'https://public.api.bsky.app',
+      minAgeDays: 30,
+      recentDays: 30,
+      minRecentPosts: 5,
+      /** How many of the newest feed items are read (one request); enough to find minRecentPosts among reposts. */
+      feedLimit: 50,
+    },
   },
 } as const;
 

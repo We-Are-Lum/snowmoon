@@ -94,7 +94,7 @@ export default async function About() {
       <p>Rules: {RULES}</p>
       <p>
         A published image shows who made it, that it is AI-generated and not by the author, and its recipe with the exact prompt.
-        It is shown with your name (Farcaster name or wallet address). A Farcaster name is the one Farcaster&apos;s relay gave
+        It is shown with your name (Farcaster name, wallet address, Lens username or Bluesky handle). A Farcaster name is the one Farcaster&apos;s relay gave
         our server when you signed in on this website; otherwise our server asks Farcaster&apos;s public API (api.farcaster.xyz) for the username of your Farcaster
         ID, sending only the ID, and keeps the answer for a day.
         Its maker can hide it at once. Anyone signed in can report it: one report of anything sexual involving a minor hides it
@@ -108,9 +108,11 @@ export default async function About() {
         <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
       </p>
       <h2>Signing in</h2>
-      {/* Model-drafted wording; the same sentence is shown at the sign-in step (src/components/sign-in.tsx). */}
+      {/* Model-drafted wording. A1 of docs/legal/signin-release-2026-11-05.md, "reviewed by the coordinator, approved by
+          the owner" (2026-11-05), word for word; A2, the byline above, likewise. */}
       <p>
-        Reading needs no account. Saving cards, liking, making images and asking the assistant need a Farcaster sign-in. Inside a
+        Reading needs no account. Saving cards and liking need a Farcaster sign-in, and the assistant a Farcaster account or one
+        linked to it. Making images needs a sign-in. Inside a
         Farcaster app it happens by itself. On this website, {SIGN_IN_SERVICES.charAt(0).toLowerCase() + SIGN_IN_SERVICES.slice(1)}
       </p>
       <h2 id="services">Where it runs</h2>

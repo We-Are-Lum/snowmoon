@@ -108,6 +108,9 @@ export async function lensAuthenticate(challengeId: string, signature: string, e
   const claims = await verifyLensIdToken(a.idToken);
   const account = (claims.act?.sub ?? claims.sub).toLowerCase();
   if (account !== expectedAccount.toLowerCase()) throw new LensRefused('other-account');
+  // Local runs only (never on Vercel): the ID token's audience, for the owner's check that a real sign-in is for our
+  // own App ("lens sign-in: aud 0x3CD3…"). The App's address only: nothing about the person.
+  if (!process.env.VERCEL) console.log(`lens sign-in: aud ${[claims.aud].flat().join(',')} (our App: ${SOCIAL_SIGN_IN.lens.app})`);
   return account as `0x${string}`;
 }
 

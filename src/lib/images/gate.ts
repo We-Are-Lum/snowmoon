@@ -49,7 +49,7 @@ export type Gate =
       ok: false;
       status: 403 | 503;
       error: string;
-      reason: 'not-open' | 'unreachable' | 'score' | 'prepaid-closed' | 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' | 'wait';
+      reason: 'not-open' | 'unreachable' | 'score' | 'prepaid-closed' | 'link-needed' | 'lens-not-open' | 'lens-score' | 'lens-unreachable' | 'bluesky-new' | 'bluesky-idle' | 'bluesky-failed' | 'bluesky-unreachable' | 'wait';
       /** Linked accounts (on): the per-network detail, shown under "Why?" (owner, 2026-11-04, 10.1). */
       why?: string;
       /** Linked accounts (on): the networks the person could still link, for "Link another account". */
@@ -107,7 +107,7 @@ async function accountGate(sql: Sql, fid: number): Promise<Gate> {
   }
   if (isSocialPerson(fid)) {
     const d = await freeFor(sql, fid);
-    return d.free ? { ok: true } : { ok: false, status: d.reason === 'lens-unreachable' ? 503 : 403, error: d.error, reason: d.reason };
+    return d.free ? { ok: true } : { ok: false, status: d.reason === 'lens-unreachable' || d.reason === 'bluesky-unreachable' ? 503 : 403, error: d.error, reason: d.reason };
   }
   if (fid < 0) return prepaidOpen() ? { ok: true } : { ok: false, status: 503, error: IMAGE_WORDING.prepaid.notOpen, reason: 'prepaid-closed' };
   const r = await checkNeynar(sql, fid, IMAGES.neynarMinScore);
