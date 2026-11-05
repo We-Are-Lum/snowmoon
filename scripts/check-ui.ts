@@ -512,7 +512,7 @@ async function checkYouSignedIn(page: Page, scheme: string) {
     const text = await page.locator('main.you').innerText();
     if (k === 'lens' || k === 'bluesky') {
       if (/needs a Farcaster name/.test(text)) fail(`${where}: says the public page needs a Farcaster name`);
-      if (!text.includes('Public pages come with a Farcaster account')) fail(`${where}: the public-page row doesn't say public pages come with a Farcaster account`);
+      if (!text.includes('Public pages for Lens and Bluesky accounts aren’t ready yet.')) fail(`${where}: the public-page row doesn't say public pages for Lens and Bluesky accounts aren't ready yet`);
       if (/A Farcaster account has no balance/.test(text)) fail(`${where}: the Wallet section speaks of a Farcaster account`);
       if (!text.includes(`A ${YOU_KIND[k]} account has no balance here`)) fail(`${where}: the Wallet section doesn't speak of the ${YOU_KIND[k]} account`);
       if (!(await page.locator('#you-wallet ~ .wallet-sign-in button, section[aria-labelledby="you-wallet"] .wallet-sign-in button').count())) fail(`${where}: the Wallet section offers no wallet sign-in`);
