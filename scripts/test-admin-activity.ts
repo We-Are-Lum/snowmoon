@@ -21,6 +21,8 @@ import { ADMINS, CHALLENGE } from '../src/lib/config';
 import { P5B_PLANTS, p5bProblems } from './lib/p5b';
 import { defProblems, defs, TZ } from '../src/lib/admin-activity-defs';
 
+// No network: Farcaster's name lookups go to a closed local port and fail at once (src/lib/names.ts), as when Farcaster is down.
+process.env.FARCASTER_API_URL = 'http://127.0.0.1:9';
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
 let passed = 0;
@@ -99,6 +101,12 @@ await pg.exec(`
     (1, 2, 'first', 900003, 'hidden words', 'p', '{}', 'https://media.snowmoon.party/f2.jpg', '${'d'.repeat(64)}', 0.01, 'hiddenframer', true, 900003, 'maker', now());
 `);
 
+// A wallet linked to @zeimaker's FID makes a frame: it must show under the FID, as the frame page shows it.
+await pg.exec(`
+  insert into studio.wallet_links (account_id, fid, how) select id, 900001, 'signed' from studio.wallet_accounts where address = '${WALLET}';
+  insert into studio.remix_frames (adaptation_id, version_id, shot_id, person, own_words, prompt, recipe, image_url, image_sha256, cost_usd, by_name, created_at)
+    select 1, 2, 'first', -id, 'linked', 'p', '{}', 'https://media.snowmoon.party/f3.jpg', '${'e'.repeat(64)}', 0.01, 'walletname-x', now() + interval '1 minute' from studio.wallet_accounts where address = '${WALLET}';
+`);
 const PORT = 54391;
 const server = new PGLiteSocketServer({ db: pg, port: PORT, host: '127.0.0.1' });
 await server.start();
@@ -154,7 +162,9 @@ check('days: anything but 7, 30 or 90 is 30', A.daysFrom('5') === 30 && A.daysFr
   const list = (id: string) => v.lists.find((l) => l.id === id)?.rows ?? [];
   check('newest versions: the public sheet with its byline and link', list('versions').some((r) => r.by === '@zeimaker' && r.href === '/references/designs/00000000-0000-0000-0000-0000000000b1'));
   check('newest remixes: the remix', list('remixes').length === 1 && list('remixes')[0].title === 'Zei remixed');
-  check('frames: the shown one only', list('frames').length === 1 && list('frames')[0].href?.startsWith('/remix/') === true);
+  check('frames: the shown ones only (not the hidden one)', list('frames').length === 2 && list('frames').every((r) => r.href?.startsWith('/remix/')));
+  check('a linked wallet\'s frame shows under its FID, as the frame page shows it (credit, then frameByline)', list('frames')[0]?.by === 'FID 900001' && !json.includes('walletname-x'), JSON.stringify(list('frames')));
+  check('scene versions: under their handle and fixed link, as the scene pages (sceneHandleFor)', list('scenes').some((r) => r.by === '@naaate' && r.href === '/@naaate/1/v/2'), JSON.stringify(list('scenes')));
   check('no bases set: said so', v.lists.some((l) => l.id === 'bases' && /no bases set/.test(l.title)));
   check('hidden work is listed nowhere', !/Hidden sheet|hiddenmaker|hiddenframer|hidden words/.test(json));
   for (const [what, value] of [['an asker\'s FID', String(ASKER)], ['a reporter\'s FID', String(REPORTER)], ['a wallet address', WALLET], ['a DID', DID], ['a reporter\'s note', 'a private note'], ['a Bluesky handle', 'someone.bsky.social'], ['a private name', 'asker"']] as const)

@@ -6,7 +6,10 @@ import { byline, designByline } from './images/byline';
 import { basesOf } from './challenge/rules';
 import { standing } from './challenge/entries';
 import { fullQueue } from './images/designs';
-import { SOCIAL_PERSON_BASE, socialPerson } from './people';
+import { socialPerson } from './people';
+import { credit } from './wallet/credit';
+import { frameByline } from './remix/frames';
+import { sceneHandleFor } from './adaptation-pages';
 import { SECTIONS, TZ, countSql, defs, type Def, type SectionId } from './admin-activity-defs';
 
 /**
@@ -35,6 +38,8 @@ export interface ActivityView {
   /** Counts left out because their table or column isn't on this database yet. */
   notHere: string[];
 }
+/** What the transaction read, and the bylines to finish after it. */
+type Read = { view: ActivityView; bylines: ((sql: Sql) => Promise<void>)[] };
 export type ActivityAnswer = { status: 200; body: ActivityView } | { status: 404 | 503; body: { error: string } };
 
 export const DAY_CHOICES = [7, 30, 90] as const;
@@ -45,7 +50,11 @@ export async function adminActivity(sql: Sql | null, fid: number | null, opts: {
   if (!isAdmin(fid)) return { status: 404, body: { error: 'Not found' } };
   if (!sql) return { status: 503, body: { error: 'Not available here' } };
   const days = daysFrom(String(opts.days ?? ''));
-  return { status: 200, body: await sql.begin('read only', (tx) => readAll(tx as unknown as Sql, days, opts.who ?? null)) as ActivityView };
+  const { view, bylines } = (await sql.begin('read only', (tx) => readAll(tx as unknown as Sql, days, opts.who ?? null))) as unknown as Read;
+  // Bylines, after the transaction, by the public pages' own functions (the linked-wallet credit, a scene's handle), so
+  // an admin sees each piece's maker exactly as everyone does. They read only what those pages read.
+  for (const b of bylines) await b(sql);
+  return { status: 200, body: view };
 }
 
 /** The days shown, newest first, in a time zone (Pacific, or UTC for the cost tables). */
@@ -66,7 +75,7 @@ async function present(tx: Sql, names: string[]): Promise<Set<string>> {
 
 const usable = (d: Def, here: Set<string>) => (d.needs ?? []).every((n) => (n.startsWith('!') ? !here.has(n.slice(1)) : here.has(n)));
 
-async function readAll(tx: Sql, days: number, who: string | null): Promise<ActivityView> {
+async function readAll(tx: Sql, days: number, who: string | null): Promise<Read> {
   await tx`set local statement_timeout = '5s'`;
   const all = defs(CHALLENGE.id);
   const extra = ['studio.challenge_marks', 'studio.challenge_eligibility', 'studio.social_accounts'];
@@ -87,15 +96,17 @@ async function readAll(tx: Sql, days: number, who: string | null): Promise<Activ
     sections.get(d.section)!.metrics.push(...[...byKey.values()].sort((a, b) => a.key.localeCompare(b.key)));
   }
   const maker = who ? await personFor(tx, who, here.has('studio.social_accounts')) : null;
-  const lists = await publicLists(tx, maker, here);
+  const bylines: Read['bylines'] = [];
+  const lists = await publicLists(tx, maker, here, bylines);
   // Last: the moderators' own queue helper, counted only (up to 100 of each kind, as /moderate lists them).
   const queue = await fullQueue(tx).then((q) => q.length).catch(() => null);
   if (queue !== null) sections.get('safety')!.metrics.unshift({ key: 'Open in the moderation queue (/moderate, up to 100 of each kind)', unit: 'count', total: queue, byDay: {} });
-  return {
+  const view: ActivityView = {
     days, dayList: dayList(days, TZ), dayListUtc: dayList(days, 'UTC'), generatedAt: new Date().toISOString(), who: maker === null ? null : who,
     // One person's view holds their public work only: no count at all, private or not.
     sections: maker === null ? [...sections.values()].filter((s) => s.metrics.length) : [], lists, notHere,
   };
+  return { view, bylines };
 }
 
 /** A public handle to its person: a Farcaster name the site has seen, a wallet's address, or a Lens/Bluesky handle. */
@@ -115,7 +126,7 @@ async function personFor(tx: Sql, raw: string, social: boolean): Promise<number 
 
 const iso = (d: unknown) => new Date(d as string).toISOString();
 
-async function publicLists(tx: Sql, maker: number | null, here: Set<string>): Promise<PublicList[]> {
+async function publicLists(tx: Sql, maker: number | null, here: Set<string>, bylines: Read['bylines']): Promise<PublicList[]> {
   const by = (col: string) => (maker === null ? tx`` : tx`and ${tx(col)} = ${maker}`);
   const remixOf = tx`exists (select 1 from studio.element_versions v1 join studio.links l on l.from_version_id = v1.id and l.kind = 'remixed_from' where v1.element_id = e.id and v1.version_no = 1)`;
   const designs = (remix: boolean) => tx<{ id: string; created_at: string; by_fid: string; entity: string; title: string; by_name: string | null; role: string | null }[]>`
@@ -131,10 +142,8 @@ async function publicLists(tx: Sql, maker: number | null, here: Set<string>): Pr
     from studio.elements e join studio.element_versions v on v.element_id = e.id join studio.recipes r on r.id = v.recipe_id
     where e.element_type = 'image' and e.status = 'published' and e.work_id = ${WORK_ID} and r.source = 'in_app' ${by('e.created_by_fid')}
     order by e.created_at desc limit 25`;
-  const scenes = await tx<{ id: string; adaptation_id: string; title: string; person: string; created_at: string; fname: string | null; address: string | null }[]>`
-    select v.id::text, v.adaptation_id::text, a.title, v.author_person::text as person, v.created_at,
-      (select n.fname from studio.account_names n where n.person = v.author_person and v.author_person > 0 order by n.seen_at desc limit 1) as fname,
-      (select w.address from studio.wallet_accounts w where v.author_person < 0 and v.author_person > ${-SOCIAL_PERSON_BASE} and w.id = -v.author_person) as address
+  const scenes = await tx<{ id: string; adaptation_id: string; title: string; person: string; created_at: string }[]>`
+    select v.id::text, v.adaptation_id::text, a.title, v.author_person::text as person, v.created_at
     from studio.adaptation_versions v join studio.adaptations a on a.id = v.adaptation_id
     where not v.hidden ${by('v.author_person')}
     order by v.created_at desc limit 25`;
@@ -145,27 +154,40 @@ async function publicLists(tx: Sql, maker: number | null, here: Set<string>): Pr
   const lists: PublicList[] = [
     { id: 'versions', title: 'Newest sheet and style versions', rows: (await designs(false)).map(designRow) },
     { id: 'remixes', title: 'Newest remixes', rows: (await designs(true)).map(designRow) },
-    { id: 'images', title: 'Newest images', rows: images.map((r) => ({ title: r.chapter ? `Chapter ${r.chapter}` : 'Image', by: byline(r.by_name, Number(r.by_fid)), href: `/image/${r.id}`, at: iso(r.created_at), note: null })) },
-    {
-      id: 'scenes', title: 'Newest scene versions',
-      rows: scenes.map((r) => {
-        const handle = r.fname ?? r.address;
-        const p = Number(r.person);
-        return { title: r.title, by: r.fname ? `@${r.fname}` : r.address ? `${r.address.slice(0, 6)}…${r.address.slice(-4)}` : p > 0 ? `FID ${p}` : 'an account', href: handle ? `/@${handle}/${r.adaptation_id}/v/${r.id}` : null, at: iso(r.created_at), note: null };
-      }),
-    },
-    { id: 'frames', title: 'Newest Remix frames', rows: frames.map((r) => ({ title: 'Remix frame', by: byline(r.by_name, Number(r.person)), href: `/remix/${r.id}`, at: iso(r.created_at), note: null })) },
+    { id: 'images', title: 'Newest images', rows: images.map((r) => ({ title: r.chapter ? `Chapter ${r.chapter}` : 'Image', by: '', href: `/image/${r.id}`, at: iso(r.created_at), note: null })) },
+    { id: 'scenes', title: 'Newest scene versions', rows: scenes.map((r) => ({ title: r.title, by: '', href: null, at: iso(r.created_at), note: null })) },
+    { id: 'frames', title: 'Newest Remix frames', rows: frames.map((r) => ({ title: 'Remix frame', by: '', href: `/remix/${r.id}`, at: iso(r.created_at), note: null })) },
     ...(await baseLists(tx)),
   ];
+  const rowsOf = (id: string) => lists.find((l) => l.id === id)!.rows;
+  // As the image page: the linked-wallet credit, then byline (src/lib/images/data.ts, src/lib/images/byline.ts).
+  bylines.push(async (sql) => {
+    const shown = await credit(sql, images, (r) => Number(r.by_fid), (r, fid, name) => ({ ...r, by_fid: String(fid), by_name: name }));
+    shown.forEach((r, i) => (rowsOf('images')[i].by = byline(r.by_name, Number(r.by_fid))));
+  });
+  // As the frame page: the credit, then frameByline (src/app/remix/[id]/page.tsx).
+  bylines.push(async (sql) => {
+    const shown = await credit(sql, frames.map((r) => ({ person: Number(r.person), byName: r.by_name })), (r) => r.person, (r, fid, name) => ({ person: fid, byName: name }));
+    shown.forEach((r, i) => (rowsOf('frames')[i].by = frameByline(r)));
+  });
+  // As the scene pages: sceneHandleFor (a linked wallet's version under its FID's name), and the link they redirect to.
+  bylines.push(async () => {
+    for (const [i, r] of scenes.entries()) {
+      const handle = await sceneHandleFor(Number(r.person)).catch(() => null);
+      const row = rowsOf('scenes')[i];
+      row.by = handle ? (/^0x/.test(handle) ? handle : `@${handle}`) : Number(r.person) > 0 ? `FID ${r.person}` : 'an account';
+      row.href = handle ? `/@${handle}/${r.adaptation_id}/v/${r.id}` : null;
+    }
+  });
   if (CHALLENGE.entries && here.has('studio.challenge_marks') && here.has('studio.challenge_eligibility')) {
     const st = await standing(tx);
     const entries = st.entries.filter((e) => maker === null || e.maker === maker);
     const per = [...st.entrants.entries()].map(([c, n]) => `${c}: ${entries.filter((e) => e.character === c).length} entries, ${n} makers`).join(' · ');
     lists.push({
       id: 'entries', title: `Challenge entries (${per || 'none yet'})`,
-      rows: entries.map((e) => ({ title: e.title || e.character, by: byline(e.byName, e.maker), href: `/references/designs/${e.versionId}`, at: e.createdAt, note: e.character })),
+      rows: entries.map((e) => ({ title: e.title || e.character, by: designByline(e.byName, e.maker), href: `/references/designs/${e.versionId}`, at: e.createdAt, note: e.character })),
     });
-    if (maker === null) lists.push({ id: 'admins', title: 'Admins’ versions in the window (not eligible)', rows: st.byAdmins.map((e) => ({ title: e.title || e.character, by: byline(e.byName, e.maker), href: `/references/designs/${e.versionId}`, at: e.createdAt, note: e.character })) });
+    if (maker === null) lists.push({ id: 'admins', title: 'Admins’ versions in the window (not eligible)', rows: st.byAdmins.map((e) => ({ title: e.title || e.character, by: designByline(e.byName, e.maker), href: `/references/designs/${e.versionId}`, at: e.createdAt, note: e.character })) });
   }
   return lists;
 }
@@ -193,7 +215,7 @@ async function baseLists(tx: Sql): Promise<PublicList[]> {
       id: `base-${id}`, title: `Direct remixes of a base: ${b.title || b.entity}, by ${designByline(b.by_name, Number(b.by_fid), b.role)} (${b.n})`,
       rows: [
         { title: `${b.title || b.entity} (the base)`, by: designByline(b.by_name, Number(b.by_fid), b.role), href: `/references/designs/${b.version_id}`, at: iso(b.created_at), note: b.entity },
-        ...remixes.map((r) => ({ title: r.title || b.entity, by: byline(r.by_name, Number(r.by_fid)), href: `/references/designs/${r.version_id}`, at: iso(r.created_at), note: null })),
+        ...remixes.map((r) => ({ title: r.title || b.entity, by: designByline(r.by_name, Number(r.by_fid)), href: `/references/designs/${r.version_id}`, at: iso(r.created_at), note: null })),
       ],
     });
   }
