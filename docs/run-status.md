@@ -16,6 +16,9 @@ merged, applied to production or published during this run; legal lines go to th
 8 GB RAM, and the Minpentai session builds too: one heavy step (a Next build or server, a full typecheck, a UI
 check) at a time across both sessions, by a shared lock. M22 is run by the Minpentai session in a quiet window.
 
+**M22 (reported by the Minpentai session, 16:3x):** passed tonight inside the agent-MCP suite on both its branches,
+#113 (balance) and minpentai-clarity; it runs again in that session's combined build. Not run by this session.
+
 ## Done
 
 **1. Recast, views, first remixes** (branch `challenge-styles`, all drafts, nothing published):
