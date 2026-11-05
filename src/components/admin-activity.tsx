@@ -36,8 +36,9 @@ export function AdminActivity({ fallback }: { fallback: React.ReactNode }) {
         {[7, 30, 90].map((d) => (
           <button key={d} type="button" aria-pressed={days === d} onClick={() => setDays(d)}>{d} days</button>
         ))}
-        {view.who && <button type="button" onClick={() => setAsked('')}>Everyone ({view.who})</button>}
+        {view.who && <button type="button" onClick={() => setAsked('')}>Back to everyone</button>}
       </div>
+      {view.who && <p className="aa-note">Only {view.who}&rsquo;s public work.</p>}
       {asked && !view.who && <p className="aa-note">No one found for {asked}.</p>}
       {!view.who && view.sections.map((s) => { const shown = s.days === 'UTC' ? view.dayListUtc : view.dayList; return (
         <section key={s.id} className="aa-section">
