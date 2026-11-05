@@ -27,7 +27,7 @@ choice and closed models (remix-model-choice), closed-model bases, person-balanc
   `bluesky-check` until then, as it should.
 - **Consent for this release:** `own-words-v5`, Lens and Bluesky only (below). Its closed-model sentence moved out.
 - **Migrations:** SQL pack items 2 and 5 (branch `sql-pack`, `docs/legal/sql-pack-2026-11-04.md`, blocks 2A–2D and
-  5A–5D), apply 2 then 5. test:sql-pack: 164 passed, 0 failed, with 0034 as applied.
+  5A–5D), apply 2 then 5. test:sql-pack: 187 passed, 0 failed, with 0034 as applied (sql-pack 21fe5a18).
 
 ## The consent version for this release: own-words-v5
 
@@ -308,7 +308,7 @@ linked to it, `getPerson` with `fid > 0`; images take any sign-in that passes it
 
 ## The migrations
 
-SQL pack items 2 and 5, as copy blocks: branch `sql-pack` (4dd9631b), `docs/legal/sql-pack-2026-11-04.md`,
+SQL pack items 2 and 5, as copy blocks: branch `sql-pack` (21fe5a18), `docs/legal/sql-pack-2026-11-04.md`,
 sections "2. NEXT_signin_lens_bluesky" (2A–2D) and "5. NEXT_social_bluesky_check" (5A–5D). Paste only those, in that
 order, as `postgres` in the Supabase SQL Editor. Item 1 is applied (0034); 3 and 4 wait for their own releases.
 
@@ -316,11 +316,12 @@ order, as `postgres` in the Supabase SQL Editor. Item 1 is applied (0034); 3 and
   `0x…c0de02`, `did:plc:readbacksigninaaaaaa2345`, FID 2147483646), and so does the branch's own file since 990b2783.
 - **5's dependencies (tested):** 5B's SQL needs only 0033; its read-backs need 0034 (5C errors without it) and 2 (5D
   needs `social_accounts`). So 2 first, then 5.
-- **Tested on PGlite, 2026-11-05:** `npm run test:sql-pack` 164 passed, 0 failed, on 0001–0034. 2: A leaves nothing,
+- **Tested on PGlite, 2026-11-05:** `npm run test:sql-pack` 187 passed, 0 failed, on 0001–0034 (with contest's item 6 after 3 and 4). 2: A leaves nothing,
   B applies, C 12/12, D passes, B twice stops and changes nothing; 5: A leaves nothing, B applies, C 11/11, D passes,
   B twice safe. Planted faults caught: 5 for item 2, 6 for item 5 (including an old rule label). The release alone
   (0034, 2, 5, with no 3 or 4) has 1C, 2C, 5C all true and 1D, 2D, 5D passing. No C or D block contains a real
-  account (checked).
+  account (checked). 5D refuses a made-up account kind (`'x'`) rather than `'lens'`, so it still holds once contest's
+  item 6 lets Lens decisions in.
 - Likely numbers at merge: 2 → 0035, 5 → 0036 (checked again against `origin/main` and production then).
 
 ## What's left before it can ship
@@ -344,9 +345,13 @@ Who does each: **O** the owner, **C** the coordinator, **A** an agent.
 - [ ] **The two migrations applied** (O, Supabase SQL Editor, laptop): SQL pack 2A–2D, then 5A–5D. Needed before the
   localhost sign-ins too, because localhost uses the production database (as `studio_writer`).
 - [ ] **One real Lens and one real Bluesky sign-in by the owner on localhost** (O, laptop; steps below).
-- [ ] **The checks on a local build, under the heavy lock** (A): tsc, test:signin-lens-bluesky, test:bluesky-check,
-  test:check-decisions, test:images-gate, test:wallet, check:principles, check:ui, check:miniapp. Run again after the
-  switch commit.
+- [x] **The checks on a local build, under the heavy lock** (A, 2026-11-04 23:32–23:50 PT, `bluesky-check` at
+  414e493e, http://127.0.0.1:3210): tsc 0 errors on both branches; test:signin-lens-bluesky 21/21,
+  test:bluesky-check 64/64, test:check-decisions 44/44, test:images-gate 130, test:wallet 193; check:ui passed (59
+  pages); check:miniapp passed; check:principles 60 of 63, the three fails expected: P6d (accepted open item), P6k
+  (Privacy awaits the reread of L12 and L16) and P6a (only on a local target: the site's own media.snowmoon.party and
+  pictures.snowmoon.party count as third-party when the target is 127.0.0.1).
+- [ ] **The checks again after the switch commit** (A).
 - [ ] **PR from `bluesky-check`** (one PR; it carries signin-lens-bluesky), the owner's OK, merge commit, deploy,
   live checks (check:shipped, check:principles, check:ui, check:miniapp; check:snap-live only if `next.config.ts` or
   middleware changed; this branch changes `next.config.ts`, so run it).
