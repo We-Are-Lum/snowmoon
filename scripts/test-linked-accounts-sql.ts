@@ -1,13 +1,13 @@
 /**
- * NEXT_linked_accounts (docs/proposals/linked-accounts.md), tested on an in-memory Postgres (PGlite). Never a production
+ * NEXT_linked_accounts, v2 (docs/proposals/linked-accounts-v2.md on designs-2026-11-05), tested on an in-memory Postgres (PGlite). Never a production
  * database. Drafted by a coding agent (Claude, a closed model by Anthropic).
  *
  *   npm run test:linked-accounts-sql
  *
- * On a fresh database: main's numbered migrations (0001..0034, word for word as origin/main has them), made-up links
+ * On a fresh database: main's numbered migrations (0001..0036, word for word as origin/main has them), made-up links
  * of today's kinds (a wallet linked to a FID, one unlinked, a Lens account linked to a FID, a Bluesky account linked
- * to that Lens account), then the SQL pack's pending items in apply order (2, 5, 3, 4, read from
- * docs/legal/sql-pack-2026-11-04.md on origin/sql-pack), then this migration:
+ * to that Lens account) and made-up rows in owned tables, then the SQL pack's other pending items in apply order (3, 4,
+ * 6, read from docs/legal/sql-pack-2026-11-04.md on origin/sql-pack) and NEXT_person_balance, then this migration:
  * - its blocks have the shape CLAUDE.md asks for: A is B ending in rollback; (a) is one select; (b) is one do block,
  *   with no set role and no temp table, raising "READ-BACK FAILED" and ending with "READ-BACK PASSED";
  * - A leaves nothing; B applies; the backfill puts each link where it belongs; (a), read only, is all true; (b)
@@ -90,7 +90,7 @@ const mainList = gitShow('origin/main:supabase/migrations');
 if (mainList === null) log.push('skip: the numbered migrations against origin/main (git show unavailable)');
 else {
   const onMain = mainList.split('\n').filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort();
-  check('this branch has exactly origin/main\'s numbered migrations (0001..0034)', onMain.join() === numbered.join() && numbered.at(-1)?.startsWith('0034') === true, `${onMain.length} on main, ${numbered.length} here`);
+  check('this branch has exactly origin/main\'s numbered migrations (0001..0036)', onMain.join() === numbered.join() && numbered.at(-1)?.startsWith('0036') === true, `${onMain.length} on main, ${numbered.length} here`);
   for (const f of numbered) {
     const m = gitShow(`origin/main:supabase/migrations/${f}`);
     if (m !== null && m !== readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8')) check(`${f} is main's, word for word`, false);
@@ -107,6 +107,7 @@ const pg = await base();
 await pg.exec(`
   insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing;
   insert into studio.elements (id, work_id, element_type, created_by_fid) values ('71111111-1111-4111-8111-111111111111','snowmoon','text',880001);
+  insert into studio.elements (id, work_id, element_type, created_by_fid) values ('72222222-2222-4222-8222-222222222222','snowmoon','text',880009);
   insert into studio.element_versions (element_id, version_no, body) values ('71111111-1111-4111-8111-111111111111', 1, '{}'), ('71111111-1111-4111-8111-111111111111', 2, '{}');
   insert into studio.wallet_accounts (address) values
     ('0x8800000000000000000000000000000000000001'), ('0x8800000000000000000000000000000000000002'), ('0x8800000000000000000000000000000000000003'),
@@ -115,29 +116,36 @@ await pg.exec(`
   insert into studio.wallet_links (account_id, fid, how, linked_at) select id, 880001, 'verified', now() - interval '20 days' from studio.wallet_accounts where address = '0x8800000000000000000000000000000000000002';
   update studio.wallet_links set unlinked_at = now() - interval '10 days', ended_by = 'person' where account_id = (select id from studio.wallet_accounts where address = '0x8800000000000000000000000000000000000002');
   insert into studio.wallet_links (account_id, fid, how) select id, 880002, 'signed' from studio.wallet_accounts where address = '0x8800000000000000000000000000000000000005';
-  insert into studio.image_asks (fid) values (880001), (880001);`);
-const walletId = async (n: number) => (await pg.query<{ id: number }>(`select id::int from studio.wallet_accounts where address = '0x880000000000000000000000000000000000000${n}'`)).rows[0].id;
-
-// The pack, from its doc on origin/sql-pack, in apply order.
-const APPLY = ['2', '5', '3', '4'];
-const packDoc = gitShow('origin/sql-pack:docs/legal/sql-pack-2026-11-04.md');
-const pack = new Map<string, string>();
-if (packDoc === null) check('the SQL pack is readable from origin/sql-pack', false, 'git show failed; run git fetch');
-else for (const m of packDoc.matchAll(/^### (\d[A-D])\. [^\n]*\n[\s\S]*?```sql\n([\s\S]*?)\n```/gm)) pack.set(m[1], m[2]);
-check('the pack has its pending items\' blocks (2, 5, 3, 4)', APPLY.every((k) => ['A', 'B', 'C', 'D'].every((x) => pack.has(k + x))), [...pack.keys()].join());
-for (const k of APPLY) {
-  let err: string | null = null;
-  await pg.exec(pack.get(`${k}B`) ?? 'select 1').catch((e: Error) => (err = e.message));
-  check(`pack ${k}B applies before this migration`, err === null, err ?? '');
-}
-// Lens account 1 linked to FID 880001; Bluesky account 2 linked to that Lens account; Lens account 3 alone, linked to nothing.
-await pg.exec(`
+  insert into studio.image_asks (fid) values (880001), (880001), (880009);
+  insert into studio.wallet_debits (account_id, usd) select id, 0.05 from studio.wallet_accounts where address in ('0x8800000000000000000000000000000000000001', '0x8800000000000000000000000000000000000003');
   insert into studio.social_accounts (kind, subject, handle) values
     ('lens', '0x88000000000000000000000000000000000000aa', 'lens/madeup'),
     ('bluesky', 'did:plc:aaaaaaaaaaaaaaaaaaaaaaaa', 'madeup.bsky.social'),
     ('lens', '0x88000000000000000000000000000000000000bb', null);
   insert into studio.social_links (account_id, fid) select id, 880001 from studio.social_accounts where subject = '0x88000000000000000000000000000000000000aa';
   insert into studio.social_links (account_id, lens_account_id) select b.id, l.id from studio.social_accounts b, studio.social_accounts l where b.subject = 'did:plc:aaaaaaaaaaaaaaaaaaaaaaaa' and l.subject = '0x88000000000000000000000000000000000000aa';`);
+const walletId = async (n: number) => (await pg.query<{ id: number }>(`select id::int from studio.wallet_accounts where address = '0x880000000000000000000000000000000000000${n}'`)).rows[0].id;
+
+// The pack's other pending items, from its doc on origin/sql-pack, in apply order; then NEXT_person_balance.
+const APPLY = ['3', '4', '6'];
+const packDoc = gitShow('origin/sql-pack:docs/legal/sql-pack-2026-11-04.md');
+const pack = new Map<string, string>();
+if (packDoc === null) check('the SQL pack is readable from origin/sql-pack', false, 'git show failed; run git fetch');
+else for (const m of packDoc.matchAll(/^### (\d[A-D])\. [^\n]*\n[\s\S]*?```sql\n([\s\S]*?)\n```/gm)) pack.set(m[1], m[2]);
+check('the pack has its pending items\' blocks (3, 4, 6)', APPLY.every((k) => ['A', 'B', 'C', 'D'].every((x) => pack.has(k + x))), [...pack.keys()].join());
+for (const k of APPLY) {
+  let err: string | null = null;
+  await pg.exec(pack.get(`${k}B`) ?? 'select 1').catch((e: Error) => (err = e.message));
+  check(`pack ${k}B applies before this migration`, err === null, err ?? '');
+}
+const pbFile = readFileSync(path.join(ROOT, 'supabase/migrations/NEXT_person_balance.sql'), 'utf8');
+const pbB = pbFile.slice(pbFile.indexOf('-- B. THE MIGRATION'), pbFile.indexOf('-- C. READ-BACK'));
+{
+  let err: string | null = null;
+  await pg.exec(pbB).catch((e: Error) => (err = e.message));
+  check('NEXT_person_balance applies before this migration', err === null, err ?? '');
+}
+await pg.exec(`insert into studio.sheet_remix_asks (remix, fid, units, slot) values ('73333333-3333-4333-8333-333333333333', 880001, 1, 'front');`);
 
 async function snapshot(db = pg): Promise<string> {
   const q = async (s: string) => JSON.stringify((await db.query(s)).rows);
@@ -194,7 +202,8 @@ check('A (dry run) leaves nothing', (await snapshot()) === s0, diff(s0, await sn
 err = null;
 await pg.exec(B).catch((e: Error) => (err = e.message));
 if (err) await pg.exec('rollback;').catch(() => {});
-check('B (migration) applies after 0001..0034 and the pack', err === null, err ?? '');
+check('B (migration) applies after 0001..0036, the pack and NEXT_person_balance', err === null, err ?? '');
+if (err) { console.log(failures.join('\n')); process.exit(1); }
 {
   const w = [await walletId(1), await walletId(2), await walletId(3), await walletId(4), await walletId(5)];
   const personOf = async (account: number) => (await pg.query<{ p: number | null }>(`select person_id::int as p from studio.person_accounts where account = ${account} and unlinked_at is null`)).rows[0]?.p ?? null;
@@ -209,9 +218,24 @@ check('B (migration) applies after 0001..0034 and the pack', err === null, err ?
   const since = (await pg.query<{ ok: boolean }>(`select (a.linked_at = l.unlinked_at) as ok from studio.person_accounts a, studio.wallet_links l where a.account = ${-w[1]} and a.unlinked_at is null and l.account_id = ${w[1]}`)).rows[0];
   check('backfill: its own person starts when the link ended (the 30-day wait can read it)', since?.ok === true);
   check('backfill: the wallet linked to FID 880002 joins its person', (await personOf(-w[4])) === (await personOf(880002)) && (await personOf(880002)) !== null);
-  check('backfill: accounts never linked get no person (made when the app first needs one)', (await personOf(-w[2])) === null && (await personOf(lens3)) === null);
-  const n = (await pg.query<{ n: number }>(`select count(*)::int as n from studio.image_asks where person_id is not null`)).rows[0].n;
-  check('backfill: existing counts are left as they were (no person_id written)', n === 0);
+  check('backfill: accounts never linked and with no rows get no Snowmoon account (made at first sign-in)', (await personOf(-w[3])) === null && (await personOf(lens3)) === null);
+  const own = async (q: string) => (await pg.query<{ p: number | null }>(q)).rows.map((r) => r.p);
+  check('backfill: every image_asks row is stamped with its number\'s Snowmoon account', JSON.stringify(await own(`select person_id::int as p from studio.image_asks where fid = 880001`)) === JSON.stringify([f1, f1]));
+  const f9 = await personOf(880009);
+  check('backfill: a FID with rows and no link gets a Snowmoon account of its own (\'first\'), which owns its rows', f9 !== null && f9 !== f1 && (await own(`select person_id::int as p from studio.image_asks where fid = 880009`))[0] === f9);
+  check('backfill: the linked wallet\'s debit belongs to its FID\'s Snowmoon account (existing wallets: owner, accepted)', (await own(`select person_id::int as p from studio.wallet_debits where account_id = ${w[0]}`))[0] === f1);
+  const w3p = await personOf(-w[2]);
+  check('backfill: an unlinked wallet with a debit gets its own Snowmoon account, which owns it', w3p !== null && w3p !== f1 && (await own(`select person_id::int as p from studio.wallet_debits where account_id = ${w[2]}`))[0] === w3p);
+  check('backfill: the public element\'s owner is in row_owners, not on the element', (await own(`select person_id::int as p from studio.row_owners where tbl = 'elements' and row_id = '71111111-1111-4111-8111-111111111111'`))[0] === f1);
+  check('backfill: sheet_remix_asks\' owner is in row_owners (its columns stay as pack 3 fixes them)', (await own(`select o.person_id::int as p from studio.row_owners o join studio.sheet_remix_asks t on o.tbl = 'sheet_remix_asks' and o.row_id = t.id::text`))[0] === f1);
+  const mains = (await pg.query<{ person: number; main: number; name: number }>(`select p.id::int as person, studio.main_of(p.id)::int as main, (select account from studio.person_names n where n.person_id = p.id order by at desc, id desc limit 1)::int as name from studio.people p order by 1`)).rows;
+  check('backfill: the FID is main and the name of its linked group', mains.find((m) => m.person === f1)?.main === 880001 && mains.find((m) => m.person === f1)?.name === 880001);
+  check('backfill: every Snowmoon account has a main', mains.every((m) => m.main !== null));
+  const notices = (await pg.query<{ n: number }>(`select count(*)::int as n from studio.person_notices where person_id = ${f1} and notice = 'wallet-owned'`)).rows[0].n;
+  check('backfill: the FID\'s account sees the wallet notice for its one linked wallet', notices === 1, String(notices));
+  check('backfill: an account without a wallet linked at migration has no notice', (await pg.query<{ n: number }>(`select count(*)::int as n from studio.person_notices where person_id = ${f9}`)).rows[0].n === 0);
+  const ids = (await pg.query<{ id: string }>(`select public_id as id from studio.people`)).rows.map((r) => r.id);
+  check('backfill: every Snowmoon account has a distinct 8-character public id', ids.every((x) => /^[a-z0-9]{8}$/.test(x)) && new Set(ids).size === ids.length);
 }
 const a = await readA();
 check(`(a) is all true (${a.rows.length} rows), read only`, allTrue(a), falseRows(a).join('; '));
@@ -237,33 +261,54 @@ async function asWriter<T>(f: () => Promise<T>): Promise<T | string> {
   }
 }
 {
-  const w3 = await walletId(3);
+  const w4 = await walletId(4);
   const r = await asWriter(async () => {
     const [{ id: p }] = (await pg.query<{ id: number }>(`insert into studio.people default values returning id::int`)).rows;
-    await pg.query(`insert into studio.person_accounts (person_id, kind, account, how) values (${p}, 'farcaster', 880077, 'first'), (${p}, 'wallet', ${-w3}, 'signed')`);
-    await pg.query(`insert into studio.image_asks (fid, person_id) values (880077, ${p})`);
-    await pg.query(`insert into studio.remix_asks (person, person_id) values (880077, ${p})`);
+    await pg.query(`insert into studio.person_accounts (person_id, kind, account, how) values (${p}, 'farcaster', 880077, 'first'), (${p}, 'wallet', ${-w4}, 'signed')`);
+    await pg.query(`insert into studio.person_mains (person_id, account, how) values (${p}, 880077, 'first')`);
+    await pg.query(`insert into studio.image_asks (fid) values (880077)`);
+    await pg.query(`insert into studio.remix_asks (person) values (${-w4})`);
     await pg.query(`insert into studio.person_link_attempts (person_id) values (${p})`);
-    const ended = await pg.query(`update studio.person_accounts set unlinked_at = now(), ended_by = 'person' where account = ${-w3} and unlinked_at is null returning 1`);
-    return `${ended.rows.length}`;
+    const stamped = (await pg.query<{ n: number }>(`select count(*)::int as n from studio.image_asks where fid = 880077 and person_id = ${p}`)).rows[0].n
+      + (await pg.query<{ n: number }>(`select count(*)::int as n from studio.remix_asks where person = ${-w4} and person_id = ${p}`)).rows[0].n;
+    await pg.query(`insert into studio.main_requests (person_id, requested_by, new_main, requested_at, effective_at) values (${p}, ${-w4}, ${-w4}, now(), now() + interval '30 days')`);
+    await pg.query(`update studio.main_requests set ended_at = now(), ended_how = 'cancelled', ended_by = 880077 where person_id = ${p} and ended_at is null`);
+    const ended = await pg.query(`update studio.person_accounts set unlinked_at = now(), ended_by = 'self', ended_via = ${-w4} where account = ${-w4} and unlinked_at is null returning 1`);
+    return `${stamped}/${ended.rows.length}`;
   });
-  check('studio_writer: a person, two accounts, counted rows and an attempt go in; a link is ended', r === '1', String(r));
+  check('studio_writer: an account, two sign-ins, a main, stamped rows, an attempt, a request cancelled, a self-unlink', r === '2/1', String(r));
 }
 const refusedAsWriter = async (label: string, sqlText: string) => {
   const r = await asWriter(async () => (await pg.query(sqlText)).affectedRows ?? 0);
   check(`studio_writer: ${label} is refused or changes nothing`, (typeof r === 'string' && /error/.test(r)) || r === 0, String(r));
 };
-await refusedAsWriter('moving an active row to another person', `update studio.person_accounts set person_id = person_id + 1`);
-await refusedAsWriter('changing an ended row', `update studio.person_accounts set ended_by = 'unverified' where unlinked_at is not null`);
+await refusedAsWriter('moving an active row to another Snowmoon account', `update studio.person_accounts set person_id = person_id + 1`);
+await refusedAsWriter('changing an ended row', `update studio.person_accounts set ended_by = 'main' where unlinked_at is not null`);
 await refusedAsWriter('deleting a row', `delete from studio.person_accounts`);
-await refusedAsWriter('deleting a person', `delete from studio.people`);
-await refusedAsWriter('inserting a row already ended', `insert into studio.person_accounts (person_id, kind, account, how, unlinked_at, ended_by) select id, 'farcaster', 880078, 'first', now(), 'person' from studio.people limit 1`);
+await refusedAsWriter('deleting a Snowmoon account', `delete from studio.people`);
+await refusedAsWriter('changing a stable address', `update studio.people set public_id = 'aaaaaaaa'`);
+await refusedAsWriter('inserting a row already ended', `insert into studio.person_accounts (person_id, kind, account, how, unlinked_at, ended_by) select id, 'farcaster', 880078, 'first', now(), 'self' from studio.people limit 1`);
+await refusedAsWriter('rewriting a main', `update studio.person_mains set account = 1`);
+await refusedAsWriter('deleting a main', `delete from studio.person_mains`);
+await refusedAsWriter('moving a request\'s date', `update studio.main_requests set effective_at = now()`);
+await refusedAsWriter('deleting a join', `delete from studio.person_joins`);
+await refusedAsWriter('changing a prize claim', `update studio.prize_claims set payout_address = '0x0000000000000000000000000000000000000000'`);
+await refusedAsWriter('restamping a row\'s owner', `update studio.row_owners set person_id = person_id + 1`);
+await refusedAsWriter('A2: the unlinked wallet starting a Snowmoon account of its own at once', `with p as (insert into studio.people default values returning id) insert into studio.person_accounts (person_id, kind, account, how) select id, 'wallet', (select -id from studio.wallet_accounts where address = '0x8800000000000000000000000000000000000002'), 'first' from p`);
 {
   const r = await asWriter(async () => {
     await pg.exec('reset role; set local role anon;');
     return (await pg.query(`select * from studio.person_accounts`)).rows.length;
   });
   check('anon: reading person_accounts is refused', typeof r === 'string' && /error/.test(r), String(r));
+}
+{
+  // Live code is unaffected: an old-style insert of a number whose stamp lookup fails still goes in.
+  const r = await asWriter(async () => {
+    await pg.query(`insert into studio.image_asks (fid) values (880555)`);
+    return (await pg.query<{ p: number | null }>(`select person_id as p from studio.image_asks where fid = 880555`)).rows[0].p;
+  });
+  check('live code: an insert by a number with no Snowmoon account goes in, unstamped', r === null, String(r));
 }
 
 // --- Planted faults -------------------------------------------------------------------------------------------------
@@ -290,29 +335,51 @@ async function plant(label: string, sqlText: string) {
 }
 const PLANTS: [string, string][] = [
   ['A1 gone: the one-active-row index dropped', `drop index studio.person_accounts_one_active;`],
-  ['A1 weakened: the index no longer partial (an unlinked account could never come back)', `drop index studio.person_accounts_one_active; create unique index person_accounts_one_active on studio.person_accounts (account, linked_at) where unlinked_at is null;`],
+  ['A1 weakened: the index no longer partial', `drop index studio.person_accounts_one_active; create unique index person_accounts_one_active on studio.person_accounts (account, linked_at) where unlinked_at is null;`],
   ['A6 gone: one-of-each-kind index dropped', `drop index studio.person_accounts_one_of_kind;`],
   ['A6 gone: the 3-wallet trigger dropped', `drop trigger person_accounts_wallets on studio.person_accounts;`],
   ['A6 weakened: the trigger allows 4 wallets', `create or replace function studio.person_accounts_wallet_limit() returns trigger language plpgsql set search_path = pg_catalog, pg_temp as $fn$ begin if new.kind = 'wallet' and (select count(*) from studio.person_accounts where person_id = new.person_id and kind = 'wallet' and unlinked_at is null) >= 4 then raise exception 'x' using errcode = '23514'; end if; return new; end $fn$;`],
+  ['A2 gone: the 30-day trigger dropped', `drop trigger person_accounts_wait on studio.person_accounts;`],
+  ['A2 weakened: the wait checks starting a new account only, not 30 days (3)', `create or replace function studio.person_accounts_wait() returns trigger language plpgsql set search_path = pg_catalog, pg_temp as $fn$ declare last record; begin select person_id, unlinked_at, ended_by into last from studio.person_accounts where account = new.account and unlinked_at is not null order by unlinked_at desc, id desc limit 1; if found and last.ended_by <> 'joined' and last.person_id <> new.person_id and new.linked_at < last.unlinked_at + interval '3 days' then raise exception 'x' using errcode = '23514'; end if; return new; end $fn$;`],
+  ['A2 too strong: rejoining its own account refused', `create or replace function studio.person_accounts_wait() returns trigger language plpgsql set search_path = pg_catalog, pg_temp as $fn$ declare last record; begin select person_id, unlinked_at, ended_by into last from studio.person_accounts where account = new.account and unlinked_at is not null order by unlinked_at desc, id desc limit 1; if found and new.linked_at < last.unlinked_at + interval '30 days' then raise exception 'x' using errcode = '23514'; end if; return new; end $fn$;`],
+  ['the main may be unlinked without a new main (commit-time trigger dropped)', `drop trigger person_accounts_main_active on studio.person_accounts;`],
+  ['a main that is not a sign-in (member trigger dropped)', `drop trigger person_mains_member on studio.person_mains;`],
+  ['recovery: a request treated as effective before day 30 (done-on-time check dropped)', `alter table studio.main_requests drop constraint main_requests_done_on_time;`],
+  ['recovery: requests with any wait (30-day check dropped)', `alter table studio.main_requests drop constraint main_requests_thirty_days;`],
+  ['recovery: two open requests (index dropped)', `drop index studio.main_requests_one_open;`],
+  ['recovery: a main by recovery without its request (trigger allows any)', `create or replace function studio.person_member_check() returns trigger language plpgsql set search_path = pg_catalog, pg_temp as $fn$ begin if not exists (select 1 from studio.person_accounts where person_id = new.person_id and account = new.account and unlinked_at is null) then raise exception 'x' using errcode = '23514'; end if; return new; end $fn$;`],
+  ['a join through a non-main (join trigger dropped)', `drop trigger person_joins_check on studio.person_joins;`],
+  ['a prize claimed by a non-main (claim trigger dropped)', `drop trigger prize_claims_check on studio.prize_claims;`],
+  ['the stable address not unique', `alter table studio.people drop constraint people_public_id_unique;`],
+  ['the stable address without its default', `alter table studio.people alter column public_id drop default;`],
   ['the kind check gone (a wallet number as a Farcaster account)', `alter table studio.person_accounts drop constraint person_accounts_kind_range;`],
   ['missing grant: studio_writer loses insert on person_accounts', `revoke insert on studio.person_accounts from studio_writer;`],
-  ['missing grant: studio_writer loses select on people', `revoke select on studio.people from studio_writer;`],
+  ['missing grant: studio_writer loses insert on main_requests', `revoke insert on studio.main_requests from studio_writer;`],
   ['studio_writer may delete links', `grant delete on studio.person_accounts to studio_writer;`],
   ['studio_writer may move a row (update of person_id)', `grant update (person_id) on studio.person_accounts to studio_writer;`],
+  ['studio_writer may change a stable address', `grant update (public_id) on studio.people to studio_writer;`],
+  ['studio_writer may move a request\'s date', `grant update (effective_at) on studio.main_requests to studio_writer;`],
   ['missing policy: writer_unlink dropped', `drop policy writer_unlink on studio.person_accounts;`],
   ['public access: anon may read person_accounts', `grant select on studio.person_accounts to anon;`],
+  ['public access: a Snowmoon account id on a public table', `alter table studio.elements add column person_id bigint;`],
   ['row-level security off on people', `alter table studio.people disable row level security;`],
-  ['the via pair check dropped (a kind of account without the account)', `alter table studio.challenge_eligibility drop constraint challenge_eligibility_via_pair;`],
-  ['the backfill lost the active wallet link', `update studio.person_accounts set unlinked_at = now(), ended_by = 'person' where account = (select -account_id from studio.wallet_links where unlinked_at is null order by id limit 1) and unlinked_at is null;`],
-  ['an empty person (no account ever)', `insert into studio.people default values;`],
-  ['wrong column type: image_asks.person_id as text', `alter table studio.image_asks drop column person_id; alter table studio.image_asks add column person_id text;`],
-  ['person_id missing on remix_asks', `alter table studio.remix_asks drop column person_id;`],
-  ['the kind check lets a wallet number in as a Bluesky account', `alter table studio.person_accounts drop constraint person_accounts_kind_range; alter table studio.person_accounts add constraint person_accounts_kind_range check ((kind = 'farcaster' and account > 0) or (kind in ('wallet', 'lens', 'bluesky') and account < 0));`],
+  ['the owner-stamp trigger dropped on image_asks', `drop trigger stamp_owner on studio.image_asks;`],
+  ['the owner-stamp trigger points at the wrong column (wallet debits by id, not number)', `drop trigger stamp_owner on studio.wallet_debits; create trigger stamp_owner before insert on studio.wallet_debits for each row execute function studio.stamp_owner('account_id', '');`],
+  ['the side-table trigger dropped on elements', `drop trigger stamp_row_owner on studio.elements;`],
+  ['the backfill missed a row (an image_asks stamp cleared)', `update studio.image_asks set person_id = null where fid = 880001;`],
+  ['the backfill missed an element owner', `delete from studio.row_owners where tbl = 'elements';`],
+  ['the backfill lost the active wallet link', `update studio.person_accounts set unlinked_at = now(), ended_by = 'self' where account = (select -account_id from studio.wallet_links where unlinked_at is null order by id limit 1) and unlinked_at is null;`],
+  ['the backfill gave an account no main', `delete from studio.person_mains where person_id = (select min(id) from studio.people);`],
+  ['the backfill missed the wallet notice', `delete from studio.person_notices;`],
+  ['an empty Snowmoon account (no sign-in ever)', `insert into studio.people default values;`],
+  ['wrong column type: image_asks.person_id as text', `alter table studio.image_asks drop column person_id cascade; alter table studio.image_asks add column person_id text;`],
+  ['person_id missing on remix_asks', `alter table studio.remix_asks drop column person_id cascade;`],
+  ['the via pair check dropped', `alter table studio.challenge_eligibility drop constraint challenge_eligibility_via_pair;`],
 ];
 for (const [label, sqlText] of PLANTS) await plant(label, sqlText);
 
 // --- The pack's read-backs with this applied ------------------------------------------------------------------------
-for (const k of ['1', ...APPLY]) {
+for (const k of ['1', '2', '5', ...APPLY]) {
   if (!pack.has(`${k}C`)) continue;
   const ra = await readA(pack.get(`${k}C`)!, true);
   check(`pack ${k}C still all true with this applied`, allTrue(ra), falseRows(ra).join('; '));
@@ -332,8 +399,8 @@ await pg.close();
       await whole.exec('rollback;').catch(() => {});
     });
   }
-  check('every migration file in name order runs (this one before the Lens/Bluesky tables exist)', e2 === null, e2 ?? '');
-  const n = (await whole.query<{ n: number }>(`select count(*)::int as n from studio.person_accounts where account in (990001, 990002, -1000990001) or account in (select -id from studio.wallet_accounts where address like '0x990000%')`)).rows[0]?.n;
+  check('every migration file in name order runs (this one before NEXT_person_balance)', e2 === null, e2 ?? '');
+  const n = (await whole.query<{ n: number }>(`select count(*)::int as n from studio.person_accounts where account in (990001, 990002, 990003, -1000990001) or account in (select -id from studio.wallet_accounts where address like '0x990000%')`)).rows[0]?.n;
   check('and keeps none of the read-back\'s made-up rows', n === 0);
   const linked = (await whole.query<{ n: number }>(`select count(*)::int as n from studio.person_accounts a join studio.person_accounts f on f.person_id = a.person_id and f.kind = 'farcaster' where a.kind = 'wallet' and a.unlinked_at is null and f.account in (6852, 193912)`)).rows[0]?.n;
   check('0026\'s two wallet links are backfilled under their FIDs\' people', linked === 2, String(linked));
