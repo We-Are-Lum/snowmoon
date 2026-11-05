@@ -2,7 +2,7 @@ import 'server-only';
 import type postgres from 'postgres';
 import { remixLines } from './lineage';
 import { refusedBases } from './bases';
-import { baseStyleOrder, basesOf, remixOfBase } from './rules';
+import { baseStyleOrder, basesOf, isFirstRemix, remixOfBase } from './rules';
 import { CHALLENGE, WORK_ID } from '../config';
 import { challengeVisibleTo } from './visibility';
 import { bookCharacter } from '../images/designs';
@@ -62,7 +62,8 @@ export async function windowVersions(sql: Sql): Promise<ChallengeVersion[]> {
         versionNo: Number(r.version_no), title: b.title ?? '', byName: b.by_name ?? null, thumb: b.views?.front?.url ?? b.samples?.[0]?.url ?? null,
       };
     })
-    .filter((v) => inWindow(v.createdAt))
+    // The owner's first remixes (CHALLENGE.firstRemixes) are shown on /challenge, never as entries (owner, 2026-11-04).
+    .filter((v) => inWindow(v.createdAt) && !isFirstRemix(v))
     .sort(newestFirst);
 }
 

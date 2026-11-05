@@ -421,14 +421,32 @@ export const CHALLENGE = {
   /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
   characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'] as readonly string[],
   /**
-   * Each character's bases (owner, 2026-11-03): up to CHALLENGE.maxBases published sheets to start from, in the same
-   * three styles for every character, so each set reads as one cast. Each entry is a design's id: its element id (any
-   * version of it) or one version's id (the id in /references/designs/<id>). Designs have no slugs. Empty until the
-   * owner picks. An entry is a fork of any base, or of a remix of one (src/lib/challenge/rules.ts, remixOfBase); while
-   * a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks before the picks.
+   * Each character's bases (owner, 2026-11-04): published sheets to start from, at most CHALLENGE.baseCount for the
+   * character (never more than CHALLENGE.maxBases). Deluin and Gladias have three each: their current default look,
+   * recast a and recast b (drafts in branch challenge-styles, docs/starting-sheet-drafts/directions/*-recast-*.jpg);
+   * the other four keep one for now (Zei's and Bai's MJ·GPT fronts, the others' Animated series fronts). No look is
+   * the "canonical" or "official" one: /challenge shows a character's bases in a fresh random order on each visit
+   * (the P5g shuffle), so none reads as the default. None is published yet, so every list stays empty. Each entry is
+   * a design's id: its element id (any version of it) or one version's id (the id in /references/designs/<id>).
+   * Designs have no slugs. An entry is a fork of any base, or of a remix of one (src/lib/challenge/rules.ts,
+   * remixOfBase); while a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks
+   * before the picks.
    */
   bases: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
+  /** How many bases each character has (owner, 2026-11-04): three for Deluin and Gladias, one for the rest for now. */
+  baseCount: { zei: 1, gladias: 3, bai: 1, seila: 1, deluin: 3, mu: 1 } as Record<string, number>,
+  /** The most bases any character may have. */
   maxBases: 3,
+  /**
+   * The owner's first remixes (owner, 2026-11-04): up to CHALLENGE.firstRemixesShown per character, shown on
+   * /challenge under the heading "First remixes by @naaate", below its bases, in the order given here. They are not
+   * entries: no Entry badge, no count, never in an entry list (src/lib/challenge/entries.ts leaves them out). Each entry is a published design's id (element or version), an
+   * admin's remix of that character's base, imported with its self-reported recipe (scripts/import-first-remixes.ts,
+   * docs/proposals/challenge-first-remixes.md). Empty until they exist: /challenge shows empty slots. Chosen by the
+   * owner, not by any count (P5g's third narrow exception, pending the owner's yes).
+   */
+  firstRemixes: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
+  firstRemixesShown: 2,
   /**
    * The bases' fixed style order (owner, 2026-11-04): within a character its bases are listed in this order, the same
    * for every character, so the casts line up. Each entry is a published style's name, as a sheet's views record it
@@ -465,14 +483,6 @@ export const CHALLENGE = {
    * challenge, whatever IMAGES.neynarMinScore becomes; only the decision (passed or below) is kept, never the score.
    */
   neynarMinScore: 0.7,
-  /**
-   * The bounties (owner, 2026-11-01): one solo poidh bounty per character, on Ethereum mainnet, funded and judged by the
-   * owner. Claims must be entries for that character. A bounty can pay out even if its character misses minEntrants;
-   * if no claim fits, the owner cancels it. Each bounty's poidh address, null until the bounty exists (/challenge links
-   * it only when set), and the amount, the same for each, null until the owner sets it (e.g. '0.05 ETH').
-   */
-  bounties: { zei: null, bai: null, gladias: null, seila: null, deluin: null, mu: null } as Record<string, string | null>,
-  bountyAmount: null as string | null,
   /**
    * Real instants (UTC), each with its America/Los_Angeles wall time (all in PST: the clocks changed on 1 Nov 2026).
    * Owner, 2026-10-31 (second update). A closing instant is the first that no longer counts.

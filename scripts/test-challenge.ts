@@ -9,7 +9,7 @@
  * must report it.
  * - Eligibility (decided once at publish and stored; pages never ask Neynar): invited, or a Neynar score at or above the
  *   threshold; refused: below it, no score, a wallet account, admins. The spend cap ($15 in the window, $2 outside),
- *   sheets opening only in the window and once Privacy says so, the rules copy (forks only, three entrants, a bounty per character,
+ *   sheets opening only in the window and once Privacy says so, the rules copy (forks only, three entrants, no bounty,
  *   the mint as a plan), and the count of distinct entrants per character.
  * - Submit (owner, 2026-11-04): a remix is an entry only once its maker submits it, with a post link (checked as "Add
  *   where you posted it" checks it); up to three per person across all characters, the 4th refused under a lock;
@@ -77,6 +77,10 @@ const L = await import('../src/lib/challenge/post-links');
     ['src/app/challenge/page.tsx', /if \(!CHALLENGE\.public\) notFound\(\);/],
     ['src/app/challenge/page.tsx', /if \(!CHALLENGE\.public\) return \{ robots: \{ index: false, follow: false \} \};/],
     ['src/app/api/challenge/submit/route.ts', /const hidden = \(fid: number \| null\) => \(challengeVisibleTo\(fid\) \? null : NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\)\);/],
+    ['src/app/challenge/rules/page.tsx', /if \(!CHALLENGE\.public\) notFound\(\);/],
+    ['src/app/challenge/remixes/page.tsx', /if \(!CHALLENGE\.public\) notFound\(\);/],
+    ['src/app/challenge/rules/page.tsx', /if \(!CHALLENGE\.public\) return \{ robots: \{ index: false, follow: false \} \};/],
+    ['src/app/challenge/remixes/page.tsx', /if \(!CHALLENGE\.public\) return \{ robots: \{ index: false, follow: false \} \};/],
     ['src/app/api/challenge/view/route.ts', /if \(!challengeVisibleTo\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/],
     ['src/app/api/challenge/standing/route.ts', /if \(!challengeVisibleTo\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/],
     ['src/app/page.tsx', /\.\.\.\(CHALLENGE\.public \? \[\{ href: '\/challenge'/],
@@ -96,8 +100,8 @@ const L = await import('../src/lib/challenge/post-links');
   const { navItems } = await import('../src/lib/nav');
   check('switch: the menu has no challenge item unless told to show it', !navItems(1, 0).some((i) => i.href === '/challenge') && navItems(1, 0, true).some((i) => i.href === '/challenge'));
   // Scripts everyone is served carry no challenge words: the share buttons, "Posted on", Submit, the fork form.
-  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-submit.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx'];
-  const wordy = clientFiles.filter((f) => /challenge\/wording'/.test(read(f)));
+  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-submit.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx', 'src/components/challenge-bases.tsx', 'src/components/challenge-remix-pick.tsx', 'src/components/challenge-remix-card.tsx'];
+  const wordy = clientFiles.filter((f) => /challenge\/(landing-)?wording'/.test(read(f)));
   check('switch: no script served to everyone imports the challenge\'s words', wordy.length === 0, wordy.join());
 }
 // The tests below are the challenge once the owner has opened it.
@@ -263,12 +267,21 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   proof('F6 a failure that drops the remix is caught', !keeps(route.replace('...(remixTicket && ', '...(false && ')) || !keeps(route.replace(/if \(!paid\.ok\) return no\(paid\.error, paid\.status, \{[^\n]*\n/, 'if (!paid.ok) return no(paid.error, paid.status, paid.extra);\n')));
 }
 
-// --- The three bases (owner, 2026-11-03) --------------------------------------------------------------------------
+// --- The bases (owner, 2026-11-03: three; 2026-11-04 after the restart: one per character) -----------------------
 {
+  const committedMax = CHALLENGE.maxBases;
+  check('committed: three bases for Deluin and Gladias, one for the rest, three at most (owner, 2026-11-04)', committedMax === 3 && CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join() === 'zei:1,gladias:3,bai:1,seila:1,deluin:3,mu:1', CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join());
+  check('committed: at most one base is used for Zei, three for Deluin', R.basesOf('zei', { zei: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222'] }).length === 1 && R.basesOf('deluin', { deluin: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 3);
+  proof('a second base for a one-base character is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), mu: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222'] }).length === 1);
+  check('no look is called canonical or official (the word is "current default")', !/\b(canonical|official) (look|base)/i.test(read('src/lib/config.ts')) && !/canonical/i.test(read('src/lib/challenge/landing-wording.ts')));
+  // The rule itself works for any number; the checks below exercise it with three.
+  CHALLENGE.maxBases = 3;
+  const countsWere = { ...CHALLENGE.baseCount }; // the rule with three bases for any character
+  for (const c of CHALLENGE.characters) CHALLENGE.baseCount[c] = 3;
   const B1 = '11111111-1111-4111-8111-111111111111', B2 = '22222222-2222-4222-8222-222222222222', B3 = '33333333-3333-4333-8333-333333333333';
   const bases = { zei: [B1, B2, B3], bai: [] as string[] };
   const step = (elementId: string, versionId = `${elementId.slice(0, 8)}-0000-4000-8000-000000000000`) => ({ elementId, versionId });
-  check('the committed bases: a list for each of the six characters, each empty or up to three design ids', R.basesProblems().length === 0 && CHALLENGE.characters.every((c) => Array.isArray(CHALLENGE.bases[c]) && CHALLENGE.bases[c].length <= 3), R.basesProblems().join('; '));
+  check('the committed bases: a list for each of the six characters, each empty or up to CHALLENGE.maxBases design ids', R.basesProblems().length === 0 && CHALLENGE.characters.every((c) => Array.isArray(CHALLENGE.bases[c]) && CHALLENGE.bases[c].length <= committedMax), R.basesProblems().join('; '));
   check('a fork of each base counts (by its element id)', [B1, B2, B3].every((b) => R.remixOfBase('zei', [step(b)], bases)));
   check('a fork of a base counts when the base is named by one version\'s id', R.remixOfBase('zei', [{ elementId: 'aaaaaaaa-0000-4000-8000-000000000000', versionId: B2 }], { zei: [B2] }));
   check('a fork of an entry (a remix of a base) counts', R.remixOfBase('zei', [step('eeeeeeee-0000-4000-8000-00000000000e'), step(B3)], bases));
@@ -284,6 +297,19 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   const otherLine = [step('99999999-9999-4999-8999-999999999999')];
   const anyFork = (line: { elementId: string; versionId: string }[]) => line.length > 0; // the rule before the bases
   proof('the old rule (any fork), used once the bases are picked, is caught', anyFork(otherLine) !== R.remixOfBase('zei', otherLine, bases));
+  CHALLENGE.maxBases = committedMax;
+  for (const c of CHALLENGE.characters) CHALLENGE.baseCount[c] = countsWere[c];
+}
+
+// --- The owner's first remixes beside each base (owner, 2026-11-04) -------------------------------------------------
+{
+  const F1 = '11111111-1111-4111-8111-111111111111', F2 = '22222222-2222-4222-8222-222222222222', F3 = '33333333-3333-4333-8333-333333333333';
+  const empty = Object.fromEntries(CHALLENGE.characters.map((c) => [c, [] as string[]]));
+  check('committed: two first remixes shown per character, and every list empty until they exist', CHALLENGE.firstRemixesShown === 2 && R.firstRemixesProblems().length === 0 && CHALLENGE.characters.every((c) => CHALLENGE.firstRemixes[c].length === 0), R.firstRemixesProblems().join('; '));
+  check('first remixes: at most two are used, in the order given', R.firstRemixesOf('zei', { zei: [F2, F1, F3] }).join() === [F2, F1].join());
+  proof('a third first remix is caught', R.firstRemixesProblems({ ...empty, zei: [F1, F2, F3] }).length === 1);
+  proof('a first remix that is not a design id is caught', R.firstRemixesProblems({ ...empty, zei: ['zei-remix'] }).length === 1);
+  proof('a missing character list is caught', R.firstRemixesProblems({ zei: [] }).length === 5);
 }
 
 // --- Bases by closed models, the bases' style order, and P5g's one exception (owner, 2026-11-04) --------------------
@@ -330,6 +356,64 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   proof('P5g: a style order that reads something else (likes) fails', p5gProblems(plantIn('src/lib/challenge/rules.ts', (t) => t.replace('return at(a.style) - at(b.style);', 'return at(a.style) - at(b.style) || b.likes - a.likes;'))).length === 1);
   proof('P5g: a style order that reads another setting fails', p5gProblems(plantIn('src/lib/challenge/rules.ts', (t) => t.replace('return at(a.style) - at(b.style);', 'return at(a.style) - at(b.style) || CHALLENGE.minEntrants;'))).length === 1);
   proof('P5g: entries ordered by built-on counts still fail', p5gProblems([...files, { file: 'src/lib/challenge/planted.ts', text: 'export const top = (e) => e.sort((a, b) => b.builtOn - a.builtOn);' }]).length === 1);
+}
+
+// --- /challenge as a landing page (owner, 2026-11-04): the random selection (P5g's second exception) and P5i -------
+{
+  const { shuffleFresh } = await import('../src/lib/challenge/shuffle');
+  const { p5gProblems, p5iProblems, CHALLENGE_FILES, P5I_FILES } = await import('./lib/p5g');
+  // Uniform: over many shuffles of four items, each item lands in each place about a quarter of the time, and all 24
+  // orders appear. A seeded generator, so the test never flakes.
+  let s = 12345;
+  // mulberry32: a small seeded generator with good low bits.
+  const seeded = () => {
+    s = (s + 0x6d2b79f5) | 0;
+    let x = Math.imul(s ^ (s >>> 15), 1 | s);
+    x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+    return ((x ^ (x >>> 14)) >>> 0) / 2 ** 32;
+  };
+  const uniformity = (shuffle: (xs: readonly number[]) => number[], n = 48_000) => {
+    const at = [0, 1, 2, 3].map(() => [0, 0, 0, 0]);
+    const orders = new Set<string>();
+    for (let k = 0; k < n; k++) {
+      const o = shuffle([0, 1, 2, 3]);
+      o.forEach((x, i) => at[x][i]++);
+      orders.add(o.join());
+    }
+    const worst = Math.max(...at.flat().map((c) => Math.abs(c / n - 0.25)));
+    return { worst, orders: orders.size };
+  };
+  const u = uniformity((xs) => shuffleFresh(xs, seeded));
+  check('the random selection is unweighted: every remix lands in every place about equally, and every order appears', u.worst < 0.01 && u.orders === 24, `worst ${u.worst.toFixed(4)}, ${u.orders} orders`);
+  const real = uniformity((xs) => shuffleFresh(xs), 24_000);
+  check('the default (crypto) shuffle is unweighted too', real.worst < 0.015 && real.orders === 24, `worst ${real.worst.toFixed(4)}`);
+  // A planted weighted shuffle (the first item, "most liked", kept on top half the time) must fail the same test.
+  const weighted = (xs: readonly number[]) => (seeded() < 0.5 ? [xs[0], ...shuffleFresh(xs.slice(1), seeded)] : shuffleFresh(xs, seeded));
+  proof('a weighted shuffle fails the uniformity test', uniformity(weighted).worst >= 0.01);
+  const input = [1, 2, 3, 4, 5];
+  const out = shuffleFresh(input);
+  check('the shuffle keeps every remix once and leaves the list as it was', out.slice().sort().join() === '1,2,3,4,5' && input.join() === '1,2,3,4,5');
+  // P5g on the code: the exception holds, and every way past it fails.
+  const files = walk('src').filter((f) => CHALLENGE_FILES.test(f)).map((f) => ({ file: f, text: read(f) }));
+  const plantIn = (file: string, f: (x: string) => string) => files.map((x) => (x.file === file ? { ...x, text: f(x.text) } : x));
+  check('P5g passes with the random selection (shuffle.ts, used once, on every remix)', p5gProblems(files).length === 0, p5gProblems(files).join('; '));
+  check('the random selection really shuffles every remix in the browser', /shuffleFresh\(all\)/.test(read('src/components/challenge-remix-pick.tsx')) && /'use client'/.test(read('src/components/challenge-remix-pick.tsx')) && /await remixes\(sql\)/.test(read('src/lib/challenge/view.ts')));
+  check('a character\'s several bases are shuffled afresh in the browser, the whole list (owner, 2026-11-04)', /setOrder\(bases\.length > 1 \? shuffleFresh\(bases\) : bases\)/.test(read('src/components/challenge-bases.tsx')) && /'use client'/.test(read('src/components/challenge-bases.tsx')));
+  proof('P5g: shuffling only some of the bases fails', p5gProblems(plantIn('src/components/challenge-bases.tsx', (x) => x.replace('shuffleFresh(bases)', 'shuffleFresh(bases.slice(1))'))).length > 0);
+  proof('P5g: bases put in a fixed order by the page fails', p5gProblems(plantIn('src/components/challenge-bases.tsx', (x) => x.replace('shuffleFresh(bases)', '[...bases].sort((a, b) => a.title.localeCompare(b.title))'))).length > 0);
+  proof('P5g: a weighted shuffle (it reads likes) fails', p5gProblems(plantIn('src/lib/challenge/shuffle.ts', (x) => x.replace('export function shuffleFresh<T>(items: readonly T[]', 'export function shuffleFresh<T extends { likes: number }>(items: readonly T[]').replace('const j = below(i + 1, random);', 'const j = below(Math.min(i + 1, 1 + out[i].likes), random);'))).length > 0);
+  proof('P5g: a shuffle with weights fails', p5gProblems(plantIn('src/lib/challenge/shuffle.ts', (x) => x.replace('const j = below(i + 1, random);', 'const j = below(i + 1, () => random() ** weight);'))).length > 0);
+  proof('P5g: a sort by chance on the page (outside the shuffle) fails', p5gProblems(plantIn('src/app/challenge/page.tsx', (x) => `${x}\nexport const planted = (e: number[]) => e.sort(() => Math.random() - 0.5);`)).length > 0);
+  proof('P5g: shuffling only some remixes (a featured few) fails', p5gProblems(plantIn('src/components/challenge-remix-pick.tsx', (x) => x.replace('shuffleFresh(all)', 'shuffleFresh(all.slice(0, 6))'))).length > 0);
+  proof('P5g: the selection drawn from a limited list fails', p5gProblems(plantIn('src/lib/challenge/view.ts', (x) => x.replace('await remixes(sql)', 'await remixes(sql, { limit: 12 })'))).length > 0);
+  proof('P5g: a shuffle elsewhere (the feed) fails', p5gProblems([...files, { file: 'src/app/challenge/remixes/page.tsx', text: `${read('src/app/challenge/remixes/page.tsx')}\nconst x = shuffleFresh(cards);` }].filter((f, i, a) => a.findIndex((y) => y.file === f.file) === i || f.text.includes('const x = shuffleFresh'))).length > 0);
+  // P5i: no counts on cards, no "most remixed" sort.
+  const p5i = P5I_FILES.map((f) => ({ file: f, text: read(f) }));
+  const plant5i = (file: string, f: (x: string) => string) => p5i.map((x) => (x.file === file ? { ...x, text: f(x.text) } : x));
+  check('P5i passes: no remix, like or built-on count on the cards, no "most remixed" sort', p5iProblems(p5i).length === 0, p5iProblems(p5i).join('; '));
+  proof('P5i: a like count on a card fails', p5iProblems(plant5i('src/components/challenge-remix-card.tsx', (x) => x.replace('<span className="ch-card-by">', '<span>{r.likes} likes</span><span className="ch-card-by">'))).length > 0);
+  proof('P5i: a remix count read for the feed fails', p5iProblems(plant5i('src/lib/challenge/remixes.ts', (x) => x.replace('select e.id as element_id,', 'select (select count(*) from studio.links) as remix_count, e.id as element_id,'))).length > 0);
+  proof('P5i: a "most remixed" sort on the feed fails', p5iProblems(plant5i('src/app/challenge/remixes/page.tsx', (x) => x.replace("type Props = { searchParams: Promise<{ character?: string; before?: string }> };", "type Props = { searchParams: Promise<{ character?: string; before?: string; sort?: string }> };\nconst mostRemixedFirst = (s?: string) => s === 'most-remixed';"))).length > 0);
 }
 
 // --- The post address: the host allow-list ----------------------------------------------------------------------
@@ -522,9 +606,10 @@ check('the guidance line is shown', share.includes('If you’re remixing someone
 
 // --- The rules copy (owner's decisions, 2026-10-31) -------------------------------------------------------------
 const W = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
-const copy = [W.intro(), W.next(), W.bounty(), ...W.rules(), W.adminsLine].join(' ');
+const copy = [W.intro(), W.next(), ...W.rules(), W.adminsLine].join(' ');
 const MINT_PLAN = 'We plan to mint each final version as an open edition, with what it raises split among everyone it was built on, including the We Are Lum team. Details come with the mint page.';
 const PROMISES = /\b(will be minted|is then minted|minted as|reward pot|extra reward|split on|token for you|you will (get|receive)|guaranteed?|\$\s?\d|\d+\s?(ETH|USDC|dollars))\b|\bwallet\b/i;
+const NO_BOUNTY = /\bbount(y|ies)\b|\bpoidh\b/i;
 function copyProblems(t: string): string[] {
   const p: string[] = [];
   if (!t.includes(MINT_PLAN)) p.push('the mint is not said as the owner\'s plan sentence');
@@ -532,22 +617,23 @@ function copyProblems(t: string): string[] {
   if (m) p.push(`promises or a wallet path: "${m[0]}"`);
   if (!/A new sheet made from scratch isn’t an entry/.test(t)) p.push('it does not say only remixes (forks) count');
   if (!new RegExp(`at least ${['zero', 'one', 'two', 'three', 'four', 'five'][CHALLENGE.minEntrants] ?? CHALLENGE.minEntrants} different people`).test(t)) p.push('the minimum number of entrants is missing or not the config\'s');
-  if (!/one poidh bounty for each character, six in all, on Ethereum mainnet/i.test(t)) p.push('the bounties are not one per character, on Ethereum mainnet');
-  if (!/must be an entry for that character/.test(t)) p.push('claims are not limited to entries for that character');
-  if (!/a little ETH on mainnet for gas/.test(t)) p.push('the gas note is missing');
-  if (!/can pay out even if its character has fewer than/.test(t) || !/if no claim fits, Nate cancels it/.test(t)) p.push('the minimum or the cancel rule for bounties is missing');
+  // No bounties at all (owner, 2026-11-04): no bounty, no poidh, anywhere in the challenge's words.
+  if (NO_BOUNTY.test(t)) p.push(`a bounty is back: "${t.match(NO_BOUNTY)![0]}"`);
   return p;
 }
-check('the rules copy: the owner\'s mint sentence, forks only, three entrants, a bounty per character on mainnet, no promises, no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
+check('the rules copy: the owner\'s mint sentence, forks only, three entrants, no bounty, no promises, no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
 check('the rules name the six characters most named in the book first (owner, 2026-11-04)', W.intro().includes('Zei, Gladias, Bai, Seila, Deluin or Mu'));
 proof('a promised mint is caught', copyProblems(copy.replace(MINT_PLAN, 'Each version is then minted as an open edition in Snowmoon WIP.')).length > 0);
 proof('a reward pot is caught', copyProblems(`${copy} Plus an extra reward pot.`).length > 0);
 proof('a wallet path back in the rules is caught', copyProblems(`${copy} Or a wallet linked to one.`).length > 0);
-proof('one bounty for the whole challenge (the old rule) is caught', copyProblems(copy.replace(/one poidh bounty for each character, six in all, on Ethereum mainnet/i, 'one poidh bounty for the whole challenge')).length > 0);
-proof('a bounty on Base instead of mainnet is caught', copyProblems(copy.replace('on Ethereum mainnet', 'on Base')).length > 0);
-check('the judging line names the character', W.bountyFor('Zei') === 'The bounty for Zei: the remix that most changes how we see Zei while staying true to the book.');
-check('bounty addresses and the amount are unset until the owner sets them', CHALLENGE.characters.every((c) => c in CHALLENGE.bounties && CHALLENGE.bounties[c] === null) && CHALLENGE.bountyAmount === null);
-check('no amount is shown while it is unset', !/ ETH each/.test(W.bounty()));
+proof('a bounty back in the rules (the old per-character rule) is caught', copyProblems(`${copy} There is one poidh bounty for each character.`).length > 0);
+{
+  // No bounty anywhere in the challenge (owner, 2026-11-04): not in the config, not in any of its words, not on its pages.
+  const words = Object.values(W).flatMap((v) => (typeof v === 'function' ? [String((v as (...a: string[]) => unknown)('Zei', 'Zei'))] : Array.isArray(v) ? v.map(String) : [String(v)])).join(' ');
+  const pages = ['src/app/challenge', 'src/lib/challenge'].flatMap((d) => readdirSync(path.join(ROOT, d), { recursive: true }).map(String).filter((f) => /\.tsx?$/.test(f)).map((f) => readFileSync(path.join(ROOT, d, f), 'utf8'))).join('\n');
+  check('no bounty: none in the config, the wording or the challenge\'s pages', !('bounties' in CHALLENGE) && !('bountyAmount' in CHALLENGE) && !NO_BOUNTY.test(words) && !NO_BOUNTY.test(pages), (words.match(NO_BOUNTY) ?? pages.match(NO_BOUNTY) ?? [''])[0]);
+  proof('a bounty planted in a page is caught', NO_BOUNTY.test(`${pages}\n<p>The poidh bounty</p>`));
+}
 proof('rules without "forks only" are caught', copyProblems(copy.replace('A new sheet made from scratch isn’t an entry.', '')).length > 0);
 
 // --- Sheets open to everyone only inside the window, and only once Privacy says so -------------------------------
@@ -722,6 +808,42 @@ check('entries: not an admin; the admin is listed apart', !ids.includes(fAdmin.v
 check('entries: not the starting sheets made before the window', !ids.includes(baiStart.versionId) && !ids.includes(zeiStart.versionId));
 check('entries: what was submitted, three', ids.length === 3, ids.join());
 check('entrants per character: Bai 2 (500, 6852), Zei 1 (6852), others 0, in CHALLENGE order', [...st.entrants].map(([c, n]) => `${c}:${n}`).join() === 'zei:1,gladias:0,bai:2,seila:0,deluin:0,mu:0', [...st.entrants].map(([c, n]) => `${c}:${n}`).join());
+{
+  // The owner's first remixes (owner, 2026-11-04) are not entries: never in the entries or the admins' list, no Entry
+  // badge or admin line on their page, no count. Here an eligible person's entry and the admin's version stand in.
+  const FR = CHALLENGE.firstRemixes as Record<string, readonly string[]>;
+  const was = { ...FR };
+  FR.zei = [fAdmin.elementId];
+  FR.bai = [f6852.versionId];
+  const st2 = await E.standing(S);
+  const ids2 = st2.entries.map((e) => e.versionId);
+  check('first remixes: never an entry, never in the admins\' list', !ids2.includes(f6852.versionId) && !st2.byAdmins.some((v) => v.versionId === fAdmin.versionId) && ids2.includes(f500b.versionId), ids2.join());
+  check('first remixes: no Entry badge or admin line on their page', (await E.versionStanding(S, f6852.versionId)) === null && (await E.versionStanding(S, fAdmin.versionId)) === null);
+  check('first remixes: no count (the entrant they would have been is not counted)', [...st2.entrants].map(([c, n]) => `${c}:${n}`).join() !== [...st.entrants].map(([c, n]) => `${c}:${n}`).join());
+  proof('a standing that ignores the first remixes is caught', ids.includes(f6852.versionId) && st.byAdmins.some((v) => v.versionId === fAdmin.versionId));
+  check('first remixes: entries.ts leaves them out of every challenge version', /\.filter\(\(v\) => inWindow\(v\.createdAt\) && !isFirstRemix\(v\)\)/.test(read('src/lib/challenge/entries.ts')));
+  for (const k of Object.keys(FR)) FR[k] = was[k];
+}
+{
+  // The remixes on /challenge and its feed (owner, 2026-11-04): every published fork of a challenge character, newest
+  // first, at its newest version; never a sheet made from scratch.
+  const RX = await import('../src/lib/challenge/remixes');
+  const all = await RX.remixes(S as never);
+  const ids = all.map((r) => r.versionId);
+  check('remixes: every fork of a challenge character, at its newest version (f500 at v2), and no sheet from scratch', ids.includes(f500b.versionId) && !ids.includes(f500a.versionId) && ids.includes(f501.versionId) && ids.includes(fAdmin.versionId) && !ids.includes(baiStart.versionId) && !ids.includes(zeiStart.versionId), ids.join());
+  check('remixes: newest first (by when each remix was made)', all.every((r, i) => i === 0 || all[i - 1].createdAt >= r.createdAt));
+  check('remixes: each names its character', all.find((r) => r.versionId === fAdmin.versionId)?.character === 'zei' && all.find((r) => r.versionId === f501.versionId)?.character === 'bai');
+  const zei = await RX.remixes(S as never, { character: 'zei' });
+  check('the feed\'s filter: Zei shows only Zei\'s remixes', zei.length > 0 && zei.every((r) => r.character === 'zei'), zei.map((r) => r.character).join());
+  check('the feed\'s filter: a slug that isn\'t a challenge character shows nothing', (await RX.remixes(S as never, { character: 'nobody' })).length === 0);
+  const first = await RX.remixes(S as never, { limit: 2 });
+  const rest = await RX.remixes(S as never, { before: RX.parseCursor(RX.cursorOf(first[first.length - 1])) });
+  check('the feed\'s pages: the next page starts after the last card, with no gap and no overlap', [...first, ...rest].map((r) => r.versionId).join() === ids.join(), `${[...first, ...rest].map((r) => r.versionId).join()} / ${ids.join()}`);
+  const page = await RX.remixFeed(S as never, { before: 'not-a-cursor' });
+  check('the feed: a bad cursor is ignored (the newest page)', page.cards.map((r) => r.versionId).join() === ids.slice(0, RX.FEED_PAGE).join() && page.next === null);
+  const wrong = [...first, ...(await RX.remixes(S as never, { before: RX.parseCursor(RX.cursorOf(first[0])) }))].map((r) => r.versionId);
+  proof('a page cut at the wrong card (an overlap) is caught', new Set(wrong).size !== wrong.length || wrong.join() !== ids.join());
+}
 check('three entrants are needed (CHALLENGE.minEntrants)', CHALLENGE.minEntrants === 3 && !R.enoughEntrants(2) && R.enoughEntrants(3));
 proof('a count that adds one person twice is caught', R.entrantCounts([{ person: 1, character: 'bai' }, { person: 1, character: 'bai' }]).get('bai') === 1);
 check('the version page: Entry once submitted, Submit offered on an unsubmitted remix, the admin line on the admin\'s', (await E.versionStanding(S, f500b.versionId))?.kind === 'entry' && (await E.versionStanding(S, f500a.versionId))?.kind === 'candidate' && (await E.versionStanding(S, fAdmin.versionId))?.kind === 'admin' && (await E.versionStanding(S, f501.versionId)) === null);
@@ -800,6 +922,10 @@ check('the sheets to start from are those made before the window', (await E.star
 // fork of a sheet that isn't a base don't; the list to start from is the bases, in order. Then everything made here is
 // hidden and the bases emptied again, so the checks below see what they saw before.
 {
+  const committedMax = CHALLENGE.maxBases;
+  CHALLENGE.maxBases = 3; // the rule with three bases; one is committed (owner, 2026-11-04)
+  const countsWere = { ...CHALLENGE.baseCount }; // the rule with three bases for any character
+  for (const c of CHALLENGE.characters) CHALLENGE.baseCount[c] = 3;
   const made: string[] = [];
   // Each remix is submitted by its maker right after publishing (owner, 2026-11-04: only Submit makes an entry); a
   // version that can't be entered is refused, as on the site.
@@ -838,6 +964,8 @@ check('the sheets to start from are those made before the window', (await E.star
   await sql`delete from studio.challenge_eligibility where version_id in (select v.id from studio.element_versions v where v.element_id in ${sql(made)})`;
   const st6 = await E.standing(S);
   check('bases: with the bases empty and the test sheets hidden, the entries are as before', st6.entries.map((e) => e.versionId).sort().join() === st2.entries.map((e) => e.versionId).sort().join());
+  CHALLENGE.maxBases = committedMax;
+  for (const c of CHALLENGE.characters) CHALLENGE.baseCount[c] = countsWere[c];
 }
 
 // Publish uses the stored check decision (owner, 2026-11-04): a current pass (up to 90 days old) is used with no
@@ -887,6 +1015,10 @@ check('the sheets to start from are those made before the window', (await E.star
 // Closed-model bases, the bases' style order and an admin's remix, in the database (owner, 2026-11-04). Everything made
 // here is hidden and the settings put back afterwards, so the checks below see what they saw before.
 {
+  const committedMax2 = CHALLENGE.maxBases;
+  CHALLENGE.maxBases = 3; // the rule with several bases; one is committed (owner, 2026-11-04)
+  const countsWere = { ...CHALLENGE.baseCount }; // the rule with three bases for any character
+  for (const c of CHALLENGE.characters) CHALLENGE.baseCount[c] = 3;
   const made: string[] = [];
   // Each remix is submitted by its maker right after publishing (owner, 2026-11-04: only Submit makes an entry); a
   // version that can't be entered is refused, as on the site.
@@ -941,6 +1073,8 @@ check('the sheets to start from are those made before the window', (await E.star
   await sql`delete from studio.challenge_eligibility where version_id in (select v.id from studio.element_versions v where v.element_id in ${sql(made)})`;
   const st8 = await E.standing(S);
   check('closed bases: afterwards, with the settings put back, the entries are as before', st8.entries.map((e) => e.versionId).sort().join() === st2.entries.map((e) => e.versionId).sort().join());
+  CHALLENGE.maxBases = committedMax2;
+  for (const c of CHALLENGE.characters) CHALLENGE.baseCount[c] = countsWere[c];
 }
 
 globalThis.fetch = realFetch;
@@ -1101,10 +1235,11 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   proof('R3 a status cap read straight from IMAGES (never $15) is caught', !capInStatus(status.replace('dailySpendCapUsd: imagesDailySpendCapUsd()', 'dailySpendCapUsd: IMAGES.dailySpendCapUsd')));
   // R4: an untitled entry's row read "Bai: Bai".
   const CW = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
-  const chPage = read('src/lib/challenge/view.ts');
+  // The entries moved to the rules page with the short /challenge (owner, 2026-11-04).
+  const chPage = read('src/app/challenge/rules/page.tsx');
   check('R4 an untitled entry\'s row is the character alone; a titled one adds its name', CW.entryLabel('Bai', '') === 'Bai' && CW.entryLabel('Bai', '  ') === 'Bai' && CW.entryLabel('Bai', 'Rain coat') === 'Bai: Rain coat');
-  check('R4 /challenge builds both lists\' rows with entryLabel', (chPage.match(/W\.entryLabel\(/g) ?? []).length === 2 && !/\|\| nameOf\(/.test(chPage));
-  proof('R4 a row that repeats the name is caught', /\|\| nameOf\(/.test(chPage.replace('W.entryLabel(nameOf(e.character), e.title)', '`${nameOf(e.character)}: ${e.title || nameOf(e.character)}`')));
+  check('R4 /challenge/rules builds both lists\' rows with entryLabel', (chPage.match(/W\.entryLabel\(/g) ?? []).length === 2 && !/\|\| nameOf\(/.test(chPage));
+  proof('R4 a row that repeats the name is caught', /\|\| nameOf\(/.test(chPage.replace('{W.entryLabel(nameOf(e.character), e.title)}', '{nameOf(e.character)}: {e.title || nameOf(e.character)}')));
   // R5: a newcomer on a starting sheet had no way to /challenge (only an entry's badge linked there).
   const lines = read('src/lib/challenge/sheet-lines.ts');
   const invite = (src: string) => /if \(invite && !standing\) lines\.push\(line\(\{ text: CW\.sheetInvite\(callName\), link: toChallenge \}\)\);/.test(src) && /const toChallenge = \{ href: '\/challenge'/.test(src);
@@ -1149,8 +1284,9 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   // c. Below 0.7: said up front, in the owner's words; the refusal beside Generate, scrolled into view; no new lookup.
   const owner = 'Entering needs a Farcaster account with a Neynar score of 0.7 or more; we check when you press Generate.';
   check('c the up-front line is the owner\'s words exactly', CW.whoCanEnter() === owner, CW.whoCanEnter());
-  const chBody = read('src/components/challenge-body.tsx');
-  check('c /challenge says it up front, under the deadline', /<\/p>\s*\{\/\*[^*]*\*\/\}\s*\{v\.who && <p className="ch-who">\{v\.who\}<\/p>\}\s*<section className="ch-rules">/.test(chBody) && /who: ph !== 'closed' \? W\.whoCanEnter\(\) : null,/.test(read('src/lib/challenge/view.ts')));
+  // With the short /challenge (owner, 2026-11-04), it sits at the top of the rules page, under the deadline.
+  const chPage = read('src/app/challenge/rules/page.tsx');
+  check('c /challenge/rules says it up front, under the deadline', /<\/p>\s*\{\/\*[^*]*\*\/\}\s*\{now !== 'closed' && <p className="ch-who">\{W\.whoCanEnter\(\)\}<\/p>\}\s*<p className="ch-intro">/.test(chPage));
   const form = read('src/components/design-form.tsx');
   const beforeConsent = (src: string) => /<div className="ic-gate">\s*\{p\.challengeOpen && !status\.invited && p\.whoCanEnter && <p className="ch-who">\{p\.whoCanEnter\}<\/p>\}\s*<p>\{W\.form\.consentFirst\}<\/p>/.test(src);
   check('c a challenge fork form says it before the consent screen', beforeConsent(form) && /whoCanEnter=\{challengeOpen \? CW\.whoCanEnter\(\) : undefined\}/.test(read('src/app/references/designs/new/page.tsx')));

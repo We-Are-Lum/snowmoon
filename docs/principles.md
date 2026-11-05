@@ -362,13 +362,31 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   likes, built-on counts, scores, costs or payments. One narrow exception (owner, 2026-11-04; branch
   challenge-three-bases): "Bases to start from" may follow the bases' fixed style order (`CHALLENGE.baseStyles`), by
   `.sort(baseStyleOrder)` inside `startingSheets` only; entries and every other challenge list stay time order. Its
-  planted violation is an entries list ordered by style, which must fail (scripts/lib/p5g.ts).
+  planted violation is an entries list ordered by style, which must fail (scripts/lib/p5g.ts). A second narrow
+  exception (owner, 2026-11-04; branch challenge-landing): /challenge's random selection, a fresh, unweighted shuffle on
+  each visit, drawn from all published remixes of the six characters; no weighting, no counts, no featuring.
+  Randomness in the challenge's code lives only in `shuffleFresh` (src/lib/challenge/shuffle.ts), which takes a list of
+  an unconstrained type and reads nothing about an item, called only by the random selection, on the whole list. It
+  runs in the browser on each visit, from the full list the cached page carries. Its planted violation is a weighted
+  shuffle, which must fail. The same shuffle orders a character's several bases (owner, 2026-11-04: Deluin's and
+  Gladias' three, their current default look and two recasts, in a fresh random order on each visit so none reads as
+  the default), in `src/components/challenge-bases.tsx` only, on the character's whole list (`shuffleFresh(bases)`);
+  shuffling only some of them, or putting them in a fixed order, must fail.
+  A third narrow exception (owner, 2026-11-04; branch challenge-landing; **pending the owner's yes**): below each
+  character's bases, under the heading "First remixes by @naaate", /challenge shows the owner's first remixes of it
+  (`CHALLENGE.firstRemixes`, at most two), in the order the owner sets in the config. Chosen by the owner, never by a
+  count, a like or a payment; no sort reads them. They are not entries: no Entry badge, no count, never in an entry
+  list. Empty slots until they exist.
 - `P5h` (branch characters-by-mentions, 2026-11-04, the owner's decision: "list characters by how often they're named
   in the book, most first, everywhere characters are listed"): character lists take one order, from the book's text
   only: `content/snowmoon/characters-by-mentions.json` must match the text as it is now (regenerated in the check), be
   in its own order (mentions, then name), and be read by `src/lib/character-order.ts`, which reads nothing else; the
   challenge's characters (`CHALLENGE.characters`) must be in that order. Planted: the challenge's characters by
   entrants.
+- `P5i` (branch challenge-landing, 2026-11-04, the owner's decision): while the challenge runs, its remix cards (the
+  random selection and "See all") show no remix, like or built-on count, and the feed (/challenge/remixes) has no "most
+  remixed" or other sort: newest first, filterable by character. A viewer's "most remixed" sort may come back after
+  entries close, by the owner's decision then. Its planted violation is a like count on a card.
 - Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
 **Status.** Pass. (Picks are built on branch phase2-admin and need 0030_admin_picks, applied 2026-10-31.)

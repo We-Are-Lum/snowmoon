@@ -31,17 +31,11 @@ export const CHALLENGE_WORDING = {
   nextHead: 'What happens next.',
   next: () =>
     `At the call on ${d('results')}, Nate shows the versions he’s taking into Episode 1, built from your remixes and credited to you. AI models and a small jury divide the credit for each one among everything it was built on, and we publish how every model did it. We plan to mint each final version as an open edition, with what it raises split among everyone it was built on, including the We Are Lum team. Details come with the mint page.`,
-  bountyHead: 'The bounties.',
-  bounty: () =>
-    `There is one poidh bounty for each character, ${numberWord(CHALLENGE.characters.length)} in all, on Ethereum mainnet, each funded and judged by Nate${CHALLENGE.bountyAmount ? `, ${CHALLENGE.bountyAmount} each` : ''}. Each goes to the remix that most changes how we see that character while staying true to the book. To claim one, your version must be an entry for that character here; post its link as a claim on that character’s bounty. Claiming needs a little ETH on mainnet for gas. A bounty can pay out even if its character has fewer than ${numberWord(CHALLENGE.minEntrants)} entrants; if no claim fits, Nate cancels it.`,
-  /** The judging line for one character's bounty (owner, 2026-11-01). */
-  bountyFor: (name: string) => `The bounty for ${name}: the remix that most changes how we see ${name} while staying true to the book.`,
-  bountyLink: (name: string) => `${name}’s bounty on poidh`,
   rulesHead: 'The rules.',
   rules: () => [
     'Make your remix on snowmoon.party with the site’s tools. Every recipe is published.',
-    // Draft wording (owner, 2026-11-03: three bases per character).
-    'Only remixes count: for each character, start from any of its three bases, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
+    // Draft wording (owner, 2026-11-04: one base per character, three for Deluin and Gladias; was three each, 2026-11-03).
+    'Only remixes count: for each character, start from one of its bases, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
     // Draft wording (owner, 2026-11-04: Submit, three per person, the post link).
     `A remix becomes an entry only when you press Submit on its page, with a link to your own post about it on Farcaster, Bluesky or Lens. You can submit up to ${numberWord(CHALLENGE.submissionsPerPerson)}, for one character or several. Until entries close you can withdraw one, which frees its place.`,
     // Draft wording (owner, 2026-11-03: make it clear an account below the check can't remix; launch rehearsal item 3).
