@@ -355,7 +355,17 @@ Who does each: **O** the owner, **C** the coordinator, **A** an agent.
   pages); check:miniapp passed; check:principles 60 of 63, the three fails expected: P6d (accepted open item), P6k
   (Privacy awaits the reread of L12 and L16) and P6a (only on a local target: the site's own media.snowmoon.party and
   pictures.snowmoon.party count as third-party when the target is 127.0.0.1).
-- [ ] **The checks again after the switch commit** (A).
+- [x] **The checks again after the switch commit** (A, 2026-11-05 07:31–08:07 PT, `bluesky-check` at 1f882675, local
+  build at http://127.0.0.1:3210): tsc 0 errors (signin-lens-bluesky, bluesky-check, contest);
+  test:signin-lens-bluesky 21/21, test:bluesky-check 64/64, test:check-decisions 44/44, test:images-gate 130,
+  test:wallet 193, test:sql-pack 187/187; check:principles 61 of 63 (**P6k and P6l pass**; only P6d, the accepted
+  open item, and P6a, a local-target artifact, fail); check:miniapp passed; check:ui passed (59 pages) once it was
+  taught to expect the four sign-in buttons that SIGN_IN_METHODS now turns on (it had hard-coded two;
+  signin-lens-bluesky, "check:ui: the sign-in buttons it expects follow SIGN_IN_METHODS").
+- [ ] **check:snap-live runs after deploy, against production.** It doesn't work on a local target: its composer and
+  challenge-link checks compare against the public host and a production-signed link (on 127.0.0.1 they 404 or name
+  localhost). This release's `next.config.ts` change is only the local-only `NEXT_PUBLIC_SIGN_IN_ALL_FOUR` guard, not
+  the snap's headers.
 - [ ] **PR from `bluesky-check`** (one PR; it carries signin-lens-bluesky), the owner's OK, merge commit, deploy,
   live checks (check:shipped, check:principles, check:ui, check:miniapp; check:snap-live only if `next.config.ts` or
   middleware changed; this branch changes `next.config.ts`, so run it).
