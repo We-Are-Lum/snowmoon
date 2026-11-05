@@ -39,8 +39,8 @@ spending. Legal and consent lines go to the coordinator first.
 
 | # | Item | State |
 |---|------|-------|
-| 0 | Sign-in release (#117, fd632855) live checks | shipped, principles (P6d only), miniapp, snap-live pass; check:ui re-run at fd632855 queued (the first run used a stale local build) |
-| 1 | You page wording (+ 0035/0036 header fix): ship alone after check:ui passes | waiting for that check:ui (branch you-page-wording 2ed40c60) |
+| 0 | Sign-in release (#117, fd632855) live checks | all pass: shipped, principles (only P6d, the accepted item), miniapp, snap-live, and check:ui (59 pages) from a fresh build at fd632855; the first check:ui run had used a stale local build |
+| 1 | You page wording (+ 0035/0036 header fix): ship alone after check:ui passes | merged as #118 (947154ec), typecheck 0 first; deploying, live checks next |
 | a | Assistant step 1 (switch off, tests, drafted lines, chat_calls migration if needed) | running (branch assistant-any-account) |
 | b | Linked accounts v2 build on linked-accounts (switch off, chain + takeover tests) | running |
 | c | Admin dashboard build on admin-activity | waiting (if time) |
