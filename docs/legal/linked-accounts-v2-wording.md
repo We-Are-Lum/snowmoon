@@ -75,3 +75,21 @@ shows the sign-in's name.
 Not built in this run (words stay as the design drafts them): the recovery banner, the single-sign-in nudge, the
 existing-wallet notice, "Your Snowmoon account", "Main sign-in" / "Choose another", "Other sign-ins", "Link a social
 account or wallet (needs your main sign-in)", "Ask to become the main sign-in".
+
+## Added after the owner's answers (2026-11-05, later)
+
+- **The You page panel's words** (`src/lib/linked/wording.ts`, `panel`, DRAFT, behind the switch), redrafted because
+  v1's said the opposite of v2 (before → after):
+  - intro: "Accounts you link are one person here: your free images and frames, limits and the remix challenge count
+    once for all of them, and your work shows under one name." → "Your Snowmoon account keeps your work, challenge
+    entries, balance and name. Each social account or wallet you link is a way in; your main sign-in manages them."
+  - unlink question: "Unlink this account? Its work will show under its own name again, and it can be linked to someone
+    else only after 30 days." → "Unlink this sign-in? It takes nothing with it: its work stays with your Snowmoon
+    account. For 30 days it can't join or start another Snowmoon account."
+  - before linking: "Your work from both accounts will be shown under one name, so anyone can see they are yours." →
+    "What you made with it belongs to your Snowmoon account and is shown under the one name you choose, so anyone can
+    see it is yours."
+- v1's other words are removed: the link and unlink refusals (replaced by v2's list above), the A2 Generate line
+  ("free images and frames are off for you until …", which v2 has no use for) and the A7 freeze line.
+- New refusal: payment-address: "This address can't be linked." (v1's words, kept.)
+- The stable address: 8 characters from `abcdefghjkmnpqrstuvwxyz23456789` (no 0, o, 1, l or i), e.g. `k7m2qx9d`.
