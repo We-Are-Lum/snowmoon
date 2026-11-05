@@ -1,4 +1,4 @@
-# Run status: long run of 2026-11-04 (from about 16:15 PT)
+# Run status: long run of 2026-11-04 (from about 16:15 PT; all five items done by about 18:25)
 
 Kept by the coding agent (Claude, a closed model by Anthropic). Pushed after each item. No secrets here. Nothing is
 merged, applied to production or published during this run; legal lines go to the coordinator first.
@@ -7,7 +7,7 @@ merged, applied to production or published during this run; legal lines go to th
 |---|------|-------|
 | 1 | Recast redo and views; Midjourney first remixes; contact sheet | done (Deluin b needs your words) |
 | 2 | Owed checks on changed branches (M22: the Minpentai session runs it) | done (17:55) |
-| 3 | Lane A: challenge-landing task; contest branch; rehearsal; dress run | running (after item 2) |
+| 3 | Lane A: challenge-landing task; contest branch; rehearsal; dress run | done; rehearsal 1 ready for you |
 | 4 | Lane B: paying per person (design, migration copy blocks, draft lines) | done (branch person-balance; whole-project typecheck owed) |
 | 5 | Lens page: typecheck, running on localhost | done (ready for you to sign) |
 
@@ -83,7 +83,15 @@ day (withdraw keeps the row); Submit's post check; /challenge/entries (newest fi
 shuffle; "See the conversation on …" links; counts off). Typecheck and build pass; tests: challenge 510, rehearsal 38,
 daily-sql 25; check:principles 61/64 (P6a, P6d, and P6k: the merged Privacy text waits for your reread).
 
-**3. Lane A so far:** challenge-landing has main merged in (365 challenge tests pass). Branch `contest`: merges done;
+**3c–3d. Rehearsal ready (done 18:2x).** Your two values are in .env.rehearsal.local (count only). Dress run with two
+made-up test persons and stand-in casts from a file: 22 of 22 steps passed (remix made for real, publish, someone
+else's cast and a cast without the link refused, Submit, listed on "Every entry" and under its character, no counts,
+withdraw, a second same-day submission refused, database the rehearsal's, R2 untouched). $0.053 for two runs, under
+the $1 cap. The database was reset; no servers running. **How to run it:** docs/rehearsal-1.md on `contest` (Drive:
+"Snowmoon: Rehearsal 1 (Farcaster), how to run it"). Legal drafts: docs/legal/contest-draft.md (Drive: "Snowmoon:
+Contest branch, new words and legal lines (DRAFT)"), with the coordinator's note on Terms §6e.
+
+**3. Lane A along the way:** challenge-landing has main merged in (365 challenge tests pass). Branch `contest`: merges done;
 rehearsal switch, local rehearsal database (starts and seeds), one submission per Pacific day (migration
 NEXT_challenge_daily.sql, which replaces the SQL pack's NEXT_challenge_submit.sql); tests pass (challenge 510,
 rehearsal 38, daily-sql 25). Your two values are in .env.rehearsal.local (checked by count only). Typecheck, checks
@@ -93,6 +101,10 @@ and the dress run wait for the lock.
 on localhost (HTTP 200) with the metadata link and "Sign in with my wallet". The server was stopped afterwards.
 
 ## Blocked
+
+Nothing blocked. Not checked: your own Farcaster sign-in on 127.0.0.1 and a real cast through Neynar (they need
+you); `npm run rehearsal` as a command (the dress run started the same server from its own script); P7c on fund-page
+(network).
 
 ## Needs the owner
 
