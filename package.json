@@ -42,6 +42,7 @@
     "test:person-balance-code": "tsx --conditions=react-server scripts/test-person-balance-code.ts",
     "test:linked-accounts-sql": "tsx scripts/test-linked-accounts-sql.ts",
     "test:linked-accounts": "tsx --conditions=react-server scripts/test-linked-accounts.ts",
+    "test:linked-accounts-v2": "tsx --conditions=react-server scripts/test-linked-accounts-v2.ts",
     "test:signin-lens-bluesky": "tsx --conditions=react-server scripts/test-signin-lens-bluesky.ts",
     "test:bluesky-check": "tsx --conditions=react-server scripts/test-bluesky-check.ts",
     "verify:lens-app": "tsx scripts/verify-lens-app.ts",

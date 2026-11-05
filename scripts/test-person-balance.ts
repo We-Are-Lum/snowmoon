@@ -98,13 +98,13 @@ await pg.exec(`
   insert into studio.wallet_payments (tx_hash, account_id, chain_id, token, amount, usd, block_number)
     select '${OLD_TX}', id, 8453, 'USDC', 5000000, 5, 37000000 from studio.wallet_accounts where address = '0x4fea94b8947926ddd3c02f4e133357b547f74ff0';`);
 
-// The pack, from its doc on origin/sql-pack.
-const PACK = ['1', '2', '3', '4', '5'];
+// The pack's items still pending after main's 0034-0036 (items 1, 2 and 5 are applied and on main), from its doc on origin/sql-pack.
+const PACK = ['3', '4', '6'];
 const packDoc = gitShow('origin/sql-pack:docs/legal/sql-pack-2026-11-04.md');
 const pack = new Map<string, string>();
 if (packDoc === null) check('the SQL pack is readable from origin/sql-pack', false, 'git show failed; run git fetch');
 else for (const m of packDoc.matchAll(/^### (\d[A-D])\. [^\n]*\n[\s\S]*?```sql\n([\s\S]*?)\n```/gm)) pack.set(m[1], m[2]);
-check('the pack has its 20 blocks', PACK.every((k) => ['A', 'B', 'C', 'D'].every((x) => pack.has(k + x))), [...pack.keys()].join());
+check('the pack has its pending items\' blocks (3, 4, 6)', PACK.every((k) => ['A', 'B', 'C', 'D'].every((x) => pack.has(k + x))), [...pack.keys()].join());
 for (const k of PACK) {
   let err: string | null = null;
   await pg.exec(pack.get(`${k}B`) ?? 'select 1').catch((e: Error) => (err = e.message));
