@@ -28,7 +28,7 @@ import { CLOSED_IMAGE_MODELS, closedImage, retentionRefusal, type ClosedImageMod
 const ROOT = path.resolve(import.meta.dirname, '..');
 const DIR = path.join(ROOT, 'docs/starting-sheet-drafts/directions');
 const LEDGER = path.join(DIR, 'ledger.json');
-const CAP = 0.37; // the recast's own cap: $0.30, +$0.07 for Deluin b's redo (owner, 2026-11-04; part of the $0.60 raise)
+const CAP = 0.44; // the recast's own cap: $0.30, +$0.07 for Deluin b's redo (part of the $0.60 raise), +$0.07 for Deluin b in the owner's new words (owner, 2026-11-04, about $0.20 with its views)
 const GUARD_WORST = 0.0015;
 const DRY = process.argv.includes('--dry');
 const sha = (b: Buffer) => createHash('sha256').update(b).digest('hex');
@@ -48,6 +48,8 @@ const RECASTS: { char: string; front: string; was: string; options: { id: string
       { id: 'b', now: 'warm golden-brown skin, straight shoulder-length black hair, dark brown eyes' },
       // Redone once with the same words (owner, 2026-11-04): b's skin came out flat yellow-orange.
       { id: 'b2', now: 'warm golden-brown skin, straight shoulder-length black hair, dark brown eyes' },
+      // b in the owner's new words (2026-11-04): "golden" came out yellow twice.
+      { id: 'b3', now: 'warm tan skin, straight shoulder-length black hair, dark brown eyes' },
     ],
   },
   {

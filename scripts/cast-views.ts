@@ -48,6 +48,8 @@ const BASES: { char: string; front: string; name?: string; descriptor?: { was: s
   // The recast bases (owner, 2026-11-04): every look of Deluin and Gladias is a challenge base. Deluin b waits for its words.
   { char: 'deluin', front: 'directions/deluin-recast-a-gemini.jpg', name: 'deluin-recast-a' },
   { char: 'gladias', front: 'directions/gladias-recast-a-gemini.jpg', name: 'gladias-recast-a' },
+  // Deluin b in the owner's words of 2026-11-04 ("warm tan skin, …"); the third try at b.
+  { char: 'deluin', front: 'directions/deluin-recast-b3-gemini.jpg', name: 'deluin-recast-b' },
   {
     char: 'gladias', front: 'directions/gladias-recast-b-gemini.jpg', name: 'gladias-recast-b',
     // The owner changed b's words to match its picture (2026-11-04); the front's recipe keeps the words it was made from.
@@ -60,7 +62,7 @@ const ledger = JSON.parse(readFileSync(LEDGER, 'utf8')) as { calls: Row[] } & Re
 const save = () => writeFileSync(LEDGER, JSON.stringify(ledger, null, 1));
 // The recast tests (scripts/recast-fronts.ts) have their own $0.30 cap and don't count here.
 const spent = () => ledger.calls.filter((c) => c.recast !== true).reduce((n, c) => n + c.costUsd, 0);
-/** None held now (Deluin's current look and option a are bases; Deluin b waits for its words and isn't listed). */
+/** None held now: Deluin's three looks and Gladias's three are all listed. */
 const HELD = new Set<string>();
 const gate = (what: string, worst: number) => {
   const after = spent() + worst;

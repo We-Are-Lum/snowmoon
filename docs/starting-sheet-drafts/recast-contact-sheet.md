@@ -23,3 +23,22 @@ face, beard and throat band are kept in all four.
 After your pick: descriptor and sheet_prompt in both character files and their sheet jobs in `cast.json`; Deluin's side
 and back views; Gladias's side and back views again (the current ones are of the old look); then the re-render list
 (`recast-rerender-list.md`), for your overnight run.
+
+## Update, 2026-11-04 evening: the bases and current defaults
+
+Nothing is canonical (owner): all three looks of Deluin and of Gladias are challenge bases, shown in a random order on
+each visit. Look b is the **current default** for the site's own pictures until the challenge or the owner changes it.
+
+- **Deluin b**, in the owner's words "warm tan skin, straight shoulder-length black hair, dark brown eyes" (the third
+  try; "golden" came out yellow twice). Skin, hair and eyes match the words. The model added a **green shoulder bag**
+  that isn't in his clothes; it shows in the front and back views but not the side one. Say if you want the front
+  made again without it (about $0.07 plus $0.14 for the views).
+
+<table><tr><td><img src="directions/deluin-recast-b3-gemini.jpg" width="200" alt="Deluin b, front, AI-generated draft"></td><td><img src="directions/deluin-recast-b-side-gemini.jpg" width="200" alt="Deluin b, side, AI-generated draft"></td><td><img src="directions/deluin-recast-b-back-gemini.jpg" width="200" alt="Deluin b, back, AI-generated draft"></td></tr></table>
+
+- **Gladias b** in the owner's corrected words: "warm light-brown skin, short straight black hair greying at the
+  temples, a neatly trimmed short beard and dark eyes"; views on the views sheet.
+- Character files and cast.json sheet jobs now hold b for both (Deluin's fixed description too, its old words kept in
+  its history). The chapter re-render waits for the owner's overnight go.
+- Spending: recast $0.40329 of $0.44; views $2.67253 of $2.83 (Gemini 3.1 Flash Image, a closed model by Google, Vertex,
+  zero retention). Deluin b in the owner's words cost $0.20342 (front $0.06718, views $0.13776, checks included).
