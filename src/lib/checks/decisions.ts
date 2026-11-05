@@ -1,6 +1,8 @@
 import 'server-only';
 import type postgres from 'postgres';
 import { CHECKS } from '../config';
+import { isSocialPerson, socialAccountOf } from '../people';
+import { socialAccount } from '../social/accounts';
 
 /**
  * Stored decisions for sign-in checks (owner, 2026-11-04: "look each account up as rarely as possible"; "store the
@@ -9,7 +11,7 @@ import { CHECKS } from '../config';
  *
  * What is kept, in studio.check_decisions (migration 0034_check_decisions): the network, the account (a FID in digits,
  * a Lens address, a DID), the rule it was checked against (`threshold`, text: 'neynar-score>=0.7',
- * 'lens-score>=1000', 'made-before-2026-11-06+5posts30d'), whether it passed, and when. Never a score, an age, a count.
+ * 'lens-score>=1000', 'age30d+5posts30d'), whether it passed, and when. Never a score, an age, a count.
  *
  * - A pass is current for CHECKS.passDays (90) days; a fail for CHECKS.failHours (24) hours. While a decision is current
  *   the check is not asked again: currentDecision() returns it. null means: look the account up, then decide().
@@ -127,4 +129,11 @@ export async function anyCurrentPass(sql: Sql, accounts: readonly Account[]): Pr
  */
 export async function recheckMaker(sql: Sql, maker: number): Promise<void> {
   if (maker > 0) await markForRecheck(sql, 'farcaster', maker);
+  // A Lens account's own maker number (signin-lens-bluesky): its Lens pass is withdrawn too (owner, 2026-11-04).
+  if (isSocialPerson(maker)) {
+    const row = await socialAccount(sql, socialAccountOf(maker)).catch(() => null);
+    if (row?.kind === 'lens') await markForRecheck(sql, 'lens', row.subject);
+    // A Bluesky account's own maker number (bluesky-check): its Bluesky pass is withdrawn too (owner, 2026-11-04, 4.6).
+    if (row?.kind === 'bluesky') await markForRecheck(sql, 'bluesky', row.subject);
+  }
 }

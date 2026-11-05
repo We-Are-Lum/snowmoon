@@ -6,6 +6,7 @@ import { baseStyleOrder, basesOf, remixOfBase } from './rules';
 import { CHALLENGE, WORK_ID } from '../config';
 import { challengeVisibleTo } from './visibility';
 import { bookCharacter } from '../images/designs';
+import { isSocialPerson } from '../people';
 import { chooseEntries, entrantCounts, fromDecision, type Decision, inWindow, markKey, newestFirst, phase, shortDateText, type Candidate, type Eligibility } from './rules';
 
 /**
@@ -54,7 +55,7 @@ export async function windowVersions(sql: Sql): Promise<ChallengeVersion[]> {
       const b = (r.body ?? {}) as { title?: string; by_name?: string | null; samples?: { url: string }[]; views?: { front?: { url: string } } };
       return {
         versionId: String(r.version_id), elementId: String(r.element_id), character, maker,
-        person: maker > 0 ? maker : 0, createdAt: new Date(r.created_at).toISOString(), forked: remixOfBase(character, lines.get(String(r.element_id)) ?? [], CHALLENGE.bases, refused),
+        person: maker > 0 || isSocialPerson(maker) ? maker : 0, createdAt: new Date(r.created_at).toISOString(), forked: remixOfBase(character, lines.get(String(r.element_id)) ?? [], CHALLENGE.bases, refused),
         versionNo: Number(r.version_no), title: b.title ?? '', byName: b.by_name ?? null, thumb: b.views?.front?.url ?? b.samples?.[0]?.url ?? null,
       };
     })

@@ -5,6 +5,7 @@ import { checkPrompt } from './guard';
 import { ImageUnavailable, type Made } from './fal';
 import { fundedBy, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
 import { blockedName } from './rules';
+import { FREE_WORDING } from '../social/free';
 import { IMAGE_WORDING } from './wording';
 import { creditBack } from '../wallet/credits';
 
@@ -35,6 +36,8 @@ export const LIMIT_SAY = {
   spend: 'Image making has reached today’s spending limit for everyone. It comes back at 00:00 UTC.',
   balance: IMAGE_WORDING.prepaid.lowBalance,
   'prepaid-spend': IMAGE_WORDING.prepaid.dailyCap,
+  /** A Lens or Bluesky account without free generations (src/lib/social/free.ts). DRAFT wording. */
+  'no-free': FREE_WORDING.none,
 } as const;
 const say = (refusal: keyof typeof LIMIT_SAY, fid: number) => (refusal === 'limit' ? LIMIT_SAY.limit(perDay(fid)) : LIMIT_SAY[refusal]);
 /** A failure's words, and, when a wallet account's Generate was credited back, that it was. */

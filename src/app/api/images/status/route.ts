@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { isAdmin } from '~/lib/admins';
+import { isSocialPerson } from '~/lib/people';
+import { freeFor } from '~/lib/social/free';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES, imagesDailySpendCapUsd } from '~/lib/config';
@@ -80,6 +82,15 @@ export async function GET(request: Request) {
     const [consented, left, publishes, kept, picks] = await Promise.all([
       hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited || fid < 0 ? Promise.resolve(null) : keptDecision(sql, fid, IMAGES.neynarMinScore).catch(() => null), myPicks(sql, fid),
     ]);
+    if (isSocialPerson(fid)) {
+      // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides; no balance.
+      // Never asks Lens here (variant B: only Generate does); with no decision yet, eligible is null until Generate.
+      const d = await freeFor(sql, fid, { lookUp: false });
+      return NextResponse.json(
+        { ...base, signedIn: true, fid, invited: false, eligible: d ? d.free : null, refusal: d && !d.free ? d.error : undefined, consented, left, publishesLeft: publishes, picks: offer(picks) },
+        { headers: { 'Cache-Control': 'no-store' } },
+      );
+    }
     if (fid < 0) {
       // A wallet account: no daily count and no Neynar score; its balance pays (owner, 2026-10-13).
       const open = prepaidOpen() && openToEveryone().open;

@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from 'node:crypto';
+import { socialByline } from '~/lib/social/byline';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { getPerson, getWallet } from '~/lib/auth';
@@ -60,7 +61,7 @@ export async function POST(request: Request) {
   // The byline (decision 12): the relay's name signed at website sign-in, else Farcaster's public API.
   // A wallet account's byline is its address, shortened (owner, 2026-10-13).
   const wallet = fid < 0 ? getWallet(request) : null;
-  const by = wallet ? { name: shortAddress(wallet.address), source: 'wallet' as const } : await bylineName(fid, body.nameProof);
+  const by = wallet ? { name: shortAddress(wallet.address), source: 'wallet' as const } : (socialByline(request, fid) ?? (await bylineName(fid, body.nameProof)));
   const url = await putPublic(t.sha256, bytes, 'image/jpeg');
   const recipeId = randomUUID(), elementId = randomUUID(), versionId = randomUUID();
   await sql.begin(async (tx) => {

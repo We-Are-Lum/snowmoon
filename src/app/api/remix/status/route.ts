@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { isSocialPerson } from '~/lib/people';
+import { freeFor } from '~/lib/social/free';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES, REMIX, remixFreeOn, remixGenerateOn } from '~/lib/config';
@@ -54,6 +56,12 @@ export async function GET(request: Request) {
       shot ? myFrames(sql, person, version, shot.id) : Promise.resolve([]),
     ]);
     const mine = frames.map((f) => ({ id: f.id, url: f.imageUrl, words: f.ownWords, hidden: f.hidden, hiddenRole: f.hiddenRole, at: f.createdAt, page: `/remix/${f.id}` }));
+    if (isSocialPerson(person)) {
+      // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides; no balance.
+      // Never asks Lens here (variant B: only Generate does); with no decision yet, eligible is null until Generate.
+      const d = await freeFor(sql, person, { lookUp: false });
+      return NextResponse.json({ ...base, signedIn: true, perDay: perDay(person), eligible: d ? d.free : null, refusal: d && !d.free ? d.error : undefined, consented, left, frames: mine, maintainer: false }, { headers: noStore });
+    }
     if (person < 0) {
       const open = prepaidOpen() && openToEveryone().open;
       const prepaid = { balanceUsd: await balanceUsd(sql, -person), priceUsd: priceUsd(reserveUsd), markup: IMAGES.prepaid.markup };

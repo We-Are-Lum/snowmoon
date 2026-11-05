@@ -16,7 +16,7 @@ export interface DesignBody {
   views: { front?: DesignPicture; side?: DesignPicture; back?: DesignPicture };
   /** The maker's Farcaster name when published (decision 12), else null and the byline is the FID. */
   by_name: string | null;
-  by_name_source: 'relay' | 'farcaster-api' | 'wallet' | null;
+  by_name_source: 'relay' | 'farcaster-api' | 'wallet' | 'lens' | 'bluesky' | null;
   /** Which parts a model drafted (the project's starting style), or null when all are the person's words. */
   assist: { model: string; drafted: string[]; source?: string } | null;
   /** 'maintainer' when the maintainer published it for the project (the starting style, decision 13); absent otherwise. */
