@@ -7,6 +7,7 @@ import { IMAGES } from '~/lib/config';
 import { workOf } from '~/lib/images/designs';
 import { REASONS } from '~/lib/images/reasons';
 import { moveToPrivate } from '~/lib/images/store';
+import { recheckMaker } from '~/lib/checks/decisions';
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -35,6 +36,8 @@ export async function POST(request: Request, { params }: Ctx) {
   const [day] = await sql`select count(*)::int as n from studio.removal_log where by_fid = ${fid} and step = 'reported' and at > now() - interval '1 day'`;
   if (day.n >= IMAGES.reportsPerDay) return NextResponse.json({ error: `You can report ${IMAGES.reportsPerDay} images a day` }, { status: 429 });
   await sql`insert into studio.removal_log ${sql({ element_id: el.elementId, step: 'reported', by_fid: fid, role: 'reader', reason, note: text || null })}`;
+  // A reported account is checked again at its next Generate or publish (owner, 2026-11-04).
+  await recheckMaker(sql, el.byFid);
   const [n] = await sql`select count(distinct by_fid)::int as n from studio.removal_log where element_id = ${el.elementId} and step = 'reported'`;
   const rule = IMAGES.hideAtOnce.includes(reason) ? `one "${reason}" report` : n.n >= IMAGES.hideAfterReporters ? `${n.n} reporters` : null;
   if (rule) {

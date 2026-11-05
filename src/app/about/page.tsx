@@ -85,10 +85,11 @@ export default async function About() {
         of the request. The image is shown to you as a draft, kept only on your device; it becomes public only if you publish
         it. The book&apos;s text is never sent to a model.
       </p>
-      {/* Model-drafted wording (the image gate, Neynar score; owner, 2026-10-09). */}
+      {/* Model-drafted wording (the image gate, Neynar score; owner, 2026-10-09; decisions not scores, branch check-decisions, 2026-11-04, pending the owner's reread). */}
       <p>
-        Neynar receives your Farcaster ID when you make an image, to look up its account score, which decides whether you can
-        make images. The score is kept for a day.
+        Neynar receives your Farcaster ID when you make an image and your account has no current check, to look up its account
+        score, which decides whether you can make images. The score isn&apos;t kept: only whether your account passed and when,
+        for up to 90 days (a day if it didn&apos;t pass).
       </p>
       <p>Rules: {RULES}</p>
       <p>
