@@ -215,10 +215,17 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   const tables = (await sql<{ t: string }[]>`select table_name as t from information_schema.tables where table_schema = 'studio' and table_type = 'BASE TABLE'`).map((r) => r.t);
   await sql`reset role`;
   const leaks: string[] = [];
+  // The numbers are looked for as whole numbers outside timestamps: a row's own time can end in ".900Z" by chance
+  // (the adaptation seeds, made in one transaction, share one), which says nothing about the Bluesky facts.
+  const ISO = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:?\d{2})/g;
+  const holds = (json: string, x: string) => (/^\d+$/.test(x) ? new RegExp(`(?<![0-9.])${x}(?![0-9])`).test(json.replace(ISO, 'T')) : json.includes(x));
   for (const t of tables) {
     const all = await sql.unsafe(`select * from studio.${t}`);
-    for (const x of RAW.filter((x) => x !== 'old.bsky.social')) if (JSON.stringify(all).includes(x)) leaks.push(`${t}: ${x}`);
+    for (const x of RAW.filter((x) => x !== 'old.bsky.social')) if (holds(JSON.stringify(all), x)) leaks.push(`${t}: ${x}`);
   }
+  // Proof that the narrower match still finds a raw count stored as a value, and ignores one inside a timestamp.
+  proof('K3 a post count stored in a row is found', holds(JSON.stringify([{ id: 1, posts: 900 }]), '900'));
+  check('K3 a timestamp ending in .900 is not taken for a post count', !holds(JSON.stringify([{ at: '2026-11-05T20:50:54.900Z' }]), '900'));
   await sql`set role studio_writer`;
   check('K3 no studio table holds an account\'s dates, counts or post words', leaks.length === 0, leaks.join(', '));
   proof('K3 a table with a posts column would be caught', rawIn([...cols, 'recent_posts'].sort(), rows));
@@ -290,11 +297,21 @@ const realFacts = (did: string) => B.blueskyFacts(did);
   // (Branch linked-accounts: NEXT_linked_accounts adds the owner stamp and which linked account passed, neither a score
   // nor a count; they are left out of the comparison.)
   check('K7 the decision is kept with account "bluesky", and no score or count', row?.account === 'bluesky' && row.decision === 'passed' && Object.keys(row).filter((k) => !['person_id', 'via', 'via_account'].includes(k)).sort().join() === 'account,challenge,checked_at,decision,eligible,fid,version_id', JSON.stringify(row));
-  let refused = false;
-  await sql`insert into studio.challenge_eligibility ${sql({ version_id: v.id, challenge: 'other', fid: -5, decision: 'passed', eligible: true, account: 'bluesky' })}`.catch(() => (refused = true));
+  // Each refusal is decided inside the database (a function that runs the insert and catches its error), so no error
+  // crosses PGlite's socket server: after an error, that server can deliver the next query's reply out of turn, so a
+  // refusal read from a client-side error could be misattributed (it failed the planted check intermittently).
+  // Fresh versions, so a refusal can only be the rule's, not version_id's uniqueness.
+  await sql`reset role`;
+  const [v2] = await sql`insert into studio.element_versions (element_id, version_no, body) values (${el.id}, 2, '{}') returning id`;
+  const [v3] = await sql`insert into studio.element_versions (element_id, version_no, body) values (${el.id}, 3, '{}') returning id`;
+  await sql.unsafe(`create function pg_temp.refuses(q text) returns boolean language plpgsql as $fn$ begin execute q; return false; exception when others then return true; end $fn$`);
+  await sql`set role studio_writer`;
+  const refuses = async (versionId: string, challenge: string, fid: number) =>
+    (await sql<{ r: boolean }[]>`select pg_temp.refuses(${`insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible, account) values ('${versionId}', '${challenge}', ${fid}, 'passed', true, 'bluesky')`}) as r`)[0]?.r === true;
+  const refused = await refuses(String(v2.id), 'other', -5);
   check('K7 a wallet account\'s number is refused in challenge_eligibility', refused);
-  let refused2 = false;
-  await sql`insert into studio.challenge_eligibility ${sql({ version_id: v.id, challenge: 'x2', fid: 6786, decision: 'passed', eligible: true, account: 'bluesky' })}`.catch(() => (refused2 = true));
+  const refused2 = await refuses(String(v3.id), 'x2', 6786);
+  check('K7 a Bluesky account\'s own row with a fresh version goes in through the same function (the refusals are the rule\'s)', !(await refuses(String(v3.id), 'x3', Number(sky))));
   proof('K7 a Farcaster ID marked as a Bluesky account is refused', refused2);
 }
 
