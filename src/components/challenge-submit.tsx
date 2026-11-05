@@ -20,7 +20,7 @@ import { PostLinkField } from './post-link-field';
  * page script, 2026-11-05). Plain links: no script or request of theirs on our page, no new sign-in scope, nothing
  * stored. The person then pastes their post's address, as before.
  */
-export function ChallengeSubmit({ versionId, byFid, words: W, path, compact = false, castHash: madeCast = null }: {
+export function ChallengeSubmit({ versionId, byFid, words: W, path, compact = false, castHash: madeCast = null, before = null }: {
   versionId: string;
   byFid: number;
   words: SubmitWords;
@@ -30,6 +30,8 @@ export function ChallengeSubmit({ versionId, byFid, words: W, path, compact = fa
   compact?: boolean;
   /** A cast just made by the share buttons above, in the Farcaster app: Submit sends it when no address is typed. */
   castHash?: string | null;
+  /** Shown above it, to its maker only (a challenge picture's page: "Then submit it as an entry · one a day"). */
+  before?: React.ReactNode;
 }) {
   const auth = useAuth();
   const social = useSocialSession();
@@ -98,6 +100,7 @@ export function ChallengeSubmit({ versionId, byFid, words: W, path, compact = fa
 
   return (
     <div className="ch-submit">
+      {before}
       {done ? (
         <p className="ch-mark">
           <button type="button" className="ic-secondary" onClick={() => send('DELETE')} disabled={busy}>

@@ -53,11 +53,20 @@ export function ChallengePicture({ id }: { id: string }) {
       </figure>
       <ChallengeShareFirst path={path} w={{ head: mine ? v.w.published : v.w.shareHead, text: v.w.postText, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} onCast={setCastHash} />
       {v.submit && (
-        <section className="sf-submit" aria-labelledby="sf-submit-head">
-          <h2 id="sf-submit-head" className="sf-head">
-            {v.w.thenSubmit} <span className="dz-muted">· {v.w.oneADay}</span>
-          </h2>
-          <ChallengeSubmit versionId={v.versionId} byFid={v.byFid} words={v.submit} path={path} compact castHash={castHash} />
+        <section className="sf-submit" aria-label={v.w.thenSubmit}>
+          <ChallengeSubmit
+            versionId={v.versionId}
+            byFid={v.byFid}
+            words={v.submit}
+            path={path}
+            compact
+            castHash={castHash}
+            before={
+              <h2 className="sf-head">
+                {v.w.thenSubmit} <span className="dz-muted">· {v.w.oneADay}</span>
+              </h2>
+            }
+          />
         </section>
       )}
       {!signedIn && (
