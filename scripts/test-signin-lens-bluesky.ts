@@ -18,6 +18,8 @@
  *  L2 Lens: a manager's signature signs in as the account it manages (act.sub), not as the manager.
  *  L3 Lens: refused: another wallet's signature (Lens's WrongSignerError), an ID token signed by a key not in Lens's
  *     JWKS, one for another App, an expired one, one naming another account than the ticket's, a changed ticket.
+ *  L4 Lens: the page signs Lens's real message (hostname without port, URI with it) and refuses another host,
+ *     wallet or chain.
  *  B1 Bluesky: the loopback client starts (PAR with PKCE and DPoP, after Lens-style nonce retry) and the callback
  *     signs in as the DID, with the handle that resolves back to it.
  *  B2 Bluesky: refused: a changed state, another issuer, a changed sealed state, a token for another DID, a DID whose
@@ -1012,6 +1014,46 @@ add({
 
 // ==================================================================================================================
 let failed = 0;
+// L4: Lens's real message format (read from api.lens.xyz on 2026-11-05 with three origins). Its first line carries
+// the hostname only, never the port, and its URI line the whole origin. The page's check refused every Lens sign-in on
+// 127.0.0.1:3000 because it compared the first line with location.host, port included (owner's run, 2026-11-05).
+const { lensMessageProblem } = await import('../src/lib/social/lens-message');
+// The old check (the plant): the first line compared with location.host, port included.
+const oldLensCheck = (text: string, site: { origin: string }, wallet: string) =>
+  text.startsWith(`${new URL(site.origin).host} wants you to sign in`) && text.toLowerCase().includes(wallet.toLowerCase()) ? null : 'domain';
+const realLens = (host: string, origin: string, wallet: string, chain = 232) =>
+  `${host} wants you to sign in with your Ethereum account:\n${wallet}\n\nSign in with Ethereum to 0x3CD3dF83e3F74e855d7c4104a8ed9EBa23FaaE47\n\nURI: ${origin}/\nVersion: 1\nChain ID: ${chain}\nNonce: 4550e080-c8c2-4fca-86b8-23190afaf487\nIssued At: 2026-11-05T17:12:04.828345578+00:00`;
+add({
+  id: 'L4',
+  name: "Lens: the page signs Lens's real message for this site (hostname without port, URI with it) and refuses another host, wallet or chain",
+  load: async () => {
+    const W = '0xC1aeBd6f0D37611d744B0ECD0865984fbCb4B4c4';
+    const live = { hostname: 'snowmoon.party', origin: 'https://snowmoon.party' };
+    const local = { hostname: '127.0.0.1', origin: 'http://127.0.0.1:3000' };
+    return {
+      old: false,
+      cases: [
+        { what: 'live site', text: realLens('snowmoon.party', 'https://snowmoon.party', W), site: live, wallet: W, want: null },
+        { what: 'localhost with a port', text: realLens('127.0.0.1', 'http://127.0.0.1:3000', W), site: local, wallet: W, want: null },
+        { what: 'wallet in lower case', text: realLens('snowmoon.party', 'https://snowmoon.party', W.toLowerCase()), site: live, wallet: W, want: null },
+        { what: 'Lens told "localhost" while the page is on 127.0.0.1 (the owner\'s failure)', text: realLens('localhost', 'http://localhost:3000', W), site: local, wallet: W, want: 'domain' },
+        { what: 'another site', text: realLens('evil.example', 'https://evil.example', W), site: live, wallet: W, want: 'domain' },
+        { what: 'same host, another port', text: realLens('127.0.0.1', 'http://127.0.0.1:4000', W), site: local, wallet: W, want: 'uri' },
+        { what: 'another wallet', text: realLens('snowmoon.party', 'https://snowmoon.party', '0x0000000000000000000000000000000000000001'), site: live, wallet: W, want: 'address' },
+        { what: 'another chain', text: realLens('snowmoon.party', 'https://snowmoon.party', W, 1), site: live, wallet: W, want: 'chain' },
+        { what: 'not a sign-in message', text: 'hello', site: live, wallet: W, want: 'format' },
+      ] as { what: string; text: string; site: { hostname: string; origin: string }; wallet: string; want: string | null }[],
+    };
+  },
+  run: (c) => {
+    const check = c.old ? oldLensCheck : lensMessageProblem;
+    return c.cases.filter((k) => check(k.text, k.site, k.wallet) !== k.want).map((k) => `${k.what}: got ${check(k.text, k.site, k.wallet)}, want ${k.want}`);
+  },
+  plant: (c) => {
+    c.old = true;
+  },
+});
+
 for (const r of rules) {
   let c: unknown;
   try {
