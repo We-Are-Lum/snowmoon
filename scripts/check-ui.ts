@@ -93,7 +93,15 @@ import path from 'node:path';
 import { chromium, type Browser, type Page, type Route } from 'playwright-core';
 import QRCode from 'qrcode';
 import { BOOK_MENTIONS } from '../src/lib/character-order';
-import { CHALLENGE, SUPPORT } from '../src/lib/config';
+import { CHALLENGE, SIGN_IN_METHODS, SUPPORT } from '../src/lib/config';
+import { SIGN_IN_CHOICES } from '../src/lib/sign-in-text';
+
+/** The ways to sign in that are on (SIGN_IN_METHODS, in order; the sign-in release of 2026-11-05 turns Lens and Bluesky on). */
+const SIGN_IN_ON = SIGN_IN_METHODS.filter((m) => m.on).map((m) => m.id);
+const SIGN_IN_OFF = SIGN_IN_METHODS.filter((m) => !m.on).map((m) => m.id);
+const SIGN_IN_LABELS = SIGN_IN_ON.map((id) => SIGN_IN_CHOICES[id].label).join(' | ');
+/** A selector for a sign-in that is off, under `scope` (null when every way is on). */
+const offSelector = (scope = '') => (SIGN_IN_OFF.length ? SIGN_IN_OFF.map((id) => `${scope} [data-method="${id}"]`.trim()).join(', ') : null);
 import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -349,7 +357,7 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
   const acct = page.locator(accountIn(within));
   await acct.locator('button', { hasText: 'Sign in with a wallet' }).waitFor({ timeout: 10000 }).catch(() => {});
   const names = await acct.locator('button').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
-  if (names.join(' | ') !== 'Sign in with Farcaster | Sign in with a wallet') fail(`${where}: signed out, the account offers "${names.join(' | ')}" (want Farcaster, then a wallet)`);
+  if (names.join(' | ') !== SIGN_IN_LABELS) fail(`${where}: signed out, the account offers "${names.join(' | ')}" (want ${SIGN_IN_LABELS})`);
   // The phone menu and the wide-screen rail (owner, 2026-10-19): in the menu first in the sheet; in both, two full-width buttons at least 48px tall in the menu's
   // main font, and the owner's line under them.
   const first = await page.evaluate(() => {
@@ -378,13 +386,16 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
     if (/mono/i.test(b.font) || (label && b.font.includes(label))) fail(`${where}: sign-in button ${i + 1} is in the label (mono) font`);
     if (!b.line) fail(`${where}: sign-in button ${i + 1} has no line under it saying what it is`);
   }
-  if (boxes.length !== 2) fail(`${where}: ${boxes.length} sign-in buttons (want 2)`);
+  if (boxes.length !== SIGN_IN_ON.length) fail(`${where}: ${boxes.length} sign-in buttons (want ${SIGN_IN_ON.length})`);
   else {
-    const [a, c] = boxes;
-    if (Math.abs(a.w - c.w) > 0.5 || Math.abs(a.h - c.h) > 0.5) fail(`${where}: the two sign-in buttons are not the same size (${a.w}x${a.h} and ${c.w}x${c.h})`);
-    if (a.bg !== c.bg || a.border !== c.border || a.font !== c.font || a.size !== c.size || a.weight !== c.weight) fail(`${where}: the two sign-in buttons are not styled alike (${JSON.stringify([a, c])})`);
+    const [a, ...others] = boxes;
+    for (const c of others) {
+      if (Math.abs(a.w - c.w) > 0.5 || Math.abs(a.h - c.h) > 0.5) fail(`${where}: the sign-in buttons are not the same size (${a.w}x${a.h} and ${c.w}x${c.h})`);
+      if (a.bg !== c.bg || a.border !== c.border || a.font !== c.font || a.size !== c.size || a.weight !== c.weight) fail(`${where}: the sign-in buttons are not styled alike (${JSON.stringify([a, c])})`);
+    }
   }
-  if (await acct.locator('[data-method="lens"], [data-method="bluesky"]').count()) fail(`${where}: a sign-in that isn't built (Lens or Bluesky) is shown`);
+  const off = offSelector();
+  if (off && (await acct.locator(off).count())) fail(`${where}: a sign-in that is switched off (${SIGN_IN_OFF.join(', ')}) is shown`);
   const note = (await acct.locator('.menu-signin-note').textContent())?.trim();
   if (note !== 'Signing in is free. It’s a signature, not a payment.') fail(`${where}: the line under the buttons reads "${note}"`);
   if (await acct.locator('.wallet-sign-in .ic-note:not([role=alert])').count()) fail(`${where}: the wallet's own note still shows in the menu`);
@@ -410,7 +421,8 @@ async function checkSignInEquals(page: Page, scope: string, where: string, want?
     if (Math.abs(a.w - b.w) > 0.5 || Math.abs(a.h - b.h) > 0.5) fail(`${where}: "${a.name}" is ${a.w}x${a.h}, "${b.name}" ${b.w}x${b.h} (want the same size)`);
     if (a.look !== b.look) fail(`${where}: "${a.name}" and "${b.name}" are styled differently (${a.look} | ${b.look})`);
   }
-  if (await page.locator(`${scope} [data-method="lens"], ${scope} [data-method="bluesky"]`).count()) fail(`${where}: a sign-in that isn't built (Lens or Bluesky) is shown`);
+  const off = offSelector(scope);
+  if (off && (await page.locator(off).count())) fail(`${where}: a sign-in that is switched off (${SIGN_IN_OFF.join(', ')}) is shown`);
 }
 /** With a wallet session: the shortened address and a Sign out that ends it (back to both options). */
 async function checkAccountWallet(page: Page, within: string, where: string) {
@@ -2407,7 +2419,7 @@ try {
     await open(page, '/you');
     await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`/you @390 (${scheme}): signed out, no sign-in offered`));
     await checkFloors(page, '/you @390 (signed out)', scheme);
-    await checkSignInEquals(page, '.you-sign-in', `/you @390 (${scheme}) signed out`, 2);
+    await checkSignInEquals(page, '.you-sign-in', `/you @390 (${scheme}) signed out`, SIGN_IN_ON.length);
     if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
     await shot(page, 'phone-390-you-signed-out', scheme);
     await checkIllustrationReview(page, scheme);
