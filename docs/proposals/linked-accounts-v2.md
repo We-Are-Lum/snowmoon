@@ -52,7 +52,7 @@ account numbers.
 **The release window.** Between the sign-in release and v2, a linked Lens/Bluesky sign-in (and, since 0026, a linked
 wallet) acts as the Farcaster ID. That follows Terms §4: "while it is linked, signing in with it is signing in as that
 account". Work made that way is recorded under the Farcaster account, and which account was used isn't stored. It
-stays with the Farcaster account, including after an unlink. Privacy §6 must say so (section 8, option A).
+stays with the Farcaster account, including after an unlink. Privacy §6 says so (section 8; option A, chosen by the owner 2026-11-05).
 
 ### Table by table: what "the whole account" means
 
@@ -243,19 +243,23 @@ table names and no numbers that may change.
   per linked account, capped, no extra entry). If the owner wants the numbers in Terms, a change to them would then
   need a reread, which is the only reason to put them there.
 
-**Privacy §6** (two options, as asked).
+**Privacy §6** (option A, chosen by the owner on 2026-11-05: v2 records the real account from its release on).
 - Before (approved): "If you link accounts, what you made with any of them, before and after linking, is shown under
   one name (your Farcaster name if you linked one; otherwise your Lens username or your Bluesky handle), so anyone can
   see that they are yours; if you unlink one, its work is shown under its own name again."
-- **Option A (recommended: v2 records the real account):** "If you link accounts, what you made with any of them,
-  before and after linking, is shown under the one name you choose, so anyone can see that they are yours; if you
-  unlink one, what was made with it is shown under its own name again, except work made before 6 November 2026 while
-  it signed in as another account, which stays with that account." (The date is v2's merge day, to be set at merge.)
-- **Option B (v2 keeps one acting account per person):** "If you link accounts, what you made with any of them,
-  before and after linking, is shown under the one name you choose, so anyone can see that they are yours; if you
-  unlink one, what it made before it was linked is shown under its own name again, and what it made while linked
-  stays with your other accounts." B needs no write-path change. But "the whole account" then means that what you make
-  is never filed under the account you used, and B is longer and harder to follow.
+- After (final draft): "If you link accounts, what you made with any of them, before and after linking, is shown under
+  the one name you choose, so anyone can see that they are yours; if you unlink one, its work is shown under its own
+  name again, except what it made while linked before you could choose your name, which stays with the account it
+  signed in as."
+- Why these words:
+  - "before you could choose your name" names the release by what it does. The name choice and the recording of the
+    real account ship together, so this is exactly the boundary. If the two ever ship apart, a date (that release's
+    merge day) becomes truer and replaces it.
+  - "the account it signed in as", not "the account it was linked to". A Bluesky account linked to a Lens account that
+    is itself linked to a Farcaster ID signed in as the Farcaster ID (one step further, `personForSocial`). In that
+    case "linked to" would name the Lens account and be false. "Signed in as" also matches Terms §4's words in the
+    sign-in release: "signing in with it is signing in as that account". The same holds for wallets linked since 0026.
+- Option B (one acting account per person) was **not chosen** and is removed.
 - Also in §6, the bracket "(your Farcaster name; … your Farcaster ID on quote cards)" becomes "(the name you choose,
   with its network's mark; the Farcaster ID on quote cards only if that is the name you chose)". This applies only if
   quote cards follow the choice (open question 5).
@@ -304,7 +308,7 @@ release). Nothing reads the new pieces until `LINKED_ACCOUNTS.enabled` is on.
 
 ## 11. Open questions
 
-1. Privacy §6: option A or B (A recommended)? And the date in A.
+1. ~~Privacy §6: option A or B?~~ Answered (owner, 2026-11-05): option A, with the release named by what it does (section 8).
 2. Wallet balances under "the whole account": may a Farcaster/Lens/Bluesky sign-in spend a linked wallet's own
    balance? person-balance says a linked wallet's balance "isn't spent while linked". v2's "whole account" suggests
    yes. Recommend yes, signed-in account's balance first.
@@ -330,7 +334,7 @@ release). Nothing reads the new pieces until `LINKED_ACCOUNTS.enabled` is on.
 - **6 (no third-party requests; only totals of ratings and likes):** pass, with a concern. Public like counts must
   count distinct people across linked accounts and stay totals only. The network icons must be served from our own
   files, not hot-linked. Linking is public through bylines, and the texts say so rather than promising it's hidden.
-  The release window's work is described honestly (§6 option A). P6g–P6j don't change (§7 is unchanged).
+  The release window's work is described honestly (§6, option A as chosen). P6g–P6j don't change (§7 is unchanged).
 - **7 (payments never enter scoring or ordering):** pass. Balances aren't pooled. A payment never creates a pass, a
   bonus or an entry.
 - **8 (Minpentai and in-world screens):** not touched.
