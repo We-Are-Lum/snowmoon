@@ -638,7 +638,7 @@ await sql.end();
     const { LINK_NOTE, linkNoteShown } = await import('../src/lib/wallet/announce');
     const { WALLET_LINKS: WLN } = await import('../src/lib/config');
     const until = WLN.announceUntil;
-    check('the note is in the owner\'s words', LINK_NOTE === 'New: if your wallet is verified on Farcaster, it now links to that account automatically. Privacy §7.');
+    check('the note is in the owner\'s words (2026-11-05)', LINK_NOTE === 'New: sign in with Lens or Bluesky.');
     check('the note ends 30 days after the earliest merge day (2026-11-21 or later)', until >= '2026-11-21');
     check('the note shows before its end date, through the whole last day', linkNoteShown(new Date('2026-10-22T12:00:00Z')) && linkNoteShown(new Date(`${until}T23:59:59Z`)));
     check('…and is gone after it, with no deploy', !linkNoteShown(new Date(Date.parse(`${until}T00:00:00Z`) + 24 * 3600 * 1000)) && !linkNoteShown(new Date('2027-01-01T00:00:00Z')));
