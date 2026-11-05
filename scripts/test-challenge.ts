@@ -91,6 +91,9 @@ const L = await import('../src/lib/challenge/post-links');
     ['src/app/references/designs/[id]/page.tsx', /posts=\{CHALLENGE\.public && CHALLENGE\.posts\}/],
     ['src/app/references/designs/[id]/page.tsx', /isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(what\)/],
   ];
+  // Admins see /challenge/rules and /challenge/remixes too, exactly like /challenge (owner, 2026-11-04).
+  for (const d of ['rules', 'remixes']) gated.push([`src/app/challenge/${d}/not-found.tsx`, new RegExp(`<ChallengeAdmin fallback=\\{<NotFound />\\} page="${d}" />`)]);
+  gated.push(['src/app/api/challenge/view/route.ts', /page === 'rules' \? await rulesView\(sql\) : page === 'remixes' \? await remixesView\(sql, /]);
   const ungated = gated.filter(([f, re]) => !re.test(read(f))).map(([f]) => f);
   check('switch: every way in is gated (page, APIs, menu, home row, sheet lines, "Posted on", share text)', ungated.length === 0, ungated.join());
   const posts = read('src/app/api/challenge/posts/route.ts');
@@ -102,7 +105,7 @@ const L = await import('../src/lib/challenge/post-links');
   const { navItems } = await import('../src/lib/nav');
   check('switch: the menu has no challenge item unless told to show it', !navItems(1, 0).some((i) => i.href === '/challenge') && navItems(1, 0, true).some((i) => i.href === '/challenge'));
   // Scripts everyone is served carry no challenge words: the share buttons, "Posted on", Submit, the fork form.
-  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-submit.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx', 'src/components/challenge-bases.tsx', 'src/components/challenge-remix-pick.tsx', 'src/components/challenge-remix-card.tsx', 'src/components/challenge-entries-list.tsx'];
+  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-submit.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx', 'src/components/challenge-bases.tsx', 'src/components/challenge-remix-pick.tsx', 'src/components/challenge-remix-card.tsx', 'src/components/challenge-entries-list.tsx', 'src/components/challenge-rules-body.tsx', 'src/components/challenge-remixes-body.tsx'];
   const wordy = clientFiles.filter((f) => /challenge\/(landing-)?wording'/.test(read(f)));
   check('switch: no script served to everyone imports the challenge\'s words', wordy.length === 0, wordy.join());
 }
@@ -924,7 +927,7 @@ check('viewing pages (the challenge, version pages, starting sheets) made no out
   await Ny.checkNeynar(S, 777, 0.7);
   proof('a Neynar lookup during a page view would be caught', calls.some((u) => u.includes('api.neynar.com')));
   calls.length = 0;
-  const pageCode = ['src/lib/challenge/entries.ts', 'src/app/challenge/page.tsx', 'src/app/references/designs/[id]/page.tsx'].map((f) => ({ f, t: read(f) }));
+  const pageCode = ['src/lib/challenge/entries.ts', 'src/lib/challenge/remixes.ts', 'src/app/challenge/page.tsx', 'src/app/challenge/rules/page.tsx', 'src/app/challenge/remixes/page.tsx', 'src/lib/challenge/rules-view.ts', 'src/lib/challenge/remixes-view.ts', 'src/app/references/designs/[id]/page.tsx'].map((f) => ({ f, t: read(f) }));
   const asks = (t: string) => /from '[^']*(images\/neynar|challenge\/record|checks\/decisions)'|\bcheckNeynar\(|\bdecide\(|recordEligibility\(/.test(t);
   check('no page-side code imports the Neynar lookup or the publish-time recorder', pageCode.every((x) => !asks(x.t)), pageCode.filter((x) => asks(x.t)).map((x) => x.f).join());
   proof('a page that imports the lookup is caught', asks("import { checkNeynar } from '../images/neynar';"));
@@ -1264,10 +1267,10 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   // R4: an untitled entry's row read "Bai: Bai".
   const CW = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
   // The entries moved to the rules page with the short /challenge (owner, 2026-11-04).
-  const chPage = read('src/app/challenge/rules/page.tsx');
+  const chPage = read('src/lib/challenge/rules-view.ts');
   check('R4 an untitled entry\'s row is the character alone; a titled one adds its name', CW.entryLabel('Bai', '') === 'Bai' && CW.entryLabel('Bai', '  ') === 'Bai' && CW.entryLabel('Bai', 'Rain coat') === 'Bai: Rain coat');
   check('R4 /challenge/rules builds both lists\' rows with entryLabel', (chPage.match(/W\.entryLabel\(/g) ?? []).length === 2 && !/\|\| nameOf\(/.test(chPage));
-  proof('R4 a row that repeats the name is caught', /\|\| nameOf\(/.test(chPage.replace('{W.entryLabel(nameOf(e.character), e.title)}', '{nameOf(e.character)}: {e.title || nameOf(e.character)}')));
+  proof('R4 a row that repeats the name is caught', /\|\| nameOf\(/.test(chPage.replace('title: W.entryLabel(nameOf(e.character), e.title)', 'title: `${nameOf(e.character)}: ${e.title || nameOf(e.character)}`')));
   // R5: a newcomer on a starting sheet had no way to /challenge (only an entry's badge linked there).
   const lines = read('src/lib/challenge/sheet-lines.ts');
   const invite = (src: string) => /if \(invite && !standing\) lines\.push\(line\(\{ text: CW\.sheetInvite\(callName\), link: toChallenge \}\)\);/.test(src) && /const toChallenge = \{ href: '\/challenge'/.test(src);
@@ -1313,8 +1316,8 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const owner = 'Entering needs a Farcaster account with a Neynar score of 0.7 or more; we check when you press Generate.';
   check('c the up-front line is the owner\'s words exactly', CW.whoCanEnter() === owner, CW.whoCanEnter());
   // With the short /challenge (owner, 2026-11-04), it sits at the top of the rules page, under the deadline.
-  const chPage = read('src/app/challenge/rules/page.tsx');
-  check('c /challenge/rules says it up front, under the deadline', /<\/p>\s*\{\/\*[^*]*\*\/\}\s*\{now !== 'closed' && <p className="ch-who">\{W\.whoCanEnter\(\)\}<\/p>\}\s*<p className="ch-intro">/.test(chPage));
+  const chBody = read('src/components/challenge-rules-body.tsx');
+  check('c /challenge/rules says it up front, under the deadline', /<\/p>\s*\{\/\*[^*]*\*\/\}\s*\{v\.who && <p className="ch-who">\{v\.who\}<\/p>\}\s*<p className="ch-intro">/.test(chBody) && /who: ph !== 'closed' \? W\.whoCanEnter\(\) : null,/.test(read('src/lib/challenge/rules-view.ts')));
   const form = read('src/components/design-form.tsx');
   const beforeConsent = (src: string) => /<div className="ic-gate">\s*\{p\.challengeOpen && !status\.invited && p\.whoCanEnter && <p className="ch-who">\{p\.whoCanEnter\}<\/p>\}\s*<p>\{W\.form\.consentFirst\}<\/p>/.test(src);
   check('c a challenge fork form says it before the consent screen', beforeConsent(form) && /whoCanEnter=\{challengeOpen \? CW\.whoCanEnter\(\) : undefined\}/.test(read('src/app/references/designs/new/page.tsx')));
