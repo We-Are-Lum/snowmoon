@@ -29,6 +29,17 @@ beyond the two named, no migrations on production, nothing published. Spending t
 - Process note: stopping port 3005 also stopped a Chrome helper that was connected to it (a browser tab may have
   closed). From now on only the listening process is stopped.
 
+## Contest session, 2026-11-05 hour run (from about 11:05 PT)
+
+- **contest** (1a62d199): main (with the sign-in release #117) merged in; the reread record combines two approved texts
+  (Privacy 1h0plt9, Terms 7rdbgk unchanged). test:signin-lens-bluesky M1 fixed (fresh database leaves out unnumbered
+  NEXT_ migrations): 24/24. tsc clean; challenge 517, bluesky-check 64, check-decisions 44, rehearsal 36.
+  **Owed checks done** on a local build (127.0.0.1:3420, 11:11–11:29 under the heavy lock): check:principles 64/66 (only
+  P6a, local target, and P6d); check:miniapp passed; check:ui passed (59 pages). Not covered: the /challenge landing,
+  which check:ui skips while CHALLENGE.public is off.
+- **Views script** points at Deluin b4 (challenge-styles f889ba36); a dry run makes nothing; no spending.
+- **fund-page P7c:** blocked: this Mac can't reach ethereum-rpc.publicnode.com (and llamarpc answers 525). Needs another network.
+
 ---
 
 # Run status: hour run of 2026-11-05 (from about 11:05 PT)
