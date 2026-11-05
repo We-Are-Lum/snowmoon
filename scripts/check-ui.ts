@@ -349,8 +349,13 @@ const accountIn = (within: string) => `${within} .menu-account`;
 async function checkAccountSignedOut(page: Page, within: string, where: string) {
   const acct = page.locator(accountIn(within));
   await acct.locator('button', { hasText: 'Sign in with a wallet' }).waitFor({ timeout: 10000 }).catch(() => {});
-  const names = await acct.locator('button').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
+  // The small "Use another server or handle" link under "Sign in with Bluesky" (2026-11-05) is not a way to sign in.
+  const names = await acct.locator('button:not(.social-other)').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
   if (names.join(' | ') !== SIGN_IN_LABELS) fail(`${where}: signed out, the account offers "${names.join(' | ')}" (want ${SIGN_IN_LABELS})`);
+  if (SIGN_IN_ON.includes('bluesky')) {
+    const other = (await acct.locator('[data-method="bluesky"] button.social-other').innerText().catch(() => '')).trim();
+    if (other !== 'Use another server or handle') fail(`${where}: no "Use another server or handle" link under "Sign in with Bluesky" (${other || 'none'})`);
+  }
   // The phone menu and the wide-screen rail (owner, 2026-10-19): in the menu first in the sheet; in both, two full-width buttons at least 48px tall in the menu's
   // main font, and the owner's line under them.
   const first = await page.evaluate(() => {
