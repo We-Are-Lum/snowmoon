@@ -376,3 +376,33 @@ export async function countOne(sql: Sql, table: 'image_asks' | 'remix_asks', num
   } else if (personId === null) await sql`insert into studio.remix_asks (person) values (${number})`;
   else await sql`insert into studio.remix_asks (person, person_id) values (${number}, ${personId})`;
 }
+
+/**
+ * Bylines (owner, 2026-11-05): the account a maker's work is shown under: their person's Farcaster account, else Lens,
+ * else Bluesky; a wallet-only person's wallet shows as itself. Read on each request, so an unlink shows the account's
+ * work under its own name again at once. Off, or no person: the maker itself.
+ */
+export async function displayAccountOf(sql: Sql, maker: number): Promise<number> {
+  if (!linkedOn()) return maker;
+  const p = await readPersonOf(sql, maker);
+  if (!p) return maker;
+  for (const k of ORDER.slice(0, 3)) {
+    const m = p.members.find((x) => x.kind === k);
+    if (m) return m.account;
+  }
+  return maker;
+}
+
+/** The other accounts whose work is shown under `account` (it must be its person's display account), or []. */
+export async function shownUnder(sql: Sql, account: number): Promise<number[]> {
+  if (!linkedOn()) return [];
+  const p = await readPersonOf(sql, account);
+  if (!p || (await displayAccountOf(sql, account)) !== account) return [];
+  return p.members.map((m) => m.account).filter((a) => a !== account);
+}
+
+/** A Lens or Bluesky account's byline name: its Lens username or Bluesky handle as checked at sign-in, or null. */
+export async function displayNameOf(sql: Sql, account: number): Promise<string | null> {
+  if (!isSocialPerson(account)) return null;
+  return (await socialAccount(sql, socialAccountOf(account)))?.handle ?? null;
+}

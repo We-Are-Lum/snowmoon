@@ -314,6 +314,38 @@ await newDay();
   check('no person id leaves the database in any public table', (await sql`select count(*)::int as n from information_schema.column_privileges where table_schema = 'studio' and column_name = 'person_id' and grantee = 'anon'`)[0].n === 0);
 }
 
+// --- Bylines (owner, 2026-11-05): work before and after linking under one name; back after an unlink --------------
+await newDay();
+{
+  const credit = await import('../src/lib/wallet/credit');
+  const Fb = 770081;
+  const Wb = await wallet(81);
+  const Lb = await social('lens', 81);
+  const Bb = await social('bluesky', 81);
+  const Wo = await wallet(82); // someone else's wallet, never linked to Fb
+  // Before linking, each account's work is under its own name.
+  check('byline: before linking, a wallet\'s, a Lens and a Bluesky account\'s work is under its own name', (await credit.linkedTo(S, [Wb, Lb.number, Bb.number])).size === 0);
+  for (const [label, acc, kind] of [['wallet', Wb, 'wallet'], ['Lens', Lb.number, 'lens'], ['Bluesky', Bb.number, 'bluesky']] as const) {
+    await A.link(S, { account: Fb, kind: 'farcaster' }, { account: acc, kind });
+    check(`planted: work a ${label} account made before linking shows under the person's Farcaster account after linking`, (await credit.linkedTo(S, [acc])).get(acc) === Fb && (await credit.actsFor(S, Fb, acc)));
+  }
+  check('byline: the Farcaster account\'s page lists the work of all three', json((await credit.walletsOf(S, Fb)).sort()) === json([Wb, Lb.number, Bb.number].sort()));
+  check('planted: someone else\'s wallet is never shown under this person', !(await credit.linkedTo(S, [Wo])).has(Wo) && !(await credit.actsFor(S, Fb, Wo)) && !(await credit.walletsOf(S, Fb)).includes(Wo));
+  for (const [label, acc] of [['wallet', Wb], ['Lens', Lb.number], ['Bluesky', Bb.number]] as const) {
+    await A.unlink(S, Fb, acc);
+    check(`planted: after unlinking, the ${label} account's work goes back to its own name`, !(await credit.linkedTo(S, [acc])).has(acc) && !(await credit.actsFor(S, Fb, acc)) && !(await credit.walletsOf(S, Fb)).includes(acc));
+  }
+  // Without Farcaster: a Bluesky account's work shows under the person's Lens account, with its Lens username.
+  const Ln = await social('lens', 83);
+  const Bn = await social('bluesky', 83);
+  await A.link(S, { account: Ln.number, kind: 'lens' }, { account: Bn.number, kind: 'bluesky' });
+  const shown = await credit.credit(S, [{ by: Bn.number, name: 'madeup83.bsky.social' as string | null }], (x) => x.by, (x, by, name) => ({ ...x, by, name }));
+  check('byline: without Farcaster, a Bluesky account\'s work shows under the person\'s Lens username', shown[0].by === Ln.number && shown[0].name === 'lens/madeup83', json(shown));
+  L.enabled = false;
+  check('off: bylines are as before (no Lens or Bluesky mapping)', (await credit.linkedTo(S, [Bn.number])).size === 0 && (await credit.walletsOf(S, Ln.number)).length === 0);
+  L.enabled = true;
+}
+
 await sql.end();
 await server.stop();
 await db.close();

@@ -1,4 +1,10 @@
-# Linked accounts: Terms and Privacy lines (DRAFT, for the coordinator)
+# Linked accounts: Terms and Privacy lines (APPROVED 2026-11-05, with one change)
+
+**2026-11-05: approved as drafted, with one change** ("reviewed by the coordinator, approved by the owner"): Privacy §6
+is the owner's own sentence (below), and bylines move to `person_accounts` so it is true. In `src/lib/legal.ts` on
+this branch, against the sign-in release's words (this branch's base) rather than main's: Terms 2n41v2, Privacy
+io2dz, reread recorded 2026-11-05. The switch stays off. In the base's words, the one link item replaces both the
+wallet-link and the Lens/Bluesky link items in §4.
 
 Drafted by a coding agent (Claude, a closed model made by Anthropic) on the owner's overnight run of 2026-11-05,
 Lane B, item 7. Branch `linked-accounts`. **DRAFT: nothing here is in `src/lib/legal.ts`**, and nothing should be
@@ -91,10 +97,12 @@ After:
 Before:
 > If you link a wallet to your Farcaster account, what you made with the wallet, before and after linking, is shown under your Farcaster name, so anyone can see that the two are yours; if you unlink it, that work is shown with the wallet's address again.
 
-After:
-> If you link accounts, what you make while they are linked is shown under one name (your Farcaster name if you linked one; otherwise your Lens username or your Bluesky handle), so anyone can see that they are yours.
+After (the owner's words, 2026-11-05, as in `legal.ts`):
+> If you link accounts, what you made with any of them, before and after linking, is shown under one name (your Farcaster name if you linked one; otherwise your Lens username or your Bluesky handle), so anyone can see that they are yours; if you unlink one, its work is shown under its own name again.
 
-**Not yet true; for the coordinator:** the branch writes new work under the person's first account (Farcaster, else
+(Superseded draft: "If you link accounts, what you make while they are linked is shown under one name (…), so anyone can see that they are yours.")
+
+**Settled 2026-11-05 (bylines moved to `person_accounts`, `src/lib/wallet/credit.ts`); the earlier note:** the branch writes new work under the person's first account (Farcaster, else
 Lens, else Bluesky), so "what you make while they are linked" is true. Today's wallet byline (`src/lib/wallet/credit.ts`)
 also shows a linked wallet's *earlier* work under the Farcaster name, from `wallet_links`, which the branch no longer
 writes. Before the switch goes on, either that byline is moved to `person_accounts` (then the sentence can keep

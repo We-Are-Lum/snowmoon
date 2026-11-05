@@ -58,6 +58,25 @@ export const LINKED_WORDING = {
     last: 'This is your only account, so it can’t be unlinked.',
     frozen: 'This account has a challenge entry, so it stays with you until the challenge’s rewards are paid.',
   },
+  /** DRAFT, for the owner's OK (2026-11-05). The You page's panel (src/components/linked-accounts.tsx). */
+  panel: {
+    title: 'Linked accounts',
+    intro: 'Accounts you link are one person here: your free images and frames, limits and the remix challenge count once for all of them, and your work shows under one name.',
+    kinds: { farcaster: 'Farcaster', wallet: 'Wallet', lens: 'Lens', bluesky: 'Bluesky' } as Record<'farcaster' | 'wallet' | 'lens' | 'bluesky', string>,
+    you: 'signed in here',
+    unlink: 'Unlink',
+    unlinkAsk: 'Unlink this account? Its work will show under its own name again, and it can be linked to someone else only after 30 days.',
+    unlinkYes: 'Unlink',
+    cancel: 'Cancel',
+    linkThis: (name: string) => `Link ${name}`,
+    linkAsk: (name: string) => `Link ${name} to you?`,
+    linkYes: 'Link',
+    another: 'Link another account',
+    anotherHow: (networks: string) => `Sign in with ${networks} on this device as well, then come back here to link it.`,
+    wallets: (left: number) => (left > 0 ? `You can link ${left} more ${left === 1 ? 'wallet' : 'wallets'}.` : 'You have linked 3 wallets, the most you can.'),
+    walletSignIn: 'Sign in with a wallet on this device as well, then come back here to link it.',
+    failed: 'That didn’t work. Try again in a moment.',
+  },
   /** DRAFT. The confirm screen before a link (proposal section 3). */
   confirm: 'Your work from both accounts will be shown under one name, so anyone can see they are yours.',
 } as const;

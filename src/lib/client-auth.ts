@@ -18,7 +18,7 @@ const EVENT = 'snowmoon:signin';
  * of Farcaster. A Farcaster sign-in, when there is one, wins.
  */
 const WALLET_KEY = 'snowmoon.wallet';
-const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/you', '/api/scenes/', '/api/make/', '/api/oauth/approve', '/api/agents', '/api/direction', '/api/drafts', '/api/notes', '/api/requests', '/api/designs/picks', '/api/chat/status', '/api/chat/ask', '/api/minpentai/m/', '/api/balance'];
+const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/you', '/api/scenes/', '/api/make/', '/api/oauth/approve', '/api/agents', '/api/direction', '/api/drafts', '/api/notes', '/api/requests', '/api/designs/picks', '/api/chat/status', '/api/chat/ask', '/api/minpentai/m/', '/api/balance', '/api/linked-accounts'];
 /**
  * Routes matched exactly rather than by prefix: hiding one's own picture (the You page, owner 2026-10-18).
  * Not every /api/images/<id>/… route: like and report take a Farcaster sign-in only, and a wallet
@@ -392,4 +392,32 @@ export function useAuth(): AuthState {
     };
   }, []);
   return state;
+}
+
+/**
+ * Linked accounts (LINKED_ACCOUNTS; src/components/linked-accounts.tsx): every sign-in kept on this device, each with
+ * the account number it names, so the You page can offer to link the ones that aren't the person's yet. The numbers
+ * are read from the tokens without checking them; the server checks every token it is sent
+ * (src/app/api/linked-accounts/route.ts). A mini app's Farcaster sign-in has no token kept here and isn't listed.
+ */
+export type DeviceSession = { kind: 'farcaster' | 'wallet' | 'lens' | 'bluesky'; account: number; name: string; token: string };
+export function deviceSessions(): DeviceSession[] {
+  const body = (t: string, i: number) => {
+    try {
+      return JSON.parse(atob(t.split('.')[i].replace(/-/g, '+').replace(/_/g, '/'))) as Record<string, unknown>;
+    } catch {
+      return {};
+    }
+  };
+  const out: DeviceSession[] = [];
+  const f = readSession();
+  if (f) out.push({ kind: 'farcaster', account: f.fid, name: f.username ? `@${f.username}` : `FID ${f.fid}`, token: f.token });
+  const w = readWallet();
+  const wa = w ? Number(body(w.token, 1).account) : NaN;
+  if (w && Number.isInteger(wa) && wa > 0) out.push({ kind: 'wallet', account: -wa, name: w.short, token: w.token });
+  for (const s of [readSocial(), socialLinkSession()]) {
+    const sa = s ? Number(body(s.token, 1).account) : NaN;
+    if (s && Number.isInteger(sa) && sa > 0 && !out.some((o) => o.token === s.token)) out.push({ kind: s.kind, account: -(1_000_000_000 + sa), name: s.name, token: s.token });
+  }
+  return out;
 }

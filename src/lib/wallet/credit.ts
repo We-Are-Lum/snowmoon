@@ -3,6 +3,7 @@ import type postgres from 'postgres';
 import { LINKED_WALLETS, WALLET_LINKS } from '../config';
 import { lookupName } from '../names';
 import { configLink, isPayTo } from './links';
+import { displayAccountOf, displayNameOf, linkedOn, shownUnder } from '../linked/accounts';
 
 /**
  * A linked wallet's earlier work, shown under its Farcaster name (owner, 2026-10-22: after linking, "earlier wallet
@@ -12,6 +13,11 @@ import { configLink, isPayTo } from './links';
  * the publish records say, principle 4). Pages read a linked wallet's work as its FID's: the byline, the profile,
  * the You page and Hide. Unlinking shows it as the wallet's again. While WALLET_LINKS.creditEarlierWork is off,
  * nothing here changes anything.
+ *
+ * Linked accounts (LINKED_ACCOUNTS, on; owner, 2026-11-05): the same, for every kind of account, read from
+ * studio.person_accounts instead of wallet_links and social_links: what any of a person's accounts made, before and
+ * after linking, is shown under the person's display account (Farcaster, else Lens, else Bluesky, else the wallet),
+ * with its name; after an unlink, the account's work is shown under its own name again.
  */
 type Sql = postgres.Sql;
 
@@ -20,6 +26,13 @@ const missing = (e: unknown) => (e as { code?: string }).code === '42P01';
 /** For each linked wallet account among `persons` (negative person numbers): the FID its work is shown under. */
 export async function linkedTo(sql: Sql | null, persons: number[]): Promise<Map<number, number>> {
   const out = new Map<number, number>();
+  if (sql && linkedOn()) {
+    for (const p of new Set(persons)) {
+      const d = await displayAccountOf(sql, p).catch(() => p);
+      if (d !== p) out.set(p, d);
+    }
+    return out;
+  }
   const ids = [...new Set(persons.filter((p) => p < 0).map((p) => -p))];
   if (!sql || !ids.length || !WALLET_LINKS.creditEarlierWork) return out;
   let rows: { id: number; address: string; fid: number | null; ever: boolean }[];
@@ -50,6 +63,8 @@ export async function linkedTo(sql: Sql | null, persons: number[]): Promise<Map<
 
 /** The wallet accounts (as negative person numbers) whose work is shown under this FID. */
 export async function walletsOf(sql: Sql | null, fid: number): Promise<number[]> {
+  // Linked accounts: every other account of the person, if `fid` is the one their work is shown under.
+  if (sql && linkedOn()) return shownUnder(sql, fid).catch(() => []);
   if (!sql || fid <= 0 || !WALLET_LINKS.creditEarlierWork) return [];
   try {
     const rows = await sql`select a.id::int as id, a.address,
@@ -79,6 +94,7 @@ function configAddresses(fid: number): string[] {
 /** May `person` act on what `maker` made (Hide): the maker itself, or the FID a linked wallet maker is shown under. */
 export async function actsFor(sql: Sql | null, person: number, maker: number): Promise<boolean> {
   if (person === maker) return true;
+  if (sql && linkedOn()) return (await linkedTo(sql, [maker])).get(maker) === person;
   if (person <= 0 || maker >= 0) return false;
   return (await linkedTo(sql, [maker])).get(maker) === person;
 }
@@ -91,7 +107,7 @@ export async function credit<T>(sql: Sql | null, items: T[], maker: (t: T) => nu
   const links = await linkedTo(sql, items.map(maker));
   if (!links.size) return items;
   const names = new Map<number, string | null>();
-  for (const fid of new Set(links.values())) names.set(fid, await lookupName(fid).catch(() => null));
+  for (const fid of new Set(links.values())) names.set(fid, fid > 0 ? await lookupName(fid).catch(() => null) : sql && linkedOn() ? await displayNameOf(sql, fid).catch(() => null) : null);
   return items.map((t) => {
     const fid = links.get(maker(t));
     return fid ? set(t, fid, names.get(fid) ?? null) : t;

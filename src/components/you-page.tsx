@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ILLUSTRATION_CHECK, IMAGES, PERSON_BALANCE } from '~/lib/config';
+import { ILLUSTRATION_CHECK, IMAGES, LINKED_ACCOUNTS, PERSON_BALANCE } from '~/lib/config';
+import { LinkedAccountsPanel } from './linked-accounts';
 import { authFetch, refreshWalletLink, signOut, signOutSocial, signOutWallet, useAuth, useSocialDevice, useSocialSession, useWalletAlongside, walletFetch } from '~/lib/client-auth';
 import { signInOpen } from '~/lib/config';
 import { SocialLinks, type SocialView } from './social-links';
@@ -223,9 +224,12 @@ export function YouPage() {
           viaWallet={auth.kind !== 'signed-in' && who.kind === 'farcaster'}
         />
         {data.wallet && <AccountRows who={data.wallet.who} signOut={signOutWallet} />}
-        {data.link && <LinkPanel view={data.link} to={who.kind === 'farcaster' ? who : null} reload={load} />}
-        {(data.linkedWallets ?? []).map((lw) => <LinkedWallet key={lw.address} w={lw} reload={load} />)}
-        {data.social && (
+        {/* Linked accounts (LINKED_ACCOUNTS, off): one panel for every kind of account, in place of the wallet and the
+            Lens and Bluesky link panels, whose routes answer 410 while it is on. */}
+        {LINKED_ACCOUNTS.enabled && <LinkedAccountsPanel onChange={() => void load()} />}
+        {!LINKED_ACCOUNTS.enabled && data.link && <LinkPanel view={data.link} to={who.kind === 'farcaster' ? who : null} reload={load} />}
+        {!LINKED_ACCOUNTS.enabled && (data.linkedWallets ?? []).map((lw) => <LinkedWallet key={lw.address} w={lw} reload={load} />)}
+        {!LINKED_ACCOUNTS.enabled && data.social && (
           <SocialLinks
             view={data.social}
             hereToken={hereToken}

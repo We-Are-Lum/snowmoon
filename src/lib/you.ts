@@ -217,7 +217,7 @@ export interface OwnWork {
  */
 export async function ownWork(person: Person, handle: string | null): Promise<OwnWork> {
   const own = await ownWorkOf(person, handle);
-  for (const w of person > 0 ? await walletsOf(db(), person) : []) {
+  for (const w of await walletsOf(db(), person)) {
     const more = await ownWorkOf(w, await sceneHandleFor(w).catch(() => null));
     own.scenes.push(...more.scenes);
     own.frames.push(...more.frames);
@@ -260,7 +260,7 @@ export interface PublicWork {
  */
 export async function publicWork(person: Person, handle: string): Promise<PublicWork> {
   const pub = await publicWorkOf(person, handle);
-  for (const w of person > 0 ? await walletsOf(db(), person) : []) {
+  for (const w of await walletsOf(db(), person)) {
     const wh = await handleFor(w).catch(() => null);
     if (!wh) continue;
     const more = await publicWorkOf(w, wh);
@@ -291,7 +291,7 @@ async function publicWorkOf(person: Person, handle: string): Promise<PublicWork>
 /** The handle of a person's public profile, if it has anything on it (so a byline never links to a page that isn't there). */
 export async function profileHandle(person: Person): Promise<string | null> {
   // A linked wallet's work is shown under its FID, so its byline links to the FID's profile.
-  const fid = person < 0 ? (await linkedTo(db(), [person]).catch(() => new Map<number, number>())).get(person) : undefined;
+  const fid = (await linkedTo(db(), [person]).catch(() => new Map<number, number>())).get(person);
   if (fid) return profileHandle(fid);
   const handle = await handleFor(person).catch(() => null);
   if (!handle) return null;

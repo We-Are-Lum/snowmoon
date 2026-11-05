@@ -395,14 +395,13 @@ export async function handleFor(person: Person): Promise<string | null> {
 
 /** The person a person's scenes are shown under: a linked wallet's FID, otherwise the person. */
 export async function sceneOwner(person: Person): Promise<Person> {
-  if (person >= 0) return person;
+  // (Off, linkedTo maps only wallets; with linked accounts on, any account: src/lib/wallet/credit.ts.)
   const links = await linkedTo(db(), [person]).catch(() => new Map<number, number>());
   return links.get(person) ?? person;
 }
 
 /** Whose scenes a person's URLs show: a FID and the wallets linked to it; anyone else, themselves. */
 export async function shownAs(person: Person): Promise<Person[]> {
-  if (person <= 0) return [person];
   return [person, ...(await walletsOf(db(), person).catch(() => []))];
 }
 
