@@ -7,9 +7,14 @@ merged, applied to production or published during this run; legal lines go to th
 |---|------|-------|
 | 1 | Recast redo and views; Midjourney first remixes; contact sheet | done (Deluin b needs your words) |
 | 2 | Owed checks on changed branches (M22: the Minpentai session runs it) | waiting for the build lock |
-| 3 | Lane A: challenge-landing task; contest branch; rehearsal; dress run | waiting |
-| 4 | Lane B: paying per person (design, migration copy blocks, draft lines) | waiting |
+| 3 | Lane A: challenge-landing task; contest branch; rehearsal; dress run | running (after item 2) |
+| 4 | Lane B: paying per person (design, migration copy blocks, draft lines) | running (branch person-balance) |
 | 5 | Lens page: typecheck, running on localhost | waiting |
+
+## How the run shares the Mac
+
+8 GB RAM, and the Minpentai session builds too: one heavy step (a Next build or server, a full typecheck, a UI
+check) at a time across both sessions, by a shared lock. M22 is run by the Minpentai session in a quiet window.
 
 ## Done
 
