@@ -1369,7 +1369,8 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('c a refusal at Generate shows right under the Generate buttons, once, and is scrolled into view', beside(form));
   proof('c the refusal back under the rules is caught', !beside(form.replace('if (note) noteRef.current?.scrollIntoView(', 'if (note) void (')));
   const lookups = walk('src').filter((f) => /\bcheckNeynar\(/.test(read(f))).sort();
-  check('c no new Neynar lookup: only the Generate gate and the publish recorder call it (and its own file)', lookups.join() === ['src/lib/challenge/record.ts', 'src/lib/images/gate.ts', 'src/lib/images/neynar.ts'].join(), lookups.join());
+  // The assistant's gate (main, assistant step 1, approved 2026-11-05: Privacy §7 says Neynar is asked when you ask the assistant).
+  check('c no new Neynar lookup: only the Generate gate, the assistant\'s gate and the publish recorder call it (and its own file)', lookups.join() === ['src/lib/challenge/record.ts', 'src/lib/chat/gate.ts', 'src/lib/images/gate.ts', 'src/lib/images/neynar.ts'].join(), lookups.join());
   // d. The rule says an account below the check can't remix.
   const rules = CW.rules().join(' ');
   check('d the rule says an account below the check can\'t remix', /can’t remix or enter/.test(rules) && !/To count as an entry, sign in/.test(rules));
