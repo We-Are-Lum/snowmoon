@@ -298,6 +298,17 @@
       "character descriptor"
      ],
      "source": "src/lib/images/design-rules.ts"
+    },
+    "maker_terms": {
+     "maker": "OpenAI",
+     "document": "OpenAI Services Agreement (updated 1 Dec 2025, effective 1 Jan 2026)",
+     "read": "read live by the owner, 2026-11-06",
+     "findings": [
+      "\u00a74.1: the customer owns all Output",
+      "\u00a74.2: no training on customer content",
+      "\u00a73.3(e): the restriction that matters is not using Output to develop competing models"
+     ],
+     "decision": "owner, 2026-11-06: Zei's and Bai's GPT bases may be published"
     }
    },
    "response_meta": {
@@ -664,6 +675,17 @@
       "character descriptor"
      ],
      "source": "src/lib/images/design-rules.ts"
+    },
+    "maker_terms": {
+     "maker": "OpenAI",
+     "document": "OpenAI Services Agreement (updated 1 Dec 2025, effective 1 Jan 2026)",
+     "read": "read live by the owner, 2026-11-06",
+     "findings": [
+      "\u00a74.1: the customer owns all Output",
+      "\u00a74.2: no training on customer content",
+      "\u00a73.3(e): the restriction that matters is not using Output to develop competing models"
+     ],
+     "decision": "owner, 2026-11-06: Zei's and Bai's GPT bases may be published"
     }
    },
    "response_meta": {
@@ -1778,6 +1800,17 @@
       "character descriptor"
      ],
      "source": "src/lib/images/design-rules.ts"
+    },
+    "maker_terms": {
+     "maker": "OpenAI",
+     "document": "OpenAI Services Agreement (updated 1 Dec 2025, effective 1 Jan 2026)",
+     "read": "read live by the owner, 2026-11-06",
+     "findings": [
+      "\u00a74.1: the customer owns all Output",
+      "\u00a74.2: no training on customer content",
+      "\u00a73.3(e): the restriction that matters is not using Output to develop competing models"
+     ],
+     "decision": "owner, 2026-11-06: Zei's and Bai's GPT bases may be published"
     }
    },
    "response_meta": {
@@ -2128,6 +2161,17 @@
       "character descriptor"
      ],
      "source": "src/lib/images/design-rules.ts"
+    },
+    "maker_terms": {
+     "maker": "OpenAI",
+     "document": "OpenAI Services Agreement (updated 1 Dec 2025, effective 1 Jan 2026)",
+     "read": "read live by the owner, 2026-11-06",
+     "findings": [
+      "\u00a74.1: the customer owns all Output",
+      "\u00a74.2: no training on customer content",
+      "\u00a73.3(e): the restriction that matters is not using Output to develop competing models"
+     ],
+     "decision": "owner, 2026-11-06: Zei's and Bai's GPT bases may be published"
     }
    },
    "response_meta": {
@@ -4226,6 +4270,17 @@
       "view line (the site's own)"
      ],
      "source": "src/lib/images/design-rules.ts"
+    },
+    "maker_terms": {
+     "maker": "OpenAI",
+     "document": "OpenAI Services Agreement (updated 1 Dec 2025, effective 1 Jan 2026)",
+     "read": "read live by the owner, 2026-11-06",
+     "findings": [
+      "\u00a74.1: the customer owns all Output",
+      "\u00a74.2: no training on customer content",
+      "\u00a73.3(e): the restriction that matters is not using Output to develop competing models"
+     ],
+     "decision": "owner, 2026-11-06: Zei's and Bai's GPT bases may be published"
     }
    },
    "response_meta": {
@@ -4394,6 +4449,17 @@
       "view line (the site's own)"
      ],
      "source": "src/lib/images/design-rules.ts"
+    },
+    "maker_terms": {
+     "maker": "OpenAI",
+     "document": "OpenAI Services Agreement (updated 1 Dec 2025, effective 1 Jan 2026)",
+     "read": "read live by the owner, 2026-11-06",
+     "findings": [
+      "\u00a74.1: the customer owns all Output",
+      "\u00a74.2: no training on customer content",
+      "\u00a73.3(e): the restriction that matters is not using Output to develop competing models"
+     ],
+     "decision": "owner, 2026-11-06: Zei's and Bai's GPT bases may be published"
     }
    },
    "response_meta": {
@@ -4562,6 +4628,17 @@
       "view line (the site's own)"
      ],
      "source": "src/lib/images/design-rules.ts"
+    },
+    "maker_terms": {
+     "maker": "OpenAI",
+     "document": "OpenAI Services Agreement (updated 1 Dec 2025, effective 1 Jan 2026)",
+     "read": "read live by the owner, 2026-11-06",
+     "findings": [
+      "\u00a74.1: the customer owns all Output",
+      "\u00a74.2: no training on customer content",
+      "\u00a73.3(e): the restriction that matters is not using Output to develop competing models"
+     ],
+     "decision": "owner, 2026-11-06: Zei's and Bai's GPT bases may be published"
     }
    },
    "response_meta": {
@@ -4730,6 +4807,17 @@
       "view line (the site's own)"
      ],
      "source": "src/lib/images/design-rules.ts"
+    },
+    "maker_terms": {
+     "maker": "OpenAI",
+     "document": "OpenAI Services Agreement (updated 1 Dec 2025, effective 1 Jan 2026)",
+     "read": "read live by the owner, 2026-11-06",
+     "findings": [
+      "\u00a74.1: the customer owns all Output",
+      "\u00a74.2: no training on customer content",
+      "\u00a73.3(e): the restriction that matters is not using Output to develop competing models"
+     ],
+     "decision": "owner, 2026-11-06: Zei's and Bai's GPT bases may be published"
     }
    },
    "response_meta": {
@@ -11795,6 +11883,17 @@
     "remade_from": {
      "file": "directions/bai-animated-gpt.jpg",
      "why": "owner, 2026-11-05: made again from Garance's edit, so her skin matches her sheet"
+    },
+    "maker_terms": {
+     "maker": "OpenAI",
+     "document": "OpenAI Services Agreement (updated 1 Dec 2025, effective 1 Jan 2026)",
+     "read": "read live by the owner, 2026-11-06",
+     "findings": [
+      "\u00a74.1: the customer owns all Output",
+      "\u00a74.2: no training on customer content",
+      "\u00a73.3(e): the restriction that matters is not using Output to develop competing models"
+     ],
+     "decision": "owner, 2026-11-06: Zei's and Bai's GPT bases may be published"
     }
    },
    "response_meta": {
