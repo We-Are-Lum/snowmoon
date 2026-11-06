@@ -42,7 +42,7 @@ beyond the two named, no migrations on production, nothing published. Spending t
 
 ---
 
-# Run status: overnight run of 2026-11-05 → 6 Nov (launch for friends Fri afternoon)
+# Run status: overnight run of 2026-11-05 → 6 Nov (launch for friends Fri afternoon) — READY FOR THE MORNING
 
 The accounts session (snowmoon-9c). Pushed after each item. No secrets. Tonight: no merges except #119 (done) and the admin
 dashboard on the owner's word, no production migrations, nothing published, at most $2 on test images. Legal lines go to the
@@ -52,8 +52,8 @@ coordinator first.
 |---|------|-------|
 | 0 | #119 assistant step 1 merged (41b37c8b), live since 15:10 PT | live checks pass (shipped, principles only P6d, ui 59, miniapp) |
 | 0 | Admin dashboard merged as #120 (69322227), live since 16:06 | live checks pass (shipped, principles 64/65 only P6d incl. P6aa, ui 59, miniapp) |
-| A | Launch slice on challenge-moments: built, main + closed-model-bases merged (6759214b); keys from approved changes Terms ar3jr5, Privacy 6llf1; checks pass (P6a local only); drafts for the morning reread | done; waits for launch-publish |
-| B | Morning release doc (launch-2026-11-06 7b347670) + publish scripts (launch-publish 20a37b7b, 46 tests) | done; lane A merging launch-publish + Midjourney model entry + label on page |
+| A | Launch head challenge-moments fe8e5d12: launch slice + main 69322227 + closed-model-bases + launch-publish; Midjourney on the model list (never offered); label on the page; keys Terms ar3jr5, Privacy 6llf1; checks pass (P6a local only) | done |
+| B | Morning release doc: https://github.com/We-Are-Lum/snowmoon/blob/launch-2026-11-06/docs/launch/release-2026-11-06.md (71f8cf50); Drive copy without SQL blocks: "Snowmoon: Launch release, 6 Nov (DRAFT)"; migrations 0037–0039 re-tested (149) | done |
 
 ---
 
