@@ -2179,8 +2179,8 @@ try {
     await checkFloors(page, '/challenge/rules', scheme);
     {
       const text = (await page.locator('.ch-page').textContent()) ?? '';
-      // The rules were approved (owner, 2026-11-06); only the intro's picture wording keeps a "Draft wording" mark, beside it.
-      if (!/Draft wording/.test((await page.locator('.ch-intro').textContent()) ?? '')) fail(`/challenge/rules (${scheme}): the intro's draft has no "Draft wording" mark`);
+      // The rules and their intro were approved (owner, 2026-11-06): no "Draft wording" mark on the rules page.
+      if (/Draft wording/.test(text)) fail(`/challenge/rules (${scheme}): a "Draft wording" mark is still on the rules page`);
       if (!/(A new sheet|A picture) made from scratch isn’t an entry/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say only remixes count`);
       if (!/Entries (open|close|closed) .*Pacific/.test(text)) fail(`/challenge/rules (${scheme}): no deadline in Pacific time`);
       if (!/submit one remix a day/.test(text)) fail(`/challenge/rules (${scheme}): the rules are missing`);
@@ -2642,6 +2642,12 @@ try {
   }
   // Phone width: no rail at all.
   for (const scheme of ['light', 'dark'] as const) {
+    {
+      // A failed Bluesky sign-in on a phone (2026-11-06): its own page, so the menu checks below start fresh.
+      const p = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme, hasTouch: true });
+      await checkSignInFailedShows(p, '@390', scheme);
+      await p.close();
+    }
     const page = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme, hasTouch: true });
     await open(page, '/chapter/1');
     if (await page.locator('.rail').isVisible()) fail('@390: the rail shows on a phone');
@@ -2652,8 +2658,6 @@ try {
     await checkFloors(page, '/chapter/1 @390 (menu)', scheme);
     await checkLegalLine(page, '.menu-sheet', '@390 menu', scheme);
     await checkAccountSignedOut(page, '.menu-sheet', '@390 menu');
-    await page.keyboard.press('Escape').catch(() => {});
-    await checkSignInFailedShows(page, '@390', scheme);
     if (await page.locator('.topbar-avatar').count()) fail('@390: signed out, the top bar shows an avatar');
     await page.locator('.menu-sheet .menu-account').scrollIntoViewIfNeeded();
     await shot(page, 'phone-390-menu', scheme);

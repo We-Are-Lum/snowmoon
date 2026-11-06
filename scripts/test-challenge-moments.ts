@@ -390,6 +390,16 @@ check('config: a current default look per challenge character, each a design id 
   check('the sheet page shows the recipe line (howMade) and links a style only from body.style', /howMade\(p\.recipe,/.test(read('src/app/references/designs/[id]/page.tsx')) && /\{!style && body\.style && \(/.test(read('src/app/references/designs/[id]/page.tsx')));
 }
 
+// --- The rules intro, approved (owner, 2026-11-06), exactly as it renders today, with no draft mark -------------------
+{
+  const W = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
+  const INTRO = 'From 6 to 22 November, make your own picture of Zei, Gladias, Bai, Seila, Deluin or Mu: start from one of their pictures, set it at a moment from the book, change what you like, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.';
+  check('rules intro: the owner\'s approved words, exactly, with the dates and names from config', CHALLENGE.pictureEntries && W.intro() === INTRO, W.intro());
+  const RV = await import('../src/lib/challenge/rules-view');
+  const rv = await RV.rulesView(null);
+  check('rules page: no "Draft wording" mark left (page or intro)', rv.draft === null && rv.introDraft === null);
+}
+
 if (failures.length) {
   console.error(`CHALLENGE MOMENTS TESTS FAILED (${failures.length}):\n- ${failures.join('\n- ')}`);
   process.exit(1);
