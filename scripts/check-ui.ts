@@ -437,9 +437,11 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
  */
 async function checkSignInFailedShows(page: Page, where: string, scheme: string) {
   if (!SIGN_IN_ON.includes('bluesky')) return;
-  await page.evaluate(() => ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social'].forEach((k) => localStorage.removeItem(k)));
   await open(page, '/about');
-  await page.evaluate(() => sessionStorage.setItem('snowmoon.bluesky.pending', 'sealed-by-the-check'));
+  await page.evaluate(() => {
+    ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social'].forEach((k) => localStorage.removeItem(k));
+    sessionStorage.setItem('snowmoon.bluesky.pending', 'sealed-by-the-check');
+  });
   await page.goto(`${BASE}/sign-in/bluesky?error=access_denied&state=x`, { waitUntil: 'networkidle' });
   const alert = page.locator('main [role="alert"]').first();
   await alert.waitFor({ timeout: 10000 }).catch(() => fail(`/sign-in/bluesky ${where} (${scheme}): a failed sign-in shows no error`));
