@@ -430,6 +430,28 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
   if (note !== 'Signing in is free. It’s a signature, not a payment.') fail(`${where}: the line under the buttons reads "${note}"`);
   if (await acct.locator('.wallet-sign-in .ic-note:not([role=alert])').count()) fail(`${where}: the wallet's own note still shows in the menu`);
 }
+/**
+ * A Bluesky sign-in that comes back with an error (2026-11-06, branch signin-error-visible): the return page shows it at
+ * once, in an alert (Bluesky's own wording, not Lens's "signature was declined"), with every way to sign in that is on
+ * right under it; the rail and the menu don't repeat them there. Only while Bluesky sign-in is on (the page is 404 off).
+ */
+async function checkSignInFailedShows(page: Page, where: string, scheme: string) {
+  if (!SIGN_IN_ON.includes('bluesky')) return;
+  await page.evaluate(() => ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social'].forEach((k) => localStorage.removeItem(k)));
+  await open(page, '/about');
+  await page.evaluate(() => sessionStorage.setItem('snowmoon.bluesky.pending', 'sealed-by-the-check'));
+  await page.goto(`${BASE}/sign-in/bluesky?error=access_denied&state=x`, { waitUntil: 'networkidle' });
+  const alert = page.locator('main [role="alert"]').first();
+  await alert.waitFor({ timeout: 10000 }).catch(() => fail(`/sign-in/bluesky ${where} (${scheme}): a failed sign-in shows no error`));
+  const text = ((await alert.textContent().catch(() => '')) ?? '').trim();
+  if (!/You’re not signed in\./.test(text) || !/Bluesky didn’t sign you in/.test(text)) fail(`/sign-in/bluesky ${where} (${scheme}): the error reads "${text}"`);
+  if (!(await alert.isVisible())) fail(`/sign-in/bluesky ${where} (${scheme}): the error is not visible`);
+  const ways = await page.locator('main .signin-failed .signin-choice').evaluateAll((els) => els.map((e) => e.getAttribute('data-method')).join(','));
+  if (ways !== SIGN_IN_ON.join(',')) fail(`/sign-in/bluesky ${where} (${scheme}): under the error, the ways to sign in are "${ways}" (want ${SIGN_IN_ON.join(',')})`);
+  if (await page.locator('.rail .signin-choice, .rail .signin-open, .menu-sheet .signin-choice').count()) fail(`/sign-in/bluesky ${where} (${scheme}): the rail or menu repeats the ways to sign in`);
+  await checkFloors(page, `/sign-in/bluesky ${where} (failed)`, scheme);
+  await shot(page, `signin-failed-${where.replace(/\W/g, '')}`, scheme);
+}
 /** Wherever more than one way to sign in is offered (src/components/sign-in-choices.tsx, owner 2026-10-30): the buttons
  *  are equals (the same box, fill, border, font and weight), each has a line under it, and only built ways show. */
 async function checkSignInEquals(page: Page, scope: string, where: string, want?: number) {
@@ -2584,6 +2606,7 @@ try {
         await shot(page, `desktop-${width}-account-wallet`, scheme);
         await checkAccountWallet(page, '.rail', `@${width} rail`);
         await checkAccountLinkedWallet(page, '.rail', `@${width} rail (linked wallet)`);
+        await checkSignInFailedShows(page, `@${width}`, scheme);
         // Signed out on /you, the rail doesn't repeat the page's sign-in buttons (2026-11-05).
         await page.evaluate(() => ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social'].forEach((k) => localStorage.removeItem(k)));
         await open(page, '/you');
@@ -2629,6 +2652,8 @@ try {
     await checkFloors(page, '/chapter/1 @390 (menu)', scheme);
     await checkLegalLine(page, '.menu-sheet', '@390 menu', scheme);
     await checkAccountSignedOut(page, '.menu-sheet', '@390 menu');
+    await page.keyboard.press('Escape').catch(() => {});
+    await checkSignInFailedShows(page, '@390', scheme);
     if (await page.locator('.topbar-avatar').count()) fail('@390: signed out, the top bar shows an avatar');
     await page.locator('.menu-sheet .menu-account').scrollIntoViewIfNeeded();
     await shot(page, 'phone-390-menu', scheme);
