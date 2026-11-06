@@ -575,8 +575,9 @@ export const CHALLENGE = {
    * coordinator first); until he approves them, these stay false, and check:principles P2m refuses CHALLENGE.public
    * on with either false. Only the owner sets them.
    */
-  cardsApproved: false as boolean,
-  sceneLinesApproved: false as boolean,
+  // Approved (owner, 2026-11-06; "reviewed by the coordinator, approved by the owner"): the cards with three changes, and the scene lines.
+  cardsApproved: true as boolean,
+  sceneLinesApproved: true as boolean,
   /**
    * Entries as pictures (owner, 2026-11-05; docs/proposals/challenge-moments.md, R2): one picture of a challenge
    * character at one of the challenge's moments, remixed from one of its pictures on /challenge, counts as an entry
@@ -586,7 +587,8 @@ export const CHALLENGE = {
    * flow still makes and publishes pictures (the site's own image pipeline, as "Make an image"), but none is an entry,
    * and sheet remixes count as before. The rehearsal switch turns it on, on this machine only.
    */
-  pictureEntries: false as boolean,
+  // On (owner, 2026-11-06): Terms §6e and Privacy were reread and say so ("reviewed by the coordinator, approved by the owner").
+  pictureEntries: true as boolean,
   /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
   characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'] as readonly string[],
   /**

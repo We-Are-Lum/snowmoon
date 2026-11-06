@@ -36,7 +36,8 @@ export interface ChallengeView {
   line: string;
   rulesLink: string;
   entriesLink: string;
-  draftShort: string;
+  /** The hub's "Draft wording" mark: none since the owner approved its words (2026-11-06). */
+  draftShort: string | null;
   notAffiliated: string;
   cards: { c: CardData; w: CardWords }[];
 }
@@ -72,7 +73,8 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
     line: L.line(),
     rulesLink: L.rulesLink,
     entriesLink: L.entriesLink,
-    draftShort: W.draftShort,
+    // Approved (owner, 2026-11-06; "reviewed by the coordinator, approved by the owner"): the hub's line and cards.
+    draftShort: CHALLENGE.cardsApproved ? null : W.draftShort,
     notAffiliated: W.notAffiliated,
     cards: sheets.map(({ c, list }) => {
       const name = callName(c.name);

@@ -28,7 +28,10 @@ export interface RulesView {
   adminNote: string | null;
   back: string;
   title: string;
-  draft: string;
+  /** A page-wide "Draft wording" line; null since the owner approved the rules (2026-11-06). */
+  draft: string | null;
+  /** The intro's own "Draft wording" mark: its picture wording isn't approved yet. */
+  introDraft: string | null;
   deadline: string;
   deadlineAfter: string | null;
   who: string | null;
@@ -61,7 +64,10 @@ export async function rulesView(sql: Sql | null, now: Date = new Date()): Promis
     adminNote: CHALLENGE.public ? null : 'Admins only for now: everyone else gets “not found” here, and nothing opens until the owner opens it (CHALLENGE.public).',
     back: L.back,
     title: L.rulesTitle,
-    draft: W.draft,
+    // The rules, dates and who-can-enter lines were approved (owner, 2026-11-06; "reviewed by the coordinator, approved
+    // by the owner"); only the intro's wording is still a draft, so the mark sits beside it alone.
+    draft: null,
+    introDraft: W.draftShort,
     deadline: ph === 'before' ? W.opensOn() : ph === 'open' ? W.deadline() : W.closed(),
     deadlineAfter: ph === 'before' ? W.deadline() : null,
     who: ph !== 'closed' ? W.whoCanEnter() : null,

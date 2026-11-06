@@ -2133,9 +2133,10 @@ try {
     await checkFloors(page, '/challenge', scheme);
     {
       const text = (await page.locator('.ch-page').textContent()) ?? '';
-      if (!/Draft wording/.test(text)) fail(`/challenge (${scheme}): no "Draft wording" line`);
+      // The hub's words were approved (owner, 2026-11-06): no "Draft wording" mark until something on it is a draft again.
+      if (CHALLENGE.cardsApproved === /Draft wording/.test(text)) fail(`/challenge (${scheme}): the "Draft wording" mark doesn't follow the approval`);
       // The characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json).
-      const heads = (await page.locator('.ch-character h2').allTextContents()).map((h) => h.split(' ')[0]);
+      const heads = (await page.locator('.cc-card h2').allTextContents()).map((h) => h.split(' ')[0]);
       if (heads.join() !== 'Zei,Gladias,Bai,Seila,Deluin,Mu') fail(`/challenge (${scheme}): the characters read ${heads.join(', ')}`);
       // The short page (owner, 2026-11-04): the deadline in its one line, the rules behind "Rules".
       if (!/Entries (open|close|closed) .*PT/.test(text)) fail(`/challenge (${scheme}): no deadline in its one line`);
@@ -2147,12 +2148,14 @@ try {
     await checkFloors(page, '/challenge/rules', scheme);
     {
       const text = (await page.locator('.ch-page').textContent()) ?? '';
-      if (!/Draft wording/.test(text)) fail(`/challenge/rules (${scheme}): no "Draft wording" line`);
-      if (!/A new sheet made from scratch isn’t an entry/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say only remixes count`);
+      // The rules were approved (owner, 2026-11-06); only the intro's picture wording keeps a "Draft wording" mark, beside it.
+      if (!/Draft wording/.test((await page.locator('.ch-intro').textContent()) ?? '')) fail(`/challenge/rules (${scheme}): the intro's draft has no "Draft wording" mark`);
+      if (!/(A new sheet|A picture) made from scratch isn’t an entry/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say only remixes count`);
       if (!/Entries (open|close|closed) .*Pacific/.test(text)) fail(`/challenge/rules (${scheme}): no deadline in Pacific time`);
-      if (!/One entry per person per character/.test(text)) fail(`/challenge/rules (${scheme}): the rules are missing`);
-      if (!/aren’t eligible for rewards/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say admins aren't eligible for rewards`);
-      if (!/Neynar score of/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say who can enter`);
+      if (!/submit one remix a day/.test(text)) fail(`/challenge/rules (${scheme}): the rules are missing`);
+      if (!/theirs aren’t entries/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say admins' pictures aren't entries`);
+      if (!/There is no prize for now\./.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say there is no prize for now`);
+      if (!/Farcaster, Lens or Bluesky account that passes the site’s check/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say who can enter`);
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/rules (${scheme}): scrolls sideways`);
       await shot(page, 'challenge-rules', scheme);
     }

@@ -1,28 +1,28 @@
-# The six character cards and the fifteen moments (DRAFT, for one-pass approval)
+# The six character cards and the fifteen moments (approved, owner, 2026-11-06)
 
-Drafted by a coding agent (Claude, a closed model by Anthropic), 2026-11-05, on branch `challenge-moments`. **DRAFT until the owner approves it.** Source of truth: `src/lib/challenge/cards.ts` and `src/lib/challenge/moments.ts`; this file lists every line with its block id for the review. `npm run test:challenge` checks every quote below word for word against its block (and fails on a planted one-word change).
+Drafted by a coding agent (Claude, a closed model by Anthropic), 2026-11-05, on branch `challenge-moments`. **Approved (owner, 2026-11-06; "reviewed by the coordinator, approved by the owner") with three changes:** Mu's one line; Zei's fact "A math guy, not a diplomat, Mu tells him" (c4-b67, Mu's own words to Zei; the book never calls Mu his mentor, its only "mentor" is c28-b81, about Lily); and "one of the book's main characters" in place of "one of the book's three leads" for Zei, Gladias and Seila. For consistency the agent also dropped "his mentor" from Zei's description ("and Mu tells him he is a math guy, not a diplomat"), flagged for the owner. First-layer facts from chapters 1–14: confirmed. Scene lines: approved. Source of truth: `src/lib/challenge/cards.ts` and `src/lib/challenge/moments.ts`; this file lists every line with its block id for the review. `npm run test:challenge` checks every quote below word for word against its block (and fails on a planted one-word change).
 
-How to approve: say "cards approved" (with any changes) and "scene lines approved"; the agent then sets `CHALLENGE.cardsApproved` and `CHALLENGE.sceneLinesApproved` to true. `check:principles` P2m refuses `CHALLENGE.public` on until both are true.
+`CHALLENGE.cardsApproved` and `CHALLENGE.sceneLinesApproved` are true (2026-11-06); `check:principles` P2m allows `CHALLENGE.public` on.
 
-Marks on the page: the one line and the description carry "This edition’s summary"; every picture’s ⓘ says "Look invented by this edition: the book doesn’t describe it."; the second layer opens with "May spoil later chapters." First-layer facts cite chapters 1–14 only (P9g). **That cutoff is the agent's rule, for the owner to confirm** (the owner's answer asked for a first layer "without major twists"; chapters 1–14 is the agent's reading of it).
+Marks on the page: the one line and the description carry "This edition’s summary"; every picture’s ⓘ says "Look invented by this edition: the book doesn’t describe it."; the second layer opens with "May spoil later chapters." First-layer facts cite chapters 1–14 only (P9g). **That cutoff was the agent's rule; the owner confirmed it (2026-11-06)** (the owner's answer asked for a first layer "without major twists"; chapters 1–14 is the agent's reading of it).
 
 Other characters in a moment are drawn from their current default looks (`CHALLENGE.defaultLooks`: Deluin's and Gladias' look b; the current fronts of Zei, Bai, Seila and Mu, Bai's from Garance's edit). They are unset until those sheets are published, and each character's first base stands in until then.
 
 ## Zei
 
-**One line (this edition’s):** An eighteen-year-old Minpentai player from Pafogai Du, in Dzego, and one of the book’s three leads.
+**One line (this edition’s):** An eighteen-year-old Minpentai player from Pafogai Du, in Dzego, and one of the book’s main characters.
 
 **First layer: facts** (this edition’s phrase · block · the book’s words)
 
 - Plays Minpentai, a high-school programming game · `c4-b79` · "a high-school programming game"
-- A math guy, his mentor says · `c4-b67` · "You're a math guy, not a diplomat."
+- A math guy, not a diplomat, Mu tells him · `c4-b67` · "You're a math guy, not a diplomat."
 - Hurt in the arm when a classroom wall came down · `c2-b100` · "The next thing Zei knew, a fragment of stone hit him in the arm."
 
 **Moments with Zei** (titles are this edition’s): The wall comes down (Ch 2); The quarterfinal (Ch 4); Lunch with a stranger (Ch 5); To our future (Ch 7); The championship final (Ch 7); "Hi, I'm Deluin" (Ch 12); Pictures of Redshire (Ch 14); At the hotel (Ch 26); Fly through the streets (Ch 26); A snowy hilltop at sunrise (Ch 29); On the summit (Ch 31)
 
 **Second layer ("More about", may spoil later chapters): description (this edition’s)**
 
-Zei Leimin is eighteen and lives in Pafogai Du, in Dzego, with his mother. He plays Minpentai, the book’s programming game, well enough to reach the quarterfinals and the championship, and his mentor Mu tells him he is a math guy, not a diplomat. He has a long rivalry with Bai, who has beaten him every time. The book gives his age and an arm that was broken and healed, but never his looks.
+Zei Leimin is eighteen and lives in Pafogai Du, in Dzego, with his mother. He plays Minpentai, the book’s programming game, well enough to reach the quarterfinals and the championship, and Mu tells him he is a math guy, not a diplomat. He has a long rivalry with Bai, who has beaten him every time. The book gives his age and an arm that was broken and healed, but never his looks.
 
 - Lives with his mother · `c5-b3` · ""Come on, Mom!", he shouted."
 - His left arm was broken and took a month to heal · `c9-b75` · "That arm had been broken and taken a month to heal"
@@ -42,7 +42,7 @@ Zei Leimin is eighteen and lives in Pafogai Du, in Dzego, with his mother. He pl
 
 ## Gladias
 
-**One line (this edition’s):** A Veridian in the anonymous Order of Steering, who wears a privacy robe in public, and one of the book’s three leads.
+**One line (this edition’s):** A Veridian in the anonymous Order of Steering, who wears a privacy robe in public, and one of the book’s main characters.
 
 **First layer: facts** (this edition’s phrase · block · the book’s words)
 
@@ -102,7 +102,7 @@ Bai Jahen is Zei’s rival at Minpentai, about his age, and hardly magnanimous i
 
 ## Seila
 
-**One line (this edition’s):** Gladias’s wife, a Veridian who writes a blog, and one of the book’s three leads.
+**One line (this edition’s):** Gladias’s wife, a Veridian who writes a blog, and one of the book’s main characters.
 
 **First layer: facts** (this edition’s phrase · block · the book’s words)
 
@@ -159,7 +159,7 @@ Deluin comes to Dzego from Redshire, in the United Cities, to play in the nation
 
 ## Mu
 
-**One line (this edition’s):** Zei’s mentor in Dzego, an older woman who follows his Minpentai games.
+**One line (this edition’s):** An older woman in Pafogai Du who knows Zei well and follows his Minpentai games.
 
 **First layer: facts** (this edition’s phrase · block · the book’s words)
 

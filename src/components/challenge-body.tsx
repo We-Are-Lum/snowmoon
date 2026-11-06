@@ -24,7 +24,7 @@ export function ChallengeBody({ v }: { v: ChallengeView }) {
         <Link href="/challenge/entries" className="ch-entries-link">
           {v.entriesLink}
         </Link>
-        <span className="as-draft ch-draft"> · {v.draftShort}</span>
+        {v.draftShort && <span className="as-draft ch-draft"> · {v.draftShort}</span>}
       </p>
       <div className="cc-list">
         {v.cards.map(({ c, w }) => (

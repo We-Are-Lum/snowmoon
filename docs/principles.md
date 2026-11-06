@@ -215,7 +215,7 @@ in 25 words or fewer and records `written_by { fid, date }`.
   moments' titles and scene lines (`src/lib/challenge/moments.ts`) are drafted by the coding agent and go to the
   owner in one pass; /challenge may not go public (`CHALLENGE.public`) until he approves them
   (`CHALLENGE.cardsApproved`, `CHALLENGE.sceneLinesApproved`), and until then every card carries the "Draft wording"
-  mark. The cards' and moments' quotes are the book's, word for word at their blocks (checked by `P9g`); the one line
+  mark. Approved, with three changes (owner, 2026-11-06). The cards' and moments' quotes are the book's, word for word at their blocks (checked by `P9g`); the one line
   and the description are marked "This edition's summary"; every picture's ⓘ says "Look invented by this edition: the
   book doesn't describe it." The scene line is a prompt, not story words: each recipe labels it model-drafted in
   `assist`. The proof turns /challenge public with the cards unapproved.
@@ -505,8 +505,8 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   (P6p is social-read's, P6r is deep-funding's and sheet-help's).
 - `P6ac` (branch challenge-moments, owner 2026-11-05): entries as pictures (`CHALLENGE.pictureEntries`: one picture
   of a challenge character at one of the challenge's moments counts, and sheet remixes stop counting) are on only while
-  Terms §6e and Privacy §4 describe them (`docs/legal/challenge-moments-draft.md`). It stays off until the owner's
-  reread; the rehearsal switch turns it on on this machine only. The proof turns it on with today's words. The id was
+  Terms §6e and Privacy §4 describe them (`docs/legal/challenge-moments-draft.md`). On since the owner's reread
+  (2026-11-06, "reviewed by the coordinator, approved by the owner"). The proof turns it on with today's words. The id was
   free on main and every remote branch (2026-11-05).
 - `P6ab` (branch assistant-any-account, 2026-11-05, the owner's one rule): the assistant's switch
   (`ASSISTANT.anyAccount`: everyone who asks passes their own network's check, Neynar, Lens or Bluesky, and Lens and

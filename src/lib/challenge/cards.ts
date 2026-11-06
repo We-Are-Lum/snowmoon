@@ -2,9 +2,10 @@
  * The six character cards on /challenge (owner, 2026-11-05, answer 2: "you draft all six cards … citing block ids,
  * word-for-word quotes checked by a test; anything this edition invented (looks) marked as the edition's own").
  *
- * DRAFT: drafted by the coding agent (Claude, a closed model by Anthropic) on 2026-11-05, on branch challenge-moments,
- * for the coordinator's review and the owner's approval in one pass. /challenge doesn't go public with them until he
- * approves (CHALLENGE.cardsApproved; check:principles P2m). Until then every card shows the site's "Draft wording" mark.
+ * Drafted by the coding agent (Claude, a closed model by Anthropic) on 2026-11-05, on branch challenge-moments.
+ * Approved (owner, 2026-11-06; "reviewed by the coordinator, approved by the owner") with three changes: Mu's one line,
+ * Zei's "A math guy, not a diplomat, Mu tells him" (c4-b67; the book never calls Mu his mentor), and "one of the book's
+ * main characters" for Zei, Gladias and Seila. CHALLENGE.cardsApproved is true (check:principles P2m).
  *
  * What is whose (P2, P8):
  * - `line` and `description`: this edition's own words, saying what the book says without inventing; shown with
@@ -54,15 +55,15 @@ export const FIRST_LAYER_MAX_CHAPTER = 14;
 export const CARDS: readonly CharacterCard[] = [
   {
     slug: 'zei',
-    line: 'An eighteen-year-old Minpentai player from Pafogai Du, in Dzego, and one of the book’s three leads.',
+    line: 'An eighteen-year-old Minpentai player from Pafogai Du, in Dzego, and one of the book’s main characters.',
     facts: [
       { text: 'Plays Minpentai, a high-school programming game', block: 'c4-b79', quote: 'a high-school programming game' },
-      { text: 'A math guy, his mentor says', block: 'c4-b67', quote: 'You\'re a math guy, not a diplomat.' },
+      { text: 'A math guy, not a diplomat, Mu tells him', block: 'c4-b67', quote: 'You\'re a math guy, not a diplomat.' },
       { text: 'Hurt in the arm when a classroom wall came down', block: 'c2-b100', quote: 'The next thing Zei knew, a fragment of stone hit him in the arm.' },
     ],
     more: {
       description:
-        'Zei Leimin is eighteen and lives in Pafogai Du, in Dzego, with his mother. He plays Minpentai, the book’s programming game, well enough to reach the quarterfinals and the championship, and his mentor Mu tells him he is a math guy, not a diplomat. He has a long rivalry with Bai, who has beaten him every time. The book gives his age and an arm that was broken and healed, but never his looks.',
+        'Zei Leimin is eighteen and lives in Pafogai Du, in Dzego, with his mother. He plays Minpentai, the book’s programming game, well enough to reach the quarterfinals and the championship, and Mu tells him he is a math guy, not a diplomat. He has a long rivalry with Bai, who has beaten him every time. The book gives his age and an arm that was broken and healed, but never his looks.',
       facts: [
         { text: 'Lives with his mother', block: 'c5-b3', quote: '"Come on, Mom!", he shouted.' },
         { text: 'His left arm was broken and took a month to heal', block: 'c9-b75', quote: 'That arm had been broken and taken a month to heal' },
@@ -83,7 +84,7 @@ export const CARDS: readonly CharacterCard[] = [
   },
   {
     slug: 'gladias',
-    line: 'A Veridian in the anonymous Order of Steering, who wears a privacy robe in public, and one of the book’s three leads.',
+    line: 'A Veridian in the anonymous Order of Steering, who wears a privacy robe in public, and one of the book’s main characters.',
     facts: [
       { text: 'Wears the dark purple Veridian Privacy Robe in public', block: 'c1-b45', quote: 'the same signature Veridian Privacy Robe that he was wearing' },
       { text: 'Hopes to become a Sentinel, or a Keeper', block: 'c1-b68', quote: 'he would get in and become a Sentinel - or, if he changed his mind, a Keeper' },
@@ -137,7 +138,7 @@ export const CARDS: readonly CharacterCard[] = [
   },
   {
     slug: 'seila',
-    line: 'Gladias’s wife, a Veridian who writes a blog, and one of the book’s three leads.',
+    line: 'Gladias’s wife, a Veridian who writes a blog, and one of the book’s main characters.',
     facts: [
       { text: 'Gladias’s wife', block: 'c3-b89', quote: 'And your wife is Seila' },
       { text: 'Writes a blog', block: 'c8-b8', quote: 'I\'m looking forward to your blog' },
@@ -188,7 +189,7 @@ export const CARDS: readonly CharacterCard[] = [
   },
   {
     slug: 'mu',
-    line: 'Zei’s mentor in Dzego, an older woman who follows his Minpentai games.',
+    line: 'An older woman in Pafogai Du who knows Zei well and follows his Minpentai games.',
     facts: [
       { text: 'An older woman', block: 'c4-b62', quote: 'An older woman noticed him and turned to him.' },
       { text: 'Tells Zei he is a math guy, not a diplomat', block: 'c4-b67', quote: 'You\'re a math guy, not a diplomat.' },

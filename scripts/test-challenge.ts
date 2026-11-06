@@ -51,6 +51,10 @@ function walk(dir: string): string[] {
 
 const R = await import('../src/lib/challenge/rules');
 const L = await import('../src/lib/challenge/post-links');
+// Entries as pictures are on as committed (owner's reread, 2026-11-06); scripts/test-challenge-moments.ts tests them.
+// This file tests the contest's sheet path, which stays in the code for when the switch is off, so it turns it off.
+check('committed: entries are pictures (CHALLENGE.pictureEntries on, after the owner\'s reread of 2026-11-06)', CHALLENGE.pictureEntries === true);
+CHALLENGE.pictureEntries = false;
 
 // --- The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"; nothing opens by date alone) ------
 // With CHALLENGE.public off (as committed) and the clock inside the window, nothing the dates used to switch on is on:

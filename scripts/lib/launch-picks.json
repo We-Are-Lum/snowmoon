@@ -1,5 +1,5 @@
 {
- "about": "DRAFT picks for the launch (lane B, 2026-11-05 night; Claude, a closed model by Anthropic). Bases: the owner's picks as recorded on branch challenge-styles (one per character; three for Deluin and Gladias, look b the current default for both). Titles are drafts. First remixes: the base each remixes is the agent's proposal from the look; the owner sets owner_confirmed to true for each (or changes base) before --apply. Every sha256 is pinned: a changed file is refused.",
+ "about": "DRAFT picks for the launch (lane B, 2026-11-05 night; Claude, a closed model by Anthropic). Bases: the owner's picks as recorded on branch challenge-styles (one per character; three for Deluin and Gladias, look b the current default for both). Titles are drafts. First remixes: the base each remixes is the agent's proposal from the look; the owner sets owner_confirmed to true for each (or changes base) before --apply. Confirmed as proposed (owner, 2026-11-06; \"reviewed by the coordinator, approved by the owner\"). Every sha256 is pinned: a changed file is refused.",
  "drafts": "docs/starting-sheet-drafts on branch challenge-styles (36d7dde6)",
  "bases": [
   {
@@ -202,7 +202,7 @@
    "sha256": "f9c6084a06bbb492ce45336acd276ce0a6543e2b7758fab71b21a57ae3195e04",
    "base": "mu",
    "base_proposed_by_agent": "Mu (her one base)",
-   "owner_confirmed": false,
+   "owner_confirmed": true,
    "title": "Mu in the snow"
   },
   {
@@ -210,7 +210,7 @@
    "sha256": "e6a0a7d85b6bb3eba928b94b2be0cd4bdd79e61e169d2470c18ec8c520bd7701",
    "base": "mu",
    "base_proposed_by_agent": "Mu (her one base)",
-   "owner_confirmed": false,
+   "owner_confirmed": true,
    "title": "Mu at the command post"
   },
   {
@@ -218,7 +218,7 @@
    "sha256": "c543d404a6fa262887e6525e0fad93506371dfcfbea67bc98bb4b5f02b7b9a39",
    "base": "seila",
    "base_proposed_by_agent": "Seila (her one base)",
-   "owner_confirmed": false,
+   "owner_confirmed": true,
    "title": "Seila, ink"
   },
   {
@@ -226,7 +226,7 @@
    "sha256": "4563c7e1e03fe5148a01411e56f5346e0560b6290775b2ef54979f539b31b020",
    "base": "seila",
    "base_proposed_by_agent": "Seila (her one base)",
-   "owner_confirmed": false,
+   "owner_confirmed": true,
    "title": "Seila at the glowing table"
   },
   {
@@ -234,7 +234,7 @@
    "sha256": "24bc72294fa52aed728ba0044257fab410f3c233bbc401c3520a99fd864e08b1",
    "base": "deluin:first",
    "base_proposed_by_agent": "Deluin, current look (the prompt describes wavy shoulder-length sandy hair and the cream hooded sweater)",
-   "owner_confirmed": false,
+   "owner_confirmed": true,
    "title": "Deluin at the game board"
   },
   {
@@ -242,7 +242,7 @@
    "sha256": "7afc153a4533c34fba24a53597640d048d2be7f66826ee43316078a233267967",
    "base": "deluin:first",
    "base_proposed_by_agent": "Deluin, current look (same words)",
-   "owner_confirmed": false,
+   "owner_confirmed": true,
    "title": "Deluin on the ledge"
   },
   {
@@ -250,7 +250,7 @@
    "sha256": "833f4afc44b32d96adcd1839b8cf357408138438c855872f56dfdb52d7cea574",
    "base": "gladias:first",
    "base_proposed_by_agent": "Gladias, current look (wavy brown hair, short beard)",
-   "owner_confirmed": false,
+   "owner_confirmed": true,
    "title": "Gladias at the council"
   },
   {
@@ -258,7 +258,7 @@
    "sha256": "e68a9bcbba340ef48a461ccd1d3c2a3da7fb356db7ab3cd0033e7c252f885391",
    "base": "zei",
    "base_proposed_by_agent": "Zei (his one base); Mu also appears",
-   "owner_confirmed": false,
+   "owner_confirmed": true,
    "title": "Zei with Mu in the snow"
   },
   {
@@ -266,7 +266,7 @@
    "sha256": "b289adcd7e837078186ed0cc79f401cfdfcbd293359e027f75dc7b3fc9489fcc",
    "base": "gladias:b",
    "base_proposed_by_agent": "Gladias b, the current default (the prompt describes warm olive-brown skin and short black hair greying at the temples)",
-   "owner_confirmed": false,
+   "owner_confirmed": true,
    "title": "Gladias at sunset"
   },
   {
@@ -274,7 +274,7 @@
    "sha256": "610d235e853183ce3d323be19166e44d6dbacd48290f6910bb4f186710fad0f0",
    "base": "deluin:b",
    "base_proposed_by_agent": "Deluin b (the prompt describes warm tan skin and long straight black hair)",
-   "owner_confirmed": false,
+   "owner_confirmed": true,
    "title": "Deluin with hood and mug"
   }
  ]

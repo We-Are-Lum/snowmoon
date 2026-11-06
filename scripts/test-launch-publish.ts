@@ -132,9 +132,13 @@ const confirmedPicks = path.join(tmp, 'picks-confirmed.json');
 writeFileSync(confirmedPicks, JSON.stringify({ ...picks, first_remixes: picks.first_remixes.map((r) => ({ ...r, owner_confirmed: true })) }, null, 1));
 const rDry = await remixes([`--bases=${outFile}`]);
 check('first remixes: the dry run exits 0, writes nothing, and plans ten', rDry.status === 0 && /Dry run: nothing written/.test(rDry.out) && (rDry.out.match(/^-- first-remixes\//gm) ?? []).length === 10 && JSON.stringify(await counts()) === JSON.stringify(before2), rDry.out.slice(-600));
-check('first remixes: the dry run says each base is the agent\'s proposal until the owner confirms it', (rDry.out.match(/the owner confirms it/g) ?? []).length === 10);
+check('first remixes: the dry run says each base is confirmed by the owner (2026-11-06)', (rDry.out.match(/^-- first-remixes\/[^\n]*\(confirmed by the owner\)/gm) ?? []).length === 10);
 check('first remixes: Midjourney is on the model list now (closed, by Midjourney), so the dry run raises no model refusal', !/Midjourney is not on config\/models\.json/.test(rDry.out));
-const rUnconf = await remixes([`--bases=${outFile}`, '--apply', '--confirm-owner-go', `--storage-dir=${storage}`], { LAUNCH_PUBLISH_TEST_CONFIG: JSON.stringify({ public: false, midjourneyListed: true }) });
+// The owner confirmed every base (2026-11-06), so the committed picks are confirmed; the refusal is proven on a copy
+// with the confirmations taken out.
+const unconfirmedPicks = path.join(tmp, 'picks-unconfirmed.json');
+writeFileSync(unconfirmedPicks, JSON.stringify({ ...picks, first_remixes: picks.first_remixes.map((r) => ({ ...r, owner_confirmed: false })) }, null, 1));
+const rUnconf = await remixes([`--bases=${outFile}`, `--picks=${unconfirmedPicks}`, '--apply', '--confirm-owner-go', `--storage-dir=${storage}`], { LAUNCH_PUBLISH_TEST_CONFIG: JSON.stringify({ public: false, midjourneyListed: true }) });
 check('first remixes: --apply with unconfirmed bases is refused, nothing written', rUnconf.status !== 0 && JSON.stringify(await counts()) === JSON.stringify(before2), rUnconf.out.slice(-400));
 const rNoMj = await remixes([`--bases=${outFile}`, `--picks=${confirmedPicks}`, '--apply', '--confirm-owner-go', `--storage-dir=${storage}`], { LAUNCH_PUBLISH_TEST_CONFIG: JSON.stringify({ public: false, midjourneyListed: false }) });
 check('first remixes: --apply while Midjourney is not on the model list is refused, nothing written', rNoMj.status !== 0 && /Midjourney is not on config/.test(rNoMj.out) && JSON.stringify(await counts()) === JSON.stringify(before2), rNoMj.out.slice(-400));

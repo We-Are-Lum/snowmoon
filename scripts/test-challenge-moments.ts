@@ -110,18 +110,18 @@ check('config: a current default look per challenge character, each a design id 
   check('P9g: the exception holds until the close and ends at it', spoilerExceptionOn(new Date(Date.parse(CHALLENGE.dates.closes) - 1)) && !spoilerExceptionOn(new Date(Date.parse(CHALLENGE.dates.closes))));
 
   const c = { public: CHALLENGE.public, cardsApproved: CHALLENGE.cardsApproved, sceneLinesApproved: CHALLENGE.sceneLinesApproved };
-  check('P2m: as committed, the cards and scene lines aren\'t approved and /challenge isn\'t public', !c.public && !c.cardsApproved && !c.sceneLinesApproved && p2mProblems(c, files).length === 0, p2mProblems(c, files).join('; '));
-  proof('P2m: public with the cards unapproved fails', p2mProblems({ ...c, public: true, sceneLinesApproved: true }, files).length > 0);
-  proof('P2m: public with the scene lines unapproved fails', p2mProblems({ ...c, public: true, cardsApproved: true }, files).length > 0);
+  check('P2m: as committed, the cards and scene lines are approved (owner, 2026-11-06) and /challenge isn\'t public yet', !c.public && c.cardsApproved && c.sceneLinesApproved && p2mProblems(c, files).length === 0, p2mProblems(c, files).join('; '));
+  proof('P2m: public with the cards unapproved fails', p2mProblems({ public: true, cardsApproved: false, sceneLinesApproved: true }, files).length > 0);
+  proof('P2m: public with the scene lines unapproved fails', p2mProblems({ public: true, cardsApproved: true, sceneLinesApproved: false }, files).length > 0);
   check('P2m: public once both are approved passes', p2mProblems({ public: true, cardsApproved: true, sceneLinesApproved: true }, files).length === 0);
   proof('P2m: an unapproved card without the Draft mark fails', p2mProblems(c, plant('src/lib/challenge/view.ts', (x) => x.replace('draft: CHALLENGE.cardsApproved ? null : W.draftShort', 'draft: null'))).length > 0);
 
-  check('P6ac: entries as pictures are off as committed', CHALLENGE.pictureEntries === false && p6acProblems(CHALLENGE.pictureEntries, TERMS.sections, PRIVACY.sections).length === 0);
-  proof('P6ac: turned on with today\'s Terms and Privacy fails', p6acProblems(true, TERMS.sections, PRIVACY.sections).length > 0);
-  const terms = TERMS.sections.map((s) => (s.n === '6e' ? { ...s, body: ['… may remix pictures of its characters …'] } : s));
-  const privacy = PRIVACY.sections.map((s) => (s.n === 4 ? { ...s, body: ['… for each picture of a challenge character you publish …'] } : s));
-  check('P6ac: on, once Terms §6e and Privacy §4 say so, passes', p6acProblems(true, terms, privacy).length === 0);
-  proof('P6ac: Terms saying it but not Privacy fails', p6acProblems(true, terms, PRIVACY.sections).length > 0);
+  check('P6ac: entries as pictures are on as committed, and Terms §6e and Privacy §4 say so (owner\'s reread, 2026-11-06)', CHALLENGE.pictureEntries === true && p6acProblems(CHALLENGE.pictureEntries, TERMS.sections, PRIVACY.sections).length === 0, p6acProblems(true, TERMS.sections, PRIVACY.sections).join('; '));
+  const oldTerms = TERMS.sections.map((s) => (s.n === '6e' ? { ...s, body: ['… may remix its characters\' sheets …'] } : s));
+  const oldPrivacy = PRIVACY.sections.map((s) => (s.n === 4 ? { ...s, body: ['… for each version of a challenge character you publish …'] } : s));
+  proof('P6ac: turned on with the words before the reread (sheets) fails', p6acProblems(true, oldTerms, oldPrivacy).length > 0);
+  const terms = TERMS.sections;
+  proof('P6ac: Terms saying it but not Privacy fails', p6acProblems(true, terms, oldPrivacy).length > 0);
 }
 
 // --- The hub's data (R1) --------------------------------------------------------------------------------------------
@@ -130,7 +130,7 @@ check('config: a current default look per challenge character, each a design id 
   const v = await V.challengeView(null);
   check('hub: the cards in CHALLENGE.characters\' order', v.cards.map((x) => x.c.slug).join() === CHALLENGE.characters.join(), v.cards.map((x) => x.c.slug).join());
   check('hub: no random-remixes block (owner, answer 9)', !('remixes' in v) && !('pick' in v));
-  check('hub: every card carries the "Draft wording" mark while unapproved', v.cards.every((x) => x.c.draft === 'Draft wording'));
+  check('hub: the cards are approved, so no card carries the "Draft wording" mark, nor the hub\'s line', v.cards.every((x) => x.c.draft === null) && v.draftShort === null);
   check('hub: every card has its line, about three facts with the book\'s words and their blocks, and its moments', v.cards.every((x) => x.c.line && x.c.facts.length >= 2 && x.c.facts.every((f) => f.quote && /^c\d+-b\d+$/.test(f.block) && f.href.startsWith('/chapter/')) && x.c.moments.length >= 2));
   check('hub: moment chips are the character\'s moments, in book order, each with "Ch N"', v.cards.every((x) => x.c.moments.map((m) => m.id).join() === momentsWith(x.c.slug).map((m) => m.id).join() && x.c.moments.every((m) => /^Ch \d+$/.test(m.chip))));
   check('hub: the moments say whose list it is', v.cards.every((x) => x.w.moments === 'Moments picked by @naaate'));

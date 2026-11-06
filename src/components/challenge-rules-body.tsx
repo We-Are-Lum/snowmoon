@@ -14,14 +14,17 @@ export function ChallengeRulesBody({ v }: { v: RulesView }) {
       </p>
       {v.adminNote && <p className="dz-note ch-admin-only">{v.adminNote}</p>}
       <h1>{v.title}</h1>
-      <p className="as-draft ch-draft">{v.draft}</p>
+      {v.draft && <p className="as-draft ch-draft">{v.draft}</p>}
       <p className="ch-deadline">
         <strong>{v.deadline}</strong>
         {v.deadlineAfter && ` ${v.deadlineAfter}`}
       </p>
       {/* Who can enter, up front (owner, 2026-11-03; launch rehearsal item 2): no lookup here, the score is checked at Generate. */}
       {v.who && <p className="ch-who">{v.who}</p>}
-      <p className="ch-intro">{v.intro}</p>
+      <p className="ch-intro">
+        {v.intro}
+        {v.introDraft && <span className="as-draft ch-draft"> · {v.introDraft}</span>}
+      </p>
       <section className="ch-rules">
         <p>
           <strong>{v.next[0]}</strong> {v.next[1]}

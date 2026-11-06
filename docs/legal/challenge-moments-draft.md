@@ -1,7 +1,11 @@
-# The remix challenge as moments: Terms, Privacy and site lines (DRAFT)
+# The remix challenge as moments: Terms, Privacy and site lines (reread by the owner, 2026-11-06)
 
 Drafted by a coding agent (Claude, a closed model by Anthropic), 2026-11-05, on branch `challenge-moments`, for the
-coordinator's review and the owner's reread. **DRAFT: none of these words is in `src/lib/legal.ts`.** Legal texts
+coordinator's review and the owner's reread. **Reread (owner, 2026-11-06; "reviewed by the coordinator, approved by the
+owner"): T1–T7, P1–P5, §6 and §7 as drafted, with the IPFS record option R (removed from Terms §6e and Privacy §4).
+They are in `src/lib/legal.ts` word for word (Terms huq39i, Privacy ozmbuf; LEGAL.effective 2026-11-06), and
+`CHALLENGE.pictureEntries` is on. The launch rules on the site and the dates are approved too. The closed-model lines are
+as the owner approved them.** The history below is kept as drafted. Legal texts
 describe today, so they ship only in the release that makes pictures the entries, after the owner says "reread".
 `LEGAL.ownerReread` is not touched.
 
