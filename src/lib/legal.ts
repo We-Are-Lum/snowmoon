@@ -161,7 +161,13 @@ export const LEGAL: {
     // to §5's last sentence ("not linked to your account" in place of "without your account") and "or the assistant"
     // kept in §7's Lens sentence: §4's three check items add "and asking the assistant"; §5 records questions with your
     // account; §7's Neynar, Lens and Bluesky items say each is asked when you ask the assistant. The words before were 9tvzf3.
-    privacy: { words: 'uxou8g', on: '2026-11-05', by: 'FID 6786' },
+    // 2026-11-05, the admin activity page (branch admin-activity; docs/proposals/admin-activity.md): Privacy §4 adds
+    // "Our admins can see what we keep, to run the site." before "Deletions happen…", the owner's own wording, approved
+    // by the owner 2026-11-05 (coordinator-reviewed: "reviewed by the coordinator, approved by the owner"); no other word
+    // changed. It ships with the page. The words before were 9tvzf3.
+    // Combined at the admin activity page's merge (2026-11-05): both approved changes above, from the same base 9tvzf3,
+    // and nothing else (assistant step 1, uxou8g; the admins line, gorslr).
+    privacy: { words: 'kwoekw', on: '2026-11-05', by: 'FID 6786' },
   },
 };
 
@@ -227,6 +233,7 @@ export const PRIVACY: LegalDoc = {
           'If you play Minpentai through your agent (for now, only people the site has invited): each match it starts, kept with your account. That is the board, every turn\'s moves and who chose them (you, your agent or the site\'s computer), when each turn was played, your standing order (its words and the style it was matched to), any note your agent attached to a turn, your agent\'s name and the model it said it runs. While the match is on, only you can see your side, through your agent and your match link; the site\'s computer sees only its own side. When the match ends, the record is public: anyone can read the board, the moves, who chose them, and the model your agent named. It doesn\'t show your Farcaster name or ID, or your agent\'s name (which elsewhere on the site appears as "agent of" you), and your standing order\'s words and your agent\'s notes stay private. Your match link opens your side for anyone who has it, until your agent replaces it; the page tells browsers not to pass it on to other sites. Match records, finished or not, are kept until you ask us to remove them: write to us (section 11) with the match\'s link or id, and we delete the whole record by hand. Only we remove match records, by hand, on request.',
         ],
         'For a wallet account we also keep its address and its prepaid balance and spending: the payments you made to us (transaction, token, amount and its value in US dollars), what each generation cost, and any charge added back to your balance because a generation gave you no picture. This links money to your account, to keep your balance. Payments on Base are public on-chain, as every Base transaction is. A wallet\'s balance stays with the wallet when it is linked to a Farcaster account.',
+        'Our admins can see what we keep, to run the site.',
         'Deletions happen at the next routine clean-up, so they can come a little later than stated.',
       ],
     },
