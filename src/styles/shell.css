@@ -405,3 +405,7 @@
 .legal-back { margin: 0 0 8px; font-family: var(--label); font-size: var(--text-label); }
 .legal-effective, .legal-reread { font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
 .legal ul { padding-left: 1.2em; }
+
+/* A sign-in that failed, on the page it came back to (2026-11-06): the error first, then the ways to try again. */
+.signin-failed { display: flex; flex-direction: column; gap: 10px; max-width: 420px; }
+.signin-error { margin: 0; padding: 10px 12px; border: 1px solid var(--warn); border-radius: 6px; color: var(--ink); background: var(--flag-bg); }

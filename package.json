@@ -38,6 +38,7 @@
     "test:agent-api-live": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-agent-api-live.ts",
     "test:agent-api": "tsx --conditions=react-server scripts/test-agent-api.ts",
     "test:wallet": "tsx --conditions=react-server scripts/test-wallet.ts",
+    "test:signin-error": "tsx scripts/test-signin-error.ts",
     "test:signin-lens-bluesky": "tsx --conditions=react-server scripts/test-signin-lens-bluesky.ts",
     "test:bluesky-check": "tsx --conditions=react-server scripts/test-bluesky-check.ts",
     "verify:lens-app": "tsx scripts/verify-lens-app.ts",

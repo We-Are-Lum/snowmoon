@@ -15,6 +15,8 @@ export const SOCIAL_WORDING = {
   declined: 'The signature was declined.',
   odd: 'That sign-in message wasn’t for this site and this wallet, so we didn’t ask your wallet to sign it.',
   blueskyLost: 'That sign-in was started in another tab or took too long. Start again.',
+  /** Bluesky sent you back without signing you in (you cancelled, or it refused). Draft wording (2026-11-06). */
+  blueskyDeclined: 'Bluesky didn’t sign you in: it was cancelled or refused there. Try again.',
   server: 'Signing in didn’t work. Try again in a moment.',
 } as const;
 
@@ -126,7 +128,8 @@ export async function finishBlueskySignIn(params: URLSearchParams): Promise<stri
     sealed = null;
   }
   if (!sealed) throw new SocialError(SOCIAL_WORDING.blueskyLost);
-  if (params.get('error')) throw new SocialError(SOCIAL_WORDING.declined);
+  // Bluesky's own refusal or a cancel (?error=…): not "the signature was declined", which is Lens's (2026-11-06).
+  if (params.get('error')) throw new SocialError(SOCIAL_WORDING.blueskyDeclined);
   const res = await fetch('/api/auth/bluesky/callback', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },

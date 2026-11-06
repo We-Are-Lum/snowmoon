@@ -30,8 +30,8 @@ export const CHALLENGE_WORDING = {
   whoCanEnter: () => `Entering needs a Farcaster, Lens or Bluesky account that passes the site’s check; we check when you press ${CHALLENGE.pictureEntries ? 'Make it' : 'Generate'}.`,
   intro: () =>
     CHALLENGE.pictureEntries
-      ? // Draft wording (2026-11-06): the intro for pictures as the entries; not yet approved.
-        `From ${windowText()}, make your own picture of ${listed(callNames())} on snowmoon.party: start from one of its pictures, set it at a moment from the book, change what you like, and publish. Your picture gets its own page, credited back to what you built on.`
+      ? // Approved by the owner (2026-11-06; "reviewed by the coordinator, approved by the owner"), the dates and names from config.
+        `From ${windowText()}, make your own picture of ${listed(callNames())}: start from one of their pictures, set it at a moment from the book, change what you like, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.`
       : `From ${windowText()}, make your own version of ${listed(callNames())} on snowmoon.party: start from a published sheet, or from someone else’s remix, change it, and publish. Your version gets its own page, credited back to what you built on.`,
   nextHead: 'What happens next.',
   // Draft wording (owner, 2026-11-05 evening): no prize for now, and nothing promised about what follows.

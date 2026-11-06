@@ -334,7 +334,10 @@ function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu'
   const name = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? (wallet.linked?.name ?? wallet.short) : social ? social.name : null;
   // On the You page, signed out, the page itself offers the ways to sign in: the rail and the menu don't repeat them,
   // so each button (and any error it shows) is on the screen once (2026-11-05, the owner's localhost sign-ins).
-  const onYou = usePathname() === '/you';
+  // The same on Bluesky's return page (2026-11-06): when a sign-in fails there, the page offers the ways to sign in under
+  // its error, so the rail and the menu don't repeat them.
+  const path = usePathname();
+  const onYou = path === '/you' || path === '/sign-in/bluesky';
   if (auth.kind === 'loading') return <div className={`menu-account${at}`} aria-busy="true" />;
   if (name === null && onYou) return null;
   if (name === null)

@@ -67,7 +67,8 @@ export async function rulesView(sql: Sql | null, now: Date = new Date()): Promis
     // The rules, dates and who-can-enter lines were approved (owner, 2026-11-06; "reviewed by the coordinator, approved
     // by the owner"); only the intro's wording is still a draft, so the mark sits beside it alone.
     draft: null,
-    introDraft: W.draftShort,
+    // The intro was approved too (owner, 2026-11-06): no "Draft wording" mark is left on the rules page.
+    introDraft: null,
     deadline: ph === 'before' ? W.opensOn() : ph === 'open' ? W.deadline() : W.closed(),
     deadlineAfter: ph === 'before' ? W.deadline() : null,
     who: ph !== 'closed' ? W.whoCanEnter() : null,
