@@ -58,6 +58,12 @@ export async function getPerson(request: Request): Promise<number | null> {
   return s ? await personForSocial(db(), s) : null;
 }
 
+/** The kind of sign-in on the request (not who it acts as): for the assistant's words (src/lib/chat/gate.ts). */
+export function signedInAs(request: Request): 'wallet' | 'lens' | 'bluesky' | null {
+  if (getWallet(request)) return 'wallet';
+  return getSocial(request)?.kind ?? null;
+}
+
 /** A Lens or Bluesky sign-in's session (src/lib/social/session.ts), or null. */
 export function getSocial(request: Request): SocialSession | null {
   const token = (request.headers.get('authorization') ?? '').match(/^Bearer\s+(\S+)$/i)?.[1];

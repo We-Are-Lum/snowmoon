@@ -24,7 +24,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, imagesDailySpendCapUsd } from '../src/lib/config';
+import { AGENTS, ASSISTANT, CHALLENGE, CHAT, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, imagesDailySpendCapUsd } from '../src/lib/config';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
 import { rehearsalOn } from '../src/lib/challenge/rehearsal-switch';
@@ -36,6 +36,7 @@ import { MENTIONS_FILE, byMentionsThenName, mentionsFile } from './lib/character
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
 import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, P5I_FILES, p5gProblems, p5iProblems } from './lib/p5g';
+import { P5B_PLANTS, p5bProblems } from './lib/p5b';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
 import { p2mProblems, p6acProblems, p9gProblems } from './lib/challenge-moments';
@@ -1202,18 +1203,13 @@ add({
 add({
   id: 'P5b',
   principle: 5,
-  name: 'moderator and admin powers: hide, and write a labelled pick, nothing else',
+  name: 'moderator and admin powers: hide, and write a labelled pick; only an admin-only page (404 to everyone else) may sort',
   load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
-  run: (files) =>
-    files
-      // Every admin check goes through isAdmin (src/lib/admins.ts, owner 2026-10-29: "ADMINS replaces the scattered owner lists").
-      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS|\bADMINS\b|\bisAdmin\(/.test(f.text) && !f.file.endsWith('config.ts') && !f.file.endsWith('src/lib/admins.ts'))
-      // The one write admins may make beyond hiding (owner, reread 2026-10-29): a pick, in studio.admin_picks.
-      .map((f: { file: string; text: string }) => ({ ...f, text: f.text.replace(/(insert into|update|delete from)\s+studio\.admin_picks\b[^`]*`/gi, '') }))
-      .filter((f: { text: string }) => /status\s*[:=]\s*['"](published|draft)['"]|set\s+status\s*=\s*'(published|draft)'|order by|\.sort\(/i.test(f.text))
-      .map((f: { file: string }) => `${f.file}: moderator or admin code does more than hide or pick`),
+  // The rule and its one exception (owner, 2026-11-05) live in scripts/lib/p5b.ts; test:admin-activity proves each fault.
+  run: (files) => p5bProblems(files),
   plant: (files) => {
-    files.push({ file: 'src/planted.ts', text: "if (ADMINS.includes(fid)) await sql`update studio.elements set status = 'published'`" });
+    // A PUBLIC page that checks isAdmin and sorts by counts must still fail.
+    files.push(P5B_PLANTS.publicSort);
   },
 });
 // A pick is always labelled and switchable, and the reader's choice stays on their device (owner, reread 2026-10-29).
@@ -1676,6 +1672,55 @@ add({
   },
 });
 
+// The admin activity page (owner, 2026-11-05; docs/proposals/admin-activity.md): admins only, never cached, totals
+// for everything private. P6's single letters are all taken on main or a branch, hence P6aa.
+add({
+  id: 'P6aa',
+  principle: 6,
+  name: 'the admin activity page answers 404 to anyone but an admin, is never cached, and returns no per-person private count',
+  load: async () => {
+    const live = async (p: string, headers: Record<string, string> = {}) => {
+      const r = await fetch(BASE + p, { headers: { 'cache-control': 'no-cache', ...headers }, redirect: 'manual' });
+      return { p, status: r.status, cache: r.headers.get('cache-control') ?? '', body: await r.text() };
+    };
+    const { defs, PRIVATE_WORDS } = await import('../src/lib/admin-activity-defs');
+    const { CHALLENGE } = await import('../src/lib/config');
+    return {
+      lib: read('src/lib/admin-activity.ts'),
+      route: read('src/app/api/admin/activity/route.ts'),
+      defs: defs(CHALLENGE.id),
+      words: PRIVATE_WORDS,
+      live: [await live('/admin/activity'), await live('/api/admin/activity'), await live('/api/admin/activity', { authorization: 'Bearer not-a-token' })],
+    };
+  },
+  run: async (c) => {
+    const { defProblems } = await import('../src/lib/admin-activity-defs');
+    const problems: string[] = [];
+    // The gate comes first: nothing is read before isAdmin says yes.
+    const fn = c.lib.slice(c.lib.indexOf('export async function adminActivity('));
+    const gate = fn.search(/if \(!isAdmin\(fid\)\) return \{ status: 404/);
+    const firstRead = fn.search(/\bsql\.begin\(|\bsql`|\btx`/);
+    if (gate < 0 || (firstRead >= 0 && firstRead < gate)) problems.push('src/lib/admin-activity.ts: adminActivity reads before (or without) the isAdmin 404 gate');
+    if (!/sql\.begin\('read only'/.test(c.lib)) problems.push('src/lib/admin-activity.ts: not one read-only transaction');
+    if (/\b(insert\s+into|update\s+studio\.|delete\s+from)\b/i.test(c.lib)) problems.push('src/lib/admin-activity.ts: writes');
+    if (/export\s+(async\s+)?function\s+(POST|PUT|PATCH|DELETE)\b/.test(c.route)) problems.push('src/app/api/admin/activity/route.ts: has a write handler');
+    if (!/'Cache-Control': 'private, no-store'/.test(c.route) || !/headers: NO_STORE/.test(c.route)) problems.push('src/app/api/admin/activity/route.ts: not every answer is private, no-store');
+    if (!/adminActivity\(db\(\), fid/.test(c.route)) problems.push('src/app/api/admin/activity/route.ts: does not answer through adminActivity (the gate)');
+    // Every count is a total: its key names only category columns (never a person) and its number is an aggregate.
+    for (const d of c.defs) problems.push(...defProblems(d));
+    // Live, signed out and with a bad token: 404, never cached, and none of the page's words.
+    for (const l of c.live) {
+      if (l.status !== 404) problems.push(`${l.p}: answers ${l.status} signed out, not 404`);
+      if (!/no-store/.test(l.cache)) problems.push(`${l.p}: Cache-Control is "${l.cache}", without no-store`);
+      for (const w of c.words) if (l.body.includes(w)) problems.push(`${l.p}: the signed-out answer holds "${w}"`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    // A per-person count: the number of pictures each FID asked for.
+    c.defs.push({ id: 'planted', section: 'making', unit: 'count', key: 'fid::text', n: 'count(*)', from: 'studio.image_asks where true', ts: 'at' });
+  },
+});
 add({
   id: 'P6d',
   principle: 6,
@@ -1982,6 +2027,41 @@ add({
   plant: (c) => {
     c.on = true;
     c.s7 = c.s7.replace(/public\.api\.bsky\.app/g, 'the AppView');
+  },
+});
+
+// P6ab (branch assistant-any-account, owner 2026-11-05): the assistant's one rule (ASSISTANT.anyAccount: everyone who
+// asks passes their own network's check; Lens and Bluesky accounts ask under their own number) is on only once the
+// owner's reread words say so (docs/legal/assistant-any-account-step1.md): Privacy §5 no longer counts questions only
+// under a Farcaster ID; §7 says Neynar, Lens and Bluesky are asked when someone asks the assistant; the notice no longer
+// says "under your Farcaster ID". Legal texts describe today (pattern of P6p).
+add({
+  id: 'P6ab',
+  principle: 6,
+  name: 'the assistant opens to Lens and Bluesky (and checks Neynar) only when Privacy §5, §7 and the notice say so',
+  load: async () => ({
+    on: ASSISTANT.anyAccount as boolean,
+    s5: (PRIVACY.sections.find((s) => s.n === 5)?.body ?? []).flat().join(' '),
+    s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' '),
+    notice: currentNoticeItems().flat().join(' '),
+  }),
+  run: (c) => {
+    if (!c.on) return [];
+    const problems: string[] = [];
+    const sentences = c.s7.split(/(?<=[.!?])\s+(?=[A-Z])/);
+    const says = (what: RegExp) => sentences.some((x) => what.test(x) && /\bassistant\b/.test(x));
+    const why = "the owner's reread of docs/legal/assistant-any-account-step1.md first";
+    if (/Under your Farcaster ID/i.test(c.s5)) problems.push(`ASSISTANT.anyAccount is on, but Privacy §5 still counts questions under your Farcaster ID only: ${why}`);
+    if (!says(/\bNeynar receives your Farcaster ID\b/)) problems.push(`ASSISTANT.anyAccount is on (Farcaster accounts pass Neynar to ask), but Privacy §7's Neynar sentence doesn't name the assistant: ${why}`);
+    if (!says(/\bLens score\b/)) problems.push(`ASSISTANT.anyAccount is on, but Privacy §7's Lens score sentence doesn't name the assistant: ${why}`);
+    if (!says(/public\.api\.bsky\.app/)) problems.push(`ASSISTANT.anyAccount is on, but Privacy §7's Bluesky check sentence doesn't name the assistant: ${why}`);
+    if (/\bFarcaster ID\b/.test(c.notice)) problems.push(`ASSISTANT.anyAccount is on, but the assistant's notice still says questions are recorded under your Farcaster ID: ${why}`);
+    return problems;
+  },
+  plant: (c) => {
+    // The switch on with today's words (all of which name only the Farcaster ID, or images only).
+    c.on = true;
+    c.s5 = c.s5 + ' Under your Farcaster ID we record only how many questions you ask.';
   },
 });
 
