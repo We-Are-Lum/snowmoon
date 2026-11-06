@@ -371,6 +371,15 @@ async function plantWalletSession(page: Page) {
 const accountIn = (within: string) => `${within} .menu-account`;
 async function checkAccountSignedOut(page: Page, within: string, where: string) {
   const acct = page.locator(accountIn(within));
+  // Signed out on the website (2026-11-06, Garance): one "Sign in" button, closed, and no way to sign in shown until it
+  // is pressed; pressed, every way that is on (the checks below).
+  const opener = acct.locator('button.signin-open');
+  await opener.waitFor({ timeout: 10000 }).catch(() => {});
+  const first = await acct.locator('button').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
+  if (first.join(' | ') !== 'Sign in') fail(`${where}: signed out, the account shows "${first.join(' | ')}" (want one "Sign in" button)`);
+  if ((await opener.getAttribute('aria-expanded').catch(() => null)) !== 'false') fail(`${where}: the "Sign in" button doesn't say it is closed (aria-expanded)`);
+  if (await acct.locator('.signin-choice').count()) fail(`${where}: the ways to sign in show before "Sign in" is pressed`);
+  await opener.click().catch(() => fail(`${where}: no "Sign in" button to press`));
   await acct.locator('button', { hasText: 'Sign in with a wallet' }).waitFor({ timeout: 10000 }).catch(() => {});
   // The small "Use another server or handle" link under "Sign in with Bluesky" (2026-11-05) is not a way to sign in.
   const names = await acct.locator('button:not(.social-other)').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
@@ -381,12 +390,12 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
   }
   // The phone menu and the wide-screen rail (owner, 2026-10-19): in the menu first in the sheet; in both, two full-width buttons at least 48px tall in the menu's
   // main font, and the owner's line under them.
-  const first = await page.evaluate(() => {
+  const firstInSheet = await page.evaluate(() => {
     const a = document.querySelector('.menu-sheet .menu-account');
     const n = document.querySelector('.menu-sheet .nav-list');
     return !!a && !!n && !!(a.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_FOLLOWING);
   });
-  if (within === '.menu-sheet' && !first) fail(`${where}: the account is not above the menu's items`);
+  if (within === '.menu-sheet' && !firstInSheet) fail(`${where}: the account is not above the menu's items`);
   // Farcaster and a wallet as equals (owner, 2026-10-30; src/components/sign-in-choices.tsx): the same box, the same
   // fill, border, font and weight, each with one line under it; only the ways that are on (no Lens or Bluesky yet).
   const boxes = await acct.locator('button.menu-signin').evaluateAll((els) =>
