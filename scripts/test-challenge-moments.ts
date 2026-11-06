@@ -20,7 +20,7 @@ import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { CHALLENGE, IMAGES } from '../src/lib/config';
-const IMAGES_IDS = [IMAGES.model.id, IMAGES.editModel.id];
+const IMAGES_IDS: string[] = [IMAGES.model.id, IMAGES.editModel.id];
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
