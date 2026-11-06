@@ -173,12 +173,16 @@ check('days: anything but 7, 30 or 90 is 30', A.daysFrom('5') === 30 && A.daysFr
 }
 {
   const optional = ['sheet_remix_asks', 'sheet_remix_people', 'coach_spend', 'person_paid', 'person_owed', 'withdrawals'];
-  check('optional counts missing here are left out, without an error', optional.every((id) => v.notHere.includes(id)), v.notHere.join());
+  // With contest's migrations in the folder (remix_count, challenge_daily; merged into challenge-moments, 2026-11-05)
+  // the sheet-remix table and the withdrawn column already exist; the test then only adds the rows.
+  const has = (await pg.query<{ t: string | null; c: number }>(`select to_regclass('studio.sheet_remix_asks')::text as t, (select count(*)::int from information_schema.columns where table_schema = 'studio' and table_name = 'challenge_marks' and column_name = 'withdrawn_at') as c`)).rows[0];
+  const missingHere = (id: string) => ((id === 'sheet_remix_asks' || id === 'sheet_remix_people') && has.t) || (id === 'withdrawals' && has.c) ? true : v.notHere.includes(id);
+  check('optional counts missing here are left out, without an error', optional.every(missingHere), v.notHere.join());
   // PGlite is one session: the site's role is the test's too, so the test steps out of it to add the tables.
   await pg.exec(`reset role;
-    create table studio.sheet_remix_asks (id bigint generated always as identity primary key, remix uuid not null, fid bigint not null, units smallint not null, slot text not null, at timestamptz not null default now());
+    ${has.t ? '' : 'create table studio.sheet_remix_asks (id bigint generated always as identity primary key, remix uuid not null, fid bigint not null, units smallint not null, slot text not null, at timestamptz not null default now());'}
     insert into studio.sheet_remix_asks (remix, fid, units, slot) values ('00000000-0000-0000-0000-0000000000b2', ${ASKER}, 3, 'front');
-    alter table studio.challenge_marks add column withdrawn_at timestamptz;
+    ${has.c ? '' : 'alter table studio.challenge_marks add column withdrawn_at timestamptz;'}
     insert into studio.challenge_marks (challenge, fid, character, version_id, marked_at, withdrawn_at) values ('${CHALLENGE.id}', 900001, 'zei', '00000000-0000-0000-0000-0000000000b2', now() - interval '1 hour', now());
     grant select on studio.sheet_remix_asks to studio_writer;
     set role studio_writer;`);
