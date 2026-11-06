@@ -58,7 +58,8 @@ const { closedModel } = await import('../../src/lib/images/recipe-lines');
 const picks = readPicks(PICKS);
 const recipes = readRemixRecipes(DRAFTS);
 const published = (JSON.parse(readFileSync(BASES, 'utf8')) as { bases: Record<string, { character: string; versionId: string; frontSha256: string }> }).bases;
-const mj = testCfg.midjourneyListed ? { closed: true, maker: 'Midjourney' } : closedModel(MIDJOURNEY_MODEL);
+// The test can force either case; otherwise the real list (Midjourney is on it since 2026-11-05, closed, never offered).
+const mj = testCfg.midjourneyListed === true ? { closed: true, maker: 'Midjourney' } : testCfg.midjourneyListed === false ? null : closedModel(MIDJOURNEY_MODEL);
 const refusals: string[] = [];
 if (!mj || !mj.closed || mj.maker !== 'Midjourney') refusals.push(`Midjourney is not on config/models.json as a closed model by Midjourney (id "${MIDJOURNEY_MODEL}"): every recipe's model must be on the list (principle 3)`);
 

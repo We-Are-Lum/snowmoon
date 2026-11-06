@@ -19,7 +19,8 @@ import { randomUUID } from 'node:crypto';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
-import { CHALLENGE } from '../src/lib/config';
+import { CHALLENGE, IMAGES } from '../src/lib/config';
+const IMAGES_IDS = [IMAGES.model.id, IMAGES.editModel.id];
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -369,6 +370,24 @@ check('config: a current default look per challenge character, each a design id 
   check('the words: "Published. Now post it:", "Then submit it as an entry", "one a day", the sign-in line as the owner wrote it', W.published === 'Published. Now post it:' && W.thenSubmit === 'Then submit it as an entry' && W.oneADay === 'one a day' && W.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
   check('the ready post names the character and the moment', W.postText('Bai', 'The quarterfinal') === 'Bai at The quarterfinal, my remix for the Snowmoon Party remix challenge');
   check('no script served to everyone imports the share words', !/challenge\/(picture-)?wording'/.test(sf + pic));
+}
+
+// === Launch: Midjourney on the model list, the label on the page, the unpublished style ===============================
+{
+  const models = (JSON.parse(read('config/models.json')) as { models: { id: string; open_weights?: boolean; maker?: string; offered?: boolean; license_line?: string }[] }).models;
+  const mj = models.find((m) => m.id === 'midjourney');
+  check('models: Midjourney is listed as a closed model by Midjourney, with its licence line', mj?.open_weights === false && mj.maker === 'Midjourney' && Boolean(mj.license_line));
+  check('models: Midjourney is never offered (offered: false; not the site\'s image or edit model)', mj?.offered === false && IMAGES_IDS.every((id) => id !== 'midjourney'));
+  const named = walk('src').filter((f) => /['"`]midjourney['"`]/i.test(read(f)));
+  check('models: no page, API or picker on the site names Midjourney as a model to use', named.length === 0, named.join());
+  const { howMade, recipeLabel, unpublishedStyle } = await import('../src/lib/images/recipe-lines');
+  const LABEL = "Made with Midjourney, a closed model by Midjourney, outside the site · recipe reported by its maker; it can't be re-run exactly";
+  const r = { model: 'midjourney', endpoint: 'Midjourney v7, outside the site', host: 'Midjourney (outside the site)', settings: { label: LABEL }, seed: null, request_id: null, cost_usd: 0, made_at: '2026-11-05T00:00:00Z', checks: null };
+  const line = howMade(r, 'a'.repeat(64), null, true).map((x) => x.text).join('');
+  check('the recipe line shows the approved Midjourney label word for word, after the model line, with "a closed model by Midjourney"', line.includes(`${LABEL}.`) && line.indexOf(LABEL) > line.indexOf('a closed model by Midjourney') && recipeLabel(r) === LABEL);
+  proof('a recipe without the label shows none', !howMade({ ...r, settings: {} }, 'a'.repeat(64), null, true).map((x) => x.text).join('').includes('Made with Midjourney'));
+  check('a style that isn\'t published: the recipe line says so, and links nowhere', /isn’t published as a style on the site/.test(howMade({ ...r, style: { title: 'Animated series', version_id: 'not published as a style on the site (…)' } }, 'a'.repeat(64), null, true).map((x) => x.text).join('')) && unpublishedStyle({ style: { title: 'Mood', version_id: '712ca63f-de6e-46bf-b3ad-7007b1120e16' } }) === null);
+  check('the sheet page shows the recipe line (howMade) and links a style only from body.style', /howMade\(p\.recipe,/.test(read('src/app/references/designs/[id]/page.tsx')) && /\{!style && body\.style && \(/.test(read('src/app/references/designs/[id]/page.tsx')));
 }
 
 if (failures.length) {

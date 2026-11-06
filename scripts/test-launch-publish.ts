@@ -14,6 +14,7 @@ import path from 'node:path';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
+import { CHALLENGE } from '../src/lib/config';
 import { MIDJOURNEY_LABEL, applyGate, descriptor, pinned, planBase, readLedger, readPicks, sha } from './lib/launch-publish';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -97,11 +98,12 @@ check('publish-bases: the dry run exits 0 and says nothing was written', dry.sta
 check('publish-bases: the dry run lists the ten bases and 28 uploads', (dry.out.match(/^-- /gm) ?? []).length === 10 && (dry.out.match(/images\/readers\/[0-9a-f]{32}\.jpg {2}sha256/g) ?? []).length === 28, String((dry.out.match(/images\/readers\/[0-9a-f]{32}\.jpg {2}sha256/g) ?? []).length));
 check('publish-bases: the dry run says Bai\'s side and back are missing, and why', /missing: side, back \(side and back: the drafts that exist/.test(dry.out));
 check('publish-bases: the dry run writes nothing', JSON.stringify(await counts()) === JSON.stringify(zero));
-check('publish-bases: with the committed switches, the dry run says closed-model bases are refused', /REFUSED while it stands: made with .*a closed model by (OpenAI|Google)/.test(dry.out));
+check('publish-bases: with the committed switches (closed-model bases allowed for the launch), the dry run refuses none', CHALLENGE.closedBasesAllowed === true && !/REFUSED while it stands/.test(dry.out));
 const noGo = await bases(['--apply', `--storage-dir=${storage}`], { LAUNCH_PUBLISH_TEST_CONFIG: OPEN });
 check('publish-bases: --apply without --confirm-owner-go is refused, nothing written', noGo.status !== 0 && /confirm-owner-go/.test(noGo.out) && JSON.stringify(await counts()) === JSON.stringify(zero) && files().length === 0, noGo.out.slice(-400));
-const closed = await bases(['--apply', '--confirm-owner-go', `--storage-dir=${storage}`]);
-check('publish-bases: --apply with CHALLENGE.closedBasesAllowed off (as committed) is refused, nothing written', closed.status !== 0 && /closedBasesAllowed/.test(closed.out) && JSON.stringify(await counts()) === JSON.stringify(zero) && files().length === 0, closed.out.slice(-400));
+// CHALLENGE.closedBasesAllowed is on as committed for the launch (2026-11-05); the switch is still proven by forcing it off.
+const closed = await bases(['--apply', '--confirm-owner-go', `--storage-dir=${storage}`], { LAUNCH_PUBLISH_TEST_CONFIG: JSON.stringify({ public: false, closedBasesAllowed: false }) });
+check('publish-bases: --apply with CHALLENGE.closedBasesAllowed off is refused, nothing written', closed.status !== 0 && /closedBasesAllowed/.test(closed.out) && JSON.stringify(await counts()) === JSON.stringify(zero) && files().length === 0, closed.out.slice(-400));
 const pub = await bases(['--apply', '--confirm-owner-go', `--storage-dir=${storage}`], { LAUNCH_PUBLISH_TEST_CONFIG: JSON.stringify({ public: true, closedBasesAllowed: true }) });
 check('publish-bases: --apply while CHALLENGE.public is on is refused, nothing written', pub.status !== 0 && /CHALLENGE\.public is on/.test(pub.out) && JSON.stringify(await counts()) === JSON.stringify(zero), pub.out.slice(-400));
 const tamp = await bases(['--apply', '--confirm-owner-go', `--storage-dir=${storage}`, `--drafts=${bad}`], { LAUNCH_PUBLISH_TEST_CONFIG: OPEN });
@@ -131,10 +133,10 @@ writeFileSync(confirmedPicks, JSON.stringify({ ...picks, first_remixes: picks.fi
 const rDry = await remixes([`--bases=${outFile}`]);
 check('first remixes: the dry run exits 0, writes nothing, and plans ten', rDry.status === 0 && /Dry run: nothing written/.test(rDry.out) && (rDry.out.match(/^-- first-remixes\//gm) ?? []).length === 10 && JSON.stringify(await counts()) === JSON.stringify(before2), rDry.out.slice(-600));
 check('first remixes: the dry run says each base is the agent\'s proposal until the owner confirms it', (rDry.out.match(/the owner confirms it/g) ?? []).length === 10);
-check('first remixes: the dry run says Midjourney must be on the model list', /Midjourney is not on config\/models\.json/.test(rDry.out));
+check('first remixes: Midjourney is on the model list now (closed, by Midjourney), so the dry run raises no model refusal', !/Midjourney is not on config\/models\.json/.test(rDry.out));
 const rUnconf = await remixes([`--bases=${outFile}`, '--apply', '--confirm-owner-go', `--storage-dir=${storage}`], { LAUNCH_PUBLISH_TEST_CONFIG: JSON.stringify({ public: false, midjourneyListed: true }) });
 check('first remixes: --apply with unconfirmed bases is refused, nothing written', rUnconf.status !== 0 && JSON.stringify(await counts()) === JSON.stringify(before2), rUnconf.out.slice(-400));
-const rNoMj = await remixes([`--bases=${outFile}`, `--picks=${confirmedPicks}`, '--apply', '--confirm-owner-go', `--storage-dir=${storage}`], { LAUNCH_PUBLISH_TEST_CONFIG: JSON.stringify({ public: false }) });
+const rNoMj = await remixes([`--bases=${outFile}`, `--picks=${confirmedPicks}`, '--apply', '--confirm-owner-go', `--storage-dir=${storage}`], { LAUNCH_PUBLISH_TEST_CONFIG: JSON.stringify({ public: false, midjourneyListed: false }) });
 check('first remixes: --apply while Midjourney is not on the model list is refused, nothing written', rNoMj.status !== 0 && /Midjourney is not on config/.test(rNoMj.out) && JSON.stringify(await counts()) === JSON.stringify(before2), rNoMj.out.slice(-400));
 const rPub = await remixes([`--bases=${outFile}`, `--picks=${confirmedPicks}`, '--apply', '--confirm-owner-go', `--storage-dir=${storage}`], { LAUNCH_PUBLISH_TEST_CONFIG: JSON.stringify({ public: true, midjourneyListed: true }) });
 check('first remixes: --apply while CHALLENGE.public is on is refused', rPub.status !== 0 && /CHALLENGE\.public is on/.test(rPub.out) && JSON.stringify(await counts()) === JSON.stringify(before2));

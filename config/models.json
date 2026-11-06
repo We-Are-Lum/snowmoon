@@ -714,6 +714,24 @@
       "license": "MIT",
       "open_weights": true,
       "weights": "https://huggingface.co/openai/whisper-large-v3-turbo"
+    },
+    {
+      "id": "midjourney",
+      "kind": "image",
+      "name": "Midjourney",
+      "maker": "Midjourney",
+      "repo": "midjourney/midjourney",
+      "revision": null,
+      "license_line": "proprietary: Midjourney's terms; weights not published",
+      "license_checked": {
+        "by": "coding agent; the owner allowed his own Midjourney pictures as the bases' first remixes, with the approved label (2026-11-05)",
+        "on": "2026-11-05",
+        "source": "Midjourney's terms (docs/legal/midjourney-reference-draft.md; counsel questions in docs/legal/counsel-questions.md)"
+      },
+      "notes": "A closed model (principle 3: reported). Used only for pictures the owner made himself, outside the site, on his own Midjourney plan, and brought in with the recipe he reported (scripts/import-first-remixes.ts --launch; label: \"Made with Midjourney, a closed model by Midjourney, outside the site · recipe reported by its maker; it can't be re-run exactly\"). Never offered to anyone as a model on the site (the owner's Midjourney condition 1): offered is false, the site has no Midjourney endpoint, and no picker may list it.",
+      "open_weights": false,
+      "offered": false,
+      "runs_on": "outside the site (the owner's own account)"
     }
   ],
   "candidates": [

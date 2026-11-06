@@ -18,6 +18,8 @@ export interface RecipeForLines {
   references?: { sha256: string; what?: string }[];
   checks?: { prompt?: { model?: string; verdict?: string } | null; host_safety_checker?: string | null } | null;
   assist?: { model: string; drafted: string[]; source?: string } | null;
+  /** The style the picture was made in: a published style's version id, or a note that it isn't published. */
+  style?: { title?: string; version_id?: string } | null;
 }
 
 type ModelEntry = { id: string; name?: string; maker?: string; license?: string; open_weights?: boolean };
@@ -125,9 +127,30 @@ export function howMade(
   const m = modelLine(r);
   const runs: { text: string; mono?: boolean }[] = [{ text: m.lead }];
   if (m.endpoint !== null) runs.push({ text: m.endpoint, mono: true }, { text: '.' });
+  // A picture brought in from outside the site carries its approved label in the recipe (the owner's Midjourney label,
+  // 2026-11-05): shown right after the model line, word for word (P2, P8).
+  const label = recipeLabel(r);
+  if (label) runs.push({ text: ` ${label}.` });
+  // A style that isn't published on the site (the launch's bases): say so, rather than link to nothing.
+  const unpublished = unpublishedStyle(r);
+  if (unpublished) runs.push({ text: ` ${unpublished}` });
   const from = madeFromLine(r, frontSha256, isFront);
   const drafted = draftedLine(r);
   runs.push({ text: ` Seed ${r.seed ?? 'not recorded'}, request ${r.request_id ?? 'not recorded'}, cost $${r.cost_usd.toFixed(4)}, ${r.made_at.slice(0, 10)}. ${from ? `${from} ` : ''}${checksLine(r)} ${drafted ? `${drafted} ` : ''}File sha256 ` });
   runs.push({ text: sha256, mono: true }, { text: '.' });
   return runs;
+}
+
+/** The label a recipe carries in its settings (a picture brought in from outside the site), or null. */
+export function recipeLabel(r: Pick<RecipeForLines, 'settings'>): string | null {
+  const l = r.settings?.label;
+  return typeof l === 'string' && l.trim() ? l.trim().replace(/\.$/, '') : null;
+}
+
+/** For a picture made in a style that isn't published as a style on the site: the sentence that says so. */
+export function unpublishedStyle(r: Pick<RecipeForLines, 'style'>): string | null {
+  const st = r.style;
+  // Only a recipe that says so (the launch's bases: version_id "not published as a style on the site …").
+  if (!st || typeof st.version_id !== 'string' || !/^not published/i.test(st.version_id)) return null;
+  return `Made in the style “${st.title ?? 'untitled'}”, which isn’t published as a style on the site; its text is in the prompt above.`; // draft wording (2026-11-05)
 }
