@@ -1490,7 +1490,7 @@ add({
       do $$ begin if to_regclass('studio.check_decisions') is not null then
         insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '42', 'neynar-score>=0.7', true);
       end if; end $$;
-      -- Free remixes (NEXT_remix_count.sql, branch remix-submit): one view of a remix, by FID 42.
+      -- Free remixes (0037_remix_count.sql, branch remix-submit): one view of a remix, by FID 42.
       do $$ begin if to_regclass('studio.sheet_remix_asks') is not null then
         insert into studio.sheet_remix_asks (remix, fid, units, slot) values ('00000000-0000-4000-8000-0000000000a1', 42, 1, 'front');
       end if; end $$;`);
@@ -2154,7 +2154,7 @@ add({
     if (c.status !== 404) problems.push(`${BASE}/challenge answers ${c.status} to a signed-out visitor, not 404`);
     // The whole HTML, its inline page data included; a link to /challenge in the markup itself.
     for (const [where, html] of [['/challenge', c.html], ['/', c.home]] as const) {
-      const m = /Remix the cast|remix challenge/i.exec(String(html)) ?? /href="\/challenge"/.exec(String(html).replace(/<script[\s\S]*?<\/script>/gi, ''));
+      const m = /Remix the cast|Remix challenge|remix challenge/i.exec(String(html)) ?? /href="\/challenge"/.exec(String(html).replace(/<script[\s\S]*?<\/script>/gi, ''));
       if (m) problems.push(`${BASE}${where}: its HTML names the challenge ("${m[0]}")`);
     }
     return problems;

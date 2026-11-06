@@ -21,7 +21,7 @@ export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   if (!CHALLENGE.public) return { robots: { index: false, follow: false } };
-  return { title: 'Remix the cast', description: 'The remix challenge on Snowmoon Party: pick a character, remix one of its bases.' };
+  return { title: 'Remix challenge', description: 'The remix challenge on Snowmoon Party: pick a character, remix one of its bases.' };
 }
 
 export default async function ChallengePage() {

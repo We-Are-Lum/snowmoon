@@ -67,7 +67,7 @@ export const LANDING_WORDING = {
       : `This is a version of ${name} in Snowmoon’s remix challenge, ${windowText()}. To make your own, sign in with Farcaster, press Remix, change it and publish.`,
   arrivalLink: 'How the challenge works',
   /** The card's words, drawn in code. */
-  cardTop: 'SNOWMOON · REMIX THE CAST',
+  cardTop: 'SNOWMOON · REMIX CHALLENGE',
   cardAi: 'AI-GENERATED PICTURE · NOT BY THE AUTHOR',
   previewTitle: (name: string, title: string) => (title.trim() ? `${name}: ${title.trim()}` : name),
   previewDescription: (name: string, by: string) => `A version of ${name} by ${by}, remixed on Snowmoon Party. AI-generated picture, not by the author.`,

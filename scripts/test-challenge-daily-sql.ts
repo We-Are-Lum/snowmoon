@@ -1,5 +1,5 @@
 /**
- * NEXT_challenge_daily.sql (branch contest, 2026-11-04), tested on an in-memory Postgres (PGlite), the way
+ * 0038_challenge_daily.sql (branch contest, 2026-11-04), tested on an in-memory Postgres (PGlite), the way
  * scripts/test-sql-pack.ts tests the SQL pack: the three parts are read from the file itself, so what is tested is
  * what the owner pastes. Never a production database.
  *
@@ -22,7 +22,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const FILE = path.join(ROOT, 'supabase/migrations/NEXT_challenge_daily.sql');
+const FILE = path.join(ROOT, 'supabase/migrations/0038_challenge_daily.sql');
 const failures: string[] = [];
 let passed = 0;
 const check = (label: string, ok: boolean, detail = '') => {

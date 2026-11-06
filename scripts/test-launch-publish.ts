@@ -71,7 +71,7 @@ check('planted: a changed file is refused by its pinned sha256', /not the pinned
 const db = new PGlite();
 await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort()) await db.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
-for (const f of ['NEXT_remix_count', 'NEXT_challenge_daily', 'NEXT_social_lens_challenge']) await db.exec(readFileSync(path.join(ROOT, `supabase/migrations/${f}.sql`), 'utf8').replace(/^-- [\s\S]*?(?=^begin;)/m, ''));
+// 0037–0039 (numbered 2026-11-06) are among the numbered migrations above.
 await db.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
 const PORT = 54391;
 const server = new PGLiteSocketServer({ db, port: PORT, host: '127.0.0.1' });

@@ -657,7 +657,7 @@ export const CHALLENGE = {
    * many submissions per person per Pacific day (timeZone below), for any character, with no total cap (branch
    * contest, 2026-11-04, replacing "up to three in total"); checked on the server under a lock. minEntrants counts the
    * different people who submitted for a character. A submission can be withdrawn until entries close; withdrawing
-   * doesn't give back that day's submission (it stays on record, withdrawn: needs NEXT_challenge_daily.sql; until
+   * doesn't give back that day's submission (it stays on record, withdrawn: needs 0038_challenge_daily.sql; until
    * then Submit and Withdraw answer "not available yet").
    */
   submissionsPerDay: 1,
@@ -896,7 +896,7 @@ export const IMAGES = {
      * dropped is made again inside the same remix), and `remixesPerDay` remixes start per UTC day. A remix on a closed
      * model counts `closedRemixUnits` (the hook for branch remix-model-choice: src/lib/images/remixes.ts, remixUnits).
      * Admins (IMAGES.perDayFor) and invited makers keep counting pictures, as before. The site-wide spend cap is
-     * unchanged. Counted in studio.sheet_remix_asks (NEXT_remix_count.sql); until it is applied, views count as
+     * unchanged. Counted in studio.sheet_remix_asks (0037_remix_count.sql); until it is applied, views count as
      * pictures, as before.
      */
     remixesPerDay: 3,

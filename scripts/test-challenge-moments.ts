@@ -314,7 +314,7 @@ check('config: a current default look per challenge character, each a design id 
   // The picture's page data.
   const V = await import('../src/lib/challenge/picture-view');
   const pv = await V.pictureView(S, second.versionId);
-  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the post text naming the moment', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'Bai at The championship final, my remix for the Snowmoon Party remix challenge' && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
+  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the owner\'s post text', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'My remix of Bai, for the Snowmoon Party remix challenge' && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
   // The feed (/challenge/remixes) with pictures as the entries: the challenge pictures, newest first, by character,
   // each linking to its page, with the viewer's own Newest / Shuffled order and no count.
   const RV = await import('../src/lib/challenge/remixes-view');
@@ -368,7 +368,7 @@ check('config: a current default look per challenge character, each a design id 
   check('"Then submit it as an entry · one a day", and the owner\'s one line with "Rules" (no other rules text)', /\{v\.w\.thenSubmit\} <span className="dz-muted">· \{v\.w\.oneADay\}<\/span>/.test(pic) && /\{v\.w\.signInLine\} <Link href="\/challenge\/rules">\{v\.w\.rules\}<\/Link>/.test(pic));
   const W = (await import('../src/lib/challenge/picture-wording')).PICTURE_WORDING;
   check('the words: "Published. Now post it:", "Then submit it as an entry", "one a day", the sign-in line as the owner wrote it', W.published === 'Published. Now post it:' && W.thenSubmit === 'Then submit it as an entry' && W.oneADay === 'one a day' && W.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
-  check('the ready post names the character and the moment', W.postText('Bai', 'The quarterfinal') === 'Bai at The quarterfinal, my remix for the Snowmoon Party remix challenge');
+  check('the ready post is the owner\'s text exactly (2026-11-06)', W.postText('Bai', 'The quarterfinal') === 'My remix of Bai, for the Snowmoon Party remix challenge');
   check('no script served to everyone imports the share words', !/challenge\/(picture-)?wording'/.test(sf + pic));
 }
 

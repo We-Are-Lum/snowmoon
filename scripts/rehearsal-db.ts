@@ -33,10 +33,15 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const HOME = path.join(os.homedir(), 'snowmoon-rehearsal-db');
 const DATA = path.join(HOME, 'data');
 const STORE = path.join(HOME, 'store');
-/** The unnumbered migrations the contest needs, in order (NEXT_challenge_submit.sql is not: the daily rule replaces its delete). */
+/**
+ * The unnumbered migrations the contest needs, in order. None since 2026-11-06: they were numbered at merge (0037–0039,
+ * applied on production by the owner). A rehearsal database that applied them under their old NEXT_ names keeps them:
+ * RENAMED says which numbered file each one became, so it isn't run again.
+ */
 // NEXT_check_decisions is numbered 0034 on main (applied); 0035/0036 are numbered too. The SQL pack's order after them:
 // remix_count (3), challenge_daily (4), social_lens_challenge (6).
-export const REHEARSAL_NEXT = ['NEXT_remix_count.sql', 'NEXT_challenge_daily.sql', 'NEXT_social_lens_challenge.sql'];
+export const REHEARSAL_NEXT: string[] = [];
+const RENAMED: Record<string, string> = { '0037_remix_count.sql': 'NEXT_remix_count.sql', '0038_challenge_daily.sql': 'NEXT_challenge_daily.sql', '0039_social_lens_challenge.sql': 'NEXT_social_lens_challenge.sql' };
 
 const port = Number(process.env.REHEARSAL_DB_PORT) || REHEARSAL_DB_PORT;
 if (process.argv.includes('--reset')) {
@@ -67,6 +72,12 @@ const applied = new Map((await db.query<{ file: string; sha256: string }>('selec
 for (const f of [...numbered, ...REHEARSAL_NEXT]) {
   const text = readFileSync(path.join(dir, f), 'utf8');
   const had = applied.get(f);
+  // Applied before under its unnumbered name (2026-11-06): recorded under the new name, not run again.
+  if (!had && RENAMED[f] && applied.has(RENAMED[f])) {
+    await db.query('insert into rehearsal_meta.applied (file, sha256) values ($1, $2)', [f, sha(text)]);
+    console.log(`rehearsal:db: ${f} was applied as ${RENAMED[f]}; recorded, not re-run`);
+    continue;
+  }
   if (had) {
     if (had !== sha(text)) console.log(`rehearsal:db: ${f} changed since it was applied; not re-run (npm run rehearsal:db -- --reset to start fresh)`);
     continue;

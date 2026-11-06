@@ -1,7 +1,8 @@
--- NEXT_challenge_daily.sql — one remix challenge submission per person per Pacific day (branch contest, 2026-11-04).
--- NOT APPLIED. Unnumbered until merge: it takes the next free number then, checked against origin/main and production
--- (CLAUDE.md). Requires 0033_remix_challenge.sql (studio.challenge_marks). Drafted by the coding agent (Claude, a
--- closed model by Anthropic); DRAFT until the owner approves it.
+-- 0038_challenge_daily.sql (was NEXT_challenge_daily.sql) — one remix challenge submission per person per Pacific day (branch contest, 2026-11-04).
+-- APPLIED on production by the owner on 2026-11-06 (SQL pack items 3, 4, 6: dry run clean, applied, read-back (a) all
+-- true, read-back (b) passed).
+-- Numbered at merge (CLAUDE.md). Requires 0033_remix_challenge.sql (studio.challenge_marks). Drafted by the coding
+-- agent (Claude, a closed model by Anthropic).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Three parts, in order:
 -- 1. the dry run (the migration's own SQL, ending in `rollback;`: it changes nothing), 2. the migration (ending in

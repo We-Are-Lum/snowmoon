@@ -1906,7 +1906,7 @@ async function checkRemixLanding() {
       if (!CHALLENGE.public) {
         const html = await page.content();
         if (await page.locator('.rl-landing, a.rl-remix, .rl-arrival').count()) fail(`${tag}: the landing shows while the challenge is admin-only`);
-        for (const words of ['Remixing opens', 'Entries closed', 'remix challenge', 'How the challenge works', 'REMIX THE CAST']) if (html.includes(words)) fail(`${tag}: the page says "${words}" while the challenge is admin-only`);
+        for (const words of ['Remixing opens', 'Entries closed', 'remix challenge', 'How the challenge works', 'REMIX CHALLENGE', 'REMIX THE CAST']) if (html.includes(words)) fail(`${tag}: the page says "${words}" while the challenge is admin-only`);
         if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `remix-landing-${w}-${scheme}-admin-only.png`), fullPage: w === 390 });
         await page.close();
         continue;
@@ -2123,7 +2123,7 @@ try {
       const html = (await res?.text()) ?? '';
       const shown = (await page.locator('body').textContent()) ?? '';
       for (const [what, t] of [['HTML', html], ['screen', shown]] as const) {
-        const m = /Remix the cast|remix challenge/i.exec(t);
+        const m = /Remix the cast|Remix challenge|remix challenge/i.exec(t);
         if (m) fail(`/challenge (${scheme}): its ${what} names the challenge ("${m[0]}") signed out`);
       }
       if (await page.locator('.ch-page').count()) fail(`/challenge (${scheme}): the challenge page is shown signed out`);

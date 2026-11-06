@@ -12,8 +12,8 @@ export const PICTURE_WORDING = {
   shareHead: 'Post it',
   copy: 'Copy link',
   copied: 'Link copied.',
-  /** The ready post (approved 2026-11-05 as "My remix of …"; the moment's title added here, draft). */
-  postText: (name: string, moment: string) => `${name} at ${moment}, my remix for the Snowmoon Party remix challenge`,
+  /** The ready post (owner, 2026-11-06), exactly: "My remix of {name}, for the Snowmoon Party remix challenge". */
+  postText: (name: string, _moment: string) => `My remix of ${name}, for the Snowmoon Party remix challenge`,
   thenSubmit: 'Then submit it as an entry',
   oneADay: 'one a day',
   /** The owner's line (2026-11-05, answer 7), with "Rules" beside it; no other rules text on the flow. */

@@ -19,7 +19,7 @@ import { momentById } from './moments';
  * 0033_remix_challenge.sql). A remix becomes an entry only when its maker presses Submit, with a link to a post about
  * it (read and listed as "Add where you posted it" does: src/lib/challenge/posts.ts); one per person per Pacific day
  * (CHALLENGE.submissionsPerDay), checked under a lock; a withdrawn one stays on record (withdrawn_at) and still uses
- * its day (NEXT_challenge_daily.sql). Viewing a page never asks Neynar or anyone else
+ * its day (0038_challenge_daily.sql). Viewing a page never asks Neynar or anyone else
  * anything (owner, 2026-10-31; scripts/test-challenge.ts proves it). Without the eligibility table, only invited makers
  * count (decided from the lists alone); without the marks table nothing is an entry and Submit answers "not available
  * yet" (as src/lib/picks.ts does without its table).
@@ -93,7 +93,7 @@ export const entryHref = (versionId: string) => (CHALLENGE.pictureEntries ? `/ch
 // The marks table may not exist yet: remembered for a minute, like src/lib/picks.ts.
 let missingUntil = 0;
 const missing = (e: unknown) => (e as { code?: string }).code === '42P01';
-/** studio.challenge_marks without withdrawn_at: NEXT_challenge_daily.sql isn't applied yet. */
+/** studio.challenge_marks without withdrawn_at: 0038_challenge_daily.sql isn't applied yet. */
 const noColumn = (e: unknown) => (e as { code?: string }).code === '42703';
 
 /** Every standing submission (one row per Submit; a withdrawn one is left out). Empty without the table or its column. */
@@ -262,7 +262,7 @@ export async function submitEntry(sql: Sql, fid: number, versionId: string, post
 /**
  * Withdraw a submission (proposed to the owner, 2026-11-04): its maker may, until entries close. It is no longer an
  * entry, but it stays on record (withdrawn_at is set; nothing is deleted) and still uses its day (branch contest,
- * 2026-11-04), and the post stays listed. Needs studio_writer's update of withdrawn_at (NEXT_challenge_daily.sql);
+ * 2026-11-04), and the post stays listed. Needs studio_writer's update of withdrawn_at (0038_challenge_daily.sql);
  * without it, "not available yet".
  */
 export async function withdrawEntry(sql: Sql, fid: number, versionId: string, now = new Date()): Promise<SubmitResult> {

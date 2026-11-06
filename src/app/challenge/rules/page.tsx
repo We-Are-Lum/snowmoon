@@ -18,7 +18,7 @@ import { ChallengeRulesBody } from '~/components/challenge-rules-body';
 export const revalidate = 60;
 export async function generateMetadata(): Promise<Metadata> {
   if (!CHALLENGE.public) return { robots: { index: false, follow: false } };
-  return { title: 'The rules: remix the cast', description: 'The remix challenge on Snowmoon Party: the rules.' };
+  return { title: 'Rules: Remix challenge', description: 'The remix challenge on Snowmoon Party: the rules.' };
 }
 
 export default async function ChallengeRules() {

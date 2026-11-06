@@ -54,7 +54,7 @@ export interface Spend {
   /**
    * A sheet's view inside a remix (owner, 2026-11-04: count remixes, not pictures): its remix's id, the units it uses
    * (src/lib/images/remixes.ts, remixUnits) and whether this view starts it. Counted as a remix only for people
-   * countsRemixes() names, and only once studio.sheet_remix_asks exists (NEXT_remix_count.sql); otherwise as a picture.
+   * countsRemixes() names, and only once studio.sheet_remix_asks exists (0037_remix_count.sql); otherwise as a picture.
    */
   remix?: { id: string; units: number; starts: boolean; slot: 'front' | 'side' | 'back' };
 }
@@ -62,7 +62,7 @@ export interface Spend {
 /** The start of today (UTC), as the other daily counts read it. */
 const UTC_DAY = `date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
 
-/** Whether remixes are counted on this database yet (NEXT_remix_count.sql applied). */
+/** Whether remixes are counted on this database yet (0037_remix_count.sql applied). */
 async function remixTable(sql: Sql): Promise<boolean> {
   const [r] = await sql<{ ok: boolean }[]>`select to_regclass('studio.sheet_remix_asks') is not null as ok`;
   return Boolean(r?.ok);

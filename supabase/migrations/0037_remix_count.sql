@@ -1,6 +1,7 @@
--- NEXT_remix_count.sql — free remixes counted as remixes, not pictures (branch remix-submit, owner 2026-11-04, item 7).
--- NOT APPLIED. Unnumbered until merge: it takes the next free number then, checked against origin/main and production
--- (CLAUDE.md). Requires 0008 (studio.image_asks, for the same shape of counting).
+-- 0037_remix_count.sql (was NEXT_remix_count.sql) — free remixes counted as remixes, not pictures (branch remix-submit, owner 2026-11-04, item 7).
+-- APPLIED on production by the owner on 2026-11-06 (SQL pack items 3, 4, 6: dry run clean, applied, read-back (a) all
+-- true, read-back (b) passed).
+-- Numbered at merge (CLAUDE.md). Requires 0008 (studio.image_asks, for the same shape of counting).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. One transaction. Safe to
 -- run twice. Dry run first: paste everything, but replace the final `commit;` with `rollback;`.

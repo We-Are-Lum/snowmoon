@@ -13,11 +13,11 @@
  *   the mint as a plan), and the count of distinct entrants per character.
  * - Submit (owner, 2026-11-04): a remix is an entry only once its maker submits it, with a post link (checked as "Add
  *   where you posted it" checks it); up to three per person across all characters, the 4th refused under a lock;
- *   withdraw until entries close, which doesn't give back that day's submission (NEXT_challenge_daily.sql); the minimum is three different people who
+ *   withdraw until entries close, which doesn't give back that day's submission (0038_challenge_daily.sql); the minimum is three different people who
  *   submitted (three by one person count once); the equal share is per person.
  * - Free remixes (owner, 2026-11-04): three a day for an account that passes the check, counted as remixes (a sheet's
  *   three views, up to six pictures, so a failed view is made again inside it), not pictures; a closed remix counts
- *   three; admins and invited makers keep counting pictures (NEXT_remix_count.sql; without it, as before).
+ *   three; admins and invited makers keep counting pictures (0037_remix_count.sql; without it, as before).
  * - The window's edges, in Pacific time, from CHALLENGE.dates; every date shown is built from it, and no page or
  *   wording file writes a date itself.
  * - The post address: the exact host allow-list; look-alike hosts, sub-domains, IPs, other schemes, ports and user
@@ -27,7 +27,7 @@
  * - "Posted on" holds no image, avatar, embed or script.
  * - The three bases (owner, 2026-11-03): a fork of each base counts, a fork of an entry counts, a sheet from scratch
  *   and a fork of a sheet that isn't a base don't; nothing breaks while the bases are empty (as before).
- * - The migration (0033, applied 2026-11-01, with NEXT_challenge_daily): RLS, privileges, no score; submissions and
+ * - The migration (0033, applied 2026-11-01, with 0038_challenge_daily): RLS, privileges, no score; submissions and
  *   posts work; without the tables, nothing breaks.
  */
 import path from 'node:path';
@@ -93,7 +93,7 @@ CHALLENGE.pictureEntries = false;
     ['src/components/app-shell.tsx', /navItems\(last, adaptations, CHALLENGE\.public \|\| \(auth\.kind === 'signed-in' && isAdmin\(auth\.fid\)\)\)/],
     ['src/app/references/designs/[id]/page.tsx', /const ch = CHALLENGE\.public \? await sheetChallenge\(/],
     ['src/app/references/designs/[id]/page.tsx', /posts=\{CHALLENGE\.public && CHALLENGE\.posts\}/],
-    ['src/app/references/designs/[id]/page.tsx', /isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(what\)/],
+    ['src/app/references/designs/[id]/page.tsx', /isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(callName\)/],
   ];
   // Admins see /challenge/rules and /challenge/remixes too, exactly like /challenge (owner, 2026-11-04).
   for (const d of ['rules', 'remixes']) gated.push([`src/app/challenge/${d}/not-found.tsx`, new RegExp(`<ChallengeAdmin fallback=\\{<NotFound />\\} page="${d}" />`)]);
@@ -684,24 +684,24 @@ await db.exec(`create role anon nologin; create role authenticated nologin; crea
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await db.exec(read(`supabase/migrations/${f}`));
 await db.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
 await db.exec(read('supabase/migrations/0033_remix_challenge.sql'));
-// 0033 run again revokes update on marks; NEXT_challenge_daily (one a day, withdraw keeps the row) runs after it, as it
+// 0033 run again revokes update on marks; 0038_challenge_daily (one a day, withdraw keeps the row) runs after it, as it
 // would on production.
-await db.exec(read('supabase/migrations/NEXT_challenge_daily.sql'));
-await db.exec(read('supabase/migrations/NEXT_challenge_daily.sql'));
-check('the migrations are safe to run twice (0033, NEXT_challenge_daily)', true);
+await db.exec(read('supabase/migrations/0038_challenge_daily.sql'));
+await db.exec(read('supabase/migrations/0038_challenge_daily.sql'));
+check('the migrations are safe to run twice (0033, 0038_challenge_daily)', true);
 // What the owner's read-back (a) checked on production (2026-11-01, 17 of 17 true), here on PGlite: RLS on, the
 // privileges as written, no public access, only studio_writer's policies, and no score column.
 const PRIVS = `select c.what, c.ok from (
   select 'rls on all three' as what, (select bool_and(relrowsecurity) from pg_class where oid in ('studio.challenge_marks'::regclass, 'studio.version_posts'::regclass, 'studio.challenge_eligibility'::regclass)) as ok
   union all select 'marks and eligibility: select and insert, no update of the whole row', bool_and(has_table_privilege('studio_writer', t::regclass, 'SELECT') and has_table_privilege('studio_writer', t::regclass, 'INSERT') and not has_table_privilege('studio_writer', t::regclass, 'UPDATE')) from unnest(array['studio.challenge_marks', 'studio.challenge_eligibility']) t
-  union all select 'eligibility and marks: no delete; marks: update of withdrawn_at only (NEXT_challenge_daily)', not has_table_privilege('studio_writer', 'studio.challenge_eligibility', 'DELETE') and not has_table_privilege('studio_writer', 'studio.challenge_marks', 'DELETE') and has_column_privilege('studio_writer', 'studio.challenge_marks', 'withdrawn_at', 'UPDATE') and not has_column_privilege('studio_writer', 'studio.challenge_marks', 'version_id', 'UPDATE')
+  union all select 'eligibility and marks: no delete; marks: update of withdrawn_at only (0038_challenge_daily)', not has_table_privilege('studio_writer', 'studio.challenge_eligibility', 'DELETE') and not has_table_privilege('studio_writer', 'studio.challenge_marks', 'DELETE') and has_column_privilege('studio_writer', 'studio.challenge_marks', 'withdrawn_at', 'UPDATE') and not has_column_privilege('studio_writer', 'studio.challenge_marks', 'version_id', 'UPDATE')
   union all select 'posts: select, insert, delete, no update', has_table_privilege('studio_writer', 'studio.version_posts', 'DELETE') and not has_table_privilege('studio_writer', 'studio.version_posts', 'UPDATE')
   union all select 'no public access', not exists (select 1 from unnest(array['anon', 'authenticated']) r, unnest(array['studio.challenge_marks', 'studio.version_posts', 'studio.challenge_eligibility']) t, unnest(array['SELECT', 'INSERT', 'UPDATE', 'DELETE']) p where has_table_privilege(r, t::regclass, p))
   union all select 'only studio_writer policies', not exists (select 1 from pg_policies where schemaname = 'studio' and tablename in ('challenge_marks', 'version_posts', 'challenge_eligibility') and roles <> '{studio_writer}'::name[])
   union all select 'no score column', not exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'challenge_eligibility' and column_name = 'score')
 ) c`;
 const privs = await db.query<{ what: string; ok: boolean }>(PRIVS);
-check('0033 (with NEXT_challenge_daily): RLS, privileges, no public access, no score column (as the owner read back)', privs.rows.length === 7 && privs.rows.every((r) => r.ok === true), JSON.stringify(privs.rows.filter((r) => !r.ok)));
+check('0033 (with 0038_challenge_daily): RLS, privileges, no public access, no score column (as the owner read back)', privs.rows.length === 7 && privs.rows.every((r) => r.ok === true), JSON.stringify(privs.rows.filter((r) => !r.ok)));
 {
   await db.exec(`grant update on studio.challenge_marks to studio_writer`);
   const r2 = await db.query<{ ok: boolean }>(PRIVS);
@@ -922,7 +922,7 @@ check('the version page: Entry once submitted, Submit offered on an unsubmitted 
   const locked = (src: string) => /pg_advisory_xact_lock\(hashtext\('snowmoon\.challenge\.submit'\), \$\{fid\}::int\)`;\s*\/\/[^\n]*\n\s*const theirs = await tx/.test(src);
   check('S6 the day is checked under a per-person lock, in the same transaction as the insert', locked(ent));
   proof('S6 a day checked without the lock is caught', !locked(ent.replace("hashtext('snowmoon.challenge.submit')", "hashtext('elsewhere')")));
-  // Withdraw (NEXT_challenge_daily.sql): until entries close; the row stays (withdrawn_at), and so does that day's use.
+  // Withdraw (0038_challenge_daily.sql): until entries close; the row stays (withdrawn_at), and so does that day's use.
   check('S7 withdraw: only your own', !(await E.withdrawEntry(S, 501, f500c.versionId)).ok);
   check('S7 withdraw: the submission is no longer an entry; its post stays listed', (await E.withdrawEntry(S, 500, f500c.versionId)).ok && (await E.versionStanding(S, f500c.versionId))?.kind === 'candidate' && (await P.postsFor(S, f500c.versionId)).length === 1);
   const [kept] = await sql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks where fid = 500 and version_id = ${f500c.versionId} and withdrawn_at is not null`;
@@ -940,7 +940,7 @@ check('the version page: Entry once submitted, Submit offered on an unsubmitted 
   await sql`reset role`;
   await reconnect();
   await sql`grant update (withdrawn_at) on studio.challenge_marks to studio_writer`;
-  check('S7 before NEXT_challenge_daily.sql is applied, withdrawing says "not available yet"', !noGrant.ok && noGrant.why === E.SUBMIT_WORDING.withdrawNotYet, JSON.stringify(noGrant));
+  check('S7 before 0038_challenge_daily.sql is applied, withdrawing says "not available yet"', !noGrant.ok && noGrant.why === E.SUBMIT_WORDING.withdrawNotYet, JSON.stringify(noGrant));
   // Put 500's entries back as the checks below expect them: f500b only.
   await E.withdrawEntry(S, 500, f500a.versionId);
   await E.withdrawEntry(S, 500, f500d.versionId);
@@ -1171,7 +1171,7 @@ CHALLENGE.postsPerPersonPerDay = 1;
 check('a daily limit per person', !(await P.addPost(S, { versionId: f500b.versionId, person: 500, post: post('ccc', '2026-11-10T10:00:00Z') })).ok);
 CHALLENGE.postsPerPersonPerDay = keepLimit;
 
-// Free remixes in the database (NEXT_remix_count.sql, loaded here like every migration): reserve() counts remixes, not
+// Free remixes in the database (0037_remix_count.sql, loaded here like every migration): reserve() counts remixes, not
 // pictures, under the person's lock; a closed remix counts three; admins and invited makers keep counting pictures.
 {
   const Lm = await import('../src/lib/images/limits');
@@ -1254,7 +1254,7 @@ CHALLENGE.postsPerPersonPerDay = keepLimit;
   const fidCodes = [await fidCode(900010), await fidCode(-1_000_000_001), await fidCode(-1_000_000_000), await fidCode(-500), await fidCode(-999_999_999), await fidCode(0)];
   check('F9 the remix table takes an FID and a Bluesky account, and refuses a wallet\'s number and zero', fidCodes.join() === 'ok,ok,ok,23514,23514,23514', fidCodes.join());
   await sql`delete from studio.sheet_remix_asks where remix = ${rid(31)}`;
-  // Without the table (before NEXT_remix_count.sql is applied), views count as pictures, as before.
+  // Without the table (before 0037_remix_count.sql is applied), views count as pictures, as before.
   await sql`alter table studio.sheet_remix_asks rename to sheet_remix_asks_away`;
   const before = await Lm.reserve(S, 900004, spend(rid(40), true));
   const [p4] = await sql<{ n: number }[]>`select count(*)::int as n from studio.image_asks where fid = 900004`;
@@ -1393,8 +1393,8 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('e2 the confirmation shows it', /\{entry\?\.kind === 'candidate' && `\$\{entry\.text\} `\}/.test(form) && /text: st\.kind === 'candidate' \? CW\.publishedCandidate\(name\) : CW\.publishedUnchecked\(name\)/.test(route));
   const share = read('src/components/challenge-share.tsx');
   const vp = read('src/app/references/designs/[id]/page.tsx');
-  const shareSwitch = (s1: string, v1: string) => /export function ChallengeShare\(\{ versionId, text, posts \}/.test(s1) && /const shareText = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(what\) : CW\.shareText\(what\);/.test(v1) && /text=\{shareText\}/.test(v1);
-  check('e3 in the window, a challenge sheet\'s share text mentions the challenge; outside it, as before', shareSwitch(share, vp) && /remix challenge/.test(CW.shareTextOpen('Bai: x')) && CW.shareTextOpen('Bai: x').startsWith('Bai: x, made on Snowmoon Party') && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party' && CW.shareTextOpen('x').includes(R.dateText('closes', { time: true })));
+  const shareSwitch = (s1: string, v1: string) => /export function ChallengeShare\(\{ versionId, text, posts \}/.test(s1) && /const shareText = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(callName\) : CW\.shareText\(what\);/.test(v1) && /text=\{shareText\}/.test(v1);
+  check('e3 in the window, a challenge sheet\'s share text is the owner\'s (2026-11-06: "My remix of {name}, for the Snowmoon Party remix challenge"); outside it, as before', shareSwitch(share, vp) && CW.shareTextOpen('Bai') === 'My remix of Bai, for the Snowmoon Party remix challenge' && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party');
   proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace('challengeOpenNow() ?', 'true ?')));
   // h. Before the open, from CHALLENGE.dates.
   check('h "Entries open Fri 6 Nov, 09:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Fri 6 Nov, 09:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());

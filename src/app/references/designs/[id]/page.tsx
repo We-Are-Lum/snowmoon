@@ -91,7 +91,7 @@ export default async function DesignPage({ params }: Props) {
   const challengeOpen = d.kind === 'character' && challengeSheetsOpen() && isChallengeCharacter(d.entity);
   // The share text mentions the challenge only while it is open (owner, 2026-11-03), on a challenge character's sheet.
   const what = style ? title : `${callName}: ${title}`;
-  const shareText = d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow() ? CW.shareTextOpen(what) : CW.shareText(what);
+  const shareText = d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow() ? CW.shareTextOpen(callName) : CW.shareText(what);
   // A landing page for someone arriving from a post (owner, 2026-11-04): a challenge character's sheet with a front view,
   // once the owner has opened the challenge (CHALLENGE.public, read by isLanding). While it is admin-only the page as
   // served says nothing of it: no landing, no Remix button, no "Remixing opens …" line, no challenge preview.

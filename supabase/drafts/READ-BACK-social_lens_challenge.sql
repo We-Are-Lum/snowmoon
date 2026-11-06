@@ -1,4 +1,4 @@
--- Read-back for NEXT_social_lens_challenge (branch contest), after its migration, as postgres. Nothing is kept.
+-- Read-back for 0039_social_lens_challenge (branch contest), after its migration, as postgres. Nothing is kept.
 -- C. READ-BACK (after B), as postgres. Two parts, nothing is kept.
 
 -- (a) one read-only select: every row's ok must be true (3 rows).
