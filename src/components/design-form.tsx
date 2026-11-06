@@ -10,6 +10,7 @@ import { SignInButton } from './sign-in';
 import { BookQuotes } from './design-book';
 import { useMyPicks } from './design-picks';
 import { AiTag } from './ai-tag';
+import { remixDefaults } from '~/lib/images/remix-defaults';
 
 /**
  * New style, new sheet, fork, or new version (step 4; Claude Design 4b, 4c, 5b). The name and the
@@ -21,11 +22,15 @@ import { AiTag } from './ai-tag';
  * views are made in one of the published styles, chosen here (owner, 2026-10-14); changing it
  * marks them to make again too. Your own style pick is chosen to start with.
  * "Preview and publish" shows the design as readers will see it first.
+ * A remix (a fork or a new version of a sheet; owner, 2026-11-04): everything starts as the source has it
+ * (src/lib/images/remix-defaults.ts), so the least anyone does is type what to change and press Remix, which makes the
+ * three views in turn from the source's front view as a reference picture. The style and the name sit under
+ * "Options", preselected, to open and change. Each view can be made again inside the same remix.
  */
 const W = IMAGE_WORDING.designs;
 type Pic = { ticket: string; image: string; text: string; style: string | null };
 type StyleOption = { versionId: string; title: string; by: string; text: string; thumb: string | null };
-type Status = { ready: boolean; invited?: boolean; consented?: boolean; left?: number; perDay: number; signedIn: boolean };
+type Status = { ready: boolean; invited?: boolean; consented?: boolean; left?: number; perDay: number; signedIn: boolean; remixes?: { left: number; perDay: number; picturesPerRemix: number } | null };
 type Wording = { version: string; line: string; title: string; text: string[]; sha256: string };
 type Props = {
   mode: 'create' | 'fork' | 'version';
@@ -61,15 +66,20 @@ export function DesignForm(p: Props) {
   const [status, setStatus] = useState<Status | null>(null);
   const [consent, setConsent] = useState<Wording | null>(null);
   const [published, setPublished] = useState<string | null>(null);
-  /** What the publish said about the remix challenge: this version is the maker's entry, or Neynar didn't answer so it doesn't count. */
-  const [entry, setEntry] = useState<{ kind: 'entry' | 'unchecked'; text: string } | null>(null);
+  /** What the publish said about the remix challenge: this version can be submitted as an entry, or Neynar didn't answer so it can't. */
+  const [entry, setEntry] = useState<{ kind: 'candidate' | 'unchecked'; text: string } | null>(null);
   // A refusal at Generate (a score below the check, the day's limit…) shows beside the Generate buttons and is
   // scrolled into view (launch rehearsal, 2026-11-02: it appeared 174px below the screen at 390px wide).
   const noteRef = useRef<HTMLParagraphElement>(null);
   useEffect(() => {
     if (note) noteRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }, [note]);
-  const [viewStyle, setViewStyle] = useState<string | null>(() => (p.source?.style && p.styles.some((s) => s.versionId === p.source!.style) ? p.source.style : null));
+  // A remix starts with the source's style, while it is still published (remixDefaults; launch rehearsal, 2026-11-02).
+  const [viewStyle, setViewStyle] = useState<string | null>(() => remixDefaults(p.source ? { style: p.source.style } : null, p.styles.map((s) => s.versionId)).style);
+  const remixing = !style && p.mode !== 'create' && p.source !== null;
+  /** The remix being made (its signed ticket from the server), so its other views, and any made again, stay inside it. */
+  const [remixTicket, setRemixTicket] = useState<string | null>(null);
+  const [progress, setProgress] = useState<string | null>(null);
   const picks = useMyPicks();
   const pickedStyle = picks?.find((x) => x.kind === 'style' && p.styles.some((s) => s.versionId === x.versionId))?.versionId ?? null;
   useEffect(() => {
@@ -90,32 +100,58 @@ export function DesignForm(p: Props) {
   const stale = [...samples, ...Object.values(views)].some((x) => x && x.text !== clean);
   const styleStale = !style && Object.values(views).some((x) => x && x.text === clean && x.style !== viewStyle);
   const made = style ? samples.filter(fresh) : (Object.values(views).filter(fresh) as Pic[]);
-  const left = status?.left ?? 0;
+  const remixCount = !style ? (status?.remixes ?? null) : null;
+  // Someone who counts remixes may go on with the remix they are making even when none are left to start.
+  const left = remixCount ? (remixCount.left > 0 || remixTicket ? Math.max(1, remixCount.left) : 0) : (status?.left ?? 0);
   const enough = style ? made.length >= p.limits.samplesMin : fresh(views.front);
   const ready = auth.kind === 'signed-in' && (status?.invited || p.challengeOpen) && status?.ready && status.consented;
 
-  const make = async (slot: 'sample' | ViewSlot, index = 0) => {
+  const make = async (slot: 'sample' | ViewSlot, index = 0, frontPic?: Pic): Promise<Pic | null> => {
     setBusy(slot === 'sample' ? `s${index}` : slot);
     setNote(null);
     try {
-      const front = slot === 'side' || slot === 'back' ? views.front : undefined;
+      const front = slot === 'side' || slot === 'back' ? (frontPic ?? views.front) : undefined;
       const res = await authFetch('/api/designs/sample', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ slot, index, kind: p.kind, text: clean, ...(style ? {} : { style: viewStyle }), ...(front ? { front: { ticket: front.ticket, image: front.image } } : {}) }),
+        body: JSON.stringify({
+          slot, index, kind: p.kind, text: clean, ...(style ? {} : { style: viewStyle }), ...(front ? { front: { ticket: front.ticket, image: front.image } } : {}),
+          // A remix's front starts from the source's front view (the server fetches it); its views stay in one remix.
+          ...(remixing && slot === 'front' ? { source: p.source!.versionId } : {}),
+          ...(remixTicket && slot !== 'sample' ? { remix: remixTicket } : {}),
+        }),
       });
-      const out = (await res.json().catch(() => ({}))) as { ticket?: string; image?: string; error?: string };
+      const out = (await res.json().catch(() => ({}))) as { ticket?: string; image?: string; error?: string; remix?: string; reason?: string };
+      if (out.remix) setRemixTicket(out.remix);
+      else if (out.reason?.startsWith('remix')) setRemixTicket(null);
       if (res.ok && out.ticket && out.image) {
         const pic = { ticket: out.ticket, image: out.image, text: clean, style: style ? null : viewStyle };
         if (slot === 'sample') setSamples((s) => s.map((x, i) => (i === index ? pic : x)));
         else setViews((v) => ({ ...v, [slot]: pic }));
-      } else setNote(out.error ?? 'Could not make the picture');
+        return pic;
+      }
+      setNote(out.error ?? 'Could not make the picture');
+      return null;
     } catch {
       setNote('No connection. Try again.');
+      return null;
     } finally {
       setBusy(null);
       void refresh();
     }
+  };
+
+  /** Remix: the three views in turn, from the source's front view. A view that fails stops here; make it again below. */
+  const remixAll = async () => {
+    const names = VIEW_NAMES[p.kind === 'location' ? 'location' : 'character'];
+    setProgress(W.form.remixing(names.front));
+    const f = await make('front');
+    for (const k of ['side', 'back'] as const) {
+      if (!f) break;
+      setProgress(W.form.remixing(names[k]));
+      if (!(await make(k, 0, f))) break;
+    }
+    setProgress(null);
   };
 
   const publish = async () => {
@@ -135,9 +171,9 @@ export function DesignForm(p: Props) {
         nameProof: webNameProof(),
       }),
     });
-    const out = (await res.json().catch(() => ({}))) as { page?: string; error?: string; challenge?: { kind: 'entry' | 'unchecked'; text: string } | null };
+    const out = (await res.json().catch(() => ({}))) as { page?: string; error?: string; challenge?: { kind: 'candidate' | 'unchecked'; text: string } | null };
     if (!res.ok || !out.page) throw new Error(out.error ?? 'Could not publish');
-    setEntry(out.challenge?.kind === 'entry' || out.challenge?.kind === 'unchecked' ? out.challenge : null);
+    setEntry(out.challenge?.kind === 'candidate' || out.challenge?.kind === 'unchecked' ? out.challenge : null);
     setPublished(out.page);
   };
 
@@ -183,11 +219,48 @@ export function DesignForm(p: Props) {
     );
   };
 
+  const nameField = (
+    <div className="dz-name">
+      <PublishedTextField id="dz-name" label={style ? W.form.name : W.form.sheetName} value={title} onChange={(v) => setTitle(v.replace(/\n/g, ' '))} rows={1} maxLength={p.limits.nameMaxChars} />
+    </div>
+  );
+  const stylePicker = style ? null : (
+    <fieldset className="dz-section dz-style-pick">
+      <legend className="dz-label">{W.form.viewStyle}</legend>
+      {p.styles.length ? (
+        <ul className="dz-rows">
+          {p.styles.map((s) => (
+            <li key={s.versionId}>
+              <label className={`dz-row dz-style-option${viewStyle === s.versionId ? ' is-on' : ''}`}>
+                <input type="radio" name="dz-view-style" value={s.versionId} checked={viewStyle === s.versionId} onChange={() => setViewStyle(s.versionId)} />
+                {s.thumb ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img className="dz-thumb" src={s.thumb} alt="" width={64} height={48} loading="lazy" />
+                ) : (
+                  <span className="dz-thumb dz-thumb-empty" aria-hidden="true" />
+                )}
+                <span className="dz-row-text">
+                  <span className="dz-row-title">{s.title}</span>
+                  <span className="dz-row-meta">{s.by}</span>
+                  {s.thumb && <span className="dz-row-ai"><AiTag what="Sample" /></span>}
+                </span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="ic-error">{W.form.viewStyleNone}</p>
+      )}
+      {chosen && <p className="dz-text dz-style-text">{chosen.text}</p>}
+      <p className="dz-note">{W.form.viewStyleNote}</p>
+    </fieldset>
+  );
+
   if (published)
     return (
       <>
         <p className="ic-done">
-          {W.form.published} {entry?.kind === 'entry' && `${entry.text} `}
+          {W.form.published} {entry?.kind === 'candidate' && `${entry.text} `}
           <Link href={published}>{W.form.see}</Link>
         </p>
         {entry?.kind === 'unchecked' && (
@@ -232,11 +305,9 @@ export function DesignForm(p: Props) {
         </div>
       ) : (
         <>
-          <div className="dz-name">
-            <PublishedTextField id="dz-name" label={style ? W.form.name : W.form.sheetName} value={title} onChange={(v) => setTitle(v.replace(/\n/g, ' '))} rows={1} maxLength={p.limits.nameMaxChars} />
-          </div>
+          {!remixing && nameField}
           <div className="dz-text-field">
-            <PublishedTextField id="dz-text" label={style ? W.form.styleText : W.form.sheetText(p.character?.callName ?? p.place?.name ?? '')} value={text} onChange={setText} rows={4} maxLength={p.limits.textMaxChars} />
+            <PublishedTextField id="dz-text" label={style ? W.form.styleText : remixing ? W.form.remixText : W.form.sheetText(p.character?.callName ?? p.place?.name ?? '')} value={text} onChange={setText} rows={4} maxLength={p.limits.textMaxChars} />
             <span className="ic-count" aria-hidden="true">
               {text.length} / {p.limits.textMaxChars}
             </span>
@@ -251,36 +322,23 @@ export function DesignForm(p: Props) {
           )}
           <p className="ic-note">{W.form.sentTo}</p>
 
-          {!style && (
-            <fieldset className="dz-section dz-style-pick">
-              <legend className="dz-label">{W.form.viewStyle}</legend>
-              {p.styles.length ? (
-                <ul className="dz-rows">
-                  {p.styles.map((s) => (
-                    <li key={s.versionId}>
-                      <label className={`dz-row dz-style-option${viewStyle === s.versionId ? ' is-on' : ''}`}>
-                        <input type="radio" name="dz-view-style" value={s.versionId} checked={viewStyle === s.versionId} onChange={() => setViewStyle(s.versionId)} />
-                        {s.thumb ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img className="dz-thumb" src={s.thumb} alt="" width={64} height={48} loading="lazy" />
-                        ) : (
-                          <span className="dz-thumb dz-thumb-empty" aria-hidden="true" />
-                        )}
-                        <span className="dz-row-text">
-                          <span className="dz-row-title">{s.title}</span>
-                          <span className="dz-row-meta">{s.by}</span>
-                          {s.thumb && <span className="dz-row-ai"><AiTag what="Sample" /></span>}
-                        </span>
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="ic-error">{W.form.viewStyleNone}</p>
-              )}
-              {chosen && <p className="dz-text dz-style-text">{chosen.text}</p>}
-              <p className="dz-note">{W.form.viewStyleNote}</p>
-            </fieldset>
+          {!style && !remixing && stylePicker}
+          {remixing && (
+            <>
+              {/* The options start as the source has them (remixDefaults); open them to change any (owner, 2026-11-04). */}
+              <details className="dz-section dz-options">
+                <summary className="dz-label">{W.form.options(chosen?.title ?? null)}</summary>
+                <p className="dz-note">{W.form.optionsNote}</p>
+                {nameField}
+                {stylePicker}
+              </details>
+              <div className="dz-remix">
+                <button type="button" className="ic-primary" onClick={remixAll} disabled={!ready || busy !== null || !clean || left <= 0 || !chosen}>
+                  {progress ?? W.form.remix}
+                </button>
+                <p className="dz-note">{W.form.remixNote}</p>
+              </div>
+            </>
           )}
 
           <section className="dz-section" aria-label={style ? 'Sample images' : 'Views'}>
@@ -309,7 +367,8 @@ export function DesignForm(p: Props) {
             {stale && <p className="ic-error">{W.form.stale}</p>}
             {styleStale && <p className="ic-error">{W.form.viewStyleChanged}</p>}
             {!style && !chosen && p.styles.length > 0 && <p className="dz-note">{W.form.viewStyleFirst}</p>}
-            <p className="dz-note">{W.form.left(left)}</p>
+            <p className="dz-note">{remixCount ? W.form.remixesLeft(remixCount.left, remixCount.picturesPerRemix) : W.form.left(left)}</p>
+            {remixing && p.source && <p className="dz-note">{W.form.fromSource}</p>}
             <p className="dz-note">{W.form.promptIs(p.suffix)}</p>
             <p className="ic-model">
               {p.models.text.name} · open weights, {p.models.text.licence} · runs on {p.models.text.host}

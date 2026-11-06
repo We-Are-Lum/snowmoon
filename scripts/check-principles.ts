@@ -27,6 +27,7 @@ import { LiveScreen } from '../src/components/live-screen';
 import { AGENTS, ASSISTANT, CHALLENGE, CHAT, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, imagesDailySpendCapUsd } from '../src/lib/config';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
+import { rehearsalOn } from '../src/lib/challenge/rehearsal-switch';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -34,10 +35,14 @@ import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/li
 import { MENTIONS_FILE, byMentionsThenName, mentionsFile } from './lib/character-mentions';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
+import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, P5I_FILES, p5gProblems, p5iProblems } from './lib/p5g';
 import { P5B_PLANTS, p5bProblems } from './lib/p5b';
-import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, p5gProblems } from './lib/p5g';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
+import { p2mProblems, p6acProblems, p9gProblems } from './lib/challenge-moments';
+import { CARDS } from '../src/lib/challenge/cards';
+import { MOMENTS } from '../src/lib/challenge/moments';
+import { spoilerExceptionOn } from '../src/lib/challenge/spoilers';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -1251,16 +1256,71 @@ add({
 // The remix challenge (owner, 2026-10-31: "No ordering by engagement or payment"): entries, sheets to start from and
 // "Posted on" are in time order and nothing else (scripts/lib/p5g.ts). One narrow exception (owner, 2026-11-04): "Bases
 // to start from" may follow the bases' fixed style order (CHALLENGE.baseStyles), there only; entries stay time order.
+// A second (owner, 2026-11-04): /challenge's random selection, a fresh unweighted shuffle of every remix on each visit.
 add({
   id: 'P5g',
   principle: 5,
-  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order',
+  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order; only the cards (their whole lists of bases and remixes), the entries\' "Shuffled" order and "Surprise me" (the curated moments, "Moments picked by @naaate", in book order) may shuffle, unweighted',
   load: async () => walk('src', /\.tsx?$/).filter((f) => P5G_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
   run: (files) => p5gProblems(files),
   plant: (files) => {
-    // An entries list ordered by style: the bases' exception must not reach it.
-    const i = files.findIndex((f: { file: string }) => f.file === 'src/lib/challenge/entries.ts');
-    files[i] = { ...files[i], text: files[i].text.replace(/export async function standing\(/, 'export const planted = (entries) => entries.sort(baseStyleOrder);\nexport async function standing(') };
+    // A weighted shuffle (owner, 2026-11-04): the random selection's exception must not let one through. (The bases'
+    // planted violation, an entries list ordered by style, is proven in scripts/test-challenge.ts.)
+    const i = files.findIndex((f: { file: string }) => f.file === 'src/lib/challenge/shuffle.ts');
+    files[i] = { ...files[i], text: files[i].text.replace('export function shuffleFresh<T>(items: readonly T[]', 'export function shuffleFresh<T extends { likes: number }>(items: readonly T[]').replace('const j = below(i + 1, random);', 'const j = below(Math.min(i + 1, 1 + out[i].likes), random);') };
+  },
+});
+// While the challenge runs (owner, 2026-11-04): no remix, like or built-on count on its remix cards, and no "most
+// remixed" sort on the feed: newest first, by character, and nothing else (scripts/lib/p5g.ts, p5iProblems).
+add({
+  id: 'P5i',
+  principle: 5,
+  name: 'the challenge\'s remix cards and feed show no remix, like or built-on count, and the feed has no "most remixed" sort (newest first only)',
+  load: async () => P5I_FILES.map((f) => ({ file: f, text: read(f) })),
+  run: (files) => p5iProblems(files),
+  plant: (files) => {
+    // A like count on the card.
+    const i = files.findIndex((f: { file: string }) => f.file === 'src/components/challenge-remix-card.tsx');
+    files[i] = { ...files[i], text: files[i].text.replace('<span className="ch-card-by">', '<span className="ch-card-likes">{r.likes} likes</span><span className="ch-card-by">') };
+  },
+});
+// P2m (branch challenge-moments, owner 2026-11-05, answer 2): the six character cards and the moments' titles and scene
+// lines are drafted by the coding agent; /challenge doesn't go public until the owner approves them (CHALLENGE.cardsApproved,
+// CHALLENGE.sceneLinesApproved), and until then every card carries the "Draft wording" mark.
+add({
+  id: 'P2m',
+  principle: 2,
+  name: 'the challenge\'s agent-drafted cards and scene lines are approved by the owner before /challenge goes public, and marked "Draft wording" until then',
+  load: async () => ({ c: { public: CHALLENGE.public as boolean, cardsApproved: CHALLENGE.cardsApproved as boolean, sceneLinesApproved: CHALLENGE.sceneLinesApproved as boolean }, files: [{ file: 'src/lib/challenge/view.ts', text: read('src/lib/challenge/view.ts') }] }),
+  run: ({ c, files }) => p2mProblems(c, files),
+  plant: (x) => {
+    x.c.public = true;
+    x.c.cardsApproved = false;
+  },
+});
+// P9g (branch challenge-moments, owner 2026-11-05, answer 1, approved): principle 9's recorded exception for the remix
+// challenge. /challenge and its remix screens may show the six cards and the curated moments from the whole book; the
+// first layer is written without major turns (its facts from chapters 1-14), the deeper layers say "May spoil later
+// chapters.", every moment chip shows its chapter, every quote is word for word, nothing else is shown, nothing outside
+// the challenge's pages uses these words, and it ends when entries close.
+add({
+  id: 'P9g',
+  principle: 9,
+  name: 'the remix challenge\'s spoiler exception stays narrow: only its six cards and curated moments, quoted word for word; the first layer from chapters 1-14; deeper layers marked "May spoil later chapters."; chapters on every moment chip; nowhere else; ended when entries close',
+  load: async () => ({
+    files: walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
+    cards: clone(CARDS),
+    moments: clone(MOMENTS),
+    characters: [...CHALLENGE.characters],
+    blocks: Object.fromEntries(loadBlocks(ROOT)),
+    dates: { opens: CHALLENGE.dates.opens, closes: CHALLENGE.dates.closes },
+  }),
+  run: (c) => p9gProblems({ ...c, blocks: new Map(Object.entries(c.blocks)), on: spoilerExceptionOn }),
+  plant: (c) => {
+    // One word changed in a moment's quote, a first-layer fact from chapter 24, and the cards' words shown on a sheet page.
+    c.moments[2].quotes[0].text = c.moments[2].quotes[0].text.replace('shine', 'win');
+    c.cards[2].facts[0] = { text: 'Second place', block: 'c24-b48', quote: 'I got second place in the Pafogai Du Minpentai games' };
+    c.files.push({ file: 'src/app/references/designs/[id]/planted.tsx', text: "import { CARDS } from '~/lib/challenge/cards';" });
   },
 });
 // Character lists (owner, 2026-11-04: "list characters by how often they're named in the book, most first, everywhere
@@ -1391,7 +1451,7 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'social_links', 'challenge_marks', 'version_posts', 'challenge_eligibility', 'check_decisions'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility', 'check_decisions', 'sheet_remix_asks', 'social_links'];
 /** How each private table names the person: a FID, except check_decisions (the account, as text). */
 const personIs42 = (t: string) => (t === 'check_decisions' ? `account = '42'` : 'fid = 42');
 add({
@@ -1429,6 +1489,10 @@ add({
       -- Check decisions (0034_check_decisions): FID 42 passed.
       do $$ begin if to_regclass('studio.check_decisions') is not null then
         insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '42', 'neynar-score>=0.7', true);
+      end if; end $$;
+      -- Free remixes (0037_remix_count.sql, branch remix-submit): one view of a remix, by FID 42.
+      do $$ begin if to_regclass('studio.sheet_remix_asks') is not null then
+        insert into studio.sheet_remix_asks (remix, fid, units, slot) values ('00000000-0000-4000-8000-0000000000a1', 42, 1, 'front');
       end if; end $$;`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
@@ -1523,6 +1587,55 @@ add({
 // Keys that bypass row-level security, or connect as the database owner, must
 // not sit on the Vercel project at all (owner decision, Oct 5, 2026).
 const FORBIDDEN_VARS = /^(SUPABASE_SERVICE_ROLE_KEY|SUPABASE_SECRET_KEY|SUPABASE_JWT_SECRET|POSTGRES_[A-Z0-9_]*)$/;
+// The rehearsal switch (branch contest, 2026-11-04): CHALLENGE_REHEARSAL=on runs the challenge as if opened, with admins
+// eligible and test stand-ins, on this machine only. Production must ignore it, and so must any Vercel deployment and
+// any database that isn't on this machine; the config must read it only through rehearsalOn, and the target must not
+// be running it (its /api/rehearsal/file answers 404 there, and /challenge stays as CHALLENGE.public says).
+add({
+  id: 'P6w',
+  principle: 6,
+  name: 'the rehearsal switch (CHALLENGE_REHEARSAL=on) is ignored on production, on any Vercel deployment and with a database elsewhere, and the site has no test sign-in',
+  load: async () => {
+    const local = 'postgres://postgres@127.0.0.1:54329/postgres';
+    const on = { CHALLENGE_REHEARSAL: 'on', STUDIO_DATABASE_URL: local };
+    const cases: [string, Record<string, string>][] = [
+      ['VERCEL_ENV=production', { ...on, VERCEL_ENV: 'production' }],
+      ['VERCEL_ENV=production without VERCEL', { ...on, VERCEL_ENV: 'production', VERCEL: '' }],
+      ['VERCEL=1 (any Vercel deployment)', { ...on, VERCEL: '1' }],
+      ['VERCEL_ENV=preview', { ...on, VERCEL_ENV: 'preview' }],
+      ['NEXT_PUBLIC_VERCEL_ENV=production', { ...on, NEXT_PUBLIC_VERCEL_ENV: 'production' }],
+      ['the production pooler as the database', { ...on, STUDIO_DATABASE_URL: 'postgres://studio_writer.x:y@aws-0-us-west-1.pooler.supabase.com:6543/postgres' }],
+    ];
+    return {
+      // Which switch to run: the real one, or the plant's (functions can't be in the loaded data, which is cloned).
+      fn: 'real' as 'real' | 'planted',
+      cases,
+      local: on,
+      config: read('src/lib/config.ts'),
+      auth: read('src/lib/auth.ts'),
+      file: await fetch(`${BASE}/api/rehearsal/file/images/readers/${'0'.repeat(32)}.jpg`, { redirect: 'manual' }).then((r) => r.status, () => 0),
+    };
+  },
+  run: (c) => {
+    const problems: string[] = [];
+    // The plant: a switch that reads only CHALLENGE_REHEARSAL, ignoring VERCEL_ENV and the database.
+    const on = c.fn === 'planted' ? (env: Record<string, string | undefined>) => env.CHALLENGE_REHEARSAL === 'on' : rehearsalOn;
+    const fn = { rehearsalOn: on };
+    for (const [what, env] of c.cases) {
+      if (fn.rehearsalOn(env)) problems.push(`the rehearsal switch is on with ${what}`);
+    }
+    // It must still work where it is meant to (else this check proves nothing about the cases above).
+    if (!fn.rehearsalOn(c.local)) problems.push('the rehearsal switch is off on this machine with a local database: the check above proves nothing');
+    if (!/typeof window === 'undefined'\s*\? rehearsalOn\(process\.env\)/.test(c.config) || /process\.env\.CHALLENGE_REHEARSAL\b/.test(c.config.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, ''))) problems.push('src/lib/config.ts reads CHALLENGE_REHEARSAL other than through rehearsalOn');
+    // The dress run's test sign-in lives only on branch contest-rehearsal, which never merges (owner, 2026-11-04).
+    if (/rehearsal-test-|rehearsalTestFid|REHEARSAL_TEST_SIGNIN/.test(c.auth)) problems.push('src/lib/auth.ts has the dress run\'s test sign-in: it belongs only on branch contest-rehearsal');
+    if (c.file !== 404) problems.push(`${BASE}/api/rehearsal/file answers ${c.file}, not 404: the target is running the rehearsal`);
+    return problems;
+  },
+  plant: (c) => {
+    c.fn = 'planted';
+  },
+});
 // Sign-in checks keep the decision, never the score (owner, 2026-11-04): no table the site can write holds a score
 // column, the decision store holds no number at all, and no site code writes a score.
 add({
@@ -1985,6 +2098,23 @@ add({
   },
 });
 
+// P6ac (branch challenge-moments, owner 2026-11-05): entries as pictures (CHALLENGE.pictureEntries) only while Terms §6e
+// and Privacy §4 describe them (docs/legal/challenge-moments-draft.md). Legal texts describe today. The id was free on
+// main and every remote branch (2026-11-05).
+add({
+  id: 'P6ac',
+  principle: 6,
+  name: 'entries as pictures of the challenge\'s characters (CHALLENGE.pictureEntries) are on only while Terms §6e and Privacy §4 say so',
+  load: async () => ({ on: CHALLENGE.pictureEntries as boolean, terms: clone(TERMS.sections), privacy: clone(PRIVACY.sections) }),
+  run: (c) => p6acProblems(c.on, c.terms, c.privacy),
+  plant: (c) => {
+    // On, with the words from before the owner's reread (2026-11-06): sheets, not pictures.
+    c.on = true;
+    for (const sec of c.terms) if (String(sec.n) === '6e') sec.body = ['During the challenge, anyone signed in may remix its characters\' sheets.'];
+    for (const sec of c.privacy) if (String(sec.n) === '4') sec.body = ['If you take part in the remix challenge: for each version of a challenge character you publish, whether it can count as an entry.'];
+  },
+});
+
 // P6u: the remix challenge is admin-only until the owner opens it (owner, 2026-11-04: "/challenge is admin-only for
 // now"; nothing opens by date alone). While CHALLENGE.public is off, with the clock past the open date (dates.opens):
 // entries are not taken (no eligibility stored at publish, so Neynar isn't asked; no marking), sheets stay
@@ -2024,7 +2154,7 @@ add({
     if (c.status !== 404) problems.push(`${BASE}/challenge answers ${c.status} to a signed-out visitor, not 404`);
     // The whole HTML, its inline page data included; a link to /challenge in the markup itself.
     for (const [where, html] of [['/challenge', c.html], ['/', c.home]] as const) {
-      const m = /Remix the cast|remix challenge/i.exec(String(html)) ?? /href="\/challenge"/.exec(String(html).replace(/<script[\s\S]*?<\/script>/gi, ''));
+      const m = /Remix the cast|Remix challenge|remix challenge/i.exec(String(html)) ?? /href="\/challenge"/.exec(String(html).replace(/<script[\s\S]*?<\/script>/gi, ''));
       if (m) problems.push(`${BASE}${where}: its HTML names the challenge ("${m[0]}")`);
     }
     return problems;
@@ -2034,6 +2164,39 @@ add({
     c.entries = true;
     c.sheets = 'export const challengeSheetsOpen = (now = new Date()) => CHALLENGE.openSheets && phase(now) === \'open\';';
     c.status = 200;
+  },
+});
+
+// P6v: Submit (branch remix-submit, owner 2026-11-04). A remix becomes an entry only when its maker presses Submit,
+// which keeps the submission and the post link (studio.challenge_marks, studio.version_posts). Legal texts describe
+// today: while entries are on, Privacy §4 must say what Submit keeps, and the code must keep marks only through Submit
+// (no "latest version counts" path left). P6v was free on main and every remote branch (2026-11-04); it was P6u until main took P6u for admin-only.
+add({
+  id: 'P6v',
+  principle: 6,
+  name: 'Submit: while entries are on, Privacy §4 says what Submit keeps (the submission and the link to your own post); only Submit writes a submission, and it checks the post is the submitter\'s',
+  load: async () => ({
+    entries: CHALLENGE.entries as boolean,
+    s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+    writers: walk('src', /\.tsx?$/).filter((f) => /insert into studio\.challenge_marks/.test(read(f))),
+    route: read('src/app/api/challenge/submit/route.ts'),
+  }),
+  run: (c) => {
+    const problems: string[] = [];
+    if (c.entries && !/you submit as an entry/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say what Submit keeps (docs/legal/remix-submit-draft.md)');
+    if (c.entries && !/link to your own post/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say Submit keeps the link to your own post');
+    if (c.entries && !/checks with its network that you wrote it/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say Submit checks that you wrote the post');
+    // Answer 9.4 (owner, 2026-11-04): the post must be the submitter's own. The route checks it; §4 says "your own post".
+    if (!/const mine = writerCheck\(got\.post, \{[\s\S]{0,300}?\}\);\s*if \(mine === 'not-yours'\) return no\(SUBMIT_WORDING\.notYourPost, 403\);\s*if \(mine === 'unknown'\) return no\([^;]*SUBMIT_WORDING\.blueskyUnknown, 403\);/.test(c.route))
+      problems.push('src/app/api/challenge/submit/route.ts: Submit does not check that the post is the submitter\'s own (writerCheck)');
+    if (c.writers.join() !== 'src/lib/challenge/entries.ts') problems.push(`submissions are written outside Submit (src/lib/challenge/entries.ts, submitEntry): ${c.writers.join(', ') || 'nowhere'}`);
+    return problems;
+  },
+  plant: (c) => {
+    c.entries = true;
+    c.s4 = 'If you take part in the remix challenge: which of your versions you mark as your entry for each character, and when.';
+    c.writers = ['src/lib/challenge/entries.ts', 'src/app/api/challenge/mark/route.ts'];
+    c.route = c.route.replace('const mine = writerCheck(', 'const mine = (() => \'ok\')(');
   },
 });
 

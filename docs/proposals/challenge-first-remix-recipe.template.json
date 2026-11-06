@@ -1,0 +1,30 @@
+{
+  "character": "zei",
+  "base": "<the base's design id, as in CHALLENGE.bases, once published>",
+  "file": "zei-first-remix-1.png",
+  "sha256": "<64 hex characters: shasum -a 256 zei-first-remix-1.png>",
+  "tool": { "name": "Midjourney", "maker": "Midjourney, Inc.", "version": "<as the tool shows it, e.g. v7>" },
+  "prompt": "<the full prompt, word for word, as submitted>",
+  "settings": {
+    "aspect_ratio": "<e.g. 3:4>",
+    "stylize": "<value or null>",
+    "chaos": "<value or null>",
+    "weird": "<value or null>",
+    "seed": "<value or null>",
+    "raw": "<true/false>",
+    "draft": "<true/false>",
+    "mode": "<fast/relax/turbo>",
+    "image_prompt_weight": "<value or null>",
+    "style_reference": "<what, or null>",
+    "omni_reference": "<what, or null>",
+    "moodboard_or_profile": "<what, or null>",
+    "other": "<anything else set, word for word>"
+  },
+  "inputs": [
+    { "sha256": "<the base's front view sha256>", "what": "the base's front view (Zei, Animated series)" }
+  ],
+  "job": { "id": "<job id, or null>", "cell": "<grid cell 1-4, or null>" },
+  "plan": "<e.g. paid, Standard>",
+  "made_on": "YYYY-MM-DD",
+  "reported": "self-reported"
+}

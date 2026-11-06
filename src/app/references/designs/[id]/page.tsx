@@ -12,13 +12,16 @@ import { BookQuotes } from '~/components/design-book';
 import { DesignBar } from '~/components/design-bar';
 import { AiTag } from '~/components/ai-tag';
 import { CHALLENGE } from '~/lib/config';
-import { challengeOpenNow } from '~/lib/challenge/rules';
+import { challengeOpenNow, phase } from '~/lib/challenge/rules';
 import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-sheets';
 import { sheetChallenge } from '~/lib/challenge/sheet-lines';
 import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import { ChallengeShare } from '~/components/challenge-share';
 import { ChallengeLines, ChallengePosts } from '~/components/challenge-lines';
 import { ChallengeAdminSheet } from '~/components/challenge-admin-sheet';
+import { ChallengeRemixLanding } from '~/components/challenge-remix-landing';
+import { NO_PREVIEW, isLanding, landingMetadata, landingPicture } from '~/lib/challenge/landing';
+import type { Metadata } from 'next';
 
 /**
  * A style or a character sheet (step 4; Claude Design 4a, 5a and 4-desktop): its name, version and
@@ -43,11 +46,20 @@ const versionRow = (h: { versionNo: number; createdAt: string; builtOn: number }
   );
 };
 
-export async function generateMetadata({ params }: Props) {
+/** A sheet's call name: "Gladias" for General Gladias. */
+const callNameOf = (name: string) => name.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? name;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const sql = db();
   const d = sql ? await designByVersion(sql, id).catch(() => null) : null;
-  if (!d) return { title: 'Not found' };
+  // A hidden or unpublished version (designByVersion reads published designs only) gives no preview picture at all.
+  if (!d) return NO_PREVIEW;
+  // A challenge character's sheet is a landing page (owner, 2026-11-04): its front view in the link preview.
+  if (isLanding({ kind: d.kind, challengeCharacter: isChallengeCharacter(d.entity), body: d.shown.body })) {
+    const character = bookCharacters().find((c) => c.name === d.entity);
+    return landingMetadata({ versionId: d.shown.versionId, name: callNameOf(character?.name ?? d.entity), title: d.shown.body.title, by: designByline(d.byName, d.byFid, d.byRole) });
+  }
   return { title: d.kind === 'style' ? `${d.shown.body.title || d.entity} · style` : `${d.entity} · sheet`, robots: { index: false } };
 }
 
@@ -60,7 +72,7 @@ export default async function DesignPage({ params }: Props) {
   const by = designByline(d.byName, d.byFid, d.byRole);
   const style = d.kind === 'style';
   const character = style ? null : (bookCharacters().find((c) => c.name === d.entity) ?? null);
-  const callName = character ? character.name.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? character.name : d.entity;
+  const callName = character ? callNameOf(character.name) : d.entity;
   // A fork shades the words it changed from the version it was remixed from ("the page shows the difference").
   const rf = d.remixedFrom && !d.remixedFrom.hidden ? d.remixedFrom : null;
   const sourceText = rf ? ((await designByVersion(sql, rf.versionId).catch(() => null))?.shown.body.text ?? null) : null;
@@ -79,10 +91,17 @@ export default async function DesignPage({ params }: Props) {
   const challengeOpen = d.kind === 'character' && challengeSheetsOpen() && isChallengeCharacter(d.entity);
   // The share text mentions the challenge only while it is open (owner, 2026-11-03), on a challenge character's sheet.
   const what = style ? title : `${callName}: ${title}`;
-  const shareText = d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow() ? CW.shareTextOpen(what) : CW.shareText(what);
+  const shareText = d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow() ? CW.shareTextOpen(callName) : CW.shareText(what);
+  // A landing page for someone arriving from a post (owner, 2026-11-04): a challenge character's sheet with a front view,
+  // once the owner has opened the challenge (CHALLENGE.public, read by isLanding). While it is admin-only the page as
+  // served says nothing of it: no landing, no Remix button, no "Remixing opens …" line, no challenge preview.
+  const landing = ch !== null && isLanding({ kind: d.kind, challengeCharacter: isChallengeCharacter(d.entity), body });
 
   const main = (
     <article className="dz-main">
+      {landing && ch && (
+        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={by} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={challengeOpen ? 'open' : phase() === 'closed' ? 'closed' : 'before'} posts={ch.posts} />
+      )}
       {character && <BookQuotes name={character.name} quotes={character.quotes} />}
       <h1 className="dz-title">{title}</h1>
       <p className="dz-meta">
@@ -198,7 +217,8 @@ export default async function DesignPage({ params }: Props) {
         challengeOpen={challengeOpen}
       />
       <ChallengeShare versionId={d.shown.versionId} text={shareText} posts={CHALLENGE.public && CHALLENGE.posts} />
-      {ch ? <ChallengePosts c={ch} versionId={d.shown.versionId} /> : <ChallengeAdminSheet versionId={d.shown.versionId} byFid={d.byFid} part="posts" />}
+      {/* On a landing page "Posted on" sits at the top, with the picture. */}
+      {ch ? !landing && <ChallengePosts c={ch} versionId={d.shown.versionId} /> : <ChallengeAdminSheet versionId={d.shown.versionId} byFid={d.byFid} part="posts" />}
       <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>
     </article>
   );

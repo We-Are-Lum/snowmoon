@@ -210,6 +210,15 @@ in 25 words or fewer and records `written_by { fid, date }`.
   changed), at a block id that exists (`check:ui` follows "Read from here" and
   checks it lands on that block). The proof changes one word and adds Design's screen block c1-b18
   as if it were a sentence.
+- `P2m` (branch challenge-moments, owner 2026-11-05, answer 2): the six character cards on /challenge
+  (`src/lib/challenge/cards.ts`: one line, about three facts, a fuller description, "Where they appear") and the
+  moments' titles and scene lines (`src/lib/challenge/moments.ts`) are drafted by the coding agent and go to the
+  owner in one pass; /challenge may not go public (`CHALLENGE.public`) until he approves them
+  (`CHALLENGE.cardsApproved`, `CHALLENGE.sceneLinesApproved`), and until then every card carries the "Draft wording"
+  mark. Approved, with three changes (owner, 2026-11-06). The cards' and moments' quotes are the book's, word for word at their blocks (checked by `P9g`); the one line
+  and the description are marked "This edition's summary"; every picture's ⓘ says "Look invented by this edition: the
+  book doesn't describe it." The scene line is a prompt, not story words: each recipe labels it model-drafted in
+  `assist`. The proof turns /challenge public with the cards unapproved.
 - `P2g`: on every chapter page as served, each screen redrawn from a template
   (`data-source="template"`) carries one ⓘ label named "Redrawn": the ⓘ shown,
   the word and the declaration served with it as its accessible name, and a
@@ -368,13 +377,43 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   likes, built-on counts, scores, costs or payments. One narrow exception (owner, 2026-11-04; branch
   challenge-three-bases): "Bases to start from" may follow the bases' fixed style order (`CHALLENGE.baseStyles`), by
   `.sort(baseStyleOrder)` inside `startingSheets` only; entries and every other challenge list stay time order. Its
-  planted violation is an entries list ordered by style, which must fail (scripts/lib/p5g.ts).
+  planted violation is an entries list ordered by style, which must fail (scripts/lib/p5g.ts). A second narrow
+  exception (owner, 2026-11-04; branch challenge-landing): /challenge's random selection, a fresh, unweighted shuffle on
+  each visit, drawn from all published remixes of the six characters; no weighting, no counts, no featuring.
+  Randomness in the challenge's code lives only in `shuffleFresh` (src/lib/challenge/shuffle.ts), which takes a list of
+  an unconstrained type and reads nothing about an item, called only by the random selection, on the whole list. It
+  runs in the browser on each visit, from the full list the cached page carries. Its planted violation is a weighted
+  shuffle, which must fail. The same shuffle orders a character's several bases (owner, 2026-11-04: Deluin's and
+  Gladias' three, their current default look and two recasts, in a fresh random order on each visit so none reads as
+  the default), in `src/components/challenge-bases.tsx` only, on the character's whole list (`shuffleFresh(bases)`);
+  shuffling only some of them, or putting them in a fixed order, must fail.
+  Since the hub's cards (owner, 2026-11-05; branch challenge-moments) the random block is gone (answer 9) and the same
+  shuffle orders, on each card only, its bases and a random three of its character's published remixes per visit,
+  expandable (answer 8: `shuffleFresh(c.bases)` and `shuffleFresh(c.remixes)` in `src/components/challenge-card.tsx`,
+  on the card's whole lists); shuffling only some of them must fail.
+  **A fourth narrow exception (owner, 2026-11-05, answer 3; approved):** the curated moments
+  (`src/lib/challenge/moments.ts`, all fifteen at launch, answer 4) are the owner's pick, labelled "Moments picked by
+  @naaate" wherever they are listed, never "official" or "best"; they stay in the book's fixed order (chapter, then
+  block), which is the book's, not a ranking, and nothing sorts them; "Surprise me" draws from that list only,
+  unweighted, a fresh uniform draw each time from all fifteen but the one already chosen
+  (`shuffleFresh(MOMENTS.filter((m) => m.id !== moment))` in `src/components/challenge-make.tsx` only), never weighted
+  by popularity, use, spoiler depth or anything else. Its planted violations: a draw from outside the list, a weighted
+  draw and a list out of book order, each of which must fail (`scripts/lib/p5g.ts`; `npm run test:challenge`).
+  A third narrow exception (owner, 2026-11-04; branch challenge-landing; **pending the owner's yes**): below each
+  character's bases, under the heading "First remixes by @naaate", /challenge shows the owner's first remixes of it
+  (`CHALLENGE.firstRemixes`, at most two), in the order the owner sets in the config. Chosen by the owner, never by a
+  count, a like or a payment; no sort reads them. They are not entries: no Entry badge, no count, never in an entry
+  list. Empty slots until they exist.
 - `P5h` (branch characters-by-mentions, 2026-11-04, the owner's decision: "list characters by how often they're named
   in the book, most first, everywhere characters are listed"): character lists take one order, from the book's text
   only: `content/snowmoon/characters-by-mentions.json` must match the text as it is now (regenerated in the check), be
   in its own order (mentions, then name), and be read by `src/lib/character-order.ts`, which reads nothing else; the
   challenge's characters (`CHALLENGE.characters`) must be in that order. Planted: the challenge's characters by
   entrants.
+- `P5i` (branch challenge-landing, 2026-11-04, the owner's decision): while the challenge runs, its remix cards (the
+  random selection and "See all") show no remix, like or built-on count, and the feed (/challenge/remixes) has no "most
+  remixed" or other sort: newest first, filterable by character. A viewer's "most remixed" sort may come back after
+  entries close, by the owner's decision then. Its planted violation is a like count on a card.
 - Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
 **Status.** Pass. (Picks are built on branch phase2-admin and need 0030_admin_picks, applied 2026-10-31.)
@@ -464,6 +503,11 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   and that may be true only while a Privacy paragraph about the bases and references names OpenAI and Google
   (docs/legal/closed-model-bases-draft.md, branch closed-model-bases). The id is free on main and every branch
   (P6p is social-read's, P6r is deep-funding's and sheet-help's).
+- `P6ac` (branch challenge-moments, owner 2026-11-05): entries as pictures (`CHALLENGE.pictureEntries`: one picture
+  of a challenge character at one of the challenge's moments counts, and sheet remixes stop counting) are on only while
+  Terms §6e and Privacy §4 describe them (`docs/legal/challenge-moments-draft.md`). On since the owner's reread
+  (2026-11-06, "reviewed by the coordinator, approved by the owner"). The proof turns it on with today's words. The id was
+  free on main and every remote branch (2026-11-05).
 - `P6ab` (branch assistant-any-account, 2026-11-05, the owner's one rule): the assistant's switch
   (`ASSISTANT.anyAccount`: everyone who asks passes their own network's check, Neynar, Lens or Bluesky, and Lens and
   Bluesky accounts ask under their own number) is on only while Privacy §5 no longer counts questions only under a
@@ -643,6 +687,41 @@ once the owner picks a version.)
   source's drawing.
 
 **Status.** Pass.
+
+---
+
+## 9. Nothing past where a reader has read is shown, or sent to a model on their behalf, unless they choose it each time.
+
+Adopted by the owner on 2026-11-04 (reread pack item 12.1). Its full text, P9a to P9f and its status table are on
+branch `find-a-moment`, which hasn't merged into this branch yet; this section carries only the exception below and
+its check, so that merge keeps both.
+
+**Recorded exception: the remix challenge (owner, 2026-11-05, answer 1; approved).** While the challenge runs,
+/challenge and its remix screens (`/challenge/make`, the preview, the published picture's page) show the six
+challenge characters' cards and the curated moments (`CHALLENGE`'s moments, `src/lib/challenge/moments.ts`) from the
+whole book, whatever the reader has read. The courtesies are exactly these, with no extra line at the top of the page
+(the owner: "No extra courtesy line"):
+
+- The **first layer** of each card (its one-line description, its facts and its moments list) is written without the
+  book's major turns; its facts cite chapters 1 to 14 only (`FIRST_LAYER_MAX_CHAPTER`), and the moments' titles name
+  no turn.
+- The **deeper layers** ("More about …" and "Where … appears in the book") carry "May spoil later chapters." at their
+  top, before anything in them; "Where … appears" is sent only when the reader opens it.
+- **Every moment chip shows its chapter** ("Ch 29"), on the cards and on the remix screen, so a reader can avoid what
+  is past them.
+
+Nothing else is covered by this: the reader, the search, "Find a moment", the assistant, the sheets and every other
+page keep principle 9, and nothing on the challenge's pages raises a limit anywhere else. Only the moment a person
+picked for their picture is sent to a model, as its scene line, when they press Make it; its quote is shown, never
+sent. The exception ends when entries close: after that the hub carries no deeper layer and no moments, and the
+passages are not served.
+
+- `P9g`: every passage the challenge's pages can show is one of the six cards' facts and passages or a moment's
+  quote, word for word at a block that exists; the first layer cites chapters 1 to 14 only; the deeper layers open with
+  "May spoil later chapters."; every moment chip shows its chapter; nothing outside the challenge's pages and APIs
+  imports the cards or the moments; and the exception ends exactly when entries close (`spoilerExceptionOn`). The
+  proof changes one word in a moment's quote, puts a chapter 24 fact on a card's first layer and imports the cards on
+  a sheet page (`scripts/lib/challenge-moments.ts`; `npm run test:challenge` proves each part on its own).
 
 ---
 

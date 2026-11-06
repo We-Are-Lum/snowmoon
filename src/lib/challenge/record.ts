@@ -8,10 +8,12 @@ import { PRIVACY } from '../legal';
 import { privacyDescribesChallenge } from './open-sheets';
 import { refusedBases } from './bases';
 import { remixLines } from './lineage';
+import { challengePictures, picturesCount } from './pictures';
 import { eligibility, entriesOpen, inWindow, needsScore, remixOfBase } from './rules';
 import { isSocialPerson, socialAccountOf } from '../people';
 import { socialAccount } from '../social/accounts';
 import { blueskyDecision, type BlueskyFacts } from '../social/bluesky-check';
+import { lensDecision } from '../social/lens-check';
 
 /**
  * The remix challenge's eligibility, decided once, when a version is published (owner, 2026-10-31: "checked once at
@@ -30,12 +32,20 @@ import { blueskyDecision, type BlueskyFacts } from '../social/bluesky-check';
  */
 type Sql = postgres.Sql;
 
-export async function recordEligibility(sql: Sql, versionId: string, fid: number, now = new Date(), privacy = PRIVACY, bluesky?: (did: string) => Promise<BlueskyFacts>): Promise<'stored' | 'not-a-candidate' | 'not-stored'> {
+export async function recordEligibility(sql: Sql, versionId: string, fid: number, now = new Date(), privacy = PRIVACY, bluesky?: (did: string) => Promise<BlueskyFacts>, lensScore?: (account: string) => Promise<number | null>): Promise<'stored' | 'not-a-candidate' | 'not-stored'> {
   try {
     if (!privacyDescribesChallenge(privacy)) return 'not-stored';
     if (!inWindow(now)) return 'not-a-candidate';
     // Nothing is recorded, and Neynar is not asked, until the owner opens the challenge (CHALLENGE.public; 2026-11-04).
     if (!entriesOpen(now)) return 'not-a-candidate';
+    // Entries as pictures (CHALLENGE.pictureEntries, branch challenge-moments): a challenge picture of the maker's,
+    // whose line reaches one of its character's bases (src/lib/challenge/pictures.ts); sheets no longer count.
+    if (CHALLENGE.pictureEntries) {
+      const [pic] = await challengePictures(sql, { versionId });
+      if (!pic || pic.byFid !== fid) return 'not-a-candidate';
+      if (!(await picturesCount(sql, [pic])).get(pic.versionId)) return 'not-a-candidate';
+      return await decide(sql, versionId, fid, now, bluesky, lensScore);
+    }
     const names = CHALLENGE.characters.map((s) => bookCharacter(s)?.name).filter((n): n is string => Boolean(n));
     const [v] = await sql`
       select e.created_by_fid, e.id as element_id, en.name
@@ -47,15 +57,33 @@ export async function recordEligibility(sql: Sql, versionId: string, fid: number
     const slug = CHALLENGE.characters.find((s) => bookCharacter(s)?.name === String(v.name)) ?? '';
     const line = (await remixLines(sql, [String(v.element_id)])).get(String(v.element_id)) ?? [];
     if (!remixOfBase(slug, line, CHALLENGE.bases, await refusedBases(sql))) return 'not-a-candidate';
+    return await decide(sql, versionId, fid, now, bluesky, lensScore);
+  } catch (e) {
+    console.error('challenge: eligibility not stored', (e as { code?: string }).code ?? (e as Error).name);
+    return 'not-stored';
+  }
+}
+
+/** The account's decision for a candidate version (a sheet remix, or with pictureEntries a challenge picture), stored once. */
+async function decide(sql: Sql, versionId: string, fid: number, now: Date, bluesky?: (did: string) => Promise<BlueskyFacts>, lensScore?: (account: string) => Promise<number | null>): Promise<'stored' | 'not-a-candidate' | 'not-stored'> {
+  try {
     let passed: boolean | null = null;
     if (fid > 0 && needsScore(fid)) {
       const r = await checkNeynar(sql, fid, CHALLENGE_LISTS.min);
       passed = r.ok ? r.passed : null;
     }
-    // A Bluesky account (owner, 2026-11-04): its Bluesky check, from the shared decision store (studio.check_decisions)
-    // while a decision is current, or asked now; only the decision is kept. Lens accounts wait for 12 November.
+    // A Lens or Bluesky account: its own check, from the shared decision store (studio.check_decisions) while a decision
+    // is current, or asked now, the same moment as Neynar's; only the decision is kept.
     if (isSocialPerson(fid)) {
       const account = await socialAccount(sql, socialAccountOf(fid));
+      // Lens (overnight run 2026-11-05, item 4): its Lens score against SOCIAL_SIGN_IN.lens.minScore, network 'lens',
+      // rule 'lens-score>=1000' (src/lib/social/lens-check.ts). Lens down: 'unchecked', as Neynar down is.
+      if (account?.kind === 'lens') {
+        const d = await lensDecision(sql, account.subject, { lookUp: true, score: lensScore });
+        const e = eligibility({ maker: fid, passed: null, bluesky: d === 'passed' ? 'passed' : d === 'below' ? 'failed' : null });
+        await sql`insert into studio.challenge_eligibility ${sql({ version_id: versionId, challenge: CHALLENGE.id, fid, decision: e.why, eligible: e.eligible, account: 'lens' })} on conflict (version_id) do nothing`;
+        return 'stored';
+      }
       if (account?.kind !== 'bluesky' || !SOCIAL_SIGN_IN.bluesky.check.on) return 'not-a-candidate';
       const d = await blueskyDecision(sql, account, bluesky, now);
       const e = eligibility({ maker: fid, passed: null, bluesky: d.ok ? d.decision : null });

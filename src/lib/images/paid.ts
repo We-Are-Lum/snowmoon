@@ -36,6 +36,9 @@ export const LIMIT_SAY = {
   spend: 'Image making has reached today’s spending limit for everyone. It comes back at 00:00 UTC.',
   balance: IMAGE_WORDING.prepaid.lowBalance,
   'prepaid-spend': IMAGE_WORDING.prepaid.dailyCap,
+  // Free remixes (owner, 2026-11-04). Draft wording.
+  'remix-limit': `You’ve made today’s ${IMAGES.designs.remixesPerDay} remixes. More tomorrow (00:00 UTC).`,
+  'remix-used': `This remix has used its ${IMAGES.designs.picturesPerRemix} pictures. Press Remix to start a new one.`,
   /** A Lens or Bluesky account without free generations (src/lib/social/free.ts). DRAFT wording. */
   'no-free': FREE_WORDING.none,
 } as const;

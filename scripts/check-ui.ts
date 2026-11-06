@@ -80,8 +80,23 @@
  *   shown, the finding with its fix line, the note box with the publication line, pre-filled with the fix line labelled
  *   "Drafted by the image check (Argon finding, gpt-oss-120b fix line)" and marked when edited; anyone else sees only the owner line.
  * - The remix challenge (/challenge, 2026-10-31): the floors, light and dark, the "Draft wording" line, its six characters in order, the
- *   deadline in Pacific time, the rules, admins not eligible for rewards, no sideways scroll. While it is admin-only
- *   (CHALLENGE.public off; owner, 2026-11-04): signed out, status 404 with nothing of the challenge in the HTML or on screen.
+ *   deadline (in its one line), the "Rules" link, no sideways scroll; /challenge/rules (the short page's rules, owner
+ *   2026-11-04): the floors, the deadline in Pacific time, who can enter, the rules, admins not eligible for rewards. As a landing page (owner,
+ *   2026-11-04), on local data (scripts/fixtures/challenge-db.ts) at 390 light and dark, in the 424 × 695 Farcaster
+ *   frame and at 1440: the cards in CHALLENGE.characters' order (branch challenge-moments, 2026-11-05): Zei's big
+ *   picture with its AI label saying the look is this edition's, the line marked as this edition's summary (and
+ *   "Draft wording" until approved), facts opening the book's words with their block, "Moments picked by @naaate" with
+ *   "Ch N" on every chip, every picture opening its remix screen, a random three of Zei's remixes and "Show more", no
+ *   count, "More about Zei" opening with "May spoil later chapters." and "Where Zei appears" loading its passages; no
+ *   random block; the feed, every remix newest first, the filter showing Bai's only, and Gladias' empty state.
+ *   While it is admin-only (CHALLENGE.public off; owner, 2026-11-04): signed out, status 404 with nothing of the
+ *   challenge in the HTML or on screen; the landing checks on local data then wait for CHALLENGE.public.
+ * - A remix page as a landing page (owner, 2026-11-04), on this checkout's build and the fixture database, at 390 (light,
+ *   dark) and 1440: at the top, the front view big, the maker, the AI label, a big Remix button to that version's remix
+ *   form (or, outside the entry window, the line in its place), signed out the line on the challenge and its dates
+ *   linking /challenge (gone signed in), the like slot empty while likes are off, no sideways scroll; a hidden remix
+ *   and a draft answer 404 with no picture. While the challenge is admin-only (CHALLENGE.public off): no landing, no
+ *   Remix button and no challenge words on the page at all, signed out.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -356,6 +371,15 @@ async function plantWalletSession(page: Page) {
 const accountIn = (within: string) => `${within} .menu-account`;
 async function checkAccountSignedOut(page: Page, within: string, where: string) {
   const acct = page.locator(accountIn(within));
+  // Signed out on the website (2026-11-06, Garance): one "Sign in" button, closed, and no way to sign in shown until it
+  // is pressed; pressed, every way that is on (the checks below).
+  const opener = acct.locator('button.signin-open');
+  await opener.waitFor({ timeout: 10000 }).catch(() => {});
+  const first = await acct.locator('button').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
+  if (first.join(' | ') !== 'Sign in') fail(`${where}: signed out, the account shows "${first.join(' | ')}" (want one "Sign in" button)`);
+  if ((await opener.getAttribute('aria-expanded').catch(() => null)) !== 'false') fail(`${where}: the "Sign in" button doesn't say it is closed (aria-expanded)`);
+  if (await acct.locator('.signin-choice').count()) fail(`${where}: the ways to sign in show before "Sign in" is pressed`);
+  await opener.click().catch(() => fail(`${where}: no "Sign in" button to press`));
   await acct.locator('button', { hasText: 'Sign in with a wallet' }).waitFor({ timeout: 10000 }).catch(() => {});
   // The small "Use another server or handle" link under "Sign in with Bluesky" (2026-11-05) is not a way to sign in.
   const names = await acct.locator('button:not(.social-other)').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
@@ -366,12 +390,12 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
   }
   // The phone menu and the wide-screen rail (owner, 2026-10-19): in the menu first in the sheet; in both, two full-width buttons at least 48px tall in the menu's
   // main font, and the owner's line under them.
-  const first = await page.evaluate(() => {
+  const firstInSheet = await page.evaluate(() => {
     const a = document.querySelector('.menu-sheet .menu-account');
     const n = document.querySelector('.menu-sheet .nav-list');
     return !!a && !!n && !!(a.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_FOLLOWING);
   });
-  if (within === '.menu-sheet' && !first) fail(`${where}: the account is not above the menu's items`);
+  if (within === '.menu-sheet' && !firstInSheet) fail(`${where}: the account is not above the menu's items`);
   // Farcaster and a wallet as equals (owner, 2026-10-30; src/components/sign-in-choices.tsx): the same box, the same
   // fill, border, font and weight, each with one line under it; only the ways that are on (no Lens or Bluesky yet).
   const boxes = await acct.locator('button.menu-signin').evaluateAll((els) =>
@@ -1724,6 +1748,134 @@ async function checkMarkdownPages() {
   }
 }
 
+// ---------------------------------------------------------------------------
+// /challenge as a landing page (owner, 2026-11-04): the triptych, the random selection and the feed's filter, on
+// local data (scripts/fixtures/challenge-db.ts), at 390 light and dark, in the 424 × 695 Farcaster frame and at 1440.
+// ---------------------------------------------------------------------------
+async function checkChallengeLanding() {
+  const { startChallengeDb, FIXTURE_CHALLENGE: FX } = await import('./fixtures/challenge-db');
+  const data = await startChallengeDb(await freePort());
+  const port = await freePort();
+  const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], {
+    env: { ...process.env, STUDIO_DATABASE_URL: data.url },
+    stdio: 'ignore',
+  });
+  const LOCAL = `http://localhost:${port}`;
+  try {
+    for (let i = 0; ; i++) {
+      if (await fetch(LOCAL).then((r) => r.ok, () => false)) break;
+      if (i > 120) throw new Error('the local build did not start (run next build first)');
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    const { CHALLENGE } = await import('../src/lib/config');
+    // /challenge is cached (revalidate 60), built from whatever database the build saw: the first request serves that
+    // copy and renders a fresh one from the local data in the background. Wait for the fresh one.
+    for (let i = 0; ; i++) {
+      const html = await fetch(`${LOCAL}/challenge`).then((r) => r.text(), () => '');
+      if (html.includes(FX.sheets.zei[0])) break;
+      if (i > 60) {
+        fail('/challenge (local data): the page never showed the local data');
+        break;
+      }
+      await new Promise((r) => setTimeout(r, 1000));
+    }
+    for (const [w, h, touch, scheme] of [
+      [390, 844, true, 'light'],
+      [390, 844, true, 'dark'],
+      [424, 695, true, 'light'],
+      [1440, 900, false, 'dark'],
+    ] as const) {
+      const tag = `@${w}×${h} (${scheme})`;
+      const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+      const at = async (p: string) => {
+        await page.goto(LOCAL + p, { waitUntil: 'networkidle' });
+        if (INJECT) await page.addStyleTag({ content: INJECT });
+        await page.evaluate(() => document.fonts.ready);
+      };
+      const name = (s: string) => `challenge-${s}-${w}x${h}-${scheme}`;
+      const snap = async (s: string, full = false) => {
+        if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `${name(s)}.png`), fullPage: full });
+      };
+      await at('/challenge');
+      await checkFloors(page, `/challenge ${tag} (local data)`, scheme);
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge ${tag}: scrolls sideways`);
+      // The characters in CHALLENGE.characters' order, whatever it is.
+      const order = await page.locator('.cc-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-character')));
+      if (order.join() !== CHALLENGE.characters.join()) fail(`/challenge ${tag}: the characters read ${order.join()}, not CHALLENGE.characters (${CHALLENGE.characters.join()})`);
+      // The hub's cards (owner, 2026-11-05; branch challenge-moments): a big picture with its AI label, the name, one line
+      // with "This edition's summary" (and "Draft wording" until approved), facts that open the book's words with their
+      // block, "Moments picked by @naaate" with "Ch N" on each chip, the bases, a random three of the character's remixes
+      // (Show more for the rest), and "More about …", whose second layer says "May spoil later chapters." and whose
+      // "Where … appears" loads the book's passages. Tapping a picture opens its remix screen.
+      const zei = page.locator('.cc-card[data-character="zei"]');
+      if (!(await zei.locator('.cc-hero [data-ai="tag"]').count())) fail(`/challenge ${tag}: Zei's big picture has no AI label`);
+      const heroTip = (await zei.locator('.cc-hero [data-ai="tag"] .sr-only').textContent()) ?? '';
+      if (!/Look invented by this edition/.test(heroTip)) fail(`/challenge ${tag}: the big picture's label doesn't say the look is this edition's (${heroTip})`);
+      if (!/This edition’s summary/.test((await zei.locator('.cc-line').textContent()) ?? '')) fail(`/challenge ${tag}: Zei's line isn't marked as this edition's summary`);
+      if (!CHALLENGE.cardsApproved && !/Draft wording/.test((await zei.locator('.cc-line').textContent()) ?? '')) fail(`/challenge ${tag}: an unapproved card has no "Draft wording" mark`);
+      const facts = zei.locator('.cc-facts').first().locator('details');
+      if ((await facts.count()) < 2) fail(`/challenge ${tag}: Zei's card has fewer than two facts`);
+      await facts.first().locator('summary').click();
+      if (!/^c\d+-b\d+$/.test(((await facts.first().locator('.cc-block').textContent()) ?? '').trim()) || !(await facts.first().locator('blockquote a[href^="/chapter/"]').count())) fail(`/challenge ${tag}: a fact doesn't open the book's words with its block and "Read it"`);
+      const momentChips = await zei.locator('.cc-moments .cc-chip').allTextContents();
+      if (!momentChips.length || !momentChips.every((t) => /· Ch \d+$/.test(t.trim()))) fail(`/challenge ${tag}: a moment chip doesn't show its chapter (${momentChips.join(' | ')})`);
+      if (((await zei.locator('h3', { hasText: 'Moments picked by @naaate' }).count()) ?? 0) !== 1) fail(`/challenge ${tag}: the moments don't say whose list it is`);
+      const tileHrefs = await zei.locator('.cc-row a.cc-tile').evaluateAll((els) => els.map((e) => e.getAttribute('href') ?? ''));
+      if (!tileHrefs.length || !tileHrefs.every((h) => /^\/(challenge\/make\?from=|references\/designs\/new\?from=)[0-9a-f-]{36}/.test(h))) fail(`/challenge ${tag}: a picture doesn't open its remix screen (${tileHrefs.join()})`);
+      const zeiRemixes = FX.remixes.filter((r) => r.character === 'zei').map((r) => r.versionId);
+      const shownRemixes = await zei.locator('.cc-remixes a.cc-tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-version') ?? ''));
+      if (shownRemixes.length !== Math.min(3, zeiRemixes.length) || !shownRemixes.every((v) => zeiRemixes.includes(v))) fail(`/challenge ${tag}: Zei's remixes show ${shownRemixes.join()}, not three of Zei's`);
+      if (zeiRemixes.length > 3) {
+        await zei.locator('.cc-show-more').click();
+        if ((await zei.locator('.cc-remixes a.cc-tile').count()) !== zeiRemixes.length) fail(`/challenge ${tag}: "Show more" doesn't show the rest of Zei's remixes`);
+      }
+      if (/\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test((await zei.textContent()) ?? '')) fail(`/challenge ${tag}: a card shows a count`);
+      await zei.scrollIntoViewIfNeeded();
+      await snap('card');
+      const more = zei.locator('button.cc-toggle').first();
+      if ((await more.getAttribute('aria-expanded')) !== 'false') fail(`/challenge ${tag}: "More about Zei" starts open`);
+      await more.click();
+      if ((await more.getAttribute('aria-expanded')) !== 'true' || ((await zei.locator('.cc-more .cc-spoil').textContent()) ?? '').trim() !== 'May spoil later chapters.') fail(`/challenge ${tag}: the second layer doesn't open with "May spoil later chapters."`);
+      await zei.locator('.cc-more button.cc-toggle').click();
+      await zei.locator('.cc-appears blockquote').first().waitFor({ timeout: 10000 }).catch(() => fail(`/challenge ${tag}: "Where Zei appears" didn't load`));
+      if (!(await zei.locator('.cc-appears blockquote[data-block] a[href^="/chapter/"]').count())) fail(`/challenge ${tag}: a passage has no "Read it"`);
+      await checkFloors(page, `/challenge ${tag} (Zei's layers open)`, scheme);
+      await snap('card-open');
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge ${tag}: scrolls sideways with a card open`);
+      // No random block on the hub (owner, 2026-11-05, answer 9); the feed is still one link away, on the rules page.
+      if (await page.locator('.ch-pick').count()) fail(`/challenge ${tag}: the old random block is still on the hub`);
+      if (w === 390 && scheme === 'light') await snap('full', true);
+      await at('/challenge/remixes');
+      // The feed: newest first; the filter shows one character's remixes only.
+      await checkFloors(page, `/challenge/remixes ${tag}`, scheme);
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/remixes ${tag}: scrolls sideways`);
+      const newest = FX.remixes.map((r) => r.versionId);
+      const feed = await page.locator('.ch-feed .ch-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-version')));
+      if (feed.join() !== newest.join()) fail(`/challenge/remixes ${tag}: not every remix newest first (${feed.join()})`);
+      if ((await page.locator('.ch-chip[aria-current="page"]').textContent())?.trim() !== 'All') fail(`/challenge/remixes ${tag}: "All" isn't the current filter`);
+      const chips = await page.locator('.ch-chip[data-character]').evaluateAll((els) => els.map((e) => e.getAttribute('data-character')));
+      if (chips.join() !== CHALLENGE.characters.join()) fail(`/challenge/remixes ${tag}: the filter's characters read ${chips.join()}`);
+      if (/most remixed|most liked/i.test((await page.locator('.ch-feed-page').textContent()) ?? '')) fail(`/challenge/remixes ${tag}: offers a "most" sort`);
+      await snap('feed');
+      await page.locator('.ch-chip[data-character="bai"]').click();
+      await page.waitForURL('**/challenge/remixes?character=bai');
+      await page.waitForLoadState('networkidle');
+      const bai = await page.locator('.ch-feed .ch-card').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-character')}:${e.getAttribute('data-version')}`));
+      const want = FX.remixes.filter((r) => r.character === 'bai').map((r) => `bai:${r.versionId}`);
+      if (bai.join() !== want.join()) fail(`/challenge/remixes?character=bai ${tag}: shows ${bai.join()}`);
+      if ((await page.locator('.ch-chip[aria-current="page"]').getAttribute('data-character')) !== 'bai') fail(`/challenge/remixes ${tag}: Bai isn't marked as the current filter`);
+      await checkFloors(page, `/challenge/remixes?character=bai ${tag}`, scheme);
+      await snap('feed-bai');
+      await at('/challenge/remixes?character=gladias');
+      if (!/No remixes of Gladias yet/.test((await page.locator('.ch-feed-none').textContent().catch(() => '')) ?? '')) fail(`/challenge/remixes?character=gladias ${tag}: no empty state`);
+      await page.close();
+    }
+  } finally {
+    server.kill();
+    await data.stop();
+  }
+}
+
 // A local server must be serving this checkout's commit; otherwise the check would pass old code.
 if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
   const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
@@ -1733,6 +1885,100 @@ if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
     process.exit(1);
   }
 }
+// ---------------------------------------------------------------------------
+// A remix page as a landing page (owner, 2026-11-04), on this checkout's build and the fixture database.
+// ---------------------------------------------------------------------------
+async function checkRemixLanding() {
+  const { startReaderImagesDb, FIXTURE_DESIGNS: D } = await import('./fixtures/reader-images-db');
+  const data = await startReaderImagesDb(await freePort(), { designs: true });
+  const port = await freePort();
+  const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], { env: { ...process.env, STUDIO_DATABASE_URL: data.url }, stdio: 'ignore' });
+  const LOCAL = `http://localhost:${port}`;
+  const remix = `/references/designs/${D.remix.version}`;
+  try {
+    for (let i = 0; !(await fetch(LOCAL).then((r) => r.ok, () => false)); i++) {
+      if (i > 120) throw new Error('the local build did not start (run next build first)');
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+    const built = ((await (await fetch(`${LOCAL}/api/version`)).json()) as { commit?: string }).commit ?? 'unknown';
+    if (built !== head) return fail(`remix landing: the local build is from ${built.slice(0, 7)}, but this checkout is at ${head.slice(0, 7)}; run next build first`);
+    for (const [w, h, touch, scheme] of [[390, 844, true, 'light'], [390, 844, true, 'dark'], [1440, 900, false, 'light']] as const) {
+      const tag = `${remix} @${w} ${scheme}`;
+      const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+      await page.goto(LOCAL + remix, { waitUntil: 'networkidle' });
+      if (INJECT) await page.addStyleTag({ content: INJECT });
+      await page.evaluate(() => document.fonts.ready);
+      await checkFloors(page, `${tag} (signed out)`, scheme);
+      // While the challenge is admin-only (CHALLENGE.public off; owner, 2026-11-04): no landing, no Remix button and no
+      // challenge line, in the page as served or on screen ("Remixing opens …" would name a date that isn't set).
+      if (!CHALLENGE.public) {
+        const html = await page.content();
+        if (await page.locator('.rl-landing, a.rl-remix, .rl-arrival').count()) fail(`${tag}: the landing shows while the challenge is admin-only`);
+        for (const words of ['Remixing opens', 'Entries closed', 'remix challenge', 'How the challenge works', 'REMIX CHALLENGE', 'REMIX THE CAST']) if (html.includes(words)) fail(`${tag}: the page says "${words}" while the challenge is admin-only`);
+        if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `remix-landing-${w}-${scheme}-admin-only.png`), fullPage: w === 390 });
+        await page.close();
+        continue;
+      }
+      const r = await page.evaluate(() => {
+        const q = (s: string) => document.querySelector(s) as HTMLElement | null;
+        const pic = q('.rl-landing .rl-picture')?.getBoundingClientRect();
+        const btn = q('.rl-landing a.rl-remix');
+        return {
+          landing: !!q('.rl-landing'),
+          first: !!q('.dz-main > .rl-landing:first-child'),
+          pic: pic ? { w: pic.width, h: pic.height, top: pic.top } : null,
+          maker: q('.rl-landing .rl-maker')?.innerText ?? '',
+          ai: !!q('.rl-landing .rl-caption .ai-tag'),
+          remix: btn ? { href: btn.getAttribute('href'), h: btn.getBoundingClientRect().height, w: btn.getBoundingClientRect().width } : null,
+          line: q('.rl-landing .rl-closed')?.innerText ?? '',
+          arrival: q('.rl-landing .rl-arrival')?.innerText ?? '',
+          arrivalLink: q('.rl-landing .rl-arrival a')?.getAttribute('href') ?? null,
+          like: document.querySelectorAll('.rl-landing [class*="like"]').length,
+          wide: document.documentElement.scrollWidth > innerWidth + 1,
+        };
+      });
+      if (!r.landing || !r.first) fail(`${tag}: the landing is not at the top of the page`);
+      if (!r.pic || r.pic.w < Math.min(w - 60, 320)) fail(`${tag}: the picture is not big (${r.pic ? Math.round(r.pic.w) : 0}px wide)`);
+      if (r.maker !== 'A remix by @remixer'.toUpperCase() && r.maker !== 'A remix by @remixer') fail(`${tag}: the maker reads "${r.maker}"`);
+      if (!r.ai) fail(`${tag}: the picture has no AI label`);
+      // The big button while entries are open; before and after, the line in its place (the window comes from CHALLENGE.dates).
+      if (r.remix) {
+        if (r.remix.href !== `/references/designs/new?from=${D.remix.version}`) fail(`${tag}: Remix opens ${r.remix.href}, not this version's remix form`);
+        if (r.remix.h < 52 || r.remix.w < Math.min(w - 60, 280)) fail(`${tag}: the Remix button is not big (${Math.round(r.remix.w)}×${Math.round(r.remix.h)})`);
+      } else if (!/^(Remixing opens|Entries closed) .+Pacific/.test(r.line)) fail(`${tag}: neither a Remix button nor the line in its place ("${r.line}")`);
+      if (!/remix challenge/.test(r.arrival) || !/\d{1,2} (to \d{1,2} )?[A-Z][a-z]+/.test(r.arrival) || r.arrivalLink !== '/challenge') fail(`${tag}: signed out, no line on what this is, its dates and how to remix, linking /challenge ("${r.arrival}")`);
+      if (r.like) fail(`${tag}: the like slot renders something while likes are off`);
+      if (r.wide) fail(`${tag}: scrolls sideways`);
+      if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `remix-landing-${w}-${scheme}.png`), fullPage: w === 390 });
+      // Signed in (a planted session, nothing signed): the arrival line goes.
+      if (w === 390 && scheme === 'light') {
+        const exp = Math.floor(Date.now() / 1000) + 86400;
+        const token = `a.${Buffer.from(JSON.stringify({ sub: 4242, exp })).toString('base64url')}.c`;
+        await page.evaluate((v) => localStorage.setItem('snowmoon.signin', v), JSON.stringify({ token, fid: 4242, username: 'remixer', nameProof: null, exp }));
+        await page.route('**/api/**', (rt) => rt.fulfill({ json: {} }));
+        await page.goto(LOCAL + remix, { waitUntil: 'networkidle' });
+        await page.waitForTimeout(500);
+        if (await page.locator('.rl-arrival').count()) fail(`${remix}: the arrival line still shows when signed in`);
+        await checkFloors(page, `${remix} @390 (signed in)`, 'light');
+        if (SHOTS) await page.screenshot({ path: path.join(SHOTS, 'remix-landing-390-signed-in.png') });
+      }
+      await page.close();
+    }
+    // A hidden remix and a draft: 404, no landing, no picture of theirs.
+    for (const v of [D.hidden.version, D.draft.version]) {
+      const page = await newPage({ viewport: { width: 390, height: 844 }, hasTouch: true });
+      const res = await page.goto(`${LOCAL}/references/designs/${v}`, { waitUntil: 'networkidle' });
+      if (res?.status() !== 404) fail(`/references/designs/${v}: a hidden or unpublished version answers ${res?.status()}`);
+      if (await page.locator('.rl-landing, img[src*="toy-drone"]').count()) fail(`/references/designs/${v}: a hidden or unpublished version shows its picture`);
+      await page.close();
+    }
+  } finally {
+    server.kill();
+    await data.stop();
+  }
+}
+
 const browser = await chromium.launch({ channel: 'chrome' });
 // A protected Vercel preview: under VERCEL_OIDC_TOKEN, every request to the preview's own origin carries it (never to
 // any other origin a page loads), in every browser context and in this script's own fetches. Never printed. Only this
@@ -1755,6 +2001,11 @@ const PREVIEW_HOST = /^snowmoon-[a-z0-9-]+-nates-projects-d1780cff\.vercel\.app$
 }
 try {
   await checkAiLabels();
+  await checkRemixLanding();
+  // The landing on local data needs /challenge readable signed out: while it is admin-only (CHALLENGE.public off), the
+  // signed-out 404 is checked below instead.
+  if (CHALLENGE.public) await checkChallengeLanding();
+  else console.log('check:ui: the /challenge landing on local data waits for CHALLENGE.public (admin-only now)');
   await checkMarkdownPages();
   // First-visit intro (config/intro.json): once, home page only, Skip on every
   // card, remembered on the device without cookies; deep links go straight in.
@@ -1881,7 +2132,7 @@ try {
       const html = (await res?.text()) ?? '';
       const shown = (await page.locator('body').textContent()) ?? '';
       for (const [what, t] of [['HTML', html], ['screen', shown]] as const) {
-        const m = /Remix the cast|remix challenge/i.exec(t);
+        const m = /Remix the cast|Remix challenge|remix challenge/i.exec(t);
         if (m) fail(`/challenge (${scheme}): its ${what} names the challenge ("${m[0]}") signed out`);
       }
       if (await page.locator('.ch-page').count()) fail(`/challenge (${scheme}): the challenge page is shown signed out`);
@@ -1891,16 +2142,31 @@ try {
     await checkFloors(page, '/challenge', scheme);
     {
       const text = (await page.locator('.ch-page').textContent()) ?? '';
-      if (!/Draft wording/.test(text)) fail(`/challenge (${scheme}): no "Draft wording" line`);
+      // The hub's words were approved (owner, 2026-11-06): no "Draft wording" mark until something on it is a draft again.
+      if (CHALLENGE.cardsApproved === /Draft wording/.test(text)) fail(`/challenge (${scheme}): the "Draft wording" mark doesn't follow the approval`);
       // The characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json).
-      const heads = (await page.locator('.ch-character h2').allTextContents()).map((h) => h.split(' ')[0]);
+      const heads = (await page.locator('.cc-card h2').allTextContents()).map((h) => h.split(' ')[0]);
       if (heads.join() !== 'Zei,Gladias,Bai,Seila,Deluin,Mu') fail(`/challenge (${scheme}): the characters read ${heads.join(', ')}`);
-      if (!/A new sheet made from scratch isn’t an entry/.test(text)) fail(`/challenge (${scheme}): it doesn't say only remixes count`);
-      if (!/Entries (open|close|closed) .*Pacific/.test(text)) fail(`/challenge (${scheme}): no deadline in Pacific time`);
-      if (!/One entry per person per character/.test(text)) fail(`/challenge (${scheme}): the rules are missing`);
-      if (!/aren’t eligible for rewards/.test(text)) fail(`/challenge (${scheme}): it doesn't say admins aren't eligible for rewards`);
+      // The short page (owner, 2026-11-04): the deadline in its one line, the rules behind "Rules".
+      if (!/Entries (open|close|closed) .*PT/.test(text)) fail(`/challenge (${scheme}): no deadline in its one line`);
+      if ((await page.locator('a.ch-rules-link').getAttribute('href').catch(() => null)) !== '/challenge/rules') fail(`/challenge (${scheme}): no "Rules" link`);
       const wide = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
       if (wide) fail(`/challenge (${scheme}): scrolls sideways`);
+    }
+    await open(page, '/challenge/rules');
+    await checkFloors(page, '/challenge/rules', scheme);
+    {
+      const text = (await page.locator('.ch-page').textContent()) ?? '';
+      // The rules were approved (owner, 2026-11-06); only the intro's picture wording keeps a "Draft wording" mark, beside it.
+      if (!/Draft wording/.test((await page.locator('.ch-intro').textContent()) ?? '')) fail(`/challenge/rules (${scheme}): the intro's draft has no "Draft wording" mark`);
+      if (!/(A new sheet|A picture) made from scratch isn’t an entry/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say only remixes count`);
+      if (!/Entries (open|close|closed) .*Pacific/.test(text)) fail(`/challenge/rules (${scheme}): no deadline in Pacific time`);
+      if (!/submit one remix a day/.test(text)) fail(`/challenge/rules (${scheme}): the rules are missing`);
+      if (!/theirs aren’t entries/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say admins' pictures aren't entries`);
+      if (!/There is no prize for now\./.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say there is no prize for now`);
+      if (!/Farcaster, Lens or Bluesky account that passes the site’s check/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say who can enter`);
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/rules (${scheme}): scrolls sideways`);
+      await shot(page, 'challenge-rules', scheme);
     }
     }
     await checkAssistant(page, scheme);

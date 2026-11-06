@@ -1,4 +1,5 @@
 import { CHALLENGE } from '../config';
+import { pacificDay } from './rehearsal-switch';
 import { CHALLENGE_LISTS } from './who';
 import { isSocialPerson } from '../people';
 
@@ -11,7 +12,9 @@ import { isSocialPerson } from '../people';
  *   same character), one of its versions made inside the window, by an eligible person.
  * - Who is eligible: the maker (a Farcaster ID; wallets can't make sheets yet) is on IMAGES.invited, or has a
  *   Neynar score of at least IMAGES.neynarMinScore. Admins (the config's admin list) can make versions but are never eligible.
- * - One entry per person per character: their latest version in the window, unless they marked another.
+ * - Entries (owner, 2026-11-04): a remix becomes an entry only when its maker presses Submit, with a link to a post
+ *   about it; one per person per Pacific day (CHALLENGE.submissionsPerDay, America/Los_Angeles), any character, no
+ *   total cap; a withdrawn submission still uses its day (branch contest, 2026-11-04).
  *
  * Every date shown anywhere comes from dateText() over CHALLENGE.dates; nothing writes a date itself (owner,
  * 2026-10-31; scripts/test-challenge.ts fails on a page or wording file that does).
@@ -48,11 +51,11 @@ export const entriesOpen = (now: Date = new Date(), pub: boolean = CHALLENGE.pub
 
 /**
  * A date of the challenge as people read it, in Pacific time, built from CHALLENGE.dates only. A closing instant
- * (closes, mintCloses) is shown as its last minute: "Sunday 22 November, 23:59 Pacific".
+ * (closes) is shown as its last minute: "Sunday 22 November, 23:59 Pacific".
  */
 export function dateText(key: DateKey, opts: { time?: boolean } = {}, dates: Record<DateKey, string> = CHALLENGE.dates): string {
   // A window that ends at midnight is shown as its last minute; one that ends at a call (09:00) as that time.
-  const closing = (key === 'closes' || key === 'mintCloses' || key === 'shortlistCloses') && pacificWallTime(dates[key]).endsWith(' 00:00');
+  const closing = key === 'closes' && pacificWallTime(dates[key]).endsWith(' 00:00');
   const at = new Date(ms(dates[key]) - (closing ? 60_000 : 0));
   const parts = new Intl.DateTimeFormat('en-GB', { timeZone: CHALLENGE.timeZone, weekday: 'long', day: 'numeric', month: 'long' }).formatToParts(at);
   const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '';
@@ -67,7 +70,7 @@ export function dateText(key: DateKey, opts: { time?: boolean } = {}, dates: Rec
  * open Fri 6 Nov, 09:00 PT"), built from CHALLENGE.dates only. A closing instant at midnight is shown as its last minute.
  */
 export function shortDateText(key: DateKey, dates: Record<DateKey, string> = CHALLENGE.dates): string {
-  const closing = (key === 'closes' || key === 'mintCloses' || key === 'shortlistCloses') && pacificWallTime(dates[key]).endsWith(' 00:00');
+  const closing = key === 'closes' && pacificWallTime(dates[key]).endsWith(' 00:00');
   const at = new Date(ms(dates[key]) - (closing ? 60_000 : 0));
   const parts = new Intl.DateTimeFormat('en-GB', { timeZone: CHALLENGE.timeZone, weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(at);
   const get = (t: string) => parts.find((p) => p.type === t)?.value ?? '';
@@ -143,7 +146,7 @@ export function fromDecision(maker: number, decision: Decision | null, lists: { 
 export const needsScore = (fid: number) => !CHALLENGE_LISTS.admins.includes(fid) && !CHALLENGE_LISTS.invited.includes(fid);
 
 // ---------------------------------------------------------------------------------------------
-// Entries: one per person per character
+// Entries: what a person submits (owner, 2026-11-04)
 // ---------------------------------------------------------------------------------------------
 export interface Candidate {
   versionId: string;
@@ -164,37 +167,82 @@ export interface Candidate {
 export const isCandidate = (c: Pick<Candidate, 'createdAt' | 'forked' | 'character'>, dates: { opens: string; closes: string } = CHALLENGE.dates) =>
   c.forked && CHALLENGE.characters.includes(c.character) && inWindow(c.createdAt, dates);
 
-export const markKey = (person: number, character: string) => `${person} ${character}`;
+/**
+ * A submission (owner, 2026-11-04: "a remix becomes an entry only when its maker presses Submit"): one row of
+ * studio.challenge_marks, written by Submit after the post link was read and checked (src/lib/challenge/entries.ts,
+ * submitEntry). `person` is the maker's FID, so whatever is shared per person (the 20% equal share) can be counted
+ * per person, not per submission (equalSharePeople below).
+ */
+export interface Submission {
+  versionId: string;
+  person: number;
+  character: string;
+  at: string;
+  /** When it was withdrawn (branch contest): still on record, so it still uses its day; never an entry. */
+  withdrawnAt?: string | null;
+}
 
 /** Newest first (the only order entries are ever shown in), then by id so the order never changes between views. */
 export const newestFirst = (a: { createdAt: string; versionId: string }, b: { createdAt: string; versionId: string }) =>
   a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : a.versionId < b.versionId ? -1 : a.versionId > b.versionId ? 1 : 0;
 
-/**
- * The entries: for each person and character, the version they marked if it is still one of their candidates, else
- * their latest. `eligible` says whose count. Returned newest first.
- */
-export function chooseEntries<C extends Candidate>(candidates: C[], marks: ReadonlyMap<string, string>, eligible: (person: number) => boolean): C[] {
-  const groups = new Map<string, C[]>();
-  for (const c of candidates) {
-    if (!isCandidate(c) || !eligible(c.person)) continue;
-    const k = markKey(c.person, c.character);
-    groups.set(k, [...(groups.get(k) ?? []), c]);
+/** One submission per person per version (a second row for the same version, if one were ever written, is the same entry). */
+export function distinctSubmissions(subs: readonly Submission[]): Submission[] {
+  // The earliest row for each, kept in the order given (no re-sorting: P5g allows only newestFirst on challenge lists).
+  const seen = new Map<string, Submission>();
+  for (const s of subs) {
+    if (s.withdrawnAt) continue;
+    const k = `${s.person} ${s.versionId}`;
+    const had = seen.get(k);
+    if (!had || s.at < had.at) seen.set(k, s);
   }
-  const out: C[] = [];
-  for (const [k, list] of groups) {
-    const marked = marks.get(k);
-    out.push(list.find((c) => c.versionId === marked) ?? [...list].sort(newestFirst)[0]);
-  }
-  return out.sort(newestFirst);
+  return [...seen.values()];
 }
 
-/** For each character, how many different people have an entry (a count shown as is, never a ranking). */
+export type SubmitRefusal = 'already' | 'today';
+/**
+ * Whether this person may submit this version now, given every submission of theirs, withdrawn ones included (branch
+ * contest, 2026-11-04, replacing "up to three in total"): one per Pacific day (CHALLENGE.submissionsPerDay; the day
+ * is America/Los_Angeles, CHALLENGE.timeZone), for any character, and no total cap. Withdrawing doesn't give back that
+ * day's submission: a withdrawn one still counts for its day. A version standing as submitted can't be submitted
+ * again. Pure: the server runs it under a lock (submitEntry), so two Submits at once can't both pass.
+ */
+export function submitRefusal(p: { person: number; versionId: string }, theirs: readonly Submission[], now: Date = new Date(), perDay: number = CHALLENGE.submissionsPerDay): SubmitRefusal | null {
+  const mine = theirs.filter((s) => s.person === p.person);
+  if (distinctSubmissions(mine).some((s) => s.versionId === p.versionId)) return 'already';
+  return submittedToday(mine, now) >= perDay ? 'today' : null;
+}
+
+/** How many submissions (withdrawn ones included) are on the Pacific day that holds `now`. */
+export function submittedToday(theirs: readonly Pick<Submission, 'at'>[], now: Date = new Date()): number {
+  const today = pacificDay(now, CHALLENGE.timeZone);
+  return theirs.filter((s) => pacificDay(new Date(s.at), CHALLENGE.timeZone) === today).length;
+}
+
+/**
+ * The entries: the candidates their makers submitted (a submission of someone else's version is ignored), by eligible
+ * people. Returned newest first. A person may have any number of entries (one a day), for one character or several.
+ */
+export function chooseEntries<C extends Candidate>(candidates: C[], submissions: readonly Submission[], eligible: (person: number) => boolean): C[] {
+  const submitted = new Set(distinctSubmissions(submissions).map((s) => `${s.person} ${s.versionId}`));
+  return candidates.filter((c) => isCandidate(c) && eligible(c.person) && submitted.has(`${c.person} ${c.versionId}`)).sort(newestFirst);
+}
+
+/**
+ * The people an equal share is split among (owner, 2026-11-04: "per person, not per submission"): each eligible
+ * person with at least one entry, once, however many entries they have, in the entries' own order.
+ */
+export const equalSharePeople = (entries: Pick<Candidate, 'person'>[]): number[] => [...new Set(entries.map((e) => e.person))];
+
+/** For each character, how many different people submitted an entry for it (a count shown as is, never a ranking). */
 export function entrantCounts(entries: Pick<Candidate, 'person' | 'character'>[], characters: readonly string[] = CHALLENGE.characters): Map<string, number> {
   return new Map(characters.map((c) => [c, new Set(entries.filter((e) => e.character === c).map((e) => e.person)).size]));
 }
 
-/** Whether a character has enough entrants for a final version, a credit test and a token (CHALLENGE.minEntrants). */
+/**
+ * Whether a character has enough entrants for a final version, a credit test and a token (CHALLENGE.minEntrants):
+ * different people who submitted for it, so three submissions by one person count once (entrantCounts).
+ */
 export const enoughEntrants = (count: number, min: number = CHALLENGE.minEntrants) => count >= min;
 
 // ---------------------------------------------------------------------------------------------
@@ -204,7 +252,12 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /** A character's bases, as configured (CHALLENGE.bases): design ids, at most CHALLENGE.maxBases, empty until picked. */
 export function basesOf(character: string, bases: Record<string, readonly string[]> = CHALLENGE.bases): string[] {
-  return (bases[character] ?? []).filter((id) => UUID.test(id)).slice(0, CHALLENGE.maxBases).map((id) => id.toLowerCase());
+  return (bases[character] ?? []).filter((id) => UUID.test(id)).slice(0, baseCountOf(character)).map((id) => id.toLowerCase());
+}
+
+/** How many bases a character may have: CHALLENGE.baseCount's number for it (one if unset), never above CHALLENGE.maxBases. */
+export function baseCountOf(character: string): number {
+  return Math.min(CHALLENGE.maxBases, Math.max(0, Math.floor(CHALLENGE.baseCount[character] ?? 1)));
 }
 
 /** What is wrong with the bases config, if anything (scripts/test-challenge.ts runs it on the committed config). */
@@ -213,7 +266,7 @@ export function basesProblems(bases: Record<string, readonly string[]> = CHALLEN
   for (const c of characters) if (!Array.isArray(bases[c])) p.push(`${c}: no bases list`);
   for (const [c, ids] of Object.entries(bases)) {
     if (!characters.includes(c)) p.push(`${c}: not a challenge character`);
-    if (ids.length > CHALLENGE.maxBases) p.push(`${c}: ${ids.length} bases, more than ${CHALLENGE.maxBases}`);
+    if (ids.length > baseCountOf(c)) p.push(`${c}: ${ids.length} bases, more than its ${baseCountOf(c)} (CHALLENGE.baseCount, at most CHALLENGE.maxBases)`);
     for (const id of ids) if (!UUID.test(id)) p.push(`${c}: "${id}" is not a design id`);
     if (new Set(ids).size !== ids.length) p.push(`${c}: a base is listed twice`);
   }
@@ -232,6 +285,26 @@ export interface Ancestor {
  * the line must reach one of them: a fork of a base, or of anyone's remix of a base (an entry or not). While the
  * character has no bases yet, any fork counts, as before the three bases.
  */
+/** The owner's first remixes of a character, as configured (CHALLENGE.firstRemixes): design ids, at most CHALLENGE.firstRemixesShown. */
+export function firstRemixesOf(character: string, list: Record<string, readonly string[]> = CHALLENGE.firstRemixes): string[] {
+  return (list[character] ?? []).filter((id) => UUID.test(id)).slice(0, CHALLENGE.firstRemixesShown).map((id) => id.toLowerCase());
+}
+/** Whether a design is one of the owner's first remixes (any character's CHALLENGE.firstRemixes): never an entry. */
+export function isFirstRemix(ids: { elementId: string; versionId: string }, list: Record<string, readonly string[]> = CHALLENGE.firstRemixes): boolean {
+  const all = Object.values(list).flat().map((id) => id.toLowerCase());
+  return all.includes(ids.elementId.toLowerCase()) || all.includes(ids.versionId.toLowerCase());
+}
+/** What's wrong with CHALLENGE.firstRemixes: a list for each character, design ids only, at most firstRemixesShown. */
+export function firstRemixesProblems(list: Record<string, readonly string[]> = CHALLENGE.firstRemixes): string[] {
+  const p: string[] = [];
+  for (const c of CHALLENGE.characters) {
+    const ids = list[c];
+    if (!Array.isArray(ids)) { p.push(`${c}: no first-remixes list`); continue; }
+    if (ids.length > CHALLENGE.firstRemixesShown) p.push(`${c}: ${ids.length} first remixes, more than ${CHALLENGE.firstRemixesShown}`);
+    for (const id of ids) if (!UUID.test(id)) p.push(`${c}: "${id}" is not a design id`);
+  }
+  return p;
+}
 export function remixOfBase(character: string, line: readonly Ancestor[], bases: Record<string, readonly string[]> = CHALLENGE.bases, refused: ReadonlySet<string> | ReadonlyMap<string, unknown> = new Set()): boolean {
   if (!line.length) return false;
   const picked = basesOf(character, bases);

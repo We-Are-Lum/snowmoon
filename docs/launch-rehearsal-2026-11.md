@@ -61,7 +61,7 @@ Step | Screenshot(s) | What happened
 1 Find /challenge from the home page | `01a-home-first-visit.png`, `01b-home.png` | The home page has no link to /challenge and doesn't mention the challenge. Its only "remix" is about Adaptations.
 1 … from the menu | `01c-menu.png` | The menu has no challenge entry: Adaptations, Book, References, Minpentai, Assistant. Signed in silently as @rehearsal-ada (`ready()` once, sign-in once).
 1 … from References | `01d-references.png`, `01e-characters-tab.png` | References › Characters lists the sheets and doesn't mention the challenge. Before fix R5, the only link to /challenge anywhere was an entry's "Entry" badge.
-1 /challenge itself (direct link) | `01f-challenge-top-in-app.png`, `01g-challenge-full-web.png` | It reads well: "Entries close Sunday 22 November, 23:59 Pacific", the rules, the six characters in order, each with its count ("0 people have entered · 3 more needed") and its starting sheet. It still shows "Draft wording: drafted for the owner, not yet approved." The bounty text describes six bounties, but none is linked and no amount is shown (`CHALLENGE.bounties` and `bountyAmount` are null).
+1 /challenge itself (direct link) | `01f-challenge-top-in-app.png`, `01g-challenge-full-web.png` | It reads well: "Entries close Sunday 22 November, 23:59 Pacific", the rules, the six characters in order, each with its count ("0 people have entered · 3 more needed") and its starting sheet. It still shows "Draft wording: drafted for the owner, not yet approved."
 2 Signed in, passing (0.92) | `02-pass-zei-sheet-top.png`, `02-pass-zei-sheet-bar.png` | Zei's starting sheet shows "Use as my Zei" and "Fork". Before fix R1, the sheet's line read "The project's starting style. Its text was drafted by the coding agent", on a character sheet.
 2 Signed in, below (0.41) | `02-below-zei-sheet-*.png`, `02-below-fork-form.png`, `03-below-a-consent.png` … `03-below-f-refusal.png` | The 0.41 account sees exactly the same: Fork, the consent screen ("Read and agree"), the form, editing. It learns only at Generate: "Image making is open to Farcaster accounts with a Neynar score of 0.7 or more … Yours is 0.41." The message appears **below the screen** (174 px below the fold at 390 × 844, under the rules), so the tap seems to do nothing (`03-below-e-after-generate-in-view.png`).
 2 Signed out, plain website | `02-signed-out-web-zei-sheet-bar.png`, `02-signed-out-web-fork-form.png`, `02-signed-out-web-sign-in-sheet.png` | Before fix R2, the fork form told a challenge visitor: "For now, making them is open to invited readers only." The website's sign-in itself (the Farcaster relay) wasn't rehearsed: it is blocked here.
@@ -97,8 +97,7 @@ Fixes, re-shot | `fixed-R2-signed-out-fork-form.png`, `fixed-R4-entries-list.png
 4. **"Draft wording: drafted for the owner, not yet approved."** shows at the top of /challenge, and "Draft wording" at
    the foot of the fork form and the consent screen. Remove it when you approve the words. check:ui currently checks
    that the /challenge line is there, so it changes with it.
-5. **The bounties aren't set.** The page promises one bounty per character, with no link and no amount
-   (`CHALLENGE.bounties`, `CHALLENGE.bountyAmount` are null). They need setting before the call.
+5. *(gone, owner 2026-11-04)* The challenge has no bounties: the page, config and rules no longer mention any.
 6. *(fixed, R1)* A starting sheet said "The project's starting style".
 7. *(fixed, R2)* Signed out during the challenge, the fork form said "open to invited readers only".
 8. *(fixed, R8)* The fork form chose no style, so Generate was disabled with "Choose a style first."
@@ -110,8 +109,7 @@ Fixes, re-shot | `fixed-R2-signed-out-fork-form.png`, `fixed-R4-entries-list.png
 14. **"Published. See it"** doesn't say "This is your entry for Bai". The page it links to does. Owner's wording.
 15. **"Fork" vs "remix".** The challenge says remix; the button and the form's title say Fork. The form does say
     "Remixed from". Owner's wording.
-16. **The share text** ("Bai: Sheet by @rehearsal-di, made on Snowmoon Party") doesn't mention the challenge or the
-    bounty. Owner's wording.
+16. **The share text** ("Bai: Sheet by @rehearsal-di, made on Snowmoon Party") doesn't mention the challenge. Owner's wording.
 17. **The seed's style title differs.** The six sheets say "Views made in the style Techno vistas", a fork made in the
     same style says "Techno vistas (starting point)". The seed writes the sheet's `style.title` from the style file's
     name, not the published title. A one-line change on `starting-sheet-drafts`. Not made here: it isn't this branch's.
@@ -205,7 +203,7 @@ The rehearsal used its own preload, which fixes all three and can move the clock
 1. A way to /challenge from the home page or the menu (item 1).
 2. Decide on the below-0.7 path (item 2: a or b).
 3. Approve the challenge wording and drop the "Draft wording" lines (items 3, 4, 14, 15, 16).
-4. Set the six bounties' poidh addresses and the amount (item 5).
+4. *(gone: no bounties, owner 2026-11-04.)*
 5. The IPFS entry record that Privacy §4 promises at the close (legal).
 6. The starting views' picks for `seed:designs`, and the seed's style title (item 17).
 7. Merge this branch, if you want the fixes R1 to R9. They need no migration and don't touch legal texts.

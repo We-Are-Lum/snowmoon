@@ -25,7 +25,7 @@ const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/image
  * Not every /api/images/<id>/… route: like and report take a Farcaster sign-in only, and a wallet
  * token sent there would be answered 401, which signs the wallet out.
  */
-const WALLET_EXACT = [/^\/api\/images\/[0-9a-f-]{36}\/hide$/];
+const WALLET_EXACT = [/^\/api\/images\/[0-9a-f-]{36}\/hide$/, /^\/api\/challenge\/submit$/];
 /**
  * Making and publishing a sheet's views take a Bluesky sign-in too, once Bluesky sign-in and its check are on (owner,
  * 2026-11-04; src/lib/social/design-person.ts). Only then: before, a wallet token sent there would be answered 401.

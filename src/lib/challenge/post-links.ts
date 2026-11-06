@@ -1,3 +1,4 @@
+import { REHEARSAL } from '../config';
 /**
  * "Add where you posted it" (owner, 2026-10-31), the pure half: no network, no database, so scripts/test-challenge.ts
  * can prove every rule on stand-ins.
@@ -35,6 +36,12 @@ export const API_HOSTS = ['api.neynar.com', 'public.api.bsky.app', 'api.lens.xyz
 
 /** Our own hosts: a link to one of these counts as a link to this site. */
 export const SITE_HOSTS = ['snowmoon.party', 'www.snowmoon.party'];
+/**
+ * Under the rehearsal switch only (REHEARSAL.on: this machine, never on Vercel), a link to the rehearsal's own origin,
+ * http://127.0.0.1:3000 (or localhost:3000), counts as the remix's page too.
+ */
+export const REHEARSAL_HOSTS = ['127.0.0.1:3000', 'localhost:3000'];
+const isSite = (u: URL) => SITE_HOSTS.includes(u.hostname.toLowerCase()) || (REHEARSAL.on && REHEARSAL_HOSTS.includes(u.host.toLowerCase()));
 
 export type PostRef =
   | { network: 'farcaster'; username: string; hash: string }
@@ -125,7 +132,7 @@ export function bskyPostsRequest(did: string, rkey: string): string | null {
   return `${POST_APIS.bskyGetPosts}?${new URLSearchParams({ uris: `at://${did}/app.bsky.feed.post/${rkey}` })}`;
 }
 
-export const LENS_QUERY = `query($p: PostId!) { post(request: { post: $p }) { __typename ... on Post { id slug timestamp author { username { localName } } metadata { __typename ... on TextOnlyMetadata { content } ... on LinkMetadata { content sharingLink } ... on ImageMetadata { content } ... on VideoMetadata { content } ... on ArticleMetadata { content } } } } }`;
+export const LENS_QUERY = `query($p: PostId!) { post(request: { post: $p }) { __typename ... on Post { id slug timestamp author { address username { localName } } metadata { __typename ... on TextOnlyMetadata { content } ... on LinkMetadata { content sharingLink } ... on ImageMetadata { content } ... on VideoMetadata { content } ... on ArticleMetadata { content } } } } }`;
 
 export interface Post {
   network: Network;
@@ -139,6 +146,38 @@ export interface Post {
   url: string;
   /** Every link the post carries (its embeds, link cards and the addresses in its text). Not stored. */
   links: string[];
+  /**
+   * Who wrote it, as its network names the account: a cast's author FID, a Bluesky post's DID (from its at:// URI), a
+   * Lens post's author account address (lowercase). Used by Submit to check the post is the submitter's own (owner,
+   * 2026-11-04, answer 9.4); not stored.
+   */
+  writer: { fid: number } | { did: string } | { lens: string } | null;
+}
+
+/**
+ * Submit's check that the post is the submitter's own (owner, 2026-11-04, answer 9.4: "a Submit's post must be the
+ * submitter's own"; overnight run 2026-11-05, item 4: Lens by its author, Bluesky by its DID, others refused until
+ * linked accounts exist):
+ * - Farcaster: the cast's author FID must be the submitter's FID (a Farcaster sign-in).
+ * - Bluesky: the post's DID must be the DID of the Bluesky account the submitter is signed in with now (`blueskyDids`).
+ *   Signed in another way, no Bluesky DID is known to be theirs: 'unknown', refused.
+ * - Lens: the post's author must be the Lens account the submitter is signed in with now (`lensAccounts`). Signed in
+ *   another way: 'unknown', refused.
+ */
+export type WriterCheck = 'ok' | 'not-yours' | 'unknown';
+export function writerCheck(
+  post: Pick<Post, 'network' | 'writer'>,
+  submitter: { fid: number; blueskyDids: readonly string[]; lensAccounts: readonly string[] },
+): WriterCheck {
+  if (post.network === 'farcaster') return post.writer && 'fid' in post.writer && submitter.fid > 0 && post.writer.fid === submitter.fid ? 'ok' : 'not-yours';
+  if (post.network === 'bluesky') {
+    const did = post.writer && 'did' in post.writer ? post.writer.did : null;
+    if (did && submitter.blueskyDids.includes(did)) return 'ok';
+    return submitter.blueskyDids.length > 0 ? 'not-yours' : 'unknown';
+  }
+  const author = post.writer && 'lens' in post.writer ? post.writer.lens : null;
+  if (author && submitter.lensAccounts.some((a) => a.toLowerCase() === author)) return 'ok';
+  return submitter.lensAccounts.length > 0 ? 'not-yours' : 'unknown';
 }
 
 const isoOrNull = (v: unknown): string | null => {
@@ -146,18 +185,22 @@ const isoOrNull = (v: unknown): string | null => {
   const t = Date.parse(v);
   return Number.isFinite(t) ? new Date(t).toISOString() : null;
 };
-const textLinks = (t: unknown): string[] => (typeof t === 'string' ? (t.match(/(?:https?:\/\/)?(?:www\.)?snowmoon\.party\/[^\s<>"')\]]*/gi) ?? []) : []);
+const textLinks = (t: unknown): string[] =>
+  typeof t === 'string'
+    ? [...(t.match(/(?:https?:\/\/)?(?:www\.)?snowmoon\.party\/[^\s<>"')\]]*/gi) ?? []), ...(REHEARSAL.on ? (t.match(/https?:\/\/(?:127\.0\.0\.1|localhost):3000\/[^\s<>"')\]]*/gi) ?? []) : [])]
+    : [];
 
-/** Neynar's GET /v2/farcaster/cast answer: { cast: { hash, author: { username }, text, timestamp, embeds: [{ url }] } }. */
+/** Neynar's GET /v2/farcaster/cast answer: { cast: { hash, author: { fid, username }, text, timestamp, embeds: [{ url }] } }. */
 export function parseNeynarCast(body: unknown): Post | null {
   const c = (body as { cast?: Record<string, unknown> } | null)?.cast;
   if (!c) return null;
   const hash = typeof c.hash === 'string' && FULL_HASH.test(c.hash) ? c.hash.toLowerCase() : null;
   const username = (c.author as { username?: unknown } | undefined)?.username;
+  const fid = (c.author as { fid?: unknown } | undefined)?.fid;
   const at = isoOrNull(c.timestamp);
   if (!hash || typeof username !== 'string' || !USERNAME.test(username) || !at) return null;
   const embeds = Array.isArray(c.embeds) ? (c.embeds as { url?: unknown }[]).map((e) => e?.url).filter((x): x is string => typeof x === 'string') : [];
-  return { network: 'farcaster', id: hash, handle: username.toLowerCase(), at, url: `https://farcaster.xyz/${username.toLowerCase()}/${hash.slice(0, 10)}`, links: [...embeds, ...textLinks(c.text)] };
+  return { network: 'farcaster', id: hash, handle: username.toLowerCase(), at, url: `https://farcaster.xyz/${username.toLowerCase()}/${hash.slice(0, 10)}`, links: [...embeds, ...textLinks(c.text)], writer: typeof fid === 'number' && Number.isInteger(fid) && fid > 0 ? { fid } : null };
 }
 
 /** Bluesky's resolveHandle answer: { did }. */
@@ -196,7 +239,7 @@ export function parseBskyPosts(body: unknown, rkey: string): Post | null | 'labe
   const embed = record.embed as { external?: { uri?: unknown }; media?: { external?: { uri?: unknown } } } | undefined;
   for (const u of [embed?.external?.uri, embed?.media?.external?.uri]) if (typeof u === 'string') links.push(u);
   links.push(...textLinks(record.text));
-  return { network: 'bluesky', id: uri, handle, at, url: `https://bsky.app/profile/${m[1]}/post/${m[2]}`, links };
+  return { network: 'bluesky', id: uri, handle, at, url: `https://bsky.app/profile/${m[1]}/post/${m[2]}`, links, writer: { did: m[1] } };
 }
 
 /** Lens's post query answer: { data: { post: { __typename: 'Post', id, slug, timestamp, author, metadata } } }. A repost is refused. */
@@ -206,19 +249,26 @@ export function parseLensPost(body: unknown, slug: string): Post | null {
   const id = typeof p.id === 'string' && /^[0-9a-z]{1,100}$/i.test(p.id) ? p.id : null;
   const s = typeof p.slug === 'string' ? p.slug.toLowerCase() : '';
   const handle = (p.author as { username?: { localName?: unknown } | null } | undefined)?.username?.localName;
+  const address = (p.author as { address?: unknown } | undefined)?.address;
   const at = isoOrNull(p.timestamp);
   if (!id || s !== slug || typeof handle !== 'string' || !USERNAME.test(handle) || !at) return null;
   const meta = (p.metadata ?? {}) as { content?: unknown; sharingLink?: unknown };
   const links = [...textLinks(meta.content), ...(typeof meta.sharingLink === 'string' ? [meta.sharingLink] : [])];
-  return { network: 'lens', id, handle: handle.toLowerCase(), at, url: `https://hey.xyz/posts/${s}`, links };
+  return { network: 'lens', id, handle: handle.toLowerCase(), at, url: `https://hey.xyz/posts/${s}`, links, writer: typeof address === 'string' && /^0x[0-9a-fA-F]{40}$/.test(address) ? { lens: address.toLowerCase() } : null };
 }
 
 /** The path of a version's page. */
 export const versionPath = (versionId: string) => `/references/designs/${versionId.toLowerCase()}`;
 
-/** Does the post link to this version's page? Its host must be ours exactly, its path that page (a trailing / allowed). */
+/** A challenge picture's page (branch challenge-moments): /challenge/p/<id>, where its share buttons link. */
+export const picturePath = (versionId: string) => `/challenge/p/${versionId.toLowerCase()}`;
+
+/**
+ * Does the post link to this version's page? Its host must be ours exactly, its path that page (a trailing / allowed):
+ * a sheet's page, or a challenge picture's (/challenge/p/<id>, or the image's own page /image/<id>).
+ */
 export function linksToVersion(post: Pick<Post, 'links'>, versionId: string): boolean {
-  const want = versionPath(versionId);
+  const wants = [versionPath(versionId), picturePath(versionId), `/image/${versionId.toLowerCase()}`];
   return post.links.some((l) => {
     let u: URL;
     try {
@@ -226,6 +276,6 @@ export function linksToVersion(post: Pick<Post, 'links'>, versionId: string): bo
     } catch {
       return false;
     }
-    return SITE_HOSTS.includes(u.hostname.toLowerCase()) && !u.username && !u.password && u.pathname.toLowerCase().replace(/\/+$/, '') === want;
+    return isSite(u) && !u.username && !u.password && wants.includes(u.pathname.toLowerCase().replace(/\/+$/, ''));
   });
 }

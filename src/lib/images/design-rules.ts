@@ -42,6 +42,16 @@ export const VIEW_NAMES: Record<'character' | 'location', Record<ViewSlot, strin
 };
 export const viewLinesFor = (kind: 'character' | 'location') => (kind === 'location' ? PLACE_VIEW_LINES : VIEW_LINES);
 
+/**
+ * A remix's front view is made from the source's front view, sent as a reference picture (owner, 2026-11-04: "the
+ * source is always a reference picture"). This line follows the view line in its prompt, so the recipe says how the
+ * reference was used. Drafted by the coding agent (Claude, a closed model by Anthropic); DRAFT wording.
+ */
+export const REMIX_SOURCE_LINES: Record<'character' | 'location', string> = {
+  character: 'Start from the person in the reference picture, and change them as the text below says.',
+  location: 'Start from the place in the reference picture, and change it as the text below says.',
+};
+
 /** The exact prompt for a sample or a view: the fixed subject, the design's text, the no-words line. */
 export function samplePrompt(subject: string, text: string): string {
   return [subject, text.trim(), IMAGES.suffix].filter(Boolean).join('\n\n');
@@ -53,8 +63,8 @@ export function samplePrompt(subject: string, text: string): string {
  * A view is always made in one of the published styles (owner, 2026-10-14): without one, the model
  * draws realistic people, not the edition's look.
  */
-export function viewPrompt(line: string, style: string, text: string): string {
-  return [line, style.trim(), text.trim(), IMAGES.suffix].filter(Boolean).join('\n\n');
+export function viewPrompt(line: string, style: string, text: string, sourceLine = ''): string {
+  return [line, sourceLine, style.trim(), text.trim(), IMAGES.suffix].filter(Boolean).join('\n\n');
 }
 
 /** Who drafted the fixed wording in a sample's prompt (recorded in the sample's recipe). */

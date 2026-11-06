@@ -1,3 +1,4 @@
+import { REHEARSAL_BASE_IDS, REHEARSAL_DEFAULT_LOOKS, rehearsalChallenge, rehearsalOn, rehearsalOnInBrowser } from './challenge/rehearsal-switch';
 /**
  * One source of truth for constants (Build Brief rule 7).
  * Caps, thresholds, moderator FIDs, and model names live here as they are added.
@@ -542,10 +543,10 @@ export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
  *
  * Switches (docs/legal/remix-challenge-draft.md; legal texts describe today; P6q checks it):
  * - `entries` (on since the owner's reread of 2026-11-01): entries listed on /challenge with each character's count of entrants, the
- *   "Entry" badge on version pages, and "Mark as my entry" (studio.challenge_marks). Eligibility is decided once, when
- *   a version is published, and stored (studio.challenge_eligibility; src/lib/challenge/record.ts); pages only read it
- *   and never ask Neynar (owner, 2026-10-31). Without the tables, only invited makers count and marking says "not
- *   available yet".
+ *   "Entry" badge on version pages, and Submit (owner, 2026-11-04; one row of studio.challenge_marks per submission,
+ *   with a post link). Eligibility is decided once, when a version is published, and stored
+ *   (studio.challenge_eligibility; src/lib/challenge/record.ts); pages only read it and never ask Neynar (owner,
+ *   2026-10-31). Without the tables, only invited makers count and Submit says "not available yet".
  * - `posts` (on since the owner's reread of 2026-11-01): "Add where you posted it" and "Posted on" (studio.version_posts). The
  *   server reads the pasted address, checks its host, and asks that network's own API (Neynar, Bluesky's public
  *   AppView, Lens's API); it never fetches the pasted address.
@@ -567,17 +568,66 @@ export const CHALLENGE = {
    * open sheets and the $15 cap are off and /challenge answers 404 to a non-admin.
    */
   public: false as boolean,
+  /**
+   * The six character cards on /challenge (src/lib/challenge/cards.ts: one line, three bullets, a fuller description
+   * and "Where they appear"), drafted by the coding agent (owner, 2026-11-05, answer 2), and the moments' titles and
+   * scene lines (src/lib/challenge/moments.ts), also drafted by it. They go to the owner in one pass (reviewed by the
+   * coordinator first); until he approves them, these stay false, and check:principles P2m refuses CHALLENGE.public
+   * on with either false. Only the owner sets them.
+   */
+  // Approved (owner, 2026-11-06; "reviewed by the coordinator, approved by the owner"): the cards with three changes, and the scene lines.
+  cardsApproved: true as boolean,
+  sceneLinesApproved: true as boolean,
+  /**
+   * Entries as pictures (owner, 2026-11-05; docs/proposals/challenge-moments.md, R2): one picture of a challenge
+   * character at one of the challenge's moments, remixed from one of its pictures on /challenge, counts as an entry
+   * (src/lib/challenge/pictures.ts); sheet remixes stop counting and sheets go back to invitation only. Off until the
+   * owner rereads the Terms §6e and Privacy lines that describe it (docs/legal/challenge-moments-draft.md): legal texts
+   * describe today, so check:principles P6ac refuses it on while Terms and Privacy don't say so. While off, the moments
+   * flow still makes and publishes pictures (the site's own image pipeline, as "Make an image"), but none is an entry,
+   * and sheet remixes count as before. The rehearsal switch turns it on, on this machine only.
+   */
+  // On (owner, 2026-11-06): Terms §6e and Privacy were reread and say so ("reviewed by the coordinator, approved by the owner").
+  pictureEntries: true as boolean,
   /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
   characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'] as readonly string[],
   /**
-   * Each character's bases (owner, 2026-11-03): up to CHALLENGE.maxBases published sheets to start from, in the same
-   * three styles for every character, so each set reads as one cast. Each entry is a design's id: its element id (any
-   * version of it) or one version's id (the id in /references/designs/<id>). Designs have no slugs. Empty until the
-   * owner picks. An entry is a fork of any base, or of a remix of one (src/lib/challenge/rules.ts, remixOfBase); while
-   * a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks before the picks.
+   * Each character's bases (owner, 2026-11-04): published sheets to start from, at most CHALLENGE.baseCount for the
+   * character (never more than CHALLENGE.maxBases). Deluin and Gladias have three each: their current default look,
+   * recast a and recast b (drafts in branch challenge-styles, docs/starting-sheet-drafts/directions/*-recast-*.jpg);
+   * the other four keep one for now (Zei's and Bai's MJ·GPT fronts, the others' Animated series fronts). No look is
+   * set above the others (the word for the first is "current default", nothing stronger): /challenge shows a
+   * character's bases in a fresh random order on each visit (the P5g shuffle), so none reads as the default. None is published yet, so every list stays empty. Each entry is
+   * a design's id: its element id (any version of it) or one version's id (the id in /references/designs/<id>).
+   * Designs have no slugs. An entry is a fork of any base, or of a remix of one (src/lib/challenge/rules.ts,
+   * remixOfBase); while a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks
+   * before the picks.
    */
   bases: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
+  /**
+   * Each character's current default look (owner, 2026-11-05, answer 10; the accounts session's note of that evening):
+   * a published sheet's element id (at its newest version) or version id. Used only for the site's own pictures: the
+   * other challenge characters in a moment are drawn from it, as reference pictures (src/lib/challenge/pictures.ts,
+   * defaultLook). Deluin and Gladias: their look b; Zei, Bai, Seila and Mu: their current front (Bai's is the front made
+   * from Garance's edit, challenge-styles bai-animated-gpt-garance.jpg). Null until that sheet is published here: then
+   * the character's first base stands in. /challenge still shows the bases in a fresh random order (P5g); this sets no
+   * base above the others there.
+   */
+  defaultLooks: { zei: null, gladias: null, bai: null, seila: null, deluin: null, mu: null } as Record<string, string | null>,
+  /** How many bases each character has (owner, 2026-11-04): three for Deluin and Gladias, one for the rest for now. */
+  baseCount: { zei: 1, gladias: 3, bai: 1, seila: 1, deluin: 3, mu: 1 } as Record<string, number>,
+  /** The most bases any character may have. */
   maxBases: 3,
+  /**
+   * The owner's first remixes (owner, 2026-11-04): up to CHALLENGE.firstRemixesShown per character, shown on
+   * /challenge under the heading "First remixes by @naaate", below its bases, in the order given here. They are not
+   * entries: no Entry badge, no count, never in an entry list (src/lib/challenge/entries.ts leaves them out). Each entry is a published design's id (element or version), an
+   * admin's remix of that character's base, imported with its self-reported recipe (scripts/import-first-remixes.ts,
+   * docs/proposals/challenge-first-remixes.md). Empty until they exist: /challenge shows empty slots. Chosen by the
+   * owner, not by any count (P5g's third narrow exception, pending the owner's yes).
+   */
+  firstRemixes: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
+  firstRemixesShown: 2,
   /**
    * The bases' fixed style order (owner, 2026-11-04): within a character its bases are listed in this order, the same
    * for every character, so the casts line up. Each entry is a published style's name, as a sheet's views record it
@@ -594,47 +644,60 @@ export const CHALLENGE = {
    * the Privacy page doesn't name OpenAI and Google for it. Remixers keep the open models: the remix and fork form's
    * model choice is unchanged.
    */
-  closedBasesAllowed: false as boolean,
+  // On for the launch (2026-11-05): the owner reread the Terms and Privacy lines naming OpenAI and Google (P6s).
+  closedBasesAllowed: true as boolean,
   /**
    * A character gets a final version, a credit test and a token only if at least this many different eligible people
    * enter it (owner, 2026-10-31). /challenge shows each character's count (a count, never a ranking).
    */
   minEntrants: 3,
   /**
+   * Submit (owner, 2026-11-04): a remix becomes an entry only when its maker presses Submit on its page, with a link
+   * to a post about it on Farcaster, Bluesky or Lens (checked as "Add where you posted it" checks it). At most this
+   * many submissions per person per Pacific day (timeZone below), for any character, with no total cap (branch
+   * contest, 2026-11-04, replacing "up to three in total"); checked on the server under a lock. minEntrants counts the
+   * different people who submitted for a character. A submission can be withdrawn until entries close; withdrawing
+   * doesn't give back that day's submission (it stays on record, withdrawn: needs 0038_challenge_daily.sql; until
+   * then Submit and Withdraw answer "not available yet").
+   */
+  submissionsPerDay: 1,
+  /**
    * The Neynar score an entrant's account must have when a version is published (owner, 2026-11-01). Fixed for the whole
    * challenge, whatever IMAGES.neynarMinScore becomes; only the decision (passed or below) is kept, never the score.
    */
   neynarMinScore: 0.7,
   /**
-   * The bounties (owner, 2026-11-01): one solo poidh bounty per character, on Ethereum mainnet, funded and judged by the
-   * owner. Claims must be entries for that character. A bounty can pay out even if its character misses minEntrants;
-   * if no claim fits, the owner cancels it. Each bounty's poidh address, null until the bounty exists (/challenge links
-   * it only when set), and the amount, the same for each, null until the owner sets it (e.g. '0.05 ETH').
-   */
-  bounties: { zei: null, bai: null, gladias: null, seila: null, deluin: null, mu: null } as Record<string, string | null>,
-  bountyAmount: null as string | null,
-  /**
    * Real instants (UTC), each with its America/Los_Angeles wall time (all in PST: the clocks changed on 1 Nov 2026).
    * Owner, 2026-10-31 (second update). A closing instant is the first that no longer counts.
    */
   dates: {
-    /** Entries open at the launch call: Fri 6 Nov 2026, 09:00 Pacific (owner, 2026-10-31). */
+    /**
+     * Entries open Fri 6 Nov 2026, 09:00 Pacific (owner, 2026-11-05 evening: live for friends on Fri 6 Nov afternoon;
+     * this supersedes "plan for Tue 1 Dec"). Nothing opens by date alone: /challenge stays hidden until the owner turns
+     * CHALLENGE.public on, so in practice entries open when he does.
+     */
     opens: '2026-11-06T17:00:00Z',
     /** Entries close after Sun 22 Nov 2026, 23:59 Pacific: this is 00:00 Pacific on 23 Nov, the first instant that no longer counts. */
     closes: '2026-11-23T08:00:00Z',
-    /** The shortlist vote and jurors: Tue 1 Dec 2026, 00:00 Pacific, to the end of Thu 3 Dec 2026 (23:59 Pacific). Not built; undefined in the plan. */
-    shortlistOpens: '2026-12-01T08:00:00Z',
-    shortlistCloses: '2026-12-04T08:00:00Z',
-    /** Results at the call: Fri 4 Dec 2026, 09:00 Pacific. */
-    results: '2026-12-04T17:00:00Z',
-    /** The mint opens Tue 8 Dec 2026, 09:00 Pacific, and closes at the Fri 18 Dec 2026 call, 09:00 Pacific. */
-    mintOpens: '2026-12-08T17:00:00Z',
-    mintCloses: '2026-12-18T17:00:00Z',
+    // No shortlist, results or mint dates (owner, 2026-11-05 evening): how the final version is chosen, and any prize,
+    // are added to the rules before entries close. No page shows a date for them.
   },
   /** The time zone every date is shown in. */
   timeZone: 'America/Los_Angeles',
   entries: true as boolean,
   posts: true as boolean,
+  /**
+   * Likes on a remix page (owner, 2026-11-04): planned for 12 November, off until then. While off, the landing's like
+   * slot (src/components/challenge-like.tsx) renders nothing and nothing is stored or counted.
+   */
+  likes: false as boolean,
+  /**
+   * Like, recast and reply counts from Farcaster, Bluesky or Lens on remix pages (branch contest, 2026-11-04): off while
+   * the challenge and the vote are open. While off, nothing reads or shows them: "Posted on" gives only "See the
+   * conversation on <network>" links. Nothing reads them yet; turning this on needs the owner's decision and its own
+   * Privacy line first.
+   */
+  socialCounts: false as boolean,
   /**
    * On (owner, 2026-10-31), but it takes effect only inside the entry window, computed from `dates`
    * (src/lib/challenge/open-sheets.ts), and only once Privacy describes the challenge (the owner's reread). Before the
@@ -647,6 +710,31 @@ export const CHALLENGE = {
   postsPerVersion: 30,
   postsPerPersonPerDay: 20,
 };
+
+/**
+ * The rehearsal switch (src/lib/challenge/rehearsal-switch.ts): CHALLENGE_REHEARSAL=on, on this machine only, never on
+ * any Vercel deployment and only with a database on this machine. When on, the challenge is `rehearsal-<yyyymmdd>`,
+ * opens at the start of today (Pacific; every date moved by the same amount) and is public on that server, and
+ * admins are eligible (src/lib/challenge/who.ts). check:principles P6w proves production ignores it.
+ */
+export const REHEARSAL = {
+  on:
+    typeof window === 'undefined'
+      ? rehearsalOn(process.env)
+      : rehearsalOnInBrowser(process.env.NEXT_PUBLIC_CHALLENGE_REHEARSAL, process.env.NEXT_PUBLIC_VERCEL_ENV, window.location.hostname),
+};
+if (REHEARSAL.on) {
+  const r = rehearsalChallenge(CHALLENGE.dates, new Date(), CHALLENGE.timeZone);
+  CHALLENGE.id = r.id;
+  CHALLENGE.dates = r.dates;
+  CHALLENGE.public = true;
+  // The rehearsal database's stand-in bases (scripts/rehearsal-db.ts), never the real ones.
+  CHALLENGE.bases = REHEARSAL_BASE_IDS;
+  CHALLENGE.defaultLooks = REHEARSAL_DEFAULT_LOOKS;
+  // Entries as pictures, on this machine only, for rehearsal 2 (branch challenge-moments): the legal lines that describe
+  // them are drafts (docs/legal/challenge-moments-draft.md), so production keeps it off (P6ac, P6w).
+  CHALLENGE.pictureEntries = true;
+}
 
 /**
  * Sign-in checks (owner, 2026-11-04: "look each account up as rarely as possible"): the Neynar score today, the Lens
@@ -801,6 +889,19 @@ export const IMAGES = {
     samplesMax: 4,
     /** A sheet needs its front view; side and back are optional. */
     publishesPerDay: 3,
+    /**
+     * Free remixes (owner, 2026-11-04): for an account that passes the check (not an admin, not invited), a sheet's
+     * views count as remixes, not pictures. A remix is one sheet's three views, started by its first view; each remix
+     * allows `picturesPerRemix` pictures in all (its three views and three more tries, so a view that fails or is
+     * dropped is made again inside the same remix), and `remixesPerDay` remixes start per UTC day. A remix on a closed
+     * model counts `closedRemixUnits` (the hook for branch remix-model-choice: src/lib/images/remixes.ts, remixUnits).
+     * Admins (IMAGES.perDayFor) and invited makers keep counting pictures, as before. The site-wide spend cap is
+     * unchanged. Counted in studio.sheet_remix_asks (0037_remix_count.sql); until it is applied, views count as
+     * pictures, as before.
+     */
+    remixesPerDay: 3,
+    picturesPerRemix: 6,
+    closedRemixUnits: 3,
     /** At most this many picked characters' sheets are added to one image. */
     maxCharacters: 3,
   },

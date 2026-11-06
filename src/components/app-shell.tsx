@@ -312,6 +312,19 @@ const YOU_TITLE = 'You: your account, wallet and work';
  * full-width buttons, a line under each, and the owner's line under all. Signed in: a row with a monogram and the name (or the shortened address), then Sign out as a row.
  * The monogram is drawn here, not a profile picture: a picture would be fetched from a host Privacy doesn't name.
  */
+/** Signed out on the website: one "Sign in" button; pressed, the ways to sign in (SignInChoices) in its place. */
+function SignInOpener() {
+  const [open, setOpen] = useState(false);
+  if (open) return <SignInChoices wallet />;
+  return (
+    <button type="button" className="menu-signin signin-open" aria-expanded={false} onClick={() => setOpen(true)}>
+      {SIGN_IN_OPEN}
+    </button>
+  );
+}
+/** The one button's word (2026-11-06). */
+const SIGN_IN_OPEN = 'Sign in';
+
 function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu' | 'rail' }) {
   const at = where === 'rail' ? ' rail-account' : '';
   const wallet = useWalletSession();
@@ -327,8 +340,10 @@ function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu'
   if (name === null)
     return (
       <div className={`menu-account menu-account-out${at}`}>
-        {/* Farcaster and a wallet as equals (owner, 2026-10-30), from SIGN_IN_METHODS; inside a Farcaster app, no wallet. */}
-        <SignInChoices wallet={auth.kind === 'signed-out' && !auth.inApp} />
+        {/* Farcaster and a wallet as equals (owner, 2026-10-30), from SIGN_IN_METHODS; inside a Farcaster app, no wallet.
+            On the website, one "Sign in" button opens the choice (2026-11-06, Garance: the four stacked took a quarter of
+            the screen); inside a Farcaster app there is only Farcaster, shown as it is. */}
+        {auth.kind === 'signed-out' && !auth.inApp ? <SignInOpener /> : <SignInChoices wallet={false} />}
       </div>
     );
   const out = auth.kind === 'signed-in' ? (auth.via === 'website' ? signOut : null) : wallet ? signOutWallet : signOutSocial;
