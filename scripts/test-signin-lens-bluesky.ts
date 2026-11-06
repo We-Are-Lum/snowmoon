@@ -1029,8 +1029,9 @@ add({
     // Fresh database: every migration but this one, then the dry run alone must leave nothing.
     const fresh = new PGlite();
     await fresh.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
-    // Every migration before 0035; later ones (0036 and the unnumbered NEXT_ files, which may need 0036) come after it.
-    for (const f of migrations.filter((f) => !f.startsWith('0035_signin') && !f.startsWith('0036_social') && !f.startsWith('NEXT_'))) await fresh.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
+    // Every migration before 0035; later ones (0036 and after, e.g. 0039, which needs 0036; and any unnumbered NEXT_ file)
+    // come after it.
+    for (const f of migrations.filter((f) => !f.startsWith('NEXT_') && (!/^\d{4}_/.test(f) || f < '0035'))) await fresh.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
     await fresh.exec(a);
     const afterDry = (await fresh.query<{ n: number }>(`select count(*)::int as n from pg_tables where schemaname = 'studio' and tablename like 'social_%'`)).rows[0].n;
     await fresh.exec(b);
