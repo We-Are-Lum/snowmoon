@@ -51,9 +51,9 @@ coordinator first.
 | # | Item | State |
 |---|------|-------|
 | 0 | #119 assistant step 1 merged (41b37c8b), live since 15:10 PT | live checks pass (shipped, principles only P6d, ui 59, miniapp) |
-| 0 | Admin dashboard merged as #120 (69322227); pre-merge checks passed | live checks queued |
+| 0 | Admin dashboard merged as #120 (69322227), live since 16:06 | live checks pass (shipped, principles 64/65 only P6d incl. P6aa, ui 59, miniapp) |
 | A | Launch slice on challenge-moments: built, main + closed-model-bases merged (6759214b); keys from approved changes Terms ar3jr5, Privacy 6llf1; checks pass (P6a local only); drafts for the morning reread | done; waits for launch-publish |
-| B | Morning release doc + the bases/first-remix publish scripts (branch launch-publish) | running; migrations 0037–0039 re-tested (149, 29 plants) |
+| B | Morning release doc (launch-2026-11-06 7b347670) + publish scripts (launch-publish 20a37b7b, 46 tests) | done; lane A merging launch-publish + Midjourney model entry + label on page |
 
 ---
 
