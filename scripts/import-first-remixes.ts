@@ -4,9 +4,10 @@
  * "made outside the site; reported by the maker; can't be re-run exactly", each with its file's sha256. Plan:
  * docs/proposals/challenge-first-remixes.md. Template: docs/proposals/challenge-first-remix-recipe.template.json.
  *
- * DRY RUN ONLY. This checks a folder of recipes and pictures and prints what would be written. It never writes to the
- * database or storage: publishing is not built, and waits for the gates in the plan (the Midjourney terms re-check,
- * reread item 5.3; the bases published and in CHALLENGE.bases; the recipe line's wording approved; the owner's go).
+ * With --dir: DRY RUN ONLY. This checks a folder of recipes and pictures and prints what would be written.
+ * With --launch (2026-11-06, lane B): the owner's ten publishable first remixes from the drafts' recipes
+ * (first-remixes/recipes.json, branch challenge-styles), dry run by default, --apply --confirm-owner-go to publish;
+ * see scripts/lib/launch-first-remixes.ts for its gates.
  *
  *   npx tsx --conditions=react-server scripts/import-first-remixes.ts --dir=<folder>
  *
@@ -94,10 +95,13 @@ export function plannedFront(r: FirstRemixRecipe) {
   };
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (import.meta.url === `file://${process.argv[1]}` && process.argv.includes('--launch')) {
+  // The launch's first remixes (2026-11-06): the owner's ten publishable Midjourney pictures, from the drafts' recipes.
+  await import('./lib/launch-first-remixes');
+} else if (import.meta.url === `file://${process.argv[1]}`) {
   const dir = process.argv.slice(2).find((a) => a.startsWith('--dir='))?.slice(6);
   if (process.argv.includes('--apply')) {
-    console.log('Refused: publishing first remixes is not built. See docs/proposals/challenge-first-remixes.md for the gates.');
+    console.log('Refused: --apply publishes only with --launch (the launch picks; scripts/lib/launch-first-remixes.ts). See docs/proposals/challenge-first-remixes.md for the gates.');
     process.exit(1);
   }
   if (!dir || !existsSync(dir)) {
