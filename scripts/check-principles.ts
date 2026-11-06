@@ -2108,7 +2108,10 @@ add({
   load: async () => ({ on: CHALLENGE.pictureEntries as boolean, terms: clone(TERMS.sections), privacy: clone(PRIVACY.sections) }),
   run: (c) => p6acProblems(c.on, c.terms, c.privacy),
   plant: (c) => {
+    // On, with the words from before the owner's reread (2026-11-06): sheets, not pictures.
     c.on = true;
+    for (const sec of c.terms) if (String(sec.n) === '6e') sec.body = ['During the challenge, anyone signed in may remix its characters\' sheets.'];
+    for (const sec of c.privacy) if (String(sec.n) === '4') sec.body = ['If you take part in the remix challenge: for each version of a challenge character you publish, whether it can count as an entry.'];
   },
 });
 
