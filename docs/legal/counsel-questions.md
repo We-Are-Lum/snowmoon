@@ -18,3 +18,8 @@ wants a lawyer or adviser to answer; none is answered here, and nothing here is 
    "no purchase necessary" wording, or rules about equal chances for those who don't pay?
 5. **Who can be paid a prize** (owner, 2026-11-04). The minimum age for a winner (signing in already needs 18+), and the
    countries we can't pay in ETH (on Base) because of sanctions: what we must check before paying, and how.
+6. **OpenAI §10 "No Publicity"** (owner, 2026-11-06). OpenAI's Services Agreement (updated 1 Dec 2025, effective 1 Jan
+   2026) §10 restricts publicity. Our recipes' labels and Privacy §7 name OpenAI factually, as the maker of a closed model
+   that made some pictures and as a service that receives prompts. Is that fine? And is our contract with OpenAI at all,
+   or is it Vercel's, since the site reaches OpenAI only through Vercel AI Gateway on Vercel's account?
+

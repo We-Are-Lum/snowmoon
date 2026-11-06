@@ -195,3 +195,15 @@ vocabulary, after which this line is required.
 
 The assistant's notice (P6i) and the image consent screen (P6j) don't change: neither OpenAI nor Google receives an
 assistant question, or anything at Generate.
+
+## OpenAI's terms, read (owner, 2026-11-06)
+
+The owner read OpenAI's Services Agreement live on 2026-11-06 (updated 1 Dec 2025, effective 1 Jan 2026): the customer
+owns all Output (§4.1); OpenAI doesn't train on customer content (§4.2); the restriction that matters is not using Output
+to develop competing models (§3.3(e)). Zei's and Bai's GPT bases may be published (owner, 2026-11-06); each GPT recipe
+records this (challenge-styles ledger, `maker_terms`).
+
+For the model-choice release (later, owner 2026-11-06): closed models only for people in OpenAI's supported countries and
+not in embargoed ones (§16.11, §16.12); the 18+ tick box stays.
+
+Announcement copy (owner, 2026-11-06): no OpenAI name or logo, and no implied partnership.
