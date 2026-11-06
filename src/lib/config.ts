@@ -642,7 +642,8 @@ export const CHALLENGE = {
    * the Privacy page doesn't name OpenAI and Google for it. Remixers keep the open models: the remix and fork form's
    * model choice is unchanged.
    */
-  closedBasesAllowed: false as boolean,
+  // On for the launch (2026-11-05): the owner reread the Terms and Privacy lines naming OpenAI and Google (P6s).
+  closedBasesAllowed: true as boolean,
   /**
    * A character gets a final version, a credit test and a token only if at least this many different eligible people
    * enter it (owner, 2026-10-31). /challenge shows each character's count (a count, never a ranking).

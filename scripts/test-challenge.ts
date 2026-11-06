@@ -327,7 +327,8 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   const { p5gProblems, CHALLENGE_FILES } = await import('./lib/p5g');
   const recipe = (model: string) => ({ prompt: 'p', model, endpoint: 'e', host: 'h', settings: {}, seed: 1, request_id: 'r', cost_usd: 0.05, made_at: '2026-11-04T00:00:00.000Z', width: 576, height: 768, checks: { prompt: { model: IMAGES.guardModel, verdict: 'ok' as const }, host_safety_checker: 'not run' as const }, assist: null });
   const body = (...models: string[]) => ({ samples: [], views: Object.fromEntries(models.map((m, i) => [(['front', 'side', 'back'] as const)[i], { url: 'u', sha256: 'a'.repeat(64), recipe: recipe(m) }])) });
-  check('committed: closed-model bases are not allowed yet (CHALLENGE.closedBasesAllowed false, until the owner\'s reread)', CHALLENGE.closedBasesAllowed === false);
+  // The owner reread the closed-model lines (2026-11-04, the 2026-11-05 fixes); they are in legal.ts for the launch.
+  check('committed: closed-model bases are allowed for the launch (CHALLENGE.closedBasesAllowed, with Privacy naming OpenAI and Google)', CHALLENGE.closedBasesAllowed === true);
   check('committed: the bases\' style order is empty until the owner picks the styles', Array.isArray(CHALLENGE.baseStyles) && CHALLENGE.baseStyles.length === 0);
   check('a base made by open models is never refused', BA.closedBaseRefusal(body('flux2-klein-4b-edit', 'flux2-klein-4b-edit'), false) === null && BA.closedBaseRefusal(body('z-image-turbo'), true) === null);
   const gpt = BA.closedBaseRefusal(body('gpt-image-2.5-sunburst'), false) ?? '';
@@ -1112,7 +1113,10 @@ check('the sheets to start from are those made before the window', (await E.star
   const st7 = await E.standing(S);
   check('an admin\'s remix of a base is not an entry (shown as the admin\'s)', !st7.entries.some((e) => e.versionId === adm.versionId) && st7.byAdmins.some((e) => e.versionId === adm.versionId));
   check('a fork of an admin\'s remix of a base counts (someone else\'s remix need not be an entry)', st7.entries.some((e) => e.versionId === fromAdm.versionId));
-  // A closed-model base, before and after CHALLENGE.closedBasesAllowed.
+  // A closed-model base, before and after CHALLENGE.closedBasesAllowed (on as committed for the launch; turned off here
+  // to prove the switch still holds them back).
+  const closedAsCommitted = CHALLENGE.closedBasesAllowed;
+  CHALLENGE.closedBasesAllowed = false;
   CHALLENGE.bases.bai = [bA.elementId, bB.elementId, bX.elementId];
   const starts = async () => (await E.startingSheets(S, 'bai')).map((x) => x.versionId);
   check('closed bases: while not allowed, a closed-model base is left out of "Bases to start from"', !(await starts()).includes(bX.versionId) && (await starts()).length === 2);
@@ -1126,6 +1130,7 @@ check('the sheets to start from are those made before the window', (await E.star
   check('closed bases: the refusal names the base by its id and says why', ((await BA.refusedBases(S as never)).get(bX.elementId) ?? '').includes('a closed model by OpenAI'));
   CHALLENGE.bases.bai = [bA.elementId, bX.versionId];
   check('closed bases: a base named by its version id is refused the same way', (await BA.refusedBases(S as never)).has(bX.versionId) && !(await starts()).includes(bX.versionId));
+  CHALLENGE.closedBasesAllowed = closedAsCommitted;
   CHALLENGE.bases.bai = [];
   CHALLENGE.bases.zei = [];
   CHALLENGE.baseStyles = [];
