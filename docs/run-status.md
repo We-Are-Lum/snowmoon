@@ -50,10 +50,10 @@ coordinator first.
 
 | # | Item | State |
 |---|------|-------|
-| 0 | #119 assistant step 1 merged (41b37c8b), live since 15:10 PT | live checks queued |
-| 0 | Admin dashboard: label fixed, main merged, combined Privacy key kwoekw (bde853d5) | pre-merge checks queued, then merge |
-| A | Launch slice on challenge-moments (cards, moments remix, back fixes, share-first, Submit paste, own-post checks, rules lines) | running |
-| B | Morning release doc (PRs in order, migrations re-tested, lines to reread, 20-min production test) | running (branch launch-2026-11-06) |
+| 0 | #119 assistant step 1 merged (41b37c8b), live since 15:10 PT | live checks pass (shipped, principles only P6d, ui 59, miniapp) |
+| 0 | Admin dashboard merged as #120 (69322227); pre-merge checks passed | live checks queued |
+| A | Launch slice on challenge-moments: built, main + closed-model-bases merged (6759214b); keys from approved changes Terms ar3jr5, Privacy 6llf1; checks pass (P6a local only); drafts for the morning reread | done; waits for launch-publish |
+| B | Morning release doc + the bases/first-remix publish scripts (branch launch-publish) | running; migrations 0037–0039 re-tested (149, 29 plants) |
 
 ---
 
