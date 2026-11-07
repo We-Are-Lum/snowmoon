@@ -313,6 +313,9 @@ a.rl-remix:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .ch-filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
 .ch-chip { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 1px solid var(--rule); border-radius: 22px; color: var(--ink); text-decoration: none; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
 .ch-chip[aria-current='page'] { border-color: var(--ink); background: var(--btn); color: var(--btn-ink); }
+/* The entries' order (Newest first / Shuffled) are buttons: no browser button face, and the chosen one marked (pre-flight 2026-11-07). */
+button.ch-chip { background: none; cursor: pointer; }
+.ch-chip[aria-pressed='true'] { border-color: var(--ink); background: var(--btn); color: var(--btn-ink); }
 
 /* The remix challenge's hub: one card per character (branch challenge-moments, 2026-11-05). */
 .cc-list { display: flex; flex-direction: column; gap: 20px; margin-top: 16px; }
