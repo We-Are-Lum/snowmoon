@@ -12,13 +12,16 @@ export const PICTURE_WORDING = {
   shareHead: 'Post it',
   copy: 'Copy link',
   copied: 'Link copied.',
-  /** The ready post (owner, 2026-11-06), exactly: "My remix of {name}, for the Snowmoon Party remix challenge". */
-  postText: (name: string, _moment: string) => `My remix of ${name}, for the Snowmoon Party remix challenge`,
+  /**
+   * The maker's ready post (owner, 2026-11-07, approved): "My remix of {name} in “{moment}”, for the Snowmoon Party remix
+   * challenge"; with no moment, exactly the line of 2026-11-06: "My remix of {name}, for the Snowmoon Party remix challenge".
+   */
+  postText: (name: string, moment: string | null) => (moment ? `My remix of ${name} in “${moment}”, for the Snowmoon Party remix challenge` : `My remix of ${name}, for the Snowmoon Party remix challenge`),
   /** For anyone but its maker (owner, 2026-11-07): the button to remix it, the remix pages' "Remix this". */
   remixThis: 'Remix this',
   /**
-   * Sharing someone else's picture never says "My remix" (owner, 2026-11-07). DRAFT for the owner's OK, drafted by the
-   * coding agent (Claude, a closed model by Anthropic): the character, the moment's title, and who made it.
+   * Sharing someone else's picture never says "My remix" (owner, 2026-11-07, approved): the character, the moment's
+   * title, and who made it, written by the @ rule (src/lib/challenge/share-makers.ts).
    */
   othersText: (name: string, moment: string, by: string) => `${name} in “${moment}”, a remix by ${by} for the Snowmoon Party remix challenge`,
   thenSubmit: 'Then submit it as an entry',

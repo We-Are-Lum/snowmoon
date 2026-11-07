@@ -15,6 +15,6 @@ const { ChallengeShare } = await import('../../src/components/challenge-share');
 process.stdout.write(
   JSON.stringify({
     postedOn: renderToStaticMarkup(React.createElement(PostedOn, { versionId: input.versionId, posts: input.posts })),
-    share: renderToStaticMarkup(React.createElement(ChallengeShare, { versionId: input.versionId, text: 'Bai, made on Snowmoon Party', posts: true })),
+    share: renderToStaticMarkup(React.createElement(ChallengeShare, { versionId: input.versionId, texts: { farcaster: 'Bai, made on Snowmoon Party', bluesky: 'Bai, made on Snowmoon Party', lens: 'Bai, made on Snowmoon Party', plain: 'Bai, made on Snowmoon Party' }, posts: true })),
   }),
 );

@@ -6,6 +6,7 @@ import { authFetch, socialSessionPerson, useAuth, useSocialSession, useWalletSes
 import { SHARE_WORDING as W } from '~/lib/challenge/share-wording';
 import { isAdmin } from '~/lib/admins';
 import { PostLinkField } from './post-link-field';
+import type { ShareTexts } from '~/lib/challenge/share-makers';
 
 /**
  * Share a version (the remix challenge, owner 2026-10-31): Farcaster, Bluesky and Lens, each prefilled with the page's
@@ -13,16 +14,17 @@ import { PostLinkField } from './post-link-field';
  * { cast: { hash } | null }), which is added to "Posted on" when that is on. Elsewhere, plain links to each network's
  * own compose page: no script or request of theirs on our page (P6a).
  * Then, when `posts` is on (CHALLENGE.posts, once the owner has opened the challenge), "Add where you posted it"; while
- * the challenge is admin-only (owner, 2026-11-04), only admins see it, to test. `text` is the post's words, written by
+ * the challenge is admin-only (owner, 2026-11-04), only admins see it, to test. `texts` are the post's words for each
+ * network's compose (the @ rule, src/lib/challenge/share-makers.ts), written by
  * the server (it mentions the challenge only while the challenge is open), so no challenge words are in this script.
  */
-export function ChallengeShare({ versionId, text: makersText, othersText, byFid, posts }: { versionId: string; text: string; othersText?: string; byFid?: number; posts: boolean }) {
+export function ChallengeShare({ versionId, texts: makersTexts, othersTexts, byFid, posts }: { versionId: string; texts: ShareTexts; othersTexts?: ShareTexts; byFid?: number; posts: boolean }) {
   const auth = useAuth();
   const wallet = useWalletSession();
   const social = useSocialSession();
   // Anyone but its maker shares it with words that aren't "My remix" (owner, 2026-11-07), when the server gives them.
   const mine = byFid !== undefined && ((auth.kind === 'signed-in' && auth.fid === byFid) || (social !== null && socialSessionPerson(social.token) === byFid));
-  const text = othersText && !mine ? othersText : makersText;
+  const texts = othersTexts && !mine ? othersTexts : makersTexts;
   const [inApp, setInApp] = useState(false);
   const [origin, setOrigin] = useState('https://snowmoon.party');
   const [address, setAddress] = useState('');
@@ -49,17 +51,17 @@ export function ChallengeShare({ versionId, text: makersText, othersText, byFid,
   };
 
   const cast = async () => {
-    const r = await sdk.actions.composeCast({ text, embeds: [url] }).catch(() => null);
+    const r = await sdk.actions.composeCast({ text: texts.farcaster, embeds: [url] }).catch(() => null);
     if (canAdd && r?.cast?.hash) await add({ castHash: r.cast.hash });
   };
   const farcaster = (() => {
     const u = new URL('https://farcaster.xyz/~/compose');
-    u.searchParams.set('text', text);
+    u.searchParams.set('text', texts.farcaster);
     u.searchParams.append('embeds[]', url);
     return u.toString();
   })();
-  const bluesky = `https://bsky.app/intent/compose?${new URLSearchParams({ text: `${text} ${url}` })}`;
-  const lens = `https://hey.xyz/?${new URLSearchParams({ text: `${text} ${url}` })}`;
+  const bluesky = `https://bsky.app/intent/compose?${new URLSearchParams({ text: `${texts.bluesky} ${url}` })}`;
+  const lens = `https://hey.xyz/?${new URLSearchParams({ text: `${texts.lens} ${url}` })}`;
 
   return (
     <section className="dz-section ch-share" aria-labelledby={`share-${versionId}`}>

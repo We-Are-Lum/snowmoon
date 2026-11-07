@@ -107,7 +107,7 @@ export function ChallengeSubmit({ versionId, byFid, words: W, path, compact = fa
       {done ? (
         asking ? (
           <p className="ch-mark ch-withdraw-ask" role="group" aria-label={W.withdrawAsk}>
-            <span>{W.withdrawAsk}</span>{' '}
+            <span>{W.withdrawAsk}</span> <span className="dz-muted ch-withdraw-note">{W.withdrawAskNote}</span>{' '}
             <button
               type="button"
               className="ic-secondary"

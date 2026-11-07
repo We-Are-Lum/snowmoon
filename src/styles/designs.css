@@ -350,6 +350,9 @@ button.ch-chip { background: none; cursor: pointer; }
 @media (min-width: 640px) { .cc-row-pics { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .cc-tile-img.cc-tile-pic { aspect-ratio: 16 / 9; object-fit: contain; }
 .ch-pics .ch-card-img { aspect-ratio: 16 / 9; object-fit: contain; }
+/* Withdraw asks once: the question, then its line, then the buttons (owner, 2026-11-07). */
+.ch-withdraw-ask > span { display: block; }
+.ch-withdraw-note { margin: 2px 0 8px; }
 .dz-thumb.dz-thumb-pic { height: 36px; object-fit: contain; }
 .cc-tile-by { font-family: var(--label); font-size: var(--text-label); line-height: 1.4; color: var(--muted); overflow-wrap: anywhere; text-transform: uppercase; }
 .cc-show-more { margin-top: 8px; min-height: 44px; }

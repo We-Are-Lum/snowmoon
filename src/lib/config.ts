@@ -657,6 +657,16 @@ export const CHALLENGE = {
   } as Record<string, readonly string[]>,
   firstRemixesShown: 2,
   /**
+   * Who else a base credits as its maker, by the base's version or element id (owner, 2026-11-07: "name everyone the page
+   * credits as maker, so Bai's sheet, made from Garance's edit, credits Garance too"). Shown with the maker on the base's
+   * landing ("Made by … and …") and named in its share text by the @ rule. Bai's base: its front was made from Garance's
+   * edit (the owner confirmed it, 2026-11-05; its recipe's credit: "Garance (the edit used as reference)"); @garance is
+   * FID 193912 on Farcaster (ADMINS).
+   */
+  coMakers: {
+    '110d5973-31c2-4d96-9a88-5838d8a6d868': [{ handle: 'garance', network: 'farcaster' }],
+  } as Record<string, readonly { handle: string; network: 'farcaster' | 'bluesky' | 'lens' | null }[]>,
+  /**
    * The bases' fixed style order (owner, 2026-11-04): within a character its bases are listed in this order, the same
    * for every character, so the casts line up. Each entry is a published style's name, as a sheet's views record it
    * (body.style.title). A base whose style isn't listed comes after, newest first. Empty until the owner picks the

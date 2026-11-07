@@ -55,7 +55,7 @@ export function ChallengePicture({ id }: { id: string }) {
           <AiTag /> {v.badge && <span className="ch-badge">{v.badge}</span>}
         </figcaption>
       </figure>
-      {known && mine && <ChallengeShareFirst path={path} w={{ head: v.w.published, text: v.w.postText, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} onCast={setCastHash} />}
+      {known && mine && <ChallengeShareFirst path={path} w={{ head: v.w.published, texts: v.w.postTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} onCast={setCastHash} />}
       {/* Anyone else (owner, 2026-11-07): "Remix this" first, not "Post it"; sharing it never says "My remix". */}
       {known && !mine && (
         <>
@@ -64,7 +64,7 @@ export function ChallengePicture({ id }: { id: string }) {
               {v.w.remixThis}
             </Link>
           )}
-          <ChallengeShareFirst path={path} w={{ head: null, text: v.w.othersText, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} />
+          <ChallengeShareFirst path={path} w={{ head: null, texts: v.w.othersTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} />
         </>
       )}
       {v.submit && (

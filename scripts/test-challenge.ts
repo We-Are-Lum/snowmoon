@@ -93,7 +93,7 @@ CHALLENGE.pictureEntries = false;
     ['src/components/app-shell.tsx', /navItems\(last, adaptations, CHALLENGE\.public \|\| \(auth\.kind === 'signed-in' && isAdmin\(auth\.fid\)\)\)/],
     ['src/app/references/designs/[id]/page.tsx', /const ch = CHALLENGE\.public \? await sheetChallenge\(/],
     ['src/app/references/designs/[id]/page.tsx', /posts=\{CHALLENGE\.public && CHALLENGE\.posts\}/],
-    ['src/app/references/designs/[id]/page.tsx', /isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(callName\)/],
+    ['src/app/references/designs/[id]/page.tsx', /const inChallenge = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\);[\s\S]*inChallenge\s*\? sameTexts\(CW\.shareTextOpen\(callName\)\)/],
   ];
   // Admins see /challenge/rules and /challenge/remixes too, exactly like /challenge (owner, 2026-11-04).
   for (const d of ['rules', 'remixes']) gated.push([`src/app/challenge/${d}/not-found.tsx`, new RegExp(`<ChallengeAdmin fallback=\\{<NotFound />\\} page="${d}" />`)]);
@@ -1411,9 +1411,9 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('e2 the confirmation shows it', /\{entry\?\.kind === 'candidate' && `\$\{entry\.text\} `\}/.test(form) && /text: st\.kind === 'candidate' \? CW\.publishedCandidate\(name\) : CW\.publishedUnchecked\(name\)/.test(route));
   const share = read('src/components/challenge-share.tsx');
   const vp = read('src/app/references/designs/[id]/page.tsx');
-  const shareSwitch = (s1: string, v1: string) => /export function ChallengeShare\(\{ versionId, text: makersText, othersText, byFid, posts \}/.test(s1) && /const shareText = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(callName\) : CW\.shareText\(what\);/.test(v1) && /text=\{shareText\}/.test(v1);
+  const shareSwitch = (s1: string, v1: string) => /export function ChallengeShare\(\{ versionId, texts: makersTexts, othersTexts, byFid, posts \}/.test(s1) && /const inChallenge = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\);/.test(v1) && /const shareTexts = inChallenge\s*\? sameTexts\(CW\.shareTextOpen\(callName\)\)\s*: textsFor\(makers, \(who\) => CW\.shareText\(/.test(v1) && /texts=\{shareTexts\}/.test(v1);
   check('e3 in the window, a challenge sheet\'s share text is the owner\'s (2026-11-06: "My remix of {name}, for the Snowmoon Party remix challenge"); outside it, as before', shareSwitch(share, vp) && CW.shareTextOpen('Bai') === 'My remix of Bai, for the Snowmoon Party remix challenge' && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party');
-  proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace('challengeOpenNow() ?', 'true ?')));
+  proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace("isChallengeCharacter(d.entity) && challengeOpenNow();", 'isChallengeCharacter(d.entity) && true;')));
   // h. Before the open, from CHALLENGE.dates.
   check('h "Entries open Fri 6 Nov, 09:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Fri 6 Nov, 09:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());
   // i. Neynar down: published, and told on the spot.
@@ -1478,21 +1478,39 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   // The friends' fixes (owner, 2026-11-07).
   {
     const PW = (await import('../src/lib/challenge/picture-wording')).PICTURE_WORDING;
+    const CWx0 = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
     const pic = read('src/components/challenge-picture.tsx');
-    const others = PW.othersText('Zei', 'The wall comes down', '@someone');
-    check('F1 sharing someone else\'s picture never says "My remix"; it names the moment and the maker', !/my remix/i.test(others) && others.includes('The wall comes down') && others.includes('@someone'));
-    check('F1 anyone but the maker sees "Remix this" (to its remix screen), not "Post it", and shares with the others\' words', PW.remixThis === 'Remix this' && /known && !mine && \(/.test(pic) && pic.includes('{v.w.remixThis}') && pic.includes('text: v.w.othersText') && !pic.includes('v.w.shareHead'));
+    const others = PW.othersText('Zei', 'The wall comes down', 'someone');
+    check('F1 sharing someone else\'s picture never says "My remix"; it names the moment and the maker', !/my remix/i.test(others) && others === 'Zei in “The wall comes down”, a remix by someone for the Snowmoon Party remix challenge');
+    check('F1 anyone but the maker sees "Remix this" (to its remix screen), not "Post it", and shares with the others\' words', PW.remixThis === 'Remix this' && /known && !mine && \(/.test(pic) && pic.includes('{v.w.remixThis}') && pic.includes('texts: v.w.othersTexts') && !pic.includes('v.w.shareHead'));
     proof('F1 a page that shows "Post it" to a visitor is caught', /known && !mine && \(/.test(pic.replace('known && !mine && (', 'known && (')) === false);
+    check('F1 the maker\'s own text names the moment; with none, exactly the line of 2026-11-06', PW.postText('Zei', 'The wall comes down') === 'My remix of Zei in “The wall comes down”, for the Snowmoon Party remix challenge' && PW.postText('Zei', null) === 'My remix of Zei, for the Snowmoon Party remix challenge');
+    // The @ rule (owner, 2026-11-07): "@maker" only in the maker's own network's compose; Copy link and the ready text never.
+    const SM = await import('../src/lib/challenge/share-makers');
+    const fc = SM.shareMaker('naaate', 6786), sky = SM.shareMaker('someone.bsky.social', -1_000_000_005), lens = SM.shareMaker('lens/someone', -1_000_000_004), gar = { handle: 'garance', network: 'farcaster' as const };
+    const t1 = SM.textsFor([fc], (who) => PW.othersText('Zei', 'The wall comes down', who));
+    check('F7 @ rule: a Farcaster maker is "@naaate" in the Farcaster compose only; "naaate" in Bluesky, Lens and the plain text', t1.farcaster.includes('by @naaate ') && t1.bluesky.includes('by naaate ') && t1.lens.includes('by naaate ') && t1.plain.includes('by naaate ') && SM.atRuleProblems(t1, [fc]).length === 0, JSON.stringify(t1));
+    const t2 = SM.textsFor([sky], (who) => PW.othersText('Zei', 'The wall comes down', who));
+    check('F7 @ rule: a Bluesky maker is "@handle" in the Bluesky compose only', t2.bluesky.includes('@someone.bsky.social') && !t2.farcaster.includes('@') && !t2.lens.includes('@') && !t2.plain.includes('@') && SM.atRuleProblems(t2, [sky]).length === 0);
+    const t3 = SM.textsFor([lens], (who) => PW.othersText('Zei', 'The wall comes down', who));
+    check('F7 @ rule: a Lens maker is "@name" in the Hey compose only, "lens/name" elsewhere', t3.lens.includes('by @someone ') && t3.plain.includes('by lens/someone ') && SM.atRuleProblems(t3, [lens]).length === 0);
+    const t4 = SM.textsFor([fc, gar], (who) => CWx0.shareTextOthers('Bai', who));
+    check('F7 a sheet names everyone the page credits as maker: two with "and", by the @ rule', t4.farcaster === 'Bai by @naaate and @garance, in the Snowmoon Party remix challenge' && t4.plain === 'Bai by naaate and garance, in the Snowmoon Party remix challenge' && SM.joinNames(['a', 'b', 'c']) === 'a, b and c');
+    check('F7 Bai\'s base credits Garance (CHALLENGE.coMakers)', (CHALLENGE.coMakers['110d5973-31c2-4d96-9a88-5838d8a6d868'] ?? []).some((m) => m.handle === 'garance' && m.network === 'farcaster'));
+    proof('F7 an @ in the wrong network\'s compose is caught', SM.atRuleProblems({ ...t1, bluesky: t1.farcaster }, [fc]).length > 0);
+    proof('F7 an @ in the Copy-link (plain) text is caught', SM.atRuleProblems({ ...t1, plain: t1.farcaster }, [fc]).length > 0);
+    const sf = read('src/components/challenge-share-first.tsx'), cs = read('src/components/challenge-share.tsx');
+    check('F7 each compose uses its own network\'s text, and the ready text the plain one', sf.includes("searchParams.set('text', w.texts.farcaster)") && sf.includes('${w.texts.bluesky} ${link}') && sf.includes('${w.texts.lens} ${link}') && sf.includes('composeCast({ text: w.texts.farcaster') && sf.includes('“{w.texts.plain}”') && cs.includes("searchParams.set('text', texts.farcaster)") && cs.includes('${texts.bluesky} ${url}') && cs.includes('${texts.lens} ${url}') && cs.includes('composeCast({ text: texts.farcaster'));
     const CWx = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
     const share = read('src/components/challenge-share.tsx');
-    check('F1 a sheet shared by anyone but its maker doesn\'t say "My remix"', !/my remix/i.test(CWx.shareTextOthers('Zei', '@naaate')) && /const text = othersText && !mine \? othersText : makersText;/.test(share));
+    check('F1 a sheet shared by anyone but its maker doesn\'t say "My remix"', !/my remix/i.test(CWx.shareTextOthers('Zei', 'naaate')) && /const texts = othersTexts && !mine \? othersTexts : makersTexts;/.test(share));
     const css = read('src/styles/designs.css');
     const card = read('src/components/challenge-card.tsx');
     check('F2 the challenge\'s pictures are shown whole at 16:9 (cards, Every remix, Every entry, the rules\' list)', /\.cc-tile-img\.cc-tile-pic \{ aspect-ratio: 16 \/ 9; object-fit: contain; \}/.test(css) && /\.ch-pics \.ch-card-img \{ aspect-ratio: 16 \/ 9; object-fit: contain; \}/.test(css) && card.includes('label={w.firsts} picture />') && card.includes('label={w.remixes} lazy picture />') && read('src/app/challenge/entries/page.tsx').includes('pictures: CHALLENGE.pictureEntries') && read('src/components/challenge-remixes-body.tsx').includes('pictures: true'));
     const make = read('src/components/challenge-make.tsx');
     check('F3 the remix screen: the box and "Make it" come right after the picture, before the moments', make.indexOf('<PublishedTextField id="mk-words"') > make.indexOf('</figure>') && make.indexOf('<PublishedTextField id="mk-words"') < make.indexOf('<section className="mk-moments"') && make.indexOf('{w.makeIt}') < make.indexOf('<section className="mk-moments"') && !/scrollIntoView/.test(make));
     const sub = read('src/components/challenge-submit.tsx');
-    check('F4 Withdraw asks once: "Withdraw this entry?" with Withdraw and Cancel', CWx.withdrawAsk === 'Withdraw this entry?' && CWx.withdrawCancel === 'Cancel' && /onClick=\{\(\) => setAsking\(true\)\}/.test(sub) && /setAsking\(false\);\s*void send\('DELETE'\);/.test(sub));
+    check('F4 Withdraw asks once: "Withdraw this entry?", its line, then Withdraw and Cancel', CWx.withdrawAsk === 'Withdraw this entry?' && CWx.withdrawAskNote === 'It still counts as today’s entry, so you can enter again tomorrow.' && CWx.withdrawCancel === 'Cancel' && sub.includes('{W.withdrawAskNote}') && /onClick=\{\(\) => setAsking\(true\)\}/.test(sub) && /setAsking\(false\);\s*void send\('DELETE'\);/.test(sub));
     proof('F4 a Withdraw that sends at once is caught', !/onClick=\{\(\) => setAsking\(true\)\}/.test(sub.replace('onClick={() => setAsking(true)}', "onClick={() => send('DELETE')}")));
     check('F6 the sheet landing names Farcaster, Lens and Bluesky', L.LANDING_WORDING.arrival('Zei', 'open').includes('sign in with Farcaster, Lens or Bluesky, press Remix'));
   }

@@ -314,7 +314,7 @@ check('config: a current default look per challenge character, each a design id 
   // The picture's page data.
   const V = await import('../src/lib/challenge/picture-view');
   const pv = await V.pictureView(S, second.versionId);
-  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the owner\'s post text', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'My remix of Bai, for the Snowmoon Party remix challenge' && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
+  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the owner\'s post text', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'My remix of Bai in “The championship final”, for the Snowmoon Party remix challenge' && pv.w.postTexts.plain === pv.submit?.postText && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
   // The feed (/challenge/remixes) with pictures as the entries: the challenge pictures, newest first, by character,
   // each linking to its page, with the viewer's own Newest / Shuffled order and no count.
   const RV = await import('../src/lib/challenge/remixes-view');
@@ -361,15 +361,15 @@ check('config: a current default look per challenge character, each a design id 
   const at = (x: string) => pic.indexOf(x);
   check('share first: the post buttons come right after the picture, before Submit and before the picture\'s title', at('<ChallengeShareFirst') > at('</figure>') && at('<ChallengeShareFirst') < at('<ChallengeSubmit') && at('<ChallengeShareFirst') < at('<h1 className="mk-title">'));
   // Owner, 2026-11-07: anyone but its maker sees "Remix this", not "Post it", and shares it with words that aren't "My remix".
-  check('share first: its maker sees "Published. Now post it:"; anyone else "Remix this" and the others\' share text', /known && mine && <ChallengeShareFirst path=\{path\} w=\{\{ head: v\.w\.published, text: v\.w\.postText/.test(pic) && /known && !mine && \(/.test(pic) && /head: null, text: v\.w\.othersText/.test(pic));
-  check('share first: Farcaster (composeCast in the app), Bluesky, Lens and Copy link, each its network\'s own compose page', /sdk\.actions\.composeCast\(\{ text: w\.text, embeds: \[link\] \}\)/.test(sf) && /https:\/\/farcaster\.xyz\/~\/compose/.test(sf) && /https:\/\/bsky\.app\/intent\/compose/.test(sf) && /https:\/\/hey\.xyz\/\?/.test(sf) && /navigator\.clipboard\.writeText\(link\)/.test(sf));
-  check('share first: the ready post is shown as it will be filled in (the text and this page\'s link)', /“\{w\.text\}” <span className="sf-link">\{link\}<\/span>/.test(sf) && /const link = `\$\{origin\}\$\{path\}`/.test(sf));
+  check('share first: its maker sees "Published. Now post it:"; anyone else "Remix this" and the others\' share text', /known && mine && <ChallengeShareFirst path=\{path\} w=\{\{ head: v\.w\.published, texts: v\.w\.postTexts/.test(pic) && /known && !mine && \(/.test(pic) && /head: null, texts: v\.w\.othersTexts/.test(pic));
+  check('share first: Farcaster (composeCast in the app), Bluesky, Lens and Copy link, each its network\'s own compose page', /sdk\.actions\.composeCast\(\{ text: w\.texts\.farcaster, embeds: \[link\] \}\)/.test(sf) && /https:\/\/farcaster\.xyz\/~\/compose/.test(sf) && /https:\/\/bsky\.app\/intent\/compose/.test(sf) && /https:\/\/hey\.xyz\/\?/.test(sf) && /navigator\.clipboard\.writeText\(link\)/.test(sf));
+  check('share first: the ready post is shown as it will be filled in (the text and this page\'s link)', /“\{w\.texts\.plain\}” <span className="sf-link">\{link\}<\/span>/.test(sf) && /const link = `\$\{origin\}\$\{path\}`/.test(sf));
   check('share first: no script or request of the networks on our page (plain links; P6a)', !/<script|fetch\(/.test(sf));
   check('Submit B on the page: only the address and Submit (the buttons are above), with a cast just made handed to it', /<ChallengeSubmit\s+versionId=\{v\.versionId\}\s+byFid=\{v\.byFid\}\s+words=\{v\.submit\}\s+path=\{path\}\s+compact\s+castHash=\{castHash\}/.test(pic) && /\{!compact && \(/.test(read('src/components/challenge-submit.tsx')));
   check('"Then submit it as an entry · one a day", and the owner\'s one line with "Rules" (no other rules text)', /\{v\.w\.thenSubmit\} <span className="dz-muted">· \{v\.w\.oneADay\}<\/span>/.test(pic) && /\{v\.w\.signInLine\} <Link href="\/challenge\/rules">\{v\.w\.rules\}<\/Link>/.test(pic));
   const W = (await import('../src/lib/challenge/picture-wording')).PICTURE_WORDING;
   check('the words: "Published. Now post it:", "Then submit it as an entry", "one a day", the sign-in line as the owner wrote it', W.published === 'Published. Now post it:' && W.thenSubmit === 'Then submit it as an entry' && W.oneADay === 'one a day' && W.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
-  check('the ready post is the owner\'s text exactly (2026-11-06)', W.postText('Bai', 'The quarterfinal') === 'My remix of Bai, for the Snowmoon Party remix challenge');
+  check('the ready post is the owner\'s text exactly (2026-11-07: with the moment; with none, the line of 2026-11-06)', W.postText('Bai', 'The quarterfinal') === 'My remix of Bai in “The quarterfinal”, for the Snowmoon Party remix challenge' && W.postText('Bai', null) === 'My remix of Bai, for the Snowmoon Party remix challenge');
   check('no script served to everyone imports the share words', !/challenge\/(picture-)?wording'/.test(sf + pic));
 }
 

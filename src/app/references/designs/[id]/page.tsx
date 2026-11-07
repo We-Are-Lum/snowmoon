@@ -16,6 +16,7 @@ import { basesOf, challengeOpenNow, phase } from '~/lib/challenge/rules';
 import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-sheets';
 import { sheetChallenge } from '~/lib/challenge/sheet-lines';
 import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
+import { joinNames, sameTexts, shareMaker, textsFor } from '~/lib/challenge/share-makers';
 import { ChallengeShare } from '~/components/challenge-share';
 import { ChallengeLines, ChallengePosts } from '~/components/challenge-lines';
 import { ChallengeAdminSheet } from '~/components/challenge-admin-sheet';
@@ -90,9 +91,16 @@ export default async function DesignPage({ params }: Props) {
   const ch = CHALLENGE.public ? await sheetChallenge(sql, { kind: d.kind, entity: d.entity, versionId: d.shown.versionId }, callName) : null;
   const challengeOpen = d.kind === 'character' && challengeSheetsOpen() && isChallengeCharacter(d.entity);
   // The share text mentions the challenge only while it is open (owner, 2026-11-03), on a challenge character's sheet.
-  const what = style ? title : `${callName}: ${title}`;
-  const shareText = d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow() ? CW.shareTextOpen(callName) : CW.shareText(what);
-  const shareTextOthers = d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow() ? CW.shareTextOthers(callName, by) : undefined;
+  // Everyone the page credits as maker (the maker, and a base's co-makers, CHALLENGE.coMakers), and every share text
+  // written by the @ rule (owner, 2026-11-07; src/lib/challenge/share-makers.ts): "@" only in the maker's own network.
+  const coMakers = CHALLENGE.coMakers[d.shown.versionId.toLowerCase()] ?? CHALLENGE.coMakers[String(d.elementId).toLowerCase()] ?? [];
+  const makers = [shareMaker(d.byName, d.byFid), ...coMakers];
+  const byShown = coMakers.length ? joinNames([by, ...coMakers.map((m) => (m.network === 'farcaster' ? `@${m.handle}` : m.handle))]) : by;
+  const inChallenge = d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow();
+  const shareTexts = inChallenge
+    ? sameTexts(CW.shareTextOpen(callName))
+    : textsFor(makers, (who) => CW.shareText(style ? title : `${callName}: ${body.title || W.page.sheetBy(who)}`));
+  const shareTextsOthers = inChallenge ? textsFor(makers, (who) => CW.shareTextOthers(callName, who)) : undefined;
   // A landing page for someone arriving from a post (owner, 2026-11-04): a challenge character's sheet with a front view,
   // once the owner has opened the challenge (CHALLENGE.public, read by isLanding). While it is admin-only the page as
   // served says nothing of it: no landing, no Remix button, no "Remixing opens …" line, no challenge preview.
@@ -109,7 +117,7 @@ export default async function DesignPage({ params }: Props) {
   const main = (
     <article className="dz-main">
       {landing && ch && (
-        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={by} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={landingPhase} remixHref={remixHref} posts={ch.posts} />
+        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={byShown} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={landingPhase} remixHref={remixHref} posts={ch.posts} />
       )}
       {character && <BookQuotes name={character.name} quotes={character.quotes} />}
       <h1 className="dz-title">{title}</h1>
@@ -225,7 +233,7 @@ export default async function DesignPage({ params }: Props) {
         byFid={d.byFid}
         challengeOpen={challengeOpen}
       />
-      <ChallengeShare versionId={d.shown.versionId} text={shareText} othersText={shareTextOthers} byFid={d.byFid} posts={CHALLENGE.public && CHALLENGE.posts} />
+      <ChallengeShare versionId={d.shown.versionId} texts={shareTexts} othersTexts={shareTextsOthers} byFid={d.byFid} posts={CHALLENGE.public && CHALLENGE.posts} />
       {/* On a landing page "Posted on" sits at the top, with the picture. */}
       {ch ? !landing && <ChallengePosts c={ch} versionId={d.shown.versionId} /> : <ChallengeAdminSheet versionId={d.shown.versionId} byFid={d.byFid} part="posts" />}
       <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>

@@ -12,6 +12,7 @@ import { submitWords, type SubmitWords } from './sheet-lines';
 import { CHALLENGE_WORDING as CW } from './wording';
 import { LANDING_WORDING as L } from './landing-wording';
 import { PICTURE_WORDING as P } from './picture-wording';
+import { sameTexts, shareMaker, textsFor } from './share-makers';
 import type { PostedOnItem } from '~/components/posted-on';
 
 /**
@@ -52,7 +53,7 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
     note: standing?.kind === 'admin' ? CW.adminNote : !CHALLENGE.pictureEntries ? P.notEntriesYet : null,
     submit,
     posts,
-    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: P.oneADay, postText: P.postText(name, m.title), othersText: P.othersText(name, m.title, maker), remixThis: P.remixThis, shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: P.thenSubmit, on: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') } },
+    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: P.oneADay, postTexts: sameTexts(P.postText(name, m.title)), othersTexts: textsFor([shareMaker(p.byName, p.byFid)], (who) => P.othersText(name, m.title, who)), remixThis: P.remixThis, shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: P.thenSubmit, on: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') } },
   };
 }
 export type PictureView = NonNullable<Awaited<ReturnType<typeof pictureView>>>;
