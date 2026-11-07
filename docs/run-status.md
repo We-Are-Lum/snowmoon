@@ -16,7 +16,7 @@ dates); 5 `fix-sheet-landing-open-window` da796b23 (sheet pages said "Remixing o
 behaviour change, owner's yes); 6 `fix-challenge-order-chips-style` 32796c4a; 7 `fix-check-ui-challenge-pictures` d2e950ce
 (check:ui broke with public on). **Before the flip:** fixes 1, 3, 4 and 7 at least; 2 and 5 on the owner's yes. The flip
 branch challenge-public-on already updates the 9 switch-off tests.
-| 2 | Speed fix 1 (thumbnails saved at publish + backfill, dry run only) and fix 3 (intro opens late), on branches | running |
+| 2 | Speed fix 1 (thumbnails saved at publish + backfill, dry run only) and fix 3 (intro opens late), on branches | done: `thumbs-at-publish` 5a790343 (or `thumbs-at-publish-on-124` def3aba9 if #124 goes first); `intro-early` 76a80ec7. Home "Just made" 1,309 KB → 24 KB; /challenge LCP 1.9 s → 0.9–1.0 s; first-visit intro 5.4 s → 1.5 s. Backfill dry run: 67 pictures, 134 copies, 2.86 MB (owner runs it; R2 keys) |
 | 3 | Tomorrow's runbook and the prepared flip | done (below) |
 
 ## Tomorrow's runbook (the owner's order: merge #123 → flip on his word → Garance tests live → announce)
