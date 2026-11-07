@@ -137,9 +137,28 @@ export function ChallengeMake() {
           <span className="dz-muted">{w.remixing}</span> <AiTag />
         </figcaption>
       </figure>
-      {/* The box and "Make it" right under the picture, on a phone's first screen (owner, 2026-11-07); the moment
-          (already drawn, shown chosen) and the model follow. */}
+      {/* Owner, 2026-11-07: the picture, the box, the moment row (its chips and "Surprise me"; one is drawn and shown
+          chosen), "Make it", then the model line, all on a phone's first screen; the moment's words follow. */}
       <PublishedTextField id="mk-words" label={w.wordsLabel} value={words} onChange={setWords} rows={3} maxLength={600} placeholder={w.wordsPlaceholder} />
+      <section className="mk-moments" aria-labelledby="mk-moment">
+        <div className="mk-moment-head">
+          <h2 id="mk-moment" className="cc-head">
+            {w.moment}
+          </h2>
+          <button type="button" className="cc-chip mk-surprise" onClick={surprise}>
+            {w.surprise} <span aria-hidden="true">⟳</span>
+          </button>
+        </div>
+        <ul className="mk-strip" role="list" aria-label={w.momentsBy}>
+          {MOMENTS.map((m) => (
+            <li key={m.id}>
+              <button type="button" className="cc-chip" aria-pressed={m.id === moment} data-moment={m.id} onClick={() => go(m.id)}>
+                {m.title} <span className="cc-chip-ch">· {m.chip}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
       {signedIn ? (
         <button type="button" className="rl-remix mk-make" onClick={make} disabled={busy}>
           {busy ? w.making : w.makeIt}
@@ -160,24 +179,7 @@ export function ChallengeMake() {
       <p className="mk-model">
         <span className="cc-head">{w.model}</span> <span className="cc-chip mk-model-chip" data-slot="model-choice">{w.modelChip}</span>
       </p>
-      <section className="mk-moments" aria-labelledby="mk-moment">
-        <div className="mk-moment-head">
-          <h2 id="mk-moment" className="cc-head">
-            {w.moment}
-          </h2>
-          <button type="button" className="cc-chip mk-surprise" onClick={surprise}>
-            {w.surprise} <span aria-hidden="true">⟳</span>
-          </button>
-        </div>
-        <ul className="mk-strip" role="list" aria-label={w.momentsBy}>
-          {MOMENTS.map((m) => (
-            <li key={m.id}>
-              <button type="button" className="cc-chip" aria-pressed={m.id === moment} data-moment={m.id} onClick={() => go(m.id)}>
-                {m.title} <span className="cc-chip-ch">· {m.chip}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
+      <section className="mk-moment-words" aria-label={w.momentsBy}>
         <p className="dz-muted mk-by">{w.momentsBy}</p>
         {chosen && (
           <div className="mk-quotes" aria-live="polite">

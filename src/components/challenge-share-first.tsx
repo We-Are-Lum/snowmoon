@@ -72,7 +72,7 @@ export function ChallengeShareFirst({ path, w, onCast }: { path: string; w: Shar
         </button>
       </div>
       <p className="sf-ready">
-        “{w.texts.plain}” <span className="sf-link">{link}</span>
+        {w.texts.plain} <span className="sf-link">{link}</span>
       </p>
     </section>
   );
