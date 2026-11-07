@@ -1475,6 +1475,8 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const list = read('src/components/challenge-entries-list.tsx');
   check('X1 /challenge/entries: the entries (standing), filtered by character, newest first as standing gives them', /const st = sql \? await standing\(sql\)/.test(page) && /\.filter\(\(e\) => !character \|\| e\.character === character\)/.test(page) && !/\.sort\(/.test(page));
   check('X1 the viewer\'s "Shuffled" order is the P5g shuffle on every entry shown, in the browser', /setShown\(shuffleFresh\(all\)\)/.test(list) && /'use client'/.test(list));
+  const css = read('src/styles/designs.css');
+  check('X1 the order buttons show which order is chosen (.ch-chip[aria-pressed=true]) and have no browser button face', /\.ch-chip\[aria-pressed='true'\] \{[^}]*background: var\(--btn\)/.test(css) && /button\.ch-chip \{ background: none;/.test(css));
   const { p5gProblems, p5iProblems, CHALLENGE_FILES, P5I_FILES } = await import('./lib/p5g');
   const files = walk('src').filter((f) => CHALLENGE_FILES.test(f)).map((f) => ({ file: f, text: read(f) }));
   check('X1 P5g passes with the entries list', p5gProblems(files).length === 0, p5gProblems(files).join('; '));
