@@ -1467,6 +1467,13 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('l4 Open Graph and twitter:card for Bluesky and Lens', (meta.twitter as { card?: string })?.card === 'summary_large_image' && JSON.stringify(meta.openGraph).includes('/api/design-card/v1?shape=og'));
   check('l5 a hidden or unpublished version: no picture, and the site embed blanked', L.NO_PREVIEW.openGraph === null && L.NO_PREVIEW.twitter === null && Object.values(L.NO_PREVIEW.other ?? {}).every((v) => v === ''));
   check('l6 likes are off (planned 12 November): the slot renders nothing', L.likesOn() === false && /if \(!likesOn\(\)\) return null;/.test(read('src/components/challenge-like.tsx')));
+  // Pre-flight 2026-11-07: inside the window with pictures as the entries (sheets invitation-only), a sheet's landing is
+  // open, not "Remixing opens …": a base's Remix opens its remix screen, any other sheet's the character's card.
+  const sp = read('src/app/references/designs/[id]/page.tsx');
+  const inWindow = /const picturesOpen = !challengeOpen && CHALLENGE\.pictureEntries && [^\n]*challengeOpenNow\(\);/.test(sp) && /const landingPhase = challengeOpen \|\| picturesOpen \? 'open'/.test(sp);
+  check('l8 inside the window with pictures as the entries, a sheet\'s landing is open, not "Remixing opens"', inWindow && sp.includes('phase={landingPhase} remixHref={remixHref}'));
+  check('l8 a base\'s Remix opens its remix screen; another sheet\'s, the character\'s card', sp.includes('`/challenge/make?from=${d.shown.versionId}`') && (L.landingAction('v1', 'open', '/challenge/make?from=v1') as { href: string }).href === '/challenge/make?from=v1');
+  proof('l8 the landing phase read from challengeSheetsOpen alone is caught', !/const landingPhase = challengeOpen \|\| picturesOpen \? 'open'/.test(sp.replace('challengeOpen || picturesOpen ?', 'challengeOpen ?')));
 }
 
 {
