@@ -66,7 +66,7 @@ CHALLENGE.pictureEntries = false;
   const V = await import('../src/lib/challenge/visibility');
   const inside = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
   check('switch: CHALLENGE.public is off as committed (the owner opens it)', CHALLENGE.public === false);
-  check('switch: the dates are kept (opens Fri 6 Nov, 09:00 Pacific; owner, 2026-11-05 evening)', CHALLENGE.dates.opens === '2026-11-06T17:00:00Z');
+  check('switch: the dates are kept (opens Tue 10 Nov, 00:00 Pacific; owner, 2026-11-07)', CHALLENGE.dates.opens === '2026-11-10T08:00:00Z');
   check('switch off, inside the window: the free cap stays $2, not $15', C.imagesDailySpendCapUsd(inside) === IMAGES.dailySpendCapUsd && IMAGES.dailySpendCapUsd === 2);
   check('switch off, inside the window: sheets stay invited-only (Privacy describes the challenge)', O.privacyDescribesChallenge(PRIVACY) && !O.challengeSheetsOpen(inside, PRIVACY));
   check('switch off, inside the window: entries are not taken', !R.entriesOpen(inside) && !R.challengeOpenNow(inside));
@@ -93,7 +93,7 @@ CHALLENGE.pictureEntries = false;
     ['src/components/app-shell.tsx', /navItems\(last, adaptations, CHALLENGE\.public \|\| \(auth\.kind === 'signed-in' && isAdmin\(auth\.fid\)\)\)/],
     ['src/app/references/designs/[id]/page.tsx', /const ch = CHALLENGE\.public \? await sheetChallenge\(/],
     ['src/app/references/designs/[id]/page.tsx', /posts=\{CHALLENGE\.public && CHALLENGE\.posts\}/],
-    ['src/app/references/designs/[id]/page.tsx', /const inChallenge = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\);[\s\S]*inChallenge\s*\? sameTexts\(CW\.shareTextOpen\(callName\)\)/],
+    ['src/app/references/designs/[id]/page.tsx', /const inChallenge = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && remixingOpenNow\(\);[\s\S]*inChallenge\s*\? sameTexts\(CW\.shareTextOpen\(callName\)\)/],
   ];
   // Admins see /challenge/rules and /challenge/remixes too, exactly like /challenge (owner, 2026-11-04).
   for (const d of ['rules', 'remixes']) gated.push([`src/app/challenge/${d}/not-found.tsx`, new RegExp(`<ChallengeAdmin fallback=\\{<NotFound />\\} page="${d}" />`)]);
@@ -149,7 +149,7 @@ proof('a wallet path let back in is caught', R.eligibility({ maker: -7, passed: 
 
 // --- The window, in Pacific time ---------------------------------------------------------------------------------
 const D0 = CHALLENGE.dates;
-check('opens Fri 6 Nov 2026, 09:00 Pacific', R.pacificWallTime(D0.opens) === '2026-11-06 09:00', R.pacificWallTime(D0.opens));
+check('opens Tue 10 Nov 2026, 00:00 Pacific (owner, 2026-11-07)', R.pacificWallTime(D0.opens) === '2026-11-10 00:00', R.pacificWallTime(D0.opens));
 check('the last minute is Sun 22 Nov 2026, 23:59 Pacific', R.pacificWallTime(new Date(Date.parse(D0.closes) - 60_000).toISOString()) === '2026-11-22 23:59');
 const at = (iso: string, deltaMs: number) => new Date(Date.parse(iso) + deltaMs);
 check('the opening instant is in', R.inWindow(at(D0.opens, 0)));
@@ -158,15 +158,26 @@ check('23:59:59.999 Pacific on the last day is in', R.inWindow(at(D0.closes, -1)
 check('midnight Pacific after the last day is out', !R.inWindow(at(D0.closes, 0)));
 check('the window crosses no clock change (PST throughout): 23:59 Pacific is 07:59 UTC the next day', new Date(Date.parse(D0.closes) - 60_000).toISOString() === '2026-11-23T07:59:00.000Z');
 check('dateText builds the deadline from the config', R.dateText('closes', { time: true }) === 'Sunday 22 November, 23:59 Pacific', R.dateText('closes', { time: true }));
-check('windowText spans the window', R.windowText() === '6 to 22 November', R.windowText());
+{
+  const CW0 = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
+  const LW0 = (await import('../src/lib/challenge/landing')).LANDING_WORDING;
+  check('windowText spans the window: "10 to 22 November" (the rules intro, the home row, the landing)', R.windowText() === '10 to 22 November' && CW0.intro().startsWith('From 10 to 22 November,') && CW0.homeLine().includes('10 to 22 November') && LW0.arrival('Zei', 'open').includes('10 to 22 November'), `${R.windowText()} | ${CW0.intro().slice(0, 40)}`);
+}
 // The free spend cap: $15 inside the window, $2 outside, by itself (owner, 2026-10-31).
 {
   const C = await import('../src/lib/config');
-  check('spend cap: $2 a millisecond before the window opens', C.imagesDailySpendCapUsd(at(D0.opens, -1)) === 2);
+  // Owner, 2026-11-07: the $15 starts at the flip (CHALLENGE.public on), before the open date too, and ends at the close.
+  check('spend cap: switch on, before the open date: $15 (from the flip)', C.imagesDailySpendCapUsd(at(D0.opens, -1)) === 15 && C.imagesDailySpendCapUsd(new Date('2026-11-07T20:00:00Z')) === 15);
   check('spend cap: $15 at the opening instant', C.imagesDailySpendCapUsd(at(D0.opens, 0)) === 15);
   check('spend cap: $15 at 23:59:59.999 Pacific on the last day', C.imagesDailySpendCapUsd(at(D0.closes, -1)) === 15);
   check('spend cap: back to $2 at the close', C.imagesDailySpendCapUsd(at(D0.closes, 0)) === 2);
-  check('spend cap: $2 today (before the launch)', C.imagesDailySpendCapUsd(new Date('2026-10-31T20:00:00Z')) === 2);
+  {
+    const pubWas = CHALLENGE.public;
+    (CHALLENGE as { public: boolean }).public = false;
+    check('spend cap: switch off, $2 whatever the date (before, inside, after the window)', [new Date('2026-11-07T20:00:00Z'), at(D0.opens, 0), at(D0.closes, -1), at(D0.closes, 0)].every((t) => C.imagesDailySpendCapUsd(t) === 2));
+    (CHALLENGE as { public: boolean }).public = pubWas;
+  }
+  proof('spend cap: a cap that waits for the open date with the switch on is caught', ((t: Date) => (CHALLENGE.public && t.getTime() >= Date.parse(D0.opens) && t.getTime() < Date.parse(D0.closes) ? 15 : 2))(at(D0.opens, -1)) !== C.imagesDailySpendCapUsd(at(D0.opens, -1)));
   check('the base caps are unchanged ($2 outside; IMAGES.invited unchanged)', IMAGES.dailySpendCapUsd === 2 && CHALLENGE.dailySpendCapUsd === 15 && IMAGES.invited.join() === '6786,6852');
   const limits = read('src/lib/images/limits.ts');
   // Three reads: a picture's, a remix's view (owner, 2026-11-04: the cap unchanged for remixes) and the words check's.
@@ -1411,11 +1422,11 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('e2 the confirmation shows it', /\{entry\?\.kind === 'candidate' && `\$\{entry\.text\} `\}/.test(form) && /text: st\.kind === 'candidate' \? CW\.publishedCandidate\(name\) : CW\.publishedUnchecked\(name\)/.test(route));
   const share = read('src/components/challenge-share.tsx');
   const vp = read('src/app/references/designs/[id]/page.tsx');
-  const shareSwitch = (s1: string, v1: string) => /export function ChallengeShare\(\{ versionId, texts: makersTexts, othersTexts, byFid, posts \}/.test(s1) && /const inChallenge = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\);/.test(v1) && /const shareTexts = inChallenge\s*\? sameTexts\(CW\.shareTextOpen\(callName\)\)\s*: textsFor\(makers, \(who\) => CW\.shareText\(/.test(v1) && /texts=\{shareTexts\}/.test(v1);
+  const shareSwitch = (s1: string, v1: string) => /export function ChallengeShare\(\{ versionId, texts: makersTexts, othersTexts, byFid, posts \}/.test(s1) && /const inChallenge = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && remixingOpenNow\(\);/.test(v1) && /const shareTexts = inChallenge\s*\? sameTexts\(CW\.shareTextOpen\(callName\)\)\s*: textsFor\(makers, \(who\) => CW\.shareText\(/.test(v1) && /texts=\{shareTexts\}/.test(v1);
   check('e3 in the window, a challenge sheet\'s share text is the owner\'s (2026-11-06: "My remix of {name}, for the Snowmoon Party remix challenge"); outside it, as before', shareSwitch(share, vp) && CW.shareTextOpen('Bai') === 'My remix of Bai, for the Snowmoon Party remix challenge' && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party');
-  proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace("isChallengeCharacter(d.entity) && challengeOpenNow();", 'isChallengeCharacter(d.entity) && true;')));
+  proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace("isChallengeCharacter(d.entity) && remixingOpenNow();", 'isChallengeCharacter(d.entity) && true;')));
   // h. Before the open, from CHALLENGE.dates.
-  check('h "Entries open Fri 6 Nov, 09:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Fri 6 Nov, 09:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());
+  check('h "Entries open Tue 10 Nov, 00:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Tue 10 Nov, 00:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());
   // i. Neynar down: published, and told on the spot.
   check('i the unchecked line says it won\'t count, and why', /won’t count/.test(CW.publishedUnchecked('Zei')) && /Neynar/.test(CW.publishedUnchecked('Zei')) && /\{entry\?\.kind === 'unchecked' && \(\s*<p className="ic-error ch-unchecked" role="status">\s*\{entry\.text\}/.test(form));
   check('i the confirmation\'s new lines carry a Draft wording line', /\{entry && <p className="as-draft ic-draftline">\{IMAGE_WORDING\.draftLine\}<\/p>\}/.test(form));
@@ -1471,7 +1482,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   // Pre-flight 2026-11-07: inside the window with pictures as the entries (sheets invitation-only), a sheet's landing is
   // open, not "Remixing opens …": a base's Remix opens its remix screen, any other sheet's the character's card.
   const sp = read('src/app/references/designs/[id]/page.tsx');
-  const inWindow = /const picturesOpen = !challengeOpen && CHALLENGE\.pictureEntries && [^\n]*challengeOpenNow\(\);/.test(sp) && /const landingPhase = challengeOpen \|\| picturesOpen \? 'open'/.test(sp);
+  const inWindow = /const picturesOpen = !challengeOpen && CHALLENGE\.pictureEntries && [^\n]*remixingOpenNow\(\);/.test(sp) && /const landingPhase = challengeOpen \|\| picturesOpen \? 'open'/.test(sp);
   check('l8 inside the window with pictures as the entries, a sheet\'s landing is open, not "Remixing opens"', inWindow && sp.includes('phase={landingPhase} remixHref={remixHref}'));
   check('l8 a base\'s Remix opens its remix screen; another sheet\'s, the character\'s card', sp.includes('`/challenge/make?from=${d.shown.versionId}`') && (L.landingAction('v1', 'open', '/challenge/make?from=v1') as { href: string }).href === '/challenge/make?from=v1');
   proof('l8 the landing phase read from challengeSheetsOpen alone is caught', !/const landingPhase = challengeOpen \|\| picturesOpen \? 'open'/.test(sp.replace('challengeOpen || picturesOpen ?', 'challengeOpen ?')));
@@ -1513,6 +1524,16 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
     check('F4 Withdraw asks once: "Withdraw this entry?", its line, then Withdraw and Cancel', CWx.withdrawAsk === 'Withdraw this entry?' && CWx.withdrawAskNote === 'It still counts as today’s entry, so you can enter again tomorrow.' && CWx.withdrawCancel === 'Cancel' && sub.includes('{W.withdrawAskNote}') && /onClick=\{\(\) => setAsking\(true\)\}/.test(sub) && /setAsking\(false\);\s*void send\('DELETE'\);/.test(sub));
     proof('F4 a Withdraw that sends at once is caught', !/onClick=\{\(\) => setAsking\(true\)\}/.test(sub.replace('onClick={() => setAsking(true)}', "onClick={() => send('DELETE')}")));
     check('F6 the sheet landing names Farcaster, Lens and Bluesky', L.LANDING_WORDING.arrival('Zei', 'open').includes('sign in with Farcaster, Lens or Bluesky, press Remix'));
+    // Before the open date (owner, 2026-11-07): remixing works from the flip; pictures made then can't be entered.
+    const LW = await import('../src/lib/challenge/landing-wording');
+    const NOTE = 'Pictures made before then are for trying it out, and can’t be entered.';
+    check('F8 before the open date, /challenge\'s line ends with the owner\'s note; on the open date it is gone', LW.LANDING_BEFORE_OPEN === NOTE && LW.LANDING_WORDING.line('before').endsWith(`and close ${R.shortDateText('closes')}. ${NOTE}`) && !LW.LANDING_WORDING.line('open').includes(NOTE) && !LW.LANDING_WORDING.line('closed').includes(NOTE));
+    proof('F8 a note that stays after the open date is caught', ((ph: 'before' | 'open') => `${LW.LANDING_WORDING.line(ph)} ${NOTE}`)('open').includes(NOTE) && !LW.LANDING_WORDING.line('open').includes(NOTE));
+    check('F8 the sheet landing says what /challenge says before the open date', read('src/app/references/designs/[id]/page.tsx').includes("note={picturesOpen && phase() === 'before' ? HUB.line('before') : undefined}") && read('src/components/challenge-remix-landing.tsx').includes('{p.note ?? L.remixNote(p.name)}'));
+    check('F8 Submit\'s line (from the open date) for a picture published before it, for its maker, with "Remix it" to its remix screen', `${PW.beforeOpen.text}${PW.beforeOpen.link}${PW.beforeOpen.after}` === 'This picture was made before entries opened, so it can’t be entered. Remix it to make a new one.' && /beforeOpen: CHALLENGE\.pictureEntries && phase\(now\) === 'open' && Date\.parse\(p\.createdAt\) < Date\.parse\(CHALLENGE\.dates\.opens\)/.test(read('src/lib/challenge/picture-view.ts')) && E.SUBMIT_WORDING.beforeOpen === `${PW.beforeOpen.text}${PW.beforeOpen.link}${PW.beforeOpen.after}` && /known && mine && v\.beforeOpen && \(/.test(pic));
+    check('F8 a maker can remix their own picture (the make route refuses no one for being its maker)', !/src\.byFid === fid|byFid === fid/.test(read('src/app/api/challenge/make/route.ts')));
+    const RR = await import('../src/lib/challenge/rules');
+    check('F8 remixing works from the flip until the close; entries from the open date', RR.remixingOpenNow(new Date(Date.parse(CHALLENGE.dates.opens) - 1), true) && !RR.remixingOpenNow(new Date(Date.parse(CHALLENGE.dates.opens) - 1), false) && !RR.remixingOpenNow(new Date(CHALLENGE.dates.closes), true) && !RR.challengeOpenNow(new Date(Date.parse(CHALLENGE.dates.opens) - 1), true));
   }
 }
 

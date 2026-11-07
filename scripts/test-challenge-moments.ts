@@ -333,6 +333,33 @@ check('config: a current default look per challenge character, each a design id 
   check('default look: a current front that isn\'t one of the bases can be named (Bai\'s Garance front)', (await P.defaultLook(S, 'zei', { zei: zeiFront.versionId }))?.versionId === zeiFront.versionId);
   proof('default look: an id that is another character\'s sheet is not used', (await P.defaultLook(S, 'zei', { zei: base.versionId }))?.versionId !== base.versionId);
   check('the hub still shuffles every base: the default look sets no order there', /setBases\(c\.bases\.length > 1 \? shuffleFresh\(c\.bases\) : c\.bases\)/.test(read('src/components/challenge-card.tsx')) && !/defaultLook/.test(read('src/lib/challenge/view.ts')));
+  // Before the open date (owner, 2026-11-07): on 11 Nov, submitting a picture published on 8 Nov is refused with the
+  // owner's line, and its page shows it to its maker; on 8 Nov, Submit says "Entries open …" for every picture.
+  {
+    Object.assign(CHALLENGE.dates, keep.dates);
+    const m = MOMENTS.find((x) => x.characters.includes('bai'))!;
+    const recipeId = randomUUID(), elementId = randomUUID(), early = randomUUID();
+    const at8 = '2026-11-08T18:00:00Z', d8 = new Date('2026-11-08T20:00:00Z'), d11 = new Date('2026-11-11T20:00:00Z');
+    await sql`insert into studio.recipes ${sql({ id: recipeId, source: 'in_app', provider: 'fal.ai', model: 'flux2-klein-4b-edit', model_version: 'e', prompt: 'p', params: sql.json({ user_prompt: 'early', by_name: 'p500', anchor: { chapter: m.chapter, start: m.start, end: m.end }, challenge: { character: 'bai', moment: m.id, scene: m.scene, from: base.versionId, fromKind: 'sheet' } } as never), seed: 1, assist: null, cost_usd: 0.009, created_by_fid: 500, created_at: at8 })}`;
+    await sql`insert into studio.elements ${sql({ id: elementId, work_id: 'snowmoon', element_type: 'image', created_by_fid: 500, created_at: at8 })}`;
+    await sql`insert into studio.element_versions ${sql({ id: early, element_id: elementId, version_no: 1, body: sql.json({ lettering: [] } as never), asset_url: 'https://media.example/early.jpg', asset_sha256: 'e'.repeat(64), recipe_id: recipeId, created_at: at8 })}`;
+    await sql`insert into studio.anchors ${sql({ version_id: early, work_id: 'snowmoon', chapter: m.chapter, start_idx: m.start, end_idx: m.end })}`;
+    await sql`insert into studio.links ${sql({ from_version_id: early, to_version_id: base.versionId, kind: 'uses' })}`;
+    const E2 = await import('../src/lib/challenge/entries');
+    const PV = await import('../src/lib/challenge/picture-view');
+    const post = { network: 'farcaster' as const, id: '0x' + 'e'.repeat(40), handle: 'p500', at: d11.toISOString(), url: 'https://farcaster.xyz/p500/0xeeeeeeee', links: [`https://snowmoon.party/challenge/p/${early}`], writer: { fid: 500 } };
+    const r11 = await E2.submitEntry(S, 500, early, post, d11);
+    const r8 = await E2.submitEntry(S, 500, early, post, d8);
+    const v11 = await PV.pictureView(S, early, d11), v8 = await PV.pictureView(S, early, d8);
+    const LINE = 'This picture was made before entries opened, so it can’t be entered. Remix it to make a new one.';
+    const ok = (a: typeof v11, b: typeof v8) => Boolean(a && b && a.beforeOpen && `${a.beforeOpen.text}${a.beforeOpen.link}${a.beforeOpen.after}` === LINE && a.notYet === null && b.beforeOpen === null && b.notYet === 'Entries open Tue 10 Nov, 00:00 PT.');
+    check('before the open date: on 11 Nov, submitting a picture published on 8 Nov is refused with the owner\'s line', !r11.ok && r11.why === LINE, JSON.stringify(r11));
+    check('before the open date: on 8 Nov, Submit says "Entries open Tue 10 Nov, 00:00 PT." for a pre-open picture', !r8.ok && r8.why === 'Entries open Tue 10 Nov, 00:00 PT.', JSON.stringify(r8));
+    check('before the open date: its page shows its maker the line from the 10th, and "Entries open …" before', ok(v11, v8));
+    proof('before the open date: the line missing on the 11th is caught', !ok(v11 && { ...v11, beforeOpen: null }, v8));
+    proof('before the open date: the line shown before the 10th is caught', !ok(v11, v8 && { ...v8, beforeOpen: v11!.beforeOpen }));
+    CHALLENGE.dates.opens = new Date(Date.now() - 60_000).toISOString();
+  }
   // The make API (GET): the screen's data for a base; 404 for anything else. POST without a sign-in: 401 (P4a). The app's
   // own connection (db()) is a second one, and PGlite's socket server takes one at a time: this test's closes first.
   await sql.end();
@@ -394,7 +421,7 @@ check('config: a current default look per challenge character, each a design id 
 // --- The rules intro, approved (owner, 2026-11-06), exactly as it renders today, with no draft mark -------------------
 {
   const W = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
-  const INTRO = 'From 6 to 22 November, make your own picture of Zei, Gladias, Bai, Seila, Deluin or Mu: start from one of their pictures, set it at a moment from the book, change what you like, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.';
+  const INTRO = 'From 10 to 22 November, make your own picture of Zei, Gladias, Bai, Seila, Deluin or Mu: start from one of their pictures, set it at a moment from the book, change what you like, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.';
   check('rules intro: the owner\'s approved words, exactly, with the dates and names from config', CHALLENGE.pictureEntries && W.intro() === INTRO, W.intro());
   const RV = await import('../src/lib/challenge/rules-view');
   const rv = await RV.rulesView(null);

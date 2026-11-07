@@ -3,11 +3,11 @@ import type postgres from 'postgres';
 import { CHALLENGE } from '../config';
 import { bookCharacter } from '../images/designs';
 import { designByline } from '../images/byline';
-import { versionStanding } from './entries';
+import { SUBMIT_WORDING, versionStanding } from './entries';
 import { chapterChip, momentById } from './moments';
 import { challengePictures } from './pictures';
 import { postsFor } from './posts';
-import { challengeOpenNow } from './rules';
+import { challengeOpenNow, phase } from './rules';
 import { submitWords, type SubmitWords } from './sheet-lines';
 import { CHALLENGE_WORDING as CW } from './wording';
 import { LANDING_WORDING as L } from './landing-wording';
@@ -40,8 +40,14 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
   const maker = designByline(p.byName, p.byFid);
   return {
     versionId: p.versionId,
-    /** Remixing it (anyone but its maker): its remix screen while entries are open; none after. */
-    remixHref: open ? `/challenge/make?from=${p.versionId}` : null,
+    /** Remixing it (anyone but its maker): its remix screen from the owner's flip (before the open date too) until entries close; none after. */
+    remixHref: CHALLENGE.public && phase(now) !== 'closed' ? `/challenge/make?from=${p.versionId}` : null,
+    /**
+     * Its maker's line in place of Submit (owner, 2026-11-07): before the open date, "Entries open …" for every picture;
+     * from the open date to the close, for a picture published before it, that it can't be entered.
+     */
+    notYet: CHALLENGE.pictureEntries && CHALLENGE.public && phase(now) === 'before' ? SUBMIT_WORDING.opens() : null,
+    beforeOpen: CHALLENGE.pictureEntries && phase(now) === 'open' && Date.parse(p.createdAt) < Date.parse(CHALLENGE.dates.opens) ? { ...P.beforeOpen, href: `/challenge/make?from=${p.versionId}` } : null,
     url: p.thumb,
     character: p.character,
     byFid: p.byFid,

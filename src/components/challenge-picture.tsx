@@ -67,6 +67,14 @@ export function ChallengePicture({ id }: { id: string }) {
           <ChallengeShareFirst path={path} w={{ head: null, texts: v.w.othersTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} />
         </>
       )}
+      {known && mine && v.notYet && <p className="sf-submit ch-not-yet">{v.notYet}</p>}
+      {known && mine && v.beforeOpen && (
+        <p className="sf-submit ch-before-open">
+          {v.beforeOpen.text}
+          <Link href={v.beforeOpen.href}>{v.beforeOpen.link}</Link>
+          {v.beforeOpen.after}
+        </p>
+      )}
       {v.submit && (
         <section className="sf-submit" aria-label={v.w.thenSubmit}>
           <ChallengeSubmit

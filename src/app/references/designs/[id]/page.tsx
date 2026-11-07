@@ -12,11 +12,12 @@ import { BookQuotes } from '~/components/design-book';
 import { DesignBar } from '~/components/design-bar';
 import { AiTag } from '~/components/ai-tag';
 import { CHALLENGE } from '~/lib/config';
-import { basesOf, challengeOpenNow, phase } from '~/lib/challenge/rules';
+import { basesOf, phase, remixingOpenNow } from '~/lib/challenge/rules';
 import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-sheets';
 import { sheetChallenge } from '~/lib/challenge/sheet-lines';
 import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import { joinNames, sameTexts, shareMaker, textsFor } from '~/lib/challenge/share-makers';
+import { LANDING_WORDING as HUB } from '~/lib/challenge/landing-wording';
 import { ChallengeShare } from '~/components/challenge-share';
 import { ChallengeLines, ChallengePosts } from '~/components/challenge-lines';
 import { ChallengeAdminSheet } from '~/components/challenge-admin-sheet';
@@ -96,7 +97,8 @@ export default async function DesignPage({ params }: Props) {
   const coMakers = CHALLENGE.coMakers[d.shown.versionId.toLowerCase()] ?? CHALLENGE.coMakers[String(d.elementId).toLowerCase()] ?? [];
   const makers = [shareMaker(d.byName, d.byFid), ...coMakers];
   const byShown = coMakers.length ? joinNames([by, ...coMakers.map((m) => (m.network === 'farcaster' ? `@${m.handle}` : m.handle))]) : by;
-  const inChallenge = d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow();
+  // From the flip (before the open date too) until the close, as /challenge says (owner, 2026-11-07).
+  const inChallenge = d.kind === 'character' && isChallengeCharacter(d.entity) && remixingOpenNow();
   const shareTexts = inChallenge
     ? sameTexts(CW.shareTextOpen(callName))
     : textsFor(makers, (who) => CW.shareText(style ? title : `${callName}: ${body.title || W.page.sheetBy(who)}`));
@@ -109,7 +111,8 @@ export default async function DesignPage({ params }: Props) {
   // challengeOpen is false inside the window; the landing said "Remixing opens <the open date>" on every sheet, the six
   // bases included. Inside the window it is open: a base's Remix opens its remix screen (as its tile on /challenge
   // does), any other sheet's opens the character's card on /challenge.
-  const picturesOpen = !challengeOpen && CHALLENGE.pictureEntries && d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow();
+  // Owner, 2026-11-07: before the open date too (remixing works from the flip), with /challenge's line (landingNote).
+  const picturesOpen = !challengeOpen && CHALLENGE.pictureEntries && d.kind === 'character' && isChallengeCharacter(d.entity) && remixingOpenNow();
   const isBase = picturesOpen && character ? basesOf(character.slug).some((b) => b === d.shown.versionId.toLowerCase() || b === String(d.elementId).toLowerCase()) : false;
   const landingPhase = challengeOpen || picturesOpen ? 'open' : phase() === 'closed' ? 'closed' : 'before';
   const remixHref = picturesOpen ? (isBase ? `/challenge/make?from=${d.shown.versionId}` : `/challenge#${character?.slug ?? ''}`) : undefined;
@@ -117,7 +120,7 @@ export default async function DesignPage({ params }: Props) {
   const main = (
     <article className="dz-main">
       {landing && ch && (
-        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={byShown} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={landingPhase} remixHref={remixHref} posts={ch.posts} />
+        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={byShown} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={landingPhase} remixHref={remixHref} note={picturesOpen && phase() === 'before' ? HUB.line('before') : undefined} posts={ch.posts} />
       )}
       {character && <BookQuotes name={character.name} quotes={character.quotes} />}
       <h1 className="dz-title">{title}</h1>

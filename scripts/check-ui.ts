@@ -1796,8 +1796,10 @@ async function checkChallengeLanding() {
     // copy and renders a fresh one from the local data in the background. Wait for the fresh one.
     for (let i = 0; ; i++) {
       const html = await fetch(`${LOCAL}/challenge`).then((r) => r.text(), () => '');
-      if (html.includes(FX.sheets.zei[0])) break;
-      if (i > 60) {
+      // The fixture's own remix too: the configured base alone could be a copy cached from another database (pre-flight
+      // 2026-11-07, a local server beside it on the same build).
+      if (html.includes(FX.sheets.zei[0]) && html.includes(FX.remixes[0].versionId)) break;
+      if (i > 90) {
         fail('/challenge (local data): the page never showed the local data');
         break;
       }

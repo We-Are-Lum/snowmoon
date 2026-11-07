@@ -24,6 +24,12 @@ export const PICTURE_WORDING = {
    * title, and who made it, written by the @ rule (src/lib/challenge/share-makers.ts).
    */
   othersText: (name: string, moment: string, by: string) => `${name} in “${moment}”, a remix by ${by} for the Snowmoon Party remix challenge`,
+  /**
+   * For its maker, in place of Submit, from the open date to the close, when the picture was published before entries
+   * opened (owner, 2026-11-07, his words, approved; the same words as SUBMIT_WORDING.beforeOpen). "Remix it" links to its
+   * remix screen (a maker can remix their own picture: the make route takes any published challenge picture).
+   */
+  beforeOpen: { text: 'This picture was made before entries opened, so it can’t be entered. ', link: 'Remix it', after: ' to make a new one.' },
   thenSubmit: 'Then submit it as an entry',
   oneADay: 'one a day',
   /** The owner's line (2026-11-05, answer 7), with "Rules" beside it; no other rules text on the flow. */
