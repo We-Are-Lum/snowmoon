@@ -11,5 +11,5 @@ export async function GET(_request: Request, { params }: { params: Promise<{ key
   const key = (await params).key.join('/');
   const bytes = rehearsalFile(key);
   if (!bytes) return new Response('Not found', { status: 404 });
-  return new Response(new Uint8Array(bytes), { headers: { 'Content-Type': 'image/jpeg', 'Cache-Control': 'no-store' } });
+  return new Response(new Uint8Array(bytes), { headers: { 'Content-Type': key.endsWith('.webp') ? 'image/webp' : 'image/jpeg', 'Cache-Control': 'no-store' } });
 }

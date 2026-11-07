@@ -6,6 +6,7 @@ import { useCanMakeDesigns } from '~/lib/images/can-add';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { useMyPicks } from './design-picks';
 import { AiTag } from './ai-tag';
+import { ThumbImg } from './thumb-img';
 
 /**
  * Styles, characters or settings (step 4; Pictures' menu above it chooses which): the order named, rows. Your own picks are marked
@@ -47,8 +48,7 @@ export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 's
                 <li key={s.versionId}>
                   <Link href={`/references/designs/${s.versionId}`} className="dz-row">
                     {s.thumb ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img className="dz-thumb" src={s.thumb} alt="" width={64} height={48} loading="lazy" />
+                      <ThumbImg className="dz-thumb" src={s.thumb} sizes="64px" alt="" width={64} height={48} loading="lazy" />
                     ) : (
                       <span className="dz-thumb dz-thumb-empty" aria-hidden="true" />
                     )}

@@ -209,6 +209,12 @@ function RecipeSheet({ file, item, view: given, onClose }: { file: string; item?
                 <dd>{view.resultLicence}</dd>
               </>
             )}
+            {view.copy && (
+              <>
+                <dt>{view.copy.label}</dt>
+                <dd>{view.copy.text} <span className="as-draft ic-draftline">Draft wording</span></dd>
+              </>
+            )}
           </dl>
         )}
         {full && (

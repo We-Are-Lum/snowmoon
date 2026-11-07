@@ -5,6 +5,7 @@ import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 import { AiLabel } from './recipe-sheet';
 import { MakeImageLink } from './make-image-link';
+import { ThumbImg } from './thumb-img';
 
 /**
  * Moments (readers' images of passages): the order strip and list, and one moment as both this
@@ -61,8 +62,7 @@ export function Moment({ im, kind }: { im: MomentItem; kind?: string }) {
   return (
     <>
       <Link href={`/image/${im.versionId}`} className="pictures-image">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={im.url} alt={im.alt} width={1024} height={576} loading="lazy" />
+        <ThumbImg src={im.url} sizes="(max-width: 640px) 100vw, 640px" alt={im.alt} width={1024} height={576} loading="lazy" />
       </Link>
       {/* The book's words the image is of, first (owner, 2026-10-10); the prompt is in the label's sheet and on its page. */}
       {im.passage.length > 0 && (
@@ -96,7 +96,7 @@ export function Moment({ im, kind }: { im: MomentItem; kind?: string }) {
         <AiLabel
           kind="image"
           text={AI_LABEL.imageBy(im.by)}
-          view={readerImageView({ versionId: im.versionId, by: im.by, prompt: im.prompt, chapter: im.chapter, where: im.where, date: im.date })}
+          view={readerImageView({ versionId: im.versionId, by: im.by, prompt: im.prompt, chapter: im.chapter, where: im.where, date: im.date, listCopyOf: im.url })}
         />{' '}
         · {im.likes} {im.likes === 1 ? 'like' : 'likes'}
       </p>

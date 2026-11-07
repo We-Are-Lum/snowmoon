@@ -35,6 +35,8 @@ export interface RecipeView {
   notPublished?: string;
   cost?: string;
   resultLicence?: string;
+  /** Opened from a list that shows a smaller copy (src/lib/images/thumb-url.ts): says so, and that the original is unchanged. */
+  copy?: { label: string; text: string };
 }
 
 

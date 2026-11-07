@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 import { HOME_TEXT as H } from '~/lib/home';
 import { AiLabel } from './recipe-sheet';
+import { ThumbImg } from './thumb-img';
 
 /**
  * "Just made": readers' published images, newest first, from the same query as /references (feed(),
@@ -41,8 +42,8 @@ export function HomeFeed({ items, unavailable }: { items: HomeFeedItem[]; unavai
             return (
               <li key={im.versionId}>
                 <Link href={`/image/${im.versionId}`} className="home-feed-thumb" aria-label={im.alt}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={im.url} alt="" width={64} height={64} loading="lazy" />
+                  {/* The 320 px copy, not the 1024 px original (speed fix 1, 2026-11-07). */}
+                  <ThumbImg src={im.url} sizes="64px" alt="" width={64} height={64} loading="lazy" />
                 </Link>
                 <div className="home-feed-body">
                   <span className="home-feed-what">
@@ -53,7 +54,7 @@ export function HomeFeed({ items, unavailable }: { items: HomeFeedItem[]; unavai
                     <AiLabel
                       kind="image"
                       text={AI_LABEL.imageBy(im.by)}
-                      view={readerImageView({ versionId: im.versionId, by: im.by, prompt: im.prompt, chapter: im.chapter, where: im.where, date })}
+                      view={readerImageView({ versionId: im.versionId, by: im.by, prompt: im.prompt, chapter: im.chapter, where: im.where, date, listCopyOf: im.url })}
                     />
                   </p>
                 </div>

@@ -8,6 +8,7 @@ import { bothChecksRan, checksLine, type RecipeForLines } from '~/lib/images/rec
 import { passageLabel, passageText } from '~/lib/images/passage';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { byline } from '~/lib/images/byline';
+import { THUMB_NOTE, thumbUrl } from '~/lib/images/thumb-url';
 import { PAPER } from '~/lib/tokens';
 import { ImageActions } from '~/components/image-actions';
 import { MakeImageLink } from '~/components/make-image-link';
@@ -181,6 +182,14 @@ export default async function ImagePage({ params }: Props) {
           </dd>
           <dt>File</dt>
           <dd className="recipe-mono">sha256 {im.sha256}</dd>
+          {thumbUrl(im.url, 320) && (
+            <>
+              <dt>{THUMB_NOTE.label}</dt>
+              <dd>
+                {THUMB_NOTE.page} <span className="as-draft ic-draftline">Draft wording</span>
+              </dd>
+            </>
+          )}
         </dl>
         </details>
         <p className="as-draft ic-draftline">{W.draftLine}</p>

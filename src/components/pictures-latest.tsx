@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { Moment, type MomentItem } from './image-feed';
 import { AiTag } from './ai-tag';
+import { ThumbImg } from './thumb-img';
 
 /**
  * Pictures' front page (owner, 2026-10-14: "the feed shows updates in all of them"): the newest
@@ -31,8 +32,7 @@ export function PicturesLatest({ items, empty }: { items: LatestItem[]; empty: R
               <li key={it.design.versionId}>
                 <Link href={`/references/designs/${it.design.versionId}`} className="pictures-design">
                   {it.design.thumb ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={it.design.thumb} alt="" width={1024} height={576} loading="lazy" />
+                    <ThumbImg src={it.design.thumb} sizes="(max-width: 640px) 100vw, 640px" alt="" width={1024} height={576} loading="lazy" />
                   ) : (
                     <span className="pictures-design-text">{it.design.title}</span>
                   )}

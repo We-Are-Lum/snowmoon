@@ -6,6 +6,7 @@ import { openedChapters } from '~/lib/chat/device';
 import { blockHref } from '~/lib/glossary-view';
 import type { ReferenceCard } from '~/lib/references';
 import { SheetImageCaption } from './design-sheets';
+import { ThumbImg } from './thumb-img';
 
 /**
  * The References glossary (owner, 2026-10-29): one card per glossary term with images. Spoilers as the glossary does
@@ -33,8 +34,7 @@ export function ReferenceCards({ cards }: { cards: ReferenceCard[] }) {
               {c.images.map((im) => (
                 <li key={im.key}>
                   <Link href={im.href} className="pictures-image">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={im.url} alt={im.alt} width={1024} height={576} loading="lazy" />
+                    <ThumbImg src={im.url} sizes="(max-width: 640px) 100vw, 640px" alt={im.alt} width={1024} height={576} loading="lazy" />
                   </Link>
                   <SheetImageCaption im={im} />
                 </li>

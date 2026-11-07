@@ -1,5 +1,6 @@
 import { IMAGES } from './config';
 import type { RecipeView } from './recipe-view';
+import { THUMB_NOTE, thumbUrl } from './images/thumb-url';
 
 /**
  * How AI use is declared where an image or the narration is shown (principle 2), as the owner
@@ -65,6 +66,8 @@ export function readerImageView(o: {
   date?: string;
   model?: string;
   notPublished?: string;
+  /** Opened from a list showing the picture's small copy (its original address here): the recipe says so. */
+  listCopyOf?: string;
 }): RecipeView {
   const full = o.versionId ? `/image/${o.versionId}` : null;
   return {
@@ -78,6 +81,7 @@ export function readerImageView(o: {
     inputs: [],
     published: o.versionId ? { by: o.by, when: o.date ?? '' } : null,
     ...(o.versionId ? {} : { notPublished: o.notPublished ?? 'Not yet. Only you can see this draft.' }),
+    ...(thumbUrl(o.listCopyOf, 320) ? { copy: { label: THUMB_NOTE.label, text: THUMB_NOTE.list } } : {}),
   };
 }
 

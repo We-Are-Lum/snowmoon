@@ -3,6 +3,8 @@ import { CopyObjectCommand, DeleteObjectCommand, GetObjectCommand, PutObjectComm
 import { mkdirSync, readFileSync, writeFileSync, copyFileSync, rmSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { IMAGES, REHEARSAL } from '../config';
+import { THUMBS, thumbKeyFor } from './thumb-url';
+import { makeThumbs } from './thumbs';
 
 /**
  * The rehearsal's own store (branch contest, 2026-11-04): under the rehearsal switch only (REHEARSAL.on: this machine,
@@ -15,7 +17,7 @@ export function rehearsalStore(): string | null {
   return REHEARSAL.on && dir && path.isAbsolute(dir) ? dir : null;
 }
 /** A key the rehearsal store accepts: the readers' images and the rehearsal's seeded bases, nothing else. */
-export const REHEARSAL_KEY = /^(images\/readers\/[0-9a-f]{32}\.jpg|brought-in\/[A-Za-z0-9/_.-]{1,200})$/;
+export const REHEARSAL_KEY = /^(images\/readers\/[0-9a-f]{32}\.jpg|images\/readers\/thumbs\/[0-9a-f]{32}-w\d{3,4}\.webp|brought-in\/[A-Za-z0-9/_.-]{1,200})$/;
 const localPath = (which: 'public' | 'private', key: string) => {
   const dir = rehearsalStore();
   if (!dir || !REHEARSAL_KEY.test(key) || key.includes('..')) throw new Error('rehearsal store: refused key');
@@ -107,21 +109,51 @@ export function storageReady(): boolean {
 export async function putPublic(sha256: string, bytes: Buffer, contentType: string): Promise<string> {
   if (rehearsalStore()) {
     localPut('public', keyFor(sha256), bytes);
+    await putThumbs(sha256, bytes);
     return `${process.env.R2_IMAGES_PUBLIC_URL!.replace(/\/$/, '')}/${keyFor(sha256)}`;
   }
   const { client, pub, url } = r2();
   const key = keyFor(sha256);
   await client.send(new PutObjectCommand({ Bucket: pub, Key: key, Body: bytes, ContentType: contentType, CacheControl: `public, max-age=${IMAGES.cacheSeconds}` }));
+  await putThumbs(sha256, bytes);
   return `${url}/${key}`;
 }
+
+/**
+ * The small copies for lists (src/lib/images/thumb-url.ts), written after the original, beside it. A copy that fails
+ * never fails the publish: the original is what was published, and a list falls back to it. Returns the keys written.
+ * The backfill (scripts/backfill-thumbs.ts) writes through here too.
+ */
+export async function putThumbs(sha256: string, original: Buffer): Promise<string[]> {
+  try {
+    const thumbs = await makeThumbs(sha256, original);
+    if (rehearsalStore()) {
+      for (const t of thumbs) localPut('public', t.key, t.bytes);
+      return thumbs.map((t) => t.key);
+    }
+    const { client, pub } = r2();
+    for (const t of thumbs) {
+      await client.send(new PutObjectCommand({ Bucket: pub, Key: t.key, Body: t.bytes, ContentType: THUMBS.contentType, CacheControl: `public, max-age=${IMAGES.cacheSeconds}` }));
+    }
+    return thumbs.map((t) => t.key);
+  } catch (e) {
+    console.error('thumbnails: not made; lists show the original', (e as Error).name);
+    return [];
+  }
+}
+
+/** The copies' keys for a picture (whether or not they exist yet). */
+const thumbKeys = (sha256: string) => THUMBS.widths.map((w) => thumbKeyFor(sha256, w));
 
 /** Hide: keep the bytes privately, then remove the public copy (record and bytes kept, as docs/removal.md allows). */
 export async function moveToPrivate(sha256: string): Promise<void> {
   if (rehearsalStore()) {
-    const from = localPath('public', keyFor(sha256));
-    if (existsSync(from)) {
-      localPut('private', keyFor(sha256), readFileSync(from));
-      rmSync(from);
+    for (const k of [keyFor(sha256), ...thumbKeys(sha256)]) {
+      const from = localPath('public', k);
+      if (existsSync(from)) {
+        localPut('private', k, readFileSync(from));
+        rmSync(from);
+      }
     }
     return;
   }
@@ -129,21 +161,33 @@ export async function moveToPrivate(sha256: string): Promise<void> {
   const key = keyFor(sha256);
   await client.send(new CopyObjectCommand({ Bucket: priv, Key: key, CopySource: `${pub}/${key}` }));
   await client.send(new DeleteObjectCommand({ Bucket: pub, Key: key }));
+  // The copies go with it. Kept privately when they exist (a picture from before them may have none: that copy is
+  // skipped), and always deleted from the public bucket, so no list can show a hidden picture.
+  for (const k of thumbKeys(sha256)) {
+    await client.send(new CopyObjectCommand({ Bucket: priv, Key: k, CopySource: `${pub}/${k}` })).catch(() => null);
+    await client.send(new DeleteObjectCommand({ Bucket: pub, Key: k }));
+  }
 }
 
 /** Unhide (the author's own hide only): put the public copy back. */
 export async function restorePublic(sha256: string): Promise<void> {
   if (rehearsalStore()) {
-    const from = localPath('private', keyFor(sha256));
-    if (existsSync(from)) {
-      mkdirSync(path.dirname(localPath('public', keyFor(sha256))), { recursive: true });
-      copyFileSync(from, localPath('public', keyFor(sha256)));
+    for (const k of [keyFor(sha256), ...thumbKeys(sha256)]) {
+      const from = localPath('private', k);
+      if (existsSync(from)) {
+        mkdirSync(path.dirname(localPath('public', k)), { recursive: true });
+        copyFileSync(from, localPath('public', k));
+      }
     }
     return;
   }
   const { client, pub, priv } = r2();
   const key = keyFor(sha256);
   await client.send(new CopyObjectCommand({ Bucket: pub, Key: key, CopySource: `${priv}/${key}`, CacheControl: `public, max-age=${IMAGES.cacheSeconds}`, MetadataDirective: 'REPLACE', ContentType: 'image/jpeg' }));
+  // The copies come back with it, when they were kept (a picture hidden before they existed has none until the backfill).
+  for (const k of thumbKeys(sha256)) {
+    await client.send(new CopyObjectCommand({ Bucket: pub, Key: k, CopySource: `${priv}/${k}`, CacheControl: `public, max-age=${IMAGES.cacheSeconds}`, MetadataDirective: 'REPLACE', ContentType: THUMBS.contentType })).catch(() => null);
+  }
 }
 
 /**

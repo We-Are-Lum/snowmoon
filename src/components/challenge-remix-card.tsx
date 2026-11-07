@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { designByline } from '~/lib/images/byline';
 import { AiTag } from './ai-tag';
+import { ThumbImg } from './thumb-img';
 
 /**
  * One remix on /challenge (the random selection) and /challenge/remixes (the feed): its front view, the character,
@@ -18,8 +19,7 @@ export function RemixCardView({ r, w }: { r: RemixCardData; w: RemixCardWords })
     <li className="ch-card" data-character={r.character} data-version={r.versionId}>
       <Link href={r.href ?? `/references/designs/${r.versionId}`} className="ch-card-link">
         {r.thumb ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img className="ch-card-img" src={r.thumb} alt={w.alt} width={288} height={384} loading="lazy" />
+          <ThumbImg className="ch-card-img" src={r.thumb} sizes="(max-width: 640px) 46vw, 288px" alt={w.alt} width={288} height={384} loading="lazy" />
         ) : (
           <span className="ch-card-img ch-card-empty" aria-hidden="true" />
         )}
