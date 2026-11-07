@@ -1471,6 +1471,16 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('X2 counts are behind CHALLENGE.socialCounts, off', CHALLENGE.socialCounts === false);
 }
 
+{
+  // Pre-flight 2026-11-07: the remix screen's Make (POST /api/challenge/make, getPerson) must get a Lens or Bluesky
+  // sign-in from the browser, or a Lens or Bluesky person is answered "Sign in to make it" while signed in.
+  const ca = read('src/lib/client-auth.ts');
+  const routes = /const WALLET_ROUTES = \[([^\]]*)\]/.exec(ca)?.[1] ?? '';
+  check('the browser sends a Lens or Bluesky sign-in to the remix screen\'s Make (/api/challenge/make)', routes.includes("'/api/challenge/make'"));
+  proof('a WALLET_ROUTES without /api/challenge/make is caught', !routes.replace("'/api/challenge/make', ", '').includes("'/api/challenge/make'"));
+  check('the make route takes a Lens or Bluesky person (getPerson)', /const fid = await getPerson\(request\);/.test(read('src/app/api/challenge/make/route.ts')));
+}
+
 console.log(`test:challenge: ${passed} passed, ${failures.length} failed`);
 if (failures.length) {
   for (const f of failures) console.log(`  FAIL ${f}`);
