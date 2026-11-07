@@ -6,7 +6,16 @@ published, no spending. Every build and typecheck holds the shared heavy lock. L
 
 | # | Item | State |
 |---|------|-------|
-| 1 | Pre-flight of #123 with CHALLENGE.public on locally: the friend's walk at phone size, checks, phone timing, small fixes on their own branches | running |
+| 1 | Pre-flight of #123 with CHALLENGE.public on locally: the friend's walk at phone size, checks, phone timing, small fixes on their own branches | done: the walk works end to end for Farcaster, and for Lens and Bluesky after fix 1; local database only (never .env.local, never the rehearsal DB). 7 fix branches pushed, no PR (below). Phone: /challenge first picture 0.9 s, Remix usable 3.9 s; a remix page 3.5 s, layout shift 0.17 |
+
+**Pre-flight fixes (each from origin/main, merges cleanly with #123 and each other):** 1 `fix-challenge-make-social-signin`
+c4fba955 (Lens/Bluesky friends couldn't make a picture); 2 `fix-challenge-farcaster-embed` 4ca670f0 (a cast of /challenge or
+a remix opened the home page; button words need the owner's yes); 3 `fix-p6u-proof-when-open` 1cb01b62 (check:principles
+would fail right after the flip); 4 `fix-test-challenge-posts-clock` 29a66aa5 (test:challenge red since 10:00 UTC on fixed
+dates); 5 `fix-sheet-landing-open-window` da796b23 (sheet pages said "Remixing opens Friday 6 November…" inside the window;
+behaviour change, owner's yes); 6 `fix-challenge-order-chips-style` 32796c4a; 7 `fix-check-ui-challenge-pictures` d2e950ce
+(check:ui broke with public on). **Before the flip:** fixes 1, 3, 4 and 7 at least; 2 and 5 on the owner's yes. The flip
+branch challenge-public-on already updates the 9 switch-off tests.
 | 2 | Speed fix 1 (thumbnails saved at publish + backfill, dry run only) and fix 3 (intro opens late), on branches | running |
 | 3 | Tomorrow's runbook and the prepared flip | done (below) |
 
