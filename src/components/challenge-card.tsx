@@ -141,10 +141,9 @@ export function ChallengeCard({ c, w }: { c: CardData; w: CardWords }) {
         <figure className="cc-hero">
           <Link href={big.href} className="cc-hero-link" data-version={big.versionId} aria-label={`${w.tapToRemix}: ${c.name}`}>
             {big.thumb ? (
-              // The big picture keeps the original: on a phone it is drawn about 390 px wide (over 1100 px on a 3x
-              // screen), past the largest copy, and the bases it shows are 32–47 KB already.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img className="cc-hero-img" src={big.thumb} alt={w.alt} width={576} height={768} />
+              // The copy here too: the bases are 576 px wide, so their 640 copy is the whole picture as WebP (about
+              // 15 KB for 35 KB), and it is the same file as the base's tile below, fetched once.
+              <ThumbImg className="cc-hero-img" src={big.thumb} sizes="(max-width: 640px) 100vw, 576px" alt={w.alt} width={576} height={768} />
             ) : (
               <span className="cc-hero-img cc-empty" aria-hidden="true" />
             )}

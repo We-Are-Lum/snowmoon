@@ -102,7 +102,7 @@ const src = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
 const usesThumb = (code: string, expr: string) => new RegExp(`<ThumbImg[^>]*src=\\{${expr.replace(/[.?]/g, '\\$&')}\\}`).test(code) && !new RegExp(`<img[^>]*src=\\{${expr.replace(/[.?]/g, '\\$&')}\\}`).test(code);
 const LISTS: [string, string[]][] = [
   ['src/components/home-feed.tsx', ['im.url']],
-  ['src/components/challenge-card.tsx', ['t.thumb']],
+  ['src/components/challenge-card.tsx', ['t.thumb', 'big.thumb']],
   ['src/components/challenge-remix-card.tsx', ['r.thumb']],
   ['src/components/image-feed.tsx', ['im.url']],
   ['src/components/reference-cards.tsx', ['im.url']],
