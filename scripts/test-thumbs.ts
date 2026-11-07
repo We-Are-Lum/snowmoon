@@ -109,8 +109,13 @@ const LISTS: [string, string[]][] = [
   ['src/components/pictures-latest.tsx', ['it.design.thumb']],
   ['src/components/design-index.tsx', ['s.thumb']],
 ];
-for (const [f, exprs] of LISTS) check(`lists: ${f} shows the copy (${exprs.join(', ')})`, exprs.every((e) => usesThumb(src(f), e)));
-check('planted: a list drawing the original with a plain <img> is caught', !usesThumb(src('src/components/home-feed.tsx').replace(/<ThumbImg src=\{im\.url\}/, '<img src={im.url}'), 'im.url'));
+// Home "Just made" (#124): NearThumb waits until near the screen, then draws the copy.
+const home = src('src/components/home-feed.tsx');
+const nearUsesThumb = (code: string) => /<NearThumb src=\{im\.url\}/.test(code) ? /if \(near\) return <ThumbImg src=\{src\}/.test(code) && !/<img[^>]*src=\{(near \? )?src/.test(code) : usesThumb(code, 'im.url');
+check('lists: src/components/home-feed.tsx shows the copy once near the screen (NearThumb, #124)', nearUsesThumb(home));
+check('planted: NearThumb drawing the original is caught', !nearUsesThumb(home.replace('if (near) return <ThumbImg src={src}', 'if (near) return <img src={src}')));
+for (const [f, exprs] of LISTS.filter(([f]) => f !== 'src/components/home-feed.tsx')) check(`lists: ${f} shows the copy (${exprs.join(', ')})`, exprs.every((e) => usesThumb(src(f), e)));
+check('planted: a list drawing the original with a plain <img> is caught', !usesThumb(src('src/components/image-feed.tsx').replace(/<ThumbImg src=\{im\.url\}/, '<img src={im.url}'), 'im.url'));
 check('the picture\'s own page keeps the original', /<img src=\{im\.url\}/.test(src('src/app/image/[id]/page.tsx')) && !/<ThumbImg/.test(src('src/app/image/[id]/page.tsx')));
 const ti = src('src/components/thumb-img.tsx');
 check('ThumbImg falls back to the original when a copy is missing (onError, and on mount for a failure before start-up)', /onError/.test(ti) && /naturalWidth === 0/.test(ti) && /src=\{small \?\? src\}/.test(ti));

@@ -42,8 +42,8 @@ export function HomeFeed({ items, unavailable }: { items: HomeFeedItem[]; unavai
             return (
               <li key={im.versionId}>
                 <Link href={`/image/${im.versionId}`} className="home-feed-thumb" aria-label={im.alt}>
-                  {/* The 320 px copy, not the 1024 px original (speed fix 1, 2026-11-07). */}
-                  <ThumbImg src={im.url} sizes="64px" alt="" width={64} height={64} loading="lazy" />
+                  {/* Near the screen only (#124), then the 320 px copy, not the 1024 px original (speed fix 1). */}
+                  <NearThumb src={im.url} />
                 </Link>
                 <div className="home-feed-body">
                   <span className="home-feed-what">
@@ -73,4 +73,26 @@ export function HomeFeed({ items, unavailable }: { items: HomeFeedItem[]; unavai
       </Link>
     </section>
   );
+}
+
+/**
+ * A 64 px thumbnail that asks for its picture only when it comes within 200 px of the screen (owner, 2026-11-06).
+ * loading="lazy" alone wasn't enough: on a slow phone Chrome starts lazy pictures up to a few screens ahead, so these
+ * two full-size readers' pictures (about 650 KB each) were downloading alongside the poster on a first visit. Until
+ * then, and before the page has started up, the box is empty at its size, so nothing moves.
+ */
+function NearThumb({ src }: { src: string }) {
+  const [near, setNear] = useState(false);
+  const [el, setEl] = useState<HTMLImageElement | null>(null);
+  useEffect(() => {
+    if (!el || near) return;
+    if (typeof IntersectionObserver === 'undefined') { setNear(true); return; }
+    const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) setNear(true); }, { rootMargin: '200px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [el, near]);
+  // Once near: the picture's 320 px copy (speed fix 1; src/components/thumb-img.tsx falls back to the original).
+  if (near) return <ThumbImg src={src} sizes="64px" alt="" width={64} height={64} decoding="async" fetchPriority="low" />;
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img ref={setEl} alt="" width={64} height={64} decoding="async" fetchPriority="low" />;
 }

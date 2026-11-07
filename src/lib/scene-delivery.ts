@@ -12,6 +12,9 @@
  *   the triptych with the title bar; the home card already prints the title under it, so the page shows the
  *   same three close-ups without any text (owner, 2026-10-18: "Probably best if starting image is just the 3
  *   of them no text"). A published version's recipe is fixed (0012), so this is not a new version.
+ * - posterSmall: the shown poster scaled to 800 px wide for the home and scenes cards (346 px wide on a phone), so a
+ *   first visit on a slow phone isn't waiting on the 1920 px file (455 KB, 71 KB at 800 px; owner, 2026-11-06). It ships
+ *   with the site (public/home/), named by its sha256 like the others.
  * How each is made, and its sha256: adaptations/fifteen-days/versions/<n>.json, "delivery" and "poster_shown".
  * Files are named by their sha256 on media.snowmoon.party, like the cut.
  */
@@ -22,6 +25,8 @@ export interface Delivery {
   wide: string;
   /** The poster shown in place of the recipe's, when there is one. */
   poster?: string;
+  /** The shown poster at 800 px wide, for the cards. */
+  posterSmall?: string;
 }
 
 const BY_CUT: Record<string, Delivery> = {
@@ -34,6 +39,7 @@ const BY_CUT: Record<string, Delivery> = {
     phone: 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-phone-3f91cf56859f.mp4',
     wide: 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-wide-b64332cf553c.mp4',
     poster: 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-shown-4fc80109065b.jpg',
+    posterSmall: '/home/fifteen-days-poster-shown-800-ae03b1e93456.jpg',
   },
 };
 
@@ -44,4 +50,9 @@ export function deliveryFor(cutUrl: string | null): Delivery | null {
 /** The poster to show for a version: its shown poster if it has one, else the recipe's. */
 export function posterFor(cutUrl: string | null, recipePoster: string | null): string | null {
   return deliveryFor(cutUrl)?.poster ?? recipePoster;
+}
+
+/** The poster for a card: the 800 px copy where there is one, else posterFor's. */
+export function cardPosterFor(cutUrl: string | null, recipePoster: string | null): string | null {
+  return deliveryFor(cutUrl)?.posterSmall ?? posterFor(cutUrl, recipePoster);
 }
