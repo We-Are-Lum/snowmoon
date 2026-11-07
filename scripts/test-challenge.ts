@@ -1469,6 +1469,17 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('l6 likes are off (planned 12 November): the slot renders nothing', L.likesOn() === false && /if \(!likesOn\(\)\) return null;/.test(read('src/components/challenge-like.tsx')));
 }
 
+{
+  // Pre-flight 2026-11-07: cast in Farcaster, /challenge and a picture's page open themselves (not the home page, the
+  // site's default embed), a picture's page with its 3:2 card (/api/image-card) and "Remix this", as a sheet's landing.
+  const hub = read('src/app/challenge/page.tsx');
+  const pic = read('src/app/challenge/p/[id]/page.tsx');
+  const opens = (t: string, path: string) => t.includes("'fc:miniapp': embed") && t.includes(`action: { type: 'launch_frame', name: APP_NAME, url: \`\${appUrl()}${path}`);
+  check('E1 /challenge cast in Farcaster opens /challenge', opens(hub, '/challenge`'));
+  check('E1 a picture\'s page cast in Farcaster opens that page, with its card and "Remix this"', opens(pic, '/challenge/p/${v.versionId}`') && pic.includes('/api/image-card/${v.versionId}') && pic.includes("title: 'Remix this'"));
+  proof('E1 a picture\'s page embed that opens the home page is caught', !opens(pic.replace('/challenge/p/${v.versionId}`, splash', '`, splash'), '/challenge/p/${v.versionId}`'));
+}
+
 // --- Every submission, and no counts (branch contest, 2026-11-04) ---------------------------------------------------
 {
   const page = read('src/app/challenge/entries/page.tsx');

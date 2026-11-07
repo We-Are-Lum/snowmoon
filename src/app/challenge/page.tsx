@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { CHALLENGE } from '~/lib/config';
+import { APP_NAME, CHALLENGE, appUrl } from '~/lib/config';
 import { db } from '~/lib/db';
 import { challengeView } from '~/lib/challenge/view';
 import { ChallengeBody } from '~/components/challenge-body';
+import { PAPER } from '~/lib/tokens';
 
 /**
  * The remix challenge's landing page, the short version (owner, 2026-11-04; docs/proposals/challenge-short-page.md;
@@ -21,7 +22,13 @@ export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   if (!CHALLENGE.public) return { robots: { index: false, follow: false } };
-  return { title: 'Remix challenge', description: 'The remix challenge on Snowmoon Party: pick a character, remix one of its bases.' };
+  // Cast in Farcaster (pre-flight 2026-11-07): the button opens /challenge, not the home page (the site's card otherwise).
+  const embed = JSON.stringify({
+    version: '1',
+    imageUrl: `${appUrl()}/embed.png`,
+    button: { title: 'Remix challenge', action: { type: 'launch_frame', name: APP_NAME, url: `${appUrl()}/challenge`, splashImageUrl: `${appUrl()}/splash.png`, splashBackgroundColor: PAPER } },
+  });
+  return { title: 'Remix challenge', description: 'The remix challenge on Snowmoon Party: pick a character, remix one of its bases.', other: { 'fc:miniapp': embed, 'fc:frame': embed } };
 }
 
 export default async function ChallengePage() {
