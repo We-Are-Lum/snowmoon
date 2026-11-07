@@ -603,7 +603,15 @@ export const CHALLENGE = {
    * remixOfBase); while a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks
    * before the picks.
    */
-  bases: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
+  // Published by the owner's run of scripts/publish-bases.ts, 2026-11-06 (version ids; the current default first).
+  bases: {
+    zei: ['bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d'],
+    gladias: ['68364375-0f33-46fd-9755-2fd2b551198a', '8a491b21-2d32-4673-946c-cff28728088b', 'd5b4c137-71d6-430d-84e1-9ec4044568dc'],
+    bai: ['110d5973-31c2-4d96-9a88-5838d8a6d868'],
+    seila: ['1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba'],
+    deluin: ['75a94420-df70-4f43-a3a6-4c2b571e72ab', 'a69718e0-89d9-465f-a783-d4b98aefbe85', '0a126522-d3d5-4e12-a674-18f49dbffbed'],
+    mu: ['15a9af1d-9eef-4e25-be57-738d9823dd74'],
+  } as Record<string, readonly string[]>,
   /**
    * Each character's current default look (owner, 2026-11-05, answer 10; the accounts session's note of that evening):
    * a published sheet's element id (at its newest version) or version id. Used only for the site's own pictures: the
@@ -613,7 +621,17 @@ export const CHALLENGE = {
    * the character's first base stands in. /challenge still shows the bases in a fresh random order (P5g); this sets no
    * base above the others there.
    */
-  defaultLooks: { zei: null, gladias: null, bai: null, seila: null, deluin: null, mu: null } as Record<string, string | null>,
+  // 2026-11-06: each character's current-default base, as published (Deluin and Gladias: look b; Bai: the front from Garance's edit).
+  // Each character's current default (launch-picks current_default; owner, 2026-11-06): look b for Gladias (gladias:b, front
+  // sha256 b9b6c009…) and Deluin (deluin:b, the b4 recast, front 2b45d17d…); the one Animated series base for the others.
+  defaultLooks: {
+    zei: 'bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d',
+    gladias: '68364375-0f33-46fd-9755-2fd2b551198a',
+    bai: '110d5973-31c2-4d96-9a88-5838d8a6d868',
+    seila: '1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba',
+    deluin: '75a94420-df70-4f43-a3a6-4c2b571e72ab',
+    mu: '15a9af1d-9eef-4e25-be57-738d9823dd74',
+  } as Record<string, string | null>,
   /** How many bases each character has (owner, 2026-11-04): three for Deluin and Gladias, one for the rest for now. */
   baseCount: { zei: 1, gladias: 3, bai: 1, seila: 1, deluin: 3, mu: 1 } as Record<string, number>,
   /** The most bases any character may have. */
@@ -626,7 +644,17 @@ export const CHALLENGE = {
    * docs/proposals/challenge-first-remixes.md). Empty until they exist: /challenge shows empty slots. Chosen by the
    * owner, not by any count (P5g's third narrow exception, pending the owner's yes).
    */
-  firstRemixes: { zei: [], bai: [], gladias: [], seila: [], deluin: [], mu: [] } as Record<string, readonly string[]>,
+  // Published by the owner's run of scripts/import-first-remixes.ts --launch, 2026-11-06. Deluin: the two the owner picked
+  // on 2026-11-04 (hood and mug, the game board). The ink ledge (ced288e6-1c3f-4d58-bb4c-839ef774bb71) is published on its
+  // own page but not listed: firstRemixesShown is 2, and firstRemixesProblems refuses a longer list.
+  firstRemixes: {
+    zei: ['70c0a8c3-41a5-43ae-83f4-4b0ddfa9ed51'],
+    gladias: ['f07a2f79-9787-4f9d-bb90-5b7ea94ad117', 'd4d8bf9f-0ca9-4a62-871b-0aa10a1fbc25'],
+    bai: [],
+    seila: ['399836db-6cd9-49e3-9302-77686b2a1161', 'b9983b8c-cde4-40c1-8601-f3f4702d1742'],
+    deluin: ['fb80b4b1-bd9f-4fd1-87ef-4e8003347aaf', '42588f48-6673-478e-ab54-8e30372743c0'],
+    mu: ['2f29b048-0e82-4d87-8193-9cfffedc9123', 'bb08afdb-f77f-4e07-b451-756460922714'],
+  } as Record<string, readonly string[]>,
   firstRemixesShown: 2,
   /**
    * The bases' fixed style order (owner, 2026-11-04): within a character its bases are listed in this order, the same
