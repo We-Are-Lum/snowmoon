@@ -12,7 +12,7 @@ import { BookQuotes } from '~/components/design-book';
 import { DesignBar } from '~/components/design-bar';
 import { AiTag } from '~/components/ai-tag';
 import { CHALLENGE } from '~/lib/config';
-import { challengeOpenNow, phase } from '~/lib/challenge/rules';
+import { basesOf, challengeOpenNow, phase } from '~/lib/challenge/rules';
 import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-sheets';
 import { sheetChallenge } from '~/lib/challenge/sheet-lines';
 import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
@@ -96,11 +96,19 @@ export default async function DesignPage({ params }: Props) {
   // once the owner has opened the challenge (CHALLENGE.public, read by isLanding). While it is admin-only the page as
   // served says nothing of it: no landing, no Remix button, no "Remixing opens …" line, no challenge preview.
   const landing = ch !== null && isLanding({ kind: d.kind, challengeCharacter: isChallengeCharacter(d.entity), body });
+  // Pre-flight 2026-11-07: while entries are pictures (CHALLENGE.pictureEntries), sheets are invitation-only, so
+  // challengeOpen is false inside the window; the landing said "Remixing opens <the open date>" on every sheet, the six
+  // bases included. Inside the window it is open: a base's Remix opens its remix screen (as its tile on /challenge
+  // does), any other sheet's opens the character's card on /challenge.
+  const picturesOpen = !challengeOpen && CHALLENGE.pictureEntries && d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow();
+  const isBase = picturesOpen && character ? basesOf(character.slug).some((b) => b === d.shown.versionId.toLowerCase() || b === String(d.elementId).toLowerCase()) : false;
+  const landingPhase = challengeOpen || picturesOpen ? 'open' : phase() === 'closed' ? 'closed' : 'before';
+  const remixHref = picturesOpen ? (isBase ? `/challenge/make?from=${d.shown.versionId}` : `/challenge#${character?.slug ?? ''}`) : undefined;
 
   const main = (
     <article className="dz-main">
       {landing && ch && (
-        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={by} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={challengeOpen ? 'open' : phase() === 'closed' ? 'closed' : 'before'} posts={ch.posts} />
+        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={by} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={landingPhase} remixHref={remixHref} posts={ch.posts} />
       )}
       {character && <BookQuotes name={character.name} quotes={character.quotes} />}
       <h1 className="dz-title">{title}</h1>

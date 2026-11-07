@@ -22,9 +22,11 @@ export function ChallengeRemixLanding(p: {
   remix: boolean;
   front: DesignPicture;
   phase: 'before' | 'open' | 'closed';
+  /** Where Remix goes while entries are open, when not this version's sheet form (pictures are the entries). */
+  remixHref?: string;
   posts: PostedOnItem[];
 }) {
-  const action = landingAction(p.versionId, p.phase);
+  const action = landingAction(p.versionId, p.phase, p.remixHref);
   return (
     <section className="rl-landing" aria-label={L.previewTitle(p.name, p.title)}>
       <ChallengeArrival text={L.arrival(p.name, p.phase)} linkText={L.arrivalLink} />

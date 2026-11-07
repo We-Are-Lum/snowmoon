@@ -33,8 +33,8 @@ export const isLanding = (p: { kind: string; challengeCharacter: boolean; body: 
   pub && p.kind === 'character' && p.challengeCharacter && landingPicture(p.body) !== null;
 
 /** The big button: the remix form for this version while entries are open; a line in its place otherwise. */
-export function landingAction(versionId: string, ph: Phase): { href: string; label: string } | { line: string } {
-  if (ph === 'open') return { href: `/references/designs/new?from=${versionId}`, label: LANDING_WORDING.remix };
+export function landingAction(versionId: string, ph: Phase, href?: string): { href: string; label: string } | { line: string } {
+  if (ph === 'open') return { href: href ?? `/references/designs/new?from=${versionId}`, label: LANDING_WORDING.remix };
   return { line: ph === 'before' ? LANDING_WORDING.opensLine() : LANDING_WORDING.closedLine() };
 }
 
