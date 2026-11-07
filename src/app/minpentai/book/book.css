@@ -69,3 +69,16 @@
 .mb-past-body { padding: 0 0 12px; }
 .mb-live-foot { margin-top: 18px; }
 .mb-live-links { margin: 8px 0; }
+
+/* 2D is for thinking, 3D for the action (owner, 2026-11-03): the 3D view beside the 2D board on wide screens, the
+   action in the board's place on a phone. */
+.mb-boards-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+.mb-board3d { width: 100%; background: #050507; overflow: hidden; }
+.mb-top-board:has(.mb-boards-2) { max-width: calc((100vh - 170px) * var(--ar, 1.3) * 2); }
+.mb-speed[aria-pressed="true"] { background: #46D7E8; color: #0E0F13; border-color: #46D7E8; }
+.mb-animate { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; min-height: 36px; }
+.mb-animate input { width: 18px; height: 18px; }
+.mb-board3d-wrap { position: relative; }
+.mb-instant { position: absolute; inset: 0; width: 100%; height: 100%; background: transparent; border: 0; padding: 8px; display: flex; align-items: flex-start; justify-content: flex-start; cursor: pointer; }
+.mb-instant span { font-family: var(--label, monospace); font-size: 12px; letter-spacing: .06em; color: #F2F2F5; background: rgba(5, 5, 7, .7); border: 1px solid #46D7E8; padding: 3px 8px; }
+.mb-animate select { min-height: 32px; }
