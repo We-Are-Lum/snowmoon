@@ -41,8 +41,7 @@ export function HomeFeed({ items, unavailable }: { items: HomeFeedItem[]; unavai
             return (
               <li key={im.versionId}>
                 <Link href={`/image/${im.versionId}`} className="home-feed-thumb" aria-label={im.alt}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={im.url} alt="" width={64} height={64} loading="lazy" />
+                  <NearThumb src={im.url} />
                 </Link>
                 <div className="home-feed-body">
                   <span className="home-feed-what">
@@ -72,4 +71,24 @@ export function HomeFeed({ items, unavailable }: { items: HomeFeedItem[]; unavai
       </Link>
     </section>
   );
+}
+
+/**
+ * A 64 px thumbnail that asks for its picture only when it comes within 200 px of the screen (owner, 2026-11-06).
+ * loading="lazy" alone wasn't enough: on a slow phone Chrome starts lazy pictures up to a few screens ahead, so these
+ * two full-size readers' pictures (about 650 KB each) were downloading alongside the poster on a first visit. Until
+ * then, and before the page has started up, the box is empty at its size, so nothing moves.
+ */
+function NearThumb({ src }: { src: string }) {
+  const [near, setNear] = useState(false);
+  const [el, setEl] = useState<HTMLImageElement | null>(null);
+  useEffect(() => {
+    if (!el || near) return;
+    if (typeof IntersectionObserver === 'undefined') { setNear(true); return; }
+    const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) setNear(true); }, { rootMargin: '200px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [el, near]);
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img ref={setEl} src={near ? src : undefined} alt="" width={64} height={64} decoding="async" fetchPriority="low" />;
 }
