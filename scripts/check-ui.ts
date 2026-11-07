@@ -2031,6 +2031,33 @@ try {
   if (CHALLENGE.public) await checkChallengeLanding();
   else console.log('check:ui: the /challenge landing on local data waits for CHALLENGE.public (admin-only now)');
   await checkMarkdownPages();
+  // The intro before the page has started up (speed fix 3, 2026-11-07; src/lib/intro-early.ts): with the site's
+  // scripts held back, a first visit already shows the first card and its Skip works (it marks the intro seen and hides
+  // it); a device that has seen it never shows it, and its hidden copy fetches none of the intro's pictures.
+  {
+    const introFile = JSON.parse(readFileSync('config/intro.json', 'utf8')) as { version: string; cards: { id: string }[] };
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
+    await ctx.route(/\/_next\/static\/chunks\//, (r) => r.abort());
+    const page = await ctx.newPage();
+    await page.goto(BASE + '/', { waitUntil: 'load' });
+    if (INJECT) await page.addStyleTag({ content: INJECT });
+    const card = page.locator('.intro-card');
+    if (!(await card.isVisible())) fail('intro (before start-up): a first visit to / does not show the intro from the page\'s HTML');
+    else {
+      if ((await card.getAttribute('data-card')) !== introFile.cards[0].id) fail('intro (before start-up): not on the first card');
+      await page.locator('.intro-skip').click();
+      if (await card.isVisible()) fail('intro (before start-up): Skip does not close it');
+      if ((await page.evaluate(() => localStorage.getItem('snowmoon.intro-seen'))) !== introFile.version) fail('intro (before start-up): Skip does not remember it');
+    }
+    const pics: string[] = [];
+    page.on('request', (q) => { if (q.resourceType() === 'image' && /images\/seed\//.test(q.url())) pics.push(q.url()); });
+    await page.reload({ waitUntil: 'load' });
+    if (await card.isVisible()) fail('intro (before start-up): shown again after it was skipped');
+    if (!(await card.count())) fail('intro (before start-up): the hidden copy is not in the HTML (this check would not prove anything)');
+    await page.waitForTimeout(1500);
+    if (pics.length) fail(`intro (before start-up): a device that has seen it still fetched the intro's pictures: ${pics.join(', ')}`);
+    await ctx.close();
+  }
   // First-visit intro (config/intro.json): once, home page only, Skip on every
   // card, remembered on the device without cookies; deep links go straight in.
   {
@@ -2086,33 +2113,6 @@ try {
     if (cookies.length) fail(`intro: the site set cookies: ${cookies.map((c) => c.name).join(', ')}`);
     await page.goto(BASE + '/chapter/1', { waitUntil: 'networkidle' });
     if (await page.locator('.what-is-this').isVisible()) fail('intro: "What is this?" still shown after the intro was seen');
-    await ctx.close();
-  }
-  // The intro before the page has started up (speed fix 3, 2026-11-07; src/lib/intro-early.ts): with the site's
-  // scripts held back, a first visit already shows the first card and its Skip works (it marks the intro seen and hides
-  // it); a device that has seen it never shows it, and its hidden copy fetches none of the intro's pictures.
-  {
-    const introFile = JSON.parse(readFileSync('config/intro.json', 'utf8')) as { version: string; cards: { id: string }[] };
-    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
-    await ctx.route(/\/_next\/static\/chunks\//, (r) => r.abort());
-    const page = await ctx.newPage();
-    await page.goto(BASE + '/', { waitUntil: 'load' });
-    if (INJECT) await page.addStyleTag({ content: INJECT });
-    const card = page.locator('.intro-card');
-    if (!(await card.isVisible())) fail('intro (before start-up): a first visit to / does not show the intro from the page\'s HTML');
-    else {
-      if ((await card.getAttribute('data-card')) !== introFile.cards[0].id) fail('intro (before start-up): not on the first card');
-      await page.locator('.intro-skip').click();
-      if (await card.isVisible()) fail('intro (before start-up): Skip does not close it');
-      if ((await page.evaluate(() => localStorage.getItem('snowmoon.intro-seen'))) !== introFile.version) fail('intro (before start-up): Skip does not remember it');
-    }
-    const pics: string[] = [];
-    page.on('request', (q) => { if (q.resourceType() === 'image' && /images\/seed\//.test(q.url())) pics.push(q.url()); });
-    await page.reload({ waitUntil: 'load' });
-    if (await card.isVisible()) fail('intro (before start-up): shown again after it was skipped');
-    if (!(await card.count())) fail('intro (before start-up): the hidden copy is not in the HTML (this check would not prove anything)');
-    await page.waitForTimeout(1500);
-    if (pics.length) fail(`intro (before start-up): a device that has seen it still fetched the intro's pictures: ${pics.join(', ')}`);
     await ctx.close();
   }
   {
