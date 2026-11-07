@@ -658,8 +658,8 @@ export const CHALLENGE = {
   firstRemixesShown: 2,
   /**
    * Who else a base credits as its maker, by the base's version or element id (owner, 2026-11-07: "name everyone the page
-   * credits as maker, so Bai's sheet, made from Garance's edit, credits Garance too"). Shown with the maker on the base's
-   * landing ("Made by … and …") and named in its share text by the @ rule. Bai's base: its front was made from Garance's
+   * credits as maker, so Bai's sheet, made from Garance's edit, credits Garance too"). Shown before the maker on the base's
+   * landing ("Made by @garance and @naaate · maintainer") and named first in its share text by the @ rule. Bai's base: its front was made from Garance's
    * edit (the owner confirmed it, 2026-11-05; its recipe's credit: "Garance (the edit used as reference)"); @garance is
    * FID 193912 on Farcaster (ADMINS).
    */

@@ -95,8 +95,9 @@ export default async function DesignPage({ params }: Props) {
   // Everyone the page credits as maker (the maker, and a base's co-makers, CHALLENGE.coMakers), and every share text
   // written by the @ rule (owner, 2026-11-07; src/lib/challenge/share-makers.ts): "@" only in the maker's own network.
   const coMakers = CHALLENGE.coMakers[d.shown.versionId.toLowerCase()] ?? CHALLENGE.coMakers[String(d.elementId).toLowerCase()] ?? [];
-  const makers = [shareMaker(d.byName, d.byFid), ...coMakers];
-  const byShown = coMakers.length ? joinNames([by, ...coMakers.map((m) => (m.network === 'farcaster' ? `@${m.handle}` : m.handle))]) : by;
+  // Co-makers first (owner, 2026-11-07: "Made by @garance and @naaate · maintainer"), on the page and in every share text.
+  const makers = [...coMakers, shareMaker(d.byName, d.byFid)];
+  const byShown = coMakers.length ? joinNames([...coMakers.map((m) => (m.network === 'farcaster' ? `@${m.handle}` : m.handle)), by]) : by;
   // From the flip (before the open date too) until the close, as /challenge says (owner, 2026-11-07).
   const inChallenge = d.kind === 'character' && isChallengeCharacter(d.entity) && remixingOpenNow();
   const shareTexts = inChallenge
@@ -120,7 +121,7 @@ export default async function DesignPage({ params }: Props) {
   const main = (
     <article className="dz-main">
       {landing && ch && (
-        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={byShown} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={landingPhase} remixHref={remixHref} note={picturesOpen && phase() === 'before' ? HUB.line('before') : undefined} posts={ch.posts} />
+        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={byShown} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={landingPhase} remixHref={remixHref} note={picturesOpen && phase() === 'before' ? HUB.sheetLine('before') : undefined} posts={ch.posts} />
       )}
       {character && <BookQuotes name={character.name} quotes={character.quotes} />}
       <h1 className="dz-title">{title}</h1>

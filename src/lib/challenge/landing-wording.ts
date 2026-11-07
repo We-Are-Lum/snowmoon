@@ -12,6 +12,8 @@ import { phase, shortDateText } from './rules';
 export const LANDING_BEFORE_OPEN = 'Pictures made before then are for trying it out, and can’t be entered.';
 
 export const LANDING_WORDING = {
+  /** The sheet pages' copy of the line, without "Pick a character." (owner, 2026-11-07): "Tap a picture to remix it. …". */
+  sheetLine: (now: ReturnType<typeof phase> = phase()) => LANDING_WORDING.line(now).replace(/^Pick a character\. /, ''),
   /**
    * The short page's one line (owner, 2026-11-04: "one line on what to do"): what to do, then when, from
    * CHALLENGE.dates. Draft wording.
