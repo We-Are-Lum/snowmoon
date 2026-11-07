@@ -19,7 +19,9 @@ const EVENT = 'snowmoon:signin';
  * of Farcaster. A Farcaster sign-in, when there is one, wins.
  */
 const WALLET_KEY = 'snowmoon.wallet';
-const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/you', '/api/scenes/', '/api/make/', '/api/oauth/approve', '/api/agents', '/api/direction', '/api/drafts', '/api/notes', '/api/requests', '/api/designs/picks', '/api/chat/status', '/api/chat/ask', '/api/minpentai/m/'];
+// /api/challenge/make: the remix screen's Make takes a Lens or Bluesky sign-in (getPerson), as Make an image does
+// (pre-flight 2026-11-07: without it a Lens or Bluesky person's Make went unsigned and was answered "Sign in to make it").
+const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/you', '/api/scenes/', '/api/make/', '/api/oauth/approve', '/api/agents', '/api/direction', '/api/drafts', '/api/notes', '/api/requests', '/api/designs/picks', '/api/challenge/make', '/api/chat/status', '/api/chat/ask', '/api/minpentai/m/'];
 /**
  * Routes matched exactly rather than by prefix: hiding one's own picture (the You page, owner 2026-10-18).
  * Not every /api/images/<id>/… route: like and report take a Farcaster sign-in only, and a wallet
