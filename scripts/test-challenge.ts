@@ -1151,10 +1151,14 @@ globalThis.fetch = realFetch;
 // "Posted on" in the database.
 CHALLENGE.posts = true;
 const post = (id: string, at: string, network: 'farcaster' | 'lens' = 'lens') => ({ network, id, handle: 'someone', at, url: network === 'lens' ? `https://hey.xyz/posts/${id}` : `https://farcaster.xyz/someone/0x0a1b2c3d`, links: [], writer: null });
-check('a post is kept', (await P.addPost(S, { versionId: f500b.versionId, person: 500, post: post('aaa', '2026-11-07T10:00:00Z') })).ok);
-const again = await P.addPost(S, { versionId: f500b.versionId, person: 501, post: post('aaa', '2026-11-07T10:00:00Z') });
+// Dated after now (pre-flight 2026-11-07): the submissions above added posts dated now to this version, so fixed dates
+// started failing "newest first" once the clock passed them (10:00 UTC on 7 Nov 2026).
+const later = (days: number) => new Date(Date.now() + days * 86_400_000).toISOString();
+const atA = later(1);
+check('a post is kept', (await P.addPost(S, { versionId: f500b.versionId, person: 500, post: post('aaa', atA) })).ok);
+const again = await P.addPost(S, { versionId: f500b.versionId, person: 501, post: post('aaa', atA) });
 check('the same post is kept once per version', again.ok && !again.added);
-await P.addPost(S, { versionId: f500b.versionId, person: -3, post: post('bbb', '2026-11-09T10:00:00Z') });
+await P.addPost(S, { versionId: f500b.versionId, person: -3, post: post('bbb', later(3)) });
 const listed = await P.postsFor(S, f500b.versionId);
 check('posts are listed newest first', listed.map((p) => p.url.split('/').pop()).slice(0, 2).join() === 'bbb,aaa', listed.map((p) => p.url).join());
 check('only the person who added it can remove it', !(await P.removeOwnPost(S, listed[0].id, 500)) && (await P.removeOwnPost(S, listed[0].id, -3)));
