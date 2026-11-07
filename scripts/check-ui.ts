@@ -1874,7 +1874,7 @@ async function checkChallengeLanding() {
       await checkFloors(page, `/challenge/remixes ${tag}`, scheme);
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/remixes ${tag}: scrolls sideways`);
       const newest = FX.remixes.map((r) => r.versionId);
-      const feed = await page.locator('.ch-feed .ch-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-version')));
+      const feed = await page.locator('.ch-feed .ch-card, .ch-entries-list .ch-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-version')));
       if (feed.join() !== newest.join()) fail(`/challenge/remixes ${tag}: not every remix newest first (${feed.join()})`);
       if ((await page.locator('.ch-chip[aria-current="page"]').textContent())?.trim() !== 'All') fail(`/challenge/remixes ${tag}: "All" isn't the current filter`);
       const chips = await page.locator('.ch-chip[data-character]').evaluateAll((els) => els.map((e) => e.getAttribute('data-character')));
@@ -1884,7 +1884,7 @@ async function checkChallengeLanding() {
       await page.locator('.ch-chip[data-character="bai"]').click();
       await page.waitForURL('**/challenge/remixes?character=bai');
       await page.waitForLoadState('networkidle');
-      const bai = await page.locator('.ch-feed .ch-card').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-character')}:${e.getAttribute('data-version')}`));
+      const bai = await page.locator('.ch-feed .ch-card, .ch-entries-list .ch-card').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-character')}:${e.getAttribute('data-version')}`));
       const want = FX.remixes.filter((r) => r.character === 'bai').map((r) => `bai:${r.versionId}`);
       if (bai.join() !== want.join()) fail(`/challenge/remixes?character=bai ${tag}: shows ${bai.join()}`);
       if ((await page.locator('.ch-chip[aria-current="page"]').getAttribute('data-character')) !== 'bai') fail(`/challenge/remixes ${tag}: Bai isn't marked as the current filter`);
