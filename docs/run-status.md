@@ -1,3 +1,33 @@
+# Run status: overnight run of 7 Nov (contest session, snowmoon-d3; from about 01:20 PT)
+
+Kept by the coding agent (Claude, a closed model by Anthropic). No merges, no flip, no production migrations, nothing
+published, no spending. Every build and typecheck holds the shared heavy lock. Local servers point at a LOCAL database
+(the worktrees' .env.local points at production: never used for a walk).
+
+| # | Item | State |
+|---|------|-------|
+| 1 | Pre-flight of #123 with CHALLENGE.public on locally: the friend's walk at phone size, checks, phone timing, small fixes on their own branches | running |
+| 2 | Speed fix 1 (thumbnails saved at publish + backfill, dry run only) and fix 3 (intro opens late), on branches | running |
+| 3 | Tomorrow's runbook and the prepared flip | done (below) |
+
+## Tomorrow's runbook (the owner's order: merge #123 → flip on his word → Garance tests live → announce)
+
+1. **Merge #123** (challenge-config-ids, 39dd1fd1; no migration, no legal text) on the owner's word. Wait for the deploy;
+   run check:shipped, check:principles, check:ui, check:miniapp (and check:snap-live) against production. /challenge
+   must still answer 404 to a non-admin.
+2. **The flip: branch `challenge-public-on` (4d9dd774), prepared, NOT merged, no PR.** It is #123 plus
+   `CHALLENGE.public: true` and the two tests that assumed "off as committed": test:challenge's switch block now turns
+   the switch off for its own checks (so "nothing opens by date alone" is still proven), and P2m expects public on.
+   Checks on it: tsc clean (under the lock); test:challenge 516/516 + moments 127; check:principles against production
+   70/71 (P6d not run here: no vercel CLI). Open the PR on the owner's word, merge, deploy, then the live checks with
+   /challenge now 200, plus a phone look.
+3. **Time /challenge on a phone** right after the flip: `BASE=https://snowmoon.party node phone-speed.mjs /,/challenge 3 phone`
+   (script in the accounts session's scratchpad, ce1324e0…/phone-speed.mjs; 150 ms RTT, 1.6 Mbps, 4× CPU).
+4. **Garance tests on the live page** (remix, publish, Post it first, Submit).
+5. **Announce** (the owner's words).
+
+---
+
 # Run status: overnight run of 2026-11-05 (from about 23:10 PT, 4 Nov)
 
 Kept by the coding agent (Claude, a closed model by Anthropic). Updated after each item. No secrets here. No merges
