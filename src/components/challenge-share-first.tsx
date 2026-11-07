@@ -11,7 +11,7 @@ import { sdk } from '@farcaster/miniapp-sdk';
  * made in the Farcaster app is handed to Submit below (`onCast`), so Submit is one tap there. Every word comes from the
  * server (`w`).
  */
-export type ShareFirstWords = { head: string; text: string; copy: string; copied: string; on: { farcaster: string; bluesky: string; lens: string } };
+export type ShareFirstWords = { head: string | null; text: string; copy: string; copied: string; on: { farcaster: string; bluesky: string; lens: string } };
 
 export function ChallengeShareFirst({ path, w, onCast }: { path: string; w: ShareFirstWords; onCast?: (hash: string) => void }) {
   const [inApp, setInApp] = useState(false);
@@ -43,10 +43,12 @@ export function ChallengeShareFirst({ path, w, onCast }: { path: string; w: Shar
     }
   };
   return (
-    <section className="sf-share" aria-labelledby="sf-head">
-      <h2 id="sf-head" className="sf-head">
-        {w.head}
-      </h2>
+    <section className="sf-share" aria-labelledby={w.head ? 'sf-head' : undefined} aria-label={w.head ? undefined : w.copy}>
+      {w.head && (
+        <h2 id="sf-head" className="sf-head">
+          {w.head}
+        </h2>
+      )}
       <div className="sf-buttons">
         {inApp ? (
           <button type="button" className="ia-button sf-button" onClick={cast}>

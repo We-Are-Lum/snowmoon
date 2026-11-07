@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { RulesView } from '~/lib/challenge/rules-view';
 import { AiTag } from './ai-tag';
+import { CHALLENGE } from '~/lib/config';
 
 /**
  * /challenge/rules, drawn from its data (src/lib/challenge/rules-view.ts), which carries every word. No hooks, so the
@@ -66,7 +67,7 @@ export function ChallengeRulesBody({ v }: { v: RulesView }) {
                   <Link href={e.href} className="dz-row">
                     {e.thumb ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img className="dz-thumb" src={e.thumb} alt={v.alt} width={64} height={48} loading="lazy" />
+                      <img className={CHALLENGE.pictureEntries ? 'dz-thumb dz-thumb-pic' : 'dz-thumb'} src={e.thumb} alt={v.alt} width={64} height={CHALLENGE.pictureEntries ? 36 : 48} loading="lazy" />
                     ) : (
                       <span className="dz-thumb dz-thumb-empty" aria-hidden="true" />
                     )}
@@ -77,7 +78,7 @@ export function ChallengeRulesBody({ v }: { v: RulesView }) {
                       <span className="dz-row-meta">{e.meta}</span>
                       {e.thumb && (
                         <span className="dz-row-ai">
-                          <AiTag what="Views" />
+                          {CHALLENGE.pictureEntries ? <AiTag /> : <AiTag what="Views" />}
                         </span>
                       )}
                     </span>

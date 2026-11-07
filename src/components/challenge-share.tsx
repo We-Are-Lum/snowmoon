@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
-import { authFetch, useAuth, useWalletSession } from '~/lib/client-auth';
+import { authFetch, socialSessionPerson, useAuth, useSocialSession, useWalletSession } from '~/lib/client-auth';
 import { SHARE_WORDING as W } from '~/lib/challenge/share-wording';
 import { isAdmin } from '~/lib/admins';
 import { PostLinkField } from './post-link-field';
@@ -16,9 +16,13 @@ import { PostLinkField } from './post-link-field';
  * the challenge is admin-only (owner, 2026-11-04), only admins see it, to test. `text` is the post's words, written by
  * the server (it mentions the challenge only while the challenge is open), so no challenge words are in this script.
  */
-export function ChallengeShare({ versionId, text, posts }: { versionId: string; text: string; posts: boolean }) {
+export function ChallengeShare({ versionId, text: makersText, othersText, byFid, posts }: { versionId: string; text: string; othersText?: string; byFid?: number; posts: boolean }) {
   const auth = useAuth();
   const wallet = useWalletSession();
+  const social = useSocialSession();
+  // Anyone but its maker shares it with words that aren't "My remix" (owner, 2026-11-07), when the server gives them.
+  const mine = byFid !== undefined && ((auth.kind === 'signed-in' && auth.fid === byFid) || (social !== null && socialSessionPerson(social.token) === byFid));
+  const text = othersText && !mine ? othersText : makersText;
   const [inApp, setInApp] = useState(false);
   const [origin, setOrigin] = useState('https://snowmoon.party');
   const [address, setAddress] = useState('');

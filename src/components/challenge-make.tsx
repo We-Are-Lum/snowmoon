@@ -78,7 +78,10 @@ export function ChallengeMake() {
   }, [view, moment]);
   // The chosen chip in view in the strip (it scrolls sideways).
   useEffect(() => {
-    document.querySelector('.mk-strip [aria-pressed="true"]')?.scrollIntoView({ block: 'nearest', inline: 'center' });
+    // Only the strip scrolls (sideways): the page stays at the top, with the box and "Make it" in view.
+    const strip = document.querySelector<HTMLElement>('.mk-strip');
+    const chip = strip?.querySelector<HTMLElement>('[aria-pressed="true"]');
+    if (strip && chip) strip.scrollLeft = chip.offsetLeft - (strip.clientWidth - chip.clientWidth) / 2;
   }, [moment, view]);
   useEffect(() => {
     try {
@@ -134,7 +137,29 @@ export function ChallengeMake() {
           <span className="dz-muted">{w.remixing}</span> <AiTag />
         </figcaption>
       </figure>
-
+      {/* The box and "Make it" right under the picture, on a phone's first screen (owner, 2026-11-07); the moment
+          (already drawn, shown chosen) and the model follow. */}
+      <PublishedTextField id="mk-words" label={w.wordsLabel} value={words} onChange={setWords} rows={3} maxLength={600} placeholder={w.wordsPlaceholder} />
+      {signedIn ? (
+        <button type="button" className="rl-remix mk-make" onClick={make} disabled={busy}>
+          {busy ? w.making : w.makeIt}
+        </button>
+      ) : (
+        <>
+          <button type="button" className="rl-remix mk-make" aria-expanded={signIn} onClick={() => setSignIn((s) => !s)}>
+            {w.signIn}
+          </button>
+          {signIn && <SignInChoices wallet={false} />}
+        </>
+      )}
+      {error && (
+        <p className="ia-note" role="alert">
+          {error}
+        </p>
+      )}
+      <p className="mk-model">
+        <span className="cc-head">{w.model}</span> <span className="cc-chip mk-model-chip" data-slot="model-choice">{w.modelChip}</span>
+      </p>
       <section className="mk-moments" aria-labelledby="mk-moment">
         <div className="mk-moment-head">
           <h2 id="mk-moment" className="cc-head">
@@ -170,28 +195,6 @@ export function ChallengeMake() {
           </div>
         )}
       </section>
-
-      <PublishedTextField id="mk-words" label={w.wordsLabel} value={words} onChange={setWords} rows={3} maxLength={600} placeholder={w.wordsPlaceholder} />
-      <p className="mk-model">
-        <span className="cc-head">{w.model}</span> <span className="cc-chip mk-model-chip" data-slot="model-choice">{w.modelChip}</span>
-      </p>
-      {signedIn ? (
-        <button type="button" className="rl-remix mk-make" onClick={make} disabled={busy}>
-          {busy ? w.making : w.makeIt}
-        </button>
-      ) : (
-        <>
-          <button type="button" className="rl-remix mk-make" aria-expanded={signIn} onClick={() => setSignIn((s) => !s)}>
-            {w.signIn}
-          </button>
-          {signIn && <SignInChoices wallet={false} />}
-        </>
-      )}
-      {error && (
-        <p className="ia-note" role="alert">
-          {error}
-        </p>
-      )}
       {consent && <ConsentScreen wording={consent} name={auth.kind === 'signed-in' ? (auth.username ?? null) : null} onAgree={agree} onCancel={() => setConsent(null)} error={null} />}
     </div>
   );

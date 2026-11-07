@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { socialPerson } from './people';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { SIGN_IN_METHODS, SOCIAL_SIGN_IN } from './config';
 
@@ -225,6 +226,16 @@ function readSocial(): SocialSessionState | null {
   try {
     const s = JSON.parse(localStorage.getItem(SOCIAL_KEY) ?? 'null') as SocialSessionState | null;
     return s && s.exp * 1000 > Date.now() + 120_000 ? s : null;
+  } catch {
+    return null;
+  }
+}
+
+/** The person number behind a Lens or Bluesky session token ("s1.<body>.<signature>"; src/lib/social/session.ts), or null. */
+export function socialSessionPerson(token: string): number | null {
+  try {
+    const body = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) as { account?: unknown };
+    return typeof body.account === 'number' ? socialPerson(body.account) : null;
   } catch {
     return null;
   }

@@ -14,6 +14,13 @@ export const PICTURE_WORDING = {
   copied: 'Link copied.',
   /** The ready post (owner, 2026-11-06), exactly: "My remix of {name}, for the Snowmoon Party remix challenge". */
   postText: (name: string, _moment: string) => `My remix of ${name}, for the Snowmoon Party remix challenge`,
+  /** For anyone but its maker (owner, 2026-11-07): the button to remix it, the remix pages' "Remix this". */
+  remixThis: 'Remix this',
+  /**
+   * Sharing someone else's picture never says "My remix" (owner, 2026-11-07). DRAFT for the owner's OK, drafted by the
+   * coding agent (Claude, a closed model by Anthropic): the character, the moment's title, and who made it.
+   */
+  othersText: (name: string, moment: string, by: string) => `${name} in “${moment}”, a remix by ${by} for the Snowmoon Party remix challenge`,
   thenSubmit: 'Then submit it as an entry',
   oneADay: 'one a day',
   /** The owner's line (2026-11-05, answer 7), with "Rules" beside it; no other rules text on the flow. */

@@ -36,6 +36,9 @@ export interface SubmitWords {
   withdraw: string;
   withdrawNote: string;
   withdrawn: string;
+  /** Withdraw asks once: the question and its Cancel (Withdraw is `withdraw`). */
+  withdrawAsk: string;
+  withdrawCancel: string;
   /** How many more today, for n = 0 … CHALLENGE.submissionsPerDay. */
   left: string[];
   /** "Post it first": the head, the note, a label per network, and the post's words (approved 2026-11-05). */
@@ -54,6 +57,8 @@ export const submitWords = (submitted: boolean, name: string): SubmitWords => ({
   withdraw: CW.withdraw,
   withdrawNote: CW.withdrawNote,
   withdrawn: CW.withdrawn,
+  withdrawAsk: CW.withdrawAsk,
+  withdrawCancel: CW.withdrawCancel,
   left: Array.from({ length: CHALLENGE.submissionsPerDay + 1 }, (_, n) => CW.submissionsLeft(n)),
   postHead: CW.submitPostHead,
   postNote: CW.submitPostNote,

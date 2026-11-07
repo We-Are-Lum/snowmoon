@@ -59,12 +59,13 @@ export const LANDING_WORDING = {
    * Reread pack 11.1 (reviewed by the coordinator, approved by the owner, 2026-11-04): once Bluesky accounts can
    * remix, "sign in with Farcaster, press Remix, …" becomes "sign in, press Remix, change it and publish". There's no
    * switch for Bluesky remixing on main yet (signin-lens-bluesky's SIGN_IN_METHODS is unmerged), so the change ships in
-   * that release, tied to its switch.
+   * that release, tied to its switch. Owner, 2026-11-07: it names the three ways in, "sign in with Farcaster, Lens or
+   * Bluesky, press Remix, …".
    */
   arrival: (name: string, ph: Phase) =>
     ph === 'closed'
       ? `This is a version of ${name} from Snowmoon’s remix challenge, which ran ${windowText()}.`
-      : `This is a version of ${name} in Snowmoon’s remix challenge, ${windowText()}. To make your own, sign in with Farcaster, press Remix, change it and publish.`,
+      : `This is a version of ${name} in Snowmoon’s remix challenge, ${windowText()}. To make your own, sign in with Farcaster, Lens or Bluesky, press Remix, change it and publish.`,
   arrivalLink: 'How the challenge works',
   /** The card's words, drawn in code. */
   cardTop: 'SNOWMOON · REMIX CHALLENGE',

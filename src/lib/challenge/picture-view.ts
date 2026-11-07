@@ -36,20 +36,23 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
   // Submit for its maker, while entries are open and pictures are the entries (the component checks who is signed in).
   const submit: SubmitWords | null = open && (standing?.kind === 'candidate' || entry) ? { ...submitWords(entry, name), postText: P.postText(name, m.title) } : null;
   const posts: PostedOnItem[] = CHALLENGE.posts ? (await postsFor(sql, p.versionId).catch(() => [])).map(({ id, network, handle, at, url }) => ({ id, network, handle, at, url })) : [];
+  const maker = designByline(p.byName, p.byFid);
   return {
     versionId: p.versionId,
+    /** Remixing it (anyone but its maker): its remix screen while entries are open; none after. */
+    remixHref: open ? `/challenge/make?from=${p.versionId}` : null,
     url: p.thumb,
     character: p.character,
     byFid: p.byFid,
     alt: L.pictureAltMoment(name),
     title: P.title(name, m.title, chapterChip(m)),
-    by: P.by(designByline(p.byName, p.byFid)),
+    by: P.by(maker),
     words: p.words,
     badge: entry ? CW.badge : null,
     note: standing?.kind === 'admin' ? CW.adminNote : !CHALLENGE.pictureEntries ? P.notEntriesYet : null,
     submit,
     posts,
-    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: P.oneADay, postText: P.postText(name, m.title), shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: P.thenSubmit, on: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') } },
+    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: P.oneADay, postText: P.postText(name, m.title), othersText: P.othersText(name, m.title, maker), remixThis: P.remixThis, shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: P.thenSubmit, on: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') } },
   };
 }
 export type PictureView = NonNullable<Awaited<ReturnType<typeof pictureView>>>;

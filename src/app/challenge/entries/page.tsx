@@ -54,7 +54,7 @@ export default async function ChallengeEntries({ searchParams }: Props) {
         ))}
       </nav>
       {all.length ? (
-        <ChallengeEntriesList all={all.map((e) => ({ versionId: e.versionId, character: e.character, title: e.title, byName: e.byName, byFid: e.maker, thumb: e.thumb, href: entryHref(e.versionId) }))} w={{ newest: L.entriesNewest, shuffled: L.entriesShuffled, orderLabel: L.entriesOrderLabel, cards }} />
+        <ChallengeEntriesList all={all.map((e) => ({ versionId: e.versionId, character: e.character, title: e.title, byName: e.byName, byFid: e.maker, thumb: e.thumb, href: entryHref(e.versionId) }))} w={{ newest: L.entriesNewest, shuffled: L.entriesShuffled, orderLabel: L.entriesOrderLabel, cards, pictures: CHALLENGE.pictureEntries }} />
       ) : (
         <p className="dz-muted ch-feed-none">{character ? L.entriesNoneFor(names[character]) : L.entriesNone}</p>
       )}

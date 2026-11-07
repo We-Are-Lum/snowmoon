@@ -360,7 +360,8 @@ check('config: a current default look per challenge character, each a design id 
   const sf = read('src/components/challenge-share-first.tsx');
   const at = (x: string) => pic.indexOf(x);
   check('share first: the post buttons come right after the picture, before Submit and before the picture\'s title', at('<ChallengeShareFirst') > at('</figure>') && at('<ChallengeShareFirst') < at('<ChallengeSubmit') && at('<ChallengeShareFirst') < at('<h1 className="mk-title">'));
-  check('share first: its maker sees "Published. Now post it:", others "Post it"', /head: mine \? v\.w\.published : v\.w\.shareHead/.test(pic));
+  // Owner, 2026-11-07: anyone but its maker sees "Remix this", not "Post it", and shares it with words that aren't "My remix".
+  check('share first: its maker sees "Published. Now post it:"; anyone else "Remix this" and the others\' share text', /known && mine && <ChallengeShareFirst path=\{path\} w=\{\{ head: v\.w\.published, text: v\.w\.postText/.test(pic) && /known && !mine && \(/.test(pic) && /head: null, text: v\.w\.othersText/.test(pic));
   check('share first: Farcaster (composeCast in the app), Bluesky, Lens and Copy link, each its network\'s own compose page', /sdk\.actions\.composeCast\(\{ text: w\.text, embeds: \[link\] \}\)/.test(sf) && /https:\/\/farcaster\.xyz\/~\/compose/.test(sf) && /https:\/\/bsky\.app\/intent\/compose/.test(sf) && /https:\/\/hey\.xyz\/\?/.test(sf) && /navigator\.clipboard\.writeText\(link\)/.test(sf));
   check('share first: the ready post is shown as it will be filled in (the text and this page\'s link)', /“\{w\.text\}” <span className="sf-link">\{link\}<\/span>/.test(sf) && /const link = `\$\{origin\}\$\{path\}`/.test(sf));
   check('share first: no script or request of the networks on our page (plain links; P6a)', !/<script|fetch\(/.test(sf));

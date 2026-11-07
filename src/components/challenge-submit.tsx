@@ -10,7 +10,8 @@ import { PostLinkField } from './post-link-field';
  * Submit (the remix challenge, owner 2026-11-04): shown only to the version's maker. A remix becomes an entry only
  * when its maker presses Submit here, with the link to a post about it on Farcaster, Bluesky or Lens; the server reads
  * the post and checks it links to this page, as "Add where you posted it" does. Up to three per person, across all
- * characters. Once submitted, the maker can withdraw it until entries close, which frees the slot. Its words come from
+ * characters. Once submitted, the maker can withdraw it until entries close (asked once: "Withdraw this entry?"); the
+ * day's submission isn't given back (the row stays, withdrawn: 0038_challenge_daily.sql). Its words come from
  * the server (`words`, src/lib/challenge/sheet-lines.ts), so this script carries none of the challenge's.
  *
  * "Post it first" (overnight run 2026-11-05, item 4): a button per network opens its own compose screen with the
@@ -43,6 +44,8 @@ export function ChallengeSubmit({ versionId, byFid, words: W, path, compact = fa
   const [castHash, setCastHash] = useState<string | null>(null);
   const [note, setNote] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Withdraw asks once (owner, 2026-11-07): "Withdraw this entry?" with Withdraw and Cancel.
+  const [asking, setAsking] = useState(false);
   const [done, setDone] = useState(W.submitted);
   const [left, setLeft] = useState<number | null>(null);
   // A Farcaster maker is known on the page; a Lens or Bluesky maker by the person number the server answers with.
@@ -102,12 +105,32 @@ export function ChallengeSubmit({ versionId, byFid, words: W, path, compact = fa
     <div className="ch-submit">
       {before}
       {done ? (
-        <p className="ch-mark">
-          <button type="button" className="ic-secondary" onClick={() => send('DELETE')} disabled={busy}>
-            {W.withdraw}
-          </button>{' '}
-          <span className="dz-muted">{W.withdrawNote}</span>
-        </p>
+        asking ? (
+          <p className="ch-mark ch-withdraw-ask" role="group" aria-label={W.withdrawAsk}>
+            <span>{W.withdrawAsk}</span>{' '}
+            <button
+              type="button"
+              className="ic-secondary"
+              onClick={() => {
+                setAsking(false);
+                void send('DELETE');
+              }}
+              disabled={busy}
+            >
+              {W.withdraw}
+            </button>{' '}
+            <button type="button" className="ic-secondary" onClick={() => setAsking(false)} disabled={busy}>
+              {W.withdrawCancel}
+            </button>
+          </p>
+        ) : (
+          <p className="ch-mark">
+            <button type="button" className="ic-secondary" onClick={() => setAsking(true)} disabled={busy}>
+              {W.withdraw}
+            </button>{' '}
+            <span className="dz-muted">{W.withdrawNote}</span>
+          </p>
+        )
       ) : (
         <form
           className="ch-add"

@@ -92,6 +92,7 @@ export default async function DesignPage({ params }: Props) {
   // The share text mentions the challenge only while it is open (owner, 2026-11-03), on a challenge character's sheet.
   const what = style ? title : `${callName}: ${title}`;
   const shareText = d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow() ? CW.shareTextOpen(callName) : CW.shareText(what);
+  const shareTextOthers = d.kind === 'character' && isChallengeCharacter(d.entity) && challengeOpenNow() ? CW.shareTextOthers(callName, by) : undefined;
   // A landing page for someone arriving from a post (owner, 2026-11-04): a challenge character's sheet with a front view,
   // once the owner has opened the challenge (CHALLENGE.public, read by isLanding). While it is admin-only the page as
   // served says nothing of it: no landing, no Remix button, no "Remixing opens …" line, no challenge preview.
@@ -224,7 +225,7 @@ export default async function DesignPage({ params }: Props) {
         byFid={d.byFid}
         challengeOpen={challengeOpen}
       />
-      <ChallengeShare versionId={d.shown.versionId} text={shareText} posts={CHALLENGE.public && CHALLENGE.posts} />
+      <ChallengeShare versionId={d.shown.versionId} text={shareText} othersText={shareTextOthers} byFid={d.byFid} posts={CHALLENGE.public && CHALLENGE.posts} />
       {/* On a landing page "Posted on" sits at the top, with the picture. */}
       {ch ? !landing && <ChallengePosts c={ch} versionId={d.shown.versionId} /> : <ChallengeAdminSheet versionId={d.shown.versionId} byFid={d.byFid} part="posts" />}
       <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>

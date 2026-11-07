@@ -1347,7 +1347,8 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   // R6: after "Mark as my entry" said "Marked as your entry.", the button stayed. Submit (2026-11-04): once submitted,
   // the Submit form goes and Withdraw shows instead.
   const markSrc = read('src/components/challenge-submit.tsx');
-  const hides = (src: string) => /setDone\(method === 'POST'\);/.test(src) && /\{done \? \(\s*<p className="ch-mark">\s*<button type="button" className="ic-secondary" onClick=\{\(\) => send\('DELETE'\)\}/.test(src);
+  // Withdraw asks once (owner, 2026-11-07): "Withdraw this entry?", then Withdraw sends it.
+  const hides = (src: string) => /setDone\(method === 'POST'\);/.test(src) && /\{done \? \(\s*asking \? \(/.test(src) && /setAsking\(false\);\s*void send\('DELETE'\);/.test(src);
   check('R6 once submitted, the Submit form goes (Withdraw instead)', hides(markSrc));
   proof('R6 a Submit form that stays after submitting is caught', !hides(markSrc.replace("setDone(method === 'POST');", 'setDone(false);')));
   // R7: publishing a fork or version didn't refresh /challenge (marking did).
@@ -1410,7 +1411,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('e2 the confirmation shows it', /\{entry\?\.kind === 'candidate' && `\$\{entry\.text\} `\}/.test(form) && /text: st\.kind === 'candidate' \? CW\.publishedCandidate\(name\) : CW\.publishedUnchecked\(name\)/.test(route));
   const share = read('src/components/challenge-share.tsx');
   const vp = read('src/app/references/designs/[id]/page.tsx');
-  const shareSwitch = (s1: string, v1: string) => /export function ChallengeShare\(\{ versionId, text, posts \}/.test(s1) && /const shareText = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(callName\) : CW\.shareText\(what\);/.test(v1) && /text=\{shareText\}/.test(v1);
+  const shareSwitch = (s1: string, v1: string) => /export function ChallengeShare\(\{ versionId, text: makersText, othersText, byFid, posts \}/.test(s1) && /const shareText = d\.kind === 'character' && isChallengeCharacter\(d\.entity\) && challengeOpenNow\(\) \? CW\.shareTextOpen\(callName\) : CW\.shareText\(what\);/.test(v1) && /text=\{shareText\}/.test(v1);
   check('e3 in the window, a challenge sheet\'s share text is the owner\'s (2026-11-06: "My remix of {name}, for the Snowmoon Party remix challenge"); outside it, as before', shareSwitch(share, vp) && CW.shareTextOpen('Bai') === 'My remix of Bai, for the Snowmoon Party remix challenge' && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party');
   proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace('challengeOpenNow() ?', 'true ?')));
   // h. Before the open, from CHALLENGE.dates.
@@ -1474,6 +1475,27 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('l8 inside the window with pictures as the entries, a sheet\'s landing is open, not "Remixing opens"', inWindow && sp.includes('phase={landingPhase} remixHref={remixHref}'));
   check('l8 a base\'s Remix opens its remix screen; another sheet\'s, the character\'s card', sp.includes('`/challenge/make?from=${d.shown.versionId}`') && (L.landingAction('v1', 'open', '/challenge/make?from=v1') as { href: string }).href === '/challenge/make?from=v1');
   proof('l8 the landing phase read from challengeSheetsOpen alone is caught', !/const landingPhase = challengeOpen \|\| picturesOpen \? 'open'/.test(sp.replace('challengeOpen || picturesOpen ?', 'challengeOpen ?')));
+  // The friends' fixes (owner, 2026-11-07).
+  {
+    const PW = (await import('../src/lib/challenge/picture-wording')).PICTURE_WORDING;
+    const pic = read('src/components/challenge-picture.tsx');
+    const others = PW.othersText('Zei', 'The wall comes down', '@someone');
+    check('F1 sharing someone else\'s picture never says "My remix"; it names the moment and the maker', !/my remix/i.test(others) && others.includes('The wall comes down') && others.includes('@someone'));
+    check('F1 anyone but the maker sees "Remix this" (to its remix screen), not "Post it", and shares with the others\' words', PW.remixThis === 'Remix this' && /known && !mine && \(/.test(pic) && pic.includes('{v.w.remixThis}') && pic.includes('text: v.w.othersText') && !pic.includes('v.w.shareHead'));
+    proof('F1 a page that shows "Post it" to a visitor is caught', /known && !mine && \(/.test(pic.replace('known && !mine && (', 'known && (')) === false);
+    const CWx = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
+    const share = read('src/components/challenge-share.tsx');
+    check('F1 a sheet shared by anyone but its maker doesn\'t say "My remix"', !/my remix/i.test(CWx.shareTextOthers('Zei', '@naaate')) && /const text = othersText && !mine \? othersText : makersText;/.test(share));
+    const css = read('src/styles/designs.css');
+    const card = read('src/components/challenge-card.tsx');
+    check('F2 the challenge\'s pictures are shown whole at 16:9 (cards, Every remix, Every entry, the rules\' list)', /\.cc-tile-img\.cc-tile-pic \{ aspect-ratio: 16 \/ 9; object-fit: contain; \}/.test(css) && /\.ch-pics \.ch-card-img \{ aspect-ratio: 16 \/ 9; object-fit: contain; \}/.test(css) && card.includes('label={w.firsts} picture />') && card.includes('label={w.remixes} lazy picture />') && read('src/app/challenge/entries/page.tsx').includes('pictures: CHALLENGE.pictureEntries') && read('src/components/challenge-remixes-body.tsx').includes('pictures: true'));
+    const make = read('src/components/challenge-make.tsx');
+    check('F3 the remix screen: the box and "Make it" come right after the picture, before the moments', make.indexOf('<PublishedTextField id="mk-words"') > make.indexOf('</figure>') && make.indexOf('<PublishedTextField id="mk-words"') < make.indexOf('<section className="mk-moments"') && make.indexOf('{w.makeIt}') < make.indexOf('<section className="mk-moments"') && !/scrollIntoView/.test(make));
+    const sub = read('src/components/challenge-submit.tsx');
+    check('F4 Withdraw asks once: "Withdraw this entry?" with Withdraw and Cancel', CWx.withdrawAsk === 'Withdraw this entry?' && CWx.withdrawCancel === 'Cancel' && /onClick=\{\(\) => setAsking\(true\)\}/.test(sub) && /setAsking\(false\);\s*void send\('DELETE'\);/.test(sub));
+    proof('F4 a Withdraw that sends at once is caught', !/onClick=\{\(\) => setAsking\(true\)\}/.test(sub.replace('onClick={() => setAsking(true)}', "onClick={() => send('DELETE')}")));
+    check('F6 the sheet landing names Farcaster, Lens and Bluesky', L.LANDING_WORDING.arrival('Zei', 'open').includes('sign in with Farcaster, Lens or Bluesky, press Remix'));
+  }
 }
 
 {
