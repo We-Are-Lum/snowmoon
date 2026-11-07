@@ -3,7 +3,7 @@ import '../styles/home.css';
 import { ownMedia, shownVersion } from '~/lib/adaptation-pages';
 import { AI_LABEL } from '~/lib/ai-declared';
 import { AiLabel } from './recipe-sheet';
-import { posterFor } from '~/lib/scene-delivery';
+import { cardPosterFor } from '~/lib/scene-delivery';
 import { POSTER_ALT, POSTERS, POSTER_V1 } from '~/lib/scene-posters';
 
 /**
@@ -13,7 +13,7 @@ import { POSTER_ALT, POSTERS, POSTER_V1 } from '~/lib/scene-posters';
  */
 export async function SceneCard({ as = 'home' }: { as?: 'home' | 'list' }) {
   const v = await Promise.race([shownVersion(6786, 1), new Promise<null>((r) => setTimeout(() => r(null), 2000))]).catch(() => null);
-  const poster = posterFor(ownMedia(v?.recipe.video_url), ownMedia(v?.recipe.poster_url));
+  const poster = cardPosterFor(ownMedia(v?.recipe.video_url), ownMedia(v?.recipe.poster_url));
   const label = v?.recipe.ai_label ?? null;
   return (
     <section className={`home-card scene-card scene-card-${as}`} aria-labelledby={`scene-card-${as}`}>
@@ -24,7 +24,7 @@ export async function SceneCard({ as = 'home' }: { as?: 'home' | 'list' }) {
       <Link href="/@naaate/1" className="scene-card-link">
         {poster && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={poster} alt={POSTER_ALT[v?.id ?? 1] ?? POSTER_ALT[1]} width={1280} height={720} />
+          <img src={poster} alt={POSTER_ALT[v?.id ?? 1] ?? POSTER_ALT[1]} width={1280} height={720} fetchPriority="high" />
         )}
         <span className="scene-card-title">Fifteen Days</span>
         <span className="scene-card-by">by @naaate · spoilers through chapter 19</span>
