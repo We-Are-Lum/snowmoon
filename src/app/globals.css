@@ -488,6 +488,8 @@ a.provenance { color: var(--muted); }
    cards, Skip in the header, progress marks, swipe or Back/Next. Labels keep
    the 12px floor where the board drew 10–11px. */
 .intro-overlay { position: fixed; inset: 0; z-index: 90; background: var(--paper); color: var(--ink); }
+/* The home page's intro is in its HTML; it shows only once the early script (src/lib/intro-early.ts) has marked a first visit. */
+html:not([data-intro-early]) .intro-overlay.intro-early { display: none; }
 .intro-card { height: 100%; max-width: 30rem; margin: 0 auto; display: flex; flex-direction: column; outline: none; }
 .intro-head { flex: none; display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 8px 0 var(--gutter); }
 .intro-brand { font-size: 20px; }

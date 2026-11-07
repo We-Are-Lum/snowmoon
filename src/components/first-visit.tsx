@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { usePathname } from 'next/navigation';
 import type { Intro, IntroCard } from '~/lib/intro';
 import { AiLabel } from './recipe-sheet';
 import { AI_LABEL } from '~/lib/ai-declared';
+import { INTRO_EARLY_ATTR, INTRO_KEY } from '~/lib/intro-early';
 
 /**
  * The first-visit intro (config/intro.json), built from
@@ -14,7 +15,7 @@ import { AI_LABEL } from '~/lib/ai-declared';
  * this device: no cookie, no account, nothing sent anywhere. Deep-linked pages
  * show a small "What is this?" link instead; About has "Replay intro screens".
  */
-const KEY = 'snowmoon.intro-seen';
+const KEY = INTRO_KEY;
 const SWIPE_PX = 50;
 
 function seen(version: string): boolean {
@@ -36,7 +37,7 @@ function markSeen(version: string) {
 const money = (usd: number) => `$${usd.toFixed(2)}`;
 
 /** What each card shows above its line. Real content only. */
-function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
+function Visual({ card, intro, lazy }: { card: IntroCard; intro: Intro; lazy: boolean }) {
   const live = intro.features.filter((f) => f.status === 'live');
   const planned = intro.features.filter((f) => f.status === 'planned');
   const im = card.image;
@@ -61,7 +62,7 @@ function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
               the picture's corner, so the card's clipped height can never hide it. */}
           <div className="iv-pic">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={im.url} alt={im.alt} width={im.width} height={im.height} />
+            <img src={im.url} alt={im.alt} width={im.width} height={im.height} loading={lazy ? 'lazy' : undefined} />
             <span className="iv-ai"><AiLabel kind="image" text={AI_LABEL.image} file={im.recipeFile} item={im.id} /></span>
           </div>
           <div className="iv-recipe-box">
@@ -93,7 +94,7 @@ function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
           </div>
           <div className="iv-step iv-indent-1">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="iv-step-mark" src={im.url} alt="" width={96} height={54} />
+            <img className="iv-step-mark" src={im.url} alt="" width={96} height={54} loading={lazy ? 'lazy' : undefined} />
             <span className="iv-step-body">
               <span className="iv-step-who">An image of it</span>
               <span className="iv-step-what">AI-generated, anchored to ¶ {im.block.label}</span>
@@ -146,7 +147,7 @@ function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
 }
 
 /** The screens themselves. Closing (Skip, Start reading, Escape) marks the intro seen. */
-function IntroScreens({ intro, onClose }: { intro: Intro; onClose: () => void }) {
+function IntroScreens({ intro, onClose, early = false, lazyImages = false }: { intro: Intro; onClose: () => void; early?: boolean; lazyImages?: boolean }) {
   const [i, setI] = useState(0);
   const [dx, setDx] = useState<number | null>(null);
   const start = useRef<number | null>(null);
@@ -179,7 +180,7 @@ function IntroScreens({ intro, onClose }: { intro: Intro; onClose: () => void })
   };
   const card = intro.cards[i];
   return (
-    <div className="intro-overlay">
+    <div className={early ? 'intro-overlay intro-early' : 'intro-overlay'}>
       <div
         className="intro-card"
         role="dialog"
@@ -224,7 +225,7 @@ function IntroScreens({ intro, onClose }: { intro: Intro; onClose: () => void })
                 <p className="intro-eyebrow">
                   {k + 1} / {n} · {c.eyebrow}
                 </p>
-                <Visual card={c} intro={intro} />
+                <Visual card={c} intro={intro} lazy={lazyImages} />
                 <h2 className="intro-line" id={`intro-line-${c.id}`}>
                   {c.line}
                 </h2>
@@ -255,13 +256,40 @@ function IntroScreens({ intro, onClose }: { intro: Intro; onClose: () => void })
   );
 }
 
-/** Home page, first visit only. */
+/**
+ * Home page, first visit only. Drawn in the page's HTML ('server'), hidden unless the early script in <head>
+ * (src/lib/intro-early.ts) has marked a first visit, so it shows at the first paint rather than once the page has
+ * started up. On start-up, before anything is painted again: a device that has seen it drops it ('closed'); a first
+ * visit keeps it ('open'), its pictures no longer held back. While 'server', its pictures load only when shown
+ * (loading="lazy"), so a returning reader's browser never fetches them for the hidden copy.
+ */
 export function IntroOnce({ intro }: { intro: Intro }) {
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    if (!seen(intro.version)) setOpen(true);
+  const [phase, setPhase] = useState<'server' | 'open' | 'closed'>('server');
+  useLayoutEffect(() => {
+    (window as { __introReady?: boolean }).__introReady = true;
+    const html = document.documentElement;
+    if (seen(intro.version)) {
+      html.removeAttribute(INTRO_EARLY_ATTR);
+      setPhase('closed');
+    } else {
+      // Also on a move to home inside the site, where the early script didn't run for this page.
+      html.setAttribute(INTRO_EARLY_ATTR, '');
+      setPhase('open');
+    }
+    return () => html.removeAttribute(INTRO_EARLY_ATTR);
   }, [intro.version]);
-  return open ? <IntroScreens intro={intro} onClose={() => setOpen(false)} /> : null;
+  if (phase === 'closed') return null;
+  return (
+    <IntroScreens
+      intro={intro}
+      early
+      lazyImages={phase === 'server'}
+      onClose={() => {
+        document.documentElement.removeAttribute(INTRO_EARLY_ATTR);
+        setPhase('closed');
+      }}
+    />
+  );
 }
 
 /** About, the menu and the rail: open the screens on request. */

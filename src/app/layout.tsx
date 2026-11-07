@@ -8,6 +8,7 @@ import { introShown } from '~/lib/seeded-shown';
 import { APP_NAME, appUrl } from '~/lib/config';
 import { PAPER } from '~/lib/tokens';
 import { THEME_SCRIPT } from '~/lib/theme';
+import { introEarlyScript } from '~/lib/intro-early';
 import '../styles/tokens.css';
 import './globals.css';
 import '../styles/shell.css';
@@ -73,6 +74,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         {/* Before first paint: the theme chosen on this device (src/lib/theme.ts). */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        {/* Before first paint: a first visit's intro on the home page, from its HTML (src/lib/intro-early.ts). */}
+        <script dangerouslySetInnerHTML={{ __html: introEarlyScript(intro.version) }} />
       </head>
       <body>
         {/* The frame from the prototype: phone top bar and menu; tablet and desktop rail; desktop assistant (src/components/app-shell.tsx). */}
