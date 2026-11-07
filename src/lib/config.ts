@@ -622,6 +622,8 @@ export const CHALLENGE = {
    * base above the others there.
    */
   // 2026-11-06: each character's current-default base, as published (Deluin and Gladias: look b; Bai: the front from Garance's edit).
+  // Each character's current default (launch-picks current_default; owner, 2026-11-06): look b for Gladias (gladias:b, front
+  // sha256 b9b6c009…) and Deluin (deluin:b, the b4 recast, front 2b45d17d…); the one Animated series base for the others.
   defaultLooks: {
     zei: 'bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d',
     gladias: '68364375-0f33-46fd-9755-2fd2b551198a',
@@ -643,13 +645,14 @@ export const CHALLENGE = {
    * owner, not by any count (P5g's third narrow exception, pending the owner's yes).
    */
   // Published by the owner's run of scripts/import-first-remixes.ts --launch, 2026-11-06. Deluin: the two the owner picked
-  // on 2026-11-04 first (hood and mug, the game board); the ledge is published too but not shown (at most two).
+  // on 2026-11-04 (hood and mug, the game board). The ink ledge (ced288e6-1c3f-4d58-bb4c-839ef774bb71) is published on its
+  // own page but not listed: firstRemixesShown is 2, and firstRemixesProblems refuses a longer list.
   firstRemixes: {
     zei: ['70c0a8c3-41a5-43ae-83f4-4b0ddfa9ed51'],
     gladias: ['f07a2f79-9787-4f9d-bb90-5b7ea94ad117', 'd4d8bf9f-0ca9-4a62-871b-0aa10a1fbc25'],
     bai: [],
     seila: ['399836db-6cd9-49e3-9302-77686b2a1161', 'b9983b8c-cde4-40c1-8601-f3f4702d1742'],
-    deluin: ['fb80b4b1-bd9f-4fd1-87ef-4e8003347aaf', '42588f48-6673-478e-ab54-8e30372743c0', 'ced288e6-1c3f-4d58-bb4c-839ef774bb71'],
+    deluin: ['fb80b4b1-bd9f-4fd1-87ef-4e8003347aaf', '42588f48-6673-478e-ab54-8e30372743c0'],
     mu: ['2f29b048-0e82-4d87-8193-9cfffedc9123', 'bb08afdb-f77f-4e07-b451-756460922714'],
   } as Record<string, readonly string[]>,
   firstRemixesShown: 2,

@@ -122,7 +122,8 @@ CHALLENGE.pictureEntries = false;
   const D = CHALLENGE.defaultLooks as Record<string, string | null>;
   check('committed bases: one per base slot for each character, each a version id', CHALLENGE.characters.every((c) => B[c].length === CHALLENGE.baseCount[c] && B[c].every((id) => uuid.test(id))), JSON.stringify(B));
   check('committed default looks: each character\'s first base (its current default)', CHALLENGE.characters.every((c) => D[c] === B[c][0]), JSON.stringify(D));
-  check('committed first remixes: version ids, never a base, no more than the bases allow to be shown in order', CHALLENGE.characters.every((c) => F[c].every((id) => uuid.test(id) && !B[c].includes(id))), JSON.stringify(F));
+  check('committed first remixes: version ids, never a base', CHALLENGE.characters.every((c) => F[c].every((id) => uuid.test(id) && !B[c].includes(id))), JSON.stringify(F));
+  check('committed first remixes: within the limit (firstRemixesProblems finds nothing)', R.firstRemixesProblems().length === 0, R.firstRemixesProblems().join('; '));
   for (const c of CHALLENGE.characters) { B[c] = []; F[c] = []; D[c] = null; }
 }
 // The tests below are the challenge once the owner has opened it.
