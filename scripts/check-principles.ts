@@ -2160,6 +2160,8 @@ add({
     return problems;
   },
   plant: (c) => {
+    // The planted state is the switch off with the dates opening things anyway (so the proof holds once it is on too).
+    c.pub = false;
     c.cap = CHALLENGE.dailySpendCapUsd;
     c.entries = true;
     c.sheets = 'export const challengeSheetsOpen = (now = new Date()) => CHALLENGE.openSheets && phase(now) === \'open\';';
