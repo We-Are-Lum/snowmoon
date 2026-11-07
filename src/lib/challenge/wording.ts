@@ -101,11 +101,21 @@ export const CHALLENGE_WORDING = {
   withdraw: 'Withdraw',
   withdrawNote: 'Until entries close you can withdraw it. Withdrawing doesn’t give back today’s submission.',
   withdrawn: 'Withdrawn: it is no longer an entry.',
+  /** Withdraw asks once (owner, 2026-11-07, these words): "Withdraw this entry?" with Withdraw and Cancel. */
+  withdrawAsk: 'Withdraw this entry?',
+  withdrawCancel: 'Cancel',
+  /** Under the question (owner, 2026-11-07, approved). */
+  withdrawAskNote: 'It still counts as today’s entry, so you can enter again tomorrow.',
   // Share and "Posted on": the words that don't name the challenge are in ./share-wording.ts.
   ...SHARE_WORDING,
   /** While entries are open, on a challenge character's sheet (owner, 2026-11-03: the share text mentions the challenge). Draft wording. */
   // The share text (owner, 2026-11-06), exactly: "My remix of {name}, for the Snowmoon Party remix challenge".
   shareTextOpen: (name: string) => `My remix of ${name}, for the Snowmoon Party remix challenge`,
+  /**
+   * The same post for anyone but the sheet's maker: never "My remix" (owner, 2026-11-07, approved). `by` names everyone
+   * the page credits as maker, joined with "and", written by the @ rule (src/lib/challenge/share-makers.ts).
+   */
+  shareTextOthers: (name: string, by: string) => `${name} by ${by}, in the Snowmoon Party remix challenge`,
   /**
    * The publish confirmation of a version that can be entered (owner, 2026-11-04: only Submit makes an entry; it
    * replaces the owner's 2026-11-03 line "This is your entry for …"). Draft wording.

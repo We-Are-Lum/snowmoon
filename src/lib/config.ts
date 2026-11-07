@@ -657,6 +657,16 @@ export const CHALLENGE = {
   } as Record<string, readonly string[]>,
   firstRemixesShown: 2,
   /**
+   * Who else a base credits as its maker, by the base's version or element id (owner, 2026-11-07: "name everyone the page
+   * credits as maker, so Bai's sheet, made from Garance's edit, credits Garance too"). Shown before the maker on the base's
+   * landing ("Made by @garance and @naaate · maintainer") and named first in its share text by the @ rule. Bai's base: its front was made from Garance's
+   * edit (the owner confirmed it, 2026-11-05; its recipe's credit: "Garance (the edit used as reference)"); @garance is
+   * FID 193912 on Farcaster (ADMINS).
+   */
+  coMakers: {
+    '110d5973-31c2-4d96-9a88-5838d8a6d868': [{ handle: 'garance', network: 'farcaster' }],
+  } as Record<string, readonly { handle: string; network: 'farcaster' | 'bluesky' | 'lens' | null }[]>,
+  /**
    * The bases' fixed style order (owner, 2026-11-04): within a character its bases are listed in this order, the same
    * for every character, so the casts line up. Each entry is a published style's name, as a sheet's views record it
    * (body.style.title). A base whose style isn't listed comes after, newest first. Empty until the owner picks the
@@ -700,11 +710,11 @@ export const CHALLENGE = {
    */
   dates: {
     /**
-     * Entries open Fri 6 Nov 2026, 09:00 Pacific (owner, 2026-11-05 evening: live for friends on Fri 6 Nov afternoon;
-     * this supersedes "plan for Tue 1 Dec"). Nothing opens by date alone: /challenge stays hidden until the owner turns
-     * CHALLENGE.public on, so in practice entries open when he does.
+     * Entries open Tue 10 Nov 2026, 00:00 Pacific (owner, 2026-11-07; it was Fri 6 Nov, 09:00). Nothing opens by date
+     * alone: /challenge stays hidden until the owner turns CHALLENGE.public on. From the flip to this instant, anyone can
+     * remix (with the $15 site-wide cap), but pictures made then are for trying it out and can't be entered.
      */
-    opens: '2026-11-06T17:00:00Z',
+    opens: '2026-11-10T08:00:00Z',
     /** Entries close after Sun 22 Nov 2026, 23:59 Pacific: this is 00:00 Pacific on 23 Nov, the first instant that no longer counts. */
     closes: '2026-11-23T08:00:00Z',
     // No shortlist, results or mint dates (owner, 2026-11-05 evening): how the final version is chosen, and any prize,
@@ -732,7 +742,7 @@ export const CHALLENGE = {
    * open and after the close, sheets are invited-only again with no deploy.
    */
   openSheets: true as boolean,
-  /** The site-wide free image spend cap while the entry window is open (owner, 2026-10-31); IMAGES.dailySpendCapUsd otherwise. */
+  /** The site-wide free image spend cap from the owner's flip (CHALLENGE.public) until entries close (owner, 2026-11-07); IMAGES.dailySpendCapUsd otherwise. */
   dailySpendCapUsd: 15,
   /** "Posted on": at most this many shown per version, newest first; and how many one person may add per UTC day. */
   postsPerVersion: 30,
@@ -832,8 +842,8 @@ export const IMAGES = {
   admin: { maxBlocks: 400 },
   publishesPerDay: 3,
   /**
-   * Across everyone, per UTC day (decision 10), kept apart from the assistant's. Outside the remix challenge's window;
-   * inside it, CHALLENGE.dailySpendCapUsd. Read through imagesDailySpendCapUsd(), never directly.
+   * Across everyone, per UTC day (decision 10), kept apart from the assistant's. Outside the remix challenge (switch off, or after the close);
+   * from the owner's flip to the close, CHALLENGE.dailySpendCapUsd. Read through imagesDailySpendCapUsd(), never directly.
    */
   dailySpendCapUsd: 2,
   /**
@@ -937,15 +947,16 @@ export const IMAGES = {
 
 /** Minpentai Play's limits and retention (owner, 2026-10-09). Every /api/minpentai/* request counts. */
 /**
- * The site-wide free image spend cap for a moment (owner, 2026-10-31): CHALLENGE.dailySpendCapUsd from the entry
- * window's open (included) to its close (excluded), once the owner has opened the challenge (CHALLENGE.public; owner,
- * 2026-11-04), IMAGES.dailySpendCapUsd ($2) at every other time. It reverts by
- * itself, with no deploy. The cap is per UTC day; the day's spend counted so far is compared with the cap now.
+ * The site-wide free image spend cap for a moment: CHALLENGE.dailySpendCapUsd from the owner's flip (CHALLENGE.public on)
+ * until entries close (excluded), before the open date too, since remixing works from the flip (owner, 2026-11-07;
+ * before, from the open date: owner, 2026-10-31); IMAGES.dailySpendCapUsd ($2) at every other time: with the switch off,
+ * whatever the date, and after the close. It reverts by itself at the close, with no deploy. The cap is per UTC day; the
+ * day's spend counted so far is compared with the cap now. The 3 free pictures a day per person don't change.
  */
 export function imagesDailySpendCapUsd(now: Date = new Date()): number {
   const t = now.getTime();
-  // Only once the owner has opened the challenge (CHALLENGE.public): the dates alone never raise the cap.
-  return CHALLENGE.public && t >= Date.parse(CHALLENGE.dates.opens) && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
+  // Only the owner's switch raises it (never the dates alone), and the close ends it.
+  return CHALLENGE.public && t < Date.parse(CHALLENGE.dates.closes) ? CHALLENGE.dailySpendCapUsd : IMAGES.dailySpendCapUsd;
 }
 
 export const MINPENTAI_PLAY = {

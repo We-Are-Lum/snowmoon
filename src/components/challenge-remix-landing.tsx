@@ -24,6 +24,8 @@ export function ChallengeRemixLanding(p: {
   phase: 'before' | 'open' | 'closed';
   /** Where Remix goes while entries are open, when not this version's sheet form (pictures are the entries). */
   remixHref?: string;
+  /** Before the open date, /challenge's own line in place of the Remix note (owner, 2026-11-07). */
+  note?: string;
   posts: PostedOnItem[];
 }) {
   const action = landingAction(p.versionId, p.phase, p.remixHref);
@@ -46,7 +48,7 @@ export function ChallengeRemixLanding(p: {
             <Link className="rl-remix" href={action.href}>
               {action.label}
             </Link>
-            <p className="rl-note">{L.remixNote(p.name)}</p>
+            <p className="rl-note">{p.note ?? L.remixNote(p.name)}</p>
           </>
         ) : (
           <p className="rl-note rl-closed">

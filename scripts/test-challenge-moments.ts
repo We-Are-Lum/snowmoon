@@ -314,7 +314,7 @@ check('config: a current default look per challenge character, each a design id 
   // The picture's page data.
   const V = await import('../src/lib/challenge/picture-view');
   const pv = await V.pictureView(S, second.versionId);
-  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the owner\'s post text', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'My remix of Bai, for the Snowmoon Party remix challenge' && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
+  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the owner\'s post text', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'My remix of Bai in “The championship final”, for the Snowmoon Party remix challenge' && pv.w.postTexts.plain === pv.submit?.postText && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
   // The feed (/challenge/remixes) with pictures as the entries: the challenge pictures, newest first, by character,
   // each linking to its page, with the viewer's own Newest / Shuffled order and no count.
   const RV = await import('../src/lib/challenge/remixes-view');
@@ -333,6 +333,33 @@ check('config: a current default look per challenge character, each a design id 
   check('default look: a current front that isn\'t one of the bases can be named (Bai\'s Garance front)', (await P.defaultLook(S, 'zei', { zei: zeiFront.versionId }))?.versionId === zeiFront.versionId);
   proof('default look: an id that is another character\'s sheet is not used', (await P.defaultLook(S, 'zei', { zei: base.versionId }))?.versionId !== base.versionId);
   check('the hub still shuffles every base: the default look sets no order there', /setBases\(c\.bases\.length > 1 \? shuffleFresh\(c\.bases\) : c\.bases\)/.test(read('src/components/challenge-card.tsx')) && !/defaultLook/.test(read('src/lib/challenge/view.ts')));
+  // Before the open date (owner, 2026-11-07): on 11 Nov, submitting a picture published on 8 Nov is refused with the
+  // owner's line, and its page shows it to its maker; on 8 Nov, Submit says "Entries open …" for every picture.
+  {
+    Object.assign(CHALLENGE.dates, keep.dates);
+    const m = MOMENTS.find((x) => x.characters.includes('bai'))!;
+    const recipeId = randomUUID(), elementId = randomUUID(), early = randomUUID();
+    const at8 = '2026-11-08T18:00:00Z', d8 = new Date('2026-11-08T20:00:00Z'), d11 = new Date('2026-11-11T20:00:00Z');
+    await sql`insert into studio.recipes ${sql({ id: recipeId, source: 'in_app', provider: 'fal.ai', model: 'flux2-klein-4b-edit', model_version: 'e', prompt: 'p', params: sql.json({ user_prompt: 'early', by_name: 'p500', anchor: { chapter: m.chapter, start: m.start, end: m.end }, challenge: { character: 'bai', moment: m.id, scene: m.scene, from: base.versionId, fromKind: 'sheet' } } as never), seed: 1, assist: null, cost_usd: 0.009, created_by_fid: 500, created_at: at8 })}`;
+    await sql`insert into studio.elements ${sql({ id: elementId, work_id: 'snowmoon', element_type: 'image', created_by_fid: 500, created_at: at8 })}`;
+    await sql`insert into studio.element_versions ${sql({ id: early, element_id: elementId, version_no: 1, body: sql.json({ lettering: [] } as never), asset_url: 'https://media.example/early.jpg', asset_sha256: 'e'.repeat(64), recipe_id: recipeId, created_at: at8 })}`;
+    await sql`insert into studio.anchors ${sql({ version_id: early, work_id: 'snowmoon', chapter: m.chapter, start_idx: m.start, end_idx: m.end })}`;
+    await sql`insert into studio.links ${sql({ from_version_id: early, to_version_id: base.versionId, kind: 'uses' })}`;
+    const E2 = await import('../src/lib/challenge/entries');
+    const PV = await import('../src/lib/challenge/picture-view');
+    const post = { network: 'farcaster' as const, id: '0x' + 'e'.repeat(40), handle: 'p500', at: d11.toISOString(), url: 'https://farcaster.xyz/p500/0xeeeeeeee', links: [`https://snowmoon.party/challenge/p/${early}`], writer: { fid: 500 } };
+    const r11 = await E2.submitEntry(S, 500, early, post, d11);
+    const r8 = await E2.submitEntry(S, 500, early, post, d8);
+    const v11 = await PV.pictureView(S, early, d11), v8 = await PV.pictureView(S, early, d8);
+    const LINE = 'This picture was made before entries opened, so it can’t be entered. Remix it to make a new one.';
+    const ok = (a: typeof v11, b: typeof v8) => Boolean(a && b && a.beforeOpen && `${a.beforeOpen.text}${a.beforeOpen.link}${a.beforeOpen.after}` === LINE && a.notYet === null && b.beforeOpen === null && b.notYet === 'Entries open Tue 10 Nov, 00:00 PT.');
+    check('before the open date: on 11 Nov, submitting a picture published on 8 Nov is refused with the owner\'s line', !r11.ok && r11.why === LINE, JSON.stringify(r11));
+    check('before the open date: on 8 Nov, Submit says "Entries open Tue 10 Nov, 00:00 PT." for a pre-open picture', !r8.ok && r8.why === 'Entries open Tue 10 Nov, 00:00 PT.', JSON.stringify(r8));
+    check('before the open date: its page shows its maker the line from the 10th, and "Entries open …" before', ok(v11, v8));
+    proof('before the open date: the line missing on the 11th is caught', !ok(v11 && { ...v11, beforeOpen: null }, v8));
+    proof('before the open date: the line shown before the 10th is caught', !ok(v11, v8 && { ...v8, beforeOpen: v11!.beforeOpen }));
+    CHALLENGE.dates.opens = new Date(Date.now() - 60_000).toISOString();
+  }
   // The make API (GET): the screen's data for a base; 404 for anything else. POST without a sign-in: 401 (P4a). The app's
   // own connection (db()) is a second one, and PGlite's socket server takes one at a time: this test's closes first.
   await sql.end();
@@ -360,15 +387,16 @@ check('config: a current default look per challenge character, each a design id 
   const sf = read('src/components/challenge-share-first.tsx');
   const at = (x: string) => pic.indexOf(x);
   check('share first: the post buttons come right after the picture, before Submit and before the picture\'s title', at('<ChallengeShareFirst') > at('</figure>') && at('<ChallengeShareFirst') < at('<ChallengeSubmit') && at('<ChallengeShareFirst') < at('<h1 className="mk-title">'));
-  check('share first: its maker sees "Published. Now post it:", others "Post it"', /head: mine \? v\.w\.published : v\.w\.shareHead/.test(pic));
-  check('share first: Farcaster (composeCast in the app), Bluesky, Lens and Copy link, each its network\'s own compose page', /sdk\.actions\.composeCast\(\{ text: w\.text, embeds: \[link\] \}\)/.test(sf) && /https:\/\/farcaster\.xyz\/~\/compose/.test(sf) && /https:\/\/bsky\.app\/intent\/compose/.test(sf) && /https:\/\/hey\.xyz\/\?/.test(sf) && /navigator\.clipboard\.writeText\(link\)/.test(sf));
-  check('share first: the ready post is shown as it will be filled in (the text and this page\'s link)', /“\{w\.text\}” <span className="sf-link">\{link\}<\/span>/.test(sf) && /const link = `\$\{origin\}\$\{path\}`/.test(sf));
+  // Owner, 2026-11-07: anyone but its maker sees "Remix this", not "Post it", and shares it with words that aren't "My remix".
+  check('share first: its maker sees "Published. Now post it:"; anyone else "Remix this" and the others\' share text', /known && mine && <ChallengeShareFirst path=\{path\} w=\{\{ head: v\.w\.published, texts: v\.w\.postTexts/.test(pic) && /known && !mine && \(/.test(pic) && /head: null, texts: v\.w\.othersTexts/.test(pic));
+  check('share first: Farcaster (composeCast in the app), Bluesky, Lens and Copy link, each its network\'s own compose page', /sdk\.actions\.composeCast\(\{ text: w\.texts\.farcaster, embeds: \[link\] \}\)/.test(sf) && /https:\/\/farcaster\.xyz\/~\/compose/.test(sf) && /https:\/\/bsky\.app\/intent\/compose/.test(sf) && /https:\/\/hey\.xyz\/\?/.test(sf) && /navigator\.clipboard\.writeText\(link\)/.test(sf));
+  check('share first: the ready post is shown as it will be filled in (the text and this page\'s link)', /\{w\.texts\.plain\} <span className="sf-link">\{link\}<\/span>/.test(sf) && !/“\{w\.texts\.plain\}”/.test(sf) && /const link = `\$\{origin\}\$\{path\}`/.test(sf));
   check('share first: no script or request of the networks on our page (plain links; P6a)', !/<script|fetch\(/.test(sf));
   check('Submit B on the page: only the address and Submit (the buttons are above), with a cast just made handed to it', /<ChallengeSubmit\s+versionId=\{v\.versionId\}\s+byFid=\{v\.byFid\}\s+words=\{v\.submit\}\s+path=\{path\}\s+compact\s+castHash=\{castHash\}/.test(pic) && /\{!compact && \(/.test(read('src/components/challenge-submit.tsx')));
   check('"Then submit it as an entry · one a day", and the owner\'s one line with "Rules" (no other rules text)', /\{v\.w\.thenSubmit\} <span className="dz-muted">· \{v\.w\.oneADay\}<\/span>/.test(pic) && /\{v\.w\.signInLine\} <Link href="\/challenge\/rules">\{v\.w\.rules\}<\/Link>/.test(pic));
   const W = (await import('../src/lib/challenge/picture-wording')).PICTURE_WORDING;
   check('the words: "Published. Now post it:", "Then submit it as an entry", "one a day", the sign-in line as the owner wrote it', W.published === 'Published. Now post it:' && W.thenSubmit === 'Then submit it as an entry' && W.oneADay === 'one a day' && W.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
-  check('the ready post is the owner\'s text exactly (2026-11-06)', W.postText('Bai', 'The quarterfinal') === 'My remix of Bai, for the Snowmoon Party remix challenge');
+  check('the ready post is the owner\'s text exactly (2026-11-07: with the moment; with none, the line of 2026-11-06)', W.postText('Bai', 'The quarterfinal') === 'My remix of Bai in “The quarterfinal”, for the Snowmoon Party remix challenge' && W.postText('Bai', null) === 'My remix of Bai, for the Snowmoon Party remix challenge');
   check('no script served to everyone imports the share words', !/challenge\/(picture-)?wording'/.test(sf + pic));
 }
 
@@ -393,7 +421,7 @@ check('config: a current default look per challenge character, each a design id 
 // --- The rules intro, approved (owner, 2026-11-06), exactly as it renders today, with no draft mark -------------------
 {
   const W = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
-  const INTRO = 'From 6 to 22 November, make your own picture of Zei, Gladias, Bai, Seila, Deluin or Mu: start from one of their pictures, set it at a moment from the book, change what you like, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.';
+  const INTRO = 'From 10 to 22 November, make your own picture of Zei, Gladias, Bai, Seila, Deluin or Mu: start from one of their pictures, set it at a moment from the book, change what you like, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.';
   check('rules intro: the owner\'s approved words, exactly, with the dates and names from config', CHALLENGE.pictureEntries && W.intro() === INTRO, W.intro());
   const RV = await import('../src/lib/challenge/rules-view');
   const rv = await RV.rulesView(null);

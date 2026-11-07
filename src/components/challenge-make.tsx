@@ -78,7 +78,10 @@ export function ChallengeMake() {
   }, [view, moment]);
   // The chosen chip in view in the strip (it scrolls sideways).
   useEffect(() => {
-    document.querySelector('.mk-strip [aria-pressed="true"]')?.scrollIntoView({ block: 'nearest', inline: 'center' });
+    // Only the strip scrolls (sideways): the page stays at the top, with the box and "Make it" in view.
+    const strip = document.querySelector<HTMLElement>('.mk-strip');
+    const chip = strip?.querySelector<HTMLElement>('[aria-pressed="true"]');
+    if (strip && chip) strip.scrollLeft = chip.offsetLeft - (strip.clientWidth - chip.clientWidth) / 2;
   }, [moment, view]);
   useEffect(() => {
     try {
@@ -134,7 +137,9 @@ export function ChallengeMake() {
           <span className="dz-muted">{w.remixing}</span> <AiTag />
         </figcaption>
       </figure>
-
+      {/* Owner, 2026-11-07: the picture, the box, the moment row (its chips and "Surprise me"; one is drawn and shown
+          chosen), "Make it", then the model line, all on a phone's first screen; the moment's words follow. */}
+      <PublishedTextField id="mk-words" label={w.wordsLabel} value={words} onChange={setWords} rows={3} maxLength={600} placeholder={w.wordsPlaceholder} />
       <section className="mk-moments" aria-labelledby="mk-moment">
         <div className="mk-moment-head">
           <h2 id="mk-moment" className="cc-head">
@@ -153,28 +158,7 @@ export function ChallengeMake() {
             </li>
           ))}
         </ul>
-        <p className="dz-muted mk-by">{w.momentsBy}</p>
-        {chosen && (
-          <div className="mk-quotes" aria-live="polite">
-            {chosen.quotes.map((x) => (
-              <blockquote key={x.block} className="cc-quote" cite={x.href}>
-                <p>{x.text}</p>
-                <p className="cc-quote-foot">
-                  <span className="cc-block">{x.block}</span>{' '}
-                  <a href={x.href} target="_blank" rel="noopener">
-                    {w.readIt}
-                  </a>
-                </p>
-              </blockquote>
-            ))}
-          </div>
-        )}
       </section>
-
-      <PublishedTextField id="mk-words" label={w.wordsLabel} value={words} onChange={setWords} rows={3} maxLength={600} placeholder={w.wordsPlaceholder} />
-      <p className="mk-model">
-        <span className="cc-head">{w.model}</span> <span className="cc-chip mk-model-chip" data-slot="model-choice">{w.modelChip}</span>
-      </p>
       {signedIn ? (
         <button type="button" className="rl-remix mk-make" onClick={make} disabled={busy}>
           {busy ? w.making : w.makeIt}
@@ -192,6 +176,27 @@ export function ChallengeMake() {
           {error}
         </p>
       )}
+      <p className="mk-model">
+        <span className="cc-head">{w.model}</span> <span className="cc-chip mk-model-chip" data-slot="model-choice">{w.modelChip}</span>
+      </p>
+      <section className="mk-moment-words" aria-label={w.momentsBy}>
+        <p className="dz-muted mk-by">{w.momentsBy}</p>
+        {chosen && (
+          <div className="mk-quotes" aria-live="polite">
+            {chosen.quotes.map((x) => (
+              <blockquote key={x.block} className="cc-quote" cite={x.href}>
+                <p>{x.text}</p>
+                <p className="cc-quote-foot">
+                  <span className="cc-block">{x.block}</span>{' '}
+                  <a href={x.href} target="_blank" rel="noopener">
+                    {w.readIt}
+                  </a>
+                </p>
+              </blockquote>
+            ))}
+          </div>
+        )}
+      </section>
       {consent && <ConsentScreen wording={consent} name={auth.kind === 'signed-in' ? (auth.username ?? null) : null} onAgree={agree} onCancel={() => setConsent(null)} error={null} />}
     </div>
   );

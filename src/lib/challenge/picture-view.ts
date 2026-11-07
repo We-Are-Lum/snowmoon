@@ -3,15 +3,16 @@ import type postgres from 'postgres';
 import { CHALLENGE } from '../config';
 import { bookCharacter } from '../images/designs';
 import { designByline } from '../images/byline';
-import { versionStanding } from './entries';
+import { SUBMIT_WORDING, versionStanding } from './entries';
 import { chapterChip, momentById } from './moments';
 import { challengePictures } from './pictures';
 import { postsFor } from './posts';
-import { challengeOpenNow } from './rules';
+import { challengeOpenNow, phase } from './rules';
 import { submitWords, type SubmitWords } from './sheet-lines';
 import { CHALLENGE_WORDING as CW } from './wording';
 import { LANDING_WORDING as L } from './landing-wording';
 import { PICTURE_WORDING as P } from './picture-wording';
+import { sameTexts, shareMaker, textsFor } from './share-makers';
 import type { PostedOnItem } from '~/components/posted-on';
 
 /**
@@ -36,20 +37,29 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
   // Submit for its maker, while entries are open and pictures are the entries (the component checks who is signed in).
   const submit: SubmitWords | null = open && (standing?.kind === 'candidate' || entry) ? { ...submitWords(entry, name), postText: P.postText(name, m.title) } : null;
   const posts: PostedOnItem[] = CHALLENGE.posts ? (await postsFor(sql, p.versionId).catch(() => [])).map(({ id, network, handle, at, url }) => ({ id, network, handle, at, url })) : [];
+  const maker = designByline(p.byName, p.byFid);
   return {
     versionId: p.versionId,
+    /** Remixing it (anyone but its maker): its remix screen from the owner's flip (before the open date too) until entries close; none after. */
+    remixHref: CHALLENGE.public && phase(now) !== 'closed' ? `/challenge/make?from=${p.versionId}` : null,
+    /**
+     * Its maker's line in place of Submit (owner, 2026-11-07): before the open date, "Entries open …" for every picture;
+     * from the open date to the close, for a picture published before it, that it can't be entered.
+     */
+    notYet: CHALLENGE.pictureEntries && CHALLENGE.public && phase(now) === 'before' ? SUBMIT_WORDING.opens() : null,
+    beforeOpen: CHALLENGE.pictureEntries && phase(now) === 'open' && Date.parse(p.createdAt) < Date.parse(CHALLENGE.dates.opens) ? { ...P.beforeOpen, href: `/challenge/make?from=${p.versionId}` } : null,
     url: p.thumb,
     character: p.character,
     byFid: p.byFid,
     alt: L.pictureAltMoment(name),
     title: P.title(name, m.title, chapterChip(m)),
-    by: P.by(designByline(p.byName, p.byFid)),
+    by: P.by(maker),
     words: p.words,
     badge: entry ? CW.badge : null,
     note: standing?.kind === 'admin' ? CW.adminNote : !CHALLENGE.pictureEntries ? P.notEntriesYet : null,
     submit,
     posts,
-    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: P.oneADay, postText: P.postText(name, m.title), shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: P.thenSubmit, on: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') } },
+    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: P.oneADay, postTexts: sameTexts(P.postText(name, m.title)), othersTexts: textsFor([shareMaker(p.byName, p.byFid)], (who) => P.othersText(name, m.title, who)), remixThis: P.remixThis, shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: P.thenSubmit, on: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') } },
   };
 }
 export type PictureView = NonNullable<Awaited<ReturnType<typeof pictureView>>>;

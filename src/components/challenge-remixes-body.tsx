@@ -26,7 +26,7 @@ export function ChallengeRemixesBody({ v }: { v: RemixesView }) {
       </nav>
       <p className="dz-note">{v.note}</p>
       {v.cards.length && v.order ? (
-        <ChallengeEntriesList all={v.cards} w={{ newest: v.order.newest, shuffled: v.order.shuffled, orderLabel: v.order.label, cards: v.cardWords }} />
+        <ChallengeEntriesList all={v.cards} w={{ newest: v.order.newest, shuffled: v.order.shuffled, orderLabel: v.order.label, cards: v.cardWords, pictures: true }} />
       ) : v.cards.length ? (
         <ul className="ch-cards ch-feed" role="list">
           {v.cards.map((r) => (

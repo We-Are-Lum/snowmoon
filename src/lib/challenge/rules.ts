@@ -45,6 +45,14 @@ export function challengeOpenNow(now: Date = new Date(), pub: boolean = CHALLENG
   return pub && phase(now, dates) === 'open';
 }
 
+/**
+ * Remixing for the challenge works now (owner, 2026-11-07): from the owner's flip (CHALLENGE.public), before the open
+ * date too, until entries close. Entries themselves wait for the open date (challengeOpenNow, entriesOpen).
+ */
+export function remixingOpenNow(now: Date = new Date(), pub: boolean = CHALLENGE.public, dates: { opens: string; closes: string } = CHALLENGE.dates): boolean {
+  return pub && phase(now, dates) !== 'closed';
+}
+
 /** Entries are taken now: CHALLENGE.entries, and the challenge open (challengeOpenNow). */
 export const entriesOpen = (now: Date = new Date(), pub: boolean = CHALLENGE.public) => CHALLENGE.entries && challengeOpenNow(now, pub);
 

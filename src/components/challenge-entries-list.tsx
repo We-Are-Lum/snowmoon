@@ -10,7 +10,7 @@ import { RemixCardView, type RemixCardData, type RemixCardWords } from './challe
  * Never ordered by a count, and no like, recast or reply count anywhere (P5i). No challenge words live here (it is in
  * scripts everyone is served): they come in `w`, from the page (src/lib/challenge/landing-wording.ts).
  */
-export type EntriesWords = { newest: string; shuffled: string; orderLabel: string; cards: Record<string, RemixCardWords> };
+export type EntriesWords = { newest: string; shuffled: string; orderLabel: string; cards: Record<string, RemixCardWords>; pictures?: boolean };
 
 export function ChallengeEntriesList({ all, w }: { all: RemixCardData[]; w: EntriesWords }) {
   const [shown, setShown] = useState<RemixCardData[] | null>(null);
@@ -24,7 +24,7 @@ export function ChallengeEntriesList({ all, w }: { all: RemixCardData[]; w: Entr
           {w.shuffled}
         </button>
       </div>
-      <ul className="ch-cards ch-entries-list" role="list" data-shuffled={shown ? 'true' : undefined}>
+      <ul className={w.pictures ? 'ch-cards ch-entries-list ch-pics' : 'ch-cards ch-entries-list'} role="list" data-shuffled={shown ? 'true' : undefined}>
         {(shown ?? all).map((r) => (
           <RemixCardView key={r.versionId} r={r} w={w.cards[r.character] ?? { name: r.character, untitled: r.character, alt: '' }} />
         ))}

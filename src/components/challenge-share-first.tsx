@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
+import type { ShareTexts } from '~/lib/challenge/share-makers';
 
 /**
  * Share first (owner, 2026-11-05; docs/proposals/challenge-moments.md §1.3 S4): right under a challenge picture, the
@@ -11,7 +12,8 @@ import { sdk } from '@farcaster/miniapp-sdk';
  * made in the Farcaster app is handed to Submit below (`onCast`), so Submit is one tap there. Every word comes from the
  * server (`w`).
  */
-export type ShareFirstWords = { head: string; text: string; copy: string; copied: string; on: { farcaster: string; bluesky: string; lens: string } };
+/** `texts`: the post's words for each network's compose, and 'plain' for what the page shows (the @ rule). */
+export type ShareFirstWords = { head: string | null; texts: ShareTexts; copy: string; copied: string; on: { farcaster: string; bluesky: string; lens: string } };
 
 export function ChallengeShareFirst({ path, w, onCast }: { path: string; w: ShareFirstWords; onCast?: (hash: string) => void }) {
   const [inApp, setInApp] = useState(false);
@@ -24,14 +26,14 @@ export function ChallengeShareFirst({ path, w, onCast }: { path: string; w: Shar
   const link = `${origin}${path}`;
   const farcaster = (() => {
     const u = new URL('https://farcaster.xyz/~/compose');
-    u.searchParams.set('text', w.text);
+    u.searchParams.set('text', w.texts.farcaster);
     u.searchParams.append('embeds[]', link);
     return u.toString();
   })();
-  const bluesky = `https://bsky.app/intent/compose?${new URLSearchParams({ text: `${w.text} ${link}` })}`;
-  const lens = `https://hey.xyz/?${new URLSearchParams({ text: `${w.text} ${link}` })}`;
+  const bluesky = `https://bsky.app/intent/compose?${new URLSearchParams({ text: `${w.texts.bluesky} ${link}` })}`;
+  const lens = `https://hey.xyz/?${new URLSearchParams({ text: `${w.texts.lens} ${link}` })}`;
   const cast = async () => {
-    const r = await sdk.actions.composeCast({ text: w.text, embeds: [link] }).catch(() => null);
+    const r = await sdk.actions.composeCast({ text: w.texts.farcaster, embeds: [link] }).catch(() => null);
     if (r?.cast?.hash) onCast?.(r.cast.hash);
   };
   const copy = async () => {
@@ -43,10 +45,12 @@ export function ChallengeShareFirst({ path, w, onCast }: { path: string; w: Shar
     }
   };
   return (
-    <section className="sf-share" aria-labelledby="sf-head">
-      <h2 id="sf-head" className="sf-head">
-        {w.head}
-      </h2>
+    <section className="sf-share" aria-labelledby={w.head ? 'sf-head' : undefined} aria-label={w.head ? undefined : w.copy}>
+      {w.head && (
+        <h2 id="sf-head" className="sf-head">
+          {w.head}
+        </h2>
+      )}
       <div className="sf-buttons">
         {inApp ? (
           <button type="button" className="ia-button sf-button" onClick={cast}>
@@ -68,7 +72,7 @@ export function ChallengeShareFirst({ path, w, onCast }: { path: string; w: Shar
         </button>
       </div>
       <p className="sf-ready">
-        “{w.text}” <span className="sf-link">{link}</span>
+        {w.texts.plain} <span className="sf-link">{link}</span>
       </p>
     </section>
   );

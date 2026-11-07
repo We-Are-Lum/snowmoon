@@ -202,6 +202,8 @@ export const SUBMIT_WORDING = {
   opens: () => `Entries open ${shortDateText('opens')}.`,
   closed: 'Entries are closed.',
   notYours: 'You can submit only your own remix, made during the challenge.',
+  /** From the open date to the close, for its maker's picture published before entries opened (owner, 2026-11-07, approved). */
+  beforeOpen: 'This picture was made before entries opened, so it can’t be entered. Remix it to make a new one.',
   notEligible: 'This version can’t be entered: your account didn’t pass the site’s check when you published it.',
   needsPost: 'Add the link to a post about it on Farcaster, Bluesky or Lens first.',
   /** Draft wording (owner, 2026-11-04, answer 9.4: the post must be the submitter's own). */
@@ -235,7 +237,12 @@ export async function submitEntry(sql: Sql, fid: number, versionId: string, post
   if (phase(now) === 'before') return { ok: false, why: SUBMIT_WORDING.opens(), status: 409 };
   if (!inWindow(now)) return { ok: false, why: SUBMIT_WORDING.closed, status: 409 };
   const v = (await windowVersions(sql)).find((x) => x.versionId === versionId && x.forked);
-  if (!v || v.person !== fid) return { ok: false, why: SUBMIT_WORDING.notYours, status: 403 };
+  if (!v || v.person !== fid) {
+    // Its maker's picture, published before entries opened (owner, 2026-11-07): for trying it out, never an entry.
+    const [early] = CHALLENGE.pictureEntries ? await challengePictures(sql, { versionId }) : [];
+    if (early && early.byFid === fid && Date.parse(early.createdAt) < Date.parse(CHALLENGE.dates.opens)) return { ok: false, why: SUBMIT_WORDING.beforeOpen, status: 403 };
+    return { ok: false, why: SUBMIT_WORDING.notYours, status: 403 };
+  }
   if ((await eligibilityOf(sql, [v])).get(v.versionId)?.eligible !== true) return { ok: false, why: SUBMIT_WORDING.notEligible, status: 403 };
   if (!post) return { ok: false, why: SUBMIT_WORDING.needsPost, status: 400 };
   try {

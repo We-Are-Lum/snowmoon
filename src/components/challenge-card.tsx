@@ -85,17 +85,18 @@ function Fact({ f, readIt }: { f: CardFactView; readIt: string }) {
   );
 }
 
-function Row({ tiles, alt, label, lazy = false }: { tiles: CardTile[]; alt: string; label: string; lazy?: boolean }) {
+/** `picture`: the challenge's pictures (16:9), shown whole at their own shape (owner, 2026-11-07); bases are sheets (3:4). */
+function Row({ tiles, alt, label, lazy = false, picture = false }: { tiles: CardTile[]; alt: string; label: string; lazy?: boolean; picture?: boolean }) {
   return (
-    <ul className="cc-row" role="list" aria-label={label}>
+    <ul className={picture ? 'cc-row cc-row-pics' : 'cc-row'} role="list" aria-label={label}>
       {tiles.map((t) => (
         <li key={t.versionId}>
           <Link className="cc-tile" href={t.href} data-version={t.versionId}>
             {t.thumb ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img className="cc-tile-img" src={t.thumb} alt={alt} width={192} height={256} loading={lazy ? 'lazy' : undefined} />
+              <img className={picture ? 'cc-tile-img cc-tile-pic' : 'cc-tile-img'} src={t.thumb} alt={alt} width={picture ? 256 : 192} height={picture ? 144 : 256} loading={lazy ? 'lazy' : undefined} />
             ) : (
-              <span className="cc-tile-img cc-empty" aria-hidden="true" />
+              <span className={picture ? 'cc-tile-img cc-tile-pic cc-empty' : 'cc-tile-img cc-empty'} aria-hidden="true" />
             )}
             <span className="cc-tile-by">{t.label ?? designByline(t.byName, t.byFid)}</span>
           </Link>
@@ -180,14 +181,14 @@ export function ChallengeCard({ c, w }: { c: CardData; w: CardWords }) {
       {c.firsts.length > 0 && (
         <>
           <h3 className="cc-head">{w.firsts}</h3>
-          <Row tiles={c.firsts} alt={w.alt} label={w.firsts} />
+          <Row tiles={c.firsts} alt={w.alt} label={w.firsts} picture />
         </>
       )}
       {c.remixes.length > 0 && remixes && (
         <>
           <h3 className="cc-head">{w.remixes}</h3>
           <div data-shuffled="true" className="cc-remixes">
-            <Row tiles={remixes.slice(0, shown)} alt={w.alt} label={w.remixes} lazy />
+            <Row tiles={remixes.slice(0, shown)} alt={w.alt} label={w.remixes} lazy picture />
           </div>
           {shown < remixes.length && (
             <button type="button" className="ic-secondary cc-show-more" onClick={() => setShown((n) => n + MORE)}>

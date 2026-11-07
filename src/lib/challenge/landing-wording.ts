@@ -5,7 +5,15 @@
  */
 import { phase, shortDateText } from './rules';
 
+/**
+ * Shown only before the open date, right after "Entries open … and close …", on /challenge and the sheet pages (owner,
+ * 2026-11-07, his words, approved): remixing works from the flip, but those pictures can't be entered.
+ */
+export const LANDING_BEFORE_OPEN = 'Pictures made before then are for trying it out, and can’t be entered.';
+
 export const LANDING_WORDING = {
+  /** The sheet pages' copy of the line, without "Pick a character." (owner, 2026-11-07): "Tap a picture to remix it. …". */
+  sheetLine: (now: ReturnType<typeof phase> = phase()) => LANDING_WORDING.line(now).replace(/^Pick a character\. /, ''),
   /**
    * The short page's one line (owner, 2026-11-04: "one line on what to do"): what to do, then when, from
    * CHALLENGE.dates. Draft wording.
@@ -13,7 +21,7 @@ export const LANDING_WORDING = {
   line: (now: ReturnType<typeof phase> = phase()) =>
     now === 'closed'
       ? `Entries closed ${shortDateText('closes')}. Every remix is below.`
-      : `Pick a character. Tap a picture to remix it. Entries ${now === 'before' ? `open ${shortDateText('opens')} and ` : ''}close ${shortDateText('closes')}.`,
+      : `Pick a character. Tap a picture to remix it. Entries ${now === 'before' ? `open ${shortDateText('opens')} and ` : ''}close ${shortDateText('closes')}.${now === 'before' ? ` ${LANDING_BEFORE_OPEN}` : ''}`,
   rulesLink: 'Rules',
   rulesTitle: 'The rules',
   countsHead: 'Entrants so far',

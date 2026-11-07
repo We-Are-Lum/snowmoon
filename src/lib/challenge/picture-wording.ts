@@ -12,8 +12,24 @@ export const PICTURE_WORDING = {
   shareHead: 'Post it',
   copy: 'Copy link',
   copied: 'Link copied.',
-  /** The ready post (owner, 2026-11-06), exactly: "My remix of {name}, for the Snowmoon Party remix challenge". */
-  postText: (name: string, _moment: string) => `My remix of ${name}, for the Snowmoon Party remix challenge`,
+  /**
+   * The maker's ready post (owner, 2026-11-07, approved): "My remix of {name} in “{moment}”, for the Snowmoon Party remix
+   * challenge"; with no moment, exactly the line of 2026-11-06: "My remix of {name}, for the Snowmoon Party remix challenge".
+   */
+  postText: (name: string, moment: string | null) => (moment ? `My remix of ${name} in “${moment}”, for the Snowmoon Party remix challenge` : `My remix of ${name}, for the Snowmoon Party remix challenge`),
+  /** For anyone but its maker (owner, 2026-11-07): the button to remix it, the remix pages' "Remix this". */
+  remixThis: 'Remix this',
+  /**
+   * Sharing someone else's picture never says "My remix" (owner, 2026-11-07, approved): the character, the moment's
+   * title, and who made it, written by the @ rule (src/lib/challenge/share-makers.ts).
+   */
+  othersText: (name: string, moment: string, by: string) => `${name} in “${moment}”, a remix by ${by} for the Snowmoon Party remix challenge`,
+  /**
+   * For its maker, in place of Submit, from the open date to the close, when the picture was published before entries
+   * opened (owner, 2026-11-07, his words, approved; the same words as SUBMIT_WORDING.beforeOpen). "Remix it" links to its
+   * remix screen (a maker can remix their own picture: the make route takes any published challenge picture).
+   */
+  beforeOpen: { text: 'This picture was made before entries opened, so it can’t be entered. ', link: 'Remix it', after: ' to make a new one.' },
   thenSubmit: 'Then submit it as an entry',
   oneADay: 'one a day',
   /** The owner's line (2026-11-05, answer 7), with "Rules" beside it; no other rules text on the flow. */

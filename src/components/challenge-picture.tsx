@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import NotFound from 'next/dist/client/components/builtin/not-found';
 import { useEffect, useState } from 'react';
-import { authFetch, useAuth, useSocialSession } from '~/lib/client-auth';
+import { authFetch, socialSessionPerson, useAuth, useSocialSession } from '~/lib/client-auth';
 import type { PictureView } from '~/lib/challenge/picture-view';
 import { AiTag } from './ai-tag';
 import { ChallengeShareFirst } from './challenge-share-first';
@@ -35,8 +35,12 @@ export function ChallengePicture({ id }: { id: string }) {
   if (!v) return <div className="mk-page" aria-busy="true" />;
   const hub = `/challenge#${v.character}`;
   const path = `/challenge/p/${v.versionId}`;
-  const mine = auth.kind === 'signed-in' && auth.fid === v.byFid;
+  // Its maker: a Farcaster FID, or a Lens or Bluesky account's person number (minus 1e9 + the account, as the server
+  // numbers them, src/lib/people.ts), read from the signed session the device holds.
+  const mine = (auth.kind === 'signed-in' && auth.fid === v.byFid) || (social !== null && socialSessionPerson(social.token) === v.byFid);
   const signedIn = auth.kind === 'signed-in' || social !== null;
+  // Until the sign-in is known, neither the maker's "Post it" nor a visitor's "Remix this" (no flash of the wrong one).
+  const known = auth.kind !== 'loading';
   return (
     <div className="mk-page" data-step="published">
       <nav className="mk-bar mk-bar-end">
@@ -51,7 +55,32 @@ export function ChallengePicture({ id }: { id: string }) {
           <AiTag /> {v.badge && <span className="ch-badge">{v.badge}</span>}
         </figcaption>
       </figure>
-      <ChallengeShareFirst path={path} w={{ head: mine ? v.w.published : v.w.shareHead, text: v.w.postText, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} onCast={setCastHash} />
+      {known && mine && <ChallengeShareFirst path={path} w={{ head: v.w.published, texts: v.w.postTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} onCast={setCastHash} />}
+      {/* Anyone else (owner, 2026-11-07): "Remix this" first, not "Post it"; sharing it never says "My remix". */}
+      {known && !mine && (
+        <>
+          {v.remixHref && (
+            <Link className="rl-remix mk-remix-this" href={v.remixHref}>
+              {v.w.remixThis}
+            </Link>
+          )}
+          <ChallengeShareFirst path={path} w={{ head: null, texts: v.w.othersTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} />
+        </>
+      )}
+      {known && mine && v.notYet && (
+        <section className="sf-submit">
+          <p className="ch-not-yet">{v.notYet}</p>
+        </section>
+      )}
+      {known && mine && v.beforeOpen && (
+        <section className="sf-submit">
+          <p className="ch-before-open">
+            {v.beforeOpen.text}
+            <Link href={v.beforeOpen.href}>{v.beforeOpen.link}</Link>
+            {v.beforeOpen.after}
+          </p>
+        </section>
+      )}
       {v.submit && (
         <section className="sf-submit" aria-label={v.w.thenSubmit}>
           <ChallengeSubmit
