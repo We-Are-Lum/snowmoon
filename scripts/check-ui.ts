@@ -1968,7 +1968,10 @@ async function checkRemixLanding() {
       if (!r.ai) fail(`${tag}: the picture has no AI label`);
       // The big button while entries are open; before and after, the line in its place (the window comes from CHALLENGE.dates).
       if (r.remix) {
-        if (r.remix.href !== `/references/designs/new?from=${D.remix.version}`) fail(`${tag}: Remix opens ${r.remix.href}, not this version's remix form`);
+        // While pictures are the entries (sheets invitation-only), a sheet that isn't a base opens its character's card on
+        // /challenge (a base, its remix screen); otherwise the version's sheet remix form.
+        const wantRemix = CHALLENGE.pictureEntries ? '/challenge#zei' : `/references/designs/new?from=${D.remix.version}`;
+        if (r.remix.href !== wantRemix) fail(`${tag}: Remix opens ${r.remix.href}, not ${wantRemix}`);
         if (r.remix.h < 52 || r.remix.w < Math.min(w - 60, 280)) fail(`${tag}: the Remix button is not big (${Math.round(r.remix.w)}×${Math.round(r.remix.h)})`);
       } else if (!/^(Remixing opens|Entries closed) .+Pacific/.test(r.line)) fail(`${tag}: neither a Remix button nor the line in its place ("${r.line}")`);
       if (!/remix challenge/.test(r.arrival) || !/\d{1,2} (to \d{1,2} )?[A-Z][a-z]+/.test(r.arrival) || r.arrivalLink !== '/challenge') fail(`${tag}: signed out, no line on what this is, its dates and how to remix, linking /challenge ("${r.arrival}")`);
