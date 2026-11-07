@@ -566,8 +566,10 @@ export const CHALLENGE = {
    *   says. `dates` stay as they are, for when the owner opens it with a new open date.
    * Only the owner turns it on. check:principles P6u proves it: with this off and the clock past `dates.opens`, entries,
    * open sheets and the $15 cap are off and /challenge answers 404 to a non-admin.
+   *
+   * ON: PREPARED, NOT MERGED. Merge only on the owner's word, after #123 (challenge-config-ids) is live and checked.
    */
-  public: false as boolean,
+  public: true as boolean,
   /**
    * The six character cards on /challenge (src/lib/challenge/cards.ts: one line, three bullets, a fuller description
    * and "Where they appear"), drafted by the coding agent (owner, 2026-11-05, answer 2), and the moments' titles and

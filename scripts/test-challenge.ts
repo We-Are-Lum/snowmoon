@@ -65,7 +65,11 @@ CHALLENGE.pictureEntries = false;
   const { PRIVACY } = await import('../src/lib/legal');
   const V = await import('../src/lib/challenge/visibility');
   const inside = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
-  check('switch: CHALLENGE.public is off as committed (the owner opens it)', CHALLENGE.public === false);
+  // The owner's flip (PREPARED on challenge-public-on, merged only on his word): the committed switch is on, and every
+  // "off" check below turns it off for its own run, so the switch is still proven to be what holds them.
+  check('switch: CHALLENGE.public is on as committed (the owner opened it)', CHALLENGE.public === true);
+  const committedPublic = CHALLENGE.public;
+  (CHALLENGE as unknown as { public: boolean }).public = false;
   check('switch: the dates are kept (opens Tue 10 Nov, 00:00 Pacific; owner, 2026-11-07)', CHALLENGE.dates.opens === '2026-11-10T08:00:00Z');
   check('switch off, inside the window: the free cap stays $2, not $15', C.imagesDailySpendCapUsd(inside) === IMAGES.dailySpendCapUsd && IMAGES.dailySpendCapUsd === 2);
   check('switch off, inside the window: sheets stay invited-only (Privacy describes the challenge)', O.privacyDescribesChallenge(PRIVACY) && !O.challengeSheetsOpen(inside, PRIVACY));
@@ -75,6 +79,7 @@ CHALLENGE.pictureEntries = false;
   proof('a cap that rises by date alone is caught', ((t: Date) => (t.getTime() >= Date.parse(CHALLENGE.dates.opens) && t.getTime() < Date.parse(CHALLENGE.dates.closes) ? 15 : 2))(inside) !== C.imagesDailySpendCapUsd(inside));
   proof('sheets that open by date alone are caught', ((t: Date) => CHALLENGE.openSheets && R.phase(t) === 'open' && O.privacyDescribesChallenge(PRIVACY))(inside) !== O.challengeSheetsOpen(inside, PRIVACY));
   proof('entries that open by date alone are caught', ((t: Date) => CHALLENGE.entries && R.phase(t) === 'open')(inside) !== R.entriesOpen(inside));
+  (CHALLENGE as unknown as { public: boolean }).public = committedPublic;
   // Every way in: the page and the APIs answer 404 to everyone but an admin; the menu, the home row, the sheet page's
   // lines, "Posted on" and the share text wait for the switch.
   const gated: [string, RegExp][] = [
