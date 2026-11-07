@@ -113,6 +113,18 @@ CHALLENGE.pictureEntries = false;
   const wordy = clientFiles.filter((f) => /challenge\/(landing-)?wording'/.test(read(f)));
   check('switch: no script served to everyone imports the challenge\'s words', wordy.length === 0, wordy.join());
 }
+// The committed ids (the owner's publish run, 2026-11-06) are checked here. The rest of the suite builds its own bases in
+// PGlite, where those ids don't exist, so the lists are cleared for it (it sets its own where it needs them).
+{
+  const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+  const B = CHALLENGE.bases as Record<string, string[]>;
+  const F = CHALLENGE.firstRemixes as Record<string, string[]>;
+  const D = CHALLENGE.defaultLooks as Record<string, string | null>;
+  check('committed bases: one per base slot for each character, each a version id', CHALLENGE.characters.every((c) => B[c].length === CHALLENGE.baseCount[c] && B[c].every((id) => uuid.test(id))), JSON.stringify(B));
+  check('committed default looks: each character\'s first base (its current default)', CHALLENGE.characters.every((c) => D[c] === B[c][0]), JSON.stringify(D));
+  check('committed first remixes: version ids, never a base, no more than the bases allow to be shown in order', CHALLENGE.characters.every((c) => F[c].every((id) => uuid.test(id) && !B[c].includes(id))), JSON.stringify(F));
+  for (const c of CHALLENGE.characters) { B[c] = []; F[c] = []; D[c] = null; }
+}
 // The tests below are the challenge once the owner has opened it.
 (CHALLENGE as { public: boolean }).public = true;
 
@@ -318,7 +330,7 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
 {
   const F1 = '11111111-1111-4111-8111-111111111111', F2 = '22222222-2222-4222-8222-222222222222', F3 = '33333333-3333-4333-8333-333333333333';
   const empty = Object.fromEntries(CHALLENGE.characters.map((c) => [c, [] as string[]]));
-  check('committed: two first remixes shown per character, and every list empty until they exist', CHALLENGE.firstRemixesShown === 2 && R.firstRemixesProblems().length === 0 && CHALLENGE.characters.every((c) => CHALLENGE.firstRemixes[c].length === 0), R.firstRemixesProblems().join('; '));
+  check('two first remixes shown per character; the cleared lists are valid', CHALLENGE.firstRemixesShown === 2 && R.firstRemixesProblems().length === 0 && CHALLENGE.characters.every((c) => CHALLENGE.firstRemixes[c].length === 0), R.firstRemixesProblems().join('; '));
   check('first remixes: at most two are used, in the order given', R.firstRemixesOf('zei', { zei: [F2, F1, F3] }).join() === [F2, F1].join());
   proof('a third first remix is caught', R.firstRemixesProblems({ ...empty, zei: [F1, F2, F3] }).length === 1);
   proof('a first remix that is not a design id is caught', R.firstRemixesProblems({ ...empty, zei: ['zei-remix'] }).length === 1);

@@ -45,6 +45,9 @@ const walk = (dir: string): string[] =>
 
 // --- P6aa: every count is a total ---------------------------------------------------------------------------------
 const DEFS = defs(CHALLENGE.id);
+// This test's database is PGlite with its own rows: the committed base ids (the owner's publish run, 2026-11-06) don't
+// exist here, so the base lists are cleared, as test:challenge does.
+for (const c of CHALLENGE.characters) (CHALLENGE.bases as Record<string, string[]>)[c] = [];
 check('every count names only categories and returns an aggregate', DEFS.every((d) => defProblems(d).length === 0), DEFS.flatMap(defProblems).join('; '));
 proof('a key that names a FID is caught', defProblems({ id: 'p', section: 'making', unit: 'count', key: 'fid::text', n: 'count(*)', from: 'studio.image_asks where true', ts: 'at' }).length > 0);
 proof('a key that names a person through a table alias is caught', defProblems({ id: 'p', section: 'making', unit: 'count', key: `'x' || x.person`, n: 'count(*)', from: 'studio.remix_asks x where true', ts: 'x.at' }).length > 0);
