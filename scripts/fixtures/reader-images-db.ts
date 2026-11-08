@@ -86,7 +86,7 @@ export async function startReaderImagesDb(port: number, opts: { designs?: boolea
     await db.query(`insert into studio.anchors (version_id, work_id, chapter, start_idx, end_idx) values ($1,'snowmoon',1,$2,$3)`, [im.version, im.start, im.end]);
   }
   if (opts.designs) await addDesigns(db);
-  const server = new PGLiteSocketServer({ db, port, host: '127.0.0.1' });
+  const server = new PGLiteSocketServer({ db, port, host: '127.0.0.1', maxConnections: 6 });
   await server.start();
   return {
     url: `postgres://postgres@127.0.0.1:${port}/postgres`,

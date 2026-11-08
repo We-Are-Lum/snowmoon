@@ -91,7 +91,7 @@ function Row({ tiles, alt, label, lazy = false, picture = false }: { tiles: Card
     <ul className={picture ? 'cc-row cc-row-pics' : 'cc-row'} role="list" aria-label={label}>
       {tiles.map((t) => (
         <li key={t.versionId}>
-          <Link className="cc-tile" href={t.href} data-version={t.versionId}>
+          <Link className="cc-tile" href={t.href} data-version={t.versionId} prefetch={false}>
             {t.thumb ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img className={picture ? 'cc-tile-img cc-tile-pic' : 'cc-tile-img'} src={t.thumb} alt={alt} width={picture ? 256 : 192} height={picture ? 144 : 256} loading={lazy ? 'lazy' : undefined} />
@@ -140,7 +140,7 @@ export function ChallengeCard({ c, w }: { c: CardData; w: CardWords }) {
     <section className="cc-card" aria-labelledby={`cc-${c.slug}`} data-character={c.slug} id={c.slug}>
       {big ? (
         <figure className="cc-hero">
-          <Link href={big.href} className="cc-hero-link" data-version={big.versionId} aria-label={`${w.tapToRemix}: ${c.name}`}>
+          <Link href={big.href} className="cc-hero-link" data-version={big.versionId} prefetch={false} aria-label={`${w.tapToRemix}: ${c.name}`}>
             {big.thumb ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img className="cc-hero-img" src={big.thumb} alt={w.alt} width={576} height={768} />

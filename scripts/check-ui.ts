@@ -122,6 +122,9 @@ import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
 const BASE = requireTarget('check:ui');
+/** Connections each fixture database takes, and its server uses: six, like production's pool (owner, 2026-11-08), so a page that
+ * queries in parallel (a feed's prefetches) is tested as it runs live; the "page goes quiet" wait stays, so a real hang still fails. */
+const FIXTURE_CONNECTIONS = 6;
 const INJECT = arg('inject-css');
 const SHOTS = arg('shots');
 /** A published style or sheet to check too (its version id), when the database has one. */
@@ -1585,7 +1588,7 @@ async function checkAiLabels() {
   const port = await freePort();
   // This checkout's production build, a second time, reading the local data.
   const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], {
-    env: { ...process.env, STUDIO_DATABASE_URL: data.url },
+    env: { ...process.env, STUDIO_DATABASE_URL: data.url, DB_MAX: String(FIXTURE_CONNECTIONS) },
     stdio: 'ignore',
   });
   const LOCAL = `http://localhost:${port}`;
@@ -1781,7 +1784,7 @@ async function checkChallengeLanding() {
   const data = await startChallengeDb(await freePort());
   const port = await freePort();
   const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], {
-    env: { ...process.env, STUDIO_DATABASE_URL: data.url },
+    env: { ...process.env, STUDIO_DATABASE_URL: data.url, DB_MAX: String(FIXTURE_CONNECTIONS) },
     stdio: 'ignore',
   });
   const LOCAL = `http://localhost:${port}`;
@@ -1918,7 +1921,7 @@ async function checkRemixLanding() {
   const { startReaderImagesDb, FIXTURE_DESIGNS: D } = await import('./fixtures/reader-images-db');
   const data = await startReaderImagesDb(await freePort(), { designs: true });
   const port = await freePort();
-  const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], { env: { ...process.env, STUDIO_DATABASE_URL: data.url }, stdio: 'ignore' });
+  const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], { env: { ...process.env, STUDIO_DATABASE_URL: data.url, DB_MAX: String(FIXTURE_CONNECTIONS) }, stdio: 'ignore' });
   const LOCAL = `http://localhost:${port}`;
   const remix = `/references/designs/${D.remix.version}`;
   try {
