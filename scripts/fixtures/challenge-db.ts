@@ -75,7 +75,7 @@ export async function startChallengeDb(port: number): Promise<{ url: string; sto
     await db.query(`insert into studio.anchors (version_id, work_id, chapter, start_idx, end_idx) values ($1,'snowmoon',$2,$3,$4)`, [r.versionId, m.chapter, m.start, m.end]);
     await db.query(`insert into studio.links (from_version_id, to_version_id, kind) values ($1,$2,'uses')`, [r.versionId, base]);
   }
-  const server = new PGLiteSocketServer({ db, port, host: '127.0.0.1', maxConnections: 6 });
+  const server = new PGLiteSocketServer({ db, port, host: '127.0.0.1' });
   await server.start();
   return {
     url: `postgres://postgres@127.0.0.1:${port}/postgres`,

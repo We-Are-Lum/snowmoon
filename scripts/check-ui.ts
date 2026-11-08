@@ -122,9 +122,6 @@ import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
 const BASE = requireTarget('check:ui');
-/** Connections each fixture database takes, and its server uses: six, like production's pool (owner, 2026-11-08), so a page that
- * queries in parallel (a feed's prefetches) is tested as it runs live; the "page goes quiet" wait stays, so a real hang still fails. */
-const FIXTURE_CONNECTIONS = 6;
 const INJECT = arg('inject-css');
 const SHOTS = arg('shots');
 /** A published style or sheet to check too (its version id), when the database has one. */
@@ -1588,7 +1585,7 @@ async function checkAiLabels() {
   const port = await freePort();
   // This checkout's production build, a second time, reading the local data.
   const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], {
-    env: { ...process.env, STUDIO_DATABASE_URL: data.url, DB_MAX: String(FIXTURE_CONNECTIONS) },
+    env: { ...process.env, STUDIO_DATABASE_URL: data.url },
     stdio: 'ignore',
   });
   const LOCAL = `http://localhost:${port}`;
@@ -1779,12 +1776,29 @@ async function checkMarkdownPages() {
 // /challenge as a landing page (owner, 2026-11-04): the triptych, the random selection and the feed's filter, on
 // local data (scripts/fixtures/challenge-db.ts), at 390 light and dark, in the 424 × 695 Farcaster frame and at 1440.
 // ---------------------------------------------------------------------------
+/**
+ * The challenge's pages on the target itself (production after the flip), with the strict "goes quiet" wait (open()),
+ * owner 2026-11-08: the relaxed wait in checkChallengeLanding is for its one-connection fixture only. Each page must
+ * load and settle, show its own elements, and not scroll sideways, at 390 light and 1440 dark.
+ */
+async function checkChallengeLive() {
+  for (const [w, h, touch, scheme] of [[390, 844, true, 'light'], [1440, 900, false, 'dark']] as const) {
+    const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+    for (const [p, sel] of [['/challenge', '.cc-card'], ['/challenge/remixes', '.ch-feed-page'], ['/challenge/entries', 'h1']] as const) {
+      await open(page, p);
+      if (!(await page.locator(sel).count())) fail(`${p} @${w} (${scheme}, live): shows no ${sel}`);
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`${p} @${w} (${scheme}, live): scrolls sideways`);
+    }
+    await page.close();
+  }
+}
+
 async function checkChallengeLanding() {
   const { startChallengeDb, FIXTURE_CHALLENGE: FX } = await import('./fixtures/challenge-db');
   const data = await startChallengeDb(await freePort());
   const port = await freePort();
   const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], {
-    env: { ...process.env, STUDIO_DATABASE_URL: data.url, DB_MAX: String(FIXTURE_CONNECTIONS) },
+    env: { ...process.env, STUDIO_DATABASE_URL: data.url },
     stdio: 'ignore',
   });
   const LOCAL = `http://localhost:${port}`;
@@ -1816,8 +1830,12 @@ async function checkChallengeLanding() {
     ] as const) {
       const tag = `@${w}×${h} (${scheme})`;
       const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+      // On the fixture's one-connection database, the challenge pages' link prefetches queue and may never settle, so
+      // here (only here) a page counts as ready once it has loaded and shown its own elements (owner, 2026-11-08,
+      // option 1). Every other section, and the live run against production (checkChallengeLive), keep "goes quiet".
       const at = async (p: string) => {
-        await page.goto(LOCAL + p, { waitUntil: 'networkidle' });
+        await page.goto(LOCAL + p, { waitUntil: 'load' });
+        await page.waitForSelector(p.startsWith('/challenge/remixes') ? '.ch-feed-page' : '.cc-card', { timeout: 30000 });
         if (INJECT) await page.addStyleTag({ content: INJECT });
         await page.evaluate(() => document.fonts.ready);
       };
@@ -1888,7 +1906,8 @@ async function checkChallengeLanding() {
       await snap('feed');
       await page.locator('.ch-chip[data-character="bai"]').click();
       await page.waitForURL('**/challenge/remixes?character=bai');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('load');
+      await page.waitForSelector('.ch-chip[aria-current="page"][data-character="bai"]', { timeout: 30000 });
       const bai = await page.locator('.ch-feed .ch-card, .ch-entries-list .ch-card').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-character')}:${e.getAttribute('data-version')}`));
       const want = FX.remixes.filter((r) => r.character === 'bai').map((r) => `bai:${r.versionId}`);
       if (bai.join() !== want.join()) fail(`/challenge/remixes?character=bai ${tag}: shows ${bai.join()}`);
@@ -1921,7 +1940,7 @@ async function checkRemixLanding() {
   const { startReaderImagesDb, FIXTURE_DESIGNS: D } = await import('./fixtures/reader-images-db');
   const data = await startReaderImagesDb(await freePort(), { designs: true });
   const port = await freePort();
-  const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], { env: { ...process.env, STUDIO_DATABASE_URL: data.url, DB_MAX: String(FIXTURE_CONNECTIONS) }, stdio: 'ignore' });
+  const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], { env: { ...process.env, STUDIO_DATABASE_URL: data.url }, stdio: 'ignore' });
   const LOCAL = `http://localhost:${port}`;
   const remix = `/references/designs/${D.remix.version}`;
   try {
@@ -2037,6 +2056,7 @@ try {
   // The landing on local data needs /challenge readable signed out: while it is admin-only (CHALLENGE.public off), the
   // signed-out 404 is checked below instead.
   if (CHALLENGE.public) await checkChallengeLanding();
+  if (CHALLENGE.public) await checkChallengeLive();
   else console.log('check:ui: the /challenge landing on local data waits for CHALLENGE.public (admin-only now)');
   await checkMarkdownPages();
   // First-visit intro (config/intro.json): once, home page only, Skip on every
