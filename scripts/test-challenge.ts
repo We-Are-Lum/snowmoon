@@ -65,7 +65,11 @@ CHALLENGE.pictureEntries = false;
   const { PRIVACY } = await import('../src/lib/legal');
   const V = await import('../src/lib/challenge/visibility');
   const inside = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
-  check('switch: CHALLENGE.public is off as committed (the owner opens it)', CHALLENGE.public === false);
+  // The owner's flip (PREPARED on challenge-public-on, merged only on his word): the committed switch is on, and every
+  // "off" check below turns it off for its own run, so the switch is still proven to be what holds them.
+  check('switch: CHALLENGE.public is on as committed (the owner opened it)', CHALLENGE.public === true);
+  const committedPublic = CHALLENGE.public;
+  (CHALLENGE as unknown as { public: boolean }).public = false;
   check('switch: the dates are kept (opens Tue 10 Nov, 00:00 Pacific; owner, 2026-11-07)', CHALLENGE.dates.opens === '2026-11-10T08:00:00Z');
   check('switch off, inside the window: the free cap stays $2, not $15', C.imagesDailySpendCapUsd(inside) === IMAGES.dailySpendCapUsd && IMAGES.dailySpendCapUsd === 2);
   check('switch off, inside the window: sheets stay invited-only (Privacy describes the challenge)', O.privacyDescribesChallenge(PRIVACY) && !O.challengeSheetsOpen(inside, PRIVACY));
@@ -75,6 +79,7 @@ CHALLENGE.pictureEntries = false;
   proof('a cap that rises by date alone is caught', ((t: Date) => (t.getTime() >= Date.parse(CHALLENGE.dates.opens) && t.getTime() < Date.parse(CHALLENGE.dates.closes) ? 15 : 2))(inside) !== C.imagesDailySpendCapUsd(inside));
   proof('sheets that open by date alone are caught', ((t: Date) => CHALLENGE.openSheets && R.phase(t) === 'open' && O.privacyDescribesChallenge(PRIVACY))(inside) !== O.challengeSheetsOpen(inside, PRIVACY));
   proof('entries that open by date alone are caught', ((t: Date) => CHALLENGE.entries && R.phase(t) === 'open')(inside) !== R.entriesOpen(inside));
+  (CHALLENGE as unknown as { public: boolean }).public = committedPublic;
   // Every way in: the page and the APIs answer 404 to everyone but an admin; the menu, the home row, the sheet page's
   // lines, "Posted on" and the share text wait for the switch.
   const gated: [string, RegExp][] = [
@@ -1533,9 +1538,12 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
     const NOTE = 'Pictures made before then are for trying it out, and can’t be entered.';
     check('F8 before the open date, /challenge\'s line ends with the owner\'s note; on the open date it is gone', LW.LANDING_BEFORE_OPEN === NOTE && LW.LANDING_WORDING.line('before').endsWith(`and close ${R.shortDateText('closes')}. ${NOTE}`) && !LW.LANDING_WORDING.line('open').includes(NOTE) && !LW.LANDING_WORDING.line('closed').includes(NOTE));
     proof('F8 a note that stays after the open date is caught', ((ph: 'before' | 'open') => `${LW.LANDING_WORDING.line(ph)} ${NOTE}`)('open').includes(NOTE) && !LW.LANDING_WORDING.line('open').includes(NOTE));
-    check('F8 the sheet landing says what /challenge says before the open date, without "Pick a character."', read('src/app/references/designs/[id]/page.tsx').includes("note={picturesOpen && phase() === 'before' ? HUB.sheetLine('before') : undefined}") && read('src/components/challenge-remix-landing.tsx').includes('{p.note ?? L.remixNote(p.name)}') && LW.LANDING_WORDING.sheetLine('before') === `Tap a picture to remix it. Entries open ${R.shortDateText('opens')} and close ${R.shortDateText('closes')}. ${NOTE}` && LW.LANDING_WORDING.line('before').startsWith('Pick a character. '));
+    check('F8 the sheet landing says what /challenge says before the open date, starting at "Entries open" (owner, 2026-11-07)', read('src/app/references/designs/[id]/page.tsx').includes("note={picturesOpen && phase() === 'before' ? HUB.sheetLine('before') : undefined}") && read('src/components/challenge-remix-landing.tsx').includes('{p.note ?? L.remixNote(p.name)}') && LW.LANDING_WORDING.sheetLine('before') === `Entries open ${R.shortDateText('opens')} and close ${R.shortDateText('closes')}. ${NOTE}` && LW.LANDING_WORDING.line('before').startsWith('Pick a character. '));
     check('F8 Submit\'s line (from the open date) for a picture published before it, for its maker, with "Remix it" to its remix screen', `${PW.beforeOpen.text}${PW.beforeOpen.link}${PW.beforeOpen.after}` === 'This picture was made before entries opened, so it can’t be entered. Remix it to make a new one.' && /beforeOpen: CHALLENGE\.pictureEntries && phase\(now\) === 'open' && Date\.parse\(p\.createdAt\) < Date\.parse\(CHALLENGE\.dates\.opens\)/.test(read('src/lib/challenge/picture-view.ts')) && E.SUBMIT_WORDING.beforeOpen === `${PW.beforeOpen.text}${PW.beforeOpen.link}${PW.beforeOpen.after}` && /known && mine && v\.beforeOpen && \(/.test(pic));
     check('F8 a maker can remix their own picture (the make route refuses no one for being its maker)', !/src\.byFid === fid|byFid === fid/.test(read('src/app/api/challenge/make/route.ts')));
+    check('F9 no "· Trial" on a challenge character\'s sheet page; other sheets keep it (owner, 2026-11-07)', read('src/app/references/designs/[id]/page.tsx').includes("{!(d.kind === 'character' && isChallengeCharacter(d.entity)) && <> · {IMAGES.label}</>}"));
+    check('F9 Every entry and Every remix show no "Draft wording" and no "Newest first." note (owner, 2026-11-07)', !read('src/app/challenge/entries/page.tsx').includes('draftShort') && !/v\.draft|v\.note/.test(read('src/components/challenge-remixes-body.tsx')));
+    check('F10 the challenge picture links are not prefetched: the remix cards (Every remix, Every entry), the card tiles and the big picture (owner, 2026-11-08)', read('src/components/challenge-remix-card.tsx').includes('className="ch-card-link" prefetch={false}') && read('src/components/challenge-card.tsx').includes('data-version={t.versionId} prefetch={false}') && read('src/components/challenge-card.tsx').includes('data-version={big.versionId} prefetch={false}'));
     const RR = await import('../src/lib/challenge/rules');
     check('F8 remixing works from the flip until the close; entries from the open date', RR.remixingOpenNow(new Date(Date.parse(CHALLENGE.dates.opens) - 1), true) && !RR.remixingOpenNow(new Date(Date.parse(CHALLENGE.dates.opens) - 1), false) && !RR.remixingOpenNow(new Date(CHALLENGE.dates.closes), true) && !RR.challengeOpenNow(new Date(Date.parse(CHALLENGE.dates.opens) - 1), true));
   }

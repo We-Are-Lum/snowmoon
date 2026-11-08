@@ -5,7 +5,6 @@ import { CHALLENGE } from '~/lib/config';
 import { db } from '~/lib/db';
 import { bookCharacter } from '~/lib/images/designs';
 import { entryHref, standing } from '~/lib/challenge/entries';
-import { CHALLENGE_WORDING as W } from '~/lib/challenge/wording';
 import { LANDING_WORDING as L } from '~/lib/challenge/landing-wording';
 import { ChallengeEntriesList } from '~/components/challenge-entries-list';
 import type { RemixCardWords } from '~/components/challenge-remix-card';
@@ -42,7 +41,6 @@ export default async function ChallengeEntries({ searchParams }: Props) {
         <Link href="/challenge">{L.back}</Link>
       </p>
       <h1>{L.entriesTitle}</h1>
-      <p className="as-draft ch-draft">{W.draftShort}</p>
       <nav className="ch-filter" aria-label={L.filterLabel}>
         <Link href={href(null)} className="ch-chip" aria-current={character === null ? 'page' : undefined}>
           {L.feedAll}

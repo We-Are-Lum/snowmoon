@@ -247,7 +247,9 @@ export default async function DesignPage({ params }: Props) {
   return (
     <div className="page prose dz-page">
       <p className="label ip-crumb">
-        <Link href={crumb.href}>← {crumb.label}</Link> · {IMAGES.label}
+        <Link href={crumb.href}>← {crumb.label}</Link>
+        {/* No "· Trial" on the challenge's pages (owner, 2026-11-07). */}
+        {!(d.kind === 'character' && isChallengeCharacter(d.entity)) && <> · {IMAGES.label}</>}
       </p>
       <div className="dz-split">
         <nav className="dz-aside" aria-label={style ? W.index.tabStyles : d.entity}>

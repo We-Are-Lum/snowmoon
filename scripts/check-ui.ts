@@ -1776,6 +1776,23 @@ async function checkMarkdownPages() {
 // /challenge as a landing page (owner, 2026-11-04): the triptych, the random selection and the feed's filter, on
 // local data (scripts/fixtures/challenge-db.ts), at 390 light and dark, in the 424 × 695 Farcaster frame and at 1440.
 // ---------------------------------------------------------------------------
+/**
+ * The challenge's pages on the target itself (production after the flip), with the strict "goes quiet" wait (open()),
+ * owner 2026-11-08: the relaxed wait in checkChallengeLanding is for its one-connection fixture only. Each page must
+ * load and settle, show its own elements, and not scroll sideways, at 390 light and 1440 dark.
+ */
+async function checkChallengeLive() {
+  for (const [w, h, touch, scheme] of [[390, 844, true, 'light'], [1440, 900, false, 'dark']] as const) {
+    const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+    for (const [p, sel] of [['/challenge', '.cc-card'], ['/challenge/remixes', '.ch-feed-page'], ['/challenge/entries', 'h1']] as const) {
+      await open(page, p);
+      if (!(await page.locator(sel).count())) fail(`${p} @${w} (${scheme}, live): shows no ${sel}`);
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`${p} @${w} (${scheme}, live): scrolls sideways`);
+    }
+    await page.close();
+  }
+}
+
 async function checkChallengeLanding() {
   const { startChallengeDb, FIXTURE_CHALLENGE: FX } = await import('./fixtures/challenge-db');
   const data = await startChallengeDb(await freePort());
@@ -1813,8 +1830,12 @@ async function checkChallengeLanding() {
     ] as const) {
       const tag = `@${w}×${h} (${scheme})`;
       const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+      // On the fixture's one-connection database, the challenge pages' link prefetches queue and may never settle, so
+      // here (only here) a page counts as ready once it has loaded and shown its own elements (owner, 2026-11-08,
+      // option 1). Every other section, and the live run against production (checkChallengeLive), keep "goes quiet".
       const at = async (p: string) => {
-        await page.goto(LOCAL + p, { waitUntil: 'networkidle' });
+        await page.goto(LOCAL + p, { waitUntil: 'load' });
+        await page.waitForSelector(p.startsWith('/challenge/remixes') ? '.ch-feed-page' : '.cc-card', { timeout: 30000 });
         if (INJECT) await page.addStyleTag({ content: INJECT });
         await page.evaluate(() => document.fonts.ready);
       };
@@ -1885,7 +1906,8 @@ async function checkChallengeLanding() {
       await snap('feed');
       await page.locator('.ch-chip[data-character="bai"]').click();
       await page.waitForURL('**/challenge/remixes?character=bai');
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('load');
+      await page.waitForSelector('.ch-chip[aria-current="page"][data-character="bai"]', { timeout: 30000 });
       const bai = await page.locator('.ch-feed .ch-card, .ch-entries-list .ch-card').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-character')}:${e.getAttribute('data-version')}`));
       const want = FX.remixes.filter((r) => r.character === 'bai').map((r) => `bai:${r.versionId}`);
       if (bai.join() !== want.join()) fail(`/challenge/remixes?character=bai ${tag}: shows ${bai.join()}`);
@@ -2034,6 +2056,7 @@ try {
   // The landing on local data needs /challenge readable signed out: while it is admin-only (CHALLENGE.public off), the
   // signed-out 404 is checked below instead.
   if (CHALLENGE.public) await checkChallengeLanding();
+  if (CHALLENGE.public) await checkChallengeLive();
   else console.log('check:ui: the /challenge landing on local data waits for CHALLENGE.public (admin-only now)');
   await checkMarkdownPages();
   // First-visit intro (config/intro.json): once, home page only, Skip on every

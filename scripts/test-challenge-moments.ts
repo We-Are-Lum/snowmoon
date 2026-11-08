@@ -110,7 +110,7 @@ check('config: a current default look per challenge character, each a design id 
   check('P9g: the exception holds until the close and ends at it', spoilerExceptionOn(new Date(Date.parse(CHALLENGE.dates.closes) - 1)) && !spoilerExceptionOn(new Date(Date.parse(CHALLENGE.dates.closes))));
 
   const c = { public: CHALLENGE.public, cardsApproved: CHALLENGE.cardsApproved, sceneLinesApproved: CHALLENGE.sceneLinesApproved };
-  check('P2m: as committed, the cards and scene lines are approved (owner, 2026-11-06) and /challenge isn\'t public yet', !c.public && c.cardsApproved && c.sceneLinesApproved && p2mProblems(c, files).length === 0, p2mProblems(c, files).join('; '));
+  check('P2m: as committed, the cards and scene lines are approved (owner, 2026-11-06) and /challenge is public (the owner\'s flip)', c.public && c.cardsApproved && c.sceneLinesApproved && p2mProblems(c, files).length === 0, p2mProblems(c, files).join('; '));
   proof('P2m: public with the cards unapproved fails', p2mProblems({ public: true, cardsApproved: false, sceneLinesApproved: true }, files).length > 0);
   proof('P2m: public with the scene lines unapproved fails', p2mProblems({ public: true, cardsApproved: true, sceneLinesApproved: false }, files).length > 0);
   check('P2m: public once both are approved passes', p2mProblems({ public: true, cardsApproved: true, sceneLinesApproved: true }, files).length === 0);

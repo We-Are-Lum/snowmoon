@@ -16,7 +16,7 @@ export function RemixCardView({ r, w }: { r: RemixCardData; w: RemixCardWords })
   const title = r.title.trim() || w.untitled;
   return (
     <li className="ch-card" data-character={r.character} data-version={r.versionId}>
-      <Link href={r.href ?? `/references/designs/${r.versionId}`} className="ch-card-link">
+      <Link href={r.href ?? `/references/designs/${r.versionId}`} className="ch-card-link" prefetch={false}>
         {r.thumb ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img className="ch-card-img" src={r.thumb} alt={w.alt} width={288} height={384} loading="lazy" />
