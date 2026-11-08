@@ -16,7 +16,6 @@ export function ChallengeRemixesBody({ v }: { v: RemixesView }) {
       </p>
       {v.adminNote && <p className="dz-note ch-admin-only">{v.adminNote}</p>}
       <h1>{v.title}</h1>
-      <p className="as-draft ch-draft">{v.draft}</p>
       <nav className="ch-filter" aria-label={v.filterLabel}>
         {v.chips.map((c) => (
           <Link key={c.key} href={c.href} className="ch-chip" data-character={c.key === 'all' ? undefined : c.key} aria-current={c.current ? 'page' : undefined}>
@@ -24,7 +23,6 @@ export function ChallengeRemixesBody({ v }: { v: RemixesView }) {
           </Link>
         ))}
       </nav>
-      <p className="dz-note">{v.note}</p>
       {v.cards.length && v.order ? (
         <ChallengeEntriesList all={v.cards} w={{ newest: v.order.newest, shuffled: v.order.shuffled, orderLabel: v.order.label, cards: v.cardWords, pictures: true }} />
       ) : v.cards.length ? (

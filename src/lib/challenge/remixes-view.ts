@@ -21,10 +21,8 @@ export interface RemixesView {
   adminNote: string | null;
   back: string;
   title: string;
-  draft: string;
   filterLabel: string;
   chips: { key: string; name: string; href: string; current: boolean }[];
-  note: string;
   cards: RemixCardData[];
   /** Pictures as the entries (CHALLENGE.pictureEntries): the viewer's own Newest / Shuffled order, as /challenge/entries has. */
   order: { newest: string; shuffled: string; label: string } | null;
@@ -56,10 +54,8 @@ export async function remixesView(sql: Sql | null, q: { character?: string | nul
     adminNote: CHALLENGE.public ? null : 'Admins only for now: everyone else gets “not found” here, and nothing opens until the owner opens it (CHALLENGE.public).',
     back: L.back,
     title: L.feedTitle,
-    draft: W.draftShort,
     filterLabel: 'Filter by character',
     chips: [{ key: 'all', name: L.feedAll, href: href(null), current: character === null }, ...chars.map((c) => ({ key: c.slug, name: names[c.slug], href: href(c.slug), current: character === c.slug }))],
-    note: L.feedNote,
     cards,
     order: CHALLENGE.pictureEntries ? { newest: L.entriesNewest, shuffled: L.entriesShuffled, label: L.entriesOrderLabel } : null,
     cardWords: Object.fromEntries(chars.map((c) => [c.slug, { name: names[c.slug], untitled: L.untitled(names[c.slug]), alt: CHALLENGE.pictureEntries ? L.pictureAltMoment(names[c.slug]) : L.pictureAlt(names[c.slug]) }])),
