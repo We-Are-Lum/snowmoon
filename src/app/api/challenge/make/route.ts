@@ -16,6 +16,7 @@ import { challengeModel, DEFAULT_CHALLENGE_MODEL, modelView, noticeProblem } fro
 import { challengeSpend, makeWith, recipeModel } from '~/lib/challenge/make-model';
 import { MODEL_WORDING } from '~/lib/challenge/model-wording';
 import { whereFrom } from '~/lib/images/countries';
+import { generationsLeft } from '~/lib/images/limits';
 import { isWalletNumber } from '~/lib/images/remixes';
 import { defaultLook, sourceOf } from '~/lib/challenge/pictures';
 import { spoilerExceptionOn } from '~/lib/challenge/spoilers';
@@ -60,7 +61,9 @@ export async function GET(request: Request) {
   if (!src) return hidden();
   // The country decides the Model row for this answer only; it isn't kept, logged or sent on.
   const row = modelView(whereFrom(request.headers), { wallet: person !== null && isWalletNumber(person) });
-  return NextResponse.json({ ...makeView(src, { styles: sql ? await publishedStyles(sql) : [], models: row.models }), modelsNote: row.note }, { headers: { 'Cache-Control': 'private, no-store' } });
+  // Today's free pictures left, so the screen can say when a closed pick (3 of them) won't fit; null signed out or for a wallet.
+  const picturesLeft = sql && person !== null && !isWalletNumber(person) ? await generationsLeft(sql, person).catch(() => null) : null;
+  return NextResponse.json({ ...makeView(src, { styles: sql ? await publishedStyles(sql) : [], models: row.models }), modelsNote: row.note, picturesLeft }, { headers: { 'Cache-Control': 'private, no-store' } });
 }
 
 export async function POST(request: Request) {

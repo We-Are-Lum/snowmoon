@@ -148,7 +148,8 @@ export const IMAGE_WORDING = {
       note: 'Chosen once for the whole sheet: the front, side and back all come from this model. Changing it marks the views to make again.',
       openDefault: 'The site’s open models (the default)',
       // Each closed picture uses CLOSED_IMAGES.countsAs (3) of the day's free pictures (branch challenge-models).
-      closedLimit: 'Not enough of today’s pictures left for a closed model: each uses 3. The open models may still work; more at 00:00 UTC.',
+      // No time here: the screen says when, in the visitor's own time (src/components/challenge-model-row.tsx resetLocal).
+      closedLimit: 'Not enough of today’s pictures left for a closed model: each uses 3. The open models may still work.',
       closedSpend: 'Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at 00:00 UTC.',
       changed: 'These views were made with another model. Make them again with this one.',
       mixed: 'The views were made with more than one model. Make them again with one.',

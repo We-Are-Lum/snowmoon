@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { CLOSED_PROVIDERS, type ClosedProvider } from '~/lib/config';
-import { MODEL_WORDING as W } from '~/lib/challenge/model-wording';
+import { MODEL_WORDING as W, resetLocal } from '~/lib/challenge/model-wording';
 import type { ModelRowEntry } from '~/lib/challenge/models';
 import { answerNotice, browserStore, mayPick, noticeFor } from '~/lib/images/model-notice';
 import { ModelNotice } from './model-picker';
@@ -45,8 +45,10 @@ export function useChallengeModel<T extends ModelRowEntry>(models: readonly T[] 
   };
   const notice = pending ? <ModelNotice maker={pending.pick.maker} askAdult={pending.askAdult} adultTicked={adultTicked} onTick={setAdultTicked} onAnswer={answer} /> : null;
   /** One line under a model's name: its terms, the price, and for a closed one its maker's label and that it uses 3. */
-  const meta = (m: ModelRowEntry) => [m.terms, W.about(m.aboutUsd), ...(m.open ? [] : [m.retention, W.countsAs])].filter(Boolean).join(' · ');
+  const meta = (m: ModelRowEntry) => (m.open ? null : (W.closedLine[m.maker] ?? null));
+  /** Today's free pictures left (from the server), when fewer than a closed picture needs: the line saying so. */
+  const tooFew = (left: number | null | undefined) => (chosen && !chosen.open && typeof left === 'number' && left < chosen.countsAs ? W.tooFew(left, resetLocal()) : null);
   /** For a wallet account: the line shown in place of the closed models ("Closed models need a Farcaster, Lens or Bluesky sign-in."). */
   const note = modelsNote;
-  return { list, chosen, pick, ready, body, notice, meta, note, W };
+  return { list, chosen, pick, ready, body, notice, meta, note, tooFew, W };
 }

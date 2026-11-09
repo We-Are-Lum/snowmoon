@@ -14,12 +14,15 @@ Not allowed:
   (including the book's author).
 - **violence**: gore, graphic injury or torture.
 - **hateful**: hate symbols, slurs, or content that demeans people for who they are.
-- **someone_elses_work**: a named character, logo, brand or franchise from another work, or the
-  style of a named living artist.
+- **someone_elses_work**: a named character, logo, brand, film or franchise from another work, or the
+  style of a named artist or studio.
 - **words**: asking for words, letters, captions, signs or speech bubbles in the image.
+- **self_harm**: self-harm, suicide or disordered eating, shown approvingly or as something to copy.
+- **extremism**: praise, symbols or propaganda for terrorist or violent extremist groups, or incitement to violence.
+- **campaign**: campaign material for a real election, party or candidate (posters, slogans, endorsements, attacks).
 
 Allowed: places, people and scenes of the novel described in the reader's own words; moods,
-light, colour and composition; styles named by movement or medium rather than by a living artist.
+light, colour and composition; styles named by movement or medium rather than by an artist, studio or film.
 
 Answer with exactly one line of JSON and nothing else:
 {"allow": true} or {"allow": false, "category": "<one of the categories above>"}

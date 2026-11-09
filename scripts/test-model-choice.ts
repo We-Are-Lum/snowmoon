@@ -247,9 +247,14 @@ proven(
     process.env.GROQ_API_KEY = 'stand-in-not-a-key';
     const realFetch = globalThis.fetch;
     let falAnswer: () => Response = () => new Response('{}');
-    globalThis.fetch = (async (url: string) => {
+    // The prompt check, mocked: it answers `guardVerdict`, and keeps what it was sent (the system policy, the prompt).
+    let guardVerdict = '{"allow": true}';
+    const guardSent: { system: string; user: string }[] = [];
+    globalThis.fetch = (async (url: string, init?: RequestInit) => {
       if (String(url).startsWith('https://fal.run/')) return falAnswer();
-      return new Response(JSON.stringify({ id: 'x', model: 'stand-in', choices: [{ index: 0, message: { role: 'assistant', content: '{"allow": true}' }, finish_reason: 'stop' }], usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 } }), { headers: { 'content-type': 'application/json' } });
+      const m = (JSON.parse(String(init?.body ?? '{}')).messages ?? []) as { role: string; content: string }[];
+      guardSent.push({ system: m.find((x) => x.role === 'system')?.content ?? '', user: m.find((x) => x.role === 'user')?.content ?? '' });
+      return new Response(JSON.stringify({ id: 'x', model: 'stand-in', choices: [{ index: 0, message: { role: 'assistant', content: guardVerdict }, finish_reason: 'stop' }], usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 } }), { headers: { 'content-type': 'application/json' } });
     }) as unknown as typeof fetch;
     const jpg = await sharp({ create: { width: 64, height: 36, channels: 3, background: { r: 0, g: 0, b: 0 } } }).jpeg().toBuffer();
     const ref = { bytes: jpg, contentType: 'image/jpeg', width: 64, height: 36 };
@@ -270,9 +275,38 @@ proven(
     const flux = await dropped(4002, flagged, () => makeEdit('Seila, warm light.', [ref]));
     // Planted: a 500 (the model didn't answer) must NOT be taken for a refusal.
     const outage = await dropped(4003, () => new Response('boom', { status: 500 }), () => makeQwenEdit('fal-ai/qwen-image-edit-plus', 'p', ref, IMAGES.size, 0.06));
+    // M4f: the challenge's whole prompt (the change box and a "Write your own" style) goes through the blocked names and
+    // the prompt check; a named real person, artist, studio or film in either is refused before any model is called.
+    const { remixPrompt } = await import('../src/lib/challenge/make');
+    const refusedFor = async (fid: number, words: string, style: string, verdict: string) => {
+      guardVerdict = verdict;
+      let called = false;
+      const r = await paidPicture(S, fid, req, { checkText: remixPrompt({ words, name: 'Zei', style }), guardMaxTokens: IMAGES.designs.guardMaxTokens, spend: { model: { id: 'flux2-klein-4b-edit', host: 'fal.ai' }, reserveUsd: 0.0215 }, make: async () => { called = true; throw new Error('not reached'); } });
+      return !r.ok && r.status === 422 && r.extra.reason === 'blocked' && !called ? (r.extra.category as string) : `allowed (${JSON.stringify(r.ok ? 'ok' : r.extra)})`;
+    };
+    const no = (cat: string) => `{"allow": false, "category": "${cat}"}`;
+    const cases = [
+      ['a real person named in the change box (blocked names)', await refusedFor(4101, 'Zei shaking hands with Donald Trump', 'watercolour', '{"allow": true}'), 'real_person'],
+      ['a real person named in "Write your own" (blocked names)', await refusedFor(4102, 'Zei on a ledge', 'painted like a Putin portrait', '{"allow": true}'), 'real_person'],
+      ['an artist in the change box (the check)', await refusedFor(4103, 'Zei, as Hokusai would draw her', 'watercolour', no('someone_elses_work')), 'someone_elses_work'],
+      ['a studio in "Write your own" (the check)', await refusedFor(4104, 'Zei on a ledge', 'Studio Ghibli look', no('someone_elses_work')), 'someone_elses_work'],
+      ['a film in "Write your own" (the check)', await refusedFor(4105, 'Zei on a ledge', 'like a still from Blade Runner', no('someone_elses_work')), 'someone_elses_work'],
+      ['campaign material (the check)', await refusedFor(4106, 'Zei holding a vote-for poster', 'poster art', no('campaign')), 'campaign'],
+    ] as const;
+    const sentStyle = guardSent.some((g) => /Studio Ghibli look/.test(g.user)) && guardSent.some((g) => /Blade Runner/.test(g.user));
+    const policySent = guardSent.at(-1)?.system ?? '';
+    const m4f = [
+      ...cases.flatMap(([what, got, want]) => (got === want ? [] : [`${what}: ${got}`])),
+      ...need(sentStyle, 'the check wasn\'t sent the "Write your own" style text'),
+      ...['self_harm', 'extremism', 'campaign', 'someone_elses_work', 'real_person'].flatMap((c) => need(new RegExp(`\\*\\*${c}\\*\\*`).test(policySent), `the policy sent to the check doesn't name ${c}`)),
+      ...need(/artist or studio/.test(policySent) && /\bfilm\b/.test(policySent) && /real election, party or candidate/.test(policySent), 'the policy sent doesn\'t name artists, studios, films and campaign material'),
+    ];
+    guardVerdict = '{"allow": true}';
+    const lax = await refusedFor(4107, 'Zei on a ledge', 'Studio Ghibli look', '{"allow": true}'); // planted: a check that lets it through
     globalThis.fetch = realFetch;
     process.env.FAL_KEY = keys.fal;
     process.env.GROQ_API_KEY = keys.groq;
+    proven('M4f the change box and a "Write your own" style are both checked: named real people (blocked names), artists, studios, films and campaign material (the check, mocked) are refused before any model; the policy sent names self_harm, extremism and campaign', () => m4f, () => (lax === 'someone_elses_work' ? [] : ['a check that allows it lets the studio through']));
     proven('M4e a model\'s refusal (Qwen 422 content_policy_violation) and a flagged FLUX picture are counted and answered as dropped (422, reason nsfw), not as a success', () => [...qwen, ...flux], () => outage);
   }
   await sql.end();
@@ -790,6 +824,27 @@ proven(
       ];
     };
     proven('C14 a wallet account sees "Closed models need a Farcaster, Lens or Bluesky sign-in." in place of the closed models, and the route refuses them', () => walletRow(modelView), () => walletRow((w, o) => ({ models: modelRow(w), note: null })));
+  }
+
+  // C17: the closed-pick lines are the owner's exact words, and their costs match the models' estimates.
+  {
+    const { MODEL_WORDING } = await import('../src/lib/challenge/model-wording');
+    const linesOk = (lines: Record<string, string>, models: typeof CHALLENGE_MODELS) => [
+      ...need(lines.OpenAI === 'a closed model by OpenAI · costs us about $0.05 · OpenAI may keep your prompt and picture up to 30 days · uses 3 of today\'s pictures', 'the OpenAI line'),
+      ...need(lines.Google === 'a closed model by Google · costs us about $0.07 · Google keeps no copy; abuse logs up to 90 days · uses 3 of today\'s pictures', 'the Google line'),
+      ...models.filter((m) => !m.open).flatMap((m) => need((lines[m.maker] ?? '').includes(`costs us about $${m.estimateUsd.toFixed(2)} `), `${m.maker}'s line doesn't say its estimate, $${m.estimateUsd.toFixed(2)}`)),
+      ...need((lines.OpenAI ?? '').includes(`uses ${CLOSED_IMAGES.countsAs} of`), 'the count'),
+    ];
+    const { resetLocal } = await import('../src/lib/challenge/model-wording');
+    const at = new Date('2026-11-09T05:00:00Z');
+    const tooFew = [
+      ...need(MODEL_WORDING.tooFew(2, '4:00 pm') === 'A closed model uses 3 of today\'s pictures; you have 2 left, enough for the open models. More pictures at 4:00 pm.', 'the too-few line'),
+      ...need(MODEL_WORDING.tooFew(0, '4:00 pm') === 'A closed model uses 3 of today\'s pictures; you have none left today. More pictures at 4:00 pm.', 'the none-left line'),
+      ...need(resetLocal(at, 'America/Los_Angeles') === '4:00 pm' && resetLocal(at, 'Europe/Paris') === '1:00 am' && resetLocal(at, 'UTC') === '12:00 am', `reset: ${resetLocal(at, 'America/Los_Angeles')}, ${resetLocal(at, 'Europe/Paris')}, ${resetLocal(at, 'UTC')}`),
+      ...need(!/resetLocal|toLocaleTimeString/.test(makeSrc), 'the route renders a time'),
+      ...need(IMAGES.generationsPerDay === 10 && IMAGES.dailySpendCapUsd !== undefined && CLOSED_IMAGES.dailySpendCapUsd === 5, 'the free count (10) or the closed cap ($5) changed'),
+    ];
+    proven('C17 the closed-pick lines are the owner\'s words with the models\' own estimates; the too-few line, its n = 0 form, and the reset in the visitor\'s time (browser only); 10 free a day, $5 closed cap', () => [...linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS), ...tooFew], () => linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS.map((m) => (m.id === 'gpt-image-2.5-sunburst' ? { ...m, estimateUsd: 0.08 } : m))));
   }
 
   // C12: model choice on the challenge is on only with Privacy §4, §7 and consent v6 saying what each maker receives (P6t).
