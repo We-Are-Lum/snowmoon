@@ -1,11 +1,11 @@
-# Challenge release: every final text (DRAFT v2, not reread)
+# Challenge release: every final text (v3, reread by the owner)
 
-Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` at `5ba80255` (v2: with challenge-simple's final head `1efcbeaf`)
-(which carries `challenge-simple`). **DRAFT until the owner's reread.** Every text below is copied from the code as it
+Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` at `9ae0aa13` (with challenge-simple's final head `1efcbeaf`). **v3:** the owner reread every text of v2 on 2026-11-08, via the coordinator's check, with changes 1–2 below applied word for word (the notice labels; the closed refusals) and the rules above Generate extended; the "none left" line approved as drafted
+(which carries `challenge-simple`). Every text below is copied from the code as it
 stands on that commit (dumped from `src/lib/legal.ts`, `config/consent.json`, the wording modules and `src/app/about`),
 not retyped. "Before" is `origin/main` at `00722d70`. Where a text didn't exist, there's no before. `{…}` marks a value
-filled in at run time. After the owner's reread of these words, `LEGAL.ownerReread` becomes: privacy `d8fe0h`, terms
-`1finiyh` (computed by `check:principles` P6k and P6l on this commit; an agent never sets them).
+filled in at run time. `LEGAL.ownerReread` is set to these words on the owner's instruction (relayed by the coordinator): privacy `d8fe0h`,
+terms `1finiyh`; P6k and P6l pass.
 
 ## Terms
 
@@ -89,18 +89,18 @@ filled in at run time. After the owner's reread of these words, `LEGAL.ownerRere
 
 > Supabase holds the database. OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures and for a challenge picture someone makes with one of their closed models, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days).
 
-## The closed models' notices (version 3), the 18+ line and the buttons
+## The closed models' notices (version 4: v3's words with the new labels), the 18+ line and the buttons
 
 Before (v2), the middle paragraph only: "OpenAI receives your prompt for each view and, for the side and back, the front
 view it made, through Vercel AI Gateway. Nothing else about you." (and the same for Google). Everything else unchanged.
 
-**OpenAI:** title "A closed model by OpenAI"; label "OpenAI keeps prompts up to 30 days".
+**OpenAI:** title "A closed model by OpenAI"; label "OpenAI may keep prompts and pictures up to 30 days" (v3, the owner's words; before "OpenAI keeps prompts up to 30 days").
 
 > GPT Image 2.5 Sunburst is made by OpenAI. Its weights aren't published, so its recipe can't be re-run exactly.
 > OpenAI receives your prompt and the picture you chose, through Vercel AI Gateway. Nothing else about you.
 > OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law. It doesn't train its models on them. The gateway keeps no copy.
 
-**Google:** title "A closed model by Google"; label "Google keeps no copy past 24 hours".
+**Google:** title "A closed model by Google"; label "Google keeps no copy; abuse logs up to 90 days" (v3, the owner's words; before "Google keeps no copy past 24 hours").
 
 > Gemini 3.1 Flash Image is made by Google. Its weights aren't published, so its recipe can't be re-run exactly.
 > Google receives your prompt and the picture you chose, through Vercel AI Gateway. Nothing else about you.
@@ -129,11 +129,11 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
 - Under a closed pick (the owner's words): OpenAI "a closed model by OpenAI · costs us about $0.05 · OpenAI may keep your prompt and picture up to 30 days · uses 3 of today's pictures"; Google "a closed model by Google · costs us about $0.07 · Google keeps no copy; abuse logs up to 90 days · uses 3 of today's pictures".
 - Too few left (the owner's words; `{reset}` is 00:00 UTC in the visitor's own time, rendered in the browser, e.g.
   "4:00 pm"): "A closed model uses 3 of today's pictures; you have {n} left, enough for the open models. More pictures at {reset}."
-- With none left (n = 0; **this agent's proposal**, since "enough for the open models" isn't true then):
+- With none left (n = 0; drafted by this agent, **approved by the owner as drafted**):
   "A closed model uses 3 of today's pictures; you have none left today. More pictures at {reset}."
 - A wallet account, in place of the closed models (the owner's words): "Closed models need a Farcaster, Lens or Bluesky sign-in."
 - Refusals (DRAFT): "That model isn’t offered here. Choose another." · "Read the model’s notice first." · "Confirm you’re 18 or older first." · when fewer than 3 are left
-  (server; no time on the server): "Not enough of today’s pictures left for a closed model: each uses 3. The open models may still work." · the closed cap: "Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at 00:00 UTC."
+  (the owner's words, v3): "A closed model uses 3 of today’s pictures, and you have fewer left. You can still use an open model." · the closed cap (the owner's words, v3; `{reset}` filled in by the browser in the visitor's own time from the instant the server sends): "Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at {reset}."
 - The recipe's crop note (DRAFT): "cropped from 3:2 to 16:9, mostly from the bottom".
 
 ## The remix screen: the rest (challenge-simple; DRAFT unless marked the owner's)
@@ -177,6 +177,6 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
   "campaign material for a real election, party or candidate (posters, slogans, endorsements, attacks)."
 - Allowed line: "…styles named by movement or medium rather than by an artist, studio or film." (before: "…rather than
   by a living artist.")
-- Not changed: the rules shown above Generate, "No real people. No sexual content. Nothing violent or hateful. No
-  characters or logos from other works. Don't ask for words in the picture." (to align with §6, the owner may want to add
-  self-harm, extremism and campaign material there: not done).
+- The rules shown above Generate (and on About), v3: "No real people. No sexual content. Nothing violent or hateful. No
+  characters or logos from other works. Don’t ask for words in the picture. No self-harm, extremism or election
+  campaigning. Describe styles by look, not by artist, studio or film." (before: the same without the last two sentences).
