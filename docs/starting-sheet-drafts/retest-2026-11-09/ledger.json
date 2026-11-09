@@ -1,0 +1,1278 @@
+{
+ "about": "Re-test 2026-11-09: shorter look lines + scene line; Bai (5 changes) and Zei (2) on FLUX, GPT, Gemini, base front only. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "cap_usd": 1.5,
+ "stop_at_usd": 1.35,
+ "seed": 20261108,
+ "looks": {
+  "bai": "Unless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.",
+  "zei": "Unless the change says otherwise: a man with light golden-tan skin and dark eyes."
+ },
+ "scene_line": "Unless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.",
+ "prompts": {
+  "f8a065ce3b94a522ac8e4da03a5673f661be28cd6dff0675a8722bc81e969f48": "as a medieval knight in armour\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "38c3a18b1665892499f904b81443e932f95162909a76e325306dde70bcfaf05d": "as a deep-sea diver in a brass helmet, underwater\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "8a68c1bddc7e9ae635a9c2cbf685e4c8024a1c870984780ad2f91caff698679d": "much taller, with a heavy, broad-shouldered build\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "31b7256a11d8a86c0baf2df2d6d586cfbea77d12c1e39c55fd8f19646a177c24": "aged about 70\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "6126c0b954ef301ff46ca3574d825904f16f83d04ddc32c8c24ac49804ed006d": "shaved head\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "323651f95a0feed00328d16bb84793f51154bfc2e506c710aa1d77630f9cdc42": "aged about 70\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "c23dfbe0a98b5e6deb23e2a51b5e51af3699a94a2b7db5bde86ae3f9078f516d": "shaved head\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "guard",
+   "prompt_sha256": "f8a065ce3b94a522ac8e4da03a5673f661be28cd6dff0675a8722bc81e969f48",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000125175,
+   "cost_source": "reported",
+   "worst_usd": 0.0005219999999999999,
+   "at": "2026-11-09T22:05:11.698Z"
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "bai",
+   "change": 8,
+   "words": "as a medieval knight in armour",
+   "prompt_sha256": "f8a065ce3b94a522ac8e4da03a5673f661be28cd6dff0675a8722bc81e969f48",
+   "file": "retest-c08-bai-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c258-0a28-7a70-bd96-53b609dd896a",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "f253cf28f2e8dd86b835f30bea3ee6cbcc125b476b1ac1357327c4efcfafe85b",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T22:05:13.474Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "copies_by_eye": 1,
+   "reading": "armour, in a hall; a woman with dark skin and earrings; her magenta hair is now black braids"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "38c3a18b1665892499f904b81443e932f95162909a76e325306dde70bcfaf05d",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000188625,
+   "cost_source": "reported",
+   "worst_usd": 0.000523425,
+   "at": "2026-11-09T22:05:14.377Z"
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "bai",
+   "change": 11,
+   "words": "as a deep-sea diver in a brass helmet, underwater",
+   "prompt_sha256": "38c3a18b1665892499f904b81443e932f95162909a76e325306dde70bcfaf05d",
+   "file": "retest-c11-bai-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c258-1381-7a30-abfa-79b9c1d5f073",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "51c22c35f79344ee830fc6616fc1c7c53a262b41734f1a864f2fd0bc5bb935da",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T22:05:15.676Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "copies_by_eye": 1,
+   "reading": "underwater with a diving helmet but modern scuba gear, not a brass suit; Bai's face and skin"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "8a68c1bddc7e9ae635a9c2cbf685e4c8024a1c870984780ad2f91caff698679d",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000141525,
+   "cost_source": "reported",
+   "worst_usd": 0.000523425,
+   "at": "2026-11-09T22:05:16.522Z"
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "bai",
+   "change": 4,
+   "words": "much taller, with a heavy, broad-shouldered build",
+   "prompt_sha256": "8a68c1bddc7e9ae635a9c2cbf685e4c8024a1c870984780ad2f91caff698679d",
+   "file": "retest-c04-bai-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c258-1be2-73f0-bd4d-e233f9d97951",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "19beb1290011f4112e509fe8e668a251880a3c6831ef8d0685943dac50e113d2",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T22:05:17.745Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "copies_by_eye": 1,
+   "reading": "no bigger; a grey blob behind her legs again; plain grey background"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "31b7256a11d8a86c0baf2df2d6d586cfbea77d12c1e39c55fd8f19646a177c24",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000158325,
+   "cost_source": "reported",
+   "worst_usd": 0.000520725,
+   "at": "2026-11-09T22:05:18.527Z"
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "bai",
+   "change": 3,
+   "words": "aged about 70",
+   "prompt_sha256": "31b7256a11d8a86c0baf2df2d6d586cfbea77d12c1e39c55fd8f19646a177c24",
+   "file": "retest-c03-bai-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c258-23ba-7de3-9f6a-98c9a6743cb2",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "360601aa08a3912366958fcd707b9a8356930e71f75821270fe203c2d142029e",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T22:05:19.856Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "copies_by_eye": 1,
+   "reading": "not aged: young face, long black hair; plain grey background"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "6126c0b954ef301ff46ca3574d825904f16f83d04ddc32c8c24ac49804ed006d",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00018105,
+   "cost_source": "reported",
+   "worst_usd": 0.0005205749999999999,
+   "at": "2026-11-09T22:05:20.803Z"
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "bai",
+   "change": 7,
+   "words": "shaved head",
+   "prompt_sha256": "6126c0b954ef301ff46ca3574d825904f16f83d04ddc32c8c24ac49804ed006d",
+   "file": "retest-c07-bai-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c258-2c9c-7d51-af14-83f9a5638653",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "a0bd981177b9325b5de56906d735e293b01abaebc2727bb08f33103afce1e67a",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T22:05:23.623Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "copies_by_eye": 1,
+   "reading": "fully shaved; earrings and tattoos; plain grey background"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "323651f95a0feed00328d16bb84793f51154bfc2e506c710aa1d77630f9cdc42",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 9.3675e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.0005195999999999999,
+   "at": "2026-11-09T22:05:24.682Z"
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "zei",
+   "change": 3,
+   "words": "aged about 70",
+   "prompt_sha256": "323651f95a0feed00328d16bb84793f51154bfc2e506c710aa1d77630f9cdc42",
+   "file": "retest-c03-zei-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c258-3bc8-7ca1-812d-ea3b6c972446",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "784cb0545ff209be2d220c0a99b6a5a4dc8d9b28fc9475a5e91984255dbe235c",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T22:05:26.989Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "copies_by_eye": 1,
+   "reading": "grey hair, face barely older; in a room"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "c23dfbe0a98b5e6deb23e2a51b5e51af3699a94a2b7db5bde86ae3f9078f516d",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001521,
+   "cost_source": "reported",
+   "worst_usd": 0.00051945,
+   "at": "2026-11-09T22:05:28.086Z"
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "zei",
+   "change": 7,
+   "words": "shaved head",
+   "prompt_sha256": "c23dfbe0a98b5e6deb23e2a51b5e51af3699a94a2b7db5bde86ae3f9078f516d",
+   "file": "retest-c07-zei-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c258-490c-7ac2-955c-a8422bee8de7",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "f1065f3cac0e2f70ffd2b8f129127323eecece808ef07a50a262d5d07cae2048",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T22:05:29.535Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "copies_by_eye": 1,
+   "reading": "shaved; plain grey background"
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gpt",
+   "status": "ok",
+   "retention": {
+    "provider": "openai",
+    "zero_data_retention": false,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-09T22:05:30.047Z",
+    "kept": {
+     "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+     "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+     "source": "https://developers.openai.com/api/docs/guides/your-data",
+     "read": "2026-11-03"
+    }
+   },
+   "cost_usd": 0,
+   "at": "2026-11-09T22:05:30.047Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "bai",
+   "change": 8,
+   "words": "as a medieval knight in armour",
+   "prompt_sha256": "f8a065ce3b94a522ac8e4da03a5673f661be28cd6dff0675a8722bc81e969f48",
+   "file": "retest-c08-bai-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "status": "error",
+   "note": "gateway 503 {\"error\":{\"message\":\"Service temporarily unavailable. Please try again shortly.\",\"type\":\"service_unavailable_error\",\"param\":{\"error\":\"Service temporarily unavailable. Please try again shortly.\",\"type\":\"service_unavailable_error\",\"statusCode\":503}},\"providerMetadata\":{\"gateway\":{\"routing\":{\"originalM",
+   "cost_usd": 0.08,
+   "cost_source": "not reported",
+   "at": "2026-11-09T22:05:38.869Z",
+   "attempt": 1,
+   "worst_usd": 0.08
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "bai",
+   "change": 8,
+   "words": "as a medieval knight in armour",
+   "prompt_sha256": "f8a065ce3b94a522ac8e4da03a5673f661be28cd6dff0675a8722bc81e969f48",
+   "file": "retest-c08-bai-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715GX1FA3VW25M4EMCYX7WY",
+   "status": "ok",
+   "cost_usd": 0.047824,
+   "cost_source": "reported by the gateway",
+   "sha256": "ef85674a04ec2d2b1a40b6ee1c4b8644a318dbf50e50526a618e82df79dd2b60",
+   "original_sha256": "7b78ffbd5fd8c523bbfc402ee88ab21f873d62472b2098ba23068cf97f4c151b",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:06:10.704Z",
+   "attempt": 2,
+   "worst_usd": 0.08,
+   "copies_by_eye": 1,
+   "reading": "armour and red cape on castle walls; Bai with magenta hair and earrings"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "bai",
+   "change": 11,
+   "words": "as a deep-sea diver in a brass helmet, underwater",
+   "prompt_sha256": "38c3a18b1665892499f904b81443e932f95162909a76e325306dde70bcfaf05d",
+   "file": "retest-c11-bai-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715HW35G8SCAGG9Y761CHG4",
+   "status": "ok",
+   "cost_usd": 0.047854,
+   "cost_source": "reported by the gateway",
+   "sha256": "879544912b69685e23f0971fe9f6bf4ae20045ab47679845079f4bb0514ccc82",
+   "original_sha256": "30e28fdf836c3187b8dae1b462416a06f23ccd9a3ce61a66237272668147ccdc",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:06:44.932Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "copies_by_eye": 1,
+   "reading": "brass helmet and suit by a wreck; Bai's face, magenta hair"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "bai",
+   "change": 4,
+   "words": "much taller, with a heavy, broad-shouldered build",
+   "prompt_sha256": "8a68c1bddc7e9ae635a9c2cbf685e4c8024a1c870984780ad2f91caff698679d",
+   "file": "retest-c04-bai-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715JXC6P2P4WVN5GEBAX7W1",
+   "status": "ok",
+   "cost_usd": 0.047854,
+   "cost_source": "reported by the gateway",
+   "sha256": "2aae00c57595443a30bc4afc8d688cebea7f33a47aa13df46f675a3c46e37912",
+   "original_sha256": "c222a32296cfcb8b4037b8edb8d8dafd86514f91cb0bf0923dd7b851d5286c48",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:07:14.161Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "copies_by_eye": 1,
+   "reading": "in a gym, a little more muscular, not much taller or heavier"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "bai",
+   "change": 3,
+   "words": "aged about 70",
+   "prompt_sha256": "31b7256a11d8a86c0baf2df2d6d586cfbea77d12c1e39c55fd8f19646a177c24",
+   "file": "retest-c03-bai-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715KSX0G3ZAVH4XKRCCEMD6",
+   "status": "ok",
+   "cost_usd": 0.047814,
+   "cost_source": "reported by the gateway",
+   "sha256": "7910190d24344101e5bca150616e0ea908b60e1e876f905f0e1085f4f74afae8",
+   "original_sha256": "0b71acbf76323150a852f61eaab79765eec1264818a6f4ad13b3f523b00d58c2",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:07:46.838Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "copies_by_eye": 1,
+   "reading": "an older woman with grey hair, at home with a cup; tattoos and earrings kept"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "bai",
+   "change": 7,
+   "words": "shaved head",
+   "prompt_sha256": "6126c0b954ef301ff46ca3574d825904f16f83d04ddc32c8c24ac49804ed006d",
+   "file": "retest-c07-bai-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715MSYWANR4BGPS821EKRZN",
+   "status": "ok",
+   "cost_usd": 0.047809,
+   "cost_source": "reported by the gateway",
+   "sha256": "98df1c63cc4e839010c0f34a7ffd6be3ad4659df6b2e422c891f8f1d0532f28a",
+   "original_sha256": "5121e23c1f6306e94d3ab9fbb2eace98bb95ef38313cfc54d4ea98fcd95da499",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:08:16.682Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "copies_by_eye": 1,
+   "reading": "keeps her magenta hair (one side shaved, as in the base), sitting on steps"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "zei",
+   "change": 3,
+   "words": "aged about 70",
+   "prompt_sha256": "323651f95a0feed00328d16bb84793f51154bfc2e506c710aa1d77630f9cdc42",
+   "file": "retest-c03-zei-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715NQ0RCA90CDXAYWDE4WGD",
+   "status": "ok",
+   "cost_usd": 0.047804,
+   "cost_source": "reported by the gateway",
+   "sha256": "b484db94e8c5c766e0b35d392f953d7421b9ed7cc96637c39355dd49d86776ea",
+   "original_sha256": "a460dfcfeee7db43af95179e629421161ecbea5e5f817c80d41d7f65b0da5613",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:08:47.429Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "copies_by_eye": 1,
+   "reading": "grey hair with a teal trace, face a little older; on a park bench"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "zei",
+   "change": 7,
+   "words": "shaved head",
+   "prompt_sha256": "c23dfbe0a98b5e6deb23e2a51b5e51af3699a94a2b7db5bde86ae3f9078f516d",
+   "file": "retest-c07-zei-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715PMY89QX5V4SMY2YH381N",
+   "status": "ok",
+   "cost_usd": 0.047799,
+   "cost_source": "reported by the gateway",
+   "sha256": "bd85ce5d1adbfb357360529b48d4d35db1846b3949fb4a2db3459fd3af970b7a",
+   "original_sha256": "c389836557ef238971298699a52f375fe6061897a49a39ceb882bb7f03bf36c8",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:09:17.213Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "copies_by_eye": 1,
+   "reading": "shaved, on steps in the city"
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gemini",
+   "status": "ok",
+   "retention": {
+    "provider": "vertex",
+    "zero_data_retention": true,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-09T22:09:17.612Z"
+   },
+   "cost_usd": 0,
+   "at": "2026-11-09T22:09:17.612Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "character": "bai",
+   "change": 8,
+   "words": "as a medieval knight in armour",
+   "prompt_sha256": "f8a065ce3b94a522ac8e4da03a5673f661be28cd6dff0675a8722bc81e969f48",
+   "file": "retest-c08-bai-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715QJF9066C4CG0PRMJ20KS",
+   "status": "ok",
+   "cost_usd": 0.0676045,
+   "cost_source": "reported by the gateway",
+   "sha256": "70d29cb7b148c75ed0e45a61f53411d36e87499423e78750b32f7bfafd8d666a",
+   "original_sha256": "c95de25cda0127b85c17c81863b46e726a867188a77dd1f1d50dfd313e61b511",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:09:26.849Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1,
+   "reading": "armour in a castle yard; Bai with magenta hair; other knights behind, not copies"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "character": "bai",
+   "change": 11,
+   "words": "as a deep-sea diver in a brass helmet, underwater",
+   "prompt_sha256": "38c3a18b1665892499f904b81443e932f95162909a76e325306dde70bcfaf05d",
+   "file": "retest-c11-bai-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715QVG19F232W0WTKAP12Y7",
+   "status": "ok",
+   "cost_usd": 0.0676075,
+   "cost_source": "reported by the gateway",
+   "sha256": "cd263f051d11ce0ba27f2395fca5065d0a638b433bc060407fb1ef2c1d57a069",
+   "original_sha256": "8733a55de365d61b0e0d1bde9d9dd65e164d47b7669ce07311a7fe8e456b99eb",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:09:36.195Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1,
+   "reading": "brass helmet and suit on the sea floor; face small but hers"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "character": "bai",
+   "change": 4,
+   "words": "much taller, with a heavy, broad-shouldered build",
+   "prompt_sha256": "8a68c1bddc7e9ae635a9c2cbf685e4c8024a1c870984780ad2f91caff698679d",
+   "file": "retest-c04-bai-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715R4PGF2QVNKTH1B62610J",
+   "status": "ok",
+   "cost_usd": 0.0676075,
+   "cost_source": "reported by the gateway",
+   "sha256": "1b8164e20f47f21523ce689de2f9fb93cf2c7f94f2f67ed13e6c4b90d9e5390e",
+   "original_sha256": "4ed94d9f4b1411ac7047d11822314801d542927d66da5b7f5960680230c6056c",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:09:47.105Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1,
+   "reading": "stronger arms and shoulders, not much bigger; one figure"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "character": "bai",
+   "change": 3,
+   "words": "aged about 70",
+   "prompt_sha256": "31b7256a11d8a86c0baf2df2d6d586cfbea77d12c1e39c55fd8f19646a177c24",
+   "file": "retest-c03-bai-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715RF99C5EQ1WSVADE6F4RK",
+   "status": "ok",
+   "cost_usd": 0.067604,
+   "cost_source": "reported by the gateway",
+   "sha256": "54f525d5146fcf6ea2f415ba21a4520b2013fc132373aa7e437b6c2b686ca820",
+   "original_sha256": "7967f17a4047975ef0e89d8720ce3b1a134590f82ed221d9afe5abe33c440132",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:09:56.877Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1,
+   "reading": "an older face, at home; hair stays magenta"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "character": "bai",
+   "change": 7,
+   "words": "shaved head",
+   "prompt_sha256": "6126c0b954ef301ff46ca3574d825904f16f83d04ddc32c8c24ac49804ed006d",
+   "file": "retest-c07-bai-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715RRTPS11QAS7K5J4TSTVK",
+   "status": "ok",
+   "cost_usd": 0.067603,
+   "cost_source": "reported by the gateway",
+   "sha256": "04b0bd8537440a48e907e42ed40c9bb2a6c334c01c2db49ada14b0c76b87a57c",
+   "original_sha256": "5237782eeff63f573f47c3813c43a0ab8957844c441c3f24dcddcbd8145b8a7d",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:10:07.324Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1,
+   "reading": "fully shaved, on a steel bridge; tattoos kept"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "character": "zei",
+   "change": 3,
+   "words": "aged about 70",
+   "prompt_sha256": "323651f95a0feed00328d16bb84793f51154bfc2e506c710aa1d77630f9cdc42",
+   "file": "retest-c03-zei-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715S314AZ6PBZ45R0HP1BNB",
+   "status": "ok",
+   "cost_usd": 0.067604,
+   "cost_source": "reported by the gateway",
+   "sha256": "af9862b9ce68660123b2e26f7bae276aa982d523a57140b0fef244957c4fc8d0",
+   "original_sha256": "8cd27016bef37951be6a8b602283fc97fdafa262072c55dbed19fb34bbaa58c4",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:10:16.606Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1,
+   "reading": "grey hair keeping the teal streak, face still young; in a study"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "character": "zei",
+   "change": 7,
+   "words": "shaved head",
+   "prompt_sha256": "c23dfbe0a98b5e6deb23e2a51b5e51af3699a94a2b7db5bde86ae3f9078f516d",
+   "file": "retest-c07-zei-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M715SC3ZENARAHH6STZE6J7X",
+   "status": "ok",
+   "cost_usd": 0.067603,
+   "cost_source": "reported by the gateway",
+   "sha256": "5b1ccc5e948a55c79136e534bea7c3d5c68da98d0d3b75f2d2dea6d3f44f3c19",
+   "original_sha256": "baf2bdd557a6b2fe742390e2f8a3a40e273bbc445cc859f9dcfdac7c42663001",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-09T22:10:25.661Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1,
+   "reading": "shaved, at a skate park"
+  }
+ ],
+ "judged_by_eye": [
+  {
+   "character": "bai",
+   "change": 8,
+   "model": "flux",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "armour, in a hall; a woman with dark skin and earrings; her magenta hair is now black braids"
+  },
+  {
+   "character": "bai",
+   "change": 8,
+   "model": "gpt",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "armour and red cape on castle walls; Bai with magenta hair and earrings"
+  },
+  {
+   "character": "bai",
+   "change": 8,
+   "model": "gemini",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "armour in a castle yard; Bai with magenta hair; other knights behind, not copies"
+  },
+  {
+   "character": "bai",
+   "change": 11,
+   "model": "flux",
+   "change_shown": "partly",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "underwater with a diving helmet but modern scuba gear, not a brass suit; Bai's face and skin"
+  },
+  {
+   "character": "bai",
+   "change": 11,
+   "model": "gpt",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "brass helmet and suit by a wreck; Bai's face, magenta hair"
+  },
+  {
+   "character": "bai",
+   "change": 11,
+   "model": "gemini",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "brass helmet and suit on the sea floor; face small but hers"
+  },
+  {
+   "character": "bai",
+   "change": 4,
+   "model": "flux",
+   "change_shown": "no",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "no bigger; a grey blob behind her legs again; plain grey background"
+  },
+  {
+   "character": "bai",
+   "change": 4,
+   "model": "gpt",
+   "change_shown": "partly",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "in a gym, a little more muscular, not much taller or heavier"
+  },
+  {
+   "character": "bai",
+   "change": 4,
+   "model": "gemini",
+   "change_shown": "partly",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "stronger arms and shoulders, not much bigger; one figure"
+  },
+  {
+   "character": "bai",
+   "change": 3,
+   "model": "flux",
+   "change_shown": "no",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "not aged: young face, long black hair; plain grey background"
+  },
+  {
+   "character": "bai",
+   "change": 3,
+   "model": "gpt",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "an older woman with grey hair, at home with a cup; tattoos and earrings kept"
+  },
+  {
+   "character": "bai",
+   "change": 3,
+   "model": "gemini",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "an older face, at home; hair stays magenta"
+  },
+  {
+   "character": "bai",
+   "change": 7,
+   "model": "flux",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "fully shaved; earrings and tattoos; plain grey background"
+  },
+  {
+   "character": "bai",
+   "change": 7,
+   "model": "gpt",
+   "change_shown": "no",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "keeps her magenta hair (one side shaved, as in the base), sitting on steps"
+  },
+  {
+   "character": "bai",
+   "change": 7,
+   "model": "gemini",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "fully shaved, on a steel bridge; tattoos kept"
+  },
+  {
+   "character": "zei",
+   "change": 3,
+   "model": "flux",
+   "change_shown": "partly",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "grey hair, face barely older; in a room"
+  },
+  {
+   "character": "zei",
+   "change": 3,
+   "model": "gpt",
+   "change_shown": "partly",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "grey hair with a teal trace, face a little older; on a park bench"
+  },
+  {
+   "character": "zei",
+   "change": 3,
+   "model": "gemini",
+   "change_shown": "partly",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "grey hair keeping the teal streak, face still young; in a study"
+  },
+  {
+   "character": "zei",
+   "change": 7,
+   "model": "flux",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "shaved; plain grey background"
+  },
+  {
+   "character": "zei",
+   "change": 7,
+   "model": "gpt",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "shaved, on steps in the city"
+  },
+  {
+   "character": "zei",
+   "change": 7,
+   "model": "gemini",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "shaved, at a skate park"
+  }
+ ]
+}

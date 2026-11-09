@@ -39,6 +39,9 @@ const FLUX = 'FLUX.2 [klein] 4B · open weights, by Black Forest Labs';
 const Q09 = 'Qwen-Image-Edit 2509 · open weights, by Alibaba’s Qwen team';
 const Q11 = 'Qwen-Image-Edit 2511 · open weights, by Alibaba’s Qwen team';
 const GEM = 'Gemini 3.1 Flash Image · a closed model by Google';
+const GPT = 'GPT Image 2.5 · a closed model by OpenAI';
+const retest = JSON.parse(readFileSync(path.join(ROOT, 'docs/starting-sheet-drafts/retest-2026-11-09/ledger.json'), 'utf8')) as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+for (const c of retest.calls) per.retest = (per.retest ?? 0) + c.cost_usd;
 
 async function main() {
   const s1: string[] = [];
@@ -57,6 +60,23 @@ async function main() {
     const nm = r.character === 'zei' ? 'Zei' : 'Bai';
     const tag = (x: number) => `<b class="${x > 1 ? 'bad' : 'ok'}">${x === 1 ? 'one figure' : `${x} copies`}</b>`;
     s3.push(`<div class="row"><h3>${r.change}. “${esc(CHANGES[r.change - 1])}” · ${nm}</h3><div class="grid two">${await img(path.join(LOOK, `c${p2(r.change)}-${r.character}-B-gemini.jpg`), `gem-before-c${p2(r.change)}-${r.character}.jpg`, `${nm}, ${CHANGES[r.change - 1]}, by Gemini 3.1 Flash Image (look test).`, `${GEM} · before: front at 3:4, style Mood, no look line`, tag(r.before_B))}${await img(path.join(FULL, `geminiF3-c${p2(r.change)}-${r.character}.jpg`), `gem-F3-c${p2(r.change)}-${r.character}.jpg`, `${nm}, ${CHANGES[r.change - 1]}, by Gemini 3.1 Flash Image with the front padded to 16:9.`, `${GEM} · F3: front padded to 16:9, look line, Same as this picture`, tag(r.F3))}</div></div>`);
+  }
+  const s4: string[] = [];
+  const judged = retest.judged_by_eye as { character: string; change: number; model: string; change_shown: string; kept: string; copies: number; reading: string }[];
+  const tag = (j: { change_shown: string; kept: string; copies: number }) => `<b class="${j.change_shown === 'yes' && j.kept === 'yes' && j.copies === 1 ? 'ok' : 'bad'}">change: ${j.change_shown} · kept: ${j.kept} · ${j.copies === 1 ? 'one figure' : `${j.copies} copies`}</b>`;
+  for (const [ch, c] of [['bai', 8], ['bai', 11], ['bai', 4], ['bai', 3], ['bai', 7], ['zei', 3], ['zei', 7]] as [string, number][]) {
+    const nm = ch === 'zei' ? 'Zei' : 'Bai';
+    const before: string[] = [];
+    if (ch === 'bai') before.push(await img(path.join(FULL, `flux-c${p2(c)}-bai-look.jpg`), `rt-before-flux-c${p2(c)}-bai.jpg`, `Bai, ${CHANGES[c - 1]}, by FLUX.2 [klein] 4B with the long look line.`, `${FLUX} · earlier: the long look line, no scene line`));
+    else before.push(await img(path.join(LOOK, `c${p2(c)}-zei-B-flux.jpg`), `rt-before-flux-c${p2(c)}-zei.jpg`, `Zei, ${CHANGES[c - 1]}, by FLUX.2 [klein] 4B (look test).`, `${FLUX} · earlier: look test (style Mood, no look line)`));
+    before.push(await img(path.join(LOOK, `c${p2(c)}-${ch}-B-gpt.jpg`), `rt-before-gpt-c${p2(c)}-${ch}.jpg`, `${nm}, ${CHANGES[c - 1]}, by GPT Image 2.5 (look test).`, `${GPT} · earlier: look test (style Mood, no look line)`));
+    before.push(await img(path.join(LOOK, `c${p2(c)}-${ch}-B-gemini.jpg`), `rt-before-gemini-c${p2(c)}-${ch}.jpg`, `${nm}, ${CHANGES[c - 1]}, by Gemini 3.1 Flash Image (look test).`, `${GEM} · earlier: look test (style Mood, no look line)`));
+    const after: string[] = [];
+    for (const [m, label] of [['flux', FLUX], ['gpt', GPT], ['gemini', GEM]] as [string, string][]) {
+      const j = judged.find((x) => x.character === ch && x.change === c && x.model === m)!;
+      after.push(await img(path.join(FULL, `retest-c${p2(c)}-${ch}-${m}.jpg`), `rt-new-${m}-c${p2(c)}-${ch}.jpg`, `${nm}, ${CHANGES[c - 1]}, by ${label.split(' · ')[0]} with the shorter look line and the scene line.`, `${label} · new: shorter look line + scene line`, `${tag(j)}<b>${esc(j.reading)}</b>`));
+    }
+    s4.push(`<div class="row"><h3>${c}. “${esc(CHANGES[c - 1])}” · ${nm}</h3><p class="sub">Earlier</p><div class="grid three">${before.join('')}</div><p class="sub">New</p><div class="grid three">${after.join('')}</div></div>`);
   }
   const html = `<!doctype html>
 <html lang="en">
@@ -85,6 +105,9 @@ h2 { font-size: 21px; margin: 0 0 4px; }
 .lead { color: var(--muted); font-size: 14px; margin: 0 0 8px; }
 h3 { font-size: 14px; margin: 14px 0 6px; }
 .grid.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.grid.three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 640px) { .grid.three { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.sub { font-size: 12px; color: var(--muted); margin: 6px 0 4px; text-transform: uppercase; letter-spacing: .05em; }
 figure { margin: 0; }
 .grid img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; display: block; border-radius: 6px; background: var(--line); }
 figcaption { font-size: 12px; margin-top: 3px; line-height: 1.35; }
@@ -99,12 +122,13 @@ figcaption span { color: var(--muted); }
 <p>Three tests of the challenge’s remix prompt as the route now builds it: the change words, “&lt;Name&gt; is the person in reference image 1, the main figure.”, the character’s look line, no style text (“Same as this picture”, the default), “Keep the face recognisable; change anything else the words describe.”, and the no-words line. One picture each; the open models use seed 20261108.</p>
 <p>Notes under the pictures are the coding agent’s reading of each picture. Comparisons with the look test also differ in style (it used Mood) and in having no look line; each caption says what differs.</p>
 <p>The project’s own test pictures: not published. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT until the owner approves it.</p>
-<div class="spend"><div><b>${usd(spent)}</b><span>spent of this run’s $3.00 cap</span></div><div><b>${usd(per.flux ?? 0)}</b><span>1 · FLUX look line</span></div><div><b>${usd(per.qwen2511 ?? 0)}</b><span>2 · Qwen 2511</span></div><div><b>${usd(per.geminiF3 ?? 0)}</b><span>3 · Gemini F3</span></div><div><b>${usd(per.guard ?? 0)}</b><span>prompt checks</span></div></div>
+<div class="spend"><div><b>${usd(spent)}</b><span>tests 1–3, of their $3.00 cap</span></div><div><b>${usd(per.flux ?? 0)}</b><span>1 · FLUX look line</span></div><div><b>${usd(per.qwen2511 ?? 0)}</b><span>2 · Qwen 2511</span></div><div><b>${usd(per.geminiF3 ?? 0)}</b><span>3 · Gemini F3</span></div><div><b>${usd(per.guard ?? 0)}</b><span>prompt checks</span></div><div><b>${usd(per.retest ?? 0)}</b><span>4 · re-test (its own $1.50 cap)</span></div></div>
 </div>
-<nav><ol><li><a href="#flux">Bai’s look line on FLUX</a></li><li><a href="#qwen">Qwen-Image-Edit 2511 against 2509</a></li><li><a href="#gemini">Gemini with the front padded to 16:9</a></li></ol></nav>
+<nav><ol><li><a href="#flux">Bai’s look line on FLUX</a></li><li><a href="#qwen">Qwen-Image-Edit 2511 against 2509</a></li><li><a href="#gemini">Gemini with the front padded to 16:9</a></li><li><a href="#retest">Re-test: shorter look line + scene line</a></li></ol></nav>
 <section id="flux"><h2>1. Bai’s look line on FLUX</h2><p class="lead">FLUX.2 [klein] 4B edit, Bai’s front only, the same seed. Left: no look line. Right: “${esc(ledger.prompts ? 'Unless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.' : '')}”</p>${s1.join('')}</section>
 <section id="qwen"><h2>2. Qwen-Image-Edit 2511 against 2509</h2><p class="lead">Bai, the look test’s 12 changes. Left: 2509 from the look test (style Mood, no look line). Right: 2511 with today’s prompt. 2511 returned 1024 × 576 and fal billed 1 unit ($0.03) a picture.</p>${s2.join('')}</section>
 <section id="gemini"><h2>3. Gemini with the front padded to 16:9</h2><p class="lead">Left: the look test (front sent at 3:4, style Mood, no look line). Right: F3, the front padded to 16:9 by the site’s toView, with the look line and no style. Pictures with more than one copy of the character: before ${n('before_B')} of 16, F3 ${n('F3')} of 16 (counted by eye).</p>${s3.join('')}</section>
+<section id="retest"><h2>4. Re-test: shorter look line + scene line</h2><p class="lead">The prompt: the change; “&lt;Name&gt; is the person in reference image 1, the main figure.”; the new look line (Bai: “${esc(retest.looks.bai)}” Zei: “${esc(retest.looks.zei)}”); “${esc(retest.scene_line)}”; no style text; “Keep the face recognisable; change anything else the words describe.”; the no-words line. Base front only, as the route sends it. Under each new picture: whether the change came through, whether the character was kept, and the copies, all by eye.</p>${s4.join('')}</section>
 </main>
 </body>
 </html>
