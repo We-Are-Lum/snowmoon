@@ -1880,7 +1880,8 @@ async function checkChallengeLanding() {
       // The row outside a picture opens the character's page.
       // A real tap on the line's text: the name's link covers the row, so the tap lands on it (Playwright's own click
       // refuses an element another one covers, which is the point here).
-      await zei.locator('.cc-line').scrollIntoViewIfNeeded();
+      // In the middle of the screen, clear of the sticky top bar.
+      await zei.locator('.cc-line').evaluate((e) => e.scrollIntoView({ block: 'center' }));
       const lineBox = await zei.locator('.cc-line').boundingBox();
       if (lineBox) await page.mouse.click(lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2);
       await page.waitForURL('**/challenge/zei', { timeout: 30000, waitUntil: 'commit' }).catch(() => fail(`/challenge ${tag}: tapping Zei's row outside a picture didn't open /challenge/zei`));
