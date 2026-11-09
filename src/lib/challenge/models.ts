@@ -188,7 +188,7 @@ export function challengeModelProblems(list: readonly ChallengeModel[]): string[
     if (!m.open && !/closed model by /.test(m.terms)) p.push(`${m.id}: a closed model whose label doesn't say "a closed model by" its maker`);
     if (!m.open && !m.terms.includes(m.maker)) p.push(`${m.id}: its label doesn't name its maker`);
     if (!m.open && !m.retention) p.push(`${m.id}: a closed model without its maker's retention words`);
-    if (m.call.host === 'Vercel AI Gateway' && !(m.call.only?.length === 1)) p.push(`${m.id}: a gateway call not pinned to one provider`);
+    if (m.call.host === 'Vercel AI Gateway' && !(m.call.only?.length === 1)) p.push(`${m.id}: a gateway call not tied to one provider`);
     if (m.id === 'gemini-3.1-flash-image' && JSON.stringify(m.call.only) !== JSON.stringify(['vertex'])) p.push(`${m.id}: Gemini must go only through vertex`);
     if (!(reserveUsd(m, IMAGES.size) >= m.estimateUsd)) p.push(`${m.id}: reserves less than its estimate`);
   }
