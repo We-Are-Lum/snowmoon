@@ -12,8 +12,14 @@ export interface FlowDraft {
   character: string;
   name: string;
   sourceUrl: string;
-  moment: { id: string; title: string; chip: string };
+  /** The moment chosen, only while the moments are on (CHALLENGE.moments); null otherwise. */
+  moment: { id: string; title: string; chip: string } | null;
   words: string;
+  /** The Style and Model rows' choices as sent (branch challenge-simple), so Try again sends the same. */
+  style?: { kind: 'style'; id: string } | { kind: 'random' } | { kind: 'own'; text: string } | null;
+  modelId?: string;
+  /** The style used, as "How it was made" names it (Random: the one drawn). */
+  styleLine?: string | null;
   ticket: string;
   image: string;
   prompt: string;

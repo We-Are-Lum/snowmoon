@@ -70,7 +70,7 @@ CHALLENGE.pictureEntries = false;
   check('switch: CHALLENGE.public is on as committed (the owner opened it)', CHALLENGE.public === true);
   const committedPublic = CHALLENGE.public;
   (CHALLENGE as unknown as { public: boolean }).public = false;
-  check('switch: the dates are kept (opens Tue 10 Nov, 00:00 Pacific; owner, 2026-11-07)', CHALLENGE.dates.opens === '2026-11-10T08:00:00Z');
+  check('switch: the dates are kept (opens Tue 17 Nov, 00:00 Pacific; owner, 2026-11-08)', CHALLENGE.dates.opens === '2026-11-17T08:00:00Z');
   check('switch off, inside the window: the free cap stays $2, not $15', C.imagesDailySpendCapUsd(inside) === IMAGES.dailySpendCapUsd && IMAGES.dailySpendCapUsd === 2);
   check('switch off, inside the window: sheets stay invited-only (Privacy describes the challenge)', O.privacyDescribesChallenge(PRIVACY) && !O.challengeSheetsOpen(inside, PRIVACY));
   check('switch off, inside the window: entries are not taken', !R.entriesOpen(inside) && !R.challengeOpenNow(inside));
@@ -154,19 +154,19 @@ proof('a wallet path let back in is caught', R.eligibility({ maker: -7, passed: 
 
 // --- The window, in Pacific time ---------------------------------------------------------------------------------
 const D0 = CHALLENGE.dates;
-check('opens Tue 10 Nov 2026, 00:00 Pacific (owner, 2026-11-07)', R.pacificWallTime(D0.opens) === '2026-11-10 00:00', R.pacificWallTime(D0.opens));
-check('the last minute is Sun 22 Nov 2026, 23:59 Pacific', R.pacificWallTime(new Date(Date.parse(D0.closes) - 60_000).toISOString()) === '2026-11-22 23:59');
+check('opens Tue 17 Nov 2026, 00:00 Pacific (owner, 2026-11-08)', R.pacificWallTime(D0.opens) === '2026-11-17 00:00' && new Date(D0.opens).getUTCDay() === 2, R.pacificWallTime(D0.opens));
+check('the last minute is Sun 29 Nov 2026, 23:59 Pacific (owner, 2026-11-08)', R.pacificWallTime(new Date(Date.parse(D0.closes) - 60_000).toISOString()) === '2026-11-29 23:59' && R.pacificWallTime(D0.closes) === '2026-11-30 00:00');
 const at = (iso: string, deltaMs: number) => new Date(Date.parse(iso) + deltaMs);
 check('the opening instant is in', R.inWindow(at(D0.opens, 0)));
 check('a millisecond before opening is out', !R.inWindow(at(D0.opens, -1)));
 check('23:59:59.999 Pacific on the last day is in', R.inWindow(at(D0.closes, -1)));
 check('midnight Pacific after the last day is out', !R.inWindow(at(D0.closes, 0)));
-check('the window crosses no clock change (PST throughout): 23:59 Pacific is 07:59 UTC the next day', new Date(Date.parse(D0.closes) - 60_000).toISOString() === '2026-11-23T07:59:00.000Z');
-check('dateText builds the deadline from the config', R.dateText('closes', { time: true }) === 'Sunday 22 November, 23:59 Pacific', R.dateText('closes', { time: true }));
+check('the window crosses no clock change (PST throughout): 23:59 Pacific is 07:59 UTC the next day', new Date(Date.parse(D0.closes) - 60_000).toISOString() === '2026-11-30T07:59:00.000Z');
+check('dateText builds the deadline from the config', R.dateText('closes', { time: true }) === 'Sunday 29 November, 23:59 Pacific', R.dateText('closes', { time: true }));
 {
   const CW0 = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
   const LW0 = (await import('../src/lib/challenge/landing')).LANDING_WORDING;
-  check('windowText spans the window: "10 to 22 November" (the rules intro, the home row, the landing)', R.windowText() === '10 to 22 November' && CW0.intro().startsWith('From 10 to 22 November,') && CW0.homeLine().includes('10 to 22 November') && LW0.arrival('Zei', 'open').includes('10 to 22 November'), `${R.windowText()} | ${CW0.intro().slice(0, 40)}`);
+  check('windowText spans the window: "17 to 29 November" (the rules intro, the home row, the landing)', R.windowText() === '17 to 29 November' && CW0.intro().startsWith('From 17 to 29 November,') && CW0.homeLine().includes('17 to 29 November') && LW0.arrival('Zei', 'open').includes('17 to 29 November'), `${R.windowText()} | ${CW0.intro().slice(0, 40)}`);
 }
 // The free spend cap: $15 inside the window, $2 outside, by itself (owner, 2026-10-31).
 {
@@ -1431,7 +1431,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('e3 in the window, a challenge sheet\'s share text is the owner\'s (2026-11-06: "My remix of {name}, for the Snowmoon Party remix challenge"); outside it, as before', shareSwitch(share, vp) && CW.shareTextOpen('Bai') === 'My remix of Bai, for the Snowmoon Party remix challenge' && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party');
   proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace("isChallengeCharacter(d.entity) && remixingOpenNow();", 'isChallengeCharacter(d.entity) && true;')));
   // h. Before the open, from CHALLENGE.dates.
-  check('h "Entries open Tue 10 Nov, 00:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Tue 10 Nov, 00:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());
+  check('h "Entries open Tue 17 Nov, 00:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Tue 17 Nov, 00:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());
   // i. Neynar down: published, and told on the spot.
   check('i the unchecked line says it won\'t count, and why', /won’t count/.test(CW.publishedUnchecked('Zei')) && /Neynar/.test(CW.publishedUnchecked('Zei')) && /\{entry\?\.kind === 'unchecked' && \(\s*<p className="ic-error ch-unchecked" role="status">\s*\{entry\.text\}/.test(form));
   check('i the confirmation\'s new lines carry a Draft wording line', /\{entry && <p className="as-draft ic-draftline">\{IMAGE_WORDING\.draftLine\}<\/p>\}/.test(form));

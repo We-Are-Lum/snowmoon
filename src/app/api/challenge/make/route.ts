@@ -12,7 +12,9 @@ import { referencePicture } from '~/lib/images/reference-picture';
 import { signTicket, type TicketDesign } from '~/lib/images/ticket';
 import { bookCharacter } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
-import { makeView, momentPrompt, othersIn, readMake } from '~/lib/challenge/make';
+import { characterAnchor, makeView, momentPrompt, othersIn, publishedStyles, readMake, remixPrompt, resolveStyle } from '~/lib/challenge/make';
+import { MAKE_WORDING } from '~/lib/challenge/make-wording';
+import { challengeModels, modelFromRequest } from '~/lib/challenge/models';
 import { defaultLook, sourceOf } from '~/lib/challenge/pictures';
 import { spoilerExceptionOn } from '~/lib/challenge/spoilers';
 import { challengeVisibleTo } from '~/lib/challenge/visibility';
@@ -20,13 +22,18 @@ import { challengeVisibleTo } from '~/lib/challenge/visibility';
 /**
  * The remix screen's API (branch challenge-moments, 2026-11-05; docs/proposals/challenge-moments.md §1.3 S2).
  *
- * GET ?from=<version>: the screen's data (the picture tapped, the fifteen moments, its words), for whoever may see the
- * challenge (everyone once CHALLENGE.public is on, admins before); 404 otherwise, and after entries close (P9g).
+ * GET ?from=<version>: the screen's data (the picture tapped, the styles, the models, its words, and the fifteen moments
+ * only while CHALLENGE.moments is on), for whoever may see the challenge (everyone once CHALLENGE.public is on, admins
+ * before); 404 otherwise, and after entries close (P9g).
  *
- * POST { from, moment, words }: one draft picture through the site's own image pipeline, exactly as "Make an image"
+ * POST { from, words, style, model } (and `moment` while the moments are on): one draft picture through the site's own image pipeline, exactly as "Make an image"
  * makes one: signed in, consent, the Generate gate (the site's check), the daily count and spend caps, the prompt
- * check, the host's safety checker. The model is the edit model, with the tapped picture as reference image 1 and the
- * other challenge characters' current default looks after it; the prompt is src/lib/challenge/make.ts's momentPrompt; the picture is anchored to the moment's passage. Nothing about the draft
+ * check (on the whole prompt, so the style's words, a person's own included, are checked with the change words), the
+ * host's safety checker. The model must be one of challengeModels() (src/lib/challenge/models.ts); today the edit
+ * model, with the tapped picture as reference image 1. With the moments off (owner, 2026-11-08) the prompt is
+ * remixPrompt (the words, reference image 1, the style's text and KEEP_LINE, the no-lettering line) and the picture is
+ * anchored to the character's first passage; with them on, momentPrompt with the other characters' current default
+ * looks after it, anchored to the moment's passage. Nothing about the draft
  * is kept here: the picture and its signed record go back to the device, and Publish (/api/images/publish) writes it.
  */
 const no = (error: string, status: number, extra: Record<string, unknown> = {}) => NextResponse.json({ error, ...extra }, { status });
@@ -39,7 +46,7 @@ export async function GET(request: Request) {
   const from = new URL(request.url).searchParams.get('from') ?? '';
   const src = sql ? await sourceOf(sql, from).catch(() => null) : null;
   if (!src) return hidden();
-  return NextResponse.json(makeView(src), { headers: { 'Cache-Control': 'private, no-store' } });
+  return NextResponse.json(makeView(src, { styles: sql ? await publishedStyles(sql) : [] }), { headers: { 'Cache-Control': 'private, no-store' } });
 }
 
 export async function POST(request: Request) {
@@ -65,9 +72,16 @@ export async function POST(request: Request) {
 
   const callName = (slug: string) => (bookCharacter(slug)?.name ?? slug).split(' ')[0];
   const name = callName(src.character);
-  // The other challenge characters in the moment, each by their current default look (their first base's front view).
-  const others = (await Promise.all(othersIn(r.moment, src.character).map(async (slug) => ({ slug, look: await defaultLook(sql, slug) })))).filter((o): o is { slug: string; look: NonNullable<typeof o.look> } => o.look !== null);
-  const prompt = momentPrompt({ words: r.words, name, scene: r.moment.scene, others: others.map((o) => callName(o.slug)) });
+  // The Model row: only a model the challenge lists (src/lib/challenge/models.ts); today the edit model alone.
+  const model = modelFromRequest(r.model, challengeModels());
+  if (!model) return no(MAKE_WORDING.noModel, 400);
+  const moment = r.moment;
+  // The Style row (moments off): a listed style, Random's draw from the published styles, or the person's own words.
+  const style = moment ? null : resolveStyle(r.style, await publishedStyles(sql));
+  if (!moment && !style) return no(MAKE_WORDING.noStyle, 400);
+  // With the moments on: the other challenge characters in the moment, each by their current default look.
+  const others = moment ? (await Promise.all(othersIn(moment, src.character).map(async (slug) => ({ slug, look: await defaultLook(sql, slug) })))).filter((o): o is { slug: string; look: NonNullable<typeof o.look> } => o.look !== null) : [];
+  const prompt = moment ? momentPrompt({ words: r.words, name, scene: moment.scene, others: others.map((o) => callName(o.slug)) }) : remixPrompt({ words: r.words, name, style: style!.text });
   const looks = [src, ...others.map((o) => o.look)];
   const pictures: { bytes: Buffer; contentType: string; width: number; height: number }[] = [];
   for (const l of looks) {
@@ -77,6 +91,8 @@ export async function POST(request: Request) {
   }
 
   // Counted from here, whatever happens next (blocked attempts count), as every picture is.
+  // The prompt check reads the whole prompt: the change words and the style's words (a person's own style too, even
+  // with no other words), so a named artist, studio, film or real person in either is refused before anything is made.
   const paid = await paidPicture(sql, fid, request, {
     checkText: prompt,
     spend: { model: IMAGES.editModel, reserveUsd: generateReserveUsd(pictures.length) },
@@ -89,18 +105,26 @@ export async function POST(request: Request) {
   // are 'uses' links too, so the recipe credits every picture sent.
   const asDesign = (l: (typeof looks)[number] & { kind: 'sheet' }): TicketDesign => ({ versionId: l.versionId, kind: 'character', entity: bookCharacter(l.character)?.name ?? l.character, title: l.title, by: designByline(l.by, l.byFid), versionNo: l.versionNo, text: '', assist: null });
   const designs: TicketDesign[] = looks.filter((l): l is (typeof looks)[number] & { kind: 'sheet' } => l.kind === 'sheet').map(asDesign);
+  // A published style (picked, or Random's draw): a 'uses' link too, with the exact text added and who drafted it.
+  const sd = style?.design;
+  if (sd) designs.push({ versionId: sd.versionId, kind: 'style', entity: sd.entity, title: sd.title, by: designByline(sd.byName, sd.byFid), versionNo: sd.versionNo, text: sd.text, assist: sd.assist ?? null });
+  const anchor = moment ? { chapter: moment.chapter, start: moment.start, end: moment.end } : characterAnchor(src.character);
   const ticket = signTicket({
-    v: 1, fid, chapter: r.moment.chapter, start: r.moment.start, end: r.moment.end, userPrompt: r.words, style: null, prompt,
+    v: 1, fid, chapter: anchor.chapter, start: anchor.start, end: anchor.end, userPrompt: r.words, style: null, prompt,
     model: IMAGES.editModel.id, endpoint: IMAGES.editModel.endpoint, host: IMAGES.editModel.host, settings: made.settings,
     seed: made.seed, requestId: made.requestId, sha256, width: IMAGES.size.width, height: IMAGES.size.height,
     costUsd: made.costUsd, guard: { model: IMAGES.guardModel, verdict: 'ok' }, at: new Date().toISOString(),
     ...(designs.length ? { designs } : {}),
     references: looks.map((l) => ({ url: l.url, sha256: l.sha256 })),
     sheets: { characters: [src.character, ...others.map((o) => o.slug)], place: null, added: [] },
-    challenge: { character: src.character, moment: r.moment.id, scene: r.moment.scene, from: src.versionId, fromKind: src.kind },
+    challenge: {
+      character: src.character, from: src.versionId, fromKind: src.kind, model: model.id,
+      ...(moment ? { moment: moment.id, scene: moment.scene } : {}),
+      ...(style ? { style: { choice: style.choice, id: style.id, elementId: style.design?.elementId ?? null, label: style.label, text: style.text } } : {}),
+    },
   });
   return NextResponse.json(
-    { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, prompt, left: paid.left },
+    { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, prompt, left: paid.left, style: style ? (style.choice === 'random' ? MAKE_WORDING.randomDrew(style.label ?? '') : style.label) : null },
     { headers: { 'Cache-Control': 'no-store' } },
   );
 }

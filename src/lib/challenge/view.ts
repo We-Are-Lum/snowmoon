@@ -2,30 +2,28 @@ import 'server-only';
 import type postgres from 'postgres';
 import { CHALLENGE } from '../config';
 import { bookCharacter } from '../images/designs';
-import type { CardData, CardFactView, CardTile, CardWords } from '~/components/challenge-card';
+import type { CardData, CardTile, CardWords, CharacterData } from '~/components/challenge-card';
 import { startingSheets } from './entries';
 import { challengePictures } from './pictures';
 import { cardOf } from './cards';
-import { chapterChip, momentsWith, readerHref } from './moments';
-import { basesOf, baseCountOf, firstRemixesOf } from './rules';
-import { spoilerExceptionOn } from './spoilers';
+import { basesOf, baseCountOf } from './rules';
 import { CHALLENGE_WORDING as W } from './wording';
 import { LANDING_WORDING as L } from './landing-wording';
 
 /**
- * Everything /challenge shows, the hub (owner, 2026-11-05; docs/proposals/challenge-moments.md §1.3 S0–S1), as plain
- * data with its words already written. The public page renders it on the server once CHALLENGE.public is on; before
- * that, only admins see it, from GET /api/challenge/view (admins only) in the browser, so no challenge words are in the
- * HTML or the scripts that everyone else is served. src/components/challenge-body.tsx draws it.
+ * What /challenge and a character's page (/challenge/<slug>) show, as plain data with their words already written
+ * (owner, 2026-11-08, the simpler challenge; it replaces the hub's cards of 2026-11-05). The public pages render it on
+ * the server once CHALLENGE.public is on; before that, only admins see it, from GET /api/challenge/view (admins only)
+ * in the browser, so no challenge words are in the HTML or the scripts that everyone else is served.
+ * src/components/challenge-body.tsx and challenge-character.tsx draw it.
  *
- * - The title, one line (what to do, and the deadline, from CHALLENGE.dates), "Rules" and "Every entry".
- * - One card per character, in CHALLENGE.characters' order (P5h): its card's words (src/lib/challenge/cards.ts, DRAFT
- *   until CHALLENGE.cardsApproved), its moments (src/lib/challenge/moments.ts, book order), its bases (the browser
- *   shows them in a fresh random order per visit), the owner's first remixes under "First remixes by @naaate"
- *   (CHALLENGE.firstRemixes, owner 2026-11-05 answer 9; hidden when there are none), and every published remix of the
- *   character, which the browser shuffles afresh and shows three of (P5g; owner, answer 8). No count anywhere (P5i).
- * - The hub's old random block is gone (owner, answer 9: "drop the separate random-remixes block").
- * "Where they appear" is not in this data: GET /api/challenge/appears sends it when a reader opens it.
+ * - /challenge: the title, one line (what to do, and the deadline, from CHALLENGE.dates), "Rules" and "Every entry";
+ *   then each character in CHALLENGE.characters' order (P5h): its name (a link to its page), its approved one line
+ *   (src/lib/challenge/cards.ts, `line`, verbatim) and its bases (the browser shows them in a fresh random order per
+ *   visit, P5g). Nothing else: no facts, "More about", "Where they appear", remixes or moments.
+ * - /challenge/<slug>: the name, the one line, "Bases", then "Remixes": every published challenge picture of the
+ *   character, the viewer's own and the owner's first remixes included, newest first (the database's order; no
+ *   shuffle, no count: P5, P5i). Tapping any picture opens its remix screen.
  */
 type Sql = postgres.Sql;
 
@@ -42,33 +40,57 @@ export interface ChallengeView {
   cards: { c: CardData; w: CardWords }[];
 }
 
+export interface CharacterView {
+  adminNote: string | null;
+  back: string;
+  c: CharacterData;
+  w: CardWords;
+  notAffiliated: string;
+}
+
 const callName = (name: string) => name.split(' ')[0];
 
-/** Where tapping a picture goes: its remix screen (R2), with the moment kept when the picture has one. */
-export const remixHref = (versionId: string, moment?: string | null) => `/challenge/make?from=${versionId}${moment ? `&moment=${encodeURIComponent(moment)}` : ''}`;
+/** Where tapping a picture goes: its remix screen (R2), with the moment kept only while the moments are on. */
+export const remixHref = (versionId: string, moment?: string | null) => `/challenge/make?from=${versionId}${CHALLENGE.moments && moment ? `&moment=${encodeURIComponent(moment)}` : ''}`;
 
-const fact = (f: { text: string; block: string; quote: string }): CardFactView => ({ ...f, href: readerHref(f.block) });
+/** A character's page. */
+export const characterHref = (slug: string) => `/challenge/${slug}`;
 
 export function cardWords(name: string): CardWords {
   const C = L.cards;
-  return {
-    bases: C.bases, firsts: L.firstRemixesHead, remixes: C.remixes, showMore: C.showMore, moments: C.moments,
-    more: C.more(name), less: C.less(name), spoil: C.spoil, summary: C.summary, look: C.look, appears: C.appears(name),
-    appearsCount: C.appearsCount, loading: C.loading, failed: C.failed, readIt: C.readIt, chapter: C.chapter,
-    alt: L.pictureAltMoment(name), tapToRemix: C.tapToRemix,
-  };
+  return { bases: C.bases, remixes: C.remixes, summary: C.summary, look: C.look, alt: L.pictureAltMoment(name), tapToRemix: C.tapToRemix, none: L.feedNoneFor(name) };
+}
+
+const adminNote = () => (CHALLENGE.public ? null : 'Admins only for now: everyone else gets “not found” here, and nothing opens until the owner opens it (CHALLENGE.public).');
+
+type Tileable = { versionId: string; thumb: string | null; title?: string; byName: string | null; byFid: number };
+const tile = (r: Tileable, label: string | null): CardTile => ({ versionId: r.versionId, thumb: r.thumb, title: r.title ?? '', byName: r.byName, byFid: r.byFid, href: remixHref(r.versionId), label });
+
+/** A character's bases as tiles (every one; the browser shuffles them); before the picks, its newest published sheet. */
+async function basesTiles(sql: Sql | null, slug: string): Promise<{ bases: CardTile[]; note: string | null }> {
+  const list = sql ? await startingSheets(sql, slug).catch(() => []) : [];
+  const picked = basesOf(slug).length > 0;
+  const name = callName(bookCharacter(slug)?.name ?? slug);
+  const bases = list.slice(0, picked ? baseCountOf(slug) : 1).map((s) => tile(s, picked ? s.style || L.baseLabel : L.sheetLabel));
+  return { bases, note: picked ? null : bases.length ? L.noBasesYet(name) : L.noBasesNoSheet(name) };
+}
+
+function cardFor(slug: string, bases: CardTile[], note: string | null): CardData {
+  const name = callName(bookCharacter(slug)?.name ?? slug);
+  return { slug, name, href: characterHref(slug), draft: CHALLENGE.cardsApproved ? null : W.draftShort, line: cardOf(slug)?.line ?? '', bases, note };
 }
 
 export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
-  const chars = CHALLENGE.characters.map((s) => bookCharacter(s)).filter((c): c is NonNullable<typeof c> => Boolean(c));
-  const sheets = await Promise.all(chars.map(async (c) => ({ c, list: sql ? await startingSheets(sql, c.slug).catch(() => []) : [] })));
-  // Every published challenge picture of the six (no filter, limit or order beyond the database's newest first): each
-  // card gets all of its character's, and the browser shuffles them (P5g). Since R2 a remix is a picture at a moment.
-  const all = sql ? await challengePictures(sql).catch(() => []) : [];
-  // P9's challenge exception ends when entries close: no deeper layer and no moments after that (P9g).
-  const spoilers = spoilerExceptionOn();
+  const chars = CHALLENGE.characters.filter((s) => bookCharacter(s));
+  const cards = await Promise.all(
+    chars.map(async (slug) => {
+      const { bases, note } = await basesTiles(sql, slug);
+      const c = cardFor(slug, bases, note);
+      return { c, w: cardWords(c.name) };
+    }),
+  );
   return {
-    adminNote: CHALLENGE.public ? null : 'Admins only for now: everyone else gets “not found” here, and nothing opens until the owner opens it (CHALLENGE.public).',
+    adminNote: adminNote(),
     title: W.title,
     line: L.line(),
     rulesLink: L.rulesLink,
@@ -76,35 +98,18 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
     // Approved (owner, 2026-11-06; "reviewed by the coordinator, approved by the owner"): the hub's line and cards.
     draftShort: CHALLENGE.cardsApproved ? null : W.draftShort,
     notAffiliated: W.notAffiliated,
-    cards: sheets.map(({ c, list }) => {
-      const name = callName(c.name);
-      const card = cardOf(c.slug);
-      const picked = basesOf(c.slug).length > 0;
-      const tile = (r: { versionId: string; thumb: string | null; title?: string; byName: string | null; byFid: number }, label: string | null, moment?: string | null): CardTile => ({
-        versionId: r.versionId, thumb: r.thumb, title: r.title ?? '', byName: r.byName, byFid: r.byFid, href: remixHref(r.versionId, moment), label,
-      });
-      // The bases, every one of them (the browser shuffles them); before the picks, the newest published sheet.
-      const bases = list.slice(0, picked ? baseCountOf(c.slug) : 1).map((s) => tile(s, picked ? s.style || L.baseLabel : L.sheetLabel));
-      const firstIds = firstRemixesOf(c.slug);
-      const mine = all.filter((r) => r.character === c.slug);
-      const isFirst = (r: { versionId: string; elementId: string }) => firstIds.includes(r.versionId.toLowerCase()) || firstIds.includes(r.elementId.toLowerCase());
-      // The owner's first remixes, in CHALLENGE.firstRemixes' order; one that isn't published is left out.
-      const firsts = firstIds.map((id) => mine.find((r) => r.versionId.toLowerCase() === id || r.elementId.toLowerCase() === id)).filter((r): r is NonNullable<typeof r> => Boolean(r)).map((r) => tile(r, null, r.moment));
-      const data: CardData = {
-        slug: c.slug,
-        name,
-        draft: CHALLENGE.cardsApproved ? null : W.draftShort,
-        line: card?.line ?? '',
-        facts: (card?.facts ?? []).map(fact),
-        more: spoilers ? { description: card?.more.description ?? '', facts: (card?.more.facts ?? []).map(fact) } : null,
-        // A moment chip opens the remix screen for one of the character's bases at that moment.
-        moments: (spoilers ? momentsWith(c.slug) : []).map((m) => ({ id: m.id, title: m.title, chip: chapterChip(m), href: bases[0] ? remixHref(bases[0].versionId, m.id) : null })),
-        bases,
-        firsts,
-        remixes: mine.filter((r) => !isFirst(r)).map((r) => tile(r, null, r.moment)),
-        note: picked ? null : bases.length ? L.noBasesYet(name) : L.noBasesNoSheet(name),
-      };
-      return { c: data, w: cardWords(name) };
-    }),
+    cards,
   };
+}
+
+/** A character's page, or null for a slug that isn't one of CHALLENGE.characters (the page then answers 404). */
+export async function characterView(sql: Sql | null, slug: string): Promise<CharacterView | null> {
+  if (!CHALLENGE.characters.includes(slug) || !bookCharacter(slug)) return null;
+  const { bases, note } = await basesTiles(sql, slug);
+  // Every published challenge picture (no filter, limit or order beyond the database's newest first), then this
+  // character's: its remixes, the viewer's own and the owner's first remixes included.
+  const all = sql ? await challengePictures(sql).catch(() => []) : [];
+  const remixes = all.filter((p) => p.character === slug).map((p) => tile(p, null));
+  const c: CharacterData = { ...cardFor(slug, bases, note), remixes };
+  return { adminNote: adminNote(), back: L.back, c, w: cardWords(c.name), notAffiliated: W.notAffiliated };
 }
