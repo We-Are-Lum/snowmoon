@@ -13,8 +13,8 @@ import { AiTag } from './ai-tag';
  * - The name, a link to the character's page; the row outside a picture opens it too (the name's link covers the row,
  *   and the pictures sit above it).
  * - The approved one line (src/lib/challenge/cards.ts, `line`, verbatim), marked "This edition's summary".
- * - The bases: a character's several bases in a fresh random order on each visit (the P5g shuffle on the whole list,
- *   `shuffleFresh(c.bases)`), so none reads as the default, with "AI ⓘ" saying the look is this edition's own.
+ * - The bases: a character's several bases in a fresh random order on each visit (the P5g shuffle, on the character's
+ *   whole list of bases), so none reads as the default, with "AI ⓘ" saying the look is this edition's own.
  *   Tapping a base opens its remix screen (`href`, from the server). Picture links aren't prefetched: on a page with
  *   many pictures, prefetching every remix screen queued requests on a small database (owner, 2026-11-08).
  *
