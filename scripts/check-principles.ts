@@ -1314,7 +1314,7 @@ add({
 add({
   id: 'P5g',
   principle: 5,
-  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order; only the cards (their whole lists of bases and remixes), the entries\' "Shuffled" order and "Surprise me" (the curated moments, "Moments picked by @naaate", in book order) may shuffle, unweighted',
+  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order; only a character\'s whole list of bases, the entries\' "Shuffled" order, "Surprise me" (the curated moments, in book order) and the Style row\'s "Random" (every published style) may shuffle, unweighted',
   load: async () => walk('src', /\.tsx?$/).filter((f) => P5G_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
   run: (files) => p5gProblems(files),
   plant: (files) => {

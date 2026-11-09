@@ -8,7 +8,7 @@
  *      but the open default;
  *  M2  the default is the open models, listed first;
  *  M3  one model per sheet: views from two choices are refused, at the side/back and at publish;
- *  M4  closed models' own count per person (6) and own site cap ($5, inside the free cap), apart from the open 10,
+ *  M4  a closed picture counts as 3 of the free pictures (no separate per-person count) and the closed site cap ($5, inside the free cap),
  *      on an in-memory Postgres with every migration, NEXT_remix_model_choice.sql included;
  *  M5  the recipe lines: the closed label, the closed safety line and the can't-be-re-run line; open lines unchanged;
  *  M6  the safety line is the agreed wording, word for word;
@@ -24,7 +24,7 @@
  *  M14 no closed-model pick goes through before 18+ is confirmed on that device.
  *
  * The challenge's Model row (branch challenge-models, 2026-11-08; CHALLENGE.modelChoice, on), mocked providers only:
- *  C1  the four models, the open default first; C2 the country gate (supported, unsupported, embargoed, Ukraine's
+ *  C1  the four models, the open default first; C2 the country gate, one list for both (supported, unsupported, embargoed, Ukraine's
  *  regions, no country); C3 the country header for one request, the test override never in production; C4 the row
  *  shows exactly what the server offers, the route refuses anything else first; C5 closed refused without the notice
  *  and 18+; C6 Gemini only via vertex (any other provider fails); C7 a closed call sends only the prompt and the one
@@ -126,7 +126,7 @@ proven(
   const sql = postgres(`postgres://studio_writer@127.0.0.1:${PORT}/postgres`, { prepare: false, max: 1, onnotice: () => {} });
   await sql`set role studio_writer`;
   (IMAGES.designs as { modelChoice: boolean }).modelChoice = true; // the switch on, for this test only
-  const { reserve, settle, generationsLeft, closedLeft, closedCapUsd } = await import('../src/lib/images/limits');
+  const { reserve, settle, generationsLeft, closedCapUsd } = await import('../src/lib/images/limits');
   const S = sql as unknown as Parameters<typeof reserve>[0];
   // The superuser, for what studio_writer may not do (the session is shared with the socket's, so the role is set back).
   const su = async (q: string, params: unknown[] = []) => {
@@ -140,7 +140,7 @@ proven(
   const closedSpend = (m: SheetModel) => ({ model: m.views, reserveUsd: m.reserveUsd.view, pool: 'closed' as const });
 
   // Branch challenge-models (owner, 2026-11-08): a closed picture counts as CLOSED_IMAGES.countsAs (3) of the day's free
-  // pictures, and the closed models' own daily count (6) and site cap still hold.
+  // pictures; the closed site cap ($5) still holds; the separate 6 a day is gone.
   const weighted = async (fid: number) => {
     const p: string[] = [];
     const per = IMAGES.generationsPerDay; // 10
@@ -168,20 +168,17 @@ proven(
     return p;
   };
   const real = await weighted(1001);
-  // An admin (300 a day) is still held to the closed models' own count (6).
+  // No separate per-person closed count any more (owner, 2026-11-08): an admin (300 a day) makes a 7th closed picture.
   const admin = Number(Object.keys(IMAGES.perDayFor)[0]);
-  for (let i = 0; i < CLOSED_IMAGES.perPersonPerDay; i++) {
+  for (let i = 0; i < 7; i++) {
     const r = await reserve(S, admin, closedSpend(GPT));
     if (!r.ok) real.push(`admin closed picture ${i + 1} refused: ${r.refusal}`);
     else await settle(S, {}, closedSpend(GPT));
   }
-  const rAdmin = await reserve(S, admin, closedSpend(GPT));
-  if (rAdmin.ok || rAdmin.refusal !== 'closed-limit') real.push('the admin\'s 7th closed picture was not stopped by the closed count');
-  if ((await closedLeft(S, admin)) !== 0) real.push('closed pictures left after 6');
   // Planted: three closed asks written without a pool (as the site wrote them before), so each counts as one.
   for (let i = 0; i < 3; i++) await sql`insert into studio.image_asks (fid) values (${1002})`;
   const plantOpenLeft = await generationsLeft(S, 1002);
-  proven('M4a a closed picture counts as 3 of the day\'s free pictures; the closed models\' own count (6) still holds', () => real, () => need(plantOpenLeft === IMAGES.generationsPerDay - 3 * CLOSED_IMAGES.countsAs, `three closed asks without a pool left ${plantOpenLeft}`));
+  proven('M4a a closed picture counts as 3 of the day\'s free pictures; no separate per-person closed count', () => real, () => need(plantOpenLeft === IMAGES.generationsPerDay - 3 * CLOSED_IMAGES.countsAs, `three closed asks without a pool left ${plantOpenLeft}`));
 
   // The site-wide closed cap: today's closed spend near its cap stops a closed picture, never an open one.
   // In the challenge window (the free cap $15, the closed cap $5), as on 12 Nov: the window moved to now, for this test only.
@@ -239,6 +236,79 @@ proven(
   const roff = await reserve(S, 3001, closedSpend(GPT));
   (CHALLENGE as { modelChoice: boolean }).modelChoice = challengeWas;
   proven('M4d no closed picture for a wallet account, nor with the switches off', () => [...need(!rw.ok, 'a wallet account reserved a closed picture'), ...need(!roff.ok, 'a closed picture was reserved with the switch off')], () => need(!ron.ok, 'a closed picture was reserved (switch on, Farcaster account)'));
+  // M4e (branch challenge-models, 2026-11-08): a picture the model refuses (Qwen's 422 content_policy_violation, a
+  // gateway moderation block) or the host's checker flags (FLUX's blacked-out picture) is the usual "dropped" answer:
+  // counted (its ask stays), not charged as a success (verdict nsfw), nothing shown. Mocked fal and prompt check.
+  {
+    const { paidPicture } = await import('../src/lib/images/paid');
+    const { makeQwenEdit, makeEdit } = await import('../src/lib/images/fal');
+    const keys = { fal: process.env.FAL_KEY, groq: process.env.GROQ_API_KEY };
+    process.env.FAL_KEY = 'stand-in-not-a-key';
+    process.env.GROQ_API_KEY = 'stand-in-not-a-key';
+    const realFetch = globalThis.fetch;
+    let falAnswer: () => Response = () => new Response('{}');
+    // The prompt check, mocked: it answers `guardVerdict`, and keeps what it was sent (the system policy, the prompt).
+    let guardVerdict = '{"allow": true}';
+    const guardSent: { system: string; user: string }[] = [];
+    globalThis.fetch = (async (url: string, init?: RequestInit) => {
+      if (String(url).startsWith('https://fal.run/')) return falAnswer();
+      const m = (JSON.parse(String(init?.body ?? '{}')).messages ?? []) as { role: string; content: string }[];
+      guardSent.push({ system: m.find((x) => x.role === 'system')?.content ?? '', user: m.find((x) => x.role === 'user')?.content ?? '' });
+      return new Response(JSON.stringify({ id: 'x', model: 'stand-in', choices: [{ index: 0, message: { role: 'assistant', content: guardVerdict }, finish_reason: 'stop' }], usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 } }), { headers: { 'content-type': 'application/json' } });
+    }) as unknown as typeof fetch;
+    const jpg = await sharp({ create: { width: 64, height: 36, channels: 3, background: { r: 0, g: 0, b: 0 } } }).jpeg().toBuffer();
+    const ref = { bytes: jpg, contentType: 'image/jpeg', width: 64, height: 36 };
+    const req = new Request('http://localhost/api/challenge/make', { method: 'POST' });
+    const asks = async (fid: number) => Number((await sql`select count(*)::int as n from studio.image_asks where fid = ${fid}`)[0].n);
+    const dropped = async (fid: number, answer: () => Response, make: () => Promise<unknown>) => {
+      falAnswer = answer;
+      const before = await asks(fid);
+      const r = await paidPicture(S, fid, req, { checkText: 'Seila, quiet.', spend: { model: { id: 'qwen-image-edit-2509', host: 'fal.ai' }, reserveUsd: 0.0615 }, make: make as () => Promise<never> });
+      const p: string[] = [];
+      if (r.ok || r.status !== 422 || r.extra.reason !== 'nsfw') p.push(`answered ${JSON.stringify(r.ok ? 'ok' : { status: r.status, extra: r.extra })}, not the dropped answer`);
+      if ((await asks(fid)) !== before + 1) p.push('not counted');
+      return p;
+    };
+    const refusal = () => new Response(JSON.stringify({ detail: [{ type: 'content_policy_violation', msg: 'The content could not be processed.' }] }), { status: 422 });
+    const flagged = () => new Response(JSON.stringify({ images: [{ url: `data:image/jpeg;base64,${jpg.toString('base64')}` }], seed: 1, has_nsfw_concepts: [true] }));
+    const qwen = await dropped(4001, refusal, () => makeQwenEdit('fal-ai/qwen-image-edit-plus', 'Seila, quiet.', ref, IMAGES.size, 0.06));
+    const flux = await dropped(4002, flagged, () => makeEdit('Seila, warm light.', [ref]));
+    // Planted: a 500 (the model didn't answer) must NOT be taken for a refusal.
+    const outage = await dropped(4003, () => new Response('boom', { status: 500 }), () => makeQwenEdit('fal-ai/qwen-image-edit-plus', 'p', ref, IMAGES.size, 0.06));
+    // M4f: the challenge's whole prompt (the change box and a "Write your own" style) goes through the blocked names and
+    // the prompt check; a named real person, artist, studio or film in either is refused before any model is called.
+    const { remixPrompt } = await import('../src/lib/challenge/make');
+    const refusedFor = async (fid: number, words: string, style: string, verdict: string) => {
+      guardVerdict = verdict;
+      let called = false;
+      const r = await paidPicture(S, fid, req, { checkText: remixPrompt({ words, name: 'Zei', style }), guardMaxTokens: IMAGES.designs.guardMaxTokens, spend: { model: { id: 'flux2-klein-4b-edit', host: 'fal.ai' }, reserveUsd: 0.0215 }, make: async () => { called = true; throw new Error('not reached'); } });
+      return !r.ok && r.status === 422 && r.extra.reason === 'blocked' && !called ? (r.extra.category as string) : `allowed (${JSON.stringify(r.ok ? 'ok' : r.extra)})`;
+    };
+    const no = (cat: string) => `{"allow": false, "category": "${cat}"}`;
+    const cases = [
+      ['a real person named in the change box (blocked names)', await refusedFor(4101, 'Zei shaking hands with Donald Trump', 'watercolour', '{"allow": true}'), 'real_person'],
+      ['a real person named in "Write your own" (blocked names)', await refusedFor(4102, 'Zei on a ledge', 'painted like a Putin portrait', '{"allow": true}'), 'real_person'],
+      ['an artist in the change box (the check)', await refusedFor(4103, 'Zei, as Hokusai would draw her', 'watercolour', no('someone_elses_work')), 'someone_elses_work'],
+      ['a studio in "Write your own" (the check)', await refusedFor(4104, 'Zei on a ledge', 'Studio Ghibli look', no('someone_elses_work')), 'someone_elses_work'],
+      ['a film in "Write your own" (the check)', await refusedFor(4105, 'Zei on a ledge', 'like a still from Blade Runner', no('someone_elses_work')), 'someone_elses_work'],
+      ['campaign material (the check)', await refusedFor(4106, 'Zei holding a vote-for poster', 'poster art', no('campaign')), 'campaign'],
+    ] as const;
+    const sentStyle = guardSent.some((g) => /Studio Ghibli look/.test(g.user)) && guardSent.some((g) => /Blade Runner/.test(g.user));
+    const policySent = guardSent.at(-1)?.system ?? '';
+    const m4f = [
+      ...cases.flatMap(([what, got, want]) => (got === want ? [] : [`${what}: ${got}`])),
+      ...need(sentStyle, 'the check wasn\'t sent the "Write your own" style text'),
+      ...['self_harm', 'extremism', 'campaign', 'someone_elses_work', 'real_person'].flatMap((c) => need(new RegExp(`\\*\\*${c}\\*\\*`).test(policySent), `the policy sent to the check doesn't name ${c}`)),
+      ...need(/artist or studio/.test(policySent) && /\bfilm\b/.test(policySent) && /real election, party or candidate/.test(policySent), 'the policy sent doesn\'t name artists, studios, films and campaign material'),
+    ];
+    guardVerdict = '{"allow": true}';
+    const lax = await refusedFor(4107, 'Zei on a ledge', 'Studio Ghibli look', '{"allow": true}'); // planted: a check that lets it through
+    globalThis.fetch = realFetch;
+    process.env.FAL_KEY = keys.fal;
+    process.env.GROQ_API_KEY = keys.groq;
+    proven('M4f the change box and a "Write your own" style are both checked: named real people (blocked names), artists, studios, films and campaign material (the check, mocked) are refused before any model; the policy sent names self_harm, extremism and campaign', () => m4f, () => (lax === 'someone_elses_work' ? [] : ['a check that allows it lets the studio through']));
+    proven('M4e a model\'s refusal (Qwen 422 content_policy_violation) and a flagged FLUX picture are counted and answered as dropped (422, reason nsfw), not as a success', () => [...qwen, ...flux], () => outage);
+  }
   await sql.end();
   await server.stop();
   await db.close();
@@ -495,7 +565,8 @@ proven(
     const want: [string, string | null, 'OpenAI' | 'Google', boolean][] = [
       ['FR', null, 'OpenAI', true], ['US', null, 'OpenAI', true], ['UA', '30', 'OpenAI', true], ['UA', '30', 'Google', true],
       ['RU', null, 'OpenAI', false], ['CN', null, 'OpenAI', false], ['HK', null, 'OpenAI', false], ['BY', null, 'OpenAI', false], ['VE', null, 'OpenAI', false],
-      ['RU', null, 'Google', true], ['CN', null, 'Google', true],
+      // One list for both (owner, 2026-11-08): Gemini isn't offered where OpenAI isn't.
+      ['RU', null, 'Google', false], ['CN', null, 'Google', false], ['PR', null, 'Google', false], ['JP', null, 'Google', true],
       ...(['CU', 'IR', 'KP', 'SY'] as const).flatMap((c) => [[c, null, 'OpenAI', false], [c, null, 'Google', false]] as [string, null, 'OpenAI' | 'Google', boolean][]),
       ['UA', '43', 'OpenAI', false], ['UA', '43', 'Google', false], ['UA', '40', 'Google', false], ['UA', '14', 'Google', false], ['UA', '09', 'Google', false], ['UA', '9', 'Google', false], ['UA', null, 'Google', false], ['UA', null, 'OpenAI', false],
     ];
@@ -504,7 +575,7 @@ proven(
     return p;
   };
   proven(
-    'C2 country gate: OpenAI only in its supported list; Google everywhere but the embargoed set; Crimea, Sevastopol, Donetsk, Luhansk and a region-less Ukraine refused; no country, nothing closed',
+    'C2 country gate: one list for both closed models, OpenAI\'s supported countries minus the embargoed set; Crimea, Sevastopol, Donetsk, Luhansk and a region-less Ukraine refused; no country, nothing closed',
     () => [
       ...gate(makerServes),
       ...need(OPENAI_SUPPORTED.length === 208 && new Set(OPENAI_SUPPORTED.map(([, c]) => c)).size === 208, `OpenAI's list has ${OPENAI_SUPPORTED.length} entries (the page had 208, read 2026-11-08)`),
@@ -532,7 +603,7 @@ proven(
     const shown = row(w).map((r) => r.id).join(','), served = challengeModelsFor(w).map((m) => m.id).join(',');
     return need(shown === served, `${w.country ?? 'no country'}: the row shows ${shown}, the server offers ${served}`);
   });
-  const ri = makeSrc.indexOf('if (!chosen) return no('), ci = makeSrc.indexOf('await hasConsented(fid)'), pi = makeSrc.indexOf('await paidPicture(');
+  const ri = makeSrc.indexOf("if (!chosen) return no("), ci = makeSrc.indexOf('await hasConsented(fid)'), pi = makeSrc.indexOf('await paidPicture(');
   proven(
     'C4 the Model row shows exactly what the server offers in each country; the route refuses anything else, before anything is counted',
     () => [
@@ -541,7 +612,7 @@ proven(
       ...need(challengeModel('midjourney', FR) === null && challengeModel('z-image-turbo', FR) === null, 'the server accepts a model not on the list'),
       ...need(challengeModel(undefined, NONE)?.id === DEFAULT_CHALLENGE_MODEL, 'no model is not the open default'),
       ...need(ri > 0 && ri < ci && ci < pi, 'the route does not refuse the model before consent and the count'),
-      ...need(/models: modelRow\(whereFrom\(request\.headers\)\)/.test(makeSrc) && /challengeModel\(bodyModel, whereFrom\(request\.headers\)\)/.test(makeSrc), 'GET or POST does not use this request\'s country'),
+      ...need(/modelView\(whereFrom\(request\.headers\)/.test(makeSrc) && /challengeModel\(r\.model, whereFrom\(request\.headers\)\)/.test(makeSrc), 'GET or POST does not use this request\'s country'),
     ],
     () => pickerMatches(() => CHALLENGE_MODELS.map((m) => ({ id: m.id }))),
   );
@@ -607,6 +678,7 @@ proven(
     return [...need(imgs.length === 1, `${c.url}: ${imgs.length} pictures sent`), ...need(!/"user":|fid|6786|"FR"|country|ip_address|safety_identifier/i.test(flat), `${c.url}: something about the person or their country is sent`)];
   });
   const am = await sharp(a.bytes).metadata();
+  const crop = (a.settings.converted as { crop: string; cropped: { removed_top: number; removed_bottom: number } });
   proven(
     'C7 a closed challenge picture sends only the prompt and the one picture tapped (no person, no country); the answer is read, converted to 1024 x 576 and costed (mocked gateway)',
     () => [
@@ -614,6 +686,7 @@ proven(
       ...need(sent[0]?.url.endsWith('/images/edits') && sent[1]?.url.endsWith('/chat/completions'), 'endpoints'),
       ...need(a.costUsd === 0.0467 && b.costUsd === 0.0677 && a.requestId === 'gen_mock', 'costs or ids not read'),
       ...need(am.width === IMAGES.size.width && am.height === IMAGES.size.height && am.format === 'jpeg', 'not converted to the challenge size'),
+      ...need(crop.crop === 'cropped from 3:2 to 16:9, mostly from the bottom' && crop.cropped.removed_top === 40 && crop.cropped.removed_bottom === 120, `the recipe's crop: ${JSON.stringify(crop)}`),
     ],
     () => callContent([{ url: 'planted', body: JSON.stringify({ prompt: 'p', user: 'fid:6786', images: ['data:image/jpeg;base64,AA', 'data:image/jpeg;base64,BB'] }) }]),
   );
@@ -660,24 +733,46 @@ proven(
     return new Response(JSON.stringify({ images: [{ url: `data:image/jpeg;base64,${jpg.toString('base64')}` }], seed: 7, has_nsfw_concepts: [false] }), { status: 200, headers: { 'x-fal-request-id': 'req_mock' } });
   }) as unknown as typeof fetch;
   const worst = reserveUsd(C_QWEN, { width: 1024, height: 576 });
-  const q = await makeQwenEdit(QWEN.endpoint, 'Bai on a ledge.', { bytes: ref, contentType: 'image/jpeg', width: 1024, height: 576 }, IMAGES.size, qwenCostUsd(IMAGES.size, { width: 1024, height: 576 }));
+  // Measured (style test, 2026-11-08): Qwen returns 1376 x 768 whatever image_size says, billed as 2 MP, $0.06.
+  globalThis.fetch = (async (url: string, init: RequestInit) => {
+    falCalls.push({ url: String(url), body: String(init.body) });
+    const jpg = await sharp({ create: { width: 1376, height: 768, channels: 3, background: { r: 1, g: 1, b: 1 } } }).jpeg().toBuffer();
+    return new Response(JSON.stringify({ images: [{ url: `data:image/jpeg;base64,${jpg.toString('base64')}` }], seed: 7, has_nsfw_concepts: [false] }), { status: 200, headers: { 'x-fal-request-id': 'req_mock' } });
+  }) as unknown as typeof fetch;
+  const { makeWith } = await import('../src/lib/challenge/make-model');
+  const q = await makeWith(C_QWEN, 'Bai on a ledge.', [{ bytes: ref, contentType: 'image/jpeg', width: 1024, height: 576 }], new Request('http://localhost/'), worst);
   globalThis.fetch = realFetch2;
   process.env.FAL_KEY = keyWas;
-  const qwenRules = (endpoint: string, cost: (o: typeof IMAGES.size, r: typeof IMAGES.size) => number) => [
+  const qm = await sharp(q.bytes).metadata();
+  const qwenRules = (endpoint: string, cost: (o: { width: number; height: number }) => number) => [
     ...need(endpoint === 'fal-ai/qwen-image-edit-plus', `endpoint ${endpoint}`),
-    ...need(Math.abs(cost(IMAGES.size, { width: 1024, height: 576 }) - 0.03 * (1 + 0.589824)) < 1e-9, `cost ${cost(IMAGES.size, { width: 1024, height: 576 })}`),
+    ...need(cost({ width: 1376, height: 768 }) === 0.06 && cost({ width: 1024, height: 576 }) === 0.03, `cost ${cost({ width: 1376, height: 768 })}`),
   ];
   proven(
-    'C10 Qwen-Image-Edit: fal-ai/qwen-image-edit-plus (2509), one reference, the safety checker on, costed as $0.03 x (output MP at least 1 + reference MP) (mocked fal)',
+    'C10 Qwen-Image-Edit: fal-ai/qwen-image-edit-plus (2509), one reference, the safety checker on; billed whole megapixels of its 1376 x 768 output ($0.06), reserved for it, and cropped and scaled to 1024 x 576 with the recipe saying so (mocked fal)',
     () => [
       ...qwenRules(QWEN.endpoint, qwenCostUsd),
       ...need(falCalls.length === 1 && falCalls[0].url === 'https://fal.run/fal-ai/qwen-image-edit-plus', `called ${falCalls.map((c) => c.url).join(', ')}`),
       ...need((JSON.parse(falCalls[0]?.body ?? '{}').image_urls ?? []).length === 1 && JSON.parse(falCalls[0]?.body ?? '{}').enable_safety_checker === true, 'not one reference, or no safety checker'),
-      ...need(q.costUsd > 0 && worst >= q.costUsd, 'the reserve is below the cost'),
+      ...need(q.costUsd === 0.06 && worst >= q.costUsd && C_QWEN.estimateUsd === 0.06, `cost ${q.costUsd}, reserve ${worst}`),
+      ...need(qm.width === 1024 && qm.height === 576 && qm.format === 'jpeg', `stored ${qm.width}x${qm.height}`),
+      ...need(/1376x768/.test(JSON.stringify(q.settings)), 'the recipe does not record the size Qwen returned'),
       ...need(!/fal-ai\/qwen-image-edit['"]/.test(read('src/lib/challenge/models.ts') + read('src/lib/images/fal.ts')), 'the deprecated endpoint is named'),
     ],
-    () => qwenRules('fal-ai/qwen-image-edit', (o, r) => 0.03 * ((o.width * o.height + r.width * r.height) / 1e6)),
+    () => qwenRules('fal-ai/qwen-image-edit', (o) => 0.03 * ((o.width * o.height) / 1e6)),
   );
+
+  // C15: the challenge's prompt check gets the larger budget (1,200), as a sheet's views do.
+  const budget = (src: string) => need(/paidPicture\(sql, fid, request, \{[\s\S]{0,400}guardMaxTokens: IMAGES\.designs\.guardMaxTokens/.test(src) && IMAGES.designs.guardMaxTokens === 1200, 'the make route checks prompts with the default 400 tokens');
+  proven('C15 the make route\'s prompt check gets 1,200 tokens (at 400, 62 of 90 style prompts came back "unclear")', () => budget(makeSrc), () => budget(makeSrc.replace(/guardMaxTokens: IMAGES\.designs\.guardMaxTokens,/, '')));
+
+  // C16: a gateway moderation block is a refusal, not an outage.
+  {
+    const { parseClosed } = await import('../src/lib/images/closed');
+    const { ImageRefused } = await import('../src/lib/images/fal');
+    const kind = (status: number, body: unknown) => { try { parseClosed({ id: 'gpt-image-2.5-sunburst' } as never, status, body); return 'ok'; } catch (e) { return e instanceof ImageRefused ? 'refused' : 'unavailable'; } };
+    proven('C16 a closed model\'s moderation block is a refusal (the dropped answer); a gateway outage is not', () => need(kind(400, { error: { code: 'moderation_blocked' } }) === 'refused' && kind(503, { error: 'busy' }) === 'unavailable', 'kinds'), () => need(kind(503, { error: 'busy' }) === 'refused', 'an outage taken for a refusal'));
+  }
 
   // C11: the country is used, never kept: no log, no database, no ticket.
   const keptProblems = (src: string, route = makeSrc) => [
@@ -687,6 +782,70 @@ proven(
   ];
   const countrySrc = makeSrc + read('src/lib/images/countries.ts') + read('src/lib/challenge/models.ts');
   proven('C11 the visitor\'s country is read for the request only: not logged, not stored, not in the ticket', () => [...keptProblems(countrySrc), ...need(!/console\.|from '\.\.\/db'|sql`/.test(read('src/lib/images/countries.ts')), 'countries.ts logs or reaches the database')], () => keptProblems(`${makeSrc}\nconsole.log('country', where);`, makeSrc.replace('signTicket({', 'signTicket({ country: where.country,')));
+
+  // C13: GPT's 3:2 is cropped to 16:9, never padded, mostly from the bottom (owner, 2026-11-08), so a head at the top stays.
+  {
+    const { toWide, cropWords, CROP_FROM_TOP } = await import('../src/lib/images/closed');
+    // 1536 x 1024: rows 0-29 white sky, rows 30-89 a red "head", the rest grey; 864 rows are kept.
+    const raw = Buffer.alloc(1536 * 1024 * 3, 128);
+    for (let y = 0; y < 90; y++) for (let x = 0; x < 1536; x++) { const i = (y * 1536 + x) * 3; if (y < 30) raw.fill(255, i, i + 3); else { raw[i] = 220; raw[i + 1] = 20; raw[i + 2] = 20; } }
+    const gptLike = await sharp(raw, { raw: { width: 1536, height: 1024, channels: 3 } }).png().toBuffer();
+    const headKept = async (fromTop: number) => {
+      const w = await toWide(gptLike, IMAGES.size, fromTop);
+      const px = await sharp(w.bytes).extract({ left: 512, top: 0, width: 1, height: 40 }).raw().toBuffer();
+      const reds = [...Array(40).keys()].filter((y) => px[y * 3] > 180 && px[y * 3 + 1] < 90).length;
+      const m = await sharp(w.bytes).metadata();
+      return [
+        ...need(reds >= 20, `only ${reds} of the top 40 rows show the head (fromTop ${fromTop})`),
+        ...need(m.width === 1024 && m.height === 576, `${m.width}x${m.height}`),
+        ...need(w.crop.removed_top + w.crop.removed_bottom === 160 && w.crop.removed_bottom >= 3 * w.crop.removed_top, `removed ${w.crop.removed_top} top, ${w.crop.removed_bottom} bottom`),
+      ];
+    };
+    const real = [...(await headKept(CROP_FROM_TOP)), ...need(cropWords(1536, 1024) === 'cropped from 3:2 to 16:9, mostly from the bottom' && cropWords(1024, 576) === 'not cropped (already 16:9)', 'crop words')];
+    const plant = await headKept(1); // all from the top: the head is cut
+    const ok = real.length === 0 && plant.length > 0;
+    if (ok) passed++;
+    else failed.push(`C13 crop: ${real.length ? real.join('; ') : 'plant not caught'}`);
+    console.log(`${ok ? 'ok  ' : 'FAIL'} C13 a closed picture is cropped to 16:9 (not padded), mostly from the bottom, so the head stays; the recipe says so${real.length ? ` (${real.join('; ')})` : ''}`);
+  }
+
+  // C14: a wallet account's Model row leaves the closed models out and says why; the route refuses them with the same words.
+  {
+    const { modelView } = await import('../src/lib/challenge/models');
+    const { MODEL_WORDING } = await import('../src/lib/challenge/model-wording');
+    const walletRow = (view: typeof modelView) => {
+      const w = view(FR, { wallet: true }), f = view(FR, { wallet: false }), none = view(NONE, { wallet: true });
+      return [
+        ...need(w.models.every((m) => m.open) && w.models[0]?.id === DEFAULT_CHALLENGE_MODEL, 'a wallet account is offered a closed model'),
+        ...need(w.note === 'Closed models need a Farcaster, Lens or Bluesky sign-in.', `the wallet line: ${w.note}`),
+        ...need(f.note === null && f.models.some((m) => !m.open), 'a Farcaster account loses the closed models'),
+        ...need(none.note === null, 'the wallet line shows where no closed model would be offered anyway'),
+        ...need(MODEL_WORDING.walletOnly === 'Closed models need a Farcaster, Lens or Bluesky sign-in.' && /isWalletNumber\(fid\)\) return no\(MODEL_WORDING\.walletOnly/.test(makeSrc), 'the route\'s refusal'),
+      ];
+    };
+    proven('C14 a wallet account sees "Closed models need a Farcaster, Lens or Bluesky sign-in." in place of the closed models, and the route refuses them', () => walletRow(modelView), () => walletRow((w, o) => ({ models: modelRow(w), note: null })));
+  }
+
+  // C17: the closed-pick lines are the owner's exact words, and their costs match the models' estimates.
+  {
+    const { MODEL_WORDING } = await import('../src/lib/challenge/model-wording');
+    const linesOk = (lines: Record<string, string>, models: typeof CHALLENGE_MODELS) => [
+      ...need(lines.OpenAI === 'a closed model by OpenAI · costs us about $0.05 · OpenAI may keep your prompt and picture up to 30 days · uses 3 of today\'s pictures', 'the OpenAI line'),
+      ...need(lines.Google === 'a closed model by Google · costs us about $0.07 · Google keeps no copy; abuse logs up to 90 days · uses 3 of today\'s pictures', 'the Google line'),
+      ...models.filter((m) => !m.open).flatMap((m) => need((lines[m.maker] ?? '').includes(`costs us about $${m.estimateUsd.toFixed(2)} `), `${m.maker}'s line doesn't say its estimate, $${m.estimateUsd.toFixed(2)}`)),
+      ...need((lines.OpenAI ?? '').includes(`uses ${CLOSED_IMAGES.countsAs} of`), 'the count'),
+    ];
+    const { resetLocal } = await import('../src/lib/challenge/model-wording');
+    const at = new Date('2026-11-09T05:00:00Z');
+    const tooFew = [
+      ...need(MODEL_WORDING.tooFew(2, '4:00 pm') === 'A closed model uses 3 of today\'s pictures; you have 2 left, enough for the open models. More pictures at 4:00 pm.', 'the too-few line'),
+      ...need(MODEL_WORDING.tooFew(0, '4:00 pm') === 'A closed model uses 3 of today\'s pictures; you have none left today. More pictures at 4:00 pm.', 'the none-left line'),
+      ...need(resetLocal(at, 'America/Los_Angeles') === '4:00 pm' && resetLocal(at, 'Europe/Paris') === '1:00 am' && resetLocal(at, 'UTC') === '12:00 am', `reset: ${resetLocal(at, 'America/Los_Angeles')}, ${resetLocal(at, 'Europe/Paris')}, ${resetLocal(at, 'UTC')}`),
+      ...need(!/resetLocal|toLocaleTimeString/.test(makeSrc), 'the route renders a time'),
+      ...need(IMAGES.generationsPerDay === 10 && IMAGES.dailySpendCapUsd !== undefined && CLOSED_IMAGES.dailySpendCapUsd === 5, 'the free count (10) or the closed cap ($5) changed'),
+    ];
+    proven('C17 the closed-pick lines are the owner\'s words with the models\' own estimates; the too-few line, its n = 0 form, and the reset in the visitor\'s time (browser only); 10 free a day, $5 closed cap', () => [...linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS), ...tooFew], () => linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS.map((m) => (m.id === 'gpt-image-2.5-sunburst' ? { ...m, estimateUsd: 0.08 } : m))));
+  }
 
   // C12: model choice on the challenge is on only with Privacy §4, §7 and consent v6 saying what each maker receives (P6t).
   const consentNow = JSON.parse(read('config/consent.json'));

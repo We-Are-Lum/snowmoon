@@ -2,7 +2,7 @@ import 'server-only';
 import type postgres from 'postgres';
 import { IMAGES } from '../config';
 import { checkPrompt } from './guard';
-import { ImageUnavailable, type Made } from './fal';
+import { ImageRefused, ImageUnavailable, type Made } from './fal';
 import { fundedBy, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
 import { blockedName } from './rules';
 import { FREE_WORDING } from '../social/free';
@@ -83,6 +83,12 @@ export async function paidPicture(
   try {
     made = await job.make();
   } catch (e) {
+    // The model's own safety check refused it (branch challenge-models): counted and answered as a dropped picture.
+    if (e instanceof ImageRefused) {
+      await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' }, image: { costUsd: 0, verdict: 'nsfw' } }, spend, funded);
+      const back = await creditBack(sql, r.debitId, 'dropped');
+      return { ok: false, status: 422, error: failed('The image was flagged by the safety checker and dropped.', back), extra: { reason: 'nsfw', left: r.left, ...(back ? { creditedBack: true } : {}) } };
+    }
     await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' } }, spend, funded);
     console.error('image generation failed', e instanceof ImageUnavailable ? e.message : (e as Error).name);
     const back = await creditBack(sql, r.debitId, 'failed');

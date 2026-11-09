@@ -10,7 +10,7 @@ import { isSocialPerson } from '../people';
 import { chooseEntries, distinctSubmissions, entrantCounts, fromDecision, type Decision, inWindow, newestFirst, phase, shortDateText, submitRefusal, submittedToday, type Candidate, type Eligibility, type Submission } from './rules';
 import type { Post } from './post-links';
 import { challengePictures, picturesCount } from './pictures';
-import { momentById } from './moments';
+import { shownMoment } from './moment-switch';
 
 /**
  * The remix challenge's entries (owner, 2026-10-31; Submit, 2026-11-04), the server half. Reads published sheets, the
@@ -82,7 +82,7 @@ export async function windowPictures(sql: Sql): Promise<ChallengeVersion[]> {
     .map((p) => ({
       versionId: p.versionId, elementId: p.elementId, character: p.character, maker: p.byFid,
       person: p.byFid > 0 || isSocialPerson(p.byFid) ? p.byFid : 0, createdAt: p.createdAt, forked: counts.get(p.versionId) === true,
-      versionNo: 1, title: momentById(p.moment)?.title ?? '', byName: p.byName, thumb: p.thumb,
+      versionNo: 1, title: shownMoment(p.moment)?.title ?? '', byName: p.byName, thumb: p.thumb,
     }))
     .sort(newestFirst);
 }

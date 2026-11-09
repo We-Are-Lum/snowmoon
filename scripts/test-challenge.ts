@@ -70,7 +70,7 @@ CHALLENGE.pictureEntries = false;
   check('switch: CHALLENGE.public is on as committed (the owner opened it)', CHALLENGE.public === true);
   const committedPublic = CHALLENGE.public;
   (CHALLENGE as unknown as { public: boolean }).public = false;
-  check('switch: the dates are kept (opens Tue 10 Nov, 00:00 Pacific; owner, 2026-11-07)', CHALLENGE.dates.opens === '2026-11-10T08:00:00Z');
+  check('switch: the dates are kept (opens Tue 17 Nov, 00:00 Pacific; owner, 2026-11-08)', CHALLENGE.dates.opens === '2026-11-17T08:00:00Z');
   check('switch off, inside the window: the free cap stays $2, not $15', C.imagesDailySpendCapUsd(inside) === IMAGES.dailySpendCapUsd && IMAGES.dailySpendCapUsd === 2);
   check('switch off, inside the window: sheets stay invited-only (Privacy describes the challenge)', O.privacyDescribesChallenge(PRIVACY) && !O.challengeSheetsOpen(inside, PRIVACY));
   check('switch off, inside the window: entries are not taken', !R.entriesOpen(inside) && !R.challengeOpenNow(inside));
@@ -154,19 +154,19 @@ proof('a wallet path let back in is caught', R.eligibility({ maker: -7, passed: 
 
 // --- The window, in Pacific time ---------------------------------------------------------------------------------
 const D0 = CHALLENGE.dates;
-check('opens Tue 10 Nov 2026, 00:00 Pacific (owner, 2026-11-07)', R.pacificWallTime(D0.opens) === '2026-11-10 00:00', R.pacificWallTime(D0.opens));
-check('the last minute is Sun 22 Nov 2026, 23:59 Pacific', R.pacificWallTime(new Date(Date.parse(D0.closes) - 60_000).toISOString()) === '2026-11-22 23:59');
+check('opens Tue 17 Nov 2026, 00:00 Pacific (owner, 2026-11-08)', R.pacificWallTime(D0.opens) === '2026-11-17 00:00' && new Date(D0.opens).getUTCDay() === 2, R.pacificWallTime(D0.opens));
+check('the last minute is Sun 29 Nov 2026, 23:59 Pacific (owner, 2026-11-08)', R.pacificWallTime(new Date(Date.parse(D0.closes) - 60_000).toISOString()) === '2026-11-29 23:59' && R.pacificWallTime(D0.closes) === '2026-11-30 00:00');
 const at = (iso: string, deltaMs: number) => new Date(Date.parse(iso) + deltaMs);
 check('the opening instant is in', R.inWindow(at(D0.opens, 0)));
 check('a millisecond before opening is out', !R.inWindow(at(D0.opens, -1)));
 check('23:59:59.999 Pacific on the last day is in', R.inWindow(at(D0.closes, -1)));
 check('midnight Pacific after the last day is out', !R.inWindow(at(D0.closes, 0)));
-check('the window crosses no clock change (PST throughout): 23:59 Pacific is 07:59 UTC the next day', new Date(Date.parse(D0.closes) - 60_000).toISOString() === '2026-11-23T07:59:00.000Z');
-check('dateText builds the deadline from the config', R.dateText('closes', { time: true }) === 'Sunday 22 November, 23:59 Pacific', R.dateText('closes', { time: true }));
+check('the window crosses no clock change (PST throughout): 23:59 Pacific is 07:59 UTC the next day', new Date(Date.parse(D0.closes) - 60_000).toISOString() === '2026-11-30T07:59:00.000Z');
+check('dateText builds the deadline from the config', R.dateText('closes', { time: true }) === 'Sunday 29 November, 23:59 Pacific', R.dateText('closes', { time: true }));
 {
   const CW0 = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
   const LW0 = (await import('../src/lib/challenge/landing')).LANDING_WORDING;
-  check('windowText spans the window: "10 to 22 November" (the rules intro, the home row, the landing)', R.windowText() === '10 to 22 November' && CW0.intro().startsWith('From 10 to 22 November,') && CW0.homeLine().includes('10 to 22 November') && LW0.arrival('Zei', 'open').includes('10 to 22 November'), `${R.windowText()} | ${CW0.intro().slice(0, 40)}`);
+  check('windowText spans the window: "17 to 29 November" (the rules intro, the home row, the landing)', R.windowText() === '17 to 29 November' && CW0.intro().startsWith('From 17 to 29 November,') && CW0.homeLine().includes('17 to 29 November') && LW0.arrival('Zei', 'open').includes('17 to 29 November'), `${R.windowText()} | ${CW0.intro().slice(0, 40)}`);
 }
 // The free spend cap: $15 inside the window, $2 outside, by itself (owner, 2026-10-31).
 {
@@ -443,14 +443,17 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   // The hub's cards (owner, 2026-11-05, answers 8 and 9): each card shuffles its whole lists of bases and remixes in the
   // browser; the page's data hands every card all of its character's remixes.
   const card = read('src/components/challenge-card.tsx');
-  check('a card shuffles its bases and its remixes afresh in the browser, the whole lists (owner, 2026-11-05)', /setBases\(c\.bases\.length > 1 \? shuffleFresh\(c\.bases\) : c\.bases\)/.test(card) && /setRemixes\(shuffleFresh\(c\.remixes\)\)/.test(card) && /'use client'/.test(card) && /await (remixes|challengePictures)\(sql\)/.test(read('src/lib/challenge/view.ts')));
-  check('a card shows a random three of its remixes, then more on "Show more"', /const FIRST = 3;/.test(card) && /remixes\.slice\(0, shown\)/.test(card) && /setShown\(\(n\) => n \+ MORE\)/.test(card));
+  // The plain list and the character's page (owner, 2026-11-08): only a character's whole list of bases is shuffled; its
+  // remixes are every published one, newest first, with no "Show more".
+  const charPage = read('src/components/challenge-character.tsx');
+  check('a character\'s bases are shuffled afresh in the browser, the whole list; its remixes are not shuffled (owner, 2026-11-08)', /setBases\(c\.bases\.length > 1 \? shuffleFresh\(c\.bases\) : c\.bases\)/.test(card) && /'use client'/.test(card) && !/shuffleFresh\(c\.remixes\)/.test(card + charPage) && /await (remixes|challengePictures)\(sql\)/.test(read('src/lib/challenge/view.ts')));
+  check('a character\'s page shows every remix, newest first, with no "Show more"', /<Row tiles=\{c\.remixes\} alt=\{w\.alt\} label=\{w\.remixes\} lazy picture \/>/.test(charPage) && !/Show more|showMore|slice\(0, shown\)/.test(card + charPage));
   proof('P5g: shuffling only some of the bases fails', p5gProblems(plantIn('src/components/challenge-card.tsx', (x) => x.replace('shuffleFresh(c.bases)', 'shuffleFresh(c.bases.slice(1))'))).length > 0);
   proof('P5g: bases put in a fixed order by the page fails', p5gProblems(plantIn('src/components/challenge-card.tsx', (x) => x.replace('shuffleFresh(c.bases)', '[...c.bases].sort((a, b) => a.title.localeCompare(b.title))'))).length > 0);
   proof('P5g: a weighted shuffle (it reads likes) fails', p5gProblems(plantIn('src/lib/challenge/shuffle.ts', (x) => x.replace('export function shuffleFresh<T>(items: readonly T[]', 'export function shuffleFresh<T extends { likes: number }>(items: readonly T[]').replace('const j = below(i + 1, random);', 'const j = below(Math.min(i + 1, 1 + out[i].likes), random);'))).length > 0);
   proof('P5g: a shuffle with weights fails', p5gProblems(plantIn('src/lib/challenge/shuffle.ts', (x) => x.replace('const j = below(i + 1, random);', 'const j = below(i + 1, () => random() ** weight);'))).length > 0);
   proof('P5g: a sort by chance on the page (outside the shuffle) fails', p5gProblems(plantIn('src/app/challenge/page.tsx', (x) => `${x}\nexport const planted = (e: number[]) => e.sort(() => Math.random() - 0.5);`)).length > 0);
-  proof('P5g: shuffling only some remixes (a featured few) fails', p5gProblems(plantIn('src/components/challenge-card.tsx', (x) => x.replace('shuffleFresh(c.remixes)', 'shuffleFresh(c.remixes.slice(0, 6))'))).length > 0);
+  proof('P5g: a character\'s remixes shuffled (a featured few) fails', p5gProblems(plantIn('src/components/challenge-character.tsx', (x) => `${x}\nconst featured = shuffleFresh(c.remixes.slice(0, 6));`)).length > 0);
   proof('P5g: the cards\' remixes drawn from a limited list fails', p5gProblems(plantIn('src/lib/challenge/view.ts', (x) => x.replace('await challengePictures(sql)', 'await challengePictures(sql, { limit: 12 })'))).length > 0);
   proof('P5g: a shuffle elsewhere (the feed) fails', p5gProblems([...files, { file: 'src/app/challenge/remixes/page.tsx', text: `${read('src/app/challenge/remixes/page.tsx')}\nconst x = shuffleFresh(cards);` }].filter((f, i, a) => a.findIndex((y) => y.file === f.file) === i || f.text.includes('const x = shuffleFresh'))).length > 0);
   // P5i: no counts on cards, no "most remixed" sort.
@@ -1431,7 +1434,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('e3 in the window, a challenge sheet\'s share text is the owner\'s (2026-11-06: "My remix of {name}, for the Snowmoon Party remix challenge"); outside it, as before', shareSwitch(share, vp) && CW.shareTextOpen('Bai') === 'My remix of Bai, for the Snowmoon Party remix challenge' && CW.shareText('Bai: x') === 'Bai: x, made on Snowmoon Party');
   proof('e3 a share text that ignores the window is caught', !shareSwitch(share, vp.replace("isChallengeCharacter(d.entity) && remixingOpenNow();", 'isChallengeCharacter(d.entity) && true;')));
   // h. Before the open, from CHALLENGE.dates.
-  check('h "Entries open Tue 10 Nov, 00:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Tue 10 Nov, 00:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());
+  check('h "Entries open Tue 17 Nov, 00:00 PT", built from CHALLENGE.dates', E.SUBMIT_WORDING.opens() === 'Entries open Tue 17 Nov, 00:00 PT.' && R.shortDateText('opens', { ...CHALLENGE.dates, opens: '2026-11-13T17:00:00Z' }) === 'Fri 13 Nov, 09:00 PT', E.SUBMIT_WORDING.opens());
   // i. Neynar down: published, and told on the spot.
   check('i the unchecked line says it won\'t count, and why', /won’t count/.test(CW.publishedUnchecked('Zei')) && /Neynar/.test(CW.publishedUnchecked('Zei')) && /\{entry\?\.kind === 'unchecked' && \(\s*<p className="ic-error ch-unchecked" role="status">\s*\{entry\.text\}/.test(form));
   check('i the confirmation\'s new lines carry a Draft wording line', /\{entry && <p className="as-draft ic-draftline">\{IMAGE_WORDING\.draftLine\}<\/p>\}/.test(form));
@@ -1525,10 +1528,12 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
     check('F1 a sheet shared by anyone but its maker doesn\'t say "My remix"', !/my remix/i.test(CWx.shareTextOthers('Zei', 'naaate')) && /const texts = othersTexts && !mine \? othersTexts : makersTexts;/.test(share));
     const css = read('src/styles/designs.css');
     const card = read('src/components/challenge-card.tsx');
-    check('F2 the challenge\'s pictures are shown whole at 16:9 (cards, Every remix, Every entry, the rules\' list)', /\.cc-tile-img\.cc-tile-pic \{ aspect-ratio: 16 \/ 9; object-fit: contain; \}/.test(css) && /\.ch-pics \.ch-card-img \{ aspect-ratio: 16 \/ 9; object-fit: contain; \}/.test(css) && card.includes('label={w.firsts} picture />') && card.includes('label={w.remixes} lazy picture />') && read('src/app/challenge/entries/page.tsx').includes('pictures: CHALLENGE.pictureEntries') && read('src/components/challenge-remixes-body.tsx').includes('pictures: true'));
+    check('F2 the challenge\'s pictures are shown whole at 16:9 (cards, Every remix, Every entry, the rules\' list)', /\.cc-tile-img\.cc-tile-pic \{ aspect-ratio: 16 \/ 9; object-fit: contain; \}/.test(css) && /\.ch-pics \.ch-card-img \{ aspect-ratio: 16 \/ 9; object-fit: contain; \}/.test(css) && read('src/components/challenge-character.tsx').includes('label={w.remixes} lazy picture />') && read('src/app/challenge/entries/page.tsx').includes('pictures: CHALLENGE.pictureEntries') && read('src/components/challenge-remixes-body.tsx').includes('pictures: true'));
     const make = read('src/components/challenge-make.tsx');
     const at = (x: string) => make.indexOf(x);
-    check('F3 the remix screen: the picture, the box, the moment row, "Make it", the model line, then the moment\'s words', at('</figure>') < at('<PublishedTextField id="mk-words"') && at('<PublishedTextField id="mk-words"') < at('<section className="mk-moments"') && at('<section className="mk-moments"') < at('className="rl-remix mk-make"') && at('className="rl-remix mk-make"') < at('<p className="mk-model">') && at('{busy ? w.making : w.makeIt}') > 0 && at('<p className="mk-model">') < at('<section className="mk-moment-words"') && !/scrollIntoView/.test(make));
+    // Owner, 2026-11-08: the picture small, the one box, the Style row, the Model row, then "Make it"; the moments (strip
+    // and words) only while CHALLENGE.moments is on.
+    check('F3 the remix screen: the picture, the box, the Style row, the Model row, then "Make it"; the moments only with the switch on', at('</figure>') < at('<PublishedTextField id="mk-words"') && at('<PublishedTextField id="mk-words"') < at('<section className="mk-styles"') && at('<section className="mk-styles"') < at('<section className="mk-model"') && at('<section className="mk-model"') < at('className="rl-remix mk-make"') && at('{busy ? w.making : w.makeIt}') > 0 && /\{momentsOn && \(\s*<section className="mk-moments"/.test(make) && /\{momentsOn && \(\s*<section className="mk-moment-words"/.test(make) && !/scrollIntoView/.test(make));
     const sub = read('src/components/challenge-submit.tsx');
     check('F4 Withdraw asks once: "Withdraw this entry?", its line, then Withdraw and Cancel', CWx.withdrawAsk === 'Withdraw this entry?' && CWx.withdrawAskNote === 'It still counts as today’s entry, so you can enter again tomorrow.' && CWx.withdrawCancel === 'Cancel' && sub.includes('{W.withdrawAskNote}') && /onClick=\{\(\) => setAsking\(true\)\}/.test(sub) && /setAsking\(false\);\s*void send\('DELETE'\);/.test(sub));
     proof('F4 a Withdraw that sends at once is caught', !/onClick=\{\(\) => setAsking\(true\)\}/.test(sub.replace('onClick={() => setAsking(true)}', "onClick={() => send('DELETE')}")));
@@ -1543,7 +1548,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
     check('F8 a maker can remix their own picture (the make route refuses no one for being its maker)', !/src\.byFid === fid|byFid === fid/.test(read('src/app/api/challenge/make/route.ts')));
     check('F9 no "· Trial" on a challenge character\'s sheet page; other sheets keep it (owner, 2026-11-07)', read('src/app/references/designs/[id]/page.tsx').includes("{!(d.kind === 'character' && isChallengeCharacter(d.entity)) && <> · {IMAGES.label}</>}"));
     check('F9 Every entry and Every remix show no "Draft wording" and no "Newest first." note (owner, 2026-11-07)', !read('src/app/challenge/entries/page.tsx').includes('draftShort') && !/v\.draft|v\.note/.test(read('src/components/challenge-remixes-body.tsx')));
-    check('F10 the challenge picture links are not prefetched: the remix cards (Every remix, Every entry), the card tiles and the big picture (owner, 2026-11-08)', read('src/components/challenge-remix-card.tsx').includes('className="ch-card-link" prefetch={false}') && read('src/components/challenge-card.tsx').includes('data-version={t.versionId} prefetch={false}') && read('src/components/challenge-card.tsx').includes('data-version={big.versionId} prefetch={false}'));
+    check('F10 the challenge picture links are not prefetched: the remix cards (Every remix, Every entry), the tiles on /challenge and a character\'s page, and the names (owner, 2026-11-08)', read('src/components/challenge-remix-card.tsx').includes('className="ch-card-link" prefetch={false}') && read('src/components/challenge-card.tsx').includes('data-version={t.versionId} prefetch={false}') && read('src/components/challenge-card.tsx').includes('className="cc-name-link" prefetch={false}'));
     const RR = await import('../src/lib/challenge/rules');
     check('F8 remixing works from the flip until the close; entries from the open date', RR.remixingOpenNow(new Date(Date.parse(CHALLENGE.dates.opens) - 1), true) && !RR.remixingOpenNow(new Date(Date.parse(CHALLENGE.dates.opens) - 1), false) && !RR.remixingOpenNow(new Date(CHALLENGE.dates.closes), true) && !RR.challengeOpenNow(new Date(Date.parse(CHALLENGE.dates.opens) - 1), true));
   }

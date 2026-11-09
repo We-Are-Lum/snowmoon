@@ -589,7 +589,8 @@ export const CHALLENGE = {
   sceneLinesApproved: true as boolean,
   /**
    * Entries as pictures (owner, 2026-11-05; docs/proposals/challenge-moments.md, R2): one picture of a challenge
-   * character at one of the challenge's moments, remixed from one of its pictures on /challenge, counts as an entry
+   * character (since 2026-11-08, with the moments off, remixed from any of that character's pictures on the challenge
+   * pages, a base or any remix, its maker's own included; before, at one of the moments), counts as an entry
    * (src/lib/challenge/pictures.ts); sheet remixes stop counting and sheets go back to invitation only. Off until the
    * owner rereads the Terms §6e and Privacy lines that describe it (docs/legal/challenge-moments-draft.md): legal texts
    * describe today, so check:principles P6ac refuses it on while Terms and Privacy don't say so. While off, the moments
@@ -598,6 +599,15 @@ export const CHALLENGE = {
    */
   // On (owner, 2026-11-06): Terms §6e and Privacy were reread and say so ("reviewed by the coordinator, approved by the owner").
   pictureEntries: true as boolean,
+  /**
+   * The moments (owner, 2026-11-08, the simpler challenge): off. With it off, no page shows a moment (no chips, no
+   * "Surprise me", no scene line or quote on the remix screen, the hub, a character's page, a picture's page, the
+   * preview, the rules, the lists, or a share text), the remix screen takes no moment and its prompt carries no scene
+   * and no other character, and a picture needs no moment to be a challenge picture or an entry. The moments' code and
+   * data stay (src/lib/challenge/moments.ts); a picture made with one still shows, without it. Turning it back on brings
+   * back the moments flow as it was (scripts/test-challenge-moments.ts runs it both ways).
+   */
+  moments: false as boolean,
   /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
   characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'] as readonly string[],
   /**
@@ -719,13 +729,14 @@ export const CHALLENGE = {
    */
   dates: {
     /**
-     * Entries open Tue 10 Nov 2026, 00:00 Pacific (owner, 2026-11-07; it was Fri 6 Nov, 09:00). Nothing opens by date
-     * alone: /challenge stays hidden until the owner turns CHALLENGE.public on. From the flip to this instant, anyone can
-     * remix (with the $15 site-wide cap), but pictures made then are for trying it out and can't be entered.
+     * Entries open Tue 17 Nov 2026, 00:00 Pacific (owner, 2026-11-08; it was Tue 10 Nov, 00:00, and before that Fri 6
+     * Nov, 09:00). Nothing opens by date alone: /challenge stays hidden until the owner turns CHALLENGE.public on. From
+     * the flip to this instant, anyone can remix (with the $15 site-wide cap), but pictures made then are for trying it
+     * out and can't be entered.
      */
-    opens: '2026-11-10T08:00:00Z',
-    /** Entries close after Sun 22 Nov 2026, 23:59 Pacific: this is 00:00 Pacific on 23 Nov, the first instant that no longer counts. */
-    closes: '2026-11-23T08:00:00Z',
+    opens: '2026-11-17T08:00:00Z',
+    /** Entries close after Sun 29 Nov 2026, 23:59 Pacific (owner, 2026-11-08): this is 00:00 Pacific on 30 Nov, the first instant that no longer counts. */
+    closes: '2026-11-30T08:00:00Z',
     // No shortlist, results or mint dates (owner, 2026-11-05 evening): how the final version is chosen, and any prize,
     // are added to the rules before entries close. No page shows a date for them.
   },
@@ -963,13 +974,13 @@ export const IMAGES = {
 } as const;
 
 /**
- * Closed models' own caps (branch remix-model-choice, suggested by the owner, 2026-11-04). A closed model's picture
- * counts in its own daily count per person, not in the open 10 (IMAGES.generationsPerDay), and its spend has its own
- * site-wide daily cap, inside the free cap of the moment (imagesDailySpendCapUsd(): the challenge's $15 in its window):
- * both caps are checked, under the same lock, before anything is spent (src/lib/images/limits.ts).
+ * Closed models' caps (branch remix-model-choice, 2026-11-04; changed on branch challenge-models, owner, 2026-11-08):
+ * a closed model's picture counts as `countsAs` of the person's free pictures that day (no separate per-person count:
+ * the 6 a day was dropped), and closed spend has its own site-wide daily cap, inside the free cap of the moment
+ * (imagesDailySpendCapUsd(): the challenge's $15 in its window): both checked under the same lock, before anything is
+ * spent (src/lib/images/limits.ts).
  */
 export const CLOSED_IMAGES = {
-  perPersonPerDay: 6,
   /**
    * How many of the day's free pictures one closed model's picture uses (owner, 2026-11-04 for remixes, as
    * IMAGES.designs.closedRemixUnits; 2026-11-08 for the challenge's pictures): 3. A closed picture is one row of

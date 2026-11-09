@@ -28,6 +28,11 @@
  * page's data (src/lib/challenge/view.ts) hands every card all of its character's remixes (`remixes(sql)` or, with
  * pictures, `challengePictures(sql)`, with no filter, limit or order).
  *
+ * The simpler challenge (owner, 2026-11-08): /challenge is a plain list and a character's page lists its remixes newest
+ * first, so only a character's bases are shuffled (`shuffleFresh(c.bases)` in src/components/challenge-card.tsx). A fifth
+ * narrow exception: the Style row's "Random", one of the published styles drawn uniformly at make time, on the server,
+ * from the whole list (`drawStyle`, `shuffleFresh(published)[0]` in src/lib/challenge/make.ts only).
+ *
  * A fourth narrow exception (owner, 2026-11-05, answer 3): the curated moments, "Moments picked by @naaate"
  * (src/lib/challenge/moments.ts), in the book's fixed order (chapter, then block; never sorted), and "Surprise me",
  * which draws from that list only, unweighted: `shuffleFresh(MOMENTS.filter((m) => m.id !== moment))` in the remix
@@ -41,6 +46,8 @@ const ENTRIES_PICK_FILE = 'src/components/challenge-entries-list.tsx';
 const PAGE_FILE = 'src/lib/challenge/view.ts';
 const CARD_FILE = 'src/components/challenge-card.tsx';
 const MAKE_FILE = 'src/components/challenge-make.tsx';
+const MAKE_LIB = 'src/lib/challenge/make.ts';
+const RANDOM_STYLE = 'published';
 const MOMENTS_FILE = 'src/lib/challenge/moments.ts';
 const SURPRISE = 'MOMENTS.filter((m) => m.id !== moment)';
 const RANDOM = /Math\.random\b|getRandomValues\b|randomInt\b/;
@@ -100,14 +107,20 @@ export function p5gProblems(files: { file: string; text: string }[]): string[] {
         continue;
       }
       if (file === CARD_FILE) {
-        if (!['c.bases', 'c.remixes'].includes(m[1].trim())) problems.push(`${file}: shuffles something other than a card's whole list of bases or remixes: shuffleFresh(${m[1].slice(0, 40)})`);
+        // Since the simpler challenge (owner, 2026-11-08) only a character's bases are shuffled; its remixes are newest first.
+        if (m[1].trim() !== 'c.bases') problems.push(`${file}: shuffles something other than a character's whole list of bases: shuffleFresh(${m[1].slice(0, 40)})`);
+        continue;
+      }
+      if (file === MAKE_LIB) {
+        // "Random" on the Style row (owner, 2026-11-08): one of the published styles, drawn at make time from the whole list.
+        if (m[1].trim() !== RANDOM_STYLE || !/export const drawStyle = \(published: readonly PublishedStyle\[\]\): PublishedStyle \| null => shuffleFresh\(published\)\[0\] \?\? null;/.test(code)) problems.push(`${file}: "Random" draws from something other than every published style: shuffleFresh(${m[1].slice(0, 60)})`);
         continue;
       }
       if (file === MAKE_FILE) {
         if (m[1].trim() !== SURPRISE) problems.push(`${file}: "Surprise me" draws from something other than the curated moments (all but the one chosen): shuffleFresh(${m[1].slice(0, 60)})`);
         continue;
       }
-      problems.push(`${file}: shuffles outside the cards, the entries' "Shuffled" order and "Surprise me" (only ${CARD_FILE}, ${ENTRIES_PICK_FILE} and ${MAKE_FILE} may)`);
+      problems.push(`${file}: shuffles outside the bases, the entries' "Shuffled" order, "Surprise me" and the Style row's "Random" (only ${CARD_FILE}, ${ENTRIES_PICK_FILE}, ${MAKE_FILE} and ${MAKE_LIB} may)`);
     }
     if (file === MOMENTS_FILE && /\bweight|\bscore|\bpopular|\blikes?\b|\bsort\(/i.test(code)) problems.push(`${MOMENTS_FILE}: the moments read or set an order other than the book's ("${code.match(/\bweight|\bscore|\bpopular|\blikes?\b|\bsort\(/i)![0]}")`);
     if (file === PAGE_FILE && !/await (remixes|challengePictures)\(sql\)/.test(code)) problems.push(`${PAGE_FILE}: the cards' remixes aren't drawn from every remix (remixes(sql) or challengePictures(sql), with no filter, limit or order)`);

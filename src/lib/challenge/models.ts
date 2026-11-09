@@ -1,6 +1,7 @@
 import { CHALLENGE, CLOSED_IMAGES, CLOSED_PROVIDERS, IMAGES } from '../config';
 import { MODEL_NOTICES } from '../legal';
 import { makerServes, type Maker, type Where } from '../images/countries';
+import { MODEL_WORDING } from './model-wording';
 
 /**
  * The challenge's models (branch challenge-models, owner, 2026-11-08): the remix screen's Model row offers these, in
@@ -42,12 +43,14 @@ const mp = (s: { width: number; height: number }) => (s.width * s.height) / 1e6;
 /**
  * Qwen-Image-Edit-2509 on fal.ai (coordinator, 2026-11-08, from fal's pages): `fal-ai/qwen-image-edit-plus` is 2509;
  * `fal-ai/qwen-image-edit-2511` also exists at the same price (the owner may switch: change it here only);
- * `fal-ai/qwen-image-edit` is deprecated, never used. "$0.03 per megapixel"; how fal rounds megapixels is
- * unconfirmed, so it is costed safely: $0.03 x (the output's MP, at least 1, + the reference's MP), as
- * scripts/fal-batch.py does.
+ * `fal-ai/qwen-image-edit` is deprecated, never used. "$0.03 per megapixel". Measured (style test, branch style-test,
+ * 2026-11-08): it ignores image_size and returns 1376 x 768 for a 1024 x 576 request, and fal bills whole megapixels of
+ * its output, 2 units, $0.06 every picture. So a picture costs $0.03 x the output's megapixels rounded up (the
+ * reference isn't billed), $0.06 today, and its output is cropped and scaled to IMAGES.size (make-model.ts).
  */
-export const QWEN = { allowlistId: 'qwen-image-edit-2509', name: 'Qwen-Image-Edit', endpoint: 'fal-ai/qwen-image-edit-plus', pricePerMp: 0.03 } as const;
-export const qwenCostUsd = (out: { width: number; height: number }, ref: { width: number; height: number }) => QWEN.pricePerMp * (Math.max(1, mp(out)) + mp(ref));
+export const QWEN = { allowlistId: 'qwen-image-edit-2509', name: 'Qwen-Image-Edit', endpoint: 'fal-ai/qwen-image-edit-plus', pricePerMp: 0.03, typicalOut: { width: 1376, height: 768 } } as const;
+/** fal's bill for one Qwen picture: whole megapixels of what it returned. */
+export const qwenCostUsd = (out: { width: number; height: number }) => QWEN.pricePerMp * Math.max(1, Math.ceil(mp(out)));
 
 const retention = (maker: string) => CLOSED_PROVIDERS[maker as keyof typeof CLOSED_PROVIDERS]?.retentionWords ?? null;
 
@@ -72,9 +75,8 @@ export const CHALLENGE_MODELS: readonly ChallengeModel[] = [
     open: true,
     terms: 'open weights, Apache-2.0',
     call: { host: 'fal.ai', endpoint: QWEN.endpoint },
-    // $0.03 x (1 MP, the output rounded up + about 0.6 MP of reference).
-    estimateUsd: 0.048,
-    priceToConfirm: 'fal\'s megapixel rounding (costed at the output\'s MP, at least 1, plus the reference\'s)',
+    // Measured: 1376 x 768 out, billed as 2 MP: $0.06 every picture.
+    estimateUsd: 0.06,
     retention: null,
   },
   {
@@ -109,7 +111,7 @@ export const DEFAULT_CHALLENGE_MODEL: ChallengeModelId = 'flux2-klein-4b-edit';
 /** The worst case reserved before a picture: the picture's worst cost plus the prompt check's share. */
 export function reserveUsd(m: ChallengeModel, ref: { width: number; height: number }, out: { width: number; height: number } = IMAGES.size): number {
   if (m.id === 'flux2-klein-4b-edit') return (mp(out) + mp(ref)) * IMAGES.editPricePerMp + GUARD_SHARE;
-  if (m.id === 'qwen-image-edit') return qwenCostUsd(out, ref) + GUARD_SHARE;
+  if (m.id === 'qwen-image-edit') return qwenCostUsd(QWEN.typicalOut) + GUARD_SHARE;
   if (m.id === 'gpt-image-2.5-sunburst') return 0.08 + GUARD_SHARE;
   return 0.09 + GUARD_SHARE;
 }
@@ -134,7 +136,16 @@ export function challengeModel(id: unknown, where: Where, on?: boolean, geminiOk
   return challengeModelsFor(where, on, geminiOk).find((m) => m.id === want) ?? null;
 }
 
-/** What the screen's Model row receives: one entry per offered model, the open default first. */
+/**
+ * What the screen's Model row receives: one entry per offered model, the open default first. For a wallet account
+ * (closed models are off for it), the closed entries are left out and `note` says why, where they'd otherwise be offered.
+ */
+export function modelView(where: Where, opts: { wallet?: boolean; on?: boolean } = {}) {
+  const row = modelRow(where, opts.on);
+  if (!opts.wallet || row.every((m) => m.open)) return { models: row, note: null as string | null };
+  return { models: row.filter((m) => m.open), note: MODEL_WORDING.walletOnly as string | null };
+}
+
 export function modelRow(where: Where, on?: boolean) {
   return challengeModelsFor(where, on).map((m) => ({
     id: m.id,
@@ -182,4 +193,30 @@ export function challengeModelProblems(list: readonly ChallengeModel[]): string[
     if (!(reserveUsd(m, IMAGES.size) >= m.estimateUsd)) p.push(`${m.id}: reserves less than its estimate`);
   }
   return p;
+}
+
+// --- The screen's side (branch challenge-simple, 2026-11-08), kept as that lane built it --------------------------
+// The remix screen shows one chip per model ("{label} · {maker} · open|closed"), sends the chosen `id`, and the route
+// checks it (challengeModel above, which also applies the country). challenge-simple's list held one entry; this
+// branch fills it from modelRow.
+
+/** One chip's model: what challenge-simple's screen reads (a Model row entry has these and more). */
+export interface ModelChoice {
+  id: string;
+  label: string;
+  maker: string;
+  open: boolean;
+}
+
+/** The Model row for a visitor (no country given: the open models only). The first is the default. */
+export function challengeModels(where: Where = { country: null, region: null }): ModelRowEntry[] {
+  return modelRow(where);
+}
+
+/** One chip's words: "FLUX.2 [klein] 4B · Black Forest Labs · open". */
+export const modelChipText = (m: ModelChoice) => `${m.label} · ${m.maker} · ${m.open ? 'open' : 'closed'}`;
+
+/** The model the request names, if the list offers it. Null (refused) for anything else, a missing one included. */
+export function modelFromRequest<T extends ModelChoice>(id: unknown, models: readonly T[] = challengeModels() as unknown as T[]): T | null {
+  return typeof id === 'string' ? (models.find((m) => m.id === id) ?? null) : null;
 }

@@ -12,7 +12,8 @@
  *   is read as the sanctioned regions below. Never in an embargoed country or region, listed or not.
  * - Google (Gemini 3.1 Flash Image, through Vertex AI): Google publishes no end-user country list for Vertex; its
  *   Cloud terms bind us to US export-control and sanctions law (Google Cloud Platform Terms of Service §3.3(viii),
- *   §8.6; checked by the coordinator, 2026-11-08). So: everywhere except the embargoed countries and regions.
+ *   §8.6; checked by the coordinator, 2026-11-08). The owner's decision (2026-11-08): ONE list for both closed models,
+ *   so Gemini is offered exactly where GPT is: OpenAI's list, minus the embargoed set.
  * - Embargoed (US comprehensive sanctions): Cuba, Iran, North Korea, Syria, and Ukraine's Crimea, Sevastopol, Donetsk
  *   and Luhansk regions (the so-called DNR and LNR). The header gives a region, not the line of control, so all of
  *   Donetsk and Luhansk are treated as embargoed, and a Ukrainian connection with no region is too (conservative,
@@ -86,12 +87,14 @@ export function embargoed(w: Where): boolean {
   return false;
 }
 
-/** May this maker's closed model be offered to a connection from here? No country: never. */
+/**
+ * May this maker's closed model be offered to a connection from here? One list for both makers (owner, 2026-11-08):
+ * OpenAI's supported countries, minus the embargoed set. No country: never.
+ */
 export function makerServes(maker: Maker, w: Where): boolean {
   if (!w.country || embargoed(w)) return false;
-  if (maker === 'OpenAI') return OPENAI_CODES.has(w.country);
-  if (maker === 'Google') return true;
-  return false;
+  if (maker !== 'OpenAI' && maker !== 'Google') return false;
+  return OPENAI_CODES.has(w.country);
 }
 
 /**
