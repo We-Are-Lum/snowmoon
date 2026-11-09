@@ -22,6 +22,8 @@ export const MAKE_WORDING = {
   style: 'Style',
   random: 'Random',
   ownStyle: 'Write your own',
+  /** The Style row's first choice, the default (owner, 2026-11-09, exact). */
+  sameStyle: 'Same as this picture',
   /** The own-style box's label. DRAFT wording. */
   ownStyleLabel: 'Your style, in a few words',
   /** In "How it was made" when Random drew the style, after "Style: " (owner, 2026-11-08: "Style: {style}, drawn at random"). */

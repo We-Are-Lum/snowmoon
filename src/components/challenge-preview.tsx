@@ -27,7 +27,6 @@ export function ChallengePreview({ id }: { id: string }) {
   const [error, setError] = useState<string | null>(null);
   // The optional backstory (owner, 2026-11-09): typed here only; a refusal by the check offers publishing without it.
   const [story, setStory] = useState('');
-  const [spoils, setSpoils] = useState(false);
   const [storyRefused, setStoryRefused] = useState(false);
   useEffect(() => setD(loadDraft(id) ?? 'gone'), [id]);
   if (d === null) return <div className="mk-page" aria-busy="true" />;
@@ -59,7 +58,7 @@ export function ChallengePreview({ id }: { id: string }) {
   const publish = async (withStory = true) => {
     setBusy('publish');
     setError(null);
-    const backstory = withStory && story.trim() ? { text: story, spoils } : undefined;
+    const backstory = withStory && story.trim() ? { text: story } : undefined;
     const r = await authFetch('/api/images/publish', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ticket: d.ticket, image: d.image, nameProof: webNameProof(), ...(backstory ? { backstory } : {}) }) }).catch(() => null);
     const out = (await r?.json().catch(() => ({}))) as { versionId?: string; error?: string; reason?: string };
     if (!r?.ok || !out.versionId) {
@@ -100,7 +99,7 @@ export function ChallengePreview({ id }: { id: string }) {
       <p className="mk-words">
         <span className="dz-muted">{w.yourWords}</span> “{d.words}”
       </p>
-      <BackstoryField name={d.name} text={story} spoils={spoils} onText={(v) => { setStory(v); setStoryRefused(false); }} onSpoils={setSpoils} />
+      <BackstoryField name={d.name} text={story} onText={(v) => { setStory(v); setStoryRefused(false); }} />
       <div className="mk-actions">
         <button type="button" className="ic-secondary mk-again" onClick={again} disabled={busy !== null}>
           {busy === 'again' ? w.making : w.tryAgain}

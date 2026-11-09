@@ -1360,7 +1360,7 @@ add({
 add({
   id: 'P9g',
   principle: 9,
-  name: 'the remix challenge\'s spoiler exception stays narrow: only its six cards and curated moments, quoted word for word; the first layer from chapters 1-14; deeper layers marked "May spoil later chapters."; chapters on every moment chip; nowhere else; ended when entries close',
+  name: 'the remix challenge\'s exception stays narrow: only its six cards and curated moments, quoted word for word; the first layer from chapters 1-14; nothing marked as a spoiler on its pages (owner, 2026-11-09); chapters on every moment chip; the reader\'s chapter gating unchanged; nowhere else; ended when entries close',
   load: async () => ({
     files: walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
     cards: clone(CARDS),
@@ -1375,6 +1375,8 @@ add({
     c.moments[2].quotes[0].text = c.moments[2].quotes[0].text.replace('shine', 'win');
     c.cards[2].facts[0] = { text: 'Second place', block: 'c24-b48', quote: 'I got second place in the Pafogai Du Minpentai games' };
     c.files.push({ file: 'src/app/references/designs/[id]/planted.tsx', text: "import { CARDS } from '~/lib/challenge/cards';" });
+    // A spoiler mark back on a challenge page (owner, 2026-11-09: none there).
+    c.files.push({ file: 'src/components/challenge-planted.tsx', text: "export const L = 'May spoil later chapters.';" });
   },
 });
 // Character lists (owner, 2026-11-04: "list characters by how often they're named in the book, most first, everywhere

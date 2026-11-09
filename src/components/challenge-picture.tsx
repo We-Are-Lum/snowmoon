@@ -9,9 +9,7 @@ import { AiTag } from './ai-tag';
 import { ChallengeShareFirst } from './challenge-share-first';
 import { ChallengeSubmit } from './challenge-submit';
 import { PostedOn } from './posted-on';
-import { AddBackstory, BackstoryShown } from './challenge-backstory';
-import { ADMINS } from '~/lib/config';
-import type { StoredBackstory } from '~/lib/challenge/backstory';
+import { BackstoryShown } from './challenge-backstory';
 
 /**
  * A challenge picture's page, /challenge/p/<version>, share first (owner, 2026-11-05; docs/proposals/challenge-moments.md
@@ -28,7 +26,6 @@ export function ChallengePicture({ id }: { id: string }) {
   const social = useSocialSession();
   const [v, setV] = useState<PictureView | null | 'missing'>(null);
   const [castHash, setCastHash] = useState<string | null>(null);
-  const [added, setAdded] = useState<StoredBackstory | null>(null);
   useEffect(() => {
     authFetch(`/api/challenge/picture?id=${encodeURIComponent(id)}`)
       .then(async (r) => (r.ok ? ((await r.json()) as PictureView) : 'missing'))
@@ -60,8 +57,7 @@ export function ChallengePicture({ id }: { id: string }) {
         </figcaption>
       </figure>
       {/* Its backstory, under the picture (owner, 2026-11-09): invented by its maker, not from the book. */}
-      {(added ?? v.backstory) && <BackstoryShown backstory={(added ?? v.backstory)!} maker={v.maker} />}
-      {known && mine && !(added ?? v.backstory) && auth.kind === 'signed-in' && ADMINS.includes(auth.fid) && <AddBackstory versionId={v.versionId} name={v.name} onAdded={setAdded} />}
+      {v.backstory && <BackstoryShown backstory={v.backstory} maker={v.maker} />}
       {known && mine && <ChallengeShareFirst path={path} w={{ head: v.w.published, texts: v.w.postTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} onCast={setCastHash} />}
       {/* Anyone else (owner, 2026-11-07): "Remix this" first, not "Post it"; sharing it never says "My remix". */}
       {known && !mine && (

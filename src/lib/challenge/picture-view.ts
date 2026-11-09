@@ -42,9 +42,9 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
   const submit: SubmitWords | null = open && (standing?.kind === 'candidate' || entry) ? { ...submitWords(entry, name), postText: P.postText(name, m?.title ?? null) } : null;
   const posts: PostedOnItem[] = CHALLENGE.posts ? (await postsFor(sql, p.versionId).catch(() => [])).map(({ id, network, handle, at, url }) => ({ id, network, handle, at, url })) : [];
   const maker = designByline(p.byName, p.byFid);
-  // Its backstory (owner, 2026-11-09): in its version's body, or added later by its maker (an admin).
+  // Its backstory (owner, 2026-11-09): in its version's body (new pictures only).
   const [vb] = await sql<{ body: unknown }[]>`select body from studio.element_versions where id = ${p.versionId}`;
-  const backstory = await backstoryOf(sql, p.versionId, vb?.body).catch(() => null);
+  const backstory = backstoryOf(vb?.body);
   return {
     versionId: p.versionId,
     /** Remixing it (anyone but its maker): its remix screen from the owner's flip (before the open date too) until entries close; none after. */

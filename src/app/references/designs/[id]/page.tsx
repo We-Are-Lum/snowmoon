@@ -18,8 +18,6 @@ import { sheetChallenge } from '~/lib/challenge/sheet-lines';
 import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import { joinNames, sameTexts, shareMaker, textsFor } from '~/lib/challenge/share-makers';
 import { LANDING_WORDING as HUB } from '~/lib/challenge/landing-wording';
-import { backstoryOf } from '~/lib/challenge/backstories';
-import { AdminAddBackstory, BackstoryShown } from '~/components/challenge-backstory';
 import { ChallengeShare } from '~/components/challenge-share';
 import { ChallengeLines, ChallengePosts } from '~/components/challenge-lines';
 import { ChallengeAdminSheet } from '~/components/challenge-admin-sheet';
@@ -120,17 +118,11 @@ export default async function DesignPage({ params }: Props) {
   const landingPhase = challengeOpen || picturesOpen ? 'open' : phase() === 'closed' ? 'closed' : 'before';
   const remixHref = picturesOpen ? (isBase ? `/challenge/make?from=${d.shown.versionId}` : `/challenge#${character?.slug ?? ''}`) : undefined;
 
-  // A first remix's backstory (owner, 2026-11-09): added by its maker, shown under its pictures; "Add backstory" for its
-  // maker (an admin) while it has none.
-  const firstRemix = Object.values(CHALLENGE.firstRemixes as Record<string, readonly string[]>).some((l) => l.map((x) => x.toLowerCase()).includes(d.shown.versionId.toLowerCase()));
-  const story = firstRemix ? await backstoryOf(sql, d.shown.versionId, body).catch(() => null) : null;
-  const storyBlock = firstRemix ? (story ? <BackstoryShown backstory={story} maker={designByline(d.byName, d.byFid)} /> : <AdminAddBackstory versionId={d.shown.versionId} byFid={d.byFid} name={callName} />) : null;
   const main = (
     <article className="dz-main">
       {landing && ch && (
         <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={byShown} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={landingPhase} remixHref={remixHref} note={picturesOpen && phase() === 'before' ? HUB.sheetLine('before') : undefined} posts={ch.posts} />
       )}
-      {landing && ch && storyBlock}
       {character && <BookQuotes name={character.name} quotes={character.quotes} />}
       <h1 className="dz-title">{title}</h1>
       <p className="dz-meta">
@@ -172,7 +164,6 @@ export default async function DesignPage({ params }: Props) {
       ) : (
         <p className="dz-meta dz-muted">{W.page.noPictures}</p>
       )}
-      {!(landing && ch) && storyBlock}
       <section className="dz-section dz-text-section">
         <div className="dz-text-col">
           <p className="dz-label">{style ? W.page.styleText : W.page.sheetText(callName)}</p>

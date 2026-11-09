@@ -42,11 +42,15 @@ export interface StyleOption {
 }
 
 /** What the screen sends: one of the listed styles, Random, or the person's own words. */
-export type StyleChoice = { kind: 'style'; id: string } | { kind: 'random' } | { kind: 'own'; text: string };
+export type StyleChoice = { kind: 'same' } | { kind: 'style'; id: string } | { kind: 'random' } | { kind: 'own'; text: string };
+
+/** The Style row's first choice, selected by default (owner, 2026-11-09, exact): no style text, so a remix keeps the look of the picture it starts from. */
+export const SAME_STYLE = { id: 'same', label: 'Same as this picture' } as const;
 
 /** Reads the request's style; null when it isn't one of the three shapes (the route then refuses it). */
 export function readStyleChoice(x: unknown): StyleChoice | { error: 'own-empty' | 'own-long' } | null {
   const o = (x && typeof x === 'object' ? x : {}) as { kind?: unknown; id?: unknown; text?: unknown };
+  if (o.kind === 'same') return { kind: 'same' };
   if (o.kind === 'random') return { kind: 'random' };
   if (o.kind === 'style' && typeof o.id === 'string' && /^(preset|style):[A-Za-z0-9_.-]{1,64}$/.test(o.id)) return { kind: 'style', id: o.id };
   if (o.kind === 'own') {

@@ -68,7 +68,7 @@ export interface TicketChallenge {
    * through `designs`), 'random' (the server's draw; `label` and `elementId` say which it drew), 'preset' (this
    * edition's preset) or 'own' (the person's own words, `text`). `text` is exactly what was added to the prompt.
    */
-  style?: { choice: 'preset' | 'published' | 'random' | 'own'; id: string | null; elementId: string | null; label: string | null; text: string };
+  style?: { choice: 'same' | 'preset' | 'published' | 'random' | 'own'; id: string | null; elementId: string | null; label: string | null; text: string };
   /** The model chosen on the Model row (src/lib/challenge/models.ts). */
   model?: string;
 }

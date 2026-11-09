@@ -71,6 +71,12 @@ export function p9gProblems(p: {
   if (!/!spoilerExceptionOn\(\)/.test(api) || !/card\.appears\.map/.test(api) || !/CHALLENGE\.characters\.includes\(slug\)/.test(api)) out.push(`${P9G_FILES.appears}: the passages aren't only the six cards' "Where they appear", while the exception holds`);
   const close = new Date(Date.parse(p.dates.closes));
   if (p.on(close, p.dates) || !p.on(new Date(close.getTime() - 1), p.dates)) out.push(`${P9G_FILES.spoilers}: the exception doesn't end exactly when entries close`);
+  // On the challenge's pages people work on the whole story, so nothing is marked as a spoiler (owner, 2026-11-09): no
+  // "May spoil later chapters." (or any spoiler mark) in the challenge's code. The reader's own chapter gating stays:
+  // "What the book says" on a sheet shows only chapters opened on this device.
+  for (const f of p.files) if (MAY_IMPORT.test(f.file) && /may spoil|spoiler mark|spoils:/i.test(stripComments(f.text))) out.push(`${f.file}: marks something as a spoiler on the challenge's pages`);
+  const book = stripComments(get(p.files, 'src/components/design-book.tsx') ?? '');
+  if (!/quotes\.filter\(\(q\) => q\.chapter <= furthest\)/.test(book) || !/openedChapters\(\)/.test(book)) out.push('src/components/design-book.tsx: the reader\'s chapter gating ("What the book says" only from chapters opened) is gone');
   // Nothing outside the challenge's pages shows these words, and no limit is raised elsewhere.
   for (const f of p.files) if (!MAY_IMPORT.test(f.file) && /^src\//.test(f.file) && IMPORTS_DATA.test(stripComments(f.text))) out.push(`${f.file}: shows the challenge's cards or moments outside the challenge's pages`);
   return out;

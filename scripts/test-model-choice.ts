@@ -257,14 +257,15 @@ proven(
     const after = await sourceOf(S as never, base.versionId, { anySheet: true });
     const otherSrc = await sourceOf(S as never, other.versionId, { anySheet: true });
     const view = after ? makeView(after, { styles: await publishedStyles(S as never) }) : null;
-    const opens = (v: typeof view, el: string) => need(v?.defaultStyle === `style:${el}` && v.styles.some((x) => x.id === `style:${el}` && x.label === 'Animated series'), `the remix screen starts on ${v?.defaultStyle}`);
+    // The default is "Same as this picture" (owner, 2026-11-09); "Animated series" is listed to pick.
+    const opens = (v: typeof view, el: string) => need(v?.defaultStyle === 'same' && v.styles.some((x) => x.id === `style:${el}` && x.label === 'Animated series'), `the remix screen starts on ${v?.defaultStyle}, or Animated series isn't listed`);
     const words = [
       ...need(blockedName(BASE_STYLE.text) === null, 'the style names someone on the blocked list'),
       ...need(!/\b(studio|ghibli|disney|pixar|dreamworks|film|movie|anime|manga|in the style of|by [A-Z])/i.test(BASE_STYLE.text), 'the style names a studio, film or artist'),
       ...need(BASE_STYLE.text.startsWith('Animated series look: clean bold black ink outlines'), 'the text isn\'t the drafts\' word for word'),
     ];
     proven(
-      'C19 publishing "Animated series" (scripts/publish-style.ts, dry run then apply, on the local database) makes a base whose front records its text open on it; another base doesn\'t; its text is quality words only (no blocked name, studio, film or artist)',
+      'C19 publishing "Animated series" (scripts/publish-style.ts, dry run then apply, on the local database) lists it and links a base whose front records its text to it (the screen starts on "Same as this picture"); another base doesn\'t; its text is quality words only (no blocked name, studio, film or artist)',
       () => [
         ...need(before?.styleElement === null && plan.exists === null && !plan.nameTaken, 'before publishing, the base already had a style or the style existed'),
         ...need(plan2.exists?.elementId === made.elementId && plan2.exists.sameText, 'the dry run after apply doesn\'t see the published style'),
