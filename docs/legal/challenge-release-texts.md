@@ -1,6 +1,6 @@
-# Challenge release: every final text (v3, reread by the owner)
+# Challenge release: every final text (v4; v3 reread by the owner)
 
-Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` at `9ae0aa13` (with challenge-simple's final head `1efcbeaf`). **v3:** the owner reread every text of v2 on 2026-11-08, via the coordinator's check, with changes 1–2 below applied word for word (the notice labels; the closed refusals) and the rules above Generate extended; the "none left" line approved as drafted
+Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` (v4 adds the closing line of 2026-11-09 and the bases' style; v3 was at `9ae0aa13`) (with challenge-simple's final head `1efcbeaf`). **v3:** the owner reread every text of v2 on 2026-11-08, via the coordinator's check, with changes 1–2 below applied word for word (the notice labels; the closed refusals) and the rules above Generate extended; the "none left" line approved as drafted
 (which carries `challenge-simple`). Every text below is copied from the code as it
 stands on that commit (dumped from `src/lib/legal.ts`, `config/consent.json`, the wording modules and `src/app/about`),
 not retyped. "Before" is `origin/main` at `00722d70`. Where a text didn't exist, there's no before. `{…}` marks a value
@@ -145,7 +145,7 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
 - The four errors: "Pick a style first." · "Write your style first." · "Write your style in up to {n} characters." ·
   "Pick one of the models listed."
 - In the prompt (public in every recipe): "{Name} is the person in reference image 1, the main figure." and the keep
-  line (the owner's words): "Keep the same character: face, hair, build and clothes, unless the change says otherwise."
+  line (the owner's words, v4, 2026-11-09, after the look test): "Keep the face recognisable; change anything else the words describe." (before, v3: "Keep the same character: face, hair, build and clothes, unless the change says otherwise.")
 
 ## The rules and the challenge pages (challenge-simple)
 
@@ -180,3 +180,13 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
 - The rules shown above Generate (and on About), v3: "No real people. No sexual content. Nothing violent or hateful. No
   characters or logos from other works. Don’t ask for words in the picture. No self-harm, extremism or election
   campaigning. Describe styles by look, not by artist, studio or film." (before: the same without the last two sentences).
+
+## v4 additions (2026-11-09)
+
+- The closing line of every challenge prompt (public in every recipe): "Keep the face recognisable; change anything else
+  the words describe." (the owner's words; above).
+- A published style, "Animated series" (the bases' own look; the owner publishes it with `scripts/publish-style.ts`):
+  title "Animated series"; text "Animated series look: clean bold black ink outlines of even weight, flat saturated cel
+  colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively
+  faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear
+  readable faces and hands." (word for word the drafts' style). A remix of a base made in it starts on it.

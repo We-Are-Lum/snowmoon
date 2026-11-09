@@ -17,8 +17,8 @@
  * Every style's text is followed by KEEP_LINE, exactly (owner, 2026-11-08).
  */
 
-/** After every style's text, exactly (owner, 2026-11-08). */
-export const KEEP_LINE = 'Keep the same character: face, hair, build and clothes, unless the change says otherwise.';
+/** After every style's text, exactly (owner, 2026-11-08; the words of 2026-11-09, after the look test). */
+export const KEEP_LINE = 'Keep the face recognisable; change anything else the words describe.';
 
 /** "Write your own": at most this many characters. */
 export const OWN_STYLE_MAX = 120;
