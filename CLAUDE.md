@@ -24,6 +24,11 @@ snowmoon.party is an independent, open adaptation of *Snowmoon* by Vitalik Buter
   worktree that needs an install gets its own copy: remove the symlink first (`rm node_modules`, which removes only the
   link), then install.
 - Commit and push work to its branch; open a PR when the owner asks for one. Don't leave work only on the local machine.
+- **No agent deletes, moves or overwrites any `.env*` file in the main checkout.** A worktree removes only its own link
+  or copy, and worktrees are removed only with `git worktree remove`. Every `rm`, `unlink` or `mv` uses an absolute path
+  inside the agent's own worktree, never a relative path after `;` (owner, 2026-11-09, after an agent's
+  `… && cd ../snowmoon-style-test && … ; unlink .env.local` failed before the `cd` and deleted the main checkout's
+  `.env.local` on 2026-11-08).
 - Remove worktrees with `git worktree remove` (never `rm -rf`), only when merged and with no uncommitted or unpushed work; never delete an unmerged branch. Propose a cleanup plan before deleting anything.
 
 ## Database migrations
