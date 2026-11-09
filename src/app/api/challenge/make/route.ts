@@ -4,10 +4,8 @@ import { getFid, getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
-import { makeEdit } from '~/lib/images/fal';
 import { mayGenerate } from '~/lib/images/gate';
 import { paidPicture } from '~/lib/images/paid';
-import { generateReserveUsd } from '~/lib/images/price';
 import { referencePicture } from '~/lib/images/reference-picture';
 import { signTicket, type TicketDesign } from '~/lib/images/ticket';
 import { bookCharacter } from '~/lib/images/designs';
@@ -16,6 +14,11 @@ import { makeView, momentPrompt, othersIn, readMake } from '~/lib/challenge/make
 import { defaultLook, sourceOf } from '~/lib/challenge/pictures';
 import { spoilerExceptionOn } from '~/lib/challenge/spoilers';
 import { challengeVisibleTo } from '~/lib/challenge/visibility';
+import { challengeModel, DEFAULT_CHALLENGE_MODEL, modelRow, noticeProblem } from '~/lib/challenge/models';
+import { challengeSpend, makeWith, recipeModel } from '~/lib/challenge/make-model';
+import { whereFrom } from '~/lib/images/countries';
+import { isWalletNumber } from '~/lib/images/remixes';
+import { MODEL_WORDING } from '~/lib/challenge/model-wording';
 
 /**
  * The remix screen's API (branch challenge-moments, 2026-11-05; docs/proposals/challenge-moments.md §1.3 S2).
@@ -28,6 +31,13 @@ import { challengeVisibleTo } from '~/lib/challenge/visibility';
  * check, the host's safety checker. The model is the edit model, with the tapped picture as reference image 1 and the
  * other challenge characters' current default looks after it; the prompt is src/lib/challenge/make.ts's momentPrompt; the picture is anchored to the moment's passage. Nothing about the draft
  * is kept here: the picture and its signed record go back to the device, and Publish (/api/images/publish) writes it.
+ *
+ * Models (branch challenge-models, owner, 2026-11-08): GET sends the Model row (src/lib/challenge/models.ts modelRow),
+ * the open default first; POST's `model` picks one of them, and anything not offered to this visitor is refused (a
+ * closed model only where its maker serves: the country is read from Vercel's header for this request and never kept).
+ * A closed model also needs `notice: { version, adult: true }`: its maker's notice shown and the 18+ box ticked on the
+ * device. Every model but the open default gets the tapped picture as its single reference image. The recipe records
+ * the model's id, endpoint, host and cost; a closed picture counts as CLOSED_IMAGES.countsAs of the day's pictures.
  */
 const no = (error: string, status: number, extra: Record<string, unknown> = {}) => NextResponse.json({ error, ...extra }, { status });
 const hidden = () => NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -39,7 +49,8 @@ export async function GET(request: Request) {
   const from = new URL(request.url).searchParams.get('from') ?? '';
   const src = sql ? await sourceOf(sql, from).catch(() => null) : null;
   if (!src) return hidden();
-  return NextResponse.json(makeView(src), { headers: { 'Cache-Control': 'private, no-store' } });
+  // The country decides the Model row for this answer only; it isn't kept, logged or sent on.
+  return NextResponse.json({ ...makeView(src), models: modelRow(whereFrom(request.headers)) }, { headers: { 'Cache-Control': 'private, no-store' } });
 }
 
 export async function POST(request: Request) {
@@ -59,6 +70,14 @@ export async function POST(request: Request) {
   if (!r.ok) return no(r.error, 400);
   const src = await sourceOf(sql, r.from);
   if (!src) return no('This picture can’t be remixed for the challenge.', 400);
+  // The model, before anything is counted: one offered to this visitor (the country, for this request only), with
+  // its maker's notice and the 18+ box answered on the device for a closed one; never a wallet account's prepaid path.
+  const bodyModel = (body as { model?: unknown }).model;
+  const chosen = challengeModel(bodyModel, whereFrom(request.headers));
+  if (!chosen) return no(MODEL_WORDING.notOffered, 400, { reason: 'model' });
+  if (!chosen.open && isWalletNumber(fid)) return no(MODEL_WORDING.walletOnly, 403, { reason: 'model' });
+  const notice = noticeProblem(chosen, (body as { notice?: unknown }).notice);
+  if (notice) return no(notice === 'adult' ? MODEL_WORDING.adultFirst : MODEL_WORDING.noticeFirst, 403, { reason: notice });
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403, { reason: 'consent' });
   const gate = await mayGenerate(sql, fid);
   if (!gate.ok) return no(gate.error, gate.status, { reason: gate.reason });
@@ -66,7 +85,8 @@ export async function POST(request: Request) {
   const callName = (slug: string) => (bookCharacter(slug)?.name ?? slug).split(' ')[0];
   const name = callName(src.character);
   // The other challenge characters in the moment, each by their current default look (their first base's front view).
-  const others = (await Promise.all(othersIn(r.moment, src.character).map(async (slug) => ({ slug, look: await defaultLook(sql, slug) })))).filter((o): o is { slug: string; look: NonNullable<typeof o.look> } => o.look !== null);
+  // Only the open default takes the others' looks; every other model gets the tapped picture alone.
+  const others = (await Promise.all((chosen.id === DEFAULT_CHALLENGE_MODEL ? othersIn(r.moment, src.character) : []).map(async (slug) => ({ slug, look: await defaultLook(sql, slug) })))).filter((o): o is { slug: string; look: NonNullable<typeof o.look> } => o.look !== null);
   const prompt = momentPrompt({ words: r.words, name, scene: r.moment.scene, others: others.map((o) => callName(o.slug)) });
   const looks = [src, ...others.map((o) => o.look)];
   const pictures: { bytes: Buffer; contentType: string; width: number; height: number }[] = [];
@@ -77,10 +97,11 @@ export async function POST(request: Request) {
   }
 
   // Counted from here, whatever happens next (blocked attempts count), as every picture is.
+  const spend = challengeSpend(chosen, pictures);
   const paid = await paidPicture(sql, fid, request, {
     checkText: prompt,
-    spend: { model: IMAGES.editModel, reserveUsd: generateReserveUsd(pictures.length) },
-    make: () => makeEdit(prompt, pictures),
+    spend,
+    make: () => makeWith(chosen, prompt, pictures, request, spend.reserveUsd),
   });
   if (!paid.ok) return no(paid.error, paid.status, paid.extra);
   const made = paid.made;
@@ -91,7 +112,7 @@ export async function POST(request: Request) {
   const designs: TicketDesign[] = looks.filter((l): l is (typeof looks)[number] & { kind: 'sheet' } => l.kind === 'sheet').map(asDesign);
   const ticket = signTicket({
     v: 1, fid, chapter: r.moment.chapter, start: r.moment.start, end: r.moment.end, userPrompt: r.words, style: null, prompt,
-    model: IMAGES.editModel.id, endpoint: IMAGES.editModel.endpoint, host: IMAGES.editModel.host, settings: made.settings,
+    model: recipeModel(chosen).id, endpoint: recipeModel(chosen).endpoint, host: recipeModel(chosen).host, settings: made.settings,
     seed: made.seed, requestId: made.requestId, sha256, width: IMAGES.size.width, height: IMAGES.size.height,
     costUsd: made.costUsd, guard: { model: IMAGES.guardModel, verdict: 'ok' }, at: new Date().toISOString(),
     ...(designs.length ? { designs } : {}),

@@ -86,3 +86,25 @@ export async function makeEdit(
   const made = await call(IMAGES.editModel.endpoint, { prompt, image_urls }, settings, mp * IMAGES.editPricePerMp);
   return made;
 }
+
+/**
+ * Qwen-Image-Edit on fal.ai (branch challenge-models; src/lib/challenge/models.ts QWEN): the prompt and one reference
+ * picture, as a data: URI. Settings fixed; the safety checker on; sync mode, nothing stored, as every call here. The
+ * cost is the safe one (models.ts qwenCostUsd) until fal's megapixel rounding is confirmed.
+ */
+export async function makeQwenEdit(
+  endpoint: string,
+  prompt: string,
+  reference: { bytes: Buffer; contentType: string; width: number; height: number },
+  size: Size,
+  costUsd: number,
+): Promise<Made> {
+  const settings = {
+    image_size: { width: size.width, height: size.height },
+    num_images: 1,
+    enable_safety_checker: true,
+    output_format: 'jpeg',
+    sync_mode: true,
+  };
+  return call(endpoint, { prompt, image_urls: [`data:${reference.contentType};base64,${reference.bytes.toString('base64')}`] }, settings, costUsd);
+}

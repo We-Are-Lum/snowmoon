@@ -5,6 +5,7 @@ import { CLOSED_PROVIDERS, IMAGES, type ClosedProvider } from '../config';
 import { gatewayToken } from '../chat/model';
 import { ImageUnavailable, type Made } from './fal';
 import type { SheetModel, ViewSlot } from './sheet-models';
+import type { ChallengeModel } from '../challenge/models';
 
 /**
  * A closed model's sheet view, through the Vercel AI Gateway (branch remix-model-choice, DRAFT, 2026-11-04), as the
@@ -90,7 +91,7 @@ export function hasC2pa(original: Buffer): boolean {
 }
 
 /** The whole picture, never cropped: scaled to fit the view size and padded with its own top-left colour (no model). */
-export async function toView(original: Buffer, size = IMAGES.viewSize): Promise<Buffer> {
+export async function toView(original: Buffer, size: { width: number; height: number } = IMAGES.viewSize): Promise<Buffer> {
   const { data } = await sharp(original).extract({ left: 0, top: 0, width: 1, height: 1 }).raw().toBuffer({ resolveWithObject: true });
   const bg = { r: data[0], g: data[1], b: data[2] };
   return sharp(original).resize(size.width, size.height, { fit: 'contain', background: bg }).flatten({ background: bg }).jpeg({ quality: 92 }).toBuffer();
@@ -117,6 +118,62 @@ export async function makeClosed(m: SheetModel, slot: ViewSlot, prompt: string, 
     settings: {
       ...r.settings,
       converted: { from, sha256: createHash('sha256').update(pic.bytes).digest('hex'), to: 'jpeg', resized_to: IMAGES.viewSize, fit: 'contain, padded with the picture\'s own corner colour' },
+      content_credentials: hasC2pa(pic.bytes) ? 'the original had a C2PA manifest from its maker; the JPEG does not keep it' : 'none found in the original',
+    },
+  };
+}
+
+/**
+ * The challenge's closed models (branch challenge-models, owner, 2026-11-08; src/lib/challenge/models.ts): one picture
+ * from the person's words with the tapped picture as the single reference image, wide (IMAGES.size), as every
+ * challenge picture is. GPT Image 2.5 Sunburst at /v1/images/edits (1536 x 1024), Gemini 3.1 Flash Image at
+ * /v1/chat/completions (aspect 16:9). The same gateway settings as the sheet views (CLOSED_PROVIDERS[maker].gateway)
+ * and the one provider the model's entry names (`only`: openai; vertex, never google). The maker receives the prompt
+ * and the reference picture, nothing else (no user field, no FID, no IP, no country: the call comes from our server).
+ */
+export function challengeClosedRequest(m: ChallengeModel, prompt: string, reference: Buffer): ClosedRequest {
+  if (m.open) throw new Error('not a closed model');
+  const data = gatewayDataFor(m.maker);
+  if (!data) throw new Error(`no gateway settings for ${m.maker}`);
+  if (!m.call.only || m.call.only.length !== 1) throw new Error(`no provider chosen for ${m.call.endpoint}`);
+  if (m.id === 'gemini-3.1-flash-image' && m.call.only[0] !== 'vertex') throw new Error('Gemini goes only through vertex');
+  const gateway = { ...data, only: m.call.only };
+  const ref = `data:image/jpeg;base64,${reference.toString('base64')}`;
+  if (m.id === 'gpt-image-2.5-sunburst') {
+    const settings = { size: '1536x1024', quality: 'high', n: 1, output_format: 'png' };
+    const body = { model: m.call.endpoint, prompt, ...settings, providerOptions: { gateway }, images: [{ image_url: ref }] };
+    return { url: `${GATEWAY_URL}/images/edits`, body, settings: { ...settings, gateway } };
+  }
+  if (m.id === 'gemini-3.1-flash-image') {
+    const settings = { modalities: ['text', 'image'], aspect_ratio: '16:9' };
+    const content = [{ type: 'image_url', image_url: { url: ref } }, { type: 'text', text: prompt }];
+    const body = { model: m.call.endpoint, modalities: settings.modalities, messages: [{ role: 'user', content }], providerOptions: { gateway, google: { imageConfig: { aspectRatio: '16:9' } } } };
+    return { url: `${GATEWAY_URL}/chat/completions`, body, settings: { ...settings, gateway } };
+  }
+  throw new Error(`no request for ${m.id}`);
+}
+
+/** One closed challenge picture: the call, the picture converted to the site's JPEG at IMAGES.size, its cost. */
+export async function makeChallengeClosed(m: ChallengeModel, prompt: string, reference: Buffer, request: Request, worstUsd: number, send: typeof fetch = fetch): Promise<Made> {
+  const token = gatewayToken(request);
+  if (!token) throw new ImageUnavailable('no gateway credential');
+  const r = challengeClosedRequest(m, prompt, reference);
+  const res = await send(r.url, { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(r.body) }).catch(() => null);
+  if (!res) throw new ImageUnavailable('the gateway did not answer');
+  // parseClosed reads GPT's and Gemini's answers by the model's id, as for a sheet's views.
+  const pic = parseClosed({ id: m.id } as SheetModel, res.status, await res.json().catch(() => ({})));
+  const jpeg = await toView(pic.bytes, IMAGES.size);
+  const from = pic.contentType.split('/')[1] ?? 'png';
+  return {
+    bytes: jpeg,
+    contentType: 'image/jpeg',
+    seed: null,
+    requestId: pic.requestId,
+    nsfw: false,
+    costUsd: pic.costUsd ?? worstUsd,
+    settings: {
+      ...r.settings,
+      converted: { from, sha256: createHash('sha256').update(pic.bytes).digest('hex'), to: 'jpeg', resized_to: IMAGES.size, fit: 'contain, padded with the picture\'s own corner colour' },
       content_credentials: hasC2pa(pic.bytes) ? 'the original had a C2PA manifest from its maker; the JPEG does not keep it' : 'none found in the original',
     },
   };

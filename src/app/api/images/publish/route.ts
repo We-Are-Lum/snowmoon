@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { getPerson, getWallet } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES, WORK_ID } from '~/lib/config';
+import { isClosed } from '~/lib/images/recipe-lines';
 import { hasConsented } from '~/lib/consent';
 import { publishesLeft } from '~/lib/images/limits';
 import { putPublic, storageReady } from '~/lib/images/store';
@@ -84,7 +85,8 @@ export async function POST(request: Request) {
         anchor: { chapter: t.chapter, start: t.start, end: t.end },
         output_sha256: t.sha256,
         size: { width: t.width, height: t.height },
-        checks: { prompt: t.guard, host_safety_checker: 'passed' },
+        // A closed model's picture (branch challenge-models): no host safety checker ran; its maker's own filters aren't recorded.
+        checks: { prompt: t.guard, host_safety_checker: isClosed(t.model) ? null : 'passed' },
         by_name: by.name,
         by_name_source: by.source,
         // Step 4: the picked styles and sheets added, each with the exact text added, and any reference pictures.

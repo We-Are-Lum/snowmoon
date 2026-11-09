@@ -601,6 +601,8 @@
     {
       "id": "qwen-image-edit-2509",
       "kind": "image",
+      "name": "Qwen-Image-Edit-2509",
+      "maker": "Alibaba's Qwen team",
       "repo": "Qwen/Qwen-Image-Edit-2509",
       "revision": null,
       "license_line": "License: apache-2.0",
@@ -615,10 +617,11 @@
       "hosted": {
         "host": "fal.ai",
         "endpoints": {
-          "fal-ai/qwen-image-edit-2509": 0.03
+          "fal-ai/qwen-image-edit-2509": 0.03,
+          "fal-ai/qwen-image-edit-plus": 0.03
         },
         "price_unit": "USD per megapixel",
-        "price_seen": "2026-10-16 (fal pricing API)"
+        "price_seen": "2026-10-16 (fal pricing API); fal-ai/qwen-image-edit-plus (Qwen-Image-Edit-2509, the challenge's remix screen, branch challenge-models): \"$0.03 per megapixel\" on fal's page, confirmed by the coordinator 2026-11-08; fal's megapixel rounding unconfirmed, so costed as $0.03 x (output MP, at least 1, + reference MP). fal-ai/qwen-image-edit is deprecated and never used."
       },
       "model_record": "endpoint, date and request id (the host does not expose a weights revision)",
       "cost_usd_per_unit": null,
