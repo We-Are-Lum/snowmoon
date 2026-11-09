@@ -557,6 +557,13 @@ export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
 export const CHALLENGE = {
   id: 'remix-2026-11',
   /**
+   * Model choice on the challenge's remix screen (branch challenge-models, owner, 2026-11-08): four models, the open
+   * default first (src/lib/challenge/models.ts), each with the tapped picture as the reference. The branch is the
+   * release: on here, with Privacy, the notices and consent v6 describing it (docs/legal/challenge-models-draft.md;
+   * check:principles P6t). Merge only after the owner's "reread" and once NEXT_remix_model_choice.sql is applied.
+   */
+  modelChoice: true as boolean,
+  /**
    * The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"). While false:
    * - /challenge, /api/challenge/* and every way into them (the menu item, the home row, the challenge share text, and
    *   on sheet pages the Entry badge, "Mark as my entry", the challenge lines and "Posted on") are for admins only
@@ -944,8 +951,64 @@ export const IMAGES = {
     closedRemixUnits: 3,
     /** At most this many picked characters' sheets are added to one image. */
     maxCharacters: 3,
+    /**
+     * Model choice for remixers (branch remix-model-choice, DRAFT, 2026-11-04): a picker on the remix (fork) form of a
+     * character sheet, the site's open models first and the default, then the closed models of SHEET_MODELS
+     * (src/lib/images/sheet-models.ts). One model per sheet. OFF: the picker is hidden and the server refuses any
+     * model but the open default. Turn it on only in the release whose Privacy names each closed model's provider
+     * (scripts/check-principles.ts P6t) and once migration NEXT_remix_model_choice.sql is applied.
+     */
+    modelChoice: false as boolean,
   },
 } as const;
+
+/**
+ * Closed models' own caps (branch remix-model-choice, suggested by the owner, 2026-11-04). A closed model's picture
+ * counts in its own daily count per person, not in the open 10 (IMAGES.generationsPerDay), and its spend has its own
+ * site-wide daily cap, inside the free cap of the moment (imagesDailySpendCapUsd(): the challenge's $15 in its window):
+ * both caps are checked, under the same lock, before anything is spent (src/lib/images/limits.ts).
+ */
+export const CLOSED_IMAGES = {
+  perPersonPerDay: 6,
+  /**
+   * How many of the day's free pictures one closed model's picture uses (owner, 2026-11-04 for remixes, as
+   * IMAGES.designs.closedRemixUnits; 2026-11-08 for the challenge's pictures): 3. A closed picture is one row of
+   * studio.image_asks in pool 'closed', and generationsLeft counts it as this many.
+   */
+  countsAs: 3,
+  dailySpendCapUsd: 5,
+  /**
+   * Google's Service Specific Terms §20(d): no use of a Generative AI Service "as part of a website … that is directed
+   * towards or is likely to be accessed by individuals under the age of 18" (docs/legal/age-terms-closed-models.md).
+   * DECIDED by the owner, 2026-11-04: Gemini is allowed for remixers. His reason: the Terms already require 18+ to sign
+   * in (Terms §4), and only signed-in people can generate; the first closed-model notice also asks each device for a
+   * one-time "I'm 18 or older" (src/lib/images/model-notice.ts).
+   */
+  geminiAgeReadingAccepted: true as boolean,
+} as const;
+
+/**
+ * Each closed model's maker, as the remix form's notice and Privacy §7 describe it (owner, 2026-11-04: closed models
+ * without zero retention are allowed, with a notice). The notice's words are in src/lib/legal.ts (MODEL_NOTICES);
+ * `noticeVersion` goes up whenever they, or the maker's terms they describe, change, and a device that asked not to be
+ * reminded sees the notice again. `noticeWords` is the first 12 hex of the sha256 of those words, so a change of words
+ * without a new version fails scripts/test-model-choice.ts. `retentionWords` (one description everywhere, owner 2026-11-04) must appear in Privacy §7's item, the notice and the consent screen for the
+ * maker (check:principles P6t, P6j). `gateway`: what each call asks of Vercel AI Gateway, as the gateway offers it for that
+ * model (https://ai-gateway.vercel.sh/v1/models/<model>/endpoints, read 2026-11-04): OpenAI's gpt-image-2.5-sunburst
+ * has has_zdr false and has_no_training true; Google Vertex AI's gemini-3.1-flash-image has has_zdr true and
+ * has_no_training true. The owner's batch calls (bases and styles) keep zero retention whatever this says.
+ */
+export const CLOSED_PROVIDERS = {
+  OpenAI: { noticeVersion: 2, noticeWords: '804666e058e7', retentionWords: 'for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law', gateway: { disallowPromptTraining: true } },
+  Google: { noticeVersion: 2, noticeWords: '69a0dde93f95', retentionWords: 'no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days', gateway: { zeroDataRetention: true, disallowPromptTraining: true } },
+} as const satisfies Record<string, { noticeVersion: number; noticeWords: string; retentionWords: string; gateway: { zeroDataRetention?: boolean; disallowPromptTraining: boolean } }>;
+export type ClosedProvider = keyof typeof CLOSED_PROVIDERS;
+
+/**
+ * Are closed models offered anywhere now (the challenge's model row, or the sheet form's picker)? While true, the free
+ * count reads studio.image_asks.pool (NEXT_remix_model_choice.sql must be applied first).
+ */
+export const closedChoiceOn = (): boolean => CHALLENGE.modelChoice || IMAGES.designs.modelChoice;
 
 /** Minpentai Play's limits and retention (owner, 2026-10-09). Every /api/minpentai/* request counts. */
 /**

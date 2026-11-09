@@ -23,6 +23,7 @@ import { IMAGE_WORDING } from '~/lib/images/wording';
 import { putPublic, storageReady } from '~/lib/images/store';
 import { readSampleTicket, type SampleTicket } from '~/lib/images/ticket';
 import { bylineName } from '~/lib/names';
+import { DEFAULT_SHEET_MODEL, isClosedModelId, oneChoice, sheetModel } from '~/lib/images/sheet-models';
 
 /**
  * Publish a style or a character sheet (step 4): a new style, a sheet for one of the book's
@@ -51,7 +52,8 @@ const recipeOf = (t: SampleTicket): DesignPicture['recipe'] => ({
   prompt: t.prompt, model: t.model, endpoint: t.endpoint, host: t.host, settings: t.settings, seed: t.seed, request_id: t.requestId,
   cost_usd: Number(t.costUsd.toFixed(4)), made_at: t.at, width: t.width, height: t.height, ...(t.references ? { references: t.references } : {}),
   ...(t.style ? { style: { version_id: t.style.versionId, title: t.style.title, text: t.style.text } } : {}),
-  checks: { prompt: t.guard, host_safety_checker: 'passed' }, assist: SAMPLE_ASSIST as unknown as DesignPicture['recipe']['assist'],
+  // A closed model returns no safety checker result: its maker's filters run where we can't see them (recipe-lines.ts).
+  checks: { prompt: t.guard, host_safety_checker: isClosedModelId(t.model) ? 'not run' : 'passed' }, assist: SAMPLE_ASSIST as unknown as DesignPicture['recipe']['assist'],
 });
 
 export async function POST(request: Request) {
@@ -118,6 +120,13 @@ export async function POST(request: Request) {
       views[slot] = got;
     }
     if (!views.front) return no('Make the front view first', 400);
+    // One model per sheet (branch remix-model-choice): every view from the same choice, a closed one only on a remix
+    // of a character sheet while IMAGES.designs.modelChoice is on, and each view made by that choice's own model.
+    const choiceId = oneChoice(Object.values(views).map((x) => ({ choice: x!.t.choice })));
+    if (!choiceId) return no(IMAGE_WORDING.designs.models.mixed, 400);
+    const choice = sheetModel(choiceId);
+    if (!choice || (choiceId !== DEFAULT_SHEET_MODEL && (mode !== 'fork' || kind !== 'character'))) return no(IMAGE_WORDING.designs.models.notOffered, 400);
+    for (const [slot, x] of Object.entries(views)) if (x!.t.model !== (slot === 'front' ? choice.front : choice.views).id) return no(IMAGE_WORDING.designs.models.mixed, 400);
     // Every view in one published style, the front's (owner, 2026-10-14).
     const styleId = views.front.t.style?.versionId;
     if (!styleId) return no('The front view was made without a style. Choose a style and make it again.', 400);

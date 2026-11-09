@@ -1,6 +1,7 @@
 import 'server-only';
 import type postgres from 'postgres';
-import { IMAGES, imagesDailySpendCapUsd } from '../config';
+import { CLOSED_IMAGES, IMAGES, closedChoiceOn, imagesDailySpendCapUsd } from '../config';
+import { CLOSED_MODEL_IDS } from './sheet-models';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
 import { paysFor } from './price';
 import { countsRemixes, isWalletNumber, remixesLeft, remixRefusal, type RemixRefusal } from './remixes';
@@ -22,7 +23,7 @@ import { freeFor } from '../social/free';
 type Sql = postgres.Sql;
 const TODAY = `(now() at time zone 'utc')::date`;
 
-export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'no-free' | RemixRefusal;
+export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'no-free' | 'closed-limit' | 'closed-spend' | RemixRefusal;
 export type Funded = 'free' | 'prepaid';
 /** Only a wallet account pays from a balance (not a Lens or Bluesky account, whose numbers are also below zero); Lens and Bluesky accounts use the free count when freeFor allows. */
 export const fundedBy = (fid: number): Funded => (isWalletNumber(fid) ? 'prepaid' : 'free');
@@ -37,9 +38,32 @@ export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
   // Never asks Lens (the count is shown when the maker opens); a decision already made counts, none yet shows the count.
   if (isSocialPerson(fid) && (await freeFor(sql, fid, { lookUp: false }))?.free === false) return 0;
   if (isWalletNumber(fid)) return paysFor(await balanceUsd(sql, -fid), priceUsd(IMAGES.reserveUsd));
-  const [r] = await sql`select count(*)::int as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
+  // With closed models offered (closedChoiceOn: the challenge's model row, or the sheet form's picker), a closed model's
+  // picture is a row in pool 'closed' (NEXT_remix_model_choice.sql) and counts as CLOSED_IMAGES.countsAs (3) of the
+  // day's free pictures. Off, the query is the one the site has always run, so nothing needs the new column.
+  const n = closedChoiceOn()
+    ? sql`coalesce(sum(case when pool = 'closed' then ${CLOSED_IMAGES.countsAs} else 1 end), 0)::int`
+    : sql`count(*)::int`;
+  const [r] = await sql`select ${n} as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
   return Math.max(0, perDay(fid) - (r?.n ?? 0));
 }
+
+/** Closed models' own daily count for this person (CLOSED_IMAGES.perPersonPerDay), apart from the open one. */
+export async function closedLeft(sql: Sql, fid: number): Promise<number> {
+  const [r] = await sql`select count(*)::int as n from studio.image_asks where fid = ${fid} and pool = 'closed' and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
+  return Math.max(0, CLOSED_IMAGES.perPersonPerDay - (r?.n ?? 0));
+}
+
+/** Today's free spend on closed models, reserved and real (image_costs by model; the prompt checks count in the open total). */
+export async function closedSpentToday(sql: Sql): Promise<number> {
+  const [r] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${sql.unsafe(TODAY)} and funded = 'free' and model in ${sql(CLOSED_MODEL_IDS as string[])}`;
+  return r?.usd ?? 0;
+}
+
+/** The closed site-wide cap now: its own, never above the free cap of the moment. */
+// (A destructured name: scripts/test-challenge.ts refuses the open cap read straight from its config in this file.)
+const { dailySpendCapUsd: closedDailyCapUsd } = CLOSED_IMAGES;
+export const closedCapUsd = (now: Date = new Date()) => Math.min(closedDailyCapUsd, imagesDailySpendCapUsd(now));
 
 export async function publishesLeft(sql: Sql, fid: number): Promise<number> {
   const [r] = await sql`select count(*)::int as n from studio.elements
@@ -57,6 +81,8 @@ export interface Spend {
    * countsRemixes() names, and only once studio.sheet_remix_asks exists (0037_remix_count.sql); otherwise as a picture.
    */
   remix?: { id: string; units: number; starts: boolean; slot: 'front' | 'side' | 'back' };
+  /** 'closed': a closed model's picture (model choice): counts as CLOSED_IMAGES.countsAs pictures, with its own count and cap, inside the free cap. */
+  pool?: 'open' | 'closed';
 }
 
 /** The start of today (UTC), as the other daily counts read it. */
@@ -96,6 +122,8 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.spend'))`;
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.fid'), ${fid}::int)`;
+    // Closed models are for the free path only, for now (a wallet account's prepaid Generate: a decision owed).
+    if (isWalletNumber(fid) && spend.pool === 'closed') return { ok: false as const, refusal: 'closed-limit' as const };
     if (isWalletNumber(fid)) {
       const t = tx as unknown as Sql;
       const price = priceUsd(spend.reserveUsd);
@@ -107,6 +135,8 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
       await addCost(t, 'prepaid', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
       return { ok: true as const, left: paysFor(balance - price, priceUsd(IMAGES.reserveUsd)), debitId };
     }
+    const closed = spend.pool === 'closed';
+    if (closed && !closedChoiceOn()) return { ok: false as const, refusal: 'closed-limit' as const };
     // A sheet's view inside a remix, for someone who counts remixes (owner, 2026-11-04): the remix count, not the pictures'.
     const t = tx as unknown as Sql;
     if (spend.remix && countsRemixes(fid) && (await remixTable(t))) {
@@ -116,17 +146,23 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
       if (refusal) return { ok: false as const, refusal };
       const [day] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'free'`;
       if (day.usd + spend.reserveUsd > imagesDailySpendCapUsd()) return { ok: false as const, refusal: 'spend' as const };
+      if (closed && (await closedSpentToday(t)) + spend.reserveUsd > closedCapUsd()) return { ok: false as const, refusal: 'closed-spend' as const };
       await tx`insert into studio.sheet_remix_asks ${tx({ remix: spend.remix.id, fid, units: spend.remix.units, slot: spend.remix.slot })}`;
       await addCost(t, 'free', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
       return { ok: true as const, left: remixesLeft(used + (spend.remix.starts ? spend.remix.units : 0)) };
     }
+    // A closed picture needs CLOSED_IMAGES.countsAs of the day's free pictures, and one of the closed pool's own.
+    const weight = closed ? CLOSED_IMAGES.countsAs : 1;
     const left = await generationsLeft(t, fid);
-    if (left <= 0) return { ok: false as const, refusal: 'limit' as const };
+    if (left < weight) return { ok: false as const, refusal: closed && left > 0 ? ('closed-limit' as const) : ('limit' as const) };
+    if (closed && (await closedLeft(t, fid)) <= 0) return { ok: false as const, refusal: 'closed-limit' as const };
     const [today] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'free'`;
     if (today.usd + spend.reserveUsd > imagesDailySpendCapUsd()) return { ok: false as const, refusal: 'spend' as const };
-    await tx`insert into studio.image_asks (fid) values (${fid})`;
+    if (closed && (await closedSpentToday(tx as unknown as Sql)) + spend.reserveUsd > closedCapUsd()) return { ok: false as const, refusal: 'closed-spend' as const };
+    if (closed) await tx`insert into studio.image_asks (fid, pool) values (${fid}, 'closed')`;
+    else await tx`insert into studio.image_asks (fid) values (${fid})`;
     await addCost(tx as unknown as Sql, 'free', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
-    return { ok: true as const, left: left - 1 };
+    return { ok: true as const, left: left - weight };
   });
 }
 

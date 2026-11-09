@@ -41,6 +41,9 @@ export const LIMIT_SAY = {
   'remix-used': `This remix has used its ${IMAGES.designs.picturesPerRemix} pictures. Press Remix to start a new one.`,
   /** A Lens or Bluesky account without free generations (src/lib/social/free.ts). DRAFT wording. */
   'no-free': FREE_WORDING.none,
+  // Model choice (branch remix-model-choice, DRAFT wording).
+  'closed-limit': IMAGE_WORDING.designs.models.closedLimit,
+  'closed-spend': IMAGE_WORDING.designs.models.closedSpend,
 } as const;
 const say = (refusal: keyof typeof LIMIT_SAY, fid: number) => (refusal === 'limit' ? LIMIT_SAY.limit(perDay(fid)) : LIMIT_SAY[refusal]);
 /** A failure's words, and, when a wallet account's Generate was credited back, that it was. */

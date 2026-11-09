@@ -2,6 +2,7 @@ import 'server-only';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { IMAGES } from '../config';
 import { SHORTHAND_ASSIST_SOURCE } from './sheets';
+import type { SheetModelId } from './sheet-models';
 
 /**
  * A draft image is never stored on the server (docs/proposals/add-an-image.md, section 5). The
@@ -117,6 +118,8 @@ export interface SampleTicket {
   source?: { versionId: string; sha256: string };
   /** For a sheet's views counted as a remix: the remix's id (src/lib/images/remixes.ts). */
   remix?: string;
+  /** The sheet's model choice (src/lib/images/sheet-models.ts), set only when it isn't the open default; absent means 'open'. */
+  choice?: SheetModelId;
   guard: { model: string; verdict: 'ok' };
   at: string;
 }

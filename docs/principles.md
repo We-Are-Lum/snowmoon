@@ -270,6 +270,10 @@ Hosted open-weight models may be listed too (`runs_on: hosted`): for a hosted re
   model and what it drafted, or null.
 - `P3d`: on the live database, every recipe of the house narration (chapter 1
   sampled) has `assist` in the column or in `studio.recipe_assist`.
+- `P3e` (branch remix-model-choice, 2026-11-04, DRAFT): the default is open. The remix form's model choice
+  (`IMAGES.designs.modelChoice`, `src/lib/images/sheet-models.ts`) lists the site's open models first, as the default,
+  with the switch on or off; every closed choice names its maker; every model a choice calls is on `config/models.json`
+  with the same open or closed record.
 
 **Status.** Pass. Both generation models record `open_weights: true`, their
 license and their weights. The closed drafting model is listed under
@@ -466,14 +470,24 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   (`config/consent.json`, current version) name the same outside services. The
   vocabulary is the services the Privacy page names: Vercel, Vercel AI Gateway,
   Cloudflare, Supabase, Groq, fal.ai, Farcaster (its services, not a Farcaster
-  ID or name), Neynar, GitHub. The pages are read as served.
-  - `P6g`: the Privacy page names every service that About, the notice or the
-    consent screen names, and the three that receive something at Generate.
+  ID or name), Neynar, GitHub, ntfy, OpenAI, Google, Spotify. The pages are read as served.
+  A maker named only for provenance (Midjourney: some pictures the owner made with it outside
+  the site, brought in with the recipe the owner reports) receives nothing and is not a
+  service, so no Privacy line is asked for it (owner, 2026-11-04, choice 5.4).
+  - `P6g`: the Privacy page names every service that About, the notice, the
+    consent screen or a closed model's notice names, and those that receive
+    something at Generate.
   - `P6h`: About names the same set as the Privacy page, no more and no fewer.
+    If About names a provenance-only maker, it says the site sends nothing to it.
   - `P6i`: the notice names exactly the services the Privacy page says receive
     assistant questions (section 5, and section 7's "receive assistant questions").
   - `P6j`: the consent screen names exactly the services that receive the image
-    prompt or the Farcaster ID at Generate: Groq, fal.ai and Neynar.
+    prompt or the Farcaster ID at Generate: Groq, Vercel AI Gateway, fal.ai and
+    Neynar, and, with model choice on, each closed model's maker. With model
+    choice on, its text (own-words-v5, one consent version for everyone: owner,
+    2026-11-04) also says what each maker receives (the prompt and the front
+    view) and gives its one description (`CLOSED_PROVIDERS[maker].retentionWords`).
+    The closed models' notice is a notice, not the consent.
 - `P6k`, `P6l`: the Privacy and Terms pages' words are words the owner (FID 6786)
   has reread (`LEGAL.ownerReread` in `src/lib/legal.ts`), the notice's `P6f`
   rule: any change to the words fails until the owner rereads them; it is set
@@ -514,6 +528,12 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   Farcaster ID, §7's Neynar, Lens-score and Bluesky-check sentences each name the assistant, and the assistant's notice
   no longer says "Farcaster ID" (docs/legal/assistant-any-account-step1.md). The id is free on main and every branch
   (P6z is contest-rehearsal's, P6aa another branch's).
+- `P6t` (branch remix-model-choice, 2026-11-04, DRAFT): model choice for remixers (`IMAGES.designs.modelChoice`) is on
+  only while Privacy §7 says each offered closed model's maker receives the prompt and pictures through Vercel AI
+  Gateway, how they are kept and that they may not be trained on, Privacy §4 says a sheet's views may be made with a
+  closed model, and the consent screen (own-words-v5) says what each maker receives and keeps (docs/legal/remix-model-choice-draft.md). OpenAI and Google
+  are in the outside-services vocabulary of P6g to P6j. The id was free on main and on deep-funding, social-read,
+  sheet-help, find-a-moment (P6v, P6w) and challenge-three-bases (P6s).
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at

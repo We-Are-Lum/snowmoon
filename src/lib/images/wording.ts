@@ -142,6 +142,19 @@ export const IMAGE_WORDING = {
       howMade: 'How the pictures were made',
       pictureRecipe: (i: number) => `Picture ${i}`,
     },
+    /** Model choice on the remix form (branch remix-model-choice, IMAGES.designs.modelChoice; DRAFT wording, the owner's to approve). */
+    models: {
+      legend: 'Model for this sheet',
+      note: 'Chosen once for the whole sheet: the front, side and back all come from this model. Changing it marks the views to make again.',
+      openDefault: 'The site’s open models (the default)',
+      closedLeft: (n: number) => `${n} closed-model ${n === 1 ? 'picture' : 'pictures'} left today (apart from the open ones)`,
+      closedLimit: 'You’ve made today’s pictures with closed models. The open models still work; closed ones come back at 00:00 UTC.',
+      closedSpend: 'Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at 00:00 UTC.',
+      changed: 'These views were made with another model. Make them again with this one.',
+      mixed: 'The views were made with more than one model. Make them again with one.',
+      notOffered: 'That model isn’t offered here.',
+      walletOnly: 'Closed models are for Farcaster accounts for now.',
+    },
     form: {
       newStyle: 'New style',
       newSheet: (name: string) => `New ${name} sheet`,
@@ -437,6 +450,7 @@ const DESIGN_SCREENS: Record<keyof typeof IMAGE_WORDING.designs, { screen: strin
   about: { screen: 'About', where: 'src/app/about/page.tsx (Pictures section)' },
   report: { screen: 'Report a style or a sheet', where: 'src/components/image-actions.tsx' },
   moderate: { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx' },
+  models: { screen: 'Remix · model for this sheet (IMAGES.designs.modelChoice, off)', where: 'src/components/design-form.tsx, src/lib/images/paid.ts (refusals)' },
   sheets: { screen: 'Character and place sheets, and “In this passage”', where: 'src/app/references/designs/place/[slug]/page.tsx, character/[slug]/page.tsx, design-sheets.tsx, image-composer.tsx, src/app/image/[id]/page.tsx, chapter pages' },
 };
 function filled(v: unknown): string {

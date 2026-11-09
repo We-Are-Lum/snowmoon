@@ -88,6 +88,7 @@
     "rehearsal": "tsx scripts/rehearsal.ts",
     "test:admin-activity": "tsx --conditions=react-server scripts/test-admin-activity.ts",
     "test:check-decisions": "tsx --conditions=react-server scripts/test-check-decisions.ts",
+    "test:model-choice": "tsx --conditions=react-server scripts/test-model-choice.ts",
     "characters:mentions": "tsx scripts/characters-by-mentions.ts",
     "test:character-order": "tsx --conditions=react-server scripts/test-character-order.ts",
     "test:check-targets": "tsx scripts/test-check-targets.ts",

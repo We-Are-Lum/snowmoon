@@ -337,6 +337,40 @@ export const PRIVACY: LegalDoc = {
   ],
 };
 
+/**
+ * The closed models' notices on the remix form (owner, 2026-11-04; branch remix-model-choice, DRAFT, pending the owner's
+ * reread), one per maker, shown the first time a device picks one of that maker's models, and again when the maker's
+ * notice version (src/lib/config.ts CLOSED_PROVIDERS) goes up. The label shows beside the model in the picker always.
+ * The 18+ line and its box show with the first notice a device sees. Facts and their sources:
+ * docs/legal/remix-model-choice-draft.md.
+ */
+export const MODEL_NOTICES = {
+  OpenAI: {
+    label: 'OpenAI keeps prompts up to 30 days',
+    title: 'A closed model by OpenAI',
+    text: [
+      'GPT Image 2.5 Sunburst is made by OpenAI. Its weights aren\'t published, so its recipe can\'t be re-run exactly.',
+      'OpenAI receives your prompt for each view and, for the side and back, the front view it made, through Vercel AI Gateway. Nothing else about you.',
+      'OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law. It doesn\'t train its models on them. The gateway keeps no copy.',
+    ],
+  },
+  Google: {
+    label: 'Google keeps no copy past 24 hours',
+    title: 'A closed model by Google',
+    text: [
+      'Gemini 3.1 Flash Image is made by Google. Its weights aren\'t published, so its recipe can\'t be re-run exactly.',
+      'Google receives your prompt for each view and, for the side and back, the front view it made, through Vercel AI Gateway. Nothing else about you.',
+      'Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days. It doesn\'t train its models on them. The gateway keeps no copy.',
+    ],
+  },
+} as const;
+/** With the first closed-model notice a device sees: the 18+ reminder and its box (the Terms' rule; not a verification). */
+export const ADULT_CONFIRM = {
+  line: 'Closed models are for people 18 or older, as signing in here is (Terms, section 4).',
+  box: 'I\'m 18 or older',
+} as const;
+export const NOTICE_BUTTONS = { ok: 'OK', never: 'Don\'t remind me again' } as const;
+
 /** A short key for a page's exact words (its title and every section), like the notice's noticeKey. */
 export function legalKey(doc: LegalDoc): string {
   const words = [doc.title, ...doc.sections.flatMap((s) => [`${s.n}. ${s.head}`, ...s.body.flat()])].join('\n');
