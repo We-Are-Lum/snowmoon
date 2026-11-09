@@ -103,8 +103,13 @@ export async function feed(sql: Sql, sort: 'new' | 'liked', limit = 60): Promise
   return shown(sql, rows.map(shape));
 }
 
+/**
+ * A chapter's pictures, by passage, for the reader (its galleries and the admins' picks for a moment). Remix challenge
+ * pictures are left out (owner, 2026-11-08): each still has its anchor in the record (its character's first passage),
+ * but the reader never shows one. Every other place a picture appears (its own page, the feed, the sheets) is unchanged.
+ */
 export async function chapterImages(sql: Sql, chapter: number): Promise<ReaderImage[]> {
-  const rows = await sql`select * from (${SELECT(sql)}) x where x.chapter = ${chapter} order by x.likes desc, x.created_at desc`;
+  const rows = await sql`select * from (${SELECT(sql)}) x where x.chapter = ${chapter} and not (x.params ? 'challenge') order by x.likes desc, x.created_at desc`;
   return shown(sql, rows.map(shape));
 }
 

@@ -24,8 +24,8 @@ export const MAKE_WORDING = {
   ownStyle: 'Write your own',
   /** The own-style box's label. DRAFT wording. */
   ownStyleLabel: 'Your style, in a few words',
-  /** In "How it was made" when Random drew the style. DRAFT wording. */
-  randomDrew: (label: string) => `Random: ${label}`,
+  /** In "How it was made" when Random drew the style, after "Style: " (owner, 2026-11-08: "Style: {style}, drawn at random"). */
+  randomDrew: (label: string) => `${label}, drawn at random`,
   model: 'Model',
   /**
    * P2 and the closed-models rule: the chip names the model and its maker. Today's one model's line; the row itself is

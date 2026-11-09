@@ -542,9 +542,14 @@ await equal('seed stored data as jsonb', 'postgres',
     mp_daily: ['select', 'insert', 'update', 'delete'],
   };
   const ALL = ['select', 'insert', 'update', 'delete', 'truncate', 'references', 'trigger'];
-  await equal('0009 adds eight tables, RLS on each', 'postgres',
+  // 0009's eight, and the two Minpentai tables later migrations added (0025 mp_snap_resume, 0032 mp_agent_matches; their
+  // own privileges are their migrations' read-backs): every mp_ table, each with RLS, and no other.
+  const LATER_MP = ['mp_snap_resume', 'mp_agent_matches'];
+  await equal('0009 adds eight tables, RLS on each (with 0025\'s and 0032\'s, every mp_ table there is)', 'postgres',
     `select array_agg(tablename::text order by tablename) as v from pg_tables where schemaname = 'studio' and tablename like 'mp\\_%' and rowsecurity`,
-    Object.keys(MP).sort());
+    [...Object.keys(MP), ...LATER_MP].sort());
+  await equal('0009\'s eight tables are all there, each with RLS', 'postgres',
+    `select count(*)::int as v from pg_tables where schemaname = 'studio' and rowsecurity and tablename in (${Object.keys(MP).map((t) => `'${t}'`).join(',')})`, 8);
   await equal('RLS on every studio table after 0009', 'postgres',
     `select count(*)::int as v from pg_tables where schemaname = 'studio' and not rowsecurity`, 0);
   await equal('0009 policies are for studio_writer only', 'postgres',

@@ -480,6 +480,34 @@ check('config: a current default look per challenge character, each a design id 
     check('character page: Bai\'s bases (both, by their tiles)', cv!.c.bases.map((b) => b.versionId).sort().join() === [base.versionId, styled.versionId].sort().join());
     const hub = await VW.challengeView(S);
     check('hub: Bai\'s row has its bases and no remixes', hub.cards.find((x) => x.c.slug === 'bai')!.c.bases.length === 2 && !('remixes' in hub.cards.find((x) => x.c.slug === 'bai')!.c));
+    // The reader (owner, 2026-11-08): a challenge picture keeps its anchor in the record, but the reader never lists it;
+    // an ordinary picture at the same passage still shows. Both ways, at the moments-off anchor and a moment's passage.
+    {
+      const D = await import('../src/lib/images/data');
+      const ordinary = async (chapter: number, start: number) => {
+        const recipeId = randomUUID(), elementId = randomUUID(), versionId = randomUUID();
+        const sha = String(++n).padStart(64, '0');
+        await sql.begin(async (tx) => {
+          await tx`insert into studio.recipes ${tx({ id: recipeId, source: 'in_app', provider: 'fal.ai', model: 'flux2-klein-4b-edit', model_version: 'e', prompt: 'p', params: tx.json({ user_prompt: 'a picture of the passage', by_name: 'p502' } as never), seed: 1, cost_usd: 0.003, created_by_fid: 502 })}`;
+          await tx`insert into studio.elements ${tx({ id: elementId, work_id: 'snowmoon', element_type: 'image', created_by_fid: 502 })}`;
+          await tx`insert into studio.element_versions ${tx({ id: versionId, element_id: elementId, version_no: 1, body: tx.json({ lettering: [] } as never), asset_url: `https://media.example/${sha}.jpg`, asset_sha256: sha, recipe_id: recipeId })}`;
+          await tx`insert into studio.anchors ${tx({ version_id: versionId, work_id: 'snowmoon', chapter, start_idx: start, end_idx: start })}`;
+        });
+        return versionId;
+      };
+      const [anc] = await sql<{ chapter: number; start_idx: number }[]>`select chapter, start_idx from studio.anchors where version_id = ${plain.versionId}`;
+      const [ancM] = await sql<{ chapter: number; start_idx: number }[]>`select chapter, start_idx from studio.anchors where version_id = ${fromBase.versionId}`;
+      const o1 = await ordinary(anc.chapter, anc.start_idx);
+      const o2 = await ordinary(ancM.chapter, ancM.start_idx);
+      const ch1 = (await D.chapterImages(S, anc.chapter)).map((x) => x.versionId);
+      const ch2 = (await D.chapterImages(S, ancM.chapter)).map((x) => x.versionId);
+      const challengeIds = (await P.challengePictures(S, { momentsOn: false })).map((x) => x.versionId);
+      check('reader: a challenge picture keeps its anchor in the record', Boolean(anc) && Boolean(ancM));
+      check('reader: no challenge picture is listed at its passage (the moments-off anchor or a moment\'s); an ordinary picture at the same passage is', ch1.includes(o1) && ch2.includes(o2) && !ch1.some((v) => challengeIds.includes(v)) && !ch2.some((v) => challengeIds.includes(v)), `${ch1.join()} | ${ch2.join()}`);
+      check('reader: a challenge picture\'s own page ("How it was made") still finds it', (await D.imageByVersion(S, plain.versionId))?.versionId === plain.versionId);
+      proof('reader: a chapter list that keeps challenge pictures is caught', ((await sql`select v.id::text from studio.element_versions v join studio.anchors a on a.version_id = v.id where a.chapter = ${anc.chapter}`).map((r) => String(r.id))).some((v) => challengeIds.includes(v)));
+      check('reader: the chapter list leaves challenge pictures out in its query', /not \(x\.params \? 'challenge'\)/.test(read('src/lib/images/data.ts')));
+    }
     const srcStyled = await P.sourceOf(S, styled.versionId);
     check('a base made in a published style: the remix screen starts on that style', srcStyled?.styleElement === styleD.elementId);
     const styles = await (await import('../src/lib/challenge/make')).publishedStyles(sql as never);
