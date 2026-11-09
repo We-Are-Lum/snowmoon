@@ -115,6 +115,9 @@ export async function POST(request: Request) {
   const spend = challengeSpend(chosen, pictures);
   const paid = await paidPicture(sql, fid, request, {
     checkText: prompt,
+    // The whole prompt (words, the style's text, the keep line) is long: the larger check budget, as a sheet's views
+    // and Remix pass (1,200). At the default 400 the style test of 2026-11-08 had 62 of 90 prompts answered "unclear".
+    guardMaxTokens: IMAGES.designs.guardMaxTokens,
     spend,
     make: () => makeWith(chosen, prompt, pictures, request, spend.reserveUsd),
   });

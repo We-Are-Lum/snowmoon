@@ -45,6 +45,15 @@ number 3 and the caps are on the screen, not in the legal texts).
   120 from the bottom (a quarter and three quarters), so heads stay. Its recipe's settings say "cropped from 3:2 to
   16:9, mostly from the bottom" (DRAFT words; also "not cropped (already 16:9)" and "cropped from … to 16:9, from both
   sides" for other shapes), with the pixels removed.
+- **Refusals:** a picture the model's own check refuses (Qwen's 422 content_policy_violation, a gateway moderation
+  block) or the host's checker flags (FLUX's blacked-out picture) gets the usual "dropped" answer: counted, nothing
+  shown, recorded as flagged, not as a success.
+- **Qwen's size:** it ignores the size asked and returns 1376 × 768; the picture is cropped and scaled to 1024 × 576
+  like a closed one, and the recipe records the size it returned.
+- **Content credentials:** GPT's and Gemini's originals carry a C2PA manifest; the site's JPEG doesn't keep it, and the
+  recipe's settings say so ("the original had a C2PA manifest from its maker; the JPEG does not keep it").
+- The prompt check gets the same budget as a sheet's views (1,200 tokens); at 400, 62 of 90 style-test prompts came
+  back "unclear" and were refused.
 - The recipe names the model and its terms ("a closed model by OpenAI"), records the endpoint, the host and the cost,
   and for a closed model that no host safety checker ran and the "can't be re-run exactly" line.
 
@@ -183,7 +192,7 @@ North Korea, Syria, and US territories the header reports as their own country (
 | Model | Usually | Reserved before (worst case, with the prompt check's $0.0015) | Source |
 | --- | --- | --- | --- |
 | FLUX.2 [klein] 4B edit | ~$0.012 (1024 × 576 out + the picture, $0.01/MP) | as today, `editReserveUsd(references)` | fal pricing API |
-| Qwen-Image-Edit (2509) | ~$0.048 ($0.03 × (1 MP at least + ~0.59 MP reference)) | the same formula | fal's page "$0.03 per megapixel" (coordinator, 2026-11-08); **rounding to confirm** |
+| Qwen-Image-Edit (2509) | $0.06 (it returns 1376 × 768 whatever size is asked, and fal bills whole megapixels: 2 × $0.03) | $0.0615 | the style test of 2026-11-08 (branch style-test, its ledger); fal's page "$0.03 per megapixel" |
 | GPT Image 2.5 Sunburst | ~$0.047 (bases, measured with one reference) | $0.0815 | the gateway's reported cost, 2026-11-03 |
 | Gemini 3.1 Flash Image | ~$0.068 (bases, measured) | $0.0915 | the gateway's reported cost, 2026-11-03 |
 

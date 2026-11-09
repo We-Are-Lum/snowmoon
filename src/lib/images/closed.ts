@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import sharp from 'sharp';
 import { CLOSED_PROVIDERS, IMAGES, type ClosedProvider } from '../config';
 import { gatewayToken } from '../chat/model';
-import { ImageUnavailable, type Made } from './fal';
+import { ImageRefused, ImageUnavailable, refusedByPolicy, type Made } from './fal';
 import type { SheetModel, ViewSlot } from './sheet-models';
 import type { ChallengeModel } from '../challenge/models';
 
@@ -68,7 +68,10 @@ export interface ClosedPicture {
 /** The picture and its cost from the gateway's answer. Pure: tests run it on recorded answers. */
 export function parseClosed(m: SheetModel, status: number, j: unknown): ClosedPicture {
   const b = (j ?? {}) as any; // eslint-disable-line @typescript-eslint/no-explicit-any
-  if (status < 200 || status >= 300) throw new ImageUnavailable(`gateway ${status}`);
+  if (status < 200 || status >= 300) {
+    if (refusedByPolicy(status, JSON.stringify(j ?? {}))) throw new ImageRefused(`gateway ${status}`);
+    throw new ImageUnavailable(`gateway ${status}`);
+  }
   const num = (x: unknown) => (x === undefined || x === null || x === '' || !Number.isFinite(Number(x)) ? null : Number(x));
   if (m.id === 'gpt-image-2.5-sunburst') {
     const b64 = b.data?.[0]?.b64_json;

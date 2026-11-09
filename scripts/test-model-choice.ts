@@ -236,6 +236,45 @@ proven(
   const roff = await reserve(S, 3001, closedSpend(GPT));
   (CHALLENGE as { modelChoice: boolean }).modelChoice = challengeWas;
   proven('M4d no closed picture for a wallet account, nor with the switches off', () => [...need(!rw.ok, 'a wallet account reserved a closed picture'), ...need(!roff.ok, 'a closed picture was reserved with the switch off')], () => need(!ron.ok, 'a closed picture was reserved (switch on, Farcaster account)'));
+  // M4e (branch challenge-models, 2026-11-08): a picture the model refuses (Qwen's 422 content_policy_violation, a
+  // gateway moderation block) or the host's checker flags (FLUX's blacked-out picture) is the usual "dropped" answer:
+  // counted (its ask stays), not charged as a success (verdict nsfw), nothing shown. Mocked fal and prompt check.
+  {
+    const { paidPicture } = await import('../src/lib/images/paid');
+    const { makeQwenEdit, makeEdit } = await import('../src/lib/images/fal');
+    const keys = { fal: process.env.FAL_KEY, groq: process.env.GROQ_API_KEY };
+    process.env.FAL_KEY = 'stand-in-not-a-key';
+    process.env.GROQ_API_KEY = 'stand-in-not-a-key';
+    const realFetch = globalThis.fetch;
+    let falAnswer: () => Response = () => new Response('{}');
+    globalThis.fetch = (async (url: string) => {
+      if (String(url).startsWith('https://fal.run/')) return falAnswer();
+      return new Response(JSON.stringify({ id: 'x', model: 'stand-in', choices: [{ index: 0, message: { role: 'assistant', content: '{"allow": true}' }, finish_reason: 'stop' }], usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 } }), { headers: { 'content-type': 'application/json' } });
+    }) as unknown as typeof fetch;
+    const jpg = await sharp({ create: { width: 64, height: 36, channels: 3, background: { r: 0, g: 0, b: 0 } } }).jpeg().toBuffer();
+    const ref = { bytes: jpg, contentType: 'image/jpeg', width: 64, height: 36 };
+    const req = new Request('http://localhost/api/challenge/make', { method: 'POST' });
+    const asks = async (fid: number) => Number((await sql`select count(*)::int as n from studio.image_asks where fid = ${fid}`)[0].n);
+    const dropped = async (fid: number, answer: () => Response, make: () => Promise<unknown>) => {
+      falAnswer = answer;
+      const before = await asks(fid);
+      const r = await paidPicture(S, fid, req, { checkText: 'Seila, quiet.', spend: { model: { id: 'qwen-image-edit-2509', host: 'fal.ai' }, reserveUsd: 0.0615 }, make: make as () => Promise<never> });
+      const p: string[] = [];
+      if (r.ok || r.status !== 422 || r.extra.reason !== 'nsfw') p.push(`answered ${JSON.stringify(r.ok ? 'ok' : { status: r.status, extra: r.extra })}, not the dropped answer`);
+      if ((await asks(fid)) !== before + 1) p.push('not counted');
+      return p;
+    };
+    const refusal = () => new Response(JSON.stringify({ detail: [{ type: 'content_policy_violation', msg: 'The content could not be processed.' }] }), { status: 422 });
+    const flagged = () => new Response(JSON.stringify({ images: [{ url: `data:image/jpeg;base64,${jpg.toString('base64')}` }], seed: 1, has_nsfw_concepts: [true] }));
+    const qwen = await dropped(4001, refusal, () => makeQwenEdit('fal-ai/qwen-image-edit-plus', 'Seila, quiet.', ref, IMAGES.size, 0.06));
+    const flux = await dropped(4002, flagged, () => makeEdit('Seila, warm light.', [ref]));
+    // Planted: a 500 (the model didn't answer) must NOT be taken for a refusal.
+    const outage = await dropped(4003, () => new Response('boom', { status: 500 }), () => makeQwenEdit('fal-ai/qwen-image-edit-plus', 'p', ref, IMAGES.size, 0.06));
+    globalThis.fetch = realFetch;
+    process.env.FAL_KEY = keys.fal;
+    process.env.GROQ_API_KEY = keys.groq;
+    proven('M4e a model\'s refusal (Qwen 422 content_policy_violation) and a flagged FLUX picture are counted and answered as dropped (422, reason nsfw), not as a success', () => [...qwen, ...flux], () => outage);
+  }
   await sql.end();
   await server.stop();
   await db.close();
@@ -660,24 +699,46 @@ proven(
     return new Response(JSON.stringify({ images: [{ url: `data:image/jpeg;base64,${jpg.toString('base64')}` }], seed: 7, has_nsfw_concepts: [false] }), { status: 200, headers: { 'x-fal-request-id': 'req_mock' } });
   }) as unknown as typeof fetch;
   const worst = reserveUsd(C_QWEN, { width: 1024, height: 576 });
-  const q = await makeQwenEdit(QWEN.endpoint, 'Bai on a ledge.', { bytes: ref, contentType: 'image/jpeg', width: 1024, height: 576 }, IMAGES.size, qwenCostUsd(IMAGES.size, { width: 1024, height: 576 }));
+  // Measured (style test, 2026-11-08): Qwen returns 1376 x 768 whatever image_size says, billed as 2 MP, $0.06.
+  globalThis.fetch = (async (url: string, init: RequestInit) => {
+    falCalls.push({ url: String(url), body: String(init.body) });
+    const jpg = await sharp({ create: { width: 1376, height: 768, channels: 3, background: { r: 1, g: 1, b: 1 } } }).jpeg().toBuffer();
+    return new Response(JSON.stringify({ images: [{ url: `data:image/jpeg;base64,${jpg.toString('base64')}` }], seed: 7, has_nsfw_concepts: [false] }), { status: 200, headers: { 'x-fal-request-id': 'req_mock' } });
+  }) as unknown as typeof fetch;
+  const { makeWith } = await import('../src/lib/challenge/make-model');
+  const q = await makeWith(C_QWEN, 'Bai on a ledge.', [{ bytes: ref, contentType: 'image/jpeg', width: 1024, height: 576 }], new Request('http://localhost/'), worst);
   globalThis.fetch = realFetch2;
   process.env.FAL_KEY = keyWas;
-  const qwenRules = (endpoint: string, cost: (o: typeof IMAGES.size, r: typeof IMAGES.size) => number) => [
+  const qm = await sharp(q.bytes).metadata();
+  const qwenRules = (endpoint: string, cost: (o: { width: number; height: number }) => number) => [
     ...need(endpoint === 'fal-ai/qwen-image-edit-plus', `endpoint ${endpoint}`),
-    ...need(Math.abs(cost(IMAGES.size, { width: 1024, height: 576 }) - 0.03 * (1 + 0.589824)) < 1e-9, `cost ${cost(IMAGES.size, { width: 1024, height: 576 })}`),
+    ...need(cost({ width: 1376, height: 768 }) === 0.06 && cost({ width: 1024, height: 576 }) === 0.03, `cost ${cost({ width: 1376, height: 768 })}`),
   ];
   proven(
-    'C10 Qwen-Image-Edit: fal-ai/qwen-image-edit-plus (2509), one reference, the safety checker on, costed as $0.03 x (output MP at least 1 + reference MP) (mocked fal)',
+    'C10 Qwen-Image-Edit: fal-ai/qwen-image-edit-plus (2509), one reference, the safety checker on; billed whole megapixels of its 1376 x 768 output ($0.06), reserved for it, and cropped and scaled to 1024 x 576 with the recipe saying so (mocked fal)',
     () => [
       ...qwenRules(QWEN.endpoint, qwenCostUsd),
       ...need(falCalls.length === 1 && falCalls[0].url === 'https://fal.run/fal-ai/qwen-image-edit-plus', `called ${falCalls.map((c) => c.url).join(', ')}`),
       ...need((JSON.parse(falCalls[0]?.body ?? '{}').image_urls ?? []).length === 1 && JSON.parse(falCalls[0]?.body ?? '{}').enable_safety_checker === true, 'not one reference, or no safety checker'),
-      ...need(q.costUsd > 0 && worst >= q.costUsd, 'the reserve is below the cost'),
+      ...need(q.costUsd === 0.06 && worst >= q.costUsd && C_QWEN.estimateUsd === 0.06, `cost ${q.costUsd}, reserve ${worst}`),
+      ...need(qm.width === 1024 && qm.height === 576 && qm.format === 'jpeg', `stored ${qm.width}x${qm.height}`),
+      ...need(/1376x768/.test(JSON.stringify(q.settings)), 'the recipe does not record the size Qwen returned'),
       ...need(!/fal-ai\/qwen-image-edit['"]/.test(read('src/lib/challenge/models.ts') + read('src/lib/images/fal.ts')), 'the deprecated endpoint is named'),
     ],
-    () => qwenRules('fal-ai/qwen-image-edit', (o, r) => 0.03 * ((o.width * o.height + r.width * r.height) / 1e6)),
+    () => qwenRules('fal-ai/qwen-image-edit', (o) => 0.03 * ((o.width * o.height) / 1e6)),
   );
+
+  // C15: the challenge's prompt check gets the larger budget (1,200), as a sheet's views do.
+  const budget = (src: string) => need(/paidPicture\(sql, fid, request, \{[\s\S]{0,400}guardMaxTokens: IMAGES\.designs\.guardMaxTokens/.test(src) && IMAGES.designs.guardMaxTokens === 1200, 'the make route checks prompts with the default 400 tokens');
+  proven('C15 the make route\'s prompt check gets 1,200 tokens (at 400, 62 of 90 style prompts came back "unclear")', () => budget(makeSrc), () => budget(makeSrc.replace(/guardMaxTokens: IMAGES\.designs\.guardMaxTokens,/, '')));
+
+  // C16: a gateway moderation block is a refusal, not an outage.
+  {
+    const { parseClosed } = await import('../src/lib/images/closed');
+    const { ImageRefused } = await import('../src/lib/images/fal');
+    const kind = (status: number, body: unknown) => { try { parseClosed({ id: 'gpt-image-2.5-sunburst' } as never, status, body); return 'ok'; } catch (e) { return e instanceof ImageRefused ? 'refused' : 'unavailable'; } };
+    proven('C16 a closed model\'s moderation block is a refusal (the dropped answer); a gateway outage is not', () => need(kind(400, { error: { code: 'moderation_blocked' } }) === 'refused' && kind(503, { error: 'busy' }) === 'unavailable', 'kinds'), () => need(kind(503, { error: 'busy' }) === 'refused', 'an outage taken for a refusal'));
+  }
 
   // C11: the country is used, never kept: no log, no database, no ticket.
   const keptProblems = (src: string, route = makeSrc) => [
