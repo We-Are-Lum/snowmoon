@@ -1,6 +1,6 @@
-# Challenge release: every final text (DRAFT, not reread)
+# Challenge release: every final text (DRAFT v2, not reread)
 
-Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` at `cc6b345f`
+Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` at `5ba80255` (v2: with challenge-simple's final head `1efcbeaf`)
 (which carries `challenge-simple`). **DRAFT until the owner's reread.** Every text below is copied from the code as it
 stands on that commit (dumped from `src/lib/legal.ts`, `config/consent.json`, the wording modules and `src/app/about`),
 not retyped. "Before" is `origin/main` at `00722d70`. Where a text didn't exist, there's no before. `{…}` marks a value
@@ -141,7 +141,7 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
 - "Remixing Zei" · "The picture of Zei you start from" (existed before).
 - The box's label: "Change {Name}: clothes, colours, age, pose…"
 - Style row: "Style" · "Random" · "Write your own" (the owner's words); the own-style
-  box: "Your style, in a few words"; in "How it was made": "Style: Random: {style}".
+  box: "Your style, in a few words"; in "How it was made": "Style: {style}, drawn at random" (the owner's words, 2026-11-08; it replaced "Style: Random: {style}").
 - The four errors: "Pick a style first." · "Write your style first." · "Write your style in up to {n} characters." ·
   "Pick one of the models listed."
 - In the prompt (public in every recipe): "{Name} is the person in reference image 1, the main figure." and the keep
