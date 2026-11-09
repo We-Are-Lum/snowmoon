@@ -1918,7 +1918,9 @@ async function checkChallengeLanding() {
       if (styleChips.join('|') !== wantChips.join('|')) fail(`/challenge/make ${tag}: the Style row reads ${styleChips.join(', ')}, not ${wantChips.join(', ')}`);
       if ((await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style')) !== `style:${FX.styles[0].element}`) fail(`/challenge/make ${tag}: Zei's base doesn't start on its own style`);
       const models = (await page.locator('.mk-model .cc-chip').allTextContents()).map((t) => t.trim());
-      if (models.join('|') !== 'FLUX.2 [klein] 4B · Black Forest Labs · open') fail(`/challenge/make ${tag}: the Model row reads ${models.join(', ')}`);
+      // Branch challenge-models: a local server has no country header, so the open models only, the default first (the
+      // closed ones, offered by country, are proven by test:model-choice C2–C4 and the screenshots).
+      if (models.join('|') !== 'FLUX.2 [klein] 4B · Black Forest Labs · open|Qwen-Image-Edit · Alibaba\'s Qwen team · open') fail(`/challenge/make ${tag}: the Model row reads ${models.join(', ')}`);
       if (await page.locator('.mk-moments, .mk-strip, .mk-surprise, .mk-quotes').count()) fail(`/challenge/make ${tag}: shows the moments while they are off`);
       await snap('make', true);
       await page.locator('.mk-styles .cc-chip[data-style="own"]').click();

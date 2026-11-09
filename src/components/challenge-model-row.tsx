@@ -45,7 +45,7 @@ export function useChallengeModel<T extends ModelRowEntry>(models: readonly T[] 
   };
   const notice = pending ? <ModelNotice maker={pending.pick.maker} askAdult={pending.askAdult} adultTicked={adultTicked} onTick={setAdultTicked} onAnswer={answer} /> : null;
   /** One line under a model's name: its terms, the price, and for a closed one its maker's label and that it uses 3. */
-  const meta = (m: ModelRowEntry) => [m.maker, m.terms, W.about(m.aboutUsd), ...(m.open ? [] : [m.retention, W.countsAs])].filter(Boolean).join(' · ');
+  const meta = (m: ModelRowEntry) => [m.terms, W.about(m.aboutUsd), ...(m.open ? [] : [m.retention, W.countsAs])].filter(Boolean).join(' · ');
   /** For a wallet account: the line shown in place of the closed models ("Closed models need a Farcaster, Lens or Bluesky sign-in."). */
   const note = modelsNote;
   return { list, chosen, pick, ready, body, notice, meta, note, W };

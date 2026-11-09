@@ -13,8 +13,9 @@ one-picture remix screen, and [`age-terms-closed-models.md`](age-terms-closed-mo
 
 Legal texts describe today: these words are in `src/lib/legal.ts`, `src/app/about/page.tsx` and `config/consent.json`
 on this branch, which is the release that turns `CHALLENGE.modelChoice` on. Merge only after the owner says "reread"
-(P6k, P6l fail until then: after the reread, `LEGAL.ownerReread.privacy.words` becomes `5m8tc2` and
-`LEGAL.ownerReread.terms.words` becomes `hegeoz`), and only once `NEXT_remix_model_choice.sql` is applied.
+(P6k, P6l fail until then: after the reread, `LEGAL.ownerReread.privacy.words` becomes `d8fe0h` and
+`LEGAL.ownerReread.terms.words` becomes `fyqkb6`; v2's keys, which also cover challenge-simple's §6e redraft, merged in
+here from `docs/legal/challenge-simple-draft.md`), and only once `NEXT_remix_model_choice.sql` is applied.
 
 "Before" is main at `00722d70`. Shortest true sentences; no labels, gateway accounts or changeable thresholds (the
 number 3 and the caps are on the screen, not in the legal texts).
@@ -201,8 +202,8 @@ North Korea, Syria, and US territories the header reports as their own country (
 - The Model row, for a wallet account: "Closed models need a Farcaster, Lens or Bluesky sign-in." (the owner's exact
   words; also the route's refusal).
 - The crop, in the recipe's settings: "cropped from 3:2 to 16:9, mostly from the bottom" (DRAFT).
-- Under a closed pick (DRAFT, `src/lib/challenge/model-wording.ts`): "{maker} · a closed model by {maker} · about
-  $0.05 a picture · {the maker's label} · Uses 3 of today's pictures".
+- Under a closed pick (DRAFT, `src/lib/challenge/model-wording.ts`): "a closed model by {maker} · about $0.05 a picture ·
+  {the maker's label} · Uses 3 of today's pictures".
 - The refusal when fewer than 3 are left (DRAFT): "Not enough of today's pictures left for a closed model: each uses 3.
   The open models may still work; more at 00:00 UTC."
 
