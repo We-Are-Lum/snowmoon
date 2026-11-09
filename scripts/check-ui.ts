@@ -1879,11 +1879,25 @@ async function checkChallengeLanding() {
       if (w === 1440) await snap('full', true);
       // The row outside a picture opens the character's page.
       // A real tap on the line's text: the name's link covers the row, so the tap lands on it (Playwright's own click
-      // refuses an element another one covers, which is the point here).
-      await zei.locator('.cc-line').scrollIntoViewIfNeeded();
-      const lineBox = await zei.locator('.cc-line').boundingBox();
-      if (lineBox) await page.mouse.click(lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2);
-      await page.waitForURL('**/challenge/zei', { timeout: 30000, waitUntil: 'commit' }).catch(() => fail(`/challenge ${tag}: tapping Zei's row outside a picture didn't open /challenge/zei`));
+      // refuses an element another one covers, which is the point here). In the middle of the screen, clear of the sticky top bar. Tapped up to three times a second apart: a tap that lands
+      // while the page is still hydrating can be lost (seen at 390 dark and 424 when no full-page shot came first); what
+      // is checked is that the tap, once the page is ready, lands on the name's link and opens the page.
+      let opened = false;
+      for (let i = 0; i < 3 && !opened; i++) {
+        await page.waitForTimeout(1000);
+        await zei.locator('.cc-line').evaluate((e) => e.scrollIntoView({ block: 'center' }));
+        const lineBox = await zei.locator('.cc-line').boundingBox();
+        const under = lineBox ? await page.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return { href: e?.getAttribute('href') ?? null, what: e ? `${e.tagName.toLowerCase()}.${String(e.className).replace(/\s+/g, '.')}` : 'nothing', x, y, vw: window.innerWidth, vh: window.innerHeight }; }, [lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2]) : null;
+        const hit = under?.href ?? null;
+        if (hit !== '/challenge/zei') {
+          fail(`/challenge ${tag}: the middle of Zei's line is covered by ${JSON.stringify(under)}, not the name's link`);
+          await snap('row-tap-miss');
+        }
+        if (lineBox) await page.mouse.click(lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2);
+        opened = await page.waitForURL('**/challenge/zei', { timeout: 10000, waitUntil: 'commit' }).then(() => true, () => false);
+        if (hit !== '/challenge/zei') break;
+      }
+      if (!opened) fail(`/challenge ${tag}: tapping Zei's row outside a picture didn't open /challenge/zei`);
 
       // A character's page (owner, 2026-11-08): the name, the one line, "Bases", then "Remixes": every published picture of
       // the character, newest first, whole at 16:9, each opening its remix screen; no count. Gladias has none yet.

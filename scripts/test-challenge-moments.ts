@@ -141,11 +141,12 @@ check('config: a current default look per challenge character, each a design id 
   check('hub: the cards are approved, so no row carries the "Draft wording" mark, nor the hub\'s line', v.cards.every((x) => x.c.draft === null) && v.draftShort === null);
   // The plain list (owner, 2026-11-08): name, the approved one line verbatim, the bases; nothing else.
   check('hub: each row is the name (a link to its page), the approved one line word for word, and the bases; nothing else', v.cards.every((x) => Object.keys(x.c).sort().join() === 'bases,draft,href,line,name,note,slug' && x.c.line === cardOf(x.c.slug)!.line && x.c.line.length > 0 && x.c.href === `/challenge/${x.c.slug}`));
-  check('hub: no facts, second layer, moments or remixes in its data', !JSON.stringify(v).includes('"facts"') && !JSON.stringify(v).includes('"moments"') && !JSON.stringify(v).includes('"more"') && !JSON.stringify(v).includes('"remixes"') && !JSON.stringify(v).includes('picked by @naaate'));
+  const rows = JSON.stringify(v.cards.map((x) => x.c));
+  check('hub: no facts, second layer, moments or remixes in its data', !/"(facts|moments|more|remixes|firsts|appears)"/.test(rows) && !JSON.stringify(v).includes('picked by @naaate') && !JSON.stringify(v).includes('May spoil'));
   check('hub: the look is marked as this edition\'s, and the line as its summary', v.cards.every((x) => x.w.look === 'Look invented by this edition: the book doesn’t describe it.' && x.w.summary === 'This edition’s summary'));
   check('hub: the one line says what to do', /^Pick a character\. Tap a picture to remix it\. Entries /.test(v.line), v.line);
   const card = read('src/components/challenge-card.tsx');
-  check('hub: tapping the name (or the row outside a picture) opens the character\'s page; the bases sit above that link', /<Link href=\{c\.href\} className="cc-name-link" prefetch=\{false\}>/.test(card) && /\.cc-card-row \.cc-name-link::after \{ content: ''; position: absolute; inset: 0;/.test(read('src/styles/designs.css')) && /\.cc-card-row \.cc-bases \{ position: relative; z-index: 1; \}/.test(read('src/styles/designs.css')));
+  check('hub: tapping the name (or the row outside a picture) opens the character\'s page; the bases sit above that link', /<Link href=\{c\.href\} className="cc-name-link" prefetch=\{false\}>/.test(card) && /\.cc-card-row \.cc-name-link \{ position: static; \}/.test(read('src/styles/designs.css')) && /\.cc-card-row \.cc-name-link::after \{ content: ''; position: absolute; inset: 0;[^}]*z-index: 1; \}/.test(read('src/styles/designs.css')) && /\.cc-card-row \.cc-bases \{ position: relative; z-index: 2; \}/.test(read('src/styles/designs.css')));
   check('hub and character page: picture links aren\'t prefetched', /<Link className="cc-tile" href=\{t\.href\} data-version=\{t\.versionId\} prefetch=\{false\}>/.test(card));
   // A character's page: only the six; no database here, so empty lists.
   const zei = await V.characterView(null, 'zei');
@@ -455,6 +456,8 @@ check('config: a current default look per challenge character, each a design id 
     const styleD = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'style', styleName: 'Quiet, warm light', body: { title: 'Quiet, warm light', text: 'Quiet, warm light; soft shadows.', samples: [], views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null } as never });
     const styled = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'character', character: DS.bookCharacter('bai')!, body: { ...sheet('Bai base, styled', 40), style: { version_id: styleD.versionId, title: 'Quiet, warm light' } } as never });
     CHALLENGE.bases = { ...CHALLENGE.bases, bai: [base.versionId, styled.versionId] };
+    const keepCount = CHALLENGE.baseCount;
+    CHALLENGE.baseCount = { ...CHALLENGE.baseCount, bai: 2 };
     const plain = await picture({ fid: 501, character: 'bai', moment: '', from: base.versionId, uses: base.versionId });
     const ownRemix = await picture({ fid: 501, character: 'bai', moment: '', from: plain.versionId, remixedFrom: plain.versionId });
     const noLine = await picture({ fid: 501, character: 'bai', moment: '', from: base.versionId });
@@ -485,6 +488,7 @@ check('config: a current default look per challenge character, each a design id 
     check('the published styles: listed with their names and texts', styles.some((x) => x.id === `style:${styleD.elementId}` && x.label === 'Quiet, warm light' && x.text === 'Quiet, warm light; soft shadows.'));
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styledBase = styled.versionId;
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styleEl = styleD.elementId;
+    (globalThis as { __keepCount?: unknown }).__keepCount = keepCount;
   }
   // The make API (GET): the screen's data for a base; 404 for anything else. POST without a sign-in: 401 (P4a). The app's
   // own connection (db()) is a second one, and PGlite's socket server takes one at a time: this test's closes first.
@@ -510,6 +514,7 @@ check('config: a current default look per challenge character, each a design id 
   CHALLENGE.entries = keep.entries;
   CHALLENGE.pictureEntries = keep.pictures;
   CHALLENGE.moments = keep.moments;
+  CHALLENGE.baseCount = (globalThis as { __keepCount?: typeof CHALLENGE.baseCount }).__keepCount ?? CHALLENGE.baseCount;
   await (await import('../src/lib/db')).db()?.end();
   await server.stop();
 }

@@ -373,8 +373,10 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .cc-card-row { position: relative; }
 .cc-name-link { color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
 .cc-name-link:hover { text-decoration: underline; }
-.cc-card-row .cc-name-link::after { content: ''; position: absolute; inset: 0; border-radius: 8px; }
-.cc-card-row .cc-bases { position: relative; z-index: 1; }
+/* The touch rule in shell.css makes every link its own 44px box; here the name's link stays static, so its cover is the row's. */
+.cc-card-row .cc-name-link { position: static; }
+.cc-card-row .cc-name-link::after { content: ''; position: absolute; inset: 0; left: 0; top: 0; width: auto; height: auto; transform: none; border-radius: 8px; z-index: 1; }
+.cc-card-row .cc-bases { position: relative; z-index: 2; }
 .cc-card-row .cc-name-link:focus-visible { outline: none; }
 .cc-card-row .cc-name-link:focus-visible::after { outline: 2px solid var(--link); outline-offset: 2px; }
 .cc-ai { margin: 6px 0 0; }
