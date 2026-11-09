@@ -1878,7 +1878,11 @@ async function checkChallengeLanding() {
       if (w === 390 && scheme === 'light') await snap('full', true);
       if (w === 1440) await snap('full', true);
       // The row outside a picture opens the character's page.
-      await zei.locator('.cc-line').click();
+      // A real tap on the line's text: the name's link covers the row, so the tap lands on it (Playwright's own click
+      // refuses an element another one covers, which is the point here).
+      await zei.locator('.cc-line').scrollIntoViewIfNeeded();
+      const lineBox = await zei.locator('.cc-line').boundingBox();
+      if (lineBox) await page.mouse.click(lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2);
       await page.waitForURL('**/challenge/zei', { timeout: 30000 }).catch(() => fail(`/challenge ${tag}: tapping Zei's row outside a picture didn't open /challenge/zei`));
 
       // A character's page (owner, 2026-11-08): the name, the one line, "Bases", then "Remixes": every published picture of
