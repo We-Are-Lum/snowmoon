@@ -1,6 +1,7 @@
 import { CHALLENGE, CLOSED_IMAGES, CLOSED_PROVIDERS, IMAGES } from '../config';
 import { MODEL_NOTICES } from '../legal';
 import { makerServes, type Maker, type Where } from '../images/countries';
+import { MODEL_WORDING } from './model-wording';
 
 /**
  * The challenge's models (branch challenge-models, owner, 2026-11-08): the remix screen's Model row offers these, in
@@ -134,7 +135,16 @@ export function challengeModel(id: unknown, where: Where, on?: boolean, geminiOk
   return challengeModelsFor(where, on, geminiOk).find((m) => m.id === want) ?? null;
 }
 
-/** What the screen's Model row receives: one entry per offered model, the open default first. */
+/**
+ * What the screen's Model row receives: one entry per offered model, the open default first. For a wallet account
+ * (closed models are off for it), the closed entries are left out and `note` says why, where they'd otherwise be offered.
+ */
+export function modelView(where: Where, opts: { wallet?: boolean; on?: boolean } = {}) {
+  const row = modelRow(where, opts.on);
+  if (!opts.wallet || row.every((m) => m.open)) return { models: row, note: null as string | null };
+  return { models: row.filter((m) => m.open), note: MODEL_WORDING.walletOnly as string | null };
+}
+
 export function modelRow(where: Where, on?: boolean) {
   return challengeModelsFor(where, on).map((m) => ({
     id: m.id,

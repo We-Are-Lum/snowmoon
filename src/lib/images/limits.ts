@@ -48,11 +48,6 @@ export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
   return Math.max(0, perDay(fid) - (r?.n ?? 0));
 }
 
-/** Closed models' own daily count for this person (CLOSED_IMAGES.perPersonPerDay), apart from the open one. */
-export async function closedLeft(sql: Sql, fid: number): Promise<number> {
-  const [r] = await sql`select count(*)::int as n from studio.image_asks where fid = ${fid} and pool = 'closed' and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
-  return Math.max(0, CLOSED_IMAGES.perPersonPerDay - (r?.n ?? 0));
-}
 
 /** Today's free spend on closed models, reserved and real (image_costs by model; the prompt checks count in the open total). */
 export async function closedSpentToday(sql: Sql): Promise<number> {
@@ -151,11 +146,10 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
       await addCost(t, 'free', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
       return { ok: true as const, left: remixesLeft(used + (spend.remix.starts ? spend.remix.units : 0)) };
     }
-    // A closed picture needs CLOSED_IMAGES.countsAs of the day's free pictures, and one of the closed pool's own.
+    // A closed picture needs CLOSED_IMAGES.countsAs of the day's free pictures (no separate per-person count: owner, 2026-11-08).
     const weight = closed ? CLOSED_IMAGES.countsAs : 1;
     const left = await generationsLeft(t, fid);
     if (left < weight) return { ok: false as const, refusal: closed && left > 0 ? ('closed-limit' as const) : ('limit' as const) };
-    if (closed && (await closedLeft(t, fid)) <= 0) return { ok: false as const, refusal: 'closed-limit' as const };
     const [today] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'free'`;
     if (today.usd + spend.reserveUsd > imagesDailySpendCapUsd()) return { ok: false as const, refusal: 'spend' as const };
     if (closed && (await closedSpentToday(tx as unknown as Sql)) + spend.reserveUsd > closedCapUsd()) return { ok: false as const, refusal: 'closed-spend' as const };

@@ -153,7 +153,42 @@ export function challengeClosedRequest(m: ChallengeModel, prompt: string, refere
   throw new Error(`no request for ${m.id}`);
 }
 
-/** One closed challenge picture: the call, the picture converted to the site's JPEG at IMAGES.size, its cost. */
+/** The share of the removed height taken from the top when a closed picture is cropped to 16:9 (the rest from the bottom, so heads stay). */
+export const CROP_FROM_TOP = 0.25;
+
+/**
+ * The words the recipe shows for a crop (DRAFT wording, branch challenge-models, owner, 2026-11-08: crop, not pad).
+ * "cropped from 3:2 to 16:9, mostly from the bottom" for GPT's 1536 x 1024.
+ */
+export function cropWords(w: number, h: number): string {
+  const g = (a: number, b: number): number => (b ? g(b, a % b) : a);
+  const d = g(w, h);
+  const ratio = `${w / d}:${h / d}`;
+  return w / h < 16 / 9 ? `cropped from ${ratio} to 16:9, mostly from the bottom` : w / h > 16 / 9 ? `cropped from ${ratio} to 16:9, from both sides` : 'not cropped (already 16:9)';
+}
+
+/**
+ * A closed picture made wide (owner, 2026-11-08): cropped to the size's shape, never padded. Taller than 16:9: the
+ * extra height goes CROP_FROM_TOP from the top and the rest from the bottom; wider: the extra width evenly from both
+ * sides. Then scaled to the size and saved as JPEG. Returns the crop for the recipe.
+ */
+export async function toWide(original: Buffer, size: { width: number; height: number } = IMAGES.size, fromTop: number = CROP_FROM_TOP) {
+  const meta = await sharp(original).metadata();
+  const w = meta.width ?? size.width, h = meta.height ?? size.height;
+  const want = size.width / size.height;
+  let left = 0, top = 0, cw = w, ch = h;
+  if (w / h < want) {
+    ch = Math.round(w / want);
+    top = Math.round((h - ch) * fromTop);
+  } else if (w / h > want) {
+    cw = Math.round(h * want);
+    left = Math.round((w - cw) / 2);
+  }
+  const bytes = await sharp(original).extract({ left, top, width: cw, height: ch }).resize(size.width, size.height, { fit: 'fill' }).flatten({ background: '#ffffff' }).jpeg({ quality: 92 }).toBuffer();
+  return { bytes, crop: { original: `${w}x${h}`, kept: { left, top, width: cw, height: ch }, removed_top: top, removed_bottom: h - ch - top, removed_left: left, removed_right: w - cw - left }, words: cropWords(w, h) };
+}
+
+/** One closed challenge picture: the call, the picture cropped to 16:9 and saved as the site's JPEG at IMAGES.size, its cost. */
 export async function makeChallengeClosed(m: ChallengeModel, prompt: string, reference: Buffer, request: Request, worstUsd: number, send: typeof fetch = fetch): Promise<Made> {
   const token = gatewayToken(request);
   if (!token) throw new ImageUnavailable('no gateway credential');
@@ -162,10 +197,10 @@ export async function makeChallengeClosed(m: ChallengeModel, prompt: string, ref
   if (!res) throw new ImageUnavailable('the gateway did not answer');
   // parseClosed reads GPT's and Gemini's answers by the model's id, as for a sheet's views.
   const pic = parseClosed({ id: m.id } as SheetModel, res.status, await res.json().catch(() => ({})));
-  const jpeg = await toView(pic.bytes, IMAGES.size);
+  const wide = await toWide(pic.bytes, IMAGES.size);
   const from = pic.contentType.split('/')[1] ?? 'png';
   return {
-    bytes: jpeg,
+    bytes: wide.bytes,
     contentType: 'image/jpeg',
     seed: null,
     requestId: pic.requestId,
@@ -173,7 +208,8 @@ export async function makeChallengeClosed(m: ChallengeModel, prompt: string, ref
     costUsd: pic.costUsd ?? worstUsd,
     settings: {
       ...r.settings,
-      converted: { from, sha256: createHash('sha256').update(pic.bytes).digest('hex'), to: 'jpeg', resized_to: IMAGES.size, fit: 'contain, padded with the picture\'s own corner colour' },
+      // The crop's words are shown in the recipe's settings (DRAFT wording): e.g. "cropped from 3:2 to 16:9, mostly from the bottom".
+      converted: { from, sha256: createHash('sha256').update(pic.bytes).digest('hex'), to: 'jpeg', resized_to: IMAGES.size, crop: wide.words, cropped: wide.crop },
       content_credentials: hasC2pa(pic.bytes) ? 'the original had a C2PA manifest from its maker; the JPEG does not keep it' : 'none found in the original',
     },
   };

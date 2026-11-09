@@ -12,7 +12,8 @@ export const MODEL_WORDING = {
   countsAs: `Uses ${CLOSED_IMAGES.countsAs} of today's pictures`,
   about: (usd: number) => `about $${usd.toFixed(2)} a picture`,
   notOffered: 'That model isn’t offered here. Choose another.',
-  walletOnly: 'Closed models are for free daily pictures only, for now.',
+  /** The owner's exact words (2026-11-08), in place of the closed models for a wallet account, and its refusal. */
+  walletOnly: 'Closed models need a Farcaster, Lens or Bluesky sign-in.',
   noticeFirst: 'Read the model’s notice first.',
   adultFirst: 'Confirm you’re 18 or older first.',
 } as const;

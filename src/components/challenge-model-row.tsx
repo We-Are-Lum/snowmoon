@@ -15,7 +15,7 @@ import { ModelNotice } from './model-picker';
  * `notice: { version, adult: true }`, without which the server refuses it. The screen decides how the row looks
  * (branch challenge-simple); `notice` is the maker's notice to show while one is pending.
  */
-export function useChallengeModel(models: readonly ModelRowEntry[] | undefined) {
+export function useChallengeModel(models: readonly ModelRowEntry[] | undefined, modelsNote: string | null = null) {
   const list = models?.length ? models : null;
   const [id, setId] = useState<string | null>(null);
   const chosen = list?.find((m) => m.id === id) ?? list?.[0] ?? null;
@@ -46,5 +46,7 @@ export function useChallengeModel(models: readonly ModelRowEntry[] | undefined) 
   const notice = pending ? <ModelNotice maker={pending.pick.maker} askAdult={pending.askAdult} adultTicked={adultTicked} onTick={setAdultTicked} onAnswer={answer} /> : null;
   /** One line under a model's name: its terms, the price, and for a closed one its maker's label and that it uses 3. */
   const meta = (m: ModelRowEntry) => [m.maker, m.terms, W.about(m.aboutUsd), ...(m.open ? [] : [m.retention, W.countsAs])].filter(Boolean).join(' · ');
-  return { list, chosen, pick, ready, body, notice, meta, W };
+  /** For a wallet account: the line shown in place of the closed models ("Closed models need a Farcaster, Lens or Bluesky sign-in."). */
+  const note = modelsNote;
+  return { list, chosen, pick, ready, body, notice, meta, note, W };
 }

@@ -147,9 +147,8 @@ export const IMAGE_WORDING = {
       legend: 'Model for this sheet',
       note: 'Chosen once for the whole sheet: the front, side and back all come from this model. Changing it marks the views to make again.',
       openDefault: 'The site’s open models (the default)',
-      closedLeft: (n: number) => `${n} closed-model ${n === 1 ? 'picture' : 'pictures'} left today (apart from the open ones)`,
-      // Each closed picture uses CLOSED_IMAGES.countsAs (3) of the day's pictures, within the closed models' own daily count (branch challenge-models).
-      closedLimit: 'No more pictures with closed models today: each uses 3 of today’s pictures. The open models may still work; more at 00:00 UTC.',
+      // Each closed picture uses CLOSED_IMAGES.countsAs (3) of the day's free pictures (branch challenge-models).
+      closedLimit: 'Not enough of today’s pictures left for a closed model: each uses 3. The open models may still work; more at 00:00 UTC.',
       closedSpend: 'Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at 00:00 UTC.',
       changed: 'These views were made with another model. Make them again with this one.',
       mixed: 'The views were made with more than one model. Make them again with one.',

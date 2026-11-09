@@ -963,13 +963,13 @@ export const IMAGES = {
 } as const;
 
 /**
- * Closed models' own caps (branch remix-model-choice, suggested by the owner, 2026-11-04). A closed model's picture
- * counts in its own daily count per person, not in the open 10 (IMAGES.generationsPerDay), and its spend has its own
- * site-wide daily cap, inside the free cap of the moment (imagesDailySpendCapUsd(): the challenge's $15 in its window):
- * both caps are checked, under the same lock, before anything is spent (src/lib/images/limits.ts).
+ * Closed models' caps (branch remix-model-choice, 2026-11-04; changed on branch challenge-models, owner, 2026-11-08):
+ * a closed model's picture counts as `countsAs` of the person's free pictures that day (no separate per-person count:
+ * the 6 a day was dropped), and closed spend has its own site-wide daily cap, inside the free cap of the moment
+ * (imagesDailySpendCapUsd(): the challenge's $15 in its window): both checked under the same lock, before anything is
+ * spent (src/lib/images/limits.ts).
  */
 export const CLOSED_IMAGES = {
-  perPersonPerDay: 6,
   /**
    * How many of the day's free pictures one closed model's picture uses (owner, 2026-11-04 for remixes, as
    * IMAGES.designs.closedRemixUnits; 2026-11-08 for the challenge's pictures): 3. A closed picture is one row of

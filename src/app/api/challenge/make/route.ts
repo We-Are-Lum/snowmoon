@@ -14,7 +14,7 @@ import { makeView, momentPrompt, othersIn, readMake } from '~/lib/challenge/make
 import { defaultLook, sourceOf } from '~/lib/challenge/pictures';
 import { spoilerExceptionOn } from '~/lib/challenge/spoilers';
 import { challengeVisibleTo } from '~/lib/challenge/visibility';
-import { challengeModel, DEFAULT_CHALLENGE_MODEL, modelRow, noticeProblem } from '~/lib/challenge/models';
+import { challengeModel, DEFAULT_CHALLENGE_MODEL, modelView, noticeProblem } from '~/lib/challenge/models';
 import { challengeSpend, makeWith, recipeModel } from '~/lib/challenge/make-model';
 import { whereFrom } from '~/lib/images/countries';
 import { isWalletNumber } from '~/lib/images/remixes';
@@ -44,13 +44,16 @@ const hidden = () => NextResponse.json({ error: 'Not found' }, { status: 404 });
 
 export async function GET(request: Request) {
   const fid = await getFid(request);
+  // Who is asking, for the Model row only: a wallet account sees why closed models aren't offered to it.
+  const person = fid ?? (await getPerson(request).catch(() => null));
   if (!challengeVisibleTo(fid) || !spoilerExceptionOn()) return hidden();
   const sql = db();
   const from = new URL(request.url).searchParams.get('from') ?? '';
   const src = sql ? await sourceOf(sql, from).catch(() => null) : null;
   if (!src) return hidden();
   // The country decides the Model row for this answer only; it isn't kept, logged or sent on.
-  return NextResponse.json({ ...makeView(src), models: modelRow(whereFrom(request.headers)) }, { headers: { 'Cache-Control': 'private, no-store' } });
+  const row = modelView(whereFrom(request.headers), { wallet: person !== null && isWalletNumber(person) });
+  return NextResponse.json({ ...makeView(src), models: row.models, modelsNote: row.note }, { headers: { 'Cache-Control': 'private, no-store' } });
 }
 
 export async function POST(request: Request) {
