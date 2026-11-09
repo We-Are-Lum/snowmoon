@@ -752,6 +752,13 @@ picked for their picture is sent to a model, as its scene line, when they press 
 sent. The exception ends when entries close: after that the hub carries no deeper layer and no moments, and the
 passages are not served.
 
+**Changed (owner, 2026-11-09): on the challenge's pages people work on the whole story, so nothing is marked as a
+spoiler.** No "May spoil later chapters." anywhere under /challenge, on its cards, character pages, rules, remix screens,
+picture pages or backstories (a backstory has no spoiler tick). The reader's own chapter gating stays exactly as it is:
+the reader, the search, "Find a moment", the assistant's limit and a sheet's "What the book says" (only chapters opened on
+the device) are unchanged. `P9g` now fails on any spoiler mark in the challenge's code (planted: one put back) and on the
+sheet page's gating removed; the assistant's limit is `test:chat`'s.
+
 - `P9g`: every passage the challenge's pages can show is one of the six cards' facts and passages or a moment's
   quote, word for word at a block that exists; the first layer cites chapters 1 to 14 only; the deeper layers open with
   "May spoil later chapters."; every moment chip shows its chapter; nothing outside the challenge's pages and APIs

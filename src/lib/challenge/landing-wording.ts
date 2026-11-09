@@ -34,8 +34,6 @@ export const LANDING_WORDING = {
     moments: 'Moments picked by @naaate',
     more: (name: string) => `More about ${name}`,
     less: (name: string) => `Less about ${name}`,
-    /** The deeper layers' line (owner, 2026-11-05, answer 1). */
-    spoil: 'May spoil later chapters.',
     summary: 'This edition’s summary',
     look: 'Look invented by this edition: the book doesn’t describe it.',
     appears: (name: string) => `Where ${name} appears in the book`,

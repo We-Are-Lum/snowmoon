@@ -100,6 +100,10 @@ check('config: a current default look per challenge character, each a design id 
   const p9 = p9gProblems(base);
   check('P9g passes as committed', p9.length === 0, p9.join('; '));
   const plant = (f: string, g: (x: string) => string) => files.map((x) => (x.file === f ? { ...x, text: g(x.text) } : x));
+  // On the challenge's pages nothing is marked as a spoiler (owner, 2026-11-09), and the reader's own gating stays.
+  proof('P9g: "May spoil later chapters." back on a challenge picture\'s backstory fails', p9gProblems({ ...base, files: plant('src/components/challenge-backstory.tsx', (x) => x + "\nexport const SPOIL = 'May spoil later chapters.';") }).length > 0);
+  proof('P9g: a sheet\'s "What the book says" no longer gated by the chapters opened fails', p9gProblems({ ...base, files: plant('src/components/design-book.tsx', (x) => x.replace('quotes.filter((q) => q.chapter <= furthest)', 'quotes')) }).length > 0);
+  check('no challenge wording or component carries a spoiler mark', !files.filter((x) => /^src\/(lib\/challenge|app\/challenge|components\/challenge-)/.test(x.file)).some((x) => /May spoil later chapters/.test(x.text)));
   // The simpler challenge (owner, 2026-11-08): a card's one line only, and the moments only while CHALLENGE.moments is on.
   proof('P9g: a card showing its second layer again (its description) fails', p9gProblems({ ...base, files: plant('src/components/challenge-card.tsx', (x) => x.replace('{c.line} <span className="cc-mark">', '{c.line} {c.more.description} <span className="cc-mark">')) }).length > 0);
   proof('P9g: a card fetching "Where they appear" again fails', p9gProblems({ ...base, files: plant('src/components/challenge-card.tsx', (x) => x + "\nconst appears = () => fetch('/api/challenge/appears?character=zei');") }).length > 0);
@@ -234,8 +238,8 @@ check('config: a current default look per challenge character, each a design id 
   check('moments off: the style is one listed (by id), Random, or the person\'s own words (at most 120 characters)', M.readMake({ from, words: 'x', style: { kind: 'style', id: 'style:0000-ab' } }).ok && M.readMake({ from, words: 'x', style: { kind: 'own', text: 'soft pencil, pale paper' } }).ok && !M.readMake({ from, words: 'x', style: { kind: 'own', text: '  ' } }).ok && !M.readMake({ from, words: 'x', style: { kind: 'own', text: 'x'.repeat(S.OWN_STYLE_MAX + 1) } }).ok && !M.readMake({ from, words: 'x', style: { kind: 'paint' } }).ok);
   // The prompt: the words, reference image 1, the style's text, then the owner's keep line exactly, then no lettering.
   const prompt = M.remixPrompt({ words: 'give her a red coat', name: 'Bai', style: 'soft pencil on pale paper' });
-  check('moments off: the prompt is the words, reference image 1, the style, then exactly "Keep the same character: …", then no lettering; no scene and no other character', prompt === `give her a red coat\n\nBai is the person in reference image 1, the main figure.\n\nsoft pencil on pale paper\n\nKeep the same character: face, hair, build and clothes, unless the change says otherwise.\n\n${IMAGES.suffix}` && !/setting:|reference image 2/.test(prompt), prompt);
-  check('the keep line is the owner\'s, exactly', S.KEEP_LINE === 'Keep the same character: face, hair, build and clothes, unless the change says otherwise.');
+  check('moments off: the prompt is the words, reference image 1, the style, then exactly "Keep the face recognisable; …", then no lettering; no scene and no other character', prompt === `give her a red coat\n\nBai is the person in reference image 1, the main figure.\n\nsoft pencil on pale paper\n\nKeep the face recognisable; change anything else the words describe.\n\n${IMAGES.suffix}` && !/setting:|reference image 2/.test(prompt), prompt);
+  check('the keep line is the owner\'s, exactly', S.KEEP_LINE === 'Keep the face recognisable; change anything else the words describe.');
   // Resolving a style: a listed one, Random (a draw from the published ones, recorded with the one drawn), or own words.
   const pub = [1, 2, 3].map((n) => ({ id: `style:e${n}`, label: `Style ${n}`, text: `text ${n}`, elementId: `e${n}`, versionId: `v${n}`, versionNo: 1, entity: `Style ${n}`, title: '', byName: 'x', byFid: 1, assist: null }));
   const picked = M.resolveStyle({ kind: 'style', id: 'style:e2' }, pub);
@@ -274,7 +278,7 @@ check('config: a current default look per challenge character, each a design id 
   }
   check('own style: a real person on the blocked list is refused before any model is asked (blockedName)', blockedName(M.remixPrompt({ words: 'x', name: 'Zei', style: 'portrait of Vitalik' })) === 'Vitalik');
   const route = read('src/app/api/challenge/make/route.ts');
-  check('the route checks the whole prompt (the words and the style\'s words) with the prompt check', /remixPrompt\(\{ words: r\.words, name, style: style!\.text \}\)/.test(route) && /checkText: prompt,/.test(route) && /blockedName\(job\.checkText\)/.test(read('src/lib/images/paid.ts')) && /checkPrompt\(job\.checkText/.test(read('src/lib/images/paid.ts')));
+  check('the route checks the whole prompt (the words and the style\'s words) with the prompt check', /remixPrompt\(\{ words: r\.words, name, (look: lookFor\(src\.character\), )?style: style!\.text \}\)/.test(route) && /checkText: prompt,/.test(route) && /blockedName\(job\.checkText\)/.test(read('src/lib/images/paid.ts')) && /checkPrompt\(job\.checkText/.test(read('src/lib/images/paid.ts')));
   // The Model row: a list from the server; the route refuses anything not in it.
   const models = MD.challengeModels();
   // Branch challenge-models: with no country (no closed model offered), the open two, the edit model first.
@@ -286,8 +290,8 @@ check('config: a current default look per challenge character, each a design id 
   // The screen's data with the moments off: no moments, the styles (the picture's own first when listed), the models.
   const src = { kind: 'sheet' as const, versionId: from, character: 'zei', url: 'u', sha256: 's', width: 1, height: 1, text: '', title: '', by: null, byFid: 1, versionNo: 1, moment: null, styleElement: 'e2' };
   const mv = M.makeView(src, { styles: pub });
-  check('moments off: the screen gets no moments, the styles in order, the picture\'s own style chosen first, the models, and the box\'s label', mv.moments.length === 0 && mv.source.moment === null && mv.styles.map((x) => x.id).join() === 'style:e1,style:e2,style:e3' && mv.defaultStyle === 'style:e2' && mv.models.length === 2 && mv.models[0].id === IMAGES.editModel.id && /* branch challenge-models: no country, the open two */  mv.w.wordsLabel === 'Change Zei: clothes, colours, age, pose…' && mv.w.style === 'Style' && mv.w.random === 'Random' && mv.w.ownStyle === 'Write your own');
-  check('moments off: a picture without a style starts on the first', M.makeView({ ...src, styleElement: null }, { styles: pub }).defaultStyle === 'style:e1');
+  check('moments off: the screen gets no moments, the styles in order, "Same as this picture" chosen first (owner, 2026-11-09), the models, and the box\'s label', mv.moments.length === 0 && mv.source.moment === null && mv.styles.map((x) => x.id).join() === 'style:e1,style:e2,style:e3' && mv.defaultStyle === 'same' && mv.models.length === 2 && mv.models[0].id === IMAGES.editModel.id && /* branch challenge-models: no country, the open two */  mv.w.wordsLabel === 'Change Zei: clothes, colours, age, pose…' && mv.w.style === 'Style' && mv.w.random === 'Random' && mv.w.ownStyle === 'Write your own');
+  check('moments off: every picture starts on "Same as this picture" (owner, 2026-11-09), with or without a style of its own', M.makeView({ ...src, styleElement: null }, { styles: pub }).defaultStyle === 'same');
   check('moments on (kept): the screen gets all fifteen', M.makeView(src, { styles: pub, momentsOn: true }).moments.length === 15);
   check('moments off: a picture is anchored to its character\'s first passage', JSON.stringify(M.characterAnchor('zei')) === JSON.stringify({ chapter: 2, start: 2, end: 2 }));
 }
@@ -527,7 +531,7 @@ check('config: a current default look per challenge character, each a design id 
   const gj = (await g.json()) as { moments: unknown[]; source: { kind: string; character: string } };
   check('make API, moments off: the screen\'s data for a base (no moments, Bai, a sheet, the styles and the model)', g.status === 200 && gj.moments.length === 0 && gj.source.character === 'bai' && gj.source.kind === 'sheet' && (gj as unknown as { styles: { label: string }[] }).styles.some((x) => x.label === 'Quiet, warm light') && (gj as unknown as { models: { chip: string }[] }).models[0].chip === 'FLUX.2 [klein] 4B · Black Forest Labs · open');
   const gs = (await (await route.GET(new Request(`http://localhost/api/challenge/make?from=${(globalThis as { __styledBase?: string }).__styledBase}`))).json()) as { defaultStyle: string };
-  check('make API, moments off: a base in a published style starts on it', gs.defaultStyle === `style:${(globalThis as { __styleEl?: string }).__styleEl}`);
+  check('make API, moments off: a base in a published style starts on "Same as this picture" (owner, 2026-11-09)', gs.defaultStyle === 'same');
   CHALLENGE.moments = true;
   const gOn = (await (await route.GET(new Request(`http://localhost/api/challenge/make?from=${base.versionId}`))).json()) as { moments: unknown[] };
   check('make API, moments on (kept): fifteen moments', gOn.moments.length === 15);

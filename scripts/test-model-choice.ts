@@ -236,6 +236,55 @@ proven(
   const roff = await reserve(S, 3001, closedSpend(GPT));
   (CHALLENGE as { modelChoice: boolean }).modelChoice = challengeWas;
   proven('M4d no closed picture for a wallet account, nor with the switches off', () => [...need(!rw.ok, 'a wallet account reserved a closed picture'), ...need(!roff.ok, 'a closed picture was reserved with the switch off')], () => need(!ron.ok, 'a closed picture was reserved (switch on, Farcaster account)'));
+  // C19 (owner, 2026-11-09): the bases' style "Animated series", published (scripts/publish-style.ts, run here on the local
+  // database), makes a base whose front records its text open the remix screen on it; its text is quality words only.
+  {
+    await su(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
+    const DS = await import('../src/lib/images/designs');
+    const { BASE_STYLE } = await import('../src/lib/challenge/base-style');
+    const { applyStyle, planStyle } = await import('./lib/publish-style');
+    const { sourceOf } = await import('../src/lib/challenge/pictures');
+    const { makeView, publishedStyles } = await import('../src/lib/challenge/make');
+    const { blockedName } = await import('../src/lib/images/rules');
+    const front = (n: number, styleText: string) => ({ url: `https://pictures.example/${n}.jpg`, sha256: String(n).repeat(64).slice(0, 64), recipe: { prompt: 'p', model: 'gpt-image-2.5-sunburst', endpoint: 'e', host: 'Vercel AI Gateway', settings: {}, seed: null, request_id: 'r', cost_usd: 0.05, made_at: new Date().toISOString(), width: 576, height: 768, checks: { prompt: { model: 'g', verdict: 'ok' }, host_safety_checker: null }, assist: null, style: { version_id: 'not published as a style on the site', title: 'Animated series', text: styleText } } });
+    const sheet = (n: number, styleText: string) => ({ title: 'Animated series', text: 'A base.', samples: [], views: { front: front(n, styleText) }, by_name: 'naaate', by_name_source: 'relay' as const, assist: null, role: null, style: null });
+    const base = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'character', character: DS.bookCharacter('zei')!, body: sheet(7, BASE_STYLE.text) as never });
+    const other = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'character', character: DS.bookCharacter('bai')!, body: sheet(8, 'Mood look: something else.') as never });
+    const before = await sourceOf(S as never, base.versionId, { anySheet: true });
+    const plan = await planStyle(S as never);
+    const made = await applyStyle(S as never);
+    const plan2 = await planStyle(S as never);
+    const after = await sourceOf(S as never, base.versionId, { anySheet: true });
+    const otherSrc = await sourceOf(S as never, other.versionId, { anySheet: true });
+    const view = after ? makeView(after, { styles: await publishedStyles(S as never) }) : null;
+    // The default is "Same as this picture" (owner, 2026-11-09); "Animated series" is listed to pick.
+    const opens = (v: typeof view, el: string) => need(v?.defaultStyle === 'same' && v.styles.some((x) => x.id === `style:${el}` && x.label === 'Animated series'), `the remix screen starts on ${v?.defaultStyle}, or Animated series isn't listed`);
+    const words = [
+      ...need(blockedName(BASE_STYLE.text) === null, 'the style names someone on the blocked list'),
+      ...need(!/\b(studio|ghibli|disney|pixar|dreamworks|film|movie|anime|manga|in the style of|by [A-Z])/i.test(BASE_STYLE.text), 'the style names a studio, film or artist'),
+      ...need(BASE_STYLE.text.startsWith('Animated series look: clean bold black ink outlines'), 'the text isn\'t the drafts\' word for word'),
+    ];
+    proven(
+      'C19 publishing "Animated series" (scripts/publish-style.ts, dry run then apply, on the local database) lists it and links a base whose front records its text to it (the screen starts on "Same as this picture"); another base doesn\'t; its text is quality words only (no blocked name, studio, film or artist)',
+      () => [
+        ...need(before?.styleElement === null && plan.exists === null && !plan.nameTaken, 'before publishing, the base already had a style or the style existed'),
+        ...need(plan2.exists?.elementId === made.elementId && plan2.exists.sameText, 'the dry run after apply doesn\'t see the published style'),
+        ...need(after?.styleElement === made.elementId, `the base starts on ${after?.styleElement}`),
+        ...opens(view, made.elementId),
+        ...need(otherSrc?.styleElement === null, 'a base in another style starts on Animated series'),
+        ...words,
+      ],
+      () => opens(otherSrc ? makeView(otherSrc, { styles: [] }) : null, made.elementId),
+    );
+  }
+
+  // C20: a base sends its front view alone (no other picture), whatever the model.
+  {
+    const route = read('src/app/api/challenge/make/route.ts');
+    const only = (src: string) => need(/const others = moment && chosen\.id === DEFAULT_CHALLENGE_MODEL \?/.test(src) && /const looks = \[src, \.\.\.others\.map/.test(src) && CHALLENGE.moments === false, 'more than the tapped picture can be sent with the moments off');
+    proven('C20 with the moments off, the tapped picture (a base\'s front view) is the only picture sent', () => only(route), () => only(route.replace('const others = moment && chosen.id === DEFAULT_CHALLENGE_MODEL ?', 'const others = chosen.id === DEFAULT_CHALLENGE_MODEL ?')));
+  }
+
   // M4e (branch challenge-models, 2026-11-08): a picture the model refuses (Qwen's 422 content_policy_violation, a
   // gateway moderation block) or the host's checker flags (FLUX's blacked-out picture) is the usual "dropped" answer:
   // counted (its ask stays), not charged as a success (verdict nsfw), nothing shown. Mocked fal and prompt check.
@@ -835,7 +884,9 @@ proven(
       ...models.filter((m) => !m.open).flatMap((m) => need((lines[m.maker] ?? '').includes(`costs us about $${m.estimateUsd.toFixed(2)} `), `${m.maker}'s line doesn't say its estimate, $${m.estimateUsd.toFixed(2)}`)),
       ...need((lines.OpenAI ?? '').includes(`uses ${CLOSED_IMAGES.countsAs} of`), 'the count'),
     ];
-    const { resetLocal } = await import('../src/lib/challenge/model-wording');
+    const { resetLocal, withReset } = await import('../src/lib/challenge/model-wording');
+    const { IMAGE_WORDING: IMAGE_W } = await import('../src/lib/images/wording');
+    const { nextUtcMidnight } = await import('../src/lib/images/paid');
     const at = new Date('2026-11-09T05:00:00Z');
     const tooFew = [
       ...need(MODEL_WORDING.tooFew(2, '4:00 pm') === 'A closed model uses 3 of today\'s pictures; you have 2 left, enough for the open models. More pictures at 4:00 pm.', 'the too-few line'),
@@ -843,6 +894,13 @@ proven(
       ...need(resetLocal(at, 'America/Los_Angeles') === '4:00 pm' && resetLocal(at, 'Europe/Paris') === '1:00 am' && resetLocal(at, 'UTC') === '12:00 am', `reset: ${resetLocal(at, 'America/Los_Angeles')}, ${resetLocal(at, 'Europe/Paris')}, ${resetLocal(at, 'UTC')}`),
       ...need(!/resetLocal|toLocaleTimeString/.test(makeSrc), 'the route renders a time'),
       ...need(IMAGES.generationsPerDay === 10 && IMAGES.dailySpendCapUsd !== undefined && CLOSED_IMAGES.dailySpendCapUsd === 5, 'the free count (10) or the closed cap ($5) changed'),
+      // The refusals in the owner's words (2026-11-08); the cap's {reset} is filled in by the browser from the answer's instant.
+      ...need(IMAGE_W.designs.models.closedLimit === 'A closed model uses 3 of today’s pictures, and you have fewer left. You can still use an open model.', 'the closed-limit words'),
+      ...need(IMAGE_W.designs.models.closedSpend === 'Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at {reset}.', 'the closed-spend words'),
+      ...need(nextUtcMidnight(new Date('2026-11-09T05:00:00Z')) === '2026-11-10T00:00:00.000Z' && /paid\.ts|resetAt: nextUtcMidnight\(\)/.test(read('src/lib/images/paid.ts')), 'the reset instant'),
+      ...need(/^Closed models .* come back at \d{1,2}:\d{2} [ap]m\.$/.test(withReset(IMAGE_W.designs.models.closedSpend, '2026-11-10T00:00:00.000Z')), `filled: ${withReset(IMAGE_W.designs.models.closedSpend, '2026-11-10T00:00:00.000Z')}`),
+      ...need(/withReset\(out\.error, out\.resetAt\)/.test(read('src/components/challenge-make.tsx')), 'the screen doesn\'t fill in the reset'),
+      ...need(read('src/lib/images/rules.ts').includes('No self-harm, extremism or election campaigning. Describe styles by look, not by artist, studio or film.'), 'the rules above Generate'),
     ];
     proven('C17 the closed-pick lines are the owner\'s words with the models\' own estimates; the too-few line, its n = 0 form, and the reset in the visitor\'s time (browser only); 10 free a day, $5 closed cap', () => [...linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS), ...tooFew], () => linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS.map((m) => (m.id === 'gpt-image-2.5-sunburst' ? { ...m, estimateUsd: 0.08 } : m))));
   }

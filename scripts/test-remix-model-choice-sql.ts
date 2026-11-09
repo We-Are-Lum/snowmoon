@@ -18,6 +18,7 @@
  */
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { PGlite } from '@electric-sql/pglite';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -48,9 +49,16 @@ const selectA = C.slice(C.indexOf('select n, what, ok'), C.indexOf(') as t(n, wh
 const doBlock = C.slice(C.indexOf('do $$'), C.lastIndexOf('end $$;') + 'end $$;'.length);
 const undo = uncomment(part('D')).split('\n').filter((l) => !/^[A-Z]/.test(l)).join('\n').trim();
 
-check('the file says who runs it (postgres, in the Supabase SQL Editor) and that it is not applied', /MUST RUN AS postgres/.test(text) && /Supabase SQL Editor/.test(text) && /NOT APPLIED/.test(text));
+check('the file says who runs it (postgres, in the Supabase SQL Editor) and when it was applied', /MUST RUN AS postgres/.test(text) && /Supabase SQL Editor/.test(text) && /APPLIED on production by the owner on 2026-11-08/.test(text));
 check('four parts in order: A ends in rollback, B in commit, C a select and a do block, D the undo', ['A', 'B', 'C', 'D'].every((k, i, a) => i === 0 || text.indexOf(`\n-- ${a[i - 1]}. `) < text.indexOf(`\n-- ${k}. `)) && dry.startsWith('begin;') && dry.endsWith('rollback;') && mig.startsWith('begin;') && mig.endsWith('commit;') && selectA.startsWith('select n, what, ok') && doBlock.startsWith('do $$') && /READ-BACK PASSED/.test(doBlock) && undo.startsWith('begin;') && undo.endsWith('commit;'));
 check('the dry run is the migration word for word', dry.slice(0, -'rollback;'.length) === mig.slice(0, -'commit;'.length));
+// Postgres can't SET ROLE in the Supabase SQL Editor (0030's note; this file's first do block failed there on
+// 2026-11-08). This in-memory test runs as a superuser and can't catch that, so a read-back that sets a role fails here.
+const setsRole = (sql: string) => /\bset\s+(local\s+|session\s+)?role\b/i.test(sql);
+check('the read-back sets no role (postgres can\'t SET ROLE in the SQL Editor)', !setsRole(C), 'part C uses SET ROLE: replace it with the coordinator\'s read-back (privileges checked, rows inserted and deleted as postgres)');
+proof('a read-back with SET ROLE is caught', setsRole('do $$ begin set local role studio_writer; end $$;') && setsRole('SET ROLE studio_writer;') && !setsRole('select has_table_privilege(\'studio_writer\', \'studio.image_asks\', \'INSERT\');'));
+// The owner's do block of 2026-11-09, word for word: its sha256 (what ran on production on 2026-11-08).
+check('part C (b) is the owner\'s do block word for word (2026-11-09)', createHash('sha256').update(doBlock).digest('hex') === '9c9ff6b7fd5afec711dbb12e0f7131f5c144ae07941b92a17e460c1a41c924e7');
 check('the read-back inserts and deletes a realistic row', /insert into studio\.image_asks/.test(doBlock) && /delete from studio\.image_asks/.test(doBlock));
 
 const pg = new PGlite();
@@ -133,8 +141,23 @@ async function planted(label: string, sql: string) {
   await pg.exec('rollback');
   proof(`${label} is caught by the read-back`, (r !== 'passed' && /READ-BACK FAILED|violates|permission/.test(r)) || !ok);
 }
-await planted('the check dropped (any pool accepted)', `alter table studio.image_asks drop constraint image_asks_pool`);
-await planted('a default of closed (every picture would count as 3)', `alter table studio.image_asks alter column pool set default 'closed'`);
+// Each raise of the owner's do block fires on its own fault (the message names it), each plant rolled back.
+async function raises(label: string, sql: string, want: RegExp) {
+  await pg.exec('begin');
+  await pg.exec(sql);
+  const r = await runReadBack();
+  await pg.exec('rollback');
+  proof(`${label}: the read-back raises "${want.source}"`, want.test(r));
+}
+await raises('studio_writer can update rows', `grant update on studio.image_asks to studio_writer`, /READ-BACK FAILED: studio_writer can change or delete rows/);
+await raises('studio_writer can delete rows', `grant delete on studio.image_asks to studio_writer`, /READ-BACK FAILED: studio_writer can change or delete rows/);
+await raises('studio_writer can\'t write a pool', `revoke insert on studio.image_asks from studio_writer`, /READ-BACK FAILED: studio_writer cannot write a pool/);
+await raises('studio_writer can\'t read the pool', `revoke select on studio.image_asks from studio_writer`, /READ-BACK FAILED: studio_writer cannot read the pool/);
+await raises('the check dropped (any pool accepted)', `alter table studio.image_asks drop constraint image_asks_pool`, /READ-BACK FAILED: a pool other than open or closed was accepted/);
+await raises('a default of closed (a picture written without a pool counts as 3)', `alter table studio.image_asks alter column pool set default 'closed'`, /READ-BACK FAILED: the weighted count is 6, not 4/);
+await raises('a wrong weight (each closed picture written twice)', `create function studio.plant_twice() returns trigger language plpgsql as $f$ begin if new.pool = 'closed' and new.fid = 2147483646 then insert into studio.image_asks (fid, pool) values (new.fid, 'open'); end if; return new; end $f$;
+  create trigger plant_twice after insert on studio.image_asks for each row execute function studio.plant_twice();`, /READ-BACK FAILED: the weighted count is 5, not 4/);
+await raises('rows left behind (a rule that keeps them)', `create rule plant_keep as on delete to studio.image_asks where old.fid = 2147483646 do instead nothing;`, /READ-BACK FAILED: 2 test rows left after the delete/);
 await planted('public access', `grant select on studio.image_asks to anon`);
 check('after the plants, the read-back passes again', (await runReadBack()) === 'passed');
 

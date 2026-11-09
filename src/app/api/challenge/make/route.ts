@@ -15,6 +15,7 @@ import { MAKE_WORDING } from '~/lib/challenge/make-wording';
 import { challengeModel, DEFAULT_CHALLENGE_MODEL, modelView, noticeProblem } from '~/lib/challenge/models';
 import { challengeSpend, makeWith, recipeModel } from '~/lib/challenge/make-model';
 import { MODEL_WORDING } from '~/lib/challenge/model-wording';
+import { lookFor } from '~/lib/challenge/looks';
 import { whereFrom } from '~/lib/images/countries';
 import { generationsLeft } from '~/lib/images/limits';
 import { isWalletNumber } from '~/lib/images/remixes';
@@ -103,7 +104,7 @@ export async function POST(request: Request) {
   // With the moments on: the other challenge characters in the moment, each by their current default look.
   // Only the open default takes the others' looks; every other model gets the tapped picture alone.
   const others = moment && chosen.id === DEFAULT_CHALLENGE_MODEL ? (await Promise.all(othersIn(moment, src.character).map(async (slug) => ({ slug, look: await defaultLook(sql, slug) })))).filter((o): o is { slug: string; look: NonNullable<typeof o.look> } => o.look !== null) : [];
-  const prompt = moment ? momentPrompt({ words: r.words, name, scene: moment.scene, others: others.map((o) => callName(o.slug)) }) : remixPrompt({ words: r.words, name, style: style!.text });
+  const prompt = moment ? momentPrompt({ words: r.words, name, scene: moment.scene, others: others.map((o) => callName(o.slug)) }) : remixPrompt({ words: r.words, name, look: lookFor(src.character), style: style!.text });
   const looks = [src, ...others.map((o) => o.look)];
   const pictures: { bytes: Buffer; contentType: string; width: number; height: number }[] = [];
   for (const l of looks) {

@@ -8,7 +8,7 @@ import { MAKE_WORDING as M } from './make-wording';
 import { challengeModels, modelChipText, type ModelRowEntry } from './models';
 import type { Source } from './pictures';
 import { shuffleFresh } from './shuffle';
-import { KEEP_LINE, OWN_STYLE_MAX, presetOptions, readStyleChoice, STYLE_PRESETS, type StyleChoice, type StyleOption, type StylePreset } from './styles';
+import { KEEP_LINE, SAME_STYLE, OWN_STYLE_MAX, presetOptions, readStyleChoice, STYLE_PRESETS, type StyleChoice, type StyleOption, type StylePreset } from './styles';
 
 /**
  * The remix screen's server half (branch challenge-moments, 2026-11-05; simplified on branch challenge-simple,
@@ -39,8 +39,9 @@ export function momentPrompt(p: { words: string; name: string; scene: string; ot
  * in "How it was made"): it names reference image 1 and leaves keeping the character to KEEP_LINE, the owner's words,
  * so a change of clothes isn't fought by "keep their clothes exactly". The style's text is always followed by KEEP_LINE.
  */
-export function remixPrompt(p: { words: string; name: string; style: string }): string {
-  return [p.words.trim(), `${p.name} is the person in reference image 1, the main figure.`, p.style.trim(), KEEP_LINE, IMAGES.suffix].filter(Boolean).join('\n\n');
+export function remixPrompt(p: { words: string; name: string; style: string; look?: string }): string {
+  // The character's look line (src/lib/challenge/looks.ts; owner-approved 2026-11-09) right after the reference line.
+  return [p.words.trim(), `${p.name} is the person in reference image 1, the main figure.`, (p.look ?? '').trim(), p.style.trim(), KEEP_LINE, IMAGES.suffix].filter(Boolean).join('\n\n');
 }
 
 /** The other challenge characters in the moment (slugs), at most two (the edit model takes three pictures in all). */
@@ -97,8 +98,10 @@ export async function publishedStyles(sql: postgres.Sql): Promise<PublishedStyle
 export const drawStyle = (published: readonly PublishedStyle[]): PublishedStyle | null => shuffleFresh(published)[0] ?? null;
 
 /** The style a request resolves to: its text for the prompt, and what the recipe records. Null when it names nothing listed. */
-export type ResolvedStyle = { choice: 'preset' | 'published' | 'random' | 'own'; id: string | null; label: string | null; text: string; design: PublishedStyle | null };
+export type ResolvedStyle = { choice: 'same' | 'preset' | 'published' | 'random' | 'own'; id: string | null; label: string | null; text: string; design: PublishedStyle | null };
 export function resolveStyle(c: StyleChoice, published: readonly PublishedStyle[], presets: readonly StylePreset[] = STYLE_PRESETS, draw: (l: readonly PublishedStyle[]) => PublishedStyle | null = drawStyle): ResolvedStyle | null {
+  // "Same as this picture" (owner, 2026-11-09): no style text; the recipe records the choice.
+  if (c.kind === 'same') return { choice: 'same', id: null, label: SAME_STYLE.label, text: '', design: null };
   if (c.kind === 'own') return { choice: 'own', id: null, label: null, text: c.text, design: null };
   if (c.kind === 'random') {
     const d = draw(published);
@@ -134,8 +137,8 @@ export function makeView(src: Source, opts: { styles: readonly PublishedStyle[];
   const models = opts.models ?? challengeModels();
   const styles: StyleOption[] = [...presetOptions(opts.presets ?? STYLE_PRESETS), ...opts.styles.map((s) => ({ id: s.id, kind: 'published' as const, label: s.label }))];
   // The picture's own style when it has one that is listed; else the first.
-  const own = src.styleElement ? `style:${src.styleElement}` : null;
-  const defaultStyle = styles.find((s) => s.id === own)?.id ?? styles[0]?.id ?? null;
+  // "Same as this picture" is the default (owner, 2026-11-09): a remix keeps the look of the picture it starts from.
+  const defaultStyle = SAME_STYLE.id;
   return {
     source: { versionId: src.versionId, kind: src.kind, character: src.character, name, url: src.url, moment: momentsOn ? src.moment : null },
     moments: momentsOn ? momentChips() : [],

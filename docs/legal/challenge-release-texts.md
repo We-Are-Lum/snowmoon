@@ -1,11 +1,11 @@
-# Challenge release: every final text (DRAFT v2, not reread)
+# Challenge release: every final text (v6; reread by the owner, 2026-11-08 and 2026-11-09)
 
-Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` at `5ba80255` (v2: with challenge-simple's final head `1efcbeaf`)
-(which carries `challenge-simple`). **DRAFT until the owner's reread.** Every text below is copied from the code as it
+Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` (v4 adds the closing line of 2026-11-09 and the bases' style; v3 was at `9ae0aa13`) (with challenge-simple's final head `1efcbeaf`). **v3:** the owner reread every text of v2 on 2026-11-08, via the coordinator's check, with changes 1–2 below applied word for word (the notice labels; the closed refusals) and the rules above Generate extended; the "none left" line approved as drafted
+(which carries `challenge-simple`). Every text below is copied from the code as it
 stands on that commit (dumped from `src/lib/legal.ts`, `config/consent.json`, the wording modules and `src/app/about`),
 not retyped. "Before" is `origin/main` at `00722d70`. Where a text didn't exist, there's no before. `{…}` marks a value
-filled in at run time. After the owner's reread of these words, `LEGAL.ownerReread` becomes: privacy `d8fe0h`, terms
-`1finiyh` (computed by `check:principles` P6k and P6l on this commit; an agent never sets them).
+filled in at run time. `LEGAL.ownerReread` is set to these words on the owner's instruction (relayed by the coordinator): privacy `d8fe0h`,
+terms `1finiyh`; P6k and P6l pass.
 
 ## Terms
 
@@ -89,18 +89,18 @@ filled in at run time. After the owner's reread of these words, `LEGAL.ownerRere
 
 > Supabase holds the database. OpenAI and Google receive, through Vercel AI Gateway, the prompts and pictures for some of the project's own pictures and for a challenge picture someone makes with one of their closed models, and nothing about you, and neither may train on them (OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days).
 
-## The closed models' notices (version 3), the 18+ line and the buttons
+## The closed models' notices (version 4: v3's words with the new labels), the 18+ line and the buttons
 
 Before (v2), the middle paragraph only: "OpenAI receives your prompt for each view and, for the side and back, the front
 view it made, through Vercel AI Gateway. Nothing else about you." (and the same for Google). Everything else unchanged.
 
-**OpenAI:** title "A closed model by OpenAI"; label "OpenAI keeps prompts up to 30 days".
+**OpenAI:** title "A closed model by OpenAI"; label "OpenAI may keep prompts and pictures up to 30 days" (v3, the owner's words; before "OpenAI keeps prompts up to 30 days").
 
 > GPT Image 2.5 Sunburst is made by OpenAI. Its weights aren't published, so its recipe can't be re-run exactly.
 > OpenAI receives your prompt and the picture you chose, through Vercel AI Gateway. Nothing else about you.
 > OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law. It doesn't train its models on them. The gateway keeps no copy.
 
-**Google:** title "A closed model by Google"; label "Google keeps no copy past 24 hours".
+**Google:** title "A closed model by Google"; label "Google keeps no copy; abuse logs up to 90 days" (v3, the owner's words; before "Google keeps no copy past 24 hours").
 
 > Gemini 3.1 Flash Image is made by Google. Its weights aren't published, so its recipe can't be re-run exactly.
 > Google receives your prompt and the picture you chose, through Vercel AI Gateway. Nothing else about you.
@@ -129,11 +129,11 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
 - Under a closed pick (the owner's words): OpenAI "a closed model by OpenAI · costs us about $0.05 · OpenAI may keep your prompt and picture up to 30 days · uses 3 of today's pictures"; Google "a closed model by Google · costs us about $0.07 · Google keeps no copy; abuse logs up to 90 days · uses 3 of today's pictures".
 - Too few left (the owner's words; `{reset}` is 00:00 UTC in the visitor's own time, rendered in the browser, e.g.
   "4:00 pm"): "A closed model uses 3 of today's pictures; you have {n} left, enough for the open models. More pictures at {reset}."
-- With none left (n = 0; **this agent's proposal**, since "enough for the open models" isn't true then):
+- With none left (n = 0; drafted by this agent, **approved by the owner as drafted**):
   "A closed model uses 3 of today's pictures; you have none left today. More pictures at {reset}."
 - A wallet account, in place of the closed models (the owner's words): "Closed models need a Farcaster, Lens or Bluesky sign-in."
 - Refusals (DRAFT): "That model isn’t offered here. Choose another." · "Read the model’s notice first." · "Confirm you’re 18 or older first." · when fewer than 3 are left
-  (server; no time on the server): "Not enough of today’s pictures left for a closed model: each uses 3. The open models may still work." · the closed cap: "Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at 00:00 UTC."
+  (the owner's words, v3): "A closed model uses 3 of today’s pictures, and you have fewer left. You can still use an open model." · the closed cap (the owner's words, v3; `{reset}` filled in by the browser in the visitor's own time from the instant the server sends): "Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at {reset}."
 - The recipe's crop note (DRAFT): "cropped from 3:2 to 16:9, mostly from the bottom".
 
 ## The remix screen: the rest (challenge-simple; DRAFT unless marked the owner's)
@@ -145,7 +145,7 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
 - The four errors: "Pick a style first." · "Write your style first." · "Write your style in up to {n} characters." ·
   "Pick one of the models listed."
 - In the prompt (public in every recipe): "{Name} is the person in reference image 1, the main figure." and the keep
-  line (the owner's words): "Keep the same character: face, hair, build and clothes, unless the change says otherwise."
+  line (the owner's words, v4, 2026-11-09, after the look test): "Keep the face recognisable; change anything else the words describe." (before, v3: "Keep the same character: face, hair, build and clothes, unless the change says otherwise.")
 
 ## The rules and the challenge pages (challenge-simple)
 
@@ -177,6 +177,71 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
   "campaign material for a real election, party or candidate (posters, slogans, endorsements, attacks)."
 - Allowed line: "…styles named by movement or medium rather than by an artist, studio or film." (before: "…rather than
   by a living artist.")
-- Not changed: the rules shown above Generate, "No real people. No sexual content. Nothing violent or hateful. No
-  characters or logos from other works. Don't ask for words in the picture." (to align with §6, the owner may want to add
-  self-harm, extremism and campaign material there: not done).
+- The rules shown above Generate (and on About), v3: "No real people. No sexual content. Nothing violent or hateful. No
+  characters or logos from other works. Don’t ask for words in the picture. No self-harm, extremism or election
+  campaigning. Describe styles by look, not by artist, studio or film." (before: the same without the last two sentences).
+
+## v4 additions (2026-11-09)
+
+- The closing line of every challenge prompt (public in every recipe): "Keep the face recognisable; change anything else
+  the words describe." (the owner's words; above).
+- A published style, "Animated series" (the bases' own look; the owner publishes it with `scripts/publish-style.ts`):
+  title "Animated series"; text "Animated series look: clean bold black ink outlines of even weight, flat saturated cel
+  colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively
+  faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear
+  readable faces and hands." (word for word the drafts' style). A remix of a base made in it starts on it.
+
+## v6 (2026-11-09): Backstory, the look lines and the Style row's default — reread by the owner
+
+The owner reread and approved these on 2026-11-09 (relayed by the coordinator). `LEGAL.ownerReread`: privacy `18g3ada`
+(terms `1finiyh`, unchanged); P6k and P6l pass. No spoiler marks on the challenge's pages (owner, 2026-11-09): the
+backstory has no spoiler tick, and "May spoil later chapters." appears nowhere under /challenge.
+
+### Privacy §4, the remix challenge item
+
+**Before** (its last two sentences, as reread on 2026-11-08):
+
+> … When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record. A picture made with a closed model counts as three of your free pictures that day.
+
+**After** (one sentence added at the end, the owner's shorter form):
+
+> … When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record. A picture made with a closed model counts as three of your free pictures that day. If you add a backstory to a challenge picture, it is kept and shown with the picture.
+
+### The rules
+
+**Before:** none. **After**, after "Only remixes count …" and Submit's line, before "Entering is free…":
+
+> You can add a short backstory in your own words; it’s shown as invented by you, not from the book.
+
+### Backstory (new pictures only)
+
+- On the publish screen of a new challenge picture: hints above the box (never put in it): "What changed for {Name}?" ·
+  "Where are they now?" · "What do they want that they didn’t before?"; the box "Backstory (optional)", up to 400
+  characters, with the publication line ("Public, permanent, GPL-3.0, shown with your name. You can hide it.").
+- Under the picture: the backstory, then "Invented by {@maker}, not from the book".
+- Approved (the agent's draft words): "The prompt check didn’t allow this backstory. Change it, or publish without it." ·
+  "Publish without it" · "Write the backstory in up to 400 characters."
+- Removed since v5: the tick "Mentions things from later in the book" and its "May spoil later chapters."; "Add
+  backstory" and "Save backstory" (pictures already published get none).
+
+### The Style row
+
+- New first choice, selected by default (the owner's words): "Same as this picture". It adds no style text, so a remix
+  keeps the look of the picture it starts from; the recipe records it ("Style: Same as this picture").
+- The others stay: the published styles ("Animated series" among them once the owner publishes it), "Random" (in "How it
+  was made": "Style: {style}, drawn at random"), "Write your own".
+
+### The look lines (this edition's invention; owner-approved 2026-11-09), public in every recipe
+
+Right after "{Name} is the person in reference image 1, the main figure." in every challenge prompt, for every model:
+
+- Zei: "Unless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky black hair with close-cut sides and one teal-blue streak, dark eyes."
+- Gladias: "Unless the change says otherwise: a man of about forty, slim and of medium height, warm light-brown skin, short straight black hair, a neatly trimmed short beard, dark eyes."
+- Bai: "Unless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings."
+- Seila: "Unless the change says otherwise: a woman in her late thirties, tall and slender, deep brown skin, shoulder-length black braids gathered back, small round gold-rimmed glasses."
+- Deluin: "Unless the change says otherwise: a young man of about eighteen, tall and long-limbed, warm tan skin, straight shoulder-length black hair, dark brown eyes, a calm, slightly serious face."
+- Mu: "Unless the change says otherwise: a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, thin red-framed glasses."
+
+The prompt's order: the change words; "{Name} is the person in reference image 1, the main figure."; the look line; the
+style's text (none with "Same as this picture"); "Keep the face recognisable; change anything else the words describe.";
+the no-lettering line.

@@ -17,8 +17,8 @@
  *
  * Spoilers (P9's challenge exception, owner 2026-11-05, answer 1): the first layer (the line, the three facts, the
  * moments list) is written without the book's major turns, and its facts cite chapters 1 to FIRST_LAYER_MAX_CHAPTER
- * only (P9g checks it). The deeper layers ("More about", "Where they appear") may draw on the whole book and say so:
- * "May spoil later chapters." Each moment chip shows its chapter.
+ * only (P9g checks it). The deeper layers ("More about", "Where they appear") may draw on the whole book (they aren't
+ * shown since 2026-11-08), with no spoiler mark (owner, 2026-11-09). Each moment chip shows its chapter.
  *
  * Plain data: served to the browser inside the page's data (the first and second layers). "Where they appear" is sent
  * only when opened (GET /api/challenge/appears).

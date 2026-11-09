@@ -12,6 +12,7 @@ import { useMyPicks } from './design-picks';
 import { AiTag } from './ai-tag';
 import { remixDefaults } from '~/lib/images/remix-defaults';
 import { ModelNotice, ModelPicker, type ModelOption } from './model-picker';
+import { withReset } from '~/lib/challenge/model-wording';
 import { answerNotice, browserStore, mayPick, noticeFor } from '~/lib/images/model-notice';
 
 /**
@@ -158,7 +159,7 @@ export function DesignForm(p: Props) {
         else setViews((v) => ({ ...v, [slot]: pic }));
         return pic;
       }
-      setNote(out.error ?? 'Could not make the picture');
+      setNote(out.error ? withReset(out.error, (out as { resetAt?: string }).resetAt) : 'Could not make the picture');
       return null;
     } catch {
       setNote('No connection. Try again.');

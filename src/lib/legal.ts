@@ -118,7 +118,11 @@ export const LEGAL: {
     // character's pictures on the challenge pages, a base or any remix, including your own), the owner's own after-text
     // (docs/legal/challenge-simple-draft.md). NOT REREAD YET: these words no longer match huq39i, so P6k is red until the
     // owner says "reread". An agent never sets a key.
-    terms: { words: 'huq39i', on: '2026-11-06', by: 'FID 6786' },
+    // 2026-11-08, the owner's reread of the challenge release (branch challenge-models, carrying challenge-simple), via the
+    // coordinator's check of docs/legal/challenge-release-texts.md v2 with changes 1–2 (the notice labels and the closed
+    // refusals, which aren't in Terms): §6 in the owner's words, §6e (challenge-simple), §8 (closed models chosen for a
+    // challenge picture). The owner instructed this key to be set (relayed by the coordinator). The words before were huq39i.
+    terms: { words: '1finiyh', on: '2026-11-08', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
     // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
@@ -238,7 +242,14 @@ export const LEGAL: {
     // owner"; docs/legal/challenge-moments-draft.md): §4 P1–P5 (pictures, not versions; open sheet remixing removed), §6
     // and §7 as drafted, and §4's IPFS record item removed (option R). The closed-model §7 item is as the owner approved
     // it. Lane B computed the same key. The words before were 6llf1.
-    privacy: { words: 'ozmbuf', on: '2026-11-06', by: 'FID 6786' },
+    // 2026-11-08, the owner's reread of the challenge release (branch challenge-models), via the coordinator's check of
+    // docs/legal/challenge-release-texts.md v2 with changes 1–2: §3 (the 18+ answer and the notices on the device), §4
+    // (choosing a model; a closed picture counts as three), §7 (the country line, and what OpenAI and Google receive and
+    // keep for a challenge picture). The owner instructed this key to be set (relayed by the coordinator). The words before
+    // were ozmbuf.
+    // 2026-11-09, owner's reread (relayed by the coordinator): §4's backstory sentence in the owner's shorter form, "If
+    // you add a backstory to a challenge picture, it is kept and shown with the picture." The words before were d8fe0h.
+    privacy: { words: '18g3ada', on: '2026-11-09', by: 'FID 6786' },
   },
 };
 
@@ -286,7 +297,7 @@ export const PRIVACY: LegalDoc = {
           'If your Lens or Bluesky account is linked to your Farcaster account, or your Bluesky account to your Lens account (you linked them while signed in with both): which is linked to which, and when it was linked or unlinked. While linked, signing in with it is signing in as that account. You can unlink it on your You page. An account you unlink can be linked to a different account only after 30 days.',
           'Images you publish, with their prompt, your name (Farcaster name, wallet address, Lens username or Bluesky handle) and the record of how they were made. These are public.',
           'Character sheets you publish, with their text, their views, your name and the record of how each view was made. These are public.',
-          'If you take part in the remix challenge: for each picture of a challenge character you publish, whether it can count as an entry and why (you were invited, you are an admin, or whether your account passed the site\'s check: Neynar\'s score for a Farcaster account, the Bluesky check for a Bluesky account), decided once, when you publish it, and kept with the time it was decided; and each picture you submit as an entry, with its character and when you submitted it. Submitting needs the link to your own post about it, which is kept and listed on the picture\'s page like any post you add (below); for a Farcaster, Bluesky or Lens post, the site checks with its network that you wrote it. If you withdraw a submission, it stops being an entry but is kept, marked withdrawn, with when; the post stays listed until you remove it. Whether a picture is an entry is shown on its page and on the challenge page, with how many people have submitted for each character. When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture\'s record. A picture made with a closed model counts as three of your free pictures that day.',
+          'If you take part in the remix challenge: for each picture of a challenge character you publish, whether it can count as an entry and why (you were invited, you are an admin, or whether your account passed the site\'s check: Neynar\'s score for a Farcaster account, the Bluesky check for a Bluesky account), decided once, when you publish it, and kept with the time it was decided; and each picture you submit as an entry, with its character and when you submitted it. Submitting needs the link to your own post about it, which is kept and listed on the picture\'s page like any post you add (below); for a Farcaster, Bluesky or Lens post, the site checks with its network that you wrote it. If you withdraw a submission, it stops being an entry but is kept, marked withdrawn, with when; the post stays listed until you remove it. Whether a picture is an entry is shown on its page and on the challenge page, with how many people have submitted for each character. When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture\'s record. A picture made with a closed model counts as three of your free pictures that day. If you add a backstory to a challenge picture, it is kept and shown with the picture.',
           'If you add where a version was posted: the post\'s network, its id there, its writer\'s handle, when it was posted, its address, and who added it and when. The network, handle, date and a link to the post are shown on the version\'s page; who added it isn\'t. You can remove a post you added; a moderator can remove any of them, on its writer\'s request or under the Terms.',
           'Frames you make in Remix, each with your words, the full prompt sent, the camera and people you set, the pictures sent with it, what it cost and your name. Anyone with a frame\'s link can see it, with your words and name. You can hide your own frames at any time.',
           'Storyboards you save: the frames in order, how long each is shown and the voice takes you chose. Anyone with a storyboard\'s link can see it, with your name. You can hide it.',
@@ -352,7 +363,7 @@ export const PRIVACY: LegalDoc = {
  */
 export const MODEL_NOTICES = {
   OpenAI: {
-    label: 'OpenAI keeps prompts up to 30 days',
+    label: 'OpenAI may keep prompts and pictures up to 30 days',
     title: 'A closed model by OpenAI',
     text: [
       'GPT Image 2.5 Sunburst is made by OpenAI. Its weights aren\'t published, so its recipe can\'t be re-run exactly.',
@@ -361,7 +372,7 @@ export const MODEL_NOTICES = {
     ],
   },
   Google: {
-    label: 'Google keeps no copy past 24 hours',
+    label: 'Google keeps no copy; abuse logs up to 90 days',
     title: 'A closed model by Google',
     text: [
       'Gemini 3.1 Flash Image is made by Google. Its weights aren\'t published, so its recipe can\'t be re-run exactly.',

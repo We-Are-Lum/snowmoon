@@ -1928,9 +1928,10 @@ async function checkChallengeLanding() {
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/make ${tag}: scrolls sideways`);
       if (((await page.locator('label[for="mk-words"]').textContent()) ?? '').trim() !== 'Change Zei: clothes, colours, age, pose…') fail(`/challenge/make ${tag}: the box's label isn't "Change Zei: clothes, colours, age, pose…"`);
       const styleChips = (await page.locator('.mk-styles .cc-chip').allTextContents()).map((t) => t.replace('⟳', '').trim());
-      const wantChips = [...FX.styles.map((x) => x.name), 'Random', 'Write your own'];
+      // "Same as this picture" first and chosen (owner, 2026-11-09), then the published styles, Random, Write your own.
+      const wantChips = ['Same as this picture', ...FX.styles.map((x) => x.name), 'Random', 'Write your own'];
       if (styleChips.join('|') !== wantChips.join('|')) fail(`/challenge/make ${tag}: the Style row reads ${styleChips.join(', ')}, not ${wantChips.join(', ')}`);
-      if ((await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style')) !== `style:${FX.styles[0].element}`) fail(`/challenge/make ${tag}: Zei's base doesn't start on its own style`);
+      if ((await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style')) !== 'same') fail(`/challenge/make ${tag}: the Style row doesn't start on "Same as this picture"`);
       const models = (await page.locator('.mk-model .cc-chip').allTextContents()).map((t) => t.trim());
       // Branch challenge-models: a local server has no country header, so the open models only, the default first (the
       // closed ones, offered by country, are proven by test:model-choice C2–C4 and the screenshots).

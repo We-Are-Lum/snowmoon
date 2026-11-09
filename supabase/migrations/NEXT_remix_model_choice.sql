@@ -1,5 +1,10 @@
 -- NEXT_remix_model_choice.sql: which pool each daily picture counts in (branches remix-model-choice, 2026-11-04, and
--- challenge-models, 2026-11-08). NOT APPLIED. Unnumbered until merge: it takes the next free number then, checked
+-- challenge-models, 2026-11-08).
+-- APPLIED on production by the owner on 2026-11-08 (part B run once, ok; read-back (a) all true). The do block of part C
+-- first drafted failed there ("permission denied to set role studio_writer": postgres can't SET ROLE in the SQL Editor,
+-- as 0030 notes); the coordinator's replacement (studio_writer's privileges checked, rows inserted and deleted as
+-- postgres) is what ran, and is part C (b) below since 2026-11-09, word for word.
+-- Was NOT APPLIED before 2026-11-08. Unnumbered until merge: it takes the next free number then, checked
 -- against origin/main and production (CLAUDE.md). Requires 0008_images (studio.image_asks). Drafted by the coding agent
 -- (Claude, a closed model by Anthropic). Tested by `npm run test:remix-model-choice-sql` (in-memory Postgres, the parts
 -- read from this file).
@@ -47,15 +52,20 @@ commit;
 --   (4, 'anon and authenticated have nothing on image_asks',
 --     not exists (select 1 from unnest(array['anon', 'authenticated']) r, unnest(array['SELECT', 'INSERT', 'UPDATE', 'DELETE']) p where has_table_privilege(r, 'studio.image_asks', p)))
 -- ) as t(n, what, ok) order by n;
--- (b) one do block: a closed picture and an open one, written as the site writes them (studio_writer's own role), read
---     back with the site's weighted count (a closed row counts 3: 4 in all), a bad pool refused, then deleted. The
---     person number 2147483646 fits the column and belongs to no account. Ends "READ-BACK PASSED".
+-- (b) one do block (the owner's, 2026-11-09, word for word; it is what ran on production on 2026-11-08): studio_writer's
+--     privileges checked (it can write and read the pool, and can't update or delete rows); a closed picture and an open
+--     one inserted as postgres, as the site writes them, read back with the site's weighted count (a closed row counts
+--     3: 4 in all); a bad pool refused; then deleted. The person number 2147483646 fits the column and belongs to no
+--     account. Ends "READ-BACK PASSED"; each check raises "READ-BACK FAILED: …" on failure. It sets no role (postgres
+--     can't switch roles in the SQL Editor).
 -- do $$
 -- declare
 --   n int;
 --   refused boolean;
 -- begin
---   set local role studio_writer;
+--   if not has_column_privilege('studio_writer', 'studio.image_asks', 'pool', 'insert') then raise exception 'READ-BACK FAILED: studio_writer cannot write a pool'; end if;
+--   if not has_column_privilege('studio_writer', 'studio.image_asks', 'pool', 'select') then raise exception 'READ-BACK FAILED: studio_writer cannot read the pool'; end if;
+--   if has_table_privilege('studio_writer', 'studio.image_asks', 'update') or has_table_privilege('studio_writer', 'studio.image_asks', 'delete') then raise exception 'READ-BACK FAILED: studio_writer can change or delete rows'; end if;
 --   insert into studio.image_asks (fid, pool) values (2147483646, 'closed');
 --   insert into studio.image_asks (fid) values (2147483646);
 --   select coalesce(sum(case when pool = 'closed' then 3 else 1 end), 0)::int into n from studio.image_asks
@@ -67,7 +77,6 @@ commit;
 --   begin insert into studio.image_asks (fid, pool) values (2147483646, 'other');
 --   exception when check_violation then refused := true; end;
 --   if not refused then raise exception 'READ-BACK FAILED: a pool other than open or closed was accepted'; end if;
---   reset role;
 --   delete from studio.image_asks where fid = 2147483646;
 --   select count(*) into n from studio.image_asks where fid = 2147483646;
 --   if n <> 0 then raise exception 'READ-BACK FAILED: % test rows left after the delete', n; end if;

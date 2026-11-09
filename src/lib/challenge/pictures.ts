@@ -6,6 +6,7 @@ import { refusedBases } from './bases';
 import { remixLines } from './lineage';
 import { momentById } from './moments';
 import { basesOf } from './rules';
+import { publishedStyles } from './make';
 
 /**
  * The challenge's pictures (owner, 2026-11-05; docs/proposals/challenge-moments.md §2.1; the moments switched off,
@@ -124,7 +125,7 @@ export async function sourceOf(sql: Sql, versionId: string, opts: { anySheet?: b
     where v.id = ${versionId} and e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and en.kind = 'character'`;
   if (d) {
     const character = CHALLENGE.characters.find((s) => bookCharacter(s)?.name === String(d.name));
-    const b = (d.body ?? {}) as { views?: { front?: { url: string; sha256: string; recipe?: { width?: number; height?: number } } }; text?: string; title?: string; by_name?: string | null; style?: { version_id?: string } | null };
+    const b = (d.body ?? {}) as { views?: { front?: { url: string; sha256: string; recipe?: { width?: number; height?: number; style?: { text?: string } | null } } }; text?: string; title?: string; by_name?: string | null; style?: { version_id?: string } | null };
     const f = b.views?.front;
     if (!character || !f) return null;
     // Once the character's bases are picked, only a base is a sheet to start from (by its element or version id).
@@ -136,7 +137,12 @@ export async function sourceOf(sql: Sql, versionId: string, opts: { anySheet?: b
     // Its style (body.style.version_id), as its design element, so the remix screen can start on it (owner, 2026-11-08).
     const sv = b.style?.version_id && /^[0-9a-f-]{36}$/i.test(b.style.version_id) ? b.style.version_id : null;
     const [st] = sv ? await sql<{ element_id: string }[]>`select element_id::text from studio.element_versions where id = ${sv}` : [];
-    return { kind: 'sheet', versionId: String(d.id), character, url: f.url, sha256: f.sha256, width: f.recipe?.width ?? 576, height: f.recipe?.height ?? 768, text: b.text ?? '', title: b.title ?? '', by: b.by_name ?? null, byFid: Number(d.created_by_fid), versionNo: Number(d.version_no), moment: null, styleElement: st?.element_id ?? null };
+    // A base made in a style that wasn't published when it went up (the launch bases: body.style null, the front's recipe
+    // recording the style's text; owner, 2026-11-09): the published style with exactly that text, once there is one
+    // ("Animated series"), so a remix starts in its base's own look.
+    const recipeText = !st && typeof f.recipe?.style?.text === 'string' ? f.recipe.style.text.trim() : '';
+    const byText = recipeText ? (await publishedStyles(sql as never).catch(() => [])).find((s) => s.text.trim() === recipeText) : undefined;
+    return { kind: 'sheet', versionId: String(d.id), character, url: f.url, sha256: f.sha256, width: f.recipe?.width ?? 576, height: f.recipe?.height ?? 768, text: b.text ?? '', title: b.title ?? '', by: b.by_name ?? null, byFid: Number(d.created_by_fid), versionNo: Number(d.version_no), moment: null, styleElement: st?.element_id ?? byText?.elementId ?? null };
   }
   const [p] = await challengePictures(sql, { versionId });
   if (!p || !p.thumb) return null;

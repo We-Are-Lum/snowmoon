@@ -149,8 +149,9 @@ export const IMAGE_WORDING = {
       openDefault: 'The site’s open models (the default)',
       // Each closed picture uses CLOSED_IMAGES.countsAs (3) of the day's free pictures (branch challenge-models).
       // No time here: the screen says when, in the visitor's own time (src/components/challenge-model-row.tsx resetLocal).
-      closedLimit: 'Not enough of today’s pictures left for a closed model: each uses 3. The open models may still work.',
-      closedSpend: 'Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at 00:00 UTC.',
+      closedLimit: 'A closed model uses 3 of today’s pictures, and you have fewer left. You can still use an open model.',
+      // {reset}: 00:00 UTC in the visitor's own time, filled in by the browser from the answer's resetAt (never by the server).
+      closedSpend: 'Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at {reset}.',
       changed: 'These views were made with another model. Make them again with this one.',
       mixed: 'The views were made with more than one model. Make them again with one.',
       notOffered: 'That model isn’t offered here.',
