@@ -23,13 +23,14 @@ export function p6tProblems(c: P6tInput): string[] {
   for (const n of c.providers) {
     const re = new RegExp(`\\b${n}\\b`);
     // The remixers' item, not the project's own bases item (closed-model-bases), which names the same makers.
-    const unit = c.s7.find((u) => re.test(u) && /Vercel AI Gateway/.test(u) && /prompt/.test(u) && /\bremix a character/.test(u));
-    if (!unit) problems.push(`IMAGES.designs.modelChoice is on, but Privacy §7 has no item saying ${n} receives a remixer's prompt and pictures through Vercel AI Gateway (docs/legal/remix-model-choice-draft.md); keep the switch off until the owner rereads it`);
+    // The challenge's item (branch challenge-models: "for a challenge picture") or the sheet form's ("remix a character").
+    const unit = c.s7.find((u) => re.test(u) && /Vercel AI Gateway/.test(u) && /prompt/.test(u) && /\b(remix a character|challenge picture)/.test(u));
+    if (!unit) problems.push(`model choice is on, but Privacy §7 has no item saying ${n} receives the prompt and pictures of someone who chooses its model, through Vercel AI Gateway (docs/legal/challenge-models-draft.md); keep the switch off until the owner rereads it`);
     else if (!/\bkeep/.test(unit) || !/\btrain/.test(unit)) problems.push(`Privacy §7's ${n} item does not say how it is kept and that it may not train on them`);
     else if (!c.retention[n] || !new RegExp(`\\b${n}\\b[^;]*${c.retention[n].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`).test(unit)) problems.push(`Privacy §7 does not give ${n}'s retention ("${c.retention[n] ?? '?'}", CLOSED_PROVIDERS) in its sentence about ${n}`);
   }
   problems.push(...consentClosedProblems(c.consent, c.providers, c.retention));
-  if (!/closed model/i.test(c.s4)) problems.push('IMAGES.designs.modelChoice is on, but Privacy §4 does not say a sheet\'s views may be made with a closed model');
+  if (!/closed model/i.test(c.s4)) problems.push('model choice is on, but Privacy §4 does not say a picture may be made with a closed model');
   return problems;
 }
 
@@ -44,7 +45,8 @@ export function consentClosedProblems(consent: string, makers: string[], retenti
   const sentences = consent.split(/(?<=[.;])\s+/);
   for (const m of makers) {
     const re = new RegExp(`\\b${m}\\b`);
-    if (!sentences.some((u) => re.test(u) && /\bprompt\b/.test(u) && /\bfront view\b/.test(u))) problems.push(`the consent screen does not say ${m} receives the prompt and the front view when a remixer picks its closed model`);
+    // What the maker receives: the front view (a sheet's side and back) or the picture chosen (a challenge picture).
+    if (!sentences.some((u) => re.test(u) && /\bprompt\b/.test(u) && /\b(front view|picture you chose)\b/.test(u))) problems.push(`the consent screen does not say ${m} receives the prompt and the picture it starts from when someone picks its closed model`);
     if (!retention[m] || !sentences.some((u) => re.test(u) && u.includes(retention[m]))) problems.push(`the consent screen does not give ${m}'s retention ("${retention[m] ?? '?'}", CLOSED_PROVIDERS)`);
   }
   return problems;

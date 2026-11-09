@@ -301,7 +301,7 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   proof('F5 a route that skips the remix count is caught', !hooked(route.replace('spend: remix ? { ...spend, remix }', 'spend: edit ? spend')));
   const lim2 = read('src/lib/images/limits.ts');
   const underLock = (src: string) => /pg_advisory_xact_lock\(hashtext\('snowmoon\.images\.fid'\), \$\{fid\}::int\)[\s\S]*if \(spend\.remix && countsRemixes\(fid\) && \(await remixTable\(t\)\)\)/.test(src);
-  check('F5 the remix count is checked under the person\'s lock, with the spend cap', underLock(lim2) && /imagesDailySpendCapUsd\(\)\) return \{ ok: false as const, refusal: 'spend' as const \};\s*await tx`insert into studio\.sheet_remix_asks/.test(lim2));
+  check('F5 the remix count is checked under the person\'s lock, with the spend cap', underLock(lim2) && /imagesDailySpendCapUsd\(\)\) return \{ ok: false as const, refusal: 'spend' as const \};\s*(?:if \(closed && [^\n]*refusal: 'closed-spend' as const \};\s*)?await tx`insert into studio\.sheet_remix_asks/.test(lim2)); // (branch challenge-models: the closed cap, inside a remix too)
   proof('F5 a remix count outside the lock is caught', !underLock(lim2.replace("hashtext('snowmoon.images.fid')", "hashtext('elsewhere')")));
   // What happens when a remix's views partly fail: the failed answer carries the remix, so making it again stays inside it.
   const keeps = (src: string) => src.includes("if (!paid.ok) return no(paid.error, paid.status, { ...paid.extra, ...(remixTicket && !String(paid.extra.reason ?? '').startsWith('remix') ? { remix: remixTicket } : {}) });");

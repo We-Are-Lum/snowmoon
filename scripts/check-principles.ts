@@ -46,6 +46,7 @@ import { spoilerExceptionOn } from '../src/lib/challenge/spoilers';
 import { DEFAULT_SHEET_MODEL, SHEET_MODELS, sheetModelProblems, sheetModelsOffered } from '../src/lib/images/sheet-models';
 import { modelChoicesFor } from '../src/lib/images/model-choice-view';
 import { consentClosedProblems, p6tProblems } from './lib/p6t';
+import { CHALLENGE_MODELS, DEFAULT_CHALLENGE_MODEL, challengeModelProblems, challengeModelsFor } from '../src/lib/challenge/models';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -1129,16 +1130,29 @@ add({
 add({
   id: 'P3e',
   principle: 3,
-  name: 'the default is open: the remix form\'s model choice lists the open models first, as the default; closed ones name their maker and are allowlisted',
+  name: 'the default is open: the remix form\'s and the challenge\'s model choice list the open models first, as the default; closed ones name their maker and are allowlisted',
   load: async () => ({
     all: clone(SHEET_MODELS) as unknown as (typeof SHEET_MODELS)[number][],
     offeredOn: sheetModelsOffered(true, true).map((m) => m.id) as string[],
     offeredOff: sheetModelsOffered(false).map((m) => m.id) as string[],
     form: (modelChoicesFor('fork', 'character', true) ?? []).map((m) => ({ id: m.id, open: m.open })),
     allowlist: (json('config/models.json').models as { id: string; open_weights: boolean; maker?: string }[]),
+    // The challenge's Model row (branch challenge-models): the same rule, for a visitor where every model is offered.
+    challenge: clone(CHALLENGE_MODELS) as unknown as (typeof CHALLENGE_MODELS)[number][],
+    challengeOn: challengeModelsFor({ country: 'FR', region: null }, true, true).map((m) => ({ id: m.id, open: m.open })),
+    challengeOff: challengeModelsFor({ country: 'FR', region: null }, false).map((m) => m.id) as string[],
   }),
   run: (c) => {
     const p = sheetModelProblems(c.all);
+    p.push(...challengeModelProblems(c.challenge).map((x) => `challenge: ${x}`));
+    if (!c.challengeOn.length || c.challengeOn[0].id !== DEFAULT_CHALLENGE_MODEL || !c.challengeOn[0].open) p.push('challenge: the Model row does not offer the open default first');
+    if (c.challengeOff.length !== 1 || c.challengeOff[0] !== DEFAULT_CHALLENGE_MODEL) p.push(`challenge: with CHALLENGE.modelChoice off, more than the open default is offered: ${c.challengeOff.join(', ')}`);
+    for (const m of c.challenge) {
+      const a = c.allowlist.find((x) => x.id === m.allowlistId || x.id === m.allowlistId.replace(/-edit$/, ''));
+      if (!a) { p.push(`challenge: ${m.id}: ${m.allowlistId} is not on config/models.json`); continue; }
+      if (a.open_weights !== m.open) p.push(`challenge: ${m.id}: says ${m.open ? 'open' : 'closed'}, config/models.json says open_weights ${a.open_weights}`);
+      if (!m.open && a.maker !== m.maker) p.push(`challenge: ${m.id}: maker ${m.maker} differs from config/models.json (${a.maker})`);
+    }
     if (c.offeredOn[0] !== DEFAULT_SHEET_MODEL) p.push(`with the switch on, the first choice offered is ${c.offeredOn[0]}`);
     if (c.offeredOff.length !== 1 || c.offeredOff[0] !== DEFAULT_SHEET_MODEL) p.push(`with the switch off, more than the open default is offered: ${c.offeredOff.join(', ')}`);
     if (!c.form.length || c.form[0].id !== DEFAULT_SHEET_MODEL || !c.form[0].open) p.push('the remix form does not show the open default first');
@@ -1155,6 +1169,7 @@ add({
   plant: (c) => {
     c.all = [...c.all].reverse();
     c.form = [...c.form].reverse();
+    c.challenge = [...c.challenge].reverse();
   },
 });
 
@@ -1864,11 +1879,13 @@ const PROVENANCE_ONLY = ['Midjourney'];
 /** At Generate, the image prompt goes to Groq (the check; through Vercel AI Gateway when Groq is busy) and
  *  fal.ai (the image), the FID to Neynar (the gate). The gateway is named on the consent screen too (owner, 2026-10-10). */
 /** Each closed model's maker, as a remixer can pick it once model choice is on. */
-const CLOSED_MAKERS = [...new Set(sheetModelsOffered(true).filter((m) => !m.open).map((m) => m.provider.name))];
+const CLOSED_MAKERS = [...new Set([...sheetModelsOffered(true).filter((m) => !m.open).map((m) => m.provider.name), ...CHALLENGE_MODELS.filter((m) => !m.open).map((m) => m.maker)])];
+/** Is any model choice on (the challenge's Model row, branch challenge-models, or the sheet form's picker)? */
+const MODEL_CHOICE_ON = (CHALLENGE.modelChoice as boolean) || (IMAGES.designs.modelChoice as boolean);
 const AT_GENERATE = [
   'Groq', 'Vercel AI Gateway', 'fal.ai', 'Neynar',
   // With model choice on (IMAGES.designs.modelChoice), each offered closed model's maker receives the prompt too.
-  ...(IMAGES.designs.modelChoice ? CLOSED_MAKERS : []),
+  ...(MODEL_CHOICE_ON ? CLOSED_MAKERS : []),
 ];
 const named = (text: string) => new Set(SERVICES.filter(([, re]) => text.match(re)).map(([n]) => n));
 const diff = (a: Set<string>, b: Set<string>) => [...a].filter((x) => !b.has(x));
@@ -1979,7 +1996,7 @@ add({
       ...diff(got, want).map((s) => `the consent screen names ${s}, which receives nothing at Generate`),
       // With model choice on, the consent screen (own-words-v5, for everyone; owner, 2026-11-04) says what each closed
       // model's maker receives and keeps. The closed models' notice is only a notice.
-      ...(IMAGES.designs.modelChoice
+      ...(MODEL_CHOICE_ON
         ? consentClosedProblems(c.consent, CLOSED_MAKERS, Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])))
         : []),
     ];
@@ -2308,8 +2325,8 @@ add({
     const c = json('config/consent.json');
     const w = c.versions[c.current];
     return {
-      on: IMAGES.designs.modelChoice as boolean,
-      providers: [...new Set(sheetModelsOffered(true).filter((m) => !m.open).map((m) => m.provider.name))] as string[],
+      on: MODEL_CHOICE_ON,
+      providers: CLOSED_MAKERS as string[],
       retention: Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])),
       s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
       s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat() as string[],

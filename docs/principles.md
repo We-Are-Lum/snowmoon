@@ -274,6 +274,10 @@ Hosted open-weight models may be listed too (`runs_on: hosted`): for a hosted re
   (`IMAGES.designs.modelChoice`, `src/lib/images/sheet-models.ts`) lists the site's open models first, as the default,
   with the switch on or off; every closed choice names its maker; every model a choice calls is on `config/models.json`
   with the same open or closed record.
+  The challenge's Model row (branch challenge-models, 2026-11-08, DRAFT; `CHALLENGE.modelChoice`,
+  `src/lib/challenge/models.ts`) is held to the same rule: FLUX.2 [klein] 4B edit first and the default, then
+  Qwen-Image-Edit, then the closed models, each naming its maker ("a closed model by …"), with its maker's retention
+  words, and each gateway call pinned to one provider (Gemini: `vertex` only); with the switch off, only the default.
 
 **Status.** Pass. Both generation models record `open_weights: true`, their
 license and their weights. The closed drafting model is listed under
@@ -532,7 +536,10 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   only while Privacy §7 says each offered closed model's maker receives the prompt and pictures through Vercel AI
   Gateway, how they are kept and that they may not be trained on, Privacy §4 says a sheet's views may be made with a
   closed model, and the consent screen (own-words-v5) says what each maker receives and keeps (docs/legal/remix-model-choice-draft.md). OpenAI and Google
-  are in the outside-services vocabulary of P6g to P6j. The id was free on main and on deep-funding, social-read,
+  are in the outside-services vocabulary of P6g to P6j. Branch challenge-models (2026-11-08) extends it to the
+  challenge's Model row (`CHALLENGE.modelChoice`): Privacy §7's item "for a challenge picture", §4's closed-model line,
+  and consent own-words-v6's sentence (the prompt and the picture you chose), checked the same way
+  (docs/legal/challenge-models-draft.md). The id was free on main and on deep-funding, social-read,
   sheet-help, find-a-moment (P6v, P6w) and challenge-three-bases (P6s).
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`

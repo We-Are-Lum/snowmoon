@@ -22,6 +22,14 @@
  *  M12 the picker shows each closed model's retention label always, with the open default first (rendered);
  *  M13 the 18+ confirmation is shown with the first notice, and both buttons wait for it (rendered);
  *  M14 no closed-model pick goes through before 18+ is confirmed on that device.
+ *
+ * The challenge's Model row (branch challenge-models, 2026-11-08; CHALLENGE.modelChoice, on), mocked providers only:
+ *  C1  the four models, the open default first; C2 the country gate (supported, unsupported, embargoed, Ukraine's
+ *  regions, no country); C3 the country header for one request, the test override never in production; C4 the row
+ *  shows exactly what the server offers, the route refuses anything else first; C5 closed refused without the notice
+ *  and 18+; C6 Gemini only via vertex (any other provider fails); C7 a closed call sends only the prompt and the one
+ *  picture; C8 the recipe names model and maker; C9 closed counts as 3 (with M4a) in its pool; C10 Qwen's endpoint and
+ *  cost; C11 the country isn't kept; C12 Privacy and consent v6 (P6t).
  */
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
@@ -131,33 +139,49 @@ proven(
   };
   const closedSpend = (m: SheetModel) => ({ model: m.views, reserveUsd: m.reserveUsd.view, pool: 'closed' as const });
 
-  const separate = async (fid: number) => {
+  // Branch challenge-models (owner, 2026-11-08): a closed picture counts as CLOSED_IMAGES.countsAs (3) of the day's free
+  // pictures, and the closed models' own daily count (6) and site cap still hold.
+  const weighted = async (fid: number) => {
     const p: string[] = [];
-    // Six closed pictures: each reserved, then settled at the real cost (the bases' $0.0467).
-    for (let i = 0; i < CLOSED_IMAGES.perPersonPerDay; i++) {
+    const per = IMAGES.generationsPerDay; // 10
+    const most = Math.floor(per / CLOSED_IMAGES.countsAs); // 3 closed pictures fit in 10
+    for (let i = 0; i < most; i++) {
       const r = await reserve(S, fid, closedSpend(GPT));
       if (!r.ok) p.push(`closed picture ${i + 1} refused: ${r.refusal}`);
-      else await settle(S, { guard: { costUsd: 0.0001, provider: 'groq', verdict: 'ok' }, image: { costUsd: 0.0467, verdict: 'ok' } }, closedSpend(GPT));
+      else {
+        if (r.left !== per - (i + 1) * CLOSED_IMAGES.countsAs) p.push(`after closed picture ${i + 1}, ${r.left} left (want ${per - (i + 1) * CLOSED_IMAGES.countsAs})`);
+        await settle(S, { guard: { costUsd: 0.0001, provider: 'groq', verdict: 'ok' }, image: { costUsd: 0.0467, verdict: 'ok' } }, closedSpend(GPT));
+      }
     }
-    const r7 = await reserve(S, fid, closedSpend(GPT));
-    if (r7.ok || r7.refusal !== 'closed-limit') p.push(`the 7th closed picture was not stopped by the closed count (${JSON.stringify(r7)})`);
-    if ((await closedLeft(S, fid)) !== 0) p.push('closed pictures left after 6');
-    if ((await generationsLeft(S, fid)) !== IMAGES.generationsPerDay) p.push(`closed pictures took from the open count: ${await generationsLeft(S, fid)} open left`);
-    // The open 10 still work after the closed six, and using them doesn't give closed ones back.
-    for (let i = 0; i < IMAGES.generationsPerDay; i++) {
+    const left = await generationsLeft(S, fid);
+    if (left !== per - most * CLOSED_IMAGES.countsAs) p.push(`${left} open left after ${most} closed (want ${per - most * CLOSED_IMAGES.countsAs})`);
+    // One left: not enough for a closed picture, enough for an open one.
+    const rc = await reserve(S, fid, closedSpend(GPT));
+    if (rc.ok || rc.refusal !== 'closed-limit') p.push(`a closed picture with ${left} left was not refused as closed-limit (${JSON.stringify(rc)})`);
+    for (let i = 0; i < left; i++) {
       const r = await reserve(S, fid);
-      if (!r.ok) p.push(`open Generate ${i + 1} refused after the closed six: ${r.refusal}`);
+      if (!r.ok) p.push(`open Generate ${i + 1} refused after the closed ones: ${r.refusal}`);
       else await settle(S, {});
     }
-    const r11 = await reserve(S, fid);
-    if (r11.ok || r11.refusal !== 'limit') p.push('the 11th open Generate was not stopped');
+    const rEnd = await reserve(S, fid);
+    if (rEnd.ok || rEnd.refusal !== 'limit') p.push('the open Generate past the day\'s count was not stopped');
     return p;
   };
-  const real = await separate(1001);
-  // Planted: six closed asks written as the site wrote them before this branch (no pool), so they count as open.
-  for (let i = 0; i < CLOSED_IMAGES.perPersonPerDay; i++) await sql`insert into studio.image_asks (fid) values (${1002})`;
+  const real = await weighted(1001);
+  // An admin (300 a day) is still held to the closed models' own count (6).
+  const admin = Number(Object.keys(IMAGES.perDayFor)[0]);
+  for (let i = 0; i < CLOSED_IMAGES.perPersonPerDay; i++) {
+    const r = await reserve(S, admin, closedSpend(GPT));
+    if (!r.ok) real.push(`admin closed picture ${i + 1} refused: ${r.refusal}`);
+    else await settle(S, {}, closedSpend(GPT));
+  }
+  const rAdmin = await reserve(S, admin, closedSpend(GPT));
+  if (rAdmin.ok || rAdmin.refusal !== 'closed-limit') real.push('the admin\'s 7th closed picture was not stopped by the closed count');
+  if ((await closedLeft(S, admin)) !== 0) real.push('closed pictures left after 6');
+  // Planted: three closed asks written without a pool (as the site wrote them before), so each counts as one.
+  for (let i = 0; i < 3; i++) await sql`insert into studio.image_asks (fid) values (${1002})`;
   const plantOpenLeft = await generationsLeft(S, 1002);
-  proven('M4a closed pictures have their own count per person (6), apart from the open 10', () => real, () => need(plantOpenLeft === IMAGES.generationsPerDay, `closed asks without a pool took ${IMAGES.generationsPerDay - plantOpenLeft} from the open count`));
+  proven('M4a a closed picture counts as 3 of the day\'s free pictures; the closed models\' own count (6) still holds', () => real, () => need(plantOpenLeft === IMAGES.generationsPerDay - 3 * CLOSED_IMAGES.countsAs, `three closed asks without a pool left ${plantOpenLeft}`));
 
   // The site-wide closed cap: today's closed spend near its cap stops a closed picture, never an open one.
   // In the challenge window (the free cap $15, the closed cap $5), as on 12 Nov: the window moved to now, for this test only.
@@ -210,8 +234,11 @@ proven(
   const rw = await reserve(S, -5, closedSpend(GPT));
   const ron = await reserve(S, 3001, closedSpend(GPT)); // the plant: a Farcaster account with the switch on may
   (IMAGES.designs as { modelChoice: boolean }).modelChoice = false;
+  const challengeWas = CHALLENGE.modelChoice;
+  (CHALLENGE as { modelChoice: boolean }).modelChoice = false; // both switches off (closedChoiceOn), for this check only
   const roff = await reserve(S, 3001, closedSpend(GPT));
-  proven('M4d no closed picture for a wallet account, nor with the switch off', () => [...need(!rw.ok, 'a wallet account reserved a closed picture'), ...need(!roff.ok, 'a closed picture was reserved with the switch off')], () => need(!ron.ok, 'a closed picture was reserved (switch on, Farcaster account)'));
+  (CHALLENGE as { modelChoice: boolean }).modelChoice = challengeWas;
+  proven('M4d no closed picture for a wallet account, nor with the switches off', () => [...need(!rw.ok, 'a wallet account reserved a closed picture'), ...need(!roff.ok, 'a closed picture was reserved with the switch off')], () => need(!ron.ok, 'a closed picture was reserved (switch on, Farcaster account)'));
   await sql.end();
   await server.stop();
   await db.close();
@@ -433,6 +460,255 @@ proven(
   const skipping: typeof answerNotice = (pr, b, _t, st, seen) => answerNotice(pr, b, true, st, seen);
   proven('M14 no closed-model pick goes through before 18+ is confirmed on that device', () => gate(answerNotice), () => gate(skipping));
   g.fetch = realFetch;
+}
+
+// --- C1 to C12: the challenge's Model row (branch challenge-models, owner, 2026-11-08) -----------------------------
+// Stand-ins only: every provider (fal.ai, the gateway) is a mocked fetch; nothing is called or spent.
+{
+  const M = await import('../src/lib/challenge/models');
+  const Cn = await import('../src/lib/images/countries');
+  const { CHALLENGE_MODELS, DEFAULT_CHALLENGE_MODEL, challengeModel, challengeModelsFor, challengeModelProblems, modelRow, noticeProblem, reserveUsd, QWEN, qwenCostUsd } = M;
+  const { makerServes, whereFrom, closedCountryOverride, OPENAI_SUPPORTED, EMBARGOED_COUNTRIES } = Cn;
+  const byId = (id: string) => CHALLENGE_MODELS.find((m) => m.id === id)!;
+  const C_GPT = byId('gpt-image-2.5-sunburst'), C_GEM = byId('gemini-3.1-flash-image'), C_QWEN = byId('qwen-image-edit'), C_FLUX = byId('flux2-klein-4b-edit');
+  type W = { country: string | null; region: string | null };
+  const FR: W = { country: 'FR', region: null }, NONE: W = { country: null, region: null };
+  const ids = (w: { country: string | null; region: string | null }, on = true) => challengeModelsFor(w, on, true).map((m) => m.id).join(',');
+  const makeSrc = read('src/app/api/challenge/make/route.ts');
+
+  // C1: the open default first, then Qwen, then the closed ones.
+  proven(
+    'C1 the challenge\'s models: FLUX.2 [klein] 4B edit first and the default, Qwen-Image-Edit, then GPT Image 2.5 and Gemini; closed ones name their maker',
+    () => [
+      ...challengeModelProblems(CHALLENGE_MODELS),
+      ...need(ids(FR) === 'flux2-klein-4b-edit,qwen-image-edit,gpt-image-2.5-sunburst,gemini-3.1-flash-image', `offered in France: ${ids(FR)}`),
+      ...need(ids(FR, false) === DEFAULT_CHALLENGE_MODEL, `with the switch off: ${ids(FR, false)}`),
+      ...need(C_GPT.terms === 'a closed model by OpenAI' && C_GEM.terms === 'a closed model by Google' && C_FLUX.terms === 'open weights, Apache-2.0' && C_QWEN.terms === 'open weights, Apache-2.0', 'labels'),
+      ...need(modelRow(FR)[0].id === DEFAULT_CHALLENGE_MODEL && modelRow(FR)[0].open, 'the Model row does not start with the open default'),
+    ],
+    () => [...challengeModelProblems([C_GPT, C_FLUX, C_QWEN, C_GEM]), ...challengeModelProblems([C_FLUX, C_GPT, C_QWEN]), ...challengeModelProblems([C_FLUX, { ...C_GEM, terms: 'Gemini' }])],
+  );
+
+  // C2: the country gate.
+  const gate = (serves: typeof makerServes) => {
+    const p: string[] = [];
+    const want: [string, string | null, 'OpenAI' | 'Google', boolean][] = [
+      ['FR', null, 'OpenAI', true], ['US', null, 'OpenAI', true], ['UA', '30', 'OpenAI', true], ['UA', '30', 'Google', true],
+      ['RU', null, 'OpenAI', false], ['CN', null, 'OpenAI', false], ['HK', null, 'OpenAI', false], ['BY', null, 'OpenAI', false], ['VE', null, 'OpenAI', false],
+      ['RU', null, 'Google', true], ['CN', null, 'Google', true],
+      ...(['CU', 'IR', 'KP', 'SY'] as const).flatMap((c) => [[c, null, 'OpenAI', false], [c, null, 'Google', false]] as [string, null, 'OpenAI' | 'Google', boolean][]),
+      ['UA', '43', 'OpenAI', false], ['UA', '43', 'Google', false], ['UA', '40', 'Google', false], ['UA', '14', 'Google', false], ['UA', '09', 'Google', false], ['UA', '9', 'Google', false], ['UA', null, 'Google', false], ['UA', null, 'OpenAI', false],
+    ];
+    for (const [country, region, maker, ok] of want) if (serves(maker, { country, region }) !== ok) p.push(`${maker} in ${country}${region ? `-${region}` : ''}: ${!ok ? 'offered' : 'not offered'}`);
+    p.push(...need(!serves('OpenAI', NONE) && !serves('Google', NONE), 'a closed model offered with no country'));
+    return p;
+  };
+  proven(
+    'C2 country gate: OpenAI only in its supported list; Google everywhere but the embargoed set; Crimea, Sevastopol, Donetsk, Luhansk and a region-less Ukraine refused; no country, nothing closed',
+    () => [
+      ...gate(makerServes),
+      ...need(OPENAI_SUPPORTED.length === 208 && new Set(OPENAI_SUPPORTED.map(([, c]) => c)).size === 208, `OpenAI's list has ${OPENAI_SUPPORTED.length} entries (the page had 208, read 2026-11-08)`),
+      ...need(!OPENAI_SUPPORTED.some(([, c]) => EMBARGOED_COUNTRIES.includes(c)), 'an embargoed country is on OpenAI\'s list'),
+    ],
+    () => gate((maker, w) => Boolean(w.country) && (maker === 'Google' || w.country !== 'RU')),
+  );
+
+  // C3: the header, read for one request; missing header hides closed models unless a test override (never in production).
+  const H = (h: Record<string, string>) => new Headers(h);
+  const headerProblems = (from: typeof whereFrom) => [
+    ...need(from(H({ 'x-vercel-ip-country': 'fr' }), {}).country === 'FR', 'the country header is not read'),
+    ...need(from(H({ 'x-vercel-ip-country': 'UA', 'x-vercel-ip-country-region': '43' }), {}).region === '43', 'the region is not read for Ukraine'),
+    ...need(from(H({ 'x-vercel-ip-country': 'FR', 'x-vercel-ip-country-region': 'IDF' }), {}).region === null, 'a region is read outside Ukraine'),
+    ...need(ids(from(H({}), {})) === 'flux2-klein-4b-edit,qwen-image-edit', `no header: ${ids(from(H({}), {}))}`),
+    ...need(ids(from(H({}), { CLOSED_MODELS_TEST_COUNTRY: 'FR', VERCEL_ENV: 'preview' })) === ids(FR), 'the test override is not honoured off production'),
+    ...need(ids(from(H({}), { CLOSED_MODELS_TEST_COUNTRY: 'FR', VERCEL_ENV: 'production' })) === 'flux2-klein-4b-edit,qwen-image-edit', 'the test override works in production'),
+    ...need(closedCountryOverride({ CLOSED_MODELS_TEST_COUNTRY: 'UA-43' })?.region === '43', 'override region'),
+  ];
+  proven('C3 the country comes from x-vercel-ip-country for this request; no header, no closed model (a test override only off production)', () => headerProblems(whereFrom), () => headerProblems(() => FR));
+
+  // C4: the picker hides what the server won't offer, and the server refuses it anyway.
+  const places: W[] = [FR, { country: 'RU', region: null }, { country: 'IR', region: null }, { country: 'UA', region: '43' }, NONE, { country: 'US', region: null }];
+  const pickerMatches = (row: (w: W) => { id: string }[]) => places.flatMap((w) => {
+    const shown = row(w).map((r) => r.id).join(','), served = challengeModelsFor(w).map((m) => m.id).join(',');
+    return need(shown === served, `${w.country ?? 'no country'}: the row shows ${shown}, the server offers ${served}`);
+  });
+  const ri = makeSrc.indexOf('if (!chosen) return no('), ci = makeSrc.indexOf('await hasConsented(fid)'), pi = makeSrc.indexOf('await paidPicture(');
+  proven(
+    'C4 the Model row shows exactly what the server offers in each country; the route refuses anything else, before anything is counted',
+    () => [
+      ...pickerMatches((w) => modelRow(w)),
+      ...need(challengeModel('gpt-image-2.5-sunburst', { country: 'RU', region: null }) === null && challengeModel('gemini-3.1-flash-image', { country: 'IR', region: null }) === null && challengeModel('gpt-image-2.5-sunburst', NONE) === null, 'the server accepts a closed model where its maker doesn\'t serve'),
+      ...need(challengeModel('midjourney', FR) === null && challengeModel('z-image-turbo', FR) === null, 'the server accepts a model not on the list'),
+      ...need(challengeModel(undefined, NONE)?.id === DEFAULT_CHALLENGE_MODEL, 'no model is not the open default'),
+      ...need(ri > 0 && ri < ci && ci < pi, 'the route does not refuse the model before consent and the count'),
+      ...need(/models: modelRow\(whereFrom\(request\.headers\)\)/.test(makeSrc) && /challengeModel\(bodyModel, whereFrom\(request\.headers\)\)/.test(makeSrc), 'GET or POST does not use this request\'s country'),
+    ],
+    () => pickerMatches(() => CHALLENGE_MODELS.map((m) => ({ id: m.id }))),
+  );
+
+  // C5: a closed model is refused without its notice and the 18+ box; an open one needs neither.
+  const noticeRules = (check: typeof noticeProblem) => [
+    ...need(check(C_GPT, undefined) === 'notice', 'GPT with no notice'),
+    ...need(check(C_GPT, { version: CLOSED_PROVIDERS.OpenAI.noticeVersion - 1, adult: true }) === 'notice', 'GPT with an old notice'),
+    ...need(check(C_GEM, { version: CLOSED_PROVIDERS.Google.noticeVersion }) === 'adult', 'Gemini without 18+'),
+    ...need(check(C_GEM, { version: CLOSED_PROVIDERS.Google.noticeVersion, adult: 'yes' }) === 'adult', 'Gemini with a non-true 18+'),
+    ...need(check(C_GPT, { version: CLOSED_PROVIDERS.OpenAI.noticeVersion, adult: true }) === null, 'GPT with both refused'),
+    ...need(check(C_FLUX, undefined) === null && check(C_QWEN, undefined) === null, 'an open model asks for a notice'),
+  ];
+  const ni = makeSrc.indexOf('const notice = noticeProblem(chosen');
+  proven('C5 a closed model is refused without its maker\'s notice (current version) and the 18+ box; the route checks it before consent', () => [...noticeRules(noticeProblem), ...need(ni > ri && ni < ci, 'the route does not check the notice before consent')], () => noticeRules((m) => (m.open ? null : null)));
+
+  // C6: Gemini only through vertex; GPT only through openai. Fails on any other provider.
+  const { challengeClosedRequest, makeChallengeClosed } = await import('../src/lib/images/closed');
+  const ref = await sharp({ create: { width: 1024, height: 576, channels: 3, background: { r: 5, g: 6, b: 7 } } }).jpeg().toBuffer();
+  const pinned = (build: (m: typeof C_GEM) => { body: Record<string, unknown> }) => {
+    const p: string[] = [];
+    for (const provider of ['vertex', 'google', 'openai', 'bedrock', 'azure']) {
+      let only: unknown = null;
+      try {
+        only = (build({ ...C_GEM, call: { ...C_GEM.call, only: [provider] } }).body.providerOptions as { gateway: { only: unknown } }).gateway.only;
+      } catch {
+        only = null;
+      }
+      const ok = JSON.stringify(only) === '["vertex"]';
+      if (provider === 'vertex' ? !ok : only !== null) p.push(`Gemini through ${provider}: ${only === null ? 'refused' : `sent with only ${JSON.stringify(only)}`}`);
+    }
+    const g = (build(C_GEM).body.providerOptions as { gateway: { only: unknown; zeroDataRetention?: unknown } }).gateway;
+    p.push(...need(JSON.stringify(g.only) === '["vertex"]' && g.zeroDataRetention === true, 'Gemini\'s own entry is not vertex with zero retention'));
+    return p;
+  };
+  proven(
+    'C6 Gemini goes only through vertex (any other provider fails), GPT only through openai',
+    () => [
+      ...pinned((m) => challengeClosedRequest(m, 'p', ref)),
+      ...need(JSON.stringify((challengeClosedRequest(C_GPT, 'p', ref).body.providerOptions as { gateway: { only: unknown } }).gateway.only) === '["openai"]', 'GPT not pinned to openai'),
+      ...need(!/\bgoogle\/gemini[^"']*['"]\s*,\s*only:\s*\[\s*['"]google/.test(read('src/lib/challenge/models.ts')), 'models.ts pins Gemini to google'),
+    ],
+    // Planted: a request builder that passes the entry's provider through unchecked.
+    () => pinned((m) => ({ body: { providerOptions: { gateway: { only: m.call.only, zeroDataRetention: true } } } })),
+  );
+
+  // C7: a closed challenge call sends the prompt and the one picture, nothing about the person; mocked gateway answers.
+  const png = await sharp({ create: { width: 1536, height: 1024, channels: 3, background: { r: 20, g: 30, b: 40 } } }).png().toBuffer();
+  const sent: { url: string; body: string }[] = [];
+  const mockSend = (async (url: string, init: RequestInit) => {
+    sent.push({ url, body: String(init.body) });
+    const ans = url.endsWith('/images/edits')
+      ? { data: [{ b64_json: png.toString('base64') }], providerMetadata: { gateway: { cost: '0.0467', generationId: 'gen_mock' } } }
+      : { id: 'gen_gem_mock', choices: [{ message: { images: [{ image_url: { url: `data:image/png;base64,${png.toString('base64')}` } }] } }], usage: { cost: 0.0677 } };
+    return new Response(JSON.stringify(ans), { status: 200 });
+  }) as unknown as typeof fetch;
+  const req = new Request('http://localhost/api/challenge/make', { method: 'POST', headers: { 'x-vercel-oidc-token': 'stand-in-not-a-key', 'x-vercel-ip-country': 'FR' } });
+  const a = await makeChallengeClosed(C_GPT, 'Bai on a ledge.', ref, req, 0.08, mockSend);
+  const b = await makeChallengeClosed(C_GEM, 'Bai on a ledge.', ref, req, 0.09, mockSend);
+  const callContent = (calls: typeof sent) => calls.flatMap((c) => {
+    const imgs = c.body.match(/data:image\/[a-z]+;base64,/g) ?? [];
+    const flat = c.body.replace(/data:image\/[a-z]+;base64,[A-Za-z0-9+/=]+/g, 'data:…');
+    return [...need(imgs.length === 1, `${c.url}: ${imgs.length} pictures sent`), ...need(!/"user":|fid|6786|"FR"|country|ip_address|safety_identifier/i.test(flat), `${c.url}: something about the person or their country is sent`)];
+  });
+  const am = await sharp(a.bytes).metadata();
+  proven(
+    'C7 a closed challenge picture sends only the prompt and the one picture tapped (no person, no country); the answer is read, converted to 1024 x 576 and costed (mocked gateway)',
+    () => [
+      ...callContent(sent),
+      ...need(sent[0]?.url.endsWith('/images/edits') && sent[1]?.url.endsWith('/chat/completions'), 'endpoints'),
+      ...need(a.costUsd === 0.0467 && b.costUsd === 0.0677 && a.requestId === 'gen_mock', 'costs or ids not read'),
+      ...need(am.width === IMAGES.size.width && am.height === IMAGES.size.height && am.format === 'jpeg', 'not converted to the challenge size'),
+    ],
+    () => callContent([{ url: 'planted', body: JSON.stringify({ prompt: 'p', user: 'fid:6786', images: ['data:image/jpeg;base64,AA', 'data:image/jpeg;base64,BB'] }) }]),
+  );
+
+  // C8: the recipe names the model and its maker (a closed model by …); the route records the chosen model.
+  const { modelLine } = await import('../src/lib/images/recipe-lines');
+  const { recipeModel } = await import('../src/lib/challenge/make-model');
+  const leads = (pick: (m: typeof C_GPT) => { id: string; endpoint: string; host: string }) => CHALLENGE_MODELS.flatMap((m) => {
+    const r = pick(m);
+    const lead = modelLine({ model: r.id, endpoint: r.endpoint, host: r.host }).lead;
+    return [...need(lead.startsWith(`${m.id === 'qwen-image-edit' ? 'Qwen-Image-Edit-2509' : m.name} (${m.allowlistId}), ${m.terms}, on ${m.call.host}`), `${m.id}: "${lead}"`)];
+  });
+  proven(
+    'C8 the recipe names each model and its terms ("a closed model by OpenAI" / "by Google"); the route records the chosen model\'s id, endpoint and host',
+    () => [...leads(recipeModel), ...need(/model: recipeModel\(chosen\)\.id, endpoint: recipeModel\(chosen\)\.endpoint, host: recipeModel\(chosen\)\.host/.test(makeSrc), 'the route does not record the chosen model')],
+    () => leads(() => ({ id: IMAGES.editModel.id, endpoint: IMAGES.editModel.endpoint, host: 'fal.ai' })),
+  );
+
+  // C9: a closed picture counts as 3 (the pool) and reserves at least its estimate; the open ones count as 1.
+  const { challengeSpend } = await import('../src/lib/challenge/make-model');
+  const spendRules = (spendOf: typeof challengeSpend) => CHALLENGE_MODELS.flatMap((m) => {
+    const sp = spendOf(m, [IMAGES.size]);
+    return [
+      ...need((sp.pool === 'closed') === !m.open, `${m.id}: pool ${sp.pool ?? 'open'}`),
+      ...need(sp.reserveUsd >= m.estimateUsd && sp.reserveUsd === (m.open && m.id === DEFAULT_CHALLENGE_MODEL ? IMAGES.editReserveUsd(1) : reserveUsd(m, IMAGES.size)), `${m.id}: reserves ${sp.reserveUsd}`),
+      ...need(sp.model.id === m.allowlistId, `${m.id}: costs counted under ${sp.model.id}`),
+    ];
+  });
+  proven(
+    'C9 a closed challenge picture goes in the closed pool (counted as 3, M4a) and reserves at least its estimate; the Model row says so',
+    () => [...spendRules(challengeSpend), ...need(modelRow(FR).filter((r) => !r.open).every((r) => r.countsAs === CLOSED_IMAGES.countsAs && CLOSED_IMAGES.countsAs === 3), 'the row does not say a closed picture counts as 3')],
+    () => spendRules((m, refs) => ({ ...challengeSpend(m, refs), pool: undefined })),
+  );
+
+  // C10: Qwen on fal-ai/qwen-image-edit-plus (2509; never the deprecated fal-ai/qwen-image-edit), costed safely (mocked fal).
+  const { makeQwenEdit } = await import('../src/lib/images/fal');
+  const falCalls: { url: string; body: string }[] = [];
+  const realFetch2 = globalThis.fetch;
+  const keyWas = process.env.FAL_KEY;
+  process.env.FAL_KEY = 'stand-in-not-a-key';
+  globalThis.fetch = (async (url: string, init: RequestInit) => {
+    falCalls.push({ url: String(url), body: String(init.body) });
+    const jpg = await sharp({ create: { width: 1024, height: 576, channels: 3, background: { r: 1, g: 1, b: 1 } } }).jpeg().toBuffer();
+    return new Response(JSON.stringify({ images: [{ url: `data:image/jpeg;base64,${jpg.toString('base64')}` }], seed: 7, has_nsfw_concepts: [false] }), { status: 200, headers: { 'x-fal-request-id': 'req_mock' } });
+  }) as unknown as typeof fetch;
+  const worst = reserveUsd(C_QWEN, { width: 1024, height: 576 });
+  const q = await makeQwenEdit(QWEN.endpoint, 'Bai on a ledge.', { bytes: ref, contentType: 'image/jpeg', width: 1024, height: 576 }, IMAGES.size, qwenCostUsd(IMAGES.size, { width: 1024, height: 576 }));
+  globalThis.fetch = realFetch2;
+  process.env.FAL_KEY = keyWas;
+  const qwenRules = (endpoint: string, cost: (o: typeof IMAGES.size, r: typeof IMAGES.size) => number) => [
+    ...need(endpoint === 'fal-ai/qwen-image-edit-plus', `endpoint ${endpoint}`),
+    ...need(Math.abs(cost(IMAGES.size, { width: 1024, height: 576 }) - 0.03 * (1 + 0.589824)) < 1e-9, `cost ${cost(IMAGES.size, { width: 1024, height: 576 })}`),
+  ];
+  proven(
+    'C10 Qwen-Image-Edit: fal-ai/qwen-image-edit-plus (2509), one reference, the safety checker on, costed as $0.03 x (output MP at least 1 + reference MP) (mocked fal)',
+    () => [
+      ...qwenRules(QWEN.endpoint, qwenCostUsd),
+      ...need(falCalls.length === 1 && falCalls[0].url === 'https://fal.run/fal-ai/qwen-image-edit-plus', `called ${falCalls.map((c) => c.url).join(', ')}`),
+      ...need((JSON.parse(falCalls[0]?.body ?? '{}').image_urls ?? []).length === 1 && JSON.parse(falCalls[0]?.body ?? '{}').enable_safety_checker === true, 'not one reference, or no safety checker'),
+      ...need(q.costUsd > 0 && worst >= q.costUsd, 'the reserve is below the cost'),
+      ...need(!/fal-ai\/qwen-image-edit['"]/.test(read('src/lib/challenge/models.ts') + read('src/lib/images/fal.ts')), 'the deprecated endpoint is named'),
+    ],
+    () => qwenRules('fal-ai/qwen-image-edit', (o, r) => 0.03 * ((o.width * o.height + r.width * r.height) / 1e6)),
+  );
+
+  // C11: the country is used, never kept: no log, no database, no ticket.
+  const keptProblems = (src: string, route = makeSrc) => [
+    ...need(!/console\.(log|info|warn|error)\([^)]*(where|country|x-vercel-ip)/i.test(src), 'the country is logged'),
+    ...need(!/country|whereFrom|where\b/i.test((route.split('signTicket(')[1] ?? '').split('});')[0]), 'the ticket carries the country'),
+    ...need(!/sql`[^`]*country/i.test(src), 'the country goes to the database'),
+  ];
+  const countrySrc = makeSrc + read('src/lib/images/countries.ts') + read('src/lib/challenge/models.ts');
+  proven('C11 the visitor\'s country is read for the request only: not logged, not stored, not in the ticket', () => [...keptProblems(countrySrc), ...need(!/console\.|from '\.\.\/db'|sql`/.test(read('src/lib/images/countries.ts')), 'countries.ts logs or reaches the database')], () => keptProblems(`${makeSrc}\nconsole.log('country', where);`, makeSrc.replace('signTicket({', 'signTicket({ country: where.country,')));
+
+  // C12: model choice on the challenge is on only with Privacy §4, §7 and consent v6 saying what each maker receives (P6t).
+  const consentNow = JSON.parse(read('config/consent.json'));
+  const v6 = consentNow.versions[consentNow.current];
+  const challengeToday: P6tInput = {
+    on: CHALLENGE.modelChoice,
+    providers: [...new Set(CHALLENGE_MODELS.filter((m) => !m.open).map((m) => m.maker))],
+    retention: Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])),
+    s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+    s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat() as string[],
+    consent: [v6.line, v6.title, ...v6.text].join('\n'),
+  };
+  proven(
+    'C12 the challenge\'s model choice is on with Privacy §4, §7 (each maker, its retention) and consent own-words-v6 naming OpenAI and Google (P6t, P6j)',
+    () => [
+      ...p6tProblems(challengeToday),
+      ...need(consentNow.current === 'own-words-v6' && Boolean(consentNow.versions['own-words-v5']), 'consent is not own-words-v6 (with v5 kept)'),
+      ...need(challengeToday.on === true && challengeToday.providers.join(',') === 'OpenAI,Google', `on ${challengeToday.on}, makers ${challengeToday.providers.join(',')}`),
+      ...need((PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().some((u) => /we read the country your connection comes from; we don't keep it/.test(String(u))), 'Privacy §7 does not say the country is read and not kept'),
+    ],
+    () => p6tProblems({ ...challengeToday, consent: challengeToday.consent.replace(/, or Google, which[^.]*\./, '.') }),
+  );
 }
 
 console.log(`\n${passed} passed, ${failed.length} failed`);

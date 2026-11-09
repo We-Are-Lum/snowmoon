@@ -1,0 +1,50 @@
+'use client';
+
+import { useRef, useState } from 'react';
+import { CLOSED_PROVIDERS, type ClosedProvider } from '~/lib/config';
+import { MODEL_WORDING as W } from '~/lib/challenge/model-wording';
+import type { ModelRowEntry } from '~/lib/challenge/models';
+import { answerNotice, browserStore, mayPick, noticeFor } from '~/lib/images/model-notice';
+import { ModelNotice } from './model-picker';
+
+/**
+ * The challenge Model row's state (branch challenge-models): what the remix screen's Model row plugs into. The list is
+ * the server's (GET /api/challenge/make's `models`: only what this visitor is offered, the open default first). A
+ * closed model is picked only once its maker's notice is answered and, the first time on this device, the 18+ box
+ * ticked (src/lib/images/model-notice.ts: kept on the device). The POST then carries `model` and, for a closed model,
+ * `notice: { version, adult: true }`, without which the server refuses it. The screen decides how the row looks
+ * (branch challenge-simple); `notice` is the maker's notice to show while one is pending.
+ */
+export function useChallengeModel(models: readonly ModelRowEntry[] | undefined) {
+  const list = models?.length ? models : null;
+  const [id, setId] = useState<string | null>(null);
+  const chosen = list?.find((m) => m.id === id) ?? list?.[0] ?? null;
+  const seen = useRef(new Set<string>());
+  const [pending, setPending] = useState<{ pick: ModelRowEntry; askAdult: boolean } | null>(null);
+  const [adultTicked, setAdultTicked] = useState(false);
+
+  const pick = (m: ModelRowEntry) => {
+    if (m.open) return setId(m.id);
+    const n = noticeFor(m.maker, browserStore(), seen.current);
+    if (!n.show) return setId(m.id);
+    setPending({ pick: m, askAdult: n.askAdult });
+  };
+  const answer = (button: 'ok' | 'never') => {
+    if (!pending) return;
+    if (!answerNotice(pending.pick.maker, button, adultTicked, browserStore(), seen.current)) return;
+    setId(pending.pick.id);
+    setPending(null);
+  };
+  const ready = !chosen || chosen.open || mayPick(chosen.maker, browserStore(), seen.current);
+  /** What the make request adds to its body. */
+  const body = (): { model?: string; notice?: { version: number; adult: true } } => {
+    if (!chosen) return {};
+    if (chosen.open) return { model: chosen.id };
+    const version = CLOSED_PROVIDERS[chosen.maker as ClosedProvider]?.noticeVersion;
+    return { model: chosen.id, notice: { version, adult: true } };
+  };
+  const notice = pending ? <ModelNotice maker={pending.pick.maker} askAdult={pending.askAdult} adultTicked={adultTicked} onTick={setAdultTicked} onAnswer={answer} /> : null;
+  /** One line under a model's name: its terms, the price, and for a closed one its maker's label and that it uses 3. */
+  const meta = (m: ModelRowEntry) => [m.maker, m.terms, W.about(m.aboutUsd), ...(m.open ? [] : [m.retention, W.countsAs])].filter(Boolean).join(' · ');
+  return { list, chosen, pick, ready, body, notice, meta, W };
+}
