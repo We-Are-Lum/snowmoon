@@ -412,7 +412,7 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   character's bases are shuffled (`shuffleFresh(c.bases)` in `src/components/challenge-card.tsx`); shuffling the
   remixes again must fail. The owner's first remixes are no longer shown apart under "First remixes by @naaate": they sit
   among the character's remixes, newest first, and are still never entries. With the moments off nothing draws "Surprise me". **A fifth narrow exception (owner,
-  2026-11-08):** the remix screen's Style row has "Random": the server draws one of the site's published styles,
+  2026-11-08; approved by the owner the same day):** the remix screen's Style row has "Random": the server draws one of the site's published styles,
   uniformly, when the picture is made (`drawStyle`, `shuffleFresh(published)[0]` in `src/lib/challenge/make.ts` only,
   on the whole list), and the recipe records both "Random" and the style drawn. Its planted violations, a draw from
   only some of the styles and a draw weighted toward one, must fail.

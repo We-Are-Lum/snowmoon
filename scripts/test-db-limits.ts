@@ -9,13 +9,17 @@
  *  L4  a slow query that keeps under the limit still answers;
  *  L5  every connection the site opens uses these options (db() and the agent reader), with keepalive, idle,
  *      connect and lifetime limits set, six connections per instance and one query at a time on each (a query that
- *      waited for the only connection was often never answered through the pooler; see src/lib/db.ts).
+ *      waited for the only connection was often never answered through the pooler; see src/lib/db.ts);
+ *  L6  a database that refuses connections fails every query at once, however many come one after another: with a local
+ *      test database's one connection and with the pooler's six (2026-11-08: the socket used to be handed over only once
+ *      connected, and after a refusal on each connection every later query hung for good).
  */
 import net from 'node:net';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
+import postgres from 'postgres';
 
 process.env.DB_SILENT_MS = '3000';
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -88,6 +92,27 @@ check(
   calls.length === 2 && calls.every((c) => c === 'dbOptions(url)') && o.keep_alive === DB_LIMITS.keepAliveSeconds && o.idle_timeout === DB_LIMITS.idleSeconds && o.connect_timeout === DB_LIMITS.connectSeconds && o.max_lifetime === DB_LIMITS.lifetimeSeconds && typeof o.socket === 'function' && o.max === 6 && local.max === 1 && o.max_pipeline === 1,
   JSON.stringify({ calls, keep_alive: o.keep_alive, idle: o.idle_timeout, connect: o.connect_timeout, life: o.max_lifetime }),
 );
+
+// L6: nothing listens on this port, so every connection is refused. postgres.js waits a little longer before each new
+// attempt (its own backoff: about 15 s by the eighth), so each query has 30 s; a query that never settles is a hang.
+{
+  const refused = await new Promise<number>((r) => { const t = net.createServer(); t.listen(0, '127.0.0.1', () => { const port = (t.address() as net.AddressInfo).port; t.close(() => r(port)); }); });
+  const url = `postgres://studio_writer@127.0.0.1:${refused}/postgres`;
+  const run = async (opts: object, n: number) => {
+    const pool = postgres(url, opts);
+    const out: string[] = [];
+    for (let i = 0; i < n; i++) out.push(await Promise.race([pool`select 1`.then(() => 'ok', (e: { code?: string }) => e.code ?? 'error'), new Promise<string>((r) => setTimeout(() => r('HANG'), 30_000))]));
+    pool.end({ timeout: 0 }).catch(() => {});
+    return out;
+  };
+  const one = await run(dbOptions(url), 8);
+  const six = await run(dbOptions('postgres://studio_writer@pooler.example.com:6543/postgres'), 8);
+  check('L6 a refused database fails every query, eight in a row, with one connection and with six (none hangs)', [...one, ...six].every((x) => x === 'ECONNREFUSED'), `one: ${one.join(' ')} | six: ${six.join(' ')}`);
+  // The planted fault: the socket as it was until 2026-11-08, handed over only once connected and rejected on an error.
+  const old = (o: { host: string[]; port: number[] }) => new Promise<net.Socket>((res, rej) => { const s = net.connect({ host: o.host[0], port: o.port[0] }); s.once('connect', () => res(s)); s.once('error', rej); });
+  const planted = await run({ ...dbOptions(url), socket: old }, 2);
+  check('proof: L6 the old socket (rejected on a refused connect) hangs the next query, and is caught', planted.includes('HANG'), planted.join(' '));
+}
 
 clearInterval(keep);
 await sql.end({ timeout: 1 });
