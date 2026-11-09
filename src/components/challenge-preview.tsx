@@ -9,7 +9,7 @@ import { AiTag } from './ai-tag';
 
 /**
  * The preview, /challenge/make/<draft> (owner, 2026-11-05; docs/proposals/challenge-moments.md §1.3 S3): the new
- * picture, the one it started from (small), the character and moment, "Your words" exactly as they will be published,
+ * picture, the one it started from (small), the character (and its moment while the moments are on), "Your words" exactly as they will be published,
  * Try again (another picture with the same words; it counts as a picture) and Publish, and "How it was made" (the exact
  * prompt and the model, collapsed). The draft lives only in this tab (src/lib/challenge/flow-storage.ts).
  *
@@ -40,11 +40,13 @@ export function ChallengePreview({ id }: { id: string }) {
   const again = async () => {
     setBusy('again');
     setError(null);
-    const r = await authFetch('/api/challenge/make', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ from: d.from, moment: d.moment.id, words: d.words }) }).catch(() => null);
-    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; error?: string };
+    // The same request again: the moment while the moments are on; else the same style choice (Random draws afresh) and model.
+    const body = d.moment ? { from: d.from, moment: d.moment.id, words: d.words, model: d.modelId } : { from: d.from, words: d.words, style: d.style, model: d.modelId };
+    const r = await authFetch('/api/challenge/make', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
+    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; style?: string | null; error?: string };
     setBusy(null);
     if (!r?.ok || !out.ticket || !out.image) return setError(out.error ?? 'Could not make it');
-    const next = { ...d, ticket: out.ticket, image: out.image, prompt: out.prompt ?? d.prompt };
+    const next = { ...d, ticket: out.ticket, image: out.image, prompt: out.prompt ?? d.prompt, styleLine: out.style ?? d.styleLine ?? null };
     saveDraft(next);
     setD(next);
   };
@@ -86,9 +88,7 @@ export function ChallengePreview({ id }: { id: string }) {
           </span>
         </figcaption>
       </figure>
-      <p className="mk-at">
-        {d.name} · {d.moment.title} ({d.moment.chip})
-      </p>
+      <p className="mk-at">{d.moment ? `${d.name} · ${d.moment.title} (${d.moment.chip})` : d.name}</p>
       <p className="mk-words">
         <span className="dz-muted">{w.yourWords}</span> “{d.words}”
       </p>
@@ -108,6 +108,11 @@ export function ChallengePreview({ id }: { id: string }) {
       <details className="mk-how">
         <summary>{w.howMade}</summary>
         <p className="dz-muted">{d.model}</p>
+        {d.styleLine && (
+          <p className="dz-muted mk-style-line">
+            {w.style}: {d.styleLine}
+          </p>
+        )}
         <pre className="mk-prompt">{d.prompt}</pre>
       </details>
     </div>

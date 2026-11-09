@@ -1,6 +1,11 @@
-# Model choice on the challenge's remix screen: Privacy, Terms, About, the notices, the 18+ line and consent v6 (DRAFT, not reread)
+# Model choice on the challenge's remix screen: Privacy, Terms, About, the notices, the 18+ line and consent v6 (DRAFT v2, not reread)
 
-Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models`. **DRAFT:
+Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models`. **v2**
+(same day) applies the owner's decisions after the coordinator's review (the retention lines approved as drafted): the
+18+ "yes" reaches the server, never kept (kept); Ukraine as drafted (counsel question 6); one country list for both
+closed models; no separate per-person closed count, and Privacy §4's last sentence in the owner's words; GPT pictures
+cropped to 16:9, not padded; closed-model pictures can be entries; Qwen 2509; the wallet line; the Terms §8 coverage
+table below and counsel question 7. **DRAFT:
 not reread by the owner.** Not legal advice. It adapts [`remix-model-choice-draft.md`](remix-model-choice-draft.md) (v4,
 the owner's decisions of 2026-11-04 stand: one notice per maker, a one-time 18+ box remembered on the device only,
 Gemini allowed for remixers, the two retention descriptions word for word) from the sheet form to the challenge's
@@ -25,16 +30,21 @@ number 3 and the caps are on the screen, not in the legal texts).
   today's extra references, the other characters' looks). The maker receives nothing else: no FID, name, IP, country.
 - **Country:** the server reads Vercel's `x-vercel-ip-country` (and, for Ukraine only, `x-vercel-ip-country-region`)
   for that one request, to decide which closed models to offer and accept; it is never stored, logged or sent on.
-  OpenAI's model only in OpenAI's supported countries; Google's everywhere but the embargoed set; neither in Cuba, Iran,
-  North Korea, Syria, Crimea, Sevastopol, Donetsk or Luhansk (nor a Ukrainian connection with no region). No header: no
-  closed model.
+  One list for both closed models (owner, v2): OpenAI's supported countries, minus the embargoed set (Cuba, Iran, North
+  Korea, Syria, Crimea, Sevastopol, Donetsk, Luhansk, and a Ukrainian connection with no region). No header: no closed
+  model.
 - **Notice and 18+:** the first time a device picks a maker's model, its notice shows; the first notice also asks "I'm 18
   or older". Both answers stay on the device. New on this branch: the make request for a closed model carries
   `notice: { version, adult: true }`, and the server refuses a closed model without it (it can't verify it; it only
   refuses a request that skipped the screen). Nothing of it is kept. That is why Privacy §3's new sentence says "we
   receive only that you confirmed, and don't keep it" (owner question 1 below).
-- **Counts:** a closed picture counts as 3 of the day's free pictures, and also within the closed models' own daily
-  count (6) and closed spend cap ($5 inside the free cap). Wallet (prepaid) accounts can't choose a closed model.
+- **Counts:** a closed picture counts as 3 of the day's free pictures; no separate per-person closed count (v2: the 6 a
+  day is gone); the closed spend cap ($5 inside the free cap) stays. Wallet (prepaid) accounts can't choose a closed
+  model; their Model row says "Closed models need a Farcaster, Lens or Bluesky sign-in." (the owner's words).
+- **Shape:** a closed picture is cropped to 16:9, never padded: GPT's 1536 × 1024 loses 160 rows, 40 from the top and
+  120 from the bottom (a quarter and three quarters), so heads stay. Its recipe's settings say "cropped from 3:2 to
+  16:9, mostly from the bottom" (DRAFT words; also "not cropped (already 16:9)" and "cropped from … to 16:9, from both
+  sides" for other shapes), with the pixels removed.
 - The recipe names the model and its terms ("a closed model by OpenAI"), records the endpoint, the host and the cost,
   and for a closed model that no host safety checker ran and the "can't be re-run exactly" line.
 
@@ -54,9 +64,9 @@ One sentence added before "These stay on your device, except that …":
 
 ## Privacy §4 (Kept by us when you sign in): the remix challenge item
 
-Two sentences added at its end:
+Two sentences added at its end (the second in the owner's words, v2):
 
-> When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record. We count the pictures you make with closed models apart from the others each day.
+> When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record. A picture made with a closed model counts as three of your free pictures that day.
 
 **Before:**
 
@@ -64,7 +74,7 @@ Two sentences added at its end:
 
 **After:**
 
-> If you take part in the remix challenge: for each picture of a challenge character you publish, whether it can count as an entry and why (you were invited, you are an admin, or whether your account passed the site's check: Neynar's score for a Farcaster account, the Bluesky check for a Bluesky account), decided once, when you publish it, and kept with the time it was decided; and each picture you submit as an entry, with its character and when you submitted it. Submitting needs the link to your own post about it, which is kept and listed on the picture's page like any post you add (below); for a Farcaster, Bluesky or Lens post, the site checks with its network that you wrote it. If you withdraw a submission, it stops being an entry but is kept, marked withdrawn, with when; the post stays listed until you remove it. Whether a picture is an entry is shown on its page and on the challenge page, with how many people have submitted for each character. When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record. We count the pictures you make with closed models apart from the others each day.
+> If you take part in the remix challenge: for each picture of a challenge character you publish, whether it can count as an entry and why (you were invited, you are an admin, or whether your account passed the site's check: Neynar's score for a Farcaster account, the Bluesky check for a Bluesky account), decided once, when you publish it, and kept with the time it was decided; and each picture you submit as an entry, with its character and when you submitted it. Submitting needs the link to your own post about it, which is kept and listed on the picture's page like any post you add (below); for a Farcaster, Bluesky or Lens post, the site checks with its network that you wrote it. If you withdraw a submission, it stops being an entry but is kept, marked withdrawn, with when; the post stays listed until you remove it. Whether a picture is an entry is shown on its page and on the challenge page, with how many people have submitted for each character. When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record. A picture made with a closed model counts as three of your free pictures that day.
 
 ## Privacy §7 (Outside services): the Vercel item (the country line)
 
@@ -164,9 +174,9 @@ Everything else in v6 is v5 word for word. Everyone who agreed to v5 is asked ag
 "last updated" date on the page): 208 countries and territories, copied by name with ISO codes in
 `src/lib/images/countries.ts`. The page: "Accessing or offering access to our services outside of the countries and
 territories listed below … may result in your account being blocked or suspended". Not on it (so GPT is not offered
-there): among others Russia, Belarus, China, Hong Kong, Macau, Venezuela, Cuba, Iran, North Korea, Syria, and US
-territories the header reports as their own country (Puerto Rico, Guam, the US Virgin Islands …). "Ukraine (with certain
-exceptions)" is read as the sanctioned regions.
+there, and since v2 neither is Gemini): among others Russia, Belarus, China, Hong Kong, Macau, Venezuela, Cuba, Iran,
+North Korea, Syria, and US territories the header reports as their own country (Puerto Rico, Guam, the US Virgin Islands
+…). "Ukraine (with certain exceptions)" is read as the sanctioned regions.
 
 ## Cost per picture (today's prices)
 
@@ -177,20 +187,109 @@ exceptions)" is read as the sanctioned regions.
 | GPT Image 2.5 Sunburst | ~$0.047 (bases, measured with one reference) | $0.0815 | the gateway's reported cost, 2026-11-03 |
 | Gemini 3.1 Flash Image | ~$0.068 (bases, measured) | $0.0915 | the gateway's reported cost, 2026-11-03 |
 
+## Visible words added in v2 (DRAFT, for the owner)
+
+- The Model row, for a wallet account: "Closed models need a Farcaster, Lens or Bluesky sign-in." (the owner's exact
+  words; also the route's refusal).
+- The crop, in the recipe's settings: "cropped from 3:2 to 16:9, mostly from the bottom" (DRAFT).
+- Under a closed pick (DRAFT, `src/lib/challenge/model-wording.ts`): "{maker} · a closed model by {maker} · about
+  $0.05 a picture · {the maker's label} · Uses 3 of today's pictures".
+- The refusal when fewer than 3 are left (DRAFT): "Not enough of today's pictures left for a closed model: each uses 3.
+  The open models may still work; more at 00:00 UTC."
+
+## Terms §8 and §6: do our rules cover the makers' policies? (v2, item 9)
+
+Our rules: **Terms §6** "Don't post anything unlawful, harassing or sexual involving minors; don't post other people's
+private information; don't impersonate anyone or present your work as the author's or as official; don't try to get
+around sign-in, daily limits or spending caps; don't interfere with the Service." **The prompt check**
+(`config/prompts/image-guard.md`, every prompt, before any model): minor, sexual, real_person, violence (gore, graphic
+injury, torture), hateful, someone_elses_work, words; plus the blocked-names list; the rules shown above Generate: "No
+real people. No sexual content. Nothing violent or hateful. No characters or logos from other works. Don't ask for words
+in the picture." And the site's facts: sign-in needs 18+ (Terms §4); every picture is labelled AI-made with its recipe;
+no words in pictures (so instructions, phishing text or slogans can't be drawn on purpose).
+
+Sources: Google's Generative AI Prohibited Use Policy, <https://policies.google.com/terms/generative-ai/use-policy>,
+"Last Modified: December 17, 2024", read 2026-11-08. OpenAI's Usage Policies, "Effective: October 29, 2025": the live
+page refused the fetch (403); read from the copy printed 2025-11-07 that `age-terms-closed-models.md` cites
+(<https://docs.databricks.com/aws/en/assets/files/usage-policies-openai-923e062e72487537e2a8df04bcec7f6d.pdf>),
+text extracted 2026-11-08. **Re-check the OpenAI list on the live page in a browser.**
+
+### Google
+
+| Google's prohibited use | Our clause(s) | Covered? |
+| --- | --- | --- |
+| 1.1 child sexual abuse or exploitation | Terms §6 "sexual involving minors"; check: minor, sexual | Yes |
+| 1.2 violent extremism or terrorism | Terms §6 "unlawful"; check: violence (gore only), hateful (hate symbols) | **Partly**: extremist praise or propaganda isn't named |
+| 1.3 non-consensual intimate imagery | check: sexual, real_person | Yes (check); Terms only through "sexual involving minors" and "unlawful" |
+| 1.4 self-harm | — | **Gap** |
+| 1.5 illegal activities, instructions | Terms §6 "unlawful"; no words in pictures | Yes |
+| 1.6 others' rights, privacy, IP | Terms §6 private information, impersonation; §5 your own work; check: real_person, someone_elses_work | Yes |
+| 1.7 tracking people without consent | Terms §6 private information | Yes (not a picture use) |
+| 1.8 automated high-stakes decisions | — | Not applicable (pictures only) |
+| 2.1 spam, phishing, malware | Terms §6 "interfere with the Service"; no words in pictures | **Partly**: spam and phishing aren't named |
+| 2.2 harm to Google's or others' services | Terms §6 "interfere with the Service" (ours only) | **Partly** |
+| 2.3 circumventing safety filters | Terms §6 "get around sign-in, daily limits or spending caps" | **Gap**: the prompt check and the makers' filters aren't named |
+| 3.1 hate | check: hateful; Terms §6 harassing | Yes |
+| 3.2 harassment, bullying, abuse | Terms §6 harassing | Yes |
+| 3.3 violence or incitement | check: violence (gore) | **Partly**: incitement isn't named |
+| 3.4 sexually explicit content | check: sexual | Yes (check); **Terms gap**: §6 forbids only sexual content involving minors |
+| 4.1 frauds, scams, deception | — | **Gap** |
+| 4.2 impersonating someone, to deceive | Terms §6 "don't impersonate anyone"; check: real_person | Yes |
+| 4.3 misleading claims of expertise | — | Not applicable (pictures, no words) |
+| 4.4 misleading claims about elections or health | check: real_person, words | **Partly** |
+| 4.5 claiming generated content is human-made | Terms §6 "present your work as the author's"; every picture labelled AI | **Partly**: passing off as hand-made isn't named |
+
+### OpenAI
+
+| OpenAI's prohibited use | Our clause(s) | Covered? |
+| --- | --- | --- |
+| Protect people: threats, intimidation, harassment, defamation | Terms §6 harassing, unlawful | Yes (defamation through "unlawful") |
+| suicide, self-harm, disordered eating | — | **Gap** |
+| sexual violence, non-consensual intimate content | check: sexual, real_person, violence | Yes (check) |
+| terrorism or violence, incl. hate-based violence | check: violence, hateful; Terms "unlawful" | **Partly** (as Google 1.2, 3.3) |
+| weapons development, procurement or use (incl. CBRNE) | Terms "unlawful"; no words in pictures | Yes for pictures (a picture of a weapon in the novel's story isn't development) |
+| illicit activities, goods, services | Terms "unlawful" | Yes |
+| breach of others' systems; infringing IP | Terms §6 interfere; §5; check: someone_elses_work | Yes for IP; **partly** for others' systems |
+| real money gambling | — | Not applicable |
+| tailored licensed advice | — | Not applicable |
+| unsolicited safety testing | — | **Gap** |
+| circumventing safeguards | Terms §6 (sign-in, limits, caps) | **Gap** (as Google 2.3) |
+| national security or intelligence uses | — | Not applicable |
+| Respect privacy: aggregating private information | Terms §6 private information | Yes |
+| facial recognition, remote biometric identification, social scoring, emotion inference, crime prediction | — | Not applicable (no such feature) |
+| likeness without consent, confusing authenticity | check: real_person; Terms §6 impersonation | Yes |
+| Keep minors safe: CSAM | Terms §6; check: minor, sexual | Yes |
+| grooming; dangerous challenges; underage sexual or violent roleplay; underage access to age-restricted goods | Terms §4 (18+ to sign in), §6 unlawful | Yes (no chat or roleplay in picture making) |
+| exposing minors to age-inappropriate content | check: sexual, violence; 18+ sign-in | Yes |
+| unhealthy dieting or exercise; body shaming of minors | check: minor (sexual only); Terms harassing | **Partly** |
+| Empower people: academic dishonesty | — | Not applicable |
+| deceit, fraud, scams, spam, impersonation | Terms §6 impersonation | **Partly** (as Google 4.1, 2.1) |
+| political campaigning, lobbying, election interference | check: real_person | **Gap**: campaign material without a real person isn't named |
+| automating high-stakes decisions | — | Not applicable |
+
+### Proposed wording (not applied; for the owner and counsel)
+
+Terms §6, one sentence in place of today's (shortest true):
+
+> Don't post anything unlawful, harassing, sexual, or that promotes self-harm, terrorism or violence; don't post other people's private information; don't impersonate anyone or present your work as the author's or as official, or AI-made work as made by hand; don't use the Service to deceive, defraud, spam or campaign politically; don't try to get around sign-in, daily limits, spending caps or the safety checks, or test them without our permission; don't interfere with the Service or anyone else's.
+
+The prompt check (`config/prompts/image-guard.md`), two categories added (the policy is public; changing it changes
+what is refused, so it is the owner's call): **self_harm** ("self-harm, suicide or disordered eating, shown approvingly")
+and **extremism** ("praise or propaganda for terrorist or violent extremist groups, or incitement to violence"); and
+"campaign material for a real election, party or candidate" under real_person.
+
+Counsel question 7 (added): "Does 'their makers' terms bind us, not you' still hold now that people choose closed
+models?"
+
 ## Decisions owed (the owner's)
 
-1. **The 18+ answer reaches the server as a yes** with each closed picture (not kept), so the server can refuse a
-   request that skipped the notice. The 2026-11-04 decision said nothing is sent. Keep this (Privacy §3 says so), or go
-   back to device-only and accept that the server can't refuse it?
-2. **Ukraine:** Donetsk and Luhansk are refused as whole regions (the header can't tell the line of control), and so is
-   a Ukrainian connection with no region. Zaporizhzhia and Kherson are not refused (not under the comprehensive
-   sanctions). OK?
-3. **Gemini in countries OpenAI doesn't serve** (e.g. Russia, China): offered, since Google publishes no end-user list
-   for Vertex and only the embargoed set is excluded. OK?
-4. **Counting:** a closed picture uses 3 of the 10 free pictures *and* one of the closed models' own 6. With 10 a day,
-   only admins (300 a day) ever reach the 6. Keep both, or drop the 6?
-5. The picture is converted to 1024 × 576 by fitting the whole picture and padding (GPT returns 3:2, so thin side bars);
-   crop instead?
-6. Whether a closed-model picture can be a challenge entry (remix-model-choice-draft.md, decision 7): today it can.
-7. Qwen: keep 2509 (`fal-ai/qwen-image-edit-plus`) or switch to 2511 (`fal-ai/qwen-image-edit-2511`, one config entry).
-8. Reread every line above. The Model row's own words (`src/lib/challenge/model-wording.ts`) are draft wording too.
+Decided 2026-11-08 (v2): 1 keep the 18+ "yes" to the server, never kept; 2 Ukraine as drafted (counsel question 6);
+3 one list for both closed models; 4 no separate 6 a day, the $5 cap stays, Privacy §4 in the owner's words; 5 crop,
+mostly from the bottom; 6 closed-model pictures can be entries; 7 Qwen 2509; 8 the wallet line.
+
+Still owed:
+
+1. Reread every line above (Privacy §3, §4, §7; Terms §8; About; the notices; consent v6) and the visible DRAFT words.
+2. The Terms §6 and prompt-check proposals above.
+3. The free daily number itself (3 or 10): the coordinator is asking; nothing here changes it.
+4. OpenAI's Usage Policies on the live page (the fetch was refused).

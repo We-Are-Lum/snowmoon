@@ -2,7 +2,9 @@
  * The remix challenge's moments and cards (branch challenge-moments, owner 2026-11-05), as pure checks, so
  * check:principles runs them on the files and scripts/test-challenge-moments.ts proves each is narrow on planted faults.
  *
- * - P9g: principle 9's recorded exception for the challenge (owner, 2026-11-05, answer 1, approved).
+ * - P9g: principle 9's recorded exception for the challenge (owner, 2026-11-05, answer 1, approved), narrowed by the
+ *   simpler challenge (owner, 2026-11-08): the pages show each card's one line only, and the moments only while
+ *   CHALLENGE.moments is on (off since then).
  * - P2m: the agent-drafted cards and scene lines are approved before /challenge goes public (answer 2).
  * - P6ac: entries as pictures only once Terms §6e and Privacy say so (legal texts describe today).
  */
@@ -24,6 +26,7 @@ export const P9G_FILES = {
   spoilers: 'src/lib/challenge/spoilers.ts',
   wording: 'src/lib/challenge/landing-wording.ts',
   make: 'src/components/challenge-make.tsx',
+  makeLib: 'src/lib/challenge/make.ts',
   makeApi: 'src/app/api/challenge/make/route.ts',
 };
 /** Where the cards' and moments' words may be imported: the challenge's own code only. */
@@ -45,25 +48,25 @@ export function p9gProblems(p: {
   const mq = p.moments.flatMap((m) => m.quotes.map((q) => ({ where: `moment ${m.id}`, block: q.block, text: q.text })));
   out.push(...quoteProblems([...mq, ...cardQuotes(p.cards)], p.blocks));
   out.push(...cardShapeProblems(p.cards, p.characters), ...momentShapeProblems(p.moments, p.characters));
-  // The deeper layers say "May spoil later chapters.", inside the second layer, before anything in it.
-  const words = get(p.files, P9G_FILES.wording) ?? '';
-  if (!/spoil: 'May spoil later chapters\.'/.test(words)) out.push(`${P9G_FILES.wording}: the deeper layers' line isn't "May spoil later chapters."`);
+  // The simpler challenge (owner, 2026-11-08): /challenge and a character's page show a card's one line only (the first
+  // layer, written without the book's major turns). No facts, no second layer ("More about") and no "Where they
+  // appear" in the cards' component or the pages' data.
   const card = stripComments(get(p.files, P9G_FILES.card) ?? '');
-  const more = card.indexOf('className="cc-more"');
-  const spoil = card.indexOf('<p className="cc-spoil">{w.spoil}</p>');
-  if (more < 0 || spoil < more || card.indexOf('{c.more.description}') < spoil) out.push(`${P9G_FILES.card}: the second layer doesn't open with "May spoil later chapters." (w.spoil) before its description`);
-  const toggle = card.indexOf('onClick={toggleAppears}');
-  if (!/const toggleAppears = \(\) => \{[\s\S]*?[fF]etch\(`\/api\/challenge\/appears\?/.test(card) || toggle < more || card.lastIndexOf('toggleAppears') !== toggle + 'onClick={'.length) out.push(`${P9G_FILES.card}: "Where they appear" isn't fetched from inside the second layer when opened`);
-  // Every moment chip shows its chapter.
-  if (!/\{m\.title\} <span className="cc-chip-ch">· \{m\.chip\}<\/span>/.test(card)) out.push(`${P9G_FILES.card}: a moment chip doesn't show its chapter (m.chip)`);
+  const deeper = /\bc\.(facts|more)\b|\bdescription\b|\/api\/challenge\/appears/.exec(card);
+  if (deeper) out.push(`${P9G_FILES.card}: shows more than a card's one line ("${deeper[0]}")`);
+  const view = stripComments(get(p.files, P9G_FILES.view) ?? '');
+  const viewDeeper = /\.(facts|more|appears)\b|from '\.\/moments'/.exec(view);
+  if (viewDeeper) out.push(`${P9G_FILES.view}: the pages' data carries more than a card's one line, or the moments ("${viewDeeper[0]}")`);
+  if (!/line: cardOf\(slug\)\?\.line/.test(view)) out.push(`${P9G_FILES.view}: a character's line isn't its card's one line`);
+  // The moments: shown on the remix screen only while CHALLENGE.moments is on, every chip with its chapter, and the
+  // remix screen's moments end with the exception (GET and POST).
   const make = get(p.files, P9G_FILES.make);
-  if (make !== null && !/\{m\.title\} <span className="cc-chip-ch">· \{m\.chip\}<\/span>/.test(stripComments(make))) out.push(`${P9G_FILES.make}: a moment chip on the remix screen doesn't show its chapter (m.chip)`);
+  if (make !== null && /\{m\.title\}/.test(stripComments(make)) && !/\{m\.title\} <span className="cc-chip-ch">· \{m\.chip\}<\/span>/.test(stripComments(make))) out.push(`${P9G_FILES.make}: a moment chip on the remix screen doesn't show its chapter (m.chip)`);
+  const makeLib = stripComments(get(p.files, P9G_FILES.makeLib) ?? '');
+  if (!/moments: momentsOn \? momentChips\(\) : \[\]/.test(makeLib) || !/chip: chapterChip\(m\)/.test(makeLib)) out.push(`${P9G_FILES.makeLib}: the remix screen's moments aren't sent only while CHALLENGE.moments is on, each with "Ch N"`);
   const makeApi = get(p.files, P9G_FILES.makeApi);
   if (makeApi !== null && (stripComments(makeApi).match(/!spoilerExceptionOn\(\)/g) ?? []).length < 2) out.push(`${P9G_FILES.makeApi}: the remix screen's moments don't end with the exception (spoilerExceptionOn, GET and POST)`);
-  const view = stripComments(get(p.files, P9G_FILES.view) ?? '');
-  if (!/chip: chapterChip\(m\)/.test(view)) out.push(`${P9G_FILES.view}: the moments' chips aren't "Ch N" (chapterChip)`);
-  // The exception ends when entries close: the view and the passages API ask spoilerExceptionOn.
-  if (!/spoilerExceptionOn\(\)/.test(view) || !/more: spoilers \?/.test(view) || !/moments: \(spoilers \?/.test(view)) out.push(`${P9G_FILES.view}: the deeper layers and the moments don't end with the exception (spoilerExceptionOn)`);
+  // The passages API (no page calls it now) still answers only for the six, only while the exception holds.
   const api = stripComments(get(p.files, P9G_FILES.appears) ?? '');
   if (!/!spoilerExceptionOn\(\)/.test(api) || !/card\.appears\.map/.test(api) || !/CHALLENGE\.characters\.includes\(slug\)/.test(api)) out.push(`${P9G_FILES.appears}: the passages aren't only the six cards' "Where they appear", while the exception holds`);
   const close = new Date(Date.parse(p.dates.closes));

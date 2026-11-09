@@ -15,15 +15,15 @@ import { ModelNotice } from './model-picker';
  * `notice: { version, adult: true }`, without which the server refuses it. The screen decides how the row looks
  * (branch challenge-simple); `notice` is the maker's notice to show while one is pending.
  */
-export function useChallengeModel(models: readonly ModelRowEntry[] | undefined, modelsNote: string | null = null) {
+export function useChallengeModel<T extends ModelRowEntry>(models: readonly T[] | undefined, modelsNote: string | null = null) {
   const list = models?.length ? models : null;
   const [id, setId] = useState<string | null>(null);
   const chosen = list?.find((m) => m.id === id) ?? list?.[0] ?? null;
   const seen = useRef(new Set<string>());
-  const [pending, setPending] = useState<{ pick: ModelRowEntry; askAdult: boolean } | null>(null);
+  const [pending, setPending] = useState<{ pick: T; askAdult: boolean } | null>(null);
   const [adultTicked, setAdultTicked] = useState(false);
 
-  const pick = (m: ModelRowEntry) => {
+  const pick = (m: T) => {
     if (m.open) return setId(m.id);
     const n = noticeFor(m.maker, browserStore(), seen.current);
     if (!n.show) return setId(m.id);

@@ -24,6 +24,8 @@ export const PICTURE_WORDING = {
    * title, and who made it, written by the @ rule (src/lib/challenge/share-makers.ts).
    */
   othersText: (name: string, moment: string, by: string) => `${name} in “${moment}”, a remix by ${by} for the Snowmoon Party remix challenge`,
+  /** With the moments off (owner, 2026-11-08, these words): "A remix of Zei by @maker, for the Snowmoon Party remix challenge". */
+  othersTextPlain: (name: string, by: string) => `A remix of ${name} by ${by}, for the Snowmoon Party remix challenge`,
   /**
    * For its maker, in place of Submit, from the open date to the close, when the picture was published before entries
    * opened (owner, 2026-11-07, his words, approved; the same words as SUBMIT_WORDING.beforeOpen). "Remix it" links to its

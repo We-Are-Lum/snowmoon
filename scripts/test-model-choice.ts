@@ -530,7 +530,7 @@ proven(
     const shown = row(w).map((r) => r.id).join(','), served = challengeModelsFor(w).map((m) => m.id).join(',');
     return need(shown === served, `${w.country ?? 'no country'}: the row shows ${shown}, the server offers ${served}`);
   });
-  const ri = makeSrc.indexOf('if (!chosen) return no('), ci = makeSrc.indexOf('await hasConsented(fid)'), pi = makeSrc.indexOf('await paidPicture(');
+  const ri = makeSrc.indexOf("if (!chosen) return no("), ci = makeSrc.indexOf('await hasConsented(fid)'), pi = makeSrc.indexOf('await paidPicture(');
   proven(
     'C4 the Model row shows exactly what the server offers in each country; the route refuses anything else, before anything is counted',
     () => [
@@ -539,7 +539,7 @@ proven(
       ...need(challengeModel('midjourney', FR) === null && challengeModel('z-image-turbo', FR) === null, 'the server accepts a model not on the list'),
       ...need(challengeModel(undefined, NONE)?.id === DEFAULT_CHALLENGE_MODEL, 'no model is not the open default'),
       ...need(ri > 0 && ri < ci && ci < pi, 'the route does not refuse the model before consent and the count'),
-      ...need(/modelView\(whereFrom\(request\.headers\)/.test(makeSrc) && /challengeModel\(bodyModel, whereFrom\(request\.headers\)\)/.test(makeSrc), 'GET or POST does not use this request\'s country'),
+      ...need(/modelView\(whereFrom\(request\.headers\)/.test(makeSrc) && /challengeModel\(r\.model, whereFrom\(request\.headers\)\)/.test(makeSrc), 'GET or POST does not use this request\'s country'),
     ],
     () => pickerMatches(() => CHALLENGE_MODELS.map((m) => ({ id: m.id }))),
   );

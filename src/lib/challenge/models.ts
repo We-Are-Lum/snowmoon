@@ -193,3 +193,29 @@ export function challengeModelProblems(list: readonly ChallengeModel[]): string[
   }
   return p;
 }
+
+// --- The screen's side (branch challenge-simple, 2026-11-08), kept as that lane built it --------------------------
+// The remix screen shows one chip per model ("{label} · {maker} · open|closed"), sends the chosen `id`, and the route
+// checks it (challengeModel above, which also applies the country). challenge-simple's list held one entry; this
+// branch fills it from modelRow.
+
+/** One chip's model: what challenge-simple's screen reads (a Model row entry has these and more). */
+export interface ModelChoice {
+  id: string;
+  label: string;
+  maker: string;
+  open: boolean;
+}
+
+/** The Model row for a visitor (no country given: the open models only). The first is the default. */
+export function challengeModels(where: Where = { country: null, region: null }): ModelRowEntry[] {
+  return modelRow(where);
+}
+
+/** One chip's words: "FLUX.2 [klein] 4B · Black Forest Labs · open". */
+export const modelChipText = (m: ModelChoice) => `${m.label} · ${m.maker} · ${m.open ? 'open' : 'closed'}`;
+
+/** The model the request names, if the list offers it. Null (refused) for anything else, a missing one included. */
+export function modelFromRequest<T extends ModelChoice>(id: unknown, models: readonly T[] = challengeModels() as unknown as T[]): T | null {
+  return typeof id === 'string' ? (models.find((m) => m.id === id) ?? null) : null;
+}

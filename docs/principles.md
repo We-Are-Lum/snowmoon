@@ -407,6 +407,15 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   (`shuffleFresh(MOMENTS.filter((m) => m.id !== moment))` in `src/components/challenge-make.tsx` only), never weighted
   by popularity, use, spoiler depth or anything else. Its planted violations: a draw from outside the list, a weighted
   draw and a list out of book order, each of which must fail (`scripts/lib/p5g.ts`; `npm run test:challenge`).
+  **The simpler challenge (owner, 2026-11-08; branch challenge-simple):** /challenge is a plain list (each character's
+  name, one line and bases) and a character's page lists every published remix of it newest first, so on both only a
+  character's bases are shuffled (`shuffleFresh(c.bases)` in `src/components/challenge-card.tsx`); shuffling the
+  remixes again must fail. The owner's first remixes are no longer shown apart under "First remixes by @naaate": they sit
+  among the character's remixes, newest first, and are still never entries. With the moments off nothing draws "Surprise me". **A fifth narrow exception (owner,
+  2026-11-08):** the remix screen's Style row has "Random": the server draws one of the site's published styles,
+  uniformly, when the picture is made (`drawStyle`, `shuffleFresh(published)[0]` in `src/lib/challenge/make.ts` only,
+  on the whole list), and the recipe records both "Random" and the style drawn. Its planted violations, a draw from
+  only some of the styles and a draw weighted toward one, must fail.
   A third narrow exception (owner, 2026-11-04; branch challenge-landing; **pending the owner's yes**): below each
   character's bases, under the heading "First remixes by @naaate", /challenge shows the owner's first remixes of it
   (`CHALLENGE.firstRemixes`, at most two), in the order the owner sets in the config. Chosen by the owner, never by a
@@ -749,6 +758,13 @@ passages are not served.
   imports the cards or the moments; and the exception ends exactly when entries close (`spoilerExceptionOn`). The
   proof changes one word in a moment's quote, puts a chapter 24 fact on a card's first layer and imports the cards on
   a sheet page (`scripts/lib/challenge-moments.ts`; `npm run test:challenge` proves each part on its own).
+  **Narrowed (owner, 2026-11-08; branch challenge-simple):** /challenge and a character's page (/challenge/<slug>) show
+  each card's one line only, no facts, deeper layers or "Where they appear"; the moments show nowhere while
+  `CHALLENGE.moments` is off (off since then; their data and code stay), and on the remix screen only when it is on.
+  `P9g` now checks that the cards' component and the pages' data carry nothing past the one line, that the remix
+  screen's moments are sent only with the switch on, each chip with its chapter, and the rest as before; its proofs
+  plant a card's description back on the page, a fetch of the passages, facts or the moments in the pages' data, and
+  the moments sent whatever the switch says.
 
 ---
 

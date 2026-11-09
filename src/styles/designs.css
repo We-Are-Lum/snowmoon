@@ -369,6 +369,17 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .cc-desc { margin: 0 0 6px; }
 .cc-count { margin: 4px 0; }
 .cc-note { margin: 8px 0 0; }
+/* /challenge as a plain list (owner, 2026-11-08): the name's link covers the row, the pictures and the AI label sit above it. */
+.cc-card-row { position: relative; }
+.cc-name-link { color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+.cc-name-link:hover { text-decoration: underline; }
+.cc-card-row .cc-name-link::after { content: ''; position: absolute; inset: 0; border-radius: 8px; }
+.cc-card-row .cc-bases { position: relative; z-index: 1; }
+.cc-card-row .cc-name-link:focus-visible { outline: none; }
+.cc-card-row .cc-name-link:focus-visible::after { outline: 2px solid var(--link); outline-offset: 2px; }
+.cc-ai { margin: 6px 0 0; }
+.ch-character-page h1.cc-name { margin: 4px 0 2px; }
+.ch-char-bases, .ch-char-remixes { margin-top: 12px; }
 
 /* The remix flow: /challenge/make, its preview and a challenge picture's page (branch challenge-moments, 2026-11-05). */
 .mk-page { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
@@ -405,6 +416,13 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .mk-links { margin: 0; }
 
 .mk-strip .cc-chip[aria-pressed='true'] { background: var(--btn); color: var(--btn-ink); border-color: var(--ink); }
+/* The Style and Model rows (owner, 2026-11-08): chips that wrap; the chosen one filled. */
+.mk-styles, .mk-model { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+.mk-styles .cc-head, .mk-model .cc-head { margin: 0; }
+.mk-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.mk-chips .cc-chip { background: transparent; color: var(--ink); font: inherit; font-size: 15px; cursor: pointer; text-align: left; }
+.mk-chips .cc-chip[aria-pressed='true'] { background: var(--btn); color: var(--btn-ink); border-color: var(--ink); }
+.mk-styles .published-field { margin-top: 4px; }
 /* Share first on a challenge picture's page (R3). */
 .sf-share, .sf-submit { display: flex; flex-direction: column; gap: 8px; }
 .ch-page h2.sf-head { margin: 4px 0 0; font-size: 19px; line-height: 1.3; }
