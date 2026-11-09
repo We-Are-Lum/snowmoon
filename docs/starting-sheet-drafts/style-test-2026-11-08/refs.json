@@ -1,0 +1,32 @@
+{
+ "zei": {
+  "version": "bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d",
+  "url": "https://pictures.snowmoon.party/images/readers/131f235227a54b06f6f11253f37a09b5.jpg",
+  "sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c"
+ },
+ "gladias": {
+  "version": "68364375-0f33-46fd-9755-2fd2b551198a",
+  "url": "https://pictures.snowmoon.party/images/readers/b9b6c00952cb47e936dc601676a7c34b.jpg",
+  "sha256": "b9b6c00952cb47e936dc601676a7c34b916355e8b4f979db4d7465ea024d0947"
+ },
+ "bai": {
+  "version": "110d5973-31c2-4d96-9a88-5838d8a6d868",
+  "url": "https://pictures.snowmoon.party/images/readers/01538922456b9bf61192ed291b8f2659.jpg",
+  "sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96"
+ },
+ "seila": {
+  "version": "1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba",
+  "url": "https://pictures.snowmoon.party/images/readers/3ef4825ca8f49aabf05ddcdaa8119e9b.jpg",
+  "sha256": "3ef4825ca8f49aabf05ddcdaa8119e9b229f523a3dfc1dc2af0238cbc95a4d13"
+ },
+ "deluin": {
+  "version": "75a94420-df70-4f43-a3a6-4c2b571e72ab",
+  "url": "https://pictures.snowmoon.party/images/readers/2b45d17da426df0304fc84ded0f3f0c4.jpg",
+  "sha256": "2b45d17da426df0304fc84ded0f3f0c464472c55c96aa517735f9837368432d4"
+ },
+ "mu": {
+  "version": "15a9af1d-9eef-4e25-be57-738d9823dd74",
+  "url": "https://pictures.snowmoon.party/images/readers/3e6ae696865441d24aa1dde262dac043.jpg",
+  "sha256": "3e6ae696865441d24aa1dde262dac043964ab8c9633d19174eb7074091087fb5"
+ }
+}
