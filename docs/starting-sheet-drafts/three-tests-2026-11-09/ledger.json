@@ -1,0 +1,2680 @@
+{
+ "about": "Three tests 2026-11-09: FLUX look line before/after (Bai), Qwen-Image-Edit 2511 (Bai), Gemini F3 (padded reference). Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "cap_usd": 3,
+ "stop_at_usd": 2.8,
+ "seed": 20261108,
+ "prompts": {
+  "0a944c5c3b7592ae40f6e00b710b4a2ea020f12a76c3c4013583165c9c5cc240": "as a medieval knight in armour\n\nBai is the person in reference image 1, the main figure.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "65be2103825643f7be9ebf82f89af7aacd27a69bab0ebee9b49d507b60444dfe": "as a medieval knight in armour\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "b4068b9b5713a3490fdde61425fac34c4f4a1def8b29cc9a0b8ef137a33fc42a": "as a deep-sea diver in a brass helmet, underwater\n\nBai is the person in reference image 1, the main figure.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "76956d73f8a9ab11fded9c868ebf5c21a620f74c20951393dcebde6ce89094c0": "as a deep-sea diver in a brass helmet, underwater\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "3664e486a765072d014fd1a2ad8bdc68e2812d407fa6ce7d893aca792194ada3": "much taller, with a heavy, broad-shouldered build\n\nBai is the person in reference image 1, the main figure.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "a4409b5a0861ca87e5e605cd2135e445ab083d6cccff7fe71cce999632fa9f86": "much taller, with a heavy, broad-shouldered build\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "df949d24fe06be7fe1b6d85d7e34a19d3e99d4e7495a8c346da8a94aec3687e0": "aged about 70\n\nBai is the person in reference image 1, the main figure.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "a8e14de0cdfcb9c7b0c77a7fa96e76daaf1c9509417d45a5b86f2dad77cb5885": "aged about 70\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "cb08c620221376cf924d40b1110232492c2ea8e73e04e07a3608c128eea85922": "shaved head\n\nBai is the person in reference image 1, the main figure.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "78e9346178fcf0ed60f387d7496e93c39be87fc07c60c84188091f3e5f886053": "shaved head\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "ef0f51c25e2ff9679ee1cd019d35d4c36f800db9c6e961c6c44a3255a21e24c0": "in a long winter coat and scarf, snow on the shoulders\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "68cbd8b48a374364b62126a675140edb3be0461c012eb6cecb1ec87b7f9568a4": "dressed all in bright red and gold\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "527b40af6aab5909e2a979c01b96a86244c00cccdd85849d364bfbc221e3535c": "mid-leap over a wall, seen from below\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "f426dba56664b6b8dc1d0fc0d4bffb1a884a92c530e4be7cd8c317d6bb2d89ee": "furious and shouting\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "19820dcce93ecaaba084e2d3dbd1d03fd093f6179932ea7eba272dd02f9a7a91": "sitting on a rooftop at night in the rain\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "de80f6f149b301ba4d99314be6b25ced426e2444b3c0d628198ddb198fc5f40d": "with a robot arm and goggles\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "3f5b1251344f557f96d00f83bdd49d251672064410051fbe8563bade6096fe8a": "as a fox\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "30e78c95c4ba74dc78771c110ba414e03370f6c23ef32f989cf8fabb069fba29": "dressed all in bright red and gold\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky black hair with close-cut sides and one teal-blue streak, dark eyes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "244d590870b9bacd341c9cdead2c0f4b9f45ddf1f6bde78c78bc42f7fd096343": "aged about 70\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky black hair with close-cut sides and one teal-blue streak, dark eyes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "2dfcba8d7d34e9b55a8d71b2ee4bfcb141071f05064c7bfdf1fdd74c935549d9": "much taller, with a heavy, broad-shouldered build\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky black hair with close-cut sides and one teal-blue streak, dark eyes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "0afb91ff12b282853d3fc05fa753e7666f9e22f35e12f344dd30d5fc8ef48501": "as a medieval knight in armour\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky black hair with close-cut sides and one teal-blue streak, dark eyes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "e7ecd9c1450d1bf3d94cadc46340b18fe462499355e22a0a24b853bb7def1e13": "in a long winter coat and scarf, snow on the shoulders\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky black hair with close-cut sides and one teal-blue streak, dark eyes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "c727ce13340679437c4ba2bf823ed3899d859d1975e4fbac8ee79d3588afa397": "shaved head\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky black hair with close-cut sides and one teal-blue streak, dark eyes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "f718db8e4f72477fae7966c5167756ab706b5e024b845b206dd901d01a42c615": "as a deep-sea diver in a brass helmet, underwater\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky black hair with close-cut sides and one teal-blue streak, dark eyes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "9ac96a0a56e81b2d4e13e8c5a7f36c5f7e3780b5ebf62fe654b2c400ebc94f04": "as a fox\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky black hair with close-cut sides and one teal-blue streak, dark eyes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "guard",
+   "prompt_sha256": "0a944c5c3b7592ae40f6e00b710b4a2ea020f12a76c3c4013583165c9c5cc240",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000197025,
+   "cost_source": "reported",
+   "worst_usd": 0.00050685,
+   "at": "2026-11-09T20:16:00.732Z"
+  },
+  {
+   "kind": "picture",
+   "test": "flux",
+   "ch": "bai",
+   "change": 8,
+   "look": false,
+   "file": "flux-c08-bai-nolook.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "prompt_sha256": "0a944c5c3b7592ae40f6e00b710b4a2ea020f12a76c3c4013583165c9c5cc240",
+   "request_id": "01a1c1f4-1474-72f3-89cc-aface5d7f25b",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "0.5625"
+   },
+   "sha256": "c78ebde705e8651826f4d0de8c042aa0aa30c28482da5b50baa100b03e072cb9",
+   "original_sha256": "c78ebde705e8651826f4d0de8c042aa0aa30c28482da5b50baa100b03e072cb9",
+   "original_size": "1024x576",
+   "crop": null,
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:16:02.281Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "65be2103825643f7be9ebf82f89af7aacd27a69bab0ebee9b49d507b60444dfe",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000131925,
+   "cost_source": "reported",
+   "worst_usd": 0.0005223,
+   "at": "2026-11-09T20:16:02.984Z"
+  },
+  {
+   "kind": "picture",
+   "test": "flux",
+   "ch": "bai",
+   "change": 8,
+   "look": true,
+   "file": "flux-c08-bai-look.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "prompt_sha256": "65be2103825643f7be9ebf82f89af7aacd27a69bab0ebee9b49d507b60444dfe",
+   "request_id": "01a1c1f4-1c20-7593-a436-0145f45c50d9",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "0.5625"
+   },
+   "sha256": "730db9e11338d0cf14e5e27cac5350831c6bcffae852126904d4f0e9365d4519",
+   "original_sha256": "730db9e11338d0cf14e5e27cac5350831c6bcffae852126904d4f0e9365d4519",
+   "original_size": "1024x576",
+   "crop": null,
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:16:04.054Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "b4068b9b5713a3490fdde61425fac34c4f4a1def8b29cc9a0b8ef137a33fc42a",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000198675,
+   "cost_source": "reported",
+   "worst_usd": 0.000508275,
+   "at": "2026-11-09T20:16:04.936Z"
+  },
+  {
+   "kind": "picture",
+   "test": "flux",
+   "ch": "bai",
+   "change": 11,
+   "look": false,
+   "file": "flux-c11-bai-nolook.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "prompt_sha256": "b4068b9b5713a3490fdde61425fac34c4f4a1def8b29cc9a0b8ef137a33fc42a",
+   "request_id": "01a1c1f4-23c1-7842-8770-39a5bc21a22a",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "0.5625"
+   },
+   "sha256": "01fef00616638734b9a2dece3a630b97b0f9ff188c30753aac4bd2f18115aa7c",
+   "original_sha256": "01fef00616638734b9a2dece3a630b97b0f9ff188c30753aac4bd2f18115aa7c",
+   "original_size": "1024x576",
+   "crop": null,
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:16:06.189Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "76956d73f8a9ab11fded9c868ebf5c21a620f74c20951393dcebde6ce89094c0",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000115575,
+   "cost_source": "reported",
+   "worst_usd": 0.000523725,
+   "at": "2026-11-09T20:16:06.855Z"
+  },
+  {
+   "kind": "picture",
+   "test": "flux",
+   "ch": "bai",
+   "change": 11,
+   "look": true,
+   "file": "flux-c11-bai-look.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "prompt_sha256": "76956d73f8a9ab11fded9c868ebf5c21a620f74c20951393dcebde6ce89094c0",
+   "request_id": "01a1c1f4-2b40-7a01-b615-56b28168d29e",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "0.5625"
+   },
+   "sha256": "6811c963592284aeeba6c2a04e3b93598201f451d9c16a35ca21ec20bf5b7b4f",
+   "original_sha256": "6811c963592284aeeba6c2a04e3b93598201f451d9c16a35ca21ec20bf5b7b4f",
+   "original_size": "1024x576",
+   "crop": null,
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:16:08.154Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "3664e486a765072d014fd1a2ad8bdc68e2812d407fa6ce7d893aca792194ada3",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000105075,
+   "cost_source": "reported",
+   "worst_usd": 0.000508275,
+   "at": "2026-11-09T20:16:08.786Z"
+  },
+  {
+   "kind": "picture",
+   "test": "flux",
+   "ch": "bai",
+   "change": 4,
+   "look": false,
+   "file": "flux-c04-bai-nolook.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "prompt_sha256": "3664e486a765072d014fd1a2ad8bdc68e2812d407fa6ce7d893aca792194ada3",
+   "request_id": "01a1c1f4-32f3-7b02-bb6c-13051a9a819a",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "0.5625"
+   },
+   "sha256": "820ff1ab9da8a90c46bf6eaba621630ea55f39edfd4c9493177018babf4736fa",
+   "original_sha256": "820ff1ab9da8a90c46bf6eaba621630ea55f39edfd4c9493177018babf4736fa",
+   "original_size": "1024x576",
+   "crop": null,
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:16:10.510Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "a4409b5a0861ca87e5e605cd2135e445ab083d6cccff7fe71cce999632fa9f86",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000113175,
+   "cost_source": "reported",
+   "worst_usd": 0.000523725,
+   "at": "2026-11-09T20:16:11.205Z"
+  },
+  {
+   "kind": "picture",
+   "test": "flux",
+   "ch": "bai",
+   "change": 4,
+   "look": true,
+   "file": "flux-c04-bai-look.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "prompt_sha256": "a4409b5a0861ca87e5e605cd2135e445ab083d6cccff7fe71cce999632fa9f86",
+   "request_id": "01a1c1f4-3c3c-7db2-bcfd-69bb2da60d63",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "0.5625"
+   },
+   "sha256": "2906762c469ad6afed59cb6f43d58e9bebf064f98dc88a49d2a0cef3371db59f",
+   "original_sha256": "2906762c469ad6afed59cb6f43d58e9bebf064f98dc88a49d2a0cef3371db59f",
+   "original_size": "1024x576",
+   "crop": null,
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:16:12.511Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "df949d24fe06be7fe1b6d85d7e34a19d3e99d4e7495a8c346da8a94aec3687e0",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000129975,
+   "cost_source": "reported",
+   "worst_usd": 0.000505575,
+   "at": "2026-11-09T20:16:13.147Z"
+  },
+  {
+   "kind": "picture",
+   "test": "flux",
+   "ch": "bai",
+   "change": 3,
+   "look": false,
+   "file": "flux-c03-bai-nolook.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "prompt_sha256": "df949d24fe06be7fe1b6d85d7e34a19d3e99d4e7495a8c346da8a94aec3687e0",
+   "request_id": "01a1c1f4-43d4-7070-b138-c18ae9228155",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "0.5625"
+   },
+   "sha256": "56539683f958f67ed325d63d31a91d03b99baf7210dd154a4eae5f56b7693ed3",
+   "original_sha256": "56539683f958f67ed325d63d31a91d03b99baf7210dd154a4eae5f56b7693ed3",
+   "original_size": "1024x576",
+   "crop": null,
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:16:14.481Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "a8e14de0cdfcb9c7b0c77a7fa96e76daaf1c9509417d45a5b86f2dad77cb5885",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000144675,
+   "cost_source": "reported",
+   "worst_usd": 0.0005210249999999999,
+   "at": "2026-11-09T20:16:15.239Z"
+  },
+  {
+   "kind": "picture",
+   "test": "flux",
+   "ch": "bai",
+   "change": 3,
+   "look": true,
+   "file": "flux-c03-bai-look.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "prompt_sha256": "a8e14de0cdfcb9c7b0c77a7fa96e76daaf1c9509417d45a5b86f2dad77cb5885",
+   "request_id": "01a1c1f4-4bfd-74c3-acb9-fdab1a7a9518",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "0.5625"
+   },
+   "sha256": "2506745a7bf39a171fa87a31bbb3622dd5f0ab61d1da09d7eec02e9ed3c8c496",
+   "original_sha256": "2506745a7bf39a171fa87a31bbb3622dd5f0ab61d1da09d7eec02e9ed3c8c496",
+   "original_size": "1024x576",
+   "crop": null,
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:16:16.920Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "cb08c620221376cf924d40b1110232492c2ea8e73e04e07a3608c128eea85922",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001161,
+   "cost_source": "reported",
+   "worst_usd": 0.000505425,
+   "at": "2026-11-09T20:16:17.495Z"
+  },
+  {
+   "kind": "picture",
+   "test": "flux",
+   "ch": "bai",
+   "change": 7,
+   "look": false,
+   "file": "flux-c07-bai-nolook.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "prompt_sha256": "cb08c620221376cf924d40b1110232492c2ea8e73e04e07a3608c128eea85922",
+   "request_id": "01a1c1f4-54d0-75f3-875d-fdad00e810c3",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "0.5625"
+   },
+   "sha256": "738d6576806eeeaa637c0c58b0794ebfb81dde208ed07bb3434cc2176e818419",
+   "original_sha256": "738d6576806eeeaa637c0c58b0794ebfb81dde208ed07bb3434cc2176e818419",
+   "original_size": "1024x576",
+   "crop": null,
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:16:18.981Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "78e9346178fcf0ed60f387d7496e93c39be87fc07c60c84188091f3e5f886053",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001011,
+   "cost_source": "reported",
+   "worst_usd": 0.000520875,
+   "at": "2026-11-09T20:16:19.592Z"
+  },
+  {
+   "kind": "picture",
+   "test": "flux",
+   "ch": "bai",
+   "change": 7,
+   "look": true,
+   "file": "flux-c07-bai-look.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "prompt_sha256": "78e9346178fcf0ed60f387d7496e93c39be87fc07c60c84188091f3e5f886053",
+   "request_id": "01a1c1f4-5d00-76e3-8a35-5239019d6102",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "0.5625"
+   },
+   "sha256": "0b827aa95677a2d453710b9627b6369a55248a91cacea038b4a3c498fe53f3bb",
+   "original_sha256": "0b827aa95677a2d453710b9627b6369a55248a91cacea038b4a3c498fe53f3bb",
+   "original_size": "1024x576",
+   "crop": null,
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:16:21.277Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "ef0f51c25e2ff9679ee1cd019d35d4c36f800db9c6e961c6c44a3255a21e24c0",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000125175,
+   "cost_source": "reported",
+   "worst_usd": 0.0005241,
+   "at": "2026-11-09T20:16:21.953Z"
+  },
+  {
+   "kind": "picture",
+   "test": "qwen2511",
+   "ch": "bai",
+   "change": 1,
+   "look": true,
+   "file": "qwen2511-c01-bai.jpg",
+   "endpoint": "fal-ai/qwen-image-edit-2511",
+   "host": "fal.ai",
+   "prompt_sha256": "ef0f51c25e2ff9679ee1cd019d35d4c36f800db9c6e961c6c44a3255a21e24c0",
+   "request_id": "01a1c1f4-663c-7fe1-a5ef-b38b52da987b",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.03,
+   "cost_source": "fal's x-fal-billable-units (1) x $0.03/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "1"
+   },
+   "sha256": "4da557801dbbf9042cec4e93b35b28938ea2e68766d496fb70d416b1de2c23a6",
+   "original_sha256": "87b9308809d4bc44767d13b1208a804b4d96ce39d37048d929a5b431beef09a2",
+   "original_size": "1024x576",
+   "crop": {
+    "words": "not cropped (already 16:9)",
+    "original": "1024x576",
+    "kept": {
+     "left": 0,
+     "top": 0,
+     "width": 1024,
+     "height": 576
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:17:29.666Z",
+   "attempt": 1,
+   "worst_usd": 0.09
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "68cbd8b48a374364b62126a675140edb3be0461c012eb6cecb1ec87b7f9568a4",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000161175,
+   "cost_source": "reported",
+   "worst_usd": 0.0005226,
+   "at": "2026-11-09T20:17:30.563Z"
+  },
+  {
+   "kind": "picture",
+   "test": "qwen2511",
+   "ch": "bai",
+   "change": 2,
+   "look": true,
+   "file": "qwen2511-c02-bai.jpg",
+   "endpoint": "fal-ai/qwen-image-edit-2511",
+   "host": "fal.ai",
+   "prompt_sha256": "68cbd8b48a374364b62126a675140edb3be0461c012eb6cecb1ec87b7f9568a4",
+   "request_id": "01a1c1f5-723f-7843-9e62-d21c31655296",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.03,
+   "cost_source": "fal's x-fal-billable-units (1) x $0.03/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "1"
+   },
+   "sha256": "d1ca0b1d823b738a225942e2b2e83d6e69da62c39d82dd8c5a4d6e55333aab9c",
+   "original_sha256": "4eccb9d09ea34b07c8704071a721c7adad31ab2bc5429f7375cf1b7088fa7e42",
+   "original_size": "1024x576",
+   "crop": {
+    "words": "not cropped (already 16:9)",
+    "original": "1024x576",
+    "kept": {
+     "left": 0,
+     "top": 0,
+     "width": 1024,
+     "height": 576
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:17:34.491Z",
+   "attempt": 1,
+   "worst_usd": 0.09
+  },
+  {
+   "kind": "picture",
+   "test": "qwen2511",
+   "ch": "bai",
+   "change": 3,
+   "look": true,
+   "file": "qwen2511-c03-bai.jpg",
+   "endpoint": "fal-ai/qwen-image-edit-2511",
+   "host": "fal.ai",
+   "prompt_sha256": "a8e14de0cdfcb9c7b0c77a7fa96e76daaf1c9509417d45a5b86f2dad77cb5885",
+   "request_id": "01a1c1f5-8198-78a2-90f3-d9048e5c3fdb",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.03,
+   "cost_source": "fal's x-fal-billable-units (1) x $0.03/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "1"
+   },
+   "sha256": "73aae24b4d59666645d6f911571b2cbe52bb78346baf65f726ef04957dc557d3",
+   "original_sha256": "96f07ffe5b5a1168094683f3895279128d62b81120f7aaf90cf7b49141e1cbbf",
+   "original_size": "1024x576",
+   "crop": {
+    "words": "not cropped (already 16:9)",
+    "original": "1024x576",
+    "kept": {
+     "left": 0,
+     "top": 0,
+     "width": 1024,
+     "height": 576
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:17:38.543Z",
+   "attempt": 1,
+   "worst_usd": 0.09
+  },
+  {
+   "kind": "picture",
+   "test": "qwen2511",
+   "ch": "bai",
+   "change": 4,
+   "look": true,
+   "file": "qwen2511-c04-bai.jpg",
+   "endpoint": "fal-ai/qwen-image-edit-2511",
+   "host": "fal.ai",
+   "prompt_sha256": "a4409b5a0861ca87e5e605cd2135e445ab083d6cccff7fe71cce999632fa9f86",
+   "request_id": "01a1c1f5-9168-7d92-9295-a4ee52e34f0e",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.03,
+   "cost_source": "fal's x-fal-billable-units (1) x $0.03/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "1"
+   },
+   "sha256": "30a3b7a370c19b354e3d66d952b22b26d3f31bf44214f10dd45f963c7a015145",
+   "original_sha256": "3ea8b0a116a71b647326825ffa27c0eb990008f13a46f9378bd20cb7332dd965",
+   "original_size": "1024x576",
+   "crop": {
+    "words": "not cropped (already 16:9)",
+    "original": "1024x576",
+    "kept": {
+     "left": 0,
+     "top": 0,
+     "width": 1024,
+     "height": 576
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:17:46.738Z",
+   "attempt": 1,
+   "worst_usd": 0.09
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "527b40af6aab5909e2a979c01b96a86244c00cccdd85849d364bfbc221e3535c",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 9.1425e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.000522825,
+   "at": "2026-11-09T20:17:47.376Z"
+  },
+  {
+   "kind": "picture",
+   "test": "qwen2511",
+   "ch": "bai",
+   "change": 5,
+   "look": true,
+   "file": "qwen2511-c05-bai.jpg",
+   "endpoint": "fal-ai/qwen-image-edit-2511",
+   "host": "fal.ai",
+   "prompt_sha256": "527b40af6aab5909e2a979c01b96a86244c00cccdd85849d364bfbc221e3535c",
+   "request_id": "01a1c1f5-b3ed-7172-a48f-df2bd678beeb",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.03,
+   "cost_source": "fal's x-fal-billable-units (1) x $0.03/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "1"
+   },
+   "sha256": "9da11ca143e921f0ac6b5d8ae0ec3bc8e77ed1128e16eacd859c1f808e30b0f4",
+   "original_sha256": "52f795d17716d718a3d864235505cf348ca8976496e08e4954f8771abc7382a4",
+   "original_size": "1024x576",
+   "crop": {
+    "words": "not cropped (already 16:9)",
+    "original": "1024x576",
+    "kept": {
+     "left": 0,
+     "top": 0,
+     "width": 1024,
+     "height": 576
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:17:51.772Z",
+   "attempt": 1,
+   "worst_usd": 0.09
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "f426dba56664b6b8dc1d0fc0d4bffb1a884a92c530e4be7cd8c317d6bb2d89ee",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000168975,
+   "cost_source": "reported",
+   "worst_usd": 0.00052155,
+   "at": "2026-11-09T20:17:52.841Z"
+  },
+  {
+   "kind": "picture",
+   "test": "qwen2511",
+   "ch": "bai",
+   "change": 6,
+   "look": true,
+   "file": "qwen2511-c06-bai.jpg",
+   "endpoint": "fal-ai/qwen-image-edit-2511",
+   "host": "fal.ai",
+   "prompt_sha256": "f426dba56664b6b8dc1d0fc0d4bffb1a884a92c530e4be7cd8c317d6bb2d89ee",
+   "request_id": "01a1c1f5-c940-7993-a85e-bc3f47cd3eaa",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.03,
+   "cost_source": "fal's x-fal-billable-units (1) x $0.03/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "1"
+   },
+   "sha256": "02418d34e85fa4803bff55a7eca23d69a6a99b6174a1ff5f755a83d35eb63096",
+   "original_sha256": "6973e56899cf82b94a17ce0977aedc0313af4536a7102b4aba8ff130fd83769f",
+   "original_size": "1024x576",
+   "crop": {
+    "words": "not cropped (already 16:9)",
+    "original": "1024x576",
+    "kept": {
+     "left": 0,
+     "top": 0,
+     "width": 1024,
+     "height": 576
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:17:56.656Z",
+   "attempt": 1,
+   "worst_usd": 0.09
+  },
+  {
+   "kind": "picture",
+   "test": "qwen2511",
+   "ch": "bai",
+   "change": 7,
+   "look": true,
+   "file": "qwen2511-c07-bai.jpg",
+   "endpoint": "fal-ai/qwen-image-edit-2511",
+   "host": "fal.ai",
+   "prompt_sha256": "78e9346178fcf0ed60f387d7496e93c39be87fc07c60c84188091f3e5f886053",
+   "request_id": "01a1c1f5-d828-7e00-b22a-4a4e4257f68b",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.03,
+   "cost_source": "fal's x-fal-billable-units (1) x $0.03/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "1"
+   },
+   "sha256": "f5a866a0884a9c0ff1fb7464fdbf3d575644accd1ed991a7aa757687a2f8e3b2",
+   "original_sha256": "b018c0bfd856bd6e36c0b7ff6941d9528abcd0eb71d6cb07ed6a9ac8d5d24c88",
+   "original_size": "1024x576",
+   "crop": {
+    "words": "not cropped (already 16:9)",
+    "original": "1024x576",
+    "kept": {
+     "left": 0,
+     "top": 0,
+     "width": 1024,
+     "height": 576
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:18:00.766Z",
+   "attempt": 1,
+   "worst_usd": 0.09
+  },
+  {
+   "kind": "picture",
+   "test": "qwen2511",
+   "ch": "bai",
+   "change": 8,
+   "look": true,
+   "file": "qwen2511-c08-bai.jpg",
+   "endpoint": "fal-ai/qwen-image-edit-2511",
+   "host": "fal.ai",
+   "prompt_sha256": "65be2103825643f7be9ebf82f89af7aacd27a69bab0ebee9b49d507b60444dfe",
+   "request_id": "01a1c1f5-e834-72b1-b9b9-9850d126ab86",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.03,
+   "cost_source": "fal's x-fal-billable-units (1) x $0.03/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "1"
+   },
+   "sha256": "194a4f1cc82c4bd55190cff39801c63ac560eb5e5a973ac542a87964f2fd591f",
+   "original_sha256": "edbf1d840655cafcbd9e08eabc7945711a91b00eb42e86710d2abf626224c5af",
+   "original_size": "1024x576",
+   "crop": {
+    "words": "not cropped (already 16:9)",
+    "original": "1024x576",
+    "kept": {
+     "left": 0,
+     "top": 0,
+     "width": 1024,
+     "height": 576
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:18:04.665Z",
+   "attempt": 1,
+   "worst_usd": 0.09
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "19820dcce93ecaaba084e2d3dbd1d03fd093f6179932ea7eba272dd02f9a7a91",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000163425,
+   "cost_source": "reported",
+   "worst_usd": 0.0005231249999999999,
+   "at": "2026-11-09T20:18:05.539Z"
+  },
+  {
+   "kind": "picture",
+   "test": "qwen2511",
+   "ch": "bai",
+   "change": 9,
+   "look": true,
+   "file": "qwen2511-c09-bai.jpg",
+   "endpoint": "fal-ai/qwen-image-edit-2511",
+   "host": "fal.ai",
+   "prompt_sha256": "19820dcce93ecaaba084e2d3dbd1d03fd093f6179932ea7eba272dd02f9a7a91",
+   "request_id": "01a1c1f5-fadc-7f50-afff-091d7d314c09",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.03,
+   "cost_source": "fal's x-fal-billable-units (1) x $0.03/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "1"
+   },
+   "sha256": "8bc6aabb15c1fa07b10b89d1235f66d4bf82f5c17ced9991fb417bd574a19843",
+   "original_sha256": "3de8c0331f1fa440d70c0990b8b52f8e34c95da3f399e3e7126cfca41df1c570",
+   "original_size": "1024x576",
+   "crop": {
+    "words": "not cropped (already 16:9)",
+    "original": "1024x576",
+    "kept": {
+     "left": 0,
+     "top": 0,
+     "width": 1024,
+     "height": 576
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:18:10.789Z",
+   "attempt": 1,
+   "worst_usd": 0.09
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "de80f6f149b301ba4d99314be6b25ced426e2444b3c0d628198ddb198fc5f40d",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000154725,
+   "cost_source": "reported",
+   "worst_usd": 0.00052215,
+   "at": "2026-11-09T20:18:11.624Z"
+  },
+  {
+   "kind": "picture",
+   "test": "qwen2511",
+   "ch": "bai",
+   "change": 10,
+   "look": true,
+   "file": "qwen2511-c10-bai.jpg",
+   "endpoint": "fal-ai/qwen-image-edit-2511",
+   "host": "fal.ai",
+   "prompt_sha256": "de80f6f149b301ba4d99314be6b25ced426e2444b3c0d628198ddb198fc5f40d",
+   "request_id": "01a1c1f6-12b8-7551-ab66-382ef9d34c11",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.03,
+   "cost_source": "fal's x-fal-billable-units (1) x $0.03/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "1"
+   },
+   "sha256": "71e95b798e0f03d910acdc99aa39185c7eed79d626650a2f42b75ede7debf8bd",
+   "original_sha256": "f36fc4e317e4d82261edf34d30ac4640585896eb984aa52008c678783a322e8b",
+   "original_size": "1024x576",
+   "crop": {
+    "words": "not cropped (already 16:9)",
+    "original": "1024x576",
+    "kept": {
+     "left": 0,
+     "top": 0,
+     "width": 1024,
+     "height": 576
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:18:16.286Z",
+   "attempt": 1,
+   "worst_usd": 0.09
+  },
+  {
+   "kind": "picture",
+   "test": "qwen2511",
+   "ch": "bai",
+   "change": 11,
+   "look": true,
+   "file": "qwen2511-c11-bai.jpg",
+   "endpoint": "fal-ai/qwen-image-edit-2511",
+   "host": "fal.ai",
+   "prompt_sha256": "76956d73f8a9ab11fded9c868ebf5c21a620f74c20951393dcebde6ce89094c0",
+   "request_id": "01a1c1f6-24dc-7942-ae64-125bc76ac0ba",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.03,
+   "cost_source": "fal's x-fal-billable-units (1) x $0.03/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "1"
+   },
+   "sha256": "37842979608d4a61c060cb94e450e61b23e8e080c9c398e7a011ed70cc48c0a0",
+   "original_sha256": "95d5bde40083252f7e12b36865756ab5fc1de0fc5de2150e84cdada058095f1d",
+   "original_size": "1024x576",
+   "crop": {
+    "words": "not cropped (already 16:9)",
+    "original": "1024x576",
+    "kept": {
+     "left": 0,
+     "top": 0,
+     "width": 1024,
+     "height": 576
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:18:36.788Z",
+   "attempt": 1,
+   "worst_usd": 0.09
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "3f5b1251344f557f96d00f83bdd49d251672064410051fbe8563bade6096fe8a",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001584,
+   "cost_source": "reported",
+   "worst_usd": 0.00052065,
+   "at": "2026-11-09T20:18:37.681Z"
+  },
+  {
+   "kind": "picture",
+   "test": "qwen2511",
+   "ch": "bai",
+   "change": 12,
+   "look": true,
+   "file": "qwen2511-c12-bai.jpg",
+   "endpoint": "fal-ai/qwen-image-edit-2511",
+   "host": "fal.ai",
+   "prompt_sha256": "3f5b1251344f557f96d00f83bdd49d251672064410051fbe8563bade6096fe8a",
+   "request_id": "01a1c1f6-786f-7502-98ae-4f69d4b4f7fb",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.03,
+   "cost_source": "fal's x-fal-billable-units (1) x $0.03/megapixel",
+   "billing_headers": {
+    "x-fal-billable-units": "1"
+   },
+   "sha256": "e5a868bbfcc9010a0849e181dba9a079c8b1f75c01dba34c6ff9f7c9028335c4",
+   "original_sha256": "75c248bd6192dfe2d40229930f86ecb236b4a196af800a67d11855a6426ffe63",
+   "original_size": "1024x576",
+   "crop": {
+    "words": "not cropped (already 16:9)",
+    "original": "1024x576",
+    "kept": {
+     "left": 0,
+     "top": 0,
+     "width": 1024,
+     "height": 576
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-09T20:18:42.929Z",
+   "attempt": 1,
+   "worst_usd": 0.09
+  },
+  {
+   "kind": "endpoint-list",
+   "status": "ok",
+   "retention": {
+    "provider": "vertex",
+    "zero_data_retention": true,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-09T20:18:43.104Z"
+   },
+   "cost_usd": 0,
+   "cost_source": "free GET",
+   "at": "2026-11-09T20:18:43.104Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "30e78c95c4ba74dc78771c110ba414e03370f6c23ef32f989cf8fabb069fba29",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00012225,
+   "cost_source": "reported",
+   "worst_usd": 0.0005210249999999999,
+   "at": "2026-11-09T20:18:43.805Z"
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "zei",
+   "change": 2,
+   "look": true,
+   "file": "geminiF3-c02-zei.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "30e78c95c4ba74dc78771c110ba414e03370f6c23ef32f989cf8fabb069fba29",
+   "reference": {
+    "from_sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c",
+    "sent_sha256": "85755cc4c3380b11a69801d8485ec371e0ce67c6732719e96350861f0d51ae9e",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZD475ZP1M4V4WQK6E2AAV",
+   "status": "ok",
+   "cost_usd": 0.067606,
+   "cost_source": "reported by the gateway",
+   "sha256": "26c71ac18772183b214c3651e574a1e6c7f14ab4085810ad4b09a03a9560b53d",
+   "original_sha256": "a9fd9c5acd8a263eb37372c79d3ad834acbbb75a9e8c1ca188dd67cf6124bc0c",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1212,
+    "completion_tokens": 1120,
+    "total_tokens": 2332,
+    "cost": 0.067606,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067606,
+    "gateway_cost": 0.067606
+   },
+   "at": "2026-11-09T20:18:53.817Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "bai",
+   "change": 2,
+   "look": true,
+   "file": "geminiF3-c02-bai.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "68cbd8b48a374364b62126a675140edb3be0461c012eb6cecb1ec87b7f9568a4",
+   "reference": {
+    "from_sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96",
+    "sent_sha256": "633a992ce6c01af54d752aa0984c51fcf707ce83e6b25454e4840df481f2cd9c",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZDDZ0WCP3EQFDQB265Z7Q",
+   "status": "ok",
+   "cost_usd": 0.067605,
+   "cost_source": "reported by the gateway",
+   "sha256": "a762f8e69fb77725584d5902d37821f72ab25dc1dcc1a2ec25de78124d23f251",
+   "original_sha256": "f5f2910bae8d6075a58f40cc82576d5d790d94381d20afa5ae605376c1f2a653",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1210,
+    "completion_tokens": 1120,
+    "total_tokens": 2330,
+    "cost": 0.067605,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067605,
+    "gateway_cost": 0.067605
+   },
+   "at": "2026-11-09T20:19:02.911Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "244d590870b9bacd341c9cdead2c0f4b9f45ddf1f6bde78c78bc42f7fd096343",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00014085,
+   "cost_source": "reported",
+   "worst_usd": 0.00051945,
+   "at": "2026-11-09T20:19:03.722Z"
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "zei",
+   "change": 3,
+   "look": true,
+   "file": "geminiF3-c03-zei.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "244d590870b9bacd341c9cdead2c0f4b9f45ddf1f6bde78c78bc42f7fd096343",
+   "reference": {
+    "from_sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c",
+    "sent_sha256": "85755cc4c3380b11a69801d8485ec371e0ce67c6732719e96350861f0d51ae9e",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZDQQ67ZAKHPHH9CSCK0TR",
+   "status": "ok",
+   "cost_usd": 0.067605,
+   "cost_source": "reported by the gateway",
+   "sha256": "680db212db18892eaa74c7bb01d301e8d117af618ebcb66c0589f5a94cfbeebf",
+   "original_sha256": "b05cce0c04be16d162e5c1a5c4c7c708ca75e061939cbc0ecf6335d5dbced8c9",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1210,
+    "completion_tokens": 1120,
+    "total_tokens": 2330,
+    "cost": 0.067605,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067605,
+    "gateway_cost": 0.067605
+   },
+   "at": "2026-11-09T20:19:11.867Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "bai",
+   "change": 3,
+   "look": true,
+   "file": "geminiF3-c03-bai.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "a8e14de0cdfcb9c7b0c77a7fa96e76daaf1c9509417d45a5b86f2dad77cb5885",
+   "reference": {
+    "from_sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96",
+    "sent_sha256": "633a992ce6c01af54d752aa0984c51fcf707ce83e6b25454e4840df481f2cd9c",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZDZJG9H2BB7JXZHBF83WX",
+   "status": "ok",
+   "cost_usd": 0.067604,
+   "cost_source": "reported by the gateway",
+   "sha256": "608f790a107909245943d69d95238632bd954ae2b6cffc7d3359ed963218c506",
+   "original_sha256": "a05394c76cbc96f74ad0a3d01d949df8f62c5daf78a02e11c7c1b796ece0bcd4",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1208,
+    "completion_tokens": 1120,
+    "total_tokens": 2328,
+    "cost": 0.067604,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067604,
+    "gateway_cost": 0.067604
+   },
+   "at": "2026-11-09T20:19:21.658Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "2dfcba8d7d34e9b55a8d71b2ee4bfcb141071f05064c7bfdf1fdd74c935549d9",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00012735,
+   "cost_source": "reported",
+   "worst_usd": 0.00052215,
+   "at": "2026-11-09T20:19:22.286Z"
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "zei",
+   "change": 4,
+   "look": true,
+   "file": "geminiF3-c04-zei.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "2dfcba8d7d34e9b55a8d71b2ee4bfcb141071f05064c7bfdf1fdd74c935549d9",
+   "reference": {
+    "from_sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c",
+    "sent_sha256": "85755cc4c3380b11a69801d8485ec371e0ce67c6732719e96350861f0d51ae9e",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZE9RGF9KVT1NN4AQXKRQV",
+   "status": "ok",
+   "cost_usd": 0.0676085,
+   "cost_source": "reported by the gateway",
+   "sha256": "341700847d20d0141f49c3a856662d8ef5563f6d8d500b72767980a12dcd59dd",
+   "original_sha256": "31d601de4f886dec818a75b2c837351e7492975f702b4e1b5e982f1856ec8237",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1217,
+    "completion_tokens": 1120,
+    "total_tokens": 2337,
+    "cost": 0.0676085,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0676085,
+    "gateway_cost": 0.0676085
+   },
+   "at": "2026-11-09T20:19:31.514Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "bai",
+   "change": 4,
+   "look": true,
+   "file": "geminiF3-c04-bai.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "a4409b5a0861ca87e5e605cd2135e445ab083d6cccff7fe71cce999632fa9f86",
+   "reference": {
+    "from_sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96",
+    "sent_sha256": "633a992ce6c01af54d752aa0984c51fcf707ce83e6b25454e4840df481f2cd9c",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZEJR8Z5QB0J4FMK1KYCRM",
+   "status": "ok",
+   "cost_usd": 0.0676075,
+   "cost_source": "reported by the gateway",
+   "sha256": "e85b349835f8b72f28872c85e5bb357151ae7feb165b194ed35d79bdd829f953",
+   "original_sha256": "c6d26c6811265d18b1ebaed43109a1013c9750574d36fd5bcc9652ceca768685",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1215,
+    "completion_tokens": 1120,
+    "total_tokens": 2335,
+    "cost": 0.0676075,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0676075,
+    "gateway_cost": 0.0676075
+   },
+   "at": "2026-11-09T20:19:40.123Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "0afb91ff12b282853d3fc05fa753e7666f9e22f35e12f344dd30d5fc8ef48501",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001716,
+   "cost_source": "reported",
+   "worst_usd": 0.000520725,
+   "at": "2026-11-09T20:19:40.910Z"
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "zei",
+   "change": 8,
+   "look": true,
+   "file": "geminiF3-c08-zei.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "0afb91ff12b282853d3fc05fa753e7666f9e22f35e12f344dd30d5fc8ef48501",
+   "reference": {
+    "from_sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c",
+    "sent_sha256": "85755cc4c3380b11a69801d8485ec371e0ce67c6732719e96350861f0d51ae9e",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZEVZH7P6A6TVHCX1SFD1B",
+   "status": "ok",
+   "cost_usd": 0.0676055,
+   "cost_source": "reported by the gateway",
+   "sha256": "d181bd3c063720a39ff4a72beec0bd1d017e8323e7742302c280d219a9a83071",
+   "original_sha256": "e0d0ea20d600f3de4c7dbaa026c15c52b02e7d143f1bbee6349467e8ba989e48",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1211,
+    "completion_tokens": 1120,
+    "total_tokens": 2331,
+    "cost": 0.0676055,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0676055,
+    "gateway_cost": 0.0676055
+   },
+   "at": "2026-11-09T20:19:52.299Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 2
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "bai",
+   "change": 8,
+   "look": true,
+   "file": "geminiF3-c08-bai.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "65be2103825643f7be9ebf82f89af7aacd27a69bab0ebee9b49d507b60444dfe",
+   "reference": {
+    "from_sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96",
+    "sent_sha256": "633a992ce6c01af54d752aa0984c51fcf707ce83e6b25454e4840df481f2cd9c",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZF75FKAVQN8ZK0TM676DC",
+   "status": "ok",
+   "cost_usd": 0.0676045,
+   "cost_source": "reported by the gateway",
+   "sha256": "a06e0dab713038a89664e759a3207cdfe996efe0568f955752267a803d35a3ef",
+   "original_sha256": "5ddb6bb60a27bdd5469ca42344dfb1cc011d80150df76d1b503ecf5d4bcc78e8",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1209,
+    "completion_tokens": 1120,
+    "total_tokens": 2329,
+    "cost": 0.0676045,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0676045,
+    "gateway_cost": 0.0676045
+   },
+   "at": "2026-11-09T20:20:01.606Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 3
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "e7ecd9c1450d1bf3d94cadc46340b18fe462499355e22a0a24b853bb7def1e13",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00011025,
+   "cost_source": "reported",
+   "worst_usd": 0.0005225249999999999,
+   "at": "2026-11-09T20:20:02.227Z"
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "zei",
+   "change": 1,
+   "look": true,
+   "file": "geminiF3-c01-zei.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "e7ecd9c1450d1bf3d94cadc46340b18fe462499355e22a0a24b853bb7def1e13",
+   "reference": {
+    "from_sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c",
+    "sent_sha256": "85755cc4c3380b11a69801d8485ec371e0ce67c6732719e96350861f0d51ae9e",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZFGRTTZJYNB5Q09FM6A5S",
+   "status": "ok",
+   "cost_usd": 0.0676085,
+   "cost_source": "reported by the gateway",
+   "sha256": "e40f5cb8df4d2b7fef345305324eefe38344b8eda4e564b9ced9ba6f0410c622",
+   "original_sha256": "19b2c984a3b2f31b0c04d5f0b63949c585d8822a602d08bd3c6d88490cacb610",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1217,
+    "completion_tokens": 1120,
+    "total_tokens": 2337,
+    "cost": 0.0676085,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0676085,
+    "gateway_cost": 0.0676085
+   },
+   "at": "2026-11-09T20:20:13.157Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 2
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "bai",
+   "change": 1,
+   "look": true,
+   "file": "geminiF3-c01-bai.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "ef0f51c25e2ff9679ee1cd019d35d4c36f800db9c6e961c6c44a3255a21e24c0",
+   "reference": {
+    "from_sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96",
+    "sent_sha256": "633a992ce6c01af54d752aa0984c51fcf707ce83e6b25454e4840df481f2cd9c",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZFVNGP12BVPGW5TE4YZ0Q",
+   "status": "ok",
+   "cost_usd": 0.0676075,
+   "cost_source": "reported by the gateway",
+   "sha256": "00c706aed45b7a9a3281e5442f904b93a0ac596271d021d3bb22125c0959477c",
+   "original_sha256": "6981659ba3a25cefee1c6cdf74ce7a195dfe8de08cf87dd9cd3ce76e1b4368e9",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1215,
+    "completion_tokens": 1120,
+    "total_tokens": 2335,
+    "cost": 0.0676075,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0676075,
+    "gateway_cost": 0.0676075
+   },
+   "at": "2026-11-09T20:20:22.699Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 2
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "c727ce13340679437c4ba2bf823ed3899d859d1975e4fbac8ee79d3588afa397",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000136275,
+   "cost_source": "reported",
+   "worst_usd": 0.0005193,
+   "at": "2026-11-09T20:20:23.415Z"
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "zei",
+   "change": 7,
+   "look": true,
+   "file": "geminiF3-c07-zei.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "c727ce13340679437c4ba2bf823ed3899d859d1975e4fbac8ee79d3588afa397",
+   "reference": {
+    "from_sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c",
+    "sent_sha256": "85755cc4c3380b11a69801d8485ec371e0ce67c6732719e96350861f0d51ae9e",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZG5G1HVDZNG821YKCMNYD",
+   "status": "ok",
+   "cost_usd": 0.067604,
+   "cost_source": "reported by the gateway",
+   "sha256": "3586064c993c5ad95aa92755216ac10cf161c6df1681f117f33d6f6edaff88cb",
+   "original_sha256": "497419592c533393fb6de2280af2d91c75446de310405293d6a10b53fd45effe",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1208,
+    "completion_tokens": 1120,
+    "total_tokens": 2328,
+    "cost": 0.067604,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067604,
+    "gateway_cost": 0.067604
+   },
+   "at": "2026-11-09T20:20:34.060Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "bai",
+   "change": 7,
+   "look": true,
+   "file": "geminiF3-c07-bai.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "78e9346178fcf0ed60f387d7496e93c39be87fc07c60c84188091f3e5f886053",
+   "reference": {
+    "from_sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96",
+    "sent_sha256": "633a992ce6c01af54d752aa0984c51fcf707ce83e6b25454e4840df481f2cd9c",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZGFVX21QYMCZ9JBPZ2WXQ",
+   "status": "ok",
+   "cost_usd": 0.067603,
+   "cost_source": "reported by the gateway",
+   "sha256": "41dcf0c0f5a6f9b8476001c5c5b56cc6d1b7831b42f51dba3b1318c38254eb8f",
+   "original_sha256": "67d89bb5af56e8a6cb7d286a440e09a12bfd95268b38f1e33b734a642d7a0e83",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1206,
+    "completion_tokens": 1120,
+    "total_tokens": 2326,
+    "cost": 0.067603,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067603,
+    "gateway_cost": 0.067603
+   },
+   "at": "2026-11-09T20:20:42.613Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "f718db8e4f72477fae7966c5167756ab706b5e024b845b206dd901d01a42c615",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00010755,
+   "cost_source": "reported",
+   "worst_usd": 0.00052215,
+   "at": "2026-11-09T20:20:43.337Z"
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "zei",
+   "change": 11,
+   "look": true,
+   "file": "geminiF3-c11-zei.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "f718db8e4f72477fae7966c5167756ab706b5e024b845b206dd901d01a42c615",
+   "reference": {
+    "from_sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c",
+    "sent_sha256": "85755cc4c3380b11a69801d8485ec371e0ce67c6732719e96350861f0d51ae9e",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZGRXFVMMXMYBDXJ4T4068",
+   "status": "ok",
+   "cost_usd": 0.0676085,
+   "cost_source": "reported by the gateway",
+   "sha256": "ad927f10957db21d296ce2868b8444a8d992239ad4ae648dc6a85f710be5c0fe",
+   "original_sha256": "a487e6081baaf6aa3025a969f14b9b5174ab4e807ec4a5b7da46ac5fce8a3b3d",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1217,
+    "completion_tokens": 1120,
+    "total_tokens": 2337,
+    "cost": 0.0676085,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0676085,
+    "gateway_cost": 0.0676085
+   },
+   "at": "2026-11-09T20:20:53.623Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "bai",
+   "change": 11,
+   "look": true,
+   "file": "geminiF3-c11-bai.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "76956d73f8a9ab11fded9c868ebf5c21a620f74c20951393dcebde6ce89094c0",
+   "reference": {
+    "from_sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96",
+    "sent_sha256": "633a992ce6c01af54d752aa0984c51fcf707ce83e6b25454e4840df481f2cd9c",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZH30G8ASWM4PBXAJK1GKM",
+   "status": "ok",
+   "cost_usd": 0.0676075,
+   "cost_source": "reported by the gateway",
+   "sha256": "b2ccc835762ad797aa1ea65bc97555b2426e55f46187032811b12b873219d844",
+   "original_sha256": "1a8d0fad711ef8d738b004a7b2a4c34ae236e7b2cc2c989bde775af80b15fac3",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1215,
+    "completion_tokens": 1120,
+    "total_tokens": 2335,
+    "cost": 0.0676075,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0676075,
+    "gateway_cost": 0.0676075
+   },
+   "at": "2026-11-09T20:21:04.569Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "9ac96a0a56e81b2d4e13e8c5a7f36c5f7e3780b5ebf62fe654b2c400ebc94f04",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000217275,
+   "cost_source": "reported",
+   "worst_usd": 0.0005190749999999999,
+   "at": "2026-11-09T20:21:05.702Z"
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "zei",
+   "change": 12,
+   "look": true,
+   "file": "geminiF3-c12-zei.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "9ac96a0a56e81b2d4e13e8c5a7f36c5f7e3780b5ebf62fe654b2c400ebc94f04",
+   "reference": {
+    "from_sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c",
+    "sent_sha256": "85755cc4c3380b11a69801d8485ec371e0ce67c6732719e96350861f0d51ae9e",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZHF4X35PEJKMATXANP09B",
+   "status": "ok",
+   "cost_usd": 0.067604,
+   "cost_source": "reported by the gateway",
+   "sha256": "d9badf8b348e9021c0f38c8dff4ca1ff34c94bb327e403e9beadd510c83c8685",
+   "original_sha256": "6758ab391d7a4e55ba57f0d1b4b6e2ff4d5fb9d3e58f0ca5480e633575d7c7c5",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1208,
+    "completion_tokens": 1120,
+    "total_tokens": 2328,
+    "cost": 0.067604,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067604,
+    "gateway_cost": 0.067604
+   },
+   "at": "2026-11-09T20:21:14.924Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "picture",
+   "test": "geminiF3",
+   "ch": "bai",
+   "change": 12,
+   "look": true,
+   "file": "geminiF3-c12-bai.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "prompt_sha256": "3f5b1251344f557f96d00f83bdd49d251672064410051fbe8563bade6096fe8a",
+   "reference": {
+    "from_sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96",
+    "sent_sha256": "633a992ce6c01af54d752aa0984c51fcf707ce83e6b25454e4840df481f2cd9c",
+    "how": "toView(front, 1024x576): contain, padded with its own top-left colour, JPEG q92"
+   },
+   "request_id": "gen_01M70ZHQRM0NJRP79BY032VNJ3",
+   "status": "ok",
+   "cost_usd": 0.067603,
+   "cost_source": "reported by the gateway",
+   "sha256": "8111f62ccc4ff65429a448d2a91647b159297972482434624e95a2e88b24dd78",
+   "original_sha256": "30dc824a4f04f9526469c1ac049cd78c7e70ecc0b9699979efde7f6c7e0731c5",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1206,
+    "completion_tokens": 1120,
+    "total_tokens": 2326,
+    "cost": 0.067603,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067603,
+    "gateway_cost": 0.067603
+   },
+   "at": "2026-11-09T20:21:24.867Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "copies_by_eye": 1
+  }
+ ],
+ "gemini_copies_by_eye": {
+  "how": "Counted by eye by the coding agent; a side panel with a large crop of the same figure counts as a copy.",
+  "rows": [
+   {
+    "change": 2,
+    "character": "zei",
+    "before_B": 1,
+    "F3": 1
+   },
+   {
+    "change": 2,
+    "character": "bai",
+    "before_B": 1,
+    "F3": 1
+   },
+   {
+    "change": 3,
+    "character": "zei",
+    "before_B": 1,
+    "F3": 1
+   },
+   {
+    "change": 3,
+    "character": "bai",
+    "before_B": 2,
+    "F3": 1
+   },
+   {
+    "change": 4,
+    "character": "zei",
+    "before_B": 1,
+    "F3": 1
+   },
+   {
+    "change": 4,
+    "character": "bai",
+    "before_B": 3,
+    "F3": 1
+   },
+   {
+    "change": 8,
+    "character": "zei",
+    "before_B": 1,
+    "F3": 2
+   },
+   {
+    "change": 8,
+    "character": "bai",
+    "before_B": 1,
+    "F3": 3
+   },
+   {
+    "change": 1,
+    "character": "zei",
+    "before_B": 1,
+    "F3": 2
+   },
+   {
+    "change": 1,
+    "character": "bai",
+    "before_B": 1,
+    "F3": 2
+   },
+   {
+    "change": 7,
+    "character": "zei",
+    "before_B": 2,
+    "F3": 1
+   },
+   {
+    "change": 7,
+    "character": "bai",
+    "before_B": 1,
+    "F3": 1
+   },
+   {
+    "change": 11,
+    "character": "zei",
+    "before_B": 1,
+    "F3": 1
+   },
+   {
+    "change": 11,
+    "character": "bai",
+    "before_B": 1,
+    "F3": 1
+   },
+   {
+    "change": 12,
+    "character": "zei",
+    "before_B": 1,
+    "F3": 1
+   },
+   {
+    "change": 12,
+    "character": "bai",
+    "before_B": 1,
+    "F3": 1
+   }
+  ]
+ },
+ "judged_by_eye": {
+  "flux": {
+   "8": {
+    "nolook": "armour; face reads as a man under a helmet, magenta ponytail",
+    "look": "armour; clearly Bai, a woman, magenta hair, earrings"
+   },
+   "11": {
+    "nolook": "diver; a different, light-skinned woman",
+    "look": "diver; clearly Bai: dark skin, magenta hair, tattoos"
+   },
+   "4": {
+    "nolook": "much bulkier; still Bai",
+    "look": "build not changed (slim), a grey blob behind the legs"
+   },
+   "3": {
+    "nolook": "aged: old face, long white hair",
+    "look": "not aged at all"
+   },
+   "7": {
+    "nolook": "fully shaved",
+    "look": "not shaved: magenta hair kept"
+   }
+  },
+  "qwen2511_vs_2509": {
+   "3": "both weak (a few lines on the face)",
+   "4": "both weak (2511 slightly more muscular)",
+   "7": "both fail: magenta hair kept",
+   "12": "both fail: no fox",
+   "others": "coat, red and gold, leap, shouting, knight, rooftop, robot arm and diver work on both; 2511 keeps her face a little better (diver) and honours 1024x576"
+  }
+ }
+}
