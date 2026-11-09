@@ -1883,7 +1883,7 @@ async function checkChallengeLanding() {
       await zei.locator('.cc-line').scrollIntoViewIfNeeded();
       const lineBox = await zei.locator('.cc-line').boundingBox();
       if (lineBox) await page.mouse.click(lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2);
-      await page.waitForURL('**/challenge/zei', { timeout: 30000 }).catch(() => fail(`/challenge ${tag}: tapping Zei's row outside a picture didn't open /challenge/zei`));
+      await page.waitForURL('**/challenge/zei', { timeout: 30000, waitUntil: 'commit' }).catch(() => fail(`/challenge ${tag}: tapping Zei's row outside a picture didn't open /challenge/zei`));
 
       // A character's page (owner, 2026-11-08): the name, the one line, "Bases", then "Remixes": every published picture of
       // the character, newest first, whole at 16:9, each opening its remix screen; no count. Gladias has none yet.
