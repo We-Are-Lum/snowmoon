@@ -32,6 +32,10 @@ export const MODEL_WORDING = {
   adultFirst: 'Confirm you’re 18 or older first.',
 } as const;
 
+/** A refusal's words with {reset} written in the visitor's own time (from the answer's resetAt instant). In the browser only. */
+export const withReset = (error: string, resetAt: unknown): string =>
+  typeof resetAt === 'string' && error.includes('{reset}') ? error.replace('{reset}', resetLocal(new Date(Date.parse(resetAt) - 1))) : error.replace('{reset}', resetLocal());
+
 /** 00:00 UTC (when the day's pictures come back) in the visitor's own time, e.g. "4:00 pm". In the browser only. */
 export function resetLocal(now: Date = new Date(), timeZone?: string): string {
   const next = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));

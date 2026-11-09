@@ -12,6 +12,7 @@ import { AiTag } from './ai-tag';
 import { ConsentScreen, PublishedTextField } from './publish-words';
 import { SignInChoices } from './sign-in-choices';
 import { useChallengeModel } from './challenge-model-row';
+import { withReset } from '~/lib/challenge/model-wording';
 
 /**
  * The remix screen, /challenge/make?from=<version> (owner, 2026-11-05; simplified 2026-11-08, the simpler challenge).
@@ -126,14 +127,15 @@ export function ChallengeMake() {
     setError(null);
     const body = momentsOn ? { from, moment: chosen!.id, words, ...mc.body() } : { from, words, style, ...mc.body() };
     const r = await authFetch('/api/challenge/make', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
-    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; style?: string | null; error?: string; reason?: string };
+    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; style?: string | null; error?: string; reason?: string; resetAt?: string };
     setBusy(false);
     if (r?.status === 403 && out.reason === 'consent') {
       const c = await authFetch('/api/consent').catch(() => null);
       if (c?.ok) setConsent(((await c.json()) as { wording: Wording }).wording);
       return;
     }
-    if (!r?.ok || !out.ticket || !out.image) return setError(out.error ?? 'Could not make it');
+    // A refusal naming when closed models come back: written here in the visitor's own time (the server sends the instant).
+    if (!r?.ok || !out.ticket || !out.image) return setError(out.error ? withReset(out.error, out.resetAt) : 'Could not make it');
     const draft: FlowDraft = {
       id: crypto.randomUUID(), from, character: view.source.character, name: view.source.name, sourceUrl: view.source.url,
       moment: chosen ? { id: chosen.id, title: chosen.title, chip: chosen.chip } : null, words, style: momentsOn ? null : style, modelId: model.id, styleLine: out.style ?? null,

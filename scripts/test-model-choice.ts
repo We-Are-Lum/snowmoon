@@ -835,7 +835,9 @@ proven(
       ...models.filter((m) => !m.open).flatMap((m) => need((lines[m.maker] ?? '').includes(`costs us about $${m.estimateUsd.toFixed(2)} `), `${m.maker}'s line doesn't say its estimate, $${m.estimateUsd.toFixed(2)}`)),
       ...need((lines.OpenAI ?? '').includes(`uses ${CLOSED_IMAGES.countsAs} of`), 'the count'),
     ];
-    const { resetLocal } = await import('../src/lib/challenge/model-wording');
+    const { resetLocal, withReset } = await import('../src/lib/challenge/model-wording');
+    const { IMAGE_WORDING: IMAGE_W } = await import('../src/lib/images/wording');
+    const { nextUtcMidnight } = await import('../src/lib/images/paid');
     const at = new Date('2026-11-09T05:00:00Z');
     const tooFew = [
       ...need(MODEL_WORDING.tooFew(2, '4:00 pm') === 'A closed model uses 3 of today\'s pictures; you have 2 left, enough for the open models. More pictures at 4:00 pm.', 'the too-few line'),
@@ -843,6 +845,13 @@ proven(
       ...need(resetLocal(at, 'America/Los_Angeles') === '4:00 pm' && resetLocal(at, 'Europe/Paris') === '1:00 am' && resetLocal(at, 'UTC') === '12:00 am', `reset: ${resetLocal(at, 'America/Los_Angeles')}, ${resetLocal(at, 'Europe/Paris')}, ${resetLocal(at, 'UTC')}`),
       ...need(!/resetLocal|toLocaleTimeString/.test(makeSrc), 'the route renders a time'),
       ...need(IMAGES.generationsPerDay === 10 && IMAGES.dailySpendCapUsd !== undefined && CLOSED_IMAGES.dailySpendCapUsd === 5, 'the free count (10) or the closed cap ($5) changed'),
+      // The refusals in the owner's words (2026-11-08); the cap's {reset} is filled in by the browser from the answer's instant.
+      ...need(IMAGE_W.designs.models.closedLimit === 'A closed model uses 3 of today’s pictures, and you have fewer left. You can still use an open model.', 'the closed-limit words'),
+      ...need(IMAGE_W.designs.models.closedSpend === 'Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at {reset}.', 'the closed-spend words'),
+      ...need(nextUtcMidnight(new Date('2026-11-09T05:00:00Z')) === '2026-11-10T00:00:00.000Z' && /paid\.ts|resetAt: nextUtcMidnight\(\)/.test(read('src/lib/images/paid.ts')), 'the reset instant'),
+      ...need(/^Closed models .* come back at \d{1,2}:\d{2} [ap]m\.$/.test(withReset(IMAGE_W.designs.models.closedSpend, '2026-11-10T00:00:00.000Z')), `filled: ${withReset(IMAGE_W.designs.models.closedSpend, '2026-11-10T00:00:00.000Z')}`),
+      ...need(/withReset\(out\.error, out\.resetAt\)/.test(read('src/components/challenge-make.tsx')), 'the screen doesn\'t fill in the reset'),
+      ...need(read('src/lib/images/rules.ts').includes('No self-harm, extremism or election campaigning. Describe styles by look, not by artist, studio or film.'), 'the rules above Generate'),
     ];
     proven('C17 the closed-pick lines are the owner\'s words with the models\' own estimates; the too-few line, its n = 0 form, and the reset in the visitor\'s time (browser only); 10 free a day, $5 closed cap', () => [...linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS), ...tooFew], () => linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS.map((m) => (m.id === 'gpt-image-2.5-sunburst' ? { ...m, estimateUsd: 0.08 } : m))));
   }

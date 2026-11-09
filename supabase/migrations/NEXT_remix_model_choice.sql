@@ -1,5 +1,10 @@
 -- NEXT_remix_model_choice.sql: which pool each daily picture counts in (branches remix-model-choice, 2026-11-04, and
--- challenge-models, 2026-11-08). NOT APPLIED. Unnumbered until merge: it takes the next free number then, checked
+-- challenge-models, 2026-11-08).
+-- APPLIED on production by the owner on 2026-11-08 (part B run once, ok; read-back (a) all true). The do block of part C
+-- below failed there ("permission denied to set role studio_writer": postgres can't SET ROLE in the SQL Editor, as
+-- 0030 notes); the coordinator's replacement (studio_writer's privileges checked, rows inserted and deleted as
+-- postgres) is what ran. Part C here is to be replaced by that text; test:remix-model-choice-sql fails until it is.
+-- Was NOT APPLIED before 2026-11-08. Unnumbered until merge: it takes the next free number then, checked
 -- against origin/main and production (CLAUDE.md). Requires 0008_images (studio.image_asks). Drafted by the coding agent
 -- (Claude, a closed model by Anthropic). Tested by `npm run test:remix-model-choice-sql` (in-memory Postgres, the parts
 -- read from this file).

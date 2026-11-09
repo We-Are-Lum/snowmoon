@@ -49,6 +49,9 @@ const say = (refusal: keyof typeof LIMIT_SAY, fid: number) => (refusal === 'limi
 /** A failure's words, and, when a wallet account's Generate was credited back, that it was. */
 export const failed = (error: string, back: boolean) => (back ? `${error} ${IMAGE_WORDING.prepaid.creditedBack}` : error);
 
+/** The next 00:00 UTC, as an instant (ISO). The server never renders it as a time. */
+export const nextUtcMidnight = (now: Date = new Date()) => new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1)).toISOString();
+
 export async function paidPicture(
   sql: Sql,
   fid: number,
@@ -58,7 +61,8 @@ export async function paidPicture(
   const spend = job.spend;
   const funded = fundedBy(fid);
   const r = await reserve(sql, fid, spend);
-  if (!r.ok) return { ok: false, status: 429, error: say(r.refusal, fid), extra: { reason: r.refusal } };
+  // A closed-cap refusal carries the instant the cap resets (00:00 UTC); the browser writes it in the visitor's own time.
+  if (!r.ok) return { ok: false, status: 429, error: say(r.refusal, fid), extra: { reason: r.refusal, ...(r.refusal === 'closed-spend' ? { resetAt: nextUtcMidnight() } : {}) } };
   const name = blockedName(job.checkText);
   if (name) {
     await settle(sql, {}, spend, funded);

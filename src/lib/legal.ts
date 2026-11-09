@@ -118,7 +118,11 @@ export const LEGAL: {
     // character's pictures on the challenge pages, a base or any remix, including your own), the owner's own after-text
     // (docs/legal/challenge-simple-draft.md). NOT REREAD YET: these words no longer match huq39i, so P6k is red until the
     // owner says "reread". An agent never sets a key.
-    terms: { words: 'huq39i', on: '2026-11-06', by: 'FID 6786' },
+    // 2026-11-08, the owner's reread of the challenge release (branch challenge-models, carrying challenge-simple), via the
+    // coordinator's check of docs/legal/challenge-release-texts.md v2 with changes 1–2 (the notice labels and the closed
+    // refusals, which aren't in Terms): §6 in the owner's words, §6e (challenge-simple), §8 (closed models chosen for a
+    // challenge picture). The owner instructed this key to be set (relayed by the coordinator). The words before were huq39i.
+    terms: { words: '1finiyh', on: '2026-11-08', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
     // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
@@ -238,7 +242,12 @@ export const LEGAL: {
     // owner"; docs/legal/challenge-moments-draft.md): §4 P1–P5 (pictures, not versions; open sheet remixing removed), §6
     // and §7 as drafted, and §4's IPFS record item removed (option R). The closed-model §7 item is as the owner approved
     // it. Lane B computed the same key. The words before were 6llf1.
-    privacy: { words: 'ozmbuf', on: '2026-11-06', by: 'FID 6786' },
+    // 2026-11-08, the owner's reread of the challenge release (branch challenge-models), via the coordinator's check of
+    // docs/legal/challenge-release-texts.md v2 with changes 1–2: §3 (the 18+ answer and the notices on the device), §4
+    // (choosing a model; a closed picture counts as three), §7 (the country line, and what OpenAI and Google receive and
+    // keep for a challenge picture). The owner instructed this key to be set (relayed by the coordinator). The words before
+    // were ozmbuf.
+    privacy: { words: 'd8fe0h', on: '2026-11-08', by: 'FID 6786' },
   },
 };
 
@@ -352,7 +361,7 @@ export const PRIVACY: LegalDoc = {
  */
 export const MODEL_NOTICES = {
   OpenAI: {
-    label: 'OpenAI keeps prompts up to 30 days',
+    label: 'OpenAI may keep prompts and pictures up to 30 days',
     title: 'A closed model by OpenAI',
     text: [
       'GPT Image 2.5 Sunburst is made by OpenAI. Its weights aren\'t published, so its recipe can\'t be re-run exactly.',
@@ -361,7 +370,7 @@ export const MODEL_NOTICES = {
     ],
   },
   Google: {
-    label: 'Google keeps no copy past 24 hours',
+    label: 'Google keeps no copy; abuse logs up to 90 days',
     title: 'A closed model by Google',
     text: [
       'Gemini 3.1 Flash Image is made by Google. Its weights aren\'t published, so its recipe can\'t be re-run exactly.',
