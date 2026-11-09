@@ -1887,8 +1887,12 @@ async function checkChallengeLanding() {
         await page.waitForTimeout(1000);
         await zei.locator('.cc-line').evaluate((e) => e.scrollIntoView({ block: 'center' }));
         const lineBox = await zei.locator('.cc-line').boundingBox();
-        const hit = lineBox ? await page.evaluate(([x, y]) => (document.elementFromPoint(x, y) as HTMLAnchorElement | null)?.getAttribute('href') ?? null, [lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2]) : null;
-        if (hit !== '/challenge/zei') fail(`/challenge ${tag}: the middle of Zei's line is covered by ${hit ?? 'nothing'}, not the name's link`);
+        const under = lineBox ? await page.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return { href: e?.getAttribute('href') ?? null, what: e ? `${e.tagName.toLowerCase()}.${String(e.className).replace(/\s+/g, '.')}` : 'nothing', x, y, vw: window.innerWidth, vh: window.innerHeight }; }, [lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2]) : null;
+        const hit = under?.href ?? null;
+        if (hit !== '/challenge/zei') {
+          fail(`/challenge ${tag}: the middle of Zei's line is covered by ${JSON.stringify(under)}, not the name's link`);
+          await snap('row-tap-miss');
+        }
         if (lineBox) await page.mouse.click(lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2);
         opened = await page.waitForURL('**/challenge/zei', { timeout: 10000, waitUntil: 'commit' }).then(() => true, () => false);
         if (hit !== '/challenge/zei') break;
