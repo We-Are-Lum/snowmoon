@@ -1909,9 +1909,9 @@ async function checkChallengeLanding() {
       await checkFloors(page, `/challenge/make ${tag}`, scheme);
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/make ${tag}: scrolls sideways`);
       if (((await page.locator('label[for="mk-words"]').textContent()) ?? '').trim() !== 'Change Zei: clothes, colours, age, pose…') fail(`/challenge/make ${tag}: the box's label isn't "Change Zei: clothes, colours, age, pose…"`);
-      const chips = (await page.locator('.mk-styles .cc-chip').allTextContents()).map((t) => t.replace('⟳', '').trim());
+      const styleChips = (await page.locator('.mk-styles .cc-chip').allTextContents()).map((t) => t.replace('⟳', '').trim());
       const wantChips = [...FX.styles.map((x) => x.name), 'Random', 'Write your own'];
-      if (chips.join('|') !== wantChips.join('|')) fail(`/challenge/make ${tag}: the Style row reads ${chips.join(', ')}, not ${wantChips.join(', ')}`);
+      if (styleChips.join('|') !== wantChips.join('|')) fail(`/challenge/make ${tag}: the Style row reads ${styleChips.join(', ')}, not ${wantChips.join(', ')}`);
       if ((await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style')) !== `style:${FX.styles[0].element}`) fail(`/challenge/make ${tag}: Zei's base doesn't start on its own style`);
       const models = (await page.locator('.mk-model .cc-chip').allTextContents()).map((t) => t.trim());
       if (models.join('|') !== 'FLUX.2 [klein] 4B · Black Forest Labs · open') fail(`/challenge/make ${tag}: the Model row reads ${models.join(', ')}`);
