@@ -28,8 +28,8 @@
  *  regions, no country); C3 the country header for one request, the test override never in production; C4 the row
  *  shows exactly what the server offers, the route refuses anything else first; C5 closed refused without the notice
  *  and 18+; C6 Gemini only via vertex (any other provider fails); C7 a closed call sends only the prompt and the one
- *  picture; C8 the recipe names model and maker; C9 closed counts as 3 (with M4a) in its pool; C10 Qwen's endpoint and
- *  cost; C11 the country isn't kept; C12 Privacy and consent v6 (P6t).
+ *  picture; C8 the recipe names model and maker; C9 closed counts as 3 (with M4a) in its pool; (C10 Qwen: dropped 2026-11-09)
+ *  C11 the country isn't kept; C12 Privacy and consent v6 (P6t).
  */
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
@@ -285,12 +285,12 @@ proven(
     proven('C20 with the moments off, the tapped picture (a base\'s front view) is the only picture sent', () => only(route), () => only(route.replace('const others = moment && chosen.id === DEFAULT_CHALLENGE_MODEL ?', 'const others = chosen.id === DEFAULT_CHALLENGE_MODEL ?')));
   }
 
-  // M4e (branch challenge-models, 2026-11-08): a picture the model refuses (Qwen's 422 content_policy_violation, a
+  // M4e (branch challenge-models, 2026-11-08): a picture the model refuses (a fal model's 422 content_policy_violation, a
   // gateway moderation block) or the host's checker flags (FLUX's blacked-out picture) is the usual "dropped" answer:
   // counted (its ask stays), not charged as a success (verdict nsfw), nothing shown. Mocked fal and prompt check.
   {
     const { paidPicture } = await import('../src/lib/images/paid');
-    const { makeQwenEdit, makeEdit } = await import('../src/lib/images/fal');
+    const { makeEdit } = await import('../src/lib/images/fal');
     const keys = { fal: process.env.FAL_KEY, groq: process.env.GROQ_API_KEY };
     process.env.FAL_KEY = 'stand-in-not-a-key';
     process.env.GROQ_API_KEY = 'stand-in-not-a-key';
@@ -312,7 +312,7 @@ proven(
     const dropped = async (fid: number, answer: () => Response, make: () => Promise<unknown>) => {
       falAnswer = answer;
       const before = await asks(fid);
-      const r = await paidPicture(S, fid, req, { checkText: 'Seila, quiet.', spend: { model: { id: 'qwen-image-edit-2509', host: 'fal.ai' }, reserveUsd: 0.0615 }, make: make as () => Promise<never> });
+      const r = await paidPicture(S, fid, req, { checkText: 'Seila, quiet.', spend: { model: { id: 'flux2-klein-4b-edit', host: 'fal.ai' }, reserveUsd: 0.0215 }, make: make as () => Promise<never> });
       const p: string[] = [];
       if (r.ok || r.status !== 422 || r.extra.reason !== 'nsfw') p.push(`answered ${JSON.stringify(r.ok ? 'ok' : { status: r.status, extra: r.extra })}, not the dropped answer`);
       if ((await asks(fid)) !== before + 1) p.push('not counted');
@@ -320,10 +320,10 @@ proven(
     };
     const refusal = () => new Response(JSON.stringify({ detail: [{ type: 'content_policy_violation', msg: 'The content could not be processed.' }] }), { status: 422 });
     const flagged = () => new Response(JSON.stringify({ images: [{ url: `data:image/jpeg;base64,${jpg.toString('base64')}` }], seed: 1, has_nsfw_concepts: [true] }));
-    const qwen = await dropped(4001, refusal, () => makeQwenEdit('fal-ai/qwen-image-edit-plus', 'Seila, quiet.', ref, IMAGES.size, 0.06));
+    const qwen = await dropped(4001, refusal, () => makeEdit('Seila, quiet.', [ref]));
     const flux = await dropped(4002, flagged, () => makeEdit('Seila, warm light.', [ref]));
     // Planted: a 500 (the model didn't answer) must NOT be taken for a refusal.
-    const outage = await dropped(4003, () => new Response('boom', { status: 500 }), () => makeQwenEdit('fal-ai/qwen-image-edit-plus', 'p', ref, IMAGES.size, 0.06));
+    const outage = await dropped(4003, () => new Response('boom', { status: 500 }), () => makeEdit('p', [ref]));
     // M4f: the challenge's whole prompt (the change box and a "Write your own" style) goes through the blocked names and
     // the prompt check; a named real person, artist, studio or film in either is refused before any model is called.
     const { remixPrompt } = await import('../src/lib/challenge/make');
@@ -356,7 +356,7 @@ proven(
     process.env.FAL_KEY = keys.fal;
     process.env.GROQ_API_KEY = keys.groq;
     proven('M4f the change box and a "Write your own" style are both checked: named real people (blocked names), artists, studios, films and campaign material (the check, mocked) are refused before any model; the policy sent names self_harm, extremism and campaign', () => m4f, () => (lax === 'someone_elses_work' ? [] : ['a check that allows it lets the studio through']));
-    proven('M4e a model\'s refusal (Qwen 422 content_policy_violation) and a flagged FLUX picture are counted and answered as dropped (422, reason nsfw), not as a success', () => [...qwen, ...flux], () => outage);
+    proven('M4e a model\'s refusal (fal 422 content_policy_violation) and a flagged FLUX picture are counted and answered as dropped (422, reason nsfw), not as a success', () => [...qwen, ...flux], () => outage);
   }
   await sql.end();
   await server.stop();
@@ -586,26 +586,26 @@ proven(
 {
   const M = await import('../src/lib/challenge/models');
   const Cn = await import('../src/lib/images/countries');
-  const { CHALLENGE_MODELS, DEFAULT_CHALLENGE_MODEL, challengeModel, challengeModelsFor, challengeModelProblems, modelRow, noticeProblem, reserveUsd, QWEN, qwenCostUsd } = M;
+  const { CHALLENGE_MODELS, DEFAULT_CHALLENGE_MODEL, challengeModel, challengeModelsFor, challengeModelProblems, modelRow, noticeProblem, reserveUsd } = M;
   const { makerServes, whereFrom, closedCountryOverride, OPENAI_SUPPORTED, EMBARGOED_COUNTRIES } = Cn;
   const byId = (id: string) => CHALLENGE_MODELS.find((m) => m.id === id)!;
-  const C_GPT = byId('gpt-image-2.5-sunburst'), C_GEM = byId('gemini-3.1-flash-image'), C_QWEN = byId('qwen-image-edit'), C_FLUX = byId('flux2-klein-4b-edit');
+  const C_GPT = byId('gpt-image-2.5-sunburst'), C_GEM = byId('gemini-3.1-flash-image'), C_FLUX = byId('flux2-klein-4b-edit');
   type W = { country: string | null; region: string | null };
   const FR: W = { country: 'FR', region: null }, NONE: W = { country: null, region: null };
   const ids = (w: { country: string | null; region: string | null }, on = true) => challengeModelsFor(w, on, true).map((m) => m.id).join(',');
   const makeSrc = read('src/app/api/challenge/make/route.ts');
 
-  // C1: the open default first, then Qwen, then the closed ones.
+  // C1: the open default first, then the closed ones (Qwen dropped, owner, 2026-11-09).
   proven(
-    'C1 the challenge\'s models: FLUX.2 [klein] 4B edit first and the default, Qwen-Image-Edit, then GPT Image 2.5 and Gemini; closed ones name their maker',
+    'C1 the challenge\'s models: FLUX.2 [klein] 4B edit first and the default, then GPT Image 2.5 and Gemini; closed ones name their maker',
     () => [
       ...challengeModelProblems(CHALLENGE_MODELS),
-      ...need(ids(FR) === 'flux2-klein-4b-edit,qwen-image-edit,gpt-image-2.5-sunburst,gemini-3.1-flash-image', `offered in France: ${ids(FR)}`),
+      ...need(ids(FR) === 'flux2-klein-4b-edit,gpt-image-2.5-sunburst,gemini-3.1-flash-image', `offered in France: ${ids(FR)}`),
       ...need(ids(FR, false) === DEFAULT_CHALLENGE_MODEL, `with the switch off: ${ids(FR, false)}`),
-      ...need(C_GPT.terms === 'a closed model by OpenAI' && C_GEM.terms === 'a closed model by Google' && C_FLUX.terms === 'open weights, Apache-2.0' && C_QWEN.terms === 'open weights, Apache-2.0', 'labels'),
+      ...need(C_GPT.terms === 'a closed model by OpenAI' && C_GEM.terms === 'a closed model by Google' && C_FLUX.terms === 'open weights, Apache-2.0', 'labels'),
       ...need(modelRow(FR)[0].id === DEFAULT_CHALLENGE_MODEL && modelRow(FR)[0].open, 'the Model row does not start with the open default'),
     ],
-    () => [...challengeModelProblems([C_GPT, C_FLUX, C_QWEN, C_GEM]), ...challengeModelProblems([C_FLUX, C_GPT, C_QWEN]), ...challengeModelProblems([C_FLUX, { ...C_GEM, terms: 'Gemini' }])],
+    () => [...challengeModelProblems([C_GPT, C_FLUX, C_GEM]), ...challengeModelProblems([C_GPT, C_GEM]), ...challengeModelProblems([C_FLUX, { ...C_GEM, terms: 'Gemini' }])],
   );
 
   // C2: the country gate.
@@ -639,9 +639,9 @@ proven(
     ...need(from(H({ 'x-vercel-ip-country': 'fr' }), {}).country === 'FR', 'the country header is not read'),
     ...need(from(H({ 'x-vercel-ip-country': 'UA', 'x-vercel-ip-country-region': '43' }), {}).region === '43', 'the region is not read for Ukraine'),
     ...need(from(H({ 'x-vercel-ip-country': 'FR', 'x-vercel-ip-country-region': 'IDF' }), {}).region === null, 'a region is read outside Ukraine'),
-    ...need(ids(from(H({}), {})) === 'flux2-klein-4b-edit,qwen-image-edit', `no header: ${ids(from(H({}), {}))}`),
+    ...need(ids(from(H({}), {})) === 'flux2-klein-4b-edit', `no header: ${ids(from(H({}), {}))}`),
     ...need(ids(from(H({}), { CLOSED_MODELS_TEST_COUNTRY: 'FR', VERCEL_ENV: 'preview' })) === ids(FR), 'the test override is not honoured off production'),
-    ...need(ids(from(H({}), { CLOSED_MODELS_TEST_COUNTRY: 'FR', VERCEL_ENV: 'production' })) === 'flux2-klein-4b-edit,qwen-image-edit', 'the test override works in production'),
+    ...need(ids(from(H({}), { CLOSED_MODELS_TEST_COUNTRY: 'FR', VERCEL_ENV: 'production' })) === 'flux2-klein-4b-edit', 'the test override works in production'),
     ...need(closedCountryOverride({ CLOSED_MODELS_TEST_COUNTRY: 'UA-43' })?.region === '43', 'override region'),
   ];
   proven('C3 the country comes from x-vercel-ip-country for this request; no header, no closed model (a test override only off production)', () => headerProblems(whereFrom), () => headerProblems(() => FR));
@@ -673,7 +673,7 @@ proven(
     ...need(check(C_GEM, { version: CLOSED_PROVIDERS.Google.noticeVersion }) === 'adult', 'Gemini without 18+'),
     ...need(check(C_GEM, { version: CLOSED_PROVIDERS.Google.noticeVersion, adult: 'yes' }) === 'adult', 'Gemini with a non-true 18+'),
     ...need(check(C_GPT, { version: CLOSED_PROVIDERS.OpenAI.noticeVersion, adult: true }) === null, 'GPT with both refused'),
-    ...need(check(C_FLUX, undefined) === null && check(C_QWEN, undefined) === null, 'an open model asks for a notice'),
+    ...need(check(C_FLUX, undefined) === null, 'an open model asks for a notice'),
   ];
   const ni = makeSrc.indexOf('const notice = noticeProblem(chosen');
   proven('C5 a closed model is refused without its maker\'s notice (current version) and the 18+ box; the route checks it before consent', () => [...noticeRules(noticeProblem), ...need(ni > ri && ni < ci, 'the route does not check the notice before consent')], () => noticeRules((m) => (m.open ? null : null)));
@@ -746,7 +746,7 @@ proven(
   const leads = (pick: (m: typeof C_GPT) => { id: string; endpoint: string; host: string }) => CHALLENGE_MODELS.flatMap((m) => {
     const r = pick(m);
     const lead = modelLine({ model: r.id, endpoint: r.endpoint, host: r.host }).lead;
-    return [...need(lead.startsWith(`${m.id === 'qwen-image-edit' ? 'Qwen-Image-Edit-2509' : m.name} (${m.allowlistId}), ${m.terms}, on ${m.call.host}`), `${m.id}: "${lead}"`)];
+    return [...need(lead.startsWith(`${m.name} (${m.allowlistId}), ${m.terms}, on ${m.call.host}`), `${m.id}: "${lead}"`)];
   });
   proven(
     'C8 the recipe names each model and its terms ("a closed model by OpenAI" / "by Google"); the route records the chosen model\'s id, endpoint and host',
@@ -768,47 +768,6 @@ proven(
     'C9 a closed challenge picture goes in the closed pool (counted as 3, M4a) and reserves at least its estimate; the Model row says so',
     () => [...spendRules(challengeSpend), ...need(modelRow(FR).filter((r) => !r.open).every((r) => r.countsAs === CLOSED_IMAGES.countsAs && CLOSED_IMAGES.countsAs === 3), 'the row does not say a closed picture counts as 3')],
     () => spendRules((m, refs) => ({ ...challengeSpend(m, refs), pool: undefined })),
-  );
-
-  // C10: Qwen on fal-ai/qwen-image-edit-plus (2509; never the deprecated fal-ai/qwen-image-edit), costed safely (mocked fal).
-  const { makeQwenEdit } = await import('../src/lib/images/fal');
-  const falCalls: { url: string; body: string }[] = [];
-  const realFetch2 = globalThis.fetch;
-  const keyWas = process.env.FAL_KEY;
-  process.env.FAL_KEY = 'stand-in-not-a-key';
-  globalThis.fetch = (async (url: string, init: RequestInit) => {
-    falCalls.push({ url: String(url), body: String(init.body) });
-    const jpg = await sharp({ create: { width: 1024, height: 576, channels: 3, background: { r: 1, g: 1, b: 1 } } }).jpeg().toBuffer();
-    return new Response(JSON.stringify({ images: [{ url: `data:image/jpeg;base64,${jpg.toString('base64')}` }], seed: 7, has_nsfw_concepts: [false] }), { status: 200, headers: { 'x-fal-request-id': 'req_mock' } });
-  }) as unknown as typeof fetch;
-  const worst = reserveUsd(C_QWEN, { width: 1024, height: 576 });
-  // Measured (style test, 2026-11-08): Qwen returns 1376 x 768 whatever image_size says, billed as 2 MP, $0.06.
-  globalThis.fetch = (async (url: string, init: RequestInit) => {
-    falCalls.push({ url: String(url), body: String(init.body) });
-    const jpg = await sharp({ create: { width: 1376, height: 768, channels: 3, background: { r: 1, g: 1, b: 1 } } }).jpeg().toBuffer();
-    return new Response(JSON.stringify({ images: [{ url: `data:image/jpeg;base64,${jpg.toString('base64')}` }], seed: 7, has_nsfw_concepts: [false] }), { status: 200, headers: { 'x-fal-request-id': 'req_mock' } });
-  }) as unknown as typeof fetch;
-  const { makeWith } = await import('../src/lib/challenge/make-model');
-  const q = await makeWith(C_QWEN, 'Bai on a ledge.', [{ bytes: ref, contentType: 'image/jpeg', width: 1024, height: 576 }], new Request('http://localhost/'), worst);
-  globalThis.fetch = realFetch2;
-  process.env.FAL_KEY = keyWas;
-  const qm = await sharp(q.bytes).metadata();
-  const qwenRules = (endpoint: string, cost: (o: { width: number; height: number }) => number) => [
-    ...need(endpoint === 'fal-ai/qwen-image-edit-plus', `endpoint ${endpoint}`),
-    ...need(cost({ width: 1376, height: 768 }) === 0.06 && cost({ width: 1024, height: 576 }) === 0.03, `cost ${cost({ width: 1376, height: 768 })}`),
-  ];
-  proven(
-    'C10 Qwen-Image-Edit: fal-ai/qwen-image-edit-plus (2509), one reference, the safety checker on; billed whole megapixels of its 1376 x 768 output ($0.06), reserved for it, and cropped and scaled to 1024 x 576 with the recipe saying so (mocked fal)',
-    () => [
-      ...qwenRules(QWEN.endpoint, qwenCostUsd),
-      ...need(falCalls.length === 1 && falCalls[0].url === 'https://fal.run/fal-ai/qwen-image-edit-plus', `called ${falCalls.map((c) => c.url).join(', ')}`),
-      ...need((JSON.parse(falCalls[0]?.body ?? '{}').image_urls ?? []).length === 1 && JSON.parse(falCalls[0]?.body ?? '{}').enable_safety_checker === true, 'not one reference, or no safety checker'),
-      ...need(q.costUsd === 0.06 && worst >= q.costUsd && C_QWEN.estimateUsd === 0.06, `cost ${q.costUsd}, reserve ${worst}`),
-      ...need(qm.width === 1024 && qm.height === 576 && qm.format === 'jpeg', `stored ${qm.width}x${qm.height}`),
-      ...need(/1376x768/.test(JSON.stringify(q.settings)), 'the recipe does not record the size Qwen returned'),
-      ...need(!/fal-ai\/qwen-image-edit['"]/.test(read('src/lib/challenge/models.ts') + read('src/lib/images/fal.ts')), 'the deprecated endpoint is named'),
-    ],
-    () => qwenRules('fal-ai/qwen-image-edit', (o) => 0.03 * ((o.width * o.height) / 1e6)),
   );
 
   // C15: the challenge's prompt check gets the larger budget (1,200), as a sheet's views do.

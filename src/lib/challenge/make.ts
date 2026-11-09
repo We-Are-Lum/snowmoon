@@ -9,6 +9,7 @@ import { challengeModels, modelChipText, type ModelRowEntry } from './models';
 import type { Source } from './pictures';
 import { shuffleFresh } from './shuffle';
 import { KEEP_LINE, SAME_STYLE, OWN_STYLE_MAX, presetOptions, readStyleChoice, STYLE_PRESETS, type StyleChoice, type StyleOption, type StylePreset } from './styles';
+import { SCENE_LINE } from './looks';
 
 /**
  * The remix screen's server half (branch challenge-moments, 2026-11-05; simplified on branch challenge-simple,
@@ -40,8 +41,9 @@ export function momentPrompt(p: { words: string; name: string; scene: string; ot
  * so a change of clothes isn't fought by "keep their clothes exactly". The style's text is always followed by KEEP_LINE.
  */
 export function remixPrompt(p: { words: string; name: string; style: string; look?: string }): string {
-  // The character's look line (src/lib/challenge/looks.ts; owner-approved 2026-11-09) right after the reference line.
-  return [p.words.trim(), `${p.name} is the person in reference image 1, the main figure.`, (p.look ?? '').trim(), p.style.trim(), KEEP_LINE, IMAGES.suffix].filter(Boolean).join('\n\n');
+  // The character's look line, then the scene line, always (src/lib/challenge/looks.ts; owner-approved 2026-11-09), right
+  // after the reference line; then the style (none for "Same as this picture"), the closing line and the suffix.
+  return [p.words.trim(), `${p.name} is the person in reference image 1, the main figure.`, (p.look ?? '').trim(), SCENE_LINE, p.style.trim(), KEEP_LINE, IMAGES.suffix].filter(Boolean).join('\n\n');
 }
 
 /** The other challenge characters in the moment (slugs), at most two (the edit model takes three pictures in all). */

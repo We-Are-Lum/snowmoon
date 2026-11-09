@@ -1,4 +1,4 @@
-# Challenge release: every final text (v6; reread by the owner, 2026-11-08 and 2026-11-09)
+# Challenge release: every final text (v7; reread by the owner, 2026-11-08 and 2026-11-09)
 
 Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` (v4 adds the closing line of 2026-11-09 and the bases' style; v3 was at `9ae0aa13`) (with challenge-simple's final head `1efcbeaf`). **v3:** the owner reread every text of v2 on 2026-11-08, via the coordinator's check, with changes 1–2 below applied word for word (the notice labels; the closed refusals) and the rules above Generate extended; the "none left" line approved as drafted
 (which carries `challenge-simple`). Every text below is copied from the code as it
@@ -124,8 +124,8 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
 ## The remix screen: the Model row (new)
 
 - Chips (the server's list; a chip is "{model} · {maker} · open|closed"): "FLUX.2 [klein] 4B · Black Forest Labs · open",
-  "Qwen-Image-Edit · Alibaba's Qwen team · open", "GPT Image 2.5 Sunburst · OpenAI · closed", "Gemini 3.1 Flash Image ·
-  Google · closed". Heading: "Model".
+  "GPT Image 2.5 Sunburst · OpenAI · closed", "Gemini 3.1 Flash Image · Google · closed" (v7: Qwen-Image-Edit dropped,
+  owner, 2026-11-09). Heading: "Model".
 - Under a closed pick (the owner's words): OpenAI "a closed model by OpenAI · costs us about $0.05 · OpenAI may keep your prompt and picture up to 30 days · uses 3 of today's pictures"; Google "a closed model by Google · costs us about $0.07 · Google keeps no copy; abuse logs up to 90 days · uses 3 of today's pictures".
 - Too few left (the owner's words; `{reset}` is 00:00 UTC in the visitor's own time, rendered in the browser, e.g.
   "4:00 pm"): "A closed model uses 3 of today's pictures; you have {n} left, enough for the open models. More pictures at {reset}."
@@ -231,17 +231,21 @@ backstory has no spoiler tick, and "May spoil later chapters." appears nowhere u
 - The others stay: the published styles ("Animated series" among them once the owner publishes it), "Random" (in "How it
   was made": "Style: {style}, drawn at random"), "Write your own".
 
-### The look lines (this edition's invention; owner-approved 2026-11-09), public in every recipe
+### The look lines and the scene line (this edition's invention; owner-approved 2026-11-09), public in every recipe
 
-Right after "{Name} is the person in reference image 1, the main figure." in every challenge prompt, for every model:
+v7 (owner, 2026-11-09): shorter look lines, and one scene line always after them, for every character and model.
 
-- Zei: "Unless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky black hair with close-cut sides and one teal-blue streak, dark eyes."
-- Gladias: "Unless the change says otherwise: a man of about forty, slim and of medium height, warm light-brown skin, short straight black hair, a neatly trimmed short beard, dark eyes."
-- Bai: "Unless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings."
-- Seila: "Unless the change says otherwise: a woman in her late thirties, tall and slender, deep brown skin, shoulder-length black braids gathered back, small round gold-rimmed glasses."
-- Deluin: "Unless the change says otherwise: a young man of about eighteen, tall and long-limbed, warm tan skin, straight shoulder-length black hair, dark brown eyes, a calm, slightly serious face."
-- Mu: "Unless the change says otherwise: a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, thin red-framed glasses."
+- Zei: "Unless the change says otherwise: a man with light golden-tan skin and dark eyes."
+- Gladias: "Unless the change says otherwise: a man with warm light-brown skin, a short beard and dark eyes."
+- Bai: "Unless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings."
+- Seila: "Unless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses."
+- Deluin: "Unless the change says otherwise: a man with warm tan skin and dark brown eyes."
+- Mu: "Unless the change says otherwise: a woman with medium brown skin and thin red-framed glasses."
+- The scene line, always: "Unless the change says otherwise: one figure, in a scene that suits the change, not a character sheet."
+
+(Before, v6: "Unless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky
+black hair with close-cut sides and one teal-blue streak, dark eyes." for Zei, and the like; no scene line.)
 
 The prompt's order: the change words; "{Name} is the person in reference image 1, the main figure."; the look line; the
-style's text (none with "Same as this picture"); "Keep the face recognisable; change anything else the words describe.";
-the no-lettering line.
+scene line; the style's text (none with "Same as this picture"); "Keep the face recognisable; change anything else the
+words describe."; the no-lettering line.

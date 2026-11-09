@@ -4,7 +4,7 @@ import { makerServes, type Maker, type Where } from '../images/countries';
 import { MODEL_WORDING } from './model-wording';
 
 /**
- * The challenge's models (branch challenge-models, owner, 2026-11-08): the remix screen's Model row offers these, in
+ * The challenge's models (branch challenge-models, owner, 2026-11-08; Qwen-Image-Edit dropped 2026-11-09): the remix screen's Model row offers these, in
  * this order, the open default first (principle 3; check:principles P3e). Each makes one picture from the person's
  * words with the tapped picture as its single reference image, through the site's own pipeline (consent, the gate,
  * the daily count and caps, the prompt check). No server-only imports: the route sends the list, and the screen shows
@@ -15,7 +15,7 @@ import { MODEL_WORDING } from './model-wording';
  * today's published ones (docs/legal/challenge-models-draft.md, "Cost", with sources): `estimateUsd` what one picture
  * usually costs; the worst case reserved before a picture is reserveUsd(model, reference) (reserve-then-settle).
  */
-export type ChallengeModelId = 'flux2-klein-4b-edit' | 'qwen-image-edit' | 'gpt-image-2.5-sunburst' | 'gemini-3.1-flash-image';
+export type ChallengeModelId = 'flux2-klein-4b-edit' | 'gpt-image-2.5-sunburst' | 'gemini-3.1-flash-image';
 
 export interface ChallengeModel {
   id: ChallengeModelId;
@@ -40,17 +40,6 @@ export interface ChallengeModel {
 const GUARD_SHARE = IMAGES.reserveUsd - IMAGES.pricePerMp; // 0.0015, the prompt check's share, as every Generate reserves
 const mp = (s: { width: number; height: number }) => (s.width * s.height) / 1e6;
 
-/**
- * Qwen-Image-Edit-2509 on fal.ai (coordinator, 2026-11-08, from fal's pages): `fal-ai/qwen-image-edit-plus` is 2509;
- * `fal-ai/qwen-image-edit-2511` also exists at the same price (the owner may switch: change it here only);
- * `fal-ai/qwen-image-edit` is deprecated, never used. "$0.03 per megapixel". Measured (style test, branch style-test,
- * 2026-11-08): it ignores image_size and returns 1376 x 768 for a 1024 x 576 request, and fal bills whole megapixels of
- * its output, 2 units, $0.06 every picture. So a picture costs $0.03 x the output's megapixels rounded up (the
- * reference isn't billed), $0.06 today, and its output is cropped and scaled to IMAGES.size (make-model.ts).
- */
-export const QWEN = { allowlistId: 'qwen-image-edit-2509', name: 'Qwen-Image-Edit', endpoint: 'fal-ai/qwen-image-edit-plus', pricePerMp: 0.03, typicalOut: { width: 1376, height: 768 } } as const;
-/** fal's bill for one Qwen picture: whole megapixels of what it returned. */
-export const qwenCostUsd = (out: { width: number; height: number }) => QWEN.pricePerMp * Math.max(1, Math.ceil(mp(out)));
 
 const retention = (maker: string) => CLOSED_PROVIDERS[maker as keyof typeof CLOSED_PROVIDERS]?.retentionWords ?? null;
 
@@ -65,18 +54,6 @@ export const CHALLENGE_MODELS: readonly ChallengeModel[] = [
     call: { host: 'fal.ai', endpoint: IMAGES.editModel.endpoint },
     // (1024 x 576 out + a 1024 x 576 reference) at $0.01/MP.
     estimateUsd: 0.012,
-    retention: null,
-  },
-  {
-    id: 'qwen-image-edit',
-    allowlistId: QWEN.allowlistId,
-    name: QWEN.name,
-    maker: 'Alibaba\'s Qwen team',
-    open: true,
-    terms: 'open weights, Apache-2.0',
-    call: { host: 'fal.ai', endpoint: QWEN.endpoint },
-    // Measured: 1376 x 768 out, billed as 2 MP: $0.06 every picture.
-    estimateUsd: 0.06,
     retention: null,
   },
   {
@@ -111,7 +88,6 @@ export const DEFAULT_CHALLENGE_MODEL: ChallengeModelId = 'flux2-klein-4b-edit';
 /** The worst case reserved before a picture: the picture's worst cost plus the prompt check's share. */
 export function reserveUsd(m: ChallengeModel, ref: { width: number; height: number }, out: { width: number; height: number } = IMAGES.size): number {
   if (m.id === 'flux2-klein-4b-edit') return (mp(out) + mp(ref)) * IMAGES.editPricePerMp + GUARD_SHARE;
-  if (m.id === 'qwen-image-edit') return qwenCostUsd(QWEN.typicalOut) + GUARD_SHARE;
   if (m.id === 'gpt-image-2.5-sunburst') return 0.08 + GUARD_SHARE;
   return 0.09 + GUARD_SHARE;
 }
