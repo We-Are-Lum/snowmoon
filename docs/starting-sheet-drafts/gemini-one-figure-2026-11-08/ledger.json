@@ -1,0 +1,1532 @@
+{
+ "about": "Gemini one-figure test 2026-11-08: line B + \"Show one figure only.\" (F1), Zei and Bai, changes 1, 2, 3, 4, 7, 8, 11, 12. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "cap_usd": 3.5,
+ "stop_at_usd": 3.3,
+ "f2": "not run: both base fronts show one figure (checked by eye), so cropping to the front figure would send the same picture",
+ "prompts": {
+  "181a4ffb4e96b18ecf5148055a6087c95ce91f9df8cf82887ed98f3399c08131": "dressed all in bright red and gold\n\nZei is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "2e1b61665371d5b2900903205b8c18600abe933317f883f7b0e4b0466bb3fdf8": "dressed all in bright red and gold\n\nBai is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "97e57c6482eddb9c2a880d703046a5ebef98566c598ea03cb8e9b772beb7a0c0": "aged about 70\n\nZei is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "1fa6f2a2c3c3e4d1b3c0117c997127817fb2fb7d8fd86115ddaa03929b054b90": "aged about 70\n\nBai is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "30e329614075d1bcb27281b46284e54ce05c49015cf2bdd9204cd46b5f6c126b": "much taller, with a heavy, broad-shouldered build\n\nZei is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "9060266549c01e04d3fb212c56737ce3c3811c3773eb9b7b229523e967ac57c8": "much taller, with a heavy, broad-shouldered build\n\nBai is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "4646d0551acc738feb281d1f5b1508bedf9f27dea793494349312807fb84b6e6": "as a medieval knight in armour\n\nZei is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "ee3fa4771e902aa7fa623282c9cb8d2e4a89cb1c0829ecfb318b93c929bf785e": "as a medieval knight in armour\n\nBai is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "d80de08bf1798d361734af31a6eaa31d9aa72c9638a5f8132a5e7ef4950c1f7e": "in a long winter coat and scarf, snow on the shoulders\n\nZei is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "b37d558f317e282509dba1fdf29088383010169d784397c14bf17f268918c8b2": "in a long winter coat and scarf, snow on the shoulders\n\nBai is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "19f1fc819ccb756148092d4c106dcf16d1eb3716f4891d887c15db0541bd9414": "shaved head\n\nZei is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "aebf35404ccc2b94910a056203df744d16fa16dd9419e80020628472caa61585": "shaved head\n\nBai is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "d49a11f30ba60170bbc9098443f2b4f345867c41d9b09df183a31a98d8a8e305": "as a deep-sea diver in a brass helmet, underwater\n\nZei is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "e297239d818f097911867ea0e8c87a69b1194ddb7ad2732bdd61747aa41964e9": "as a deep-sea diver in a brass helmet, underwater\n\nBai is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "648b49a12a83aff28987095d19ffc9ede26f6a50b7bd1e8b2f902b9c7b14a499": "as a fox\n\nZei is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "77b4c1dda399e23f9195cacec56a8f68cb40e2212976d3821a03883fb45fff22": "as a fox\n\nBai is the person in reference image 1, the main figure. Show one figure only.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "endpoint-list",
+   "status": "ok",
+   "retention": {
+    "provider": "vertex",
+    "zero_data_retention": true,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-09T06:18:18.163Z"
+   },
+   "cost_usd": 0,
+   "cost_source": "free GET",
+   "at": "2026-11-09T06:18:18.164Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "181a4ffb4e96b18ecf5148055a6087c95ce91f9df8cf82887ed98f3399c08131",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000119625,
+   "cost_source": "reported",
+   "worst_usd": 0.0005172,
+   "at": "2026-11-09T06:18:19.045Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 2,
+   "character": "zei",
+   "prompt_sha256": "181a4ffb4e96b18ecf5148055a6087c95ce91f9df8cf82887ed98f3399c08131",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFA97BPXP8FR46Z146NJJ7",
+   "status": "ok",
+   "cost_usd": 0.067599,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "70484909f7432a0be68adf3c2cec5c03fdf8437e2d1bdf527fb29d5def466588",
+   "original_sha256": "c0f5b1a83964cd77499f0adb44e75c54e03f87a30977b472bbe1172ba52a41b5",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c02-zei-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1198,
+    "completion_tokens": 1120,
+    "total_tokens": 2318,
+    "cost": 0.067599,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067599,
+    "gateway_cost": 0.067599
+   },
+   "at": "2026-11-09T06:18:28.236Z",
+   "attempt": 1,
+   "copies_by_eye": 2
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "2e1b61665371d5b2900903205b8c18600abe933317f883f7b0e4b0466bb3fdf8",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000200025,
+   "cost_source": "reported",
+   "worst_usd": 0.0005172,
+   "at": "2026-11-09T06:18:29.077Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 2,
+   "character": "bai",
+   "prompt_sha256": "2e1b61665371d5b2900903205b8c18600abe933317f883f7b0e4b0466bb3fdf8",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFAJXTT4F6M0XE24DQKMAA",
+   "status": "ok",
+   "cost_usd": 0.0675985,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "6b1bf7d99b42d24a3bbc78f20a15ba458e389b5b2d4d912d62b8ba9c5106d2d1",
+   "original_sha256": "4a3567229267ab28cf1d717f74d8ff6bc6a2f0040b73c5589018eeb409895451",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c02-bai-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1197,
+    "completion_tokens": 1120,
+    "total_tokens": 2317,
+    "cost": 0.0675985,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0675985,
+    "gateway_cost": 0.0675985
+   },
+   "at": "2026-11-09T06:18:39.113Z",
+   "attempt": 1,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "97e57c6482eddb9c2a880d703046a5ebef98566c598ea03cb8e9b772beb7a0c0",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000142125,
+   "cost_source": "reported",
+   "worst_usd": 0.000515625,
+   "at": "2026-11-09T06:18:39.837Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 3,
+   "character": "zei",
+   "prompt_sha256": "97e57c6482eddb9c2a880d703046a5ebef98566c598ea03cb8e9b772beb7a0c0",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFAXF8A8SMRDMQFWDDJ7N4",
+   "status": "ok",
+   "cost_usd": 0.067598,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "82466f5644e799a38651e82967ff368e65be1a7c3c4abf4a5f4bd3bab2978c07",
+   "original_sha256": "3e5945815911a8218e37e670e6f04464b2bd42965456fc51070400dd2457a3ed",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c03-zei-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1196,
+    "completion_tokens": 1120,
+    "total_tokens": 2316,
+    "cost": 0.067598,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067598,
+    "gateway_cost": 0.067598
+   },
+   "at": "2026-11-09T06:18:49.482Z",
+   "attempt": 1,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "1fa6f2a2c3c3e4d1b3c0117c997127817fb2fb7d8fd86115ddaa03929b054b90",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000115425,
+   "cost_source": "reported",
+   "worst_usd": 0.000515625,
+   "at": "2026-11-09T06:18:50.126Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 3,
+   "character": "bai",
+   "prompt_sha256": "1fa6f2a2c3c3e4d1b3c0117c997127817fb2fb7d8fd86115ddaa03929b054b90",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFB7GTZCJW9CVW7ZFZEQXH",
+   "status": "ok",
+   "cost_usd": 0.0675975,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "1b26cebbb8152d7a2de6c304f766d48bdc7938c559fd2ca31fc70dedf7e3b0b0",
+   "original_sha256": "2e4d87caa9e6bbea2a9efb6ad7b3e0387bcdbf6e05b276b877166e4e7d317f22",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c03-bai-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1195,
+    "completion_tokens": 1120,
+    "total_tokens": 2315,
+    "cost": 0.0675975,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0675975,
+    "gateway_cost": 0.0675975
+   },
+   "at": "2026-11-09T06:18:59.778Z",
+   "attempt": 1,
+   "copies_by_eye": 3
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "30e329614075d1bcb27281b46284e54ce05c49015cf2bdd9204cd46b5f6c126b",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000135825,
+   "cost_source": "reported",
+   "worst_usd": 0.0005183249999999999,
+   "at": "2026-11-09T06:19:00.474Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 4,
+   "character": "zei",
+   "prompt_sha256": "30e329614075d1bcb27281b46284e54ce05c49015cf2bdd9204cd46b5f6c126b",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFBHM60A0GCTVD102BYDRX",
+   "status": "ok",
+   "cost_usd": 0.0676015,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "a03f93456a391e6547e4d45083383f40af804c702c07d6328415e010218b7948",
+   "original_sha256": "b84ac45c1a0236a3256e0035b371811ba12a76b36461839996ed5d8d045ce2df",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c04-zei-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1203,
+    "completion_tokens": 1120,
+    "total_tokens": 2323,
+    "cost": 0.0676015,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0676015,
+    "gateway_cost": 0.0676015
+   },
+   "at": "2026-11-09T06:19:09.949Z",
+   "attempt": 1,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "9060266549c01e04d3fb212c56737ce3c3811c3773eb9b7b229523e967ac57c8",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000166125,
+   "cost_source": "reported",
+   "worst_usd": 0.0005183249999999999,
+   "at": "2026-11-09T06:19:10.689Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 4,
+   "character": "bai",
+   "prompt_sha256": "9060266549c01e04d3fb212c56737ce3c3811c3773eb9b7b229523e967ac57c8",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFBVHZHQJ95Y3JCTHK8NPQ",
+   "status": "ok",
+   "cost_usd": 0.067601,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "2b9235ee45d7e47fdb86822f7a5e3ae18f13d25ccf16038daebe1444fc651921",
+   "original_sha256": "235d1b946e98f07f89f9159279d0eb5de57e9326bc868e9ef894d0337ca9c52d",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c04-bai-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1202,
+    "completion_tokens": 1120,
+    "total_tokens": 2322,
+    "cost": 0.067601,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067601,
+    "gateway_cost": 0.067601
+   },
+   "at": "2026-11-09T06:19:19.930Z",
+   "attempt": 1,
+   "copies_by_eye": 3
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "4646d0551acc738feb281d1f5b1508bedf9f27dea793494349312807fb84b6e6",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000105975,
+   "cost_source": "reported",
+   "worst_usd": 0.0005168999999999999,
+   "at": "2026-11-09T06:19:20.476Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 8,
+   "character": "zei",
+   "prompt_sha256": "4646d0551acc738feb281d1f5b1508bedf9f27dea793494349312807fb84b6e6",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFC570P8G40NS2KMHJC0N7",
+   "status": "ok",
+   "cost_usd": 0.0675985,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "701a133c5fce74eeebe7d990a1bf600539ac3af66d0d45f32d3fcaf5cd805b0f",
+   "original_sha256": "d658a0b0e28b4c736fd74d78224bf5d304ca2f6ef1dba9344d74c3220ff51b9b",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c08-zei-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1197,
+    "completion_tokens": 1120,
+    "total_tokens": 2317,
+    "cost": 0.0675985,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0675985,
+    "gateway_cost": 0.0675985
+   },
+   "at": "2026-11-09T06:19:29.613Z",
+   "attempt": 1,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "ee3fa4771e902aa7fa623282c9cb8d2e4a89cb1c0829ecfb318b93c929bf785e",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000114675,
+   "cost_source": "reported",
+   "worst_usd": 0.0005168999999999999,
+   "at": "2026-11-09T06:19:30.244Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 8,
+   "character": "bai",
+   "prompt_sha256": "ee3fa4771e902aa7fa623282c9cb8d2e4a89cb1c0829ecfb318b93c929bf785e",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFCEPBK1KWP5P28086G1VH",
+   "status": "ok",
+   "cost_usd": 0.067598,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "b192db0e7a799e834ce78de48aa1a7b461f349df982d708649c47e7caa2b5856",
+   "original_sha256": "3aef25081aee5b0502bf77eb8358570b51e2fc7ce71f544d26699fa173a696a6",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c08-bai-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1196,
+    "completion_tokens": 1120,
+    "total_tokens": 2316,
+    "cost": 0.067598,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067598,
+    "gateway_cost": 0.067598
+   },
+   "at": "2026-11-09T06:19:39.352Z",
+   "attempt": 1,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "d80de08bf1798d361734af31a6eaa31d9aa72c9638a5f8132a5e7ef4950c1f7e",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000122025,
+   "cost_source": "reported",
+   "worst_usd": 0.0005187,
+   "at": "2026-11-09T06:19:39.934Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 1,
+   "character": "zei",
+   "prompt_sha256": "d80de08bf1798d361734af31a6eaa31d9aa72c9638a5f8132a5e7ef4950c1f7e",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFCR5726X9V78BJ6XAE4XE",
+   "status": "ok",
+   "cost_usd": 0.0676015,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "057ec6b31d2c17d4fcc3290900d3c6806b083a35456ec98eee49b77f14cc5578",
+   "original_sha256": "d913db2f3c203f528a85074b96febc5037fe4325b1b51fd519c128016c6f52f0",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c01-zei-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1203,
+    "completion_tokens": 1120,
+    "total_tokens": 2323,
+    "cost": 0.0676015,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0676015,
+    "gateway_cost": 0.0676015
+   },
+   "at": "2026-11-09T06:19:50.375Z",
+   "attempt": 1,
+   "copies_by_eye": 3
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "b37d558f317e282509dba1fdf29088383010169d784397c14bf17f268918c8b2",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000161625,
+   "cost_source": "reported",
+   "worst_usd": 0.0005187,
+   "at": "2026-11-09T06:19:51.168Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 1,
+   "character": "bai",
+   "prompt_sha256": "b37d558f317e282509dba1fdf29088383010169d784397c14bf17f268918c8b2",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFD34DDYQCWJ8RT7Q8K5KS",
+   "status": "ok",
+   "cost_usd": 0.067808,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "89885bc69deda61150123283662dbc96e8cff4f7dddfad160ba894c25f29ad83",
+   "original_sha256": "61557eccda834ac87908e1d9ff90f9180af8e9aa81d9930d9faec0496b4a7c1f",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c01-bai-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1202,
+    "completion_tokens": 1189,
+    "total_tokens": 2391,
+    "cost": 0.067808,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067808,
+    "gateway_cost": 0.067808
+   },
+   "at": "2026-11-09T06:20:00.718Z",
+   "attempt": 1,
+   "copies_by_eye": 3
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "19f1fc819ccb756148092d4c106dcf16d1eb3716f4891d887c15db0541bd9414",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00013665,
+   "cost_source": "reported",
+   "worst_usd": 0.0005154749999999999,
+   "at": "2026-11-09T06:20:01.454Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 7,
+   "character": "zei",
+   "prompt_sha256": "19f1fc819ccb756148092d4c106dcf16d1eb3716f4891d887c15db0541bd9414",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFDD5VTCTW47J45YP39GC3",
+   "status": "ok",
+   "cost_usd": 0.067597,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "a34bb33d103dfbf22e4ad301850e5b65ee37c242b806babe42a6bc06e783650b",
+   "original_sha256": "294724dc343e3489b57c1c20516ffab5b96902ad8ea01fc49abd9df5ed0662a7",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c07-zei-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1194,
+    "completion_tokens": 1120,
+    "total_tokens": 2314,
+    "cost": 0.067597,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067597,
+    "gateway_cost": 0.067597
+   },
+   "at": "2026-11-09T06:20:10.808Z",
+   "attempt": 1,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "aebf35404ccc2b94910a056203df744d16fa16dd9419e80020628472caa61585",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00013365,
+   "cost_source": "reported",
+   "worst_usd": 0.0005154749999999999,
+   "at": "2026-11-09T06:20:11.474Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 7,
+   "character": "bai",
+   "prompt_sha256": "aebf35404ccc2b94910a056203df744d16fa16dd9419e80020628472caa61585",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFDQ0HC87S7EXG9PD3Z9HY",
+   "status": "ok",
+   "cost_usd": 0.0675965,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "899b8952c28279b55f6b1502db40f64717f45585187fcd0060f6cbe7c0146423",
+   "original_sha256": "88dc85112f71e34a7fd4349b8056d7fab898bda92d97667ea5e3889c2c889ecd",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c07-bai-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1193,
+    "completion_tokens": 1120,
+    "total_tokens": 2313,
+    "cost": 0.0675965,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0675965,
+    "gateway_cost": 0.0675965
+   },
+   "at": "2026-11-09T06:20:22.272Z",
+   "attempt": 1,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "d49a11f30ba60170bbc9098443f2b4f345867c41d9b09df183a31a98d8a8e305",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000186825,
+   "cost_source": "reported",
+   "worst_usd": 0.0005183249999999999,
+   "at": "2026-11-09T06:20:23.082Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 11,
+   "character": "zei",
+   "prompt_sha256": "d49a11f30ba60170bbc9098443f2b4f345867c41d9b09df183a31a98d8a8e305",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFE2C1A0ZFTZPYFNMA8XQY",
+   "status": "ok",
+   "cost_usd": 0.0676015,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "7dacd59b50695b2579b98ed42566c8211a417e732e470d5442a068e0011ed1d7",
+   "original_sha256": "ca6022edefff08b6560c6e44872cac0abeebbfd79e19fbcd235961a3296730a5",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c11-zei-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1203,
+    "completion_tokens": 1120,
+    "total_tokens": 2323,
+    "cost": 0.0676015,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0676015,
+    "gateway_cost": 0.0676015
+   },
+   "at": "2026-11-09T06:20:34.080Z",
+   "attempt": 1,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "e297239d818f097911867ea0e8c87a69b1194ddb7ad2732bdd61747aa41964e9",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000168525,
+   "cost_source": "reported",
+   "worst_usd": 0.0005183249999999999,
+   "at": "2026-11-09T06:20:34.862Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 11,
+   "character": "bai",
+   "prompt_sha256": "e297239d818f097911867ea0e8c87a69b1194ddb7ad2732bdd61747aa41964e9",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFEDT1P5C09EFKMFM1FHK8",
+   "status": "ok",
+   "cost_usd": 0.067601,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "80591cf618efb697d3e352a786955e3e1a04804c265bf7f574e0ff499dad5081",
+   "original_sha256": "88c017abaa8f460e404213c5d2ee6f6939a396e3f418497a8e58ab9357e5bc74",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c11-bai-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1202,
+    "completion_tokens": 1120,
+    "total_tokens": 2322,
+    "cost": 0.067601,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067601,
+    "gateway_cost": 0.067601
+   },
+   "at": "2026-11-09T06:20:44.142Z",
+   "attempt": 1,
+   "copies_by_eye": 1
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "648b49a12a83aff28987095d19ffc9ede26f6a50b7bd1e8b2f902b9c7b14a499",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00022275,
+   "cost_source": "reported",
+   "worst_usd": 0.00051525,
+   "at": "2026-11-09T06:20:45.273Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 12,
+   "character": "zei",
+   "prompt_sha256": "648b49a12a83aff28987095d19ffc9ede26f6a50b7bd1e8b2f902b9c7b14a499",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFEQZ9YHG2G236PB1DD30K",
+   "status": "ok",
+   "cost_usd": 0.067597,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "439a3a2d1144088af6c74f5f61fbeb73a022f8cebd24d2c1629d6c16c3845bbc",
+   "original_sha256": "152fe1303fc208ac1559bc022abb9af6572ceb70403064e95d6a01ca9d437fea",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c12-zei-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1194,
+    "completion_tokens": 1120,
+    "total_tokens": 2314,
+    "cost": 0.067597,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.067597,
+    "gateway_cost": 0.067597
+   },
+   "at": "2026-11-09T06:20:54.689Z",
+   "attempt": 1,
+   "copies_by_eye": 2
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "77b4c1dda399e23f9195cacec56a8f68cb40e2212976d3821a03883fb45fff22",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00014775,
+   "cost_source": "reported",
+   "worst_usd": 0.00051525,
+   "at": "2026-11-09T06:21:02.352Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "fix": "F1",
+   "line": "B",
+   "change": 12,
+   "character": "bai",
+   "prompt_sha256": "77b4c1dda399e23f9195cacec56a8f68cb40e2212976d3821a03883fb45fff22",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M6ZFF8MT66GDPAQNKJJ0E24M",
+   "status": "ok",
+   "cost_usd": 0.0675965,
+   "cost_source": "reported by the gateway",
+   "worst_usd": 0.09,
+   "sha256": "ca1739481f4223453b85de4ad874d4a902e63006c21f26a4ce0573e5f0667b31",
+   "original_sha256": "a8774bd565c451fba66c218ac90b73ce590441d4ee2ad1e6127833112ec71159",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "file": "c12-bai-B-gemini-F1.jpg",
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "usage": {
+    "prompt_tokens": 1193,
+    "completion_tokens": 1120,
+    "total_tokens": 2313,
+    "cost": 0.0675965,
+    "is_byok": false,
+    "prompt_tokens_details": {
+     "cached_tokens": 0,
+     "audio_tokens": 0,
+     "video_tokens": 0
+    },
+    "cost_details": {
+     "upstream_inference_cost": null,
+     "upstream_inference_prompt_cost": 0,
+     "upstream_inference_completions_cost": 0
+    },
+    "completion_tokens_details": {
+     "reasoning_tokens": 0,
+     "image_tokens": 0
+    },
+    "cache_creation_input_tokens": 0,
+    "market_cost": 0.0675965,
+    "gateway_cost": 0.0675965
+   },
+   "at": "2026-11-09T06:21:11.710Z",
+   "attempt": 1,
+   "copies_by_eye": 1
+  }
+ ],
+ "copies_by_eye": {
+  "how": "Counted by eye by the coding agent on each picture; a side panel showing a large crop of the same figure counts as a copy. Before: the look test's Gemini pictures (docs/starting-sheet-drafts/look-test-2026-11-08), line A and line B; F1: line B with \"Show one figure only.\"",
+  "rows": [
+   {
+    "change": 2,
+    "character": "zei",
+    "before_A": 3,
+    "before_B": 1,
+    "F1": 2
+   },
+   {
+    "change": 2,
+    "character": "bai",
+    "before_A": 3,
+    "before_B": 1,
+    "F1": 1
+   },
+   {
+    "change": 3,
+    "character": "zei",
+    "before_A": 1,
+    "before_B": 1,
+    "F1": 1
+   },
+   {
+    "change": 3,
+    "character": "bai",
+    "before_A": 2,
+    "before_B": 2,
+    "F1": 3
+   },
+   {
+    "change": 4,
+    "character": "zei",
+    "before_A": 3,
+    "before_B": 1,
+    "F1": 1
+   },
+   {
+    "change": 4,
+    "character": "bai",
+    "before_A": 1,
+    "before_B": 3,
+    "F1": 3
+   },
+   {
+    "change": 8,
+    "character": "zei",
+    "before_A": 3,
+    "before_B": 1,
+    "F1": 1
+   },
+   {
+    "change": 8,
+    "character": "bai",
+    "before_A": 1,
+    "before_B": 1,
+    "F1": 1
+   },
+   {
+    "change": 1,
+    "character": "zei",
+    "before_A": 1,
+    "before_B": 1,
+    "F1": 3
+   },
+   {
+    "change": 1,
+    "character": "bai",
+    "before_A": 1,
+    "before_B": 1,
+    "F1": 3
+   },
+   {
+    "change": 7,
+    "character": "zei",
+    "before_A": 1,
+    "before_B": 2,
+    "F1": 1
+   },
+   {
+    "change": 7,
+    "character": "bai",
+    "before_A": 1,
+    "before_B": 1,
+    "F1": 1
+   },
+   {
+    "change": 11,
+    "character": "zei",
+    "before_A": 1,
+    "before_B": 1,
+    "F1": 1
+   },
+   {
+    "change": 11,
+    "character": "bai",
+    "before_A": 1,
+    "before_B": 1,
+    "F1": 1
+   },
+   {
+    "change": 12,
+    "character": "zei",
+    "before_A": 1,
+    "before_B": 1,
+    "F1": 2
+   },
+   {
+    "change": 12,
+    "character": "bai",
+    "before_A": 1,
+    "before_B": 1,
+    "F1": 1
+   }
+  ]
+ }
+}
