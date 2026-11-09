@@ -57,7 +57,7 @@ commit;
 --     one inserted as postgres, as the site writes them, read back with the site's weighted count (a closed row counts
 --     3: 4 in all); a bad pool refused; then deleted. The person number 2147483646 fits the column and belongs to no
 --     account. Ends "READ-BACK PASSED"; each check raises "READ-BACK FAILED: …" on failure. It sets no role (postgres
---     can't SET ROLE in the SQL Editor).
+--     can't switch roles in the SQL Editor).
 -- do $$
 -- declare
 --   n int;
