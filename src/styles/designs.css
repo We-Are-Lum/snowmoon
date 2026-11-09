@@ -434,3 +434,12 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .sf-ready { margin: 0; font-size: var(--text-small); color: var(--body); overflow-wrap: anywhere; }
 .sf-link { color: var(--muted); }
 .sf-submit .ch-add { margin-top: 0; }
+
+/* Backstory (owner, 2026-11-09): the starter questions as hints, the box, the tick; and the backstory under a picture. */
+.mk-backstory { margin: 16px 0; }
+.mk-backstory-hints { margin: 0 0 8px; padding-left: 18px; font-size: 14px; line-height: 1.4; }
+.mk-backstory-tick { display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 15px; }
+.mk-backstory-shown { margin: 12px 0 16px; }
+.mk-backstory-text { margin: 0 0 4px; white-space: pre-wrap; }
+.mk-backstory-by, .mk-backstory-spoils { margin: 0; font-size: 14px; }
+.mk-backstory-add, .mk-publish-without { margin: 8px 0; }

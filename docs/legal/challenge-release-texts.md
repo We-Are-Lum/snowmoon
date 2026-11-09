@@ -1,4 +1,4 @@
-# Challenge release: every final text (v4; v3 reread by the owner)
+# Challenge release: every final text (v5; v3 reread by the owner; v5's additions NOT YET REREAD)
 
 Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` (v4 adds the closing line of 2026-11-09 and the bases' style; v3 was at `9ae0aa13`) (with challenge-simple's final head `1efcbeaf`). **v3:** the owner reread every text of v2 on 2026-11-08, via the coordinator's check, with changes 1–2 below applied word for word (the notice labels; the closed refusals) and the rules above Generate extended; the "none left" line approved as drafted
 (which carries `challenge-simple`). Every text below is copied from the code as it
@@ -190,3 +190,51 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
   colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively
   faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear
   readable faces and hands." (word for word the drafts' style). A remix of a base made in it starts on it.
+
+## v5 additions (2026-11-09): Backstory and the look lines — NOT YET REREAD
+
+These are drafts for the owner's new reread; they don't ride on the earlier one. `LEGAL.ownerReread` is not changed, so
+`check:principles` P6k (Privacy) is red until the owner rereads; P6l (Terms) stays green (Terms don't change: §5
+already covers a backstory, the same licence as the picture).
+
+### Privacy §4, the remix challenge item (DRAFT, not yet reread)
+
+**Before** (its last two sentences, as reread on 2026-11-08):
+
+> … When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record. A picture made with a closed model counts as three of your free pictures that day.
+
+**After** (one sentence added at the end):
+
+> … When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record. A picture made with a closed model counts as three of your free pictures that day. If you add a backstory to a challenge picture, it is kept and shown with the picture, with whether you marked it as mentioning later chapters and when you added it.
+
+### The rules (the coordinator's draft, not yet reread)
+
+**Before:** none. **After**, after "Only remixes count …" and Submit's line, before "Entering is free…":
+
+> You can add a short backstory in your own words; it’s shown as invented by you, not from the book.
+
+### Backstory on the publish screen and the picture's page (the owner's approved words)
+
+- Box label: "Backstory (optional)", up to 400 characters, with the publication line ("Public, permanent, GPL-3.0,
+  shown with your name. You can hide it." as every PublishedTextField).
+- Hints above it (never put in the box): "What changed for {Name}?" · "Where are they now?" · "What do they want that they
+  didn't before?"
+- The tick: "Mentions things from later in the book" → on the picture's page: "May spoil later chapters."
+- Under the picture: the backstory, then "Invented by {@maker}, not from the book".
+- DRAFT (the agent's): the refusal "The prompt check didn't allow this backstory. Change it, or publish without it."; the
+  button "Publish without it"; the admin's "Add backstory" and "Save backstory"; "Write the backstory in up to 400
+  characters."
+
+### The look lines (this edition's invention; owner-approved 2026-11-09), public in every recipe
+
+Right after "{Name} is the person in reference image 1, the main figure." in every challenge prompt, for every model:
+
+- Zei: "Unless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky black hair with close-cut sides and one teal-blue streak, dark eyes."
+- Gladias: "Unless the change says otherwise: a man of about forty, slim and of medium height, warm light-brown skin, short straight black hair, a neatly trimmed short beard, dark eyes."
+- Bai: "Unless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings."
+- Seila: "Unless the change says otherwise: a woman in her late thirties, tall and slender, deep brown skin, shoulder-length black braids gathered back, small round gold-rimmed glasses."
+- Deluin: "Unless the change says otherwise: a young man of about eighteen, tall and long-limbed, warm tan skin, straight shoulder-length black hair, dark brown eyes, a calm, slightly serious face."
+- Mu: "Unless the change says otherwise: a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, thin red-framed glasses."
+
+The prompt's order: the change words; "{Name} is the person in reference image 1, the main figure."; the look line; the
+style's text; "Keep the face recognisable; change anything else the words describe."; the no-lettering line.

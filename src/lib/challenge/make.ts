@@ -39,8 +39,9 @@ export function momentPrompt(p: { words: string; name: string; scene: string; ot
  * in "How it was made"): it names reference image 1 and leaves keeping the character to KEEP_LINE, the owner's words,
  * so a change of clothes isn't fought by "keep their clothes exactly". The style's text is always followed by KEEP_LINE.
  */
-export function remixPrompt(p: { words: string; name: string; style: string }): string {
-  return [p.words.trim(), `${p.name} is the person in reference image 1, the main figure.`, p.style.trim(), KEEP_LINE, IMAGES.suffix].filter(Boolean).join('\n\n');
+export function remixPrompt(p: { words: string; name: string; style: string; look?: string }): string {
+  // The character's look line (src/lib/challenge/looks.ts; owner-approved 2026-11-09) right after the reference line.
+  return [p.words.trim(), `${p.name} is the person in reference image 1, the main figure.`, (p.look ?? '').trim(), p.style.trim(), KEEP_LINE, IMAGES.suffix].filter(Boolean).join('\n\n');
 }
 
 /** The other challenge characters in the moment (slugs), at most two (the edit model takes three pictures in all). */

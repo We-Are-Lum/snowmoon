@@ -112,18 +112,24 @@ export async function paidPicture(
  * which is published but not sent to the image model). Blocked names first, then the same model check;
  * its cost goes into the day's totals; refused when the spend caps are reached.
  */
-export async function checkWords(sql: Sql, request: Request, text: string): Promise<{ ok: true } | { ok: false; status: number; error: string }> {
+export async function checkWords(
+  sql: Sql,
+  request: Request,
+  text: string,
+  /** A backstory (branch challenge-models): the larger check budget, and its own refusal words. */
+  opts: { maxTokens?: number; refused?: string } = {},
+): Promise<{ ok: true } | { ok: false; status: number; error: string }> {
   if (!text.trim()) return { ok: true };
-  if (blockedName(text)) return { ok: false, status: 422, error: IMAGE_WORDING.designs.form.nameBlocked };
+  if (blockedName(text)) return { ok: false, status: 422, error: opts.refused ?? IMAGE_WORDING.designs.form.nameBlocked };
   if (!(await wordsCheckFits(sql))) return { ok: false, status: 429, error: LIMIT_SAY.spend };
   let guard;
   try {
-    guard = await checkPrompt(text, request);
+    guard = await checkPrompt(text, request, opts.maxTokens);
   } catch (e) {
     console.error('name check failed', (e as Error).name);
     return { ok: false, status: 503, error: 'The prompt check did not answer. Try again in a moment.' };
   }
   await recordGuard(sql, { costUsd: guard.costUsd, provider: guard.provider, verdict: guard.allow ? 'ok' : 'blocked' });
-  return guard.allow ? { ok: true } : { ok: false, status: 422, error: NAME_REFUSED };
+  return guard.allow ? { ok: true } : { ok: false, status: 422, error: opts.refused ?? NAME_REFUSED };
 }
 export const NAME_REFUSED = IMAGE_WORDING.designs.form.nameRefused;
