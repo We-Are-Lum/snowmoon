@@ -1,4 +1,4 @@
--- NEXT_image_asks_back.sql: pictures given back to the day's count (branch challenge-models, owner, 2026-11-09).
+-- 0041_image_asks_back.sql: pictures given back to the day's count (branch challenge-models, owner, 2026-11-09).
 -- NOT APPLIED. Unnumbered until merge: it takes the next free number then, checked against origin/main and production
 -- (CLAUDE.md). Requires 0008_images (studio.image_asks). Drafted by the coding agent (Claude, a closed model by
 -- Anthropic). Tested by `npm run test:image-asks-back-sql` (in-memory Postgres, the parts read from this file).
