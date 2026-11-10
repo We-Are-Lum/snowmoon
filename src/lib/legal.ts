@@ -43,9 +43,8 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: the day the sign-in release (bluesky-check, carrying signin-lens-bluesky) merges and its Lens and Bluesky
-  // lines go live. Set to 2026-11-05 because the owner plans to merge tonight; if the merge moves, this moves with it.
-  effective: '2026-11-06',
+  // MERGE DAY: the day PR #144 (Privacy §4's Lens score) merges and goes live. If the merge moves, this moves with it.
+  effective: '2026-11-10',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -252,7 +251,9 @@ export const LEGAL: {
     // 2026-11-09, owner's reread of the final review (coordinator reviewed; the owner: "Reread: Privacy §4 as in the
     // final report"): §4 adds "Until entries close, the closed model by OpenAI is chosen to start with if you can use it;
     // you can change it before you make the picture." The words before were 18g3ada.
-    privacy: { words: 'k5nsr6', on: '2026-11-09', by: 'FID 6786' },
+    // 2026-11-10, owner's reread of PR #144 ("Reread #144: Privacy §4, only the Lens phrase changes"): §4's challenge
+    // item names "the Lens score for a Lens account" among the checks. The words before were k5nsr6.
+    privacy: { words: '1g9hf8', on: '2026-11-10', by: 'FID 6786' },
   },
 };
 
