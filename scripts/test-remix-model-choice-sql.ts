@@ -1,5 +1,5 @@
 /**
- * NEXT_remix_model_choice.sql (branches remix-model-choice and challenge-models), tested on an in-memory Postgres
+ * 0040_remix_model_choice.sql (branches remix-model-choice and challenge-models), tested on an in-memory Postgres
  * (PGlite), as scripts/test-challenge-daily-sql.ts tests 0038: the parts are read from the file itself, so what is
  * tested is what the owner pastes. Never a production database.
  *
@@ -22,7 +22,7 @@ import { createHash } from 'node:crypto';
 import { PGlite } from '@electric-sql/pglite';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const FILE = path.join(ROOT, 'supabase/migrations/NEXT_remix_model_choice.sql');
+const FILE = path.join(ROOT, 'supabase/migrations/0040_remix_model_choice.sql');
 const failures: string[] = [];
 let passed = 0;
 const check = (label: string, ok: boolean, detail = '') => {

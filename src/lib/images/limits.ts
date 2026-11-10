@@ -39,18 +39,18 @@ export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
   if (isSocialPerson(fid) && (await freeFor(sql, fid, { lookUp: false }))?.free === false) return 0;
   if (isWalletNumber(fid)) return paysFor(await balanceUsd(sql, -fid), priceUsd(IMAGES.reserveUsd));
   // With closed models offered (closedChoiceOn: the challenge's model row, or the sheet form's picker), a closed model's
-  // picture is a row in pool 'closed' (NEXT_remix_model_choice.sql) and counts as CLOSED_IMAGES.countsAs (3) of the
+  // picture is a row in pool 'closed' (0040_remix_model_choice.sql) and counts as CLOSED_IMAGES.countsAs (3) of the
   // day's free pictures. Off, the query is the one the site has always run, so nothing needs the new column.
   const n = closedChoiceOn()
     ? sql`coalesce(sum(case when pool = 'closed' then ${CLOSED_IMAGES.countsAs} else 1 end), 0)::int`
     : sql`count(*)::int`;
   const [r] = await sql`select ${n} as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
-  // Pictures given back today (a FLUX picture fal's safety checker blocked; NEXT_image_asks_back.sql), once that table exists.
+  // Pictures given back today (a FLUX picture fal's safety checker blocked; 0041_image_asks_back.sql), once that table exists.
   const back = (await backTable(sql)) ? Number((await sql<{ n: number }[]>`select count(*)::int as n from studio.image_asks_back where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`)[0]?.n ?? 0) : 0;
   return Math.max(0, Math.min(perDay(fid), perDay(fid) - (r?.n ?? 0) + back));
 }
 
-/** Whether pictures can be given back on this database yet (NEXT_image_asks_back.sql applied). */
+/** Whether pictures can be given back on this database yet (0041_image_asks_back.sql applied). */
 async function backTable(sql: Sql): Promise<boolean> {
   const [r] = await sql<{ ok: boolean }[]>`select to_regclass('studio.image_asks_back') is not null as ok`;
   return Boolean(r?.ok);
@@ -87,6 +87,15 @@ const { dailySpendCapUsd: closedDailyCapUsd } = CLOSED_IMAGES;
 // Owner, 2026-11-09: never within CLOSED_IMAGES.openFloorUsd of the free cap, so closed spending can never stop the open
 // model (the challenge: $25 free, $20 closed; outside it, $2 free, no closed pictures).
 export const closedCapUsd = (now: Date = new Date()) => Math.max(0, Math.min(closedDailyCapUsd, imagesDailySpendCapUsd(now) - CLOSED_IMAGES.openFloorUsd));
+/**
+ * Would one more closed picture (reserving `reserveUsd`) be refused by the closed caps now ('closed-spend')? Read
+ * without the lock, for the screen's starting model only (owner, 2026-11-09: never start on a model that will refuse);
+ * reserve() decides under the lock.
+ */
+export async function closedCapReached(sql: Sql, reserveUsd: number): Promise<boolean> {
+  const [today] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${sql.unsafe(TODAY)} and funded = 'free'`;
+  return (await closedSpentToday(sql)) + reserveUsd > closedCapUsd() || today.usd + reserveUsd > closedTotalCapUsd();
+}
 /** A closed picture also stops once the day's whole free spend (open and closed, prompt checks included) would leave the open model less than its floor. */
 const closedTotalCapUsd = (now: Date = new Date()) => imagesDailySpendCapUsd(now) - CLOSED_IMAGES.openFloorUsd;
 

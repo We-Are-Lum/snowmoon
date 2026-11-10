@@ -130,25 +130,26 @@ proven('L3 the prompt order: change words, reference line, look line, scene line
   proven('S1 "Same as this picture": first in the Style row, the default, adds no style line, recorded in the recipe; the prompt order otherwise unchanged', same(M.resolveStyle, makeScreen), same(((c: never, p: never) => M.resolveStyle({ kind: 'random' } as never, p)) as never, makeScreen));
 }
 
-// S2: the challenge's styles are an allowlist (CHALLENGE.offeredStyles = ["Animated series"]; owner, 2026-11-09).
+// S2: the challenge's styles are an allowlist (CHALLENGE.offeredStyles = ["Animated series", "Comic book", "Comic 3D mix"]; owner, 2026-11-09).
 {
   const M = await import('../src/lib/challenge/make');
   const ST = await import('../src/lib/challenge/styles');
   const st = (label: string, n: number) => ({ id: `style:e${n}`, label, text: `${label} look.`, elementId: `e${n}`, versionId: `v${n}`, versionNo: 1, entity: label, title: label, byName: 'naaate', byFid: 6786, assist: null });
-  const site = [st('Quiet, warm light', 1), st('Mood', 2), st('Animated series', 3), st('Bolder', 4), st('Printed', 5)];
+  const site = [st('Quiet, warm light', 1), st('Mood', 2), st('Animated series', 3), st('Bolder', 4), st('Comic 3D mix', 7), st('Printed', 5), st('Comic book', 6)];
+  const OFFERED = 'Animated series,Comic book,Comic 3D mix';
   const screen = read('src/components/challenge-make.tsx');
   const src = { kind: 'sheet' as const, versionId: 'v', character: 'zei', url: 'u', sha256: 's', width: 1, height: 1, text: '', title: '', by: null, byFid: 1, versionNo: 1, moment: null, styleElement: null };
   const allow = (only: typeof M.offeredOnly) => {
     const offered = only(site as never);
-    const draws = [...Array(20).keys()].map(() => M.resolveStyle({ kind: 'random' }, offered)?.label);
+    const draws = [...Array(60).keys()].map(() => M.resolveStyle({ kind: 'random' }, offered)?.label);
     const none = only([st('Mood', 2)] as never);
     const v = M.makeView(src as never, { styles: offered });
     return [
-      ...need(JSON.stringify(CHALLENGE.offeredStyles) === '["Animated series"]' && ST.STYLE_PRESETS.length === 0, 'the allowlist isn\'t ["Animated series"] (and no presets)'),
-      ...need(offered.map((s) => s.label).join() === 'Animated series', `offered: ${offered.map((s) => s.label).join()}`),
-      ...need(draws.every((l) => l === 'Animated series'), `Random drew ${[...new Set(draws)].join()}`),
+      ...need(JSON.stringify(CHALLENGE.offeredStyles) === '["Animated series","Comic book","Comic 3D mix"]' && ST.STYLE_PRESETS.length === 0, 'the allowlist isn\'t the three (and no presets)'),
+      ...need(offered.map((s) => s.label).join() === OFFERED, `offered: ${offered.map((s) => s.label).join()}`),
+      ...need(draws.every((l) => OFFERED.split(',').includes(l ?? '')) && new Set(draws).size === 3, `Random drew ${[...new Set(draws)].join()}`),
       ...need(M.resolveStyle({ kind: 'style', id: 'style:e2' }, offered) === null, 'a style not offered (Mood) is taken'),
-      ...need(v.defaultStyle === 'same' && v.styles.map((s) => s.label).join() === 'Animated series', 'the row isn\'t "Same as this picture", "Animated series"'),
+      ...need(v.defaultStyle === 'same' && v.styles.map((s) => s.label).join() === OFFERED, 'the row isn\'t "Same as this picture" and the three'),
       // Before "Animated series" is published: "Same as this picture" and Write your own; Random hidden; a Random request refused.
       ...need(none.length === 0 && M.makeView(src as never, { styles: none }).styles.length === 0 && M.resolveStyle({ kind: 'random' }, none) === null, 'with nothing offered, Random still draws'),
       ...need(/\{hasPublished && \(/.test(screen) && screen.indexOf('{hasPublished && (') < screen.indexOf('data-style="random"') && /data-style="own"/.test(screen), 'Random isn\'t hidden with nothing to draw from, or Write your own is missing'),

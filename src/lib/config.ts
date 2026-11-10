@@ -560,7 +560,7 @@ export const CHALLENGE = {
    * Model choice on the challenge's remix screen (branch challenge-models, owner, 2026-11-08): four models, the open
    * default first (src/lib/challenge/models.ts), each with the tapped picture as the reference. The branch is the
    * release: on here, with Privacy, the notices and consent v6 describing it (docs/legal/challenge-models-draft.md;
-   * check:principles P6t). Merge only after the owner's "reread" and once NEXT_remix_model_choice.sql is applied.
+   * check:principles P6t). Merge only after the owner's "reread" and once 0040_remix_model_choice.sql is applied.
    */
   modelChoice: true as boolean,
   /**
@@ -568,7 +568,7 @@ export const CHALLENGE = {
    * shows once the owner publishes it), after "Same as this picture" and before Random and Write your own. The other
    * published styles stay on the site but aren't offered here; Random draws only from these (STYLE_PRESETS, empty, too).
    */
-  offeredStyles: ['Animated series'] as readonly string[],
+  offeredStyles: ['Animated series', 'Comic book', 'Comic 3D mix'] as readonly string[],
   /**
    * The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"). While false:
    * - /challenge, /api/challenge/* and every way into them (the menu item, the home row, the challenge share text, and
@@ -982,7 +982,7 @@ export const IMAGES = {
      * character sheet, the site's open models first and the default, then the closed models of SHEET_MODELS
      * (src/lib/images/sheet-models.ts). One model per sheet. OFF: the picker is hidden and the server refuses any
      * model but the open default. Turn it on only in the release whose Privacy names each closed model's provider
-     * (scripts/check-principles.ts P6t) and once migration NEXT_remix_model_choice.sql is applied.
+     * (scripts/check-principles.ts P6t) and once migration 0040_remix_model_choice.sql is applied.
      */
     modelChoice: false as boolean,
   },
@@ -1040,7 +1040,7 @@ export type ClosedProvider = keyof typeof CLOSED_PROVIDERS;
 
 /**
  * Are closed models offered anywhere now (the challenge's model row, or the sheet form's picker)? While true, the free
- * count reads studio.image_asks.pool (NEXT_remix_model_choice.sql must be applied first).
+ * count reads studio.image_asks.pool (0040_remix_model_choice.sql must be applied first).
  */
 export const closedChoiceOn = (): boolean => CHALLENGE.modelChoice || IMAGES.designs.modelChoice;
 

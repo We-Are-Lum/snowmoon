@@ -421,7 +421,7 @@ working time, with tests.
 | R2 | **The moments remix screen** and its flow: `/challenge/make`, preview, publish-replaces, back/✕ per §1.2, empty prompt, moment strip, "Surprise me", one picture through the image pipeline with the tapped picture as reference, anchored; entries switch from sheets to pictures (`rules.ts`, `entries.ts`, `record.ts`); `openSheets` off; Terms §6e and Privacy lines (§2.7) in the same branch. Tests: the remix-line rule on pictures, moment quotes word for word, the anchor, a planted sheet fork that must not count | R1; moments and scene lines approved; legal reread | 3 days |
 | R3 | **Share first**: the published screen (S4) with post buttons at the top, the ready text, Submit beside them; option B (Paste) in R3, option A (Find my post) as R3b with its Privacy line | R2 | 1 day (+1 day for A) |
 | R4 | Rehearsal 2 on this machine (§4.1) | R1–R3 | 0.5 day |
-| R5 | **Model choice on the remix screen**: remix-model-choice merged into contest, its migration applied, its picker on S2, Privacy naming the providers for pictures | remix-model-choice merged and `NEXT_remix_model_choice.sql` applied; its reread | 1 day |
+| R5 | **Model choice on the remix screen**: remix-model-choice merged into contest, its migration applied, its picker on S2, Privacy naming the providers for pictures | remix-model-choice merged and `0040_remix_model_choice.sql` applied; its reread | 1 day |
 | R6 | The shortlist and the final version (A or B) | the vote's design; not needed before 1 Dec | later |
 
 About 6–7 agent days for R1–R4, more with option A and R5. No migration for R1–R4 (the challenge tables and anchors

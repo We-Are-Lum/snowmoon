@@ -1,4 +1,4 @@
--- NEXT_remix_model_choice.sql: which pool each daily picture counts in (branches remix-model-choice, 2026-11-04, and
+-- 0040_remix_model_choice.sql: which pool each daily picture counts in (branches remix-model-choice, 2026-11-04, and
 -- challenge-models, 2026-11-08).
 -- APPLIED on production by the owner on 2026-11-08 (part B run once, ok; read-back (a) all true). The do block of part C
 -- first drafted failed there ("permission denied to set role studio_writer": postgres can't SET ROLE in the SQL Editor,
