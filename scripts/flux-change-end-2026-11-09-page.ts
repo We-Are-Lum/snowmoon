@@ -43,7 +43,7 @@ export async function fluxEndSection(opts: { endFull: string; retestFull: string
   }
   const spent = ledger.calls.reduce((n: number, c: any) => n + c.cost_usd, 0); // eslint-disable-line @typescript-eslint/no-explicit-any
   const sample = Object.values(ledger.prompts as Record<string, string>)[0] ?? '';
-  const html = `<section id="${opts.id ?? 'flux-end'}"><h2>${esc(opts.title)}</h2><p class="lead">FLUX.2 [klein] 4B edit only, the base front only, the same seed as the re-test (20261108). The prompt keeps the re-test’s lines but moves the change words out of first place, written as “The change: …”: last (E), or just before the no-words line (S). Spent $${spent.toFixed(2)} of a $0.20 cap. Notes under each picture are the coding agent’s reading.</p><details><summary class="lead">Variant E’s prompt for the first case</summary><pre>${esc(sample)}</pre></details>${rows.join('')}</section>`;
+  const html = `<section id="${opts.id ?? 'flux-end'}"><h2>${esc(opts.title)}</h2><p class="lead">FLUX.2 [klein] 4B edit only, the base front only, the same seed as the re-test (20261108). The prompt keeps the re-test’s lines but moves the change words out of first place, written as “The change: …”: last (E), or just before the no-words line (S). Spent $${spent.toFixed(2)} of a $0.20 cap. Notes under each picture are the coding agent’s reading, as corrected by the owner and coordinator.</p><p class="lead"><b>${esc(ledger.recommendation ?? '')}</b></p><details><summary class="lead">Variant E’s prompt for the first case</summary><pre>${esc(sample)}</pre></details>${rows.join('')}</section>`;
   return { html, files, spent };
 }
 

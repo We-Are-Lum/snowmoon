@@ -182,7 +182,9 @@
    "at": "2026-11-10T00:16:32.444Z",
    "attempt": 1,
    "copies_by_eye": 1,
-   "reading": "an old woman: wrinkles, grey hair; tattoos and earrings kept"
+   "reading": "an old woman: wrinkles, grey hair; but her face is clearly lighter than her own arms and her base: skin lightened",
+   "kept": "no",
+   "kept_reason": "skin lightened (owner/coordinator correction, 2026-11-09)"
   },
   {
    "kind": "guard",
@@ -469,7 +471,9 @@
    "at": "2026-11-10T00:16:50.850Z",
    "attempt": 1,
    "copies_by_eye": 1,
-   "reading": "an old woman with long grey hair; tattoos and earrings kept"
+   "reading": "an old woman with long grey hair; but her face is clearly lighter than her own arms and her base: skin lightened",
+   "kept": "no",
+   "kept_reason": "skin lightened (owner/coordinator correction, 2026-11-09)"
   },
   {
    "kind": "guard",
@@ -691,18 +695,20 @@
    "change": 3,
    "variant": "E",
    "change_shown": "yes",
-   "kept": "yes",
+   "kept": "no",
    "copies": 1,
-   "reading": "an old woman: wrinkles, grey hair; tattoos and earrings kept"
+   "reading": "an old woman: wrinkles, grey hair; but her face is clearly lighter than her own arms and her base: skin lightened",
+   "kept_reason": "skin lightened (owner/coordinator correction, 2026-11-09)"
   },
   {
    "character": "bai",
    "change": 3,
    "variant": "S",
    "change_shown": "yes",
-   "kept": "yes",
+   "kept": "no",
    "copies": 1,
-   "reading": "an old woman with long grey hair; tattoos and earrings kept"
+   "reading": "an old woman with long grey hair; but her face is clearly lighter than her own arms and her base: skin lightened",
+   "kept_reason": "skin lightened (owner/coordinator correction, 2026-11-09)"
   },
   {
    "character": "bai",
@@ -785,5 +791,6 @@
    "copies": 1,
    "reading": "shaved; grey background"
   }
- ]
+ ],
+ "recommendation": "Not adopted: aging works but Bai's skin lightened; FLUX keeps the change first. A skin-tone test follows after launch."
 }
