@@ -57,7 +57,8 @@ const sql = postgres(DB_URL, { prepare: false, max: 1, onnotice: () => {} });
 await sql`set role studio_writer`;
 const S = sql as never;
 const count = async () => Number(((await db.query<{ n: number }>('select count(*)::int as n from studio.element_versions')).rows[0]).n);
-const p1cFor = async (elementId: string) => p1cProblems((await sql<P1cRow[]>`select v.id::text as id, v.recipe_id, e.element_type, v.body from studio.element_versions v join studio.elements e on e.id = v.element_id where e.status = 'published' and e.id = ${elementId}`) as P1cRow[]);
+// P1c's own query (scripts/check-principles.ts), for one element.
+const p1cFor = async (elementId: string) => p1cProblems((await sql<P1cRow[]>`select v.id::text as id, v.recipe_id, e.element_type, v.body, e.id::text as element_id, v.version_no, en.kind from studio.element_versions v join studio.elements e on e.id = v.element_id left join studio.entities en on en.id = e.entity_id where e.status = 'published' and e.id = ${elementId}`) as P1cRow[]);
 const canon = (v: unknown): string => JSON.stringify(v, (_k, x) => (x && typeof x === 'object' && !Array.isArray(x) ? Object.fromEntries(Object.entries(x).sort(([a], [b]) => (a < b ? -1 : 1))) : x));
 const refusedOf = async (f: () => Promise<unknown>) => { try { await f(); return null; } catch (e) { return e instanceof StyleRefused ? e.message : `threw ${(e as Error).message}`; } };
 
@@ -104,7 +105,7 @@ let comicBook = '';
   const plan = await planStyle(S, COMIC_3D_MIX);
   const added = await addSamples(S, COMIC_3D_MIX, await samplesFor(COMIC_3D_MIX, 3, 's3'), store.put);
   const rows = await sql<{ id: string; version_no: number; body: { samples: unknown[]; title: string; text: string; by_name: string } }[]>`select id::text, version_no, body from studio.element_versions where element_id = ${old.elementId} order by version_no`;
-  const p1cNew = p1cProblems((await sql<P1cRow[]>`select v.id::text as id, v.recipe_id, e.element_type, v.body from studio.element_versions v join studio.elements e on e.id = v.element_id where v.id = ${added.versionId}`) as P1cRow[]);
+  const p1cNew = await p1cFor(old.elementId);
   const again = await refusedOf(async () => addSamples(S, COMIC_3D_MIX, await samplesFor(COMIC_3D_MIX, 2, 's3b'), store.put));
   const toCreated = await refusedOf(async () => addSamples(S, COMIC_BOOK, await samplesFor(COMIC_BOOK, 2, 's3c'), store.put));
   const real = [
@@ -115,10 +116,32 @@ let comicBook = '';
     ...need(!!again && /already has 3 sample pictures/.test(again), `adding again: ${again}`),
     ...need(!!toCreated && /already has 2 sample pictures/.test(toCreated), `adding to a style published with samples: ${toCreated}`),
   ];
-  console.log(`     note: version 1 of the style, published without pictures, is still listed by P1c (${(await p1cFor(old.elementId)).length} row): element_versions is append-only, so only the new version has samples.`);
   // Planted: a "version" without the samples.
-  const planted = p1cProblems([{ id: 'v2', recipe_id: null, element_type: 'design', body: { ...rows[1].body, samples: [] } }]);
-  proven('S3 adding samples to a style published without any writes version 2 with them (version 1 untouched); P1c passes for version 2; adding again, or to a style with samples, is refused', real, planted);
+  const planted = p1cProblems([{ id: rows[0].id, recipe_id: null, element_type: 'design', body: JSON.parse(oldBody), element_id: old.elementId, version_no: 1, kind: 'style' }, { id: 'v2', recipe_id: null, element_type: 'design', body: { ...rows[1].body, samples: [] }, element_id: old.elementId, version_no: 2, kind: 'style' }]);
+  proven('S3 adding samples to a style published without any writes version 2 with them (version 1 untouched); P1c passes for the style (version 1 superseded, owner 2026-11-10); adding again, or to a style with samples, is refused', real, planted);
+}
+
+// S7 (owner, 2026-11-10): P1c's narrow exception, both sides, on the rule alone.
+{
+  const pic = (recipe: unknown = { prompt: 'p', model: 'm' }) => ({ url: 'u', sha256: 's', recipe });
+  const style = (id: string, n: number, samples: unknown[], el = 'E') => ({ id, recipe_id: null, element_type: 'design', body: { title: 'T', text: 't', samples, views: {} }, element_id: el, version_no: n, kind: 'style' }) as P1cRow;
+  const sheet = (id: string, n: number, views: Record<string, unknown>) => ({ id, recipe_id: null, element_type: 'design', body: { title: 'S', text: 's', samples: [], views }, element_id: 'SH', version_no: n, kind: 'character' }) as P1cRow;
+  const i = p1cProblems([style('v1', 1, []), style('v2', 2, [pic(), pic()])]);
+  const ii = p1cProblems([style('v1', 1, [])]);
+  const iii = p1cProblems([style('v1', 1, [pic(), pic()]), style('v2', 2, [])]);
+  const iv = p1cProblems([style('v1', 1, []), style('v2', 2, [pic(), pic({ prompt: 'p' })])]);
+  const sheetEmpty = p1cProblems([sheet('s1', 1, {}), sheet('s2', 2, { front: pic() })]);
+  const otherStyle = p1cProblems([style('v1', 1, [], 'A'), style('v2', 2, [pic(), pic()], 'B')]);
+  const real = [...need(i.length === 0, `(i) v1 empty + v2 with samples: ${i.join('; ')}`)];
+  const planted = [
+    ...need(ii.length > 0, '(ii) v1 empty only passed'),
+    ...need(iii.length > 0 && iii.some((p) => p.includes('v2')), '(iii) the latest empty passed'),
+    ...need(iv.length > 0, '(iv) a sample without its recipe passed'),
+    ...need(sheetEmpty.length > 0 && sheetEmpty.some((p) => p.includes('s1')), 'a sheet version with no pictures passed (sheets are unchanged)'),
+    ...need(otherStyle.length > 0, 'a later version of another style excused an empty one'),
+  ];
+  // Every plant must fail: the planted list holds the cases that wrongly passed; it must be empty, so the proof is on the failures.
+  proven('S7 P1c: (i) v1 empty + v2 with samples passes; (ii) v1 empty alone, (iii) the latest version empty, (iv) a sample without its recipe, a sheet without pictures, and another style\'s later version all fail', [...real, ...planted], [...ii, ...iii, ...iv, ...sheetEmpty, ...otherStyle].length >= 5 ? ['planted cases fail, as they must'] : []);
 }
 
 // S4 and S5: the manifest.
@@ -134,42 +157,58 @@ const writeJpeg = async (name: string, w: number, h: number, seed: number) => {
   const a = await writeJpeg('comic-book-zei-gemini.jpg', 1024, 576, 11);
   const b = await writeJpeg('comic-book-bai-gpt.jpg', 1024, 576, 12);
   const small = await writeJpeg('comic-book-mu-gemini.jpg', 560, 315, 13);
+  const odd = await writeJpeg('comic-book-deluin-qwen.jpg', 1024, 576, 14);
+  const wide = await writeJpeg('comic-book-seila-gpt.jpg', 1024, 576, 15);
+  const plain = await writeJpeg('plain-zei-gpt.jpg', 1024, 576, 16);
   const promptFor = (s: string) => `Zei is the person in reference image 1, the main figure.\n\nStyle: ${s}\n\nNo text, no lettering, no signs with words.`;
-  // A ledger shaped as docs/starting-sheet-drafts/style-test-2026-11-08/ledger.json is.
-  const ps = createHash('sha256').update(promptFor(COMIC_BOOK.text)).digest('hex');
+  const sh = (s: string) => createHash('sha256').update(s).digest('hex');
+  const ps = sh(promptFor(COMIC_BOOK.text)), pPlain = sh('Zei in a hat.');
+  const pic = (file: string, sha256: string, extra: Record<string, unknown> = {}) => ({ kind: 'picture', character: 'zei', prompt_sha256: ps, endpoint: 'google/gemini-3.1-flash-image', host: 'Vercel AI Gateway', request_id: `gen_${file}`, seed: null, status: 'ok', cost_usd: 0.0676025, sha256, file, out_size: '1024x576', settings: { aspect_ratio: '16:9' }, at: '2026-11-09T01:30:00.000Z', ...extra });
+  // A ledger shaped as the test ledgers under docs/starting-sheet-drafts/*/ledger.json are.
   const ledger = {
-    prompts: { [ps]: promptFor(COMIC_BOOK.text) },
+    prompts: { [ps]: promptFor(COMIC_BOOK.text), [pPlain]: 'Zei in a hat.' },
     refs: { zei: { version: 'bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d', sha256: '131f'.padEnd(64, '0') } },
     calls: [
       { kind: 'guard', prompt_sha256: ps, status: 'ok' },
-      { kind: 'picture', model: 'gemini', character: 'zei', style: 'comic-book', prompt_sha256: ps, endpoint: 'google/gemini-3.1-flash-image', host: 'Vercel AI Gateway', request_id: 'gen_A', seed: null, status: 'ok', cost_usd: 0.0676025, sha256: a.sha256, file: 'comic-book-zei-gemini.jpg', out_size: '1024x576', settings: { aspect_ratio: '16:9' }, at: '2026-11-09T01:30:00.000Z' },
-      { kind: 'picture', model: 'gemini', character: 'zei', style: 'comic-book', prompt_sha256: ps, endpoint: 'google/gemini-3.1-flash-image', host: 'Vercel AI Gateway', request_id: 'gen_C', seed: null, status: 'ok', cost_usd: 0.0676, sha256: 'f'.repeat(64), file: 'comic-book-mu-gemini.jpg', out_size: '1024x576', settings: {}, at: '2026-11-09T01:31:00.000Z' },
+      pic('comic-book-zei-gemini.jpg', a.sha256),
+      // A retried file: the failed attempt first, then the picture made.
+      pic('comic-book-bai-gpt.jpg', 'e'.repeat(64), { status: 'error', endpoint: 'openai/gpt-image-2.5-sunburst' }),
+      pic('comic-book-bai-gpt.jpg', b.sha256, { endpoint: 'openai/gpt-image-2.5-sunburst', request_id: 'gen_B', cost_usd: 0.0479 }),
+      pic('comic-book-mu-gemini.jpg', 'f'.repeat(64)),
+      pic('comic-book-deluin-qwen.jpg', odd.sha256, { endpoint: 'fal-ai/qwen-image-edit-2511', host: 'fal.ai' }),
+      pic('comic-book-seila-gpt.jpg', wide.sha256, { endpoint: 'openai/gpt-image-2.5-sunburst', out_size: '1536x864' }),
+      pic('plain-zei-gpt.jpg', plain.sha256, { endpoint: 'openai/gpt-image-2.5-sunburst', prompt_sha256: pPlain }),
     ],
   };
   const ledgerFile = path.join(dir, 'ledger.json');
   writeFileSync(ledgerFile, JSON.stringify(ledger));
-  const whole = { prompt: promptFor(COMIC_BOOK.text), model: 'gpt-image-2.5-sunburst', maker: 'OpenAI', endpoint: 'openai/gpt-image-2.5-sunburst', host: 'Vercel AI Gateway', settings: { size: '1536x1024' }, seed: null, request_id: 'gen_B', cost_usd: 0.0479, made_at: '2026-11-09T01:33:51.019Z', width: 1024, height: 576, checks: { prompt: { model: 'gpt-oss-safeguard-20b', verdict: 'ok' }, host_safety_checker: 'not run' }, assist: null };
   const write = (name: string, m: unknown) => { const f = path.join(dir, name); writeFileSync(f, JSON.stringify(m)); return f; };
-  const good = write('good.json', { styles: { 'Comic book': [{ file: a.file, sha256: a.sha256, ledger: ledgerFile }, { file: b.file, sha256: b.sha256, recipe: whole }] } });
+  const A = { file: a.file, sha256: a.sha256, ledger: ledgerFile, row: 'comic-book-zei-gemini.jpg', maker: 'Google' };
+  const B = { file: b.file, sha256: b.sha256, ledger: ledgerFile, row: 'comic-book-bai-gpt.jpg' };
+  const good = write('good.json', { styles: { 'Comic book': [A, B] } });
   const g = await readManifest(good, ROOT);
   const ready = g.ready.get('Comic book') ?? [];
   const fromLedger = ready[0]?.recipe;
   const realS4 = [
     ...g.problems,
     ...need(ready.length === 2, `ready: ${ready.length}`),
-    ...need(fromLedger?.prompt === promptFor(COMIC_BOOK.text) && fromLedger.model === 'gemini-3.1-flash-image' && fromLedger.request_id === 'gen_A' && fromLedger.checks.prompt.verdict === 'ok' && fromLedger.references?.[0]?.sha256 === ledger.refs.zei.sha256 && fromLedger.references?.[0]?.what === "Zei's base front (version bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d)" && fromLedger.width === 1024, `the recipe from the ledger: ${JSON.stringify(fromLedger)}`),
-    ...need(!('maker' in (ready[1]?.recipe ?? {})), 'the maker was stored (the site shows it from config/models.json)'),
+    ...need(fromLedger?.prompt === promptFor(COMIC_BOOK.text) && fromLedger.model === 'gemini-3.1-flash-image' && fromLedger.request_id === 'gen_comic-book-zei-gemini.jpg' && fromLedger.checks.prompt.verdict === 'ok' && fromLedger.references?.[0]?.sha256 === ledger.refs.zei.sha256 && fromLedger.references?.[0]?.what === "Zei's base front (version bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d)" && fromLedger.width === 1024 && fromLedger.made_at === '2026-11-09T01:30:00.000Z' && fromLedger.assist?.source === `${ledgerFile}, row comic-book-zei-gemini.jpg`, `the recipe from the row: ${JSON.stringify(fromLedger)}`),
+    ...need(ready[1]?.recipe.request_id === 'gen_B' && ready[1].recipe.model === 'gpt-image-2.5-sunburst', 'a retried file: not the row that made the picture'),
+    ...need(!('maker' in (ready[0]?.recipe ?? {})), 'the maker was stored (the site shows it from config/models.json)'),
   ];
-  const bad = (name: string, sample: Record<string, unknown>) => write(name, { styles: { 'Comic book': [{ file: a.file, sha256: a.sha256, ledger: ledgerFile }, sample] } });
+  const bad = (name: string, sample: Record<string, unknown>) => write(name, { styles: { 'Comic book': [A, sample] } });
   const plants = [
-    ['a wrong sha256', bad('p1.json', { file: b.file, sha256: '0'.repeat(64), recipe: whole }), /sha256 isn't the one given/],
-    ['a wrong size', bad('p2.json', { file: b.file, sha256: b.sha256, recipe: { ...whole, width: 1536 } }), /but the recipe says 1536/],
-    ['a prompt without the style text', bad('p3.json', { file: b.file, sha256: b.sha256, recipe: { ...whole, prompt: 'Zei in a hat.' } }), /doesn't carry the style's text/],
-    ['a model not on the list', bad('p4.json', { file: b.file, sha256: b.sha256, recipe: { ...whole, model: 'some-model' } }), /isn't on config\/models\.json/],
-    ['a wrong maker', bad('p5.json', { file: b.file, sha256: b.sha256, recipe: { ...whole, maker: 'Google' } }), /says OpenAI/],
-    ['the 560 px copy of a ledger picture', bad('p6.json', { file: small.file, sha256: small.sha256, ledger: ledgerFile }), /560 px/],
-    ['one sample only', write('p7.json', { styles: { 'Comic book': [{ file: a.file, sha256: a.sha256, ledger: ledgerFile }] } }), /2 to 4/],
-    ['a style not offered', write('p8.json', { styles: { Bolder: [] } }), /isn't one of the offered styles/],
+    ['a hand-written recipe', bad('p0.json', { file: b.file, sha256: b.sha256, recipe: { ...ready[1]?.recipe } }), /brings its own "recipe"/],
+    ['no ledger or row', bad('p1.json', { file: b.file, sha256: b.sha256 }), /needs "ledger" and "row"/],
+    ['a wrong sha256', bad('p2.json', { ...B, sha256: '0'.repeat(64) }), /the file's sha256 is/],
+    ['a row that isn\'t there', bad('p3.json', { ...B, row: 'nope.jpg' }), /no such picture row/],
+    ['the 560 px copy of a ledger picture', bad('p4.json', { file: small.file, sha256: small.sha256, ledger: ledgerFile, row: 'comic-book-mu-gemini.jpg' }), /560 px/],
+    ['a model not on the list', bad('p5.json', { file: odd.file, sha256: odd.sha256, ledger: ledgerFile, row: 'comic-book-deluin-qwen.jpg' }), /isn't a model on the list/],
+    ['a wrong maker', bad('p6.json', { ...B, maker: 'Google' }), /says OpenAI/],
+    ['a size other than the record\'s', bad('p7.json', { file: wide.file, sha256: wide.sha256, ledger: ledgerFile, row: 'comic-book-seila-gpt.jpg' }), /but the record says 1536 x 864/],
+    ['a prompt without the style text', bad('p8.json', { file: plain.file, sha256: plain.sha256, ledger: ledgerFile, row: 'plain-zei-gpt.jpg' }), /doesn't carry the style's text/],
+    ['one sample only', write('p9.json', { styles: { 'Comic book': [A] } }), /2 to 4/],
+    ['a style not offered', write('p10.json', { styles: { Bolder: [] } }), /isn't one of the offered styles/],
   ] as const;
   const caught: string[] = [];
   for (const [what, f, want] of plants) {
@@ -177,7 +216,7 @@ const writeJpeg = async (name: string, w: number, h: number, seed: number) => {
     if (r.problems.some((p) => want.test(p))) caught.push(what);
     else realS4.push(`${what} was not caught (${r.problems.join('; ') || 'no problems'})`);
   }
-  proven('S4 the manifest: sha256, size, the style text in the prompt, a listed model and its maker are checked; a recipe comes from a style-test ledger; a 560 px copy is caught', realS4, caught.length === plants.length ? caught : []);
+  proven('S4 the manifest: every recipe is read from its generation record (ledger + row; a hand-written one is refused); sha256, the record\'s size, the style text in the prompt, a listed model and its maker are checked; a 560 px copy is caught', realS4, caught.length === plants.length ? caught : []);
 
   // S5: no artist, studio or film, and no one on the blocked list, in any style text or sample prompt.
   const realS5 = [...OFFERED_STYLES.flatMap((s) => sampleProblems(s, []).filter((p) => /names/.test(p))), ...ready.flatMap((x) => sampleProblems(COMIC_BOOK, [x, ...ready.filter((y) => y !== x)]).filter((p) => /names/.test(p)))];

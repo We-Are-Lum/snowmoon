@@ -35,6 +35,12 @@ coding agent and its helpers are in `docs/prompts/`.
   its committed narration recipe.
 - `P1c`: in the database, every version of a published element has a recipe; a style or character sheet keeps one inside its body for each of its pictures instead, and passes only when it has pictures and every one names its prompt and model (owner, 2026-10-14)
   (reads the live database when `STUDIO_DATABASE_URL` is set).
+  One narrow exception (owner, 2026-11-10, after three styles were published on 2026-11-09 with no pictures; element_versions
+  is append-only, so those versions can't gain pictures): a published **style** version with no pictures at all passes only
+  when a later published version of the same style element has samples, every one with its recipe. The latest published
+  version of every style must always have samples with recipes, with no exception; a version with pictures whose recipe
+  is missing always fails; sheets are unchanged. Rule: `scripts/lib/p1c.ts`; tested both ways in
+  `scripts/test-publish-style.ts` (S7).
 - `P1d`: a signed-out visitor reaches the exact prompt of every published
   image and narration: the chapter page links the recipe (and the lettering
   record for lettered images), and the file at that link, fetched anonymously

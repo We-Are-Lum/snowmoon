@@ -125,34 +125,38 @@ export function addRefusal(style: OfferedStyle, plan: StylePlan): string | null 
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-// The manifest (owner, 2026-11-10): for each style, 2 to 4 picture files and their recipes. A sample gives either its
-// whole recipe, or a style-test ledger to read it from (docs/starting-sheet-drafts/style-test-2026-11-08/ledger.json):
+// The manifest (owner, 2026-11-10): for each style, 2 to 4 picture files, each named with the generation record it
+// came from: a ledger (any of the test ledgers under docs/starting-sheet-drafts/*/ledger.json: the style test of
+// 2026-11-08, real-prompts, retest, world-line, book-world, near-future, gemini-settings and the others) and the row's
+// id there, the picture's file name in that ledger. The recipe is built from that row only (and the ledger's prompt and
+// prompt-check rows for it): a recipe is never written by hand, and a sample that brings its own "recipe" is refused.
 //
 // {
 //   "styles": {
-//     "Comic book": [
-//       { "file": "/abs/path/comic-book-zei-gemini.jpg", "sha256": "d3dd…", "ledger": "docs/…/ledger.json" },
-//       { "file": "/abs/path/x.jpg", "sha256": "…", "recipe": { "prompt": "…", "model": "gpt-image-2.5-sunburst",
-//         "maker": "OpenAI", "endpoint": "openai/gpt-image-2.5-sunburst", "host": "Vercel AI Gateway",
-//         "settings": {…}, "seed": null, "request_id": "gen_…", "cost_usd": 0.0479, "made_at": "2026-11-09T01:33:51Z",
-//         "width": 1024, "height": 576, "references": [{ "sha256": "…", "what": "…" }],
-//         "checks": { "prompt": { "model": "gpt-oss-safeguard-20b", "verdict": "ok" }, "host_safety_checker": "not run" },
-//         "assist": { "model": "claude-coding-agent", "drafted": ["sample prompt"], "source": "…" } } }
+//     "Animated series": [
+//       { "file": "/abs/path/rp-08-seila-gpt.jpg", "sha256": "<sha256 of the file>",
+//         "ledger": "/abs/path/real-prompts-2026-11-09/ledger.json", "row": "rp-08-seila-gpt.jpg" },
+//       { "file": "/abs/path/rp-11-mu-gemini.jpg", "sha256": "…", "ledger": "…", "row": "rp-11-mu-gemini.jpg", "maker": "Google" }
 //     ]
 //   }
 // }
+//
+// "maker" is optional: when given, it must be the model's maker on config/models.json (the site shows the maker and the
+// "closed model" label from that list, so they are checked, not stored). The file must be the full-size picture the row
+// records (its sha256 is the row's): a 560 px copy is refused.
 // ---------------------------------------------------------------------------------------------------------------
 
 export interface ManifestSample {
   file: string;
   sha256: string;
-  /** The whole recipe; or `ledger` to read it from a style-test ledger (the file's name is looked up there). */
-  recipe?: DesignPicture['recipe'] & { maker?: string };
-  ledger?: string;
+  ledger: string;
+  /** The row's id in the ledger: the picture's file name there. */
+  row: string;
+  maker?: string;
 }
 export interface Manifest { styles: Record<string, ManifestSample[]> }
 
-/** The model allowlist's id for an endpoint the style test called, and its maker (config/models.json). */
+/** The model allowlist's id for each endpoint the test ledgers called (config/models.json). */
 const MODEL_BY_ENDPOINT: Record<string, string> = {
   'fal-ai/flux-2/klein/4b/edit': IMAGES.editModel.id,
   'openai/gpt-image-2.5-sunburst': 'gpt-image-2.5-sunburst',
@@ -164,29 +168,39 @@ const allowlist = (root: string): ModelRow[] => (JSON.parse(readFileSync(path.jo
 const listed = (root: string, id: string) => allowlist(root).find((m) => m.id === id || m.id === id.replace(/-edit$/, ''));
 
 const callName = (slug: string) => slug.charAt(0).toUpperCase() + slug.slice(1);
+export type Ledger = { prompts: Record<string, string>; refs?: Record<string, { sha256?: string; version?: string }>; calls: Record<string, unknown>[] };
 
-/** A picture's recipe from the style test's ledger (docs/starting-sheet-drafts/style-test-2026-11-08/ledger.json). */
-export function recipeFromLedger(ledger: { prompts: Record<string, string>; refs: Record<string, { sha256: string; version?: string }>; calls: Record<string, unknown>[] }, file: string, ledgerPath: string): DesignPicture['recipe'] | string {
-  const c = ledger.calls.find((x) => x.kind === 'picture' && x.file === file && x.status === 'ok') as Record<string, unknown> | undefined;
-  if (!c) return `${file}: not in the ledger as a picture that was made`;
-  const prompt = ledger.prompts[String(c.prompt_sha256)];
+/**
+ * A picture's recipe from its generation record: the ledger's row whose file is `row` and whose sha256 is the picture's
+ * (a ledger may hold a retried file twice), its prompt by prompt_sha256, and the prompt check's row for that prompt.
+ * Nothing else goes in. Returns the recipe, or why it can't be built.
+ */
+export function recipeFromLedger(ledger: Ledger, row: string, sha256: string, ledgerPath: string): DesignPicture['recipe'] | string {
+  const rows = ledger.calls.filter((x) => x.kind === 'picture' && x.file === row);
+  if (!rows.length) return `${row}: no such picture row in ${ledgerPath}`;
+  const c = rows.find((x) => x.sha256 === sha256 && x.status === 'ok');
+  if (!c) return `${row}: the ledger records sha256 ${rows.map((x) => String(x.sha256)).join(' or ')}, not ${sha256} (use the full-size picture the row records, not the 560 px copy)`;
+  const prompt = ledger.prompts?.[String(c.prompt_sha256)];
   const model = MODEL_BY_ENDPOINT[String(c.endpoint)];
-  if (!prompt || !model) return `${file}: the ledger has no prompt or no known model for it`;
-  const guard = ledger.calls.find((x) => x.kind === 'guard' && x.prompt_sha256 === c.prompt_sha256 && x.status === 'ok') as Record<string, unknown> | undefined;
-  const [w, h] = String(c.out_size ?? '1024x576').split('x').map(Number);
-  const ref = ledger.refs[String(c.character)];
+  if (!prompt) return `${row}: the ledger has no prompt for prompt_sha256 ${String(c.prompt_sha256)}`;
+  if (!model) return `${row}: endpoint ${String(c.endpoint)} isn't a model on the list`;
+  const guard = ledger.calls.find((x) => x.kind === 'guard' && x.prompt_sha256 === c.prompt_sha256 && x.status === 'ok');
+  const size = typeof c.out_size === 'string' ? c.out_size.split('x').map(Number) : (() => { const s = (c.settings as { image_size?: { width?: number; height?: number } } | undefined)?.image_size; return s?.width && s?.height ? [s.width, s.height] : [IMAGES.size.width, IMAGES.size.height]; })();
+  const own = Array.isArray(c.references) ? (c.references as { sha256?: string; what?: string }[]).filter((r) => typeof r?.sha256 === 'string').map((r) => ({ sha256: r.sha256!, ...(r.what ? { what: r.what } : {}) })) : [];
+  const ref = ledger.refs?.[String(c.character)];
+  const references = own.length ? own : ref?.sha256 ? [{ sha256: ref.sha256, what: `${callName(String(c.character))}'s base front${ref.version ? ` (version ${ref.version})` : ''}` }] : [];
   return {
-    // The ledger's settings, with how the picture was fitted to 1024 x 576 and the model's original, when it says.
+    // The row's settings, with how the picture was fitted to its size and the model's original, when the row says.
     prompt, model, endpoint: String(c.endpoint), host: String(c.host),
     settings: { ...((c.settings as Record<string, unknown>) ?? {}), ...(c.crop ? { crop: c.crop } : {}), ...(c.original_sha256 ? { original_sha256: c.original_sha256, original_size: c.original_size } : {}) },
-    seed: typeof c.seed === 'number' ? c.seed : null, request_id: (c.request_id as string) ?? null, cost_usd: Number(c.cost_usd), made_at: String(c.at), width: w, height: h,
-    ...(ref ? { references: [{ sha256: ref.sha256, what: `${callName(String(c.character))}'s base front${ref.version ? ` (version ${ref.version})` : ''}` }] } : {}),
+    seed: typeof c.seed === 'number' ? c.seed : null, request_id: (c.request_id as string) ?? null, cost_usd: Number(c.cost_usd), made_at: String(c.at), width: size[0], height: size[1],
+    ...(references.length ? { references } : {}),
     checks: { prompt: { model: 'gpt-oss-safeguard-20b', verdict: guard ? 'ok' : 'not run' }, host_safety_checker: 'not run' },
-    assist: { model: 'claude-coding-agent', drafted: ['sample prompt'], source: `${ledgerPath} (the style test of 2026-11-08)` },
+    assist: { model: 'claude-coding-agent', drafted: ['sample prompt'], source: `${ledgerPath}, row ${row}` },
   };
 }
 
-/** Reads and checks a manifest: every file read, its sha256 and size checked, every recipe complete. Reads only. */
+/** Reads and checks a manifest: every file read, its sha256 and size checked, every recipe read from its record. Reads only. */
 export async function readManifest(file: string, root: string, styles: readonly OfferedStyle[] = OFFERED_STYLES): Promise<{ ready: Map<string, ReadySample[]>; problems: string[] }> {
   const problems: string[] = [];
   const ready = new Map<string, ReadySample[]>();
@@ -196,12 +210,16 @@ export async function readManifest(file: string, root: string, styles: readonly 
   } catch (e) {
     return { ready, problems: [`the manifest can't be read: ${(e as Error).message}`] };
   }
-  const ledgers = new Map<string, Parameters<typeof recipeFromLedger>[0]>();
+  const ledgers = new Map<string, Ledger>();
   for (const [title, list] of Object.entries(m.styles ?? {})) {
     const style = styles.find((s) => s.title === title);
     if (!style) { problems.push(`"${title}" isn't one of the offered styles (${styles.map((s) => s.title).join(', ')})`); continue; }
     const out: ReadySample[] = [];
     for (const x of Array.isArray(list) ? list : []) {
+      const at = `"${title}" ${x?.file}`;
+      // A recipe is never written by hand (owner, 2026-11-10): only one read from its generation record.
+      if ('recipe' in (x ?? {})) { problems.push(`${at}: brings its own "recipe"; give the ledger and row it was made in instead`); continue; }
+      if (typeof x?.ledger !== 'string' || typeof x?.row !== 'string') { problems.push(`${at}: needs "ledger" and "row" (its generation record)`); continue; }
       let bytes: Buffer;
       try {
         bytes = readFileSync(path.isAbsolute(x.file) ? x.file : path.join(root, x.file));
@@ -209,29 +227,21 @@ export async function readManifest(file: string, root: string, styles: readonly 
         problems.push(`"${title}": can't read ${x.file}`);
         continue;
       }
-      let recipe = x.recipe as (DesignPicture['recipe'] & { maker?: string }) | undefined;
-      if (!recipe && x.ledger) {
-        const lp = path.isAbsolute(x.ledger) ? x.ledger : path.join(root, x.ledger);
-        if (!ledgers.has(lp)) {
-          try { ledgers.set(lp, JSON.parse(readFileSync(lp, 'utf8'))); } catch { problems.push(`"${title}": can't read the ledger ${x.ledger}`); continue; }
-        }
-        const r = recipeFromLedger(ledgers.get(lp)!, path.basename(x.file), x.ledger);
-        if (typeof r === 'string') { problems.push(`"${title}": ${r}`); continue; }
-        const lc = ledgers.get(lp)!.calls.find((c) => c.file === path.basename(x.file) && c.kind === 'picture') as { sha256?: string } | undefined;
-        if (lc?.sha256 && lc.sha256 !== x.sha256) problems.push(`"${title}" ${x.file}: the ledger records sha256 ${lc.sha256}, not ${x.sha256} (use the full-size picture, not the 560 px copy)`);
-        recipe = r;
+      const sha = createHash('sha256').update(bytes).digest('hex');
+      if (sha !== x.sha256) { problems.push(`${at}: the file's sha256 is ${sha}, not ${x.sha256}`); continue; }
+      const lp = path.isAbsolute(x.ledger) ? x.ledger : path.join(root, x.ledger);
+      if (!ledgers.has(lp)) {
+        try { ledgers.set(lp, JSON.parse(readFileSync(lp, 'utf8')) as Ledger); } catch { problems.push(`"${title}": can't read the ledger ${x.ledger}`); continue; }
       }
-      if (!recipe) { problems.push(`"${title}" ${x.file}: no recipe and no ledger`); continue; }
-      // The maker and the label come from the model list (the site shows "a closed model by …" from it): checked, not stored.
+      const recipe = recipeFromLedger(ledgers.get(lp)!, x.row, x.sha256, x.ledger);
+      if (typeof recipe === 'string') { problems.push(`"${title}" ${recipe}`); continue; }
       const row = listed(root, recipe.model);
-      if (!row) problems.push(`"${title}" ${x.file}: model ${recipe.model} isn't on config/models.json`);
-      else if (recipe.maker && row.maker && recipe.maker !== row.maker) problems.push(`"${title}" ${x.file}: maker ${recipe.maker}, but config/models.json says ${row.maker}`);
+      if (!row) problems.push(`${at}: model ${recipe.model} isn't on config/models.json`);
+      else if (x.maker && row.maker && x.maker !== row.maker) problems.push(`${at}: maker ${x.maker}, but config/models.json says ${row.maker}`);
       const meta = await sharp(bytes).metadata().catch(() => null);
-      if (!meta || meta.format !== 'jpeg') problems.push(`"${title}" ${x.file}: not a JPEG`);
-      else if (meta.width !== recipe.width || meta.height !== recipe.height) problems.push(`"${title}" ${x.file}: ${meta.width} x ${meta.height}, but the recipe says ${recipe.width} x ${recipe.height}`);
-      const { maker: _maker, ...clean } = recipe;
-      void _maker;
-      out.push({ file: x.file, bytes, sha256: x.sha256, recipe: clean });
+      if (!meta || meta.format !== 'jpeg') problems.push(`${at}: not a JPEG`);
+      else if (meta.width !== recipe.width || meta.height !== recipe.height) problems.push(`${at}: ${meta.width} x ${meta.height}, but the record says ${recipe.width} x ${recipe.height}`);
+      out.push({ file: x.file, bytes, sha256: x.sha256, recipe });
     }
     problems.push(...sampleProblems(style, out));
     ready.set(title, out);

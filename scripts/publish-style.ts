@@ -14,7 +14,8 @@
  *   npx tsx --conditions=react-server --env-file=/Users/nathan/snowmoon/.env.local scripts/publish-style.ts --manifest=<file> --apply --confirm-owner-go
  *
  * The manifest (format in scripts/lib/publish-style.ts, readManifest): for each style title, 2 to 4 picture files, each
- * with its sha256 and its recipe (or the style-test ledger to read the recipe from). The dry run reads the files and,
+ * with its sha256 and its generation record (a test ledger and the row's id there); every recipe is read from that row,
+ * never written by hand. The dry run reads the files and,
  * in one read-only transaction, the database, and prints for each style what it would do: publish it with these
  * samples, add them as a new version, or refuse (and why). It writes nothing and uploads nothing. --apply refuses
  * without --confirm-owner-go, without a manifest, and when the manifest has any problem; it never publishes a style
