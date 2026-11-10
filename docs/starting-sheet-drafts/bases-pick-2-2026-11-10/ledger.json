@@ -1,0 +1,695 @@
+{
+ "about": "Bases pick 2 (2026-11-10): new base candidates for Zei, Bai, Seila, Mu, looks a and b, GPT Image 2.5 and FLUX.2 [klein] 4B, from the base front. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "overnight_cap_usd": 3,
+ "stop_at_usd": 2.8,
+ "seed": 20261110,
+ "looks": {
+  "zei": {
+   "a": "deep brown skin, short black twists with one electric-blue streak, quick dark eyes",
+   "b": "fair skin, spiky ash-brown hair with one electric-blue streak, quick grey eyes"
+  },
+  "bai": {
+   "a": "light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes",
+   "b": "fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes"
+  },
+  "seila": {
+   "a": "light tan skin, shoulder-length wavy black hair gathered loosely back, alert dark eyes",
+   "b": "fair skin, shoulder-length auburn hair in a loose braid, alert green eyes"
+  },
+  "mu": {
+   "a": "pale skin, short silver hair in a sharp asymmetric cut, keen grey eyes",
+   "b": "deep brown skin, short silver coils in a sharp asymmetric cut, keen dark eyes"
+  }
+ },
+ "refs": {
+  "zei": {
+   "version": "bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d",
+   "url": "https://pictures.snowmoon.party/images/readers/131f235227a54b06f6f11253f37a09b5.jpg",
+   "sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c"
+  },
+  "gladias": {
+   "version": "68364375-0f33-46fd-9755-2fd2b551198a",
+   "url": "https://pictures.snowmoon.party/images/readers/b9b6c00952cb47e936dc601676a7c34b.jpg",
+   "sha256": "b9b6c00952cb47e936dc601676a7c34b916355e8b4f979db4d7465ea024d0947"
+  },
+  "bai": {
+   "version": "110d5973-31c2-4d96-9a88-5838d8a6d868",
+   "url": "https://pictures.snowmoon.party/images/readers/01538922456b9bf61192ed291b8f2659.jpg",
+   "sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96"
+  },
+  "seila": {
+   "version": "1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba",
+   "url": "https://pictures.snowmoon.party/images/readers/3ef4825ca8f49aabf05ddcdaa8119e9b.jpg",
+   "sha256": "3ef4825ca8f49aabf05ddcdaa8119e9b229f523a3dfc1dc2af0238cbc95a4d13"
+  },
+  "deluin": {
+   "version": "75a94420-df70-4f43-a3a6-4c2b571e72ab",
+   "url": "https://pictures.snowmoon.party/images/readers/2b45d17da426df0304fc84ded0f3f0c4.jpg",
+   "sha256": "2b45d17da426df0304fc84ded0f3f0c464472c55c96aa517735f9837368432d4"
+  },
+  "mu": {
+   "version": "15a9af1d-9eef-4e25-be57-738d9823dd74",
+   "url": "https://pictures.snowmoon.party/images/readers/3e6ae696865441d24aa1dde262dac043.jpg",
+   "sha256": "3e6ae696865441d24aa1dde262dac043964ab8c9633d19174eb7074091087fb5"
+  }
+ },
+ "prompts": {
+  "44d5aba966bd957215c3d8a10712ae57cc58bfed204eb6e6751281f17644f98c": "with deep brown skin, short black twists with one electric-blue streak, quick dark eyes; the same clothes and the electric-blue streak as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "e538e0cacf26434b30bb38ef7b0557f347193f8d4e299d14d11a98d3c1348206": "with fair skin, spiky ash-brown hair with one electric-blue streak, quick grey eyes; the same clothes and the electric-blue streak as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "5185740a0083ce4dcc82beb503444e6c67723049ac2d6b17fb9012e2194eab1b": "with light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes; the same clothes and the magenta ends as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "2511dabcf4edc6c14b4d5e50a85b00ea269eb332d37b6802fc3f071fd3017d26": "with fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes; the same clothes and the magenta ends as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "098ae72235d8856cc84d50bf9fb0d8496aafad5ce3a42eb4752b578689f1e6ff": "with light tan skin, shoulder-length wavy black hair gathered loosely back, alert dark eyes; the same clothes and the small round gold-rimmed glasses as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background\n\nSeila is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "a5a786b1e9d963b1c76afa92ec985595cac3c8bc495c16c3fd013c0e8aff39d4": "with fair skin, shoulder-length auburn hair in a loose braid, alert green eyes; the same clothes and the small round gold-rimmed glasses as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background\n\nSeila is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "b3cf8ed9db95ccc2dba48bf16bd1088af59dcc15aec0ef413c658b97421b9e9e": "with pale skin, short silver hair in a sharp asymmetric cut, keen grey eyes; the same clothes and the thin red-framed glasses as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background\n\nMu is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "131dbd33b8eaca1741f61ab079b486d5abb45cd9e957195e434bcd743eede219": "with deep brown skin, short silver coils in a sharp asymmetric cut, keen dark eyes; the same clothes and the thin red-framed glasses as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background\n\nMu is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "guard",
+   "prompt_sha256": "44d5aba966bd957215c3d8a10712ae57cc58bfed204eb6e6751281f17644f98c",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000161925,
+   "cost_source": "reported",
+   "worst_usd": 0.0005371499999999999,
+   "at": "2026-11-10T08:26:31.076Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "e538e0cacf26434b30bb38ef7b0557f347193f8d4e299d14d11a98d3c1348206",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000177675,
+   "cost_source": "reported",
+   "worst_usd": 0.00053685,
+   "at": "2026-11-10T08:26:31.855Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "5185740a0083ce4dcc82beb503444e6c67723049ac2d6b17fb9012e2194eab1b",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000173925,
+   "cost_source": "reported",
+   "worst_usd": 0.0005388,
+   "at": "2026-11-10T08:26:32.626Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "2511dabcf4edc6c14b4d5e50a85b00ea269eb332d37b6802fc3f071fd3017d26",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00022785,
+   "cost_source": "reported",
+   "worst_usd": 0.0005385749999999999,
+   "at": "2026-11-10T08:26:33.570Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "098ae72235d8856cc84d50bf9fb0d8496aafad5ce3a42eb4752b578689f1e6ff",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000156525,
+   "cost_source": "reported",
+   "worst_usd": 0.0005397749999999999,
+   "at": "2026-11-10T08:26:34.402Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "a5a786b1e9d963b1c76afa92ec985595cac3c8bc495c16c3fd013c0e8aff39d4",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00013755,
+   "cost_source": "reported",
+   "worst_usd": 0.0005388,
+   "at": "2026-11-10T08:26:35.022Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "b3cf8ed9db95ccc2dba48bf16bd1088af59dcc15aec0ef413c658b97421b9e9e",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001848,
+   "cost_source": "reported",
+   "worst_usd": 0.0005373,
+   "at": "2026-11-10T08:26:35.855Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "131dbd33b8eaca1741f61ab079b486d5abb45cd9e957195e434bcd743eede219",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000327375,
+   "cost_source": "reported",
+   "worst_usd": 0.000537825,
+   "at": "2026-11-10T08:26:37.307Z"
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gpt",
+   "status": "ok",
+   "retention": {
+    "provider": "openai",
+    "zero_data_retention": false,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-10T08:26:37.349Z",
+    "kept": {
+     "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+     "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+     "source": "https://developers.openai.com/api/docs/guides/your-data",
+     "read": "2026-11-03"
+    }
+   },
+   "cost_usd": 0,
+   "at": "2026-11-10T08:26:37.349Z"
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "zei",
+   "look": "a",
+   "words": "with deep brown skin, short black twists with one electric-blue streak, quick dark eyes; the same clothes and the electric-blue streak as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "44d5aba966bd957215c3d8a10712ae57cc58bfed204eb6e6751281f17644f98c",
+   "file": "bp2-zei-a-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c490-f980-7d10-bd6d-4d83bc125d07",
+   "seed": 20261110,
+   "status": "ok",
+   "cost_usd": 0.00421875,
+   "cost_source": "fal's x-fal-billable-units (0.421875) x $0.01/megapixel",
+   "sha256": "baaaeb1cb233d0a18fb1799d2ef94feaddf60949f8b5f8908da22ec30b9e303b",
+   "settings": {
+    "image_size": {
+     "width": 576,
+     "height": 768
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261110
+   },
+   "at": "2026-11-10T08:26:39.319Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "zei",
+   "look": "b",
+   "words": "with fair skin, spiky ash-brown hair with one electric-blue streak, quick grey eyes; the same clothes and the electric-blue streak as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "e538e0cacf26434b30bb38ef7b0557f347193f8d4e299d14d11a98d3c1348206",
+   "file": "bp2-zei-b-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c491-00b9-7270-8ec9-fd1d37a1003d",
+   "seed": 20261110,
+   "status": "ok",
+   "cost_usd": 0.00421875,
+   "cost_source": "fal's x-fal-billable-units (0.421875) x $0.01/megapixel",
+   "sha256": "b014e9ae070a4a9276d0316b9f54fabc01ba48f4e009fbf32840e397921d8ccf",
+   "settings": {
+    "image_size": {
+     "width": 576,
+     "height": 768
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261110
+   },
+   "at": "2026-11-10T08:26:41.065Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "bai",
+   "look": "a",
+   "words": "with light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes; the same clothes and the magenta ends as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "5185740a0083ce4dcc82beb503444e6c67723049ac2d6b17fb9012e2194eab1b",
+   "file": "bp2-bai-a-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c491-0695-7ac2-8e00-83d5f8b90aaa",
+   "seed": 20261110,
+   "status": "ok",
+   "cost_usd": 0.00421875,
+   "cost_source": "fal's x-fal-billable-units (0.421875) x $0.01/megapixel",
+   "sha256": "f99f03acefc3dff983900032be2c2c4b1e5578580bea9790e01f782be2cc414f",
+   "settings": {
+    "image_size": {
+     "width": 576,
+     "height": 768
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261110
+   },
+   "at": "2026-11-10T08:26:42.642Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "bai",
+   "look": "b",
+   "words": "with fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes; the same clothes and the magenta ends as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "2511dabcf4edc6c14b4d5e50a85b00ea269eb332d37b6802fc3f071fd3017d26",
+   "file": "bp2-bai-b-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c491-0cc0-7632-80f6-838a934af026",
+   "seed": 20261110,
+   "status": "ok",
+   "cost_usd": 0.00421875,
+   "cost_source": "fal's x-fal-billable-units (0.421875) x $0.01/megapixel",
+   "sha256": "72bd6a41479645b3eadd32b05dcc1c21c62cdf7d3f822a0796664059e8756fae",
+   "settings": {
+    "image_size": {
+     "width": 576,
+     "height": 768
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261110
+   },
+   "at": "2026-11-10T08:26:44.265Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "seila",
+   "look": "a",
+   "words": "with light tan skin, shoulder-length wavy black hair gathered loosely back, alert dark eyes; the same clothes and the small round gold-rimmed glasses as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "098ae72235d8856cc84d50bf9fb0d8496aafad5ce3a42eb4752b578689f1e6ff",
+   "file": "bp2-seila-a-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c491-131a-7003-91d3-f18c5413feec",
+   "seed": 20261110,
+   "status": "ok",
+   "cost_usd": 0.00421875,
+   "cost_source": "fal's x-fal-billable-units (0.421875) x $0.01/megapixel",
+   "sha256": "32173cf16b6ded5be32e2e0eab86906906600cb80e20c894bd0ec38e7510c4f7",
+   "settings": {
+    "image_size": {
+     "width": 576,
+     "height": 768
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261110
+   },
+   "at": "2026-11-10T08:26:45.619Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "seila",
+   "look": "b",
+   "words": "with fair skin, shoulder-length auburn hair in a loose braid, alert green eyes; the same clothes and the small round gold-rimmed glasses as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "a5a786b1e9d963b1c76afa92ec985595cac3c8bc495c16c3fd013c0e8aff39d4",
+   "file": "bp2-seila-b-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c491-1861-7e60-9569-3998cb360505",
+   "seed": 20261110,
+   "status": "filtered",
+   "cost_usd": 0.00421875,
+   "cost_source": "fal's x-fal-billable-units (0.421875) x $0.01/megapixel",
+   "sha256": "eb4f0a4bce174c7c2c55ff1fa026c67fa03282a582eadf8fa5d34ba3ffca3ff2",
+   "settings": {
+    "image_size": {
+     "width": 576,
+     "height": 768
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261110
+   },
+   "at": "2026-11-10T08:26:47.127Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "mu",
+   "look": "a",
+   "words": "with pale skin, short silver hair in a sharp asymmetric cut, keen grey eyes; the same clothes and the thin red-framed glasses as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "b3cf8ed9db95ccc2dba48bf16bd1088af59dcc15aec0ef413c658b97421b9e9e",
+   "file": "bp2-mu-a-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c491-1e54-77a0-843f-32cd9c3144e6",
+   "seed": 20261110,
+   "status": "ok",
+   "cost_usd": 0.00421875,
+   "cost_source": "fal's x-fal-billable-units (0.421875) x $0.01/megapixel",
+   "sha256": "f231c975b248cbdd478dc4a74ba02dc4ac0a19e21d025c1d43c1e9aaac10d2a3",
+   "settings": {
+    "image_size": {
+     "width": 576,
+     "height": 768
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261110
+   },
+   "at": "2026-11-10T08:26:48.493Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "character": "mu",
+   "look": "b",
+   "words": "with deep brown skin, short silver coils in a sharp asymmetric cut, keen dark eyes; the same clothes and the thin red-framed glasses as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "131dbd33b8eaca1741f61ab079b486d5abb45cd9e957195e434bcd743eede219",
+   "file": "bp2-mu-b-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c491-2395-7383-b3e2-02f52b8b96f2",
+   "seed": 20261110,
+   "status": "ok",
+   "cost_usd": 0.00421875,
+   "cost_source": "fal's x-fal-billable-units (0.421875) x $0.01/megapixel",
+   "sha256": "10a828c4a0f9679720c8b3ac17cb3efd4b9d61870a1cb25878b518abf2c92207",
+   "settings": {
+    "image_size": {
+     "width": 576,
+     "height": 768
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261110
+   },
+   "at": "2026-11-10T08:26:49.851Z",
+   "attempt": 1,
+   "worst_usd": 0.0125
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "zei",
+   "look": "a",
+   "words": "with deep brown skin, short black twists with one electric-blue streak, quick dark eyes; the same clothes and the electric-blue streak as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "44d5aba966bd957215c3d8a10712ae57cc58bfed204eb6e6751281f17644f98c",
+   "file": "bp2-zei-a-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M7292AH0RNWWPE9S71YF5BKN",
+   "status": "ok",
+   "cost_usd": 0.048034,
+   "cost_source": "reported by the gateway",
+   "sha256": "98620d0109e2354bddc269471ec59f8a23089ad9bce6a457a0d09091262f4aee",
+   "original_sha256": "78fae6a77bac916416e8e2494ed79ef5f5924d707811ba98c8fc623767051f54",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T08:27:21.938Z",
+   "attempt": 1,
+   "worst_usd": 0.08
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "zei",
+   "look": "b",
+   "words": "with fair skin, spiky ash-brown hair with one electric-blue streak, quick grey eyes; the same clothes and the electric-blue streak as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "e538e0cacf26434b30bb38ef7b0557f347193f8d4e299d14d11a98d3c1348206",
+   "file": "bp2-zei-b-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M72939R0AWBDWPCBZYYS25JD",
+   "status": "ok",
+   "cost_usd": 0.048044,
+   "cost_source": "reported by the gateway",
+   "sha256": "88de0a4709d0579fb06d2e1352098b01d25e7e2f7879e3a2b70384343422789a",
+   "original_sha256": "463143c8fd9b98c8b233f67f2f2af4c5789d749f8e00ec6dbdb326a757340b2e",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T08:27:54.511Z",
+   "attempt": 1,
+   "worst_usd": 0.08
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "bai",
+   "look": "a",
+   "words": "with light olive skin, long straight black hair in a high ponytail dyed magenta at the ends, dark eyes; the same clothes and the magenta ends as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "5185740a0083ce4dcc82beb503444e6c67723049ac2d6b17fb9012e2194eab1b",
+   "file": "bp2-bai-a-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M72949HV8VQHS0Y125VS19DR",
+   "status": "ok",
+   "cost_usd": 0.048074,
+   "cost_source": "reported by the gateway",
+   "sha256": "3a77101a8b92004a3958ff9e65fc2e582ecde42ab988e9092b526d1b38942124",
+   "original_sha256": "02c82724d869fdcc069358de6c7cf8f11cb5c2ecf5c81b051b8bc5fc9e85e5fb",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T08:28:27.288Z",
+   "attempt": 1,
+   "worst_usd": 0.08
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "bai",
+   "look": "b",
+   "words": "with fair freckled skin, a high ponytail of loose auburn curls dyed magenta at the ends, hazel eyes; the same clothes and the magenta ends as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "2511dabcf4edc6c14b4d5e50a85b00ea269eb332d37b6802fc3f071fd3017d26",
+   "file": "bp2-bai-b-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M72959J0YHTBY925FH4BV4P0",
+   "status": "ok",
+   "cost_usd": 0.048089,
+   "cost_source": "reported by the gateway",
+   "sha256": "30d7f5ca99f3c0b7b53968e8394fe68405fddd2ed10636face1f2c1b018f2b28",
+   "original_sha256": "190a1039d26e803831b9d21ec19d0bc774f07bbb1c9d13ec4f67ffec6c6572f3",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T08:29:00.087Z",
+   "attempt": 1,
+   "worst_usd": 0.08
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "seila",
+   "look": "a",
+   "words": "with light tan skin, shoulder-length wavy black hair gathered loosely back, alert dark eyes; the same clothes and the small round gold-rimmed glasses as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "098ae72235d8856cc84d50bf9fb0d8496aafad5ce3a42eb4752b578689f1e6ff",
+   "file": "bp2-seila-a-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M72969JYV6AJ315ACYATJRTH",
+   "status": "ok",
+   "cost_usd": 0.048074,
+   "cost_source": "reported by the gateway",
+   "sha256": "22ef5e6602ab1167c02befaaa331fde0e3a36990166b7e3fa75a3d2950545c3c",
+   "original_sha256": "8e1e8e676645c5cf3e7386c881336807bf3dd4ce7931fd29c126b4f064090c6c",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T08:29:32.632Z",
+   "attempt": 1,
+   "worst_usd": 0.08
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "seila",
+   "look": "b",
+   "words": "with fair skin, shoulder-length auburn hair in a loose braid, alert green eyes; the same clothes and the small round gold-rimmed glasses as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "a5a786b1e9d963b1c76afa92ec985595cac3c8bc495c16c3fd013c0e8aff39d4",
+   "file": "bp2-seila-b-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M729799T8VE8CC2039V1SY4Z",
+   "status": "ok",
+   "cost_usd": 0.048069,
+   "cost_source": "reported by the gateway",
+   "sha256": "5a59f88f1665e1c56104e11ae168de523aae4a168be68ff41f778e7cfb43bde2",
+   "original_sha256": "29614fe82c5453fff7bd21a78a5a361e896aa25ba995749c38031734d3aa7300",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T08:30:04.010Z",
+   "attempt": 1,
+   "worst_usd": 0.08
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "mu",
+   "look": "a",
+   "words": "with pale skin, short silver hair in a sharp asymmetric cut, keen grey eyes; the same clothes and the thin red-framed glasses as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "b3cf8ed9db95ccc2dba48bf16bd1088af59dcc15aec0ef413c658b97421b9e9e",
+   "file": "bp2-mu-a-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M729880W9AX5Y04XX8THMYXZ",
+   "status": "ok",
+   "cost_usd": 0.048039,
+   "cost_source": "reported by the gateway",
+   "sha256": "0217a068691527f6ab30a82b71fa346b5d636d84f003bd8f61ff0ed83ee95ff9",
+   "original_sha256": "ffd9daa46ba87c1df7e7af5478324ccb9efeb2cae3b941e55b2339f944b7b624",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T08:30:33.041Z",
+   "attempt": 1,
+   "worst_usd": 0.08
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "character": "mu",
+   "look": "b",
+   "words": "with deep brown skin, short silver coils in a sharp asymmetric cut, keen dark eyes; the same clothes and the thin red-framed glasses as in the picture; full body from head to shoes, standing and facing the front, on a plain light grey background",
+   "prompt_sha256": "131dbd33b8eaca1741f61ab079b486d5abb45cd9e957195e434bcd743eede219",
+   "file": "bp2-mu-b-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M72994CDTAXASYX0YS854VYQ",
+   "status": "ok",
+   "cost_usd": 0.048044,
+   "cost_source": "reported by the gateway",
+   "sha256": "79d25dba94f2486ee899f4b189021ecfaa6778466ce1853f4f4412f130114b52",
+   "original_sha256": "543d3cb54daa699131f477888f606496f1984ea901149f912a388567e37b6a91",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T08:31:06.831Z",
+   "attempt": 1,
+   "worst_usd": 0.08
+  }
+ ]
+}
