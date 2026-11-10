@@ -422,12 +422,12 @@ make time:
 
 > Set it in this world, where it fits: a near future, not a fantasy or medieval past; {setting}. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.
 
-The five settings (this edition's descriptions of the book's setting, not quotes; each cited block checked to exist in
-`content/snowmoon/text`):
+The four settings (this edition's descriptions of the book's setting, not quotes; each cited block checked to exist in
+`content/snowmoon/text`). Setting B ("greenery mixed with glass-and-steel buildings with sharp edges", c3-b72, c13-b24)
+was dropped by the owner the same day (it gave generic towers on GPT and Gemini); the other letters stay:
 
 - E: "a half-kilometre-tall mountain pyramid at the edge of the city" (c4-b48)
 - A: "stone-brick houses behind tall trees, tall apartment towers with many windows above the treetops, small drones overhead" (c1-b2, c1-b13, c1-b4)
-- B: "greenery mixed with glass-and-steel buildings with sharp edges" (c3-b72, c13-b24)
 - C: "a chaotic mix of stone, concrete and glass-and-steel buildings, tall and short, some half-built" (c5-b11, c22-b2)
 - D: "people with watches and hand devices, gates with glowing green circles, small robots with screen faces" (c1-b4, c1-b41, c3-b82)
 
@@ -442,9 +442,9 @@ The recipe records the draw under `challenge.setting`: its letter, its text and 
 picture's /image page, and the preview before publishing) shows:
 
 - heading: "Setting (this edition’s description of the book’s setting, not a quote)"
-- line: "{text}. Drawn at random from five for a closed model (setting {letter}); it describes the book at {blocks}."
+- line: "{text}. Drawn at random from four for a closed model (setting {letter}); it describes the book at {blocks}."
   e.g. "stone-brick houses behind tall trees, tall apartment towers with many windows above the treetops, small drones
-  overhead. Drawn at random from five for a closed model (setting A); it describes the book at c1-b2, c1-b13, c1-b4."
+  overhead. Drawn at random from four for a closed model (setting A); it describes the book at c1-b2, c1-b13, c1-b4."
 
 It cites the blocks by id and shows none of the book's text.
 

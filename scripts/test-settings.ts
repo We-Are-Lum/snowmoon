@@ -4,11 +4,11 @@
  *
  *   npm run test:settings
  *
- *  T1 the line is the owner's, word for word, with {setting} filled; the five settings and their blocks;
+ *  T1 the line is the owner's, word for word, with {setting} filled; the four settings (B dropped) and their blocks;
  *  T2 every cited block exists in content/snowmoon/text;
  *  T3 the line goes after the scene line, before the style (the prompt's order);
  *  T4 closed models (GPT, Gemini) always get the line, FLUX never (the route draws only for a closed model);
- *  T5 the draw is even (each of the five equally likely, the challenge's uniform shuffle) and made at make time;
+ *  T5 the draw is even (each of the four equally likely, the challenge's uniform shuffle) and made at make time;
  *  T6 the draw is recorded in the ticket and the recipe (letter, text, blocks), read back for "How it was made", shown
  *     there labelled as this edition's description, citing the blocks;
  *  T7 no setting names a real person, artist, studio or film (blocked names, the words, the prompt check mocked);
@@ -45,16 +45,15 @@ const OWNER = (s: string) => `Set it in this world, where it fits: a near future
 const WANT: Record<string, [string, string[]]> = {
   E: ['a half-kilometre-tall mountain pyramid at the edge of the city', ['c4-b48']],
   A: ['stone-brick houses behind tall trees, tall apartment towers with many windows above the treetops, small drones overhead', ['c1-b2', 'c1-b13', 'c1-b4']],
-  B: ['greenery mixed with glass-and-steel buildings with sharp edges', ['c3-b72', 'c13-b24']],
   C: ['a chaotic mix of stone, concrete and glass-and-steel buildings, tall and short, some half-built', ['c5-b11', 'c22-b2']],
   D: ['people with watches and hand devices, gates with glowing green circles, small robots with screen faces', ['c1-b4', 'c1-b41', 'c3-b82']],
 };
 const settingsOk = (list: readonly ChallengeSetting[]) => [
-  ...need(list.length === 5 && new Set(list.map((s) => s.id)).size === 5, 'not five settings'),
+  ...need(list.length === 4 && new Set(list.map((s) => s.id)).size === 4 && !list.some((s) => (s.id as string) === 'B'), 'not the four settings (B dropped, owner 2026-11-09)'),
   ...list.flatMap((s) => need(WANT[s.id]?.[0] === s.text && JSON.stringify(WANT[s.id]?.[1]) === JSON.stringify(s.blocks), `setting ${s.id} isn't the owner's`)),
   ...list.flatMap((s) => need(settingLine(s) === OWNER(s.text), `setting ${s.id}'s line isn't the owner's words`)),
 ];
-proven('T1 the setting line is the owner\'s, word for word; the five settings and their blocks', () => settingsOk(CHALLENGE_SETTINGS), () => settingsOk(CHALLENGE_SETTINGS.map((s, i) => (i ? s : { ...s, text: `${s.text} at dusk` }))));
+proven('T1 the setting line is the owner\'s, word for word; the four settings (E, A, D, C; B dropped) and their blocks', () => settingsOk(CHALLENGE_SETTINGS), () => settingsOk(CHALLENGE_SETTINGS.map((s, i) => (i ? s : { ...s, text: `${s.text} at dusk` }))));
 
 // T2
 const blockExists = (id: string) => {
@@ -97,10 +96,10 @@ const even = (draw: () => ChallengeSetting) => {
   const n = 50_000;
   const counts = new Map<string, number>();
   for (let i = 0; i < n; i++) { const s = draw(); counts.set(s.id, (counts.get(s.id) ?? 0) + 1); }
-  const exp = n / 5;
+  const exp = n / CHALLENGE_SETTINGS.length;
   const chi = [...CHALLENGE_SETTINGS].reduce((a, s) => a + ((counts.get(s.id) ?? 0) - exp) ** 2 / exp, 0);
-  // 4 degrees of freedom: 18.47 is the 0.1% point.
-  return [...need(counts.size === 5, `drew ${counts.size} of 5`), ...need(chi < 18.47, `uneven draw (chi-square ${chi.toFixed(1)}: ${JSON.stringify(Object.fromEntries(counts))})`)];
+  // 3 degrees of freedom: 16.27 is the 0.1% point.
+  return [...need(counts.size === 4, `drew ${counts.size} of 4`), ...need(chi < 16.27, `uneven draw (chi-square ${chi.toFixed(1)}: ${JSON.stringify(Object.fromEntries(counts))})`)];
 };
 const draws = [...Array(20).keys()].map(() => drawSetting().id);
 proven('T5 the draw is even (the challenge\'s uniform shuffle over the whole pool; chi-square on 50,000 draws) and made per picture at make time', () => [...even(() => drawSetting()), ...need(new Set(draws).size > 1, 'the same setting every time'), ...need(/export const drawSetting = \(random: \(\) => number = uniform\): ChallengeSetting => shuffleFresh\(CHALLENGE_SETTINGS, random\)\[0\];/.test(read('src/lib/challenge/settings.ts')), 'not the uniform shuffle over the whole pool')], () => even(() => (Math.random() < 0.4 ? CHALLENGE_SETTINGS[0] : drawSetting())));
@@ -114,7 +113,7 @@ const recorded = (src: string) => [
   ...need(/setting\?: \{ id: string; text: string; blocks: string\[\] \};/.test(ticket) && /\.\.\.\(t\.challenge \? \{ challenge: t\.challenge \} : \{\}\)/.test(publish), 'the recipe doesn\'t keep the ticket\'s challenge (and its setting)'),
   ...need(/setting: readSetting\(\(p\.challenge as \{ setting\?: unknown \} \| undefined\)\?\.setting\)/.test(data), '"How it was made" doesn\'t read it back'),
   ...need(/\{SETTING_WORDING\.head\}/.test(page) && /SETTING_WORDING\.line\(im\.setting\)/.test(page) && /SETTING_WORDING\.line\(d\.setting\)/.test(preview), 'the picture page or the preview doesn\'t show it'),
-  ...need(SETTING_WORDING.head === 'Setting (this edition’s description of the book’s setting, not a quote)' && SETTING_WORDING.line(rec) === `${WANT.A[0]}. Drawn at random from five for a closed model (setting A); it describes the book at c1-b2, c1-b13, c1-b4.`, `the wording: ${SETTING_WORDING.line(rec)}`),
+  ...need(SETTING_WORDING.head === 'Setting (this edition’s description of the book’s setting, not a quote)' && SETTING_WORDING.line(rec) === `${WANT.A[0]}. Drawn at random from four for a closed model (setting A); it describes the book at c1-b2, c1-b13, c1-b4.`, `the wording: ${SETTING_WORDING.line(rec)}`),
 ];
 proven('T6 the draw is recorded (letter, text, blocks) in the ticket and recipe, and "How it was made" shows it as this edition\'s description, citing the blocks', () => recorded(route), () => recorded(route.replace('...(setting ? { setting: settingRecord(setting) } : {}),', '')));
 

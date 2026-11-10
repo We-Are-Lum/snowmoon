@@ -429,7 +429,7 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   uniformly, when the picture is made (`drawStyle`, `shuffleFresh(published)[0]` in `src/lib/challenge/make.ts` only,
   on the whole list), and the recipe records both "Random" and the style drawn. Its planted violations, a draw from
   only some of the styles and a draw weighted toward one, must fail. The same exception covers the settings pool
-  (owner, 2026-11-09): for a closed model's picture the server draws one of five settings evenly, at make time
+  (owner, 2026-11-09): for a closed model's picture the server draws one of four settings evenly, at make time
   (`drawSetting`, `shuffleFresh(CHALLENGE_SETTINGS, random)[0]` in `src/lib/challenge/settings.ts` only, on the whole
   pool), and the recipe records the setting drawn (scripts/test-settings.ts T5).
   A third narrow exception (owner, 2026-11-04; branch challenge-landing; **pending the owner's yes**): below each
