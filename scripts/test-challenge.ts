@@ -8,7 +8,7 @@
  * Each rule is also proven to fail on a planted violation ("proof: …" lines): the check is run on a bad input and
  * must report it.
  * - Eligibility (decided once at publish and stored; pages never ask Neynar): invited, or a Neynar score at or above the
- *   threshold; refused: below it, no score, a wallet account, admins. The spend cap ($15 in the window, $2 outside),
+ *   threshold; refused: below it, no score, a wallet account, admins. The spend cap ($25 in the window, $2 outside),
  *   sheets opening only in the window and once Privacy says so, the rules copy (forks only, three entrants, no bounty,
  *   the mint as a plan), and the count of distinct entrants per character.
  * - Submit (owner, 2026-11-04): a remix is an entry only once its maker submits it, with a post link (checked as "Add
@@ -58,7 +58,7 @@ CHALLENGE.pictureEntries = false;
 
 // --- The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"; nothing opens by date alone) ------
 // With CHALLENGE.public off (as committed) and the clock inside the window, nothing the dates used to switch on is on:
-// entries, open sheets, the $15 cap, the challenge share text; and only admins may see the challenge.
+// entries, open sheets, the challenge's cap, the challenge share text; and only admins may see the challenge.
 {
   const C = await import('../src/lib/config');
   const O = await import('../src/lib/challenge/open-sheets');
@@ -71,12 +71,12 @@ CHALLENGE.pictureEntries = false;
   const committedPublic = CHALLENGE.public;
   (CHALLENGE as unknown as { public: boolean }).public = false;
   check('switch: the dates are kept (opens Thu 12 Nov, 00:00 Pacific; owner, 2026-11-09)', CHALLENGE.dates.opens === '2026-11-12T08:00:00Z');
-  check('switch off, inside the window: the free cap stays $2, not $15', C.imagesDailySpendCapUsd(inside) === IMAGES.dailySpendCapUsd && IMAGES.dailySpendCapUsd === 2);
+  check('switch off, inside the window: the free cap stays $2, not $25', C.imagesDailySpendCapUsd(inside) === IMAGES.dailySpendCapUsd && IMAGES.dailySpendCapUsd === 2);
   check('switch off, inside the window: sheets stay invited-only (Privacy describes the challenge)', O.privacyDescribesChallenge(PRIVACY) && !O.challengeSheetsOpen(inside, PRIVACY));
   check('switch off, inside the window: entries are not taken', !R.entriesOpen(inside) && !R.challengeOpenNow(inside));
   check('switch off: only admins may see the challenge', !V.challengeVisibleTo(null) && !V.challengeVisibleTo(501) && !V.challengeVisibleTo(6852) && ADMINS.every((a) => V.challengeVisibleTo(a)));
   check('switch on, inside the window: the same functions open (so the switch is what holds them)', R.challengeOpenNow(inside, true) && R.entriesOpen(inside, true) && O.challengeSheetsOpen(inside, PRIVACY, true) && V.challengeVisibleTo(501, true));
-  proof('a cap that rises by date alone is caught', ((t: Date) => (t.getTime() >= Date.parse(CHALLENGE.dates.opens) && t.getTime() < Date.parse(CHALLENGE.dates.closes) ? 15 : 2))(inside) !== C.imagesDailySpendCapUsd(inside));
+  proof('a cap that rises by date alone is caught', ((t: Date) => (t.getTime() >= Date.parse(CHALLENGE.dates.opens) && t.getTime() < Date.parse(CHALLENGE.dates.closes) ? 25 : 2))(inside) !== C.imagesDailySpendCapUsd(inside));
   proof('sheets that open by date alone are caught', ((t: Date) => CHALLENGE.openSheets && R.phase(t) === 'open' && O.privacyDescribesChallenge(PRIVACY))(inside) !== O.challengeSheetsOpen(inside, PRIVACY));
   proof('entries that open by date alone are caught', ((t: Date) => CHALLENGE.entries && R.phase(t) === 'open')(inside) !== R.entriesOpen(inside));
   (CHALLENGE as unknown as { public: boolean }).public = committedPublic;
@@ -168,13 +168,13 @@ check('dateText builds the deadline from the config', R.dateText('closes', { tim
   const LW0 = (await import('../src/lib/challenge/landing')).LANDING_WORDING;
   check('windowText spans the window: "12 to 29 November" (the rules intro, the home row, the landing)', R.windowText() === '12 to 29 November' && CW0.intro().startsWith('From 12 to 29 November,') && CW0.homeLine().includes('12 to 29 November') && LW0.arrival('Zei', 'open').includes('12 to 29 November'), `${R.windowText()} | ${CW0.intro().slice(0, 40)}`);
 }
-// The free spend cap: $15 inside the window, $2 outside, by itself (owner, 2026-10-31).
+// The free spend cap: $25 inside the window (owner, 2026-11-09; $15 before), $2 outside, by itself (owner, 2026-10-31).
 {
   const C = await import('../src/lib/config');
   // Owner, 2026-11-07: the $15 starts at the flip (CHALLENGE.public on), before the open date too, and ends at the close.
-  check('spend cap: switch on, before the open date: $15 (from the flip)', C.imagesDailySpendCapUsd(at(D0.opens, -1)) === 15 && C.imagesDailySpendCapUsd(new Date('2026-11-07T20:00:00Z')) === 15);
-  check('spend cap: $15 at the opening instant', C.imagesDailySpendCapUsd(at(D0.opens, 0)) === 15);
-  check('spend cap: $15 at 23:59:59.999 Pacific on the last day', C.imagesDailySpendCapUsd(at(D0.closes, -1)) === 15);
+  check('spend cap: switch on, before the open date: $25 (from the flip)', C.imagesDailySpendCapUsd(at(D0.opens, -1)) === 25 && C.imagesDailySpendCapUsd(new Date('2026-11-07T20:00:00Z')) === 25);
+  check('spend cap: $25 at the opening instant', C.imagesDailySpendCapUsd(at(D0.opens, 0)) === 25);
+  check('spend cap: $25 at 23:59:59.999 Pacific on the last day', C.imagesDailySpendCapUsd(at(D0.closes, -1)) === 25);
   check('spend cap: back to $2 at the close', C.imagesDailySpendCapUsd(at(D0.closes, 0)) === 2);
   {
     const pubWas = CHALLENGE.public;
@@ -182,13 +182,13 @@ check('dateText builds the deadline from the config', R.dateText('closes', { tim
     check('spend cap: switch off, $2 whatever the date (before, inside, after the window)', [new Date('2026-11-07T20:00:00Z'), at(D0.opens, 0), at(D0.closes, -1), at(D0.closes, 0)].every((t) => C.imagesDailySpendCapUsd(t) === 2));
     (CHALLENGE as { public: boolean }).public = pubWas;
   }
-  proof('spend cap: a cap that waits for the open date with the switch on is caught', ((t: Date) => (CHALLENGE.public && t.getTime() >= Date.parse(D0.opens) && t.getTime() < Date.parse(D0.closes) ? 15 : 2))(at(D0.opens, -1)) !== C.imagesDailySpendCapUsd(at(D0.opens, -1)));
-  check('the base caps are unchanged ($2 outside; IMAGES.invited unchanged)', IMAGES.dailySpendCapUsd === 2 && CHALLENGE.dailySpendCapUsd === 15 && IMAGES.invited.join() === '6786,6852');
+  proof('spend cap: a cap that waits for the open date with the switch on is caught', ((t: Date) => (CHALLENGE.public && t.getTime() >= Date.parse(D0.opens) && t.getTime() < Date.parse(D0.closes) ? 25 : 2))(at(D0.opens, -1)) !== C.imagesDailySpendCapUsd(at(D0.opens, -1)));
+  check('the base caps are unchanged ($2 outside; IMAGES.invited unchanged)', IMAGES.dailySpendCapUsd === 2 && CHALLENGE.dailySpendCapUsd === 25 && IMAGES.invited.join() === '6786,6852');
   const limits = read('src/lib/images/limits.ts');
   // Three reads: a picture's, a remix's view (owner, 2026-11-04: the cap unchanged for remixes) and the words check's.
   check('the spend check reads the cap through imagesDailySpendCapUsd()', (limits.match(/imagesDailySpendCapUsd\(\)/g) ?? []).length === 3 && !/IMAGES\.dailySpendCapUsd/.test(limits));
-  proof('a cap read straight from IMAGES (never $15) is caught', /IMAGES\.dailySpendCapUsd/.test(limits.replace('imagesDailySpendCapUsd()', 'IMAGES.dailySpendCapUsd')));
-  proof('a cap that stays at $15 after the close is caught', ((t: Date) => (t.getTime() >= Date.parse(D0.opens) ? 15 : 2))(at(D0.closes, 0)) !== C.imagesDailySpendCapUsd(at(D0.closes, 0)));
+  proof('a cap read straight from IMAGES (never $25) is caught', /IMAGES\.dailySpendCapUsd/.test(limits.replace('imagesDailySpendCapUsd()', 'IMAGES.dailySpendCapUsd')));
+  proof('a cap that stays at $25 after the close is caught', ((t: Date) => (t.getTime() >= Date.parse(D0.opens) ? 25 : 2))(at(D0.closes, 0)) !== C.imagesDailySpendCapUsd(at(D0.closes, 0)));
 }
 check('a date moved in the config moves in the text', R.dateText('closes', { time: true }, { ...D0, closes: '2026-11-18T08:00:00Z' }) === 'Tuesday 17 November, 23:59 Pacific');
 check('phase: before, open, closed', R.phase(at(D0.opens, -1)) === 'before' && R.phase(at(D0.opens, 0)) === 'open' && R.phase(at(D0.closes, 0)) === 'closed');
@@ -302,7 +302,7 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   const lim2 = read('src/lib/images/limits.ts');
   const underLock = (src: string) => /pg_advisory_xact_lock\(hashtext\('snowmoon\.images\.fid'\), \$\{fid\}::int\)[\s\S]*if \(spend\.remix && countsRemixes\(fid\) && \(await remixTable\(t\)\)\)/.test(src);
   check('F5 the remix count is checked under the person\'s lock, with the spend cap', underLock(lim2) && /imagesDailySpendCapUsd\(\)\) return \{ ok: false as const, refusal: 'spend' as const \};\s*(?:if \(closed && [^\n]*refusal: 'closed-spend' as const \};\s*)?await tx`insert into studio\.sheet_remix_asks/.test(lim2)); // (branch challenge-models: the closed cap, inside a remix too)
-  proof('F5 a remix count outside the lock is caught', !underLock(lim2.replace("hashtext('snowmoon.images.fid')", "hashtext('elsewhere')")));
+  proof('F5 a remix count outside the lock is caught', !underLock(lim2.replaceAll("hashtext('snowmoon.images.fid')", "hashtext('elsewhere')")));
   // What happens when a remix's views partly fail: the failed answer carries the remix, so making it again stays inside it.
   const keeps = (src: string) => src.includes("if (!paid.ok) return no(paid.error, paid.status, { ...paid.extra, ...(remixTicket && !String(paid.extra.reason ?? '').startsWith('remix') ? { remix: remixTicket } : {}) });");
   check('F6 a view that fails answers with its remix, so it is made again inside the same remix', keeps(route));
@@ -1350,7 +1350,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   const status = read('src/app/api/images/status/route.ts');
   const capInStatus = (src: string) => /dailySpendCapUsd: imagesDailySpendCapUsd\(\)/.test(src) && !/IMAGES\.dailySpendCapUsd/.test(src);
   check('R3 the image status route gives the day\'s spend cap through imagesDailySpendCapUsd()', capInStatus(status));
-  proof('R3 a status cap read straight from IMAGES (never $15) is caught', !capInStatus(status.replace('dailySpendCapUsd: imagesDailySpendCapUsd()', 'dailySpendCapUsd: IMAGES.dailySpendCapUsd')));
+  proof('R3 a status cap read straight from IMAGES (never $25) is caught', !capInStatus(status.replace('dailySpendCapUsd: imagesDailySpendCapUsd()', 'dailySpendCapUsd: IMAGES.dailySpendCapUsd')));
   // R4: an untitled entry's row read "Bai: Bai".
   const CW = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
   // The entries moved to the rules page with the short /challenge (owner, 2026-11-04).

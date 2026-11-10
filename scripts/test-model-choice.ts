@@ -8,7 +8,7 @@
  *      but the open default;
  *  M2  the default is the open models, listed first;
  *  M3  one model per sheet: views from two choices are refused, at the side/back and at publish;
- *  M4  a closed picture counts as 3 of the free pictures (no separate per-person count) and the closed site cap ($15 since 2026-11-09, never above the free cap),
+ *  M4  a closed picture counts as 3 of the free pictures (no separate per-person count) and the closed site cap ($20 since 2026-11-09, $5 under the free cap),
  *      on an in-memory Postgres with every migration, NEXT_remix_model_choice.sql included;
  *  M5  the recipe lines: the closed label, the closed safety line and the can't-be-re-run line; open lines unchanged;
  *  M6  the safety line is the agreed wording, word for word;
@@ -140,7 +140,7 @@ proven(
   const closedSpend = (m: SheetModel) => ({ model: m.views, reserveUsd: m.reserveUsd.view, pool: 'closed' as const });
 
   // Branch challenge-models (owner, 2026-11-08): a closed picture counts as CLOSED_IMAGES.countsAs (3) of the day's free
-  // pictures; the closed site cap ($15) still holds; the separate 6 a day is gone.
+  // pictures; the closed site cap ($20) still holds; the separate 6 a day is gone.
   const weighted = async (fid: number) => {
     const p: string[] = [];
     const per = IMAGES.generationsPerDay; // 10
@@ -181,8 +181,8 @@ proven(
   proven('M4a a closed picture counts as 3 of the day\'s free pictures; no separate per-person closed count', () => real, () => need(plantOpenLeft === IMAGES.generationsPerDay - 3 * CLOSED_IMAGES.countsAs, `three closed asks without a pool left ${plantOpenLeft}`));
 
   // The site-wide closed cap: today's closed spend near its cap stops a closed picture, never an open one.
-  // In the challenge window (the free cap $15, the closed cap $15 since 2026-11-09, so the two are the same there), as on
-  // 12 Nov: the window moved to now, for this test only.
+  // In the challenge window (the free cap $25, the closed cap $20: owner, 2026-11-09), as on 12 Nov: the window moved to
+  // now, for this test only.
   const dates = CHALLENGE.dates as { opens: string; closes: string };
   const saved = { ...dates };
   const pub = CHALLENGE as { public: boolean };
@@ -203,24 +203,37 @@ proven(
     else await settle(S, {});
     return p;
   };
-  // With the closed cap equal to the free cap, a closed picture near it is stopped by one or the other ('spend' or
-  // 'closed-spend'); an open Generate that still fits goes through.
-  const siteCapEq = async () => {
-    const p: string[] = [];
-    const rc = await reserve(S, 2001, closedSpend(GPT));
-    if (rc.ok || (rc.refusal !== 'closed-spend' && rc.refusal !== 'spend')) p.push(`a closed picture over the closed cap was not stopped (${JSON.stringify(rc)})`);
-    const ro = await reserve(S, 2001);
-    if (!ro.ok) p.push(`an open Generate that fits was stopped (${ro.refusal})`);
-    else await settle(S, {});
-    return p;
-  };
   await fill(cap - GPT.reserveUsd.view / 2, GPT.views.id);
-  const capReal = await siteCapEq();
+  const capReal = await siteCap();
   await su('delete from studio.image_costs');
   await fill(1, GPT.views.id); // planted: closed spend far under the cap, so the closed picture must go through
-  const capPlant = await siteCapEq();
-  void siteCap;
-  proven('M4b closed spend is capped site-wide ($15 in the window, the same as the free cap); an open Generate that fits still goes', () => [...capReal, ...need(cap === 15, `closed cap ${cap} in the window`)], () => capPlant);
+  const capPlant = await siteCap();
+  proven('M4b closed spend has its own site-wide cap ($20 in the window, under the free $25); an open Generate still goes', () => [...capReal, ...need(cap === 20, `closed cap ${cap} in the window`)], () => capPlant);
+
+  // M4h (owner, 2026-11-09): GPT spending can never stop FLUX: the closed cap is never within $5 of the free cap of the
+  // moment (none at all where the free cap is under $5), and a closed picture stops once the day's whole free spend would
+  // leave less than $5, while an open Generate still goes.
+  {
+    const { closedCapUsd: capAt } = await import('../src/lib/images/limits');
+    const instants = [new Date(Date.now() - 86400_000 * 30), new Date(), new Date(Date.parse(dates.closes) - 1), new Date(Date.parse(dates.closes)), new Date(Date.parse(dates.closes) + 86400_000 * 30)];
+    const floor = (f: (n: Date) => number) => instants.flatMap((n) => need(f(n) <= Math.max(0, imagesDailySpendCapUsd(n) - 5) + 1e-9, `at ${n.toISOString()}: closed cap ${f(n)}, free cap ${imagesDailySpendCapUsd(n)}`));
+    const mixed = async () => {
+      await su('delete from studio.image_costs');
+      await fill(10, 'z-image-turbo');
+      await fill(imagesDailySpendCapUsd() - 5 - 10 - GPT.reserveUsd.view / 2, GPT.views.id); // 19.96 in all
+      const rc = await reserve(S, 2003, closedSpend(GPT));
+      const ro = await reserve(S, 2003);
+      if (ro.ok) await settle(S, {});
+      return [...need(!rc.ok && rc.refusal === 'closed-spend', `a closed picture past $20 in all went through (${JSON.stringify(rc)})`), ...need(ro.ok, 'an open Generate was stopped with $5 left')];
+    };
+    const m4h = [
+      ...floor(capAt),
+      ...need(CHALLENGE.dailySpendCapUsd === 25 && CLOSED_IMAGES.dailySpendCapUsd === 20 && CLOSED_IMAGES.openFloorUsd === 5 && CHALLENGE.dailySpendCapUsd - CLOSED_IMAGES.dailySpendCapUsd >= 5, `caps: free ${CHALLENGE.dailySpendCapUsd}, closed ${CLOSED_IMAGES.dailySpendCapUsd}, floor ${CLOSED_IMAGES.openFloorUsd}`),
+      ...(await mixed()),
+    ];
+    // Planted: the cap of before (never above the free cap, but no floor).
+    proven('M4h GPT spending can never stop FLUX: the closed cap stays $5 under the free cap (none under $5), and the whole day\'s spend stops closed pictures at $20', () => m4h, () => floor((n) => Math.min(CLOSED_IMAGES.dailySpendCapUsd, imagesDailySpendCapUsd(n))));
+  }
   Object.assign(dates, saved);
 
   // The free cap of the moment still holds over closed pictures, and the closed cap sits inside it.
@@ -229,13 +242,13 @@ proven(
   const rAll = await reserve(S, 2002, closedSpend(GPT));
   const inWindow = closedCapUsd(new Date('2026-11-10T20:00:00Z'));
   proven(
-    'M4c the closed cap is $15, never above the free cap of the moment ($15 in the challenge, $2 after), and the free cap still stops closed pictures',
+    'M4c the closed cap is $20 in the challenge\'s $25, none outside it ($2), and the free cap still stops closed pictures',
     () => [
       ...need(!rAll.ok && rAll.refusal === 'spend', `a closed picture over the free cap was not stopped (${JSON.stringify(rAll)})`),
-      ...need(inWindow === CLOSED_IMAGES.dailySpendCapUsd && inWindow === 15 && imagesDailySpendCapUsd(new Date('2026-11-10T20:00:00Z')) === 15, `in the window the closed cap is ${inWindow}`),
-      ...need(closedCapUsd(new Date('2026-12-10T20:00:00Z')) === Math.min(15, IMAGES.dailySpendCapUsd), 'outside the window the closed cap is above the free cap'),
+      ...need(inWindow === CLOSED_IMAGES.dailySpendCapUsd && inWindow === 20 && imagesDailySpendCapUsd(new Date('2026-11-10T20:00:00Z')) === 25, `in the window the closed cap is ${inWindow}`),
+      ...need(closedCapUsd(new Date('2026-12-10T20:00:00Z')) === 0, 'outside the window closed pictures are allowed'),
     ],
-    () => need(Math.min(50, 15) === 50, 'a closed cap of $50 would sit above the $15 free cap'),
+    () => need(Math.min(50, 25) === 50, 'a closed cap of $50 would sit above the $25 free cap'),
   );
 
   pub.public = wasPublic;
@@ -385,6 +398,12 @@ proven(
       const given = await run(4201, true);
       const counted = await run(4202, false);
       const refused = await run(4203, true, '{"allow": false, "category": "sexual"}');
+      // At most 3 given back a person a day (owner, 2026-11-09): the 2nd and 3rd are given back, the 4th counts.
+      const second = await run(4201, true), third = await run(4201, true), fourth = await run(4201, true);
+      // Until NEXT_image_asks_back.sql is applied: no table, so a blocked picture counts and nothing fails.
+      await su('alter table studio.image_asks_back rename to image_asks_back_hidden');
+      const noTable = await run(4204, true);
+      await su('alter table studio.image_asks_back_hidden rename to image_asks_back');
       const m4g = [
         ...need(!given.r.ok && given.r.error === 'This picture was blocked by the open model\'s safety check. Try other words, or a closed model.' && given.r.extra.reason === 'nsfw' && given.r.extra.givenBack === true, `the blocked answer: ${JSON.stringify(given.r)}`),
         ...need(given.used === 0, `a blocked FLUX picture used ${given.used} of today's pictures`),
@@ -392,8 +411,10 @@ proven(
         ...need(!given.r.ok && given.r.extra.left === IMAGES.generationsPerDay, `the answer's left: ${!given.r.ok && given.r.extra.left}`),
         ...need(counted.used === 1 && counted.recorded === 1, `without giveBack it used ${counted.used}`),
         ...need(!refused.r.ok && refused.r.extra.reason === 'blocked' && refused.used === 1, `a prompt-check refusal used ${refused.used}`),
+        ...need(second.used === 0 && third.used === 0 && fourth.used === 1 && !fourth.r.ok && fourth.r.extra.givenBack === undefined, `blocks 2-4 used ${second.used}, ${third.used}, ${fourth.used}`),
+        ...need(!noTable.r.ok && noTable.r.extra.reason === 'nsfw' && noTable.used === 1 && noTable.r.error === MW.openBlocked(true), `without the table: used ${noTable.used}, ${JSON.stringify(noTable.r)}`),
       ];
-      proven('M4g a FLUX picture fal\'s checker blocks, for the challenge, says the owner\'s words and uses none of today\'s pictures (its spend recorded); a prompt-check refusal still counts', () => m4g, () => need(counted.used === 0, `planted (no give-back): the blocked picture used ${counted.used}`));
+      proven('M4g a FLUX picture fal\'s checker blocks, for the challenge, says the owner\'s words and uses none of today\'s pictures (its spend recorded), at most 3 a day (the 4th counts); a prompt-check refusal still counts; without the table it counts and nothing fails', () => m4g, () => need(counted.used === 0, `planted (no give-back): the blocked picture used ${counted.used}`));
     }
     globalThis.fetch = realFetch;
     process.env.FAL_KEY = keys.fal;
@@ -895,7 +916,7 @@ proven(
       ...need(MODEL_WORDING.tooFew(0, '4:00 pm') === 'A closed model uses 3 of today\'s pictures; you have none left today. More pictures at 4:00 pm.', 'the none-left line'),
       ...need(resetLocal(at, 'America/Los_Angeles') === '4:00 pm' && resetLocal(at, 'Europe/Paris') === '1:00 am' && resetLocal(at, 'UTC') === '12:00 am', `reset: ${resetLocal(at, 'America/Los_Angeles')}, ${resetLocal(at, 'Europe/Paris')}, ${resetLocal(at, 'UTC')}`),
       ...need(!/resetLocal|toLocaleTimeString/.test(makeSrc), 'the route renders a time'),
-      ...need(IMAGES.generationsPerDay === 10 && IMAGES.dailySpendCapUsd !== undefined && CLOSED_IMAGES.dailySpendCapUsd === 15, 'the free count (10) or the closed cap ($15) changed'),
+      ...need(IMAGES.generationsPerDay === 10 && IMAGES.dailySpendCapUsd !== undefined && CLOSED_IMAGES.dailySpendCapUsd === 20, 'the free count (10) or the closed cap ($20) changed'),
       // The refusals in the owner's words (2026-11-08); the cap's {reset} is filled in by the browser from the answer's instant.
       ...need(IMAGE_W.designs.models.closedLimit === 'A closed model uses 3 of today’s pictures, and you have fewer left. You can still use an open model.', 'the closed-limit words'),
       ...need(IMAGE_W.designs.models.closedSpend === 'Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at {reset}.', 'the closed-spend words'),
@@ -904,7 +925,7 @@ proven(
       ...need(/withReset\(out\.error, out\.resetAt\)/.test(read('src/components/challenge-make.tsx')), 'the screen doesn\'t fill in the reset'),
       ...need(read('src/lib/images/rules.ts').includes('No self-harm, extremism or election campaigning. Describe styles by look, not by artist, studio or film.'), 'the rules above Generate'),
     ];
-    proven('C17 the closed-pick lines are the owner\'s words with the models\' own estimates; the too-few line, its n = 0 form, and the reset in the visitor\'s time (browser only); 10 free a day, $15 closed cap', () => [...linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS), ...tooFew], () => linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS.map((m) => (m.id === 'gpt-image-2.5-sunburst' ? { ...m, estimateUsd: 0.08 } : m))));
+    proven('C17 the closed-pick lines are the owner\'s words with the models\' own estimates; the too-few line, its n = 0 form, and the reset in the visitor\'s time (browser only); 10 free a day, $20 closed cap', () => [...linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS), ...tooFew], () => linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS.map((m) => (m.id === 'gpt-image-2.5-sunburst' ? { ...m, estimateUsd: 0.08 } : m))));
   }
 
   // C21 (owner, 2026-11-09): the Model row starts on GPT Image 2.5 Sunburst for someone who can use it, until entries

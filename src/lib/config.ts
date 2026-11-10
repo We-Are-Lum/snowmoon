@@ -578,7 +578,7 @@ export const CHALLENGE = {
    *   sheet-making (openSheets) and the challenge's free image cap (dailySpendCapUsd) all stay off, whatever the clock
    *   says. `dates` stay as they are, for when the owner opens it with a new open date.
    * Only the owner turns it on. check:principles P6u proves it: with this off and the clock past `dates.opens`, entries,
-   * open sheets and the $15 cap are off and /challenge answers 404 to a non-admin.
+   * open sheets and the challenge's cap are off and /challenge answers 404 to a non-admin.
    *
    * ON: PREPARED, NOT MERGED. Merge only on the owner's word, after #123 (challenge-config-ids) is live and checked.
    */
@@ -737,7 +737,7 @@ export const CHALLENGE = {
     /**
      * Entries open Thu 12 Nov 2026, 00:00 Pacific (owner, 2026-11-09; it was Tue 17 Nov, before that Tue 10 Nov, 00:00,
      * and before that Fri 6 Nov, 09:00). Nothing opens by date alone: /challenge stays hidden until the owner turns CHALLENGE.public on. From
-     * the flip to this instant, anyone can remix (with the $15 site-wide cap), but pictures made then are for trying it
+     * the flip to this instant, anyone can remix (with the challenge's site-wide cap), but pictures made then are for trying it
      * out and can't be entered.
      */
     opens: '2026-11-12T08:00:00Z',
@@ -768,8 +768,17 @@ export const CHALLENGE = {
    * open and after the close, sheets are invited-only again with no deploy.
    */
   openSheets: true as boolean,
-  /** The site-wide free image spend cap from the owner's flip (CHALLENGE.public) until entries close (owner, 2026-11-07); IMAGES.dailySpendCapUsd otherwise. */
-  dailySpendCapUsd: 15,
+  /**
+   * The site-wide free image spend cap from the owner's flip (CHALLENGE.public) until entries close (owner, 2026-11-07:
+   * $15; 2026-11-09: $25, with the closed cap at $20, so the open model always keeps at least
+   * CLOSED_IMAGES.openFloorUsd of the day); IMAGES.dailySpendCapUsd otherwise.
+   */
+  dailySpendCapUsd: 25,
+  /**
+   * A FLUX picture fal's safety checker blocks is given back to the day's count (owner, 2026-11-09), at most this many
+   * times per person per UTC day; after that a blocked picture counts as usual (src/lib/images/limits.ts giveBack).
+   */
+  blockedGivenBackPerDay: 3,
   /** "Posted on": at most this many shown per version, newest first; and how many one person may add per UTC day. */
   postsPerVersion: 30,
   postsPerPersonPerDay: 20,
@@ -983,7 +992,7 @@ export const IMAGES = {
  * Closed models' caps (branch remix-model-choice, 2026-11-04; changed on branch challenge-models, owner, 2026-11-08):
  * a closed model's picture counts as `countsAs` of the person's free pictures that day (no separate per-person count:
  * the 6 a day was dropped), and closed spend has its own site-wide daily cap, inside the free cap of the moment
- * (imagesDailySpendCapUsd(): the challenge's $15 in its window): both checked under the same lock, before anything is
+ * (imagesDailySpendCapUsd(): the challenge's $25 in its window): both checked under the same lock, before anything is
  * spent (src/lib/images/limits.ts).
  */
 export const CLOSED_IMAGES = {
@@ -993,8 +1002,14 @@ export const CLOSED_IMAGES = {
    * studio.image_asks in pool 'closed', and generationsLeft counts it as this many.
    */
   countsAs: 3,
-  /** The closed site-wide daily cap (owner: $5, 2026-11-08; $15, 2026-11-09, with GPT the default for the challenge). Never above the free cap of the moment (limits.ts closedCapUsd). */
-  dailySpendCapUsd: 15,
+  /**
+   * The closed site-wide daily cap (owner: $5, 2026-11-08; $20, 2026-11-09, with GPT the default for the challenge).
+   * Never more than the free cap of the moment less openFloorUsd (limits.ts closedCapUsd), so closed spending can never
+   * stop the open model: with the challenge's $25, $20; outside it ($2), none.
+   */
+  dailySpendCapUsd: 20,
+  /** What the open model always keeps of the day's free cap (owner, 2026-11-09): closed pictures stop before it. */
+  openFloorUsd: 5,
   /**
    * Google's Service Specific Terms §20(d): no use of a Generative AI Service "as part of a website … that is directed
    * towards or is likely to be accessed by individuals under the age of 18" (docs/legal/age-terms-closed-models.md).

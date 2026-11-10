@@ -286,17 +286,23 @@ again) and P6t/P6j's wording checks follow it.
   again"), the picture is made straight away with the words as they are then. Tapping FLUX instead closes it. The
   server still refuses a closed picture without the notice version and the 18+ answer (unchanged). Picking GPT by
   tapping its chip shows the notice at the tap, as before.
-- **The closed site cap** is $15 a day (was $5). *For the owner:* that is the same as the challenge's free cap ($15),
-  so in the window the closed cap no longer holds back anything the free cap doesn't: closed pictures can use the whole
-  day's $15, leaving nothing for FLUX that day (about 190 GPT pictures at the $0.08 reserved). To keep room for FLUX,
-  raise `CHALLENGE.dailySpendCapUsd` above $15 or set the closed cap lower.
+- **The spending caps** (owner, 2026-11-09, after the coordinator's read): the challenge's free (site-wide) cap is
+  $25 a day (was $15) and the closed cap $20 (was $5), so FLUX always keeps at least $5 of the day: a closed picture
+  stops once closed spending would pass $20, or once the day's whole free spending (open and closed, prompt checks
+  included) would pass $20; an open picture goes on to $25. Outside the challenge's window (the $2 cap) no closed
+  picture can be made at all, which includes admins trying GPT before the owner turns `CHALLENGE.public` on. Tested
+  (M4h: GPT spending can never stop FLUX). No legal text names these amounts (checked: Terms, Privacy, consent and
+  About name none of them).
 - **One character per picture.** Change words naming another challenge character (Zei, Gladias, Bai, Seila, Deluin,
   Mu; a whole word, any case) are refused before any model or check runs, so the attempt uses none of today's
-  pictures. Only the change box is read, not a "Write your own" style.
+  pictures. The screen says it at "Make it", before any notice or request; the server refuses it too. Only the change
+  box is read, not a "Write your own" style.
 - **A FLUX picture fal's safety checker blocks** uses none of today's pictures (its spend still counts against the
-  caps; fal's checker stays on). This needs `NEXT_image_asks_back.sql` (a new append-only table): until the owner
-  applies it, such a picture still counts, and nothing else changes. Prompt-check refusals, and a closed model's own
-  refusals, still count as before.
+  caps; fal's checker stays on), at most 3 times a person a UTC day; the 4th and later count as usual. This needs
+  `NEXT_image_asks_back.sql` (a new append-only table, studio.image_asks_back). Until the owner applies it, the site
+  checks for the table on each count and give-back (`to_regclass`), finds none, and counts a blocked picture as
+  before; nothing else changes and nothing fails (tested: M4g with the table hidden). Prompt-check refusals, and a
+  closed model's own refusals, still count as before.
 
 ### New texts on the remix screen (the owner's words, exact)
 
@@ -346,7 +352,7 @@ again) and P6t/P6j's wording checks follow it.
    models (the default)" is the sheet form's, not the challenge's, and stays true there).
 9. Too few left: "A closed model uses 3 of today's pictures; you have {n} left, enough for the open models. More pictures at {reset}." — still true; someone with fewer than 3 left now starts on FLUX, so it shows only if they tap GPT.
 10. The closed-limit refusal: "A closed model uses 3 of today's pictures, and you have fewer left. You can still use an open model." — still true.
-11. The closed-cap refusal: "Closed models have reached today's spending limit for everyone. The open models still work; closed ones come back at {reset}." — still true; with GPT the default, more people will see it once the $15 is reached. *Proposal:* none (the screen doesn't switch the default to FLUX when the closed cap is reached; it could, if the owner wants).
+11. The closed-cap refusal: "Closed models have reached today's spending limit for everyone. The open models still work; closed ones come back at {reset}." — still true (FLUX keeps $5); with GPT the default, more people will see it once the $20 is reached. *Proposal:* none (the screen doesn't switch the default to FLUX when the closed cap is reached; it could, if the owner wants).
 12. The rules intro: "… pick a style and a model, and publish it. …" — no default assumed.
 
 **Principles and checks.**

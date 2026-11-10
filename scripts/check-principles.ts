@@ -2218,7 +2218,7 @@ add({
 add({
   id: 'P6u',
   principle: 6,
-  name: 'while CHALLENGE.public is off, the dates open nothing (entries, open sheets, the $15 cap) and /challenge answers 404 to a non-admin',
+  name: 'while CHALLENGE.public is off, the dates open nothing (entries, open sheets, the challenge\'s cap) and /challenge answers 404 to a non-admin',
   load: async () => {
     const at = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
     const r = await fetch(`${BASE}/challenge`, { headers: { 'cache-control': 'no-cache' }, redirect: 'manual' }).catch(() => null);

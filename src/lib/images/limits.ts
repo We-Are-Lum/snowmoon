@@ -1,6 +1,6 @@
 import 'server-only';
 import type postgres from 'postgres';
-import { CLOSED_IMAGES, IMAGES, closedChoiceOn, imagesDailySpendCapUsd } from '../config';
+import { CHALLENGE, CLOSED_IMAGES, IMAGES, closedChoiceOn, imagesDailySpendCapUsd } from '../config';
 import { CLOSED_MODEL_IDS } from './sheet-models';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
 import { paysFor } from './price';
@@ -64,8 +64,14 @@ async function backTable(sql: Sql): Promise<boolean> {
  */
 export async function giveBack(sql: Sql, fid: number): Promise<boolean> {
   if (isWalletNumber(fid) || !(await backTable(sql))) return false;
-  await sql`insert into studio.image_asks_back (fid) values (${fid})`;
-  return true;
+  // At most CHALLENGE.blockedGivenBackPerDay a person a UTC day (owner, 2026-11-09), under the person's lock.
+  return sql.begin(async (tx) => {
+    await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.fid'), ${fid}::int)`;
+    const [r] = await tx<{ n: number }[]>`select count(*)::int as n from studio.image_asks_back where fid = ${fid} and at >= ${tx.unsafe(UTC_DAY)}`;
+    if (Number(r?.n ?? 0) >= CHALLENGE.blockedGivenBackPerDay) return false;
+    await tx`insert into studio.image_asks_back (fid) values (${fid})`;
+    return true;
+  });
 }
 
 
@@ -78,7 +84,11 @@ export async function closedSpentToday(sql: Sql): Promise<number> {
 /** The closed site-wide cap now: its own, never above the free cap of the moment. */
 // (A destructured name: scripts/test-challenge.ts refuses the open cap read straight from its config in this file.)
 const { dailySpendCapUsd: closedDailyCapUsd } = CLOSED_IMAGES;
-export const closedCapUsd = (now: Date = new Date()) => Math.min(closedDailyCapUsd, imagesDailySpendCapUsd(now));
+// Owner, 2026-11-09: never within CLOSED_IMAGES.openFloorUsd of the free cap, so closed spending can never stop the open
+// model (the challenge: $25 free, $20 closed; outside it, $2 free, no closed pictures).
+export const closedCapUsd = (now: Date = new Date()) => Math.max(0, Math.min(closedDailyCapUsd, imagesDailySpendCapUsd(now) - CLOSED_IMAGES.openFloorUsd));
+/** A closed picture also stops once the day's whole free spend (open and closed, prompt checks included) would leave the open model less than its floor. */
+const closedTotalCapUsd = (now: Date = new Date()) => imagesDailySpendCapUsd(now) - CLOSED_IMAGES.openFloorUsd;
 
 export async function publishesLeft(sql: Sql, fid: number): Promise<number> {
   const [r] = await sql`select count(*)::int as n from studio.elements
@@ -161,7 +171,7 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
       if (refusal) return { ok: false as const, refusal };
       const [day] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'free'`;
       if (day.usd + spend.reserveUsd > imagesDailySpendCapUsd()) return { ok: false as const, refusal: 'spend' as const };
-      if (closed && (await closedSpentToday(t)) + spend.reserveUsd > closedCapUsd()) return { ok: false as const, refusal: 'closed-spend' as const };
+      if (closed && ((await closedSpentToday(t)) + spend.reserveUsd > closedCapUsd() || day.usd + spend.reserveUsd > closedTotalCapUsd())) return { ok: false as const, refusal: 'closed-spend' as const };
       await tx`insert into studio.sheet_remix_asks ${tx({ remix: spend.remix.id, fid, units: spend.remix.units, slot: spend.remix.slot })}`;
       await addCost(t, 'free', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
       return { ok: true as const, left: remixesLeft(used + (spend.remix.starts ? spend.remix.units : 0)) };
@@ -172,7 +182,7 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
     if (left < weight) return { ok: false as const, refusal: closed && left > 0 ? ('closed-limit' as const) : ('limit' as const) };
     const [today] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'free'`;
     if (today.usd + spend.reserveUsd > imagesDailySpendCapUsd()) return { ok: false as const, refusal: 'spend' as const };
-    if (closed && (await closedSpentToday(tx as unknown as Sql)) + spend.reserveUsd > closedCapUsd()) return { ok: false as const, refusal: 'closed-spend' as const };
+    if (closed && ((await closedSpentToday(tx as unknown as Sql)) + spend.reserveUsd > closedCapUsd() || today.usd + spend.reserveUsd > closedTotalCapUsd())) return { ok: false as const, refusal: 'closed-spend' as const };
     if (closed) await tx`insert into studio.image_asks (fid, pool) values (${fid}, 'closed')`;
     else await tx`insert into studio.image_asks (fid) values (${fid})`;
     await addCost(tx as unknown as Sql, 'free', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
