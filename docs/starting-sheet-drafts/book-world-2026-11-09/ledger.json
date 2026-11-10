@@ -1,0 +1,569 @@
+{
+ "about": "Book-world follow-up 2026-11-09: GPT only, the book-based world line, 6 cases, styles Comic book / Comic 3D mix (style test texts, test-only). Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "world_line": "Set it in this world, where it fits: stone houses among tall trees, apartment buildings shaped like oversized medieval castle towers with many windows, small drones overhead, people with watches and hand devices. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.",
+ "styles": [
+  {
+   "id": "comic-book",
+   "label": "Comic book",
+   "text": "bold black ink outlines, flat bright colours, dot-pattern shading, dramatic angle",
+   "source": "new preset"
+  },
+  {
+   "id": "comic-3d-mix",
+   "label": "Comic 3D mix",
+   "text": "3D forms drawn over with hand-inked lines, halftone dots and hatching in the shadows, slightly offset colour printing, bold graphic colour",
+   "source": "new preset"
+  }
+ ],
+ "cap_usd": 2,
+ "stop_at_usd": 0.7,
+ "seed": 20261109,
+ "base_style": {
+  "title": "Animated series",
+  "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.",
+  "source": "docs/starting-sheet-drafts/directions/plan.json, styles[\"Animated series\"] (branch challenge-styles)"
+ },
+ "refs": {
+  "zei": {
+   "version": "bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d",
+   "url": "https://pictures.snowmoon.party/images/readers/131f235227a54b06f6f11253f37a09b5.jpg",
+   "sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c"
+  },
+  "gladias": {
+   "version": "68364375-0f33-46fd-9755-2fd2b551198a",
+   "url": "https://pictures.snowmoon.party/images/readers/b9b6c00952cb47e936dc601676a7c34b.jpg",
+   "sha256": "b9b6c00952cb47e936dc601676a7c34b916355e8b4f979db4d7465ea024d0947"
+  },
+  "bai": {
+   "version": "110d5973-31c2-4d96-9a88-5838d8a6d868",
+   "url": "https://pictures.snowmoon.party/images/readers/01538922456b9bf61192ed291b8f2659.jpg",
+   "sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96"
+  },
+  "seila": {
+   "version": "1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba",
+   "url": "https://pictures.snowmoon.party/images/readers/3ef4825ca8f49aabf05ddcdaa8119e9b.jpg",
+   "sha256": "3ef4825ca8f49aabf05ddcdaa8119e9b229f523a3dfc1dc2af0238cbc95a4d13"
+  },
+  "deluin": {
+   "version": "75a94420-df70-4f43-a3a6-4c2b571e72ab",
+   "url": "https://pictures.snowmoon.party/images/readers/2b45d17da426df0304fc84ded0f3f0c4.jpg",
+   "sha256": "2b45d17da426df0304fc84ded0f3f0c464472c55c96aa517735f9837368432d4"
+  },
+  "mu": {
+   "version": "15a9af1d-9eef-4e25-be57-738d9823dd74",
+   "url": "https://pictures.snowmoon.party/images/readers/3e6ae696865441d24aa1dde262dac043.jpg",
+   "sha256": "3e6ae696865441d24aa1dde262dac043964ab8c9633d19174eb7074091087fb5"
+  }
+ },
+ "prompts": {
+  "f77bf72327f08a333cf4a18e9d4ef49276ef5257d0efa1ec5b410848bdefb4a4": "at a big sports game\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: stone houses among tall trees, apartment buildings shaped like oversized medieval castle towers with many windows, small drones overhead, people with watches and hand devices. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nbold black ink outlines, flat bright colours, dot-pattern shading, dramatic angle\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "898a3df151814f6204b440c729f6f768bd29454911c60e5c7a11d984fddd1cb2": "going out to a party\n\nGladias is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm light-brown skin, a short beard and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: stone houses among tall trees, apartment buildings shaped like oversized medieval castle towers with many windows, small drones overhead, people with watches and hand devices. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\n3D forms drawn over with hand-inked lines, halftone dots and hatching in the shadows, slightly offset colour printing, bold graphic colour\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "64d0b78970f8772688d1948d86d44147316a56a01e86c505f2cf68cd9341ffb0": "as the villain\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: stone houses among tall trees, apartment buildings shaped like oversized medieval castle towers with many windows, small drones overhead, people with watches and hand devices. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nbold black ink outlines, flat bright colours, dot-pattern shading, dramatic angle\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "32c3b37514834fea33367a47d5cbb55fc815f389586379c317cf01f6683b0339": "walking home in the rain at night\n\nSeila is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: stone houses among tall trees, apartment buildings shaped like oversized medieval castle towers with many windows, small drones overhead, people with watches and hand devices. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\n3D forms drawn over with hand-inked lines, halftone dots and hatching in the shadows, slightly offset colour printing, bold graphic colour\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "fe718168fe1809cd19717d7b6485af68b367e8729fbee6ab485214c8910bcc27": "at a concert\n\nDeluin is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm tan skin and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: stone houses among tall trees, apartment buildings shaped like oversized medieval castle towers with many windows, small drones overhead, people with watches and hand devices. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nbold black ink outlines, flat bright colours, dot-pattern shading, dramatic angle\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "98049966dca127e1eefca6839bfeff5fc77d6b377441ad112c41bf143950124d": "on vacation\n\nMu is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: stone houses among tall trees, apartment buildings shaped like oversized medieval castle towers with many windows, small drones overhead, people with watches and hand devices. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\n3D forms drawn over with hand-inked lines, halftone dots and hatching in the shadows, slightly offset colour printing, bold graphic colour\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "guard",
+   "prompt_sha256": "f77bf72327f08a333cf4a18e9d4ef49276ef5257d0efa1ec5b410848bdefb4a4",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00013545,
+   "cost_source": "reported",
+   "worst_usd": 0.00055065,
+   "at": "2026-11-10T01:39:13.455Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "898a3df151814f6204b440c729f6f768bd29454911c60e5c7a11d984fddd1cb2",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00014445,
+   "cost_source": "reported",
+   "worst_usd": 0.0005563499999999999,
+   "at": "2026-11-10T01:39:14.304Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "64d0b78970f8772688d1948d86d44147316a56a01e86c505f2cf68cd9341ffb0",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00012225,
+   "cost_source": "reported",
+   "worst_usd": 0.000551325,
+   "at": "2026-11-10T01:39:15.354Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "32c3b37514834fea33367a47d5cbb55fc815f389586379c317cf01f6683b0339",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 8.0625e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.0005574,
+   "at": "2026-11-10T01:39:15.833Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "fe718168fe1809cd19717d7b6485af68b367e8729fbee6ab485214c8910bcc27",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000319425,
+   "cost_source": "reported",
+   "worst_usd": 0.0005501249999999999,
+   "at": "2026-11-10T01:39:17.100Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "98049966dca127e1eefca6839bfeff5fc77d6b377441ad112c41bf143950124d",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000137325,
+   "cost_source": "reported",
+   "worst_usd": 0.0005550749999999999,
+   "at": "2026-11-10T01:39:17.855Z"
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gpt",
+   "status": "ok",
+   "retention": {
+    "provider": "openai",
+    "zero_data_retention": false,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-10T01:39:17.984Z",
+    "kept": {
+     "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+     "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+     "source": "https://developers.openai.com/api/docs/guides/your-data",
+     "read": "2026-11-03"
+    }
+   },
+   "cost_usd": 0,
+   "at": "2026-11-10T01:39:17.984Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 1,
+   "character": "zei",
+   "words": "at a big sports game",
+   "style_row": "Comic book",
+   "style_used": "Comic book",
+   "prompt_sha256": "f77bf72327f08a333cf4a18e9d4ef49276ef5257d0efa1ec5b410848bdefb4a4",
+   "file": "bw-01-zei-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HR3J1RV3F4JWD2JCDV1BC",
+   "status": "ok",
+   "cost_usd": 0.048189,
+   "cost_source": "reported by the gateway",
+   "sha256": "0e500ede7ff6ddddf1fb7cb52645bf25e7b8ce398600a087d388f3ef0665d6f7",
+   "original_sha256": "77919ade31f571103d99e796b86a158f2e0b2140c99eb33bb7d865f08d2fb341",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:39:52.141Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "cheering in stone stands; castle towers, drones, a watch"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 4,
+   "character": "gladias",
+   "words": "going out to a party",
+   "style_row": "Comic 3D mix",
+   "style_used": "Comic 3D mix",
+   "prompt_sha256": "898a3df151814f6204b440c729f6f768bd29454911c60e5c7a11d984fddd1cb2",
+   "file": "bw-04-gladias-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HS7J7HAAVTFYHRCZJ0N7N",
+   "status": "ok",
+   "cost_usd": 0.048289,
+   "cost_source": "reported by the gateway",
+   "sha256": "d590572037233ad8a48e7c190c58f575919d3bb09cb9774c7d3889c09fc740d4",
+   "original_sha256": "7c115664dc063f1ca94020892bbab3820e6bb9c4200b61855232873e7c7e3d2f",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:40:31.511Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "champagne on a terrace; tower blocks with many windows, drones"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 5,
+   "character": "bai",
+   "words": "as the villain",
+   "style_row": "Comic book",
+   "style_used": "Comic book",
+   "prompt_sha256": "64d0b78970f8772688d1948d86d44147316a56a01e86c505f2cf68cd9341ffb0",
+   "file": "bw-05-bai-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HTB9DEBYF3T3YM0D7AQT8",
+   "status": "ok",
+   "cost_usd": 0.048189,
+   "cost_source": "reported by the gateway",
+   "sha256": "d16ca05b26c210b50bc34ae3f16268cbe265732194828e833dceedf85a3387bd",
+   "original_sha256": "3c7a169abfa033414fcf137cda89b67901430884513ad690efec0ed1071b46ce",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:41:06.898Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "caped villain with a glowing orb; window towers, drones, guards"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 7,
+   "character": "seila",
+   "words": "walking home in the rain at night",
+   "style_row": "Comic 3D mix",
+   "style_used": "Comic 3D mix",
+   "prompt_sha256": "32c3b37514834fea33367a47d5cbb55fc815f389586379c317cf01f6683b0339",
+   "file": "bw-07-seila-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HVDZA3H6MFFQ7SW4PZD35",
+   "status": "ok",
+   "cost_usd": 0.048294,
+   "cost_source": "reported by the gateway",
+   "sha256": "d4b0e32675c4467845d436f5ab3c275f9826b53563d0b2863aaecb008c439a35",
+   "original_sha256": "ebc9c5ce9069c8639a81b8e10551de3ebe23cc7cdca8d3baa6b4a0186ace4195",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:41:42.356Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "walking a rainy stone lane; lit towers, drones"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 10,
+   "character": "deluin",
+   "words": "at a concert",
+   "style_row": "Comic book",
+   "style_used": "Comic book",
+   "prompt_sha256": "fe718168fe1809cd19717d7b6485af68b367e8729fbee6ab485214c8910bcc27",
+   "file": "bw-10-deluin-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HWGGWNJPXCQ3YNH7F0Z9D",
+   "status": "ok",
+   "cost_usd": 0.048174,
+   "cost_source": "reported by the gateway",
+   "sha256": "44c50aae5b7883c3ee36c61b9dd9e8ed46b7a2a569a3865468c4aae05cf1a14b",
+   "original_sha256": "c8c0eb48c5d6490a06c97198d016416be3c86da05e7b90785dccc83fcbc5abc1",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:42:18.880Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "partly",
+    "shareable": "yes",
+    "promo_star": false,
+    "reading": "cheering at an outdoor concert; the stage itself is modern"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 12,
+   "character": "mu",
+   "words": "on vacation",
+   "style_row": "Comic 3D mix",
+   "style_used": "Comic 3D mix",
+   "prompt_sha256": "98049966dca127e1eefca6839bfeff5fc77d6b377441ad112c41bf143950124d",
+   "file": "bw-12-mu-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HXM6QE8CDR0HHF33E84KX",
+   "status": "ok",
+   "cost_usd": 0.048254,
+   "cost_source": "reported by the gateway",
+   "sha256": "f4f27a2874eced1731f4f98dbb07b10ef9efa37f2365397ec9e122f2026bcbdf",
+   "original_sha256": "9f486fe57dbbcdc3416fcf8e86b960303c7005c5fbae215a5f5e22c548b31021",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:42:56.430Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "a cold drink at a caf\u00e9; window towers, drones, a hand device"
+   }
+  }
+ ],
+ "judged_by_eye": [
+  {
+   "case": 1,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "cheering in stone stands; castle towers, drones, a watch"
+  },
+  {
+   "case": 4,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "champagne on a terrace; tower blocks with many windows, drones"
+  },
+  {
+   "case": 5,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "caped villain with a glowing orb; window towers, drones, guards"
+  },
+  {
+   "case": 7,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "walking a rainy stone lane; lit towers, drones"
+  },
+  {
+   "case": 10,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "partly",
+   "shareable": "yes",
+   "promo_star": false,
+   "reading": "cheering at an outdoor concert; the stage itself is modern"
+  },
+  {
+   "case": 12,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "a cold drink at a caf\u00e9; window towers, drones, a hand device"
+  }
+ ]
+}

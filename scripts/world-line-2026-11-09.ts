@@ -1,0 +1,204 @@
+/**
+ * World-line test (2026-11-09, owner-approved, cap $2.00, stop before $1.90): 12 cases, two per character, each from the
+ * character's default base front (as the route sends it), WITHOUT and WITH a world line. "Without" is the route's own
+ * remixPrompt in the shipping order (origin/challenge-models d4ff5219 merged in); "with" inserts WORLD_LINE right after
+ * the scene line, nothing else changed. FLUX.2 [klein] 4B edit uses one fixed seed for both; GPT Image 2.5 Sunburst and
+ * Gemini 3.1 Flash Image take no seed, so their with/without pairs differ by chance too. Run: FLUX and GPT on all 12
+ * (with and without), Gemini on cases 1, 5, 8, 11, then cases 3 and 10 only while the cap allows. Style row: Same as
+ * this picture / Animated series (BASE_STYLE.text) / Random, recorded as drawing "Animated series". Prompt check (1,200
+ * tokens) on every prompt first. Test pictures only: NO database, nothing published. Drafted by the coding agent
+ * (Claude, a closed model by Anthropic). DRAFT.
+ *
+ *   npx tsx --conditions=react-server --env-file=.env.local scripts/world-line-2026-11-09.ts <outdir>
+ */
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import sharp from 'sharp';
+import { IMAGES } from '../src/lib/config';
+import { remixPrompt } from '../src/lib/challenge/make';
+import { BASE_STYLE } from '../src/lib/challenge/base-style';
+import { lookFor, SCENE_LINE } from '../src/lib/challenge/looks';
+import { CHALLENGE_MODELS } from '../src/lib/challenge/models';
+import { challengeClosedRequest, hasC2pa, parseClosed, toWide } from '../src/lib/images/closed';
+import type { SheetModel } from '../src/lib/images/sheet-models';
+import { checkPrompt, guardWorstUsd } from '../src/lib/images/guard';
+import { blockedName } from '../src/lib/images/rules';
+import { assertGatewayOptions, retentionCheck, type ClosedImageModel } from './lib/batch-model';
+
+const ROOT = path.resolve(import.meta.dirname, '..');
+const DOC = path.join(ROOT, 'docs/starting-sheet-drafts/world-line-2026-11-09');
+const LEDGER = path.join(DOC, 'ledger.json');
+const OUT = process.argv[2];
+if (!OUT) throw new Error('usage: world-line-2026-11-09.ts <outdir>');
+const REFS = path.join(OUT, '..', 'style-test', 'refs');
+mkdirSync(path.join(OUT, 'full'), { recursive: true });
+mkdirSync(DOC, { recursive: true });
+
+const STOP_AT = 1.9;
+const SEED = 20261109;
+const GUARD_TOKENS = IMAGES.designs.guardMaxTokens;
+const WORST = { flux: 0.0125, gpt: 0.08, gemini: 0.09 };
+const sha = (b: Buffer) => createHash('sha256').update(b).digest('hex');
+delete process.env.GROQ_API_KEY;
+delete process.env.VERCEL_OIDC_TOKEN;
+const GW_KEY = process.env.AI_GATEWAY_API_KEY;
+const FAL_KEY = process.env.FAL_KEY;
+if (!GW_KEY || !FAL_KEY) throw new Error('missing a key');
+const fakeRequest = new Request('http://localhost/local-script');
+const REF_INFO = JSON.parse(readFileSync(path.join(REFS, 'refs.json'), 'utf8')) as Record<string, { version: string; url: string; sha256: string }>;
+const NAME: Record<string, string> = { zei: 'Zei', gladias: 'Gladias', bai: 'Bai', seila: 'Seila', deluin: 'Deluin', mu: 'Mu' };
+
+type StyleRow = 'Same' | 'Animated series' | 'Random';
+export const CASES: { n: number; ch: string; words: string; style: StyleRow }[] = [
+  { n: 1, ch: 'zei', words: 'at a big sports game', style: 'Same' },
+  { n: 2, ch: 'zei', words: 'after winning a big match', style: 'Animated series' },
+  { n: 3, ch: 'gladias', words: 'older and wiser', style: 'Random' },
+  { n: 4, ch: 'gladias', words: 'going out to a party', style: 'Same' },
+  { n: 5, ch: 'bai', words: 'as the villain', style: 'Animated series' },
+  { n: 6, ch: 'bai', words: 'training really hard', style: 'Random' },
+  { n: 7, ch: 'seila', words: 'walking home in the rain at night', style: 'Same' },
+  { n: 8, ch: 'seila', words: 'on a first date', style: 'Animated series' },
+  { n: 9, ch: 'deluin', words: 'in their school days', style: 'Random' },
+  { n: 10, ch: 'deluin', words: 'at a concert', style: 'Same' },
+  { n: 11, ch: 'mu', words: 'hiding from someone', style: 'Animated series' },
+  { n: 12, ch: 'mu', words: 'on vacation', style: 'Random' },
+];
+const styleText = (s: StyleRow) => (s === 'Same' ? '' : BASE_STYLE.text);
+export const WORLD_LINE = "Set it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.";
+type Variant = 'without' | 'with';
+export function promptFor(c: (typeof CASES)[number], v: Variant): string {
+  const p = remixPrompt({ words: c.words, name: NAME[c.ch], look: lookFor(c.ch), style: styleText(c.style) });
+  if (v === 'without') return p;
+  if (p.split(SCENE_LINE).length !== 2) throw new Error('the scene line is not in the prompt once');
+  return p.replace(SCENE_LINE, `${SCENE_LINE}\n\n${WORLD_LINE}`);
+}
+
+const ledger: any = existsSync(LEDGER) ? JSON.parse(readFileSync(LEDGER, 'utf8')) : { // eslint-disable-line @typescript-eslint/no-explicit-any
+  about: 'World-line test 2026-11-09: 12 cases, without and with the world line; FLUX and GPT on all 12, Gemini on 1, 5, 8, 11 (then 3, 10 within the cap). Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.', world_line: WORLD_LINE, seed_note: 'FLUX: one seed for with and without; GPT and Gemini take no seed.',
+  cap_usd: 2, stop_at_usd: STOP_AT, seed: SEED, base_style: BASE_STYLE,
+  random_note: 'Random recorded as drawing "Animated series", as the coordinator instructed (Random draws only the offered style).',
+  refs: REF_INFO, prompts: {}, calls: [],
+};
+const save = () => writeFileSync(LEDGER, JSON.stringify(ledger, null, 1));
+const spent = () => ledger.calls.reduce((n: number, c: any) => n + c.cost_usd, 0); // eslint-disable-line @typescript-eslint/no-explicit-any
+const now = () => new Date().toISOString();
+class Stop extends Error {}
+const gate = (what: string, worst: number) => { if (spent() + worst > STOP_AT + 1e-9) throw new Stop(`STOP before ${what}: spent $${spent().toFixed(4)} + worst $${worst} > $${STOP_AT}`); };
+const front = (ch: string) => {
+  const b = readFileSync(path.join(REFS, `${ch}.jpg`));
+  if (sha(b) !== REF_INFO[ch].sha256) throw new Error(`${ch}: reference sha256 differs`);
+  return b;
+};
+
+const guardOk = new Map<string, boolean>();
+for (const c of ledger.calls) if (c.kind === 'guard') guardOk.set(c.prompt_sha256, c.status === 'ok');
+async function guard(prompt: string): Promise<boolean> {
+  const h = sha(Buffer.from(prompt));
+  ledger.prompts[h] = prompt;
+  if (guardOk.has(h)) return guardOk.get(h)!;
+  const bn = blockedName(prompt);
+  if (bn) { ledger.calls.push({ kind: 'guard', prompt_sha256: h, status: 'blocked-name', note: bn, cost_usd: 0, at: now() }); guardOk.set(h, false); save(); return false; }
+  const w = guardWorstUsd(prompt.length, GUARD_TOKENS);
+  gate('a prompt check', w);
+  const g = await checkPrompt(prompt, fakeRequest, GUARD_TOKENS);
+  ledger.calls.push({ kind: 'guard', prompt_sha256: h, max_tokens: GUARD_TOKENS, status: g.allow ? 'ok' : 'guard-refused', note: g.category ?? undefined, cost_usd: g.costUsd, cost_source: 'reported', worst_usd: w, at: now() });
+  guardOk.set(h, g.allow); save();
+  return g.allow;
+}
+
+type ModelKey = 'flux' | 'gpt' | 'gemini';
+async function make(model: ModelKey, c: (typeof CASES)[number], v: Variant, attempt: number): Promise<void> {
+  const prompt = promptFor(c, v);
+  const h = sha(Buffer.from(prompt));
+  const file = `wl-${String(c.n).padStart(2, '0')}-${c.ch}-${model}-${v}.jpg`;
+  const base = { kind: 'picture', model, variant: v, case: c.n, character: c.ch, words: c.words, style_row: c.style, style_used: c.style === 'Same' ? null : BASE_STYLE.title, prompt_sha256: h, file };
+  const worst = WORST[model];
+  gate(file, worst);
+  let row: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  try {
+    if (model === 'flux') {
+      const endpoint = IMAGES.editModel.endpoint;
+      const settings = { image_size: { width: IMAGES.size.width, height: IMAGES.size.height }, num_images: 1, enable_safety_checker: true, output_format: 'jpeg', sync_mode: true, seed: SEED };
+      const res = await fetch(`https://fal.run/${endpoint}`, { method: 'POST', headers: { Authorization: `Key ${FAL_KEY}`, 'Content-Type': 'application/json', 'X-Fal-Store-IO': '0' }, body: JSON.stringify({ prompt, image_urls: [`data:image/jpeg;base64,${front(c.ch).toString('base64')}`], ...settings }) });
+      const units = Number(res.headers.get('x-fal-billable-units') ?? NaN);
+      const text = await res.text();
+      let j: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+      try { j = JSON.parse(text); } catch { /* not json */ }
+      const mm = String(j.images?.[0]?.url ?? '').match(/^data:([^;]+);base64,(.+)$/);
+      if (!res.ok || !mm) {
+        const refused = res.status === 422 || /content|policy|safety|nsfw/i.test(text);
+        row = { ...base, endpoint, host: 'fal.ai', status: refused ? 'refused' : 'error', note: `${res.status} ${text.slice(0, 300)}`, cost_usd: refused ? 0 : worst, cost_source: refused ? '4xx: not billed' : 'worst counted', at: now() };
+      } else {
+        const raw = Buffer.from(mm[2], 'base64');
+        writeFileSync(path.join(OUT, 'full', file), raw);
+        const nsfw = Boolean(j.has_nsfw_concepts?.[0]);
+        row = { ...base, endpoint, host: 'fal.ai', request_id: res.headers.get('x-fal-request-id'), seed: j.seed ?? SEED, status: nsfw ? 'filtered' : 'ok', note: nsfw ? 'fal safety checker flagged it' : undefined, cost_usd: Number.isFinite(units) ? units * IMAGES.editPricePerMp : worst, cost_source: Number.isFinite(units) ? `fal's x-fal-billable-units (${units}) x $${IMAGES.editPricePerMp}/megapixel` : 'worst counted', sha256: sha(raw), settings, at: now() };
+      }
+    } else {
+      const m = CHALLENGE_MODELS.find((x) => x.id === (model === 'gpt' ? 'gpt-image-2.5-sunburst' : 'gemini-3.1-flash-image'))!;
+      const req = challengeClosedRequest(m, prompt, front(c.ch));
+      assertGatewayOptions(m.id as ClosedImageModel, req.body as never);
+      const res = await fetch(req.url, { method: 'POST', headers: { Authorization: `Bearer ${GW_KEY}`, 'Content-Type': 'application/json' }, body: JSON.stringify(req.body) });
+      const text = await res.text();
+      let j: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+      try { j = JSON.parse(text); } catch { /* not json */ }
+      const reported = Number(model === 'gpt' ? j.providerMetadata?.gateway?.cost : (j.usage?.cost ?? j.providerMetadata?.gateway?.cost));
+      const ok = Number.isFinite(reported);
+      try {
+        const pic = parseClosed({ id: m.id } as SheetModel, res.status, j);
+        const meta = await sharp(pic.bytes).metadata();
+        const w = await toWide(pic.bytes, IMAGES.size);
+        writeFileSync(path.join(OUT, 'full', file), w.bytes);
+        row = { ...base, endpoint: m.call.endpoint, host: m.call.host, request_id: pic.requestId, status: 'ok', cost_usd: ok ? reported : worst, cost_source: ok ? 'reported by the gateway' : 'worst counted', sha256: sha(w.bytes), original_sha256: sha(pic.bytes), original_size: `${meta.width}x${meta.height}`, crop: { words: w.words, ...w.crop }, settings: req.settings, content_credentials: hasC2pa(pic.bytes) ? 'C2PA manifest in the original' : 'none found', at: now() };
+      } catch (e) {
+        const refused = (res.ok && model === 'gemini') || /safety|moderat|policy|blocked|prohibit/i.test(text);
+        row = { ...base, endpoint: m.call.endpoint, host: m.call.host, status: refused ? 'refused' : 'error', note: `${(e as Error).message} ${text.slice(0, 400)}`, cost_usd: ok ? reported : (res.status >= 400 && res.status < 500 ? 0 : worst), cost_source: ok ? 'reported by the gateway' : 'not reported', at: now() };
+      }
+    }
+  } catch (e) {
+    if (e instanceof Stop) throw e;
+    row = { ...base, status: 'error', note: String((e as Error).message).slice(0, 300), cost_usd: worst, cost_source: 'worst counted', at: now() };
+  }
+  row.attempt = attempt; row.worst_usd = worst;
+  ledger.calls.push(row); save();
+  console.log(`${file}: ${row.status} $${row.cost_usd.toFixed(4)} (spent $${spent().toFixed(4)})${row.note ? ` ${String(row.note).slice(0, 160)}` : ''}`);
+  if (row.status === 'error' && attempt === 1) return make(model, c, v, 2);
+}
+
+const GEMINI_CORE = [1, 5, 8, 11];
+const GEMINI_EXTRA = [3, 10];
+async function main() {
+  try {
+    for (const c of CASES) for (const v of ['without', 'with'] as const) if (!(await guard(promptFor(c, v)))) console.log(`case ${c.n} ${v}: the prompt check refused it`);
+    const plan: [ModelKey, number[]][] = [['flux', CASES.map((c) => c.n)], ['gpt', CASES.map((c) => c.n)], ['gemini', GEMINI_CORE], ['gemini', GEMINI_EXTRA]];
+    const listed = new Set<string>();
+    for (const [model, ns] of plan) {
+      if (model !== 'flux' && !listed.has(model)) {
+        listed.add(model);
+        const { refusal, retention } = await retentionCheck(model === 'gpt' ? 'gpt-image-2.5-sunburst' : 'gemini-3.1-flash-image');
+        ledger.calls.push({ kind: 'endpoint-list', model, status: refusal ? 'refused' : 'ok', note: refusal ?? undefined, retention, cost_usd: 0, at: now() }); save();
+        if (refusal) throw new Stop(refusal);
+      }
+      for (const n of ns) for (const v of ['without', 'with'] as const) {
+        const c = CASES.find((x) => x.n === n)!;
+        const h = sha(Buffer.from(promptFor(c, v)));
+        const file = `wl-${String(c.n).padStart(2, '0')}-${c.ch}-${model}-${v}.jpg`;
+        if (!guardOk.get(h)) {
+          if (!ledger.calls.some((x: any) => x.file === file)) { ledger.calls.push({ kind: 'picture', model, variant: v, case: c.n, character: c.ch, words: c.words, file, prompt_sha256: h, status: 'guard-refused', cost_usd: 0, at: now() }); save(); } // eslint-disable-line @typescript-eslint/no-explicit-any
+          continue;
+        }
+        const prior = ledger.calls.filter((x: any) => x.kind === 'picture' && x.file === file); // eslint-disable-line @typescript-eslint/no-explicit-any
+        if (prior.some((x: any) => x.status !== 'error') || prior.length >= 2) continue; // eslint-disable-line @typescript-eslint/no-explicit-any
+        // A pair is made whole or not at all: check room for both before the first of the pair.
+        if (v === 'without') gate(`${file} and its pair`, 2 * WORST[model]);
+        await make(model, c, v, prior.length + 1);
+      }
+    }
+    console.log(`DONE spent $${spent().toFixed(4)}`);
+  } catch (e) {
+    if (e instanceof Stop) { console.log(e.message); save(); process.exit(2); }
+    throw e;
+  }
+}
+main();

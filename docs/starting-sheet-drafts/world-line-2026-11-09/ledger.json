@@ -1,0 +1,3877 @@
+{
+ "about": "World-line test 2026-11-09: 12 cases, without and with the world line; FLUX and GPT on all 12, Gemini on 1, 5, 8, 11 (then 3, 10 within the cap). Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "world_line": "Set it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.",
+ "seed_note": "FLUX: one seed for with and without; GPT and Gemini take no seed.",
+ "cap_usd": 2,
+ "stop_at_usd": 1.9,
+ "seed": 20261109,
+ "base_style": {
+  "title": "Animated series",
+  "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.",
+  "source": "docs/starting-sheet-drafts/directions/plan.json, styles[\"Animated series\"] (branch challenge-styles)"
+ },
+ "random_note": "Random recorded as drawing \"Animated series\", as the coordinator instructed (Random draws only the offered style).",
+ "refs": {
+  "zei": {
+   "version": "bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d",
+   "url": "https://pictures.snowmoon.party/images/readers/131f235227a54b06f6f11253f37a09b5.jpg",
+   "sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c"
+  },
+  "gladias": {
+   "version": "68364375-0f33-46fd-9755-2fd2b551198a",
+   "url": "https://pictures.snowmoon.party/images/readers/b9b6c00952cb47e936dc601676a7c34b.jpg",
+   "sha256": "b9b6c00952cb47e936dc601676a7c34b916355e8b4f979db4d7465ea024d0947"
+  },
+  "bai": {
+   "version": "110d5973-31c2-4d96-9a88-5838d8a6d868",
+   "url": "https://pictures.snowmoon.party/images/readers/01538922456b9bf61192ed291b8f2659.jpg",
+   "sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96"
+  },
+  "seila": {
+   "version": "1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba",
+   "url": "https://pictures.snowmoon.party/images/readers/3ef4825ca8f49aabf05ddcdaa8119e9b.jpg",
+   "sha256": "3ef4825ca8f49aabf05ddcdaa8119e9b229f523a3dfc1dc2af0238cbc95a4d13"
+  },
+  "deluin": {
+   "version": "75a94420-df70-4f43-a3a6-4c2b571e72ab",
+   "url": "https://pictures.snowmoon.party/images/readers/2b45d17da426df0304fc84ded0f3f0c4.jpg",
+   "sha256": "2b45d17da426df0304fc84ded0f3f0c464472c55c96aa517735f9837368432d4"
+  },
+  "mu": {
+   "version": "15a9af1d-9eef-4e25-be57-738d9823dd74",
+   "url": "https://pictures.snowmoon.party/images/readers/3e6ae696865441d24aa1dde262dac043.jpg",
+   "sha256": "3e6ae696865441d24aa1dde262dac043964ab8c9633d19174eb7074091087fb5"
+  }
+ },
+ "prompts": {
+  "169790e98b01638c0a89b23ddd9491e513ebbfef9020faaf841ff6d32b389b2a": "at a big sports game\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "55ed75b320466d243c07b96eb1eb80b3692520b805c7be1dd168d137f32746f8": "at a big sports game\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "dbb4b0ed2709864bb58491724db3432ee94c28202ed243c3c672f123ef14ca60": "after winning a big match\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "a199a361cb2b884db6272910029dbfc492c707d867260cdd3d0ea9a2b1ebb79b": "after winning a big match\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "2c7b9c212e9861c253d0afe066c65b64f98231c97796865914331ef8ef1868ac": "older and wiser\n\nGladias is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm light-brown skin, a short beard and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "beeb1c9e3e554c3017e9cd046c7845fafd0112efb213987f7ba232c6d4cd989d": "older and wiser\n\nGladias is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm light-brown skin, a short beard and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "2eb4bad81af4e05826731f0de85fa4db13079ef6584dc9be2f16813bcb0bdab7": "going out to a party\n\nGladias is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm light-brown skin, a short beard and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "e21827b91a99f5f2d6b385aa9557e99d04251e6accf247d3cd00bf49ba532124": "going out to a party\n\nGladias is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm light-brown skin, a short beard and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "a61fdbe2071d991147e2b4d5e79fb7bede0529ba4517064abebf48794175f96d": "as the villain\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "93c6bff8a1a1e052c1e0bf33e096d68cf407350e175272e68f133eb971d5d129": "as the villain\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "30da43a088de99894871e8a70eeb162d5a5e6a7d2011c198377a3907185a205e": "training really hard\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "eac087e1444e32bbbf988fd38bccdce93c37ed8800eedd43a1d5b2c1355741e0": "training really hard\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "b4863f899e3574efdbed603d80ac78c8575831c4b93201fbc755c89ac12ca90a": "walking home in the rain at night\n\nSeila is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "3a4a9adc9f1b5e9ed97632a6def5eff6d78b55e08c902974cbac578f5fb27088": "walking home in the rain at night\n\nSeila is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "5e6e430111f78ebbb66edb280d3a9e4ec3402cf1001afe25ef3192adfe5fc521": "on a first date\n\nSeila is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "c97461d94e85b44981f3c676df70eda9e604d46d36fe469988f0b7c3692073c0": "on a first date\n\nSeila is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "0bb3b5fef35547f840f2e3fac8ac79dc7bb19eccd82775d7dc68cf798be1b220": "in their school days\n\nDeluin is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm tan skin and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "9eb578d64980e5ca78fb7e7f4242f4a462cc9027f92e54f90b663fa13add83d3": "in their school days\n\nDeluin is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm tan skin and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "490455914c78cb67da525b96373785724b9ee6a23e710bf03387dd977ad9aef3": "at a concert\n\nDeluin is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm tan skin and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "d62b1b94b4c48545af980c99df4628dff386ae57db75af74777b7172f61d19a6": "at a concert\n\nDeluin is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm tan skin and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "83fd6f0d61aeea1d738e7c3766f47c77af39a73e456de5f249d16d11a7a69386": "hiding from someone\n\nMu is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "03a24c26045ad07149b477a1394582e70bf040106eef92a310d2bdf53ec80dce": "hiding from someone\n\nMu is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "bb8151cb48d22f32c541f130e2b2812cbde348a2bcd343efc0628b15f2af2e40": "on vacation\n\nMu is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "0251eb3b599bfeab9dd1d20997ff19cb401ee6afd65ef35a1423c4441fb6fc70": "on vacation\n\nMu is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in Snowmoon's world: quiet technology woven into old stone, castle towers, mountains and gardens. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "guard",
+   "prompt_sha256": "169790e98b01638c0a89b23ddd9491e513ebbfef9020faaf841ff6d32b389b2a",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00014025,
+   "cost_source": "reported",
+   "worst_usd": 0.000520125,
+   "at": "2026-11-10T01:23:03.237Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "55ed75b320466d243c07b96eb1eb80b3692520b805c7be1dd168d137f32746f8",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000129675,
+   "cost_source": "reported",
+   "worst_usd": 0.0005363249999999999,
+   "at": "2026-11-10T01:23:03.922Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "dbb4b0ed2709864bb58491724db3432ee94c28202ed243c3c672f123ef14ca60",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 9.8025e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.000546525,
+   "at": "2026-11-10T01:23:04.469Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "a199a361cb2b884db6272910029dbfc492c707d867260cdd3d0ea9a2b1ebb79b",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00017655,
+   "cost_source": "reported",
+   "worst_usd": 0.0005627249999999999,
+   "at": "2026-11-10T01:23:05.289Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "2c7b9c212e9861c253d0afe066c65b64f98231c97796865914331ef8ef1868ac",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000104175,
+   "cost_source": "reported",
+   "worst_usd": 0.0005472,
+   "at": "2026-11-10T01:23:05.825Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "beeb1c9e3e554c3017e9cd046c7845fafd0112efb213987f7ba232c6d4cd989d",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001353,
+   "cost_source": "reported",
+   "worst_usd": 0.0005633999999999999,
+   "at": "2026-11-10T01:23:06.465Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "2eb4bad81af4e05826731f0de85fa4db13079ef6584dc9be2f16813bcb0bdab7",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00011985,
+   "cost_source": "reported",
+   "worst_usd": 0.00052155,
+   "at": "2026-11-10T01:23:07.255Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "e21827b91a99f5f2d6b385aa9557e99d04251e6accf247d3cd00bf49ba532124",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000135075,
+   "cost_source": "reported",
+   "worst_usd": 0.0005377499999999999,
+   "at": "2026-11-10T01:23:07.983Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "a61fdbe2071d991147e2b4d5e79fb7bede0529ba4517064abebf48794175f96d",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000221625,
+   "cost_source": "reported",
+   "worst_usd": 0.0005468249999999999,
+   "at": "2026-11-10T01:23:08.884Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "93c6bff8a1a1e052c1e0bf33e096d68cf407350e175272e68f133eb971d5d129",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00017385,
+   "cost_source": "reported",
+   "worst_usd": 0.000563025,
+   "at": "2026-11-10T01:23:09.731Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "30da43a088de99894871e8a70eeb162d5a5e6a7d2011c198377a3907185a205e",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000216825,
+   "cost_source": "reported",
+   "worst_usd": 0.000547275,
+   "at": "2026-11-10T01:23:10.603Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "eac087e1444e32bbbf988fd38bccdce93c37ed8800eedd43a1d5b2c1355741e0",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00015435,
+   "cost_source": "reported",
+   "worst_usd": 0.0005634749999999999,
+   "at": "2026-11-10T01:23:11.581Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "b4863f899e3574efdbed603d80ac78c8575831c4b93201fbc755c89ac12ca90a",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000106125,
+   "cost_source": "reported",
+   "worst_usd": 0.0005226,
+   "at": "2026-11-10T01:23:12.360Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "3a4a9adc9f1b5e9ed97632a6def5eff6d78b55e08c902974cbac578f5fb27088",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00014025,
+   "cost_source": "reported",
+   "worst_usd": 0.0005388,
+   "at": "2026-11-10T01:23:13.254Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "5e6e430111f78ebbb66edb280d3a9e4ec3402cf1001afe25ef3192adfe5fc521",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 9.4875e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.000547275,
+   "at": "2026-11-10T01:23:14.202Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "c97461d94e85b44981f3c676df70eda9e604d46d36fe469988f0b7c3692073c0",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001566,
+   "cost_source": "reported",
+   "worst_usd": 0.0005634749999999999,
+   "at": "2026-11-10T01:23:15.051Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "0bb3b5fef35547f840f2e3fac8ac79dc7bb19eccd82775d7dc68cf798be1b220",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 9.7575e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.000546225,
+   "at": "2026-11-10T01:23:15.725Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "9eb578d64980e5ca78fb7e7f4242f4a462cc9027f92e54f90b663fa13add83d3",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001404,
+   "cost_source": "reported",
+   "worst_usd": 0.000562425,
+   "at": "2026-11-10T01:23:16.557Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "490455914c78cb67da525b96373785724b9ee6a23e710bf03387dd977ad9aef3",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000182625,
+   "cost_source": "reported",
+   "worst_usd": 0.0005195999999999999,
+   "at": "2026-11-10T01:23:17.398Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "d62b1b94b4c48545af980c99df4628dff386ae57db75af74777b7172f61d19a6",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00026325,
+   "cost_source": "reported",
+   "worst_usd": 0.0005357999999999999,
+   "at": "2026-11-10T01:23:18.602Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "83fd6f0d61aeea1d738e7c3766f47c77af39a73e456de5f249d16d11a7a69386",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 9.885e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.0005468999999999999,
+   "at": "2026-11-10T01:23:19.225Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "03a24c26045ad07149b477a1394582e70bf040106eef92a310d2bdf53ec80dce",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 9.9675e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.0005631,
+   "at": "2026-11-10T01:23:19.832Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "bb8151cb48d22f32c541f130e2b2812cbde348a2bcd343efc0628b15f2af2e40",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001152,
+   "cost_source": "reported",
+   "worst_usd": 0.0005463,
+   "at": "2026-11-10T01:23:20.581Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "0251eb3b599bfeab9dd1d20997ff19cb401ee6afd65ef35a1423c4441fb6fc70",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000127725,
+   "cost_source": "reported",
+   "worst_usd": 0.0005625,
+   "at": "2026-11-10T01:23:21.518Z"
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "without",
+   "case": 1,
+   "character": "zei",
+   "words": "at a big sports game",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "169790e98b01638c0a89b23ddd9491e513ebbfef9020faaf841ff6d32b389b2a",
+   "file": "wl-01-zei-flux-without.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-76b3-7fc2-8a7d-38913ac0231b",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "8ef0db309ffafa37fefac3b7eec027292f46a2be25be1b4121bc2b079b9892d9",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:23.356Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "standing on a modern stadium pitch"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "with",
+   "case": 1,
+   "character": "zei",
+   "words": "at a big sports game",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "55ed75b320466d243c07b96eb1eb80b3692520b805c7be1dd168d137f32746f8",
+   "file": "wl-01-zei-flux-with.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-7db3-7f52-a2dd-7fa0a97560c9",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "108a3e1a73ebca85d6a77936423d871d2e728fcaad755a8f0fc86ff05440515c",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:25.398Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "partly",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "no",
+    "reading": "just standing; a stadium in a castle valley behind"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "without",
+   "case": 2,
+   "character": "zei",
+   "words": "after winning a big match",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "dbb4b0ed2709864bb58491724db3432ee94c28202ed243c3c672f123ef14ca60",
+   "file": "wl-02-zei-flux-without.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-8493-7f23-9fb1-e60dc7517b9b",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "99547e2c02d1669bbc2c458960595f127c845c9b90dc02f4ec7039ca706dcb8d",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:26.555Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "no",
+    "reading": "the base pose on grey"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "with",
+   "case": 2,
+   "character": "zei",
+   "words": "after winning a big match",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "a199a361cb2b884db6272910029dbfc492c707d867260cdd3d0ea9a2b1ebb79b",
+   "file": "wl-02-zei-flux-with.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-8913-7f10-aa3b-748609a596c9",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "a711c5fff4d44ce9376aee86b5350b0f98de21e83f234130f6f56a733503b2e9",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:28.228Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "no",
+    "reading": "the base pose before a fairy-tale castle"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "without",
+   "case": 3,
+   "character": "gladias",
+   "words": "older and wiser",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "2c7b9c212e9861c253d0afe066c65b64f98231c97796865914331ef8ef1868ac",
+   "file": "wl-03-gladias-flux-without.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-8fcf-7681-b768-4ecad29a7bce",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "9973073002c8d44387efd8c1ba7b4b67d1ec1a9333c567bd077a9715b481a9e4",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:29.572Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "no",
+    "reading": "white hair and beard, plain grey background"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "with",
+   "case": 3,
+   "character": "gladias",
+   "words": "older and wiser",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "beeb1c9e3e554c3017e9cd046c7845fafd0112efb213987f7ba232c6d4cd989d",
+   "file": "wl-03-gladias-flux-with.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-94f7-79b3-9037-f63e7fdd8ca5",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "3f473a1426d6754332f19b8deef01ddaa5a2d5e0ba019be67b9a83e573f2c851",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:31.181Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "white hair and beard before castles"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "without",
+   "case": 4,
+   "character": "gladias",
+   "words": "going out to a party",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "2eb4bad81af4e05826731f0de85fa4db13079ef6584dc9be2f16813bcb0bdab7",
+   "file": "wl-04-gladias-flux-without.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-9b2b-78f0-9f41-54bc4be3ea2e",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "946f03cf1f86d19498aa7988e7fcd191389fec61b5959583501cfc4378489562",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:32.917Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "at a modern house party"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "with",
+   "case": 4,
+   "character": "gladias",
+   "words": "going out to a party",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "e21827b91a99f5f2d6b385aa9557e99d04251e6accf247d3cd00bf49ba532124",
+   "file": "wl-04-gladias-flux-with.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-a1fb-7011-857d-4722ca436b8d",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "2c145d1f8fa7a874c3bc7c8b855b7598b292a262c3d22b210b48da3b6514712c",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:34.408Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "partly",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "no",
+    "reading": "standing in a castle street with people"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "without",
+   "case": 5,
+   "character": "bai",
+   "words": "as the villain",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "a61fdbe2071d991147e2b4d5e79fb7bede0529ba4517064abebf48794175f96d",
+   "file": "wl-05-bai-flux-without.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-a7cb-7e92-ae55-14be6daab7d1",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "1ced5140daaaf06f075e6bccb5ca1ee90ee2080d322e94d96b33968b2b8f50ac",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:35.598Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "no",
+    "reading": "the base pose on grey"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "with",
+   "case": 5,
+   "character": "bai",
+   "words": "as the villain",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "93c6bff8a1a1e052c1e0bf33e096d68cf407350e175272e68f133eb971d5d129",
+   "file": "wl-05-bai-flux-with.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-ac7c-7401-ae68-dd9e5b879e6d",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "70afe7728b0b7240abe3443538b10790f404cf084ccaaccb462efd83f3f1ca92",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:37.213Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "no",
+    "reading": "the base pose before a castle"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "without",
+   "case": 6,
+   "character": "bai",
+   "words": "training really hard",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "30da43a088de99894871e8a70eeb162d5a5e6a7d2011c198377a3907185a205e",
+   "file": "wl-06-bai-flux-without.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-b2cb-72d1-9961-f76e8ef78115",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "85e4b2f89abcb5dff265f33b03af68128b95f8e40514f5166bae0219e474574d",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:38.421Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "no",
+    "reading": "the base pose on grey"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "with",
+   "case": 6,
+   "character": "bai",
+   "words": "training really hard",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "eac087e1444e32bbbf988fd38bccdce93c37ed8800eedd43a1d5b2c1355741e0",
+   "file": "wl-06-bai-flux-with.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-b777-7821-a324-fc3190d2e82d",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "69f7d8f328f040e2bdae627d4ab0d2266ab7b7127ee7096600985d801c34e421",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:40.088Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "no",
+    "reading": "the base pose before a castle"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "without",
+   "case": 7,
+   "character": "seila",
+   "words": "walking home in the rain at night",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "b4863f899e3574efdbed603d80ac78c8575831c4b93201fbc755c89ac12ca90a",
+   "file": "wl-07-seila-flux-without.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-bdfb-79a3-b5e8-8b57880e30fe",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "b988ea4746b12899d5657031f16328b6f026b92199617d23cc1b4c41585d8f3c",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:41.624Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "partly",
+    "shareable": "yes",
+    "reading": "a rainy tree-lined street"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "with",
+   "case": 7,
+   "character": "seila",
+   "words": "walking home in the rain at night",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "3a4a9adc9f1b5e9ed97632a6def5eff6d78b55e08c902974cbac578f5fb27088",
+   "file": "wl-07-seila-flux-with.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-c423-7850-ac1d-656706442bb0",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "1cbc2d91394011a4b4ab0589ae2eb000301ab9e9d8d7a55292776e6f3ff4ab81",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:43.082Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "a rainy cobbled street of towers (snow too)"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "without",
+   "case": 8,
+   "character": "seila",
+   "words": "on a first date",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "5e6e430111f78ebbb66edb280d3a9e4ec3402cf1001afe25ef3192adfe5fc521",
+   "file": "wl-08-seila-flux-without.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-c9bf-72d2-b584-c7c066e4781c",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "56c6d0510a82a7536c453338e6f4ccbc124b6a51799d6291d02af14b6e2fca79",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:44.423Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "partly",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "no",
+    "reading": "at a table on grey"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "with",
+   "case": 8,
+   "character": "seila",
+   "words": "on a first date",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "c97461d94e85b44981f3c676df70eda9e604d46d36fe469988f0b7c3692073c0",
+   "file": "wl-08-seila-flux-with.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-cedf-7b11-9038-8451013b9318",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "e5bb28362579bf63ee58e6b0e8634d8120c8e3b71c495284513b610af7fbdd84",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:46.121Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "partly",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "no",
+    "reading": "at a table before castles"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "without",
+   "case": 9,
+   "character": "deluin",
+   "words": "in their school days",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "0bb3b5fef35547f840f2e3fac8ac79dc7bb19eccd82775d7dc68cf798be1b220",
+   "file": "wl-09-deluin-flux-without.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-d5b3-7ff2-b975-bc252ba06fbc",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "24917ae5882ddb1574e047c234ea826d1b191e1d8d034b9ebce136d914fddfe6",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:47.326Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "no",
+    "reading": "the base pose on grey"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "with",
+   "case": 9,
+   "character": "deluin",
+   "words": "in their school days",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "9eb578d64980e5ca78fb7e7f4242f4a462cc9027f92e54f90b663fa13add83d3",
+   "file": "wl-09-deluin-flux-with.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-da33-77a3-912c-de741cf59420",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "22f61afb37ac1b97f3051935f78d819e297c87fb7768373ce8671270dd2aea99",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:48.909Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "no",
+    "reading": "the base pose before castles"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "without",
+   "case": 10,
+   "character": "deluin",
+   "words": "at a concert",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "490455914c78cb67da525b96373785724b9ee6a23e710bf03387dd977ad9aef3",
+   "file": "wl-10-deluin-flux-without.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-e096-7f10-a045-14baa66520ac",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "22e74998507d74f3c5eeb4858624ac8ee95f5f99dbdb8b3cc809fa13c0f16f4b",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:50.455Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "on a modern concert floor"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "with",
+   "case": 10,
+   "character": "deluin",
+   "words": "at a concert",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "d62b1b94b4c48545af980c99df4628dff386ae57db75af74777b7172f61d19a6",
+   "file": "wl-10-deluin-flux-with.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-e69b-7591-8fe8-4886d893da85",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "591efacf4eb646edd7467d206b8325e7103f266e2472424f84ec48b5cadf2918",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:52.160Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "no",
+    "reading": "standing in a castle town; no concert"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "without",
+   "case": 11,
+   "character": "mu",
+   "words": "hiding from someone",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "83fd6f0d61aeea1d738e7c3766f47c77af39a73e456de5f249d16d11a7a69386",
+   "file": "wl-11-mu-flux-without.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-ed1b-7392-b728-836539780a19",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "aa88010d2795c4fdb62039a5e0b9ff9f48efd825dc8dd6238ff07afdb7520dbd",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:53.563Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "no",
+    "reading": "the base pose on grey"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "with",
+   "case": 11,
+   "character": "mu",
+   "words": "hiding from someone",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "03a24c26045ad07149b477a1394582e70bf040106eef92a310d2bdf53ec80dce",
+   "file": "wl-11-mu-flux-with.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-f298-7f40-a1c2-6b397b6d3eaa",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "48f5e51c23ef1e984e596a6344bb349081f01d3ce9a6be4859c94b745876b574",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:55.918Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "no",
+    "why_not_kept": "brown hair and a younger face",
+    "world": "yes",
+    "shareable": "no",
+    "reading": "the base pose before castles"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "without",
+   "case": 12,
+   "character": "mu",
+   "words": "on vacation",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "bb8151cb48d22f32c541f130e2b2812cbde348a2bcd343efc0628b15f2af2e40",
+   "file": "wl-12-mu-flux-without.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30d-fbf0-70f1-98f4-7502b9a373dc",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "cfeea31954d5d929bbdd92662c14a79f37f63e218c5f112fb3735924ff77ba1b",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:57.437Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "partly",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "no",
+    "reading": "on a beach in her uniform"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "variant": "with",
+   "case": 12,
+   "character": "mu",
+   "words": "on vacation",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "0251eb3b599bfeab9dd1d20997ff19cb401ee6afd65ef35a1423c4441fb6fc70",
+   "file": "wl-12-mu-flux-with.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c30e-01ef-7542-88d2-a204e584780b",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "435cba197e48fe2e23074f127baafda04f7d2e8190b6b97638c0ed6dc055a715",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T01:23:59.628Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "no",
+    "reading": "the base pose before castles"
+   }
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gpt",
+   "status": "ok",
+   "retention": {
+    "provider": "openai",
+    "zero_data_retention": false,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-10T01:23:59.828Z",
+    "kept": {
+     "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+     "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+     "source": "https://developers.openai.com/api/docs/guides/your-data",
+     "read": "2026-11-03"
+    }
+   },
+   "cost_usd": 0,
+   "at": "2026-11-10T01:23:59.828Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "without",
+   "case": 1,
+   "character": "zei",
+   "words": "at a big sports game",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "169790e98b01638c0a89b23ddd9491e513ebbfef9020faaf841ff6d32b389b2a",
+   "file": "wl-01-zei-gpt-without.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71GW2XP6PZ28PMYVA4F1R6C",
+   "status": "ok",
+   "cost_usd": 0.047809,
+   "cost_source": "reported by the gateway",
+   "sha256": "17a1e597e314293b0546db8d77ea1cd3fc2c4fdeb2769652a31710ad609f2a04",
+   "original_sha256": "0de2234f08db0492386f786ca3e2e2561ce54dd4a23c30aa55ad75d739469dad",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:24:29.972Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "cheering in a modern stadium with a big screen"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 1,
+   "character": "zei",
+   "words": "at a big sports game",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "55ed75b320466d243c07b96eb1eb80b3692520b805c7be1dd168d137f32746f8",
+   "file": "wl-01-zei-gpt-with.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71GX0BK03W2N1WGGRTVE6R2",
+   "status": "ok",
+   "cost_usd": 0.048024,
+   "cost_source": "reported by the gateway",
+   "sha256": "a508d093677e39f64832aea01f7e4529caf696828b405276873ef57acaf771a8",
+   "original_sha256": "c1a991da54d565c8aed516a6096050637eb1f9dd818bb3412f090856eadc4d28",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:25:04.313Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "cheering; stone stands, banners, castle towers"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "without",
+   "case": 2,
+   "character": "zei",
+   "words": "after winning a big match",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "dbb4b0ed2709864bb58491724db3432ee94c28202ed243c3c672f123ef14ca60",
+   "file": "wl-02-zei-gpt-without.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71GY1VPAJAEXMTDQQ5EE0GP",
+   "status": "ok",
+   "cost_usd": 0.048114,
+   "cost_source": "reported by the gateway",
+   "sha256": "7ba6cdd4e71355a2bb3944b26b999ec325ce20f096525e4474731b1575661679",
+   "original_sha256": "711eb6a719365f879ed6cdcf1ff15a4aa54c495a7e22049c4e86c139e390c772",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:25:34.151Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "cheering under confetti in a modern arena"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 2,
+   "character": "zei",
+   "words": "after winning a big match",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "a199a361cb2b884db6272910029dbfc492c707d867260cdd3d0ea9a2b1ebb79b",
+   "file": "wl-02-zei-gpt-with.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71GYYZ461X0RX8DW0QFR5XT",
+   "status": "ok",
+   "cost_usd": 0.048329,
+   "cost_source": "reported by the gateway",
+   "sha256": "13c8824aab801357f8a383f1e2181412ef7390318267a2898df3c12b279ea197",
+   "original_sha256": "ce165691ccce0ae37079c2013fc8d0ca669d3bd084d34ab9378cd271d3dd8de1",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:26:07.385Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "holding a trophy; stone city, waterfall, airships"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "without",
+   "case": 3,
+   "character": "gladias",
+   "words": "older and wiser",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "2c7b9c212e9861c253d0afe066c65b64f98231c97796865914331ef8ef1868ac",
+   "file": "wl-03-gladias-gpt-without.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71GZZEBX86Q320XT2E4S8T2",
+   "status": "ok",
+   "cost_usd": 0.048124,
+   "cost_source": "reported by the gateway",
+   "sha256": "f98540119521ca2c3971abf21458c5f9b88ac4bfba9bdcf82a057622f6692b8d",
+   "original_sha256": "4616a343ac15c5ef180b8ef36ec2a0957a37d235ded7262fa9002848928ee28d",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:26:38.881Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "partly",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "partly",
+    "shareable": "yes",
+    "reading": "grey temples, at a desk with maps"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 3,
+   "character": "gladias",
+   "words": "older and wiser",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "beeb1c9e3e554c3017e9cd046c7845fafd0112efb213987f7ba232c6d4cd989d",
+   "file": "wl-03-gladias-gpt-with.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71H0Y5BHV9AH0REFSHXZ258",
+   "status": "ok",
+   "cost_usd": 0.048339,
+   "cost_source": "reported by the gateway",
+   "sha256": "70a065de5fb4c42d69ce2c3a5ee4d75c468ad96990d1711d0b720aa0ef197f18",
+   "original_sha256": "dc00894375d99d8376944d5976c2c44453ce45b0d9be884cde6ab0e9d855255f",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:27:13.952Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "partly",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "grey temples, on a terrace over a tower city"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "without",
+   "case": 4,
+   "character": "gladias",
+   "words": "going out to a party",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "2eb4bad81af4e05826731f0de85fa4db13079ef6584dc9be2f16813bcb0bdab7",
+   "file": "wl-04-gladias-gpt-without.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71H20FANAY4MYETCEQ40MCE",
+   "status": "ok",
+   "cost_usd": 0.047829,
+   "cost_source": "reported by the gateway",
+   "sha256": "3f98d18d2e0d32ce7fececa30b18ea1917863dee7f5d47581e9829422c8131dd",
+   "original_sha256": "5ad7390abb8a368fb74cd9e89f523d95f730d4a1f9da65082db2bbf23993c34f",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:27:45.103Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "partly",
+    "shareable": "yes",
+    "reading": "with wine in a lantern-lit hall"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 4,
+   "character": "gladias",
+   "words": "going out to a party",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "e21827b91a99f5f2d6b385aa9557e99d04251e6accf247d3cd00bf49ba532124",
+   "file": "wl-04-gladias-gpt-with.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71H2YWN407EQYRXMJ7BD7YD",
+   "status": "ok",
+   "cost_usd": 0.048044,
+   "cost_source": "reported by the gateway",
+   "sha256": "7e0a7df9e218484e2d7e5beed34c7790faac6adf036f55d51aa043a392a45de3",
+   "original_sha256": "f977bb14610d1c9c976a0bb025997845cdb5189dc3ddf810594e7be93edca241",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:28:22.764Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "a cloaked guest on a stone terrace above a castle city"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "without",
+   "case": 5,
+   "character": "bai",
+   "words": "as the villain",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "a61fdbe2071d991147e2b4d5e79fb7bede0529ba4517064abebf48794175f96d",
+   "file": "wl-05-bai-gpt-without.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71H43PVHMTGKZG5X819PX5P",
+   "status": "ok",
+   "cost_usd": 0.048114,
+   "cost_source": "reported by the gateway",
+   "sha256": "9c5309549c0dd1a624740fed5a836238bbdd6947216bf8388987029cc9a1c397",
+   "original_sha256": "5cfdaed9e3f3313b5831ea6a8ccc97f53af85f077673c2b41f5e94f9a0ce2389",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:28:55.285Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "a dark-clad villain in a modern loft"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 5,
+   "character": "bai",
+   "words": "as the villain",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "93c6bff8a1a1e052c1e0bf33e096d68cf407350e175272e68f133eb971d5d129",
+   "file": "wl-05-bai-gpt-with.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71H53D6FBZFTJYZZQD5N9BJ",
+   "status": "ok",
+   "cost_usd": 0.048329,
+   "cost_source": "reported by the gateway",
+   "sha256": "205eab983ba840c2c7d8779afd86541344481775890ec9f397e193b5ab839f64",
+   "original_sha256": "52e52b7150a6b1d458538e5247eee44854a7723c9b77539124f3048ab6319654",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:29:27.417Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "a caped villain with armoured guards, stone and banners"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "without",
+   "case": 6,
+   "character": "bai",
+   "words": "training really hard",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "30da43a088de99894871e8a70eeb162d5a5e6a7d2011c198377a3907185a205e",
+   "file": "wl-06-bai-gpt-without.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71H62X8SF86TCV8BC3HMQN9",
+   "status": "ok",
+   "cost_usd": 0.048114,
+   "cost_source": "reported by the gateway",
+   "sha256": "60403a728559ab7eaa8ed15d906c165169c180a8b1439ccf499c9f26f8234b36",
+   "original_sha256": "c0b310dd039c373b6f4df074c99906af9d9e292077b7e2762a2bd98db82599e6",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:30:00.566Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "dumbbells in a modern gym"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 6,
+   "character": "bai",
+   "words": "training really hard",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "eac087e1444e32bbbf988fd38bccdce93c37ed8800eedd43a1d5b2c1355741e0",
+   "file": "wl-06-bai-gpt-with.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71H73BVYMQX2VSWDN2G74X7",
+   "status": "ok",
+   "cost_usd": 0.048329,
+   "cost_source": "reported by the gateway",
+   "sha256": "ddfa67b1d2d7aaa3333cc5b59c78f6ca028a375a9e477665c47b6d12e82385f7",
+   "original_sha256": "3815e6820164386035bf0a40373044f98c3c6b48f8ca60812d47f1e00ccab4bc",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:30:33.993Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "punching a bag in a stone courtyard"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "without",
+   "case": 7,
+   "character": "seila",
+   "words": "walking home in the rain at night",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "b4863f899e3574efdbed603d80ac78c8575831c4b93201fbc755c89ac12ca90a",
+   "file": "wl-07-seila-gpt-without.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71H83SQHW2XKEV1G6EKKDJW",
+   "status": "ok",
+   "cost_usd": 0.047834,
+   "cost_source": "reported by the gateway",
+   "sha256": "142c605d886e4a322709e8bb500d20529231fd1599297f4ed40d07261d806144",
+   "original_sha256": "a68af81b5861491fd23a83c56eb1d16674b8ebe3a4d685e10618b58a1a373f48",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:31:08.435Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "partly",
+    "shareable": "yes",
+    "reading": "a rainy old stone street"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 7,
+   "character": "seila",
+   "words": "walking home in the rain at night",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "3a4a9adc9f1b5e9ed97632a6def5eff6d78b55e08c902974cbac578f5fb27088",
+   "file": "wl-07-seila-gpt-with.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71H95D3GQ2MADS26DV8XQHR",
+   "status": "ok",
+   "cost_usd": 0.048049,
+   "cost_source": "reported by the gateway",
+   "sha256": "b8c010406b8e9da0b2dab8cc477c3c91f064c87cfa3f42c4744dc7b72bb8188a",
+   "original_sha256": "50f088296962fba324ebd0d4a4e38f25e8282dc45ab25e84bb54d484ca70debb",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:31:41.354Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "a rainy stone street below a lit castle city"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "without",
+   "case": 8,
+   "character": "seila",
+   "words": "on a first date",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "5e6e430111f78ebbb66edb280d3a9e4ec3402cf1001afe25ef3192adfe5fc521",
+   "file": "wl-08-seila-gpt-without.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HA5PCHYYCWTV5VM03GFGW",
+   "status": "ok",
+   "cost_usd": 0.048124,
+   "cost_source": "reported by the gateway",
+   "sha256": "a99ac79649b8e60e20ce472ecc983f12a86891097f336d14fb7a48e964e78aea",
+   "original_sha256": "cad6be8c73891891b2f0b323e7a5b16eead52efd1a47c6f5d7ccacb9c0c5fac2",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:32:12.242Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "a candlelit restaurant"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 8,
+   "character": "seila",
+   "words": "on a first date",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "c97461d94e85b44981f3c676df70eda9e604d46d36fe469988f0b7c3692073c0",
+   "file": "wl-08-seila-gpt-with.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HB6TVNDN3DD8397XVGBJN",
+   "status": "ok",
+   "cost_usd": 0.048339,
+   "cost_source": "reported by the gateway",
+   "sha256": "cc49112261e18853b6b923438dd568f2b4632beffd2405102feec31775af40dd",
+   "original_sha256": "1106a4b38a4bd97a0c287da66b114841e884ac770b5c02c861c3fd6a413b08c1",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:32:46.840Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "dinner on a terrace over mountains and towers"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "without",
+   "case": 9,
+   "character": "deluin",
+   "words": "in their school days",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "0bb3b5fef35547f840f2e3fac8ac79dc7bb19eccd82775d7dc68cf798be1b220",
+   "file": "wl-09-deluin-gpt-without.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HC5KARQ3FMAH3X935VND4",
+   "status": "ok",
+   "cost_usd": 0.048104,
+   "cost_source": "reported by the gateway",
+   "sha256": "64acb65216e65fdd7f6ec49ef47eba2fef637a1fa532c9cb7204102480c37897",
+   "original_sha256": "335f3a1f2dd1c18becf88eebf5ec058b6d31ba198ab35eba97a5beebb293fc7f",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:33:18.292Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "partly",
+    "shareable": "yes",
+    "reading": "writing at a desk in a stone hall"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 9,
+   "character": "deluin",
+   "words": "in their school days",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "9eb578d64980e5ca78fb7e7f4242f4a462cc9027f92e54f90b663fa13add83d3",
+   "file": "wl-09-deluin-gpt-with.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HD4950GKATKZHG2HHGJJH",
+   "status": "ok",
+   "cost_usd": 0.048319,
+   "cost_source": "reported by the gateway",
+   "sha256": "0a0a9c576573e1f8c54e8f1768b625a1e69b5ff5d0fafd7bfc789012afa647ae",
+   "original_sha256": "58d23ffd16af3229305e6fa3c8afe61ebbc389aef7f5d329cb678e489417bf22",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:33:54.080Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "a student with books in a stone college courtyard"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "without",
+   "case": 10,
+   "character": "deluin",
+   "words": "at a concert",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "490455914c78cb67da525b96373785724b9ee6a23e710bf03387dd977ad9aef3",
+   "file": "wl-10-deluin-gpt-without.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HE77BHVXDC4TZZD0H3NYW",
+   "status": "ok",
+   "cost_usd": 0.047794,
+   "cost_source": "reported by the gateway",
+   "sha256": "0148be959eb642727be58b7f3bd8626f4e56acfbc1b28c3e3be49d320f58eff9",
+   "original_sha256": "51a74c8b01449e6ee64a45dc53962b27ba358b28ba7e20e2b834c1f5ea69a97c",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:34:24.766Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "cheering at a modern rock concert"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 10,
+   "character": "deluin",
+   "words": "at a concert",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "d62b1b94b4c48545af980c99df4628dff386ae57db75af74777b7172f61d19a6",
+   "file": "wl-10-deluin-gpt-with.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HF55Q73XEW7NS9RFFZJF0",
+   "status": "ok",
+   "cost_usd": 0.048009,
+   "cost_source": "reported by the gateway",
+   "sha256": "c82e4a6734afd7e39bd3970576c5797bbe460b290102fb8a01772f2228880345",
+   "original_sha256": "87948f048e8a476e11c339b1d0d650bdf8a306b9b2ff91aa5a47769e04fb394e",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:34:58.942Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "cheering in a stone hall with banners"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "without",
+   "case": 11,
+   "character": "mu",
+   "words": "hiding from someone",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "83fd6f0d61aeea1d738e7c3766f47c77af39a73e456de5f249d16d11a7a69386",
+   "file": "wl-11-mu-gpt-without.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HG6MK02KMWP0V0TVGB7C5",
+   "status": "ok",
+   "cost_usd": 0.048109,
+   "cost_source": "reported by the gateway",
+   "sha256": "0dbcd1bf3dce167f03704e89b7949ea8b6b371730f239be25bc421f2341681ee",
+   "original_sha256": "0c3742e8ecd617a42a45271d0fb11dd7a34b7ecde0edb0e454a3a21c0d77de9b",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:35:28.257Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "partly",
+    "shareable": "yes",
+    "reading": "peeking round a doorway at a figure"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 11,
+   "character": "mu",
+   "words": "hiding from someone",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "03a24c26045ad07149b477a1394582e70bf040106eef92a310d2bdf53ec80dce",
+   "file": "wl-11-mu-gpt-with.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HH37J9P9GW1KV5T45BVA4",
+   "status": "ok",
+   "cost_usd": 0.048324,
+   "cost_source": "reported by the gateway",
+   "sha256": "715660de9fa5b29b36b12874a2c92c76ae8ee5447b8d5fedcd1d320281174d93",
+   "original_sha256": "8c23416b17a26c5fd09d11f65dbf7ccb57457662ab950a4bc334355f9debd41f",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:36:02.796Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "pressed to a stone wall in a castle street at night"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "without",
+   "case": 12,
+   "character": "mu",
+   "words": "on vacation",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "bb8151cb48d22f32c541f130e2b2812cbde348a2bcd343efc0628b15f2af2e40",
+   "file": "wl-12-mu-gpt-without.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HJ4XCBHR4SYCKF3MKQ0CB",
+   "status": "ok",
+   "cost_usd": 0.048099,
+   "cost_source": "reported by the gateway",
+   "sha256": "f51534be55ddce5649661026dfd7797aeead5c9a39eb5d6389330738d58332c9",
+   "original_sha256": "a94d76744f49f835adf8800eed168344367fe834ed350a890ba452e1ecb5abcc",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:36:34.697Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "in a deck chair on a tropical beach"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "with",
+   "case": 12,
+   "character": "mu",
+   "words": "on vacation",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "0251eb3b599bfeab9dd1d20997ff19cb401ee6afd65ef35a1423c4441fb6fc70",
+   "file": "wl-12-mu-gpt-with.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HK482GGCXPNEGT84VC8E5",
+   "status": "ok",
+   "cost_usd": 0.048314,
+   "cost_source": "reported by the gateway",
+   "sha256": "2e2b235a3779bf1732390eb1fcab822908c39d9e9df30d30d10b65e7e5259c7f",
+   "original_sha256": "d3c50f588c0eb1bfd50e2208c3a91d47dff6a236b3daa91fe03b4b7908c514f1",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:37:08.658Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "relaxing on a terrace over a tower city"
+   }
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gemini",
+   "status": "ok",
+   "retention": {
+    "provider": "vertex",
+    "zero_data_retention": true,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-10T01:37:08.693Z"
+   },
+   "cost_usd": 0,
+   "at": "2026-11-10T01:37:08.693Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "without",
+   "case": 1,
+   "character": "zei",
+   "words": "at a big sports game",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "169790e98b01638c0a89b23ddd9491e513ebbfef9020faaf841ff6d32b389b2a",
+   "file": "wl-01-zei-gemini-without.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HM58N2J9FR7N9JE65WA99",
+   "status": "ok",
+   "cost_usd": 0.067604,
+   "cost_source": "reported by the gateway",
+   "sha256": "137089f5388797027fff3f6cce6e63ff22ac3906eb66c35491420df84ca17c25",
+   "original_sha256": "c8278f272237c27c3b0b36d5584eebe3afedf89d5704018eaf1c6fec7ab19de2",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:37:19.767Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "in a modern indoor arena"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "with",
+   "case": 1,
+   "character": "zei",
+   "words": "at a big sports game",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "55ed75b320466d243c07b96eb1eb80b3692520b805c7be1dd168d137f32746f8",
+   "file": "wl-01-zei-gemini-with.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HMG60HBE3VP4PQBP7P89S",
+   "status": "ok",
+   "cost_usd": 0.0676275,
+   "cost_source": "reported by the gateway",
+   "sha256": "1790de70fc3d0a01f8fca25fc6b80f891751b49a99ea93f56aa871f6731c4ce8",
+   "original_sha256": "598e9e9e6174f4ccae4f8489effdc77a0a05f36890bcada47786cf8dcfa1d055",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:37:33.157Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "by a field among stone towers and gardens"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "without",
+   "case": 5,
+   "character": "bai",
+   "words": "as the villain",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "a61fdbe2071d991147e2b4d5e79fb7bede0529ba4517064abebf48794175f96d",
+   "file": "wl-05-bai-gemini-without.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HMXB1AC3RDK0QPFM6YWKN",
+   "status": "ok",
+   "cost_usd": 0.067634,
+   "cost_source": "reported by the gateway",
+   "sha256": "4ff024d6927ec851027a2152ef61d151adc156e1927f973b71fefb2fd5d504cd",
+   "original_sha256": "88ef904108c4b80cb502e756c81699fbe6ddc125e5ef96519405eb82e20dfd82",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:37:43.584Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "partly",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "no",
+    "reading": "at a control console; her own clothes"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "with",
+   "case": 5,
+   "character": "bai",
+   "words": "as the villain",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "93c6bff8a1a1e052c1e0bf33e096d68cf407350e175272e68f133eb971d5d129",
+   "file": "wl-05-bai-gemini-with.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HN8D09JRP8458V2SN2KT3",
+   "status": "ok",
+   "cost_usd": 0.0678645,
+   "cost_source": "reported by the gateway",
+   "sha256": "66676d79dd1bfd6e89b0fd548ef04547deb956b6e48ab01ae66992b74c9a5dba",
+   "original_sha256": "a54952b3a498cfa85c17fa505b7c95979eabee4b71bad67c684cfcb62ee0a165",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:37:55.289Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "cloaked on a snowy battlement by a hover-craft; face small"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "without",
+   "case": 8,
+   "character": "seila",
+   "words": "on a first date",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "5e6e430111f78ebbb66edb280d3a9e4ec3402cf1001afe25ef3192adfe5fc521",
+   "file": "wl-08-seila-gemini-without.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HNJTT6DBKBCF477S78D8Y",
+   "status": "ok",
+   "cost_usd": 0.067636,
+   "cost_source": "reported by the gateway",
+   "sha256": "034d970720a6caaa7c98d703e059cbbdab27b1a856e5f0c1e2b914fe401b6725",
+   "original_sha256": "8b2bf1237e78d9cdb098dfbac1ae80014bccc9c21e1884c8865a2b87e9b9c66c",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:38:04.207Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "a candlelit caf\u00e9, her date\u2019s back to us"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "with",
+   "case": 8,
+   "character": "seila",
+   "words": "on a first date",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "c97461d94e85b44981f3c676df70eda9e604d46d36fe469988f0b7c3692073c0",
+   "file": "wl-08-seila-gemini-with.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HNVFA28CAR4K2J1GD82SD",
+   "status": "ok",
+   "cost_usd": 0.0678185,
+   "cost_source": "reported by the gateway",
+   "sha256": "2876518fb028955df0d2ab815decd4e6299935f0ff0c944b648e5489c23e085c",
+   "original_sha256": "9836c5c3a7d50f592b62726b2c2b5b7a3f39e18414edaf319c56b367f5bde4b3",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:38:15.348Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "a window table over a castle valley, a flying craft"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "without",
+   "case": 11,
+   "character": "mu",
+   "words": "hiding from someone",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "83fd6f0d61aeea1d738e7c3766f47c77af39a73e456de5f249d16d11a7a69386",
+   "file": "wl-11-mu-gemini-without.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HP6AH0C457WXSGQ61WF6H",
+   "status": "ok",
+   "cost_usd": 0.0676345,
+   "cost_source": "reported by the gateway",
+   "sha256": "3460bedf640954c1e73142e0634fe7e9b0fda517c429e974a05e997a13c76482",
+   "original_sha256": "71ae5f75c7c5485886eca5e636ab2fb9ff6017ec5c4a14c6801dc028807ebafa",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:38:25.608Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "no",
+    "shareable": "yes",
+    "reading": "crouched by a door, a figure beyond"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "with",
+   "case": 11,
+   "character": "mu",
+   "words": "hiding from someone",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "03a24c26045ad07149b477a1394582e70bf040106eef92a310d2bdf53ec80dce",
+   "file": "wl-11-mu-gemini-with.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71HPGFTPXGX190R7WCJS8CV",
+   "status": "ok",
+   "cost_usd": 0.067658,
+   "cost_source": "reported by the gateway",
+   "sha256": "6ded9ac3308a4811591a42b8cf9708c5e1cb7bfe25a179af713eeb597cc7cb15",
+   "original_sha256": "b9a76888cf8174d611d2fb2e1604d4de0b1658331c5191d6b04c60409dec11ca",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T01:38:36.512Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "world": "yes",
+    "shareable": "yes",
+    "reading": "hooded behind a stone pillar as robots pass"
+   }
+  }
+ ],
+ "judged_by_eye": [
+  {
+   "case": 1,
+   "model": "flux",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "standing on a modern stadium pitch"
+  },
+  {
+   "case": 1,
+   "model": "flux",
+   "variant": "with",
+   "change_done": "partly",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "no",
+   "reading": "just standing; a stadium in a castle valley behind"
+  },
+  {
+   "case": 1,
+   "model": "gpt",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "cheering in a modern stadium with a big screen"
+  },
+  {
+   "case": 1,
+   "model": "gpt",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "cheering; stone stands, banners, castle towers"
+  },
+  {
+   "case": 1,
+   "model": "gemini",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "in a modern indoor arena"
+  },
+  {
+   "case": 1,
+   "model": "gemini",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "by a field among stone towers and gardens"
+  },
+  {
+   "case": 2,
+   "model": "flux",
+   "variant": "without",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "no",
+   "reading": "the base pose on grey"
+  },
+  {
+   "case": 2,
+   "model": "flux",
+   "variant": "with",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "no",
+   "reading": "the base pose before a fairy-tale castle"
+  },
+  {
+   "case": 2,
+   "model": "gpt",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "cheering under confetti in a modern arena"
+  },
+  {
+   "case": 2,
+   "model": "gpt",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "holding a trophy; stone city, waterfall, airships"
+  },
+  {
+   "case": 3,
+   "model": "flux",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "no",
+   "reading": "white hair and beard, plain grey background"
+  },
+  {
+   "case": 3,
+   "model": "flux",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "white hair and beard before castles"
+  },
+  {
+   "case": 3,
+   "model": "gpt",
+   "variant": "without",
+   "change_done": "partly",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "partly",
+   "shareable": "yes",
+   "reading": "grey temples, at a desk with maps"
+  },
+  {
+   "case": 3,
+   "model": "gpt",
+   "variant": "with",
+   "change_done": "partly",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "grey temples, on a terrace over a tower city"
+  },
+  {
+   "case": 4,
+   "model": "flux",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "at a modern house party"
+  },
+  {
+   "case": 4,
+   "model": "flux",
+   "variant": "with",
+   "change_done": "partly",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "no",
+   "reading": "standing in a castle street with people"
+  },
+  {
+   "case": 4,
+   "model": "gpt",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "partly",
+   "shareable": "yes",
+   "reading": "with wine in a lantern-lit hall"
+  },
+  {
+   "case": 4,
+   "model": "gpt",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "a cloaked guest on a stone terrace above a castle city"
+  },
+  {
+   "case": 5,
+   "model": "flux",
+   "variant": "without",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "no",
+   "reading": "the base pose on grey"
+  },
+  {
+   "case": 5,
+   "model": "flux",
+   "variant": "with",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "no",
+   "reading": "the base pose before a castle"
+  },
+  {
+   "case": 5,
+   "model": "gpt",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "a dark-clad villain in a modern loft"
+  },
+  {
+   "case": 5,
+   "model": "gpt",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "a caped villain with armoured guards, stone and banners"
+  },
+  {
+   "case": 5,
+   "model": "gemini",
+   "variant": "without",
+   "change_done": "partly",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "no",
+   "reading": "at a control console; her own clothes"
+  },
+  {
+   "case": 5,
+   "model": "gemini",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "cloaked on a snowy battlement by a hover-craft; face small"
+  },
+  {
+   "case": 6,
+   "model": "flux",
+   "variant": "without",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "no",
+   "reading": "the base pose on grey"
+  },
+  {
+   "case": 6,
+   "model": "flux",
+   "variant": "with",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "no",
+   "reading": "the base pose before a castle"
+  },
+  {
+   "case": 6,
+   "model": "gpt",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "dumbbells in a modern gym"
+  },
+  {
+   "case": 6,
+   "model": "gpt",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "punching a bag in a stone courtyard"
+  },
+  {
+   "case": 7,
+   "model": "flux",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "partly",
+   "shareable": "yes",
+   "reading": "a rainy tree-lined street"
+  },
+  {
+   "case": 7,
+   "model": "flux",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "a rainy cobbled street of towers (snow too)"
+  },
+  {
+   "case": 7,
+   "model": "gpt",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "partly",
+   "shareable": "yes",
+   "reading": "a rainy old stone street"
+  },
+  {
+   "case": 7,
+   "model": "gpt",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "a rainy stone street below a lit castle city"
+  },
+  {
+   "case": 8,
+   "model": "flux",
+   "variant": "without",
+   "change_done": "partly",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "no",
+   "reading": "at a table on grey"
+  },
+  {
+   "case": 8,
+   "model": "flux",
+   "variant": "with",
+   "change_done": "partly",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "no",
+   "reading": "at a table before castles"
+  },
+  {
+   "case": 8,
+   "model": "gpt",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "a candlelit restaurant"
+  },
+  {
+   "case": 8,
+   "model": "gpt",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "dinner on a terrace over mountains and towers"
+  },
+  {
+   "case": 8,
+   "model": "gemini",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "a candlelit caf\u00e9, her date\u2019s back to us"
+  },
+  {
+   "case": 8,
+   "model": "gemini",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "a window table over a castle valley, a flying craft"
+  },
+  {
+   "case": 9,
+   "model": "flux",
+   "variant": "without",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "no",
+   "reading": "the base pose on grey"
+  },
+  {
+   "case": 9,
+   "model": "flux",
+   "variant": "with",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "no",
+   "reading": "the base pose before castles"
+  },
+  {
+   "case": 9,
+   "model": "gpt",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "partly",
+   "shareable": "yes",
+   "reading": "writing at a desk in a stone hall"
+  },
+  {
+   "case": 9,
+   "model": "gpt",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "a student with books in a stone college courtyard"
+  },
+  {
+   "case": 10,
+   "model": "flux",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "on a modern concert floor"
+  },
+  {
+   "case": 10,
+   "model": "flux",
+   "variant": "with",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "no",
+   "reading": "standing in a castle town; no concert"
+  },
+  {
+   "case": 10,
+   "model": "gpt",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "cheering at a modern rock concert"
+  },
+  {
+   "case": 10,
+   "model": "gpt",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "cheering in a stone hall with banners"
+  },
+  {
+   "case": 11,
+   "model": "flux",
+   "variant": "without",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "no",
+   "reading": "the base pose on grey"
+  },
+  {
+   "case": 11,
+   "model": "flux",
+   "variant": "with",
+   "change_done": "no",
+   "kept": "no",
+   "why_not_kept": "brown hair and a younger face",
+   "world": "yes",
+   "shareable": "no",
+   "reading": "the base pose before castles"
+  },
+  {
+   "case": 11,
+   "model": "gpt",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "partly",
+   "shareable": "yes",
+   "reading": "peeking round a doorway at a figure"
+  },
+  {
+   "case": 11,
+   "model": "gpt",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "pressed to a stone wall in a castle street at night"
+  },
+  {
+   "case": 11,
+   "model": "gemini",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "crouched by a door, a figure beyond"
+  },
+  {
+   "case": 11,
+   "model": "gemini",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "hooded behind a stone pillar as robots pass"
+  },
+  {
+   "case": 12,
+   "model": "flux",
+   "variant": "without",
+   "change_done": "partly",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "no",
+   "reading": "on a beach in her uniform"
+  },
+  {
+   "case": 12,
+   "model": "flux",
+   "variant": "with",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "no",
+   "reading": "the base pose before castles"
+  },
+  {
+   "case": 12,
+   "model": "gpt",
+   "variant": "without",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "no",
+   "shareable": "yes",
+   "reading": "in a deck chair on a tropical beach"
+  },
+  {
+   "case": 12,
+   "model": "gpt",
+   "variant": "with",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "world": "yes",
+   "shareable": "yes",
+   "reading": "relaxing on a terrace over a tower city"
+  }
+ ],
+ "not_made": "Gemini pairs for cases 3 and 10: the cap stopped them (spent $1.83 + $0.18 for a pair > $1.90)."
+}
