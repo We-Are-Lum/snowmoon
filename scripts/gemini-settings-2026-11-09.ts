@@ -34,7 +34,7 @@ const REFS = path.join(OUT, '..', 'style-test', 'refs');
 mkdirSync(path.join(OUT, 'full'), { recursive: true });
 mkdirSync(DOC, { recursive: true });
 
-const STOP_AT = 0.36;
+const STOP_AT = 0.45; // raised by the owner (2026-11-09) for the 5th picture; was 0.36
 const SEED = 20261109;
 const GUARD_TOKENS = IMAGES.designs.guardMaxTokens;
 const WORST = { flux: 0.0125, gpt: 0.08, gemini: 0.09 };

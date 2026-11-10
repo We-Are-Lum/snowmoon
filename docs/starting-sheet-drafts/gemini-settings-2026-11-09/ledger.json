@@ -56,8 +56,8 @@
    "B"
   ]
  },
- "cap_usd": 0.4,
- "stop_at_usd": 0.36,
+ "cap_usd": 0.45,
+ "stop_at_usd": 0.45,
  "seed": 20261109,
  "refs": {
   "zei": {
@@ -434,6 +434,87 @@
     "promo_star": true,
     "reading": "rain at night under a glowing umbrella; brick houses, trees, monorail, towers"
    }
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gemini",
+   "status": "ok",
+   "retention": {
+    "provider": "vertex",
+    "zero_data_retention": true,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-10T04:16:14.715Z"
+   },
+   "cost_usd": 0,
+   "at": "2026-11-10T04:16:14.715Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "B",
+   "case": 12,
+   "character": "mu",
+   "words": "on vacation",
+   "style_row": "Same",
+   "style_used": null,
+   "setting": "B",
+   "setting_blocks": [
+    "c3-b72",
+    "c13-b24"
+   ],
+   "prompt_sha256": "cabf0946ae46e1465f4608dcb88d1691536897f87740735e3cb8faf3704e7c26",
+   "file": "gs-12-mu-B.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71TQFN65BKH1TVCSDEG4XXK",
+   "status": "ok",
+   "cost_usd": 0.0676315,
+   "cost_source": "reported by the gateway",
+   "sha256": "16ccaf2f0a6a44850fa5621bc7af41b711b6f76ae63206d91d3dce8f67a6047e",
+   "original_sha256": "5458bd0c00c8fb3992084a122ef105a3753e0874c518325613292a8856234ca2",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T04:16:27.345Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "partly",
+    "futuristic": "yes",
+    "figures": 1,
+    "shareable": "yes",
+    "promo_star": false,
+    "reading": "on a balcony with a cocktail and a tablet, glass towers with hanging gardens; a generic future skyline"
+   }
   }
  ],
  "judged_by_eye": [
@@ -484,7 +565,19 @@
    "shareable": "yes",
    "promo_star": true,
    "reading": "rain at night under a glowing umbrella; brick houses, trees, monorail, towers"
+  },
+  {
+   "case": 12,
+   "setting": "B",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "partly",
+   "futuristic": "yes",
+   "figures": 1,
+   "shareable": "yes",
+   "promo_star": false,
+   "reading": "on a balcony with a cocktail and a tablet, glass towers with hanging gardens; a generic future skyline"
   }
  ],
- "not_made": "Case 12 (Mu, setting B): stopped by the cap rule (spent $0.2713 + worst $0.09 = $0.3613 > $0.36)."
+ "cap_note": "cap raised by the owner to $0.45 total for the 5th picture (case 12, Mu, setting B)"
 }
