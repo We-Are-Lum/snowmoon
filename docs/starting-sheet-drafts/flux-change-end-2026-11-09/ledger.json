@@ -1,0 +1,789 @@
+{
+ "about": "FLUX change-at-the-end test 2026-11-09: variants E (after the no-words line) and S (just before it). Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "cap_usd": 0.2,
+ "stop_at_usd": 0.19,
+ "seed": 20261108,
+ "prompts": {
+  "f0e135515e4466efe6a45512d125ec3a423ce9b89bc1daacdf416e28c28a1a00": "Bai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.\n\nThe change: as a medieval knight in armour",
+  "bfa830e334db65bcdbed305b51470fc9d3eb2faac6fd2af10c87b2a2d4a16fc3": "Bai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.\n\nThe change: as a deep-sea diver in a brass helmet, underwater",
+  "9637ca864cdd57c612467ab17a28e14681f755ca70fe984785622179ef8efcda": "Bai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.\n\nThe change: much taller, with a heavy, broad-shouldered build",
+  "12f16d72ca957a1262bf152b69bc7182e816fedef0da7d3aadf043cc8a3885f6": "Bai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.\n\nThe change: aged about 70",
+  "ffc14528e0f4674b8132f29df3bf5bebe950f777346aecb5a524e8df33e82f43": "Bai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.\n\nThe change: shaved head",
+  "e0afb57ecdbf9d630b72c9e68d6e8a00188cc61ca431bd6051703f3968d9db0b": "Zei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.\n\nThe change: aged about 70",
+  "cca67a790fda7416a17a34976f9a00ae52d93dd73beb42fd0060f1786110fc42": "Zei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.\n\nThe change: shaved head",
+  "7c8aed3da5ffe03ae648a5a29a7eea15ff234a3290f49bf51781691dc3c98a33": "Bai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nThe change: as a medieval knight in armour\n\nNo text, no lettering, no signs with words.",
+  "5ec657855aeaef7a6ab17a644571e50431cf6ffc0b84d583d369ea07a1077f29": "Bai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nThe change: as a deep-sea diver in a brass helmet, underwater\n\nNo text, no lettering, no signs with words.",
+  "cae05d190a234192bbd46326a5bd9d684a5591937e8afb1dd04f282e63644044": "Bai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nThe change: much taller, with a heavy, broad-shouldered build\n\nNo text, no lettering, no signs with words.",
+  "5e63d5a42c1c9e529f8716706f4fd34b34342270e33a4f6bcd442cfef5a46f74": "Bai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nThe change: aged about 70\n\nNo text, no lettering, no signs with words.",
+  "703f142a60b2eabe98342b2783c5983559bc1d952ffada6591e63836390c40db": "Bai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nThe change: shaved head\n\nNo text, no lettering, no signs with words.",
+  "6d5543bdaa3a90fc35e3e474cdb6f36ddee255d1cee6e7193225a840a14f4459": "Zei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nThe change: aged about 70\n\nNo text, no lettering, no signs with words.",
+  "0a681000e33f507834431cbbd134f46f1b8743060a09dbe4247044b92a09062d": "Zei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nThe change: shaved head\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "guard",
+   "prompt_sha256": "f0e135515e4466efe6a45512d125ec3a423ce9b89bc1daacdf416e28c28a1a00",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000161025,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:24.781Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "E",
+   "character": "bai",
+   "change": 8,
+   "words": "as a medieval knight in armour",
+   "file": "fluxend-E-c08-bai.jpg",
+   "prompt_sha256": "f0e135515e4466efe6a45512d125ec3a423ce9b89bc1daacdf416e28c28a1a00",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-2c2c-73a0-8b38-f0617af26778",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "e4c7fcbce537606f4304c07ccfc06696e7b088c0c2f1c9f1c8a8b832de5fc649",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:26.392Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "armour in a hall; dark magenta hair, earrings"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "bfa830e334db65bcdbed305b51470fc9d3eb2faac6fd2af10c87b2a2d4a16fc3",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000186675,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:27.324Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "E",
+   "character": "bai",
+   "change": 11,
+   "words": "as a deep-sea diver in a brass helmet, underwater",
+   "file": "fluxend-E-c11-bai.jpg",
+   "prompt_sha256": "bfa830e334db65bcdbed305b51470fc9d3eb2faac6fd2af10c87b2a2d4a16fc3",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-3504-7da0-ae29-c7b2c81a9cf4",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "6f7f26522f1f4b529a08232dc501d5d581442a42a9a7553cb55db6831bcc2094",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:28.658Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "brass-rimmed helmet, scuba harness; tattoos show"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "9637ca864cdd57c612467ab17a28e14681f755ca70fe984785622179ef8efcda",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000102375,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:29.233Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "E",
+   "character": "bai",
+   "change": 4,
+   "words": "much taller, with a heavy, broad-shouldered build",
+   "file": "fluxend-E-c04-bai.jpg",
+   "prompt_sha256": "9637ca864cdd57c612467ab17a28e14681f755ca70fe984785622179ef8efcda",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-3c7c-7fe0-9a44-b7b288c83e8e",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "6123e3d329e39211bca6d6da58108f8fac855d0a7491991382e122d2c7699829",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:30.344Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "no bigger; a larger grey blob behind her"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "12f16d72ca957a1262bf152b69bc7182e816fedef0da7d3aadf043cc8a3885f6",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000157575,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:31.296Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "E",
+   "character": "bai",
+   "change": 3,
+   "words": "aged about 70",
+   "file": "fluxend-E-c03-bai.jpg",
+   "prompt_sha256": "12f16d72ca957a1262bf152b69bc7182e816fedef0da7d3aadf043cc8a3885f6",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-44a4-73b1-8770-032ca20ac5c0",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "70f51ea5dbe3618070a739aeeccfcaa963ad46b91fd752542a959b2a61c4b628",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:32.444Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "an old woman: wrinkles, grey hair; tattoos and earrings kept"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "ffc14528e0f4674b8132f29df3bf5bebe950f777346aecb5a524e8df33e82f43",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000157725,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:33.257Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "E",
+   "character": "bai",
+   "change": 7,
+   "words": "shaved head",
+   "file": "fluxend-E-c07-bai.jpg",
+   "prompt_sha256": "ffc14528e0f4674b8132f29df3bf5bebe950f777346aecb5a524e8df33e82f43",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-4c34-7fe2-b4e0-4f8a47b10f99",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "0d468fb21552d8b1b0be3c172c53e84c17dc2c3128e57521084c2c14c0476f92",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:34.663Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "fully shaved"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "e0afb57ecdbf9d630b72c9e68d6e8a00188cc61ca431bd6051703f3968d9db0b",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000128925,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:35.756Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "E",
+   "character": "zei",
+   "change": 3,
+   "words": "aged about 70",
+   "file": "fluxend-E-c03-zei.jpg",
+   "prompt_sha256": "e0afb57ecdbf9d630b72c9e68d6e8a00188cc61ca431bd6051703f3968d9db0b",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-55fd-7c23-b851-3540c1809f13",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "9c5640248d622fb3ef827dec61bcd0622fd1a05a10e2ff9c6d15e5a410f69802",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:36.974Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "an old face with white hair; plain grey background, no scene"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "cca67a790fda7416a17a34976f9a00ae52d93dd73beb42fd0060f1786110fc42",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000112575,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:38.767Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "E",
+   "character": "zei",
+   "change": 7,
+   "words": "shaved head",
+   "file": "fluxend-E-c07-zei.jpg",
+   "prompt_sha256": "cca67a790fda7416a17a34976f9a00ae52d93dd73beb42fd0060f1786110fc42",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-61bd-7e73-bb2c-6213bfbbaada",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "ddd2100dd91bba6644c914dceb75bd9313a9cbada8153b5485b49ece805139e7",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:41.244Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "shaved; grey background"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "7c8aed3da5ffe03ae648a5a29a7eea15ff234a3290f49bf51781691dc3c98a33",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001197,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:41.895Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "S",
+   "character": "bai",
+   "change": 8,
+   "words": "as a medieval knight in armour",
+   "file": "fluxend-S-c08-bai.jpg",
+   "prompt_sha256": "7c8aed3da5ffe03ae648a5a29a7eea15ff234a3290f49bf51781691dc3c98a33",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-6df4-7e30-a967-9e7ce75d5ef7",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "1d4b185d35fc8b5f43c2ac7419beca0e187059b70376673c133d9c5a6ccd57e1",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:43.661Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "armour in a hall; dark magenta hair, earrings"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "5ec657855aeaef7a6ab17a644571e50431cf6ffc0b84d583d369ea07a1077f29",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00020535,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:44.844Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "S",
+   "character": "bai",
+   "change": 11,
+   "words": "as a deep-sea diver in a brass helmet, underwater",
+   "file": "fluxend-S-c11-bai.jpg",
+   "prompt_sha256": "5ec657855aeaef7a6ab17a644571e50431cf6ffc0b84d583d369ea07a1077f29",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-79e8-7901-b7a6-a8516961f1c5",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "980b5aed4c3818dd2b7479c30ec1c3a99b46b3bee4cea79c2665ab46d5e64063",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:46.414Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "the same as E"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "cae05d190a234192bbd46326a5bd9d684a5591937e8afb1dd04f282e63644044",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00013245,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:47.219Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "S",
+   "character": "bai",
+   "change": 4,
+   "words": "much taller, with a heavy, broad-shouldered build",
+   "file": "fluxend-S-c04-bai.jpg",
+   "prompt_sha256": "cae05d190a234192bbd46326a5bd9d684a5591937e8afb1dd04f282e63644044",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-82be-7f32-baa0-2492ee3d1431",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "23997edb99247fb043368621c1b89031df5cc45bd5cd1341f0fd3fea1b4637b1",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:48.623Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "no bigger; grey blob behind her"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "5e63d5a42c1c9e529f8716706f4fd34b34342270e33a4f6bcd442cfef5a46f74",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 9.795e-05,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:49.493Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "S",
+   "character": "bai",
+   "change": 3,
+   "words": "aged about 70",
+   "file": "fluxend-S-c03-bai.jpg",
+   "prompt_sha256": "5e63d5a42c1c9e529f8716706f4fd34b34342270e33a4f6bcd442cfef5a46f74",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-8bd8-7691-87d6-4db95ccd95d5",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "3b13c8880758052ab26b0c0369169a454b07af26d31db2d20799d4a577fc8a27",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:50.850Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "an old woman with long grey hair; tattoos and earrings kept"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "703f142a60b2eabe98342b2783c5983559bc1d952ffada6591e63836390c40db",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001077,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:52.542Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "S",
+   "character": "bai",
+   "change": 7,
+   "words": "shaved head",
+   "file": "fluxend-S-c07-bai.jpg",
+   "prompt_sha256": "703f142a60b2eabe98342b2783c5983559bc1d952ffada6591e63836390c40db",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-9784-7f53-bc9e-f249bd2443eb",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "9c9d0d76104238687af1361eb6280ad99e8e79a310bc36419d7c1aadaca35dce",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:53.730Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "fully shaved"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "6d5543bdaa3a90fc35e3e474cdb6f36ddee255d1cee6e7193225a840a14f4459",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001242,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:16:54.784Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "S",
+   "character": "zei",
+   "change": 3,
+   "words": "aged about 70",
+   "file": "fluxend-S-c03-zei.jpg",
+   "prompt_sha256": "6d5543bdaa3a90fc35e3e474cdb6f36ddee255d1cee6e7193225a840a14f4459",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-a0b4-7353-9445-653d863cae35",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "9354ca560e1a472f25fe2f11ed61f864fd4aa273df0d405e2af4294a9253dbaa",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:16:58.915Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "the same as E"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "0a681000e33f507834431cbbd134f46f1b8743060a09dbe4247044b92a09062d",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00010905,
+   "cost_source": "reported",
+   "at": "2026-11-10T00:17:00.219Z"
+  },
+  {
+   "kind": "picture",
+   "variant": "S",
+   "character": "zei",
+   "change": 7,
+   "words": "shaved head",
+   "file": "fluxend-S-c07-zei.jpg",
+   "prompt_sha256": "0a681000e33f507834431cbbd134f46f1b8743060a09dbe4247044b92a09062d",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2d0-b5c0-7d71-8e4b-c1a7047b6477",
+   "seed": 20261108,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "da11fc34105d11cc590bd861e7233bcba4af0e2cf8b5c318e002c589c63e0672",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261108
+   },
+   "at": "2026-11-10T00:17:01.435Z",
+   "attempt": 1,
+   "copies_by_eye": 1,
+   "reading": "shaved; grey background"
+  }
+ ],
+ "judged_by_eye": [
+  {
+   "character": "bai",
+   "change": 8,
+   "variant": "R",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "armour in a hall; black braids"
+  },
+  {
+   "character": "bai",
+   "change": 8,
+   "variant": "E",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "armour in a hall; dark magenta hair, earrings"
+  },
+  {
+   "character": "bai",
+   "change": 8,
+   "variant": "S",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "armour in a hall; dark magenta hair, earrings"
+  },
+  {
+   "character": "bai",
+   "change": 11,
+   "variant": "R",
+   "change_shown": "partly",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "modern scuba, not a brass suit"
+  },
+  {
+   "character": "bai",
+   "change": 11,
+   "variant": "E",
+   "change_shown": "partly",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "brass-rimmed helmet, scuba harness; tattoos show"
+  },
+  {
+   "character": "bai",
+   "change": 11,
+   "variant": "S",
+   "change_shown": "partly",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "the same as E"
+  },
+  {
+   "character": "bai",
+   "change": 4,
+   "variant": "R",
+   "change_shown": "no",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "no bigger; grey blob behind her"
+  },
+  {
+   "character": "bai",
+   "change": 4,
+   "variant": "E",
+   "change_shown": "no",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "no bigger; a larger grey blob behind her"
+  },
+  {
+   "character": "bai",
+   "change": 4,
+   "variant": "S",
+   "change_shown": "no",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "no bigger; grey blob behind her"
+  },
+  {
+   "character": "bai",
+   "change": 3,
+   "variant": "R",
+   "change_shown": "no",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "not aged"
+  },
+  {
+   "character": "bai",
+   "change": 3,
+   "variant": "E",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "an old woman: wrinkles, grey hair; tattoos and earrings kept"
+  },
+  {
+   "character": "bai",
+   "change": 3,
+   "variant": "S",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "an old woman with long grey hair; tattoos and earrings kept"
+  },
+  {
+   "character": "bai",
+   "change": 7,
+   "variant": "R",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "buzzed short"
+  },
+  {
+   "character": "bai",
+   "change": 7,
+   "variant": "E",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "fully shaved"
+  },
+  {
+   "character": "bai",
+   "change": 7,
+   "variant": "S",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "fully shaved"
+  },
+  {
+   "character": "zei",
+   "change": 3,
+   "variant": "R",
+   "change_shown": "partly",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "grey hair, young face; in a room"
+  },
+  {
+   "character": "zei",
+   "change": 3,
+   "variant": "E",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "an old face with white hair; plain grey background, no scene"
+  },
+  {
+   "character": "zei",
+   "change": 3,
+   "variant": "S",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "the same as E"
+  },
+  {
+   "character": "zei",
+   "change": 7,
+   "variant": "R",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "shaved; grey background"
+  },
+  {
+   "character": "zei",
+   "change": 7,
+   "variant": "E",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "shaved; grey background"
+  },
+  {
+   "character": "zei",
+   "change": 7,
+   "variant": "S",
+   "change_shown": "yes",
+   "kept": "yes",
+   "copies": 1,
+   "reading": "shaved; grey background"
+  }
+ ]
+}

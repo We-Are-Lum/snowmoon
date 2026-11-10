@@ -8,6 +8,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
+import { fluxEndSection } from './flux-change-end-2026-11-09-page';
 
 const OUT = process.argv[2];
 if (!OUT) throw new Error('usage: three-tests-2026-11-09-page.ts <outdir>');
@@ -78,6 +79,8 @@ async function main() {
     }
     s4.push(`<div class="row"><h3>${c}. “${esc(CHANGES[c - 1])}” · ${nm}</h3><p class="sub">Earlier</p><div class="grid three">${before.join('')}</div><p class="sub">New</p><div class="grid three">${after.join('')}</div></div>`);
   }
+  const s5 = await fluxEndSection({ endFull: path.join(OUT, '..', 'flux-change-end', 'full'), retestFull: FULL, imgDir: IMG, id: 'flux-end', title: '5. FLUX: the change at the end' });
+  files += s5.files;
   const html = `<!doctype html>
 <html lang="en">
 <head>
@@ -113,6 +116,7 @@ figure { margin: 0; }
 figcaption { font-size: 12px; margin-top: 3px; line-height: 1.35; }
 figcaption b { display: block; font-weight: 600; } figcaption b.ok { color: var(--ok); } figcaption b.bad { color: var(--bad); }
 figcaption span { color: var(--muted); }
+pre { white-space: pre-wrap; word-break: break-word; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 12.5px; }
 </style>
 </head>
 <body>
@@ -122,13 +126,14 @@ figcaption span { color: var(--muted); }
 <p>Three tests of the challenge’s remix prompt as the route now builds it: the change words, “&lt;Name&gt; is the person in reference image 1, the main figure.”, the character’s look line, no style text (“Same as this picture”, the default), “Keep the face recognisable; change anything else the words describe.”, and the no-words line. One picture each; the open models use seed 20261108.</p>
 <p>Notes under the pictures are the coding agent’s reading of each picture. Comparisons with the look test also differ in style (it used Mood) and in having no look line; each caption says what differs.</p>
 <p>The project’s own test pictures: not published. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT until the owner approves it.</p>
-<div class="spend"><div><b>${usd(spent)}</b><span>tests 1–3, of their $3.00 cap</span></div><div><b>${usd(per.flux ?? 0)}</b><span>1 · FLUX look line</span></div><div><b>${usd(per.qwen2511 ?? 0)}</b><span>2 · Qwen 2511</span></div><div><b>${usd(per.geminiF3 ?? 0)}</b><span>3 · Gemini F3</span></div><div><b>${usd(per.guard ?? 0)}</b><span>prompt checks</span></div><div><b>${usd(per.retest ?? 0)}</b><span>4 · re-test (its own $1.50 cap)</span></div></div>
+<div class="spend"><div><b>${usd(spent)}</b><span>tests 1–3, of their $3.00 cap</span></div><div><b>${usd(per.flux ?? 0)}</b><span>1 · FLUX look line</span></div><div><b>${usd(per.qwen2511 ?? 0)}</b><span>2 · Qwen 2511</span></div><div><b>${usd(per.geminiF3 ?? 0)}</b><span>3 · Gemini F3</span></div><div><b>${usd(per.guard ?? 0)}</b><span>prompt checks</span></div><div><b>${usd(per.retest ?? 0)}</b><span>4 · re-test (its own $1.50 cap)</span></div><div><b>${usd(s5.spent)}</b><span>5 · FLUX change at the end (its own $0.20 cap)</span></div></div>
 </div>
-<nav><ol><li><a href="#flux">Bai’s look line on FLUX</a></li><li><a href="#qwen">Qwen-Image-Edit 2511 against 2509</a></li><li><a href="#gemini">Gemini with the front padded to 16:9</a></li><li><a href="#retest">Re-test: shorter look line + scene line</a></li></ol></nav>
+<nav><ol><li><a href="#flux">Bai’s look line on FLUX</a></li><li><a href="#qwen">Qwen-Image-Edit 2511 against 2509</a></li><li><a href="#gemini">Gemini with the front padded to 16:9</a></li><li><a href="#retest">Re-test: shorter look line + scene line</a></li><li><a href="#flux-end">FLUX: the change at the end</a></li></ol></nav>
 <section id="flux"><h2>1. Bai’s look line on FLUX</h2><p class="lead">FLUX.2 [klein] 4B edit, Bai’s front only, the same seed. Left: no look line. Right: “${esc(ledger.prompts ? 'Unless the change says otherwise: a young woman of about eighteen, tall and athletic, dark brown skin, one side of her head shaved and long magenta hair swept over the other, tattooed arms, gold earrings.' : '')}”</p>${s1.join('')}</section>
 <section id="qwen"><h2>2. Qwen-Image-Edit 2511 against 2509</h2><p class="lead">Bai, the look test’s 12 changes. Left: 2509 from the look test (style Mood, no look line). Right: 2511 with today’s prompt. 2511 returned 1024 × 576 and fal billed 1 unit ($0.03) a picture.</p>${s2.join('')}</section>
 <section id="gemini"><h2>3. Gemini with the front padded to 16:9</h2><p class="lead">Left: the look test (front sent at 3:4, style Mood, no look line). Right: F3, the front padded to 16:9 by the site’s toView, with the look line and no style. Pictures with more than one copy of the character: before ${n('before_B')} of 16, F3 ${n('F3')} of 16 (counted by eye).</p>${s3.join('')}</section>
 <section id="retest"><h2>4. Re-test: shorter look line + scene line</h2><p class="lead">The prompt: the change; “&lt;Name&gt; is the person in reference image 1, the main figure.”; the new look line (Bai: “${esc(retest.looks.bai)}” Zei: “${esc(retest.looks.zei)}”); “${esc(retest.scene_line)}”; no style text; “Keep the face recognisable; change anything else the words describe.”; the no-words line. Base front only, as the route sends it. Under each new picture: whether the change came through, whether the character was kept, and the copies, all by eye.</p>${s4.join('')}</section>
+${s5.html}
 </main>
 </body>
 </html>
