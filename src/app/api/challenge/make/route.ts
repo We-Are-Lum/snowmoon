@@ -17,6 +17,7 @@ import { oneCharacterProblem } from '~/lib/challenge/one-character';
 import { challengeSpend, makeWith, recipeModel } from '~/lib/challenge/make-model';
 import { MODEL_WORDING } from '~/lib/challenge/model-wording';
 import { lookFor } from '~/lib/challenge/looks';
+import { drawSetting, settingLine, settingRecord } from '~/lib/challenge/settings';
 import { whereFrom } from '~/lib/images/countries';
 import { closedCapReached, generationsLeft } from '~/lib/images/limits';
 import { IMAGE_WORDING } from '~/lib/images/wording';
@@ -128,7 +129,9 @@ export async function POST(request: Request) {
   // With the moments on: the other challenge characters in the moment, each by their current default look.
   // Only the open default takes the others' looks; every other model gets the tapped picture alone.
   const others = moment && chosen.id === DEFAULT_CHALLENGE_MODEL ? (await Promise.all(othersIn(moment, src.character).map(async (slug) => ({ slug, look: await defaultLook(sql, slug) })))).filter((o): o is { slug: string; look: NonNullable<typeof o.look> } => o.look !== null) : [];
-  const prompt = moment ? momentPrompt({ words: r.words, name, scene: moment.scene, others: others.map((o) => callName(o.slug)) }) : remixPrompt({ words: r.words, name, look: lookFor(src.character), style: style!.text });
+  // A closed model (GPT, Gemini; never FLUX): one of the five settings, drawn evenly here, at make time (owner, 2026-11-09).
+  const setting = !moment && !chosen.open ? drawSetting() : null;
+  const prompt = moment ? momentPrompt({ words: r.words, name, scene: moment.scene, others: others.map((o) => callName(o.slug)) }) : remixPrompt({ words: r.words, name, look: lookFor(src.character), style: style!.text, ...(setting ? { setting: settingLine(setting) } : {}) });
   const looks = [src, ...others.map((o) => o.look)];
   const pictures: { bytes: Buffer; contentType: string; width: number; height: number }[] = [];
   for (const l of looks) {
@@ -176,10 +179,11 @@ export async function POST(request: Request) {
       character: src.character, from: src.versionId, fromKind: src.kind, model: chosen.id,
       ...(moment ? { moment: moment.id, scene: moment.scene } : {}),
       ...(style ? { style: { choice: style.choice, id: style.id, elementId: style.design?.elementId ?? null, label: style.label, text: style.text } } : {}),
+      ...(setting ? { setting: settingRecord(setting) } : {}),
     },
   });
   return NextResponse.json(
-    { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, prompt, left: paid.left, style: style ? (style.choice === 'random' ? MAKE_WORDING.randomDrew(style.label ?? '') : style.label) : null },
+    { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, prompt, left: paid.left, style: style ? (style.choice === 'random' ? MAKE_WORDING.randomDrew(style.label ?? '') : style.label) : null, setting: setting ? settingRecord(setting) : null },
     { headers: { 'Cache-Control': 'no-store' } },
   );
 }
