@@ -1,4 +1,4 @@
-# Challenge release: every final text (v8; reread by the owner, 2026-11-08 and 2026-11-09)
+# Challenge release: every final text (v9, for the merge; reread by the owner, 2026-11-08 and 2026-11-09)
 
 Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` (v4 adds the closing line of 2026-11-09 and the bases' style; v3 was at `9ae0aa13`) (with challenge-simple's final head `1efcbeaf`). **v3:** the owner reread every text of v2 on 2026-11-08, via the coordinator's check, with changes 1–2 below applied word for word (the notice labels; the closed refusals) and the rules above Generate extended; the "none left" line approved as drafted
 (which carries `challenge-simple`). Every text below is copied from the code as it
@@ -149,11 +149,12 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
 
 ## The rules and the challenge pages (challenge-simple)
 
-- Rules intro (the owner's words; dates and names from config): "From 12 to 29 November, make your own picture of Zei,
+- Rules intro (the owner's words, v9 with the new open date; dates and names from config; entries open Thu 12 Nov 2026,
+  00:00 PT, and close after Sun 29 Nov, 23:59 PT): "From 12 to 29 November, make your own picture of Zei,
   Gladias, Bai, Seila, Deluin or Mu: start from one of their pictures, change what you like, pick a style and a model,
   and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page,
   credited back to what you built on."
-  Before: "From {dates}, make your own picture of {names}: start from one of their pictures, set it at a moment from the
+  (v8: "From 17 to 29 November, …".) Before: "From {dates}, make your own picture of {names}: start from one of their pictures, set it at a moment from the
   book, change what you like, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your
   picture gets its own page, credited back to what you built on."
 - Rules line (DRAFT): "Only remixes count: start from one of a character's pictures on the challenge pages, a base or any
@@ -231,8 +232,9 @@ backstory has no spoiler tick, and "May spoil later chapters." appears nowhere u
 
 - New first choice, selected by default (the owner's words): "Same as this picture". It adds no style text, so a remix
   keeps the look of the picture it starts from; the recipe records it ("Style: Same as this picture").
-- The others stay: the published styles ("Animated series" among them once the owner publishes it), "Random" (in "How it
-  was made": "Style: {style}, drawn at random"), "Write your own".
+- v9 (owner, 2026-11-09): the row ships exactly "Same as this picture" (default), "Animated series" (once the owner
+  publishes it), "Random" (drawing only from "Animated series"; in "How it was made": "Style: {style}, drawn at random";
+  hidden while there's nothing to draw from), "Write your own". The site's other published styles aren't offered here.
 
 ### The look lines and the scene line (this edition's invention; owner-approved 2026-11-09), public in every recipe
 
