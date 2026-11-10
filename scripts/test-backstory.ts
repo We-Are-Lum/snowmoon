@@ -18,7 +18,8 @@
  *  L1 each challenge character has exactly one look line, starting "Unless the change says otherwise: ";
  *  L2 none names a real person (blocked names), a studio, film or artist, and the check (mocked) is sent them in the
  *     prompt;
- *  L3 the prompt order: the change words, the reference line, the look line, the style, the closing line, the suffix.
+ *  L3 the prompt order: the change words, the reference line, the look line, the scene line, the style, the closing line,
+ *     the suffix.
  */
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
@@ -27,7 +28,7 @@ import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { CHALLENGE, IMAGES } from '../src/lib/config';
 import { BACKSTORY_MAX, BACKSTORY_WORDING, readBackstory } from '../src/lib/challenge/backstory';
-import { CHARACTER_LOOKS, LOOK_PREFIX } from '../src/lib/challenge/looks';
+import { CHARACTER_LOOKS, LOOK_PREFIX, SCENE_LINE } from '../src/lib/challenge/looks';
 import { KEEP_LINE } from '../src/lib/challenge/styles';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -99,12 +100,13 @@ const looks = (l: Readonly<Record<string, string>>) => [
     ...need(blockedName(t) === null, `${c}: names someone on the blocked list`),
     ...need(!/\b(studio|ghibli|disney|pixar|film|movie|anime|manga|in the style of|artist)\b/i.test(t), `${c}: names a studio, film or artist`),
   ]),
-  ...need(l.zei === 'Unless the change says otherwise: a young man of eighteen, slim and of medium height, light golden-tan skin, spiky black hair with close-cut sides and one teal-blue streak, dark eyes.', 'Zei\'s line isn\'t the owner\'s, exactly'),
+  ...need(l.zei === 'Unless the change says otherwise: a man with light golden-tan skin and dark eyes.' && l.mu === 'Unless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.', 'the lines aren\'t the owner\'s, exactly (2026-11-09)'),
+  ...need(SCENE_LINE === 'Unless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.' && blockedName(SCENE_LINE) === null, 'the scene line isn\'t the owner\'s, exactly'),
 ];
 proven('L1 L2 one look line per challenge character, each "Unless the change says otherwise: …", none naming a real person, studio, film or artist', looks(CHARACTER_LOOKS), looks({ ...CHARACTER_LOOKS, mu: 'Mu, drawn like a Pixar film character.' }));
-const order = (prompt: string) => need(prompt === ['give her a red coat', 'Bai is the person in reference image 1, the main figure.', CHARACTER_LOOKS.bai, 'soft pencil on pale paper', KEEP_LINE, IMAGES.suffix].join('\n\n'), `the prompt is ${JSON.stringify(prompt).slice(0, 200)}`);
+const order = (prompt: string) => need(prompt === ['give her a red coat', 'Bai is the person in reference image 1, the main figure.', CHARACTER_LOOKS.bai, SCENE_LINE, 'soft pencil on pale paper', KEEP_LINE, IMAGES.suffix].join('\n\n'), `the prompt is ${JSON.stringify(prompt).slice(0, 200)}`);
 const route = read('src/app/api/challenge/make/route.ts');
-proven('L3 the prompt order: change words, reference line, look line, style, closing line, suffix (every model)', [...order(remixPrompt({ words: 'give her a red coat', name: 'Bai', look: CHARACTER_LOOKS.bai, style: 'soft pencil on pale paper' })), ...need(/remixPrompt\(\{ words: r\.words, name, look: lookFor\(src\.character\), style: style!\.text \}\)/.test(route), 'the route doesn\'t add the look line')], order(remixPrompt({ words: 'give her a red coat', name: 'Bai', style: 'soft pencil on pale paper' })));
+proven('L3 the prompt order: change words, reference line, look line, scene line (always), style, closing line, suffix (every model)', [...order(remixPrompt({ words: 'give her a red coat', name: 'Bai', look: CHARACTER_LOOKS.bai, style: 'soft pencil on pale paper' })), ...need(/remixPrompt\(\{ words: r\.words, name, look: lookFor\(src\.character\), style: style!\.text \}\)/.test(route), 'the route doesn\'t add the look line')], order(remixPrompt({ words: 'give her a red coat', name: 'Bai', style: 'soft pencil on pale paper' })));
 
 // S1: "Same as this picture" (owner, 2026-11-09): the first choice and the default, no style text, recorded in the recipe.
 {
@@ -119,7 +121,7 @@ proven('L3 the prompt order: change words, reference line, look line, style, clo
     return [
       ...need(M.makeView(src as never, { styles: pub as never }).defaultStyle === 'same', 'the default isn\'t "Same as this picture"'),
       ...need(r?.choice === 'same' && r.text === '' && r.label === 'Same as this picture', 'it adds style text, or isn\'t recorded as "same"'),
-      ...need(prompt === ['a red scarf', 'Zei is the person in reference image 1, the main figure.', CHARACTER_LOOKS.zei, KEEP_LINE, IMAGES.suffix].join('\n\n'), 'the prompt carries a style line, or its order changed'),
+      ...need(prompt === ['a red scarf', 'Zei is the person in reference image 1, the main figure.', CHARACTER_LOOKS.zei, SCENE_LINE, KEEP_LINE, IMAGES.suffix].join('\n\n'), 'the prompt carries a style line, or its order changed'),
       ...need(JSON.stringify(ST.readStyleChoice({ kind: 'same' })) === '{"kind":"same"}', 'the request can\'t ask for it'),
       ...need(screen.indexOf('data-style="same"') > 0 && screen.indexOf('data-style="same"') < screen.indexOf('view.styles.map((s)') && /\{w\.sameStyle\}/.test(screen), 'it isn\'t the Style row\'s first chip'),
       ...need(/style: \{ choice: style\.choice/.test(route), 'the recipe doesn\'t record the style choice'),

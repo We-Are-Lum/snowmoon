@@ -155,6 +155,24 @@ check('config: a current default look per challenge character, each a design id 
   // A character's page: only the six; no database here, so empty lists.
   const zei = await V.characterView(null, 'zei');
   check('character page: the name, the one line, the bases and the remixes (none without a database), its back link', zei !== null && zei.c.name === 'Zei' && zei.c.line === cardOf('zei')!.line && Array.isArray(zei.c.bases) && zei.c.remixes.length === 0 && zei.w.none === 'No remixes of Zei yet.' && zei.back === '← The remix challenge');
+  // "Read where {Name} first appears" (owner, 2026-11-09): each of the six pages, the words, the reader link at the card's
+  // first "appears" block (the same block a picture is anchored to), and that block is in the book's text.
+  {
+    const FA = await import('../src/lib/challenge/first-appears');
+    const CD = await import('../src/lib/challenge/cards');
+    const MK = await import('../src/lib/challenge/make');
+    const rows = await Promise.all(CHALLENGE.characters.map(async (slug) => ({ slug, v: await V.characterView(null, slug) })));
+    const ok = (check: (slug: string, href: string, words: string) => boolean) => rows.every(({ slug, v }) => v?.firstAppears && check(slug, v.firstAppears.href, v.firstAppears.words));
+    check('first appears: each of the six pages links "Read where {Name} first appears" to the reader at the card\'s first block, which exists in the text and anchors its pictures', ok((slug, href, words) => {
+      const block = CD.CARDS.find((c) => c.slug === slug)!.appears[0].block;
+      const m = /^c(\d+)-b(\d+)$/.exec(block)!;
+      const a = MK.characterAnchor(slug);
+      return words === `Read where ${rows.find((r) => r.slug === slug)!.v!.c.name} first appears` && href === `/chapter/${m[1]}#${block}` && blocks.has(block) && a.chapter === Number(m[1]) && a.start === Number(m[2]);
+    }) && rows.find((r) => r.slug === 'zei')!.v!.firstAppears!.href === '/chapter/2#c2-b2' && rows.find((r) => r.slug === 'zei')!.v!.firstAppears!.words === 'Read where Zei first appears');
+    proof('first appears: a link to a block that isn\'t in the text fails', !blocks.has('c2-b99999') && FA.firstAppearsBlock('nobody') === 'c1-b1');
+    const comp = read('src/components/challenge-character.tsx');
+    check('first appears: the link sits under the one line, prefetch off', comp.indexOf('data-slot="first-appears"') > comp.indexOf('<CardLine') && comp.indexOf('data-slot="first-appears"') < comp.indexOf('ch-char-bases') && /prefetch=\{false\} data-slot="first-appears"/.test(comp));
+  }
   check('character page: null (404) for anything but the six', (await V.characterView(null, 'lektor')) === null && (await V.characterView(null, 'entries')) === null && (await V.characterView(null, '')) === null);
   const page = read('src/app/challenge/[slug]/page.tsx');
   check('character page: gated and cached as /challenge (public switch, revalidate 60), only the six as pages', /if \(!CHALLENGE\.public\) notFound\(\);/.test(page) && /export const revalidate = 60;/.test(page) && /export const dynamicParams = false;/.test(page) && /CHALLENGE\.characters\.map\(\(slug\) => \(\{ slug \}\)\)/.test(page) && /page="character"/.test(read('src/app/challenge/[slug]/not-found.tsx')));
@@ -238,7 +256,7 @@ check('config: a current default look per challenge character, each a design id 
   check('moments off: the style is one listed (by id), Random, or the person\'s own words (at most 120 characters)', M.readMake({ from, words: 'x', style: { kind: 'style', id: 'style:0000-ab' } }).ok && M.readMake({ from, words: 'x', style: { kind: 'own', text: 'soft pencil, pale paper' } }).ok && !M.readMake({ from, words: 'x', style: { kind: 'own', text: '  ' } }).ok && !M.readMake({ from, words: 'x', style: { kind: 'own', text: 'x'.repeat(S.OWN_STYLE_MAX + 1) } }).ok && !M.readMake({ from, words: 'x', style: { kind: 'paint' } }).ok);
   // The prompt: the words, reference image 1, the style's text, then the owner's keep line exactly, then no lettering.
   const prompt = M.remixPrompt({ words: 'give her a red coat', name: 'Bai', style: 'soft pencil on pale paper' });
-  check('moments off: the prompt is the words, reference image 1, the style, then exactly "Keep the face recognisable; …", then no lettering; no scene and no other character', prompt === `give her a red coat\n\nBai is the person in reference image 1, the main figure.\n\nsoft pencil on pale paper\n\nKeep the face recognisable; change anything else the words describe.\n\n${IMAGES.suffix}` && !/setting:|reference image 2/.test(prompt), prompt);
+  check('moments off: the prompt is the words, reference image 1, the scene line (always, owner 2026-11-09), the style, then exactly "Keep the face recognisable; …", then no lettering; no moment\'s setting and no other character', prompt === `give her a red coat\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nsoft pencil on pale paper\n\nKeep the face recognisable; change anything else the words describe.\n\n${IMAGES.suffix}` && !/setting:|reference image 2/.test(prompt), prompt);
   check('the keep line is the owner\'s, exactly', S.KEEP_LINE === 'Keep the face recognisable; change anything else the words describe.');
   // Resolving a style: a listed one, Random (a draw from the published ones, recorded with the one drawn), or own words.
   const pub = [1, 2, 3].map((n) => ({ id: `style:e${n}`, label: `Style ${n}`, text: `text ${n}`, elementId: `e${n}`, versionId: `v${n}`, versionNo: 1, entity: `Style ${n}`, title: '', byName: 'x', byFid: 1, assist: null }));
@@ -281,8 +299,8 @@ check('config: a current default look per challenge character, each a design id 
   check('the route checks the whole prompt (the words and the style\'s words) with the prompt check', /remixPrompt\(\{ words: r\.words, name, (look: lookFor\(src\.character\), )?style: style!\.text \}\)/.test(route) && /checkText: prompt,/.test(route) && /blockedName\(job\.checkText\)/.test(read('src/lib/images/paid.ts')) && /checkPrompt\(job\.checkText/.test(read('src/lib/images/paid.ts')));
   // The Model row: a list from the server; the route refuses anything not in it.
   const models = MD.challengeModels();
-  // Branch challenge-models: with no country (no closed model offered), the open two, the edit model first.
-  check('models: a list, the edit model first (open, by Black Forest Labs, its chip as today\'s line), then Qwen-Image-Edit; no closed model without a country', models.length === 2 && models[0].id === IMAGES.editModel.id && models[0].open && models[1].id === 'qwen-image-edit' && models.every((m) => m.open) && MD.modelChipText(models[0]) === 'FLUX.2 [klein] 4B · Black Forest Labs · open' && MD.modelChipText(models[0]) === (await import('../src/lib/challenge/make-wording')).MAKE_WORDING.modelChip);
+  // Branch challenge-models: with no country (no closed model offered), the edit model alone (Qwen dropped, owner, 2026-11-09).
+  check('models: a list, the edit model first (open, by Black Forest Labs, its chip as today\'s line); no closed model without a country', models.length === 1 && models[0].id === IMAGES.editModel.id && models[0].open && MD.modelChipText(models[0]) === 'FLUX.2 [klein] 4B · Black Forest Labs · open' && MD.modelChipText(models[0]) === (await import('../src/lib/challenge/make-wording')).MAKE_WORDING.modelChip);
   check('models: the request\'s model must be in the list (a missing or other id is refused)', MD.modelFromRequest(IMAGES.editModel.id)?.id === IMAGES.editModel.id && MD.modelFromRequest('gpt-image-2.5') === null && MD.modelFromRequest(undefined) === null && MD.modelFromRequest('x', [...models, { id: 'x', label: 'X', maker: 'Y', open: false }] as unknown as typeof models)?.open === false);
   // Branch challenge-models: the route checks the model with this request's country (challengeModel), before consent and the count.
   check('models: the route refuses a model not in the list before anything is spent', /const chosen = challengeModel\(r\.model, whereFrom\(request\.headers\)\);\s*if \(!chosen\) return no\(MAKE_WORDING\.noModel, 400/.test(route) && route.indexOf('challengeModel(') < route.indexOf('paidPicture('));
@@ -290,7 +308,7 @@ check('config: a current default look per challenge character, each a design id 
   // The screen's data with the moments off: no moments, the styles (the picture's own first when listed), the models.
   const src = { kind: 'sheet' as const, versionId: from, character: 'zei', url: 'u', sha256: 's', width: 1, height: 1, text: '', title: '', by: null, byFid: 1, versionNo: 1, moment: null, styleElement: 'e2' };
   const mv = M.makeView(src, { styles: pub });
-  check('moments off: the screen gets no moments, the styles in order, "Same as this picture" chosen first (owner, 2026-11-09), the models, and the box\'s label', mv.moments.length === 0 && mv.source.moment === null && mv.styles.map((x) => x.id).join() === 'style:e1,style:e2,style:e3' && mv.defaultStyle === 'same' && mv.models.length === 2 && mv.models[0].id === IMAGES.editModel.id && /* branch challenge-models: no country, the open two */  mv.w.wordsLabel === 'Change Zei: clothes, colours, age, pose…' && mv.w.style === 'Style' && mv.w.random === 'Random' && mv.w.ownStyle === 'Write your own');
+  check('moments off: the screen gets no moments, the styles in order, "Same as this picture" chosen first (owner, 2026-11-09), the models, and the box\'s label', mv.moments.length === 0 && mv.source.moment === null && mv.styles.map((x) => x.id).join() === 'style:e1,style:e2,style:e3' && mv.defaultStyle === 'same' && mv.models.length === 1 && mv.models[0].id === IMAGES.editModel.id && /* branch challenge-models: no country, the open model alone */  mv.w.wordsLabel === 'Change Zei: clothes, colours, age, pose…' && mv.w.style === 'Style' && mv.w.random === 'Random' && mv.w.ownStyle === 'Write your own');
   check('moments off: every picture starts on "Same as this picture" (owner, 2026-11-09), with or without a style of its own', M.makeView({ ...src, styleElement: null }, { styles: pub }).defaultStyle === 'same');
   check('moments on (kept): the screen gets all fifteen', M.makeView(src, { styles: pub, momentsOn: true }).moments.length === 15);
   check('moments off: a picture is anchored to its character\'s first passage', JSON.stringify(M.characterAnchor('zei')) === JSON.stringify({ chapter: 2, start: 2, end: 2 }));

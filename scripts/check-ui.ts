@@ -1905,6 +1905,9 @@ async function checkChallengeLanding() {
       await checkFloors(page, `/challenge/zei ${tag}`, scheme);
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways`);
       if (((await page.locator('.ch-character-page h1').textContent()) ?? '').trim() !== 'Zei') fail(`/challenge/zei ${tag}: the heading isn't "Zei"`);
+      // "Read where Zei first appears" (owner, 2026-11-09): under the one line, to the reader at Zei's first block.
+      const fa = page.locator('.ch-character-page a[data-slot="first-appears"]');
+      if ((await fa.count()) !== 1 || ((await fa.textContent()) ?? '').trim() !== 'Read where Zei first appears' || (await fa.getAttribute('href')) !== '/chapter/2#c2-b2') fail(`/challenge/zei ${tag}: no "Read where Zei first appears" to /chapter/2#c2-b2 (${await fa.getAttribute('href').catch(() => 'none')})`);
       const heads = (await page.locator('.ch-character-page h2.cc-head').allTextContents()).map((t) => t.trim());
       if (heads.join('|') !== 'Bases|Remixes') fail(`/challenge/zei ${tag}: the sections read ${heads.join(', ')}, not Bases, Remixes`);
       const zeiRemixes = FX.remixes.filter((r) => r.character === 'zei').map((r) => r.versionId);
@@ -1933,9 +1936,9 @@ async function checkChallengeLanding() {
       if (styleChips.join('|') !== wantChips.join('|')) fail(`/challenge/make ${tag}: the Style row reads ${styleChips.join(', ')}, not ${wantChips.join(', ')}`);
       if ((await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style')) !== 'same') fail(`/challenge/make ${tag}: the Style row doesn't start on "Same as this picture"`);
       const models = (await page.locator('.mk-model .cc-chip').allTextContents()).map((t) => t.trim());
-      // Branch challenge-models: a local server has no country header, so the open models only, the default first (the
+      // Branch challenge-models: a local server has no country header, so the open model only (the
       // closed ones, offered by country, are proven by test:model-choice C2–C4 and the screenshots).
-      if (models.join('|') !== 'FLUX.2 [klein] 4B · Black Forest Labs · open|Qwen-Image-Edit · Alibaba\'s Qwen team · open') fail(`/challenge/make ${tag}: the Model row reads ${models.join(', ')}`);
+      if (models.join('|') !== 'FLUX.2 [klein] 4B · Black Forest Labs · open') fail(`/challenge/make ${tag}: the Model row reads ${models.join(', ')}`);
       if (await page.locator('.mk-moments, .mk-strip, .mk-surprise, .mk-quotes').count()) fail(`/challenge/make ${tag}: shows the moments while they are off`);
       await snap('make', true);
       await page.locator('.mk-styles .cc-chip[data-style="own"]').click();
