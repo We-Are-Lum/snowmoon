@@ -8,7 +8,7 @@
  *      but the open default;
  *  M2  the default is the open models, listed first;
  *  M3  one model per sheet: views from two choices are refused, at the side/back and at publish;
- *  M4  a closed picture counts as 3 of the free pictures (no separate per-person count) and the closed site cap ($5, inside the free cap),
+ *  M4  a closed picture counts as 3 of the free pictures (no separate per-person count) and the closed site cap ($15 since 2026-11-09, never above the free cap),
  *      on an in-memory Postgres with every migration, NEXT_remix_model_choice.sql included;
  *  M5  the recipe lines: the closed label, the closed safety line and the can't-be-re-run line; open lines unchanged;
  *  M6  the safety line is the agreed wording, word for word;
@@ -140,7 +140,7 @@ proven(
   const closedSpend = (m: SheetModel) => ({ model: m.views, reserveUsd: m.reserveUsd.view, pool: 'closed' as const });
 
   // Branch challenge-models (owner, 2026-11-08): a closed picture counts as CLOSED_IMAGES.countsAs (3) of the day's free
-  // pictures; the closed site cap ($5) still holds; the separate 6 a day is gone.
+  // pictures; the closed site cap ($15) still holds; the separate 6 a day is gone.
   const weighted = async (fid: number) => {
     const p: string[] = [];
     const per = IMAGES.generationsPerDay; // 10
@@ -181,7 +181,8 @@ proven(
   proven('M4a a closed picture counts as 3 of the day\'s free pictures; no separate per-person closed count', () => real, () => need(plantOpenLeft === IMAGES.generationsPerDay - 3 * CLOSED_IMAGES.countsAs, `three closed asks without a pool left ${plantOpenLeft}`));
 
   // The site-wide closed cap: today's closed spend near its cap stops a closed picture, never an open one.
-  // In the challenge window (the free cap $15, the closed cap $5), as on 12 Nov: the window moved to now, for this test only.
+  // In the challenge window (the free cap $15, the closed cap $15 since 2026-11-09, so the two are the same there), as on
+  // 12 Nov: the window moved to now, for this test only.
   const dates = CHALLENGE.dates as { opens: string; closes: string };
   const saved = { ...dates };
   const pub = CHALLENGE as { public: boolean };
@@ -202,12 +203,24 @@ proven(
     else await settle(S, {});
     return p;
   };
+  // With the closed cap equal to the free cap, a closed picture near it is stopped by one or the other ('spend' or
+  // 'closed-spend'); an open Generate that still fits goes through.
+  const siteCapEq = async () => {
+    const p: string[] = [];
+    const rc = await reserve(S, 2001, closedSpend(GPT));
+    if (rc.ok || (rc.refusal !== 'closed-spend' && rc.refusal !== 'spend')) p.push(`a closed picture over the closed cap was not stopped (${JSON.stringify(rc)})`);
+    const ro = await reserve(S, 2001);
+    if (!ro.ok) p.push(`an open Generate that fits was stopped (${ro.refusal})`);
+    else await settle(S, {});
+    return p;
+  };
   await fill(cap - GPT.reserveUsd.view / 2, GPT.views.id);
-  const capReal = await siteCap();
+  const capReal = await siteCapEq();
   await su('delete from studio.image_costs');
-  await fill(cap - GPT.reserveUsd.view / 2, 'z-image-turbo'); // planted: the same spend, on an open model
-  const capPlant = await siteCap();
-  proven('M4b closed spend has its own site-wide cap ($5 in the window); open spend does not count in it', () => [...capReal, ...need(cap === 5, `closed cap ${cap} in the window`)], () => capPlant);
+  await fill(1, GPT.views.id); // planted: closed spend far under the cap, so the closed picture must go through
+  const capPlant = await siteCapEq();
+  void siteCap;
+  proven('M4b closed spend is capped site-wide ($15 in the window, the same as the free cap); an open Generate that fits still goes', () => [...capReal, ...need(cap === 15, `closed cap ${cap} in the window`)], () => capPlant);
   Object.assign(dates, saved);
 
   // The free cap of the moment still holds over closed pictures, and the closed cap sits inside it.
@@ -216,11 +229,11 @@ proven(
   const rAll = await reserve(S, 2002, closedSpend(GPT));
   const inWindow = closedCapUsd(new Date('2026-11-10T20:00:00Z'));
   proven(
-    'M4c the closed cap is $5 within the challenge\'s $15, and the free cap still stops closed pictures',
+    'M4c the closed cap is $15, never above the free cap of the moment ($15 in the challenge, $2 after), and the free cap still stops closed pictures',
     () => [
       ...need(!rAll.ok && rAll.refusal === 'spend', `a closed picture over the free cap was not stopped (${JSON.stringify(rAll)})`),
-      ...need(inWindow === CLOSED_IMAGES.dailySpendCapUsd && inWindow === 5 && imagesDailySpendCapUsd(new Date('2026-11-10T20:00:00Z')) === 15, `in the window the closed cap is ${inWindow}`),
-      ...need(closedCapUsd(new Date('2026-12-10T20:00:00Z')) === Math.min(5, IMAGES.dailySpendCapUsd), 'outside the window the closed cap is above the free cap'),
+      ...need(inWindow === CLOSED_IMAGES.dailySpendCapUsd && inWindow === 15 && imagesDailySpendCapUsd(new Date('2026-11-10T20:00:00Z')) === 15, `in the window the closed cap is ${inWindow}`),
+      ...need(closedCapUsd(new Date('2026-12-10T20:00:00Z')) === Math.min(15, IMAGES.dailySpendCapUsd), 'outside the window the closed cap is above the free cap'),
     ],
     () => need(Math.min(50, 15) === 50, 'a closed cap of $50 would sit above the $15 free cap'),
   );
@@ -352,6 +365,36 @@ proven(
     ];
     guardVerdict = '{"allow": true}';
     const lax = await refusedFor(4107, 'Zei on a ledge', 'Studio Ghibli look', '{"allow": true}'); // planted: a check that lets it through
+    // M4g (owner, 2026-11-09): a FLUX picture fal's checker blocks, made for the challenge (blocked.giveBack), answers the
+    // owner's words and uses none of today's pictures (given back: NEXT_image_asks_back.sql, applied here); its spend is
+    // still recorded (verdict nsfw). Without giveBack (elsewhere on the site) it counts, as before; a prompt-check
+    // refusal counts too, whatever is asked.
+    {
+      const { generationsLeft: leftOf } = await import('../src/lib/images/limits');
+      const { MODEL_WORDING: MW } = await import('../src/lib/challenge/model-wording');
+      const nsfwSpend = async () => Number((await sql`select coalesce(sum(calls), 0)::int as n from studio.image_costs where kind = 'image' and verdict = 'nsfw' and model = 'flux2-klein-4b-edit'`)[0].n);
+      const run = async (fid: number, giveBack: boolean, verdict = '{"allow": true}') => {
+        guardVerdict = verdict;
+        falAnswer = flagged;
+        const before = await leftOf(S, fid);
+        const spentBefore = await nsfwSpend();
+        const r = await paidPicture(S, fid, req, { checkText: 'Seila, warm light.', spend: { model: { id: 'flux2-klein-4b-edit', host: 'fal.ai' }, reserveUsd: 0.0215 }, make: () => makeEdit('Seila, warm light.', [ref]), blocked: { error: MW.openBlocked(true), giveBack } });
+        guardVerdict = '{"allow": true}';
+        return { r, used: before - (await leftOf(S, fid)), recorded: (await nsfwSpend()) - spentBefore };
+      };
+      const given = await run(4201, true);
+      const counted = await run(4202, false);
+      const refused = await run(4203, true, '{"allow": false, "category": "sexual"}');
+      const m4g = [
+        ...need(!given.r.ok && given.r.error === 'This picture was blocked by the open model\'s safety check. Try other words, or a closed model.' && given.r.extra.reason === 'nsfw' && given.r.extra.givenBack === true, `the blocked answer: ${JSON.stringify(given.r)}`),
+        ...need(given.used === 0, `a blocked FLUX picture used ${given.used} of today's pictures`),
+        ...need(given.recorded === 1, 'the blocked picture\'s spend was not recorded'),
+        ...need(!given.r.ok && given.r.extra.left === IMAGES.generationsPerDay, `the answer's left: ${!given.r.ok && given.r.extra.left}`),
+        ...need(counted.used === 1 && counted.recorded === 1, `without giveBack it used ${counted.used}`),
+        ...need(!refused.r.ok && refused.r.extra.reason === 'blocked' && refused.used === 1, `a prompt-check refusal used ${refused.used}`),
+      ];
+      proven('M4g a FLUX picture fal\'s checker blocks, for the challenge, says the owner\'s words and uses none of today\'s pictures (its spend recorded); a prompt-check refusal still counts', () => m4g, () => need(counted.used === 0, `planted (no give-back): the blocked picture used ${counted.used}`));
+    }
     globalThis.fetch = realFetch;
     process.env.FAL_KEY = keys.fal;
     process.env.GROQ_API_KEY = keys.groq;
@@ -661,7 +704,7 @@ proven(
       ...need(challengeModel('midjourney', FR) === null && challengeModel('z-image-turbo', FR) === null, 'the server accepts a model not on the list'),
       ...need(challengeModel(undefined, NONE)?.id === DEFAULT_CHALLENGE_MODEL, 'no model is not the open default'),
       ...need(ri > 0 && ri < ci && ci < pi, 'the route does not refuse the model before consent and the count'),
-      ...need(/modelView\(whereFrom\(request\.headers\)/.test(makeSrc) && /challengeModel\(r\.model, whereFrom\(request\.headers\)\)/.test(makeSrc), 'GET or POST does not use this request\'s country'),
+      ...need((makeSrc.match(/const where = whereFrom\(request\.headers\);/g) ?? []).length === 2 && /modelView\(where, \{ wallet \}\)/.test(makeSrc) && /challengeModel\(r\.model, where\)/.test(makeSrc), 'GET or POST does not use this request\'s country'),
     ],
     () => pickerMatches(() => CHALLENGE_MODELS.map((m) => ({ id: m.id }))),
   );
@@ -852,7 +895,7 @@ proven(
       ...need(MODEL_WORDING.tooFew(0, '4:00 pm') === 'A closed model uses 3 of today\'s pictures; you have none left today. More pictures at 4:00 pm.', 'the none-left line'),
       ...need(resetLocal(at, 'America/Los_Angeles') === '4:00 pm' && resetLocal(at, 'Europe/Paris') === '1:00 am' && resetLocal(at, 'UTC') === '12:00 am', `reset: ${resetLocal(at, 'America/Los_Angeles')}, ${resetLocal(at, 'Europe/Paris')}, ${resetLocal(at, 'UTC')}`),
       ...need(!/resetLocal|toLocaleTimeString/.test(makeSrc), 'the route renders a time'),
-      ...need(IMAGES.generationsPerDay === 10 && IMAGES.dailySpendCapUsd !== undefined && CLOSED_IMAGES.dailySpendCapUsd === 5, 'the free count (10) or the closed cap ($5) changed'),
+      ...need(IMAGES.generationsPerDay === 10 && IMAGES.dailySpendCapUsd !== undefined && CLOSED_IMAGES.dailySpendCapUsd === 15, 'the free count (10) or the closed cap ($15) changed'),
       // The refusals in the owner's words (2026-11-08); the cap's {reset} is filled in by the browser from the answer's instant.
       ...need(IMAGE_W.designs.models.closedLimit === 'A closed model uses 3 of today’s pictures, and you have fewer left. You can still use an open model.', 'the closed-limit words'),
       ...need(IMAGE_W.designs.models.closedSpend === 'Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at {reset}.', 'the closed-spend words'),
@@ -861,7 +904,87 @@ proven(
       ...need(/withReset\(out\.error, out\.resetAt\)/.test(read('src/components/challenge-make.tsx')), 'the screen doesn\'t fill in the reset'),
       ...need(read('src/lib/images/rules.ts').includes('No self-harm, extremism or election campaigning. Describe styles by look, not by artist, studio or film.'), 'the rules above Generate'),
     ];
-    proven('C17 the closed-pick lines are the owner\'s words with the models\' own estimates; the too-few line, its n = 0 form, and the reset in the visitor\'s time (browser only); 10 free a day, $5 closed cap', () => [...linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS), ...tooFew], () => linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS.map((m) => (m.id === 'gpt-image-2.5-sunburst' ? { ...m, estimateUsd: 0.08 } : m))));
+    proven('C17 the closed-pick lines are the owner\'s words with the models\' own estimates; the too-few line, its n = 0 form, and the reset in the visitor\'s time (browser only); 10 free a day, $15 closed cap', () => [...linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS), ...tooFew], () => linesOk(MODEL_WORDING.closedLine, CHALLENGE_MODELS.map((m) => (m.id === 'gpt-image-2.5-sunburst' ? { ...m, estimateUsd: 0.08 } : m))));
+  }
+
+  // C21 (owner, 2026-11-09): the Model row starts on GPT Image 2.5 Sunburst for someone who can use it, until entries
+  // close; FLUX for a wallet account, outside OpenAI's regions, with no country header, signed out, with too few
+  // pictures left, and after the close (tied to CHALLENGE.dates.closes, both sides tried). The row's order is unchanged.
+  {
+    const { challengeDefaultModel, challengeDefaultProblems, defaultCases, CHALLENGE_CLOSED_DEFAULT } = M;
+    const closes = Date.parse(CHALLENGE.dates.closes);
+    const before = new Date(closes - 1), at = new Date(closes), after = new Date('2026-12-01T12:00:00Z');
+    const US = { country: 'US', region: null }, NONE = { country: null, region: null }, IR = { country: 'IR', region: null }, CN = { country: 'CN', region: null }, CRIMEA = { country: 'UA', region: '43' };
+    const base: Parameters<typeof challengeDefaultModel>[0] = { where: US, signedIn: true, wallet: false, picturesLeft: 10, now: before };
+    const exact = (f: typeof challengeDefaultModel) => {
+      const d = (o: Partial<typeof base>) => f({ ...base, ...o });
+      return [
+        ...need(d({}) === 'gpt-image-2.5-sunburst', `signed in, US, before the close: ${d({})}`),
+        ...need(d({ picturesLeft: null }) === 'gpt-image-2.5-sunburst', 'unknown count'),
+        ...need(d({ picturesLeft: 3 }) === 'gpt-image-2.5-sunburst' && d({ picturesLeft: 2 }) === 'flux2-klein-4b-edit', 'the count edge (3 fits, 2 doesn\'t)'),
+        ...need(d({ wallet: true }) === 'flux2-klein-4b-edit', 'a wallet account'),
+        ...need(d({ signedIn: false, picturesLeft: null }) === 'flux2-klein-4b-edit', 'signed out'),
+        ...need(d({ where: NONE }) === 'flux2-klein-4b-edit', 'no country header'),
+        ...need(d({ where: IR }) === 'flux2-klein-4b-edit' && d({ where: CN }) === 'flux2-klein-4b-edit' && d({ where: CRIMEA }) === 'flux2-klein-4b-edit', 'outside OpenAI\'s regions'),
+        ...need(d({ now: at }) === 'flux2-klein-4b-edit' && d({ now: after }) === 'flux2-klein-4b-edit', 'at or after the close'),
+        ...need(d({ on: false }) === 'flux2-klein-4b-edit', 'closed models off'),
+        ...need(CHALLENGE.dates.closes === '2026-11-30T08:00:00Z', `the close is ${CHALLENGE.dates.closes}, not 29 Nov 23:59 PT`),
+        ...need(challengeDefaultProblems(defaultCases().map((c) => ({ c, id: f(c) }))).length === 0, 'P3e\'s check fails it'),
+      ];
+    };
+    // Planted: GPT for everyone it's offered to, whatever the date or the account.
+    const wider: typeof challengeDefaultModel = (c) => (challengeModelsFor(c.where, c.on).some((m) => m.id === CHALLENGE_CLOSED_DEFAULT) ? CHALLENGE_CLOSED_DEFAULT : 'flux2-klein-4b-edit');
+    const rowSrc = read('src/components/challenge-model-row.tsx'), routeSrc2 = makeSrc;
+    proven('C21 GPT Image 2.5 Sunburst is the default exactly for someone who can use it, until entries close; FLUX otherwise and after (both sides of the close)', () => [
+      ...exact(challengeDefaultModel),
+      ...need(/const defaultModel = challengeDefaultModel\(\{ where, signedIn: person !== null, wallet, picturesLeft, now: new Date\(\) \}\)/.test(routeSrc2), 'the route does not send the default'),
+      ...need(/list\?\.find\(\(m\) => m\.id === defaultModel\)/.test(rowSrc), 'the row does not start on the server\'s default'),
+      ...need(modelRow(US)[0].id === DEFAULT_CHALLENGE_MODEL, 'the row\'s order changed (FLUX first)'),
+    ], () => exact(wider));
+    // P3e's own check: exactly the exception passes; anything wider (planted) fails, and so does any other closed default.
+    const gemini: typeof challengeDefaultModel = (c) => (challengeDefaultModel(c) === CHALLENGE_CLOSED_DEFAULT ? 'gemini-3.1-flash-image' : 'flux2-klein-4b-edit');
+    proven('C21b P3e accepts exactly this exception: a wider default, or another closed model, fails', () => challengeDefaultProblems(defaultCases().map((c) => ({ c, id: challengeDefaultModel(c) }))), () => [...challengeDefaultProblems(defaultCases().map((c) => ({ c, id: wider(c) }))).slice(0, 1), ...challengeDefaultProblems(defaultCases().map((c) => ({ c, id: gemini(c) }))).slice(0, 1)]);
+  }
+
+  // C22 (owner, 2026-11-09): change words naming another challenge character are refused before any model or check,
+  // with the owner's words; whole words only, any case.
+  {
+    const { oneCharacterProblem, otherCharacterIn } = await import('../src/lib/challenge/one-character');
+    const cases = (f: typeof otherCharacterIn) => [
+      ...need(f('Zei and Bai at the market', 'zei') === 'Bai', 'Bai'),
+      ...need(f('with bai beside him', 'zei') === 'Bai', 'bai (lower case)'),
+      ...need(f('MU waves', 'zei') === 'Mu' && f('Mu\'s hat', 'zei') === 'Mu', 'MU, Mu\'s'),
+      ...need(f('Seila, then Gladias', 'zei') === 'Seila', 'the first one found'),
+      ...need(f('Gladias, then Seila', 'zei') === 'Gladias', 'the first one found (order of the words)'),
+      ...need(f('playing music', 'zei') === null && f('Bailey waves', 'zei') === null && f('an embai lantern', 'zei') === null && f('Deluinish light', 'zei') === null, 'music, Bailey, embai, Deluinish must not match'),
+      ...need(f('Zei alone on the ledge', 'zei') === null && f('zei, zei', 'zei') === null, 'the picture\'s own character'),
+      ...need(f('Bai alone', 'bai') === null && f('Bai and Zei', 'bai') === 'Zei', 'from Bai\'s picture'),
+    ];
+    const loose: typeof otherCharacterIn = (w, ch) => (['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'].filter((s) => s !== ch).find((s) => w.toLowerCase().includes(s)) ?? null);
+    const si = makeSrc.indexOf('oneCharacterProblem(r.words, src.character)'), mi = makeSrc.indexOf('challengeModel(r.model'), ci = makeSrc.indexOf('await hasConsented(fid)'), pi = makeSrc.indexOf('await paidPicture(');
+    proven('C22 another challenge character named in the change box is refused first, in the owner\'s words; "music", "Bailey", "embai" don\'t match', () => [
+      ...cases(otherCharacterIn),
+      ...need(oneCharacterProblem('Zei and bai', 'zei') === 'One character per picture for now, so leave Bai out: this picture is of Zei.', `the words: ${oneCharacterProblem('Zei and bai', 'zei')}`),
+      ...need(si > 0 && si < mi && mi < ci && ci < pi, 'the refusal is not before the model, consent and the paid path (it would use a picture)'),
+      ...need(/if \(second\) return no\(second, 400, \{ reason: 'character' \}\)/.test(makeSrc), 'the route\'s refusal'),
+      ...need(!/oneCharacterProblem\([^)]*style/.test(makeSrc), 'the style text is checked too (only the change box, as the owner said)'),
+    ], () => cases(loose));
+  }
+
+  // C23 (owner, 2026-11-09): the FLUX block message's closed-model clause only for someone who can use a closed model.
+  {
+    const { MODEL_WORDING: MW } = await import('../src/lib/challenge/model-wording');
+    const { closedUsableBy } = M;
+    const US = { country: 'US', region: null }, NONE = { country: null, region: null }, IR = { country: 'IR', region: null };
+    const say = (usable: typeof closedUsableBy) => [
+      ...need(MW.openBlocked(usable(US, false)) === 'This picture was blocked by the open model\'s safety check. Try other words, or a closed model.', 'a Farcaster account in the US'),
+      ...need(MW.openBlocked(usable(US, true)) === 'This picture was blocked by the open model\'s safety check. Try other words.', 'a wallet account'),
+      ...need(MW.openBlocked(usable(NONE, false)) === 'This picture was blocked by the open model\'s safety check. Try other words.', 'no country header'),
+      ...need(MW.openBlocked(usable(IR, false)) === 'This picture was blocked by the open model\'s safety check. Try other words.', 'an embargoed country'),
+      ...need(MW.openBlocked(usable(US, false, false)) === 'This picture was blocked by the open model\'s safety check. Try other words.', 'closed models off'),
+      ...need(/chosen\.id === DEFAULT_CHALLENGE_MODEL \? \{ blocked: \{ error: MODEL_WORDING\.openBlocked\(closedUsableBy\(where, isWalletNumber\(fid\)\)\), giveBack: true \} \}/.test(makeSrc), 'the route doesn\'t pass the block words and the give-back for FLUX only'),
+    ];
+    proven('C23 the FLUX block message says "or a closed model" only to someone who can use one (not a wallet account, nor outside the makers\' regions)', () => say(closedUsableBy), () => say(() => true));
   }
 
   // C12: model choice on the challenge is on only with Privacy §4, §7 and consent v6 saying what each maker receives (P6t).

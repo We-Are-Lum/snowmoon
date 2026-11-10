@@ -10,9 +10,10 @@ import { referencePicture } from '~/lib/images/reference-picture';
 import { signTicket, type TicketDesign } from '~/lib/images/ticket';
 import { bookCharacter } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
-import { characterAnchor, makeView, momentPrompt, othersIn, publishedStyles, readMake, remixPrompt, resolveStyle } from '~/lib/challenge/make';
+import { characterAnchor, makeView, momentPrompt, othersIn, challengeStyles, readMake, remixPrompt, resolveStyle } from '~/lib/challenge/make';
 import { MAKE_WORDING } from '~/lib/challenge/make-wording';
-import { challengeModel, DEFAULT_CHALLENGE_MODEL, modelView, noticeProblem } from '~/lib/challenge/models';
+import { challengeDefaultModel, challengeModel, closedUsableBy, DEFAULT_CHALLENGE_MODEL, modelView, noticeProblem } from '~/lib/challenge/models';
+import { oneCharacterProblem } from '~/lib/challenge/one-character';
 import { challengeSpend, makeWith, recipeModel } from '~/lib/challenge/make-model';
 import { MODEL_WORDING } from '~/lib/challenge/model-wording';
 import { lookFor } from '~/lib/challenge/looks';
@@ -47,6 +48,11 @@ import { challengeVisibleTo } from '~/lib/challenge/visibility';
  * `notice: { version, adult: true }`: its maker's notice shown and the 18+ box ticked on the device. Every model but
  * the open default gets the tapped picture as its single reference image. The recipe records the model's id,
  * endpoint, host and cost; a closed picture counts as CLOSED_IMAGES.countsAs of the day's free pictures.
+ *
+ * Owner, 2026-11-09: GET also sends `defaultModel`, the model the row starts on (GPT Image 2.5 Sunburst for someone who
+ * can use it, until entries close: P3's one exception; FLUX otherwise). POST refuses change words naming another
+ * challenge character first (one character per picture), and a FLUX picture fal's checker blocks answers the owner's
+ * words and uses none of today's pictures.
  */
 const no = (error: string, status: number, extra: Record<string, unknown> = {}) => NextResponse.json({ error, ...extra }, { status });
 const hidden = () => NextResponse.json({ error: 'Not found' }, { status: 404 });
@@ -61,10 +67,15 @@ export async function GET(request: Request) {
   const src = sql ? await sourceOf(sql, from).catch(() => null) : null;
   if (!src) return hidden();
   // The country decides the Model row for this answer only; it isn't kept, logged or sent on.
-  const row = modelView(whereFrom(request.headers), { wallet: person !== null && isWalletNumber(person) });
+  const where = whereFrom(request.headers);
+  const wallet = person !== null && isWalletNumber(person);
+  const row = modelView(where, { wallet });
   // Today's free pictures left, so the screen can say when a closed pick (3 of them) won't fit; null signed out or for a wallet.
   const picturesLeft = sql && person !== null && !isWalletNumber(person) ? await generationsLeft(sql, person).catch(() => null) : null;
-  return NextResponse.json({ ...makeView(src, { styles: sql ? await publishedStyles(sql) : [], models: row.models }), modelsNote: row.note, picturesLeft }, { headers: { 'Cache-Control': 'private, no-store' } });
+  // The model the row starts on: GPT Image 2.5 Sunburst for someone who can use it, until entries close (P3's one
+  // exception, owner 2026-11-09; models.ts challengeDefaultModel); FLUX for everyone else and after the close.
+  const defaultModel = challengeDefaultModel({ where, signedIn: person !== null, wallet, picturesLeft, now: new Date() });
+  return NextResponse.json({ ...makeView(src, { styles: sql ? await challengeStyles(sql) : [], models: row.models }), modelsNote: row.note, picturesLeft, defaultModel: row.models.some((m) => m.id === defaultModel) ? defaultModel : DEFAULT_CHALLENGE_MODEL }, { headers: { 'Cache-Control': 'private, no-store' } });
 }
 
 export async function POST(request: Request) {
@@ -84,9 +95,14 @@ export async function POST(request: Request) {
   if (!r.ok) return no(r.error, 400);
   const src = await sourceOf(sql, r.from);
   if (!src) return no('This picture can’t be remixed for the challenge.', 400);
+  // One character per picture for now (owner, 2026-11-09): change words naming another challenge character are refused
+  // here, before any model or check runs, so the attempt uses none of today's pictures. Only the change box is read.
+  const second = oneCharacterProblem(r.words, src.character);
+  if (second) return no(second, 400, { reason: 'character' });
   // The model, before anything is counted: one offered to this visitor (the country, for this request only), with
   // its maker's notice and the 18+ box answered on the device for a closed one; never a wallet account's prepaid path.
-  const chosen = challengeModel(r.model, whereFrom(request.headers));
+  const where = whereFrom(request.headers);
+  const chosen = challengeModel(r.model, where);
   if (!chosen) return no(MAKE_WORDING.noModel, 400, { reason: 'model' });
   if (!chosen.open && isWalletNumber(fid)) return no(MODEL_WORDING.walletOnly, 403, { reason: 'model' });
   const notice = noticeProblem(chosen, (body as { notice?: unknown }).notice);
@@ -99,7 +115,7 @@ export async function POST(request: Request) {
   const name = callName(src.character);
   const moment = r.moment;
   // The Style row (moments off): a listed style, Random's draw from the published styles, or the person's own words.
-  const style = moment ? null : resolveStyle(r.style, await publishedStyles(sql));
+  const style = moment ? null : resolveStyle(r.style, await challengeStyles(sql));
   if (!moment && !style) return no(MAKE_WORDING.noStyle, 400);
   // With the moments on: the other challenge characters in the moment, each by their current default look.
   // Only the open default takes the others' looks; every other model gets the tapped picture alone.
@@ -124,6 +140,10 @@ export async function POST(request: Request) {
     guardMaxTokens: IMAGES.designs.guardMaxTokens,
     spend,
     make: () => makeWith(chosen, prompt, pictures, request, spend.reserveUsd),
+    // A FLUX picture fal's safety checker blocks (owner, 2026-11-09): its own words, the closed-model clause only for
+    // someone who can use one here, and it uses none of today's pictures (its spend still counts against the caps).
+    // fal's checker stays on. A closed model's refusal, and the prompt check's, count as before.
+    ...(chosen.id === DEFAULT_CHALLENGE_MODEL ? { blocked: { error: MODEL_WORDING.openBlocked(closedUsableBy(where, isWalletNumber(fid))), giveBack: true } } : {}),
   });
   if (!paid.ok) return no(paid.error, paid.status, paid.extra);
   const made = paid.made;

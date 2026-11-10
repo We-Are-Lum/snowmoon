@@ -85,6 +85,72 @@ export const CHALLENGE_MODELS: readonly ChallengeModel[] = [
 
 export const DEFAULT_CHALLENGE_MODEL: ChallengeModelId = 'flux2-klein-4b-edit';
 
+/**
+ * The one exception to "the default is open" (principle 3; owner, 2026-11-09, the challenge only): until entries
+ * close (CHALLENGE.dates.closes, 29 Nov 23:59 PT), the Model row starts on GPT Image 2.5 Sunburst for someone who can
+ * use it: signed in with Farcaster, Lens or Bluesky (not a wallet account), where OpenAI serves (countries.ts: its
+ * supported countries, without the embargoed ones; nothing when the country header is missing), with closed models
+ * offered (CHALLENGE.modelChoice), and with enough of today's free pictures left for one (CLOSED_IMAGES.countsAs).
+ * Everyone else starts on FLUX, which stays first in the row and one tap away; after the close everyone starts on
+ * FLUX again, with no deploy. The row's order doesn't change. check:principles P3e accepts exactly this and fails on
+ * anything wider (a closed default for anyone else, after the close, or any other closed model).
+ */
+export const CHALLENGE_CLOSED_DEFAULT: ChallengeModelId = 'gpt-image-2.5-sunburst';
+
+export interface DefaultCase {
+  where: Where;
+  /** Signed in at all (a wallet account included). */
+  signedIn: boolean;
+  wallet: boolean;
+  /** Today's free pictures left; null when not known (signed out, or a wallet account). */
+  picturesLeft: number | null;
+  now: Date;
+  /** CHALLENGE.modelChoice, for tests. */
+  on?: boolean;
+}
+
+/** The model the Model row starts on for this visitor (the exception above, or the open default). */
+export function challengeDefaultModel(c: DefaultCase): ChallengeModelId {
+  if (!c.signedIn || c.wallet) return DEFAULT_CHALLENGE_MODEL;
+  if (!(c.now.getTime() < Date.parse(CHALLENGE.dates.closes))) return DEFAULT_CHALLENGE_MODEL;
+  if (typeof c.picturesLeft === 'number' && c.picturesLeft < CLOSED_IMAGES.countsAs) return DEFAULT_CHALLENGE_MODEL;
+  return challengeModelsFor(c.where, c.on).some((m) => m.id === CHALLENGE_CLOSED_DEFAULT) ? CHALLENGE_CLOSED_DEFAULT : DEFAULT_CHALLENGE_MODEL;
+}
+
+/** Every kind of visitor P3e and the tests try the default on: the exception's edges, each one way and the other. */
+export function defaultCases(): DefaultCase[] {
+  const closes = Date.parse(CHALLENGE.dates.closes);
+  const out: DefaultCase[] = [];
+  const wheres: Where[] = [{ country: 'US', region: null }, { country: 'FR', region: null }, { country: null, region: null }, { country: 'IR', region: null }, { country: 'CN', region: null }, { country: 'UA', region: '43' }];
+  for (const where of wheres)
+    for (const [signedIn, wallet] of [[true, false], [true, true], [false, false]] as const)
+      for (const picturesLeft of [null, 10, 3, 2, 0])
+        for (const now of [new Date(closes - 60_000), new Date(closes), new Date(closes + 86_400_000)])
+          for (const on of [true, false]) out.push({ where, signedIn, wallet, picturesLeft, now, on });
+  return out;
+}
+
+/**
+ * What's wrong with these defaults (P3e): any closed model but GPT Image 2.5 Sunburst as a default, or GPT as a
+ * default outside the exception (signed out, a wallet account, after the close, where OpenAI doesn't serve or the
+ * country is unknown, closed models off, too few pictures left). A narrower default (FLUX where the exception allows
+ * GPT) is no P3 problem; scripts/test-model-choice.ts holds the exact rule.
+ */
+export function challengeDefaultProblems(got: readonly { c: DefaultCase; id: string }[]): string[] {
+  const p: string[] = [];
+  const closes = Date.parse(CHALLENGE.dates.closes);
+  for (const { c, id } of got) {
+    const m = CHALLENGE_MODELS.find((x) => x.id === id);
+    const who = `${c.signedIn ? (c.wallet ? 'a wallet account' : 'signed in') : 'signed out'}, country ${c.where.country ?? 'unknown'}${c.where.region ? `-${c.where.region}` : ''}, ${c.picturesLeft ?? 'unknown'} left, ${c.now.toISOString()}${c.on === false ? ', closed models off' : ''}`;
+    if (!m) { p.push(`default ${id} is not a challenge model (${who})`); continue; }
+    if (m.open) continue;
+    if (m.id !== CHALLENGE_CLOSED_DEFAULT) { p.push(`the default is ${m.id}, a closed model other than the challenge's one exception (${who})`); continue; }
+    const allowed = c.signedIn && !c.wallet && c.now.getTime() < closes && !(typeof c.picturesLeft === 'number' && c.picturesLeft < CLOSED_IMAGES.countsAs) && (c.on ?? CHALLENGE.modelChoice) && makerServes('OpenAI', c.where);
+    if (!allowed) p.push(`the default is closed (${m.id}) outside the exception (${who})`);
+  }
+  return p;
+}
+
 /** The worst case reserved before a picture: the picture's worst cost plus the prompt check's share. */
 export function reserveUsd(m: ChallengeModel, ref: { width: number; height: number }, out: { width: number; height: number } = IMAGES.size): number {
   if (m.id === 'flux2-klein-4b-edit') return (mp(out) + mp(ref)) * IMAGES.editPricePerMp + GUARD_SHARE;
@@ -105,6 +171,9 @@ export function challengeModelsFor(where: Where, on: boolean = CHALLENGE.modelCh
     return makerServes(m.maker as Maker, where);
   });
 }
+
+/** Can this visitor use a closed model here (not a wallet account, and one is offered where they are)? */
+export const closedUsableBy = (where: Where, wallet: boolean, on?: boolean): boolean => !wallet && challengeModelsFor(where, on).some((m) => !m.open);
 
 /** A model by its id, only if it is offered to this visitor; nothing (or empty) is the open default. Null otherwise. */
 export function challengeModel(id: unknown, where: Where, on?: boolean, geminiOk?: boolean): ChallengeModel | null {

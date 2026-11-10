@@ -1932,7 +1932,9 @@ async function checkChallengeLanding() {
       if (((await page.locator('label[for="mk-words"]').textContent()) ?? '').trim() !== 'Change Zei: clothes, colours, age, pose…') fail(`/challenge/make ${tag}: the box's label isn't "Change Zei: clothes, colours, age, pose…"`);
       const styleChips = (await page.locator('.mk-styles .cc-chip').allTextContents()).map((t) => t.replace('⟳', '').trim());
       // "Same as this picture" first and chosen (owner, 2026-11-09), then the published styles, Random, Write your own.
-      const wantChips = ['Same as this picture', ...FX.styles.map((x) => x.name), 'Random', 'Write your own'];
+      // Only the offered styles (CHALLENGE.offeredStyles, "Animated series"; owner, 2026-11-09); Random only with one to draw.
+      const offeredFx = FX.styles.map((x) => x.name).filter((n) => CHALLENGE.offeredStyles.includes(n));
+      const wantChips = ['Same as this picture', ...offeredFx, ...(offeredFx.length ? ['Random'] : []), 'Write your own'];
       if (styleChips.join('|') !== wantChips.join('|')) fail(`/challenge/make ${tag}: the Style row reads ${styleChips.join(', ')}, not ${wantChips.join(', ')}`);
       if ((await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style')) !== 'same') fail(`/challenge/make ${tag}: the Style row doesn't start on "Same as this picture"`);
       const models = (await page.locator('.mk-model .cc-chip').allTextContents()).map((t) => t.trim());

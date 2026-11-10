@@ -46,7 +46,7 @@ import { spoilerExceptionOn } from '../src/lib/challenge/spoilers';
 import { DEFAULT_SHEET_MODEL, SHEET_MODELS, sheetModelProblems, sheetModelsOffered } from '../src/lib/images/sheet-models';
 import { modelChoicesFor } from '../src/lib/images/model-choice-view';
 import { consentClosedProblems, p6tProblems } from './lib/p6t';
-import { CHALLENGE_MODELS, DEFAULT_CHALLENGE_MODEL, challengeModelProblems, challengeModelsFor } from '../src/lib/challenge/models';
+import { CHALLENGE_MODELS, DEFAULT_CHALLENGE_MODEL, challengeDefaultModel, challengeDefaultProblems, challengeModelProblems, challengeModelsFor, defaultCases } from '../src/lib/challenge/models';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -1130,7 +1130,7 @@ add({
 add({
   id: 'P3e',
   principle: 3,
-  name: 'the default is open: the remix form\'s and the challenge\'s model choice list the open models first, as the default; closed ones name their maker and are allowlisted',
+  name: 'the default is open: the remix form\'s and the challenge\'s model choice list the open models first, as the default (one exception: GPT Image 2.5 Sunburst for the challenge, for those who can use it, until entries close); closed ones name their maker and are allowlisted',
   load: async () => ({
     all: clone(SHEET_MODELS) as unknown as (typeof SHEET_MODELS)[number][],
     offeredOn: sheetModelsOffered(true, true).map((m) => m.id) as string[],
@@ -1141,10 +1141,13 @@ add({
     challenge: clone(CHALLENGE_MODELS) as unknown as (typeof CHALLENGE_MODELS)[number][],
     challengeOn: challengeModelsFor({ country: 'FR', region: null }, true, true).map((m) => ({ id: m.id, open: m.open })),
     challengeOff: challengeModelsFor({ country: 'FR', region: null }, false).map((m) => m.id) as string[],
+    // The row's starting model for every kind of visitor (owner, 2026-11-09: P3's one exception, the challenge only).
+    defaults: defaultCases().map((c) => ({ c, id: challengeDefaultModel(c) as string })),
   }),
   run: (c) => {
     const p = sheetModelProblems(c.all);
     p.push(...challengeModelProblems(c.challenge).map((x) => `challenge: ${x}`));
+    p.push(...challengeDefaultProblems(c.defaults).slice(0, 5).map((x) => `challenge: ${x}`));
     if (!c.challengeOn.length || c.challengeOn[0].id !== DEFAULT_CHALLENGE_MODEL || !c.challengeOn[0].open) p.push('challenge: the Model row does not offer the open default first');
     if (c.challengeOff.length !== 1 || c.challengeOff[0] !== DEFAULT_CHALLENGE_MODEL) p.push(`challenge: with CHALLENGE.modelChoice off, more than the open default is offered: ${c.challengeOff.join(', ')}`);
     for (const m of c.challenge) {
@@ -1170,6 +1173,8 @@ add({
     c.all = [...c.all].reverse();
     c.form = [...c.form].reverse();
     c.challenge = [...c.challenge].reverse();
+    // A wider default: GPT for a wallet account too.
+    c.defaults = c.defaults.map((d) => (d.c.wallet ? { ...d, id: 'gpt-image-2.5-sunburst' } : d));
   },
 });
 

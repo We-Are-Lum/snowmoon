@@ -15,18 +15,27 @@ import { ModelNotice } from './model-picker';
  * `notice: { version, adult: true }`, without which the server refuses it. The screen decides how the row looks
  * (branch challenge-simple); `notice` is the maker's notice to show while one is pending.
  */
-export function useChallengeModel<T extends ModelRowEntry>(models: readonly T[] | undefined, modelsNote: string | null = null) {
+export function useChallengeModel<T extends ModelRowEntry>(models: readonly T[] | undefined, modelsNote: string | null = null, defaultModel: string | null = null) {
   const list = models?.length ? models : null;
   const [id, setId] = useState<string | null>(null);
-  const chosen = list?.find((m) => m.id === id) ?? list?.[0] ?? null;
+  // The row starts on the server's default for this visitor (GPT Image 2.5 Sunburst for someone who can use it, until
+  // entries close: P3's one exception, owner 2026-11-09), else the first, the open default.
+  const chosen = list?.find((m) => m.id === id) ?? list?.find((m) => m.id === defaultModel) ?? list?.[0] ?? null;
   const seen = useRef(new Set<string>());
   const [pending, setPending] = useState<{ pick: T; askAdult: boolean } | null>(null);
   const [adultTicked, setAdultTicked] = useState(false);
+  // What runs once a notice asked at "Make it" is answered (the closed default's first picture).
+  const then = useRef<(() => void) | null>(null);
 
   const pick = (m: T) => {
-    if (m.open) return setId(m.id);
+    if (m.open) {
+      then.current = null;
+      setPending(null);
+      return setId(m.id);
+    }
     const n = noticeFor(m.maker, browserStore(), seen.current);
     if (!n.show) return setId(m.id);
+    then.current = null;
     setPending({ pick: m, askAdult: n.askAdult });
   };
   const answer = (button: 'ok' | 'never') => {
@@ -34,8 +43,26 @@ export function useChallengeModel<T extends ModelRowEntry>(models: readonly T[] 
     if (!answerNotice(pending.pick.maker, button, adultTicked, browserStore(), seen.current)) return;
     setId(pending.pick.id);
     setPending(null);
+    const next = then.current;
+    then.current = null;
+    next?.();
   };
-  const ready = !chosen || chosen.open || mayPick(chosen.maker, browserStore(), seen.current);
+  /** May the chosen model make a picture now (read live from the device, not from the last render)? */
+  const readyNow = () => !chosen || chosen.open || mayPick(chosen.maker, browserStore(), seen.current);
+  const ready = readyNow();
+  /**
+   * The chosen model is closed and its notice (and, the first time on this device, the 18+ box) is still to answer:
+   * shows it under the Model row and runs `next` once it is answered. Returns false when there is nothing to ask.
+   * The server refuses a closed picture without both whatever the screen does (models.ts noticeProblem).
+   */
+  const askFirst = (next: () => void): boolean => {
+    if (!chosen || chosen.open) return false;
+    const n = noticeFor(chosen.maker, browserStore(), seen.current);
+    if (!n.show) return false;
+    then.current = next;
+    setPending({ pick: chosen, askAdult: n.askAdult });
+    return true;
+  };
   /** What the make request adds to its body. */
   const body = (): { model?: string; notice?: { version: number; adult: true } } => {
     if (!chosen) return {};
@@ -50,5 +77,5 @@ export function useChallengeModel<T extends ModelRowEntry>(models: readonly T[] 
   const tooFew = (left: number | null | undefined) => (chosen && !chosen.open && typeof left === 'number' && left < chosen.countsAs ? W.tooFew(left, resetLocal()) : null);
   /** For a wallet account: the line shown in place of the closed models ("Closed models need a Farcaster, Lens or Bluesky sign-in."). */
   const note = modelsNote;
-  return { list, chosen, pick, ready, body, notice, meta, note, tooFew, W };
+  return { list, chosen, pick, ready, readyNow, askFirst, body, notice, meta, note, tooFew, W };
 }

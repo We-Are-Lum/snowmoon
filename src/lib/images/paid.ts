@@ -3,7 +3,7 @@ import type postgres from 'postgres';
 import { IMAGES } from '../config';
 import { checkPrompt } from './guard';
 import { ImageRefused, ImageUnavailable, type Made } from './fal';
-import { fundedBy, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
+import { fundedBy, giveBack, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
 import { blockedName } from './rules';
 import { FREE_WORDING } from '../social/free';
 import { IMAGE_WORDING } from './wording';
@@ -56,7 +56,15 @@ export async function paidPicture(
   sql: Sql,
   fid: number,
   request: Request,
-  job: { checkText: string; spend?: Spend; make: () => Promise<Made>; /** The prompt check's token budget (a sheet's views: IMAGES.designs.guardMaxTokens). */ guardMaxTokens?: number },
+  job: {
+    checkText: string; spend?: Spend; make: () => Promise<Made>; /** The prompt check's token budget (a sheet's views: IMAGES.designs.guardMaxTokens). */ guardMaxTokens?: number;
+    /**
+     * A picture the model's safety check blocks (the host's checker flagged it, or the model refused): its words, and
+     * whether it is given back to today's count (the challenge's open model, owner 2026-11-09). Its spend stays recorded.
+     * Without it, a blocked picture counts and says "flagged by the safety checker and dropped", as everywhere else.
+     */
+    blocked?: { error: string; giveBack: boolean };
+  },
 ): Promise<Paid> {
   const spend = job.spend;
   const funded = fundedBy(fid);
@@ -90,8 +98,7 @@ export async function paidPicture(
     // The model's own safety check refused it (branch challenge-models): counted and answered as a dropped picture.
     if (e instanceof ImageRefused) {
       await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' }, image: { costUsd: 0, verdict: 'nsfw' } }, spend, funded);
-      const back = await creditBack(sql, r.debitId, 'dropped');
-      return { ok: false, status: 422, error: failed('The image was flagged by the safety checker and dropped.', back), extra: { reason: 'nsfw', left: r.left, ...(back ? { creditedBack: true } : {}) } };
+      return dropped(sql, fid, r, job.blocked);
     }
     await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' } }, spend, funded);
     console.error('image generation failed', e instanceof ImageUnavailable ? e.message : (e as Error).name);
@@ -100,11 +107,16 @@ export async function paidPicture(
   }
   await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' }, image: { costUsd: made.costUsd, verdict: made.nsfw ? 'nsfw' : 'ok' } }, spend, funded);
   // Flagged by the host's safety checker: dropped here, never shown or stored.
-  if (made.nsfw) {
-    const back = await creditBack(sql, r.debitId, 'dropped');
-    return { ok: false, status: 422, error: failed('The image was flagged by the safety checker and dropped.', back), extra: { reason: 'nsfw', left: r.left, ...(back ? { creditedBack: true } : {}) } };
-  }
+  if (made.nsfw) return dropped(sql, fid, r, job.blocked);
   return { ok: true, made, left: r.left };
+}
+
+/** A picture the safety check blocked: dropped, never shown or stored; credited back to a wallet; given back when asked. */
+async function dropped(sql: Sql, fid: number, r: { left: number; debitId?: number }, blocked?: { error: string; giveBack: boolean }): Promise<Paid> {
+  const back = await creditBack(sql, r.debitId, 'dropped');
+  const given = blocked?.giveBack ? await giveBack(sql, fid) : false;
+  const left = given ? r.left + 1 : r.left;
+  return { ok: false, status: 422, error: failed(blocked?.error ?? 'The image was flagged by the safety checker and dropped.', back), extra: { reason: 'nsfw', left, ...(back ? { creditedBack: true } : {}), ...(given ? { givenBack: true } : {}) } };
 }
 
 /**

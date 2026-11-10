@@ -30,7 +30,7 @@ export const CHALLENGE_WORDING = {
   whoCanEnter: () => `Entering needs a Farcaster, Lens or Bluesky account that passes the site’s check; we check when you press ${CHALLENGE.pictureEntries ? 'Make it' : 'Generate'}.`,
   intro: () =>
     CHALLENGE.pictureEntries && !CHALLENGE.moments
-      ? // The owner's words (2026-11-08, the simpler challenge), exactly; "17 to 29 November" and the names come from config
+      ? // The owner's words (2026-11-08, the simpler challenge), exactly; "12 to 29 November" and the names come from config
         // (windowText, CHALLENGE.characters), and scripts/test-challenge-moments.ts ties the whole line to his text.
         `From ${windowText()}, make your own picture of ${listed(callNames())}: start from one of their pictures, change what you like, pick a style and a model, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.`
       : CHALLENGE.pictureEntries

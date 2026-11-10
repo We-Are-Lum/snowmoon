@@ -303,7 +303,7 @@ check('config: a current default look per challenge character, each a design id 
   check('models: a list, the edit model first (open, by Black Forest Labs, its chip as today\'s line); no closed model without a country', models.length === 1 && models[0].id === IMAGES.editModel.id && models[0].open && MD.modelChipText(models[0]) === 'FLUX.2 [klein] 4B · Black Forest Labs · open' && MD.modelChipText(models[0]) === (await import('../src/lib/challenge/make-wording')).MAKE_WORDING.modelChip);
   check('models: the request\'s model must be in the list (a missing or other id is refused)', MD.modelFromRequest(IMAGES.editModel.id)?.id === IMAGES.editModel.id && MD.modelFromRequest('gpt-image-2.5') === null && MD.modelFromRequest(undefined) === null && MD.modelFromRequest('x', [...models, { id: 'x', label: 'X', maker: 'Y', open: false }] as unknown as typeof models)?.open === false);
   // Branch challenge-models: the route checks the model with this request's country (challengeModel), before consent and the count.
-  check('models: the route refuses a model not in the list before anything is spent', /const chosen = challengeModel\(r\.model, whereFrom\(request\.headers\)\);\s*if \(!chosen\) return no\(MAKE_WORDING\.noModel, 400/.test(route) && route.indexOf('challengeModel(') < route.indexOf('paidPicture('));
+  check('models: the route refuses a model not in the list before anything is spent', /const where = whereFrom\(request\.headers\);\s*const chosen = challengeModel\(r\.model, where\);\s*if \(!chosen\) return no\(MAKE_WORDING\.noModel, 400/.test(route) && route.indexOf('challengeModel(') < route.indexOf('paidPicture('));
   check('a closed model\'s chip says "closed" and names its maker', MD.modelChipText({ id: 'g', label: 'Gemini 3.1 Flash Image', maker: 'Google', open: false }) === 'Gemini 3.1 Flash Image · Google · closed');
   // The screen's data with the moments off: no moments, the styles (the picture's own first when listed), the models.
   const src = { kind: 'sheet' as const, versionId: from, character: 'zei', url: 'u', sha256: 's', width: 1, height: 1, text: '', title: '', by: null, byFid: 1, versionNo: 1, moment: null, styleElement: 'e2' };
@@ -464,9 +464,9 @@ check('config: a current default look per challenge character, each a design id 
     const r8 = await E2.submitEntry(S, 500, early, post, d8);
     const v11 = await PV.pictureView(S, early, d11), v8 = await PV.pictureView(S, early, d8);
     const LINE = 'This picture was made before entries opened, so it can’t be entered. Remix it to make a new one.';
-    const ok = (a: typeof v11, b: typeof v8) => Boolean(a && b && a.beforeOpen && `${a.beforeOpen.text}${a.beforeOpen.link}${a.beforeOpen.after}` === LINE && a.notYet === null && b.beforeOpen === null && b.notYet === 'Entries open Tue 17 Nov, 00:00 PT.');
+    const ok = (a: typeof v11, b: typeof v8) => Boolean(a && b && a.beforeOpen && `${a.beforeOpen.text}${a.beforeOpen.link}${a.beforeOpen.after}` === LINE && a.notYet === null && b.beforeOpen === null && b.notYet === 'Entries open Thu 12 Nov, 00:00 PT.');
     check('before the open date: on 18 Nov, submitting a picture published on 8 Nov is refused with the owner\'s line', !r11.ok && r11.why === LINE, JSON.stringify(r11));
-    check('before the open date: on 8 Nov, Submit says "Entries open Tue 17 Nov, 00:00 PT." for a pre-open picture', !r8.ok && r8.why === 'Entries open Tue 17 Nov, 00:00 PT.', JSON.stringify(r8));
+    check('before the open date: on 8 Nov, Submit says "Entries open Thu 12 Nov, 00:00 PT." for a pre-open picture', !r8.ok && r8.why === 'Entries open Thu 12 Nov, 00:00 PT.', JSON.stringify(r8));
     check('before the open date: its page shows its maker the line from the 17th, and "Entries open …" before', ok(v11, v8));
     proof('before the open date: the line missing on the 18th is caught', !ok(v11 && { ...v11, beforeOpen: null }, v8));
     proof('before the open date: the line shown before the 17th is caught', !ok(v11, v8 && { ...v8, beforeOpen: v11!.beforeOpen }));
@@ -547,7 +547,9 @@ check('config: a current default look per challenge character, each a design id 
   const route = await import('../src/app/api/challenge/make/route');
   const g = await route.GET(new Request(`http://localhost/api/challenge/make?from=${base.versionId}`));
   const gj = (await g.json()) as { moments: unknown[]; source: { kind: string; character: string } };
-  check('make API, moments off: the screen\'s data for a base (no moments, Bai, a sheet, the styles and the model)', g.status === 200 && gj.moments.length === 0 && gj.source.character === 'bai' && gj.source.kind === 'sheet' && (gj as unknown as { styles: { label: string }[] }).styles.some((x) => x.label === 'Quiet, warm light') && (gj as unknown as { models: { chip: string }[] }).models[0].chip === 'FLUX.2 [klein] 4B · Black Forest Labs · open');
+  // The challenge's styles are an allowlist (CHALLENGE.offeredStyles, "Animated series"; owner, 2026-11-09): "Quiet, warm
+  // light" is published on this database but not offered; with "Animated series" unpublished here, the row lists none.
+  check('make API, moments off: the screen\'s data for a base (no moments, Bai, a sheet, only the offered styles, and the model)', g.status === 200 && gj.moments.length === 0 && gj.source.character === 'bai' && gj.source.kind === 'sheet' && !(gj as unknown as { styles: { label: string }[] }).styles.some((x) => x.label === 'Quiet, warm light') && (gj as unknown as { styles: unknown[] }).styles.length === 0 && (gj as unknown as { models: { chip: string }[] }).models[0].chip === 'FLUX.2 [klein] 4B · Black Forest Labs · open');
   const gs = (await (await route.GET(new Request(`http://localhost/api/challenge/make?from=${(globalThis as { __styledBase?: string }).__styledBase}`))).json()) as { defaultStyle: string };
   check('make API, moments off: a base in a published style starts on "Same as this picture" (owner, 2026-11-09)', gs.defaultStyle === 'same');
   CHALLENGE.moments = true;
@@ -610,15 +612,15 @@ check('config: a current default look per challenge character, each a design id 
 {
   const W = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
   const R = await import('../src/lib/challenge/rules');
-  // The owner's words, exactly; "17 to 29 November" is his literal, and the page builds it from CHALLENGE.dates, so the
+  // The owner's words, exactly; "12 to 29 November" is his literal (2026-11-09), and the page builds it from CHALLENGE.dates, so the
   // two can't drift: if the dates move, this check fails until the owner's line is moved with them.
-  const INTRO = 'From 17 to 29 November, make your own picture of Zei, Gladias, Bai, Seila, Deluin or Mu: start from one of their pictures, change what you like, pick a style and a model, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.';
+  const INTRO = 'From 12 to 29 November, make your own picture of Zei, Gladias, Bai, Seila, Deluin or Mu: start from one of their pictures, change what you like, pick a style and a model, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.';
   check('rules intro: the owner\'s words, exactly (moments off)', CHALLENGE.pictureEntries && !CHALLENGE.moments && W.intro() === INTRO, W.intro());
-  check('rules intro: its "17 to 29 November" is CHALLENGE.dates (opens 17 Nov 00:00 PT, the last minute 29 Nov 23:59 PT)', R.windowText() === '17 to 29 November' && R.pacificWallTime(CHALLENGE.dates.opens) === '2026-11-17 00:00' && R.pacificWallTime(new Date(Date.parse(CHALLENGE.dates.closes) - 60_000).toISOString()) === '2026-11-29 23:59' && INTRO.includes(`From ${R.windowText()},`));
+  check('rules intro: its "12 to 29 November" is CHALLENGE.dates (opens 12 Nov 00:00 PT, the last minute 29 Nov 23:59 PT)', R.windowText() === '12 to 29 November' && R.pacificWallTime(CHALLENGE.dates.opens) === '2026-11-12 00:00' && R.pacificWallTime(new Date(Date.parse(CHALLENGE.dates.closes) - 60_000).toISOString()) === '2026-11-29 23:59' && INTRO.includes(`From ${R.windowText()},`));
   {
     const keep = { ...CHALLENGE.dates };
     CHALLENGE.dates.closes = '2026-12-01T08:00:00Z';
-    proof('rules intro: dates that move away from the owner\'s "17 to 29 November" are caught', W.intro() !== INTRO);
+    proof('rules intro: dates that move away from the owner\'s "12 to 29 November" are caught', W.intro() !== INTRO);
     Object.assign(CHALLENGE.dates, keep);
   }
   check('rules: no moment in the intro or the rules', !/moment/i.test(W.intro() + W.rules().join(' ')));

@@ -1,4 +1,8 @@
-# Challenge release: every final text (v8; reread by the owner, 2026-11-08 and 2026-11-09)
+# Challenge release: every final text (v10: v9, reread by the owner on 2026-11-08 and 2026-11-09, plus the v10 section at the end, NOT YET REREAD)
+
+**v10 (2026-11-09, NOT YET REREAD):** GPT Image 2.5 Sunburst as the challenge's default for those who can use it, the
+one-character refusal and the FLUX block message. See "v10" at the end: every text that assumes an open default, with
+before and after drafts. No legal text has changed in the code (`LEGAL.ownerReread` untouched; P6k and P6l pass).
 
 Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` (v4 adds the closing line of 2026-11-09 and the bases' style; v3 was at `9ae0aa13`) (with challenge-simple's final head `1efcbeaf`). **v3:** the owner reread every text of v2 on 2026-11-08, via the coordinator's check, with changes 1–2 below applied word for word (the notice labels; the closed refusals) and the rules above Generate extended; the "none left" line approved as drafted
 (which carries `challenge-simple`). Every text below is copied from the code as it
@@ -149,11 +153,12 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
 
 ## The rules and the challenge pages (challenge-simple)
 
-- Rules intro (the owner's words; dates and names from config): "From 17 to 29 November, make your own picture of Zei,
+- Rules intro (the owner's words, v9 with the new open date; dates and names from config; entries open Thu 12 Nov 2026,
+  00:00 PT, and close after Sun 29 Nov, 23:59 PT): "From 12 to 29 November, make your own picture of Zei,
   Gladias, Bai, Seila, Deluin or Mu: start from one of their pictures, change what you like, pick a style and a model,
   and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page,
   credited back to what you built on."
-  Before: "From {dates}, make your own picture of {names}: start from one of their pictures, set it at a moment from the
+  (v8: "From 17 to 29 November, …".) Before: "From {dates}, make your own picture of {names}: start from one of their pictures, set it at a moment from the
   book, change what you like, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your
   picture gets its own page, credited back to what you built on."
 - Rules line (DRAFT): "Only remixes count: start from one of a character's pictures on the challenge pages, a base or any
@@ -231,8 +236,9 @@ backstory has no spoiler tick, and "May spoil later chapters." appears nowhere u
 
 - New first choice, selected by default (the owner's words): "Same as this picture". It adds no style text, so a remix
   keeps the look of the picture it starts from; the recipe records it ("Style: Same as this picture").
-- The others stay: the published styles ("Animated series" among them once the owner publishes it), "Random" (in "How it
-  was made": "Style: {style}, drawn at random"), "Write your own".
+- v9 (owner, 2026-11-09): the row ships exactly "Same as this picture" (default), "Animated series" (once the owner
+  publishes it), "Random" (drawing only from "Animated series"; in "How it was made": "Style: {style}, drawn at random";
+  hidden while there's nothing to draw from), "Write your own". The site's other published styles aren't offered here.
 
 ### The look lines and the scene line (this edition's invention; owner-approved 2026-11-09), public in every recipe
 
@@ -252,3 +258,103 @@ black hair with close-cut sides and one teal-blue streak, dark eyes." for Zei, a
 The prompt's order: the change words; "{Name} is the person in reference image 1, the main figure."; the look line; the
 scene line; the style's text (none with "Same as this picture"); "Keep the face recognisable; change anything else the
 words describe."; the no-lettering line.
+
+## v10 (2026-11-09): GPT as the challenge's default, one character per picture, the FLUX block message — NOT YET REREAD
+
+Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT until the owner rereads it. Nothing in
+`src/lib/legal.ts` or `config/consent.json` has changed: every legal "after" below is a proposal only. If the owner
+takes any of them, its key goes red until the owner says "reread" and the key is set: Privacy §3, §4 or §7 → **P6k**
+(privacy `18g3ada`); Terms §8 → **P6l** (terms `1finiyh`); consent → a new version `own-words-v7` (everyone is asked
+again) and P6t/P6j's wording checks follow it.
+
+### What the code now does (the owner's decisions of 2026-11-09)
+
+- **The default.** The Model row starts on GPT Image 2.5 Sunburst for someone signed in with Farcaster, Lens or Bluesky
+  (not a wallet account), where OpenAI serves (its supported countries without the embargoed ones; nothing when the
+  country header is missing), with closed models on and at least 3 of today's pictures left. Everyone else starts on
+  FLUX. The row's order is unchanged (FLUX first, one tap away). At entries close (`CHALLENGE.dates.closes`,
+  2026-11-30T08:00:00Z = 29 Nov 23:59:59 PT) everyone starts on FLUX again, by itself. Recorded as P3's one exception
+  in `docs/principles.md`; P3e accepts exactly it and fails on anything wider.
+  - *Added by this agent, for the owner to confirm:* someone with fewer than 3 pictures left starts on FLUX (GPT would
+    be refused for them); a request with no `model` still means FLUX on the server (the screen always sends one).
+- **The OpenAI line** shows under the Model row whenever GPT is selected, the default on first load included:
+  "a closed model by OpenAI · costs us about $0.05 · OpenAI may keep your prompt and picture up to 30 days · uses 3 of today's pictures".
+- **The notice and the 18+ box, where they now appear.** On first load nothing interrupts: the page shows the OpenAI
+  line under the Model row. When the person presses **Make it** with GPT selected and this device hasn't answered
+  OpenAI's notice (or the 18+ box), the notice appears in place of that line, under the Model row (scrolled into
+  view), with the 18+ box the first time on the device; nothing is sent. Once it is answered ("OK" or "Don't remind me
+  again"), the picture is made straight away with the words as they are then. Tapping FLUX instead closes it. The
+  server still refuses a closed picture without the notice version and the 18+ answer (unchanged). Picking GPT by
+  tapping its chip shows the notice at the tap, as before.
+- **The closed site cap** is $15 a day (was $5). *For the owner:* that is the same as the challenge's free cap ($15),
+  so in the window the closed cap no longer holds back anything the free cap doesn't: closed pictures can use the whole
+  day's $15, leaving nothing for FLUX that day (about 190 GPT pictures at the $0.08 reserved). To keep room for FLUX,
+  raise `CHALLENGE.dailySpendCapUsd` above $15 or set the closed cap lower.
+- **One character per picture.** Change words naming another challenge character (Zei, Gladias, Bai, Seila, Deluin,
+  Mu; a whole word, any case) are refused before any model or check runs, so the attempt uses none of today's
+  pictures. Only the change box is read, not a "Write your own" style.
+- **A FLUX picture fal's safety checker blocks** uses none of today's pictures (its spend still counts against the
+  caps; fal's checker stays on). This needs `NEXT_image_asks_back.sql` (a new append-only table): until the owner
+  applies it, such a picture still counts, and nothing else changes. Prompt-check refusals, and a closed model's own
+  refusals, still count as before.
+
+### New texts on the remix screen (the owner's words, exact)
+
+- The one-character refusal: "One character per picture for now, so leave {Other} out: this picture is of {Name}."
+  e.g. "One character per picture for now, so leave Bai out: this picture is of Zei."
+- The FLUX block message, for someone who can use a closed model here: "This picture was blocked by the open model's
+  safety check. Try other words, or a closed model."; for anyone else (a wallet account, outside OpenAI's and Google's
+  regions, no country header): "This picture was blocked by the open model's safety check. Try other words."
+  (Before, everywhere: "The image was flagged by the safety checker and dropped." It stays so outside the challenge
+  and for closed models.)
+
+### Every text that assumes an open default, with a draft
+
+**Legal texts (proposals only; none changed).**
+
+1. Privacy §3, Kept on your device only.
+   Before: "If you choose a closed model for a challenge picture, it also stores that you confirmed you are 18 or older, and which makers' notices you asked not to be shown again; with each such picture we receive only that you confirmed, and don't keep it."
+   After (draft): "If you make a challenge picture with a closed model, it also stores that you confirmed you are 18 or older, and which makers' notices you asked not to be shown again; with each such picture we receive only that you confirmed, and don't keep it."
+   Agent's view: still true as it stands (the device stores the answers only once the person answers the notice to
+   make a closed picture); the draft avoids "choose" now that GPT is pre-selected. → P6k.
+2. Privacy §4, the remix challenge item.
+   Before: "When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record."
+   After (draft): "When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record; until entries close, a closed model by OpenAI is chosen to start with where it can be used."
+   Agent's view: the before is still true; the draft says the default, as the screen shows it. → P6k.
+3. Privacy §7, the closed-models item.
+   Before: "If you choose a closed model for a challenge picture, its maker, OpenAI or Google, receives through Vercel AI Gateway your prompt and the picture you chose. …"
+   After (draft): "If you make a challenge picture with a closed model, its maker, OpenAI or Google, receives through Vercel AI Gateway your prompt and the picture you chose. …" (the rest unchanged).
+   Agent's view: still true (nothing reaches OpenAI until the person presses Make it with GPT selected and answers the
+   notice); the draft avoids "choose". P6t reads this item's maker and retention words, which don't change. → P6k.
+4. Terms §8, AI-made material.
+   Before: "Some pictures are made with closed models by OpenAI and Google, by the project or by someone who chooses one for a challenge picture, …"
+   After (draft): "Some pictures are made with closed models by OpenAI and Google, by the project or by someone making a challenge picture with one, …"
+   Agent's view: optional, as 1–3. → P6l.
+5. Consent own-words-v6.
+   Before: "If you choose a closed model for a challenge picture, your prompt and the picture you chose go through Vercel AI Gateway to its maker instead of fal.ai: …"
+   After (draft, as own-words-v7): "If you make a challenge picture with a closed model, your prompt and the picture you chose go through Vercel AI Gateway to its maker instead of fal.ai: …"
+   Agent's view: keep v6 unless the owner takes 1–4: a new version asks everyone again, and v6 is still true.
+6. About, "Where it runs": "… and for a challenge picture someone makes with one of their closed models …" — no
+   open default assumed; no change proposed.
+7. The notices (OpenAI, Google; version 4): "OpenAI receives your prompt and the picture you chose …" — true whether GPT
+   was tapped or pre-selected; no change proposed (a change would need notice version 5).
+
+**Screen and page texts (not legal).**
+
+8. The Model row's chips and heading: unchanged; FLUX stays first. No chip says "default" on the challenge screen
+   (`MODEL_WORDING.openDefault`, "Open (default)", is defined but not shown there; the sheet form's "The site's open
+   models (the default)" is the sheet form's, not the challenge's, and stays true there).
+9. Too few left: "A closed model uses 3 of today's pictures; you have {n} left, enough for the open models. More pictures at {reset}." — still true; someone with fewer than 3 left now starts on FLUX, so it shows only if they tap GPT.
+10. The closed-limit refusal: "A closed model uses 3 of today's pictures, and you have fewer left. You can still use an open model." — still true.
+11. The closed-cap refusal: "Closed models have reached today's spending limit for everyone. The open models still work; closed ones come back at {reset}." — still true; with GPT the default, more people will see it once the $15 is reached. *Proposal:* none (the screen doesn't switch the default to FLUX when the closed cap is reached; it could, if the owner wants).
+12. The rules intro: "… pick a style and a model, and publish it. …" — no default assumed.
+
+**Principles and checks.**
+
+13. `docs/principles.md` P3: the exception recorded (owner, 2026-11-09, challenge only, ends 29 Nov), and P3e's
+    description of the challenge's row updated (Qwen gone, FLUX first, the exception checked).
+14. check:principles P3e's name, as printed: "the default is open: the remix form's and the challenge's model choice
+    list the open models first, as the default (one exception: GPT Image 2.5 Sunburst for the challenge, for those who
+    can use it, until entries close); closed ones name their maker and are allowlisted". Principle 3's own heading
+    ("… Open-weight models are preferred. Report any closed model in use.") is unchanged.
+

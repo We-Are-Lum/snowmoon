@@ -564,6 +564,12 @@ export const CHALLENGE = {
    */
   modelChoice: true as boolean,
   /**
+   * The published styles the challenge's Style row offers, by title (owner, 2026-11-09): "Animated series" only (it
+   * shows once the owner publishes it), after "Same as this picture" and before Random and Write your own. The other
+   * published styles stay on the site but aren't offered here; Random draws only from these (STYLE_PRESETS, empty, too).
+   */
+  offeredStyles: ['Animated series'] as readonly string[],
+  /**
    * The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"). While false:
    * - /challenge, /api/challenge/* and every way into them (the menu item, the home row, the challenge share text, and
    *   on sheet pages the Entry badge, "Mark as my entry", the challenge lines and "Posted on") are for admins only
@@ -729,12 +735,12 @@ export const CHALLENGE = {
    */
   dates: {
     /**
-     * Entries open Tue 17 Nov 2026, 00:00 Pacific (owner, 2026-11-08; it was Tue 10 Nov, 00:00, and before that Fri 6
-     * Nov, 09:00). Nothing opens by date alone: /challenge stays hidden until the owner turns CHALLENGE.public on. From
+     * Entries open Thu 12 Nov 2026, 00:00 Pacific (owner, 2026-11-09; it was Tue 17 Nov, before that Tue 10 Nov, 00:00,
+     * and before that Fri 6 Nov, 09:00). Nothing opens by date alone: /challenge stays hidden until the owner turns CHALLENGE.public on. From
      * the flip to this instant, anyone can remix (with the $15 site-wide cap), but pictures made then are for trying it
      * out and can't be entered.
      */
-    opens: '2026-11-17T08:00:00Z',
+    opens: '2026-11-12T08:00:00Z',
     /** Entries close after Sun 29 Nov 2026, 23:59 Pacific (owner, 2026-11-08): this is 00:00 Pacific on 30 Nov, the first instant that no longer counts. */
     closes: '2026-11-30T08:00:00Z',
     // No shortlist, results or mint dates (owner, 2026-11-05 evening): how the final version is chosen, and any prize,
@@ -987,7 +993,8 @@ export const CLOSED_IMAGES = {
    * studio.image_asks in pool 'closed', and generationsLeft counts it as this many.
    */
   countsAs: 3,
-  dailySpendCapUsd: 5,
+  /** The closed site-wide daily cap (owner: $5, 2026-11-08; $15, 2026-11-09, with GPT the default for the challenge). Never above the free cap of the moment (limits.ts closedCapUsd). */
+  dailySpendCapUsd: 15,
   /**
    * Google's Service Specific Terms §20(d): no use of a Generative AI Service "as part of a website … that is directed
    * towards or is likely to be accessed by individuals under the age of 18" (docs/legal/age-terms-closed-models.md).

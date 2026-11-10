@@ -28,6 +28,11 @@ export const MODEL_WORDING = {
   notOffered: 'That model isn’t offered here. Choose another.',
   /** The owner's exact words (2026-11-08), in place of the closed models for a wallet account, and its refusal. */
   walletOnly: 'Closed models need a Farcaster, Lens or Bluesky sign-in.',
+  /**
+   * A FLUX picture fal's safety checker blocked (owner, 2026-11-09, exact): the closed-model clause only for someone who
+   * can use a closed model here. Such a picture uses none of today's pictures (src/lib/images/limits.ts giveBack).
+   */
+  openBlocked: (closedOk: boolean) => `This picture was blocked by the open model's safety check. Try other words${closedOk ? ', or a closed model' : ''}.`,
   noticeFirst: 'Read the model’s notice first.',
   adultFirst: 'Confirm you’re 18 or older first.',
 } as const;
