@@ -149,7 +149,7 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
 
 ## The rules and the challenge pages (challenge-simple)
 
-- Rules intro (the owner's words; dates and names from config): "From 17 to 29 November, make your own picture of Zei,
+- Rules intro (the owner's words; dates and names from config): "From 12 to 29 November, make your own picture of Zei,
   Gladias, Bai, Seila, Deluin or Mu: start from one of their pictures, change what you like, pick a style and a model,
   and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page,
   credited back to what you built on."

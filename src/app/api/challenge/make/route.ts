@@ -10,7 +10,7 @@ import { referencePicture } from '~/lib/images/reference-picture';
 import { signTicket, type TicketDesign } from '~/lib/images/ticket';
 import { bookCharacter } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
-import { characterAnchor, makeView, momentPrompt, othersIn, publishedStyles, readMake, remixPrompt, resolveStyle } from '~/lib/challenge/make';
+import { characterAnchor, makeView, momentPrompt, othersIn, challengeStyles, readMake, remixPrompt, resolveStyle } from '~/lib/challenge/make';
 import { MAKE_WORDING } from '~/lib/challenge/make-wording';
 import { challengeModel, DEFAULT_CHALLENGE_MODEL, modelView, noticeProblem } from '~/lib/challenge/models';
 import { challengeSpend, makeWith, recipeModel } from '~/lib/challenge/make-model';
@@ -64,7 +64,7 @@ export async function GET(request: Request) {
   const row = modelView(whereFrom(request.headers), { wallet: person !== null && isWalletNumber(person) });
   // Today's free pictures left, so the screen can say when a closed pick (3 of them) won't fit; null signed out or for a wallet.
   const picturesLeft = sql && person !== null && !isWalletNumber(person) ? await generationsLeft(sql, person).catch(() => null) : null;
-  return NextResponse.json({ ...makeView(src, { styles: sql ? await publishedStyles(sql) : [], models: row.models }), modelsNote: row.note, picturesLeft }, { headers: { 'Cache-Control': 'private, no-store' } });
+  return NextResponse.json({ ...makeView(src, { styles: sql ? await challengeStyles(sql) : [], models: row.models }), modelsNote: row.note, picturesLeft }, { headers: { 'Cache-Control': 'private, no-store' } });
 }
 
 export async function POST(request: Request) {
@@ -99,7 +99,7 @@ export async function POST(request: Request) {
   const name = callName(src.character);
   const moment = r.moment;
   // The Style row (moments off): a listed style, Random's draw from the published styles, or the person's own words.
-  const style = moment ? null : resolveStyle(r.style, await publishedStyles(sql));
+  const style = moment ? null : resolveStyle(r.style, await challengeStyles(sql));
   if (!moment && !style) return no(MAKE_WORDING.noStyle, 400);
   // With the moments on: the other challenge characters in the moment, each by their current default look.
   // Only the open default takes the others' looks; every other model gets the tapped picture alone.

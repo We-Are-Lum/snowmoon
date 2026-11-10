@@ -96,6 +96,16 @@ export async function publishedStyles(sql: postgres.Sql): Promise<PublishedStyle
     .map((r) => ({ id: `style:${r.elementId}`, label: r.title.trim() || r.entity, text: r.text, elementId: r.elementId, versionId: r.versionId, versionNo: r.versionNo, entity: r.entity, title: r.title, byName: r.byName, byFid: r.byFid, assist: r.assist }));
 }
 
+/**
+ * The styles the challenge offers (CHALLENGE.offeredStyles, by title; owner, 2026-11-09): the published ones on the
+ * allowlist only. The Style row lists them and Random draws only from them; with none published yet, the row is "Same
+ * as this picture" and Write your own (Random hides with nothing to draw from).
+ */
+export const offeredOnly = (published: readonly PublishedStyle[], offered: readonly string[] = CHALLENGE.offeredStyles): PublishedStyle[] => published.filter((s) => offered.includes(s.label.trim()));
+export async function challengeStyles(sql: postgres.Sql, offered: readonly string[] = CHALLENGE.offeredStyles): Promise<PublishedStyle[]> {
+  return offeredOnly(await publishedStyles(sql), offered);
+}
+
 /** "Random" (owner, 2026-11-08): one of the published styles, drawn uniformly at make time (P5g: the whole list, unweighted). */
 export const drawStyle = (published: readonly PublishedStyle[]): PublishedStyle | null => shuffleFresh(published)[0] ?? null;
 

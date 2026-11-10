@@ -85,7 +85,7 @@ export function shortDateText(key: DateKey, dates: Record<DateKey, string> = CHA
   return `${get('weekday')} ${get('day')} ${get('month')}, ${get('hour')}:${get('minute')} PT`;
 }
 
-/** "17 to 29 November": the window as a span, from the config. */
+/** "12 to 29 November": the window as a span, from the config. */
 export function windowText(dates: Record<DateKey, string> = CHALLENGE.dates): string {
   const d = (k: DateKey) => dateText(k, {}, dates).split(' ').slice(1); // [day, month]
   const [a, am] = d('opens');
