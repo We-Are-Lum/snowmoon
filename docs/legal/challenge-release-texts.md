@@ -281,8 +281,8 @@ again) and P6t/P6j's wording checks follow it.
   "a closed model by OpenAI · costs us about $0.05 · OpenAI may keep your prompt and picture up to 30 days · uses 3 of today's pictures".
 - **The notice and the 18+ box, where they now appear.** On first load nothing interrupts: the page shows the OpenAI
   line under the Model row. When the person presses **Make it** with GPT selected and this device hasn't answered
-  OpenAI's notice (or the 18+ box), the notice appears in place of that line, under the Model row (scrolled into
-  view), with the 18+ box the first time on the device; nothing is sent. Once it is answered ("OK" or "Don't remind me
+  OpenAI's notice (or the 18+ box), the notice appears in place of that line, under the Model row, right above "Make
+  it" (the page isn't scrolled: owner, 2026-11-07), with the 18+ box the first time on the device; nothing is sent. Once it is answered ("OK" or "Don't remind me
   again"), the picture is made straight away with the words as they are then. Tapping FLUX instead closes it. The
   server still refuses a closed picture without the notice version and the 18+ answer (unchanged). Picking GPT by
   tapping its chip shows the notice at the tap, as before.
