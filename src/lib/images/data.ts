@@ -41,6 +41,8 @@ export interface ReaderImage {
   references: { url: string; sha256: string }[];
   /** Sheets as text (2026-10-10): the characters and place this image is of, and the shorthand text added. */
   sheets: { characters: string[]; place: string | null; added: { kind: 'character' | 'place'; slug: string; name: string; text: string }[] } | null;
+  /** A challenge picture's drawn setting (closed models only; src/lib/challenge/settings.ts), or null. */
+  setting: { id: string; text: string; blocks: string[] } | null;
 }
 
 const SELECT = (sql: Sql) => sql`
@@ -91,6 +93,7 @@ function shape(r: Record<string, unknown>): ReaderImage {
     designs: Array.isArray(p.designs) ? (p.designs as ReaderImage['designs']) : [],
     references: Array.isArray(p.references) ? (p.references as ReaderImage['references']) : [],
     sheets: p.sheets && typeof p.sheets === 'object' ? (p.sheets as ReaderImage['sheets']) : null,
+    setting: readSetting((p.challenge as { setting?: unknown } | undefined)?.setting),
   };
 }
 
@@ -168,4 +171,11 @@ export async function reportQueue(sql: Sql) {
     where last.step = 'reported' or (last.step = 'hidden' and last.role = 'rule')
     order by last.at
     limit 100`;
+}
+
+/** A recipe's challenge setting, if it has a well-formed one. */
+function readSetting(s: unknown): ReaderImage['setting'] {
+  const x = (s && typeof s === 'object' ? s : null) as { id?: unknown; text?: unknown; blocks?: unknown } | null;
+  if (!x || typeof x.id !== 'string' || typeof x.text !== 'string' || !Array.isArray(x.blocks)) return null;
+  return { id: x.id, text: x.text, blocks: x.blocks.filter((b): b is string => typeof b === 'string' && /^c\d+-b\d+$/.test(b)) };
 }

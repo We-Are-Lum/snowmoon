@@ -47,6 +47,8 @@ const PAGE_FILE = 'src/lib/challenge/view.ts';
 const CARD_FILE = 'src/components/challenge-card.tsx';
 const MAKE_FILE = 'src/components/challenge-make.tsx';
 const MAKE_LIB = 'src/lib/challenge/make.ts';
+/** The settings pool (owner, 2026-11-09): one of the five settings, drawn evenly for a closed model's picture. */
+const SETTINGS_FILE = 'src/lib/challenge/settings.ts';
 const RANDOM_STYLE = 'published';
 const MOMENTS_FILE = 'src/lib/challenge/moments.ts';
 const SURPRISE = 'MOMENTS.filter((m) => m.id !== moment)';
@@ -116,11 +118,16 @@ export function p5gProblems(files: { file: string; text: string }[]): string[] {
         if (m[1].trim() !== RANDOM_STYLE || !/export const drawStyle = \(published: readonly PublishedStyle\[\]\): PublishedStyle \| null => shuffleFresh\(published\)\[0\] \?\? null;/.test(code)) problems.push(`${file}: "Random" draws from something other than every published style: shuffleFresh(${m[1].slice(0, 60)})`);
         continue;
       }
+      if (file === SETTINGS_FILE) {
+        // The settings pool (owner, 2026-11-09): one setting, drawn evenly from the whole pool, at make time.
+        if (m[1].trim() !== 'CHALLENGE_SETTINGS, random' || !/export const drawSetting = \(random: \(\) => number = uniform\): ChallengeSetting => shuffleFresh\(CHALLENGE_SETTINGS, random\)\[0\];/.test(code)) problems.push(`${file}: the settings draw takes something other than the whole pool, evenly: shuffleFresh(${m[1].slice(0, 60)})`);
+        continue;
+      }
       if (file === MAKE_FILE) {
         if (m[1].trim() !== SURPRISE) problems.push(`${file}: "Surprise me" draws from something other than the curated moments (all but the one chosen): shuffleFresh(${m[1].slice(0, 60)})`);
         continue;
       }
-      problems.push(`${file}: shuffles outside the bases, the entries' "Shuffled" order, "Surprise me" and the Style row's "Random" (only ${CARD_FILE}, ${ENTRIES_PICK_FILE}, ${MAKE_FILE} and ${MAKE_LIB} may)`);
+      problems.push(`${file}: shuffles outside the bases, the entries' "Shuffled" order, "Surprise me", the Style row's "Random" and the settings draw (only ${CARD_FILE}, ${ENTRIES_PICK_FILE}, ${MAKE_FILE}, ${MAKE_LIB} and ${SETTINGS_FILE} may)`);
     }
     if (file === MOMENTS_FILE && /\bweight|\bscore|\bpopular|\blikes?\b|\bsort\(/i.test(code)) problems.push(`${MOMENTS_FILE}: the moments read or set an order other than the book's ("${code.match(/\bweight|\bscore|\bpopular|\blikes?\b|\bsort\(/i)![0]}")`);
     if (file === PAGE_FILE && !/await (remixes|challengePictures)\(sql\)/.test(code)) problems.push(`${PAGE_FILE}: the cards' remixes aren't drawn from every remix (remixes(sql) or challengePictures(sql), with no filter, limit or order)`);

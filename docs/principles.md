@@ -428,7 +428,10 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   2026-11-08; approved by the owner the same day):** the remix screen's Style row has "Random": the server draws one of the site's published styles,
   uniformly, when the picture is made (`drawStyle`, `shuffleFresh(published)[0]` in `src/lib/challenge/make.ts` only,
   on the whole list), and the recipe records both "Random" and the style drawn. Its planted violations, a draw from
-  only some of the styles and a draw weighted toward one, must fail.
+  only some of the styles and a draw weighted toward one, must fail. The same exception covers the settings pool
+  (owner, 2026-11-09): for a closed model's picture the server draws one of five settings evenly, at make time
+  (`drawSetting`, `shuffleFresh(CHALLENGE_SETTINGS, random)[0]` in `src/lib/challenge/settings.ts` only, on the whole
+  pool), and the recipe records the setting drawn (scripts/test-settings.ts T5).
   A third narrow exception (owner, 2026-11-04; branch challenge-landing; **pending the owner's yes**): below each
   character's bases, under the heading "First remixes by @naaate", /challenge shows the owner's first remixes of it
   (`CHALLENGE.firstRemixes`, at most two), in the order the owner sets in the config. Chosen by the owner, never by a
