@@ -135,7 +135,7 @@ export function ChallengeMake() {
     setError(null);
     const body = momentsOn ? { from, moment: chosen!.id, words, ...mc.body() } : { from, words, style, ...mc.body() };
     const r = await authFetch('/api/challenge/make', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
-    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; style?: string | null; setting?: { id: string; text: string; blocks: string[] } | null; error?: string; reason?: string; resetAt?: string };
+    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; style?: string | null; error?: string; reason?: string; resetAt?: string };
     setBusy(false);
     if (r?.status === 403 && out.reason === 'consent') {
       const c = await authFetch('/api/consent').catch(() => null);
@@ -146,7 +146,7 @@ export function ChallengeMake() {
     if (!r?.ok || !out.ticket || !out.image) return setError(out.error ? withReset(out.error, out.resetAt) : 'Could not make it');
     const draft: FlowDraft = {
       id: crypto.randomUUID(), from, character: view.source.character, name: view.source.name, sourceUrl: view.source.url,
-      moment: chosen ? { id: chosen.id, title: chosen.title, chip: chosen.chip } : null, words, style: momentsOn ? null : style, modelId: model.id, styleLine: out.style ?? null, setting: out.setting ?? null,
+      moment: chosen ? { id: chosen.id, title: chosen.title, chip: chosen.chip } : null, words, style: momentsOn ? null : style, modelId: model.id, styleLine: out.style ?? null,
       ticket: out.ticket, image: out.image, prompt: out.prompt ?? '', model: model.chip, w,
     };
     if (!saveDraft(draft)) return setError('Could not keep the picture in this tab. Try again.');

@@ -28,15 +28,4 @@ export const COMIC_3D_MIX: OfferedStyle = {
   text: '3D forms drawn over with hand-inked lines, halftone dots and hatching in the shadows, slightly offset colour printing, bold graphic colour',
   source: 'the owner\'s style test, "Comic 3D mix: 3D forms drawn over with hand-inked lines, halftone dots and hatching in the shadows, slightly offset colour printing, bold graphic colour"',
 };
-/**
- * "Mood", the fourth offered style (owner, 2026-11-09): already published on production as "Mood" by @naaate (version
- * 712ca63f-de6e-46bf-b3ad-7007b1120e16, 2026-10-15; title and text read from its public page,
- * /references/designs/712ca63f-de6e-46bf-b3ad-7007b1120e16). scripts/publish-style.ts refuses it there (it exists);
- * a local database gets it with this text.
- */
-export const MOOD: OfferedStyle = {
-  title: 'Mood',
-  text: 'Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.',
-  source: 'published on production, version 712ca63f-de6e-46bf-b3ad-7007b1120e16 (its public page)',
-};
-export const OFFERED_STYLES: readonly OfferedStyle[] = [BASE_STYLE, COMIC_BOOK, COMIC_3D_MIX, MOOD];
+export const OFFERED_STYLES: readonly OfferedStyle[] = [BASE_STYLE, COMIC_BOOK, COMIC_3D_MIX];

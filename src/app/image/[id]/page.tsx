@@ -8,7 +8,6 @@ import { RERUN_LINE, bothChecksRan, checksLine, isClosed, modelName, modelTerms,
 import { passageLabel, passageText } from '~/lib/images/passage';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { byline } from '~/lib/images/byline';
-import { SETTING_WORDING } from '~/lib/challenge/settings-wording';
 import { PAPER } from '~/lib/tokens';
 import { ImageActions } from '~/components/image-actions';
 import { MakeImageLink } from '~/components/make-image-link';
@@ -135,15 +134,6 @@ export default async function ImagePage({ params }: Props) {
                   {d.assist ? ' (text drafted by the coding agent, a closed model)' : ''}: {d.text}
                 </dd>
               ))}
-            </>
-          )}
-          {im.setting && (
-            <>
-              {/* A challenge picture by a closed model: the setting drawn for it (owner, 2026-11-09), cited by block, not quoted. */}
-              <dt className="ip-wide">{SETTING_WORDING.head}</dt>
-              <dd className="ip-wide ip-words ip-added" data-slot="setting">
-                {SETTING_WORDING.line(im.setting)}
-              </dd>
             </>
           )}
           {im.references.length > 0 && (

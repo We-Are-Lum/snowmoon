@@ -106,7 +106,7 @@ const looks = (l: Readonly<Record<string, string>>) => [
 proven('L1 L2 one look line per challenge character, each "Unless the change says otherwise: …", none naming a real person, studio, film or artist', looks(CHARACTER_LOOKS), looks({ ...CHARACTER_LOOKS, mu: 'Mu, drawn like a Pixar film character.' }));
 const order = (prompt: string) => need(prompt === ['give her a red coat', 'Bai is the person in reference image 1, the main figure.', CHARACTER_LOOKS.bai, SCENE_LINE, 'soft pencil on pale paper', KEEP_LINE, IMAGES.suffix].join('\n\n'), `the prompt is ${JSON.stringify(prompt).slice(0, 200)}`);
 const route = read('src/app/api/challenge/make/route.ts');
-proven('L3 the prompt order: change words, reference line, look line, scene line (always), the setting line (closed models only; scripts/test-settings.ts T3), style, closing line, suffix', [...order(remixPrompt({ words: 'give her a red coat', name: 'Bai', look: CHARACTER_LOOKS.bai, style: 'soft pencil on pale paper' })), ...need(/remixPrompt\(\{ words: r\.words, name, look: lookFor\(src\.character\), style: style!\.text(, \.\.\.\(setting \? \{ setting: settingLine\(setting\) \} : \{\}\))? \}\)/.test(route), 'the route doesn\'t add the look line')], order(remixPrompt({ words: 'give her a red coat', name: 'Bai', style: 'soft pencil on pale paper' })));
+proven('L3 the prompt order: change words, reference line, look line, scene line (always), style, closing line, suffix (every model)', [...order(remixPrompt({ words: 'give her a red coat', name: 'Bai', look: CHARACTER_LOOKS.bai, style: 'soft pencil on pale paper' })), ...need(/remixPrompt\(\{ words: r\.words, name, look: lookFor\(src\.character\), style: style!\.text \}\)/.test(route), 'the route doesn\'t add the look line')], order(remixPrompt({ words: 'give her a red coat', name: 'Bai', style: 'soft pencil on pale paper' })));
 
 // S1: "Same as this picture" (owner, 2026-11-09): the first choice and the default, no style text, recorded in the recipe.
 {
@@ -136,20 +136,20 @@ proven('L3 the prompt order: change words, reference line, look line, scene line
   const ST = await import('../src/lib/challenge/styles');
   const st = (label: string, n: number) => ({ id: `style:e${n}`, label, text: `${label} look.`, elementId: `e${n}`, versionId: `v${n}`, versionNo: 1, entity: label, title: label, byName: 'naaate', byFid: 6786, assist: null });
   const site = [st('Quiet, warm light', 1), st('Mood', 2), st('Animated series', 3), st('Bolder', 4), st('Comic 3D mix', 7), st('Printed', 5), st('Comic book', 6)];
-  const OFFERED = 'Animated series,Comic book,Comic 3D mix,Mood';
+  const OFFERED = 'Animated series,Comic book,Comic 3D mix';
   const screen = read('src/components/challenge-make.tsx');
   const src = { kind: 'sheet' as const, versionId: 'v', character: 'zei', url: 'u', sha256: 's', width: 1, height: 1, text: '', title: '', by: null, byFid: 1, versionNo: 1, moment: null, styleElement: null };
   const allow = (only: typeof M.offeredOnly) => {
     const offered = only(site as never);
     const draws = [...Array(60).keys()].map(() => M.resolveStyle({ kind: 'random' }, offered)?.label);
-    const none = only([st('Bolder', 4)] as never);
+    const none = only([st('Mood', 2)] as never);
     const v = M.makeView(src as never, { styles: offered });
     return [
-      ...need(JSON.stringify(CHALLENGE.offeredStyles) === '["Animated series","Comic book","Comic 3D mix","Mood"]' && ST.STYLE_PRESETS.length === 0, 'the allowlist isn\'t the four (and no presets)'),
+      ...need(JSON.stringify(CHALLENGE.offeredStyles) === '["Animated series","Comic book","Comic 3D mix"]' && ST.STYLE_PRESETS.length === 0, 'the allowlist isn\'t the three (and no presets)'),
       ...need(offered.map((s) => s.label).join() === OFFERED, `offered: ${offered.map((s) => s.label).join()}`),
-      ...need(draws.every((l) => OFFERED.split(',').includes(l ?? '')) && new Set(draws).size === 4, `Random drew ${[...new Set(draws)].join()}`),
-      ...need(M.resolveStyle({ kind: 'style', id: 'style:e4' }, offered) === null, 'a style not offered (Bolder) is taken'),
-      ...need(v.defaultStyle === 'same' && v.styles.map((s) => s.label).join() === OFFERED, 'the row isn\'t "Same as this picture" and the four'),
+      ...need(draws.every((l) => OFFERED.split(',').includes(l ?? '')) && new Set(draws).size === 3, `Random drew ${[...new Set(draws)].join()}`),
+      ...need(M.resolveStyle({ kind: 'style', id: 'style:e2' }, offered) === null, 'a style not offered (Mood) is taken'),
+      ...need(v.defaultStyle === 'same' && v.styles.map((s) => s.label).join() === OFFERED, 'the row isn\'t "Same as this picture" and the three'),
       // Before "Animated series" is published: "Same as this picture" and Write your own; Random hidden; a Random request refused.
       ...need(none.length === 0 && M.makeView(src as never, { styles: none }).styles.length === 0 && M.resolveStyle({ kind: 'random' }, none) === null, 'with nothing offered, Random still draws'),
       ...need(/\{hasPublished && \(/.test(screen) && screen.indexOf('{hasPublished && (') < screen.indexOf('data-style="random"') && /data-style="own"/.test(screen), 'Random isn\'t hidden with nothing to draw from, or Write your own is missing'),

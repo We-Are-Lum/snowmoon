@@ -1,6 +1,5 @@
 'use client';
 
-import { SETTING_WORDING } from '~/lib/challenge/settings-wording';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -49,10 +48,10 @@ export function ChallengePreview({ id }: { id: string }) {
     // The same request again: the moment while the moments are on; else the same style choice (Random draws afresh) and model.
     const body = d.moment ? { from: d.from, moment: d.moment.id, words: d.words, model: d.modelId } : { from: d.from, words: d.words, style: d.style, model: d.modelId };
     const r = await authFetch('/api/challenge/make', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
-    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; style?: string | null; setting?: { id: string; text: string; blocks: string[] } | null; error?: string };
+    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; style?: string | null; error?: string };
     setBusy(null);
     if (!r?.ok || !out.ticket || !out.image) return setError(out.error ?? 'Could not make it');
-    const next = { ...d, ticket: out.ticket, image: out.image, prompt: out.prompt ?? d.prompt, styleLine: out.style ?? d.styleLine ?? null, setting: out.setting ?? null };
+    const next = { ...d, ticket: out.ticket, image: out.image, prompt: out.prompt ?? d.prompt, styleLine: out.style ?? d.styleLine ?? null };
     saveDraft(next);
     setD(next);
   };
@@ -125,11 +124,6 @@ export function ChallengePreview({ id }: { id: string }) {
         {d.styleLine && (
           <p className="dz-muted mk-style-line">
             {w.style}: {d.styleLine}
-          </p>
-        )}
-        {d.setting && (
-          <p className="dz-muted mk-setting-line" data-slot="setting">
-            {SETTING_WORDING.head}: {SETTING_WORDING.line(d.setting)}
           </p>
         )}
         <pre className="mk-prompt">{d.prompt}</pre>
