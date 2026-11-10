@@ -1,0 +1,2484 @@
+{
+ "about": "Real-prompts test 2026-11-09: 12 cases x FLUX, GPT, Gemini, base front only, prompts by remixPrompt in the shipping order. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "cap_usd": 2,
+ "stop_at_usd": 1.85,
+ "seed": 20261109,
+ "base_style": {
+  "title": "Animated series",
+  "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.",
+  "source": "docs/starting-sheet-drafts/directions/plan.json, styles[\"Animated series\"] (branch challenge-styles)"
+ },
+ "random_note": "Random recorded as drawing \"Animated series\", as the coordinator instructed (Random draws only from the offered styles). On challenge-models 9e0ef303 the code (make.ts drawStyle over publishedStyles) draws from every published style with text; whether that list is only \"Animated series\" in production was not checked here.",
+ "refs": {
+  "zei": {
+   "version": "bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d",
+   "url": "https://pictures.snowmoon.party/images/readers/131f235227a54b06f6f11253f37a09b5.jpg",
+   "sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c"
+  },
+  "gladias": {
+   "version": "68364375-0f33-46fd-9755-2fd2b551198a",
+   "url": "https://pictures.snowmoon.party/images/readers/b9b6c00952cb47e936dc601676a7c34b.jpg",
+   "sha256": "b9b6c00952cb47e936dc601676a7c34b916355e8b4f979db4d7465ea024d0947"
+  },
+  "bai": {
+   "version": "110d5973-31c2-4d96-9a88-5838d8a6d868",
+   "url": "https://pictures.snowmoon.party/images/readers/01538922456b9bf61192ed291b8f2659.jpg",
+   "sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96"
+  },
+  "seila": {
+   "version": "1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba",
+   "url": "https://pictures.snowmoon.party/images/readers/3ef4825ca8f49aabf05ddcdaa8119e9b.jpg",
+   "sha256": "3ef4825ca8f49aabf05ddcdaa8119e9b229f523a3dfc1dc2af0238cbc95a4d13"
+  },
+  "deluin": {
+   "version": "75a94420-df70-4f43-a3a6-4c2b571e72ab",
+   "url": "https://pictures.snowmoon.party/images/readers/2b45d17da426df0304fc84ded0f3f0c4.jpg",
+   "sha256": "2b45d17da426df0304fc84ded0f3f0c464472c55c96aa517735f9837368432d4"
+  },
+  "mu": {
+   "version": "15a9af1d-9eef-4e25-be57-738d9823dd74",
+   "url": "https://pictures.snowmoon.party/images/readers/3e6ae696865441d24aa1dde262dac043.jpg",
+   "sha256": "3e6ae696865441d24aa1dde262dac043964ab8c9633d19174eb7074091087fb5"
+  }
+ },
+ "prompts": {
+  "6650fd03c07fdcb833a4d68aec4c6eb04d5698588909a345c7d65e1c9bb1fc88": "with Bai\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "e5cdccd9d881939a3cf1839c9d8cf8331ca857f924609865cbf6e58e3b2c5778": "riding a motorcycle through a city at sunset\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "ccaa7ff1f73a4f42474d7ed7c5650a7cfb97676fb5f147b9285cfcc460586c90": "as a wizard casting a spell\n\nGladias is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm light-brown skin, a short beard and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "fe30ce24e68fa1bb886d732b1982a8bd532d9d1f2f7b3febcf8c0639fd8c794f": "dressed up for a fancy party\n\nGladias is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm light-brown skin, a short beard and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "6f8a1d3981ba548e0b5f4b5ce1f22d5fd69a3988b32d794023bc1904cdc3d268": "make her a villain\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "d1d7b64b41955f45bdfffbf7c42012af40075106a04a8b9bc3c9a4bb0ed569b1": "fighting a dragon\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "8389b8f8c5a50dbd907651e4f9540ce851d5f8bc48f78ea7699b4595ac82519c": "cozy, reading in a caf\u00e9 on a rainy day\n\nSeila is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "511cb3d7ef38fac2ba0afe841237fbb697f60120641aa68af81bd54e61630122": "as an astronaut on the moon\n\nSeila is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "ac4dc0afd5d89c1260631b9ac90f5afeda41e2b61f2299c175246a03882921c4": "make him cooler\n\nDeluin is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm tan skin and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "56bcd1ca74162e90364d0255068df30804508799ba7f646a90ea91651fcea06a": "at a crowded night market, eating noodles\n\nDeluin is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm tan skin and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "5ad20ca4fdba7549dbc121722a3a4c67b991ed0def99adfe1a1ec65913fdabdb": "in winter gear on a snowy mountain at night\n\nMu is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "0632bfd42c98ec2559d756834f2574a58277a7c959f87042748efe3c59c528eb": "as a pirate captain on a ship in a storm\n\nMu is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "guard",
+   "prompt_sha256": "6650fd03c07fdcb833a4d68aec4c6eb04d5698588909a345c7d65e1c9bb1fc88",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000107025,
+   "cost_source": "reported",
+   "worst_usd": 0.0005192249999999999,
+   "at": "2026-11-10T00:27:51.667Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "e5cdccd9d881939a3cf1839c9d8cf8331ca857f924609865cbf6e58e3b2c5778",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000141825,
+   "cost_source": "reported",
+   "worst_usd": 0.00054795,
+   "at": "2026-11-10T00:27:52.455Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "ccaa7ff1f73a4f42474d7ed7c5650a7cfb97676fb5f147b9285cfcc460586c90",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 9.06e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.0005480999999999999,
+   "at": "2026-11-10T00:27:52.913Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "fe30ce24e68fa1bb886d732b1982a8bd532d9d1f2f7b3febcf8c0639fd8c794f",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001995,
+   "cost_source": "reported",
+   "worst_usd": 0.00052215,
+   "at": "2026-11-10T00:27:54.248Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "6f8a1d3981ba548e0b5f4b5ce1f22d5fd69a3988b32d794023bc1904cdc3d268",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001896,
+   "cost_source": "reported",
+   "worst_usd": 0.000547125,
+   "at": "2026-11-10T00:27:55.084Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "d1d7b64b41955f45bdfffbf7c42012af40075106a04a8b9bc3c9a4bb0ed569b1",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001908,
+   "cost_source": "reported",
+   "worst_usd": 0.00054705,
+   "at": "2026-11-10T00:27:56.055Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "8389b8f8c5a50dbd907651e4f9540ce851d5f8bc48f78ea7699b4595ac82519c",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000121425,
+   "cost_source": "reported",
+   "worst_usd": 0.000522975,
+   "at": "2026-11-10T00:27:56.875Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "511cb3d7ef38fac2ba0afe841237fbb697f60120641aa68af81bd54e61630122",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 9.8325e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.0005481749999999999,
+   "at": "2026-11-10T00:27:57.520Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "ac4dc0afd5d89c1260631b9ac90f5afeda41e2b61f2299c175246a03882921c4",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0002205,
+   "cost_source": "reported",
+   "worst_usd": 0.00054585,
+   "at": "2026-11-10T00:27:58.652Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "56bcd1ca74162e90364d0255068df30804508799ba7f646a90ea91651fcea06a",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001209,
+   "cost_source": "reported",
+   "worst_usd": 0.0005217749999999999,
+   "at": "2026-11-10T00:27:59.193Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "5ad20ca4fdba7549dbc121722a3a4c67b991ed0def99adfe1a1ec65913fdabdb",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000136125,
+   "cost_source": "reported",
+   "worst_usd": 0.0005487,
+   "at": "2026-11-10T00:28:00.146Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "0632bfd42c98ec2559d756834f2574a58277a7c959f87042748efe3c59c528eb",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001398,
+   "cost_source": "reported",
+   "worst_usd": 0.000548475,
+   "at": "2026-11-10T00:28:00.870Z"
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "case": 1,
+   "character": "zei",
+   "words": "with Bai",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "6650fd03c07fdcb833a4d68aec4c6eb04d5698588909a345c7d65e1c9bb1fc88",
+   "file": "rp-01-zei-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2da-cb6f-7542-b3f4-e3dcffd76e5c",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "d1b5856ad2837a9369151c9b73ce9e6da42f888f64f41582e9addc9aecd74f55",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T00:28:02.483Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "no",
+    "reading": "Zei alone on a shore; no Bai"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "case": 2,
+   "character": "zei",
+   "words": "riding a motorcycle through a city at sunset",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "e5cdccd9d881939a3cf1839c9d8cf8331ca857f924609865cbf6e58e3b2c5778",
+   "file": "rp-02-zei-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2da-d177-7342-994d-eb21537e8775",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "2160458e811aeaf797c54dbb53760d86dfe1388291fd3c177af9c8728696b3d1",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T00:28:04.318Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "riding through a sunset street; streak kept"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "case": 3,
+   "character": "gladias",
+   "words": "as a wizard casting a spell",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "ccaa7ff1f73a4f42474d7ed7c5650a7cfb97676fb5f147b9285cfcc460586c90",
+   "file": "rp-03-gladias-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2da-d7a1-7a53-a39a-57c1ee2beea2",
+   "seed": 20261109,
+   "status": "filtered",
+   "note": "fal safety checker flagged it",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "bc0100d33c8639b89126d34c11d372ff327a48469f5e7bd9cfd5e4851846e897",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T00:28:05.529Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": null,
+    "kept": null,
+    "why_not_kept": null,
+    "figures": 0,
+    "shareable": "no",
+    "reading": "blocked by fal\u2019s safety checker (black picture)"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "case": 4,
+   "character": "gladias",
+   "words": "dressed up for a fancy party",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "fe30ce24e68fa1bb886d732b1982a8bd532d9d1f2f7b3febcf8c0639fd8c794f",
+   "file": "rp-04-gladias-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2da-dc5a-7421-8230-936b17c4ae5b",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "4d9c5a3b94d3a00baecd743761ddbb5e34389a9d7e604cea98f112d4a4d49233",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T00:28:06.875Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "yes",
+    "kept": "no",
+    "why_not_kept": "a photo-real different man; the picture\u2019s own look lost",
+    "figures": 1,
+    "shareable": "no",
+    "reading": "in a tuxedo at a party, photographic"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "case": 5,
+   "character": "bai",
+   "words": "make her a villain",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "6f8a1d3981ba548e0b5f4b5ce1f22d5fd69a3988b32d794023bc1904cdc3d268",
+   "file": "rp-05-bai-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2da-e1a1-7851-8cf8-eb7732392ca9",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "22b9d4343e91efd2b5067f3241bd720a1cc0593c928c696e0e367a0bea8085b1",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T00:28:08.181Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "no",
+    "reading": "Bai smiling on a grey background; nothing villainous"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "case": 6,
+   "character": "bai",
+   "words": "fighting a dragon",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "d1d7b64b41955f45bdfffbf7c42012af40075106a04a8b9bc3c9a4bb0ed569b1",
+   "file": "rp-06-bai-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2da-e6cf-7f63-990a-86e621d5f2d5",
+   "seed": 20261109,
+   "status": "filtered",
+   "note": "fal safety checker flagged it",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "8cd05475c67dc99c5be3efb741ae73f126a29d4ce23e5e764fe0aaf044588ef5",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T00:28:09.200Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": null,
+    "kept": null,
+    "why_not_kept": null,
+    "figures": 0,
+    "shareable": "no",
+    "reading": "blocked by fal\u2019s safety checker (black picture)"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "case": 7,
+   "character": "seila",
+   "words": "cozy, reading in a caf\u00e9 on a rainy day",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "8389b8f8c5a50dbd907651e4f9540ce851d5f8bc48f78ea7699b4595ac82519c",
+   "file": "rp-07-seila-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2da-eabd-72c1-8617-b97e6c020956",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "d3d3a2597a24f78cf0eba7b579f1e87400a2329c9ed00dc91b0b187b5c7593f0",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T00:28:10.581Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "reading by a rainy caf\u00e9 window"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "case": 8,
+   "character": "seila",
+   "words": "as an astronaut on the moon",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "511cb3d7ef38fac2ba0afe841237fbb697f60120641aa68af81bd54e61630122",
+   "file": "rp-08-seila-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2da-f016-7400-b7a5-c5b20be9b749",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "1c74b81c57e1e1e503a93a24aa9d5728ce7546e7d37cd2337e52ed69ac151e71",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T00:28:11.984Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "partly",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "no",
+    "reading": "grey moon ground but no spacesuit; her own coat"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "case": 9,
+   "character": "deluin",
+   "words": "make him cooler",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "ac4dc0afd5d89c1260631b9ac90f5afeda41e2b61f2299c175246a03882921c4",
+   "file": "rp-09-deluin-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2da-f591-77b0-8105-bab5aded0b5d",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "931296deddf0550771641313f73f2572032e46911f8c0d3202ace08075b04e84",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T00:28:13.171Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "no",
+    "reading": "the base pose on grey; nothing changed"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "case": 10,
+   "character": "deluin",
+   "words": "at a crowded night market, eating noodles",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "56bcd1ca74162e90364d0255068df30804508799ba7f646a90ea91651fcea06a",
+   "file": "rp-10-deluin-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2da-fa3f-7790-947e-b3a6696f1cfa",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "81cf477115de15f5c6b4044c3d85583cb5d264d698d8777223fbdaaaafd5c92f",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T00:28:14.702Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "eating noodles at a busy stall"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "case": 11,
+   "character": "mu",
+   "words": "in winter gear on a snowy mountain at night",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "5ad20ca4fdba7549dbc121722a3a4c67b991ed0def99adfe1a1ec65913fdabdb",
+   "file": "rp-11-mu-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2db-003d-7d31-a00b-f790468fd22f",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "a4e018e9a1ab99055ef0b0d311795c2e15e61b303b7e677bfeaf7de71cfe86e4",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T00:28:16.332Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "partly",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "no",
+    "reading": "snowy mountains at night, but her own uniform"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "flux",
+   "case": 12,
+   "character": "mu",
+   "words": "as a pirate captain on a ship in a storm",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "0632bfd42c98ec2559d756834f2574a58277a7c959f87042748efe3c59c528eb",
+   "file": "rp-12-mu-flux.jpg",
+   "endpoint": "fal-ai/flux-2/klein/4b/edit",
+   "host": "fal.ai",
+   "request_id": "01a1c2db-068d-7601-98cb-e9613731333f",
+   "seed": 20261109,
+   "status": "ok",
+   "cost_usd": 0.005625,
+   "cost_source": "fal's x-fal-billable-units (0.5625) x $0.01/megapixel",
+   "sha256": "705b7fd9f84102d0e0ee0ec2ff41433ab8ab268063e92d271981b3cd7f3417f6",
+   "settings": {
+    "image_size": {
+     "width": 1024,
+     "height": 576
+    },
+    "num_images": 1,
+    "enable_safety_checker": true,
+    "output_format": "jpeg",
+    "sync_mode": true,
+    "seed": 20261109
+   },
+   "at": "2026-11-10T00:28:17.982Z",
+   "attempt": 1,
+   "worst_usd": 0.0125,
+   "judged": {
+    "change_done": "partly",
+    "kept": "no",
+    "why_not_kept": "brown hair, younger, lighter face than her base",
+    "figures": 1,
+    "shareable": "no",
+    "reading": "a pirate hat on a ship in the rain, her own uniform"
+   }
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gpt",
+   "status": "ok",
+   "retention": {
+    "provider": "openai",
+    "zero_data_retention": false,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-10T00:28:18.115Z",
+    "kept": {
+     "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+     "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+     "source": "https://developers.openai.com/api/docs/guides/your-data",
+     "read": "2026-11-03"
+    }
+   },
+   "cost_usd": 0,
+   "at": "2026-11-10T00:28:18.115Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "case": 1,
+   "character": "zei",
+   "words": "with Bai",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "6650fd03c07fdcb833a4d68aec4c6eb04d5698588909a345c7d65e1c9bb1fc88",
+   "file": "rp-01-zei-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71DP3HG5ZQF8HVBYDR7G7KB",
+   "status": "ok",
+   "cost_usd": 0.047794,
+   "cost_source": "reported by the gateway",
+   "sha256": "04e3a3bf4248c80d77bb706dc6befc9bff13de879df14bc3cb9bb9d0ca33e44a",
+   "original_sha256": "8fdfeadebd308c4d5b102bb463a7c693a1e18805ae4ab5725e3229141c7b6d75",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:28:48.315Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "no",
+    "reading": "Zei with a white dog: \u201cBai\u201d read as a dog"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "case": 2,
+   "character": "zei",
+   "words": "riding a motorcycle through a city at sunset",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "e5cdccd9d881939a3cf1839c9d8cf8331ca857f924609865cbf6e58e3b2c5778",
+   "file": "rp-02-zei-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71DQ14XW8TW726G7NF6ETMJ",
+   "status": "ok",
+   "cost_usd": 0.048134,
+   "cost_source": "reported by the gateway",
+   "sha256": "76635419610e3854a771958f6a6c8f31b702c9adc85d44e18416154830c9b8dc",
+   "original_sha256": "438c6c39dcb588fa4cc0e3537cd8d72aa0e66482fdb7fa1db29267b36a98fd01",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:29:19.123Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "on a sport bike, city at sunset; streak kept"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "case": 3,
+   "character": "gladias",
+   "words": "as a wizard casting a spell",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "ccaa7ff1f73a4f42474d7ed7c5650a7cfb97676fb5f147b9285cfcc460586c90",
+   "file": "rp-03-gladias-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71DQZ1J3MWXYX9H1YR1A7YR",
+   "status": "ok",
+   "cost_usd": 0.048139,
+   "cost_source": "reported by the gateway",
+   "sha256": "ca4313c8a80b9a9d797392bb40f30879f091572cee99004057aae3c2c35f7822",
+   "original_sha256": "57c2b0a7159352980e8e13110c26884957e4ac8228fb0fac748ffd00852fe6ba",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:29:53.502Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "casting golden light among ruins; beard and skin kept"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "case": 4,
+   "character": "gladias",
+   "words": "dressed up for a fancy party",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "fe30ce24e68fa1bb886d732b1982a8bd532d9d1f2f7b3febcf8c0639fd8c794f",
+   "file": "rp-04-gladias-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71DS0N638DG22VMJPXMME21",
+   "status": "ok",
+   "cost_usd": 0.047839,
+   "cost_source": "reported by the gateway",
+   "sha256": "8dd24a482cd502eea104d53a2a2fe74771ed568da07b1b3d290cad5d53e1d4ed",
+   "original_sha256": "2d80169b73d9b68a9c5a77c5b30dd6abfaf849794c556edcb9cc0c8b98bda854",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:30:24.642Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "in a green dress coat with champagne"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "case": 5,
+   "character": "bai",
+   "words": "make her a villain",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "6f8a1d3981ba548e0b5f4b5ce1f22d5fd69a3988b32d794023bc1904cdc3d268",
+   "file": "rp-05-bai-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71DSZ3Q8A9D0VJNR7B8YVN6",
+   "status": "ok",
+   "cost_usd": 0.048119,
+   "cost_source": "reported by the gateway",
+   "sha256": "745f8ab4f9c08f7de84a338500bf36ba9e9ca5b5bcb07ccbd141496f68bb6869",
+   "original_sha256": "1a3d05b5c6d4ae2c2247bd9d8017df321e7826920ab5cb6b03d6b9ee4f0f59fa",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:30:52.821Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "long black coat, a mask in hand, night"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "case": 6,
+   "character": "bai",
+   "words": "fighting a dragon",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "d1d7b64b41955f45bdfffbf7c42012af40075106a04a8b9bc3c9a4bb0ed569b1",
+   "file": "rp-06-bai-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71DTTJF1VW8XCFBG6SFH8J0",
+   "status": "ok",
+   "cost_usd": 0.048119,
+   "cost_source": "reported by the gateway",
+   "sha256": "7793a76b7e5f0d1e588cc2ef5b6d5a8b21018874f2c9e97226562c862f22c5e9",
+   "original_sha256": "ebaf93be3a7bb3cdd090c411e847b367fc21ca052fd0af516a3dacab119da97c",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:31:24.959Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "sword raised against a red dragon"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "case": 7,
+   "character": "seila",
+   "words": "cozy, reading in a caf\u00e9 on a rainy day",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "8389b8f8c5a50dbd907651e4f9540ce851d5f8bc48f78ea7699b4595ac82519c",
+   "file": "rp-07-seila-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71DVSYSS5JKBKXVWQ29V0VA",
+   "status": "ok",
+   "cost_usd": 0.047854,
+   "cost_source": "reported by the gateway",
+   "sha256": "94aff26ef69054e7bb2be5c0ad4414bb2fec07d2ac99487d7ae7fefd069129f7",
+   "original_sha256": "d71ff4dc0377ced734600f47c448c9d4220b6d340721a6ffe9b15835cf660a18",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:31:54.110Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "reading with coffee, rain outside"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "case": 8,
+   "character": "seila",
+   "words": "as an astronaut on the moon",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "511cb3d7ef38fac2ba0afe841237fbb697f60120641aa68af81bd54e61630122",
+   "file": "rp-08-seila-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71DWPD80AQMJJ6KPHCYXJRW",
+   "status": "ok",
+   "cost_usd": 0.048134,
+   "cost_source": "reported by the gateway",
+   "sha256": "67119d6da9b0c8ff7c557352c317c01961b0fe857748bf905c075aad46b76f37",
+   "original_sha256": "bfba98b44e533a4236cd0b31e9c4887e864118cf05442399062860b1bc8a0ddc",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:32:27.912Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "spacesuit on the moon, Earth behind"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "case": 9,
+   "character": "deluin",
+   "words": "make him cooler",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "ac4dc0afd5d89c1260631b9ac90f5afeda41e2b61f2299c175246a03882921c4",
+   "file": "rp-09-deluin-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71DXQFGPHNFG4P61MCASEC1",
+   "status": "ok",
+   "cost_usd": 0.048099,
+   "cost_source": "reported by the gateway",
+   "sha256": "19a4e76dbc704d89e508eab5eec983e176c850ab2602c5cbe7d11b0bee66dc31",
+   "original_sha256": "ab5a394a25332fc7935de73773ea902dc68dd3878e31d858c127c5be9f26d0b0",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:32:59.997Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "partly",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "a cloak, lounging above a lake town"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "case": 10,
+   "character": "deluin",
+   "words": "at a crowded night market, eating noodles",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "56bcd1ca74162e90364d0255068df30804508799ba7f646a90ea91651fcea06a",
+   "file": "rp-10-deluin-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71DYQ00FF7W1THRY4NKH0CB",
+   "status": "ok",
+   "cost_usd": 0.047819,
+   "cost_source": "reported by the gateway",
+   "sha256": "45b1f9e77658ddbe2e80487f9dd567dfe28e360841fd6041b532873ae259e140",
+   "original_sha256": "f130dd907912a93fb9f6e82456c6dd4d174ac61c0e11b98ca79b160a46bae204",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:33:33.916Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "eating noodles under lanterns"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "case": 11,
+   "character": "mu",
+   "words": "in winter gear on a snowy mountain at night",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "5ad20ca4fdba7549dbc121722a3a4c67b991ed0def99adfe1a1ec65913fdabdb",
+   "file": "rp-11-mu-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71DZQX56B9Z75BPT1GS773C",
+   "status": "ok",
+   "cost_usd": 0.048134,
+   "cost_source": "reported by the gateway",
+   "sha256": "37c76aba0f9c7ba4a46a6e5d3fd0fa193d580d99e670df6b0abae2c9fd1f229f",
+   "original_sha256": "6efad67f3eea5750db323e748b485a858313f1f7895daea1340d156620b0319b",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:34:06.552Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "parka and poles under the moon"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "case": 12,
+   "character": "mu",
+   "words": "as a pirate captain on a ship in a storm",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "0632bfd42c98ec2559d756834f2574a58277a7c959f87042748efe3c59c528eb",
+   "file": "rp-12-mu-gpt.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E0QR0EKM33FY01XR12NS9",
+   "status": "ok",
+   "cost_usd": 0.048139,
+   "cost_source": "reported by the gateway",
+   "sha256": "1865a263c464086028fad52c387a261fd6f2f5a9a26450fa52ec4ab0e2fc2341",
+   "original_sha256": "259836f38669121bf336eb0af24a4af233aab63643f8c2e8714a681a15ad614d",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:34:40.750Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "pirate coat at the wheel, lightning"
+   }
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gemini",
+   "status": "ok",
+   "retention": {
+    "provider": "vertex",
+    "zero_data_retention": true,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-10T00:34:41.176Z"
+   },
+   "cost_usd": 0,
+   "at": "2026-11-10T00:34:41.176Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "case": 1,
+   "character": "zei",
+   "words": "with Bai",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "6650fd03c07fdcb833a4d68aec4c6eb04d5698588909a345c7d65e1c9bb1fc88",
+   "file": "rp-01-zei-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E1SHGV8EK39NCNEEM614M",
+   "status": "ok",
+   "cost_usd": 0.0677405,
+   "cost_source": "reported by the gateway",
+   "sha256": "3fccd09dc0e60f41cb416d398c13346ffeafaf9ff11824d168c0afc004310640",
+   "original_sha256": "59974f78d032b52f08f60eb8e19933833c7ad1abcc5980d13f09595a44fcabc5",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:34:51.677Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "no",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "no",
+    "reading": "Zei walking a black dog: \u201cBai\u201d read as a dog"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "case": 2,
+   "character": "zei",
+   "words": "riding a motorcycle through a city at sunset",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "e5cdccd9d881939a3cf1839c9d8cf8331ca857f924609865cbf6e58e3b2c5778",
+   "file": "rp-02-zei-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E23VWTX06MHD60D6TN32Z",
+   "status": "ok",
+   "cost_usd": 0.0676365,
+   "cost_source": "reported by the gateway",
+   "sha256": "6833db686c39f977e6cd4376cd529efc9951c046e8cfc83ece94c241ab6bd7b3",
+   "original_sha256": "9232f10b5495ee8e09eda925feaa8397a2cb49e85a5b942bc3ef6875f99b3f9f",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:35:00.499Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "on a motorcycle at sunset; his hair is now all teal"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "case": 3,
+   "character": "gladias",
+   "words": "as a wizard casting a spell",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "ccaa7ff1f73a4f42474d7ed7c5650a7cfb97676fb5f147b9285cfcc460586c90",
+   "file": "rp-03-gladias-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E2CD0EAGV9A4DBABDAKDN",
+   "status": "ok",
+   "cost_usd": 0.067638,
+   "cost_source": "reported by the gateway",
+   "sha256": "a31d299326fad451f210a3ca2f0c68e8b81d29142e66c271e5db0b2b8c8aab38",
+   "original_sha256": "515564bded235f84386b08cf881ed116f359f6fe47e16b7089e6b3d3b66ff1c8",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:35:10.809Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "no",
+    "why_not_kept": "face tinted green-grey by the spell\u2019s light, not his skin",
+    "figures": 1,
+    "shareable": "no",
+    "reading": "casting a swirl spell on a tower"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "case": 4,
+   "character": "gladias",
+   "words": "dressed up for a fancy party",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "fe30ce24e68fa1bb886d732b1982a8bd532d9d1f2f7b3febcf8c0639fd8c794f",
+   "file": "rp-04-gladias-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E2PH8MH1S0N4VWH2YF580",
+   "status": "ok",
+   "cost_usd": 0.067607,
+   "cost_source": "reported by the gateway",
+   "sha256": "d74c62ff38d596b4628cefdbb17a894c7520f2231de52360af1e760d78d75ddc",
+   "original_sha256": "fff44ba3d74ec06da1583211781afe1d17a686f38f6ac60e3932bb4004e4db85",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:35:20.161Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "no",
+    "why_not_kept": "hair turned grey, looks older",
+    "figures": 2,
+    "shareable": "no",
+    "reading": "two copies of him at a ball"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "case": 5,
+   "character": "bai",
+   "words": "make her a villain",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "6f8a1d3981ba548e0b5f4b5ce1f22d5fd69a3988b32d794023bc1904cdc3d268",
+   "file": "rp-05-bai-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E2ZPRYW1RVEQ3FHQ7V4M3",
+   "status": "ok",
+   "cost_usd": 0.0676345,
+   "cost_source": "reported by the gateway",
+   "sha256": "bc758360788015085d3c2040c2bae0d4b72637de49d6fe10da8d54ccaff399a3",
+   "original_sha256": "095a3c5f12c54fc607f4806d581ac6565bceefc30ffbd562be4eb44e7106a5f4",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:35:29.817Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "purple suit in a control room"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "case": 6,
+   "character": "bai",
+   "words": "fighting a dragon",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "d1d7b64b41955f45bdfffbf7c42012af40075106a04a8b9bc3c9a4bb0ed569b1",
+   "file": "rp-06-bai-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E392HFHJBXMN5VC50KW0S",
+   "status": "ok",
+   "cost_usd": 0.067634,
+   "cost_source": "reported by the gateway",
+   "sha256": "d986f6bec4f0015947ff99d2de2d56be4b9043f5e35e2cb075307370f9b36939",
+   "original_sha256": "6cedc9d53f6f26589e849a7fe9e45b052060c00595ea57610d4485eddba7411e",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:35:39.436Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "a light whip against a green dragon"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "case": 7,
+   "character": "seila",
+   "words": "cozy, reading in a caf\u00e9 on a rainy day",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "8389b8f8c5a50dbd907651e4f9540ce851d5f8bc48f78ea7699b4595ac82519c",
+   "file": "rp-07-seila-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E3JG2P44CWYWEW27XDGAR",
+   "status": "ok",
+   "cost_usd": 0.0676085,
+   "cost_source": "reported by the gateway",
+   "sha256": "75182365aed6177f29d6962aab36c0c566fa6eadd9163e54b3c9f4fba1a87e14",
+   "original_sha256": "6ecae27495d85f0c3153c1277d81d3e3b907d2d159fa793d123e42dac9d4a959",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:35:49.790Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "in an armchair by a rainy window"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "case": 8,
+   "character": "seila",
+   "words": "as an astronaut on the moon",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "511cb3d7ef38fac2ba0afe841237fbb697f60120641aa68af81bd54e61630122",
+   "file": "rp-08-seila-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E3WMG9XJMY5NXPNBB1KRE",
+   "status": "ok",
+   "cost_usd": 0.067637,
+   "cost_source": "reported by the gateway",
+   "sha256": "294c284194f3c31b6ec076d39c050af3c082b7fc8a8537a76a70128c532a8cb0",
+   "original_sha256": "1f3355b2cde7ba76617c69cdd04e54c9d2692dea762175d1aa80d5c60271bb66",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:35:59.358Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "spacesuit on the moon; face small"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "case": 9,
+   "character": "deluin",
+   "words": "make him cooler",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "ac4dc0afd5d89c1260631b9ac90f5afeda41e2b61f2299c175246a03882921c4",
+   "file": "rp-09-deluin-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E45XA94WQRRVVT30B0A29",
+   "status": "ok",
+   "cost_usd": 0.0676335,
+   "cost_source": "reported by the gateway",
+   "sha256": "9ba964d0dc6e1d36c951cf4b943852653932ae13cfa85b89d789fc37540ba7c3",
+   "original_sha256": "8702ef4491cc99b3d1e16c46268bf5ba63637175bf6b19ce30f7373d7f55f991",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:36:09.289Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "hooded, with a crossbow, action pose"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "case": 10,
+   "character": "deluin",
+   "words": "at a crowded night market, eating noodles",
+   "style_row": "Same",
+   "style_used": null,
+   "prompt_sha256": "56bcd1ca74162e90364d0255068df30804508799ba7f646a90ea91651fcea06a",
+   "file": "rp-10-deluin-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E4FKXFJSY61GH4F4ZEDER",
+   "status": "ok",
+   "cost_usd": 0.067605,
+   "cost_source": "reported by the gateway",
+   "sha256": "3918414540d697547ac024aca257d87c13b337008021a7e34b7f18c4daeb22ca",
+   "original_sha256": "76cad50cd847e046ceb3c85240c57888e92d5af682bb9fbae7130f004ef639d9",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:36:18.529Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "eating noodles in a crowded market; small in frame"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "case": 11,
+   "character": "mu",
+   "words": "in winter gear on a snowy mountain at night",
+   "style_row": "Animated series",
+   "style_used": "Animated series",
+   "prompt_sha256": "5ad20ca4fdba7549dbc121722a3a4c67b991ed0def99adfe1a1ec65913fdabdb",
+   "file": "rp-11-mu-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E4RPA4XREDSQ9ZMXX1RC8",
+   "status": "ok",
+   "cost_usd": 0.067637,
+   "cost_source": "reported by the gateway",
+   "sha256": "f09727429c0a1ca89598e10bf74250417dcb6c0cd9ad695327274e7141f31c67",
+   "original_sha256": "965e54537d8c3e7d91d36099139cf8ff033ec269a0aa5d0a19842775ea98df4d",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:36:29.192Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "padded suit on a snowy ridge at night"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "case": 12,
+   "character": "mu",
+   "words": "as a pirate captain on a ship in a storm",
+   "style_row": "Random",
+   "style_used": "Animated series",
+   "prompt_sha256": "0632bfd42c98ec2559d756834f2574a58277a7c959f87042748efe3c59c528eb",
+   "file": "rp-12-mu-gemini.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71E531P0RTWMFD00FRWV1A6",
+   "status": "ok",
+   "cost_usd": 0.0676375,
+   "cost_source": "reported by the gateway",
+   "sha256": "402e6057aaa34164da47f28c2e3a916061fa3e6ff5174da6c03fc0502ea6e4bd",
+   "original_sha256": "a13362991d7bd04c095df7b0bde6b4fc19a44d95ca0872ee656e2d4a18ea350f",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T00:36:38.786Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "why_not_kept": null,
+    "figures": 1,
+    "shareable": "yes",
+    "reading": "at the wheel in a storm; face small"
+   }
+  }
+ ],
+ "judged_by_eye": [
+  {
+   "case": 1,
+   "model": "flux",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "no",
+   "reading": "Zei alone on a shore; no Bai"
+  },
+  {
+   "case": 1,
+   "model": "gpt",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "no",
+   "reading": "Zei with a white dog: \u201cBai\u201d read as a dog"
+  },
+  {
+   "case": 1,
+   "model": "gemini",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "no",
+   "reading": "Zei walking a black dog: \u201cBai\u201d read as a dog"
+  },
+  {
+   "case": 2,
+   "model": "flux",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "riding through a sunset street; streak kept"
+  },
+  {
+   "case": 2,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "on a sport bike, city at sunset; streak kept"
+  },
+  {
+   "case": 2,
+   "model": "gemini",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "on a motorcycle at sunset; his hair is now all teal"
+  },
+  {
+   "case": 3,
+   "model": "flux",
+   "change_done": null,
+   "kept": null,
+   "why_not_kept": null,
+   "figures": 0,
+   "shareable": "no",
+   "reading": "blocked by fal\u2019s safety checker (black picture)"
+  },
+  {
+   "case": 3,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "casting golden light among ruins; beard and skin kept"
+  },
+  {
+   "case": 3,
+   "model": "gemini",
+   "change_done": "yes",
+   "kept": "no",
+   "why_not_kept": "face tinted green-grey by the spell\u2019s light, not his skin",
+   "figures": 1,
+   "shareable": "no",
+   "reading": "casting a swirl spell on a tower"
+  },
+  {
+   "case": 4,
+   "model": "flux",
+   "change_done": "yes",
+   "kept": "no",
+   "why_not_kept": "a photo-real different man; the picture\u2019s own look lost",
+   "figures": 1,
+   "shareable": "no",
+   "reading": "in a tuxedo at a party, photographic"
+  },
+  {
+   "case": 4,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "in a green dress coat with champagne"
+  },
+  {
+   "case": 4,
+   "model": "gemini",
+   "change_done": "yes",
+   "kept": "no",
+   "why_not_kept": "hair turned grey, looks older",
+   "figures": 2,
+   "shareable": "no",
+   "reading": "two copies of him at a ball"
+  },
+  {
+   "case": 5,
+   "model": "flux",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "no",
+   "reading": "Bai smiling on a grey background; nothing villainous"
+  },
+  {
+   "case": 5,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "long black coat, a mask in hand, night"
+  },
+  {
+   "case": 5,
+   "model": "gemini",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "purple suit in a control room"
+  },
+  {
+   "case": 6,
+   "model": "flux",
+   "change_done": null,
+   "kept": null,
+   "why_not_kept": null,
+   "figures": 0,
+   "shareable": "no",
+   "reading": "blocked by fal\u2019s safety checker (black picture)"
+  },
+  {
+   "case": 6,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "sword raised against a red dragon"
+  },
+  {
+   "case": 6,
+   "model": "gemini",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "a light whip against a green dragon"
+  },
+  {
+   "case": 7,
+   "model": "flux",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "reading by a rainy caf\u00e9 window"
+  },
+  {
+   "case": 7,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "reading with coffee, rain outside"
+  },
+  {
+   "case": 7,
+   "model": "gemini",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "in an armchair by a rainy window"
+  },
+  {
+   "case": 8,
+   "model": "flux",
+   "change_done": "partly",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "no",
+   "reading": "grey moon ground but no spacesuit; her own coat"
+  },
+  {
+   "case": 8,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "spacesuit on the moon, Earth behind"
+  },
+  {
+   "case": 8,
+   "model": "gemini",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "spacesuit on the moon; face small"
+  },
+  {
+   "case": 9,
+   "model": "flux",
+   "change_done": "no",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "no",
+   "reading": "the base pose on grey; nothing changed"
+  },
+  {
+   "case": 9,
+   "model": "gpt",
+   "change_done": "partly",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "a cloak, lounging above a lake town"
+  },
+  {
+   "case": 9,
+   "model": "gemini",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "hooded, with a crossbow, action pose"
+  },
+  {
+   "case": 10,
+   "model": "flux",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "eating noodles at a busy stall"
+  },
+  {
+   "case": 10,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "eating noodles under lanterns"
+  },
+  {
+   "case": 10,
+   "model": "gemini",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "eating noodles in a crowded market; small in frame"
+  },
+  {
+   "case": 11,
+   "model": "flux",
+   "change_done": "partly",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "no",
+   "reading": "snowy mountains at night, but her own uniform"
+  },
+  {
+   "case": 11,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "parka and poles under the moon"
+  },
+  {
+   "case": 11,
+   "model": "gemini",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "padded suit on a snowy ridge at night"
+  },
+  {
+   "case": 12,
+   "model": "flux",
+   "change_done": "partly",
+   "kept": "no",
+   "why_not_kept": "brown hair, younger, lighter face than her base",
+   "figures": 1,
+   "shareable": "no",
+   "reading": "a pirate hat on a ship in the rain, her own uniform"
+  },
+  {
+   "case": 12,
+   "model": "gpt",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "pirate coat at the wheel, lightning"
+  },
+  {
+   "case": 12,
+   "model": "gemini",
+   "change_done": "yes",
+   "kept": "yes",
+   "why_not_kept": null,
+   "figures": 1,
+   "shareable": "yes",
+   "reading": "at the wheel in a storm; face small"
+  }
+ ]
+}
