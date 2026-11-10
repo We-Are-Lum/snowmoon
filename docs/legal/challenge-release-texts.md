@@ -1,4 +1,4 @@
-# Challenge release: every final text (v7; reread by the owner, 2026-11-08 and 2026-11-09)
+# Challenge release: every final text (v8; reread by the owner, 2026-11-08 and 2026-11-09)
 
 Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` (v4 adds the closing line of 2026-11-09 and the bases' style; v3 was at `9ae0aa13`) (with challenge-simple's final head `1efcbeaf`). **v3:** the owner reread every text of v2 on 2026-11-08, via the coordinator's check, with changes 1–2 below applied word for word (the notice labels; the closed refusals) and the rules above Generate extended; the "none left" line approved as drafted
 (which carries `challenge-simple`). Every text below is copied from the code as it
@@ -162,6 +162,9 @@ The other paragraphs, the line and the title are v5's word for word: "Public, pe
   entry."
 - Character page: title "{Name}: Remix challenge"; description "The remix challenge on Snowmoon Party: {Name}'s bases
   and every remix."
+- Character page, under the one line (v8, the owner's words, 2026-11-09): "Read where {Name} first appears" (e.g. "Read
+  where Zei first appears"), a link to the reader at the character's first appearance (the card's first block, the same
+  block its pictures are anchored to; Zei: c2-b2). The reader keeps its own chapter gating.
 - Share texts: your own picture "My remix of {Name}, for the Snowmoon Party remix challenge" (before, with the moments: "My remix of
   {Name} in "{moment}", for the Snowmoon Party remix challenge"); someone else's (the owner's words)
   "A remix of {Name} by {@maker}, for the Snowmoon Party remix challenge" (before: "{Name} in "{moment}", a remix

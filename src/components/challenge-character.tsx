@@ -20,6 +20,13 @@ export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
       {v.adminNote && <p className="dz-note ch-admin-only">{v.adminNote}</p>}
       <h1 className="cc-name">{c.name}</h1>
       <CardLine c={c} w={w} />
+      {v.firstAppears && (
+        <p className="ch-first-appears">
+          <Link href={v.firstAppears.href} prefetch={false} data-slot="first-appears">
+            {v.firstAppears.words}
+          </Link>
+        </p>
+      )}
       {c.note && <p className="dz-muted cc-note">{c.note}</p>}
       {c.bases.length > 0 && (
         <section aria-labelledby="ch-bases" className="ch-char-bases">

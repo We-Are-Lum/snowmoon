@@ -155,6 +155,24 @@ check('config: a current default look per challenge character, each a design id 
   // A character's page: only the six; no database here, so empty lists.
   const zei = await V.characterView(null, 'zei');
   check('character page: the name, the one line, the bases and the remixes (none without a database), its back link', zei !== null && zei.c.name === 'Zei' && zei.c.line === cardOf('zei')!.line && Array.isArray(zei.c.bases) && zei.c.remixes.length === 0 && zei.w.none === 'No remixes of Zei yet.' && zei.back === '← The remix challenge');
+  // "Read where {Name} first appears" (owner, 2026-11-09): each of the six pages, the words, the reader link at the card's
+  // first "appears" block (the same block a picture is anchored to), and that block is in the book's text.
+  {
+    const FA = await import('../src/lib/challenge/first-appears');
+    const CD = await import('../src/lib/challenge/cards');
+    const MK = await import('../src/lib/challenge/make');
+    const rows = await Promise.all(CHALLENGE.characters.map(async (slug) => ({ slug, v: await V.characterView(null, slug) })));
+    const ok = (check: (slug: string, href: string, words: string) => boolean) => rows.every(({ slug, v }) => v?.firstAppears && check(slug, v.firstAppears.href, v.firstAppears.words));
+    check('first appears: each of the six pages links "Read where {Name} first appears" to the reader at the card\'s first block, which exists in the text and anchors its pictures', ok((slug, href, words) => {
+      const block = CD.CARDS.find((c) => c.slug === slug)!.appears[0].block;
+      const m = /^c(\d+)-b(\d+)$/.exec(block)!;
+      const a = MK.characterAnchor(slug);
+      return words === `Read where ${rows.find((r) => r.slug === slug)!.v!.c.name} first appears` && href === `/chapter/${m[1]}#${block}` && blocks.has(block) && a.chapter === Number(m[1]) && a.start === Number(m[2]);
+    }) && rows.find((r) => r.slug === 'zei')!.v!.firstAppears!.href === '/chapter/2#c2-b2' && rows.find((r) => r.slug === 'zei')!.v!.firstAppears!.words === 'Read where Zei first appears');
+    proof('first appears: a link to a block that isn\'t in the text fails', !blocks.has('c2-b99999') && FA.firstAppearsBlock('nobody') === 'c1-b1');
+    const comp = read('src/components/challenge-character.tsx');
+    check('first appears: the link sits under the one line, prefetch off', comp.indexOf('data-slot="first-appears"') > comp.indexOf('<CardLine') && comp.indexOf('data-slot="first-appears"') < comp.indexOf('ch-char-bases') && /prefetch=\{false\} data-slot="first-appears"/.test(comp));
+  }
   check('character page: null (404) for anything but the six', (await V.characterView(null, 'lektor')) === null && (await V.characterView(null, 'entries')) === null && (await V.characterView(null, '')) === null);
   const page = read('src/app/challenge/[slug]/page.tsx');
   check('character page: gated and cached as /challenge (public switch, revalidate 60), only the six as pages', /if \(!CHALLENGE\.public\) notFound\(\);/.test(page) && /export const revalidate = 60;/.test(page) && /export const dynamicParams = false;/.test(page) && /CHALLENGE\.characters\.map\(\(slug\) => \(\{ slug \}\)\)/.test(page) && /page="character"/.test(read('src/app/challenge/[slug]/not-found.tsx')));

@@ -1905,6 +1905,9 @@ async function checkChallengeLanding() {
       await checkFloors(page, `/challenge/zei ${tag}`, scheme);
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways`);
       if (((await page.locator('.ch-character-page h1').textContent()) ?? '').trim() !== 'Zei') fail(`/challenge/zei ${tag}: the heading isn't "Zei"`);
+      // "Read where Zei first appears" (owner, 2026-11-09): under the one line, to the reader at Zei's first block.
+      const fa = page.locator('.ch-character-page a[data-slot="first-appears"]');
+      if ((await fa.count()) !== 1 || ((await fa.textContent()) ?? '').trim() !== 'Read where Zei first appears' || (await fa.getAttribute('href')) !== '/chapter/2#c2-b2') fail(`/challenge/zei ${tag}: no "Read where Zei first appears" to /chapter/2#c2-b2 (${await fa.getAttribute('href').catch(() => 'none')})`);
       const heads = (await page.locator('.ch-character-page h2.cc-head').allTextContents()).map((t) => t.trim());
       if (heads.join('|') !== 'Bases|Remixes') fail(`/challenge/zei ${tag}: the sections read ${heads.join(', ')}, not Bases, Remixes`);
       const zeiRemixes = FX.remixes.filter((r) => r.character === 'zei').map((r) => r.versionId);

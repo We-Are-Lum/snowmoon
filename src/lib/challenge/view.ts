@@ -9,6 +9,7 @@ import { cardOf } from './cards';
 import { basesOf, baseCountOf } from './rules';
 import { CHALLENGE_WORDING as W } from './wording';
 import { LANDING_WORDING as L } from './landing-wording';
+import { firstAppearsHref, firstAppearsWords } from './first-appears';
 
 /**
  * What /challenge and a character's page (/challenge/<slug>) show, as plain data with their words already written
@@ -46,6 +47,8 @@ export interface CharacterView {
   c: CharacterData;
   w: CardWords;
   notAffiliated: string;
+  /** "Read where {Name} first appears" (owner, 2026-11-09): the reader at the character's first block. */
+  firstAppears?: { href: string; words: string };
 }
 
 const callName = (name: string) => name.split(' ')[0];
@@ -111,5 +114,6 @@ export async function characterView(sql: Sql | null, slug: string): Promise<Char
   const all = sql ? await challengePictures(sql).catch(() => []) : [];
   const remixes = all.filter((p) => p.character === slug).map((p) => tile(p, null));
   const c: CharacterData = { ...cardFor(slug, bases, note), remixes };
-  return { adminNote: adminNote(), back: L.back, c, w: cardWords(c.name), notAffiliated: W.notAffiliated };
+  // "Read where {Name} first appears" (owner, 2026-11-09): the reader at the character's first block.
+  return { adminNote: adminNote(), back: L.back, c, w: cardWords(c.name), notAffiliated: W.notAffiliated, firstAppears: { href: firstAppearsHref(slug), words: firstAppearsWords(c.name) } };
 }

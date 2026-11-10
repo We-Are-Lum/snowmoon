@@ -3,13 +3,13 @@ import type postgres from 'postgres';
 import { CHALLENGE, IMAGES } from '../config';
 import { bookCharacter, listDesigns } from '../images/designs';
 import { chapterChip, momentById, MOMENTS, readerHref, type Moment } from './moments';
-import { CARDS } from './cards';
 import { MAKE_WORDING as M } from './make-wording';
 import { challengeModels, modelChipText, type ModelRowEntry } from './models';
 import type { Source } from './pictures';
 import { shuffleFresh } from './shuffle';
 import { KEEP_LINE, SAME_STYLE, OWN_STYLE_MAX, presetOptions, readStyleChoice, STYLE_PRESETS, type StyleChoice, type StyleOption, type StylePreset } from './styles';
 import { SCENE_LINE } from './looks';
+import { firstAppearsBlock } from './first-appears';
 
 /**
  * The remix screen's server half (branch challenge-moments, 2026-11-05; simplified on branch challenge-simple,
@@ -127,7 +127,7 @@ export const momentChips = () =>
  * moment's passage instead.
  */
 export function characterAnchor(character: string): { chapter: number; start: number; end: number } {
-  const block = CARDS.find((c) => c.slug === character)?.appears[0]?.block ?? 'c1-b1';
+  const block = firstAppearsBlock(character);
   const m = /^c(\d+)-b(\d+)$/.exec(block)!;
   return { chapter: Number(m[1]), start: Number(m[2]), end: Number(m[2]) };
 }
