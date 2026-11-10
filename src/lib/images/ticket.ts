@@ -71,11 +71,6 @@ export interface TicketChallenge {
   style?: { choice: 'same' | 'preset' | 'published' | 'random' | 'own'; id: string | null; elementId: string | null; label: string | null; text: string };
   /** The model chosen on the Model row (src/lib/challenge/models.ts). */
   model?: string;
-  /**
-   * The setting drawn for a closed model's picture (src/lib/challenge/settings.ts; owner, 2026-11-09): its letter, the
-   * text put in the setting line, and the book's blocks it describes (this edition's description, not a quote).
-   */
-  setting?: { id: string; text: string; blocks: string[] };
 }
 
 export interface TicketSheets {
