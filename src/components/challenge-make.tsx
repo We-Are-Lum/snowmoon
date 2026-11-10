@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import NotFound from 'next/dist/client/components/builtin/not-found';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { authFetch, useAuth, useSocialSession, useWalletSession } from '~/lib/client-auth';
 import { shuffleFresh } from '~/lib/challenge/shuffle';
 import type { MakeView } from '~/lib/challenge/make';
@@ -12,6 +12,7 @@ import { AiTag } from './ai-tag';
 import { ConsentScreen, PublishedTextField } from './publish-words';
 import { SignInChoices } from './sign-in-choices';
 import { useChallengeModel } from './challenge-model-row';
+import { oneCharacterProblem } from '~/lib/challenge/one-character';
 import { withReset } from '~/lib/challenge/model-wording';
 
 /**
@@ -57,8 +58,11 @@ export function ChallengeMake() {
   const [consent, setConsent] = useState<Wording | null>(null);
   // The Model row (branch challenge-models): the server's list for this visitor; a closed pick waits for its maker's
   // notice and, once per device, the 18+ box; a wallet account sees why closed models aren't offered.
-  const loaded = view && view !== 'missing' ? (view as MakeView & { modelsNote?: string | null; picturesLeft?: number | null }) : null;
-  const mc = useChallengeModel(loaded?.models, loaded?.modelsNote ?? null);
+  const loaded = view && view !== 'missing' ? (view as MakeView & { modelsNote?: string | null; picturesLeft?: number | null; defaultModel?: string | null }) : null;
+  const mc = useChallengeModel(loaded?.models, loaded?.modelsNote ?? null, loaded?.defaultModel ?? null);
+  // The latest make, for the notice asked at "Make it": answered, it makes the picture with the words as they are then.
+  const makeRef = useRef<() => void>(() => {});
+  // The notice opens under the Model row, right above "Make it"; the page isn't scrolled (owner, 2026-11-07).
 
   useEffect(() => {
     if (!from) return setView('missing');
@@ -122,7 +126,11 @@ export function ChallengeMake() {
     if (!momentsOn && !style) return setError(w.noStyle);
     if (style?.kind === 'own' && !style.text.trim()) return setError(w.ownEmpty);
     if (!model) return setError(w.noModel);
-    if (!mc.ready) return setError(w.noModel);
+    // One character per picture (owner, 2026-11-09): said here before any notice or request; the server refuses it too.
+    const second = oneCharacterProblem(words, view.source.character);
+    if (second) return setError(second);
+    // A closed default's first picture on this device: its maker's notice and the 18+ box, under the Model row, first.
+    if (!mc.readyNow()) return mc.askFirst(() => makeRef.current()) ? setError(null) : setError(w.noModel);
     setBusy(true);
     setError(null);
     const body = momentsOn ? { from, moment: chosen!.id, words, ...mc.body() } : { from, words, style, ...mc.body() };
@@ -144,6 +152,7 @@ export function ChallengeMake() {
     if (!saveDraft(draft)) return setError('Could not keep the picture in this tab. Try again.');
     router.push(`/challenge/make/${draft.id}`);
   };
+  makeRef.current = () => void make();
   const agree = async () => {
     const r = await authFetch('/api/consent', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sha256: consent?.sha256 }) });
     if (r.ok) {

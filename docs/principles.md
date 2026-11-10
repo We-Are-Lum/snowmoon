@@ -275,9 +275,22 @@ Hosted open-weight models may be listed too (`runs_on: hosted`): for a hosted re
   with the switch on or off; every closed choice names its maker; every model a choice calls is on `config/models.json`
   with the same open or closed record.
   The challenge's Model row (branch challenge-models, 2026-11-08, DRAFT; `CHALLENGE.modelChoice`,
-  `src/lib/challenge/models.ts`) is held to the same rule: FLUX.2 [klein] 4B edit first and the default, then
-  Qwen-Image-Edit, then the closed models, each naming its maker ("a closed model by …"), with its maker's retention
-  words, and each gateway call pinned to one provider (Gemini: `vertex` only); with the switch off, only the default.
+  `src/lib/challenge/models.ts`) is held to the same rule: FLUX.2 [klein] 4B edit first, then the closed models, each
+  naming its maker ("a closed model by …"), with its maker's retention words, and each gateway call pinned to one
+  provider (Gemini: `vertex` only); with the switch off, only FLUX. (Qwen-Image-Edit was dropped, owner, 2026-11-09.)
+  FLUX is the default, with the one exception below; `P3e` checks every kind of visitor (signed in or out, a wallet
+  account, countries in and out of OpenAI's regions and none, pictures left, closed models on or off, before and
+  after the close) and fails on any closed default wider than the exception, or any other closed model as a default.
+
+**Recorded exception (owner, 2026-11-09, the challenge only; ends when entries close, 29 Nov 2026 23:59 PT).** During
+the remix challenge the Model row starts on GPT Image 2.5 Sunburst (a closed model by OpenAI) for someone who can use
+it: signed in with Farcaster, Lens or Bluesky (not a wallet account), where OpenAI serves (its supported countries,
+without the embargoed ones; not when the country header is missing), with closed models on and enough of today's
+pictures left for one. FLUX stays first in the row and one tap away, and is the default for everyone else. The
+OpenAI line shows under the row whenever GPT is selected, the default included, and the notice and 18+ box are asked
+before the first closed picture on a device. At `CHALLENGE.dates.closes` the default goes back to FLUX for everyone
+by itself (`challengeDefaultModel`, tied to the date; tested on both sides). Open-weight models stay preferred: this
+is the owner's choice for the challenge's pictures, reported here.
 
 **Status.** Pass. Both generation models record `open_weights: true`, their
 license and their weights. The closed drafting model is listed under

@@ -45,7 +45,27 @@ export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
     ? sql`coalesce(sum(case when pool = 'closed' then ${CLOSED_IMAGES.countsAs} else 1 end), 0)::int`
     : sql`count(*)::int`;
   const [r] = await sql`select ${n} as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
-  return Math.max(0, perDay(fid) - (r?.n ?? 0));
+  // Pictures given back today (a FLUX picture fal's safety checker blocked; NEXT_image_asks_back.sql), once that table exists.
+  const back = (await backTable(sql)) ? Number((await sql<{ n: number }[]>`select count(*)::int as n from studio.image_asks_back where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`)[0]?.n ?? 0) : 0;
+  return Math.max(0, Math.min(perDay(fid), perDay(fid) - (r?.n ?? 0) + back));
+}
+
+/** Whether pictures can be given back on this database yet (NEXT_image_asks_back.sql applied). */
+async function backTable(sql: Sql): Promise<boolean> {
+  const [r] = await sql<{ ok: boolean }[]>`select to_regclass('studio.image_asks_back') is not null as ok`;
+  return Boolean(r?.ok);
+}
+
+/**
+ * Gives one open picture back to today's count (owner, 2026-11-09): a challenge picture by the open model that fal's
+ * safety checker blocked. studio.image_asks stays append-only; this adds a row to studio.image_asks_back (the person
+ * number and the time, as image_asks keeps), which generationsLeft subtracts. The spend stays recorded against the caps.
+ * Returns whether it was given back (false before the table exists: the picture counts, as before).
+ */
+export async function giveBack(sql: Sql, fid: number): Promise<boolean> {
+  if (isWalletNumber(fid) || !(await backTable(sql))) return false;
+  await sql`insert into studio.image_asks_back (fid) values (${fid})`;
+  return true;
 }
 
 

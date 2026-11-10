@@ -993,7 +993,8 @@ export const CLOSED_IMAGES = {
    * studio.image_asks in pool 'closed', and generationsLeft counts it as this many.
    */
   countsAs: 3,
-  dailySpendCapUsd: 5,
+  /** The closed site-wide daily cap (owner: $5, 2026-11-08; $15, 2026-11-09, with GPT the default for the challenge). Never above the free cap of the moment (limits.ts closedCapUsd). */
+  dailySpendCapUsd: 15,
   /**
    * Google's Service Specific Terms §20(d): no use of a Generative AI Service "as part of a website … that is directed
    * towards or is likely to be accessed by individuals under the age of 18" (docs/legal/age-terms-closed-models.md).
