@@ -45,7 +45,7 @@ const selectA = C.slice(C.indexOf('select n, what, ok'), C.indexOf(') as t(n, wh
 const doBlock = C.slice(C.indexOf('do $$'), C.lastIndexOf('end $$;') + 'end $$;'.length);
 const undo = uncomment(part('D')).split('\n').filter((l) => !/^[A-Z]/.test(l)).join('\n').trim();
 
-check('the file says who runs it (postgres, in the Supabase SQL Editor) and that it is not applied', /MUST RUN AS postgres/.test(text) && /Supabase SQL Editor/.test(text) && /NOT APPLIED/.test(text));
+check('the file says who runs it (postgres, in the Supabase SQL Editor) and when it was applied', /MUST RUN AS postgres/.test(text) && /Supabase SQL Editor/.test(text) && /APPLIED on production by the owner on 2026-11-09/.test(text));
 check('four parts in order: A ends in rollback, B in commit, C a select and a do block, D the undo', ['A', 'B', 'C', 'D'].every((k, i, a) => i === 0 || text.indexOf(`\n-- ${a[i - 1]}. `) < text.indexOf(`\n-- ${k}. `)) && dry.startsWith('begin;') && dry.endsWith('rollback;') && mig.startsWith('begin;') && mig.endsWith('commit;') && selectA.startsWith('select n, what, ok') && doBlock.startsWith('do $$') && /READ-BACK PASSED/.test(doBlock) && undo.startsWith('begin;') && undo.endsWith('commit;'));
 check('the dry run is the migration word for word', dry.slice(0, -'rollback;'.length) === mig.slice(0, -'commit;'.length));
 const setsRole = (sql: string) => /\bset\s+(local\s+|session\s+)?role\b/i.test(sql);
