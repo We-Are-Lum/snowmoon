@@ -20,6 +20,8 @@ export interface FlowDraft {
   modelId?: string;
   /** The style used, as "How it was made" names it (Random: the one drawn). */
   styleLine?: string | null;
+  /** A closed model's drawn setting (src/lib/challenge/settings.ts), as "How it was made" names it. */
+  setting?: { id: string; text: string; blocks: string[] } | null;
   ticket: string;
   image: string;
   prompt: string;
