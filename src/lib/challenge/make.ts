@@ -101,7 +101,9 @@ export async function publishedStyles(sql: postgres.Sql): Promise<PublishedStyle
  * allowlist only. The Style row lists them and Random draws only from them; with none published yet, the row is "Same
  * as this picture" and Write your own (Random hides with nothing to draw from).
  */
-export const offeredOnly = (published: readonly PublishedStyle[], offered: readonly string[] = CHALLENGE.offeredStyles): PublishedStyle[] => published.filter((s) => offered.includes(s.label.trim()));
+export const offeredOnly = (published: readonly PublishedStyle[], offered: readonly string[] = CHALLENGE.offeredStyles): PublishedStyle[] =>
+  // In the allowlist's order (owner, 2026-11-09: Animated series, Comic book, Comic 3D mix), whatever order they were published in.
+  offered.flatMap((name) => published.filter((s) => s.label.trim() === name));
 export async function challengeStyles(sql: postgres.Sql, offered: readonly string[] = CHALLENGE.offeredStyles): Promise<PublishedStyle[]> {
   return offeredOnly(await publishedStyles(sql), offered);
 }

@@ -12,13 +12,15 @@ import { bookCharacter } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
 import { characterAnchor, makeView, momentPrompt, othersIn, challengeStyles, readMake, remixPrompt, resolveStyle } from '~/lib/challenge/make';
 import { MAKE_WORDING } from '~/lib/challenge/make-wording';
-import { challengeDefaultModel, challengeModel, closedUsableBy, DEFAULT_CHALLENGE_MODEL, modelView, noticeProblem } from '~/lib/challenge/models';
+import { CHALLENGE_CLOSED_DEFAULT, challengeDefaultModel, challengeModel, closedUsableBy, DEFAULT_CHALLENGE_MODEL, reserveUsd, modelView, noticeProblem } from '~/lib/challenge/models';
 import { oneCharacterProblem } from '~/lib/challenge/one-character';
 import { challengeSpend, makeWith, recipeModel } from '~/lib/challenge/make-model';
 import { MODEL_WORDING } from '~/lib/challenge/model-wording';
 import { lookFor } from '~/lib/challenge/looks';
 import { whereFrom } from '~/lib/images/countries';
-import { generationsLeft } from '~/lib/images/limits';
+import { closedCapReached, generationsLeft } from '~/lib/images/limits';
+import { IMAGE_WORDING } from '~/lib/images/wording';
+import { nextUtcMidnight } from '~/lib/images/paid';
 import { isWalletNumber } from '~/lib/images/remixes';
 import { defaultLook, sourceOf } from '~/lib/challenge/pictures';
 import { spoilerExceptionOn } from '~/lib/challenge/spoilers';
@@ -74,8 +76,14 @@ export async function GET(request: Request) {
   const picturesLeft = sql && person !== null && !isWalletNumber(person) ? await generationsLeft(sql, person).catch(() => null) : null;
   // The model the row starts on: GPT Image 2.5 Sunburst for someone who can use it, until entries close (P3's one
   // exception, owner 2026-11-09; models.ts challengeDefaultModel); FLUX for everyone else and after the close.
-  const defaultModel = challengeDefaultModel({ where, signedIn: person !== null, wallet, picturesLeft, now: new Date() });
-  return NextResponse.json({ ...makeView(src, { styles: sql ? await challengeStyles(sql) : [], models: row.models }), modelsNote: row.note, picturesLeft, defaultModel: row.models.some((m) => m.id === defaultModel) ? defaultModel : DEFAULT_CHALLENGE_MODEL }, { headers: { 'Cache-Control': 'private, no-store' } });
+  // When one more closed picture would pass today's closed caps: start on FLUX and say so under the Model row (owner,
+  // 2026-11-09: never start on a model that will refuse). The line's {reset} is written by the browser.
+  const closedOffered = row.models.some((m) => !m.open);
+  const gpt = challengeModel(CHALLENGE_CLOSED_DEFAULT, where);
+  const capReached = sql && closedOffered && gpt ? await closedCapReached(sql, reserveUsd(gpt, IMAGES.size)).catch(() => false) : false;
+  const defaultModel = challengeDefaultModel({ where, signedIn: person !== null, wallet, picturesLeft, now: new Date(), closedCapReached: capReached });
+  const capLine = capReached ? { text: IMAGE_WORDING.designs.models.closedSpend, resetAt: nextUtcMidnight() } : null;
+  return NextResponse.json({ ...makeView(src, { styles: sql ? await challengeStyles(sql) : [], models: row.models }), modelsNote: row.note, picturesLeft, defaultModel: row.models.some((m) => m.id === defaultModel) ? defaultModel : DEFAULT_CHALLENGE_MODEL, capLine }, { headers: { 'Cache-Control': 'private, no-store' } });
 }
 
 export async function POST(request: Request) {

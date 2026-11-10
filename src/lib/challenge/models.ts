@@ -107,6 +107,8 @@ export interface DefaultCase {
   now: Date;
   /** CHALLENGE.modelChoice, for tests. */
   on?: boolean;
+  /** One more closed picture would pass today's closed caps (limits.ts closedCapReached): start on FLUX (owner, 2026-11-09). */
+  closedCapReached?: boolean;
 }
 
 /** The model the Model row starts on for this visitor (the exception above, or the open default). */
@@ -114,6 +116,7 @@ export function challengeDefaultModel(c: DefaultCase): ChallengeModelId {
   if (!c.signedIn || c.wallet) return DEFAULT_CHALLENGE_MODEL;
   if (!(c.now.getTime() < Date.parse(CHALLENGE.dates.closes))) return DEFAULT_CHALLENGE_MODEL;
   if (typeof c.picturesLeft === 'number' && c.picturesLeft < CLOSED_IMAGES.countsAs) return DEFAULT_CHALLENGE_MODEL;
+  if (c.closedCapReached) return DEFAULT_CHALLENGE_MODEL;
   return challengeModelsFor(c.where, c.on).some((m) => m.id === CHALLENGE_CLOSED_DEFAULT) ? CHALLENGE_CLOSED_DEFAULT : DEFAULT_CHALLENGE_MODEL;
 }
 
@@ -126,7 +129,7 @@ export function defaultCases(): DefaultCase[] {
     for (const [signedIn, wallet] of [[true, false], [true, true], [false, false]] as const)
       for (const picturesLeft of [null, 10, 3, 2, 0])
         for (const now of [new Date(closes - 60_000), new Date(closes), new Date(closes + 86_400_000)])
-          for (const on of [true, false]) out.push({ where, signedIn, wallet, picturesLeft, now, on });
+          for (const on of [true, false]) for (const closedCapReached of [false, true]) out.push({ where, signedIn, wallet, picturesLeft, now, on, closedCapReached });
   return out;
 }
 
@@ -141,11 +144,11 @@ export function challengeDefaultProblems(got: readonly { c: DefaultCase; id: str
   const closes = Date.parse(CHALLENGE.dates.closes);
   for (const { c, id } of got) {
     const m = CHALLENGE_MODELS.find((x) => x.id === id);
-    const who = `${c.signedIn ? (c.wallet ? 'a wallet account' : 'signed in') : 'signed out'}, country ${c.where.country ?? 'unknown'}${c.where.region ? `-${c.where.region}` : ''}, ${c.picturesLeft ?? 'unknown'} left, ${c.now.toISOString()}${c.on === false ? ', closed models off' : ''}`;
+    const who = `${c.signedIn ? (c.wallet ? 'a wallet account' : 'signed in') : 'signed out'}, country ${c.where.country ?? 'unknown'}${c.where.region ? `-${c.where.region}` : ''}, ${c.picturesLeft ?? 'unknown'} left, ${c.now.toISOString()}${c.on === false ? ', closed models off' : ''}${c.closedCapReached ? ', the closed cap reached' : ''}`;
     if (!m) { p.push(`default ${id} is not a challenge model (${who})`); continue; }
     if (m.open) continue;
     if (m.id !== CHALLENGE_CLOSED_DEFAULT) { p.push(`the default is ${m.id}, a closed model other than the challenge's one exception (${who})`); continue; }
-    const allowed = c.signedIn && !c.wallet && c.now.getTime() < closes && !(typeof c.picturesLeft === 'number' && c.picturesLeft < CLOSED_IMAGES.countsAs) && (c.on ?? CHALLENGE.modelChoice) && makerServes('OpenAI', c.where);
+    const allowed = c.signedIn && !c.wallet && c.now.getTime() < closes && !(typeof c.picturesLeft === 'number' && c.picturesLeft < CLOSED_IMAGES.countsAs) && (c.on ?? CHALLENGE.modelChoice) && makerServes('OpenAI', c.where) && !c.closedCapReached;
     if (!allowed) p.push(`the default is closed (${m.id}) outside the exception (${who})`);
   }
   return p;

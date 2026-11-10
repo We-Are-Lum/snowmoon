@@ -568,7 +568,7 @@ export const CHALLENGE = {
    * shows once the owner publishes it), after "Same as this picture" and before Random and Write your own. The other
    * published styles stay on the site but aren't offered here; Random draws only from these (STYLE_PRESETS, empty, too).
    */
-  offeredStyles: ['Animated series'] as readonly string[],
+  offeredStyles: ['Animated series', 'Comic book', 'Comic 3D mix'] as readonly string[],
   /**
    * The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"). While false:
    * - /challenge, /api/challenge/* and every way into them (the menu item, the home row, the challenge share text, and

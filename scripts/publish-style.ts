@@ -1,5 +1,6 @@
 /**
- * Publish the bases' style, "Animated series" (owner, 2026-11-09), so a remix starts in its base's own look
+ * Publish the challenge's offered styles (owner, 2026-11-09): "Animated series", the bases' style, so a remix starts in
+ * its base's own look, and "Comic book" and "Comic 3D mix" from the owner's style test (src/lib/challenge/base-style.ts)
  * (src/lib/challenge/pictures.ts sourceOf: a base whose front recipe records this style's text starts on it). One style
  * of FID 6786's, the maintainer, with its text word for word (src/lib/challenge/base-style.ts) and no sample pictures.
  * Written by the coding agent (Claude, a closed model by Anthropic), branch challenge-models. DRAFT.
@@ -11,11 +12,12 @@
  *
  * The dry run reads in one read-only transaction and prints: whether the style is already published (and with the same
  * text), the body it would write, and for each base in CHALLENGE.bases whether its front records this text (those start
- * on the style once it is published). --apply refuses without --confirm-owner-go, and when a style named "Animated
- * series" already exists (it never writes twice). Options: --db=<url> (a local test database), --name=<byline>.
+ * on the style once it is published). --apply refuses without --confirm-owner-go, and refuses each style whose name
+ * already exists (it never writes one twice; the others are published). Options: --db=<url> (a local test database),
+ * --name=<byline>, --only=<title> (one of the three).
  */
 import postgres from 'postgres';
-import { BASE_STYLE } from '../src/lib/challenge/base-style';
+import { OFFERED_STYLES } from '../src/lib/challenge/base-style';
 import { applyStyle, planStyle } from './lib/publish-style';
 
 const arg = (k: string) => {
@@ -31,14 +33,25 @@ const sql = postgres(url, { prepare: false, max: 1, onnotice: () => {} });
 const finish = async (code: number) => { await sql.end(); process.exit(code); };
 
 say(`publish-style: ${APPLY ? 'APPLY' : 'DRY RUN (reads only; nothing written)'}; database ${new URL(url).hostname}`);
-const plan = await sql.begin('read only', (tx) => planStyle(tx));
-say(`style "${BASE_STYLE.title}": ${plan.exists ? `already published, version ${plan.exists.versionId} (element ${plan.exists.elementId}), ${plan.exists.sameText ? 'same text' : 'DIFFERENT TEXT'}` : plan.nameTaken ? 'the name is taken by a style that is not published' : 'not published yet'}`);
-say(`text (${BASE_STYLE.source}): ${BASE_STYLE.text}`);
-say(`body: ${JSON.stringify(plan.body)}`);
-for (const b of plan.bases) say(`  base ${b.character} ${b.versionId}: ${b.matches === null ? 'not found in this database' : b.matches ? 'its front records this style: starts on it' : 'its front records another style (or none): unchanged'}`);
+// Owner, 2026-11-09 (final review): the challenge's three offered styles; --only=<title> for one of them.
+const only = arg('only');
+const styles = OFFERED_STYLES.filter((s) => !only || s.title.toLowerCase() === only.toLowerCase());
+if (!styles.length) { say(`No offered style is called "${only}". Nothing done.`); await finish(2); }
+const plans = [];
+for (const style of styles) {
+  const plan = await sql.begin('read only', (tx) => planStyle(tx, style));
+  plans.push({ style, plan });
+  say(`style "${style.title}": ${plan.exists ? `already published, version ${plan.exists.versionId} (element ${plan.exists.elementId}), ${plan.exists.sameText ? 'same text' : 'DIFFERENT TEXT'}` : plan.nameTaken ? 'the name is taken by a style that is not published' : 'not published yet'}`);
+  say(`  text (${style.source}): ${style.text}`);
+  say(`  body: ${JSON.stringify(plan.body)}`);
+  for (const b of plan.bases.filter((x) => x.matches)) say(`  base ${b.character} ${b.versionId}: its front records this style: starts on it`);
+}
 if (!APPLY) { say('Dry run: nothing written.'); await finish(0); }
 if (!has('confirm-owner-go')) { say('Refusing --apply without --confirm-owner-go. Nothing done.'); await finish(3); }
-if (plan.exists || plan.nameTaken) { say('Refusing --apply: a style with this name already exists. Nothing done.'); await finish(3); }
-const out = await applyStyle(sql, arg('name') || 'naaate');
-say(`published: version ${out.versionId} (element ${out.elementId})`);
-await finish(0);
+let refused = 0;
+for (const { style, plan } of plans) {
+  if (plan.exists || plan.nameTaken) { say(`"${style.title}": refused, a style with this name already exists. Not written.`); refused++; continue; }
+  const out = await applyStyle(sql, arg('name') || 'naaate', style);
+  say(`"${style.title}": published, version ${out.versionId} (element ${out.elementId})`);
+}
+await finish(refused ? 3 : 0);

@@ -226,7 +226,19 @@ proven(
       if (ro.ok) await settle(S, {});
       return [...need(!rc.ok && rc.refusal === 'closed-spend', `a closed picture past $20 in all went through (${JSON.stringify(rc)})`), ...need(ro.ok, 'an open Generate was stopped with $5 left')];
     };
+    // The screen's starting model (owner, 2026-11-09): with one more closed picture over the caps, the row starts on FLUX.
+    const { closedCapReached } = await import('../src/lib/images/limits');
+    const { reserveUsd: closedReserve, CHALLENGE_MODELS: CMs } = await import('../src/lib/challenge/models');
+    const gptReserve = closedReserve(CMs.find((m) => m.id === 'gpt-image-2.5-sunburst')!, IMAGES.size);
+    await su('delete from studio.image_costs');
+    const reachedEmpty = await closedCapReached(S, gptReserve);
+    await fill(19.97, GPT.views.id);
+    const reachedNear = await closedCapReached(S, gptReserve);
+    await su('delete from studio.image_costs');
+    await fill(19.97, 'z-image-turbo');
+    const reachedByTotal = await closedCapReached(S, gptReserve);
     const m4h = [
+      ...need(!reachedEmpty && reachedNear && reachedByTotal, `closedCapReached: empty ${reachedEmpty}, closed near $20 ${reachedNear}, all spend near $20 ${reachedByTotal}`),
       ...floor(capAt),
       ...need(CHALLENGE.dailySpendCapUsd === 25 && CLOSED_IMAGES.dailySpendCapUsd === 20 && CLOSED_IMAGES.openFloorUsd === 5 && CHALLENGE.dailySpendCapUsd - CLOSED_IMAGES.dailySpendCapUsd >= 5, `caps: free ${CHALLENGE.dailySpendCapUsd}, closed ${CLOSED_IMAGES.dailySpendCapUsd}, floor ${CLOSED_IMAGES.openFloorUsd}`),
       ...(await mixed()),
@@ -302,6 +314,48 @@ proven(
       ],
       () => opens(otherSrc ? makeView(otherSrc, { styles: [] }) : null, made.elementId),
     );
+  }
+
+  // C24 (owner, 2026-11-09, final review): the three offered styles, published with scripts/publish-style.ts on the local
+  // database, are listed in the allowlist's order and Random draws only from them; publishing again is refused (the plan
+  // sees each); none of their texts names a real person (blocked names), an artist, studio or film (the words, and the
+  // prompt check, mocked, sent each text).
+  {
+    const { OFFERED_STYLES, COMIC_BOOK, COMIC_3D_MIX } = await import('../src/lib/challenge/base-style');
+    const { applyStyle, planStyle } = await import('./lib/publish-style');
+    const { challengeStyles, resolveStyle } = await import('../src/lib/challenge/make');
+    const { blockedName } = await import('../src/lib/images/rules');
+    const { checkPrompt } = await import('../src/lib/images/guard');
+    for (const s of [COMIC_BOOK, COMIC_3D_MIX]) if (!(await planStyle(S as never, s)).exists) await applyStyle(S as never, 'naaate', s);
+    const plans = await Promise.all(OFFERED_STYLES.map((s) => planStyle(S as never, s)));
+    const listed = await challengeStyles(S as never);
+    const draws = new Set([...Array(60).keys()].map(() => resolveStyle({ kind: 'random' }, listed)?.label));
+    const sent: string[] = [];
+    const realFetch2 = globalThis.fetch;
+    const groq = process.env.GROQ_API_KEY;
+    process.env.GROQ_API_KEY = 'stand-in-not-a-key';
+    globalThis.fetch = (async (_u: string, init?: RequestInit) => {
+      const m = (JSON.parse(String(init?.body ?? '{}')).messages ?? []) as { role: string; content: string }[];
+      sent.push(m.find((x) => x.role === 'user')?.content ?? '');
+      return new Response(JSON.stringify({ id: 'x', model: 'stand-in', choices: [{ index: 0, message: { role: 'assistant', content: '{"allow": true}' }, finish_reason: 'stop' }], usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 } }), { headers: { 'content-type': 'application/json' } });
+    }) as unknown as typeof fetch;
+    const req2 = new Request('http://localhost/api/challenge/make', { method: 'POST' });
+    const allowed: boolean[] = [];
+    for (const s of OFFERED_STYLES) allowed.push((await checkPrompt(s.text, req2, IMAGES.designs.guardMaxTokens)).allow);
+    globalThis.fetch = realFetch2;
+    process.env.GROQ_API_KEY = groq;
+    const NAMES = /\b(studio|ghibli|disney|pixar|dreamworks|marvel|dc comics|film|movie|anime|manga|in the style of|by [A-Z]|kirby|lichtenstein|moebius|hergé|herge)/i;
+    const wordsOk = (texts: string[]) => texts.flatMap((x) => [...need(blockedName(x) === null, `"${x}" names someone on the blocked list`), ...need(!NAMES.test(x), `"${x}" names an artist, studio or film`)]);
+    proven('C24 the three offered styles (Animated series, Comic book, Comic 3D mix): published locally with the script, listed in that order, Random draws only from them, publishing again is refused; no text names a real person, artist, studio or film (the prompt check, mocked, saw each)', () => [
+      ...need(JSON.stringify(CHALLENGE.offeredStyles) === JSON.stringify(OFFERED_STYLES.map((s) => s.title)), 'the allowlist and the styles differ'),
+      ...need(COMIC_BOOK.text === 'bold black ink outlines, flat bright colours, dot-pattern shading, dramatic angle' && COMIC_3D_MIX.text === '3D forms drawn over with hand-inked lines, halftone dots and hatching in the shadows, slightly offset colour printing, bold graphic colour', 'the texts aren\'t the owner\'s, after the colon'),
+      ...need(plans.every((p) => p.exists && p.exists.sameText), 'a style is not seen as published (the script would publish it twice)'),
+      ...need(listed.map((s) => s.label).join() === 'Animated series,Comic book,Comic 3D mix', `listed: ${listed.map((s) => s.label).join()}`),
+      ...need([...draws].every((l) => OFFERED_STYLES.some((s) => s.title === l)) && draws.size === 3, `Random drew ${[...draws].join()}`),
+      ...need(/if \(plan\.exists \|\| plan\.nameTaken\) \{ say\(`"\$\{style\.title\}": refused/.test(read('scripts/publish-style.ts')), 'the script does not refuse a style that exists'),
+      ...wordsOk(OFFERED_STYLES.map((s) => s.text)),
+      ...need(allowed.every(Boolean) && OFFERED_STYLES.every((s) => sent.some((u) => u.includes(s.text))), 'the prompt check did not see each text'),
+    ], () => wordsOk(['bold ink outlines in the style of Jack Kirby', 'Studio Ghibli watercolour']));
   }
 
   // C20: a base sends its front view alone (no other picture), whatever the model.
@@ -949,6 +1003,7 @@ proven(
         ...need(d({ where: IR }) === 'flux2-klein-4b-edit' && d({ where: CN }) === 'flux2-klein-4b-edit' && d({ where: CRIMEA }) === 'flux2-klein-4b-edit', 'outside OpenAI\'s regions'),
         ...need(d({ now: at }) === 'flux2-klein-4b-edit' && d({ now: after }) === 'flux2-klein-4b-edit', 'at or after the close'),
         ...need(d({ on: false }) === 'flux2-klein-4b-edit', 'closed models off'),
+        ...need(d({ closedCapReached: true }) === 'flux2-klein-4b-edit', 'the closed cap reached (owner, 2026-11-09: never start on a model that will refuse)'),
         ...need(CHALLENGE.dates.closes === '2026-11-30T08:00:00Z', `the close is ${CHALLENGE.dates.closes}, not 29 Nov 23:59 PT`),
         ...need(challengeDefaultProblems(defaultCases().map((c) => ({ c, id: f(c) }))).length === 0, 'P3e\'s check fails it'),
       ];
@@ -958,9 +1013,11 @@ proven(
     const rowSrc = read('src/components/challenge-model-row.tsx'), routeSrc2 = makeSrc;
     proven('C21 GPT Image 2.5 Sunburst is the default exactly for someone who can use it, until entries close; FLUX otherwise and after (both sides of the close)', () => [
       ...exact(challengeDefaultModel),
-      ...need(/const defaultModel = challengeDefaultModel\(\{ where, signedIn: person !== null, wallet, picturesLeft, now: new Date\(\) \}\)/.test(routeSrc2), 'the route does not send the default'),
+      ...need(/const defaultModel = challengeDefaultModel\(\{ where, signedIn: person !== null, wallet, picturesLeft, now: new Date\(\), closedCapReached: capReached \}\)/.test(routeSrc2), 'the route does not send the default'),
       ...need(/list\?\.find\(\(m\) => m\.id === defaultModel\)/.test(rowSrc), 'the row does not start on the server\'s default'),
       ...need(modelRow(US)[0].id === DEFAULT_CHALLENGE_MODEL, 'the row\'s order changed (FLUX first)'),
+      ...need(/closedCapReached\(sql, reserveUsd\(gpt, IMAGES\.size\)\)/.test(routeSrc2) && /closedCapReached: capReached \}\)/.test(routeSrc2) && /capLine = capReached \? \{ text: IMAGE_WORDING\.designs\.models\.closedSpend, resetAt: nextUtcMidnight\(\) \}/.test(routeSrc2), 'the route does not start on FLUX with the cap line when the closed cap is reached'),
+      ...need(/data-slot="model-cap">\{withReset\(loaded\.capLine\.text, loaded\.capLine\.resetAt\)\}/.test(read('src/components/challenge-make.tsx')), 'the screen does not show the cap line under the Model row'),
     ], () => exact(wider));
     // P3e's own check: exactly the exception passes; anything wider (planted) fails, and so does any other closed default.
     const gemini: typeof challengeDefaultModel = (c) => (challengeDefaultModel(c) === CHALLENGE_CLOSED_DEFAULT ? 'gemini-3.1-flash-image' : 'flux2-klein-4b-edit');

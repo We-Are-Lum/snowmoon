@@ -87,6 +87,15 @@ const { dailySpendCapUsd: closedDailyCapUsd } = CLOSED_IMAGES;
 // Owner, 2026-11-09: never within CLOSED_IMAGES.openFloorUsd of the free cap, so closed spending can never stop the open
 // model (the challenge: $25 free, $20 closed; outside it, $2 free, no closed pictures).
 export const closedCapUsd = (now: Date = new Date()) => Math.max(0, Math.min(closedDailyCapUsd, imagesDailySpendCapUsd(now) - CLOSED_IMAGES.openFloorUsd));
+/**
+ * Would one more closed picture (reserving `reserveUsd`) be refused by the closed caps now ('closed-spend')? Read
+ * without the lock, for the screen's starting model only (owner, 2026-11-09: never start on a model that will refuse);
+ * reserve() decides under the lock.
+ */
+export async function closedCapReached(sql: Sql, reserveUsd: number): Promise<boolean> {
+  const [today] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${sql.unsafe(TODAY)} and funded = 'free'`;
+  return (await closedSpentToday(sql)) + reserveUsd > closedCapUsd() || today.usd + reserveUsd > closedTotalCapUsd();
+}
 /** A closed picture also stops once the day's whole free spend (open and closed, prompt checks included) would leave the open model less than its floor. */
 const closedTotalCapUsd = (now: Date = new Date()) => imagesDailySpendCapUsd(now) - CLOSED_IMAGES.openFloorUsd;
 

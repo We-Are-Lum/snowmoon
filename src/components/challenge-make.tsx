@@ -58,7 +58,7 @@ export function ChallengeMake() {
   const [consent, setConsent] = useState<Wording | null>(null);
   // The Model row (branch challenge-models): the server's list for this visitor; a closed pick waits for its maker's
   // notice and, once per device, the 18+ box; a wallet account sees why closed models aren't offered.
-  const loaded = view && view !== 'missing' ? (view as MakeView & { modelsNote?: string | null; picturesLeft?: number | null; defaultModel?: string | null }) : null;
+  const loaded = view && view !== 'missing' ? (view as MakeView & { modelsNote?: string | null; picturesLeft?: number | null; defaultModel?: string | null; capLine?: { text: string; resetAt: string } | null }) : null;
   const mc = useChallengeModel(loaded?.models, loaded?.modelsNote ?? null, loaded?.defaultModel ?? null);
   // The latest make, for the notice asked at "Make it": answered, it makes the picture with the words as they are then.
   const makeRef = useRef<() => void>(() => {});
@@ -252,6 +252,8 @@ export function ChallengeMake() {
         {model && !model.open && !mc.notice && <p className="dz-muted mk-model-meta" data-slot="model-meta">{mc.meta(model)}</p>}
         {!mc.notice && mc.tooFew(loaded?.picturesLeft) && <p className="dz-muted mk-model-few" data-slot="model-too-few">{mc.tooFew(loaded?.picturesLeft)}</p>}
         {mc.note && <p className="dz-muted mk-model-note" data-slot="model-note">{mc.note}</p>}
+        {/* Today's closed spending limit reached: the row started on FLUX; the line, with {reset} in the visitor's time. */}
+        {loaded?.capLine && !mc.notice && <p className="dz-muted mk-model-cap" data-slot="model-cap">{withReset(loaded.capLine.text, loaded.capLine.resetAt)}</p>}
       </section>
       {signedIn ? (
         <button type="button" className="rl-remix mk-make" onClick={make} disabled={busy}>

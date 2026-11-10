@@ -1,8 +1,8 @@
-# Challenge release: every final text (v10: v9, reread by the owner on 2026-11-08 and 2026-11-09, plus the v10 section at the end, NOT YET REREAD)
+# Challenge release: every final text (v11: v9 reread by the owner on 2026-11-08 and 2026-11-09; v10 reviewed by the coordinator and approved by the owner on 2026-11-09; v11's Privacy §4 awaits the owner's reread)
 
-**v10 (2026-11-09, NOT YET REREAD):** GPT Image 2.5 Sunburst as the challenge's default for those who can use it, the
-one-character refusal and the FLUX block message. See "v10" at the end: every text that assumes an open default, with
-before and after drafts. No legal text has changed in the code (`LEGAL.ownerReread` untouched; P6k and P6l pass).
+**v11 (2026-11-09, final review; coordinator reviewed, owner approved):** see "v11" at the end. One legal change: a
+sentence added to Privacy §4. `LEGAL.ownerReread` is NOT set: P6k is red until the owner rereads §4 and says "reread";
+the new privacy key is `k5nsr6` (was `18g3ada`). Terms (`1finiyh`) and consent (own-words-v6) are unchanged.
 
 Written by the coding agent (Claude, a closed model by Anthropic), 2026-11-08, on branch `challenge-models` (v4 adds the closing line of 2026-11-09 and the bases' style; v3 was at `9ae0aa13`) (with challenge-simple's final head `1efcbeaf`). **v3:** the owner reread every text of v2 on 2026-11-08, via the coordinator's check, with changes 1–2 below applied word for word (the notice labels; the closed refusals) and the rules above Generate extended; the "none left" line approved as drafted
 (which carries `challenge-simple`). Every text below is copied from the code as it
@@ -363,4 +363,48 @@ again) and P6t/P6j's wording checks follow it.
     list the open models first, as the default (one exception: GPT Image 2.5 Sunburst for the challenge, for those who
     can use it, until entries close); closed ones name their maker and are allowlisted". Principle 3's own heading
     ("… Open-weight models are preferred. Report any closed model in use.") is unchanged.
+
+## v11 (2026-11-09): the final review (coordinator reviewed, owner approved)
+
+Drafted by the coding agent (Claude, a closed model by Anthropic).
+
+### Privacy §4, the remix challenge item — changed; awaits the owner's reread (P6k red, new key `k5nsr6`)
+
+**Before** (the sentence, as reread on 2026-11-08):
+
+> When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record.
+
+**After** (the owner's words, exactly):
+
+> When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record. Until entries close, the closed model by OpenAI is chosen to start with if you can use it; you can change it before you make the picture.
+
+The whole item after the change (verbatim from `src/lib/legal.ts`):
+
+> If you take part in the remix challenge: for each picture of a challenge character you publish, whether it can count as an entry and why (you were invited, you are an admin, or whether your account passed the site's check: Neynar's score for a Farcaster account, the Bluesky check for a Bluesky account), decided once, when you publish it, and kept with the time it was decided; and each picture you submit as an entry, with its character and when you submitted it. Submitting needs the link to your own post about it, which is kept and listed on the picture's page like any post you add (below); for a Farcaster, Bluesky or Lens post, the site checks with its network that you wrote it. If you withdraw a submission, it stops being an entry but is kept, marked withdrawn, with when; the post stays listed until you remove it. Whether a picture is an entry is shown on its page and on the challenge page, with how many people have submitted for each character. When you make a challenge picture you can choose its model: an open model, or a closed model, named with its maker on the screen and in the picture's record. Until entries close, the closed model by OpenAI is chosen to start with if you can use it; you can change it before you make the picture. A picture made with a closed model counts as three of your free pictures that day. If you add a backstory to a challenge picture, it is kept and shown with the picture.
+
+Not taken (the owner, 2026-11-09): v10's proposals 1, 3, 4 and 5 (Privacy §3, Privacy §7, Terms §8, consent v7).
+Consent stays own-words-v6; Terms unchanged. Approved as written: the one-character refusal and both FLUX block messages.
+
+### Behaviours
+
+- Fewer than 3 pictures left: the row starts on FLUX (approved).
+- **Changed:** when the closed cap is reached, or would be by one more closed picture (GPT's worst case), the row starts
+  on FLUX and shows, under the Model row, the cap line: "Closed models have reached today's spending limit for
+  everyone. The open models still work; closed ones come back at {reset}." (`{reset}` in the visitor's own time,
+  written by the browser). The row never starts on a model that will refuse.
+
+### The Style row
+
+`CHALLENGE.offeredStyles` = "Animated series", "Comic book", "Comic 3D mix", in that order (whatever order they are
+published in). The row: "Same as this picture" (default), the three once published, "Random" (drawing only from the
+published offered ones), "Write your own". The styles' prompt texts (the owner's words from the style test, the part
+after the colon; public in every recipe that uses them):
+
+- Animated series: "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands." (unchanged)
+- Comic book: "bold black ink outlines, flat bright colours, dot-pattern shading, dramatic angle"
+- Comic 3D mix: "3D forms drawn over with hand-inked lines, halftone dots and hatching in the shadows, slightly offset colour printing, bold graphic colour"
+
+The owner publishes them after the merge: `npx tsx --conditions=react-server --env-file-if-exists=.env.local
+scripts/publish-style.ts` (dry run), then the same with `--apply --confirm-owner-go`. It refuses any style whose name
+already exists and publishes the others; `--only=<title>` for one.
 
