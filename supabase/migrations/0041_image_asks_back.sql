@@ -1,6 +1,8 @@
 -- 0041_image_asks_back.sql: pictures given back to the day's count (branch challenge-models, owner, 2026-11-09).
--- NOT APPLIED. Unnumbered until merge: it takes the next free number then, checked against origin/main and production
--- (CLAUDE.md). Requires 0008_images (studio.image_asks). Drafted by the coding agent (Claude, a closed model by
+-- APPLIED on production by the owner on 2026-11-09 (parts B and C: the migration, the read-back's select all true and
+-- "READ-BACK PASSED"); confirmed read-only by the coding agent the same evening as studio_writer: studio.image_asks_back
+-- exists (2 columns), studio_writer can insert and select, not update or delete. Numbered 0041 at merge (#137).
+-- Requires 0008_images (studio.image_asks). Drafted by the coding agent (Claude, a closed model by
 -- Anthropic). Tested by `npm run test:image-asks-back-sql` (in-memory Postgres, the parts read from this file).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:
