@@ -1,0 +1,1186 @@
+{
+ "about": "Near-future settings test 2026-11-09: GPT only, 6 cases x 2 drawn settings. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "world_line_template": "Set it in this world, where it fits: a near future, not a fantasy or medieval past; {setting}. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.",
+ "settings": {
+  "A": {
+   "text": "stone-brick houses behind tall trees, tall apartment towers with many windows above the treetops, small drones overhead",
+   "blocks": [
+    "c1-b2",
+    "c1-b13",
+    "c1-b4"
+   ]
+  },
+  "B": {
+   "text": "greenery mixed with glass-and-steel buildings with sharp edges",
+   "blocks": [
+    "c3-b72",
+    "c13-b24"
+   ]
+  },
+  "C": {
+   "text": "a chaotic mix of stone, concrete and glass-and-steel buildings, tall and short, some half-built",
+   "blocks": [
+    "c5-b11",
+    "c22-b2"
+   ]
+  },
+  "D": {
+   "text": "people with watches and hand devices, gates with glowing green circles, small robots with screen faces",
+   "blocks": [
+    "c1-b4",
+    "c1-b41",
+    "c3-b82"
+   ]
+  },
+  "E": {
+   "text": "a half-kilometre-tall mountain pyramid at the edge of the city",
+   "blocks": [
+    "c4-b48"
+   ]
+  },
+  "F": {
+   "text": "pine forests, wide grasslands and red mountains with snowy tops",
+   "blocks": [
+    "c14-b124"
+   ]
+  }
+ },
+ "draw": {
+  "generator": "mulberry32",
+  "seed": 20261109,
+  "result": {
+   "1": [
+    "D",
+    "B"
+   ],
+   "4": [
+    "E",
+    "B"
+   ],
+   "5": [
+    "C",
+    "E"
+   ],
+   "7": [
+    "A",
+    "E"
+   ],
+   "10": [
+    "F",
+    "C"
+   ],
+   "12": [
+    "E",
+    "B"
+   ]
+  }
+ },
+ "style_mood": {
+  "id": "mood",
+  "label": "Mood",
+  "text": "Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.",
+  "source": "published style Mood, version 712ca63f-de6e-46bf-b3ad-7007b1120e16 (same source)"
+ },
+ "style_note": "Mood chosen as the least cartoony of the style test: on GPT it paints the scene with visible brushwork, dark detailed light and texture rather than flat cel colour; its pictures there leaned medieval (banners, castles), which this test pushes against.",
+ "cap_usd": 1.0,
+ "stop_at_usd": 0.92,
+ "seed": 20261109,
+ "refs": {
+  "zei": {
+   "version": "bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d",
+   "url": "https://pictures.snowmoon.party/images/readers/131f235227a54b06f6f11253f37a09b5.jpg",
+   "sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c"
+  },
+  "gladias": {
+   "version": "68364375-0f33-46fd-9755-2fd2b551198a",
+   "url": "https://pictures.snowmoon.party/images/readers/b9b6c00952cb47e936dc601676a7c34b.jpg",
+   "sha256": "b9b6c00952cb47e936dc601676a7c34b916355e8b4f979db4d7465ea024d0947"
+  },
+  "bai": {
+   "version": "110d5973-31c2-4d96-9a88-5838d8a6d868",
+   "url": "https://pictures.snowmoon.party/images/readers/01538922456b9bf61192ed291b8f2659.jpg",
+   "sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96"
+  },
+  "seila": {
+   "version": "1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba",
+   "url": "https://pictures.snowmoon.party/images/readers/3ef4825ca8f49aabf05ddcdaa8119e9b.jpg",
+   "sha256": "3ef4825ca8f49aabf05ddcdaa8119e9b229f523a3dfc1dc2af0238cbc95a4d13"
+  },
+  "deluin": {
+   "version": "75a94420-df70-4f43-a3a6-4c2b571e72ab",
+   "url": "https://pictures.snowmoon.party/images/readers/2b45d17da426df0304fc84ded0f3f0c4.jpg",
+   "sha256": "2b45d17da426df0304fc84ded0f3f0c464472c55c96aa517735f9837368432d4"
+  },
+  "mu": {
+   "version": "15a9af1d-9eef-4e25-be57-738d9823dd74",
+   "url": "https://pictures.snowmoon.party/images/readers/3e6ae696865441d24aa1dde262dac043.jpg",
+   "sha256": "3e6ae696865441d24aa1dde262dac043964ab8c9633d19174eb7074091087fb5"
+  }
+ },
+ "prompts": {
+  "66a35519b241265107c920262e35fc810511826a8cda933450644a0cc2c3cd23": "at a big sports game\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; people with watches and hand devices, gates with glowing green circles, small robots with screen faces. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "12064034b84efd0b669ca0e77d440a6cc96189e04322c985aa0ed7dcfa3260a5": "at a big sports game\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; greenery mixed with glass-and-steel buildings with sharp edges. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "92c23069877d9b75c9aba3052472948a17be6ea8df1a16943c12dc5616f2b722": "going out to a party\n\nGladias is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm light-brown skin, a short beard and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; a half-kilometre-tall mountain pyramid at the edge of the city. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "d3ad4928909a0d82835c55a297eff3e284cd9f53c0ab9355e51e6ab408d65dcf": "going out to a party\n\nGladias is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm light-brown skin, a short beard and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; greenery mixed with glass-and-steel buildings with sharp edges. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "02a560580d54b3d1aa37784bcdebe23006677f37f65edb92b1b4e55b548ca951": "as the villain\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; a chaotic mix of stone, concrete and glass-and-steel buildings, tall and short, some half-built. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "88a2d341853de7f05b7d4d33741aa680568ce691f8eff70e2df84c7127397301": "as the villain\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; a half-kilometre-tall mountain pyramid at the edge of the city. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "7eeb3e1617841f681cc462f779742a3d1d74eb7727eac224fc9b7515231cb9e1": "walking home in the rain at night\n\nSeila is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; stone-brick houses behind tall trees, tall apartment towers with many windows above the treetops, small drones overhead. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "0493d827387be492a65cef5cee276f3a31b51f490ae56cf1648d0f4df03982d8": "walking home in the rain at night\n\nSeila is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; a half-kilometre-tall mountain pyramid at the edge of the city. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "479d4dddfad4d031517b3231cb92d5788ea0cdd765c2868464019756f08b210f": "at a concert\n\nDeluin is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm tan skin and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; pine forests, wide grasslands and red mountains with snowy tops. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "63f5e5d2d58a27381c79ffdb0fed71c3b3e48783733de415692773c445585b4b": "at a concert\n\nDeluin is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm tan skin and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; a chaotic mix of stone, concrete and glass-and-steel buildings, tall and short, some half-built. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "90088e0bd085742a278ca3a3ab46bfdff9de5468402b1069c31d86549631ddc7": "on vacation\n\nMu is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; a half-kilometre-tall mountain pyramid at the edge of the city. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "54ecf0170735bdbcbfca7174211a9f5317d432b547a9da2bb3cb60fc304312b8": "on vacation\n\nMu is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; greenery mixed with glass-and-steel buildings with sharp edges. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nIntense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "guard",
+   "prompt_sha256": "66a35519b241265107c920262e35fc810511826a8cda933450644a0cc2c3cd23",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 7.9425e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.0005425499999999999,
+   "at": "2026-11-10T02:57:37.728Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "12064034b84efd0b669ca0e77d440a6cc96189e04322c985aa0ed7dcfa3260a5",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001266,
+   "cost_source": "reported",
+   "worst_usd": 0.00053955,
+   "at": "2026-11-10T02:57:38.479Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "92c23069877d9b75c9aba3052472948a17be6ea8df1a16943c12dc5616f2b722",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00011595,
+   "cost_source": "reported",
+   "worst_usd": 0.000549375,
+   "at": "2026-11-10T02:57:39.376Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "d3ad4928909a0d82835c55a297eff3e284cd9f53c0ab9355e51e6ab408d65dcf",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 8.5875e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.000549375,
+   "at": "2026-11-10T02:57:39.888Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "02a560580d54b3d1aa37784bcdebe23006677f37f65edb92b1b4e55b548ca951",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00014985,
+   "cost_source": "reported",
+   "worst_usd": 0.0005426999999999999,
+   "at": "2026-11-10T02:57:40.947Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "88a2d341853de7f05b7d4d33741aa680568ce691f8eff70e2df84c7127397301",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000188775,
+   "cost_source": "reported",
+   "worst_usd": 0.000540225,
+   "at": "2026-11-10T02:57:41.800Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "7eeb3e1617841f681cc462f779742a3d1d74eb7727eac224fc9b7515231cb9e1",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 9.705e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.0005547,
+   "at": "2026-11-10T02:57:43.249Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "0493d827387be492a65cef5cee276f3a31b51f490ae56cf1648d0f4df03982d8",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 8.2725e-05,
+   "cost_source": "reported",
+   "worst_usd": 0.000550425,
+   "at": "2026-11-10T02:57:43.793Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "479d4dddfad4d031517b3231cb92d5788ea0cdd765c2868464019756f08b210f",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00013395,
+   "cost_source": "reported",
+   "worst_usd": 0.0005390999999999999,
+   "at": "2026-11-10T02:57:44.719Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "63f5e5d2d58a27381c79ffdb0fed71c3b3e48783733de415692773c445585b4b",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000286125,
+   "cost_source": "reported",
+   "worst_usd": 0.0005415,
+   "at": "2026-11-10T02:57:45.917Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "90088e0bd085742a278ca3a3ab46bfdff9de5468402b1069c31d86549631ddc7",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000145125,
+   "cost_source": "reported",
+   "worst_usd": 0.0005480999999999999,
+   "at": "2026-11-10T02:57:46.658Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "54ecf0170735bdbcbfca7174211a9f5317d432b547a9da2bb3cb60fc304312b8",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00015465,
+   "cost_source": "reported",
+   "worst_usd": 0.0005480999999999999,
+   "at": "2026-11-10T02:57:47.497Z"
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gpt",
+   "status": "ok",
+   "retention": {
+    "provider": "openai",
+    "zero_data_retention": false,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-10T02:57:47.948Z",
+    "kept": {
+     "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+     "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+     "source": "https://developers.openai.com/api/docs/guides/your-data",
+     "read": "2026-11-03"
+    }
+   },
+   "cost_usd": 0,
+   "at": "2026-11-10T02:57:47.948Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "D",
+   "case": 1,
+   "character": "zei",
+   "words": "at a big sports game",
+   "style_row": "Same",
+   "style_used": null,
+   "setting": "D",
+   "setting_blocks": [
+    "c1-b4",
+    "c1-b41",
+    "c3-b82"
+   ],
+   "prompt_sha256": "66a35519b241265107c920262e35fc810511826a8cda933450644a0cc2c3cd23",
+   "file": "nf-01-zei-D.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71P7V48RETQC1H7YNC7A4C2",
+   "status": "ok",
+   "cost_usd": 0.048114,
+   "cost_source": "reported by the gateway",
+   "sha256": "0b746780b35ab0a03fafe56a6a11b645ef0bf09f54fedfcd0dd5d014b9166feb",
+   "original_sha256": "3fabf04ca8333b566b606157d7f25a57f591bb578459a59c1417b0301e85ad91",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T02:58:26.389Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "futuristic": "yes",
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "cheering; glowing pitch lines, a small robot with a screen face, watch"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "B",
+   "case": 1,
+   "character": "zei",
+   "words": "at a big sports game",
+   "style_row": "Same",
+   "style_used": null,
+   "setting": "B",
+   "setting_blocks": [
+    "c3-b72",
+    "c13-b24"
+   ],
+   "prompt_sha256": "12064034b84efd0b669ca0e77d440a6cc96189e04322c985aa0ed7dcfa3260a5",
+   "file": "nf-01-zei-B.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71P90R7ABP11545A56QK958",
+   "status": "ok",
+   "cost_usd": 0.048079,
+   "cost_source": "reported by the gateway",
+   "sha256": "249870993c4873db5045cb86a378f5ac4a4c9d66ee0b750f130d6f846f068261",
+   "original_sha256": "29ace0148ad480313ee3c2565f562ab3d105da6070ecbd1cc5ed9325c3792bc1",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T02:59:02.978Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "partly",
+    "futuristic": "yes",
+    "shareable": "yes",
+    "promo_star": false,
+    "reading": "a sleek green-and-glass stadium; could be any future city"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "E",
+   "case": 4,
+   "character": "gladias",
+   "words": "going out to a party",
+   "style_row": "Mood",
+   "style_used": "Mood",
+   "setting": "E",
+   "setting_blocks": [
+    "c4-b48"
+   ],
+   "prompt_sha256": "92c23069877d9b75c9aba3052472948a17be6ea8df1a16943c12dc5616f2b722",
+   "file": "nf-04-gladias-E.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71PA4AQR39PY8GQSQQ2XH7Y",
+   "status": "ok",
+   "cost_usd": 0.048249,
+   "cost_source": "reported by the gateway",
+   "sha256": "7c02cbd73516299606932ef5ba389180fc76317cc8372c01b28b347e99583137",
+   "original_sha256": "1fabaa44db0fdc877e9a214ac51de40e2a9fe43ccce9adbf171264cba48a1038",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T02:59:41.995Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "futuristic": "yes",
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "a terrace party below a lit mountain pyramid"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "B",
+   "case": 4,
+   "character": "gladias",
+   "words": "going out to a party",
+   "style_row": "Mood",
+   "style_used": "Mood",
+   "setting": "B",
+   "setting_blocks": [
+    "c3-b72",
+    "c13-b24"
+   ],
+   "prompt_sha256": "d3ad4928909a0d82835c55a297eff3e284cd9f53c0ab9355e51e6ab408d65dcf",
+   "file": "nf-04-gladias-B.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71PBAFWXCQXAH1A4C76VVJM",
+   "status": "ok",
+   "cost_usd": 0.048224,
+   "cost_source": "reported by the gateway",
+   "sha256": "9f081ca38cc6a875d964c7aa7af729906d9f58521d8de86d5630234d0649dd58",
+   "original_sha256": "d7c8a62df3f9c32ea11e1998067e43d355462986c868440732c460ac8f18fa5b",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T03:00:21.939Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "partly",
+    "futuristic": "yes",
+    "shareable": "yes",
+    "promo_star": false,
+    "reading": "a rooftop party before a glass skyline; new green coat"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "C",
+   "case": 5,
+   "character": "bai",
+   "words": "as the villain",
+   "style_row": "Same",
+   "style_used": null,
+   "setting": "C",
+   "setting_blocks": [
+    "c5-b11",
+    "c22-b2"
+   ],
+   "prompt_sha256": "02a560580d54b3d1aa37784bcdebe23006677f37f65edb92b1b4e55b548ca951",
+   "file": "nf-05-bai-C.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71PCHG8KN5YW6DFYS4SASC9",
+   "status": "ok",
+   "cost_usd": 0.048129,
+   "cost_source": "reported by the gateway",
+   "sha256": "826f6730532afc6e9d71ad57de23720ca4045efd6de0747fe7bb7b2db905e667",
+   "original_sha256": "405f2f5100eeb845ba6b9742191d967f5d597c18518fcd0630357951742c087a",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T03:01:00.968Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "futuristic": "yes",
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "caped villain over a dense mix of towers and scaffolds"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "E",
+   "case": 5,
+   "character": "bai",
+   "words": "as the villain",
+   "style_row": "Same",
+   "style_used": null,
+   "setting": "E",
+   "setting_blocks": [
+    "c4-b48"
+   ],
+   "prompt_sha256": "88a2d341853de7f05b7d4d33741aa680568ce691f8eff70e2df84c7127397301",
+   "file": "nf-05-bai-E.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71PDQMJRVSK2ZJ0X2JE2TBY",
+   "status": "ok",
+   "cost_usd": 0.048104,
+   "cost_source": "reported by the gateway",
+   "sha256": "c575afd090425c6e550f6d907e40e80e6e8ded5197f9735972225ad0ef11a0f2",
+   "original_sha256": "6a665666ad2164221aa188879187db65291b0437a657ca72000d9db3a8f15cc9",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T03:01:37.961Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "futuristic": "yes",
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "caped villain before the mountain pyramid at dusk"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "A",
+   "case": 7,
+   "character": "seila",
+   "words": "walking home in the rain at night",
+   "style_row": "Mood",
+   "style_used": "Mood",
+   "setting": "A",
+   "setting_blocks": [
+    "c1-b2",
+    "c1-b13",
+    "c1-b4"
+   ],
+   "prompt_sha256": "7eeb3e1617841f681cc462f779742a3d1d74eb7727eac224fc9b7515231cb9e1",
+   "file": "nf-07-seila-A.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71PEVTAEAFVG67YF5JFFS0N",
+   "status": "ok",
+   "cost_usd": 0.048289,
+   "cost_source": "reported by the gateway",
+   "sha256": "da494d7f9f58abdeebe8407106393c401762b6687e40e744c0d4161bdefe9661",
+   "original_sha256": "b69060b609c5a5a6259a49f105f8efd41b27786585eed9f068ee26392bcfb1c5",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T03:02:16.904Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "futuristic": "yes",
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "rainy stone lane under trees, window towers and drones above"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "E",
+   "case": 7,
+   "character": "seila",
+   "words": "walking home in the rain at night",
+   "style_row": "Mood",
+   "style_used": "Mood",
+   "setting": "E",
+   "setting_blocks": [
+    "c4-b48"
+   ],
+   "prompt_sha256": "0493d827387be492a65cef5cee276f3a31b51f490ae56cf1648d0f4df03982d8",
+   "file": "nf-07-seila-E.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71PG1QGJEYCQBKBD18ZYMZQ",
+   "status": "ok",
+   "cost_usd": 0.048254,
+   "cost_source": "reported by the gateway",
+   "sha256": "ca3273ab03b01f3b7ff6506d081d575bd5df79c71e750f0c564f83f8887b3c31",
+   "original_sha256": "a37648388aefadb061761e8e87ce6eba502f6168b112d75ccb76c2395d9721da",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T03:02:59.237Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "futuristic": "yes",
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "rainy river walk, the lit pyramid across the water"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "F",
+   "case": 10,
+   "character": "deluin",
+   "words": "at a concert",
+   "style_row": "Same",
+   "style_used": null,
+   "setting": "F",
+   "setting_blocks": [
+    "c14-b124"
+   ],
+   "prompt_sha256": "479d4dddfad4d031517b3231cb92d5788ea0cdd765c2868464019756f08b210f",
+   "file": "nf-10-deluin-F.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71PHB879M42MJ2S6YT25T7Z",
+   "status": "ok",
+   "cost_usd": 0.048069,
+   "cost_source": "reported by the gateway",
+   "sha256": "dfe6430c13f27b00ae6249bb865e8eb9cf017dab336f1959fc66a7e3fdf50934",
+   "original_sha256": "8a5f71e3503c0f4117a3a54684bf8d1fc92a12a7193a7719396c9f77f4d53fe8",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T03:03:34.907Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "partly",
+    "futuristic": "partly",
+    "shareable": "yes",
+    "promo_star": false,
+    "reading": "an outdoor festival under red snowy peaks; a modern stage"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "C",
+   "case": 10,
+   "character": "deluin",
+   "words": "at a concert",
+   "style_row": "Same",
+   "style_used": null,
+   "setting": "C",
+   "setting_blocks": [
+    "c5-b11",
+    "c22-b2"
+   ],
+   "prompt_sha256": "63f5e5d2d58a27381c79ffdb0fed71c3b3e48783733de415692773c445585b4b",
+   "file": "nf-10-deluin-C.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71PJDZ15VE8FCVG4H0M84YM",
+   "status": "ok",
+   "cost_usd": 0.048114,
+   "cost_source": "reported by the gateway",
+   "sha256": "1aabd7f846cdb4411d034ff130131476fab688f0ef427f25761ecbe3578c945e",
+   "original_sha256": "998a2b491987eb6c4bf0cbe13173e588606d2479bff2a7311ed8981415251f0d",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T03:04:09.870Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "partly",
+    "futuristic": "yes",
+    "shareable": "yes",
+    "promo_star": false,
+    "reading": "a big stage before half-built towers and cranes"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "E",
+   "case": 12,
+   "character": "mu",
+   "words": "on vacation",
+   "style_row": "Mood",
+   "style_used": "Mood",
+   "setting": "E",
+   "setting_blocks": [
+    "c4-b48"
+   ],
+   "prompt_sha256": "90088e0bd085742a278ca3a3ab46bfdff9de5468402b1069c31d86549631ddc7",
+   "file": "nf-12-mu-E.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71PKG3FA8FANMCVFKZ0S6G1",
+   "status": "ok",
+   "cost_usd": 0.048214,
+   "cost_source": "reported by the gateway",
+   "sha256": "19037febd30d3158cc93e566d230ff0cf951669ecd44e511dee73101fb086cad",
+   "original_sha256": "563eb32694a7b351c4ef149b6da03d21abaabfef237a837aad38bf32afef733b",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T03:04:51.082Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "futuristic": "yes",
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "a cocktail on a terrace, the pyramid and a future city behind"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "B",
+   "case": 12,
+   "character": "mu",
+   "words": "on vacation",
+   "style_row": "Mood",
+   "style_used": "Mood",
+   "setting": "B",
+   "setting_blocks": [
+    "c3-b72",
+    "c13-b24"
+   ],
+   "prompt_sha256": "54ecf0170735bdbcbfca7174211a9f5317d432b547a9da2bb3cb60fc304312b8",
+   "file": "nf-12-mu-B.jpg",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71PMRD47TQ7888N0WQ2YAY0",
+   "status": "ok",
+   "cost_usd": 0.048189,
+   "cost_source": "reported by the gateway",
+   "sha256": "a303be5055d8f34064976429a83184ccb3bf55bcd4e0accb5fde10a62ea747cd",
+   "original_sha256": "f4b5499fa70502182ff518ef420b40dd9d8788fb042d4463aa5fd2dd717236d1",
+   "original_size": "1536x1024",
+   "crop": {
+    "words": "cropped from 3:2 to 16:9, mostly from the bottom",
+    "original": "1536x1024",
+    "kept": {
+     "left": 0,
+     "top": 40,
+     "width": 1536,
+     "height": 864
+    },
+    "removed_top": 40,
+    "removed_bottom": 120,
+    "removed_left": 0,
+    "removed_right": 0
+   },
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "disallowPromptTraining": true,
+     "only": [
+      "openai"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T03:05:30.200Z",
+   "attempt": 1,
+   "worst_usd": 0.08,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "partly",
+    "futuristic": "yes",
+    "shareable": "yes",
+    "promo_star": false,
+    "reading": "a deck chair over a glass city by the water"
+   }
+  }
+ ],
+ "judged_by_eye": [
+  {
+   "case": 1,
+   "setting": "D",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "yes",
+   "futuristic": "yes",
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "cheering; glowing pitch lines, a small robot with a screen face, watch"
+  },
+  {
+   "case": 1,
+   "setting": "B",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "partly",
+   "futuristic": "yes",
+   "shareable": "yes",
+   "promo_star": false,
+   "reading": "a sleek green-and-glass stadium; could be any future city"
+  },
+  {
+   "case": 4,
+   "setting": "E",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "yes",
+   "futuristic": "yes",
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "a terrace party below a lit mountain pyramid"
+  },
+  {
+   "case": 4,
+   "setting": "B",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "partly",
+   "futuristic": "yes",
+   "shareable": "yes",
+   "promo_star": false,
+   "reading": "a rooftop party before a glass skyline; new green coat"
+  },
+  {
+   "case": 5,
+   "setting": "C",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "yes",
+   "futuristic": "yes",
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "caped villain over a dense mix of towers and scaffolds"
+  },
+  {
+   "case": 5,
+   "setting": "E",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "yes",
+   "futuristic": "yes",
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "caped villain before the mountain pyramid at dusk"
+  },
+  {
+   "case": 7,
+   "setting": "A",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "yes",
+   "futuristic": "yes",
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "rainy stone lane under trees, window towers and drones above"
+  },
+  {
+   "case": 7,
+   "setting": "E",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "yes",
+   "futuristic": "yes",
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "rainy river walk, the lit pyramid across the water"
+  },
+  {
+   "case": 10,
+   "setting": "F",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "partly",
+   "futuristic": "partly",
+   "shareable": "yes",
+   "promo_star": false,
+   "reading": "an outdoor festival under red snowy peaks; a modern stage"
+  },
+  {
+   "case": 10,
+   "setting": "C",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "partly",
+   "futuristic": "yes",
+   "shareable": "yes",
+   "promo_star": false,
+   "reading": "a big stage before half-built towers and cranes"
+  },
+  {
+   "case": 12,
+   "setting": "E",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "yes",
+   "futuristic": "yes",
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "a cocktail on a terrace, the pyramid and a future city behind"
+  },
+  {
+   "case": 12,
+   "setting": "B",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "partly",
+   "futuristic": "yes",
+   "shareable": "yes",
+   "promo_star": false,
+   "reading": "a deck chair over a glass city by the water"
+  }
+ ]
+}
