@@ -6,9 +6,11 @@
  * needs recipe_id.
  *
  * One narrow exception (owner, 2026-11-10, option a; docs/principles.md P1): a published STYLE version with no pictures
- * at all passes only when a LATER version of the same style element has samples, every one with its recipe. The latest
- * version of every style must always have samples with recipes (no exception). A version with pictures whose recipe is
- * missing always fails. Sheets (characters, places) are unchanged.
+ * at all passes only when a LATER version of the same style element has samples, every one with its recipe; and a style
+ * that has such a version must have samples with recipes in its latest version (the exception never excuses the latest).
+ * A style with no empty version is judged by the general rule alone, so an older style whose pictures are views, not
+ * samples, still passes (owner, 2026-11-10). A version with pictures whose recipe is missing always fails. Sheets
+ * (characters, places) are unchanged.
  */
 export type P1cRow = {
   id: string;
@@ -48,8 +50,10 @@ export function p1cProblems(rows: readonly P1cRow[]): string[] {
     return later.some((v) => samplesWithRecipes(v.body));
   };
   const problems = rows.filter((r) => !ok(r)).map((r) => `version ${r.id} has no recipe`);
-  // The latest version of every style must have samples with recipes, whatever came before.
+  // A style that has an empty version (the exception's case) must have samples with recipes in its latest version. A style
+  // with no empty version is judged by the general rule above alone: pictures as samples or views, each with its recipe.
   for (const [el, vs] of styleVersions) {
+    if (!vs.some((v) => picturesOf(v.body).length === 0)) continue;
     const latest = vs.reduce((a, b) => ((b.version_no ?? 0) > (a.version_no ?? 0) ? b : a));
     if (!samplesWithRecipes(latest.body) && !problems.includes(`version ${latest.id} has no recipe`)) problems.push(`version ${latest.id} (the latest of style ${el}) has no samples with recipes`);
   }

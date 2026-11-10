@@ -132,16 +132,22 @@ let comicBook = '';
   const iv = p1cProblems([style('v1', 1, []), style('v2', 2, [pic(), pic({ prompt: 'p' })])]);
   const sheetEmpty = p1cProblems([sheet('s1', 1, {}), sheet('s2', 2, { front: pic() })]);
   const otherStyle = p1cProblems([style('v1', 1, [], 'A'), style('v2', 2, [pic(), pic()], 'B')]);
-  const real = [...need(i.length === 0, `(i) v1 empty + v2 with samples: ${i.join('; ')}`)];
+  // (v) An older style whose pictures are views, not samples (one version, or two), is not caught (owner, 2026-11-10).
+  const viewsStyle = (id: string, n: number) => ({ ...style(id, n, []), body: { title: 'T', text: 't', samples: [], views: { front: pic() } } }) as P1cRow;
+  const v = p1cProblems([viewsStyle('w1', 1), viewsStyle('x1', 1), viewsStyle('x2', 2)].map((r, k) => ({ ...r, element_id: k === 0 ? 'W' : 'X' })));
+  // (vi) The same, but a views style's view lost its recipe: still caught by the general rule.
+  const vi = p1cProblems([{ ...viewsStyle('y1', 1), body: { title: 'T', text: 't', samples: [], views: { front: pic({ prompt: 'p' }) } } } as P1cRow]);
+  const real = [...need(i.length === 0, `(i) v1 empty + v2 with samples: ${i.join('; ')}`), ...need(v.length === 0, `(v) an older style with views but no samples was caught: ${v.join('; ')}`)];
   const planted = [
     ...need(ii.length > 0, '(ii) v1 empty only passed'),
     ...need(iii.length > 0 && iii.some((p) => p.includes('v2')), '(iii) the latest empty passed'),
     ...need(iv.length > 0, '(iv) a sample without its recipe passed'),
     ...need(sheetEmpty.length > 0 && sheetEmpty.some((p) => p.includes('s1')), 'a sheet version with no pictures passed (sheets are unchanged)'),
     ...need(otherStyle.length > 0, 'a later version of another style excused an empty one'),
+  ...need(vi.length > 0, '(vi) a views style with a view missing its recipe passed'),
   ];
   // Every plant must fail: the planted list holds the cases that wrongly passed; it must be empty, so the proof is on the failures.
-  proven('S7 P1c: (i) v1 empty + v2 with samples passes; (ii) v1 empty alone, (iii) the latest version empty, (iv) a sample without its recipe, a sheet without pictures, and another style\'s later version all fail', [...real, ...planted], [...ii, ...iii, ...iv, ...sheetEmpty, ...otherStyle].length >= 5 ? ['planted cases fail, as they must'] : []);
+  proven('S7 P1c: (i) v1 empty + v2 with samples passes; (ii) v1 empty alone, (iii) the latest version empty, (iv) a sample without its recipe, a sheet without pictures, another style\'s later version and (vi) a view without its recipe all fail; (v) an older style with views but no samples passes', [...real, ...planted], [...ii, ...iii, ...iv, ...sheetEmpty, ...otherStyle, ...vi].length >= 6 ? ['planted cases fail, as they must'] : []);
 }
 
 // S4 and S5: the manifest.

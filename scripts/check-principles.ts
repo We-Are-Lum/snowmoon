@@ -154,7 +154,7 @@ add({
 add({
   id: 'P1c',
   principle: 1,
-  name: 'in the database, every version of a published element has a recipe (a style or sheet: every one of its pictures; a style version with no pictures only when a later version has samples with recipes, and the latest always does)',
+  name: 'in the database, every version of a published element has a recipe (a style or sheet: every one of its pictures; a style version with no pictures only when a later version has samples with recipes, and then the latest has them)',
   load: async () => {
     const url = process.env.STUDIO_DATABASE_URL;
     type Row = { id: string; recipe_id: string | null; element_type: string; body: unknown; element_id: string; version_no: number; kind: string | null };
@@ -170,7 +170,7 @@ add({
   // The rule lives in scripts/lib/p1c.ts (shared with scripts/test-publish-style.ts): a style or sheet passes when it has
   // at least one picture and every picture's recipe names its prompt and model; anything else needs recipe_id. One narrow
   // exception (owner, 2026-11-10): a style version with no pictures, when a later version of it has samples with recipes;
-  // the latest version of every style must always have them.
+  // a style that uses it must have them in its latest version. Other styles: the general rule (samples or views).
   run: ({ rows, skipped }) => {
     if (skipped) return ['skipped: STUDIO_DATABASE_URL not set'];
     return p1cProblems(rows as never);

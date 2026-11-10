@@ -37,9 +37,10 @@ coding agent and its helpers are in `docs/prompts/`.
   (reads the live database when `STUDIO_DATABASE_URL` is set).
   One narrow exception (owner, 2026-11-10, after three styles were published on 2026-11-09 with no pictures; element_versions
   is append-only, so those versions can't gain pictures): a published **style** version with no pictures at all passes only
-  when a later published version of the same style element has samples, every one with its recipe. The latest published
-  version of every style must always have samples with recipes, with no exception; a version with pictures whose recipe
-  is missing always fails; sheets are unchanged. Rule: `scripts/lib/p1c.ts`; tested both ways in
+  when a later published version of the same style element has samples, every one with its recipe, and a style that has
+  such a version must have samples with recipes in its latest published version (the exception never excuses the
+  latest). A style with no empty version is judged by the rule above alone, so an older style whose pictures are views,
+  not samples, still passes. A version with pictures whose recipe is missing always fails; sheets are unchanged. Rule: `scripts/lib/p1c.ts`; tested both ways in
   `scripts/test-publish-style.ts` (S7).
 - `P1d`: a signed-out visitor reaches the exact prompt of every published
   image and narration: the chapter page links the recipe (and the lettering
