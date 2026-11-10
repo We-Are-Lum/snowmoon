@@ -465,3 +465,16 @@ its text, read from its public page:
 It names no artist, studio or film (tested). `scripts/publish-style.ts` lists it and refuses it on production (it
 exists); the Style row is "Same as this picture", Animated series, Comic book, Comic 3D mix, Mood, Random, Write your own.
 
+## v13 (2026-11-09, branch challenge-settings): "How it was made" wording for the setting (coordinator reviewed, owner approved)
+
+The same on the preview and the picture's page, the owner's words exactly (replacing v12's draft):
+
+- heading: "Setting"
+- line: "{text}. This edition's description of the book's world, not a quote, picked at random from four (setting {letter}); based on {blocks}."
+  e.g. "a chaotic mix of stone, concrete and glass-and-steel buildings, tall and short, some half-built. This edition's
+  description of the book's world, not a quote, picked at random from four (setting C); based on c5-b11, c22-b2."
+
+(v12's draft was: heading "Setting (this edition’s description of the book’s setting, not a quote)"; line "{text}. Drawn
+at random from four for a closed model (setting {letter}); it describes the book at {blocks}.") No legal text changes;
+keys unchanged (privacy `k5nsr6`, terms `1finiyh`).
+

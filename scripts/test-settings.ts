@@ -113,7 +113,7 @@ const recorded = (src: string) => [
   ...need(/setting\?: \{ id: string; text: string; blocks: string\[\] \};/.test(ticket) && /\.\.\.\(t\.challenge \? \{ challenge: t\.challenge \} : \{\}\)/.test(publish), 'the recipe doesn\'t keep the ticket\'s challenge (and its setting)'),
   ...need(/setting: readSetting\(\(p\.challenge as \{ setting\?: unknown \} \| undefined\)\?\.setting\)/.test(data), '"How it was made" doesn\'t read it back'),
   ...need(/\{SETTING_WORDING\.head\}/.test(page) && /SETTING_WORDING\.line\(im\.setting\)/.test(page) && /SETTING_WORDING\.line\(d\.setting\)/.test(preview), 'the picture page or the preview doesn\'t show it'),
-  ...need(SETTING_WORDING.head === 'Setting (this edition’s description of the book’s setting, not a quote)' && SETTING_WORDING.line(rec) === `${WANT.A[0]}. Drawn at random from four for a closed model (setting A); it describes the book at c1-b2, c1-b13, c1-b4.`, `the wording: ${SETTING_WORDING.line(rec)}`),
+  ...need(SETTING_WORDING.head === 'Setting' && SETTING_WORDING.line(rec) === `${WANT.A[0]}. This edition's description of the book's world, not a quote, picked at random from four (setting A); based on c1-b2, c1-b13, c1-b4.`, `the wording: ${SETTING_WORDING.line(rec)}`),
 ];
 proven('T6 the draw is recorded (letter, text, blocks) in the ticket and recipe, and "How it was made" shows it as this edition\'s description, citing the blocks', () => recorded(route), () => recorded(route.replace('...(setting ? { setting: settingRecord(setting) } : {}),', '')));
 
