@@ -281,6 +281,8 @@ proven(
     const DS = await import('../src/lib/images/designs');
     const { BASE_STYLE } = await import('../src/lib/challenge/base-style');
     const { applyStyle, planStyle } = await import('./lib/publish-style');
+    const { samplesFor, fakeStore } = await import('./lib/style-samples-fixture');
+    const store19 = fakeStore();
     const { sourceOf } = await import('../src/lib/challenge/pictures');
     const { makeView, publishedStyles } = await import('../src/lib/challenge/make');
     const { blockedName } = await import('../src/lib/images/rules');
@@ -290,7 +292,7 @@ proven(
     const other = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'character', character: DS.bookCharacter('bai')!, body: sheet(8, 'Mood look: something else.') as never });
     const before = await sourceOf(S as never, base.versionId, { anySheet: true });
     const plan = await planStyle(S as never);
-    const made = await applyStyle(S as never);
+    const made = await applyStyle(S as never, 'naaate', BASE_STYLE, await samplesFor(BASE_STYLE, 2, 'c19'), store19.put);
     const plan2 = await planStyle(S as never);
     const after = await sourceOf(S as never, base.versionId, { anySheet: true });
     const otherSrc = await sourceOf(S as never, other.versionId, { anySheet: true });
@@ -323,10 +325,12 @@ proven(
   {
     const { OFFERED_STYLES, COMIC_BOOK, COMIC_3D_MIX, MOOD } = await import('../src/lib/challenge/base-style');
     const { applyStyle, planStyle } = await import('./lib/publish-style');
+    const { samplesFor, fakeStore } = await import('./lib/style-samples-fixture');
+    const store24 = fakeStore();
     const { challengeStyles, resolveStyle } = await import('../src/lib/challenge/make');
     const { blockedName } = await import('../src/lib/images/rules');
     const { checkPrompt } = await import('../src/lib/images/guard');
-    for (const s of OFFERED_STYLES) if (!(await planStyle(S as never, s)).exists) await applyStyle(S as never, 'naaate', s);
+    for (const s of OFFERED_STYLES) if (!(await planStyle(S as never, s)).exists) await applyStyle(S as never, 'naaate', s, await samplesFor(s, 2, 'c24'), store24.put);
     const plans = await Promise.all(OFFERED_STYLES.map((s) => planStyle(S as never, s)));
     const listed = await challengeStyles(S as never);
     const draws = new Set([...Array(60).keys()].map(() => resolveStyle({ kind: 'random' }, listed)?.label));
@@ -353,7 +357,7 @@ proven(
       ...need(listed.map((s) => s.label).join() === 'Animated series,Comic book,Comic 3D mix,Mood', `listed: ${listed.map((s) => s.label).join()}`),
       ...need([...draws].every((l) => OFFERED_STYLES.some((s) => s.title === l)) && draws.size === 4, `Random drew ${[...draws].join()}`),
       ...need(MOOD.title === 'Mood' && MOOD.text === 'Intense, highly detailed graphic novel look. Moody. Expressive. Dark lines, bold colors. Visible brushstrokes.', 'Mood isn\'t the published title and text'),
-      ...need(/if \(plan\.exists \|\| plan\.nameTaken\) \{ say\(`"\$\{style\.title\}": refused/.test(read('scripts/publish-style.ts')), 'the script does not refuse a style that exists'),
+      ...need(/else if \(!plan\.exists && !plan\.nameTaken\) step = \{ title: style\.title, kind: 'create'/.test(read('scripts/publish-style.ts')), 'the script does not refuse a style that exists'),
       ...wordsOk(OFFERED_STYLES.map((s) => s.text)),
       ...need(allowed.every(Boolean) && OFFERED_STYLES.every((s) => sent.some((u) => u.includes(s.text))), 'the prompt check did not see each text'),
     ], () => wordsOk(['bold ink outlines in the style of Jack Kirby', 'Studio Ghibli watercolour']));

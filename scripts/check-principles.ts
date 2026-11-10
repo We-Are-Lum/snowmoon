@@ -12,6 +12,7 @@
  * (read-only) when STUDIO_DATABASE_URL is set. Page checks fetch the deployed
  * site; the third-party request check drives the local Chrome.
  */
+import { p1cProblems } from './lib/p1c';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -164,21 +165,11 @@ add({
     await sql.end();
     return { rows: [...rows], skipped: false };
   },
-  // A style or character sheet (element_type 'design') keeps a recipe inside its body for each of its
-  // pictures (samples, views) rather than a recipe_id (owner, 2026-10-14): it passes only when it has
-  // at least one picture and every picture's recipe names its prompt and model. Anything else needs recipe_id.
+  // The rule lives in scripts/lib/p1c.ts (shared with scripts/test-publish-style.ts): a style or sheet passes when it has
+  // at least one picture and every picture's recipe names its prompt and model; anything else needs recipe_id.
   run: ({ rows, skipped }) => {
     if (skipped) return ['skipped: STUDIO_DATABASE_URL not set'];
-    const pictures = (body: unknown) => {
-      const b = (body ?? {}) as { samples?: unknown; views?: unknown };
-      const views = b.views && typeof b.views === 'object' ? Object.values(b.views as Record<string, unknown>) : [];
-      return [...(Array.isArray(b.samples) ? b.samples : []), ...views] as { recipe?: { prompt?: string; model?: string } }[];
-    };
-    const inBody = (r: { element_type: string; body: unknown }) => {
-      const ps = pictures(r.body);
-      return r.element_type === 'design' && ps.length > 0 && ps.every((p) => !!p?.recipe?.prompt && !!p?.recipe?.model);
-    };
-    return rows.filter((r: { recipe_id: string | null }) => !r.recipe_id && !inBody(r as never)).map((r: { id: string }) => `version ${r.id} has no recipe`);
+    return p1cProblems(rows as never);
   },
   plant: (c) => {
     c.skipped = false;
