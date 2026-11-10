@@ -5,7 +5,7 @@ import { bookCharacter } from '../images/designs';
 import type { RemixCardData, RemixCardWords } from '~/components/challenge-remix-card';
 import { FEED_PAGE, cursorOf, parseCursor, remixFeed } from './remixes';
 import { challengePictures } from './pictures';
-import { momentById } from './moments';
+import { shownMoment } from './moment-switch';
 import { CHALLENGE_WORDING as W } from './wording';
 import { LANDING_WORDING as L } from './landing-wording';
 
@@ -78,7 +78,7 @@ async function pictureFeed(sql: Sql, character: string | null, before: string | 
   const page = from < 0 ? [] : all.slice(from, from + FEED_PAGE + 1);
   const shown = page.slice(0, FEED_PAGE);
   return {
-    cards: shown.map((p) => ({ versionId: p.versionId, character: p.character, title: momentById(p.moment)?.title ?? '', byName: p.byName, byFid: p.byFid, thumb: p.thumb, href: `/challenge/p/${p.versionId}` })),
+    cards: shown.map((p) => ({ versionId: p.versionId, character: p.character, title: shownMoment(p.moment)?.title ?? '', byName: p.byName, byFid: p.byFid, thumb: p.thumb, href: `/challenge/p/${p.versionId}` })),
     next: page.length > FEED_PAGE ? cursorOf(shown[shown.length - 1]) : null,
   };
 }

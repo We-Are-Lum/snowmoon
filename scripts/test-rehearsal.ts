@@ -86,7 +86,16 @@ check('every R2 write and read has the local branch first', (store.match(/if \(r
   check('switch on: the stand-in bases are the challenge\'s bases', JSON.stringify(p.bases) === JSON.stringify(REHEARSAL_BASE_IDS));
   check('switch on: a link to http://127.0.0.1:3000 counts as the remix\'s page; another port doesn\'t; snowmoon.party still does', p.rehearsalLink === true && p.otherPortLink === false && p.siteLink === true);
   const prod = probe({ CHALLENGE_REHEARSAL: 'on', STUDIO_DATABASE_URL: local, VERCEL_ENV: 'production', VERCEL: '1' });
-  check('switch with VERCEL_ENV=production: everything as committed (remix-2026-11, not public, admins not eligible, no rehearsal link)', prod.on === false && prod.id === 'remix-2026-11' && prod.public === false && prod.owner === 'admin' && prod.rehearsalLink === false && prod.visibleSignedOut === false, JSON.stringify(prod).slice(0, 300));
+  // "As committed" is the committed config read the same way with no switch at all, whatever its public switch says
+  // (it was false until the owner's flip, #133, 2026-11-08): the production run must match it field for field, with the
+  // rehearsal's own changes (id, dates, bases, eligible admins, the 127.0.0.1 link) absent, and signed-out visibility
+  // following CHALLENGE.public exactly, on or off.
+  const plain = probe({ STUDIO_DATABASE_URL: local });
+  type Probe = Record<string, unknown>;
+  const asCommitted = (x: Probe) => x.on === false && x.id === 'remix-2026-11' && ['id', 'public', 'opens', 'closes', 'bases', 'admins', 'owner', 'visibleSignedOut'].every((k) => JSON.stringify(x[k]) === JSON.stringify(plain[k])) && x.public === CHALLENGE.public && x.opens === CHALLENGE.dates.opens && x.closes === CHALLENGE.dates.closes && x.owner === 'admin' && x.rehearsalLink === false && x.visibleSignedOut === x.public;
+  check('switch with VERCEL_ENV=production: everything as committed (remix-2026-11, the challenge on as the owner flipped it, the committed dates, admins not eligible, no rehearsal link)', plain.on === false && plain.public === true && asCommitted(prod), JSON.stringify({ prod, plain }).slice(0, 400));
+  proof('the rehearsal\'s own settings (switch on, on this machine) are not "as committed"', !asCommitted(p));
+  proof('a production run that kept the rehearsal\'s 127.0.0.1 link is caught', !asCommitted({ ...prod, rehearsalLink: true }));
   const pooler = probe({ CHALLENGE_REHEARSAL: 'on', STUDIO_DATABASE_URL: 'postgres://studio_writer.x:y@aws-0-us-west-1.pooler.supabase.com:6543/postgres' });
   check('switch with the production database: off', pooler.on === false && pooler.id === 'remix-2026-11');
 }

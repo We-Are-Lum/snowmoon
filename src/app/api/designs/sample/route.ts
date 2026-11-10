@@ -14,7 +14,9 @@ import { REMIX_SOURCE_LINES, SAMPLE_SUBJECTS, samplePrompt, viewLinesFor, viewPr
 import { designByVersion } from '~/lib/images/designs';
 import { readRemixTicket, readSampleTicket, signRemixTicket, signSampleTicket } from '~/lib/images/ticket';
 import { referencePicture } from '~/lib/images/reference-picture';
-import { countsRemixes, remixUnits } from '~/lib/images/remixes';
+import { countsRemixes, isWalletNumber, remixUnits } from '~/lib/images/remixes';
+import { callFor, DEFAULT_SHEET_MODEL, reserveFor, sheetModel } from '~/lib/images/sheet-models';
+import { makeClosed } from '~/lib/images/closed';
 
 /**
  * One sample picture for a style, or one view for a character sheet (step 4), before the design
@@ -50,7 +52,7 @@ export async function POST(request: Request) {
   const sql = db();
   if (!sql || !process.env.FAL_KEY || !process.env.IMAGES_TICKET_SECRET) return no('Making images is not set up on this deployment', 503);
 
-  let body: { slot?: unknown; index?: unknown; kind?: unknown; text?: unknown; style?: unknown; source?: unknown; remix?: unknown; front?: { ticket?: unknown; image?: unknown } };
+  let body: { slot?: unknown; index?: unknown; kind?: unknown; text?: unknown; style?: unknown; source?: unknown; remix?: unknown; model?: unknown; front?: { ticket?: unknown; image?: unknown } };
   try {
     body = await request.json();
   } catch {
@@ -62,6 +64,11 @@ export async function POST(request: Request) {
   if (!text || text.length > IMAGES.designs.textMaxChars) return no(`Write the text first, up to ${IMAGES.designs.textMaxChars} characters`, 400);
   const index = Number(body.index ?? 0);
   if (slot === 'sample' && !(Number.isInteger(index) && index >= 0 && index < SAMPLE_SUBJECTS.length)) return no('Bad request', 400);
+  // The sheet's model (branch remix-model-choice): the open default unless IMAGES.designs.modelChoice is on and a
+  // character sheet's view asks for another offered choice. A sample, or a place's view, is always the open default.
+  const choice = sheetModel(body.model);
+  if (!choice || (choice.id !== DEFAULT_SHEET_MODEL && (slot === 'sample' || body.kind !== 'character'))) return no(IMAGE_WORDING.designs.models.notOffered, 400, { reason: 'model' });
+  if (!choice.open && isWalletNumber(fid)) return no(IMAGE_WORDING.designs.models.walletOnly, 403, { reason: 'model' });
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403, { reason: 'consent' });
   // The same gate as Generate, before anything is counted or reserved (invited FIDs pass it without a lookup).
   const gate = await mayGenerate(sql, fid);
@@ -84,6 +91,8 @@ export async function POST(request: Request) {
     if (t.text !== text) return no('The text changed since the front view was made. Make the front view again.', 409, { reason: 'stale' });
     if (t.subject !== viewLinesFor(body.kind === 'location' ? 'location' : 'character').front) return no('Make the front view first', 400);
     if (t.style?.versionId !== style!.versionId) return no('The style changed since the front view was made. Make the front view again.', 409, { reason: 'stale' });
+    // One model per sheet: a side or back comes from the front's model.
+    if ((t.choice ?? DEFAULT_SHEET_MODEL) !== choice.id) return no(IMAGE_WORDING.designs.models.changed, 409, { reason: 'model' });
     const bytes = Buffer.from(m[1], 'base64');
     if (createHash('sha256').update(bytes).digest('hex') !== t.sha256) return no('The front view is not the one its record describes', 400);
     front = { bytes, sha256: t.sha256 };
@@ -106,8 +115,8 @@ export async function POST(request: Request) {
 
   // Remixes, not pictures (owner, 2026-11-04): the remix this view goes in, for someone who counts remixes. A side or
   // back goes in its front's remix; a front goes in the remix the person is making (its ticket), or starts one.
-  // Every remix is on the open default today: one unit (remix-model-choice passes its model's `open` to remixUnits).
-  const units = remixUnits({ open: true });
+  // A remix on a closed model uses IMAGES.designs.closedRemixUnits (remix-model-choice passes its model's `open`).
+  const units = remixUnits({ open: choice.open });
   let remix: { id: string; units: number; starts: boolean; slot: 'front' | 'side' | 'back' } | null = null;
   if (slot !== 'sample' && countsRemixes(fid)) {
     const held = typeof body.remix === 'string' ? readRemixTicket(body.remix) : null;
@@ -125,15 +134,23 @@ export async function POST(request: Request) {
   const size = slot === 'sample' || body.kind === 'location' ? IMAGES.size : IMAGES.viewSize;
   const ref = front ?? (source ? { bytes: source.bytes, sha256: source.sha256 } : null);
   const edit = ref !== null;
-  const spend = edit ? { model: IMAGES.editModel, reserveUsd: IMAGES.editReserveUsd(1) } : { model: IMAGES.model, reserveUsd: IMAGES.reserveUsd };
-  const model = edit ? IMAGES.editModel : IMAGES.model;
+  const closed = !choice.open && slot !== 'sample' ? choice : null;
+  const viewSlot = slot === 'sample' ? 'front' : slot;
+  // The open default: exactly as before (Z-Image Turbo from text; FLUX.2 [klein] 4B edit from a reference picture).
+  const spend = closed
+    ? { model: callFor(closed, viewSlot), reserveUsd: reserveFor(closed, viewSlot), pool: 'closed' as const }
+    : edit ? { model: IMAGES.editModel, reserveUsd: IMAGES.editReserveUsd(1) } : { model: IMAGES.model, reserveUsd: IMAGES.reserveUsd };
+  const model = closed ? callFor(closed, viewSlot) : edit ? IMAGES.editModel : IMAGES.model;
   const paid = await paidPicture(sql, fid, request, {
     checkText: prompt,
-    spend: remix ? { ...spend, remix } : edit ? spend : undefined,
+    spend: remix ? { ...spend, remix } : edit || closed ? spend : undefined,
     // A sheet's view prompt is long (view line, style text, sheet text): the larger budget, as Remix's (owner, 2026-11-03).
     guardMaxTokens: slot === 'sample' ? undefined : IMAGES.designs.guardMaxTokens,
     // The source's front is sent at its own size (a view: upright, IMAGES.viewSize), as a front is to its side and back.
-    make: () => (ref ? makeEdit(prompt, [{ bytes: ref.bytes, contentType: 'image/jpeg', ...(front ? size : IMAGES.viewSize) }], size) : makeImage(prompt, size)),
+    make: () =>
+      closed
+        ? makeClosed(closed, viewSlot, prompt, ref?.bytes ?? null, request, reserveFor(closed, viewSlot) - (IMAGES.reserveUsd - IMAGES.pricePerMp))
+        : ref ? makeEdit(prompt, [{ bytes: ref.bytes, contentType: 'image/jpeg', ...(front ? size : IMAGES.viewSize) }], size) : makeImage(prompt, size),
   });
   // A view that fails stays inside its remix: the answer carries the remix, so making it again uses no other remix.
   if (!paid.ok) return no(paid.error, paid.status, { ...paid.extra, ...(remixTicket && !String(paid.extra.reason ?? '').startsWith('remix') ? { remix: remixTicket } : {}) });
@@ -147,6 +164,7 @@ export async function POST(request: Request) {
     ...(style ? { style } : {}),
     ...(source ? { source: { versionId: source.versionId, sha256: source.sha256 } } : {}),
     ...(remix ? { remix: remix.id } : {}),
+    ...(choice.id !== DEFAULT_SHEET_MODEL ? { choice: choice.id } : {}),
     guard: { model: IMAGES.guardModel, verdict: 'ok' }, at: new Date().toISOString(),
   });
   return NextResponse.json(

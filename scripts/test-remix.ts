@@ -18,7 +18,7 @@
  *  R1–R5: the caps (10 a day, the free cap across everyone, the off switch, a reservation replaced by
  *         the real cost, no person in the cost totals), and hiding (maker, maintainer, nobody else).
  *  R6:    signed out, the shot's Remix panel asks to sign in; Generate signed out is refused (401).
- *  R7:    signed in, the consent screen first (wording own-words-v5), then the words box and Generate.
+ *  R7:    signed in, the consent screen first (wording own-words-v6), then the words box and Generate.
  *  R8:    Generate: a frame saved to their remix, with the AI label, its page and its recipe (the four
  *         pictures by sha256, the exact prompt with their words), and the balance debited.
  *  R9:    a blocked prompt is refused and nothing is saved; a bad layout is refused.
@@ -213,7 +213,7 @@ try {
     const consentShot = await shot(page, 'R7-consent');
     await page.getByRole('button', { name: 'I agree' }).click();
     await page.locator('#ed-remix-words').waitFor();
-    check('R7', 'consent first (own-words-v5), then the words box', /own-words-v5/i.test(wording) && /In Remix, every frame you make is saved and public at its link/.test(wording) && /shown with your name/.test(wording) && /shown with your address, 0x5aae…eaed/.test(wording), { wording: wording.slice(0, 300) }, consentShot);
+    check('R7', 'consent first (own-words-v6), then the words box', /own-words-v6/i.test(wording) && /In Remix, every frame you make is saved and public at its link/.test(wording) && /shown with your name/.test(wording) && /shown with your address, 0x5aae…eaed/.test(wording), { wording: wording.slice(0, 300) }, consentShot);
 
     // Move the camera a little first: Generate sends what the camera now sees.
     await page.getByRole('slider', { name: /Field of view/ }).focus();

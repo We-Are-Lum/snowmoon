@@ -24,12 +24,12 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, ASSISTANT, CHALLENGE, CHAT, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, imagesDailySpendCapUsd } from '../src/lib/config';
+import { AGENTS, ASSISTANT, CHALLENGE, CHAT, CLOSED_PROVIDERS, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, imagesDailySpendCapUsd } from '../src/lib/config';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
 import { rehearsalOn } from '../src/lib/challenge/rehearsal-switch';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
-import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
+import { LEGAL, MODEL_NOTICES, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 import { MENTIONS_FILE, byMentionsThenName, mentionsFile } from './lib/character-mentions';
@@ -43,6 +43,10 @@ import { p2mProblems, p6acProblems, p9gProblems } from './lib/challenge-moments'
 import { CARDS } from '../src/lib/challenge/cards';
 import { MOMENTS } from '../src/lib/challenge/moments';
 import { spoilerExceptionOn } from '../src/lib/challenge/spoilers';
+import { DEFAULT_SHEET_MODEL, SHEET_MODELS, sheetModelProblems, sheetModelsOffered } from '../src/lib/images/sheet-models';
+import { modelChoicesFor } from '../src/lib/images/model-choice-view';
+import { consentClosedProblems, p6tProblems } from './lib/p6t';
+import { CHALLENGE_MODELS, DEFAULT_CHALLENGE_MODEL, challengeDefaultModel, challengeDefaultProblems, challengeModelProblems, challengeModelsFor, defaultCases } from '../src/lib/challenge/models';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -1042,6 +1046,8 @@ add({
     endpoints.set(IMAGES.guardModel, 'src/lib/config.ts IMAGES.guardModel');
     // Step 4: reference pictures (a sheet's side and back views; images made with a sheet's views).
     endpoints.set(IMAGES.editModel.endpoint, 'src/lib/config.ts IMAGES.editModel');
+    // Model choice (IMAGES.designs.modelChoice): every model a sheet's views can be made with, offered or not.
+    for (const m of SHEET_MODELS) for (const c of [m.front, m.views]) endpoints.set(c.endpoint, `src/lib/images/sheet-models.ts ${m.id}`);
     return { models: json('config/models.json').models, used: [...used.entries()], endpoints: [...endpoints.entries()] };
   },
   run: ({ models, used, endpoints }) => {
@@ -1116,6 +1122,59 @@ add({
   plant: (c) => {
     c.skipped = '';
     c.ids = [...c.ids, '00000000-0000-0000-0000-00000000dead'];
+  },
+});
+
+// P3e (branch remix-model-choice): the remix form's model picker keeps the open models the default and first in the
+// list, whether the switch is on or off; every closed choice names its maker; every model it calls is on the allowlist.
+add({
+  id: 'P3e',
+  principle: 3,
+  name: 'the default is open: the remix form\'s and the challenge\'s model choice list the open models first, as the default (one exception: GPT Image 2.5 Sunburst for the challenge, for those who can use it, until entries close); closed ones name their maker and are allowlisted',
+  load: async () => ({
+    all: clone(SHEET_MODELS) as unknown as (typeof SHEET_MODELS)[number][],
+    offeredOn: sheetModelsOffered(true, true).map((m) => m.id) as string[],
+    offeredOff: sheetModelsOffered(false).map((m) => m.id) as string[],
+    form: (modelChoicesFor('fork', 'character', true) ?? []).map((m) => ({ id: m.id, open: m.open })),
+    allowlist: (json('config/models.json').models as { id: string; open_weights: boolean; maker?: string }[]),
+    // The challenge's Model row (branch challenge-models): the same rule, for a visitor where every model is offered.
+    challenge: clone(CHALLENGE_MODELS) as unknown as (typeof CHALLENGE_MODELS)[number][],
+    challengeOn: challengeModelsFor({ country: 'FR', region: null }, true, true).map((m) => ({ id: m.id, open: m.open })),
+    challengeOff: challengeModelsFor({ country: 'FR', region: null }, false).map((m) => m.id) as string[],
+    // The row's starting model for every kind of visitor (owner, 2026-11-09: P3's one exception, the challenge only).
+    defaults: defaultCases().map((c) => ({ c, id: challengeDefaultModel(c) as string })),
+  }),
+  run: (c) => {
+    const p = sheetModelProblems(c.all);
+    p.push(...challengeModelProblems(c.challenge).map((x) => `challenge: ${x}`));
+    p.push(...challengeDefaultProblems(c.defaults).slice(0, 5).map((x) => `challenge: ${x}`));
+    if (!c.challengeOn.length || c.challengeOn[0].id !== DEFAULT_CHALLENGE_MODEL || !c.challengeOn[0].open) p.push('challenge: the Model row does not offer the open default first');
+    if (c.challengeOff.length !== 1 || c.challengeOff[0] !== DEFAULT_CHALLENGE_MODEL) p.push(`challenge: with CHALLENGE.modelChoice off, more than the open default is offered: ${c.challengeOff.join(', ')}`);
+    for (const m of c.challenge) {
+      const a = c.allowlist.find((x) => x.id === m.allowlistId || x.id === m.allowlistId.replace(/-edit$/, ''));
+      if (!a) { p.push(`challenge: ${m.id}: ${m.allowlistId} is not on config/models.json`); continue; }
+      if (a.open_weights !== m.open) p.push(`challenge: ${m.id}: says ${m.open ? 'open' : 'closed'}, config/models.json says open_weights ${a.open_weights}`);
+      if (!m.open && a.maker !== m.maker) p.push(`challenge: ${m.id}: maker ${m.maker} differs from config/models.json (${a.maker})`);
+    }
+    if (c.offeredOn[0] !== DEFAULT_SHEET_MODEL) p.push(`with the switch on, the first choice offered is ${c.offeredOn[0]}`);
+    if (c.offeredOff.length !== 1 || c.offeredOff[0] !== DEFAULT_SHEET_MODEL) p.push(`with the switch off, more than the open default is offered: ${c.offeredOff.join(', ')}`);
+    if (!c.form.length || c.form[0].id !== DEFAULT_SHEET_MODEL || !c.form[0].open) p.push('the remix form does not show the open default first');
+    for (const m of c.all) {
+      for (const id of [m.front.id, m.views.id]) {
+        const a = c.allowlist.find((x) => x.id === id || x.id === id.replace(/-edit$/, ''));
+        if (!a) { p.push(`${m.id}: ${id} is not on config/models.json`); continue; }
+        if (a.open_weights !== m.open) p.push(`${m.id}: says ${m.open ? 'open' : 'closed'}, config/models.json says open_weights ${a.open_weights}`);
+        if (!m.open && a.maker !== m.maker) p.push(`${m.id}: maker ${m.maker} differs from config/models.json (${a.maker})`);
+      }
+    }
+    return p;
+  },
+  plant: (c) => {
+    c.all = [...c.all].reverse();
+    c.form = [...c.form].reverse();
+    c.challenge = [...c.challenge].reverse();
+    // A wider default: GPT for a wallet account too.
+    c.defaults = c.defaults.map((d) => (d.c.wallet ? { ...d, id: 'gpt-image-2.5-sunburst' } : d));
   },
 });
 
@@ -1260,7 +1319,7 @@ add({
 add({
   id: 'P5g',
   principle: 5,
-  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order; only the cards (their whole lists of bases and remixes), the entries\' "Shuffled" order and "Surprise me" (the curated moments, "Moments picked by @naaate", in book order) may shuffle, unweighted',
+  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order; only a character\'s whole list of bases, the entries\' "Shuffled" order, "Surprise me" (the curated moments, in book order) and the Style row\'s "Random" (every published style) may shuffle, unweighted',
   load: async () => walk('src', /\.tsx?$/).filter((f) => P5G_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
   run: (files) => p5gProblems(files),
   plant: (files) => {
@@ -1306,7 +1365,7 @@ add({
 add({
   id: 'P9g',
   principle: 9,
-  name: 'the remix challenge\'s spoiler exception stays narrow: only its six cards and curated moments, quoted word for word; the first layer from chapters 1-14; deeper layers marked "May spoil later chapters."; chapters on every moment chip; nowhere else; ended when entries close',
+  name: 'the remix challenge\'s exception stays narrow: only its six cards and curated moments, quoted word for word; the first layer from chapters 1-14; nothing marked as a spoiler on its pages (owner, 2026-11-09); chapters on every moment chip; the reader\'s chapter gating unchanged; nowhere else; ended when entries close',
   load: async () => ({
     files: walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
     cards: clone(CARDS),
@@ -1321,6 +1380,8 @@ add({
     c.moments[2].quotes[0].text = c.moments[2].quotes[0].text.replace('shine', 'win');
     c.cards[2].facts[0] = { text: 'Second place', block: 'c24-b48', quote: 'I got second place in the Pafogai Du Minpentai games' };
     c.files.push({ file: 'src/app/references/designs/[id]/planted.tsx', text: "import { CARDS } from '~/lib/challenge/cards';" });
+    // A spoiler mark back on a challenge page (owner, 2026-11-09: none there).
+    c.files.push({ file: 'src/components/challenge-planted.tsx', text: "export const L = 'May spoil later chapters.';" });
   },
 });
 // Character lists (owner, 2026-11-04: "list characters by how often they're named in the book, most first, everywhere
@@ -1811,11 +1872,28 @@ const SERVICES: [string, RegExp][] = [
   ['GitHub', /\bGitHub\b/g],
   // Owner's Privacy wording of 2026-10-10 names these two as well.
   ['ntfy', /\bntfy\b/g],
+  // Closed models' makers, as providers that receive prompts and pictures through Vercel AI Gateway (branches
+  // closed-model-bases and remix-model-choice, 2026-11-04). "gpt-oss" names a model, not the provider receiving anything.
+  ['OpenAI', /\bOpenAI\b/g],
+  ['Google', /\bGoogle\b(?! Fonts)/g],
   ['Spotify', /\bSpotify\b/g],
 ];
+/** Makers named for provenance only: some pictures the owner made with them outside the site are brought in with the
+ *  recipe the owner reports, and nothing is sent to them. They are not services, so P6g and P6h never ask the Privacy
+ *  page to name them (owner, 2026-11-04, choice 5.4: Midjourney). P6h does check that About, if it names one, says the
+ *  site sends nothing to it. */
+const PROVENANCE_ONLY = ['Midjourney'];
 /** At Generate, the image prompt goes to Groq (the check; through Vercel AI Gateway when Groq is busy) and
  *  fal.ai (the image), the FID to Neynar (the gate). The gateway is named on the consent screen too (owner, 2026-10-10). */
-const AT_GENERATE = ['Groq', 'Vercel AI Gateway', 'fal.ai', 'Neynar'];
+/** Each closed model's maker, as a remixer can pick it once model choice is on. */
+const CLOSED_MAKERS = [...new Set([...sheetModelsOffered(true).filter((m) => !m.open).map((m) => m.provider.name), ...CHALLENGE_MODELS.filter((m) => !m.open).map((m) => m.maker)])];
+/** Is any model choice on (the challenge's Model row, branch challenge-models, or the sheet form's picker)? */
+const MODEL_CHOICE_ON = (CHALLENGE.modelChoice as boolean) || (IMAGES.designs.modelChoice as boolean);
+const AT_GENERATE = [
+  'Groq', 'Vercel AI Gateway', 'fal.ai', 'Neynar',
+  // With model choice on (IMAGES.designs.modelChoice), each offered closed model's maker receives the prompt too.
+  ...(MODEL_CHOICE_ON ? CLOSED_MAKERS : []),
+];
 const named = (text: string) => new Set(SERVICES.filter(([, re]) => text.match(re)).map(([n]) => n));
 const diff = (a: Set<string>, b: Set<string>) => [...a].filter((x) => !b.has(x));
 const pageText = (html: string, sel: string) => {
@@ -1830,6 +1908,9 @@ interface Named {
   about: string;
   notice: string;
   consent: string;
+  /** The closed models' notices (src/lib/legal.ts MODEL_NOTICES), by maker: label, title and text. A notice, not the
+   *  consent (owner, 2026-11-04: own-words-v5 carries the closed-model sentence). */
+  modelNotices: Record<string, string>;
 }
 let namedCache: Named | null = null;
 async function loadNamed(): Promise<Named> {
@@ -1843,6 +1924,7 @@ async function loadNamed(): Promise<Named> {
       about: pageText(await page('/about'), '.shell-main .page, main .page, .page'),
       notice: currentNoticeItems().flat().join('\n'),
       consent: [w.line, w.title, ...w.text].join('\n'),
+      modelNotices: Object.fromEntries(Object.entries(MODEL_NOTICES).map(([k, n]) => [k, [n.label, n.title, ...n.text].join('\n')])),
     };
   }
   return clone(namedCache);
@@ -1857,7 +1939,8 @@ add({
     if (!c.privacy.length) return ['/privacy: no policy text served (.legal p, .legal li)'];
     const p = privacyAll(c);
     const problems: string[] = [];
-    for (const [where, text] of [['About', c.about], ['the assistant\'s notice', c.notice], ['the image consent screen', c.consent]] as const)
+    const sources: [string, string][] = [['About', c.about], ['the assistant\'s notice', c.notice], ['the image consent screen', c.consent], ...Object.entries(c.modelNotices).map(([k, t]) => [`${k}'s closed-model notice`, t] as [string, string])];
+    for (const [where, text] of sources)
       for (const s of diff(named(text), p)) problems.push(`${where} names ${s}; the Privacy page does not`);
     for (const s of AT_GENERATE) if (!p.has(s)) problems.push(`the Privacy page does not name ${s}, which receives the prompt or the Farcaster ID at Generate`);
     return problems;
@@ -1874,9 +1957,15 @@ add({
   run: (c: Named) => {
     const p = privacyAll(c), a = named(c.about);
     if (!c.about.trim()) return ['/about: no page text served'];
+    // A maker named for provenance only (PROVENANCE_ONLY) needs no Privacy line, but About must say nothing goes to it.
+    const sentences = c.about.split(/(?<=[.;])\s+/);
+    const provenance = PROVENANCE_ONLY.filter((m) => sentences.some((u) => new RegExp(`\\b${m}\\b`).test(u)))
+      .filter((m) => !sentences.some((u) => new RegExp(`\\bnothing to ${m}\\b`).test(u)))
+      .map((m) => `About names ${m} (provenance only) but doesn't say the site sends nothing to ${m}`);
     return [
       ...diff(p, a).map((s) => `the Privacy page names ${s}; About does not`),
       ...diff(a, p).map((s) => `About names ${s}; the Privacy page does not`),
+      ...provenance,
     ];
   },
   plant: (c: Named) => {
@@ -1905,13 +1994,18 @@ add({
 add({
   id: 'P6j',
   principle: 6,
-  name: 'the image consent screen (config/consent.json, current) names exactly the services that receive the prompt or the FID at Generate',
+  name: 'the image consent screen (config/consent.json, current) names exactly the services that receive the prompt or the FID at Generate; with model choice on, it says what each closed model\'s maker receives and keeps',
   load: loadNamed,
   run: (c: Named) => {
     const got = named(c.consent), want = new Set(AT_GENERATE);
     return [
       ...diff(want, got).map((s) => `the consent screen does not name ${s}, which receives the prompt or the Farcaster ID at Generate`),
       ...diff(got, want).map((s) => `the consent screen names ${s}, which receives nothing at Generate`),
+      // With model choice on, the consent screen (own-words-v5, for everyone; owner, 2026-11-04) says what each closed
+      // model's maker receives and keeps. The closed models' notice is only a notice.
+      ...(MODEL_CHOICE_ON
+        ? consentClosedProblems(c.consent, CLOSED_MAKERS, Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])))
+        : []),
     ];
   },
   plant: (c: Named) => {
@@ -2124,7 +2218,7 @@ add({
 add({
   id: 'P6u',
   principle: 6,
-  name: 'while CHALLENGE.public is off, the dates open nothing (entries, open sheets, the $15 cap) and /challenge answers 404 to a non-admin',
+  name: 'while CHALLENGE.public is off, the dates open nothing (entries, open sheets, the challenge\'s cap) and /challenge answers 404 to a non-admin',
   load: async () => {
     const at = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
     const r = await fetch(`${BASE}/challenge`, { headers: { 'cache-control': 'no-cache' }, redirect: 'manual' }).catch(() => null);
@@ -2222,6 +2316,38 @@ add({
   plant: (c) => {
     c.allowed = true;
     c.units = c.units.map((u: string) => u.replace(/\bOpenAI\b/g, 'a model maker'));
+  },
+});
+
+// P6t (branch remix-model-choice, 2026-11-04): model choice (IMAGES.designs.modelChoice) sends a remixer's prompt and
+// front view to each offered closed model's maker through Vercel AI Gateway. The switch may be on only while Privacy
+// names each of them there, with what it receives and how it is kept, and the consent screen (own-words-v5, for
+// everyone; owner, 2026-11-04, choice 6.1 reversed) says what each receives and keeps (legal texts describe today). P6t was free on main and on deep-funding, social-read (P6p), sheet-help, find-a-moment (P6v, P6w) and
+// challenge-three-bases (P6s, its closed-model bases) when picked; P6r is taken on three of them.
+add({
+  id: 'P6t',
+  principle: 6,
+  name: 'model choice is on only while Privacy §4 and §7 (with each maker\'s retention) and the consent screen name each offered closed model\'s maker, through Vercel AI Gateway',
+  load: async () => {
+    const c = json('config/consent.json');
+    const w = c.versions[c.current];
+    return {
+      on: MODEL_CHOICE_ON,
+      providers: CLOSED_MAKERS as string[],
+      retention: Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])),
+      s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+      s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat() as string[],
+      consent: [w.line, w.title, ...w.text].join('\n'),
+    };
+  },
+  run: (c) => p6tProblems(c),
+  plant: (c) => {
+    c.on = true;
+    c.providers = ['OpenAI'];
+    // Privacy §7 names OpenAI, but not how long it may keep them.
+    c.s7 = ['OpenAI receives, through Vercel AI Gateway, the prompt for each view. It may keep them, and does not train on them.'];
+    c.consent = 'Your prompt goes to fal.ai.';
+    c.s4 = 'Character sheets you publish.';
   },
 });
 

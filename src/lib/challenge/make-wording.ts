@@ -16,8 +16,23 @@ export const MAKE_WORDING = {
   readIt: 'Read it →',
   wordsLabel: 'Describe what to change',
   wordsPlaceholder: 'Describe what to change',
+  /** The one box with the moments off (owner's approved design, 2026-11-08). DRAFT wording. */
+  changeLabel: (name: string) => `Change ${name}: clothes, colours, age, pose…`,
+  /** The Style row (owner, 2026-11-08: "Style", "Random", "Write your own"). */
+  style: 'Style',
+  random: 'Random',
+  ownStyle: 'Write your own',
+  /** The Style row's first choice, the default (owner, 2026-11-09, exact). */
+  sameStyle: 'Same as this picture',
+  /** The own-style box's label. DRAFT wording. */
+  ownStyleLabel: 'Your style, in a few words',
+  /** In "How it was made" when Random drew the style, after "Style: " (owner, 2026-11-08: "Style: {style}, drawn at random"). */
+  randomDrew: (label: string) => `${label}, drawn at random`,
   model: 'Model',
-  /** P2 and the closed-models rule: the chip names the model and its maker. Room for the model choice (remix-model-choice). */
+  /**
+   * P2 and the closed-models rule: the chip names the model and its maker. Today's one model's line; the row itself is
+   * built from src/lib/challenge/models.ts (challengeModels, modelChipText), which writes this same line.
+   */
   modelChip: `${IMAGES.editModel.name} · Black Forest Labs · open`,
   makeIt: 'Make it',
   making: 'Making it…',
@@ -39,4 +54,9 @@ export const MAKE_WORDING = {
   noSource: 'This picture can’t be remixed for the challenge.',
   noMoment: 'Pick a moment first.',
   noWords: 'Describe what to change first.',
+  // The Style and Model rows' errors (branch challenge-simple, 2026-11-08). DRAFT wording.
+  noStyle: 'Pick a style first.',
+  ownEmpty: 'Write your style first.',
+  ownLong: (n: number) => `Write your style in up to ${n} characters.`,
+  noModel: 'Pick one of the models listed.',
 };

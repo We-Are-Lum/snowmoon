@@ -11,6 +11,9 @@ import { BookQuotes } from './design-book';
 import { useMyPicks } from './design-picks';
 import { AiTag } from './ai-tag';
 import { remixDefaults } from '~/lib/images/remix-defaults';
+import { ModelNotice, ModelPicker, type ModelOption } from './model-picker';
+import { withReset } from '~/lib/challenge/model-wording';
+import { answerNotice, browserStore, mayPick, noticeFor } from '~/lib/images/model-notice';
 
 /**
  * New style, new sheet, fork, or new version (step 4; Claude Design 4b, 4c, 5b). The name and the
@@ -28,7 +31,8 @@ import { remixDefaults } from '~/lib/images/remix-defaults';
  * "Options", preselected, to open and change. Each view can be made again inside the same remix.
  */
 const W = IMAGE_WORDING.designs;
-type Pic = { ticket: string; image: string; text: string; style: string | null };
+type Pic = { ticket: string; image: string; text: string; style: string | null; choice?: string };
+/** A model the remixer may choose for the sheet (IMAGES.designs.modelChoice): its label is read from config/models.json on the server. */
 type StyleOption = { versionId: string; title: string; by: string; text: string; thumb: string | null };
 type Status = { ready: boolean; invited?: boolean; consented?: boolean; left?: number; perDay: number; signedIn: boolean; remixes?: { left: number; perDay: number; picturesPerRemix: number } | null };
 type Wording = { version: string; line: string; title: string; text: string[]; sha256: string };
@@ -50,6 +54,8 @@ type Props = {
   suffix: string;
   /** The remix challenge opens this fork or version to everyone who passes the Generate gate (CHALLENGE.openSheets; the server checks again). */
   challengeOpen?: boolean;
+  /** Model choice (branch remix-model-choice): given only on a character sheet's remix while IMAGES.designs.modelChoice is on; the open default first. */
+  modelChoices?: ModelOption[];
   /** Who can enter, the challenge's words, given by the server only while it opens this form (challengeOpen). */
   whoCanEnter?: string;
 };
@@ -86,6 +92,28 @@ export function DesignForm(p: Props) {
     if (pickedStyle) setViewStyle((v) => v ?? pickedStyle);
   }, [pickedStyle]);
   const chosen = p.styles.find((s) => s.versionId === viewStyle) ?? null;
+  // One model per sheet: chosen once; views made with another are marked to make again.
+  const choices = p.modelChoices && p.modelChoices.length > 1 ? p.modelChoices : null;
+  const [modelId, setModelId] = useState<string>(choices?.[0].id ?? 'open');
+  const model = choices?.find((m) => m.id === modelId) ?? null;
+  // The closed models' notice (src/lib/images/model-notice.ts): once per maker, on this device only; the first one asks 18+.
+  const seenNotices = useRef(new Set<string>());
+  const [notice, setNotice] = useState<{ pick: ModelOption; askAdult: boolean } | null>(null);
+  const [adultTicked, setAdultTicked] = useState(false);
+  const pickModel = (m: ModelOption) => {
+    if (m.open || !m.maker) return setModelId(m.id);
+    const n = noticeFor(m.maker, browserStore(), seenNotices.current);
+    if (!n.show) return setModelId(m.id);
+    setNotice({ pick: m, askAdult: n.askAdult });
+  };
+  const answer = (button: 'ok' | 'never') => {
+    if (!notice?.pick.maker) return;
+    if (!answerNotice(notice.pick.maker, button, adultTicked, browserStore(), seenNotices.current)) return;
+    setModelId(notice.pick.id);
+    setNotice(null);
+  };
+  // A closed choice works only once its notice (and the 18+ box) has been answered on this device.
+  const modelReady = !model || model.open || !model.maker || mayPick(model.maker, browserStore(), seenNotices.current);
 
   const refresh = useCallback(async () => {
     const res = await authFetch('/api/images/status').catch(() => null);
@@ -96,7 +124,8 @@ export function DesignForm(p: Props) {
   }, [refresh, auth.kind]);
 
   const clean = text.trim();
-  const fresh = (x: Pic | null | undefined): x is Pic => Boolean(x && x.text === clean && (style || x.style === viewStyle));
+  const fresh = (x: Pic | null | undefined): x is Pic => Boolean(x && x.text === clean && (style || (x.style === viewStyle && (x.choice ?? 'open') === modelId)));
+  const modelStale = !style && Object.values(views).some((x) => x && x.text === clean && x.style === viewStyle && (x.choice ?? 'open') !== modelId);
   const stale = [...samples, ...Object.values(views)].some((x) => x && x.text !== clean);
   const styleStale = !style && Object.values(views).some((x) => x && x.text === clean && x.style !== viewStyle);
   const made = style ? samples.filter(fresh) : (Object.values(views).filter(fresh) as Pic[]);
@@ -115,7 +144,7 @@ export function DesignForm(p: Props) {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
-          slot, index, kind: p.kind, text: clean, ...(style ? {} : { style: viewStyle }), ...(front ? { front: { ticket: front.ticket, image: front.image } } : {}),
+          slot, index, kind: p.kind, text: clean, ...(style ? {} : { style: viewStyle }), ...(choices && !style ? { model: modelId } : {}), ...(front ? { front: { ticket: front.ticket, image: front.image } } : {}),
           // A remix's front starts from the source's front view (the server fetches it); its views stay in one remix.
           ...(remixing && slot === 'front' ? { source: p.source!.versionId } : {}),
           ...(remixTicket && slot !== 'sample' ? { remix: remixTicket } : {}),
@@ -125,12 +154,12 @@ export function DesignForm(p: Props) {
       if (out.remix) setRemixTicket(out.remix);
       else if (out.reason?.startsWith('remix')) setRemixTicket(null);
       if (res.ok && out.ticket && out.image) {
-        const pic = { ticket: out.ticket, image: out.image, text: clean, style: style ? null : viewStyle };
+        const pic = { ticket: out.ticket, image: out.image, text: clean, style: style ? null : viewStyle, ...(choices && !style ? { choice: modelId } : {}) };
         if (slot === 'sample') setSamples((s) => s.map((x, i) => (i === index ? pic : x)));
         else setViews((v) => ({ ...v, [slot]: pic }));
         return pic;
       }
-      setNote(out.error ?? 'Could not make the picture');
+      setNote(out.error ? withReset(out.error, (out as { resetAt?: string }).resetAt) : 'Could not make the picture');
       return null;
     } catch {
       setNote('No connection. Try again.');
@@ -210,7 +239,7 @@ export function DesignForm(p: Props) {
           type="button"
           className="ic-link dz-slot-go"
           onClick={() => make(slot, i)}
-          disabled={!ready || busy !== null || !clean || left <= 0 || needsFront || needsStyle}
+          disabled={!ready || busy !== null || !clean || left <= 0 || needsFront || needsStyle || !modelReady}
           aria-label={`${pic ? W.form.again : W.form.generate}: ${label}`}
         >
           {busy === key ? W.form.making : pic ? W.form.again : W.form.generate}
@@ -341,6 +370,15 @@ export function DesignForm(p: Props) {
             </>
           )}
 
+          {!style && choices && (
+            <fieldset className="dz-section dz-model-pick">
+              <legend className="dz-label">{W.models.legend}</legend>
+              <ModelPicker choices={choices} modelId={modelId} onPick={pickModel} />
+              {notice?.pick.maker && <ModelNotice maker={notice.pick.maker} askAdult={notice.askAdult} adultTicked={adultTicked} onTick={setAdultTicked} onAnswer={answer} />}
+              <p className="dz-note">{W.models.note}</p>
+            </fieldset>
+          )}
+
           <section className="dz-section" aria-label={style ? 'Sample images' : 'Views'}>
             <p className="dz-label">{style ? W.form.samples(p.limits.samplesMin, p.limits.samplesMax) : W.form.views}</p>
             <ul className={`dz-slots${style ? '' : ' is-views'}${p.kind === 'location' ? ' is-place' : ''}`}>
@@ -366,16 +404,25 @@ export function DesignForm(p: Props) {
             {!style && <p className="dz-note">{W.form.viewsShared}</p>}
             {stale && <p className="ic-error">{W.form.stale}</p>}
             {styleStale && <p className="ic-error">{W.form.viewStyleChanged}</p>}
+            {modelStale && <p className="ic-error">{W.models.changed}</p>}
             {!style && !chosen && p.styles.length > 0 && <p className="dz-note">{W.form.viewStyleFirst}</p>}
             <p className="dz-note">{remixCount ? W.form.remixesLeft(remixCount.left, remixCount.picturesPerRemix) : W.form.left(left)}</p>
             {remixing && p.source && <p className="dz-note">{W.form.fromSource}</p>}
             <p className="dz-note">{W.form.promptIs(p.suffix)}</p>
             <p className="ic-model">
+              {model && !model.open ? (
+                <>
+                  {model.name} · {model.terms} · runs through Vercel AI Gateway
+                </>
+              ) : (
+                <>
               {p.models.text.name} · open weights, {p.models.text.licence} · runs on {p.models.text.host}
               {!style && (
                 <>
                   <br />
                   {W.form.viewModel}: {p.models.edit.name} · open weights, {p.models.edit.licence} · runs on {p.models.edit.host}
+                </>
+              )}
                 </>
               )}
             </p>
@@ -387,7 +434,7 @@ export function DesignForm(p: Props) {
           </div>
           <div className="dz-publish">
             <PublishFlow
-              disabled={!enough || stale || styleStale || busy !== null || (style && !title.trim())}
+              disabled={!enough || stale || styleStale || modelStale || busy !== null || (style && !title.trim())}
               preview={
                 <div className="dz-preview">
                   <p className="dz-title">{title.trim() || (style ? '' : W.page.sheetBy(auth.kind === 'signed-in' && auth.username ? `@${auth.username}` : 'you'))}</p>

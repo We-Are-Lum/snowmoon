@@ -9,6 +9,7 @@ import { AiTag } from './ai-tag';
 import { ChallengeShareFirst } from './challenge-share-first';
 import { ChallengeSubmit } from './challenge-submit';
 import { PostedOn } from './posted-on';
+import { BackstoryShown } from './challenge-backstory';
 
 /**
  * A challenge picture's page, /challenge/p/<version>, share first (owner, 2026-11-05; docs/proposals/challenge-moments.md
@@ -55,6 +56,8 @@ export function ChallengePicture({ id }: { id: string }) {
           <AiTag /> {v.badge && <span className="ch-badge">{v.badge}</span>}
         </figcaption>
       </figure>
+      {/* Its backstory, under the picture (owner, 2026-11-09): invented by its maker, not from the book. */}
+      {v.backstory && <BackstoryShown backstory={v.backstory} maker={v.maker} />}
       {known && mine && <ChallengeShareFirst path={path} w={{ head: v.w.published, texts: v.w.postTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} onCast={setCastHash} />}
       {/* Anyone else (owner, 2026-11-07): "Remix this" first, not "Post it"; sharing it never says "My remix". */}
       {known && !mine && (

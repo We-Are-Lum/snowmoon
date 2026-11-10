@@ -29,7 +29,11 @@ export const CHALLENGE_WORDING = {
   // Draft wording (owner, 2026-11-05 evening): Farcaster, Lens and Bluesky, as the Submit line and the sign-in release say.
   whoCanEnter: () => `Entering needs a Farcaster, Lens or Bluesky account that passes the site’s check; we check when you press ${CHALLENGE.pictureEntries ? 'Make it' : 'Generate'}.`,
   intro: () =>
-    CHALLENGE.pictureEntries
+    CHALLENGE.pictureEntries && !CHALLENGE.moments
+      ? // The owner's words (2026-11-08, the simpler challenge), exactly; "12 to 29 November" and the names come from config
+        // (windowText, CHALLENGE.characters), and scripts/test-challenge-moments.ts ties the whole line to his text.
+        `From ${windowText()}, make your own picture of ${listed(callNames())}: start from one of their pictures, change what you like, pick a style and a model, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.`
+      : CHALLENGE.pictureEntries
       ? // Approved by the owner (2026-11-06; "reviewed by the coordinator, approved by the owner"), the dates and names from config.
         `From ${windowText()}, make your own picture of ${listed(callNames())}: start from one of their pictures, set it at a moment from the book, change what you like, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.`
       : `From ${windowText()}, make your own version of ${listed(callNames())} on snowmoon.party: start from a published sheet, or from someone else’s remix, change it, and publish. Your version gets its own page, credited back to what you built on.`,
@@ -41,7 +45,10 @@ export const CHALLENGE_WORDING = {
     'Make your remix on snowmoon.party with the site’s tools. Every recipe is published.',
     // Draft wording (owner, 2026-11-04: one base per character, three for Deluin and Gladias; was three each, 2026-11-03).
     // Entries as pictures (branch challenge-moments, CHALLENGE.pictureEntries; draft wording, switched with it).
-    CHALLENGE.pictureEntries
+    CHALLENGE.pictureEntries && !CHALLENGE.moments
+      ? // DRAFT wording (branch challenge-simple, 2026-11-08): the moment clause dropped, the start matching Terms §6e's after-text.
+        'Only remixes count: start from one of a character’s pictures on the challenge pages, a base or any remix, including your own. A picture made from scratch isn’t an entry.'
+      : CHALLENGE.pictureEntries
       ? 'Only remixes count: start from one of a character’s pictures on the challenge page and set it at one of the moments. A picture made from scratch isn’t an entry.'
       : 'Only remixes count: for each character, start from one of its bases, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
     // Draft wording (owner, 2026-11-04: Submit and the post link; branch contest, 2026-11-04: one a day, no total cap).
@@ -52,6 +59,8 @@ export const CHALLENGE_WORDING = {
     CHALLENGE.pictureEntries
       ? `Remixing is free: ${numberWord(IMAGES.generationsPerDay)} pictures a day.`
       : `Remixing is free: ${numberWord(IMAGES.designs.remixesPerDay)} remixes a day. A remix is one sheet’s three views; if one of them fails, make it again inside the same remix without using another.`,
+    // The owner's reread (2026-11-09), Backstory.
+    'You can add a short backstory in your own words; it’s shown as invented by you, not from the book.',
     'Entering is free. There is no prize for now.',
     'Post your version anywhere with its link. If you’re remixing someone’s post, quote or reply to it.',
     `A Farcaster account passes the site’s check with a Neynar score of at least ${CHALLENGE.neynarMinScore}, fixed for the whole challenge; Lens and Bluesky accounts pass their own checks, the same ones that let them make pictures.`,

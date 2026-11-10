@@ -6,10 +6,12 @@ import { useEffect, useState } from 'react';
 import { authFetch, webNameProof } from '~/lib/client-auth';
 import { loadDraft, markPublished, saveDraft, type FlowDraft } from '~/lib/challenge/flow-storage';
 import { AiTag } from './ai-tag';
+import { BackstoryField } from './challenge-backstory';
+import { BACKSTORY_WORDING } from '~/lib/challenge/backstory';
 
 /**
  * The preview, /challenge/make/<draft> (owner, 2026-11-05; docs/proposals/challenge-moments.md §1.3 S3): the new
- * picture, the one it started from (small), the character and moment, "Your words" exactly as they will be published,
+ * picture, the one it started from (small), the character (and its moment while the moments are on), "Your words" exactly as they will be published,
  * Try again (another picture with the same words; it counts as a picture) and Publish, and "How it was made" (the exact
  * prompt and the model, collapsed). The draft lives only in this tab (src/lib/challenge/flow-storage.ts).
  *
@@ -23,6 +25,9 @@ export function ChallengePreview({ id }: { id: string }) {
   const [d, setD] = useState<FlowDraft | null | 'gone'>(null);
   const [busy, setBusy] = useState<'again' | 'publish' | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // The optional backstory (owner, 2026-11-09): typed here only; a refusal by the check offers publishing without it.
+  const [story, setStory] = useState('');
+  const [storyRefused, setStoryRefused] = useState(false);
   useEffect(() => setD(loadDraft(id) ?? 'gone'), [id]);
   if (d === null) return <div className="mk-page" aria-busy="true" />;
   if (d === 'gone')
@@ -40,21 +45,25 @@ export function ChallengePreview({ id }: { id: string }) {
   const again = async () => {
     setBusy('again');
     setError(null);
-    const r = await authFetch('/api/challenge/make', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ from: d.from, moment: d.moment.id, words: d.words }) }).catch(() => null);
-    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; error?: string };
+    // The same request again: the moment while the moments are on; else the same style choice (Random draws afresh) and model.
+    const body = d.moment ? { from: d.from, moment: d.moment.id, words: d.words, model: d.modelId } : { from: d.from, words: d.words, style: d.style, model: d.modelId };
+    const r = await authFetch('/api/challenge/make', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
+    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; style?: string | null; error?: string };
     setBusy(null);
     if (!r?.ok || !out.ticket || !out.image) return setError(out.error ?? 'Could not make it');
-    const next = { ...d, ticket: out.ticket, image: out.image, prompt: out.prompt ?? d.prompt };
+    const next = { ...d, ticket: out.ticket, image: out.image, prompt: out.prompt ?? d.prompt, styleLine: out.style ?? d.styleLine ?? null };
     saveDraft(next);
     setD(next);
   };
-  const publish = async () => {
+  const publish = async (withStory = true) => {
     setBusy('publish');
     setError(null);
-    const r = await authFetch('/api/images/publish', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ticket: d.ticket, image: d.image, nameProof: webNameProof() }) }).catch(() => null);
-    const out = (await r?.json().catch(() => ({}))) as { versionId?: string; error?: string };
+    const backstory = withStory && story.trim() ? { text: story } : undefined;
+    const r = await authFetch('/api/images/publish', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ticket: d.ticket, image: d.image, nameProof: webNameProof(), ...(backstory ? { backstory } : {}) }) }).catch(() => null);
+    const out = (await r?.json().catch(() => ({}))) as { versionId?: string; error?: string; reason?: string };
     if (!r?.ok || !out.versionId) {
       setBusy(null);
+      setStoryRefused(out.reason === 'backstory');
       return setError(out.error ?? 'Could not publish it');
     }
     markPublished(d, out.versionId);
@@ -86,17 +95,16 @@ export function ChallengePreview({ id }: { id: string }) {
           </span>
         </figcaption>
       </figure>
-      <p className="mk-at">
-        {d.name} · {d.moment.title} ({d.moment.chip})
-      </p>
+      <p className="mk-at">{d.moment ? `${d.name} · ${d.moment.title} (${d.moment.chip})` : d.name}</p>
       <p className="mk-words">
         <span className="dz-muted">{w.yourWords}</span> “{d.words}”
       </p>
+      <BackstoryField name={d.name} text={story} onText={(v) => { setStory(v); setStoryRefused(false); }} />
       <div className="mk-actions">
         <button type="button" className="ic-secondary mk-again" onClick={again} disabled={busy !== null}>
           {busy === 'again' ? w.making : w.tryAgain}
         </button>
-        <button type="button" className="rl-remix mk-publish" onClick={publish} disabled={busy !== null}>
+        <button type="button" className="rl-remix mk-publish" onClick={() => publish()} disabled={busy !== null}>
           {busy === 'publish' ? w.publishing : w.publish}
         </button>
       </div>
@@ -105,9 +113,19 @@ export function ChallengePreview({ id }: { id: string }) {
           {error}
         </p>
       )}
+      {storyRefused && (
+        <button type="button" className="ic-secondary mk-publish-without" onClick={() => publish(false)} disabled={busy !== null}>
+          {BACKSTORY_WORDING.withoutIt}
+        </button>
+      )}
       <details className="mk-how">
         <summary>{w.howMade}</summary>
         <p className="dz-muted">{d.model}</p>
+        {d.styleLine && (
+          <p className="dz-muted mk-style-line">
+            {w.style}: {d.styleLine}
+          </p>
+        )}
         <pre className="mk-prompt">{d.prompt}</pre>
       </details>
     </div>

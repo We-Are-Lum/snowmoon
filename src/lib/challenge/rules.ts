@@ -59,7 +59,7 @@ export const entriesOpen = (now: Date = new Date(), pub: boolean = CHALLENGE.pub
 
 /**
  * A date of the challenge as people read it, in Pacific time, built from CHALLENGE.dates only. A closing instant
- * (closes) is shown as its last minute: "Sunday 22 November, 23:59 Pacific".
+ * (closes) is shown as its last minute: "Sunday 29 November, 23:59 Pacific".
  */
 export function dateText(key: DateKey, opts: { time?: boolean } = {}, dates: Record<DateKey, string> = CHALLENGE.dates): string {
   // A window that ends at midnight is shown as its last minute; one that ends at a call (09:00) as that time.
@@ -85,7 +85,7 @@ export function shortDateText(key: DateKey, dates: Record<DateKey, string> = CHA
   return `${get('weekday')} ${get('day')} ${get('month')}, ${get('hour')}:${get('minute')} PT`;
 }
 
-/** "6 to 22 November": the window as a span, from the config. */
+/** "12 to 29 November": the window as a span, from the config. */
 export function windowText(dates: Record<DateKey, string> = CHALLENGE.dates): string {
   const d = (k: DateKey) => dateText(k, {}, dates).split(' ').slice(1); // [day, month]
   const [a, am] = d('opens');

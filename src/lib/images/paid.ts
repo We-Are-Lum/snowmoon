@@ -2,8 +2,8 @@ import 'server-only';
 import type postgres from 'postgres';
 import { IMAGES } from '../config';
 import { checkPrompt } from './guard';
-import { ImageUnavailable, type Made } from './fal';
-import { fundedBy, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
+import { ImageRefused, ImageUnavailable, type Made } from './fal';
+import { fundedBy, giveBack, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
 import { blockedName } from './rules';
 import { FREE_WORDING } from '../social/free';
 import { IMAGE_WORDING } from './wording';
@@ -41,21 +41,36 @@ export const LIMIT_SAY = {
   'remix-used': `This remix has used its ${IMAGES.designs.picturesPerRemix} pictures. Press Remix to start a new one.`,
   /** A Lens or Bluesky account without free generations (src/lib/social/free.ts). DRAFT wording. */
   'no-free': FREE_WORDING.none,
+  // Model choice (branch remix-model-choice, DRAFT wording).
+  'closed-limit': IMAGE_WORDING.designs.models.closedLimit,
+  'closed-spend': IMAGE_WORDING.designs.models.closedSpend,
 } as const;
 const say = (refusal: keyof typeof LIMIT_SAY, fid: number) => (refusal === 'limit' ? LIMIT_SAY.limit(perDay(fid)) : LIMIT_SAY[refusal]);
 /** A failure's words, and, when a wallet account's Generate was credited back, that it was. */
 export const failed = (error: string, back: boolean) => (back ? `${error} ${IMAGE_WORDING.prepaid.creditedBack}` : error);
 
+/** The next 00:00 UTC, as an instant (ISO). The server never renders it as a time. */
+export const nextUtcMidnight = (now: Date = new Date()) => new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1)).toISOString();
+
 export async function paidPicture(
   sql: Sql,
   fid: number,
   request: Request,
-  job: { checkText: string; spend?: Spend; make: () => Promise<Made>; /** The prompt check's token budget (a sheet's views: IMAGES.designs.guardMaxTokens). */ guardMaxTokens?: number },
+  job: {
+    checkText: string; spend?: Spend; make: () => Promise<Made>; /** The prompt check's token budget (a sheet's views: IMAGES.designs.guardMaxTokens). */ guardMaxTokens?: number;
+    /**
+     * A picture the model's safety check blocks (the host's checker flagged it, or the model refused): its words, and
+     * whether it is given back to today's count (the challenge's open model, owner 2026-11-09). Its spend stays recorded.
+     * Without it, a blocked picture counts and says "flagged by the safety checker and dropped", as everywhere else.
+     */
+    blocked?: { error: string; giveBack: boolean };
+  },
 ): Promise<Paid> {
   const spend = job.spend;
   const funded = fundedBy(fid);
   const r = await reserve(sql, fid, spend);
-  if (!r.ok) return { ok: false, status: 429, error: say(r.refusal, fid), extra: { reason: r.refusal } };
+  // A closed-cap refusal carries the instant the cap resets (00:00 UTC); the browser writes it in the visitor's own time.
+  if (!r.ok) return { ok: false, status: 429, error: say(r.refusal, fid), extra: { reason: r.refusal, ...(r.refusal === 'closed-spend' ? { resetAt: nextUtcMidnight() } : {}) } };
   const name = blockedName(job.checkText);
   if (name) {
     await settle(sql, {}, spend, funded);
@@ -80,6 +95,11 @@ export async function paidPicture(
   try {
     made = await job.make();
   } catch (e) {
+    // The model's own safety check refused it (branch challenge-models): counted and answered as a dropped picture.
+    if (e instanceof ImageRefused) {
+      await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' }, image: { costUsd: 0, verdict: 'nsfw' } }, spend, funded);
+      return dropped(sql, fid, r, job.blocked);
+    }
     await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' } }, spend, funded);
     console.error('image generation failed', e instanceof ImageUnavailable ? e.message : (e as Error).name);
     const back = await creditBack(sql, r.debitId, 'failed');
@@ -87,11 +107,16 @@ export async function paidPicture(
   }
   await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' }, image: { costUsd: made.costUsd, verdict: made.nsfw ? 'nsfw' : 'ok' } }, spend, funded);
   // Flagged by the host's safety checker: dropped here, never shown or stored.
-  if (made.nsfw) {
-    const back = await creditBack(sql, r.debitId, 'dropped');
-    return { ok: false, status: 422, error: failed('The image was flagged by the safety checker and dropped.', back), extra: { reason: 'nsfw', left: r.left, ...(back ? { creditedBack: true } : {}) } };
-  }
+  if (made.nsfw) return dropped(sql, fid, r, job.blocked);
   return { ok: true, made, left: r.left };
+}
+
+/** A picture the safety check blocked: dropped, never shown or stored; credited back to a wallet; given back when asked. */
+async function dropped(sql: Sql, fid: number, r: { left: number; debitId?: number }, blocked?: { error: string; giveBack: boolean }): Promise<Paid> {
+  const back = await creditBack(sql, r.debitId, 'dropped');
+  const given = blocked?.giveBack ? await giveBack(sql, fid) : false;
+  const left = given ? r.left + 1 : r.left;
+  return { ok: false, status: 422, error: failed(blocked?.error ?? 'The image was flagged by the safety checker and dropped.', back), extra: { reason: 'nsfw', left, ...(back ? { creditedBack: true } : {}), ...(given ? { givenBack: true } : {}) } };
 }
 
 /**
@@ -99,18 +124,24 @@ export async function paidPicture(
  * which is published but not sent to the image model). Blocked names first, then the same model check;
  * its cost goes into the day's totals; refused when the spend caps are reached.
  */
-export async function checkWords(sql: Sql, request: Request, text: string): Promise<{ ok: true } | { ok: false; status: number; error: string }> {
+export async function checkWords(
+  sql: Sql,
+  request: Request,
+  text: string,
+  /** A backstory (branch challenge-models): the larger check budget, and its own refusal words. */
+  opts: { maxTokens?: number; refused?: string } = {},
+): Promise<{ ok: true } | { ok: false; status: number; error: string }> {
   if (!text.trim()) return { ok: true };
-  if (blockedName(text)) return { ok: false, status: 422, error: IMAGE_WORDING.designs.form.nameBlocked };
+  if (blockedName(text)) return { ok: false, status: 422, error: opts.refused ?? IMAGE_WORDING.designs.form.nameBlocked };
   if (!(await wordsCheckFits(sql))) return { ok: false, status: 429, error: LIMIT_SAY.spend };
   let guard;
   try {
-    guard = await checkPrompt(text, request);
+    guard = await checkPrompt(text, request, opts.maxTokens);
   } catch (e) {
     console.error('name check failed', (e as Error).name);
     return { ok: false, status: 503, error: 'The prompt check did not answer. Try again in a moment.' };
   }
   await recordGuard(sql, { costUsd: guard.costUsd, provider: guard.provider, verdict: guard.allow ? 'ok' : 'blocked' });
-  return guard.allow ? { ok: true } : { ok: false, status: 422, error: NAME_REFUSED };
+  return guard.allow ? { ok: true } : { ok: false, status: 422, error: opts.refused ?? NAME_REFUSED };
 }
 export const NAME_REFUSED = IMAGE_WORDING.designs.form.nameRefused;

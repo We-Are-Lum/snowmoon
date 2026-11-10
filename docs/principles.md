@@ -270,6 +270,27 @@ Hosted open-weight models may be listed too (`runs_on: hosted`): for a hosted re
   model and what it drafted, or null.
 - `P3d`: on the live database, every recipe of the house narration (chapter 1
   sampled) has `assist` in the column or in `studio.recipe_assist`.
+- `P3e` (branch remix-model-choice, 2026-11-04, DRAFT): the default is open. The remix form's model choice
+  (`IMAGES.designs.modelChoice`, `src/lib/images/sheet-models.ts`) lists the site's open models first, as the default,
+  with the switch on or off; every closed choice names its maker; every model a choice calls is on `config/models.json`
+  with the same open or closed record.
+  The challenge's Model row (branch challenge-models, 2026-11-08, DRAFT; `CHALLENGE.modelChoice`,
+  `src/lib/challenge/models.ts`) is held to the same rule: FLUX.2 [klein] 4B edit first, then the closed models, each
+  naming its maker ("a closed model by …"), with its maker's retention words, and each gateway call pinned to one
+  provider (Gemini: `vertex` only); with the switch off, only FLUX. (Qwen-Image-Edit was dropped, owner, 2026-11-09.)
+  FLUX is the default, with the one exception below; `P3e` checks every kind of visitor (signed in or out, a wallet
+  account, countries in and out of OpenAI's regions and none, pictures left, closed models on or off, before and
+  after the close) and fails on any closed default wider than the exception, or any other closed model as a default.
+
+**Recorded exception (owner, 2026-11-09, the challenge only; ends when entries close, 29 Nov 2026 23:59 PT).** During
+the remix challenge the Model row starts on GPT Image 2.5 Sunburst (a closed model by OpenAI) for someone who can use
+it: signed in with Farcaster, Lens or Bluesky (not a wallet account), where OpenAI serves (its supported countries,
+without the embargoed ones; not when the country header is missing), with closed models on and enough of today's
+pictures left for one. FLUX stays first in the row and one tap away, and is the default for everyone else. The
+OpenAI line shows under the row whenever GPT is selected, the default included, and the notice and 18+ box are asked
+before the first closed picture on a device. At `CHALLENGE.dates.closes` the default goes back to FLUX for everyone
+by itself (`challengeDefaultModel`, tied to the date; tested on both sides). Open-weight models stay preferred: this
+is the owner's choice for the challenge's pictures, reported here.
 
 **Status.** Pass. Both generation models record `open_weights: true`, their
 license and their weights. The closed drafting model is listed under
@@ -399,6 +420,15 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   (`shuffleFresh(MOMENTS.filter((m) => m.id !== moment))` in `src/components/challenge-make.tsx` only), never weighted
   by popularity, use, spoiler depth or anything else. Its planted violations: a draw from outside the list, a weighted
   draw and a list out of book order, each of which must fail (`scripts/lib/p5g.ts`; `npm run test:challenge`).
+  **The simpler challenge (owner, 2026-11-08; branch challenge-simple):** /challenge is a plain list (each character's
+  name, one line and bases) and a character's page lists every published remix of it newest first, so on both only a
+  character's bases are shuffled (`shuffleFresh(c.bases)` in `src/components/challenge-card.tsx`); shuffling the
+  remixes again must fail. The owner's first remixes are no longer shown apart under "First remixes by @naaate": they sit
+  among the character's remixes, newest first, and are still never entries. With the moments off nothing draws "Surprise me". **A fifth narrow exception (owner,
+  2026-11-08; approved by the owner the same day):** the remix screen's Style row has "Random": the server draws one of the site's published styles,
+  uniformly, when the picture is made (`drawStyle`, `shuffleFresh(published)[0]` in `src/lib/challenge/make.ts` only,
+  on the whole list), and the recipe records both "Random" and the style drawn. Its planted violations, a draw from
+  only some of the styles and a draw weighted toward one, must fail.
   A third narrow exception (owner, 2026-11-04; branch challenge-landing; **pending the owner's yes**): below each
   character's bases, under the heading "First remixes by @naaate", /challenge shows the owner's first remixes of it
   (`CHALLENGE.firstRemixes`, at most two), in the order the owner sets in the config. Chosen by the owner, never by a
@@ -466,14 +496,24 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   (`config/consent.json`, current version) name the same outside services. The
   vocabulary is the services the Privacy page names: Vercel, Vercel AI Gateway,
   Cloudflare, Supabase, Groq, fal.ai, Farcaster (its services, not a Farcaster
-  ID or name), Neynar, GitHub. The pages are read as served.
-  - `P6g`: the Privacy page names every service that About, the notice or the
-    consent screen names, and the three that receive something at Generate.
+  ID or name), Neynar, GitHub, ntfy, OpenAI, Google, Spotify. The pages are read as served.
+  A maker named only for provenance (Midjourney: some pictures the owner made with it outside
+  the site, brought in with the recipe the owner reports) receives nothing and is not a
+  service, so no Privacy line is asked for it (owner, 2026-11-04, choice 5.4).
+  - `P6g`: the Privacy page names every service that About, the notice, the
+    consent screen or a closed model's notice names, and those that receive
+    something at Generate.
   - `P6h`: About names the same set as the Privacy page, no more and no fewer.
+    If About names a provenance-only maker, it says the site sends nothing to it.
   - `P6i`: the notice names exactly the services the Privacy page says receive
     assistant questions (section 5, and section 7's "receive assistant questions").
   - `P6j`: the consent screen names exactly the services that receive the image
-    prompt or the Farcaster ID at Generate: Groq, fal.ai and Neynar.
+    prompt or the Farcaster ID at Generate: Groq, Vercel AI Gateway, fal.ai and
+    Neynar, and, with model choice on, each closed model's maker. With model
+    choice on, its text (own-words-v5, one consent version for everyone: owner,
+    2026-11-04) also says what each maker receives (the prompt and the front
+    view) and gives its one description (`CLOSED_PROVIDERS[maker].retentionWords`).
+    The closed models' notice is a notice, not the consent.
 - `P6k`, `P6l`: the Privacy and Terms pages' words are words the owner (FID 6786)
   has reread (`LEGAL.ownerReread` in `src/lib/legal.ts`), the notice's `P6f`
   rule: any change to the words fails until the owner rereads them; it is set
@@ -514,6 +554,15 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   Farcaster ID, §7's Neynar, Lens-score and Bluesky-check sentences each name the assistant, and the assistant's notice
   no longer says "Farcaster ID" (docs/legal/assistant-any-account-step1.md). The id is free on main and every branch
   (P6z is contest-rehearsal's, P6aa another branch's).
+- `P6t` (branch remix-model-choice, 2026-11-04, DRAFT): model choice for remixers (`IMAGES.designs.modelChoice`) is on
+  only while Privacy §7 says each offered closed model's maker receives the prompt and pictures through Vercel AI
+  Gateway, how they are kept and that they may not be trained on, Privacy §4 says a sheet's views may be made with a
+  closed model, and the consent screen (own-words-v5) says what each maker receives and keeps (docs/legal/remix-model-choice-draft.md). OpenAI and Google
+  are in the outside-services vocabulary of P6g to P6j. Branch challenge-models (2026-11-08) extends it to the
+  challenge's Model row (`CHALLENGE.modelChoice`): Privacy §7's item "for a challenge picture", §4's closed-model line,
+  and consent own-words-v6's sentence (the prompt and the picture you chose), checked the same way
+  (docs/legal/challenge-models-draft.md). The id was free on main and on deep-funding, social-read,
+  sheet-help, find-a-moment (P6v, P6w) and challenge-three-bases (P6s).
 - `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at
@@ -716,12 +765,26 @@ picked for their picture is sent to a model, as its scene line, when they press 
 sent. The exception ends when entries close: after that the hub carries no deeper layer and no moments, and the
 passages are not served.
 
+**Changed (owner, 2026-11-09): on the challenge's pages people work on the whole story, so nothing is marked as a
+spoiler.** No "May spoil later chapters." anywhere under /challenge, on its cards, character pages, rules, remix screens,
+picture pages or backstories (a backstory has no spoiler tick). The reader's own chapter gating stays exactly as it is:
+the reader, the search, "Find a moment", the assistant's limit and a sheet's "What the book says" (only chapters opened on
+the device) are unchanged. `P9g` now fails on any spoiler mark in the challenge's code (planted: one put back) and on the
+sheet page's gating removed; the assistant's limit is `test:chat`'s.
+
 - `P9g`: every passage the challenge's pages can show is one of the six cards' facts and passages or a moment's
   quote, word for word at a block that exists; the first layer cites chapters 1 to 14 only; the deeper layers open with
   "May spoil later chapters."; every moment chip shows its chapter; nothing outside the challenge's pages and APIs
   imports the cards or the moments; and the exception ends exactly when entries close (`spoilerExceptionOn`). The
   proof changes one word in a moment's quote, puts a chapter 24 fact on a card's first layer and imports the cards on
   a sheet page (`scripts/lib/challenge-moments.ts`; `npm run test:challenge` proves each part on its own).
+  **Narrowed (owner, 2026-11-08; branch challenge-simple):** /challenge and a character's page (/challenge/<slug>) show
+  each card's one line only, no facts, deeper layers or "Where they appear"; the moments show nowhere while
+  `CHALLENGE.moments` is off (off since then; their data and code stay), and on the remix screen only when it is on.
+  `P9g` now checks that the cards' component and the pages' data carry nothing past the one line, that the remix
+  screen's moments are sent only with the switch on, each chip with its chapter, and the rest as before; its proofs
+  plant a card's description back on the page, a fetch of the passages, facts or the moments in the pages' data, and
+  the moments sent whatever the switch says.
 
 ---
 

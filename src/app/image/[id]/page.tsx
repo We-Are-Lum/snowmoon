@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { APP_NAME, IMAGES, appUrl } from '~/lib/config';
 import { db } from '~/lib/db';
 import { imageByVersion } from '~/lib/images/data';
-import { bothChecksRan, checksLine, type RecipeForLines } from '~/lib/images/recipe-lines';
+import { RERUN_LINE, bothChecksRan, checksLine, isClosed, modelName, modelTerms, type RecipeForLines } from '~/lib/images/recipe-lines';
 import { passageLabel, passageText } from '~/lib/images/passage';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { byline } from '~/lib/images/byline';
@@ -158,8 +158,9 @@ export default async function ImagePage({ params }: Props) {
           </dd>
           <dt>Model</dt>
           <dd>
-            {(im.model === IMAGES.editModel.id ? IMAGES.editModel : IMAGES.model).name} ({im.model}), open weights, {(im.model === IMAGES.editModel.id ? IMAGES.editModel : IMAGES.model).licence}. It ran on {im.host}, endpoint{' '}
-            <span className="recipe-mono">{im.modelVersion}</span>.
+            {/* The model's name and terms from config/models.json ("open weights, Apache-2.0", or "a closed model by <maker>"; branch challenge-models). */}
+            {modelName(im.model)} ({im.model}), {modelTerms(im.model)}. It ran on {im.host}, endpoint{' '}
+            <span className="recipe-mono">{im.modelVersion}</span>.{isClosed(im.model) ? ` ${RERUN_LINE}` : ''}
           </dd>
           <dt>Settings</dt>
           <dd className="recipe-mono">
@@ -169,7 +170,7 @@ export default async function ImagePage({ params }: Props) {
             {im.seed !== null ? `, seed ${im.seed}` : ''}
           </dd>
           <dt>Checks</dt>
-          <dd>{bothChecksRan(im.checks) ? <>The prompt was checked by gpt-oss-safeguard-20b against the published rules, and the image by the host&apos;s safety checker, before anyone saw it.</> : checksLine({ model: im.model, endpoint: '', host: im.host ?? '', checks: im.checks as RecipeForLines['checks'] })}</dd>
+          <dd>{bothChecksRan(im.checks) && !isClosed(im.model) ? <>The prompt was checked by gpt-oss-safeguard-20b against the published rules, and the image by the host&apos;s safety checker, before anyone saw it.</> : checksLine({ model: im.model, endpoint: '', host: im.host ?? '', checks: im.checks as RecipeForLines['checks'] })}</dd>
           <dt>Request</dt>
           <dd className="recipe-mono">{im.requestId ?? 'not recorded'}</dd>
           <dt>Cost</dt>

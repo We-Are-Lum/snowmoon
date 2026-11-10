@@ -2,6 +2,7 @@ import 'server-only';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { IMAGES } from '../config';
 import { SHORTHAND_ASSIST_SOURCE } from './sheets';
+import type { SheetModelId } from './sheet-models';
 
 /**
  * A draft image is never stored on the server (docs/proposals/add-an-image.md, section 5). The
@@ -57,10 +58,19 @@ export interface Ticket {
 
 export interface TicketChallenge {
   character: string;
-  moment: string;
-  scene: string;
+  /** The moment's id and the scene line sent; absent for a picture made with the moments off (CHALLENGE.moments, 2026-11-08). */
+  moment?: string;
+  scene?: string;
   from: string;
   fromKind: 'sheet' | 'picture';
+  /**
+   * The style row's choice (branch challenge-simple, 2026-11-08): 'published' (a published style, also a 'uses' link
+   * through `designs`), 'random' (the server's draw; `label` and `elementId` say which it drew), 'preset' (this
+   * edition's preset) or 'own' (the person's own words, `text`). `text` is exactly what was added to the prompt.
+   */
+  style?: { choice: 'same' | 'preset' | 'published' | 'random' | 'own'; id: string | null; elementId: string | null; label: string | null; text: string };
+  /** The model chosen on the Model row (src/lib/challenge/models.ts). */
+  model?: string;
 }
 
 export interface TicketSheets {
@@ -117,6 +127,8 @@ export interface SampleTicket {
   source?: { versionId: string; sha256: string };
   /** For a sheet's views counted as a remix: the remix's id (src/lib/images/remixes.ts). */
   remix?: string;
+  /** The sheet's model choice (src/lib/images/sheet-models.ts), set only when it isn't the open default; absent means 'open'. */
+  choice?: SheetModelId;
   guard: { model: string; verdict: 'ok' };
   at: string;
 }
@@ -181,7 +193,7 @@ export function recipeAssist(t: Pick<Ticket, 'style' | 'designs' | 'sheets'> & {
     sources.push(SHORTHAND_ASSIST_SOURCE);
   }
   // A challenge picture's scene line: this edition's, drafted by the coding agent (src/lib/challenge/moments.ts).
-  if (t.challenge) {
+  if (t.challenge?.moment) {
     drafted.push('moment scene line');
     sources.push(`src/lib/challenge/moments.ts (${t.challenge.moment})`);
   }

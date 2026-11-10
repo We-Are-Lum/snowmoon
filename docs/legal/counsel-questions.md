@@ -18,3 +18,14 @@ wants a lawyer or adviser to answer; none is answered here, and nothing here is 
    "no purchase necessary" wording, or rules about equal chances for those who don't pay?
 5. **Who can be paid a prize** (owner, 2026-11-04). The minimum age for a winner (signing in already needs 18+), and the
    countries we can't pay in ETH (on Base) because of sanctions: what we must check before paying, and how.
+6. **Closed models in Ukraine** (owner, 2026-11-08; branch challenge-models, docs/legal/challenge-models-draft.md). The
+   challenge's remix screen offers OpenAI's and Google's closed models only in OpenAI's supported countries, minus the
+   US-embargoed set (Cuba, Iran, North Korea, Syria, and Ukraine's Crimea, Sevastopol, Donetsk and Luhansk), read from
+   the connection's country and region (Vercel's headers). OpenAI lists "Ukraine (with certain exceptions)". The region
+   header can't tell the line of control, so all of the Donetsk and Luhansk regions are refused, and so is a Ukrainian
+   connection with no region; Zaporizhzhia and Kherson are not refused. Is that enough for OpenAI's exceptions and US
+   sanctions law, and is a country read from the connection a reasonable basis?
+7. **"Their makers' terms bind us, not you"** (owner, 2026-11-08; Terms §8). Does "their makers' terms bind us, not you"
+   still hold now that people choose closed models (OpenAI, Google) for their own challenge pictures? Both providers'
+   terms reach "End Users" (OpenAI Services Agreement §3.3; Google Cloud Service Specific Terms §17(b), §20(d)), and we
+   are the customer through Vercel AI Gateway.
