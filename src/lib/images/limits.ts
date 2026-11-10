@@ -39,18 +39,18 @@ export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
   if (isSocialPerson(fid) && (await freeFor(sql, fid, { lookUp: false }))?.free === false) return 0;
   if (isWalletNumber(fid)) return paysFor(await balanceUsd(sql, -fid), priceUsd(IMAGES.reserveUsd));
   // With closed models offered (closedChoiceOn: the challenge's model row, or the sheet form's picker), a closed model's
-  // picture is a row in pool 'closed' (NEXT_remix_model_choice.sql) and counts as CLOSED_IMAGES.countsAs (3) of the
+  // picture is a row in pool 'closed' (0040_remix_model_choice.sql) and counts as CLOSED_IMAGES.countsAs (3) of the
   // day's free pictures. Off, the query is the one the site has always run, so nothing needs the new column.
   const n = closedChoiceOn()
     ? sql`coalesce(sum(case when pool = 'closed' then ${CLOSED_IMAGES.countsAs} else 1 end), 0)::int`
     : sql`count(*)::int`;
   const [r] = await sql`select ${n} as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
-  // Pictures given back today (a FLUX picture fal's safety checker blocked; NEXT_image_asks_back.sql), once that table exists.
+  // Pictures given back today (a FLUX picture fal's safety checker blocked; 0041_image_asks_back.sql), once that table exists.
   const back = (await backTable(sql)) ? Number((await sql<{ n: number }[]>`select count(*)::int as n from studio.image_asks_back where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`)[0]?.n ?? 0) : 0;
   return Math.max(0, Math.min(perDay(fid), perDay(fid) - (r?.n ?? 0) + back));
 }
 
-/** Whether pictures can be given back on this database yet (NEXT_image_asks_back.sql applied). */
+/** Whether pictures can be given back on this database yet (0041_image_asks_back.sql applied). */
 async function backTable(sql: Sql): Promise<boolean> {
   const [r] = await sql<{ ok: boolean }[]>`select to_regclass('studio.image_asks_back') is not null as ok`;
   return Boolean(r?.ok);

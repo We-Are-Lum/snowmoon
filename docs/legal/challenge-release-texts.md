@@ -299,7 +299,7 @@ again) and P6t/P6j's wording checks follow it.
   box is read, not a "Write your own" style.
 - **A FLUX picture fal's safety checker blocks** uses none of today's pictures (its spend still counts against the
   caps; fal's checker stays on), at most 3 times a person a UTC day; the 4th and later count as usual. This needs
-  `NEXT_image_asks_back.sql` (a new append-only table, studio.image_asks_back). Until the owner applies it, the site
+  `0041_image_asks_back.sql` (a new append-only table, studio.image_asks_back). Until the owner applies it, the site
   checks for the table on each count and give-back (`to_regclass`), finds none, and counts a blocked picture as
   before; nothing else changes and nothing fails (tested: M4g with the table hidden). Prompt-check refusals, and a
   closed model's own refusals, still count as before.

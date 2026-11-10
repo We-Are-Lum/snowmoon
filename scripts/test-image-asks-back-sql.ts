@@ -1,5 +1,5 @@
 /**
- * NEXT_image_asks_back.sql (branch challenge-models, owner 2026-11-09), tested on an in-memory Postgres (PGlite), as
+ * 0041_image_asks_back.sql (branch challenge-models, owner 2026-11-09), tested on an in-memory Postgres (PGlite), as
  * scripts/test-remix-model-choice-sql.ts tests its file: the parts are read from the file itself, so what is tested is
  * what the owner pastes. Never a production database.
  *
@@ -18,7 +18,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const FILE = path.join(ROOT, 'supabase/migrations/NEXT_image_asks_back.sql');
+const FILE = path.join(ROOT, 'supabase/migrations/0041_image_asks_back.sql');
 const failures: string[] = [];
 let passed = 0;
 const check = (label: string, ok: boolean, detail = '') => {
@@ -55,7 +55,7 @@ check('the read-back inserts and deletes a realistic row', /insert into studio\.
 const pg = new PGlite();
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort()) await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
-await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations/NEXT_remix_model_choice.sql'), 'utf8'));
+await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations/0040_remix_model_choice.sql'), 'utf8'));
 await pg.exec(`insert into studio.image_asks (fid, at) values (6852, now()), (6852, now() - interval '1 day')`);
 
 async function snapshot(): Promise<string> {

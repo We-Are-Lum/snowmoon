@@ -249,11 +249,10 @@ export const LEGAL: {
     // were ozmbuf.
     // 2026-11-09, owner's reread (relayed by the coordinator): §4's backstory sentence in the owner's shorter form, "If
     // you add a backstory to a challenge picture, it is kept and shown with the picture." The words before were d8fe0h.
-    // NOT YET REREAD: 2026-11-09, final review (coordinator reviewed, owner approved the words): §4 adds "Until entries
-    // close, the closed model by OpenAI is chosen to start with if you can use it; you can change it before you make the
-    // picture." The current words are k5nsr6; P6k stays red until the owner rereads §4 and says "reread", then this key
-    // is set to k5nsr6 (never by an agent on its own).
-    privacy: { words: '18g3ada', on: '2026-11-09', by: 'FID 6786' },
+    // 2026-11-09, owner's reread of the final review (coordinator reviewed; the owner: "Reread: Privacy §4 as in the
+    // final report"): §4 adds "Until entries close, the closed model by OpenAI is chosen to start with if you can use it;
+    // you can change it before you make the picture." The words before were 18g3ada.
+    privacy: { words: 'k5nsr6', on: '2026-11-09', by: 'FID 6786' },
   },
 };
 

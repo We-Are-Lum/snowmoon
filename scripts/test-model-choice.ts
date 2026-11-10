@@ -9,7 +9,7 @@
  *  M2  the default is the open models, listed first;
  *  M3  one model per sheet: views from two choices are refused, at the side/back and at publish;
  *  M4  a closed picture counts as 3 of the free pictures (no separate per-person count) and the closed site cap ($20 since 2026-11-09, $5 under the free cap),
- *      on an in-memory Postgres with every migration, NEXT_remix_model_choice.sql included;
+ *      on an in-memory Postgres with every migration, 0040_remix_model_choice.sql included;
  *  M5  the recipe lines: the closed label, the closed safety line and the can't-be-re-run line; open lines unchanged;
  *  M6  the safety line is the agreed wording, word for word;
  *  M7  the switch can't be on without Privacy (P6t) and the consent screen (own-words-v5) saying what each maker
@@ -433,7 +433,7 @@ proven(
     guardVerdict = '{"allow": true}';
     const lax = await refusedFor(4107, 'Zei on a ledge', 'Studio Ghibli look', '{"allow": true}'); // planted: a check that lets it through
     // M4g (owner, 2026-11-09): a FLUX picture fal's checker blocks, made for the challenge (blocked.giveBack), answers the
-    // owner's words and uses none of today's pictures (given back: NEXT_image_asks_back.sql, applied here); its spend is
+    // owner's words and uses none of today's pictures (given back: 0041_image_asks_back.sql, applied here); its spend is
     // still recorded (verdict nsfw). Without giveBack (elsewhere on the site) it counts, as before; a prompt-check
     // refusal counts too, whatever is asked.
     {
@@ -454,7 +454,7 @@ proven(
       const refused = await run(4203, true, '{"allow": false, "category": "sexual"}');
       // At most 3 given back a person a day (owner, 2026-11-09): the 2nd and 3rd are given back, the 4th counts.
       const second = await run(4201, true), third = await run(4201, true), fourth = await run(4201, true);
-      // Until NEXT_image_asks_back.sql is applied: no table, so a blocked picture counts and nothing fails.
+      // Until 0041_image_asks_back.sql is applied: no table, so a blocked picture counts and nothing fails.
       await su('alter table studio.image_asks_back rename to image_asks_back_hidden');
       const noTable = await run(4204, true);
       await su('alter table studio.image_asks_back_hidden rename to image_asks_back');

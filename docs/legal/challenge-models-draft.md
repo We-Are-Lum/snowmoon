@@ -15,7 +15,7 @@ Legal texts describe today: these words are in `src/lib/legal.ts`, `src/app/abou
 on this branch, which is the release that turns `CHALLENGE.modelChoice` on. Merge only after the owner says "reread"
 (P6k, P6l fail until then: after the reread, `LEGAL.ownerReread.privacy.words` becomes `d8fe0h` and
 `LEGAL.ownerReread.terms.words` becomes `1finiyh` (with Terms §6, 2026-11-08); v2's keys, which also cover challenge-simple's §6e redraft, merged in
-here from `docs/legal/challenge-simple-draft.md`), and only once `NEXT_remix_model_choice.sql` is applied.
+here from `docs/legal/challenge-simple-draft.md`), and only once `0040_remix_model_choice.sql` is applied.
 
 "Before" is main at `00722d70`. Shortest true sentences; no labels, gateway accounts or changeable thresholds (the
 number 3 and the caps are on the screen, not in the legal texts).
