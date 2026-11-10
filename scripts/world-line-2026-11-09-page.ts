@@ -16,6 +16,8 @@ const wl = JSON.parse(readFileSync(path.join(ROOT, 'docs/starting-sheet-drafts/w
 const bw = JSON.parse(readFileSync(path.join(ROOT, 'docs/starting-sheet-drafts/book-world-2026-11-09/ledger.json'), 'utf8')) as any; // eslint-disable-line @typescript-eslint/no-explicit-any
 const nf = JSON.parse(readFileSync(path.join(ROOT, 'docs/starting-sheet-drafts/near-future-2026-11-09/ledger.json'), 'utf8')) as any; // eslint-disable-line @typescript-eslint/no-explicit-any
 const NFFULL = path.join(OUT, '..', 'near-future', 'full');
+const gs = JSON.parse(readFileSync(path.join(ROOT, 'docs/starting-sheet-drafts/gemini-settings-2026-11-09/ledger.json'), 'utf8')) as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+const GSFULL = path.join(OUT, '..', 'gemini-settings', 'full');
 const REFS = path.join(OUT, '..', 'style-test', 'refs');
 const FULL = path.join(OUT, 'full');
 const BWFULL = path.join(OUT, '..', 'book-world', 'full');
@@ -41,6 +43,7 @@ const perWl = sum(wl.calls, (c) => (c.kind === 'guard' ? 'guard' : c.model ?? 'o
 const spentWl = Object.values(perWl).reduce((a, b) => a + b, 0);
 const spentBw = bw.calls.reduce((n: number, c: any) => n + c.cost_usd, 0); // eslint-disable-line @typescript-eslint/no-explicit-any
 const spentNf = nf.calls.reduce((n: number, c: any) => n + c.cost_usd, 0); // eslint-disable-line @typescript-eslint/no-explicit-any
+const spentGs = gs.calls.reduce((n: number, c: any) => n + c.cost_usd, 0); // eslint-disable-line @typescript-eslint/no-explicit-any
 const usd = (x: number) => `$${x.toFixed(2)}`;
 type J = { case: number; model: string; variant?: string; change_done: string; kept: string; why_not_kept: string | null; world: string; shareable: string; reading: string; promo_star?: boolean };
 const judged = wl.judged_by_eye as J[];
@@ -104,6 +107,21 @@ async function main() {
     nfRows.push(`<div class="row"><h3><span class="num">${r.case}</span>${NAME[r.character]} · “${esc(r.words)}”</h3><div class="grid three">${cells.join('')}</div></div>`);
   }
   const nfStars = nfJ.filter((j) => j.promo_star).length;
+  // Gemini settings: the GPT near-future picture of the same case and setting, then Gemini's.
+  type GJ = NJ & { figures: number };
+  const gsJ = gs.judged_by_eye as GJ[];
+  const gmarks = (j: GJ) => `<ul class="marks"><li class="${cls(j.change_done === 'yes')}">change done: ${j.change_done}</li><li class="${cls(j.kept === 'yes')}">still them (face and skin): ${j.kept}</li><li class="${cls(j.world === 'yes')}">this world: ${j.world}</li><li class="${cls(j.futuristic === 'yes')}">futuristic, not medieval: ${j.futuristic}</li><li class="${cls(j.figures === 1)}">figures: ${j.figures}</li><li class="${cls(j.shareable === 'yes')}">shareable: ${j.shareable}</li></ul>`;
+  const gsRows: string[] = [];
+  for (const g of (gs.calls as any[]).filter((x) => x.kind === 'picture' && x.status === 'ok')) { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const jn = nfJ.find((x) => x.case === g.case && x.setting === g.setting)!;
+    const nrow = (nf.calls as any[]).find((x) => x.kind === 'picture' && x.case === g.case && x.setting === g.setting && x.status === 'ok'); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const jg = gsJ.find((x) => x.case === g.case && x.setting === g.setting)!;
+    const left = `<figure><img src="img/${nrow.file}" width="560" height="315" loading="lazy" alt="${esc(`${NAME[g.character]}, ${g.words}, setting ${g.setting}, by GPT Image 2.5. AI-generated test picture.`)}"><figcaption><b>${jn.promo_star ? '<span class="star">★</span> ' : ''}GPT · setting ${g.setting} (section 3)</b><span>${esc(MODELS[1].label)}</span><em>${esc(jn.reading)}</em></figcaption></figure>`;
+    const right = `<figure><img src="${await small(path.join(GSFULL, g.file), g.file)}" width="560" height="315" loading="lazy" alt="${esc(`${NAME[g.character]}, ${g.words}, setting ${g.setting}, by Gemini 3.1 Flash Image. AI-generated test picture.`)}"><figcaption><b>${jg.promo_star ? '<span class="star">★</span> ' : ''}Gemini · setting ${g.setting} · Same as this picture</b><span>${esc(MODELS[2].label)}</span>${gmarks(jg)}<em>${esc(jg.reading)}</em></figcaption></figure>`;
+    gsRows.push(`<div class="row"><h3><span class="num">${g.case}</span>${NAME[g.character]} · “${esc(g.words)}” · setting ${g.setting}: “${esc(gs.settings[g.setting].text)}”</h3><div class="grid two">${left}${right}</div></div>`);
+  }
+  if (gs.not_made) gsRows.push(`<p class="lead">${esc(gs.not_made)}</p>`);
+  const gsStars = gsJ.filter((j) => j.promo_star).length;
   const bySetting = Object.keys(nf.settings).map((k) => { const js = nfJ.filter((j) => j.setting === k); return `<tr><th>${k}</th><td>${esc(nf.settings[k].text)}</td><td>${js.length}</td><td>${js.filter((j) => j.world === 'yes').length}</td><td>${js.filter((j) => j.promo_star).length}</td></tr>`; }).join('');
   const html = `<!doctype html>
 <html lang="en">
@@ -161,15 +179,16 @@ figcaption b { display: block; } figcaption span { color: var(--muted); display:
 <blockquote>${esc(wl.world_line)}</blockquote>
 <p>FLUX and GPT Image 2.5 on all 12; Gemini on cases 1, 5, 8 and 11 (cases 3 and 10 didn’t fit the cap). FLUX uses one seed for both; GPT and Gemini take no seed, so their pairs also differ by chance. Then a GPT-only follow-up with a book-based line (section 2). The marks are the coding agent’s reading, strict on skin tone. All prompts passed the prompt check.</p>
 <p>The project’s own test pictures: not published. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT until the owner approves it.</p>
-<div class="spend"><div><b>${usd(spentWl)}</b><span>world line, of its $2.00 cap</span></div><div><b>${usd(perWl.flux ?? 0)}</b><span>FLUX</span></div><div><b>${usd(perWl.gpt ?? 0)}</b><span>GPT Image 2.5</span></div><div><b>${usd(perWl.gemini ?? 0)}</b><span>Gemini</span></div><div><b>${usd(spentBw)}</b><span>book-world follow-up, of its $0.75 cap</span></div><div><b>${usd(spentNf)}</b><span>near-future settings, of its $1.00 cap</span></div></div>
+<div class="spend"><div><b>${usd(spentWl)}</b><span>world line, of its $2.00 cap</span></div><div><b>${usd(perWl.flux ?? 0)}</b><span>FLUX</span></div><div><b>${usd(perWl.gpt ?? 0)}</b><span>GPT Image 2.5</span></div><div><b>${usd(perWl.gemini ?? 0)}</b><span>Gemini</span></div><div><b>${usd(spentBw)}</b><span>book-world follow-up, of its $0.75 cap</span></div><div><b>${usd(spentNf)}</b><span>near-future settings, of its $1.00 cap</span></div><div><b>${usd(spentGs)}</b><span>Gemini settings, of its $0.40 cap</span></div></div>
 <div class="tablewrap"><table><thead><tr><th>Model</th><th>World line</th><th>Pictures</th><th>Change came through</th><th>Still them</th><th>Snowmoon’s world</th><th>Shareable</th></tr></thead><tbody>${rowsSum.join('')}</tbody></table></div>
 </div>
 <h2>The six bases</h2>
 <div class="fronts">${fronts.join('')}</div>
-<nav><ol><li><a href="#world">Without and with the world line</a></li><li><a href="#book">GPT: the book-based world line</a></li><li><a href="#future">GPT: near-future settings</a></li></ol></nav>
+<nav><ol><li><a href="#world">Without and with the world line</a></li><li><a href="#book">GPT: the book-based world line</a></li><li><a href="#future">GPT: near-future settings</a></li><li><a href="#gemini-settings">Gemini: the settings pool</a></li></ol></nav>
 <section id="world"><h2>1. Without and with the world line</h2>${sections.join('\n')}</section>
 <section id="book"><h2>2. GPT: the book-based world line</h2><p class="lead">GPT Image 2.5 only, 6 cases (one per character), with this line in the same place, and the style row set to the style test’s “Comic book” and “Comic 3D mix” in turn (test-only, not offered on the challenge). Left: the first world line’s GPT picture (the case’s own style). Right: the book-based line. ★ marks a picture good enough for promo: good-looking, clearly the character, clearly this world (${stars} of ${bwJ.length}).</p><blockquote>${esc(bw.world_line)}</blockquote>${bwRows.join('\n')}</section>
 <section id="future"><h2>3. GPT: near-future settings</h2><p class="lead">GPT Image 2.5 only, the same 6 cases. The line, in the same place: “${esc(nf.world_line_template)}”, with {setting} one of six settings drawn from the book, two different ones per case (drawn by a seeded generator, ${esc(nf.draw.generator)} seed ${nf.draw.seed}). Style: Same as this picture and Mood in turn, by case (${esc(nf.style_note)}). Left: the book-based line from section 2. ★ marks a picture good enough for promo (${nfStars} of ${nfJ.length}).</p><div class="tablewrap"><table><thead><tr><th>Setting</th><th>Text</th><th>Pictures</th><th>This world</th><th>★</th></tr></thead><tbody>${bySetting}</tbody></table></div>${nfRows.join('\n')}</section>
+<section id="gemini-settings"><h2>4. Gemini: the settings pool</h2><p class="lead">Gemini 3.1 Flash Image (vertex only, zero data retention), the same near-future line with one setting per case from the pool E, A, B, C, D (F dropped), style Same as this picture, the shipping prompt from the release (origin/main 6cbb582). Left: GPT’s picture of the same case and setting. ★ marks a picture good enough for promo (${gsStars} of ${gsJ.length}).</p>${gsRows.join('\n')}</section>
 </main>
 </body>
 </html>

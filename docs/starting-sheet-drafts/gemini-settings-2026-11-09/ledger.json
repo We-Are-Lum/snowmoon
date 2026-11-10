@@ -1,0 +1,490 @@
+{
+ "about": "Gemini settings test 2026-11-09: Gemini 3.1 Flash Image, 5 cases, one setting each (E, A, B, C, D), style Same as this picture. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "world_line_template": "Set it in this world, where it fits: a near future, not a fantasy or medieval past; {setting}. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.",
+ "settings": {
+  "A": {
+   "text": "stone-brick houses behind tall trees, tall apartment towers with many windows above the treetops, small drones overhead",
+   "blocks": [
+    "c1-b2",
+    "c1-b13",
+    "c1-b4"
+   ]
+  },
+  "B": {
+   "text": "greenery mixed with glass-and-steel buildings with sharp edges",
+   "blocks": [
+    "c3-b72",
+    "c13-b24"
+   ]
+  },
+  "C": {
+   "text": "a chaotic mix of stone, concrete and glass-and-steel buildings, tall and short, some half-built",
+   "blocks": [
+    "c5-b11",
+    "c22-b2"
+   ]
+  },
+  "D": {
+   "text": "people with watches and hand devices, gates with glowing green circles, small robots with screen faces",
+   "blocks": [
+    "c1-b4",
+    "c1-b41",
+    "c3-b82"
+   ]
+  },
+  "E": {
+   "text": "a half-kilometre-tall mountain pyramid at the edge of the city",
+   "blocks": [
+    "c4-b48"
+   ]
+  }
+ },
+ "assignment": {
+  "1": [
+   "D"
+  ],
+  "4": [
+   "E"
+  ],
+  "5": [
+   "C"
+  ],
+  "7": [
+   "A"
+  ],
+  "12": [
+   "B"
+  ]
+ },
+ "cap_usd": 0.4,
+ "stop_at_usd": 0.36,
+ "seed": 20261109,
+ "refs": {
+  "zei": {
+   "version": "bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d",
+   "url": "https://pictures.snowmoon.party/images/readers/131f235227a54b06f6f11253f37a09b5.jpg",
+   "sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c"
+  },
+  "gladias": {
+   "version": "68364375-0f33-46fd-9755-2fd2b551198a",
+   "url": "https://pictures.snowmoon.party/images/readers/b9b6c00952cb47e936dc601676a7c34b.jpg",
+   "sha256": "b9b6c00952cb47e936dc601676a7c34b916355e8b4f979db4d7465ea024d0947"
+  },
+  "bai": {
+   "version": "110d5973-31c2-4d96-9a88-5838d8a6d868",
+   "url": "https://pictures.snowmoon.party/images/readers/01538922456b9bf61192ed291b8f2659.jpg",
+   "sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96"
+  },
+  "seila": {
+   "version": "1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba",
+   "url": "https://pictures.snowmoon.party/images/readers/3ef4825ca8f49aabf05ddcdaa8119e9b.jpg",
+   "sha256": "3ef4825ca8f49aabf05ddcdaa8119e9b229f523a3dfc1dc2af0238cbc95a4d13"
+  },
+  "deluin": {
+   "version": "75a94420-df70-4f43-a3a6-4c2b571e72ab",
+   "url": "https://pictures.snowmoon.party/images/readers/2b45d17da426df0304fc84ded0f3f0c4.jpg",
+   "sha256": "2b45d17da426df0304fc84ded0f3f0c464472c55c96aa517735f9837368432d4"
+  },
+  "mu": {
+   "version": "15a9af1d-9eef-4e25-be57-738d9823dd74",
+   "url": "https://pictures.snowmoon.party/images/readers/3e6ae696865441d24aa1dde262dac043.jpg",
+   "sha256": "3e6ae696865441d24aa1dde262dac043964ab8c9633d19174eb7074091087fb5"
+  }
+ },
+ "prompts": {
+  "66a35519b241265107c920262e35fc810511826a8cda933450644a0cc2c3cd23": "at a big sports game\n\nZei is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with light golden-tan skin and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; people with watches and hand devices, gates with glowing green circles, small robots with screen faces. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "1e8fa0178c96e2a869add21b09a0f2b8777db4e2004c12deed27f880bcce0be9": "going out to a party\n\nGladias is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with warm light-brown skin, a short beard and dark eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; a half-kilometre-tall mountain pyramid at the edge of the city. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "02a560580d54b3d1aa37784bcdebe23006677f37f65edb92b1b4e55b548ca951": "as the villain\n\nBai is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with dark brown skin, tattooed arms and gold earrings.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; a chaotic mix of stone, concrete and glass-and-steel buildings, tall and short, some half-built. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "60adfe02e850198315886312df753404eb70c77bf84218ca337065338c52ae54": "walking home in the rain at night\n\nSeila is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; stone-brick houses behind tall trees, tall apartment towers with many windows above the treetops, small drones overhead. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "cabf0946ae46e1465f4608dcb88d1691536897f87740735e3cb8faf3704e7c26": "on vacation\n\nMu is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; greenery mixed with glass-and-steel buildings with sharp edges. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "guard",
+   "prompt_sha256": "66a35519b241265107c920262e35fc810511826a8cda933450644a0cc2c3cd23",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000138825,
+   "cost_source": "reported",
+   "worst_usd": 0.0005425499999999999,
+   "at": "2026-11-10T04:00:36.346Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "1e8fa0178c96e2a869add21b09a0f2b8777db4e2004c12deed27f880bcce0be9",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000220575,
+   "cost_source": "reported",
+   "worst_usd": 0.000540975,
+   "at": "2026-11-10T04:00:37.383Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "02a560580d54b3d1aa37784bcdebe23006677f37f65edb92b1b4e55b548ca951",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00014415,
+   "cost_source": "reported",
+   "worst_usd": 0.0005426999999999999,
+   "at": "2026-11-10T04:00:38.069Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "60adfe02e850198315886312df753404eb70c77bf84218ca337065338c52ae54",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000158775,
+   "cost_source": "reported",
+   "worst_usd": 0.0005463,
+   "at": "2026-11-10T04:00:38.943Z"
+  },
+  {
+   "kind": "guard",
+   "prompt_sha256": "cabf0946ae46e1465f4608dcb88d1691536897f87740735e3cb8faf3704e7c26",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000117675,
+   "cost_source": "reported",
+   "worst_usd": 0.0005396999999999999,
+   "at": "2026-11-10T04:00:39.631Z"
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gemini",
+   "status": "ok",
+   "retention": {
+    "provider": "vertex",
+    "zero_data_retention": true,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-10T04:00:39.697Z"
+   },
+   "cost_usd": 0,
+   "at": "2026-11-10T04:00:39.697Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "D",
+   "case": 1,
+   "character": "zei",
+   "words": "at a big sports game",
+   "style_row": "Same",
+   "style_used": null,
+   "setting": "D",
+   "setting_blocks": [
+    "c1-b4",
+    "c1-b41",
+    "c3-b82"
+   ],
+   "prompt_sha256": "66a35519b241265107c920262e35fc810511826a8cda933450644a0cc2c3cd23",
+   "file": "gs-01-zei-D.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71STYJ462H1GS79ASJCW3W9",
+   "status": "ok",
+   "cost_usd": 0.067636,
+   "cost_source": "reported by the gateway",
+   "sha256": "e8e906a9a73697efdc4bec74b34506d92c68185f0825d466901073daca674e68",
+   "original_sha256": "581698f305e0d89987d40461daa9b1da4904f8b51b8ec46e885be696625b1f6c",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T04:00:54.449Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "futuristic": "yes",
+    "figures": 1,
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "in a stadium concourse: green-ring gates, a screen-face robot, hand devices, a hologram pitch"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "E",
+   "case": 4,
+   "character": "gladias",
+   "words": "going out to a party",
+   "style_row": "Same",
+   "style_used": null,
+   "setting": "E",
+   "setting_blocks": [
+    "c4-b48"
+   ],
+   "prompt_sha256": "1e8fa0178c96e2a869add21b09a0f2b8777db4e2004c12deed27f880bcce0be9",
+   "file": "gs-04-gladias-E.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71SVCYSF3ZNKNKAJ65JT2MA",
+   "status": "ok",
+   "cost_usd": 0.067637,
+   "cost_source": "reported by the gateway",
+   "sha256": "84f21ccd3d553420d3dea4b50b7ebe3fdf4dcc3eb1728d107fdc7503ec81ab01",
+   "original_sha256": "b54b7104bb48a8f7cd3c5805c28eaeb46e786342eeb31f9c13cd9daa72225449",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T04:01:07.535Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "futuristic": "yes",
+    "figures": 1,
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "a terrace party on the lit mountain pyramid, neon city below"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "C",
+   "case": 5,
+   "character": "bai",
+   "words": "as the villain",
+   "style_row": "Same",
+   "style_used": null,
+   "setting": "C",
+   "setting_blocks": [
+    "c5-b11",
+    "c22-b2"
+   ],
+   "prompt_sha256": "02a560580d54b3d1aa37784bcdebe23006677f37f65edb92b1b4e55b548ca951",
+   "file": "gs-05-bai-C.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71SVSR9NM13D1F6TEGZ3RNR",
+   "status": "ok",
+   "cost_usd": 0.0676375,
+   "cost_source": "reported by the gateway",
+   "sha256": "d9bc43bdd088ac189078421a03e3015c274ce36b8da73a2fc42381b192678a73",
+   "original_sha256": "5478217d00c9d3ef7e8274996004e2b6388da776f15b579aa1656544ffe70d86",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T04:01:22.425Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "partly",
+    "kept": "yes",
+    "world": "yes",
+    "futuristic": "yes",
+    "figures": 1,
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "armoured on a rooftop among half-built towers and drones; more agent than villain"
+   }
+  },
+  {
+   "kind": "picture",
+   "model": "gemini",
+   "variant": "A",
+   "case": 7,
+   "character": "seila",
+   "words": "walking home in the rain at night",
+   "style_row": "Same",
+   "style_used": null,
+   "setting": "A",
+   "setting_blocks": [
+    "c1-b2",
+    "c1-b13",
+    "c1-b4"
+   ],
+   "prompt_sha256": "60adfe02e850198315886312df753404eb70c77bf84218ca337065338c52ae54",
+   "file": "gs-07-seila-A.jpg",
+   "endpoint": "google/gemini-3.1-flash-image",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M71SW89QF9MGDN7XTESBFVWB",
+   "status": "ok",
+   "cost_usd": 0.06764,
+   "cost_source": "reported by the gateway",
+   "sha256": "5298fe776fac81854380dbbf80d4007ebfa40cf3bffca39a6e550c618888f737",
+   "original_sha256": "b067e126c65f356df66f9c84c1bab67e31812fff742fd1194e10cf1c3985f2ca",
+   "original_size": "1376x768",
+   "crop": {
+    "words": "cropped from 43:24 to 16:9, from both sides",
+    "original": "1376x768",
+    "kept": {
+     "left": 6,
+     "top": 0,
+     "width": 1365,
+     "height": 768
+    },
+    "removed_top": 0,
+    "removed_bottom": 0,
+    "removed_left": 6,
+    "removed_right": 5
+   },
+   "settings": {
+    "modalities": [
+     "text",
+     "image"
+    ],
+    "aspect_ratio": "16:9",
+    "gateway": {
+     "zeroDataRetention": true,
+     "disallowPromptTraining": true,
+     "only": [
+      "vertex"
+     ]
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-10T04:01:36.144Z",
+   "attempt": 1,
+   "worst_usd": 0.09,
+   "judged": {
+    "change_done": "yes",
+    "kept": "yes",
+    "world": "yes",
+    "futuristic": "yes",
+    "figures": 1,
+    "shareable": "yes",
+    "promo_star": true,
+    "reading": "rain at night under a glowing umbrella; brick houses, trees, monorail, towers"
+   }
+  }
+ ],
+ "judged_by_eye": [
+  {
+   "case": 1,
+   "setting": "D",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "yes",
+   "futuristic": "yes",
+   "figures": 1,
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "in a stadium concourse: green-ring gates, a screen-face robot, hand devices, a hologram pitch"
+  },
+  {
+   "case": 4,
+   "setting": "E",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "yes",
+   "futuristic": "yes",
+   "figures": 1,
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "a terrace party on the lit mountain pyramid, neon city below"
+  },
+  {
+   "case": 5,
+   "setting": "C",
+   "change_done": "partly",
+   "kept": "yes",
+   "world": "yes",
+   "futuristic": "yes",
+   "figures": 1,
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "armoured on a rooftop among half-built towers and drones; more agent than villain"
+  },
+  {
+   "case": 7,
+   "setting": "A",
+   "change_done": "yes",
+   "kept": "yes",
+   "world": "yes",
+   "futuristic": "yes",
+   "figures": 1,
+   "shareable": "yes",
+   "promo_star": true,
+   "reading": "rain at night under a glowing umbrella; brick houses, trees, monorail, towers"
+  }
+ ],
+ "not_made": "Case 12 (Mu, setting B): stopped by the cap rule (spent $0.2713 + worst $0.09 = $0.3613 > $0.36)."
+}
