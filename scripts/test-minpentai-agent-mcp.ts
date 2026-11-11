@@ -136,8 +136,8 @@ try {
   check('M23 the record reveals the computer\'s random value, matching the commitment shown at the start', /^[0-9a-f]{64}$/.test(String(rec.out.computer_random)) && rec.out.computer_random_commitment === committed && createHash('sha256').update(String(rec.out.computer_random)).digest('hex') === committed);
   check('M19 every commitment in the record has its salt', recTurns.length > 0 && recTurns.every((t) => /^[0-9a-f]{64}$/.test(t.C.salt) && /^[0-9a-f]{64}$/.test(t.A.salt) && /^[0-9a-f]{64}$/.test(t.C.commitment)));
   const after = await (await fetch(live)).text();
-  // The page as #107 left it: the whole board at the end; the end says why (owner, 2026-11-04; worded 2026-11-11: "Over: you won with more towers standing, 5 to 1, at step 144").
-  check('M20 after the end the live link shows the whole board and why it ended', /Over: [^<]*at step \d+/.test(after) && /The whole board at the end/.test(after), (after.match(/Over: [^<]{0,120}/) ?? ['no "Over:"'])[0]);
+  // The page as #107 left it: the whole board at the end; the end says why (owner, 2026-11-04; worded 2026-11-12: "Over at step 144: you won, 3 towers standing to their 1.", header "Standing 3–1 · Destroyed 3–3").
+  check('M20 after the end the live link shows the whole board and why it ended', /Over at step \d+: [^<]*\./.test(after) && /The whole board at the end/.test(after), (after.match(/Over at step [^<]{0,120}/) ?? ['no "Over at step"'])[0]);
   // The table (0032_minpentai_agent_matches.sql v2): the exact ruleset, updated_at stamped on every save, nobody but the server reads it, and the server can't delete.
   const row = (await S.pg.query<{ ruleset: string; level: number; stamped: boolean }>(`select ruleset, level, updated_at > created_at as stamped from studio.mp_agent_matches where id = $1`, [id])).rows[0];
   check('M24 the match is stored under its exact ruleset and level', row?.ruleset === 'book-2' && row.level === 2, JSON.stringify(row));

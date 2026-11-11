@@ -17,7 +17,7 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { drawRules, engine, layout, other, rng, verdict, type AnyPiece, type Engine, type Kills, type Placement, type Side, type World } from '../versions/engine';
 import type { Settings } from '../versions/schema';
 import { SOLO_V3, type VersionRules } from '../versions/solo-v1';
-import { TurnWatch, tieKills, type Dark } from './summary';
+import { TurnWatch, tieKills, type Dark, type Held } from './summary';
 import { emptyOwnSeen, outOfSight, updOwnSeen, withOwnSeen, type OwnSeen } from '../versions/own-seen';
 import { BOOK_3_DRAFT, BOOK_4_DRAFT, BOOK_EDITION } from '../versions/book-edition';
 import { PRESETS, TOP_LEVEL, searchPlan, type BookPlay, type Computer, type Preset } from '../versions/search';
@@ -116,6 +116,13 @@ export interface SoloMatch {
    * updated like `ls` from its own view. Matches from before it rebuild it from their record (theirSquaresSeen).
    */
   theirSq?: Record<number, { hp: number; step: number }>;
+  /**
+   * The person's side's symbol gliders it saw come to rest on squares out of its sight now, square -> the step (owner,
+   * 2026-11-12: the summary says where only when the side saw it, and then the view lists it and simulate and
+   * symbol_launches use it). Kept by the turn summary's watcher (summary.ts); matches from before it rebuild it from
+   * their record (restOf). The person's side only: the computer's memory (own) is unchanged, so its records replay.
+   */
+  rest?: Record<number, number>;
   /** 1: the site computer plans with that memory (matches started from 2026-11-04; older records replay without it). */
   remember?: 1;
   /** Turns to act so far (0 is setup). */
@@ -278,7 +285,7 @@ export function viewFor(m: SoloMatch) {
   const can = canPlaceKeys(m);
   const over = !!m.end;
   const lastSeen = Object.entries(m.ls[me]).filter(([k]) => !view.tw[+k]).map(([k, step]) => ({ x: e.XY(+k)[0], y: e.XY(+k)[1], step }));
-  const mineOut = outOfSight(e, m.w, s, me, ownOf(m)[me]);
+  const mineOut = mineOutOfSight(m);
   const enemyArea = enemyAreaOf(e, s, view, see, m.ls[me], me);
   const areaSet = new Set(enemyArea);
   return {
@@ -353,6 +360,16 @@ function darkGliders(e: Engine, mem: OwnSeen, kills: Kills, me: Side): Dark[] {
   const gl = Object.values(mem.gl).sort((a, b) => b.step - a.step).filter((g) => { const k = `${g.x},${g.y},${g.dx},${g.dy},${g.seed ? 1 : 0}`; if (seen.has(k)) return false; seen.add(k); return true; });
   const dead = new Set(tieKills(e, gl, (kills.log ?? []).filter((x) => x.o === me)).values());
   return gl.filter((_, j) => !dead.has(j)).map((g) => ({ x: g.x, y: g.y, dx: g.dx, dy: g.dy, step: g.step, ...(g.seed ? { seed: 1 as const } : {}) }));
+}
+
+/**
+ * The person's side's own pieces out of sight as it last saw them: its memory (own-seen.ts) and the symbol gliders it
+ * saw come to rest out of sight (SoloMatch.rest), the later kept where both name a square.
+ */
+function mineOutOfSight(m: SoloMatch): OwnSeen {
+  const { s, e } = rulesOf(m), out = outOfSight(e, m.w, s, PERSON, ownOf(m)[PERSON]), see = e.sees(m.w, s, PERSON);
+  for (const [k, step] of Object.entries(restOf(m))) if (!see.has(+k) && !(out.sd[+k] && out.sd[+k].step > step)) out.sd[+k] = { step };
+  return out;
 }
 
 /** The empty squares the person's side may place on now, within reach of the towers it holds. */
@@ -519,24 +536,39 @@ export function turnFrames(m: SoloMatch, turn: number, whole = false) {
 }
 
 /**
- * How a finished match ended, in words for the person's live page (owner, 2026-11-04: fix 3): who won and why, e.g. "you
- * won with more towers standing, 5 to 1, at step 144" (towers left, beside the header's towers destroyed: worded
- * 2026-11-11 so the two don't read as disagreeing) or "you won at step 126: every enemy tower destroyed". Only once it's
- * over (the tower counts are then the record's).
+ * How a finished match ended, in words for the person's live page (owner, 2026-11-04: fix 3; worded 2026-11-12 so the
+ * line and the header's numbers can't read as disagreeing): "Over at step 144: you won, 3 towers standing to their 1.",
+ * the same form for a loss ("the site computer won, 4 towers standing to your 2.") and a draw; "Over at step 126: you
+ * won: every enemy tower destroyed." Only once it's over (the tower counts are then the record's).
  */
 export function endText(m: SoloMatch): string | null {
   if (!m.end) return null;
   const { s, e } = rulesOf(m), { win, how, step } = m.end;
   const mine = e.towers(m.w, PERSON).length, theirs = e.towers(m.w, COMPUTER).length;
+  const n = (k: number) => `${k} tower${k === 1 ? '' : 's'}`;
+  const over = `Over at step ${step}:`;
+  if (how === 'resigned') return `${over} you resigned.`;
   const who = win === PERSON ? 'you won' : win === COMPUTER ? 'the site computer won' : 'a draw';
-  if (how === 'resigned') return `you resigned at step ${step}`;
-  if (s.win === 'first-blood') return `${who} at step ${step}: the first tower destroyed decides (towers destroyed ${m.kills.C} to ${m.kills.A})`;
-  if (!mine && !theirs) return `a draw at step ${step}: both sides' last towers fell at once`;
-  if (!theirs) return `you won at step ${step}: every enemy tower destroyed`;
-  if (!mine) return `the site computer won at step ${step}: every tower of yours destroyed`;
-  // The winner's count first: "you won with more towers standing, 5 to 1", "the site computer won with more towers standing, 4 to 2".
-  if (mine !== theirs) return `${who} with more towers standing, ${Math.max(mine, theirs)} to ${Math.min(mine, theirs)}, at step ${step}`;
-  return s.tieBreak && m.kills.C !== m.kills.A ? `${who} at step ${step}: towers standing level ${mine} to ${theirs}, so towers destroyed decide, ${m.kills.C} to ${m.kills.A}` : `a draw at step ${step}: towers standing level, ${mine} to ${theirs}`;
+  if (s.win === 'first-blood') return `${over} ${who}: the first tower destroyed decides (towers destroyed ${m.kills.C} to ${m.kills.A}).`;
+  if (!mine && !theirs) return `${over} a draw: both sides' last towers fell at once.`;
+  if (!theirs) return `${over} you won: every enemy tower destroyed.`;
+  if (!mine) return `${over} the site computer won: every tower of yours destroyed.`;
+  // The winner's towers first: "you won, 3 towers standing to their 1", "the site computer won, 4 towers standing to your 2".
+  const standing = win === COMPUTER ? `${n(theirs)} standing to your ${mine}` : `${n(mine)} standing to their ${theirs}`;
+  const decided = mine === theirs && win !== 'D' ? `, so towers destroyed decided, ${m.kills.C} to ${m.kills.A}` : '';
+  return `${over} ${who}, ${standing}${decided}.`;
+}
+
+/**
+ * The live page's header beside the status (owner, 2026-11-12): during the match only "Towers destroyed 3–3 (they may
+ * have towers you haven't seen)", where the ruleset reports kills (standing towers stay hidden: the fog); at the end
+ * "Standing 3–1 · Destroyed 3–3", yours first.
+ */
+export function tallyText(m: SoloMatch): string | null {
+  const { s, e } = rulesOf(m);
+  const destroyed = `${m.kills.C}–${m.kills.A}`;
+  if (m.end) return `Standing ${e.towers(m.w, PERSON).length}–${e.towers(m.w, COMPUTER).length}${s.killReports ? ` · Destroyed ${destroyed}` : ''}`;
+  return s.killReports ? `Towers destroyed ${destroyed} (they may have towers you haven’t seen)` : null;
 }
 
 /**
@@ -583,10 +615,23 @@ export function planComputer(m: SoloMatch, now: string): boolean {
  * its own gliders out of sight as its memory holds them (darkGliders). `audience`: the AI's view and summary, or the
  * person's live page (owner, 2026-11-11: there the person reads "You took this turn here, approving your AI's draft.").
  */
-function watchTurn(e: Engine, s: Settings, me: Side, before: World, kills: Kills, o: Pick<Orders, 'placements' | 'via' | 'drafted_by'>, mem: OwnSeen, audience: 'ai' | 'page' = 'ai') {
-  const watch = new TurnWatch(e, s, me, before, kills, o.placements, darkGliders(e, outOfSight(e, before, s, me, mem), kills, me));
+function watchTurn(e: Engine, s: Settings, me: Side, before: World, kills: Kills, o: Pick<Orders, 'placements' | 'via' | 'drafted_by'>, mem: OwnSeen, rest: Record<number, number>, audience: 'ai' | 'page' = 'ai') {
+  const out = outOfSight(e, before, s, me, mem);
+  const held: Held[] = [
+    ...Object.entries(out.sq).map(([k, q]) => ({ kind: 'sq' as const, k: +k, hp: q.hp, step: q.step })),
+    ...Object.entries(out.mir).map(([k, q]) => ({ kind: 'mir' as const, k: +k, hp: q.hp, step: q.step })),
+    ...Object.entries(out.fa).map(([k, q]) => ({ kind: 'fa' as const, k: +k, hp: q.hp, step: q.step })),
+    ...Object.entries(out.sd).filter(([k]) => !(+k in rest)).map(([k, q]) => ({ kind: 'sd' as const, k: +k, step: q.step })),
+  ];
+  const watch = new TurnWatch(e, s, me, before, kills, o.placements, { dark: darkGliders(e, out, kills, me), held, rest });
   if (o.via === 'page') watch.say(audience === 'page' ? `You took this turn here, approving ${o.drafted_by === 'agent' ? 'your AI\'s draft' : 'a draft'}.` : `Your person took this turn on the live page, approving the orders ${o.drafted_by === 'agent' ? 'you (their AI) drafted' : 'drafted before'}.`);
   return watch;
+}
+/** The turn has run: the gliders the view lists out of sight now, and, if the match is over, how it ended (summary.ts). */
+function closeTurn(watch: TurnWatch, e: Engine, s: Settings, me: Side, before: World, w: World, kills: Kills, mem: OwnSeen) {
+  watch.listedNow(darkGliders(e, outOfSight(e, w, s, me, mem), kills, me));
+  const v = verdict(e, w, s, kills);
+  if (v) watch.ended(before, w, { win: v, byTime: !!(e.towers(w, 'C').length && e.towers(w, 'A').length) });
 }
 
 /** A turn as the live page tells it: its summary, towers destroyed and lost, and its big moments (up to 3). */
@@ -599,23 +644,31 @@ export interface TurnStory { turn: number; lines: string[]; kills: number; lost:
  * moments (owner, 2026-11-04). `audience` 'page': the live page's wording (owner, 2026-11-11).
  */
 export function turnSummaries(m: SoloMatch, me: Side = PERSON, audience: 'ai' | 'page' = 'ai', start?: World): TurnStory[] {
-  const { s, e } = rulesOf(m);
   // `start`: the board the record starts from (the match's first board; a test may set one up by hand).
-  const w = start ? e.clone(start) : e.world(s), kills: Kills = { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) }, mem = emptyOwnSeen();
+  return watchAll(m, me, audience, start).stories;
+}
+/** turnSummaries, and the side's resting symbol gliders out of sight as the record leaves them (restOf). */
+function watchAll(m: Pick<SoloMatch, 'ruleset' | 'seed' | 'history'>, me: Side, audience: 'ai' | 'page', start?: World): { stories: TurnStory[]; rest: Record<number, number> } {
+  const { s, e } = rulesOf(m);
+  const w = start ? e.clone(start) : e.world(s), kills: Kills = { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) }, mem = emptyOwnSeen(), rest: Record<number, number> = {};
   const out: TurnStory[] = [];
   for (const h of m.history) {
-    const watch = watchTurn(e, s, me, e.clone(w), kills, h[me], mem, audience);
+    const w0 = e.clone(w);
+    const watch = watchTurn(e, s, me, e.clone(w), kills, h[me], mem, rest, audience);
     e.apply(w, s, { C: h.C.placements, A: h.A.placements });
     updOwnSeen(e, w, s, me, mem);
     watch.appear(w);
     const before = kills[me], from = w.step;
     do { e.step(w, s, kills); updOwnSeen(e, w, s, me, mem); watch.look(w); if (verdict(e, w, s, kills)) break; } while (w.step - from < s.every);
+    closeTurn(watch, e, s, me, w0, w, kills, mem);
     const lines = watch.done();
     out.push({ turn: h.turn, lines, kills: s.killReports ? kills[me] - before : watch.killsSeen, lost: watch.lost, big: watch.big(3) });
     if (verdict(e, w, s, kills)) break;
   }
-  return out;
+  return { stories: out, rest };
 }
+/** The person's side's resting symbol gliders out of sight (SoloMatch.rest): kept, or rebuilt from the record. */
+export const restOf = (m: Pick<SoloMatch, 'ruleset' | 'seed' | 'history' | 'rest'>): Record<number, number> => m.rest ?? watchAll(m, PERSON, 'ai').rest;
 
 /** Both sides' orders revealed and applied together; the engine runs to the next turn to act (or the end). */
 function resolve(m: SoloMatch, now: string) {
@@ -627,14 +680,16 @@ function resolve(m: SoloMatch, now: string) {
   // The person's turn summary, from their side's view at each frame (summary.ts).
   const own = (m.own = ownOf({ ...m, history: m.history.slice(0, -1) }));
   const theirSq = (m.theirSq = theirSquaresSeen({ ...m, history: m.history.slice(0, -1) }));
-  const watch = watchTurn(e, s, PERSON, e.clone(m.w), m.kills, C, own[PERSON]);
+  const rest = (m.rest = restOf({ ...m, history: m.history.slice(0, -1) }));
+  const w0 = e.clone(m.w);
+  const watch = watchTurn(e, s, PERSON, e.clone(m.w), m.kills, C, own[PERSON], rest);
   e.apply(m.w, s, { C: C.placements, A: A.placements });
   e.updSeen(m.w, s, m.ls, m.kills);
   updOwn(e, m.w, s, own);
   updTheirSq(e, m.w, s, theirSq);
   watch.appear(m.w);
   const from = m.w.step, turn = m.turn;
-  const note = () => { m.summary = { turn, from, lines: watch.done() }; };
+  const note = () => { closeTurn(watch, e, s, PERSON, w0, m.w, m.kills, own[PERSON]); m.summary = { turn, from, lines: watch.done() }; };
   do {
     e.step(m.w, s, m.kills);
     e.updSeen(m.w, s, m.ls, m.kills);
@@ -743,7 +798,7 @@ export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { nam
   // computer believes its own: search.ts belief), enemy towers where it last saw them unless use_last_seen is false
   // (owner, 2026-11-04: fix 4), enemy squares where it last saw them unless use_last_seen_squares is false (owner,
   // 2026-11-11: fix 5), then the agent's own belief.
-  const board = withOwnSeen(e, e.clone(view), me, outOfSight(e, m.w, s, me, ownOf(m)[me]));
+  const board = withOwnSeen(e, e.clone(view), me, mineOutOfSight(m));
   const b = args.belief ?? {};
   if (args.use_last_seen !== undefined && typeof args.use_last_seen !== 'boolean') throw new SoloError('use_last_seen must be true or false');
   if (args.use_last_seen_squares !== undefined && typeof args.use_last_seen_squares !== 'boolean') throw new SoloError('use_last_seen_squares must be true or false');
@@ -859,10 +914,13 @@ export function symbolLaunches(m: SoloMatch, args: { x: unknown; y: unknown }) {
   const { s, e } = rulesOf(m);
   const me = PERSON, view = e.fog(m.w, s, me), x = args.x as number, y = args.y as number;
   const pts = pointsOf(m, s), cost = 3 * (s.costSeed ?? 0);
-  const r = converging(e, e.clone(view), s, me, e.towers(view, me), pts, x, y);
+  // Its own pieces out of sight where it last saw them (owner, 2026-11-12: a symbol glider it saw come to rest stops
+  // launches), as simulate assumes them; nothing about the enemy's.
+  const mineOut = mineOutOfSight(m), held = Object.keys(mineOut.sq).length + Object.keys(mineOut.mir).length + Object.keys(mineOut.fa).length + Object.keys(mineOut.sd).length;
+  const r = converging(e, withOwnSeen(e, e.clone(view), me, mineOut), s, me, e.towers(view, me), pts, x, y);
   return {
     target: { x, y },
-    based_on: `your view at step ${view.step}, with nothing assumed about what you can't see (an enemy glider or piece in the dark can still stop them)`,
+    based_on: `your view at step ${view.step}${held ? ', with your own pieces out of sight where you last saw them (my_pieces_out_of_sight)' : ''}, with nothing assumed about the enemy's pieces you can't see (an enemy glider or piece in the dark can still stop them)`,
     ...(s.costSeed ? { cost, points: pts, affordable: r.affordable, ...(r.affordable ? {} : { cant_afford: `three symbol gliders cost ${cost}; you have ${pts} points this turn` }) } : {}),
     options: r.options.map((o) => ({ launches: o.launches, rest_at: o.rests, symbol_forms: { ...o.symbol, before_next_turn: o.symbol.step <= view.step + s.every } })),
     ...(r.why_none ? { why_none: r.why_none } : {}),
