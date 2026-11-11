@@ -1784,6 +1784,7 @@ async function checkMarkdownPages() {
 async function checkChallengeLive() {
   for (const [w, h, touch, scheme] of [[390, 844, true, 'light'], [1440, 900, false, 'dark']] as const) {
     const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+    const before = failures.length;
     for (const [p, sel] of [['/challenge', '.cc-card'], ['/challenge/zei', '.ch-character-page'], ['/challenge/remixes', '.ch-feed-page'], ['/challenge/entries', 'h1']] as const) {
       await open(page, p);
       if (!(await page.locator(sel).count())) fail(`${p} @${w} (${scheme}, live): shows no ${sel}`);
@@ -1806,6 +1807,8 @@ async function checkChallengeLive() {
       await open(page, '/chapter/1');
       if (!(await page.locator('.panel').isVisible())) fail(`/chapter/1 @${w} (${scheme}, live): the assistant panel is no longer open by default outside the challenge`);
     }
+    // One line when these pass, so a skipped check can't pass for a silent one (owner, 2026-11-10).
+    if (failures.length === before) console.log(`ok   challenge pages @${w} (${scheme}): load and settle; the assistant panel closed at load on 4 pages${w >= 1200 ? '; one tap opens it; opened there it starts open again; closed there it starts closed; /chapter/1 still opens by default' : '; no panel control at phone width'}`);
     await page.close();
   }
 }
@@ -2130,7 +2133,7 @@ try {
   // signed-out 404 is checked below instead.
   if (CHALLENGE.public) await checkChallengeLanding();
   if (CHALLENGE.public) await checkChallengeLive();
-  else console.log('check:ui: the /challenge landing on local data waits for CHALLENGE.public (admin-only now)');
+  else console.log('check:ui: the /challenge landing on local data, the challenge pages and their assistant panel checks wait for CHALLENGE.public (admin-only now): NOT RUN');
   await checkMarkdownPages();
   // First-visit intro (config/intro.json): once, home page only, Skip on every
   // card, remembered on the device without cookies; deep links go straight in.
