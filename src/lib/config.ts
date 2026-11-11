@@ -570,6 +570,13 @@ export const CHALLENGE = {
    */
   offeredStyles: ['Animated series', 'Comic book', 'Comic 3D mix', 'Mood'] as readonly string[],
   /**
+   * The rewards (owner, 2026-11-11; src/lib/challenge/rewards.ts): a section on /challenge/rules and a line on /challenge.
+   * Off: nothing shows, and the rules still say "There is no prize for now." Only the owner turns it on, once the amounts
+   * and links are filled and the Terms and Privacy lines in docs/legal/challenge-rewards-draft.md are reread and live;
+   * scripts/test-rewards.ts refuses it on while any blank is left.
+   */
+  rewards: false as boolean,
+  /**
    * The owner's switch (owner, 2026-11-04: "/challenge is admin-only for now"). While false:
    * - /challenge, /api/challenge/* and every way into them (the menu item, the home row, the challenge share text, and
    *   on sheet pages the Entry badge, "Mark as my entry", the challenge lines and "Posted on") are for admins only

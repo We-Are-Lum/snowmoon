@@ -675,7 +675,9 @@ function copyProblems(t: string): string[] {
   if (NO_BOUNTY.test(t)) p.push(`a bounty is back: "${t.match(NO_BOUNTY)![0]}"`);
   return p;
 }
-check('the rules copy: no prize for now, the final version and any prize decided before entries close, remixes only, no bounty, no promises (mint, rewards, payouts), no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
+// With the rewards on (owner, 2026-11-11), "What happens next." and the prize line give way to them: scripts/test-rewards.ts
+// checks those words; this check holds while they're off.
+check('the rules copy: no prize for now, the final version and any prize decided before entries close, remixes only, no bounty, no promises (mint, rewards, payouts), no wallet path', CHALLENGE.rewards || copyProblems(copy).length === 0, copyProblems(copy).join('; '));
 check('the rules name the six characters most named in the book first (owner, 2026-11-04)', W.intro().includes('Zei, Gladias, Bai, Seila, Deluin or Mu'));
 proof('a promised mint is caught', copyProblems(`${copy} Each version is then minted as an open edition in Snowmoon WIP.`).length > 0);
 proof('rules without "no prize for now" are caught', copyProblems(copy.replaceAll(NO_PRIZE, '')).length > 0);
@@ -685,7 +687,9 @@ proof('a bounty back in the rules (the old per-character rule) is caught', copyP
 {
   // No bounty anywhere in the challenge (owner, 2026-11-04): not in the config, not in any of its words, not on its pages.
   const words = Object.values(W).flatMap((v) => (typeof v === 'function' ? [String((v as (...a: string[]) => unknown)('Zei', 'Zei'))] : Array.isArray(v) ? v.map(String) : [String(v)])).join(' ');
-  const pages = ['src/app/challenge', 'src/lib/challenge'].flatMap((d) => readdirSync(path.join(ROOT, d), { recursive: true }).map(String).filter((f) => /\.tsx?$/.test(f)).map((f) => readFileSync(path.join(ROOT, d, f), 'utf8'))).join('\n');
+  // The owner reversed "no bounty" on 2026-11-11 for the rewards only: their words live in src/lib/challenge/rewards.ts,
+  // shown only with CHALLENGE.rewards on (scripts/test-rewards.ts); every other file of the challenge still names none.
+  const pages = ['src/app/challenge', 'src/lib/challenge'].flatMap((d) => readdirSync(path.join(ROOT, d), { recursive: true }).map(String).filter((f) => /\.tsx?$/.test(f) && !(d === 'src/lib/challenge' && f === 'rewards.ts')).map((f) => readFileSync(path.join(ROOT, d, f), 'utf8'))).join('\n');
   check('no bounty: none in the config, the wording or the challenge\'s pages', !('bounties' in CHALLENGE) && !('bountyAmount' in CHALLENGE) && !NO_BOUNTY.test(words) && !NO_BOUNTY.test(pages), (words.match(NO_BOUNTY) ?? pages.match(NO_BOUNTY) ?? [''])[0]);
   proof('a bounty planted in a page is caught', NO_BOUNTY.test(`${pages}\n<p>The poidh bounty</p>`));
 }
