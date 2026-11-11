@@ -86,7 +86,7 @@ proven('T3 the setting line comes right after the scene line, before the style',
 // T4
 const gate = (src: string) => [
   ...need(/const setting = !moment && !chosen\.open \? drawSetting\(\) : null;/.test(src), 'the route doesn\'t draw for a closed model only'),
-  ...need(/remixPrompt\(\{ words: r\.words, name, look: lookFor\(src\.character\), style: style!\.text, \.\.\.\(setting \? \{ setting: settingLine\(setting\) \} : \{\}\) \}\)/.test(src), 'the prompt doesn\'t carry the drawn setting'),
+  ...need(/remixPrompt\(\{ words: r\.words, name, look: lookForBase\(src\.character, await baseFrontOf\(sql, src\)\), style: style!\.text, \.\.\.\(setting \? \{ setting: settingLine\(setting\) \} : \{\}\) \}\)/.test(src), 'the prompt doesn\'t carry the drawn setting'),
   ...need((src.match(/drawSetting\(/g) ?? []).length === 1 && (src.match(/settingLine\(/g) ?? []).length === 1, 'the setting is drawn or written elsewhere in the route'),
 ];
 const models = read('src/lib/challenge/models.ts');

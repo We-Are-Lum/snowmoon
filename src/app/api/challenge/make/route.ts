@@ -16,14 +16,14 @@ import { CHALLENGE_CLOSED_DEFAULT, challengeDefaultModel, challengeModel, closed
 import { oneCharacterProblem } from '~/lib/challenge/one-character';
 import { challengeSpend, makeWith, recipeModel } from '~/lib/challenge/make-model';
 import { MODEL_WORDING } from '~/lib/challenge/model-wording';
-import { lookFor } from '~/lib/challenge/looks';
+import { lookForBase } from '~/lib/challenge/looks';
 import { drawSetting, settingLine, settingRecord } from '~/lib/challenge/settings';
 import { whereFrom } from '~/lib/images/countries';
 import { closedCapReached, generationsLeft } from '~/lib/images/limits';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { nextUtcMidnight } from '~/lib/images/paid';
 import { isWalletNumber } from '~/lib/images/remixes';
-import { defaultLook, sourceOf } from '~/lib/challenge/pictures';
+import { baseFrontOf, defaultLook, sourceOf } from '~/lib/challenge/pictures';
 import { spoilerExceptionOn } from '~/lib/challenge/spoilers';
 import { challengeVisibleTo } from '~/lib/challenge/visibility';
 
@@ -132,7 +132,7 @@ export async function POST(request: Request) {
   const others = moment && chosen.id === DEFAULT_CHALLENGE_MODEL ? (await Promise.all(othersIn(moment, src.character).map(async (slug) => ({ slug, look: await defaultLook(sql, slug) })))).filter((o): o is { slug: string; look: NonNullable<typeof o.look> } => o.look !== null) : [];
   // A closed model (GPT, Gemini; never FLUX): one of the five settings, drawn evenly here, at make time (owner, 2026-11-09).
   const setting = !moment && !chosen.open ? drawSetting() : null;
-  const prompt = moment ? momentPrompt({ words: r.words, name, scene: moment.scene, others: others.map((o) => callName(o.slug)) }) : remixPrompt({ words: r.words, name, look: lookFor(src.character), style: style!.text, ...(setting ? { setting: settingLine(setting) } : {}) });
+  const prompt = moment ? momentPrompt({ words: r.words, name, scene: moment.scene, others: others.map((o) => callName(o.slug)) }) : remixPrompt({ words: r.words, name, look: lookForBase(src.character, await baseFrontOf(sql, src)), style: style!.text, ...(setting ? { setting: settingLine(setting) } : {}) });
   const looks = [src, ...others.map((o) => o.look)];
   const pictures: { bytes: Buffer; contentType: string; width: number; height: number }[] = [];
   for (const l of looks) {

@@ -28,7 +28,7 @@ import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { CHALLENGE, IMAGES } from '../src/lib/config';
 import { BACKSTORY_MAX, BACKSTORY_WORDING, readBackstory } from '../src/lib/challenge/backstory';
-import { CHARACTER_LOOKS, LOOK_PREFIX, SCENE_LINE } from '../src/lib/challenge/looks';
+import { BASE_LOOKS, CHARACTER_LOOKS, LOOK_PREFIX, lookForBase, SCENE_LINE, walkToBase } from '../src/lib/challenge/looks';
 import { KEEP_LINE } from '../src/lib/challenge/styles';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -107,8 +107,53 @@ const looks = (l: Readonly<Record<string, string>>) => [
 ];
 proven('L1 L2 one look line per challenge character, each "Unless the change says otherwise: …", none naming a real person, studio, film or artist', looks(CHARACTER_LOOKS), looks({ ...CHARACTER_LOOKS, mu: 'Mu, drawn like a Pixar film character.' }));
 const order = (prompt: string) => need(prompt === ['give her a red coat', 'Bai is the person in reference image 1, the main figure.', CHARACTER_LOOKS.bai, SCENE_LINE, 'soft pencil on pale paper', KEEP_LINE, IMAGES.suffix].join('\n\n'), `the prompt is ${JSON.stringify(prompt).slice(0, 200)}`);
+
+// L4 (owner, 2026-11-11): one look line per base, so a base (or a remix of it) whose skin differs from its character's
+// line isn't pulled toward the wrong skin. Lines are keyed by the base's front sha256; the launch bases come from
+// scripts/lib/launch-picks.json (pinned).
+{
+  const picks = JSON.parse(read('scripts/lib/launch-picks.json')) as { bases: { key: string; character: string; current_default: boolean; views: { front: { sha256: string } } }[] };
+  const front = (key: string) => picks.bases.find((b) => b.key === key)!.views.front.sha256;
+  const baseRules = (L: Readonly<Record<string, string>>) => [
+    ...Object.entries(L).flatMap(([k, t]) => [
+      ...need(/^[0-9a-f]{64}$/.test(k), `${k.slice(0, 12)}: not a sha256`),
+      ...need(t.startsWith(LOOK_PREFIX) && t.endsWith('.'), `${k.slice(0, 12)}: doesn't start "${LOOK_PREFIX}"`),
+      ...need(blockedName(t) === null && !/\b(studio|ghibli|disney|pixar|film|movie|anime|manga|in the style of|artist)\b/i.test(t), `${k.slice(0, 12)}: names a studio, film, artist or blocked name`),
+    ]),
+    // Every launch base that isn't its character's default has its own line; a default keeps the character's line.
+    ...picks.bases.flatMap((b) => (b.current_default || ['zei', 'bai', 'seila', 'mu'].includes(b.key) ? need(!(b.views.front.sha256 in L), `${b.key}: the default base has a second line`) : need(b.views.front.sha256 in L, `${b.key}: no line of its own`))),
+    ...need(/deep brown skin/.test(L[front('gladias:a')] ?? '') && /light olive skin/.test(L[front('gladias:first')] ?? '') && /deep brown skin/.test(L[front('deluin:a')] ?? '') && /pale skin/.test(L[front('deluin:first')] ?? ''), 'a launch base\'s line names the wrong skin'),
+  ];
+  const sel = [
+    ...need(lookForBase('gladias', front('gladias:a')) === BASE_LOOKS[front('gladias:a')], 'a base with a line doesn\'t get it'),
+    ...need(lookForBase('gladias', front('gladias:b')) === CHARACTER_LOOKS.gladias && lookForBase('gladias', null) === CHARACTER_LOOKS.gladias, 'the default base, or no base, doesn\'t get the character\'s line'),
+    ...need(lookForBase('gladias', front('gladias:a').toUpperCase()) === BASE_LOOKS[front('gladias:a')], 'the sha256 is case-sensitive'),
+  ];
+  // The walk: remix -> remix -> base; a picture whose line reaches no sheet; a loop stops.
+  const from: Record<string, string | null> = { r2: 'r1', r1: 'baseA', lone: null, l1: 'l2', l2: 'l1' };
+  const sheets: Record<string, string> = { baseA: front('gladias:a') };
+  const walk = (w: typeof walkToBase) => Promise.all([
+    w('r2', async (id) => (id in from ? from[id] : undefined), async (id) => sheets[id] ?? null),
+    w('baseA', async (id) => (id in from ? from[id] : undefined), async (id) => sheets[id] ?? null),
+    w('lone', async (id) => (id in from ? from[id] : undefined), async (id) => sheets[id] ?? null),
+    w('l1', async (id) => (id in from ? from[id] : undefined), async (id) => sheets[id] ?? null),
+  ]);
+  const [deep, direct, lone, loop] = await walk(walkToBase);
+  const walked = [
+    ...need(deep === front('gladias:a') && direct === front('gladias:a'), 'a remix of a remix doesn\'t reach its base'),
+    ...need(lone === null && loop === null, 'a line with no base, or a loop, doesn\'t end in null'),
+  ];
+  const route = read('src/app/api/challenge/make/route.ts');
+  const wired = (src: string) => need(/look: lookForBase\(src\.character, await baseFrontOf\(sql, src\)\)/.test(src) && /includeHidden: true/.test(read('src/lib/challenge/pictures.ts')), 'the make route doesn\'t use the base\'s line (through hidden pictures too)');
+  const [plantDeep] = await walk(async (s) => (s === 'r2' ? null : walkToBase(s, async () => undefined, async () => null)));
+  proven('L4 one look line per base (keyed by its front), a remix uses its base\'s line through every step, the default base and no base use the character\'s; the make route uses it', [...baseRules(BASE_LOOKS), ...sel, ...walked, ...wired(route)], [
+    ...baseRules({ ...BASE_LOOKS, [front('gladias:a')]: 'Unless the change says otherwise: a man with warm light-brown skin.', [front('gladias:b')]: 'Unless the change says otherwise: x.' }),
+    ...(plantDeep === front('gladias:a') ? [] : ['planted: a walk that stops at the first step loses the base']),
+    ...wired(route.replace('lookForBase(src.character, await baseFrontOf(sql, src))', 'lookFor(src.character)')),
+  ]);
+}
 const route = read('src/app/api/challenge/make/route.ts');
-proven('L3 the prompt order: change words, reference line, look line, scene line (always), the setting line (closed models only; scripts/test-settings.ts T3), style, closing line, suffix', [...order(remixPrompt({ words: 'give her a red coat', name: 'Bai', look: CHARACTER_LOOKS.bai, style: 'soft pencil on pale paper' })), ...need(/remixPrompt\(\{ words: r\.words, name, look: lookFor\(src\.character\), style: style!\.text(, \.\.\.\(setting \? \{ setting: settingLine\(setting\) \} : \{\}\))? \}\)/.test(route), 'the route doesn\'t add the look line')], order(remixPrompt({ words: 'give her a red coat', name: 'Bai', style: 'soft pencil on pale paper' })));
+proven('L3 the prompt order: change words, reference line, look line, scene line (always), the setting line (closed models only; scripts/test-settings.ts T3), style, closing line, suffix', [...order(remixPrompt({ words: 'give her a red coat', name: 'Bai', look: CHARACTER_LOOKS.bai, style: 'soft pencil on pale paper' })), ...need(/remixPrompt\(\{ words: r\.words, name, look: lookForBase\(src\.character, await baseFrontOf\(sql, src\)\), style: style!\.text(, \.\.\.\(setting \? \{ setting: settingLine\(setting\) \} : \{\}\))? \}\)/.test(route), 'the route doesn\'t add the look line')], order(remixPrompt({ words: 'give her a red coat', name: 'Bai', style: 'soft pencil on pale paper' })));
 
 // S1: "Same as this picture" (owner, 2026-11-09): the first choice and the default, no style text, recorded in the recipe.
 {
