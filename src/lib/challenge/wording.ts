@@ -1,4 +1,5 @@
 import { CHALLENGE, IMAGES } from '../config';
+import { REWARDS_WORDING } from './rewards';
 import { dateText, windowText } from './rules';
 import { SHARE_WORDING } from './share-wording';
 
@@ -39,7 +40,7 @@ export const CHALLENGE_WORDING = {
       : `From ${windowText()}, make your own version of ${listed(callNames())} on snowmoon.party: start from a published sheet, or from someone else’s remix, change it, and publish. Your version gets its own page, credited back to what you built on.`,
   nextHead: 'What happens next.',
   // Draft wording (owner, 2026-11-05 evening): no prize for now, and nothing promised about what follows.
-  next: () => 'There is no prize for now. How the final version is chosen, and any prize, are added to the rules before entries close.',
+  next: () => (CHALLENGE.rewards ? REWARDS_WORDING.next : 'There is no prize for now. How the final version is chosen, and any prize, are added to the rules before entries close.'),
   rulesHead: 'The rules.',
   rules: () => [
     'Make your remix on snowmoon.party with the site’s tools. Every recipe is published.',
@@ -61,7 +62,7 @@ export const CHALLENGE_WORDING = {
       : `Remixing is free: ${numberWord(IMAGES.designs.remixesPerDay)} remixes a day. A remix is one sheet’s three views; if one of them fails, make it again inside the same remix without using another.`,
     // The owner's reread (2026-11-09), Backstory; "short" dropped next to the 2,000-character limit (owner, 2026-11-11).
     'You can add a backstory in your own words; it’s shown as invented by you, not from the book.',
-    'Entering is free. There is no prize for now.',
+    CHALLENGE.rewards ? REWARDS_WORDING.free : 'Entering is free. There is no prize for now.',
     'Post your version anywhere with its link. If you’re remixing someone’s post, quote or reply to it.',
     `A Farcaster account passes the site’s check with a Neynar score of at least ${CHALLENGE.neynarMinScore}, fixed for the whole challenge; Lens and Bluesky accounts pass their own checks, the same ones that let them make pictures.`,
   ],

@@ -6,6 +6,7 @@ import { bookCharacter } from '../images/designs';
 import { entryHref, standing, type Standing } from './entries';
 import { entrantCounts, phase } from './rules';
 import { CHALLENGE_WORDING as W } from './wording';
+import { rewardsSection } from './rewards';
 import { LANDING_WORDING as L } from './landing-wording';
 
 /**
@@ -50,6 +51,8 @@ export interface RulesView {
   alt: string;
   adminsHead: string | null;
   byAdmins: { href: string; text: string }[];
+  /** The rewards (CHALLENGE.rewards; src/lib/challenge/rewards.ts), or null while off. */
+  rewards: ReturnType<typeof rewardsSection>;
 }
 
 const callName = (name: string) => name.split(' ')[0];
@@ -88,6 +91,7 @@ export async function rulesView(sql: Sql | null, now: Date = new Date()): Promis
     badge: W.badge,
     alt: CHALLENGE.pictureEntries ? 'AI-generated picture, not by the author' : 'AI-generated front view, not by the author',
     adminsHead: CHALLENGE.entries && st.byAdmins.length > 0 ? W.adminsHead : null,
+    rewards: rewardsSection(),
     byAdmins: st.byAdmins.map((v) => ({ href: entryHref(v.versionId), text: [W.entryLabel(nameOf(v.character), v.title), designByline(v.byName, v.maker), ...(CHALLENGE.pictureEntries ? [] : [`v${v.versionNo}`])].join(' · ') })),
   };
 }

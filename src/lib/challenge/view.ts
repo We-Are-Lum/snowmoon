@@ -1,4 +1,5 @@
 import 'server-only';
+import { REWARDS_WORDING } from './rewards';
 import type postgres from 'postgres';
 import { CHALLENGE } from '../config';
 import { bookCharacter } from '../images/designs';
@@ -37,6 +38,8 @@ export interface ChallengeView {
   entriesLink: string;
   /** The hub's "Draft wording" mark: none since the owner approved its words (2026-11-06). */
   draftShort: string | null;
+  /** The rewards' line, linking to them on the rules page (CHALLENGE.rewards), or null while off. */
+  rewardsLine: { text: string; href: string } | null;
   notAffiliated: string;
   cards: { c: CardData; w: CardWords }[];
 }
@@ -100,6 +103,7 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
     entriesLink: L.entriesLink,
     // Approved (owner, 2026-11-06; "reviewed by the coordinator, approved by the owner"): the hub's line and cards.
     draftShort: CHALLENGE.cardsApproved ? null : W.draftShort,
+    rewardsLine: CHALLENGE.rewards ? { text: REWARDS_WORDING.landing, href: '/challenge/rules#rewards' } : null,
     notAffiliated: W.notAffiliated,
     cards,
   };

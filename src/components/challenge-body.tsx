@@ -26,6 +26,11 @@ export function ChallengeBody({ v }: { v: ChallengeView }) {
         </Link>
         {v.draftShort && <span className="as-draft ch-draft"> · {v.draftShort}</span>}
       </p>
+      {v.rewardsLine && (
+        <p className="ch-rewards-line">
+          <Link href={v.rewardsLine.href}>{v.rewardsLine.text}</Link>
+        </p>
+      )}
       <div className="cc-list">
         {v.cards.map(({ c, w }) => (
           <ChallengeCard key={c.slug} c={c} w={w} />

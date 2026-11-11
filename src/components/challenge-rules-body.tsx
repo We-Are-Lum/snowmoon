@@ -41,6 +41,19 @@ export function ChallengeRulesBody({ v }: { v: RulesView }) {
         <p className="dz-note">{v.notAffiliated}</p>
       </section>
 
+      {v.rewards && (
+        <section className="dz-section ch-rewards" id="rewards" aria-labelledby="ch-rewards">
+          <h2 id="ch-rewards">
+            {v.rewards.head} <span className="as-draft ch-draft">· {v.rewards.draft}</span>
+          </h2>
+          <ul>
+            {v.rewards.items.map((r) => (
+              <li key={r.text}>{r.href ? <Link href={r.href}>{r.text}</Link> : r.text}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {v.counts && (
         <section className="dz-section ch-counts" aria-labelledby="ch-counts">
           <h2 id="ch-counts">{v.counts.head}</h2>
