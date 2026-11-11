@@ -10,7 +10,7 @@ import { referencePicture } from '~/lib/images/reference-picture';
 import { signTicket, type TicketDesign } from '~/lib/images/ticket';
 import { bookCharacter } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
-import { characterAnchor, makeView, momentPrompt, othersIn, challengeStyles, readMake, remixPrompt, resolveStyle } from '~/lib/challenge/make';
+import { makeView, momentPrompt, othersIn, challengeStyles, readMake, remixPrompt, resolveStyle } from '~/lib/challenge/make';
 import { MAKE_WORDING } from '~/lib/challenge/make-wording';
 import { CHALLENGE_CLOSED_DEFAULT, challengeDefaultModel, challengeModel, closedUsableBy, DEFAULT_CHALLENGE_MODEL, reserveUsd, modelView, noticeProblem } from '~/lib/challenge/models';
 import { oneCharacterProblem } from '~/lib/challenge/one-character';
@@ -40,8 +40,9 @@ import { challengeVisibleTo } from '~/lib/challenge/visibility';
  * host's safety checker. The model must be one of challengeModels() (src/lib/challenge/models.ts); today the edit
  * model, with the tapped picture as reference image 1. With the moments off (owner, 2026-11-08) the prompt is
  * remixPrompt (the words, reference image 1, the style's text and KEEP_LINE, the no-lettering line) and the picture is
- * anchored to the character's first passage; with them on, momentPrompt with the other characters' current default
- * looks after it, anchored to the moment's passage. Nothing about the draft
+ * attached to no passage (owner, 2026-11-10: challenge pictures are never attached to a passage or moment; until then
+ * the character's first passage); with them on, momentPrompt with the other characters' current default looks after it,
+ * and still no passage and no moment in the record. Nothing about the draft
  * is kept here: the picture and its signed record go back to the device, and Publish (/api/images/publish) writes it.
  *
  * Models (branch challenge-models, owner, 2026-11-08): GET sends the Model row (src/lib/challenge/models.ts modelView),
@@ -166,9 +167,10 @@ export async function POST(request: Request) {
   // A published style (picked, or Random's draw): a 'uses' link too, with the exact text added and who drafted it.
   const sd = style?.design;
   if (sd) designs.push({ versionId: sd.versionId, kind: 'style', entity: sd.entity, title: sd.title, by: designByline(sd.byName, sd.byFid), versionNo: sd.versionNo, text: sd.text, assist: sd.assist ?? null });
-  const anchor = moment ? { chapter: moment.chapter, start: moment.start, end: moment.end } : characterAnchor(src.character);
+  // No passage and no moment, ever (owner, 2026-11-10: "challenge pictures must never be attached to a passage or
+  // moment"); nothing is carried over from the picture it starts from either.
   const ticket = signTicket({
-    v: 1, fid, chapter: anchor.chapter, start: anchor.start, end: anchor.end, userPrompt: r.words, style: null, prompt,
+    v: 1, fid, chapter: null, start: null, end: null, userPrompt: r.words, style: null, prompt,
     model: recipeModel(chosen).id, endpoint: recipeModel(chosen).endpoint, host: recipeModel(chosen).host, settings: made.settings,
     seed: made.seed, requestId: made.requestId, sha256, width: IMAGES.size.width, height: IMAGES.size.height,
     costUsd: made.costUsd, guard: { model: IMAGES.guardModel, verdict: 'ok' }, at: new Date().toISOString(),
@@ -177,7 +179,6 @@ export async function POST(request: Request) {
     sheets: { characters: [src.character, ...others.map((o) => o.slug)], place: null, added: [] },
     challenge: {
       character: src.character, from: src.versionId, fromKind: src.kind, model: chosen.id,
-      ...(moment ? { moment: moment.id, scene: moment.scene } : {}),
       ...(style ? { style: { choice: style.choice, id: style.id, elementId: style.design?.elementId ?? null, label: style.label, text: style.text } } : {}),
       ...(setting ? { setting: settingRecord(setting) } : {}),
     },

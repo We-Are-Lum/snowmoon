@@ -84,7 +84,7 @@ export function frameView(f: { id: string; by: string; title: string; shot: stri
 }
 
 /** A reader's picture (studio.elements, an image): the same sheet as the feed's. */
-export const pictureView = (p: { versionId: string; by: string; prompt: string; chapter: number; at: string }) =>
+export const pictureView = (p: { versionId: string; by: string; prompt: string; chapter: number | null; at: string }) =>
   readerImageView({ versionId: p.versionId, by: p.by, prompt: p.prompt, chapter: p.chapter, date: p.at.slice(0, 10) });
 
 export const labelFor = (by: string) => AI_LABEL.imageBy(by);

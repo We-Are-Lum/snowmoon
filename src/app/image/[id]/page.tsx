@@ -8,6 +8,7 @@ import { RERUN_LINE, bothChecksRan, checksLine, isClosed, modelName, modelTerms,
 import { passageLabel, passageText } from '~/lib/images/passage';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { byline } from '~/lib/images/byline';
+import { NO_PASSAGE } from '~/lib/images/no-passage';
 import { SETTING_WORDING } from '~/lib/challenge/settings-wording';
 import { PAPER } from '~/lib/tokens';
 import { ImageActions } from '~/components/image-actions';
@@ -41,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     imageUrl: card,
     button: { title: 'See it in Snowmoon', action: { type: 'launch_frame', name: APP_NAME, url: `${appUrl()}/image/${id}`, splashImageUrl: `${appUrl()}/splash.png`, splashBackgroundColor: PAPER } },
   });
-  const title = `An image for Snowmoon, Chapter ${im.chapter}`;
+  const title = im.chapter === null ? NO_PASSAGE.title : `An image for Snowmoon, Chapter ${im.chapter}`;
   const description = `AI-generated image by ${byline(im.byName, im.byFid)}, not by the author.`;
   return {
     title,
@@ -56,12 +57,14 @@ export default async function ImagePage({ params }: Props) {
   const { id } = await params;
   const im = await load(id);
   if (!im) notFound();
-  const where = passageLabel(im.chapter, im.start, im.end);
+  // A remix challenge picture has no passage (owner, 2026-11-10): no chapter, no passage, no reader link.
+  const anchored = im.chapter !== null && im.start !== null && im.end !== null;
+  const where = anchored ? passageLabel(im.chapter!, im.start!, im.end!) : null;
   const date = im.createdAt.slice(0, 10);
   const by = byline(im.byName, im.byFid);
-  const reader = `/chapter/${im.chapter}#c${im.chapter}-b${im.start}`;
+  const reader = anchored ? `/chapter/${im.chapter}#c${im.chapter}-b${im.start}` : NO_PASSAGE.page(im.versionId);
   // The passage's own words (book text, never sent to a model): what the image is of, shown first (owner, 2026-10-10).
-  const passage = passageText(im.chapter, im.start, im.end);
+  const passage = anchored ? passageText(im.chapter!, im.start!, im.end!) : [];
   // "In this image" (2026-10-10): the characters and place its recipe records (older images: the picked sheets' characters).
   const inImage = inThisImage(
     im.sheets?.characters ?? im.designs.filter((d) => d.kind === 'character').map((d) => sheetCharacters().find((c) => c.name === d.entity)?.slug).filter((x): x is string => Boolean(x)),
@@ -89,8 +92,14 @@ export default async function ImagePage({ params }: Props) {
             <span className="ip-meta">
               {date} ·{' '}
               <Link href={reader}>
-                Chapter {im.chapter}
-                {where ? ` · ${where}` : ''} · Open in reader →
+                {anchored ? (
+                  <>
+                    Chapter {im.chapter}
+                    {where ? ` · ${where}` : ''} · Open in reader →
+                  </>
+                ) : (
+                  <>{NO_PASSAGE.label} →</>
+                )}
               </Link>
             </span>
           </figcaption>
@@ -104,9 +113,11 @@ export default async function ImagePage({ params }: Props) {
         )}
         {inImage.length > 0 && <InThisImage items={inImage} />}
         {/* Another image of the same passage (owner, 2026-10-10); shown where "Add an image" shows. Model-drafted wording. */}
-        <MakeImageLink className="mi-from ip-make" passage={{ chapter: im.chapter, start: im.start, end: im.end }}>
-          {W.create.ofThis} →
-        </MakeImageLink>
+        {anchored && (
+          <MakeImageLink className="mi-from ip-make" passage={{ chapter: im.chapter!, start: im.start!, end: im.end! }}>
+            {W.create.ofThis} →
+          </MakeImageLink>
+        )}
       </div>
 
       <div className="ip-side">
@@ -187,7 +198,7 @@ export default async function ImagePage({ params }: Props) {
           <dd>{im.costUsd !== null ? `$${im.costUsd.toFixed(4)}` : 'not recorded'}</dd>
           <dt>Published</dt>
           <dd>
-            By {im.byName ? `@${im.byName} (FID ${im.byFid})` : `FID ${im.byFid}`}, {date}, for Chapter {im.chapter}
+            By {im.byName ? `@${im.byName} (FID ${im.byFid})` : `FID ${im.byFid}`}, {date}, {anchored ? `for Chapter ${im.chapter}` : `for the ${NO_PASSAGE.label.toLowerCase()}`}
             {where ? `, ${where}` : ''}. Licence GPL-3.0.
           </dd>
           <dt>File</dt>

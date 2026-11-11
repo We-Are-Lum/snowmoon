@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { chapterLabel } from '~/lib/images/no-passage';
 import { notFound } from 'next/navigation';
 import { IMAGES } from '~/lib/config';
 import { db } from '~/lib/db';
@@ -200,7 +201,7 @@ export default async function DesignPage({ params }: Props) {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={b.url} alt="AI-generated image, not by the author" width={1024} height={576} loading="lazy" />
                   </Link>
-                  <span className="dz-caption">Chapter {b.chapter} · AI-generated image · not by the author</span>
+                  <span className="dz-caption">{chapterLabel(b.chapter)} · AI-generated image · not by the author</span>
                 </li>
               ))}
             </ul>

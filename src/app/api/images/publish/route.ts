@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from 'node:crypto';
+import { challengeRecord, publishAnchor } from '~/lib/images/anchor';
 import { socialByline } from '~/lib/social/byline';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
@@ -75,6 +76,9 @@ export async function POST(request: Request) {
   // A wallet account's byline is its address, shortened (owner, 2026-10-13).
   const wallet = fid < 0 ? getWallet(request) : null;
   const by = wallet ? { name: shortAddress(wallet.address), source: 'wallet' as const } : (socialByline(request, fid) ?? (await bylineName(fid, body.nameProof)));
+  // The passage: every reader's image has one, a remix challenge picture never (owner, 2026-11-10).
+  const anchor = publishAnchor(t);
+  if (!t.challenge && !anchor) return no('This draft has no passage. Generate it again.', 400);
   const url = await putPublic(t.sha256, bytes, 'image/jpeg');
   const recipeId = randomUUID(), elementId = randomUUID(), versionId = randomUUID();
   await sql.begin(async (tx) => {
@@ -92,7 +96,8 @@ export async function POST(request: Request) {
         settings: t.settings,
         request_id: t.requestId,
         made_at: t.at,
-        anchor: { chapter: t.chapter, start: t.start, end: t.end },
+        // A remix challenge picture has no passage (owner, 2026-11-10): no anchor, whatever its ticket says.
+        ...(anchor ? { anchor } : {}),
         output_sha256: t.sha256,
         size: { width: t.width, height: t.height },
         // A closed model's picture (branch challenge-models): no host safety checker ran; its maker's own filters aren't recorded.
@@ -105,7 +110,8 @@ export async function POST(request: Request) {
         // Sheets as text (2026-10-10): who is in the image and where, and the shorthand text added.
         ...(t.sheets ? { sheets: t.sheets } : {}),
         // A remix challenge picture: the character remixed, the moment and its scene line, and what it started from.
-        ...(t.challenge ? { challenge: t.challenge } : {}),
+        // (never a moment or its scene: owner, 2026-11-10)
+        ...(t.challenge ? { challenge: challengeRecord(t.challenge) } : {}),
       } as never),
       seed: t.seed,
       // The style text was drafted by the coding agent (content/snowmoon/designs/styles), so it says so.
@@ -117,7 +123,7 @@ export async function POST(request: Request) {
     })}`;
     await tx`insert into studio.elements ${tx({ id: elementId, work_id: WORK_ID, element_type: 'image', created_by_fid: fid })}`;
     await tx`insert into studio.element_versions ${tx({ id: versionId, element_id: elementId, version_no: 1, body: tx.json({ lettering: [], ...(bs.backstory ? { backstory: { ...bs.backstory, at: new Date().toISOString() } } : {}) } as never), asset_url: url, asset_sha256: t.sha256, recipe_id: recipeId })}`;
-    await tx`insert into studio.anchors ${tx({ version_id: versionId, work_id: WORK_ID, chapter: t.chapter, start_idx: t.start, end_idx: t.end })}`;
+    if (anchor) await tx`insert into studio.anchors ${tx({ version_id: versionId, work_id: WORK_ID, chapter: anchor.chapter, start_idx: anchor.start, end_idx: anchor.end })}`;
     for (const to of uses) await tx`insert into studio.links ${tx({ from_version_id: versionId, to_version_id: to, kind: 'uses' })}`;
     for (const to of remixedFrom) await tx`insert into studio.links ${tx({ from_version_id: versionId, to_version_id: to, kind: 'remixed_from' })}`;
   });
