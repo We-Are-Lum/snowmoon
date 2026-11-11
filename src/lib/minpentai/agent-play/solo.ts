@@ -17,7 +17,7 @@ import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { drawRules, engine, layout, other, rng, verdict, type AnyPiece, type Engine, type Kills, type Placement, type Side, type World } from '../versions/engine';
 import type { Settings } from '../versions/schema';
 import { SOLO_V3, type VersionRules } from '../versions/solo-v1';
-import { TurnWatch } from './summary';
+import { TurnWatch, tieKills, type Dark } from './summary';
 import { emptyOwnSeen, outOfSight, updOwnSeen, withOwnSeen, type OwnSeen } from '../versions/own-seen';
 import { BOOK_3_DRAFT, BOOK_4_DRAFT, BOOK_EDITION } from '../versions/book-edition';
 import { PRESETS, TOP_LEVEL, searchPlan, type BookPlay, type Computer, type Preset } from '../versions/search';
@@ -111,6 +111,11 @@ export interface SoloMatch {
    * before it rebuild it from their record (ownOf).
    */
   own?: Record<Side, OwnSeen>;
+  /**
+   * The person's side's memory of enemy squares, as it last saw them (owner, 2026-11-11: fix 5; simulate assumes them),
+   * updated like `ls` from its own view. Matches from before it rebuild it from their record (theirSquaresSeen).
+   */
+  theirSq?: Record<number, { hp: number; step: number }>;
   /** 1: the site computer plans with that memory (matches started from 2026-11-04; older records replay without it). */
   remember?: 1;
   /** Turns to act so far (0 is setup). */
@@ -206,7 +211,7 @@ export function newSolo(o: { id: string; ruleset: RulesetName; level: number; se
   e.L.towers.C.forEach((k) => (ls.A[k] = 0));
   const m: SoloMatch = {
     v: 1, id: o.id, ruleset: o.ruleset, level: o.level, ...(REVISIONS[o.ruleset] ? { computer: REVISIONS[o.ruleset]!.computer } : {}), seed: o.seed, person: o.person, agent: o.agent,
-    linkHash: sha256(linkSecret), cpu, cpuCommit: sha256(cpu), createdAt: o.now, w, kills: { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) }, ls, own: { C: emptyOwnSeen(), A: emptyOwnSeen() }, remember: 1, turn: 0,
+    linkHash: sha256(linkSecret), cpu, cpuCommit: sha256(cpu), createdAt: o.now, w, kills: { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) }, ls, own: { C: emptyOwnSeen(), A: emptyOwnSeen() }, theirSq: {}, remember: 1, turn: 0,
     pend: { C: null, A: null }, openedAt: Date.parse(o.now) || 0, standing: null, history: [], end: null,
   };
   return { m, linkSecret };
@@ -274,10 +279,8 @@ export function viewFor(m: SoloMatch) {
   const over = !!m.end;
   const lastSeen = Object.entries(m.ls[me]).filter(([k]) => !view.tw[+k]).map(([k, step]) => ({ x: e.XY(+k)[0], y: e.XY(+k)[1], step }));
   const mineOut = outOfSight(e, m.w, s, me, ownOf(m)[me]);
-  // The enemy's possible placement area (owner, 2026-11-04: fix 6): within its reach of every enemy tower this side
-  // sees or last saw, less squares it sees taken. Only the towers it knows of: one it never saw adds more.
-  const theirTowers = [...e.towers(view, other(me)), ...lastSeen.map((t) => e.K(t.x, t.y))];
-  const enemyArea = [...e.lit(view, other(me), s.reach, theirTowers)].filter((k) => !see.has(k) || e.empty(view, k));
+  const enemyArea = enemyAreaOf(e, s, view, see, m.ls[me], me);
+  const areaSet = new Set(enemyArea);
   return {
     match_id: m.id,
     side: 'Cyan',
@@ -296,7 +299,7 @@ export function viewFor(m: SoloMatch) {
     costs: costsOf(s),
     // book-4's kill reports: every enemy tower this side's gliders destroyed, seen or not, and the count for both
     // sides (the tie-break counts them). Nothing else from the dark.
-    ...(s.killReports ? { towers_destroyed: { by_you: m.kills.C, by_opponent: m.kills.A }, your_kills: (m.kills.log ?? []).filter((x) => x.o === me).map((x) => ({ x: e.XY(x.k)[0], y: e.XY(x.k)[1], step: x.step })) } : {}),
+    ...(s.killReports ? { towers_destroyed: { by_you: m.kills.C, by_opponent: m.kills.A }, ...(over ? {} : { towers_unseen: UNSEEN }), your_kills: (m.kills.log ?? []).filter((x) => x.o === me).map((x) => ({ x: e.XY(x.k)[0], y: e.XY(x.k)[1], step: x.step })) } : {}),
     ...(s.gliderSight || s.symbolGliderSight ? { glider_sight: { plain: s.gliderSight ?? 0, symbol: s.symbolGliderSight ?? 0 } } : {}),
     // book-3's limits, said only where a ruleset sets them (book-1 and book-2 views are unchanged).
     ...(s.maxTowers ? { towers_at_most: s.maxTowers, ...(s.symbolsCapped ? { symbols_count_toward_the_cap: true } : {}) } : {}),
@@ -310,9 +313,12 @@ export function viewFor(m: SoloMatch) {
     in_sight: rowRanges(e, see),
     last_seen_enemy_towers: lastSeen,
     // Its own pieces it can't see now, as it last saw them (fix 2): never their state now.
-    my_pieces_out_of_sight: piecesOut(e, mineOut),
+    my_pieces_out_of_sight: piecesOut(e, mineOut, darkGliders(e, mineOut, m.kills, me)),
     enemy_can_place_from_last_seen: { squares: rowRanges(e, enemyArea), how: `the squares within ${s.reach} (the ${2 * s.reach + 1} x ${2 * s.reach + 1} box) of every enemy tower you see or last saw, less squares you see taken: where the enemy could place next turn if those towers still stand. A tower you never saw adds more.` },
     can_place: rowRanges(e, can),
+    // can_place squares the enemy can place on too, from the towers this side sees or last saw (owner, 2026-11-11: fix 6):
+    // a piece placed there may be cancelled by one of theirs on the same square.
+    can_place_contested: rowRanges(e, can.filter((k) => areaSet.has(k))),
     my_orders: m.pend.C ? { placements: m.pend.C.placements.map(orderOut), source: m.pend.C.source, final: m.pend.C.final, commitment: m.pend.C.commitment, ...(m.pend.C.note ? { note: m.pend.C.note } : {}) } : null,
     standing_order: m.standing,
     my_turns: m.history.map((h) => ({ turn: h.turn, step: h.step, placements: h.C.placements.map(orderOut), source: h.C.source, ...(h.C.preset ? { preset: h.C.preset } : {}), ...(h.C.via === 'page' ? { taken_on_the_live_page: true, drafted_by: h.C.drafted_by } : {}) })),
@@ -322,6 +328,31 @@ export function viewFor(m: SoloMatch) {
     // What the person's side saw happen in the last turn's steps, in words (summary.ts); empty before the first.
     last_turn_summary: m.summary ? { turn: m.summary.turn, from_step: m.summary.from, lines: m.summary.lines } : null,
   };
+}
+
+/** Beside towers_destroyed and on the live page (owner, 2026-11-11: fix 2). No count of the enemy's towers: the fog stays. */
+export const UNSEEN = 'They may have towers you haven\'t seen: towers_destroyed counts towers destroyed, not towers left.';
+
+/**
+ * The enemy's possible placement area (owner, 2026-11-04: fix 6): within its reach of every enemy tower this side sees or
+ * last saw, less squares it sees taken. Only the towers it knows of: one it never saw adds more.
+ */
+function enemyAreaOf(e: Engine, s: Settings, view: World, see: Set<number>, ls: Record<number, number>, me: Side): number[] {
+  const theirTowers = [...e.towers(view, other(me)), ...Object.keys(ls).map(Number).filter((k) => !view.tw[k])];
+  return [...e.lit(view, other(me), s.reach, theirTowers)].filter((k) => !see.has(k) || e.empty(view, k));
+}
+
+/**
+ * Its own gliders out of sight as its memory holds them (own-seen.ts), less those a kill report ties to a tower they
+ * destroyed (summary.ts tieKills: the glider's straight line from where it was last seen reaches that tower at the kill's
+ * step, and only its line does), and less repeats of the same square and heading, the latest kept (owner, 2026-11-11:
+ * fix 1). Only from its memory and its kill reports: nothing about where a glider is now.
+ */
+function darkGliders(e: Engine, mem: OwnSeen, kills: Kills, me: Side): Dark[] {
+  const seen = new Set<string>();
+  const gl = Object.values(mem.gl).sort((a, b) => b.step - a.step).filter((g) => { const k = `${g.x},${g.y},${g.dx},${g.dy},${g.seed ? 1 : 0}`; if (seen.has(k)) return false; seen.add(k); return true; });
+  const dead = new Set(tieKills(e, gl, (kills.log ?? []).filter((x) => x.o === me)).values());
+  return gl.filter((_, j) => !dead.has(j)).map((g) => ({ x: g.x, y: g.y, dx: g.dx, dy: g.dy, step: g.step, ...(g.seed ? { seed: 1 as const } : {}) }));
 }
 
 /** The empty squares the person's side may place on now, within reach of the towers it holds. */
@@ -373,14 +404,14 @@ function gridRows(e: Engine, v: World, see: Set<number>, me: Side, lastSeen: { x
   return g.map((r) => r.join(''));
 }
 /** Its own pieces out of sight (own-seen.ts outOfSight), as the view lists them. */
-function piecesOut(e: Engine, mem: OwnSeen) {
+function piecesOut(e: Engine, mem: OwnSeen, gliders: Dark[]) {
   const xy = (k: number | string) => ({ x: e.XY(+k)[0], y: e.XY(+k)[1] });
   return [
     ...Object.entries(mem.sq).map(([k, q]) => ({ piece: 'square', ...xy(k), hits_left: q.hp, last_seen_step: q.step })),
     ...Object.entries(mem.mir).map(([k, q]) => ({ piece: 'mirror', ...xy(k), slant: q.d > 0 ? '/' : '\\', hits_left: q.hp, last_seen_step: q.step })),
     ...Object.entries(mem.fa).map(([k, q]) => ({ piece: 'factory', ...xy(k), dir: dirName(q.dx, q.dy), hits_left: q.hp, last_seen_step: q.step })),
     ...Object.entries(mem.sd).map(([k, q]) => ({ piece: 'resting_symbol_glider', ...xy(k), last_seen_step: q.step })),
-    ...Object.values(mem.gl).map((g) => ({ piece: g.seed ? 'symbol_glider' : 'glider', x: g.x, y: g.y, dir: dirName(g.dx, g.dy), last_seen_step: g.step, flying: true })),
+    ...gliders.sort((a, b) => a.step - b.step || a.y - b.y || a.x - b.x || a.dy - b.dy || a.dx - b.dx).map((g) => ({ piece: g.seed ? 'symbol_glider' : 'glider', x: g.x, y: g.y, dir: dirName(g.dx, g.dy), last_seen_step: g.step, flying: true })),
     ...Object.values(mem.mw).map((m) => ({ piece: 'moving_wall', dir: dirName(m.dx, m.dy), squares: e.wallCells(m).filter((_, i) => m.c[i]).map(([x, y]) => ({ x, y })), last_seen_step: m.step })),
   ];
 }
@@ -489,8 +520,9 @@ export function turnFrames(m: SoloMatch, turn: number, whole = false) {
 
 /**
  * How a finished match ended, in words for the person's live page (owner, 2026-11-04: fix 3): who won and why, e.g. "you
- * won on towers, 5 to 1, at step 144" or "you won at step 126: every enemy tower destroyed". Only once it's over (the
- * tower counts are then the record's).
+ * won with more towers standing, 5 to 1, at step 144" (towers left, beside the header's towers destroyed: worded
+ * 2026-11-11 so the two don't read as disagreeing) or "you won at step 126: every enemy tower destroyed". Only once it's
+ * over (the tower counts are then the record's).
  */
 export function endText(m: SoloMatch): string | null {
   if (!m.end) return null;
@@ -502,14 +534,15 @@ export function endText(m: SoloMatch): string | null {
   if (!mine && !theirs) return `a draw at step ${step}: both sides' last towers fell at once`;
   if (!theirs) return `you won at step ${step}: every enemy tower destroyed`;
   if (!mine) return `the site computer won at step ${step}: every tower of yours destroyed`;
-  // The winner's count first: "you won on towers, 5 to 1", "the site computer won on towers, 4 to 2".
-  if (mine !== theirs) return `${who} on towers, ${Math.max(mine, theirs)} to ${Math.min(mine, theirs)}, at step ${step}`;
-  return s.tieBreak && m.kills.C !== m.kills.A ? `${who} at step ${step}: towers level ${mine} to ${theirs}, so towers destroyed decide, ${m.kills.C} to ${m.kills.A}` : `a draw at step ${step}: towers level, ${mine} to ${theirs}`;
+  // The winner's count first: "you won with more towers standing, 5 to 1", "the site computer won with more towers standing, 4 to 2".
+  if (mine !== theirs) return `${who} with more towers standing, ${Math.max(mine, theirs)} to ${Math.min(mine, theirs)}, at step ${step}`;
+  return s.tieBreak && m.kills.C !== m.kills.A ? `${who} at step ${step}: towers standing level ${mine} to ${theirs}, so towers destroyed decide, ${m.kills.C} to ${m.kills.A}` : `a draw at step ${step}: towers standing level, ${mine} to ${theirs}`;
 }
 
 /**
  * While the match goes on (fix 3): where the enemy's towers are as far as the person's side knows, the ones it sees and
- * those it last saw. The match going on says they have at least one.
+ * those it last saw. The match going on says they have at least one. Never a count (owner, 2026-11-11: fix 2): the line
+ * says they may have towers it hasn't seen.
  */
 export function stillStanding(m: SoloMatch): string | null {
   if (m.end) return null;
@@ -517,7 +550,7 @@ export function stillStanding(m: SoloMatch): string | null {
   const seen = e.towers(view, COMPUTER), last = Object.keys(m.ls[PERSON]).map(Number).filter((k) => !view.tw[k]);
   const at = (ks: number[]) => ks.slice(0, 4).map((k) => `(${e.XY(k)[0]}, ${e.XY(k)[1]})`).join(', ') + (ks.length > 4 ? ` and ${ks.length - 4} more` : '');
   if (!seen.length && !last.length) return 'They still have towers, somewhere out of your sight.';
-  return `They still have towers: ${[seen.length ? `in sight at ${at(seen)}` : '', last.length ? `last seen at ${at(last)}` : ''].filter(Boolean).join('; ')}.`;
+  return `They still have towers: ${[seen.length ? `in sight at ${at(seen)}` : '', last.length ? `last seen at ${at(last)}` : ''].filter(Boolean).join('; ')}. They may have towers you haven't seen.`;
 }
 
 /** The squares the person's side sees now, as a replay frame gives them (the 3D view's cloud covers the rest). */
@@ -545,10 +578,14 @@ export function planComputer(m: SoloMatch, now: string): boolean {
   return true;
 }
 
-/** A side's turn summary watcher (summary.ts), from the board before the placements, with the turn's opening lines. */
-function watchTurn(e: Engine, s: Settings, me: Side, before: World, kills: Kills, o: Pick<Orders, 'placements' | 'via' | 'drafted_by'>) {
-  const watch = new TurnWatch(e, s, me, before, kills, o.placements);
-  if (o.via === 'page') watch.say(`Your person took this turn on the live page, approving the orders ${o.drafted_by === 'agent' ? 'you (their AI) drafted' : 'drafted before'}.`);
+/**
+ * A side's turn summary watcher (summary.ts), from the board before the placements, with the turn's opening lines, and
+ * its own gliders out of sight as its memory holds them (darkGliders). `audience`: the AI's view and summary, or the
+ * person's live page (owner, 2026-11-11: there the person reads "You took this turn here, approving your AI's draft.").
+ */
+function watchTurn(e: Engine, s: Settings, me: Side, before: World, kills: Kills, o: Pick<Orders, 'placements' | 'via' | 'drafted_by'>, mem: OwnSeen, audience: 'ai' | 'page' = 'ai') {
+  const watch = new TurnWatch(e, s, me, before, kills, o.placements, darkGliders(e, outOfSight(e, before, s, me, mem), kills, me));
+  if (o.via === 'page') watch.say(audience === 'page' ? `You took this turn here, approving ${o.drafted_by === 'agent' ? 'your AI\'s draft' : 'a draft'}.` : `Your person took this turn on the live page, approving the orders ${o.drafted_by === 'agent' ? 'you (their AI) drafted' : 'drafted before'}.`);
   return watch;
 }
 
@@ -559,18 +596,20 @@ export interface TurnStory { turn: number; lines: string[]; kills: number; lost:
  * Every turn's summary for a side, rebuilt from the record (the same watcher, the same frames the turn ran through):
  * the live page's past turns (owner, 2026-11-03). Index = turn. Also the towers that side's gliders destroyed in it,
  * where the ruleset reports kills (otherwise only those destroyed in its sight), the towers it lost, and the turn's big
- * moments (owner, 2026-11-04).
+ * moments (owner, 2026-11-04). `audience` 'page': the live page's wording (owner, 2026-11-11).
  */
-export function turnSummaries(m: SoloMatch, me: Side = PERSON): TurnStory[] {
+export function turnSummaries(m: SoloMatch, me: Side = PERSON, audience: 'ai' | 'page' = 'ai', start?: World): TurnStory[] {
   const { s, e } = rulesOf(m);
-  const w = e.world(s), kills: Kills = { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) };
+  // `start`: the board the record starts from (the match's first board; a test may set one up by hand).
+  const w = start ? e.clone(start) : e.world(s), kills: Kills = { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) }, mem = emptyOwnSeen();
   const out: TurnStory[] = [];
   for (const h of m.history) {
-    const watch = watchTurn(e, s, me, e.clone(w), kills, h[me]);
+    const watch = watchTurn(e, s, me, e.clone(w), kills, h[me], mem, audience);
     e.apply(w, s, { C: h.C.placements, A: h.A.placements });
+    updOwnSeen(e, w, s, me, mem);
     watch.appear(w);
     const before = kills[me], from = w.step;
-    do { e.step(w, s, kills); watch.look(w); if (verdict(e, w, s, kills)) break; } while (w.step - from < s.every);
+    do { e.step(w, s, kills); updOwnSeen(e, w, s, me, mem); watch.look(w); if (verdict(e, w, s, kills)) break; } while (w.step - from < s.every);
     const lines = watch.done();
     out.push({ turn: h.turn, lines, kills: s.killReports ? kills[me] - before : watch.killsSeen, lost: watch.lost, big: watch.big(3) });
     if (verdict(e, w, s, kills)) break;
@@ -586,11 +625,13 @@ function resolve(m: SoloMatch, now: string) {
   const strip = ({ final: _f, note: _n, ...x }: Orders) => x;
   m.history.push({ turn: m.turn, step: m.w.step, C: strip(C), A: strip(A) });
   // The person's turn summary, from their side's view at each frame (summary.ts).
-  const watch = watchTurn(e, s, PERSON, e.clone(m.w), m.kills, C);
   const own = (m.own = ownOf({ ...m, history: m.history.slice(0, -1) }));
+  const theirSq = (m.theirSq = theirSquaresSeen({ ...m, history: m.history.slice(0, -1) }));
+  const watch = watchTurn(e, s, PERSON, e.clone(m.w), m.kills, C, own[PERSON]);
   e.apply(m.w, s, { C: C.placements, A: A.placements });
   e.updSeen(m.w, s, m.ls, m.kills);
   updOwn(e, m.w, s, own);
+  updTheirSq(e, m.w, s, theirSq);
   watch.appear(m.w);
   const from = m.w.step, turn = m.turn;
   const note = () => { m.summary = { turn, from, lines: watch.done() }; };
@@ -598,6 +639,7 @@ function resolve(m: SoloMatch, now: string) {
     e.step(m.w, s, m.kills);
     e.updSeen(m.w, s, m.ls, m.kills);
     updOwn(e, m.w, s, own);
+    updTheirSq(e, m.w, s, theirSq);
     watch.look(m.w);
     const v = verdict(e, m.w, s, m.kills);
     if (v) {
@@ -693,16 +735,18 @@ export function checkComputer(r: Pick<SoloMatch, 'ruleset' | 'computer' | 'seed'
  * and the agent's own belief, never from the real board. A belief piece may only go where the side can't see
  * (where it can see, it already knows); scenario orders are checked on that imagined board.
  */
-export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { name: string; placements: unknown }[]; steps?: number; use_last_seen?: boolean }) {
+export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { name: string; placements: unknown }[]; steps?: number; use_last_seen?: boolean; use_last_seen_squares?: boolean }) {
   const { s, e } = rulesOf(m);
   const me = PERSON, them = other(me);
   const view = e.fog(m.w, s, me), see = e.sees(view, s, me);
   // The board as this side believes it: its view, its own pieces out of sight where it last saw them (as the site
   // computer believes its own: search.ts belief), enemy towers where it last saw them unless use_last_seen is false
-  // (owner, 2026-11-04: fix 4), then the agent's own belief.
+  // (owner, 2026-11-04: fix 4), enemy squares where it last saw them unless use_last_seen_squares is false (owner,
+  // 2026-11-11: fix 5), then the agent's own belief.
   const board = withOwnSeen(e, e.clone(view), me, outOfSight(e, m.w, s, me, ownOf(m)[me]));
   const b = args.belief ?? {};
   if (args.use_last_seen !== undefined && typeof args.use_last_seen !== 'boolean') throw new SoloError('use_last_seen must be true or false');
+  if (args.use_last_seen_squares !== undefined && typeof args.use_last_seen_squares !== 'boolean') throw new SoloError('use_last_seen_squares must be true or false');
   if (!Array.isArray(b.towers ?? []) || !Array.isArray(b.squares ?? []) || !Array.isArray(b.gliders ?? [])) throw new SoloError('belief: towers, squares and gliders must be lists');
   if ((b.towers?.length ?? 0) + (b.squares?.length ?? 0) + (b.gliders?.length ?? 0) > 60) throw new SoloError('belief: at most 60 pieces');
   const named = [...(b.towers ?? []), ...(b.squares ?? []), ...(b.gliders ?? [])] as { x: unknown; y: unknown }[];
@@ -713,6 +757,10 @@ export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { nam
   const mine = new Set(named.map((p) => e.K(p.x as number, p.y as number)));
   const lastSeen = args.use_last_seen === false ? [] : Object.keys(m.ls[me]).map(Number).filter((k) => !view.tw[k] && !mine.has(k) && e.empty(board, k));
   for (const k of lastSeen) board.tw[k] = them;
+  const sqSeen = args.use_last_seen_squares === false ? [] : Object.entries(theirSquaresSeen(m)).map(([k, q]) => ({ k: +k, ...q })).filter((q) => !see.has(q.k) && !mine.has(q.k) && e.empty(board, q.k));
+  for (const q of sqSeen) board.sq[q.k] = { o: them, hp: q.hp };
+  // Where the enemy can place next turn, from the towers this side sees or last saw (fix 6): a placement there may cancel.
+  const area = new Set(enemyAreaOf(e, s, view, see, m.ls[me], me));
   const put = (x: unknown, y: unknown) => {
     const k = e.K(x as number, y as number);
     if (!e.empty(board, k)) throw new SoloError(`belief: ${x},${y} already holds a piece in your belief`);
@@ -734,8 +782,9 @@ export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { nam
   // My symbols formed last turn, still waiting to be walled in (decided when this turn's placements appear).
   const waiting = Object.keys(board.fs ?? {}).map(Number).filter((k) => board.fs![k].o === me && board.tw[k] === me);
   return {
-    based_on: `your view at step ${board.step}, your own pieces out of sight where you last saw them, ${lastSeen.length ? `${lastSeen.length} enemy tower${lastSeen.length === 1 ? '' : 's'} where you last saw ${lastSeen.length === 1 ? 'it' : 'them'} (use_last_seen: false leaves them out), ` : ''}and your belief`,
+    based_on: `your view at step ${board.step}, your own pieces out of sight where you last saw them, ${lastSeen.length ? `${lastSeen.length} enemy tower${lastSeen.length === 1 ? '' : 's'} where you last saw ${lastSeen.length === 1 ? 'it' : 'them'} (use_last_seen: false leaves them out), ` : ''}${sqSeen.length ? `${sqSeen.length} enemy square${sqSeen.length === 1 ? '' : 's'} where you last saw ${sqSeen.length === 1 ? 'it' : 'them'}, with the hits ${sqSeen.length === 1 ? 'it' : 'they'} had then (use_last_seen_squares: false leaves them out), ` : ''}and your belief`,
     ...(lastSeen.length ? { last_seen_towers_assumed: lastSeen.map((k) => ({ x: e.XY(k)[0], y: e.XY(k)[1] })) } : {}),
+    ...(sqSeen.length ? { last_seen_squares_assumed: sqSeen.sort((a, b) => a.k - b.k).map((q) => ({ x: e.XY(q.k)[0], y: e.XY(q.k)[1], hits_left: q.hp, last_seen_step: q.step })) } : {}),
     scenarios: args.scenarios.map((sc) => {
       const name = typeof sc?.name === 'string' ? sc.name.slice(0, 60) : '';
       let ps: Placement<AnyPiece>[];
@@ -752,9 +801,11 @@ export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { nam
       const formed = Object.keys(w.fs ?? {}).map(Number).filter((k) => w.fs![k].o === me).sort((a, b) => a - b);
       // Lane warnings from the side's view alone (not the belief: launch cells are all in sight anyway).
       const warnings = laneWarnings(e, view, s, e.towers(view, me), ps);
+      const hot = [...new Set(ps.flatMap((p) => (p.t === 'w' ? e.wallCells(p) : [[p.x, p.y]]).filter(([x, y]) => e.inb(x, y) && area.has(e.K(x, y))).map(([x, y]) => `(${x},${y})`)))];
       return {
         name, legal: true, cost: ps.reduce((t, p) => t + e.cost(s, p.t), 0),
         ...(warnings.length ? { warnings } : {}),
+        ...(hot.length ? { contested: `The enemy can place on ${hot.length > 1 ? `${hot.slice(0, -1).join(', ')} and ${hot[hot.length - 1]}` : hot[0]}: it may cancel.` } : {}),
         ...(s.costSeed ? {
           symbols: formed.map((k) => ({ x: e.XY(k)[0], y: e.XY(k)[1], step: w.fs![k].at + 1, formed: true, standing_at_end: w.tw[k] === me })),
           symbol_gliders_resting: Object.keys(w.sd ?? {}).map(Number).filter((k) => w.sd![k] === me).sort((a, b) => a - b).map((k) => ({ x: e.XY(k)[0], y: e.XY(k)[1] })),
@@ -769,6 +820,30 @@ export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { nam
       };
     }),
   };
+}
+/** The person's side's memory of enemy squares, from what it sees on board w now. */
+function updTheirSq(e: Engine, w: World, s: Settings, mem: Record<number, { hp: number; step: number }>) {
+  const me = PERSON, see = e.sees(w, s, me), v = e.fog(w, s, me);
+  for (const k of see) { const q = v.sq[k]; if (q && q.o !== me) mem[k] = { hp: q.hp, step: w.step }; else delete mem[k]; }
+}
+/**
+ * The enemy's squares as the person's side last saw them (fix 5), rebuilt from the record frame by frame, from its own
+ * view only (engine fog and sees), as engine.updSeen keeps last-seen towers: where it sees a square, what is there now
+ * (or nothing); where it doesn't, what it last saw there, with the hits it had then and the step.
+ */
+function theirSquaresSeen(m: Pick<SoloMatch, 'ruleset' | 'seed' | 'history' | 'theirSq'>): Record<number, { hp: number; step: number }> {
+  if (m.theirSq) return m.theirSq;
+  const { s, e } = rulesOf(m), w = e.world(s), kills: Kills = { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) };
+  const mem: Record<number, { hp: number; step: number }> = {};
+  const upd = () => updTheirSq(e, w, s, mem);
+  upd();
+  for (const h of m.history) {
+    e.apply(w, s, { C: h.C.placements, A: h.A.placements });
+    upd();
+    const from = w.step;
+    do { e.step(w, s, kills); upd(); if (verdict(e, w, s, kills)) return mem; } while (w.step - from < s.every);
+  }
+  return mem;
 }
 export interface Belief { towers?: { x: number; y: number }[]; squares?: { x: number; y: number; hits_left?: number }[]; gliders?: { x: number; y: number; dir: string }[] }
 
