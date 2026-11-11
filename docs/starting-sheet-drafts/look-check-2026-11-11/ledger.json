@@ -1,0 +1,219 @@
+{
+ "about": "Per-base look lines, a quick check (owner, 2026-11-11, PR #155): Gladias look a and Deluin look a with 'at a concert' and 'shaved head', GPT Image 2.5, the make route's prompt. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "cap_usd": 0.25,
+ "bases": {
+  "gladias": {
+   "name": "Gladias",
+   "file": "docs/starting-sheet-drafts/directions/gladias-recast-a-gemini.jpg",
+   "sha256": "bca41e700fdb72334d08334843e53c78381f824e0f2ea7db57eeef31dc54c4b6"
+  },
+  "deluin": {
+   "name": "Deluin",
+   "file": "docs/starting-sheet-drafts/directions/deluin-recast-a-gemini.jpg",
+   "sha256": "d2ebbc5fc7afc9746fc68c2ff3a6035cf885f75e8d7f5939bc4e5bbd66717b12"
+  }
+ },
+ "looks": {
+  "gladias": "Unless the change says otherwise: a man with deep brown skin, a short beard and dark brown eyes.",
+  "deluin": "Unless the change says otherwise: a man with deep brown skin and dark brown eyes."
+ },
+ "prompts": {
+  "afcbae09fd6a4567ece2ba744f27a89067e5fcfdbc7c0f6f4bb43ac4a67efb75": "at a concert\n\nGladias is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with deep brown skin, a short beard and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; a half-kilometre-tall mountain pyramid at the edge of the city. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "252299ac1357befc4007856e056b9271d675dcc2cf2ccb4062a3e0c2f3a65d3f": "shaved head\n\nGladias is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with deep brown skin, a short beard and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; people with watches and hand devices, gates with glowing green circles, small robots with screen faces. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "4998dee901c56ee8674cd0fa4d5e400afe74eecdaa0549708ecbb0af1a55d098": "at a concert\n\nDeluin is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with deep brown skin and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; people with watches and hand devices, gates with glowing green circles, small robots with screen faces. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words.",
+  "5c7738c6f9900490e6350a4d0d19b3477758dc68967dfcb5916223a3ac1fbe8d": "shaved head\n\nDeluin is the person in reference image 1, the main figure.\n\nUnless the change says otherwise: a man with deep brown skin and dark brown eyes.\n\nUnless the change says otherwise: one figure, in a scene that suits the change, not a character sheet.\n\nSet it in this world, where it fits: a near future, not a fantasy or medieval past; stone-brick houses behind tall trees, tall apartment towers with many windows above the treetops, small drones overhead. Show this world's own version of anything mentioned, like its games, sports, clothes, vehicles and buildings.\n\nKeep the face recognisable; change anything else the words describe.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "endpoint-list",
+   "model": "gpt",
+   "status": "ok",
+   "retention": {
+    "provider": "openai",
+    "zero_data_retention": false,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-11T23:57:16.438Z",
+    "kept": {
+     "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+     "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+     "source": "https://developers.openai.com/api/docs/guides/your-data",
+     "read": "2026-11-03"
+    }
+   },
+   "cost_usd": 0,
+   "at": "2026-11-11T23:57:16.439Z"
+  },
+  {
+   "kind": "guard",
+   "file": "gladias-a-at-a-concert-gpt.jpg",
+   "prompt_sha256": "afcbae09fd6a4567ece2ba744f27a89067e5fcfdbc7c0f6f4bb43ac4a67efb75",
+   "status": "ok",
+   "cost_usd": 0.00015585,
+   "cost_source": "reported",
+   "at": "2026-11-11T23:57:17.572Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "base": "gladias",
+   "base_sha256": "bca41e700fdb72334d08334843e53c78381f824e0f2ea7db57eeef31dc54c4b6",
+   "words": "at a concert",
+   "setting": "E",
+   "file": "gladias-a-at-a-concert-gpt.jpg",
+   "prompt_sha256": "afcbae09fd6a4567ece2ba744f27a89067e5fcfdbc7c0f6f4bb43ac4a67efb75",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M76GPRJD4V6V6M1GQ5DYBPDE",
+   "status": "ok",
+   "cost_usd": 0.048109,
+   "cost_source": "reported by the gateway",
+   "sha256": "7c42ee0885e6ba445b9f8e36db8e84f770189c40ce162adb8fd67d8c98c350c4",
+   "original_sha256": "8860774e8ad7b44d046c0085a898ab7f0aa6837b85dde60a3000de2aa824d25d",
+   "original_size": "1536x1024",
+   "converted": "cut to 1024x576 (16:9, from the top)",
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-11T23:57:49.655Z"
+  },
+  {
+   "kind": "guard",
+   "file": "gladias-a-shaved-head-gpt.jpg",
+   "prompt_sha256": "252299ac1357befc4007856e056b9271d675dcc2cf2ccb4062a3e0c2f3a65d3f",
+   "status": "ok",
+   "cost_usd": 0.0001182,
+   "cost_source": "reported",
+   "at": "2026-11-11T23:57:50.392Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "base": "gladias",
+   "base_sha256": "bca41e700fdb72334d08334843e53c78381f824e0f2ea7db57eeef31dc54c4b6",
+   "words": "shaved head",
+   "setting": "D",
+   "file": "gladias-a-shaved-head-gpt.jpg",
+   "prompt_sha256": "252299ac1357befc4007856e056b9271d675dcc2cf2ccb4062a3e0c2f3a65d3f",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M76GQRJA2HZV9DT951ZA2GG4",
+   "status": "ok",
+   "cost_usd": 0.048119,
+   "cost_source": "reported by the gateway",
+   "sha256": "7a101faae89b861b52557ca81f1f30a7cbdc4c5fa462f9b21bf46938b9b58ea7",
+   "original_sha256": "885d325da7baa29752b1163ccab8bbfc2a244a30159543052486cddf2174aeaf",
+   "original_size": "1536x1024",
+   "converted": "cut to 1024x576 (16:9, from the top)",
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-11T23:58:19.749Z"
+  },
+  {
+   "kind": "guard",
+   "file": "deluin-a-at-a-concert-gpt.jpg",
+   "prompt_sha256": "4998dee901c56ee8674cd0fa4d5e400afe74eecdaa0549708ecbb0af1a55d098",
+   "status": "ok",
+   "cost_usd": 0.0001539,
+   "cost_source": "reported",
+   "at": "2026-11-11T23:58:20.605Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "base": "deluin",
+   "base_sha256": "d2ebbc5fc7afc9746fc68c2ff3a6035cf885f75e8d7f5939bc4e5bbd66717b12",
+   "words": "at a concert",
+   "setting": "D",
+   "file": "deluin-a-at-a-concert-gpt.jpg",
+   "prompt_sha256": "4998dee901c56ee8674cd0fa4d5e400afe74eecdaa0549708ecbb0af1a55d098",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M76GRTYXDK0K81KFFJTPC355",
+   "status": "ok",
+   "cost_usd": 0.048099,
+   "cost_source": "reported by the gateway",
+   "sha256": "a15b6bfde351ad4bd3cb7df86f6f8c4f3eccc31de875eba87b74f1fcfd4fbdf1",
+   "original_sha256": "7ae0c99c561c19398a983054bf25b7f8d684a73b72254bcdcd394b5d5f52c114",
+   "original_size": "1536x1024",
+   "converted": "cut to 1024x576 (16:9, from the top)",
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-11T23:58:58.824Z"
+  },
+  {
+   "kind": "guard",
+   "file": "deluin-a-shaved-head-gpt.jpg",
+   "prompt_sha256": "5c7738c6f9900490e6350a4d0d19b3477758dc68967dfcb5916223a3ac1fbe8d",
+   "status": "ok",
+   "cost_usd": 0.000180675,
+   "cost_source": "reported",
+   "at": "2026-11-11T23:58:59.602Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "base": "deluin",
+   "base_sha256": "d2ebbc5fc7afc9746fc68c2ff3a6035cf885f75e8d7f5939bc4e5bbd66717b12",
+   "words": "shaved head",
+   "setting": "A",
+   "file": "deluin-a-shaved-head-gpt.jpg",
+   "prompt_sha256": "5c7738c6f9900490e6350a4d0d19b3477758dc68967dfcb5916223a3ac1fbe8d",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M76GSW4QRHE2WZJSFP13AV5E",
+   "status": "ok",
+   "cost_usd": 0.048124,
+   "cost_source": "reported by the gateway",
+   "sha256": "89ee5b692d66c8160d78eb1ef9bd90c7eb957c2e69c068e6a9fdc236ce3406a5",
+   "original_sha256": "576aa58c7b09b2137ca9e1e46cd642922565bd7388d1abf6b09bbf32bf690147",
+   "original_size": "1536x1024",
+   "converted": "cut to 1024x576 (16:9, from the top)",
+   "settings": {
+    "size": "1536x1024",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "at": "2026-11-11T23:59:28.772Z"
+  }
+ ]
+}
