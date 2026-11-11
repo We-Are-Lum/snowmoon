@@ -7,7 +7,11 @@
  * From a local match as in record-minpentai-live-flow.ts. On a phone: turns whose action plays in 3D in the board's
  * place with their instant replays, Watch again in 2D at 2x, "Animate action in 3D" off for a turn played in 2D, a past
  * turn watched in 3D. On a desktop, the 3D view beside the 2D board: turns with their replays, then turns taken unfilmed
- * until the match ends, and the last turn's action and its final replay on the whole board.
+ * until the match ends on its own, and the last turn's action and its final replay on the whole board.
+ *
+ * The player drafts real orders every turn, never empty ones (owner, 2026-11-12: the "passive" mode of 2026-11-04,
+ * which placed nothing from turn 3 so the match would end on a tower, showed "nothing placed" turns that looked like a
+ * bug; it is gone, and the desktop match runs to its natural end).
  *
  *   npx next build && npx tsx --conditions=react-server scripts/record-minpentai-replay-3d.ts [out-dir]
  *
@@ -32,12 +36,14 @@ const browser = await chromium.launch({ channel: 'chrome', args: ['--enable-gpu'
 try {
   const a = await connect(BASE, people.A.token, 'Claude', 'read play');
   type V = { turn: number; phase: string; can_place: string[] };
-  const draft = async (id: string, t: number, passive = false) => {
+  const draft = async (id: string, t: number) => {
     const v = (await tool(BASE, a.access_token, 'minpentai_get_view', { match_id: id })).out as unknown as V;
     if (v.phase === 'over') return -1;
     const east = [...fromRows(v.can_place)].sort((p, q) => q[0] - p[0] || p[1] - q[1]);
-    // Towers at setup; then gliders east from rows that change each turn, so they reach the enemy's side.
-    const placements = passive ? [] : v.turn === 0 ? east.slice(0, 2).map(([x, y]) => ({ piece: 'tower', x, y })) : east.filter((_, i) => (i + t) % 3 === 0).slice(0, 2).map(([x, y]) => ({ piece: 'glider', x, y, dir: 'E' }));
+    // Towers at setup; then gliders east from rows that change each turn, so they reach the enemy's side; never nothing.
+    let placements = v.turn === 0 ? east.slice(0, 2).map(([x, y]) => ({ piece: 'tower', x, y })) : east.filter((_, i) => (i + t) % 3 === 0).slice(0, 2).map(([x, y]) => ({ piece: 'glider', x, y, dir: 'E' }));
+    if (!placements.length) placements = east.slice(0, 1).map(([x, y]) => ({ piece: 'glider', x, y, dir: 'E' }));
+    if (!placements.length) throw new Error(`turn ${v.turn}: nowhere to place, so no real orders to draft`);
     const d = await tool(BASE, a.access_token, 'minpentai_submit_orders', { match_id: id, turn: v.turn, placements, source: 'agent', final: false });
     if (!d.ok) throw new Error(`draft turn ${v.turn}: ${d.error}`);
     return v.turn;
@@ -69,8 +75,8 @@ try {
         }
         throw new Error(`not seen in ${max} ms: ${loc}`);
       },
-      async turn(t, shoot = true, passive = false) {
-        const turn = await draft(id, t, passive);
+      async turn(t, shoot = true) {
+        const turn = await draft(id, t);
         if (turn < 0) return false;
         await f.until(page.locator('.mb-take-button'), 60_000, shoot);
         if (shoot) await f.shoot(1500); // the plan, on the 2D board
@@ -115,12 +121,11 @@ try {
   await film('desktop', 1440, 900, async (f) => {
     const { page } = f;
     for (let t = 0; t < 3; t++) await f.turn(t);
-    // Turns until the match is over; each filmed, and kept only if the match ended in it.
+    // Turns until the match ends on its own (towers or the clock); each filmed, and kept only if the match ended in it.
     let t = 3;
     for (; t < 40; t++) {
       const at = f.mark();
-      // Placing nothing from here, so the computer can take the last tower: the match ends on a tower, not the clock.
-      if (!(await f.turn(t, true, true))) break;
+      if (!(await f.turn(t, true))) break;
       if (await page.getByText(/^Over[: ]/).isVisible()) break;
       f.cut(at);
     }
@@ -146,6 +151,6 @@ interface Filmer {
   shoot(ms: number): Promise<void>;
   /** Step until `loc` shows (filmed, or fast without screenshots). */
   until(loc: Locator, max?: number, shoot?: boolean): Promise<void>;
-  /** Draft and take a turn on the page, through its action and replays. False once the match is over. */
-  turn(t: number, shoot?: boolean, passive?: boolean): Promise<boolean>;
+  /** Draft real orders and take the turn on the page, through its action and replays. False once the match is over. */
+  turn(t: number, shoot?: boolean): Promise<boolean>;
 }

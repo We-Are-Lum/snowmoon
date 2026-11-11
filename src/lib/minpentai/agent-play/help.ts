@@ -30,6 +30,9 @@ export function launchCells(e: Engine, w: World, s: Settings, snap: number[]): S
  *      line in front of one of your remaining launch cells, in a direction gliders may fly, with nothing between: a
  *      glider you launch there later would hit it first (chip your own square, turn off your mirror, bounce off your
  *      tower). Lines are checked up to twice your reach; a piece on the edge square of a line blocks nothing there.
+ * A square beside one of your towers (a symbol is a tower while it stands), or beside a tower placed with it, walls that
+ * tower in on purpose (owner, 2026-11-11: fix 7): its lane warnings fold into one line a tower, "Your squares at (12,2)
+ * and (12,4) wall (12,3); they also stand in 5 of your launch lanes."
  * At most 8 warnings, the rest counted.
  * Measured with the towers you have now and on your view of the board only.
  */
@@ -50,6 +53,9 @@ export function laneWarnings(e: Engine, view: World, s: Settings, snap: number[]
   }
   const dirs = s.directions === 8 ? D8 : D4, far = 2 * s.reach;
   const seen = new Set<Placement<AnyPiece>>();
+  // The towers a square may be walling in: those you have now, and those placed with it.
+  const towers = [...snap.map((k) => e.XY(k)), ...ps.filter((p) => p.t === 't').map((p) => [p.x, p.y] as [number, number])];
+  const walls = new Map<string, { at: string[]; lanes: number }>();
   for (const [k, p] of taken) {
     if (seen.has(p)) continue;
     const blocked: string[] = [];
@@ -68,9 +74,18 @@ export function laneWarnings(e: Engine, view: World, s: Settings, snap: number[]
     }
     if (!blocked.length) continue;
     seen.add(p);
+    const wall = p.t === 's' ? towers.find(([x, y]) => Math.max(Math.abs(x - p.x), Math.abs(y - p.y)) === 1) : undefined;
+    if (wall) {
+      const w = walls.get(`(${wall[0]},${wall[1]})`) ?? { at: [], lanes: 0 };
+      w.at.push(`(${p.x},${p.y})`); w.lanes += blocked.length;
+      walls.set(`(${wall[0]},${wall[1]})`, w);
+      continue;
+    }
     const effect = p.t === 'm' ? 'turn off it' : p.t === 't' ? (s.ownTower === 'destroy' ? 'destroy it' : 'bounce off it') : p.t === 'w' ? 'meet it' : 'hit it first and chip it';
     out.push(`Your ${PIECE[p.t]} at (${p.x},${p.y}) stands in ${blocked.length === 1 ? 'one of your launch lanes' : `${blocked.length} of your launch lanes`}: a glider launched ${blocked.slice(0, 3).join(', ')}${blocked.length > 3 ? ' …' : ''} would ${effect}.`);
   }
+  const and = (xs: string[]) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
+  for (const [t, w] of walls) out.push(`Your square${w.at.length === 1 ? '' : 's'} at ${and(w.at)} wall${w.at.length === 1 ? 's' : ''} ${t}; ${w.at.length === 1 ? 'it also stands' : 'they also stand'} in ${w.lanes === 1 ? 'one of your launch lanes' : `${w.lanes} of your launch lanes`}.`);
   return out.length > 8 ? [...out.slice(0, 7), `… and ${out.length - 7} more like these.`] : out;
 }
 

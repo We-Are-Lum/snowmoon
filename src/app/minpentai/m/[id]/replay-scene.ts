@@ -8,15 +8,22 @@
  * frames are the whole board, and there is no cloud.
  *
  * This edition's own abstract pieces: grey blocks for rocks; for towers a metal column under a floating, turning
- * emblem in the side's colour; for gliders a chevron of small lit cubes (a bright core for symbol gliders); low blocks
- * for squares; thin slabs for mirrors; squat cubes for factories; bars for moving walls.
+ * emblem in the side's colour (one solid shape); for gliders one solid arrow in the side's colour (a bright core for
+ * symbol gliders); low blocks for squares; tall thin slabs with a lit top edge for mirrors; squat cubes for factories;
+ * bars for moving walls. Debris is small, greys at once and is gone within 1.5 s, so it never reads as a piece
+ * (owner, 2026-11-12, after the end view's amber debris looked like scattered pieces).
+ *
+ * The camera frames the whole board (owner, 2026-11-12: the far corner was cropped): its distance comes from projecting
+ * the board's four corners (cameraFit), at the slow sway's extremes and leaning toward the action at its furthest, and
+ * for the "final" replay's pull-back, so they fit with a small margin at any aspect ratio. When nothing plays (a frame
+ * with no frame before it and no step time), the debris and flashes are cleared: the idle view is only the board.
  *
  * Two quality levels: high (shadows, pixel ratio up to 1.5, more debris) and low (none of those), so a phone can hold
  * its frame target; the page measures and steps down, and plays the action in 2D if even low can't hold it.
  */
 import type * as THREE_NS from 'three';
 import type { boardOut } from '~/lib/minpentai/agent-play/solo';
-import { easeCamera, fpsMeter, glowTexture, makeDebris, makeFlashes, makeRenderer, makeStage, type Quality } from '../../scene-kit';
+import { easeCamera, fitDistance, fpsMeter, glowTexture, makeDebris, makeFlashes, makeRenderer, makeStage, type Quality } from '../../scene-kit';
 import { actionCentre, dirOf, replayEvents, type Moment, type ReplayEvent } from './replay-events';
 
 type T3 = typeof THREE_NS;
@@ -35,10 +42,40 @@ export interface ReplayScene {
 
 const CYAN = '#46D7E8', AMBER = '#FFB43A';
 const sideCol = (side: string | null) => (side === 'mine' ? CYAN : side === 'theirs' ? AMBER : '#8A8C96');
-/** The glider's chevron: five cubes, (forward, across) in squares, pointing along its heading. */
-const CHEVRON: [number, number][] = [[.24, 0], [.06, -.16], [.06, .16], [-.12, -.32], [-.12, .32]];
-/** A tower's emblem: a small plus of cubes. */
-const EMBLEM: [number, number, number][] = [[0, 0, 0], [1, 0, 0], [-1, 0, 0], [0, 0, 1], [0, 0, -1], [0, 1, 0]];
+/** The glider's arrow, flat on the field: (forward, across) in squares, pointing along its heading. */
+const ARROW: [number, number][] = [[.34, 0], [-.2, .26], [-.08, 0], [-.2, -.26]];
+
+type V3 = [number, number, number];
+const unit = (v: V3): V3 => { const l = Math.hypot(...v) || 1; return [v[0] / l, v[1] / l, v[2] / l]; };
+/** The usual view's slow sway, from the clock alone: its angle around the board, and its distance breathing ±3%. */
+const swayAngle = (t: number) => -.34 + Math.sin(t * .09) * .07;
+const swayDist = (t: number) => 1 + Math.sin(t * .13) * .03;
+const SWAY_ANGLES = [-.41, -.375, -.34, -.305, -.27];
+/** From the point it looks at toward the camera: the usual three-quarter view from Cyan's side, and the "final" pull-back. */
+const usualDir = (a: number) => unit([Math.sin(a) * .66, .75, Math.cos(a) * .66]);
+const FAR_DIR = unit([0, 1.45, .55]);
+/** How far the usual view leans toward the action: this share of the way from the middle (actionCentre). */
+const LEAN = .22;
+/**
+ * The camera distances that frame the whole W × H board at this aspect ratio and vertical fov: the usual view (every
+ * sway angle, the sway's nearest distance, leaning as far as it can toward any side) and the final replay's pull-back.
+ * From the board's four corners projected (scene-kit fitDistance), on the field and at a tower's height.
+ */
+export function cameraFit(W: number, H: number, aspect: number, fov: number) {
+  const corners: V3[] = [];
+  for (const y of [0, 1.2]) for (const [x, z] of [[-W / 2, -H / 2], [W / 2, -H / 2], [-W / 2, H / 2], [W / 2, H / 2]]) corners.push([x, y, z]);
+  let usual = 0;
+  const lx = LEAN * (W / 2 - .5), lz = LEAN * (H / 2 - .5);
+  for (const a of SWAY_ANGLES) for (const [ox, oz] of [[0, 0], [lx, lz], [-lx, lz], [lx, -lz], [-lx, -lz]]) usual = Math.max(usual, fitDistance(corners, [ox, 0, oz - H * .04], usualDir(a), fov, aspect));
+  return { usual: usual / .97, far: fitDistance(corners, [0, 0, 0], FAR_DIR, fov, aspect) };
+}
+/** The usual view at time t (seconds), leaning toward `lean` (world x, z): where the camera stands and the point it looks at. */
+export function usualAim(fit: { usual: number }, H: number, t: number, lean: [number, number]): [V3, V3] {
+  const u = usualDir(swayAngle(t)), d = fit.usual * swayDist(t), look: V3 = [lean[0], 0, lean[1] - H * .04];
+  return [[look[0] + u[0] * d, look[1] + u[1] * d, look[2] + u[2] * d], look];
+}
+/** The "final" replay's pull-back over the whole board. */
+export const finalAim = (fit: { far: number }): [V3, V3] => [[FAR_DIR[0] * fit.far, FAR_DIR[1] * fit.far, FAR_DIR[2] * fit.far], [0, 0, 0]];
 
 export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, quality: Quality = 'high', pieceScale = 1): ReplayScene {
   const P = pieceScale;
@@ -50,7 +87,7 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
   const stage = makeStage(T, scene, W, H, { fog: .012 });
   const glowTex = glowTexture(T);
   const flashes = makeFlashes(T, scene, glowTex, 24);
-  const debris = makeDebris(T, scene, 700, true);
+  const debris = makeDebris(T, scene, 700, true, { life: 1.5 });
   const cam = easeCamera(T, camera);
   const meter = fpsMeter();
 
@@ -72,14 +109,26 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
   const sight = inst(new T.PlaneGeometry(.96, .96), new T.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: .07, depthWrite: false }), W * H, false);
   const rocks = inst(box(), std({ color: '#4B4C55', roughness: .85 }), W * H);
   const columns = inst(new T.CylinderGeometry(.12, .24, 1.3, 10), std({ color: '#5A5E6C', metalness: .6, roughness: .35, emissive: '#15161B' }), 64);
-  const emblems = inst(box(), new T.MeshBasicMaterial({ color: '#ffffff' }), 64 * EMBLEM.length, false);
+  // A tower's emblem: one solid shape, turning.
+  const emblems = inst(new T.OctahedronGeometry(.28, 0), new T.MeshBasicMaterial({ color: '#ffffff' }), 64, false);
   const bases = inst(new T.RingGeometry(.3, .42, 28), new T.MeshBasicMaterial({ color: '#ffffff', side: T.DoubleSide }), 64, false);
   const squares = inst(box(), std({ roughness: .5, emissive: '#111111' }), W * H);
   const mirrors = inst(box(), std({ metalness: .5, roughness: .25 }), W * H);
+  // A mirror's lit top edge, so it reads at a distance.
+  const mirrorEdges = inst(box(), new T.MeshBasicMaterial({ color: '#ffffff' }), W * H, false);
   const factories = inst(box(), std(), W * H);
   const walls = inst(box(), std({ roughness: .5, emissive: '#111111' }), W * H);
   const resting = inst(new T.SphereGeometry(.16, 12, 10), new T.MeshBasicMaterial({ color: '#ffffff' }), W * H, false);
-  const cubes = inst(box(), new T.MeshBasicMaterial({ color: '#ffffff' }), 300 * CHEVRON.length, false);
+  // Gliders: one solid arrow each, flat, a little above the field.
+  const arrowGeo = (() => {
+    const sh = new T.Shape();
+    ARROW.forEach(([f, a], i) => (i ? sh.lineTo(f, a) : sh.moveTo(f, a)));
+    sh.closePath();
+    const g = new T.ExtrudeGeometry(sh, { depth: .09, bevelEnabled: false });
+    g.rotateX(-Math.PI / 2); g.translate(0, -.045, 0);
+    return g;
+  })();
+  const arrows = inst(arrowGeo, new T.MeshBasicMaterial({ color: '#ffffff' }), 300, false);
   // Glows: one additive point per glider, tower and symbol core (the broadcast's glow layer).
   const GMAX = 400, gpos = new Float32Array(GMAX * 3), gcol = new Float32Array(GMAX * 3), pg = new T.BufferGeometry();
   pg.setAttribute('position', new T.BufferAttribute(gpos, 3)); pg.setAttribute('color', new T.BufferAttribute(gcol, 3));
@@ -118,6 +167,8 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
   let focusOn: { at: [number, number]; mode: Moment['mode']; ms: number; since: number } | null = null;
 
   function show(board: Board, seen: [number, number][] | null, prev: Board | null, stepMs: number) {
+    // Nothing playing (no frame before, no step time): the board as it stands, with no debris or flashes left over.
+    if (!prev && !stepMs) { debris.clear(); flashes.clear(); shake = 0; }
     const ev = replayEvents(prev, board, seen, [W, H]);
     // The static pieces, as this frame shows them.
     const lit = seen ? new Set(seen.map(([x, y]) => y * W + x)) : null;
@@ -126,7 +177,13 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
     finish(sight, n);
     n = 0; for (const r of board.rocks) place(rocks, n++, X(r.x), .35, Z(r.y), .94, .7, .94); finish(rocks, n);
     n = 0; for (const s of board.squares) place(squares, n++, X(s.x), .2, Z(s.y), .74, s.hits_left > 1 ? .4 : .22, .74, C.set(sideCol(s.side)).multiplyScalar(.6).getStyle()); finish(squares, n);
-    n = 0; for (const m of board.mirrors ?? []) place(mirrors, n++, X(m.x), .3, Z(m.y), .95, .6, .07, sideCol(m.side), m.slant === '/' ? Math.PI / 4 : -Math.PI / 4); finish(mirrors, n);
+    n = 0;
+    for (const m of board.mirrors ?? []) {
+      const ry = m.slant === '/' ? Math.PI / 4 : -Math.PI / 4;
+      place(mirrors, n, X(m.x), .5, Z(m.y), .95, 1, .08, sideCol(m.side), ry);
+      place(mirrorEdges, n++, X(m.x), 1.02, Z(m.y), .97, .05, .11, C.set(sideCol(m.side)).lerp(new T.Color('#ffffff'), .55).getStyle(), ry);
+    }
+    finish(mirrors, n); finish(mirrorEdges, n);
     n = 0; for (const f of board.factories ?? []) place(factories, n++, X(f.x), .22, Z(f.y), .62, .44, .62, C.set(sideCol(f.side)).multiplyScalar(.7).getStyle()); finish(factories, n);
     n = 0; for (const w of board.moving_walls ?? []) for (const c of w.squares) place(walls, n++, X(c.x), .2, Z(c.y), .86, .4, .86, C.set(sideCol(w.side)).multiplyScalar(.55).getStyle()); finish(walls, n);
     n = 0; for (const r of board.resting_symbol_gliders ?? []) place(resting, n++, X(r.x), .2, Z(r.y), 1, 1, 1, sideCol(r.side)); finish(resting, n);
@@ -175,7 +232,7 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
   }
 
   // The camera: a three-quarter view from Cyan's side, swaying slowly, as the broadcast's cameras do.
-  const R = Math.max(W, H);
+  let fit = cameraFit(W, H, camera.aspect, camera.fov);
   let raf = 0, last = 0;
   const frame = (now: number) => {
     raf = requestAnimationFrame(frame);
@@ -184,8 +241,6 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
     last = now;
     meter.tick(dt);
     const t = now / 1000;
-    // Far enough to frame the whole board at any width (the fov is vertical, so a narrow frame needs more distance).
-    const fit = Math.max(H, W / camera.aspect) / 2 / Math.tan((camera.fov * Math.PI) / 360);
     if (focusOn) {
       // An instant replay: around a square in sight. close: a quick close-up; orbit: once around a little; sweep: in
       // from the usual view; final: in close, then back over the whole board.
@@ -197,14 +252,13 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
       else if (focusOn.mode === 'orbit') { r = 6.2; h = 4.6; a = -.6 + 1.6 * sm(u); }
       else if (focusOn.mode === 'sweep') { const v = sm(Math.min(1, u * 1.4)); r = 10 - 4.6 * v; h = 8.5 - 4.4 * v; a = -1 + 1.2 * sm(u); }
       else { const inT = Math.min(1, u / .55), out = Math.max(0, (u - .62) / .38); r = 8 - 2.6 * sm(inT); h = 6.5 - 2.6 * sm(inT); a = -.8 + .6 * u; wide = sm(out); lookY = .4; }
-      const near: [number, number, number] = [fx + Math.sin(a) * r, h, fz + Math.cos(a) * r], far: [number, number, number] = [0, fit * 1.45, fit * .55];
+      const near: [number, number, number] = [fx + Math.sin(a) * r, h, fz + Math.cos(a) * r], far = finalAim(fit)[0];
       cam.aim(near.map((v, i) => v + (far[i] - v) * wide) as [number, number, number], [fx * (1 - wide), lookY * (1 - wide), fz * (1 - wide)]);
       cam.update(dt, shake, 5);
     } else {
       // The usual view, swaying slowly; during playback it leans gently toward this step's action in sight.
-      const a = -.34 + Math.sin(t * .09) * .07, d = fit * (1.27 + Math.sin(t * .13) * .03);
-      const [cx, cz] = centre ? [X(centre[0]) * .22, Z(centre[1]) * .22] : [0, 0];
-      cam.aim([cx + Math.sin(a) * d * .66, d * .75, cz + Math.cos(a) * d * .66], [cx, 0, cz - H * .04]);
+      const lean: [number, number] = centre ? [X(centre[0]) * LEAN, Z(centre[1]) * LEAN] : [0, 0];
+      cam.aim(...usualAim(fit, H, t, lean));
       cam.update(dt, shake);
     }
     shake = Math.max(0, shake - dt * .6);
@@ -217,21 +271,18 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
         const [dx, dy] = dirOf(g.dir), len = Math.hypot(dx, dy) || 1, fx = dx / len, fz = dy / len;
         const gx = X(g.from[0] + (g.to[0] - g.from[0]) * e), gz = Z(g.from[1] + (g.to[1] - g.from[1]) * e);
         const vis = g.fade === 'in' ? e : g.fade === 'out' ? 1 - e : 1, y = .42 + Math.sin(t * 6 + g.from[0] * 1.3 + g.from[1]) * .05;
-        const col = sideCol(g.side), sz = .16 * P * Math.max(.001, vis);
-        for (const [f, s] of CHEVRON) place(cubes, n++, gx + (fx * f - fz * s) * P, y, gz + (fz * f + fx * s) * P, sz, sz, sz, col);
+        const col = sideCol(g.side), sz = (g.symbol ? 1.15 : 1) * P * Math.max(.001, vis);
+        place(arrows, n++, gx, y, gz, sz, sz, sz, col, Math.atan2(-fz, fx));
         glowAt(gx, y, gz, col, (g.symbol ? 1.3 : 1) * vis);
         if (g.symbol) glowAt(gx, y + .1, gz, '#FFFFFF', .8 * vis);
       }
-      finish(cubes, n);
+      finish(arrows, n);
       // Towers: the column, and the emblem floating and turning over it.
       let c = 0, m = 0;
       for (const tw of state.board.towers) {
         const x = X(tw.x), z = Z(tw.y), col = sideCol(tw.side), h = (tw.forming ? .6 : 1) * P, ey = .65 + 1.3 * h + Math.sin(t * 1.6 + tw.x) * .06, ry = t * .8 + tw.y;
         place(columns, c++, x, .65 * h, z, P, h, P);
-        for (const [a, b, u] of EMBLEM) {
-          const ca = Math.cos(ry), sa = Math.sin(ry);
-          place(emblems, m++, x + (a * ca - u * sa) * .21 * P, ey + b * .21 * P, z + (a * sa + u * ca) * .21 * P, .19 * P, .19 * P, .19 * P, col, ry);
-        }
+        place(emblems, m++, x, ey, z, P, P * 1.25, P, col, ry);
         glowAt(x, ey, z, col, 1.6);
       }
       finish(columns, c); finish(emblems, m);
@@ -260,7 +311,7 @@ export function buildReplayScene(T: T3, el: HTMLElement, W: number, H: number, q
   // Compile every material now, flashes included, so the first hit or burst doesn't stall a frame.
   flashes.prewarm(() => renderer.compile(scene, camera));
   raf = requestAnimationFrame(frame);
-  const ro = new ResizeObserver(() => { const [w, h] = size(); renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); });
+  const ro = new ResizeObserver(() => { const [w, h] = size(); renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); fit = cameraFit(W, H, camera.aspect, camera.fov); });
   ro.observe(el);
 
   return {
