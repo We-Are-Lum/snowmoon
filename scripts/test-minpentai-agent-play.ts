@@ -21,7 +21,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { verdict, type AnyPiece, type Kills, type Placement } from '../src/lib/minpentai/versions/engine';
-import { CURRENT, DRAFTS, RULESETS, draftInfo, takeTurnOnPage, turnFrames, turnSummaries, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { CURRENT, DRAFTS, RULESETS, draftInfo, endText, fromRows, ownOf, stillStanding, takeTurnOnPage, turnFrames, turnSummaries, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
 const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
@@ -33,7 +33,7 @@ const json = (m: SoloMatch) => JSON.parse(JSON.stringify(m)) as SoloMatch;
 /** A scripted agent: from the view only, a tower toward the enemy if it can, else a glider east; it compares two plans with simulate first. */
 function scripted(m: SoloMatch) {
   const v = viewFor(m);
-  const cells = v.can_place as [number, number][];
+  const cells = fromRows(v.can_place);
   if (!cells.length) return [];
   const east = [...cells].sort((a, b) => b[0] - a[0] || a[1] - b[1]);
   const plans: Record<string, unknown[]> = {
@@ -102,9 +102,9 @@ playOut('play', 202);
   hidden.w.mir = { ...(hidden.w.mir ?? {}), [e.K(...far[3])]: { o: 'A', d: 1, hp: 3 } };
   const strip = (x: ReturnType<typeof viewFor>) => ({ ...x, opponent_commitment: null });
   ok(isDeepStrictEqual(strip(viewFor(hidden)), strip(v)), 'the view is the same whatever is hidden');
-  const sc = { scenarios: [{ name: 'wait', placements: [] }, { name: 'shoot', placements: [{ piece: 'glider', x: (v.can_place as number[][])[0][0], y: (v.can_place as number[][])[0][1], dir: 'E' }] }], steps: 24 };
+  const sc = { scenarios: [{ name: 'wait', placements: [] }, { name: 'shoot', placements: [{ piece: 'glider', x: fromRows(v.can_place)[0][0], y: fromRows(v.can_place)[0][1], dir: 'E' }] }], steps: 24 };
   ok(isDeepStrictEqual(simulate(hidden, sc), simulate(m, sc)), "simulate's answer is the same whatever is hidden");
-  const tgt = (v.can_place as number[][])[0];
+  const tgt = fromRows(v.can_place)[0];
   ok(isDeepStrictEqual(symbolLaunches(hidden, { x: tgt[0] + 4, y: tgt[1] }), symbolLaunches(m, { x: tgt[0] + 4, y: tgt[1] })) && isDeepStrictEqual(viewFor(hidden).rules, v.rules), "symbol_launches' answer and the rules lines are the same whatever is hidden");
   // A belief piece on a square in sight is refused the same way whether it holds a piece or not.
   const seenEmpty = [...see].find((k) => e.empty(m.w, k))!, seenFull = Object.keys(m.w.tw).map(Number).find((k) => see.has(k))!;
@@ -313,8 +313,8 @@ playOut('play', 202);
   // The view is unchanged but for the two added fields.
   {
     const m = mk('book-2', 32), v = viewFor(m) as Record<string, unknown>;
-    const old = ['match_id', 'side', 'opponent', 'ruleset', 'rule', 'phase', 'turn', 'step', 'max_steps', 'every', 'board_size', 'sight', 'reach', 'points', 'costs', 'board', 'last_seen_enemy_towers', 'can_place', 'my_orders', 'standing_order', 'my_turns', 'end'];
-    ok(isDeepStrictEqual(Object.keys(v), [...old, 'rules', 'how_the_pieces_work', 'last_turn_summary']) && isDeepStrictEqual(viewFor(json(m)), v), 'the view keeps every field it had, adds only rules, how_the_pieces_work and last_turn_summary, and is the same each time');
+    const old = ['match_id', 'side', 'opponent', 'ruleset', 'rule', 'phase', 'turn', 'step', 'max_steps', 'every', 'board_size', 'sight', 'reach', 'points', 'costs', 'board', 'grid', 'in_sight', 'last_seen_enemy_towers', 'my_pieces_out_of_sight', 'enemy_can_place_from_last_seen', 'can_place', 'my_orders', 'standing_order', 'my_turns', 'end'];
+    ok(isDeepStrictEqual(Object.keys(v), [...old, 'rules', 'how_the_pieces_work', 'last_turn_summary']) && isDeepStrictEqual(viewFor(json(m)), v), 'the view has its fields in order (2026-11-04: grid, in_sight, my_pieces_out_of_sight and enemy_can_place_from_last_seen added; can_place as rows), and is the same each time');
   }
   // The lines' claims, checked against the engine on a bare book-3 board.
   {
@@ -326,6 +326,14 @@ playOut('play', 202);
     e.apply(w, s, { C: [P('s', 3, 5), P('g', 5, 5, 1, 0)], A: [] });
     for (let i = 0; i < 8; i++) e.step(w, s);
     ok(w.sq[e.K(3, 5)]?.hp === s.squareHits - 1, 'a glider that bounces off a rock flies back and chips your own square (as the lines say)');
+    // The mirror example (2026-11-04): S from (14,6), "\" at (14,8): at (14,7) after step 1, still there flying E after
+    // step 2, then E along row 7; the mirror's square is never entered.
+    w = bare();
+    e.apply(w, s, { C: [P('m', 14, 8, -1, 0), P('g', 14, 6, 0, 1)], A: [] });
+    const path: string[] = [];
+    for (let i = 0; i < 4; i++) { e.step(w, s); const g = w.gl[0]; path.push(`${g.x},${g.y},${g.dx},${g.dy}`); }
+    ok(isDeepStrictEqual(path, ['14,7,0,1', '14,7,1,0', '15,7,1,0', '16,7,1,0']) && w.mir?.[e.K(14, 8)]?.hp === (s.mirrorHits ?? 3) - 1, `the mirror example plays as the lines say (${path.join(' | ')})`);
+    ok(rulesFor(m).rules.some((l) => l.includes('A glider never enters the mirror\'s square') && l.includes('Mirror example: a glider launched S from (14,6) with a "\\" at (14,8)')), 'the mirror line and its example are in the rules');
     // The convergence example: E on rows 4, 5, 6 against a column at x = 15 forms at (14,4).
     w = bare(); for (const y of [4, 5, 6]) w.rock[e.K(15, y)] = 1;
     e.apply(w, s, { C: [4, 5, 6].map((y) => P('e', 10, y, 1, 0)), A: [] });
@@ -355,7 +363,7 @@ playOut('play', 202);
     sim.scenarios.forEach((sc, i) => {
       const o = r.options[i], got = (sc as { symbols?: { x: number; y: number; step: number }[] }).symbols ?? [];
       ok(sc.legal && got.some((x) => x.x === o.symbol_forms.x && x.y === o.symbol_forms.y && x.step === o.symbol_forms.step), `option ${i}: simulate forms the symbol at (${o.symbol_forms.x},${o.symbol_forms.y}) at step ${o.symbol_forms.step}`);
-      ok(o.launches.every((l) => (v.can_place as number[][]).some(([x, y]) => x === l.x && y === l.y) && ['N', 'E', 'S', 'W'].includes(l.dir)) && o.rest_at.every((p) => Math.abs(p.x - target!.x) <= 1 && Math.abs(p.y - target!.y) <= 1), `option ${i}: launches from can_place in N/E/S/W, resting inside the 3 x 3 box`);
+      ok(o.launches.every((l) => fromRows(v.can_place).some(([x, y]) => x === l.x && y === l.y) && ['N', 'E', 'S', 'W'].includes(l.dir)) && o.rest_at.every((p) => Math.abs(p.x - target!.x) <= 1 && Math.abs(p.y - target!.y) <= 1), `option ${i}: launches from can_place in N/E/S/W, resting inside the 3 x 3 box`);
     });
     const open = symbolLaunches(m, { x: 12, y: 7 });
     ok(!open.options.length && /no launch of yours reaches|nothing there stops them|three are needed/.test(open.why_none ?? ''), `no option says why (${open.why_none})`);
@@ -370,7 +378,7 @@ playOut('play', 202);
   {
     const m = mk('book-2', 11), v = viewFor(m);
     const rows = new Map<number, number[]>();
-    for (const [x, y] of v.can_place as number[][]) rows.set(y, [...(rows.get(y) ?? []), x]);
+    for (const [x, y] of fromRows(v.can_place)) rows.set(y, [...(rows.get(y) ?? []), x]);
     const [y, xs] = [...rows].find(([, xs]) => xs.length >= 3)!;
     const sim = simulate(m, { scenarios: [
       { name: 'fill', placements: xs.map((x) => ({ piece: 'square', x, y })) },
@@ -414,17 +422,188 @@ playOut('play', 202);
     // Replay to the turn's start and record Cyan's sight at every step of it.
     const { e, s } = rulesOf(m), w = e.world(s), k: Kills = { C: 0, A: 0 }, sight = new Map<number, Set<number>>();
     for (const h of m.history) { e.apply(w, s, { C: h.C.placements, A: h.A.placements }); const from = w.step; if (h.turn === sum.turn) sight.set(w.step, e.lit(w, 'C', s.sight)); do { e.step(w, s, k); if (h.turn === sum.turn) sight.set(w.step, e.lit(w, 'C', s.sight)); } while (w.step - from < s.every && !verdict(e, w, s, k)); }
+    // Each part of a line (a glider's story has several, split by ":" and ";") that names a square and a step.
     for (const l of sum.lines as string[]) {
-      if (/^You placed/.test(l)) continue;
-      const mm = l.match(/\((\d+), (\d+)\).*step (\d+)/);
-      if (!mm) continue;
-      named++;
-      const [x, y, st] = [+mm[1], +mm[2], +mm[3]];
-      const seen = [st - 1, st, st + 1].some((t) => sight.get(t)?.has(e.K(x, y)));
-      if (!seen && !/lost your tower/.test(l)) { outside++; console.log('  outside sight:', l); }
+      if (/^Your side placed|^Kill report/.test(l)) continue;
+      for (const part of l.split(/[:;] /)) {
+        const mm = part.match(/\((\d+), (\d+)\).*step (\d+)/);
+        if (!mm) continue;
+        named++;
+        const [x, y, st] = [+mm[1], +mm[2], +mm[3]];
+        const seen = [st - 1, st, st + 1].some((t) => sight.get(t)?.has(e.K(x, y)));
+        if (!seen && !/lost your tower/.test(part)) { outside++; console.log('  outside sight:', part, '|', l); }
+      }
     }
   }
   ok(named > 0 && outside === 0, `every square the summaries name was in Cyan's sight then (${named} named)`);
+}
+
+// ---------- 9b. The turn summary's stories (owner, 2026-11-04): the same whatever happens out of sight ----------
+{
+  const mk4 = (id: string, seed: number, level = 2) => newSolo({ id, ruleset: 'book-4', level, seed, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+  const noReports = (ls: string[]) => ls.filter((l) => !/^Kill report|^Towers destroyed so far/.test(l));
+  // A book-4 plain glider (it doesn't see) at the edge of sight, with a hidden tower in front of it or not: the same
+  // summary but for the kill report.
+  const edge = (hidden: boolean) => {
+    const m = mk4(hidden ? 'tsum40000001' : 'tsum40000002', 91), { e, s } = rulesOf(m);
+    const [tx, ty] = e.XY(e.L.towers.C[0]), x = tx + s.sight;
+    ok(!e.sees(m.w, s, 'C').has(e.K(x + 1, ty)) && e.empty(m.w, e.K(x + 1, ty)), 'book-4: the square past the glider is out of Cyan\'s sight, and empty');
+    if (hidden) m.w.tw[e.K(x + 1, ty)] = 'A';
+    m.w.gl.push({ id: 900, o: 'C', x, y: ty, dx: 1, dy: 0 } as never);
+    planComputer(m, now());
+    m.pend.A = { ...m.pend.A!, placements: [] };
+    submit(m, { turn: 0, placements: [], source: 'agent', final: true, now: now() });
+    return { lines: m.summary!.lines, first: JSON.stringify(m.kills.log?.[0] ?? null), at: `(${x + 1}, ${ty})` };
+  };
+  const r4 = edge(true), t4 = edge(false);
+  ok(r4.first !== t4.first, 'book-4: the glider destroyed the hidden tower in one match, flew on in the other');
+  ok(isDeepStrictEqual(noReports(r4.lines), noReports(t4.lines)), `book-4: the summaries read the same but for the kill report (${JSON.stringify(t4.lines)})`);
+  ok(r4.lines.some((l) => l.startsWith('Kill report:') && l.includes(r4.at)) && !t4.lines.some((l) => l.startsWith('Kill report:') && l.includes(r4.at)), 'the kill report names the square');
+
+  // A whole book-4 match, turn by turn: a twin whose enemy squares out of sight differ (added, or removed), where no
+  // glider or wall comes near them all turn, reads the same summary and view.
+  const symbols = (m: SoloMatch) => {
+    const v = viewFor(m), out: unknown[] = [], rows = new Set<number>();
+    let pts = v.points;
+    for (const [x, y] of fromRows(v.can_place).sort((a, b) => b[0] - a[0] || a[1] - b[1])) { if (pts < 2) break; if (rows.has(y)) continue; rows.add(y); out.push({ piece: 'symbol_glider', x, y, dir: 'E' }); pts -= 2; }
+    return out;
+  };
+  {
+    const m = mk4('tsum40000003', 93);
+    let twins = 0, changed = 0, memOk = true;
+    while (!m.end && m.turn < 10) {
+      planComputer(m, now());
+      const { e, s } = rulesOf(m), orders = parseOrders(m.turn % 2 ? symbols(m) : scripted(m), s);
+      // The squares Cyan sees at any frame of the turn, and every square any glider or wall stands on or beside.
+      const pw = e.clone(m.w), seen = new Set<number>(), near = new Set<number>();
+      const mark = () => {
+        for (const k of e.sees(pw, s, 'C')) seen.add(k);
+        const around = (x: number, y: number) => { for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (e.inb(x + dx, y + dy)) near.add(e.K(x + dx, y + dy)); };
+        for (const g of pw.gl) around(g.x, g.y);
+        for (const w of pw.mw ?? []) for (const [x, y] of e.wallCells(w)) around(x, y);
+      };
+      mark();
+      e.apply(pw, s, { C: orders, A: m.pend.A!.placements });
+      mark();
+      const from = pw.step;
+      do { e.step(pw, s); mark(); } while (pw.step - from < s.every && !verdict(e, pw, s));
+      const a = json(m), b = json(m);
+      let n = 0;
+      for (let k = 0; k < e.W * e.H && n < 4; k++) {
+        if (seen.has(k) || near.has(k)) continue;
+        if (b.w.sq[k]?.o === 'A') { delete b.w.sq[k]; n++; } else if (e.empty(b.w, k) && !Object.keys(m.ls.C).includes(String(k))) { b.w.sq[k] = { o: 'A', hp: 1 }; n++; }
+      }
+      if (n) {
+        changed += n;
+        for (const x of [a, b]) submit(x, { turn: x.turn, placements: orders, source: 'agent', final: true, now: now() });
+        const strip = (v: ReturnType<typeof viewFor>) => ({ ...v, my_orders: null });
+        if (isDeepStrictEqual(a.summary, b.summary) && isDeepStrictEqual(strip(viewFor(a)), strip(viewFor(b)))) twins++;
+        else console.log('  differs at turn', m.turn, JSON.stringify(a.summary?.lines), JSON.stringify(b.summary?.lines));
+      }
+      submit(m, { turn: m.turn, placements: orders, source: 'agent', final: true, now: now() });
+      // Where it sees, the memory of its own pieces is what it sees: its squares there, with their hits.
+      const see = e.sees(m.w, s, 'C'), mem = ownOf(m).C;
+      for (const k of see) { const q = m.w.sq[k]; if ((q?.o === 'C') !== (k in mem.sq) || (q?.o === 'C' && mem.sq[k].hp !== q.hp)) memOk = false; }
+    }
+    ok(twins > 0 && changed > 0, `every turn's summary and view are the same with enemy squares out of sight changed (${twins} turns, ${changed} squares)`);
+    ok(memOk, 'where it sees, the memory of its own squares is what it sees');
+  }
+
+  // A book-4 match of symbol gliders: one story a glider; a symbol glider (it sees) never "leaves your sight"; every tower
+  // a story says a glider destroyed is in the kill log at that square and step; symbol gliders' kills are theirs.
+  {
+    const m = mk4('tsum40000004', 7, 3);
+    while (!m.end && m.turn < 8) { planComputer(m, now()); submit(m, { turn: m.turn, placements: parseOrders(symbols(m), rulesOf(m).s), source: 'agent', final: true, now: now() }); }
+    const { e } = rulesOf(m), sums = turnSummaries(m), all = sums.flatMap((x) => x.lines);
+    ok(!all.some((l) => /^Your symbol glider/.test(l) && /left your sight/.test(l)), 'a symbol glider (it sees as it flies) is never said to leave your sight');
+    let kills = 0, killsOk = true;
+    for (const l of all) for (const k of l.matchAll(/destroyed the enemy tower at \((\d+), (\d+)\) at step (\d+)/g)) {
+      kills++;
+      if (!(m.kills.log ?? []).some((x) => x.o === 'C' && x.k === e.K(+k[1], +k[2]) && x.step === +k[3])) killsOk = false;
+    }
+    ok(kills > 0 && killsOk, `every kill a story tells is in the kill log (${kills})`);
+    ok(all.some((l) => /^Your symbol glider from .*: .*destroyed the enemy tower/.test(l)), 'a symbol glider\'s kill is credited to the symbol glider');
+    ok(!all.some((l) => /stopped near/.test(l)) && all.some((l) => /came to rest at/.test(l)), 'no "stopped near": a symbol glider comes to rest, or destroys, or is destroyed');
+    ok(sums.every((x) => x.big.length <= 3) && sums.filter((x) => x.kills > 0).every((x) => x.big.some((b) => /destroyed/.test(b))), 'each turn leads with at most 3 big moments; a turn with kills leads with them');
+    ok(sums.reduce((t, x) => t + x.lost, 0) === m.kills.A, `the turns' losses add up to the towers lost (${m.kills.A})`);
+    ok(all.some((l) => /^Your side placed \d+ symbol gliders heading east/.test(l)), 'placements read "Your side placed 5 symbol gliders heading east"');
+    // The live page's end and "they still have towers" (fix 3).
+    const still = stillStanding(m);
+    if (!m.end) ok(still && /^They still have towers/.test(still), `while it goes on: ${still}`);
+    while (!m.end) submit(m, { turn: m.turn, placements: parseOrders(symbols(m), rulesOf(m).s), source: 'agent', final: true, now: now() });
+    const end = endText(m)!;
+    ok(/(won|draw).*(on towers, \d+ to \d+, at step \d+|every enemy tower destroyed|every tower of yours destroyed|towers level|both sides' last towers)/.test(end) && stillStanding(m) === null, `the end says why: "${end}"`);
+  }
+
+  // Take turn keeps the commitment the AI was given (the report's small point: the record's differed).
+  {
+    const m = mk4('tsum40000005', 95);
+    const r = submit(m, { turn: 0, placements: parseOrders(scripted(m), rulesOf(m).s), source: 'agent', final: false, now: now() });
+    takeTurnOnPage(m, { turn: 0, now: now() });
+    ok(m.history[0].C.commitment === r.commitment && createHash('sha256').update(ordersText(m.history[0].C.placements) + m.history[0].C.salt).digest('hex') === r.commitment, 'Take turn keeps the drafted commitment, and the revealed salt gives it');
+  }
+}
+
+// ---------- 9c. Its own pieces out of sight, as last seen (owner, 2026-11-04) ----------
+{
+  const { belief } = await import('../src/lib/minpentai/versions/search');
+  const m0 = newSolo({ id: 'town00000001', ruleset: 'book-4', level: 2, seed: 94, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+  const { e, s } = rulesOf(m0), seeC = e.sees(m0.w, s, 'C'), seeA = e.sees(m0.w, s, 'A');
+  const dark = (see: Set<number>, left: boolean) => [...Array(e.W * e.H).keys()].find((k) => !see.has(k) && e.empty(m0.w, k) && (e.XY(k)[0] < e.W / 2) === left && !e.sees(m0.w, s, left ? 'A' : 'C').has(k))!;
+  const kC = dark(seeC, true), kA = dark(seeA, false);
+  ok(kC !== undefined && kA !== undefined, 'a square out of Cyan\'s sight on its half, and one out of Amber\'s on its half');
+  // Each side remembers a square of its own there, hit twice when last seen; the real square is intact, chipped or gone.
+  const variant = (id: string, hp: number | null) => {
+    const m = json(m0);
+    m.id = id;
+    m.own!.C.sq[kC] = { hp: 2, step: 0 };
+    m.own!.A.sq[kA] = { hp: 2, step: 0 };
+    if (hp) { m.w.sq[kC] = { o: 'C', hp }; m.w.sq[kA] = { o: 'A', hp }; }
+    return m;
+  };
+  const ms = [variant('town00000002', 2), variant('town00000003', 1), variant('town00000004', null)];
+  const v = ms.map((m) => viewFor(m)), sim = ms.map((m) => simulate(m, { scenarios: [{ name: 'wait', placements: [] }], steps: 12 }));
+  ok(v.every((x) => isDeepStrictEqual({ ...x, match_id: null }, { ...v[0], match_id: null })), 'the view is the same whether your square out of sight is intact, chipped or destroyed');
+  ok(sim.every((x) => isDeepStrictEqual(x, sim[0])), 'and so is simulate');
+  const [cx, cy] = e.XY(kC);
+  ok(v[0].my_pieces_out_of_sight.some((p) => p.piece === 'square' && 'x' in p && p.x === cx && p.y === cy && 'hits_left' in p && p.hits_left === 2 && p.last_seen_step === 0), 'the view lists it as last seen: its square, 2 hits left, step 0');
+  ok(v[0].grid.rows[cy][cx] === 'S' && !v[0].board.squares.some((q) => q.x === cx && q.y === cy), 'the grid shows it, the board (what you see) doesn\'t');
+  const plans = ms.map((m) => { planComputer(m, now()); return ordersText(m.pend.A!.placements); });
+  ok(plans.every((p) => p === plans[0]), 'the computer\'s plan is the same whether its own square out of sight is intact, chipped or destroyed');
+  const auto = ms.map((m) => { m.pend.A = null; autopilot(m, { turn: 0, now: now() }); return ordersText(m.history[0].C.placements); });
+  ok(auto.every((p) => p === auto[0]), 'and so is the site computer\'s plan for your side');
+  const b = belief({ e, o: 'A', view: e.fog(ms[2].w, s, 'A'), lastSeen: {}, ownSeen: ms[2].own!.A });
+  ok(b.sq[kA]?.o === 'A' && b.sq[kA].hp === 2 && !belief({ e, o: 'A', view: e.fog(ms[2].w, s, 'A'), lastSeen: {} }).sq[kA], 'the computer believes its square is where it last saw it (only with the memory)');
+  // A match played for real, its computer remembering its own pieces: its record replays to the same computer orders.
+  // (Not ms[0]: its board was edited by hand above, so a replay from the record can't reproduce it, and whether that
+  // happens to change the computer's plan depends on the match's random value: the check passed or failed by chance.)
+  {
+    const mm = newSolo({ id: 'trem00000001', ruleset: 'book-4', level: 2, seed: 11, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+    while (!mm.end && mm.turn < 4) { planComputer(mm, now()); submit(mm, { turn: mm.turn, placements: parseOrders(scripted(mm), rulesOf(mm).s), source: 'agent', final: true, now: now() }); }
+    ok(!!mm.remember && checkComputer(json(mm)).length === 0, 'a match whose computer remembers still replays');
+  }
+  // Simulate (fix 4): last-seen enemy towers by default, use_last_seen: false leaves them out; every square of a belief
+  // you can see is named at once.
+  {
+    const m = json(m0), sc = [{ name: 'wait', placements: [] }];
+    type Sim = { last_seen_towers_assumed?: unknown[]; scenarios: { result: { board_end: { towers: { side: string }[] } } }[] };
+    const on = simulate(m, { scenarios: sc }) as Sim, off = simulate(m, { scenarios: sc, use_last_seen: false }) as Sim;
+    const theirs = (x: Sim) => x.scenarios[0].result.board_end.towers.filter((t) => t.side === 'theirs').length;
+    ok(on.last_seen_towers_assumed?.length === viewFor(m).last_seen_enemy_towers.length && theirs(on) === e.L.towers.A.length && theirs(off) === 0 && !off.last_seen_towers_assumed, `the last-seen towers are on the simulated board by default (${theirs(on)}), and left out with use_last_seen: false`);
+    const seen = [...seeC].slice(0, 3).map((k) => e.XY(k));
+    let msg = '';
+    try { simulate(m, { belief: { towers: seen.map(([x, y]) => ({ x, y })) }, scenarios: sc }); } catch (err) { msg = (err as Error).message; }
+    ok(seen.every(([x, y]) => msg.includes(`${x},${y}`)) && /in_sight/.test(msg), `a refused belief names every square you can see at once (${msg})`);
+    const v = viewFor(m);
+    ok(fromRows(v.in_sight).length === seeC.size && v.grid.rows.length === e.H && v.grid.rows.every((r) => r.length === e.W) && fromRows(v.can_place).every(([x, y]) => v.grid.rows[y][x] === '.'), 'the view lists the squares in sight as rows, and the grid is one character a square (can_place squares are "." in it)');
+    const area = fromRows(v.enemy_can_place_from_last_seen.squares);
+    ok(e.L.towers.A.every((k) => area.some(([x, y]) => Math.abs(x - e.XY(k)[0]) <= s.reach && Math.abs(y - e.XY(k)[1]) <= s.reach)) && area.every(([x, y]) => e.L.towers.A.some((k) => Math.abs(x - e.XY(k)[0]) <= s.reach && Math.abs(y - e.XY(k)[1]) <= s.reach)), 'the enemy\'s possible placement area is the reach boxes of its last-seen towers');
+  }
+  const played = newSolo({ id: 'town00000005', ruleset: 'book-4', level: 2, seed: 96, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+  while (!played.end && played.turn < 5) submit(played, { turn: played.turn, placements: parseOrders(scripted(played), rulesOf(played).s), source: 'agent', final: true, now: now() });
+  const old = json(played);
+  delete old.own;
+  ok(JSON.stringify(ownOf(old)) === JSON.stringify(played.own), 'a match from before the memory rebuilds it from its record, the same as kept');
 }
 
 // ---------- 10. The live page: Take turn and the replay's frames (owner, 2026-11-03) ----------

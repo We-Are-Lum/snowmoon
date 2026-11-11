@@ -86,7 +86,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
   },
   {
     name: 'minpentai_get_view', title: 'Your side of a Minpentai match', scope: 'play', writes: false, counts: 'reads',
-    description: `What your side sees now (call it at the start of every exchange: your person may have taken the turn on their live page, in which case my_turns marks it taken_on_the_live_page and last_turn_summary tells what happened): rocks, your pieces, every piece within sight of your towers, where you last saw enemy towers, the squares you may place on (can_place), your pending orders and the opponent's commitment (a hash; its orders stay hidden until the reveal). Nothing outside your sight. Also the match's full rules ("rules", generated from its ruleset: read them before your first turn). ${NOTES.core} ${NOTES.sight} ${PAGE}`,
+    description: `What your side sees now (call it at the start of every exchange: your person may have taken the turn on their live page, in which case my_turns marks it taken_on_the_live_page and last_turn_summary tells what happened): rocks, your pieces, every piece within sight (board), the same as text (grid: one character a square, with its legend), the squares you see (in_sight, as rows "y=3: x=0-4, 6"), your own pieces out of sight as you last saw them (my_pieces_out_of_sight: never their state now), where you last saw enemy towers, where the enemy could place next turn from those towers (enemy_can_place_from_last_seen), the squares you may place on (can_place, as rows), your pending orders and the opponent's commitment (a hash; its orders stay hidden until the reveal). Nothing outside your sight. Also the match's full rules ("rules", generated from its ruleset: read them before your first turn). ${NOTES.core} ${NOTES.sight} ${PAGE}`,
     inputSchema: { type: 'object', properties: { match_id: MATCH }, required: ['match_id'], additionalProperties: false },
     async run(agent, args) {
       on(agent);
@@ -96,7 +96,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
   },
   {
     name: 'minpentai_simulate', title: 'Try plans against your guess', scope: 'play', writes: false, counts: 'reads',
-    description: `Runs the engine from your side\'s view plus your own belief about the dark (enemy towers, squares and gliders you suppose are where you can\'t see), for 1 to 6 scenarios of your placements, to the next turn to act (or \`steps\`). Never reads the hidden board: a belief piece is refused only where you can already see. Stores nothing. Each scenario also says, on the book edition, which symbols form (symbols: x, y, the step it forms) and where your symbol gliders rest (symbol_gliders_resting), and whether last turn's symbol stays walled in (last_turns_symbols); and "warnings" for placements that block your own launch lanes: a row or column left with no launch cell, or a piece standing in the line in front of one of your launch cells (measured with the towers you have now, on your view). ${NOTES.core} ${NOTES.convergence}`,
+    description: `Runs the engine from your side\'s view plus your own belief about the dark (enemy towers, squares and gliders you suppose are where you can\'t see), for 1 to 6 scenarios of your placements, to the next turn to act (or \`steps\`). Never reads the hidden board. By default the enemy towers you last saw (last_seen_enemy_towers) are on the board where you last saw them (use_last_seen: false leaves them out), and so are your own pieces out of sight, as you last saw them. A belief piece is refused only where you can already see (in_sight in get_view); every such square is named at once. Stores nothing. Each scenario also says, on the book edition, which symbols form (symbols: x, y, the step it forms) and where your symbol gliders rest (symbol_gliders_resting), and whether last turn's symbol stays walled in (last_turns_symbols); and "warnings" for placements that block your own launch lanes: a row or column left with no launch cell, or a piece standing in the line in front of one of your launch cells (measured with the towers you have now, on your view). ${NOTES.core} ${NOTES.convergence}`,
     inputSchema: {
       type: 'object', additionalProperties: false, required: ['match_id', 'scenarios'],
       properties: {
@@ -108,11 +108,12 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
         } },
         scenarios: { type: 'array', minItems: 1, maxItems: 6, items: { type: 'object', properties: { name: { type: 'string' }, placements: PLACEMENTS }, required: ['name', 'placements'], additionalProperties: false } },
         steps: { type: 'integer', minimum: 1, maximum: 96 },
+        use_last_seen: { type: 'boolean', description: 'Default true: enemy towers you last saw are assumed where you last saw them. false: only your belief.' },
       },
     },
     async run(agent, args) {
       on(agent);
-      only(args, ['match_id', 'belief', 'scenarios', 'steps']);
+      only(args, ['match_id', 'belief', 'scenarios', 'steps', 'use_last_seen']);
       const { m } = await mine(agent, args.match_id);
       if (m.end) throw new ToolInputError('the match is over: see minpentai_get_record');
       return guard(() => simulate(m, args as Parameters<typeof simulate>[1]));
@@ -132,7 +133,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
   },
   {
     name: 'minpentai_submit_orders', title: 'Submit your side\'s orders', scope: 'play', writes: true, counts: 'reads',
-    description: `Your side's placements for the open turn, replacing any you sent before. Sent with final: false they are a draft: your person sees it on their live page (faint on the board, its cost and lane warnings) and can approve it there with Take turn, which plays the turn as theirs; or they tell you to send it with final: true. Say whose they are: "person" (your person chose them) or "agent" (you chose them under your person\'s standing order). Returns a commitment (sha256 of the orders and a fresh secret salt, revealed with them after the turn). With final: true the turn resolves now: both sides\' orders are revealed and applied together, and the match runs to the next turn to act. Try them in minpentai_simulate first: it warns when a placement blocks your own launch lanes. ${NOTES.core}`,
+    description: `Your side's placements for the open turn, replacing any you sent before. Sent with final: false they are a draft: your person sees it on their live page (faint on the board, its cost and lane warnings) and can approve it there with Take turn, which plays the turn as theirs; or they tell you to send it with final: true. Say whose they are: "person" (your person chose them) or "agent" (you chose them under your person\'s standing order). Returns only whether they were accepted, the commitment (sha256 of the orders and a fresh secret salt, revealed with them after the turn; Take turn on the live page keeps it) and the points left; with final: true also how the turn resolved (call minpentai_get_view for what happened). With final: true the turn resolves now: both sides\' orders are revealed and applied together, and the match runs to the next turn to act. Try them in minpentai_simulate first: it warns when a placement blocks your own launch lanes. ${NOTES.core}`,
     inputSchema: { type: 'object', properties: { match_id: MATCH, turn: { type: 'integer', minimum: 0 }, placements: PLACEMENTS, source: { enum: ['person', 'agent'] }, final: { type: 'boolean' }, note: { type: 'string', maxLength: 280 } }, required: ['match_id', 'turn', 'placements', 'source'], additionalProperties: false },
     async run(agent, args) {
       on(agent);
@@ -143,7 +144,9 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
         const ps = parseOrders(args.placements, rulesOf(m).s);
         return { r: submit(m, { turn: Number(args.turn), placements: ps, source: args.source as 'person' | 'agent', final: args.final === true, note, now: new Date().toISOString() }), m };
       });
-      return { ...out.r, view: viewFor(out.m) };
+      const r = out.r as ReturnType<typeof submit> & { resolved?: unknown };
+      // Small replies (owner, 2026-11-04): no echo of the view; get_view has it.
+      return { accepted: r.accepted, commitment: r.commitment, points_left: r.points_left, ...(r.resolved ? { resolved: r.resolved } : {}) };
     },
   },
   {

@@ -9,7 +9,7 @@ import { Board } from '../book-view';
 
 /** One card a piece: its name, what it does in two lines (this edition's rules), and its scenario playing on a loop. */
 const CARDS = [
-  { scenario: 'mirror', name: 'Mirror wall', cost: 2, lines: ['A glider flying into it turns a quarter turn, yours too.', 'Three hits break it. A diagonal glider goes straight back.'] },
+  { scenario: 'mirror', name: 'Mirror wall', cost: 2, lines: ['A glider never enters its square: it turns a quarter turn on the square in front of it, then leaves from there. Yours too. A glider flying south from (14,6) with a “\\” at (14,8) turns at (14,7) and flies east along row 7.', 'Three hits break it. A diagonal glider goes straight back.'] },
   { scenario: 'symbol', name: 'Symbol glider', cost: 2, lines: ['Three resting together become your symbol for one turn.', 'Wall it in during that turn and it stays as a tower.'] },
   { scenario: 'wall', name: 'Moving wall', cost: 6, lines: ['Three squares wide, moving every second step.', 'Its front sends gliders straight back; a hit from the side or behind breaks a square.'] },
   { scenario: 'factory', name: 'Glider factory', cost: 3, lines: ['Stands against a rock. Each glider that hits the rock makes it fire one of yours.', 'Each firing spends one ore; with none left the rock crumbles.'] },

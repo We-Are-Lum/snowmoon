@@ -20,7 +20,7 @@ import { readFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 import postgres from 'postgres';
 import { requireTarget } from './lib/target';
-import { checkComputer, ordersText, rulesOf, simulate, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { checkComputer, fromRows, ordersText, rulesOf, simulate, viewFor, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 const BASE = requireTarget('check:minpentai-agent-live');
 // A protected preview: run under `vercel env run` and the local OIDC token opens it (never printed).
@@ -100,7 +100,7 @@ try {
     if (isDeepStrictEqual(strip(JSON.parse(JSON.stringify(viewFor(m)))), strip(v)) && isDeepStrictEqual(strip(JSON.parse(JSON.stringify(viewFor(withoutHidden(m))))), strip(v))) viewOk++;
     else check(`turn ${v.turn}: the view is the side's fog view, whatever is hidden`, false);
     // The sandbox: production's answer equals the answer from the real board with the hidden pieces removed.
-    const east = [...(v.can_place as [number, number][])].sort((a, b) => b[0] - a[0] || a[1] - b[1]);
+    const east = [...fromRows(v.can_place as string[])].sort((a, b) => b[0] - a[0] || a[1] - b[1]);
     const sc = { scenarios: [{ name: 'tower', placements: east.length ? [{ piece: 'tower', x: east[0][0], y: east[0][1] }] : [] }, { name: 'symbols', placements: east.length > 2 ? [0, 1, 2].map((i) => ({ piece: 'symbol_glider', x: east[i][0], y: east[i][1], dir: 'E' })) : [] }, { name: 'mirror', placements: east.length ? [{ piece: 'mirror', x: east[0][0], y: east[0][1], slant: '/' }] : [] }], steps: Math.min(24, (v.max_steps as number) - (v.step as number)) };
     const tg = Date.now();
     const sim = await tool('minpentai_simulate', { match_id: id, ...sc });
