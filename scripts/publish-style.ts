@@ -18,14 +18,15 @@
  * never written by hand. The dry run reads the files and,
  * in one read-only transaction, the database, and prints for each style what it would do: publish it with these
  * samples, add them as a new version, or refuse (and why). It writes nothing and uploads nothing. --apply refuses
- * without --confirm-owner-go, without a manifest, and when the manifest has any problem; it never publishes a style
+ * without --confirm-owner-go, without a manifest, when the manifest has any problem, and when R2_BUCKET is the book's
+ * bucket (snowmoon-media) or a storage setting is missing (exit 4; the dry run says so); it never publishes a style
  * without samples, never writes a style twice, and never adds samples to a style that has some.
  * Options: --db=<url> (a local test database), --name=<byline>, --only=<title>.
  */
 import path from 'node:path';
 import postgres from 'postgres';
 import { OFFERED_STYLES } from '../src/lib/challenge/base-style';
-import { addRefusal, addSamples, applyStyle, planStyle, readManifest, StyleRefused } from './lib/publish-style';
+import { addRefusal, addSamples, applyStyle, bucketRefusal, planStyle, readManifest, StyleRefused } from './lib/publish-style';
 
 const arg = (k: string) => {
   const a = process.argv.findLast((x) => x === `--${k}` || x.startsWith(`--${k}=`));
@@ -66,10 +67,17 @@ for (const style of styles) {
   say(`  -> ${step.kind === 'skip' ? 'SKIP' : step.kind === 'create' ? 'PUBLISH' : 'ADD SAMPLES'}: ${step.why}`);
   steps.push(step);
 }
-if (!APPLY) { say('Dry run: nothing written, nothing uploaded.'); await finish(0); }
+const storage = bucketRefusal();
+if (!APPLY) {
+  if (storage) say(`--apply would refuse: ${storage}.`);
+  say('Dry run: nothing written, nothing uploaded.');
+  await finish(0);
+}
 if (!has('confirm-owner-go')) { say('Refusing --apply without --confirm-owner-go. Nothing done.'); await finish(3); }
 if (!m) { say('Refusing --apply without --manifest. Nothing done.'); await finish(3); }
 if (m!.problems.length) { say(`Refusing --apply: the manifest has ${m!.problems.length} problem(s), above. Nothing done.`); await finish(3); }
+// The samples go to the readers' bucket, never the book's (as publish-bases refuses): checked before anything is uploaded.
+if (storage) { say(`Refusing --apply: ${storage}. Nothing done.`); await finish(4); }
 const { putPublic } = await import('../src/lib/images/store');
 let refused = 0;
 for (const s of steps) {

@@ -9,6 +9,7 @@ import { makeDesign, styleNameTaken } from '../../src/lib/images/designs';
 import type { DesignBody, DesignPicture } from '../../src/lib/element-body';
 import { blockedName } from '../../src/lib/images/rules';
 import { MAINTAINER_FID } from './launch-publish';
+import { BOOK_MEDIA_BUCKET } from '../../src/lib/images/store';
 
 /**
  * Publishing the challenge's offered styles (src/lib/challenge/base-style.ts) as styles of FID 6786's (the maintainer,
@@ -52,6 +53,22 @@ export async function planStyle(sql: Sql | postgres.TransactionSql, style: Offer
 
 /** Refused: a style is never written without its sample pictures (owner, 2026-11-10). */
 export class StyleRefused extends Error {}
+
+/** The site's storage settings (src/lib/images/store.ts, r2()); the test checks this list against the site's own. */
+export const STORAGE_SETTINGS = ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET', 'R2_PRIVATE_BUCKET', 'R2_IMAGES_PUBLIC_URL'] as const;
+
+/**
+ * Why --apply must not upload with these settings, or null (owner, 2026-11-11, after .env.local was found to hold the
+ * book's bucket and key): the samples go to the readers' bucket, never the book's (snowmoon-media), as publish-bases
+ * refuses too; and every storage setting must be there. Reads only the setting names and compares R2_BUCKET with the
+ * book's bucket name; it never prints a value.
+ */
+export function bucketRefusal(env: NodeJS.ProcessEnv = process.env): string | null {
+  if (env.R2_BUCKET === BOOK_MEDIA_BUCKET) return `R2_BUCKET is the book's bucket (${BOOK_MEDIA_BUCKET}); the samples go to the readers' bucket, with the key scoped to it`;
+  if (env.REHEARSAL_STORE) return env.R2_IMAGES_PUBLIC_URL ? null : 'missing R2_IMAGES_PUBLIC_URL';
+  const missing = STORAGE_SETTINGS.filter((k) => !env[k]);
+  return missing.length ? `the site's storage settings are needed (the readers' bucket). Missing: ${missing.join(', ')}` : null;
+}
 
 /** One sample picture ready to publish: its bytes and its recipe, checked (readManifest). */
 export interface ReadySample {

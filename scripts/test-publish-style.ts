@@ -14,6 +14,7 @@
  *     differs, is refused;
  *  S4 the manifest: a file's sha256, its size, the style's text in its prompt, a model on config/models.json and its
  *     maker are checked; a recipe can come from a style-test ledger; a 560 px copy of a ledger picture is caught;
+ *  S8 --apply refuses the book's bucket and missing storage settings before any upload;
  *  S5 nothing names an artist, studio or film, and no one on the blocked list (planted prompts are caught);
  *  S6 the script's dry run writes nothing and uploads nothing, and --apply without --confirm-owner-go writes nothing.
  */
@@ -29,7 +30,8 @@ import postgres from 'postgres';
 import sharp from 'sharp';
 import { COMIC_BOOK, COMIC_3D_MIX, MOOD, OFFERED_STYLES } from '../src/lib/challenge/base-style';
 import { IMAGES } from '../src/lib/config';
-import { addSamples, applyStyle, planStyle, readManifest, sampleProblems, StyleRefused, type ReadySample } from './lib/publish-style';
+import { addSamples, applyStyle, bucketRefusal, planStyle, readManifest, sampleProblems, STORAGE_SETTINGS, StyleRefused, type ReadySample } from './lib/publish-style';
+import { missingStorage } from '../src/lib/images/store';
 import { fakeStore, samplesFor } from './lib/style-samples-fixture';
 import { p1cProblems, type P1cRow } from './lib/p1c';
 
@@ -259,6 +261,50 @@ const writeJpeg = async (name: string, w: number, h: number, seed: number) => {
     ...need(after === before, `the database changed: ${before} -> ${after} versions`),
   ];
   proven('S6 the dry run writes and uploads nothing; --apply refuses without --confirm-owner-go and without a manifest', realS6, after === before + 1 ? [] : ['planted: a run that wrote one version would change the count']);
+
+  // S8 (owner, 2026-11-11): --apply refuses the book's bucket (snowmoon-media) and missing storage settings before any
+  // upload, as publish-bases does; the dry run says it would. A readers'-bucket setup is not refused (the plant's other side).
+  const all = Object.fromEntries(STORAGE_SETTINGS.map((k) => [k, 'set'])) as NodeJS.ProcessEnv;
+  const readers: NodeJS.ProcessEnv = { ...all, R2_BUCKET: 'snowmoon-readers' };
+  const book: NodeJS.ProcessEnv = { ...all, R2_BUCKET: 'snowmoon-media' };
+  const noPrivate: NodeJS.ProcessEnv = { ...readers };
+  delete noPrivate.R2_PRIVATE_BUCKET;
+  // The list is the site's own: with every name set the site's storage misses none, and without each one it misses that one.
+  const saved = Object.fromEntries(STORAGE_SETTINGS.map((k) => [k, process.env[k]]));
+  Object.assign(process.env, readers);
+  const siteMissesNone = missingStorage().length === 0;
+  const siteMissesEach = STORAGE_SETTINGS.every((k) => {
+    const v = process.env[k];
+    delete process.env[k];
+    const m = missingStorage();
+    process.env[k] = v;
+    return m.length === 1 && m[0] === k;
+  });
+  for (const [k, v] of Object.entries(saved)) (v === undefined ? delete process.env[k] : (process.env[k] = v));
+  const runWith = async (env: NodeJS.ProcessEnv, ...args: string[]) => {
+    try {
+      const r = await promisify(execFile)('npx', ['tsx', '--conditions=react-server', path.join(ROOT, 'scripts/publish-style.ts'), `--db=${DB_URL}`, ...args], { cwd: ROOT, encoding: 'utf8', env: { ...process.env, STUDIO_DATABASE_URL: '', REHEARSAL_STORE: '', ...env } });
+      return { code: 0, out: r.stdout };
+    } catch (e) {
+      const x = e as { code: number; stdout: string };
+      return { code: x.code, out: x.stdout };
+    }
+  };
+  const before8 = await count();
+  const bookDry = await runWith(book, `--manifest=${good}`);
+  const bookApply = await runWith(book, `--manifest=${good}`, '--apply', '--confirm-owner-go');
+  const missingApply = await runWith({ ...noPrivate, R2_PRIVATE_BUCKET: '' }, `--manifest=${good}`, '--apply', '--confirm-owner-go');
+  const after8 = await count();
+  const realS8 = [
+    ...need(bucketRefusal(readers) === null, `a readers'-bucket setup was refused: ${bucketRefusal(readers)}`),
+    ...need(siteMissesNone && siteMissesEach, 'the storage settings list is not the site\'s own (src/lib/images/store.ts)'),
+    ...need(bookDry.code === 0 && /--apply would refuse: R2_BUCKET is the book's bucket \(snowmoon-media\)/.test(bookDry.out), `dry run with the book's bucket: ${bookDry.code} ${bookDry.out.slice(-300)}`),
+    ...need(bookApply.code === 4 && /Refusing --apply: R2_BUCKET is the book's bucket \(snowmoon-media\)/.test(bookApply.out) && /Nothing done\./.test(bookApply.out), `--apply with the book's bucket: ${bookApply.code} ${bookApply.out.slice(-300)}`),
+    ...need(missingApply.code === 4 && /Missing: R2_PRIVATE_BUCKET/.test(missingApply.out), `--apply without R2_PRIVATE_BUCKET: ${missingApply.code} ${missingApply.out.slice(-300)}`),
+    ...need(after8 === before8, `the database changed: ${before8} -> ${after8} versions`),
+  ];
+  const planted8 = [bucketRefusal(book), bucketRefusal(noPrivate)].filter((x): x is string => Boolean(x));
+  proven('S8 --apply refuses the book\'s bucket (snowmoon-media) and missing storage settings before any upload (exit 4, nothing written); the dry run says it would; a readers\'-bucket setup passes', realS8, planted8.length === 2 ? planted8 : []);
   void comicBook;
 }
 
