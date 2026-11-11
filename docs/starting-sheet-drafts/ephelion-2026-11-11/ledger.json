@@ -1,0 +1,174 @@
+{
+ "about": "Lord Ephelion base candidates (2026-11-11): GPT Image 2.5, text only, Animated series, three variants of invented details. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "cap_usd": 1.5,
+ "stop_at_usd": 1.4,
+ "base_style": {
+  "title": "Animated series",
+  "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.",
+  "source": "docs/starting-sheet-drafts/directions/plan.json, styles[\"Animated series\"] (branch challenge-styles)"
+ },
+ "book_based": {
+  "detail": "a man",
+  "block": "c21-b76"
+ },
+ "variants": {
+  "a": "a tall man in his fifties with pale skin, long platinum-white hair swept back to the shoulders and pale-blue eyes, wearing a long ice-blue high-collared coat with silver seams over a white suit, and white gloves",
+  "b": "a tall man in his fifties with deep brown skin, close-cropped grey hair, a short grey beard and dark eyes, wearing a long charcoal-grey high-collared coat with silver trim over a dark suit",
+  "c": "a tall man in his forties with olive skin, slicked-back black hair and grey eyes, wearing a long white high-collared coat with ice-blue panels over a white suit"
+ },
+ "prompts": {
+  "c79be0db281ae03f7178e36862c09b37120dbb88f61afc3ffceb6323497770ed": "Full body from head to shoes: one person, standing and facing the front, arms relaxed, on a plain flat light grey background with no scenery.\n\nThe person is a tall man in his fifties with pale skin, long platinum-white hair swept back to the shoulders and pale-blue eyes, wearing a long ice-blue high-collared coat with silver seams over a white suit, and white gloves.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+  "8927a51267d28f8223efd78ff07b1579909dc7f5b35590e6a0c31dec737d2fc6": "Full body from head to shoes: one person, standing and facing the front, arms relaxed, on a plain flat light grey background with no scenery.\n\nThe person is a tall man in his fifties with deep brown skin, close-cropped grey hair, a short grey beard and dark eyes, wearing a long charcoal-grey high-collared coat with silver trim over a dark suit.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+  "362386198c5d6011191e87884c7e6b7eb86ffa8bb13fb10c1cbe3d1c4058b3f2": "Full body from head to shoes: one person, standing and facing the front, arms relaxed, on a plain flat light grey background with no scenery.\n\nThe person is a tall man in his forties with olive skin, slicked-back black hair and grey eyes, wearing a long white high-collared coat with ice-blue panels over a white suit.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "guard",
+   "variant": "a",
+   "prompt_sha256": "c79be0db281ae03f7178e36862c09b37120dbb88f61afc3ffceb6323497770ed",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00012075,
+   "cost_source": "reported",
+   "worst_usd": 0.0005487,
+   "at": "2026-11-11T08:36:20.737Z"
+  },
+  {
+   "kind": "guard",
+   "variant": "b",
+   "prompt_sha256": "8927a51267d28f8223efd78ff07b1579909dc7f5b35590e6a0c31dec737d2fc6",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000080925,
+   "cost_source": "reported",
+   "worst_usd": 0.000546975,
+   "at": "2026-11-11T08:36:21.457Z"
+  },
+  {
+   "kind": "guard",
+   "variant": "c",
+   "prompt_sha256": "362386198c5d6011191e87884c7e6b7eb86ffa8bb13fb10c1cbe3d1c4058b3f2",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000108,
+   "cost_source": "reported",
+   "worst_usd": 0.000544875,
+   "at": "2026-11-11T08:36:22.321Z"
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gpt",
+   "status": "ok",
+   "retention": {
+    "provider": "openai",
+    "zero_data_retention": false,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-11T08:36:22.363Z",
+    "kept": {
+     "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+     "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+     "source": "https://developers.openai.com/api/docs/guides/your-data",
+     "read": "2026-11-03"
+    }
+   },
+   "cost_usd": 0,
+   "at": "2026-11-11T08:36:22.364Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "a",
+   "file": "ephelion-a-gpt.jpg",
+   "prompt_sha256": "c79be0db281ae03f7178e36862c09b37120dbb88f61afc3ffceb6323497770ed",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M74W0GACZ0FKMRNT2J5177YG",
+   "status": "ok",
+   "cost_usd": 0.041955,
+   "cost_source": "reported by the gateway",
+   "sha256": "858fa6dc49f0b26434e46d9bf0ccecc576941a0eaac54ac5d2e8b304db3fc28f",
+   "original_sha256": "cab9f5afde62646b59ad222460c940ec3ff29e551282b4e399e4b6f7f4b985b8",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "attempt": 1,
+   "at": "2026-11-11T08:36:53.596Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "b",
+   "file": "ephelion-b-gpt.jpg",
+   "prompt_sha256": "8927a51267d28f8223efd78ff07b1579909dc7f5b35590e6a0c31dec737d2fc6",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M74W1ETBJCSK51XYNMMPCQC3",
+   "status": "ok",
+   "cost_usd": 0.04194,
+   "cost_source": "reported by the gateway",
+   "sha256": "92ab84746c1576528af68ecba67791a4d82762a021d1699cd879d7f78bf77e93",
+   "original_sha256": "47e7e3b78cc55e096a94415cb19cdf4ed00935a67fa85a74dfe44f987dcdbe97",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "attempt": 1,
+   "at": "2026-11-11T08:37:27.432Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "c",
+   "file": "ephelion-c-gpt.jpg",
+   "prompt_sha256": "362386198c5d6011191e87884c7e6b7eb86ffa8bb13fb10c1cbe3d1c4058b3f2",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M74W2FTRZ9AN409QZAJDENS3",
+   "status": "ok",
+   "cost_usd": 0.041905,
+   "cost_source": "reported by the gateway",
+   "sha256": "8e7ff7ab3fc00519e69396a16d5691d825afd3f1e9349c03441867ba355cb66a",
+   "original_sha256": "387a19aa0040d6a4ecd18d9eb75f0146a06a3c93b544026243e02dd456207360",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "attempt": 1,
+   "at": "2026-11-11T08:37:58.939Z"
+  }
+ ]
+}
