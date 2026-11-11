@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { playFor } from '~/lib/agents/core';
-import { linkOpens, turnFrames } from '~/lib/minpentai/agent-play/solo';
+import { linkSide, turnFrames } from '~/lib/minpentai/agent-play/solo';
 import { load } from '~/lib/minpentai/agent-play/store';
 import { settle } from '~/lib/minpentai/agent-play/quiet';
+import { clocked } from '~/lib/minpentai/agent-play/act';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,8 +15,11 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params, url = new URL(request.url), k = url.searchParams.get('k') ?? '', t = Number(url.searchParams.get('t'));
   const peek = await load(id).catch(() => null);
-  if (!peek || !playFor(peek.m.person) || !linkOpens(peek.m, k) || !Number.isInteger(t)) return NextResponse.json({ error: 'not found' }, { status: 404 });
-  const r = (await settle(id)) ?? peek;
+  // Each player of a practice match has their own link, opening their own side only.
+  const side = peek ? linkSide(peek.m, k) : null;
+  const owner = peek && side ? (peek.m.versus ? peek.m.versus.players[side] : peek.m.person) : null;
+  if (!peek || !side || owner === null || !playFor(owner) || !Number.isInteger(t)) return NextResponse.json({ error: 'not found' }, { status: 404 });
+  const r = (peek.m.versus ? await clocked(id) : await settle(id)) ?? peek;
   if (!r.m.history.some((h) => h.turn === t)) return NextResponse.json({ error: 'not found' }, { status: 404 });
-  return NextResponse.json({ frames: turnFrames(r.m, t, !!r.m.end) }, { headers: { 'cache-control': 'no-store', 'referrer-policy': 'no-referrer' } });
+  return NextResponse.json({ frames: turnFrames(r.m, t, !!r.m.end, side) }, { headers: { 'cache-control': 'no-store', 'referrer-policy': 'no-referrer' } });
 }

@@ -21,7 +21,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { verdict, type AnyPiece, type Kills, type Placement } from '../src/lib/minpentai/versions/engine';
-import { CURRENT, DRAFTS, RULESETS, draftInfo, takeTurnOnPage, turnFrames, turnSummaries, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { joinPractice, linkSide, newPractice, runClock, sideOf, CURRENT, DRAFTS, RULESETS, draftInfo, takeTurnOnPage, turnFrames, turnSummaries, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
 const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
@@ -469,6 +469,61 @@ playOut('play', 202);
   resign(m);
   const whole = turnFrames(m, 1, true);
   ok(whole.length === s.every + 1 && whole.every((f) => f.seen === null) && whole.some((f) => f.board.towers.some((q) => q.side === 'theirs')), 'after the end, the replay shows the whole board');
+}
+
+// ---------- 11. Practice matches between people (owner, 2026-11-03) ----------
+{
+  const t0 = '2026-11-03T10:00:00.000Z', at = (min: number) => new Date(Date.parse(t0) + min * 60_000).toISOString();
+  const mk = (pub: boolean, clock: '15m' | '4h' | '24h' = '15m') => newPractice({ id: pub ? 'tpract000001' : 'tpract000002', ruleset: 'book-2', seed: 211, person: 6786, name: '@owner', showName: true, agent: { id: null, name: 'Rook', model: { name: 'Model C', maker: 'Maker', weights: 'open' } }, clock, public: pub, now: t0 });
+  const { m, linkSecret, invite } = mk(false);
+  ok(!!invite && m.versus!.invite!.expires === Date.parse(t0) + 24 * 3600_000 && m.versus!.deadline === null, 'a private match: an invite valid 24 hours; no clock until someone joins');
+  const join = (o: Partial<Parameters<typeof joinPractice>[1]>) => joinPractice(m, { person: 777, name: '@guest', showName: false, agent: { id: null, name: 'Bishop', model: { name: 'Model A', maker: 'Other', weights: 'closed' } }, invite: invite!, now: at(1), ...o });
+  throwsLike(() => join({ invite: 'wrongwrongwrongwrong' }), /doesn't open/, 'a wrong invite is refused');
+  throwsLike(() => join({ now: at(25 * 60) }), /expired/, 'an expired invite is refused');
+  throwsLike(() => join({ person: 6786 }), /you created this match/, 'the creator can\'t join their own match');
+  const secretA = join({});
+  throwsLike(() => joinPractice(m, { person: 888, name: '@third', showName: false, agent: { id: null, name: 'X', model: null }, invite: invite!, now: at(2) }), /already has two players/, 'the invite is single use: nobody joins twice');
+  ok(linkSide(m, linkSecret) === 'C' && linkSide(m, secretA) === 'A' && linkSide(m, 'nonsensenonsensenonsense') === null, 'each player\'s live link opens their own side only');
+  ok(m.versus!.deadline === Date.parse(at(1)) + 15 * 60_000 && sideOf(m, 777) === 'A' && sideOf(m, 6786) === 'C' && sideOf(m, 5) === null, 'joined: the clock runs from now; each person has their side');
+  // Sealed orders: Cyan's final orders don't resolve the turn; Amber sees only that they're in, as a commitment.
+  const cOrders = parseOrders(scripted(m), rulesOf(m).s, 'C');
+  const rc = submit(m, { turn: 0, placements: cOrders, source: 'agent', final: true, now: at(2) }, 'C') as Record<string, unknown>;
+  const va = viewFor(m, 'A') as Record<string, any>;
+  ok(m.turn === 0 && rc.waiting_for !== undefined && va.opponent.sent_final_orders === true && va.opponent.commitment === m.pend.C!.commitment && va.my_orders === null && va.side === 'Amber', 'Cyan\'s final orders wait for Amber; Amber sees only that they are in, and their commitment');
+  ok(!JSON.stringify(va).includes(m.pend.C!.salt) && !('placements' in va.opponent), 'nothing of Cyan\'s orders reaches Amber but the commitment');
+  throwsLike(() => submit(m, { turn: 0, placements: [], source: 'agent', final: true, now: at(3) }, 'C'), /final orders for this turn are in/, 'final orders can\'t be changed');
+  throwsLike(() => submit(m, { turn: 0, placements: cOrders, source: 'agent', final: false, now: at(3) }, 'A'), /your own side only/, 'a side can\'t place the other side\'s pieces');
+  // Amber's view is her fog view: the same with every hidden Cyan piece removed.
+  const twinA = json(m), { e, s } = rulesOf(m), seeA = e.sees(twinA.w, s, 'A');
+  for (const k of Object.keys(twinA.w.tw)) if (twinA.w.tw[+k] === 'C' && !seeA.has(+k)) delete twinA.w.tw[+k];
+  for (const k of Object.keys(twinA.w.sq)) if (twinA.w.sq[+k].o === 'C' && !seeA.has(+k)) delete twinA.w.sq[+k];
+  twinA.w.gl = twinA.w.gl.filter((g) => g.o !== 'C' || seeA.has(e.K(g.x, g.y)));
+  ok(isDeepStrictEqual(JSON.parse(JSON.stringify(viewFor(m, 'A'))), JSON.parse(JSON.stringify(viewFor(twinA, 'A')))), 'Amber\'s view is the same with every hidden Cyan piece removed');
+  const aOrders = parseOrders([{ piece: 'tower', x: e.XY(e.L.towers.A[0])[0] - 2, y: e.XY(e.L.towers.A[0])[1] }], s, 'A');
+  const ra = submit(m, { turn: 0, placements: aOrders, source: 'person', final: true, now: at(4) }, 'A') as Record<string, any>;
+  ok(ra.resolved && m.turn === 1 && m.history[0].A.source === 'person' && m.history[0].C.commitment === rc.commitment && m.summary && m.versus!.summaryA && m.versus!.deadline === Date.parse(at(4)) + 15 * 60_000, 'with both in, the turn resolves; each side gets its own summary; the next turn\'s clock starts');
+  // The clock: Amber is away; when it runs out, the site computer plays her turn under her standing order.
+  setStanding(m, 'Keep my towers walled.', 'defend', 'A');
+  submit(m, { turn: 1, placements: [], source: 'agent', final: true, now: at(5) }, 'C');
+  ok(!runClock(m, at(10)) && m.turn === 1, 'before the clock runs out nothing is played');
+  ok(runClock(m, at(4 + 16)) && m.turn === 2 && m.history[1].A.source === 'site-computer' && m.history[1].A.clock === true && m.history[1].A.preset === 'defend' && m.history[1].C.source === 'agent', 'after it runs out, Amber\'s turn is played under her standing order, marked as the clock\'s');
+  ok(/clock ran out/.test(m.versus!.summaryA!.lines[0]) && (viewFor(m, 'A') as any).my_turns[1].clock_ran_out === true, 'Amber\'s summary and view say so');
+  // Both away for an hour: every overdue turn is played, then it waits.
+  const before = m.turn; runClock(m, at(4 + 16 + 60));
+  ok(m.turn > before + 2 && m.history.slice(before).every((h) => h.C.clock && h.A.clock), 'both away: each overdue turn is played for both, one clock at a time');
+  ok(checkComputer(json(m)).length === 0, 'every move the site computer made for either side follows from the record and the committed value');
+  resign(m, 'A');
+  ok(m.end?.win === 'C' && m.end.how === 'resigned', 'Amber resigns: Cyan wins');
+  const rec = recordOf(m) as Record<string, any>;
+  ok(rec.sides.C.name === '@owner' && !('name' in rec.sides.A) && rec.sides.A.model.label === 'self-reported' && /never counted/.test(rec.practice), 'the record: a name only where that player chose it, models self-reported, never counted');
+  // A public match: no invite, on the open list until someone joins.
+  const pub = mk(true).m;
+  ok(pub.versus!.invite === null && pub.versus!.public, 'a public match has no invite');
+  joinPractice(pub, { person: 999, name: '@open', showName: false, agent: { id: null, name: 'Y', model: null }, now: at(1) });
+  ok(pub.versus!.players.A === 999, 'anyone may join a public one');
+  // Solo matches are untouched: no versus, the computer still plays and replays.
+  const solo = start('book', 212).m;
+  ok(!solo.versus && sideOf(solo, 6786) === 'C' && (viewFor(solo) as any).opponent.kind === 'site computer', 'a solo match is as before');
 }
 
 console.log(`minpentai agent play: ${checks} checks passed`);
