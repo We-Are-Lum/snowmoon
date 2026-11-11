@@ -1,5 +1,6 @@
 'use client';
 
+import { NO_PASSAGE } from '~/lib/images/no-passage';
 import { useEffect, useRef, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, useAuth } from '~/lib/client-auth';
@@ -15,7 +16,7 @@ import { PrivateNoteField } from './private-note-field';
  */
 const IMAGE_WORDING_DESIGN_REPORT = { style: W.designs.report.style, sheet: W.designs.report.sheet };
 
-export function ImageActions({ versionId, byFid, chapter, design }: { versionId: string; byFid: number; chapter: number; design?: 'style' | 'sheet' }) {
+export function ImageActions({ versionId, byFid, chapter, design }: { versionId: string; byFid: number; chapter: number | null; design?: 'style' | 'sheet' }) {
   const auth = useAuth();
   const [likes, setLikes] = useState<{ likes: number; liked: boolean } | null>(null);
   const [inApp, setInApp] = useState(false);
@@ -54,7 +55,7 @@ export function ImageActions({ versionId, byFid, chapter, design }: { versionId:
     else setNote(((await res.json().catch(() => ({}))) as { error?: string }).error ?? 'Could not record the like');
   };
   const cast = async () => {
-    const text = `An image for Snowmoon, Chapter ${chapter}`;
+    const text = chapter === null ? NO_PASSAGE.title : `An image for Snowmoon, Chapter ${chapter}`;
     const url = `${window.location.origin}/image/${versionId}`;
     if (inApp) await sdk.actions.composeCast({ text, embeds: [url] });
     else {

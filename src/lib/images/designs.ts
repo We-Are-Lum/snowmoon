@@ -168,17 +168,18 @@ export async function designByVersion(sql: Sql, versionId: string): Promise<Desi
 }
 
 /** Published images built on a design (any version), newest first, for "See them". */
-export async function imagesBuiltOn(sql: Sql, elementId: string, limit = 24): Promise<{ versionId: string; url: string; chapter: number }[]> {
+export async function imagesBuiltOn(sql: Sql, elementId: string, limit = 24): Promise<{ versionId: string; url: string; chapter: number | null }[]> {
   if (!isId(elementId)) return [];
   const rows = await sql`
     select distinct on (fv.id) fv.id, fv.asset_url, a.chapter, fe.created_at from studio.links l
     join studio.element_versions tv on tv.id = l.to_version_id
     join studio.element_versions fv on fv.id = l.from_version_id
     join studio.elements fe on fe.id = fv.element_id
-    join studio.anchors a on a.version_id = fv.id
+    left join studio.recipes fr on fr.id = fv.recipe_id
+    left join studio.anchors a on a.version_id = fv.id and not coalesce(fr.params ? 'challenge', false)
     where l.kind = 'uses' and tv.element_id = ${elementId} and fe.element_type = 'image' and fe.status = 'published'`;
   return rows
-    .map((r) => ({ versionId: String(r.id), url: String(r.asset_url), chapter: Number(r.chapter), at: new Date(r.created_at).getTime() }))
+    .map((r) => ({ versionId: String(r.id), url: String(r.asset_url), chapter: r.chapter === null ? null : Number(r.chapter), at: new Date(r.created_at).getTime() }))
     .sort((a, b) => b.at - a.at)
     .slice(0, limit)
     .map(({ versionId, url, chapter }) => ({ versionId, url, chapter }));

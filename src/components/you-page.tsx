@@ -1,5 +1,6 @@
 'use client';
 
+import { chapterLabel } from '~/lib/images/no-passage';
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ILLUSTRATION_CHECK, IMAGES } from '~/lib/config';
@@ -79,7 +80,7 @@ const W = {
   shot: (title: string, shot: string, v: number) => `${title}, shot ${shot} · version ${v}`,
   board: (b: BoardItem) => `${b.frames} frame${b.frames === 1 ? '' : 's'} · ${b.seconds.toFixed(1)} s · ${b.sceneTitle}, version ${b.versionId}`,
   untitled: 'Untitled storyboard',
-  chapter: (n: number) => `Chapter ${n}`,
+  chapter: (n: number | null) => chapterLabel(n),
   couldNot: 'Could not change it',
   // Wallet ↔ Farcaster links (owner, 2026-10-22). DRAFT wording (coding agent, 2026-10-22), for the owner.
   linkTitle: 'Link this wallet to Farcaster',
