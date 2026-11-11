@@ -38,6 +38,24 @@ export const RULESETS = { 'book-1': BOOK_EDITION, 'book-2': BOOK_EDITION, 'book-
  */
 export const COMPUTERS: Record<RulesetName, { book?: BookPlay; comp?: Computer }> = { 'book-1': {}, 'book-2': { book: { variety: 0, kinds: ['f', 'w', 'm', 'e'], from: 2 } }, 'book-3': {}, 'book-4': { comp: { formingSymbols: true, seedScore: 0, spendTies: true } }, 'play-3': {} };
 /**
+ * A computer revised within a ruleset (owner, 2026-11-04, after the book-4 playtest: "make the computer play properly at
+ * every level"): a new match records the revision it is played against (SoloMatch.computer), and a match without one,
+ * every match started before, keeps replaying with the ruleset's first computer (COMPUTERS). Revision 2 guards its
+ * towers (search.ts Computer.guard): squares in the lanes a glider could come down, at setup and for every new tower,
+ * and no tower where a single enemy glider would destroy it at once; and each turn it tries an attack line at one enemy
+ * tower it sees or last saw (tuned 2026-11-04: "a computer that only defends is the passive opponent from my first playtest").
+ */
+export const REVISIONS: Partial<Record<RulesetName, { computer: number; book?: BookPlay; comp?: Computer }>> = {
+  'book-4': { computer: 2, comp: { formingSymbols: true, seedScore: 0, spendTies: true, guard: true } },
+};
+/** How the site computer plays a match: its ruleset's computer, or the revision the match was started with. */
+export const computerOf = (m: Pick<SoloMatch, 'ruleset' | 'computer'>): { book?: BookPlay; comp?: Computer } => {
+  const r = REVISIONS[m.ruleset];
+  if (m.computer === undefined) return COMPUTERS[m.ruleset];
+  if (!r || r.computer !== m.computer) throw new SoloError(`no computer revision ${m.computer} for ${m.ruleset}`);
+  return { book: r.book, comp: r.comp };
+};
+/**
  * Draft rulesets: started only by name, and only by the people in AGENTS.minpentaiPlay.drafts. book-3's computer is the
  * plain search, unforced: under book-3's rules it chooses the pieces on its own (or doesn't), which is what the draft
  * is for.
@@ -67,6 +85,8 @@ export interface SoloMatch {
   id: string;
   ruleset: RulesetName;
   level: number;
+  /** The computer's revision within the ruleset (REVISIONS), when the match was started with one; absent: COMPUTERS. */
+  computer?: number;
   seed: number;
   person: number;
   agent: { id: string | null; name: string; model: ModelClaim | null };
@@ -132,19 +152,19 @@ export const commit = (ps: Placement<AnyPiece>[], salt: string) => sha256(orders
 /** The computer's random numbers for a turn: the seed, the turn, and the committed server-only value. */
 const cpuWord = (cpu: string) => parseInt(cpu.slice(0, 8), 16) >>> 1;
 const turnRng = (m: Pick<SoloMatch, 'seed' | 'turn' | 'cpu'>, who: 1 | 2) => rng(((m.seed * 7919 + m.turn * 31 + who) ^ cpuWord(m.cpu)) >>> 0);
-type PlanState = Pick<SoloMatch, 'ruleset' | 'seed' | 'level' | 'cpu' | 'w' | 'ls' | 'turn' | 'own' | 'remember'>;
+type PlanState = Pick<SoloMatch, 'ruleset' | 'computer' | 'seed' | 'level' | 'cpu' | 'w' | 'ls' | 'turn' | 'own' | 'remember'>;
 /** Side o's memory of its own pieces out of sight, for the computer, when the match's computer plans with it. */
 const memoryFor = (m: PlanState, o: Side) => (m.remember && m.own ? JSON.parse(JSON.stringify(m.own[o])) as OwnSeen : undefined);
 /** What the site computer plays for its own side from this state (its own view only). */
 function computerPlan(m: PlanState) {
   const { s, e } = rulesOf(m);
   const o = COMPUTER;
-  return searchPlan({ e, s, o, view: e.fog(m.w, s, o), lastSeen: { ...m.ls[o] }, ownSeen: memoryFor(m, o), snap: e.towers(m.w, o), points: pointsOf(m, s), rng: turnRng(m, 1), level: m.level, ...COMPUTERS[m.ruleset] }).placements;
+  return searchPlan({ e, s, o, view: e.fog(m.w, s, o), lastSeen: { ...m.ls[o] }, ownSeen: memoryFor(m, o), snap: e.towers(m.w, o), points: pointsOf(m, s), rng: turnRng(m, 1), level: m.level, ...computerOf(m) }).placements;
 }
 /** What the site computer plays for the person's side when asked to (the fallback, under a preset). */
 function fallbackPlan(m: PlanState, preset: Preset) {
   const { s, e } = rulesOf(m);
-  return searchPlan({ e, s, o: PERSON, view: e.fog(m.w, s, PERSON), lastSeen: { ...m.ls[PERSON] }, ownSeen: memoryFor(m, PERSON), snap: e.towers(m.w, PERSON), points: pointsOf(m, s), rng: turnRng(m, 2), level: FALLBACK_LEVEL, preset, ...COMPUTERS[m.ruleset] }).placements;
+  return searchPlan({ e, s, o: PERSON, view: e.fog(m.w, s, PERSON), lastSeen: { ...m.ls[PERSON] }, ownSeen: memoryFor(m, PERSON), snap: e.towers(m.w, PERSON), points: pointsOf(m, s), rng: turnRng(m, 2), level: FALLBACK_LEVEL, preset, ...computerOf(m) }).placements;
 }
 
 /** Both sides' memory of their own pieces, after the board changed (placements appearing, or a step). */
@@ -185,7 +205,7 @@ export function newSolo(o: { id: string; ruleset: RulesetName; level: number; se
   e.L.towers.A.forEach((k) => (ls.C[k] = 0));
   e.L.towers.C.forEach((k) => (ls.A[k] = 0));
   const m: SoloMatch = {
-    v: 1, id: o.id, ruleset: o.ruleset, level: o.level, seed: o.seed, person: o.person, agent: o.agent,
+    v: 1, id: o.id, ruleset: o.ruleset, level: o.level, ...(REVISIONS[o.ruleset] ? { computer: REVISIONS[o.ruleset]!.computer } : {}), seed: o.seed, person: o.person, agent: o.agent,
     linkHash: sha256(linkSecret), cpu, cpuCommit: sha256(cpu), createdAt: o.now, w, kills: { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) }, ls, own: { C: emptyOwnSeen(), A: emptyOwnSeen() }, remember: 1, turn: 0,
     pend: { C: null, A: null }, openedAt: Date.parse(o.now) || 0, standing: null, history: [], end: null,
   };
@@ -614,7 +634,7 @@ export function recordOf(m: SoloMatch) {
   if (!m.end) throw new SoloError('no finished match with that id');
   const { s, e, rule } = rulesOf(m);
   return {
-    match_id: m.id, ruleset: m.ruleset, seed: m.seed, computer_random: m.cpu, computer_random_commitment: m.cpuCommit, rule, level: m.level, created_at: m.createdAt,
+    match_id: m.id, ruleset: m.ruleset, ...(m.computer !== undefined ? { computer_revision: m.computer } : {}), seed: m.seed, computer_random: m.cpu, computer_random_commitment: m.cpuCommit, rule, level: m.level, created_at: m.createdAt,
     // The computer planned with its memory of its own pieces out of sight (own-seen.ts): a verifier replays it so.
     ...(m.remember ? { computer_remembers_own_pieces: true } : {}),
     // Nothing that leads back to the person (owner, 2026-10-31): no Farcaster name or ID, and no agent name, since the
@@ -645,11 +665,11 @@ export function replay(m: Pick<SoloMatch, 'ruleset' | 'seed' | 'history' | 'end'
  * and from the seed, that value and the revealed orders, every move the site computer made (for its own side, and for
  * the person's side when asked to) comes out the same. Returns the problems found; empty when all agree.
  */
-export function checkComputer(r: Pick<SoloMatch, 'ruleset' | 'seed' | 'level' | 'cpu' | 'cpuCommit' | 'history' | 'remember'>): string[] {
+export function checkComputer(r: Pick<SoloMatch, 'ruleset' | 'computer' | 'seed' | 'level' | 'cpu' | 'cpuCommit' | 'history' | 'remember'>): string[] {
   const out: string[] = [];
   if (sha256(r.cpu) !== r.cpuCommit) out.push('the revealed computer value does not match its commitment');
   const { s, e } = rulesOf(r);
-  const st: PlanState = { ruleset: r.ruleset, seed: r.seed, level: r.level, cpu: r.cpu, w: e.world(s), ls: { C: {}, A: {} }, turn: 0, remember: r.remember, own: { C: emptyOwnSeen(), A: emptyOwnSeen() } };
+  const st: PlanState = { ruleset: r.ruleset, computer: r.computer, seed: r.seed, level: r.level, cpu: r.cpu, w: e.world(s), ls: { C: {}, A: {} }, turn: 0, remember: r.remember, own: { C: emptyOwnSeen(), A: emptyOwnSeen() } };
   e.L.towers.A.forEach((k) => (st.ls.C[k] = 0));
   e.L.towers.C.forEach((k) => (st.ls.A[k] = 0));
   const kills: Kills = { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) };
