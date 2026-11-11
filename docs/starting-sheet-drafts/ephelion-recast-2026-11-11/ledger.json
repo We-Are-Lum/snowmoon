@@ -1,0 +1,131 @@
+{
+ "about": "Lord Ephelion: candidates b and c's looks in candidate a's outfit (owner, 2026-11-11), GPT Image 2.5 edit from candidate a's front. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "cap_usd": 0.3,
+ "reference": {
+  "file": "ephelion-2026-11-11/ephelion-a-gpt.jpg",
+  "sha256": "858fa6dc49f0b26434e46d9bf0ccecc576941a0eaac54ac5d2e8b304db3fc28f",
+  "what": "candidate a's front (its outfit kept)"
+ },
+ "book_based": {
+  "detail": "a man",
+  "block": "c21-b76"
+ },
+ "outfit": "a long ice-blue high-collared coat with silver seams over a white suit, and white gloves",
+ "looks": {
+  "b": "a tall man in his fifties with deep brown skin, close-cropped grey hair, a short grey beard and dark eyes",
+  "c": "a tall man in his forties with olive skin, slicked-back black hair and grey eyes"
+ },
+ "prompts": {
+  "5ff9cab0ec3f1d3d5496dd5a30d80b5ac67c94982183f1360bd88866ab18ab99": "The person in reference image 1, recast as a tall man in his fifties with deep brown skin, close-cropped grey hair, a short grey beard and dark eyes, wearing exactly the same clothes as in reference image 1: a long ice-blue high-collared coat with silver seams over a white suit, and white gloves.\n\nFull body from head to shoes: one person, standing and facing the front, arms relaxed, on a plain flat light grey background with no scenery.\n\nKeep the drawing style of reference image 1. Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+  "9b6685422e3302eea4fb319b56fd63528f127eb43e2c7ca59177d18934fa0dd3": "The person in reference image 1, recast as a tall man in his forties with olive skin, slicked-back black hair and grey eyes, wearing exactly the same clothes as in reference image 1: a long ice-blue high-collared coat with silver seams over a white suit, and white gloves.\n\nFull body from head to shoes: one person, standing and facing the front, arms relaxed, on a plain flat light grey background with no scenery.\n\nKeep the drawing style of reference image 1. Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "guard",
+   "variant": "b",
+   "prompt_sha256": "5ff9cab0ec3f1d3d5496dd5a30d80b5ac67c94982183f1360bd88866ab18ab99",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.0001995,
+   "cost_source": "reported",
+   "worst_usd": 0.0005574,
+   "at": "2026-11-11T23:21:55.315Z"
+  },
+  {
+   "kind": "guard",
+   "variant": "c",
+   "prompt_sha256": "9b6685422e3302eea4fb319b56fd63528f127eb43e2c7ca59177d18934fa0dd3",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000192375,
+   "cost_source": "reported",
+   "worst_usd": 0.000555525,
+   "at": "2026-11-11T23:21:56.449Z"
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gpt",
+   "status": "ok",
+   "retention": {
+    "provider": "openai",
+    "zero_data_retention": false,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-11T23:21:56.933Z",
+    "kept": {
+     "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+     "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+     "source": "https://developers.openai.com/api/docs/guides/your-data",
+     "read": "2026-11-03"
+    }
+   },
+   "cost_usd": 0,
+   "at": "2026-11-11T23:21:56.933Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "b",
+   "file": "ephelion-coat-b-gpt.jpg",
+   "prompt_sha256": "5ff9cab0ec3f1d3d5496dd5a30d80b5ac67c94982183f1360bd88866ab18ab99",
+   "reference_sha256": "858fa6dc49f0b26434e46d9bf0ccecc576941a0eaac54ac5d2e8b304db3fc28f",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M76EP1MMS2FTKW0S5TMA1AN2",
+   "status": "ok",
+   "cost_usd": 0.048299,
+   "cost_source": "reported by the gateway",
+   "sha256": "25e58ae07b8a0c18debf9194ead384eb890d5f5684287f08b19b403215f96618",
+   "original_sha256": "e099d27c30540c60e38f3456dda03ccdd9ba0c90d798dbf9da8a76c9f3429a0f",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "attempt": 1,
+   "at": "2026-11-11T23:22:19.624Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "c",
+   "file": "ephelion-coat-c-gpt.jpg",
+   "prompt_sha256": "9b6685422e3302eea4fb319b56fd63528f127eb43e2c7ca59177d18934fa0dd3",
+   "reference_sha256": "858fa6dc49f0b26434e46d9bf0ccecc576941a0eaac54ac5d2e8b304db3fc28f",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M76EPQT2FHKWYKF8PNXHAQQY",
+   "status": "ok",
+   "cost_usd": 0.048264,
+   "cost_source": "reported by the gateway",
+   "sha256": "e41dfeb66dd662770f0145c0fe2f5a290c0c0c602ecaa0515cf87ea0e38a4b9f",
+   "original_sha256": "50ede803f119dbcb098fde804ae3ea6244f144dc779b55e6d645b29e4fbeb04b",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "attempt": 1,
+   "at": "2026-11-11T23:22:45.315Z"
+  }
+ ]
+}
