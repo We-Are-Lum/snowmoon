@@ -1,4 +1,5 @@
 import 'server-only';
+import { isWalletPerson } from '../people';
 import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import type postgres from 'postgres';
@@ -34,7 +35,7 @@ async function runFrame(person: number, request: Request, body: { adaptation: nu
   if (!shot || !layout) return { ok: false as const, status: 400, error: 'This shot has no committed layout to redraw from.' };
   const pictures = remixPictures(layout, shot);
   // A wallet account is charged the price its Make it button showed, or nothing (Terms 6a: "the price shown").
-  if (person < 0 && body.change.price_usd !== priceUsd(REMIX.reserveUsd(pictures.length))) return { ok: false as const, status: 409, error: 'The price of this frame has changed. Ask your agent to draft it again.' };
+  if (isWalletPerson(person) && body.change.price_usd !== priceUsd(REMIX.reserveUsd(pictures.length))) return { ok: false as const, status: 409, error: 'The price of this frame has changed. Ask your agent to draft it again.' };
   // The person's acting notes for this shot go into the prompt, in their words, and into the recipe as theirs.
   const acting = await actingFor(person, body.adaptation, body.version, body.shot);
   const prompt = remixPrompt(shot, pictures, [body.change.note, actingPrompt(acting)].filter(Boolean).join(' '));

@@ -53,12 +53,26 @@
  *   in-memory database with two published readers' images (scripts/fixtures/reader-images-db.ts);
  *   sign-in, the composer's status and the queue are mocked in the browser.
  * - The account at the foot of the rail and the menu sheet (owner, 2026-10-18): signed out it offers "Sign in with
- *   Farcaster", then "Sign in with a wallet" (the editor's button, with its note); a wallet session (planted in
+ *   Farcaster", then "Sign in with a wallet", as equals (owner, 2026-10-30: the same size and look, a line under each;
+ *   also on /you and in the composer's sign-in step; no Lens or Bluesky while they are off); a wallet session (planted in
  *   storage, nothing signed; the assistant's status answers it 403, as for a wallet not linked to Farcaster) stays
  *   signed in on load, and shows its shortened address and a Sign out that ends it; a Farcaster session shows
  *   the Farcaster name and no wallet option. The name is a link to the You page (/you), and the top bar shows an
  *   avatar linking there, between ? and the menu, only when signed in; /you signed out meets the floors and shows
  *   only the sign-in offer (owner, 2026-10-18).
+ * - The You page signed in (2026-11-05), at 390, light and dark, for a Lens, a Bluesky, a Farcaster and a wallet account
+ *   (planted in storage; /api/you from fixtures here): the account's own network beside its name, no row without a
+ *   value, a Lens or Bluesky account's public-page and Wallet lines about that account, one button style; "Link a
+ *   Bluesky account" starts at bsky.social, its error shows once, and "Use another server or handle" opens the handle
+ *   box filled in with the last handle; the assistant says "Asking questions needs a Farcaster account." Signed out,
+ *   /you's rail and menu don't repeat the page's sign-in buttons.
+ * - The assistant's panel for each kind of sign-in (step 1 of "the assistant for any account", 2026-11-05), at 390,
+ *   light and dark, with /api/chat/status answered here as the server answers (src/lib/chat/gate.ts, following
+ *   ASSISTANT.anyAccount): signed out, the "Sign in to ask questions" heading and the line on who can ask; signed in
+ *   with Farcaster (and, switch on, Lens or Bluesky with no decision yet), the assistant's home and no "Sign in" heading;
+ *   refused (a wallet; switch off, Lens or Bluesky; switch on, a Lens account with a kept fail), no "Sign in" heading,
+ *   the gate's refusal (src/lib/chat/who-can-ask.ts) once, a link to the You page for Lens and Bluesky, and for a
+ *   wallet only the ways that can ask.
  * - The owner's image review (/you/illustrations, owner 2026-10-23) at 390, light and dark: signed out, the floors and
  *   the sign-in offer only; as the owner (API replayed from scripts/fixtures/illustration-review.json), worst first,
  *   in the owner's order (wrong, partly with a double, partly, matches, not checked), each item with its passage, its
@@ -66,8 +80,23 @@
  *   shown, the finding with its fix line, the note box with the publication line, pre-filled with the fix line labelled
  *   "Drafted by the image check (Argon finding, gpt-oss-120b fix line)" and marked when edited; anyone else sees only the owner line.
  * - The remix challenge (/challenge, 2026-10-31): the floors, light and dark, the "Draft wording" line, its six characters in order, the
- *   deadline in Pacific time, the rules, admins not eligible for rewards, no sideways scroll. While it is admin-only
- *   (CHALLENGE.public off; owner, 2026-11-04): signed out, status 404 with nothing of the challenge in the HTML or on screen.
+ *   deadline (in its one line), the "Rules" link, no sideways scroll; /challenge/rules (the short page's rules, owner
+ *   2026-11-04): the floors, the deadline in Pacific time, who can enter, the rules, admins not eligible for rewards. As a landing page (owner,
+ *   2026-11-04), on local data (scripts/fixtures/challenge-db.ts) at 390 light and dark, in the 424 × 695 Farcaster
+ *   frame and at 1440: the cards in CHALLENGE.characters' order (branch challenge-moments, 2026-11-05): Zei's big
+ *   picture with its AI label saying the look is this edition's, the line marked as this edition's summary (and
+ *   "Draft wording" until approved), facts opening the book's words with their block, "Moments picked by @naaate" with
+ *   "Ch N" on every chip, every picture opening its remix screen, a random three of Zei's remixes and "Show more", no
+ *   count, "More about Zei" opening with "May spoil later chapters." and "Where Zei appears" loading its passages; no
+ *   random block; the feed, every remix newest first, the filter showing Bai's only, and Gladias' empty state.
+ *   While it is admin-only (CHALLENGE.public off; owner, 2026-11-04): signed out, status 404 with nothing of the
+ *   challenge in the HTML or on screen; the landing checks on local data then wait for CHALLENGE.public.
+ * - A remix page as a landing page (owner, 2026-11-04), on this checkout's build and the fixture database, at 390 (light,
+ *   dark) and 1440: at the top, the front view big, the maker, the AI label, a big Remix button to that version's remix
+ *   form (or, outside the entry window, the line in its place), signed out the line on the challenge and its dates
+ *   linking /challenge (gone signed in), the like slot empty while likes are off, no sideways scroll; a hidden remix
+ *   and a draft answer 404 with no picture. While the challenge is admin-only (CHALLENGE.public off): no landing, no
+ *   Remix button and no challenge words on the page at all, signed out.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -79,7 +108,16 @@ import path from 'node:path';
 import { chromium, type Browser, type Page, type Route } from 'playwright-core';
 import QRCode from 'qrcode';
 import { BOOK_MENTIONS } from '../src/lib/character-order';
-import { CHALLENGE, SUPPORT } from '../src/lib/config';
+import { ASSISTANT, CHALLENGE, SIGN_IN_METHODS, SUPPORT } from '../src/lib/config';
+import { SIGN_IN_CHOICES } from '../src/lib/sign-in-text';
+import { ASK_WORDING, type AccountKind } from '../src/lib/chat/who-can-ask';
+
+/** The ways to sign in that are on (SIGN_IN_METHODS, in order; the sign-in release of 2026-11-05 turns Lens and Bluesky on). */
+const SIGN_IN_ON = SIGN_IN_METHODS.filter((m) => m.on).map((m) => m.id);
+const SIGN_IN_OFF = SIGN_IN_METHODS.filter((m) => !m.on).map((m) => m.id);
+const SIGN_IN_LABELS = SIGN_IN_ON.map((id) => SIGN_IN_CHOICES[id].label).join(' | ');
+/** A selector for a sign-in that is off, under `scope` (null when every way is on). */
+const offSelector = (scope = '') => (SIGN_IN_OFF.length ? SIGN_IN_OFF.map((id) => `${scope} [data-method="${id}"]`.trim()).join(', ') : null);
 import { requireTarget } from './lib/target';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -324,26 +362,42 @@ const plantWallet = (address: string) => {
 async function plantWalletSession(page: Page) {
   const planted = `Bearer x.${btoa(JSON.stringify({ sub: 'w', exp: 4102444800 })).replace(/=+$/, '')}.y`;
   await page.route('**/api/chat/status', (r) =>
-    r.request().headers().authorization === planted ? r.fulfill({ status: 403, json: { error: 'Sign in with Farcaster to use the assistant' } }) : r.fallback(),
+    r.request().headers().authorization === planted ? r.fulfill(chatStatusFor('wallet')) : r.fallback(),
   );
   await page.evaluate(plantWallet, WALLET_ADDRESS);
 }
 /** The account inside `within` (src/components/app-shell.tsx: Account in the rail, MenuAccount at the top of the
- *  phone menu): signed out, Farcaster then a wallet, both shown. */
+ *  phone menu): signed out, Farcaster then a wallet, as equals (owner, 2026-10-30). */
 const accountIn = (within: string) => `${within} .menu-account`;
 async function checkAccountSignedOut(page: Page, within: string, where: string) {
   const acct = page.locator(accountIn(within));
+  // Signed out on the website (2026-11-06, Garance): one "Sign in" button, closed, and no way to sign in shown until it
+  // is pressed; pressed, every way that is on (the checks below).
+  const opener = acct.locator('button.signin-open');
+  await opener.waitFor({ timeout: 10000 }).catch(() => {});
+  const first = await acct.locator('button').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
+  if (first.join(' | ') !== 'Sign in') fail(`${where}: signed out, the account shows "${first.join(' | ')}" (want one "Sign in" button)`);
+  if ((await opener.getAttribute('aria-expanded').catch(() => null)) !== 'false') fail(`${where}: the "Sign in" button doesn't say it is closed (aria-expanded)`);
+  if (await acct.locator('.signin-choice').count()) fail(`${where}: the ways to sign in show before "Sign in" is pressed`);
+  await opener.click().catch(() => fail(`${where}: no "Sign in" button to press`));
   await acct.locator('button', { hasText: 'Sign in with a wallet' }).waitFor({ timeout: 10000 }).catch(() => {});
-  const names = await acct.locator('button').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
-  if (names.join(' | ') !== 'Sign in with Farcaster | Sign in with a wallet') fail(`${where}: signed out, the account offers "${names.join(' | ')}" (want Farcaster, then a wallet)`);
+  // The small "Use another server or handle" link under "Sign in with Bluesky" (2026-11-05) is not a way to sign in.
+  const names = await acct.locator('button:not(.social-other)').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
+  if (names.join(' | ') !== SIGN_IN_LABELS) fail(`${where}: signed out, the account offers "${names.join(' | ')}" (want ${SIGN_IN_LABELS})`);
+  if (SIGN_IN_ON.includes('bluesky')) {
+    const other = (await acct.locator('[data-method="bluesky"] button.social-other').innerText().catch(() => '')).trim();
+    if (other !== 'Use another server or handle') fail(`${where}: no "Use another server or handle" link under "Sign in with Bluesky" (${other || 'none'})`);
+  }
   // The phone menu and the wide-screen rail (owner, 2026-10-19): in the menu first in the sheet; in both, two full-width buttons at least 48px tall in the menu's
-  // main font, the first filled, and one line under them.
-  const first = await page.evaluate(() => {
+  // main font, and the owner's line under them.
+  const firstInSheet = await page.evaluate(() => {
     const a = document.querySelector('.menu-sheet .menu-account');
     const n = document.querySelector('.menu-sheet .nav-list');
     return !!a && !!n && !!(a.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_FOLLOWING);
   });
-  if (within === '.menu-sheet' && !first) fail(`${where}: the account is not above the menu's items`);
+  if (within === '.menu-sheet' && !firstInSheet) fail(`${where}: the account is not above the menu's items`);
+  // Farcaster and a wallet as equals (owner, 2026-10-30; src/components/sign-in-choices.tsx): the same box, the same
+  // fill, border, font and weight, each with one line under it; only the ways that are on (no Lens or Bluesky yet).
   const boxes = await acct.locator('button.menu-signin').evaluateAll((els) =>
     els.map((e) => {
       const r = e.getBoundingClientRect();
@@ -351,7 +405,8 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
       const box = e.closest('.menu-account') as HTMLElement;
       const bs = getComputedStyle(box);
       const inner = box.clientWidth - parseFloat(bs.paddingLeft) - parseFloat(bs.paddingRight);
-      return { h: r.height, full: r.width >= inner - 1, font: st.fontFamily, bg: st.backgroundColor };
+      const line = e.closest('.signin-choice')?.querySelector('.signin-choice-line')?.textContent?.trim() ?? '';
+      return { w: r.width, h: r.height, full: r.width >= inner - 1, font: st.fontFamily, size: st.fontSize, weight: st.fontWeight, bg: st.backgroundColor, border: st.border, line };
     }),
   );
   const label = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--font-label').trim());
@@ -359,12 +414,299 @@ async function checkAccountSignedOut(page: Page, within: string, where: string) 
     if (b.h < 48) fail(`${where}: sign-in button ${i + 1} is ${b.h}px tall (want at least 48)`);
     if (!b.full) fail(`${where}: sign-in button ${i + 1} is not full width`);
     if (/mono/i.test(b.font) || (label && b.font.includes(label))) fail(`${where}: sign-in button ${i + 1} is in the label (mono) font`);
+    if (!b.line) fail(`${where}: sign-in button ${i + 1} has no line under it saying what it is`);
   }
-  if (boxes.length === 2 && boxes[0].bg === boxes[1].bg) fail(`${where}: the Farcaster button is not filled apart from the wallet one`);
+  if (boxes.length !== SIGN_IN_ON.length) fail(`${where}: ${boxes.length} sign-in buttons (want ${SIGN_IN_ON.length})`);
+  else {
+    const [a, ...others] = boxes;
+    for (const c of others) {
+      if (Math.abs(a.w - c.w) > 0.5 || Math.abs(a.h - c.h) > 0.5) fail(`${where}: the sign-in buttons are not the same size (${a.w}x${a.h} and ${c.w}x${c.h})`);
+      if (a.bg !== c.bg || a.border !== c.border || a.font !== c.font || a.size !== c.size || a.weight !== c.weight) fail(`${where}: the sign-in buttons are not styled alike (${JSON.stringify([a, c])})`);
+    }
+  }
+  const off = offSelector();
+  if (off && (await acct.locator(off).count())) fail(`${where}: a sign-in that is switched off (${SIGN_IN_OFF.join(', ')}) is shown`);
   const note = (await acct.locator('.menu-signin-note').textContent())?.trim();
   if (note !== 'Signing in is free. It’s a signature, not a payment.') fail(`${where}: the line under the buttons reads "${note}"`);
   if (await acct.locator('.wallet-sign-in .ic-note:not([role=alert])').count()) fail(`${where}: the wallet's own note still shows in the menu`);
 }
+/**
+ * A Bluesky sign-in that comes back with an error (2026-11-06, branch signin-error-visible): the return page shows it at
+ * once, in an alert (Bluesky's own wording, not Lens's "signature was declined"), with every way to sign in that is on
+ * right under it; the rail and the menu don't repeat them there. Only while Bluesky sign-in is on (the page is 404 off).
+ */
+async function checkSignInFailedShows(page: Page, where: string, scheme: string) {
+  if (!SIGN_IN_ON.includes('bluesky')) return;
+  await open(page, '/about');
+  await page.evaluate(() => {
+    ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social'].forEach((k) => localStorage.removeItem(k));
+    sessionStorage.setItem('snowmoon.bluesky.pending', 'sealed-by-the-check');
+  });
+  await page.goto(`${BASE}/sign-in/bluesky?error=access_denied&state=x`, { waitUntil: 'networkidle' });
+  const alert = page.locator('main [role="alert"]').first();
+  await alert.waitFor({ timeout: 10000 }).catch(() => fail(`/sign-in/bluesky ${where} (${scheme}): a failed sign-in shows no error`));
+  const text = ((await alert.textContent().catch(() => '')) ?? '').trim();
+  if (!/You’re not signed in\./.test(text) || !/Bluesky didn’t sign you in/.test(text)) fail(`/sign-in/bluesky ${where} (${scheme}): the error reads "${text}"`);
+  if (!(await alert.isVisible())) fail(`/sign-in/bluesky ${where} (${scheme}): the error is not visible`);
+  const ways = await page.locator('main .signin-failed .signin-choice').evaluateAll((els) => els.map((e) => e.getAttribute('data-method')).join(','));
+  if (ways !== SIGN_IN_ON.join(',')) fail(`/sign-in/bluesky ${where} (${scheme}): under the error, the ways to sign in are "${ways}" (want ${SIGN_IN_ON.join(',')})`);
+  if (await page.locator('.rail .signin-choice, .rail .signin-open, .menu-sheet .signin-choice').count()) fail(`/sign-in/bluesky ${where} (${scheme}): the rail or menu repeats the ways to sign in`);
+  await checkFloors(page, `/sign-in/bluesky ${where} (failed)`, scheme);
+  await shot(page, `signin-failed-${where.replace(/\W/g, '')}`, scheme);
+}
+/** Wherever more than one way to sign in is offered (src/components/sign-in-choices.tsx, owner 2026-10-30): the buttons
+ *  are equals (the same box, fill, border, font and weight), each has a line under it, and only built ways show. */
+async function checkSignInEquals(page: Page, scope: string, where: string, want?: number) {
+  const bs = await page.locator(`${scope} .signin-choice-btn`).evaluateAll((els) =>
+    els
+      .filter((e) => (e as HTMLElement).offsetParent !== null)
+      .map((e) => {
+        const r = e.getBoundingClientRect();
+        const st = getComputedStyle(e);
+        const line = e.closest('.signin-choice')?.querySelector('.signin-choice-line')?.textContent?.trim() ?? '';
+        return { name: e.textContent?.trim(), w: Math.round(r.width * 2) / 2, h: Math.round(r.height * 2) / 2, look: [st.backgroundColor, st.border, st.fontFamily, st.fontSize, st.fontWeight].join(' / '), line };
+      }),
+  );
+  if (want !== undefined && bs.length !== want) fail(`${where}: ${bs.length} sign-in buttons (want ${want}: ${JSON.stringify(bs.map((b) => b.name))})`);
+  if (!bs.length) return fail(`${where}: no sign-in offered`);
+  for (const b of bs) if (!b.line) fail(`${where}: "${b.name}" has no line under it saying what it is`);
+  const [a, ...rest] = bs;
+  for (const b of rest) {
+    if (Math.abs(a.w - b.w) > 0.5 || Math.abs(a.h - b.h) > 0.5) fail(`${where}: "${a.name}" is ${a.w}x${a.h}, "${b.name}" ${b.w}x${b.h} (want the same size)`);
+    if (a.look !== b.look) fail(`${where}: "${a.name}" and "${b.name}" are styled differently (${a.look} | ${b.look})`);
+  }
+  const off = offSelector(scope);
+  if (off && (await page.locator(off).count())) fail(`${where}: a sign-in that is switched off (${SIGN_IN_OFF.join(', ')}) is shown`);
+}
+/**
+ * The You page signed in (2026-11-05, after the owner's Lens and Bluesky sign-ins on localhost), at 390: a Lens, a
+ * Bluesky, a Farcaster and a wallet account, each planted in storage (nothing signed) with /api/you answered from a
+ * fixture here, like the other signed-in cases. For each: the label beside the name is the account's own network; no
+ * row is shown without a value (a Lens or Bluesky account has no FID or address row); a Lens or Bluesky account's
+ * public-page row and Wallet section speak of that account (not "needs a Farcaster name", not "A Farcaster account
+ * has no balance"); every button on the page is the page's one style (ic-secondary, or ic-primary for a chosen
+ * option), apart from the "Use another server or handle" link. Lens's page offers "Link a Bluesky account": it starts
+ * at bsky.social ({ entryway: true }, answered here with a refusal, shown once), and "Use another server or handle"
+ * opens the handle box filled in with the handle last signed in with on this device. The assistant, signed in with
+ * Lens, says plainly why it needs Farcaster.
+ */
+/**
+ * /api/chat/status as the server answers each kind of sign-in today (src/app/api/chat/status/route.ts and
+ * src/lib/chat/gate.ts, ASSISTANT.anyAccount off): Farcaster ready; a wallet, and a Lens or Bluesky account not linked
+ * to a FID, 403 with the gate's words and the account's kind.
+ */
+function chatStatusFor(kind: AccountKind | 'lens-below') {
+  const ready = { json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', provider: 'Groq', route: 'Groq', perDay: 30, left: 30 } };
+  if (kind === 'farcaster') return ready;
+  if (kind === 'wallet') return { status: 403, json: { error: ASK_WORDING.wallet(), reason: 'wallet', account: 'wallet' } };
+  // A Lens account whose kept decision is a fail (switch on): refused by the status route.
+  if (kind === 'lens-below') return { status: 403, json: { error: ASK_WORDING.lensBelow(), reason: 'lens-score', account: 'lens' } };
+  // Switch on: with no decision yet the status says it can ask (the question decides). Off: refused.
+  return ASSISTANT.anyAccount ? ready : { status: 403, json: { error: ASK_WORDING.socialOff, reason: 'social-off', account: kind } };
+}
+
+/** The assistant's panel for each kind of sign-in (2026-11-05): see the header. */
+async function checkAssistantPanels(page: Page, scheme: string) {
+  const b64 = (o: object) => Buffer.from(JSON.stringify(o)).toString('base64').replace(/=+$/, '');
+  const token = `x.${b64({ sub: 'fixture', exp: 4102444800 })}.y`;
+  const planted = `Bearer ${token}`;
+  let kind: AccountKind | 'lens-below' = 'farcaster';
+  const answer = async (r: Route) => {
+    const req = r.request();
+    if (req.headers().authorization !== planted) return r.fallback();
+    const u = new URL(req.url());
+    if (u.pathname === '/api/chat/status') return r.fulfill(chatStatusFor(kind));
+    if (u.pathname === '/api/you') return r.fulfill({ json: { work: YOU_EMPTY_WORK, maintainer: false, prices: null, wallet: null, link: null, linkedWallets: [], ...YOU_FIXTURES[kind === 'lens-below' ? 'lens' : kind] } });
+    return r.fulfill({ status: 404, json: { error: 'Not found' } });
+  };
+  const signInHeading = async () =>
+    page.locator('.as').first().evaluate((el) => [...el.querySelectorAll('h1, h2, .as-label')].some((e) => /^\s*Sign in\b/i.test(e.textContent ?? '')));
+  // Signed out: the heading and who can ask.
+  await page.evaluate(() => {
+    for (const key of ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social']) localStorage.removeItem(key);
+  });
+  await open(page, '/assistant');
+  await page.waitForSelector('.as-signed-out', { timeout: 10000 }).catch(() => fail(`/assistant @390 (${scheme}, signed out): no signed-out screen`));
+  if (!(await signInHeading())) fail(`/assistant @390 (${scheme}, signed out): no "Sign in to ask questions" heading`);
+  if (!(await page.getByText(ASK_WORDING.who(), { exact: true }).count())) fail(`/assistant @390 (${scheme}, signed out): doesn't say "${ASK_WORDING.who()}"`);
+  await page.route('**/api/**', answer);
+  for (const k of ['farcaster', 'lens', 'bluesky', 'wallet', ...(ASSISTANT.anyAccount ? (['lens-below'] as const) : [])] as const) {
+    kind = k;
+    const asks = k === 'farcaster' || (ASSISTANT.anyAccount && (k === 'lens' || k === 'bluesky'));
+    const where = `/assistant @390 (${scheme}, ${k})`;
+    await page.evaluate(
+      ({ k, token, wallet }) => {
+        for (const key of ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social', 'snowmoon.social.link']) localStorage.removeItem(key);
+        const exp = 4102444800;
+        if (k === 'farcaster') localStorage.setItem('snowmoon.signin', JSON.stringify({ token, fid: 4242, username: 'fixture', exp }));
+        else if (k === 'wallet') localStorage.setItem('snowmoon.wallet', JSON.stringify({ token, address: wallet, short: `${wallet.slice(0, 6)}…${wallet.slice(-4)}`, exp }));
+        else localStorage.setItem('snowmoon.social', JSON.stringify({ token, kind: k === 'bluesky' ? 'bluesky' : 'lens', name: k === 'bluesky' ? 'fixture.bsky.social' : 'lens/fixture', exp }));
+      },
+      { k, token, wallet: WALLET_ADDRESS },
+    );
+    await open(page, '/assistant');
+    const ready = await page.waitForSelector(asks ? '.as-start' : '.as-refused', { timeout: 10000 }).then(() => true, () => false);
+    if (!ready) {
+      fail(`${where}: ${asks ? "the assistant's home" : 'the refusal'} didn't show`);
+      continue;
+    }
+    if (await page.locator('.as-signed-out').count()) fail(`${where}: shows the signed-out screen to someone signed in`);
+    if (await signInHeading()) fail(`${where}: shows a "Sign in" heading to someone signed in`);
+    if (!asks) {
+      const want = (chatStatusFor(k).json as { error: string }).error;
+      const n = await page.getByText(want, { exact: true }).count();
+      if (n !== 1) fail(`${where}: the refusal "${want}" shows ${n} times (want once)`);
+      if (k === 'wallet') {
+        const ways = await page.locator('.as-refused .signin-choice').evaluateAll((els) => els.map((e) => e.getAttribute('data-method')));
+        const can = ASSISTANT.anyAccount ? SIGN_IN_ON.filter((m) => m === 'farcaster' || m === 'lens' || m === 'bluesky').join(',') : 'farcaster';
+        if (ways.join(',') !== can) fail(`${where}: offers ${ways.join(', ') || 'no'} sign-in (want only the ways that can ask: ${can})`);
+      } else if (!(await page.locator('.as-refused a[href="/you"]').count())) fail(`${where}: no link to the You page to link accounts`);
+    }
+    await checkFloors(page, where, scheme);
+    await shot(page, `phone-390-assistant-${k}`, scheme);
+  }
+  await page.unroute('**/api/**', answer);
+  await page.evaluate(() => {
+    for (const key of ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social', 'snowmoon.social.link']) localStorage.removeItem(key);
+  });
+}
+
+const YOU_EMPTY_WORK = { stored: true, scenes: [], frames: [], boards: [], pictures: [] };
+const YOU_FIXTURES = {
+  lens: {
+    who: { kind: 'lens', name: 'lens/fixture', handle: null },
+    social: { here: { account: 1, kind: 'lens', name: 'lens/fixture', linked: null, offer: null, waitUntil: null }, linked: [], canAddBluesky: true },
+  },
+  bluesky: {
+    who: { kind: 'bluesky', name: 'fixture.bsky.social', handle: null },
+    social: { here: { account: 2, kind: 'bluesky', name: 'fixture.bsky.social', linked: null, offer: null, waitUntil: null }, linked: [], canAddBluesky: false },
+  },
+  farcaster: {
+    who: { kind: 'farcaster', name: '@fixture', handle: 'fixture', fid: 4242, username: 'fixture' },
+    social: { here: null, linked: [], canAddBluesky: false },
+  },
+  wallet: {
+    who: { kind: 'wallet', name: '0x1234…5678', handle: WALLET_ADDRESS, address: WALLET_ADDRESS, basename: null, short: '0x1234…5678' },
+    social: { here: null, linked: [], canAddBluesky: false },
+    prices: { imageUsd: 0.05, frameUsd: 0.2 },
+    link: { wallet: { address: WALLET_ADDRESS, short: '0x1234…5678' }, linked: null, canUnlink: false, offer: false, found: 0, to: null },
+  },
+} as const;
+const YOU_KIND = { lens: 'Lens', bluesky: 'Bluesky', farcaster: 'Farcaster', wallet: 'Wallet' } as const;
+const LAST_HANDLE = 'fixture-last.example.com';
+
+async function checkYouSignedIn(page: Page, scheme: string) {
+  const b64 = (o: object) => Buffer.from(JSON.stringify(o)).toString('base64').replace(/=+$/, '');
+  const token = `x.${b64({ sub: 'fixture', exp: 4102444800 })}.y`;
+  const planted = `Bearer ${token}`;
+  let kind: keyof typeof YOU_FIXTURES = 'lens';
+  const starts: string[] = [];
+  // Only requests carrying the planted token are answered here (the rest go on to the server): /api/you from the
+  // fixture, the wallet's balance, and 404 for the rest (agents off), so no 401 ends the planted session.
+  const answer = async (r: Route) => {
+    const req = r.request();
+    const u = new URL(req.url());
+    if (u.pathname === '/api/auth/bluesky/start') {
+      starts.push(req.postData() ?? '');
+      return r.fulfill({ status: 400, json: { error: 'Fixture: the Bluesky start was refused here.', reason: 'fixture' } });
+    }
+    if (req.headers().authorization !== planted) return r.fallback();
+    if (u.pathname === '/api/you') return r.fulfill({ json: { work: YOU_EMPTY_WORK, maintainer: false, prices: null, wallet: null, link: null, linkedWallets: [], ...YOU_FIXTURES[kind] } });
+    if (u.pathname === '/api/wallet/balance')
+      return r.fulfill({ json: { address: WALLET_ADDRESS, balanceUsd: 1.5, priceUsd: 0.05, generations: 30, markup: 0.3, open: true, payTo: WALLET_ADDRESS, usdc: WALLET_ADDRESS, packsUsd: [5, 10], linkOffer: false } });
+    if (u.pathname === '/api/chat/status') return r.fulfill(chatStatusFor(kind));
+    return r.fulfill({ status: 404, json: { error: 'Not found' } });
+  };
+  await page.route('**/api/**', answer);
+  for (const k of Object.keys(YOU_FIXTURES) as (keyof typeof YOU_FIXTURES)[]) {
+    kind = k;
+    const where = `/you @390 (${scheme}, ${k})`;
+    await page.evaluate(
+      ({ k, token, wallet, last }) => {
+        for (const key of ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social', 'snowmoon.social.link']) localStorage.removeItem(key);
+        const exp = 4102444800;
+        if (k === 'farcaster') localStorage.setItem('snowmoon.signin', JSON.stringify({ token, fid: 4242, username: 'fixture', exp }));
+        else if (k === 'wallet') localStorage.setItem('snowmoon.wallet', JSON.stringify({ token, address: wallet, short: `${wallet.slice(0, 6)}…${wallet.slice(-4)}`, exp }));
+        else localStorage.setItem('snowmoon.social', JSON.stringify({ token, kind: k, name: k === 'lens' ? 'lens/fixture' : 'fixture.bsky.social', exp }));
+        localStorage.setItem('snowmoon.bluesky.last-handle', last);
+      },
+      { k, token, wallet: WALLET_ADDRESS, last: LAST_HANDLE },
+    );
+    await open(page, '/you');
+    const ok = await page.locator('.you-account .you-kind').first().waitFor({ timeout: 10000 }).then(() => true, () => false);
+    if (!ok) {
+      fail(`${where}: the account didn't show`);
+      continue;
+    }
+    const label = (await page.locator('.you-account .you-kind').first().innerText()).trim();
+    if (label.toLowerCase() !== YOU_KIND[k].toLowerCase()) fail(`${where}: the account is labelled "${label}", not ${YOU_KIND[k]}`);
+    const rows = await page.locator('.you-account').first().locator('.you-facts > div').evaluateAll((els) => els.map((e) => [e.querySelector('dt')?.textContent?.trim() ?? '', e.querySelector('dd')?.textContent?.trim() ?? '']));
+    for (const [dt, dd] of rows) if (!dd) fail(`${where}: the row "${dt}" has no value`);
+    const dts = rows.map(([dt]) => dt.toLowerCase());
+    if ((k === 'lens' || k === 'bluesky') && dts.some((d) => /wallet address|farcaster id|basename/.test(d))) fail(`${where}: shows a row that doesn't apply: ${dts.join(', ')}`);
+    if (k === 'farcaster' && !dts.includes('farcaster id')) fail(`${where}: no Farcaster ID row`);
+    if (k === 'wallet' && !dts.includes('wallet address')) fail(`${where}: no wallet address row`);
+    const text = await page.locator('main.you').innerText();
+    if (k === 'lens' || k === 'bluesky') {
+      if (/needs a Farcaster name/.test(text)) fail(`${where}: says the public page needs a Farcaster name`);
+      if (!text.includes('Public pages for Lens and Bluesky accounts aren’t ready yet.')) fail(`${where}: the public-page row doesn't say public pages for Lens and Bluesky accounts aren't ready yet`);
+      if (/A Farcaster account has no balance/.test(text)) fail(`${where}: the Wallet section speaks of a Farcaster account`);
+      if (!text.includes(`A ${YOU_KIND[k]} account has no balance here`)) fail(`${where}: the Wallet section doesn't speak of the ${YOU_KIND[k]} account`);
+      if (!(await page.locator('#you-wallet ~ .wallet-sign-in button, section[aria-labelledby="you-wallet"] .wallet-sign-in button').count())) fail(`${where}: the Wallet section offers no wallet sign-in`);
+    }
+    // One button style on the page: ic-secondary (ic-primary only for a chosen option), apart from the small link
+    // under "Sign in with Bluesky" and the AI labels.
+    const buttons = await page.locator('main.you button').evaluateAll((els) =>
+      els
+        .filter((e) => (e as HTMLElement).offsetParent !== null && !e.classList.contains('social-other') && !e.classList.contains('ai-label') && !e.closest('.wallet-balance'))
+        .map((e) => {
+          const st = getComputedStyle(e);
+          return { name: e.textContent?.trim() ?? '', cls: e.className, look: [st.borderTopStyle, st.borderTopWidth, st.fontFamily, st.fontSize, st.textTransform, st.borderRadius].join(' / ') };
+        }),
+    );
+    for (const b of buttons) if (!/\bic-(secondary|primary)\b/.test(b.cls)) fail(`${where}: the button "${b.name}" isn't the page's style (class "${b.cls}")`);
+    const looks = [...new Set(buttons.map((b) => b.look))];
+    if (looks.length > 1) fail(`${where}: the buttons are styled ${looks.length} ways: ${looks.join(' | ')}`);
+    if (!buttons.length) fail(`${where}: no buttons found`);
+    await checkFloors(page, where, scheme);
+    await shot(page, `phone-390-you-${k}`, scheme);
+    if (k === 'lens') {
+      // Link a Bluesky account: the main button starts at bsky.social; its refusal shows once.
+      const blue = page.locator('main.you .social-sign-in').filter({ hasText: 'Link a Bluesky account' }).first();
+      await blue.locator('button.ic-secondary').first().click();
+      await page.locator('main.you [role=alert]', { hasText: 'Fixture: the Bluesky start was refused here.' }).first().waitFor({ timeout: 10000 }).catch(() => {});
+      const last = starts.at(-1) ?? '';
+      if (last !== JSON.stringify({ entryway: true })) fail(`${where}: "Link a Bluesky account" sent ${last || 'nothing'} (want {"entryway":true}: start at bsky.social)`);
+      const shown = await page.getByText('Fixture: the Bluesky start was refused here.').count();
+      if (shown !== 1) fail(`${where}: the sign-in error shows ${shown} times (want once)`);
+      const other = blue.locator('button.social-other');
+      if ((await other.innerText().catch(() => '')).trim() !== 'Use another server or handle') fail(`${where}: no "Use another server or handle" link under the Bluesky button`);
+      else {
+        await other.click();
+        const box = blue.locator('input[type=text]');
+        const value = await box.inputValue({ timeout: 5000 }).catch(() => null);
+        if (value !== LAST_HANDLE) fail(`${where}: the handle box isn't filled in with the last handle (${value})`);
+        await checkFloors(page, `${where} (handle box)`, scheme);
+        await shot(page, 'phone-390-you-lens-handle', scheme);
+      }
+      // The assistant, signed in with Lens: with ASSISTANT.anyAccount on it opens (the question decides the Lens check);
+      // off, it says plainly why it needs Farcaster.
+      await open(page, '/assistant');
+      if (ASSISTANT.anyAccount) {
+        const opened = await page.locator('.as-start').first().waitFor({ timeout: 10000 }).then(() => true, () => false);
+        if (!opened) fail(`/assistant @390 (${scheme}, lens): the assistant doesn't open for a Lens account`);
+      } else {
+        const said = await page.getByText('Asking questions needs a Farcaster account.').first().waitFor({ timeout: 10000 }).then(() => true, () => false);
+        if (!said) fail(`/assistant @390 (${scheme}, lens): doesn't say "Asking questions needs a Farcaster account."`);
+      }
+    }
+  }
+  await page.unroute('**/api/**', answer);
+  await page.evaluate(() => {
+    for (const key of ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social', 'snowmoon.social.link', 'snowmoon.bluesky.last-handle']) localStorage.removeItem(key);
+  });
+}
+
 /** With a wallet session: the shortened address and a Sign out that ends it (back to both options). */
 async function checkAccountWallet(page: Page, within: string, where: string) {
   const acct = page.locator(accountIn(within));
@@ -464,6 +806,7 @@ async function checkMakeImage(page: Page, scheme: string) {
   if (!/Sign in to make an image/.test((await page.locator('.image-composer').textContent().catch(() => '')) ?? '')) fail(`/references/new (${scheme}): signed out, the composer does not ask to sign in`);
   if (!/Chapter 1 · ¶ 1–8 · 8 blocks/.test((await page.locator('.image-composer .ic-label').first().textContent().catch(() => '')) ?? '')) fail(`/references/new (${scheme}): the composer is not on the chosen passage (${await page.locator('.image-composer .ic-label').first().textContent().catch(() => '')})`);
   await checkFloors(page, '/references/new (composer, signed out)', scheme);
+  await checkSignInEquals(page, '.image-composer .ic-gate', `/references/new (${scheme}) composer signed out`);
   await page.keyboard.press('Escape');
 
   // Search.
@@ -1429,6 +1772,214 @@ async function checkMarkdownPages() {
   }
 }
 
+// ---------------------------------------------------------------------------
+// /challenge as a landing page (owner, 2026-11-04): the triptych, the random selection and the feed's filter, on
+// local data (scripts/fixtures/challenge-db.ts), at 390 light and dark, in the 424 × 695 Farcaster frame and at 1440.
+// ---------------------------------------------------------------------------
+/**
+ * The challenge's pages on the target itself (production after the flip), with the strict "goes quiet" wait (open()),
+ * owner 2026-11-08: the relaxed wait in checkChallengeLanding is for its one-connection fixture only. Each page must
+ * load and settle, show its own elements, and not scroll sideways, at 390 light and 1440 dark.
+ */
+async function checkChallengeLive() {
+  for (const [w, h, touch, scheme] of [[390, 844, true, 'light'], [1440, 900, false, 'dark']] as const) {
+    const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+    for (const [p, sel] of [['/challenge', '.cc-card'], ['/challenge/zei', '.ch-character-page'], ['/challenge/remixes', '.ch-feed-page'], ['/challenge/entries', 'h1']] as const) {
+      await open(page, p);
+      if (!(await page.locator(sel).count())) fail(`${p} @${w} (${scheme}, live): shows no ${sel}`);
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`${p} @${w} (${scheme}, live): scrolls sideways`);
+    }
+    await page.close();
+  }
+}
+
+async function checkChallengeLanding() {
+  const { startChallengeDb, FIXTURE_CHALLENGE: FX } = await import('./fixtures/challenge-db');
+  const data = await startChallengeDb(await freePort());
+  const port = await freePort();
+  const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], {
+    env: { ...process.env, STUDIO_DATABASE_URL: data.url },
+    stdio: 'ignore',
+  });
+  const LOCAL = `http://localhost:${port}`;
+  try {
+    for (let i = 0; ; i++) {
+      if (await fetch(LOCAL).then((r) => r.ok, () => false)) break;
+      if (i > 120) throw new Error('the local build did not start (run next build first)');
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    const { CHALLENGE } = await import('../src/lib/config');
+    // /challenge is cached (revalidate 60), built from whatever database the build saw: the first request serves that
+    // copy and renders a fresh one from the local data in the background. Wait for the fresh one.
+    // The same for a character's page (owner, 2026-11-08), which lists the fixture's own remixes (the hub lists only the
+    // bases, whose ids are the configured ones, so the hub waits for its base and Zei's page for its remixes).
+    for (const [p, want] of [['/challenge/zei', [FX.remixes[0].versionId]], ['/challenge', [FX.sheets.zei[0], FX.sheets.bai[0]]]] as const) {
+      for (let i = 0; ; i++) {
+        const html = await fetch(`${LOCAL}${p}`).then((r) => r.text(), () => '');
+        if (want.every((x) => html.includes(x))) break;
+        if (i > 90) {
+          fail(`${p} (local data): the page never showed the local data`);
+          break;
+        }
+        await new Promise((r) => setTimeout(r, 1000));
+      }
+    }
+    for (const [w, h, touch, scheme] of [
+      [390, 844, true, 'light'],
+      [390, 844, true, 'dark'],
+      [424, 695, true, 'light'],
+      [1440, 900, false, 'dark'],
+    ] as const) {
+      const tag = `@${w}×${h} (${scheme})`;
+      const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+      // On the fixture's one-connection database, the challenge pages' link prefetches queue and may never settle, so
+      // here (only here) a page counts as ready once it has loaded and shown its own elements (owner, 2026-11-08,
+      // option 1). Every other section, and the live run against production (checkChallengeLive), keep "goes quiet".
+      const at = async (p: string, sel?: string) => {
+        await page.goto(LOCAL + p, { waitUntil: 'load' });
+        await page.waitForSelector(sel ?? (p.startsWith('/challenge/remixes') ? '.ch-feed-page' : '.cc-card'), { timeout: 30000 });
+        if (INJECT) await page.addStyleTag({ content: INJECT });
+        await page.evaluate(() => document.fonts.ready);
+      };
+      const name = (s: string) => `challenge-${s}-${w}x${h}-${scheme}`;
+      const snap = async (s: string, full = false) => {
+        if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `${name(s)}.png`), fullPage: full });
+      };
+      await at('/challenge');
+      await checkFloors(page, `/challenge ${tag} (local data)`, scheme);
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge ${tag}: scrolls sideways`);
+      // The characters in CHALLENGE.characters' order, whatever it is.
+      const order = await page.locator('.cc-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-character')));
+      if (order.join() !== CHALLENGE.characters.join()) fail(`/challenge ${tag}: the characters read ${order.join()}, not CHALLENGE.characters (${CHALLENGE.characters.join()})`);
+      // The plain list (owner, 2026-11-08, the simpler challenge): each character's name (a link to its page), its approved
+      // one line (verbatim, with "This edition's summary") and its bases, each opening its remix screen; nothing else:
+      // no facts, "More about", "Where they appear", moments or remixes, and no count. The row outside a picture opens
+      // the character's page.
+      const { CARDS } = await import('../src/lib/challenge/cards');
+      for (const slug of CHALLENGE.characters) {
+        const row = page.locator(`.cc-card[data-character="${slug}"]`);
+        if ((await row.locator('h2 a.cc-name-link').getAttribute('href')) !== `/challenge/${slug}`) fail(`/challenge ${tag}: ${slug}'s name doesn't link its page`);
+        const line = ((await row.locator('.cc-line').textContent()) ?? '').trim();
+        const want = CARDS.find((c) => c.slug === slug)!.line;
+        if (!line.startsWith(want) || !/This edition’s summary$/.test(line)) fail(`/challenge ${tag}: ${slug}'s line isn't its approved one line with "This edition's summary" ("${line}")`);
+        if (await row.locator('.cc-facts, .cc-moments, .cc-toggle, .cc-more, .cc-appears, .cc-remixes, .cc-chip').count()) fail(`/challenge ${tag}: ${slug}'s row shows more than its name, line and bases`);
+        if (/\bCh \d+\b|Moments picked|More about|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test((await row.textContent()) ?? '')) fail(`/challenge ${tag}: ${slug}'s row shows a moment, a deeper layer or a count`);
+      }
+      const zei = page.locator('.cc-card[data-character="zei"]');
+      if (!CHALLENGE.cardsApproved && !/Draft wording/.test((await zei.locator('.cc-line').textContent()) ?? '')) fail(`/challenge ${tag}: an unapproved card has no "Draft wording" mark`);
+      if (!(await zei.locator('.cc-ai [data-ai="tag"]').count())) fail(`/challenge ${tag}: Zei's bases have no AI label`);
+      const heroTip = (await zei.locator('.cc-ai [data-ai="tag"] .sr-only').textContent()) ?? '';
+      if (!/Look invented by this edition/.test(heroTip)) fail(`/challenge ${tag}: the bases' label doesn't say the look is this edition's (${heroTip})`);
+      const tileHrefs = await zei.locator('.cc-row a.cc-tile').evaluateAll((els) => els.map((e) => e.getAttribute('href') ?? ''));
+      if (!tileHrefs.length || !tileHrefs.every((h) => /^\/challenge\/make\?from=[0-9a-f-]{36}$/.test(h))) fail(`/challenge ${tag}: a base doesn't open its remix screen (${tileHrefs.join()})`);
+      if (await page.locator('.ch-pick, .cc-hero').count()) fail(`/challenge ${tag}: the old random block or big picture is still on the hub`);
+      await zei.scrollIntoViewIfNeeded();
+      await snap('row');
+      if (w === 390 && scheme === 'light') await snap('full', true);
+      if (w === 1440) await snap('full', true);
+      // The row outside a picture opens the character's page.
+      // A real tap on the line's text: the name's link covers the row, so the tap lands on it (Playwright's own click
+      // refuses an element another one covers, which is the point here). In the middle of the screen, clear of the sticky top bar. Tapped up to three times a second apart: a tap that lands
+      // while the page is still hydrating can be lost (seen at 390 dark and 424 when no full-page shot came first); what
+      // is checked is that the tap, once the page is ready, lands on the name's link and opens the page.
+      let opened = false;
+      for (let i = 0; i < 3 && !opened; i++) {
+        await page.waitForTimeout(1000);
+        await zei.locator('.cc-line').evaluate((e) => e.scrollIntoView({ block: 'center' }));
+        const lineBox = await zei.locator('.cc-line').boundingBox();
+        const under = lineBox ? await page.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return { href: e?.getAttribute('href') ?? null, what: e ? `${e.tagName.toLowerCase()}.${String(e.className).replace(/\s+/g, '.')}` : 'nothing', x, y, vw: window.innerWidth, vh: window.innerHeight }; }, [lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2]) : null;
+        const hit = under?.href ?? null;
+        if (hit !== '/challenge/zei') {
+          fail(`/challenge ${tag}: the middle of Zei's line is covered by ${JSON.stringify(under)}, not the name's link`);
+          await snap('row-tap-miss');
+        }
+        if (lineBox) await page.mouse.click(lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2);
+        opened = await page.waitForURL('**/challenge/zei', { timeout: 10000, waitUntil: 'commit' }).then(() => true, () => false);
+        if (hit !== '/challenge/zei') break;
+      }
+      if (!opened) fail(`/challenge ${tag}: tapping Zei's row outside a picture didn't open /challenge/zei`);
+
+      // A character's page (owner, 2026-11-08): the name, the one line, "Bases", then "Remixes": every published picture of
+      // the character, newest first, whole at 16:9, each opening its remix screen; no count. Gladias has none yet.
+      await at('/challenge/zei', '.ch-character-page');
+      await checkFloors(page, `/challenge/zei ${tag}`, scheme);
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways`);
+      if (((await page.locator('.ch-character-page h1').textContent()) ?? '').trim() !== 'Zei') fail(`/challenge/zei ${tag}: the heading isn't "Zei"`);
+      // "Read where Zei first appears" (owner, 2026-11-09): under the one line, to the reader at Zei's first block.
+      const fa = page.locator('.ch-character-page a[data-slot="first-appears"]');
+      if ((await fa.count()) !== 1 || ((await fa.textContent()) ?? '').trim() !== 'Read where Zei first appears' || (await fa.getAttribute('href')) !== '/chapter/2#c2-b2') fail(`/challenge/zei ${tag}: no "Read where Zei first appears" to /chapter/2#c2-b2 (${await fa.getAttribute('href').catch(() => 'none')})`);
+      const heads = (await page.locator('.ch-character-page h2.cc-head').allTextContents()).map((t) => t.trim());
+      if (heads.join('|') !== 'Bases|Remixes') fail(`/challenge/zei ${tag}: the sections read ${heads.join(', ')}, not Bases, Remixes`);
+      const zeiRemixes = FX.remixes.filter((r) => r.character === 'zei').map((r) => r.versionId);
+      const shown = await page.locator('.ch-char-remixes a.cc-tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-version') ?? ''));
+      if (shown.join() !== zeiRemixes.join()) fail(`/challenge/zei ${tag}: the remixes read ${shown.join()}, not every one of Zei's, newest first (${zeiRemixes.join()})`);
+      const remixHrefs = await page.locator('.ch-char-remixes a.cc-tile').evaluateAll((els) => els.map((e) => e.getAttribute('href') ?? ''));
+      if (!remixHrefs.every((h, i) => h === `/challenge/make?from=${zeiRemixes[i]}`)) fail(`/challenge/zei ${tag}: a remix doesn't open its remix screen (${remixHrefs.join()})`);
+      if ((await page.locator('.ch-char-remixes img.cc-tile-pic').count()) !== zeiRemixes.length) fail(`/challenge/zei ${tag}: the remixes aren't shown whole at 16:9`);
+      if (/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test((await page.locator('.ch-character-page').textContent()) ?? '')) fail(`/challenge/zei ${tag}: shows a moment or a count`);
+      await snap('character', true);
+      await at('/challenge/gladias', '.ch-character-page');
+      if (!/No remixes of Gladias yet/.test((await page.locator('.ch-char-remixes .ch-feed-none').textContent().catch(() => '')) ?? '')) fail(`/challenge/gladias ${tag}: no empty state`);
+      const missing = await page.goto(`${LOCAL}/challenge/lektor`, { waitUntil: 'load' });
+      if (missing?.status() !== 404) fail(`/challenge/lektor ${tag}: answers ${missing?.status()}, not 404`);
+
+      // The remix screen (owner, 2026-11-08): the picture small, one box, the Style row (the published styles, Random,
+      // Write your own; Zei's base starts on its own style), the Model row (one chip, the model and its maker), Make it;
+      // no moments.
+      await at(`/challenge/make?from=${FX.sheets.zei[0]}`, '.mk-styles');
+      await checkFloors(page, `/challenge/make ${tag}`, scheme);
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/make ${tag}: scrolls sideways`);
+      if (((await page.locator('label[for="mk-words"]').textContent()) ?? '').trim() !== 'Change Zei: clothes, colours, age, pose…') fail(`/challenge/make ${tag}: the box's label isn't "Change Zei: clothes, colours, age, pose…"`);
+      const styleChips = (await page.locator('.mk-styles .cc-chip').allTextContents()).map((t) => t.replace('⟳', '').trim());
+      // "Same as this picture" first and chosen (owner, 2026-11-09), then the published styles, Random, Write your own.
+      // Only the offered styles (CHALLENGE.offeredStyles, "Animated series"; owner, 2026-11-09); Random only with one to draw.
+      const offeredFx = FX.styles.map((x) => x.name).filter((n) => CHALLENGE.offeredStyles.includes(n));
+      const wantChips = ['Same as this picture', ...offeredFx, ...(offeredFx.length ? ['Random'] : []), 'Write your own'];
+      if (styleChips.join('|') !== wantChips.join('|')) fail(`/challenge/make ${tag}: the Style row reads ${styleChips.join(', ')}, not ${wantChips.join(', ')}`);
+      if ((await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style')) !== 'same') fail(`/challenge/make ${tag}: the Style row doesn't start on "Same as this picture"`);
+      const models = (await page.locator('.mk-model .cc-chip').allTextContents()).map((t) => t.trim());
+      // Branch challenge-models: a local server has no country header, so the open model only (the
+      // closed ones, offered by country, are proven by test:model-choice C2–C4 and the screenshots).
+      if (models.join('|') !== 'FLUX.2 [klein] 4B · Black Forest Labs · open') fail(`/challenge/make ${tag}: the Model row reads ${models.join(', ')}`);
+      if (await page.locator('.mk-moments, .mk-strip, .mk-surprise, .mk-quotes').count()) fail(`/challenge/make ${tag}: shows the moments while they are off`);
+      await snap('make', true);
+      await page.locator('.mk-styles .cc-chip[data-style="own"]').click();
+      if (!(await page.locator('#mk-own-style').count()) || (await page.locator('#mk-own-style').getAttribute('maxlength')) !== '120') fail(`/challenge/make ${tag}: "Write your own" doesn't open a box of at most 120 characters`);
+      if (!(await page.locator('#mk-own-style-line').count())) fail(`/challenge/make ${tag}: "Write your own" has no publication line (P1f)`);
+      await checkFloors(page, `/challenge/make ${tag} (Write your own)`, scheme);
+      await snap('make-own', true);
+      await at('/challenge/remixes');
+      // The feed: newest first; the filter shows one character's remixes only.
+      await checkFloors(page, `/challenge/remixes ${tag}`, scheme);
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/remixes ${tag}: scrolls sideways`);
+      const newest = FX.remixes.map((r) => r.versionId);
+      const feed = await page.locator('.ch-feed .ch-card, .ch-entries-list .ch-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-version')));
+      if (feed.join() !== newest.join()) fail(`/challenge/remixes ${tag}: not every remix newest first (${feed.join()})`);
+      if ((await page.locator('.ch-chip[aria-current="page"]').textContent())?.trim() !== 'All') fail(`/challenge/remixes ${tag}: "All" isn't the current filter`);
+      const chips = await page.locator('.ch-chip[data-character]').evaluateAll((els) => els.map((e) => e.getAttribute('data-character')));
+      if (chips.join() !== CHALLENGE.characters.join()) fail(`/challenge/remixes ${tag}: the filter's characters read ${chips.join()}`);
+      if (/most remixed|most liked/i.test((await page.locator('.ch-feed-page').textContent()) ?? '')) fail(`/challenge/remixes ${tag}: offers a "most" sort`);
+      await snap('feed');
+      await page.locator('.ch-chip[data-character="bai"]').click();
+      await page.waitForURL('**/challenge/remixes?character=bai');
+      await page.waitForLoadState('load');
+      await page.waitForSelector('.ch-chip[aria-current="page"][data-character="bai"]', { timeout: 30000 });
+      const bai = await page.locator('.ch-feed .ch-card, .ch-entries-list .ch-card').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-character')}:${e.getAttribute('data-version')}`));
+      const want = FX.remixes.filter((r) => r.character === 'bai').map((r) => `bai:${r.versionId}`);
+      if (bai.join() !== want.join()) fail(`/challenge/remixes?character=bai ${tag}: shows ${bai.join()}`);
+      if ((await page.locator('.ch-chip[aria-current="page"]').getAttribute('data-character')) !== 'bai') fail(`/challenge/remixes ${tag}: Bai isn't marked as the current filter`);
+      await checkFloors(page, `/challenge/remixes?character=bai ${tag}`, scheme);
+      await snap('feed-bai');
+      await at('/challenge/remixes?character=gladias');
+      if (!/No remixes of Gladias yet/.test((await page.locator('.ch-feed-none').textContent().catch(() => '')) ?? '')) fail(`/challenge/remixes?character=gladias ${tag}: no empty state`);
+      await page.close();
+    }
+  } finally {
+    server.kill();
+    await data.stop();
+  }
+}
+
 // A local server must be serving this checkout's commit; otherwise the check would pass old code.
 if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
   const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
@@ -1438,6 +1989,103 @@ if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
     process.exit(1);
   }
 }
+// ---------------------------------------------------------------------------
+// A remix page as a landing page (owner, 2026-11-04), on this checkout's build and the fixture database.
+// ---------------------------------------------------------------------------
+async function checkRemixLanding() {
+  const { startReaderImagesDb, FIXTURE_DESIGNS: D } = await import('./fixtures/reader-images-db');
+  const data = await startReaderImagesDb(await freePort(), { designs: true });
+  const port = await freePort();
+  const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], { env: { ...process.env, STUDIO_DATABASE_URL: data.url }, stdio: 'ignore' });
+  const LOCAL = `http://localhost:${port}`;
+  const remix = `/references/designs/${D.remix.version}`;
+  try {
+    for (let i = 0; !(await fetch(LOCAL).then((r) => r.ok, () => false)); i++) {
+      if (i > 120) throw new Error('the local build did not start (run next build first)');
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+    const built = ((await (await fetch(`${LOCAL}/api/version`)).json()) as { commit?: string }).commit ?? 'unknown';
+    if (built !== head) return fail(`remix landing: the local build is from ${built.slice(0, 7)}, but this checkout is at ${head.slice(0, 7)}; run next build first`);
+    for (const [w, h, touch, scheme] of [[390, 844, true, 'light'], [390, 844, true, 'dark'], [1440, 900, false, 'light']] as const) {
+      const tag = `${remix} @${w} ${scheme}`;
+      const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+      await page.goto(LOCAL + remix, { waitUntil: 'networkidle' });
+      if (INJECT) await page.addStyleTag({ content: INJECT });
+      await page.evaluate(() => document.fonts.ready);
+      await checkFloors(page, `${tag} (signed out)`, scheme);
+      // While the challenge is admin-only (CHALLENGE.public off; owner, 2026-11-04): no landing, no Remix button and no
+      // challenge line, in the page as served or on screen ("Remixing opens …" would name a date that isn't set).
+      if (!CHALLENGE.public) {
+        const html = await page.content();
+        if (await page.locator('.rl-landing, a.rl-remix, .rl-arrival').count()) fail(`${tag}: the landing shows while the challenge is admin-only`);
+        for (const words of ['Remixing opens', 'Entries closed', 'remix challenge', 'How the challenge works', 'REMIX CHALLENGE', 'REMIX THE CAST']) if (html.includes(words)) fail(`${tag}: the page says "${words}" while the challenge is admin-only`);
+        if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `remix-landing-${w}-${scheme}-admin-only.png`), fullPage: w === 390 });
+        await page.close();
+        continue;
+      }
+      const r = await page.evaluate(() => {
+        const q = (s: string) => document.querySelector(s) as HTMLElement | null;
+        const pic = q('.rl-landing .rl-picture')?.getBoundingClientRect();
+        const btn = q('.rl-landing a.rl-remix');
+        return {
+          landing: !!q('.rl-landing'),
+          first: !!q('.dz-main > .rl-landing:first-child'),
+          pic: pic ? { w: pic.width, h: pic.height, top: pic.top } : null,
+          maker: q('.rl-landing .rl-maker')?.innerText ?? '',
+          ai: !!q('.rl-landing .rl-caption .ai-tag'),
+          remix: btn ? { href: btn.getAttribute('href'), h: btn.getBoundingClientRect().height, w: btn.getBoundingClientRect().width } : null,
+          line: q('.rl-landing .rl-closed')?.innerText ?? '',
+          arrival: q('.rl-landing .rl-arrival')?.innerText ?? '',
+          arrivalLink: q('.rl-landing .rl-arrival a')?.getAttribute('href') ?? null,
+          like: document.querySelectorAll('.rl-landing [class*="like"]').length,
+          wide: document.documentElement.scrollWidth > innerWidth + 1,
+        };
+      });
+      if (!r.landing || !r.first) fail(`${tag}: the landing is not at the top of the page`);
+      if (!r.pic || r.pic.w < Math.min(w - 60, 320)) fail(`${tag}: the picture is not big (${r.pic ? Math.round(r.pic.w) : 0}px wide)`);
+      if (r.maker !== 'A remix by @remixer'.toUpperCase() && r.maker !== 'A remix by @remixer') fail(`${tag}: the maker reads "${r.maker}"`);
+      if (!r.ai) fail(`${tag}: the picture has no AI label`);
+      // The big button while entries are open; before and after, the line in its place (the window comes from CHALLENGE.dates).
+      if (r.remix) {
+        // While pictures are the entries (sheets invitation-only), a sheet that isn't a base opens its character's card on
+        // /challenge (a base, its remix screen); otherwise the version's sheet remix form.
+        const wantRemix = CHALLENGE.pictureEntries ? '/challenge#zei' : `/references/designs/new?from=${D.remix.version}`;
+        if (r.remix.href !== wantRemix) fail(`${tag}: Remix opens ${r.remix.href}, not ${wantRemix}`);
+        if (r.remix.h < 52 || r.remix.w < Math.min(w - 60, 280)) fail(`${tag}: the Remix button is not big (${Math.round(r.remix.w)}×${Math.round(r.remix.h)})`);
+      } else if (!/^(Remixing opens|Entries closed) .+Pacific/.test(r.line)) fail(`${tag}: neither a Remix button nor the line in its place ("${r.line}")`);
+      if (!/remix challenge/.test(r.arrival) || !/\d{1,2} (to \d{1,2} )?[A-Z][a-z]+/.test(r.arrival) || r.arrivalLink !== '/challenge') fail(`${tag}: signed out, no line on what this is, its dates and how to remix, linking /challenge ("${r.arrival}")`);
+      if (r.like) fail(`${tag}: the like slot renders something while likes are off`);
+      if (r.wide) fail(`${tag}: scrolls sideways`);
+      if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `remix-landing-${w}-${scheme}.png`), fullPage: w === 390 });
+      // Signed in (a planted session, nothing signed): the arrival line goes.
+      if (w === 390 && scheme === 'light') {
+        const exp = Math.floor(Date.now() / 1000) + 86400;
+        const token = `a.${Buffer.from(JSON.stringify({ sub: 4242, exp })).toString('base64url')}.c`;
+        await page.evaluate((v) => localStorage.setItem('snowmoon.signin', v), JSON.stringify({ token, fid: 4242, username: 'remixer', nameProof: null, exp }));
+        await page.route('**/api/**', (rt) => rt.fulfill({ json: {} }));
+        await page.goto(LOCAL + remix, { waitUntil: 'networkidle' });
+        await page.waitForTimeout(500);
+        if (await page.locator('.rl-arrival').count()) fail(`${remix}: the arrival line still shows when signed in`);
+        await checkFloors(page, `${remix} @390 (signed in)`, 'light');
+        if (SHOTS) await page.screenshot({ path: path.join(SHOTS, 'remix-landing-390-signed-in.png') });
+      }
+      await page.close();
+    }
+    // A hidden remix and a draft: 404, no landing, no picture of theirs.
+    for (const v of [D.hidden.version, D.draft.version]) {
+      const page = await newPage({ viewport: { width: 390, height: 844 }, hasTouch: true });
+      const res = await page.goto(`${LOCAL}/references/designs/${v}`, { waitUntil: 'networkidle' });
+      if (res?.status() !== 404) fail(`/references/designs/${v}: a hidden or unpublished version answers ${res?.status()}`);
+      if (await page.locator('.rl-landing, img[src*="toy-drone"]').count()) fail(`/references/designs/${v}: a hidden or unpublished version shows its picture`);
+      await page.close();
+    }
+  } finally {
+    server.kill();
+    await data.stop();
+  }
+}
+
 const browser = await chromium.launch({ channel: 'chrome' });
 // A protected Vercel preview: under VERCEL_OIDC_TOKEN, every request to the preview's own origin carries it (never to
 // any other origin a page loads), in every browser context and in this script's own fetches. Never printed. Only this
@@ -1460,6 +2108,12 @@ const PREVIEW_HOST = /^snowmoon-[a-z0-9-]+-nates-projects-d1780cff\.vercel\.app$
 }
 try {
   await checkAiLabels();
+  await checkRemixLanding();
+  // The landing on local data needs /challenge readable signed out: while it is admin-only (CHALLENGE.public off), the
+  // signed-out 404 is checked below instead.
+  if (CHALLENGE.public) await checkChallengeLanding();
+  if (CHALLENGE.public) await checkChallengeLive();
+  else console.log('check:ui: the /challenge landing on local data waits for CHALLENGE.public (admin-only now)');
   await checkMarkdownPages();
   // First-visit intro (config/intro.json): once, home page only, Skip on every
   // card, remembered on the device without cookies; deep links go straight in.
@@ -1586,7 +2240,7 @@ try {
       const html = (await res?.text()) ?? '';
       const shown = (await page.locator('body').textContent()) ?? '';
       for (const [what, t] of [['HTML', html], ['screen', shown]] as const) {
-        const m = /Remix the cast|remix challenge/i.exec(t);
+        const m = /Remix the cast|Remix challenge|remix challenge/i.exec(t);
         if (m) fail(`/challenge (${scheme}): its ${what} names the challenge ("${m[0]}") signed out`);
       }
       if (await page.locator('.ch-page').count()) fail(`/challenge (${scheme}): the challenge page is shown signed out`);
@@ -1596,16 +2250,31 @@ try {
     await checkFloors(page, '/challenge', scheme);
     {
       const text = (await page.locator('.ch-page').textContent()) ?? '';
-      if (!/Draft wording/.test(text)) fail(`/challenge (${scheme}): no "Draft wording" line`);
+      // The hub's words were approved (owner, 2026-11-06): no "Draft wording" mark until something on it is a draft again.
+      if (CHALLENGE.cardsApproved === /Draft wording/.test(text)) fail(`/challenge (${scheme}): the "Draft wording" mark doesn't follow the approval`);
       // The characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json).
-      const heads = (await page.locator('.ch-character h2').allTextContents()).map((h) => h.split(' ')[0]);
+      const heads = (await page.locator('.cc-card h2').allTextContents()).map((h) => h.split(' ')[0]);
       if (heads.join() !== 'Zei,Gladias,Bai,Seila,Deluin,Mu') fail(`/challenge (${scheme}): the characters read ${heads.join(', ')}`);
-      if (!/A new sheet made from scratch isn’t an entry/.test(text)) fail(`/challenge (${scheme}): it doesn't say only remixes count`);
-      if (!/Entries (open|close|closed) .*Pacific/.test(text)) fail(`/challenge (${scheme}): no deadline in Pacific time`);
-      if (!/One entry per person per character/.test(text)) fail(`/challenge (${scheme}): the rules are missing`);
-      if (!/aren’t eligible for rewards/.test(text)) fail(`/challenge (${scheme}): it doesn't say admins aren't eligible for rewards`);
+      // The short page (owner, 2026-11-04): the deadline in its one line, the rules behind "Rules".
+      if (!/Entries (open|close|closed) .*PT/.test(text)) fail(`/challenge (${scheme}): no deadline in its one line`);
+      if ((await page.locator('a.ch-rules-link').getAttribute('href').catch(() => null)) !== '/challenge/rules') fail(`/challenge (${scheme}): no "Rules" link`);
       const wide = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
       if (wide) fail(`/challenge (${scheme}): scrolls sideways`);
+    }
+    await open(page, '/challenge/rules');
+    await checkFloors(page, '/challenge/rules', scheme);
+    {
+      const text = (await page.locator('.ch-page').textContent()) ?? '';
+      // The rules and their intro were approved (owner, 2026-11-06): no "Draft wording" mark on the rules page.
+      if (/Draft wording/.test(text)) fail(`/challenge/rules (${scheme}): a "Draft wording" mark is still on the rules page`);
+      if (!/(A new sheet|A picture) made from scratch isn’t an entry/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say only remixes count`);
+      if (!/Entries (open|close|closed) .*Pacific/.test(text)) fail(`/challenge/rules (${scheme}): no deadline in Pacific time`);
+      if (!/submit one remix a day/.test(text)) fail(`/challenge/rules (${scheme}): the rules are missing`);
+      if (!/theirs aren’t entries/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say admins' pictures aren't entries`);
+      if (!/There is no prize for now\./.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say there is no prize for now`);
+      if (!/Farcaster, Lens or Bluesky account that passes the site’s check/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say who can enter`);
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/rules (${scheme}): scrolls sideways`);
+      await shot(page, 'challenge-rules', scheme);
     }
     }
     await checkAssistant(page, scheme);
@@ -1994,12 +2663,16 @@ try {
         if (!current?.includes('Chapter 1')) fail(`@${width}: the rail does not mark the current chapter`);
         // Signed out: the assistant panel is there, with what it does and a sign-in button.
         await page.waitForSelector('.panel .as-signed-out button');
-        // The panel's sign-in is the menu's button (owner, 2026-10-19): full width, at least 48px, the main font, filled.
-        const pb = await page.locator('.panel .as-signed-out button.as-signin').evaluate((e) => {
+        // The panel's sign-in is the menu's button (owner, 2026-10-19; the same list since 2026-10-30): full width, at least 48px,
+        // the main font; only the ways that can ask: Farcaster, and Lens and Bluesky once ASSISTANT.anyAccount is on (2026-11-05).
+        const pb = await page.locator('.panel .as-signed-out .as-signin button.menu-signin').first().evaluate((e) => {
           const r = e.getBoundingClientRect();
           const st = getComputedStyle(e);
-          return { h: r.height, w: r.width, pw: (e.parentElement as HTMLElement).clientWidth, font: st.fontFamily, upper: st.textTransform };
+          return { h: r.height, w: r.width, pw: (e.closest('.as-signin') as HTMLElement).clientWidth, font: st.fontFamily, upper: st.textTransform };
         });
+        const panelWays = await page.locator('.panel .as-signed-out .as-signin .signin-choice').evaluateAll((els) => els.map((e) => e.getAttribute('data-method')).join(','));
+        const askWays = ASSISTANT.anyAccount ? SIGN_IN_ON.filter((m) => m === 'farcaster' || m === 'lens' || m === 'bluesky').join(',') : 'farcaster';
+        if (panelWays !== askWays) fail(`@${width}: the assistant panel offers ${panelWays || 'no'} sign-in (want the ways that can ask: ${askWays})`);
         if (pb.h < 47.5 || pb.w < pb.pw - 1 || /mono/i.test(pb.font) || pb.upper === 'uppercase') fail(`@${width}: the assistant panel's sign-in is not the menu's button (${JSON.stringify(pb)})`);
         await shot(page, `desktop-${width}-chapter`, scheme);
         // Minpentai's pages start with the assistant closed (owner, 2026-10-20); opening it there isn't remembered.
@@ -2019,6 +2692,12 @@ try {
         await shot(page, `desktop-${width}-account-wallet`, scheme);
         await checkAccountWallet(page, '.rail', `@${width} rail`);
         await checkAccountLinkedWallet(page, '.rail', `@${width} rail (linked wallet)`);
+        await checkSignInFailedShows(page, `@${width}`, scheme);
+        // Signed out on /you, the rail doesn't repeat the page's sign-in buttons (2026-11-05).
+        await page.evaluate(() => ['snowmoon.signin', 'snowmoon.wallet', 'snowmoon.social'].forEach((k) => localStorage.removeItem(k)));
+        await open(page, '/you');
+        await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`/you @${width} (${scheme}): signed out, no sign-in offered`));
+        if (await page.locator('.rail .signin-choice').count()) fail(`/you @${width} (${scheme}): signed out, the rail repeats the page's sign-in buttons`);
         // Listen view.
         await open(page, '/chapter/1?view=listen');
         await page.waitForSelector('.listen-pane .listen-progress');
@@ -2049,6 +2728,12 @@ try {
   }
   // Phone width: no rail at all.
   for (const scheme of ['light', 'dark'] as const) {
+    {
+      // A failed Bluesky sign-in on a phone (2026-11-06): its own page, so the menu checks below start fresh.
+      const p = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme, hasTouch: true });
+      await checkSignInFailedShows(p, '@390', scheme);
+      await p.close();
+    }
     const page = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme, hasTouch: true });
     await open(page, '/chapter/1');
     if (await page.locator('.rail').isVisible()) fail('@390: the rail shows on a phone');
@@ -2111,8 +2796,16 @@ try {
     await open(page, '/you');
     await page.locator('.you-sign-in button').first().waitFor({ timeout: 10000 }).catch(() => fail(`/you @390 (${scheme}): signed out, no sign-in offered`));
     await checkFloors(page, '/you @390 (signed out)', scheme);
+    await checkSignInEquals(page, '.you-sign-in', `/you @390 (${scheme}) signed out`, SIGN_IN_ON.length);
     if (/Your account|Your work|Balance \$/.test(await page.locator('main.you').innerText().catch(() => ''))) fail(`/you @390 (${scheme}): signed out, the page shows an account, wallet or work`);
     await shot(page, 'phone-390-you-signed-out', scheme);
+    // Signed out on /you, the menu doesn't repeat the page's sign-in buttons (2026-11-05).
+    await page.click('.topbar-icon[aria-label="Menu"]');
+    await page.waitForSelector('.menu-sheet');
+    if (await page.locator('.menu-sheet .signin-choice').count()) fail(`/you @390 (${scheme}): signed out, the menu repeats the page's sign-in buttons`);
+    await page.keyboard.press('Escape');
+    await checkYouSignedIn(page, scheme);
+    await checkAssistantPanels(page, scheme);
     await checkIllustrationReview(page, scheme);
     await checkAdmin(page, scheme);
     await checkImageZoom(page, scheme);

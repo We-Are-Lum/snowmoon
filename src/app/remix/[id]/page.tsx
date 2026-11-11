@@ -6,7 +6,7 @@ import { db } from '~/lib/db';
 import { APP_NAME, appUrl } from '~/lib/config';
 import { AI_DECLARED } from '~/lib/ai-declared';
 import { getAdaptation, sceneHandleFor } from '~/lib/adaptation-pages';
-import { frameById, type Frame } from '~/lib/remix/frames';
+import { frameById, frameByline, type Frame } from '~/lib/remix/frames';
 import { credit } from '~/lib/wallet/credit';
 import { HideButton, ShareRow } from '../remix-actions';
 import '../remix.css';
@@ -37,7 +37,7 @@ async function load(id: string) {
   return { f, title: adaptation?.title ?? 'a scene', handle, maker };
 }
 
-const byline = (f: Frame) => (f.byName ? (f.person < 0 ? f.byName : `@${f.byName}`) : f.person > 0 ? `FID ${f.person}` : 'a wallet account');
+const byline = (f: Frame) => frameByline(f);
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;

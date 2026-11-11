@@ -432,13 +432,17 @@ for (const f of REST) {
 }
 await equal('RLS on every studio table after the last migration', 'postgres',
   `select count(*)::int as v from pg_tables where schemaname = 'studio' and not rowsecurity`, 0);
-// image_scores: one row per FID, kept a day; the app reads, writes, refreshes and deletes old rows.
-await ok('writer keeps a score', W, `insert into studio.image_scores (fid, score) values (7, 0.82)`);
-await ok('writer refreshes a score', W, `insert into studio.image_scores (fid, score) values (7, 0.75) on conflict (fid) do update set score = excluded.score, fetched_at = now()`);
-await equal('one row per FID', W, `select count(*)::int as v from studio.image_scores where fid = 7`, 1);
-await denied('a score is between 0 and 1', W, `insert into studio.image_scores (fid, score) values (8, 1.5)`, /image_scores_score_check/);
-await ok('writer deletes old scores', W, `delete from studio.image_scores where fetched_at < now() - interval '1 day'`);
+// image_scores (0010): emptied by 0034_check_decisions; the writer can no longer keep or change a score (owner, 2026-11-04).
+await denied('writer cannot keep a score', W, `insert into studio.image_scores (fid, score) values (7, 0.82)`, PERM);
+await equal('no score is kept', W, `select count(*)::int as v from studio.image_scores`, 0);
 await denied('writer cannot truncate scores', W, `truncate studio.image_scores`, PERM);
+// check_decisions: the decision only (passed, when, the rule), per network and account.
+await ok('writer keeps a decision', W, `insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '7', 'neynar-score>=0.7', true)`);
+await ok('writer replaces a decision', W, `insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '7', 'neynar-score>=0.7', false) on conflict (network, account, threshold) do update set passed = excluded.passed, decided_at = now()`);
+await equal('one decision per account and rule', W, `select count(*)::int as v from studio.check_decisions where account = '7'`, 1);
+await denied('a FID is digits', W, `insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', 'x7', 'neynar-score>=0.7', true)`, /check_decisions_account_shape/);
+await ok('writer deletes expired decisions', W, `delete from studio.check_decisions where decided_at < now() - interval '90 days'`);
+await denied('writer cannot truncate decisions', W, `truncate studio.check_decisions`, PERM);
 // alert_state: when the last alert went out; no FID; never deleted.
 await ok('writer claims the alert hour', W, `insert into studio.alert_state (kind, sent_at) values ('reports', now()) on conflict (kind) do update set sent_at = now() where studio.alert_state.sent_at < now() - interval '60 minutes'`);
 await ok('writer gives the hour back', W, `update studio.alert_state set sent_at = '-infinity' where kind = 'reports'`);
@@ -448,6 +452,7 @@ await equal('alert_state holds no FID', 'postgres',
   `select count(*)::int as v from information_schema.columns where table_schema = 'studio' and table_name = 'alert_state' and column_name like '%fid%'`, 0);
 for (const role of ['anon', 'authenticated']) {
   await denied(`${role} cannot read scores`, role, `select fid from studio.image_scores`, PERM);
+  await denied(`${role} cannot read decisions`, role, `select account from studio.check_decisions`, PERM);
   await denied(`${role} cannot write scores`, role, `insert into studio.image_scores (fid, score) values (9, 0.9)`, PERM);
   await denied(`${role} cannot read alert_state`, role, `select * from studio.alert_state`, PERM);
   await denied(`${role} cannot write alert_state`, role, `update studio.alert_state set sent_at = now()`, PERM);
@@ -537,9 +542,14 @@ await equal('seed stored data as jsonb', 'postgres',
     mp_daily: ['select', 'insert', 'update', 'delete'],
   };
   const ALL = ['select', 'insert', 'update', 'delete', 'truncate', 'references', 'trigger'];
-  await equal('0009 adds eight tables, RLS on each', 'postgres',
+  // 0009's eight, and the two Minpentai tables later migrations added (0025 mp_snap_resume, 0032 mp_agent_matches; their
+  // own privileges are their migrations' read-backs): every mp_ table, each with RLS, and no other.
+  const LATER_MP = ['mp_snap_resume', 'mp_agent_matches'];
+  await equal('0009 adds eight tables, RLS on each (with 0025\'s and 0032\'s, every mp_ table there is)', 'postgres',
     `select array_agg(tablename::text order by tablename) as v from pg_tables where schemaname = 'studio' and tablename like 'mp\\_%' and rowsecurity`,
-    Object.keys(MP).sort());
+    [...Object.keys(MP), ...LATER_MP].sort());
+  await equal('0009\'s eight tables are all there, each with RLS', 'postgres',
+    `select count(*)::int as v from pg_tables where schemaname = 'studio' and rowsecurity and tablename in (${Object.keys(MP).map((t) => `'${t}'`).join(',')})`, 8);
   await equal('RLS on every studio table after 0009', 'postgres',
     `select count(*)::int as v from pg_tables where schemaname = 'studio' and not rowsecurity`, 0);
   await equal('0009 policies are for studio_writer only', 'postgres',

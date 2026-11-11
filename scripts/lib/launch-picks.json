@@ -1,0 +1,281 @@
+{
+ "about": "DRAFT picks for the launch (lane B, 2026-11-05 night; Claude, a closed model by Anthropic). Bases: the owner's picks as recorded on branch challenge-styles (one per character; three for Deluin and Gladias, look b the current default for both). Titles are drafts. First remixes: the base each remixes is the agent's proposal from the look; the owner sets owner_confirmed to true for each (or changes base) before --apply. Confirmed as proposed (owner, 2026-11-06; \"reviewed by the coordinator, approved by the owner\"). Every sha256 is pinned: a changed file is refused.",
+ "drafts": "docs/starting-sheet-drafts on branch challenge-styles (36d7dde6)",
+ "bases": [
+  {
+   "key": "zei",
+   "character": "zei",
+   "title": "Animated series",
+   "current_default": true,
+   "views": {
+    "front": {
+     "file": "directions/zei-animated-gpt.jpg",
+     "sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c"
+    },
+    "side": {
+     "file": "directions/zei-animated-side-gpt.jpg",
+     "sha256": "88d9f91ae1930e35c75b1f1dae4ae7b4521dffc0dbc6d140899cb0f1c2763464"
+    },
+    "back": {
+     "file": "directions/zei-animated-back-gpt.jpg",
+     "sha256": "f976714b5bdc9331b40b1470df16a3768582821db4599af20403815e90b9ae82"
+    }
+   }
+  },
+  {
+   "key": "gladias:b",
+   "character": "gladias",
+   "title": "Animated series, look b",
+   "current_default": true,
+   "views": {
+    "front": {
+     "file": "directions/gladias-recast-b-gemini.jpg",
+     "sha256": "b9b6c00952cb47e936dc601676a7c34b916355e8b4f979db4d7465ea024d0947"
+    },
+    "side": {
+     "file": "directions/gladias-recast-b-side-gemini.jpg",
+     "sha256": "f485158fd657e2b8c36405613799fe2869b4f0a6b285adc821aedf4e026fae90"
+    },
+    "back": {
+     "file": "directions/gladias-recast-b-back-gemini.jpg",
+     "sha256": "2e41db7d37c926dc32245ccb26c138e90ea990b50ad334984baf22601980a2c5"
+    }
+   }
+  },
+  {
+   "key": "gladias:first",
+   "character": "gladias",
+   "title": "Animated series, first look",
+   "current_default": false,
+   "views": {
+    "front": {
+     "file": "directions/gladias-animated-gemini.jpg",
+     "sha256": "aff6f24f59e5a2147f25cad9492499c1cff3770b66dd3a0973f76e84db7d9fbd"
+    },
+    "side": {
+     "file": "directions/gladias-animated-side-gemini.jpg",
+     "sha256": "160ba5b5015cdb58bafb20619aa5c681a9164e18b8dc1a198d2b66878cc7d456"
+    },
+    "back": {
+     "file": "directions/gladias-animated-back-gemini.jpg",
+     "sha256": "d3191ac3963f3d1ee276abd887694bfdb805b7561e2920e629a06fe1bfc2eb83"
+    }
+   }
+  },
+  {
+   "key": "gladias:a",
+   "character": "gladias",
+   "title": "Animated series, look a",
+   "current_default": false,
+   "views": {
+    "front": {
+     "file": "directions/gladias-recast-a-gemini.jpg",
+     "sha256": "bca41e700fdb72334d08334843e53c78381f824e0f2ea7db57eeef31dc54c4b6"
+    },
+    "side": {
+     "file": "directions/gladias-recast-a-side-gemini.jpg",
+     "sha256": "f5a22e3c624365b80aff41ff85dfb4df751f1dd87d3050a1c55150bbea47822e"
+    },
+    "back": {
+     "file": "directions/gladias-recast-a-back-gemini.jpg",
+     "sha256": "115abaa23b9e4e047d04b0b911a33c6f71ad71f10b4691984b39acb0a1228e2e"
+    }
+   }
+  },
+  {
+   "key": "bai",
+   "character": "bai",
+   "title": "Animated series",
+   "current_default": true,
+   "views": {
+    "front": {
+     "file": "directions/bai-animated-gpt-garance.jpg",
+     "sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96"
+    }
+   },
+   "missing": "side and back: the drafts that exist (bai-animated-side-gpt.jpg, bai-animated-back-gpt.jpg) were made from her earlier front, not from this one (made from Garance's edit), so they are left out"
+  },
+  {
+   "key": "seila",
+   "character": "seila",
+   "title": "Animated series",
+   "current_default": true,
+   "views": {
+    "front": {
+     "file": "directions/seila-animated-gemini.jpg",
+     "sha256": "3ef4825ca8f49aabf05ddcdaa8119e9b229f523a3dfc1dc2af0238cbc95a4d13"
+    },
+    "side": {
+     "file": "directions/seila-animated-side-gemini.jpg",
+     "sha256": "1cba57a86bea22abd54c646134eac0a882d1118cd0c6f9a052c1f2732c3b7787"
+    },
+    "back": {
+     "file": "directions/seila-animated-back-gemini.jpg",
+     "sha256": "7fab36859ec0e51b4a63a2d5c66c9737f29851a78a1a0a1c2bb9585812ebb6db"
+    }
+   }
+  },
+  {
+   "key": "deluin:b",
+   "character": "deluin",
+   "title": "Animated series, look b",
+   "current_default": true,
+   "views": {
+    "front": {
+     "file": "directions/deluin-recast-b4-gemini.jpg",
+     "sha256": "2b45d17da426df0304fc84ded0f3f0c464472c55c96aa517735f9837368432d4"
+    },
+    "side": {
+     "file": "directions/deluin-recast-b4-side-gemini.jpg",
+     "sha256": "8f1c6d951e20a384adbb3ce76684820c20cf4ecb93c6863db821c3a8ad5e1a97"
+    },
+    "back": {
+     "file": "directions/deluin-recast-b4-back-gemini.jpg",
+     "sha256": "15849b6dc6ac7f7225b76ef17b3587f8570f85429584a5b1f9ba358b8c060d0f"
+    }
+   }
+  },
+  {
+   "key": "deluin:first",
+   "character": "deluin",
+   "title": "Animated series, first look",
+   "current_default": false,
+   "views": {
+    "front": {
+     "file": "directions/deluin-animated-gemini.jpg",
+     "sha256": "ed9362662479c88e3ed88abd983031679fa2fb24f89d4fb69d0b1f247c5fe453"
+    },
+    "side": {
+     "file": "directions/deluin-animated-side-gemini.jpg",
+     "sha256": "292768dd2b3c5fbe88af6287d5356ea6e5e7fdad08482389bbf33cdcfaeccdb9"
+    },
+    "back": {
+     "file": "directions/deluin-animated-back-gemini.jpg",
+     "sha256": "49b6ad5668344f8f6607fca26e859272e447664b2494db1c1f0991e921b95cab"
+    }
+   }
+  },
+  {
+   "key": "deluin:a",
+   "character": "deluin",
+   "title": "Animated series, look a",
+   "current_default": false,
+   "views": {
+    "front": {
+     "file": "directions/deluin-recast-a-gemini.jpg",
+     "sha256": "d2ebbc5fc7afc9746fc68c2ff3a6035cf885f75e8d7f5939bc4e5bbd66717b12"
+    },
+    "side": {
+     "file": "directions/deluin-recast-a-side-gemini.jpg",
+     "sha256": "f21b3eb9b0ce9d443f24dbfa9de0f444eea4d34cd7224a3af42aedfa93bc7031"
+    },
+    "back": {
+     "file": "directions/deluin-recast-a-back-gemini.jpg",
+     "sha256": "8b33252eec5dc1e00f0bc35847b7e593ca997799aa2e729817c3da019904e9a8"
+    }
+   }
+  },
+  {
+   "key": "mu",
+   "character": "mu",
+   "title": "Animated series",
+   "current_default": true,
+   "views": {
+    "front": {
+     "file": "directions/mu-animated-gemini.jpg",
+     "sha256": "3e6ae696865441d24aa1dde262dac043964ab8c9633d19174eb7074091087fb5"
+    },
+    "side": {
+     "file": "directions/mu-animated-side-gemini.jpg",
+     "sha256": "ceda17d3d1649ab10d2356462cd7d51aa8e980d46cf57dbe66b70fbdb3a3238f"
+    },
+    "back": {
+     "file": "directions/mu-animated-back-gemini.jpg",
+     "sha256": "a63632e7353944c9bee6d63ba17f1633557281bde844c2014d0d77cf8e8d1cf4"
+    }
+   }
+  }
+ ],
+ "first_remixes": [
+  {
+   "file": "first-remixes/mu-snow-closeup.png",
+   "sha256": "f9c6084a06bbb492ce45336acd276ce0a6543e2b7758fab71b21a57ae3195e04",
+   "base": "mu",
+   "base_proposed_by_agent": "Mu (her one base)",
+   "owner_confirmed": true,
+   "title": "Mu in the snow"
+  },
+  {
+   "file": "first-remixes/mu-ink-cape.png",
+   "sha256": "e6a0a7d85b6bb3eba928b94b2be0cd4bdd79e61e169d2470c18ec8c520bd7701",
+   "base": "mu",
+   "base_proposed_by_agent": "Mu (her one base)",
+   "owner_confirmed": true,
+   "title": "Mu at the command post"
+  },
+  {
+   "file": "first-remixes/seila-ink-child.png",
+   "sha256": "c543d404a6fa262887e6525e0fad93506371dfcfbea67bc98bb4b5f02b7b9a39",
+   "base": "seila",
+   "base_proposed_by_agent": "Seila (her one base)",
+   "owner_confirmed": true,
+   "title": "Seila, ink"
+  },
+  {
+   "file": "first-remixes/seila-glowing-table.png",
+   "sha256": "4563c7e1e03fe5148a01411e56f5346e0560b6290775b2ef54979f539b31b020",
+   "base": "seila",
+   "base_proposed_by_agent": "Seila (her one base)",
+   "owner_confirmed": true,
+   "title": "Seila at the glowing table"
+  },
+  {
+   "file": "first-remixes/deluin-game-board.png",
+   "sha256": "24bc72294fa52aed728ba0044257fab410f3c233bbc401c3520a99fd864e08b1",
+   "base": "deluin:first",
+   "base_proposed_by_agent": "Deluin, current look (the prompt describes wavy shoulder-length sandy hair and the cream hooded sweater)",
+   "owner_confirmed": true,
+   "title": "Deluin at the game board"
+  },
+  {
+   "file": "first-remixes/deluin-ink-ledge.png",
+   "sha256": "7afc153a4533c34fba24a53597640d048d2be7f66826ee43316078a233267967",
+   "base": "deluin:first",
+   "base_proposed_by_agent": "Deluin, current look (same words)",
+   "owner_confirmed": true,
+   "title": "Deluin on the ledge"
+  },
+  {
+   "file": "first-remixes/gladias-council.png",
+   "sha256": "833f4afc44b32d96adcd1839b8cf357408138438c855872f56dfdb52d7cea574",
+   "base": "gladias:first",
+   "base_proposed_by_agent": "Gladias, current look (wavy brown hair, short beard)",
+   "owner_confirmed": true,
+   "title": "Gladias at the council"
+  },
+  {
+   "file": "first-remixes/zei-with-mu-snow.png",
+   "sha256": "e68a9bcbba340ef48a461ccd1d3c2a3da7fb356db7ab3cd0033e7c252f885391",
+   "base": "zei",
+   "base_proposed_by_agent": "Zei (his one base); Mu also appears",
+   "owner_confirmed": true,
+   "title": "Zei with Mu in the snow"
+  },
+  {
+   "file": "first-remixes/gladias-sunset-goatee.png",
+   "sha256": "b289adcd7e837078186ed0cc79f401cfdfcbd293359e027f75dc7b3fc9489fcc",
+   "base": "gladias:b",
+   "base_proposed_by_agent": "Gladias b, the current default (the prompt describes warm olive-brown skin and short black hair greying at the temples)",
+   "owner_confirmed": true,
+   "title": "Gladias at sunset"
+  },
+  {
+   "file": "first-remixes/deluin-hood-mug.png",
+   "sha256": "610d235e853183ce3d323be19166e44d6dbacd48290f6910bb4f186710fad0f0",
+   "base": "deluin:b",
+   "base_proposed_by_agent": "Deluin b (the prompt describes warm tan skin and long straight black hair)",
+   "owner_confirmed": true,
+   "title": "Deluin with hood and mug"
+  }
+ ]
+}

@@ -56,7 +56,7 @@ export const browserEnv = (): Env => ({
 
 export type Dev = 'phone' | 'frame' | 'desk';
 export type Screen = 'home' | 'ladder' | 'person' | 'start' | 'match' | 'result' | 'replay' | 'free';
-export type Sheet = null | 'menu' | 'resign' | 'leave' | 'opts';
+export type Sheet = null | 'menu' | 'resign' | 'leave' | 'opts' | 'stale';
 export type Tab = 'learn' | 'play' | 'free';
 export type Mode = 'practice' | 'ladder';
 
@@ -148,6 +148,9 @@ export interface Hooks {
   changed?(): void;
 }
 
+/** What Play says when a match link no longer replays (model-drafted; owner's decision 2026-11-03, option 3). */
+export const STALE_TEXT = 'This match was saved before the computer changed how it plans: it now sees only what its towers light. The saved moves no longer fit, so it can\'t be carried on.';
+
 export class PlayController {
   state: PState = { dev: 'phone', signed: false, scr: 'home', tab: 'play', fs: false, panel: true, sheet: null, toast: null, prog: { opened: 1, rec: {} }, rungSel: null, piece: 'g', dir: [1, 0], aim: false, v: 0 };
   m: Match | null = null;
@@ -210,6 +213,8 @@ export class PlayController {
    * when the snap's player picked a rule or played a version (snap/versions.ts settings; a challenge
    * link starts here with no turns). The rng is the same either way: mk has drawn its first number.
    * Play's board only (the snap's versions are Play with a rule picked and numbers changed).
+   * Also false when the match ends before every turn given is used: the turns no longer fit the match (a link made
+   * before the computer planned from its fog view only, 2026-11-03, can replay differently; staleMatch says so).
    */
   continueMatch(seed: number, turns: { t: Piece; x: number; y: number; dx: number; dy: number }[][], lvl = 0, numbers?: (drawn: RuleId) => { rule: RuleId; R: number; every: number; cost: number }, rs: RulesetId = 1): boolean {
     // A link made before rulesets were numbered carries none: it replays under 1, the rules it was made with.
@@ -232,11 +237,22 @@ export class PlayController {
       }
       this.applyTurn();
       while (m.phase === 'run') this.runTick();
-      if (m.phase === 'over') return true;
+      if (m.phase === 'over') {
+        if (turn === turns[turns.length - 1]) return true;
+        // Ended with turns left over: not the match the link was made from.
+        this.m = null;
+        this.setState({ scr: 'home', tab: 'play' });
+        return false;
+      }
     }
     this.setState({ scr: 'match', piece: 'g', dir: [1, 0], aim: false });
     return true;
   }
+  /**
+   * A link or kept match that no longer replays (owner, 2026-11-03: since the computer plans from its fog view only, a
+   * match made before can play out differently): a short note and a way to start a new match, never an error.
+   */
+  staleMatch() { this.env.clearInterval(this.rt); this.m = null; this.setState({ scr: 'home', tab: 'play', sheet: 'stale', fs: false, toast: null }); }
   beginAct() {
     const m = this.m!, w = m.w;
     if (m.next2 && w.step >= m.s.switchAt) { m.s = m.next2.s; m.drawn = m.next2.drawn; m.rule = m.drawn.id; m.R = m.s.sight; m.every = m.s.every; m.cost = m.s.costGlider; m.next2 = null; }
@@ -403,7 +419,8 @@ export class PlayController {
       signIn: () => this.hooks.signIn?.(),
       toastOn: !!s.toast, toast: s.toast || '',
       closeSheet: () => this.setState({ sheet: null }),
-      sheetOn: !!s.sheet, shMenu: s.sheet === 'menu', shResign: s.sheet === 'resign', shLeave: s.sheet === 'leave', shOpts: s.sheet === 'opts',
+      sheetOn: !!s.sheet, shMenu: s.sheet === 'menu', shResign: s.sheet === 'resign', shLeave: s.sheet === 'leave', shOpts: s.sheet === 'opts', shStale: s.sheet === 'stale',
+      staleText: STALE_TEXT, startNew: () => this.openStart('practice'),
       enterFS: () => this.setState({ fs: true, aim: false }), exitFS: () => this.setState({ fs: false, aim: false }), togglePanel: () => this.setState({ panel: !s.panel }), panelLabel: s.panel ? 'HIDE PANEL' : 'SHOW PANEL',
       fs, fsBtn: fsAble && !fs, hdrLight: !(desk && fs), hdrDark: desk && fs, panelOn: !(desk && fs && !s.panel),
       pStart: scr === 'start', pAct: false, pRun: false, pResult: scr === 'result', pReplay: scr === 'replay', pFree: scr === 'free',
@@ -513,6 +530,8 @@ export interface PlayView {
   ladTag: string; signIn: () => void;
   toastOn: boolean; toast: string; closeSheet: () => void;
   sheetOn: boolean; shMenu: boolean; shResign: boolean; shLeave: boolean; shOpts: boolean;
+  /** A link that no longer replays: its note and "Start a new match" (a practice match). */
+  shStale: boolean; staleText: string; startNew: () => void;
   enterFS: () => void; exitFS: () => void; togglePanel: () => void; panelLabel: string;
   fsBtn: boolean; hdrLight: boolean; hdrDark: boolean; panelOn: boolean;
   pStart: boolean; pAct: boolean; pRun: boolean; pResult: boolean; pReplay: boolean; pFree: boolean;

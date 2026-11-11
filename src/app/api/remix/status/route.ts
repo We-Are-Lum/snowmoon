@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
+import { isSocialPerson } from '~/lib/people';
+import { freeFor } from '~/lib/social/free';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES, REMIX, remixFreeOn, remixGenerateOn } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
-import { keptValue } from '~/lib/images/neynar';
-import { GATE_WORDING, openToEveryone } from '~/lib/images/gate';
+import { keptDecision } from '~/lib/images/neynar';
+import { GATE_WORDING, openToEveryone, refusalFor } from '~/lib/images/gate';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { balanceUsd, prepaidOpen, priceUsd } from '~/lib/wallet/credits';
 import { generationsLeft, perDay } from '~/lib/remix/limits';
@@ -50,10 +52,16 @@ export async function GET(request: Request) {
     const [consented, left, kept, frames] = await Promise.all([
       hasConsented(person),
       generationsLeft(sql, person, reserveUsd),
-      invited || person < 0 ? Promise.resolve(null) : keptValue(sql, person),
+      invited || person < 0 ? Promise.resolve(null) : keptDecision(sql, person, IMAGES.neynarMinScore).catch(() => null),
       shot ? myFrames(sql, person, version, shot.id) : Promise.resolve([]),
     ]);
     const mine = frames.map((f) => ({ id: f.id, url: f.imageUrl, words: f.ownWords, hidden: f.hidden, hiddenRole: f.hiddenRole, at: f.createdAt, page: `/remix/${f.id}` }));
+    if (isSocialPerson(person)) {
+      // A Lens or Bluesky account (not linked to a Farcaster account): free only as src/lib/social/free.ts decides; no balance.
+      // Never asks Lens here (variant B: only Generate does); with no decision yet, eligible is null until Generate.
+      const d = await freeFor(sql, person, { lookUp: false });
+      return NextResponse.json({ ...base, signedIn: true, perDay: perDay(person), eligible: d ? d.free : null, refusal: d && !d.free ? d.error : undefined, consented, left, frames: mine, maintainer: false }, { headers: noStore });
+    }
     if (person < 0) {
       const open = prepaidOpen() && openToEveryone().open;
       const prepaid = { balanceUsd: await balanceUsd(sql, -person), priceUsd: priceUsd(reserveUsd), markup: IMAGES.prepaid.markup };
@@ -62,8 +70,9 @@ export async function GET(request: Request) {
         { headers: noStore },
       );
     }
-    const eligible = invited ? true : kept === null ? null : kept >= IMAGES.neynarMinScore;
-    const refusal = eligible === false && kept !== null ? GATE_WORDING.below(kept) : undefined;
+    // The kept decision only (no score is kept, and none is asked for on a page load).
+    const eligible = invited ? true : kept === null ? null : kept.passed;
+    const refusal = kept !== null && !kept.passed ? refusalFor({ score: null, decidedAt: kept.decidedAt }) : undefined;
     return NextResponse.json({ ...base, signedIn: true, perDay: perDay(person), eligible, refusal, consented, left, frames: mine, maintainer: isAdmin(person) }, { headers: noStore });
   } catch (e) {
     console.error('remix status failed', (e as { code?: string }).code ?? (e as Error).name);

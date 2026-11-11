@@ -10,6 +10,7 @@ import { RULES } from '~/lib/images/rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { DesignForm } from '~/components/design-form';
 import { challengeSheetsOpen, isChallengeCharacter } from '~/lib/challenge/open-sheets';
+import { modelChoicesFor } from '~/lib/images/model-choice-view';
 import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 
 /**
@@ -76,6 +77,7 @@ export default async function NewDesign({ searchParams }: Props) {
         limits={{ ...IMAGES.designs }}
         models={{ text: IMAGES.model, edit: IMAGES.editModel }}
         suffix={IMAGES.suffix}
+        modelChoices={modelChoicesFor(mode, kind)}
         challengeOpen={challengeOpen}
         whoCanEnter={challengeOpen ? CW.whoCanEnter() : undefined}
       />
