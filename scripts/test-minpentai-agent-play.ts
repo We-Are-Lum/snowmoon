@@ -38,7 +38,10 @@ import { laneWarnings } from '../src/lib/minpentai/agent-play/help';
 import { CURRENT, DRAFTS, REVISIONS, RULESETS, UNSEEN, draftInfo, endText, tallyText, restOf, fromRows, ownOf, stillStanding, takeTurnOnPage, turnFrames, turnSummaries, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
-const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
+// MINPENTAI_TEST_ALL=1: run every check and list the ones that fail, instead of stopping at the first (for a planted
+// fog violation: which twins catch it).
+const ALL = process.env.MINPENTAI_TEST_ALL === '1', failed: string[] = [];
+const ok = (cond: unknown, what: string) => { checks++; if (ALL && !cond) { failed.push(what.slice(0, 160)); return; } assert.ok(cond, what); };
 const throwsLike = (f: () => unknown, re: RegExp, what: string) => { checks++; assert.throws(f, (e: unknown) => e instanceof SoloError && re.test((e as Error).message), what); };
 const now = () => new Date().toISOString();
 const start = (family: 'book' | 'play', seed: number, level = 2) => newSolo({ id: `t${String(seed).padStart(11, '0')}`.slice(0, 12), ruleset: CURRENT[family], level, seed, person: 6786, agent: { id: null, name: 'Rook', model: { name: 'Test model', maker: 'Nobody', weights: 'open' } }, now: now() });
@@ -974,6 +977,18 @@ playOut('play', 202);
     ok(has(r.a, want), `item 6: ${want} (${JSON.stringify(lines(r.a))})`);
     ok(r.same, `item 6 twins: a remembered square ${hp ? 'chipped' : 'gone'} reads the same whatever else is hidden`);
   }
+  // Its twin: a remembered square of yours out of sight all turn, standing or destroyed in the dark: no line about it,
+  // and everything the same (a loss is told only once your side sees it).
+  {
+    let at = '';
+    const r = twin('tv3c60000007', (m, e, s) => {
+      const see = e.sees(m.w, s, 'C'), k = [...Array(e.W * e.H).keys()].find((j) => !see.has(j) && e.empty(m.w, j) && e.XY(j)[0] > 4 && e.XY(j)[0] < e.W / 2 && [...see].every((i) => Math.max(Math.abs(e.XY(i)[0] - e.XY(j)[0]), Math.abs(e.XY(i)[1] - e.XY(j)[1])) >= 3))!;
+      m.own!.C.sq[k] = { hp: 2, step: 0 };
+      m.w.sq[k] = { o: 'C', hp: 2 };
+      at = `(${e.XY(k)[0]}, ${e.XY(k)[1]})`;
+    }, (m, e) => { for (const k of Object.keys(m.own!.C.sq)) delete m.w.sq[+k]; void e; });
+    ok(r.same && !lines(r.a).some((l) => l.includes(at)) && viewFor(r.b).my_pieces_out_of_sight.some((p) => p.piece === 'square'), `item 6 twins: a remembered square standing or destroyed out of sight reads the same, with no line about it (${at})`);
+  }
   // Item 6, 3a: an enemy symbol glider coming to rest, or forming its symbol, on a square in sight against something out of
   // sight is never also said to fly out of sight from there.
   for (const formed of [false, true]) {
@@ -1123,8 +1138,46 @@ playOut('play', 202);
   const outside = sc.replace(fireBody, '');
   ok(fireBody.length > 100 && !/flashes\.fire\(|debris\.burst\(|shake = Math\.max\(shake/.test(outside), 'flashes, debris and the shake are fired only from replay-events\' events');
   ok(/const ev = replayEvents\(prev, board, seen, \[W, H\]\);/.test(sc) && /fire\(ev\);/.test(sc) && (sc.match(/fire\(ev\)/g) ?? []).length === 1, 'the events are the frames\' (the frame before, this one and its sight)');
-  const aim = sc.slice(sc.indexOf('cam.aim('), sc.indexOf(');', sc.indexOf('cam.aim(')));
-  ok(aim && !/board|state|ev\b|seen|glider/.test(aim), 'the camera\'s path reads only the clock and the board\'s size');
+  // Every cam.aim call, and the functions that work out where it aims (cameraFit, usualAim, finalAim), read only the
+  // clock, the board's size, the frame's shape and the replay's focus (owner, 2026-11-12: the framing moved into them).
+  const aims = [...sc.matchAll(/cam\.aim\(/g)].map((x) => sc.slice(x.index, sc.indexOf(');', x.index)));
+  const fns = ['export function cameraFit(', 'export function usualAim(', 'export const finalAim ='].map((h) => { const i = sc.indexOf(h); return i < 0 ? '' : sc.slice(i, sc.indexOf('\n}', i) > 0 && !h.startsWith('export const') ? sc.indexOf('\n}', i) : sc.indexOf('\n', i)); });
+  ok(aims.length === 2 && fns.every((f) => f.length > 20) && [...aims, ...fns].every((a) => !/board|state|ev\b|seen|glider/.test(a)), 'the camera\'s path reads only the clock and the board\'s size');
+  // The end view (owner, 2026-11-12). When nothing plays after the end, the 3D view's frame is the last whole-board frame,
+  // shown with no frame before it and no step time; the scene then clears debris and flashes, so it shows only the board.
+  ok(top.includes("const idle = whole && last ? { board: last.board, seen: null } : { board: p.current.board, seen: p.current.seen };") && top.includes(": { board: idle.board, prev: null, seen: idle.seen, stepMs: 0 };") && /const last = frames\.at\(-1\);/.test(top), 'when nothing plays after the end, the 3D view is given the last whole-board frame');
+  ok(/function show\([^)]*\) \{\n\s*\/\/[^\n]*\n\s*if \(!prev && !stepMs\) \{ debris\.clear\(\); flashes\.clear\(\); shake = 0; \}/.test(sc), 'and the scene clears debris and flashes first when nothing plays');
+  // Pieces read as pieces: a glider is one solid arrow, a tower's emblem one solid shape, mirrors tall with a lit edge;
+  // debris greys at once and is gone within 1.5 s.
+  ok(!/CHEVRON|EMBLEM/.test(sc) && /const arrows = inst\(arrowGeo,/.test(sc) && (sc.match(/place\(arrows, /g) ?? []).length === 1 && /new T\.OctahedronGeometry\(/.test(sc) && /place\(mirrors, n, X\(m\.x\), \.5, Z\(m\.y\), \.95, 1, /.test(sc) && /place\(mirrorEdges, /.test(sc), 'a glider is one arrow, a tower\'s emblem one shape, a mirror tall with a lit edge');
+  {
+    const kitMod = await import('../src/app/minpentai/scene-kit');
+    ok(/makeDebris\(T, scene, 700, true, \{ life: 1\.5 \}\)/.test(sc) && kitMod.debrisGrey(0) >= .5 && kitMod.debrisGrey(.5) === 1 && kitMod.debrisFade(1.5, 1.5) === 0 && kitMod.debrisFade(.9, 1.5) === 1, 'debris starts half grey, is all grey by half a second, and is gone at 1.5 s');
+    // Framing: the board's four corners fit inside the frame, with a margin, at every aspect ratio, through the usual
+    // view's sway and lean and in the final replay's pull-back, checked with three.js's own projection.
+    const THREE = await import('three'), sceneMod = await import('../src/app/minpentai/m/[id]/replay-scene');
+    let worst = 0;
+    for (const [W, H] of [[18, 14], [16, 12], [32, 16]]) for (const aspect of [.46, .75, 1, 1.6, 2.4]) {
+      const fit = sceneMod.cameraFit(W, H, aspect, 42), cam = new THREE.PerspectiveCamera(42, aspect, .1, 400);
+      const views: [number[], number[]][] = [sceneMod.finalAim(fit)];
+      for (let t = 0; t < 120; t += 1.7) for (const lean of [[0, 0], [.22 * (W / 2 - .5), .22 * (H / 2 - .5)], [-.22 * (W / 2 - .5), -.22 * (H / 2 - .5)]] as [number, number][]) views.push(sceneMod.usualAim(fit, H, t, lean));
+      for (const [pos, look] of views) {
+        cam.position.set(pos[0], pos[1], pos[2]); cam.lookAt(look[0], look[1], look[2]); cam.updateMatrixWorld(); cam.updateProjectionMatrix();
+        for (const [x, z] of [[-W / 2, -H / 2], [W / 2, -H / 2], [-W / 2, H / 2], [W / 2, H / 2]]) { const v = new THREE.Vector3(x, 0, z).project(cam); worst = Math.max(worst, Math.abs(v.x), Math.abs(v.y)); }
+      }
+    }
+    ok(worst > .6 && worst <= .95, `the whole board fits in the frame at every aspect ratio, sway and lean, and in the final pull-back (the furthest corner at ${worst.toFixed(3)} of the half-frame)`);
+  }
+  // Effects only for pieces really destroyed: a symbol glider coming to rest, or three resting ones forming a symbol, set
+  // off nothing; a square broken does.
+  {
+    type B = Parameters<typeof replayEvents>[1];
+    const bd = (o: Partial<B>) => ({ rocks: [], towers: [], squares: [], gliders: [], resting_symbol_gliders: [], ...o }) as B;
+    const rest = replayEvents(bd({ gliders: [{ x: 3, y: 3, dir: 'E', side: 'theirs', symbol: true }] as B['gliders'], squares: [{ x: 4, y: 3, side: 'theirs', hits_left: 2 }] as B['squares'] }), bd({ resting_symbol_gliders: [{ x: 3, y: 3, side: 'theirs' }] as B['resting_symbol_gliders'], squares: [{ x: 4, y: 3, side: 'theirs', hits_left: 2 }] as B['squares'] }), null, [12, 12]);
+    const form = replayEvents(bd({ resting_symbol_gliders: [{ x: 3, y: 3, side: 'mine' }, { x: 3, y: 5, side: 'mine' }] as B['resting_symbol_gliders'], gliders: [{ x: 4, y: 4, dir: 'E', side: 'mine', symbol: true }] as B['gliders'] }), bd({ towers: [{ x: 4, y: 4, side: 'mine', forming: true }] as B['towers'] }), null, [12, 12]);
+    const broke = replayEvents(bd({ squares: [{ x: 4, y: 3, side: 'theirs', hits_left: 1 }] as B['squares'], gliders: [{ x: 3, y: 3, dir: 'E', side: 'mine' }] as B['gliders'] }), bd({}), null, [12, 12]);
+    ok(!rest.some((e) => e.kind === 'stopped' || e.kind === 'destroyed') && !form.some((e) => e.kind === 'stopped' || e.kind === 'destroyed') && form.some((e) => e.kind === 'formed') && broke.some((e) => e.kind === 'destroyed' && e.piece === 'square'), `effects only for pieces really destroyed (${JSON.stringify({ rest, form, broke })})`);
+  }
   // The camera's focus in the scene comes only from that prop.
   ok((sc.match(/focusOn = /g) ?? []).length === 1 && /focus\(f\) \{ focusOn = f \? \{ \.\.\.f, since: performance\.now\(\) \} : null; \}/.test(sc), 'the scene\'s replay camera is set only by focus()');
   // replay-events on real frames: an effect only on a square in sight; a glider that leaves sight just fades.
@@ -1168,4 +1221,5 @@ playOut('play', 202);
   ok(instantReplays([{ board: b0, seen: null }, { board: b1, seen: null }], [12, 12], { ended: true, only: 'big' }).every((x) => x.tier >= 3), '"big moments" keeps only towers and the end');
 }
 
+if (failed.length) { console.log(`minpentai agent play: ${failed.length} of ${checks} checks failed:\n  ${failed.join('\n  ')}`); process.exit(1); }
 console.log(`minpentai agent play: ${checks} checks passed`);

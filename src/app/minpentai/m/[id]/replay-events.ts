@@ -18,7 +18,7 @@ export type ReplayEvent =
   | { kind: 'glide'; side: Side; from: [number, number]; to: [number, number]; dir: string; symbol?: boolean }
   /** A glider launched, or came into sight: it fades in. */
   | { kind: 'arrive'; side: Side; at: [number, number] }
-  /** A glider gone from a square in sight whose next square is in sight too: it was stopped there. */
+  /** A glider gone from a square in sight whose next square is in sight too: it was stopped there (a symbol glider that came to rest, or joined a symbol, is not). */
   | { kind: 'stopped'; side: Side; at: [number, number] }
   /** A glider that flew on into the dark (or off the board): it fades out. No effect. */
   | { kind: 'leave'; side: Side; at: [number, number]; dir: string }
@@ -47,8 +47,15 @@ export function replayEvents(prev: Board | null, cur: Board, seen: [number, numb
     if (i >= 0) { used.add(i); const p = prev.gliders[i]; out.push({ kind: 'glide', side: g.side as Side, from: [p.x, p.y], to: [g.x, g.y], dir: g.dir, ...(g.symbol ? { symbol: true } : {}) }); }
     else out.push({ kind: 'arrive', side: g.side as Side, at: [g.x, g.y] });
   }
+  // What came to rest, or formed a symbol, this step: no effect for it (owner, 2026-11-12: effects burst only pieces
+  // really destroyed).
+  const restingNow = new Set((cur.resting_symbol_gliders ?? []).map((r) => `${r.side}|${key(r.x, r.y)}`));
+  const hadTower = new Set(prev.towers.map((t) => key(t.x, t.y)));
+  const newSymbols = cur.towers.filter((t) => t.forming && !hadTower.has(key(t.x, t.y)));
+  const joined = (side: string, x: number, y: number) => newSymbols.some((t) => t.side === side && Math.max(Math.abs(t.x - x), Math.abs(t.y - y)) <= 2);
   prev.gliders.forEach((g, i) => {
     if (used.has(i)) return;
+    if (g.symbol && (restingNow.has(`${g.side}|${key(g.x, g.y)}`) || joined(g.side, g.x, g.y))) return;
     const [dx, dy] = dirOf(g.dir);
     const nx = g.x + dx, ny = g.y + dy, onBoard = nx >= 0 && ny >= 0 && nx < size[0] && ny < size[1];
     if (onBoard && inSight(g.x, g.y) && inSight(nx, ny)) out.push({ kind: 'stopped', side: g.side as Side, at: [g.x, g.y] });
@@ -57,7 +64,12 @@ export function replayEvents(prev: Board | null, cur: Board, seen: [number, numb
   // Pieces that stand on a square: gone from a square in sight, or hit there.
   const gone = <P extends { x: number; y: number }>(piece: Extract<ReplayEvent, { kind: 'destroyed' }>['piece'], a: P[] | undefined, b: P[] | undefined, side: (p: P) => Side | null) => {
     const now = new Set((b ?? []).map((p) => key(p.x, p.y)));
-    for (const p of a ?? []) if (!now.has(key(p.x, p.y)) && inSight(p.x, p.y)) out.push({ kind: 'destroyed', piece, side: side(p), at: [p.x, p.y] });
+    for (const p of a ?? []) {
+      if (now.has(key(p.x, p.y)) || !inSight(p.x, p.y)) continue;
+      // Resting symbol gliders taken into their side's symbol, formed this step beside them, aren't destroyed.
+      if (piece === 'resting' && joined(side(p) ?? '', p.x, p.y)) continue;
+      out.push({ kind: 'destroyed', piece, side: side(p), at: [p.x, p.y] });
+    }
   };
   const hits = <P extends { x: number; y: number; side: string; hits_left: number }>(piece: Extract<ReplayEvent, { kind: 'hit' }>['piece'], a: P[] | undefined, b: P[] | undefined) => {
     const was = new Map((a ?? []).map((p) => [key(p.x, p.y), p]));
@@ -70,8 +82,7 @@ export function replayEvents(prev: Board | null, cur: Board, seen: [number, numb
   gone('resting', prev.resting_symbol_gliders, cur.resting_symbol_gliders, (p) => p.side as Side);
   gone('rock', prev.rocks, cur.rocks, () => null);
   // A symbol forming: a tower marked forming that wasn't there a step before, on a square in sight.
-  const had = new Set(prev.towers.map((t) => key(t.x, t.y)));
-  for (const t of cur.towers) if (t.forming && !had.has(key(t.x, t.y)) && inSight(t.x, t.y)) out.push({ kind: 'formed', side: t.side as Side, at: [t.x, t.y] });
+  for (const t of newSymbols) if (inSight(t.x, t.y)) out.push({ kind: 'formed', side: t.side as Side, at: [t.x, t.y] });
   hits('square', prev.squares, cur.squares);
   hits('mirror', prev.mirrors, cur.mirrors);
   hits('factory', prev.factories, cur.factories);
