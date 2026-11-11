@@ -13,9 +13,13 @@ import type { SheetModelId } from './sheet-models';
 export interface Ticket {
   v: 1;
   fid: number;
-  chapter: number;
-  start: number;
-  end: number;
+  /**
+   * The passage the image is made for. Null for a remix challenge picture, which is never attached to a passage or
+   * moment (owner, 2026-11-10); publishing ignores any passage on a challenge ticket (one signed before that day too).
+   */
+  chapter: number | null;
+  start: number | null;
+  end: number | null;
   /** The person's own prompt, as they wrote it. */
   userPrompt: string;
   /** The style chosen, if any, and its text as sent (model-drafted, so recorded in assist). */

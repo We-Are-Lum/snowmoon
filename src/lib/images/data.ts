@@ -1,4 +1,5 @@
 import 'server-only';
+import { hasPassage, type Anchored } from './no-passage';
 import { credit } from '../wallet/credit';
 import type postgres from 'postgres';
 import { WORK_ID } from '../config';
@@ -14,9 +15,13 @@ export interface ReaderImage {
   elementId: string;
   url: string;
   sha256: string;
-  chapter: number;
-  start: number;
-  end: number;
+  /**
+   * The passage it was made for; null for a remix challenge picture, which is never attached to a passage or moment
+   * (owner, 2026-11-10). Pictures published before that keep their old anchor row (append-only), which is never read.
+   */
+  chapter: number | null;
+  start: number | null;
+  end: number | null;
   byFid: number;
   /** The Farcaster username recorded when it was published, if any; shown as @name, else "FID n". */
   byName: string | null;
@@ -45,6 +50,13 @@ export interface ReaderImage {
   setting: { id: string; text: string; blocks: string[] } | null;
 }
 
+/**
+ * A picture's passage: left joined, so a picture without one still shows; never read for a remix challenge picture
+ * (owner, 2026-11-10: "challenge pictures must never be attached to a passage or moment"), whatever row it has.
+ * Uses the recipe `r`, joined before it.
+ */
+export const NO_CHALLENGE_ANCHOR = (sql: Sql) => sql`left join studio.anchors a on a.version_id = v.id and not (r.params ? 'challenge')`;
+
 const SELECT = (sql: Sql) => sql`
   select v.id as version_id, e.id as element_id, v.asset_url as url, v.asset_sha256 as sha256,
          a.chapter, a.start_idx, a.end_idx, e.created_by_fid as by_fid, e.created_at,
@@ -54,8 +66,8 @@ const SELECT = (sql: Sql) => sql`
          coalesce((select array_agg(l.to_version_id::text) from studio.links l where l.from_version_id = v.id and l.kind = 'remixed_from'), '{}') as remixed_from
   from studio.elements e
   join studio.element_versions v on v.element_id = e.id
-  join studio.anchors a on a.version_id = v.id
   join studio.recipes r on r.id = v.recipe_id
+  ${NO_CHALLENGE_ANCHOR(sql)}
   left join studio.like_totals lt on lt.version_id = v.id
   where e.element_type = 'image' and e.status = 'published' and e.work_id = ${WORK_ID} and r.source = 'in_app'`;
 
@@ -69,9 +81,9 @@ function shape(r: Record<string, unknown>): ReaderImage {
     elementId: String(r.element_id),
     url: String(r.url),
     sha256: String(r.sha256),
-    chapter: Number(r.chapter),
-    start: Number(r.start_idx),
-    end: Number(r.end_idx),
+    chapter: r.chapter === null || r.chapter === undefined ? null : Number(r.chapter),
+    start: r.start_idx === null || r.start_idx === undefined ? null : Number(r.start_idx),
+    end: r.end_idx === null || r.end_idx === undefined ? null : Number(r.end_idx),
     byFid: Number(r.by_fid),
     byName: typeof p.by_name === 'string' ? p.by_name : null,
     createdAt: new Date(r.created_at as string).toISOString(),
@@ -108,12 +120,12 @@ export async function feed(sql: Sql, sort: 'new' | 'liked', limit = 60): Promise
 
 /**
  * A chapter's pictures, by passage, for the reader (its galleries and the admins' picks for a moment). Remix challenge
- * pictures are left out (owner, 2026-11-08): each still has its anchor in the record (its character's first passage),
- * but the reader never shows one. Every other place a picture appears (its own page, the feed, the sheets) is unchanged.
+ * pictures are left out (owner, 2026-11-08), and since 2026-11-10 have no passage at all (those published 10-11 Nov keep
+ * an anchor row, which is never read). Every other place a picture appears (its own page, the feed, the sheets) is unchanged.
  */
-export async function chapterImages(sql: Sql, chapter: number): Promise<ReaderImage[]> {
+export async function chapterImages(sql: Sql, chapter: number): Promise<Anchored<ReaderImage>[]> {
   const rows = await sql`select * from (${SELECT(sql)}) x where x.chapter = ${chapter} and not (x.params ? 'challenge') order by x.likes desc, x.created_at desc`;
-  return shown(sql, rows.map(shape));
+  return (await shown(sql, rows.map(shape))).filter(hasPassage);
 }
 
 export async function imageByVersion(sql: Sql, versionId: string): Promise<ReaderImage | null> {
@@ -167,7 +179,7 @@ export async function reportQueue(sql: Sql) {
     from last join studio.elements e on e.id = last.element_id
     join studio.element_versions v on v.element_id = e.id
     join studio.recipes r on r.id = v.recipe_id
-    join studio.anchors a on a.version_id = v.id
+    ${NO_CHALLENGE_ANCHOR(sql)}
     where last.step = 'reported' or (last.step = 'hidden' and last.role = 'rule')
     order by last.at
     limit 100`;

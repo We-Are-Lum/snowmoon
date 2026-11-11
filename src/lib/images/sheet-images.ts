@@ -1,4 +1,5 @@
 import 'server-only';
+import { hasPassage } from './no-passage';
 import { db } from '../db';
 import { loadIllustrations } from '../illustrations';
 import { hiddenSeeded } from '../admin-hidden';
@@ -15,7 +16,8 @@ import type { SheetImage } from '~/components/design-sheets';
 export async function sheetImages(kind: 'character' | 'place', slug: string, name: string): Promise<SheetImage[]> {
   const sql = db();
   const readers = sql ? await imagesWithSheet(sql, kind, slug, name).catch(() => []) : [];
-  const fromReaders: SheetImage[] = readers.map((im) => {
+  // A sheet's images are listed by chapter: a remix challenge picture has no passage (owner, 2026-11-10), so it isn't here.
+  const fromReaders: SheetImage[] = readers.filter(hasPassage).map((im) => {
     const by = byline(im.byName, im.byFid);
     return {
       key: im.versionId, href: `/image/${im.versionId}`, url: im.url, alt: `AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`,

@@ -119,7 +119,8 @@ export interface BoardItem {
 export interface PictureItem {
   versionId: string;
   url: string | null;
-  chapter: number;
+  /** Null for a remix challenge picture (no passage; owner, 2026-11-10). */
+  chapter: number | null;
   prompt: string;
   createdAt: string;
   hidden: boolean;
@@ -180,8 +181,8 @@ async function picturesBy(sql: Sql, person: number): Promise<PictureItem[]> {
            (select l.role from studio.removal_log l where l.element_id = e.id and l.step in ('hidden', 'unhidden') order by l.at desc limit 1) as last_role
     from studio.elements e
     join studio.element_versions v on v.element_id = e.id
-    join studio.anchors a on a.version_id = v.id
     join studio.recipes r on r.id = v.recipe_id
+    left join studio.anchors a on a.version_id = v.id and not (r.params ? 'challenge')
     where e.element_type = 'image' and e.created_by_fid = ${person} and e.status in ('published', 'hidden')
       and e.work_id = ${WORK_ID} and r.source = 'in_app'
     order by e.created_at desc limit 100`;
@@ -191,7 +192,7 @@ async function picturesBy(sql: Sql, person: number): Promise<PictureItem[]> {
     return {
       versionId: String(r.version_id),
       url: hidden ? null : String(r.url),
-      chapter: Number(r.chapter),
+      chapter: r.chapter === null ? null : Number(r.chapter),
       prompt: typeof p.user_prompt === 'string' ? p.user_prompt : '',
       createdAt: new Date(r.created_at as string).toISOString(),
       hidden,
