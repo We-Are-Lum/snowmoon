@@ -1,0 +1,302 @@
+{
+ "f01": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f02": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json"
+ },
+ "f03": {
+  "K": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json"
+ },
+ "f04": {
+  "K": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f05": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f06": {
+  "K": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json"
+ },
+ "f07": {
+  "K": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json"
+ },
+ "f08": {
+  "K": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f09": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f10": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f11": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "M": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f12": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json"
+ },
+ "f13": {
+  "K": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json"
+ },
+ "f14": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f15": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f16": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json"
+ },
+ "f17": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json"
+ },
+ "f18": {
+  "K": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f19": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f20": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json"
+ },
+ "f21": {
+  "K": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json"
+ },
+ "f22": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f23": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f24": {
+  "K": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json"
+ },
+ "f25": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json"
+ },
+ "f26": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json"
+ },
+ "f27": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f28": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f29": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f30": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f31": {
+  "K": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f32": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json"
+ },
+ "f33": {
+  "K": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json"
+ },
+ "f34": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f35": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f36": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json"
+ },
+ "f37": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json"
+ },
+ "f38": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f39": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f40": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f41": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f42": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json"
+ },
+ "f43": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json"
+ },
+ "f44": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f45": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f46": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json"
+ },
+ "f47": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "M": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json"
+ },
+ "f48": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/fresh-run-2-bge.json"
+ },
+ "f49": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "M": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "P": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json"
+ },
+ "f50": {
+  "K": "docs/proposals/chat-eval/claude-trial/run-gpt-oss-120b.json",
+  "M": "docs/proposals/chat-eval/claude-trial/run-opus-5-5.json",
+  "P": "docs/proposals/chat-eval/fresh-run-2-bge.json",
+  "R": "docs/proposals/chat-eval/claude-trial/run-sonnet-5-5.json"
+ }
+}

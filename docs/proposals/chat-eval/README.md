@@ -189,3 +189,17 @@ own server function: no embedding service, no new party. The 4,105 text blocks e
 74 seconds once, at ingest, on the local machine; their vectors (384 floats each, about 6 MB
 in all) would be stored with pgvector in the existing database. The model is downloaded once,
 at build, from Hugging Face.
+
+## Claude as a second answer model (run 2026-10-24)
+
+Claude Opus 5.5 and Claude Sonnet 5.5 answering the fresh set, with the same retrieval, prompts and guard,
+against gpt-oss-120b. Spent $1.52 of $5. Wrong answers: Opus 1–2, Sonnet 1–2, gpt-oss today 6 (same
+passages); correct answers unchanged (24–26), since the misses are retrieval. Details: `claude-trial/README.md`.
+
+## Search fixes, abstaining, and a GPT grader (2026-10-24, report only)
+
+- **Search** (`search/`): the 17 misses explained. Local embeddings (bge-small with a two-block window) plus
+  16 hits with 2 blocks before and 4 after send the answering block for 44/50 (from 33), with no losses. The
+  tuning set is also 44/50.
+- **Abstaining** (`abstain/`): gpt-oss with the search fix and a claim filter gets 31–32 correct and 2 wrong by
+  graders A and B, 1 wrong by all three. GPT-5.6-sol, the third grader, finds 9 (Sonnet 2). Spent $2.20 of $3.

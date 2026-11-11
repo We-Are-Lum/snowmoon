@@ -1,0 +1,2005 @@
+{
+ "grader": "B (independent agent)",
+ "items": [
+  {
+   "id": "f01",
+   "label": "K",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f01",
+   "label": "M",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f01",
+   "label": "P",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f01",
+   "label": "R",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f02",
+   "label": "K",
+   "claims": 2,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "Gives Gladias's forest/Sentinel reply (c1-b135) as Seila's plan"
+  },
+  {
+   "id": "f02",
+   "label": "M",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f02",
+   "label": "P",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Lays out both replies but won't say which is Seila's"
+  },
+  {
+   "id": "f02",
+   "label": "R",
+   "claims": 5,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": "'While Gladias is at his acceptance hearing' isn't in the cited c8 blocks"
+  },
+  {
+   "id": "f03",
+   "label": "K",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f03",
+   "label": "M",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f03",
+   "label": "P",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f03",
+   "label": "R",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f04",
+   "label": "K",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f04",
+   "label": "M",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f04",
+   "label": "P",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f04",
+   "label": "R",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f05",
+   "label": "K",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f05",
+   "label": "M",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f05",
+   "label": "P",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f05",
+   "label": "R",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f06",
+   "label": "K",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f06",
+   "label": "M",
+   "claims": 1,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "Gives Zei's later tournament win (c14) instead of his third place the night before the bombing"
+  },
+  {
+   "id": "f06",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f06",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f07",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the excerpts don't explain it, though c3-b13 does"
+  },
+  {
+   "id": "f07",
+   "label": "M",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Gives the trust-list mechanism but leaves out that the planned meeting is why sharing was unlocked that day"
+  },
+  {
+   "id": "f07",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f07",
+   "label": "R",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f08",
+   "label": "K",
+   "claims": 4,
+   "supported": 3,
+   "unsupported_but_true": 1,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": "Calls Silverchat 'open-source' where c3-b24 says only that its API was open; 'social value' comes from c8-b56, not the cited block"
+  },
+  {
+   "id": "f08",
+   "label": "M",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": "Answers from Gladias's own account (c8-b56) rather than c3-b24; consistent with it"
+  },
+  {
+   "id": "f08",
+   "label": "P",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Gives the right account but hedges on whether the speaker is Gladias"
+  },
+  {
+   "id": "f08",
+   "label": "R",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f09",
+   "label": "K",
+   "claims": 6,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": "'Opaque-algorithm behavior' isn't in the blocks; c3-b23 says only 'that kind of behavior'"
+  },
+  {
+   "id": "f09",
+   "label": "M",
+   "claims": 4,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": "'Campaigns like Bluewhale target such information' goes beyond c3-b23 and drops Mov's 'no idea if it's connected'"
+  },
+  {
+   "id": "f09",
+   "label": "P",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f09",
+   "label": "R",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Gives Mov's general protection-from-manipulation reason (c6-b74), not the Keeper/husband example in the gold"
+  },
+  {
+   "id": "f10",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f10",
+   "label": "M",
+   "claims": 9,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f10",
+   "label": "P",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f10",
+   "label": "R",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f11",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f11",
+   "label": "M",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f11",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f11",
+   "label": "R",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f12",
+   "label": "K",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Leaves out Mu's point that live (real-time) diplomacy will matter more (c4-b69)"
+  },
+  {
+   "id": "f12",
+   "label": "M",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Leaves out c4-b69 on real-time diplomacy and says the passages don't explain why, though they do"
+  },
+  {
+   "id": "f12",
+   "label": "P",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Leaves out c4-b69; 'missed his birthday' is ambiguous (it is Mu's birthday, and Mu is 'she')"
+  },
+  {
+   "id": "f12",
+   "label": "R",
+   "claims": 6,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "partly",
+   "note": "Leaves out c4-b69; c7-b132's speaker isn't shown, so 'Mu returns to the theme' can't be checked"
+  },
+  {
+   "id": "f13",
+   "label": "K",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f13",
+   "label": "M",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f13",
+   "label": "P",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f13",
+   "label": "R",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f14",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says it isn't shown, though c4-b156/158 were available"
+  },
+  {
+   "id": "f14",
+   "label": "M",
+   "claims": 3,
+   "supported": 1,
+   "unsupported_but_true": 1,
+   "unsupported": 1,
+   "correct": "cant",
+   "note": "Says it isn't shown; also gives the 'I need your help' line to Zei, which the blocks can't confirm"
+  },
+  {
+   "id": "f14",
+   "label": "P",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says it isn't shown and describes the c10 scene instead"
+  },
+  {
+   "id": "f14",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f15",
+   "label": "K",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f15",
+   "label": "M",
+   "claims": 4,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "partly",
+   "note": "Main reason (spies) is right, but it presents verification difficulty as a second barrier, where the book makes the cryptography Dzego's chosen approach; leaves out the reveal-only-when-suspicious design"
+  },
+  {
+   "id": "f15",
+   "label": "P",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f15",
+   "label": "R",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Main reason (spies) is right; leaves out the cameras revealing only suspicious data, and 'moreover' frames the cryptography as an obstacle"
+  },
+  {
+   "id": "f16",
+   "label": "K",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f16",
+   "label": "M",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f16",
+   "label": "P",
+   "claims": 4,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "Says the easy-to-get reputation is 'academic' reputation; c5-b41 says the easy kind is the loan/hotel reputation"
+  },
+  {
+   "id": "f16",
+   "label": "R",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f17",
+   "label": "K",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f17",
+   "label": "M",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f17",
+   "label": "P",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f17",
+   "label": "R",
+   "claims": 5,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": "Who says 'It'll be fun' (c5-b117) can't be confirmed from the blocks"
+  },
+  {
+   "id": "f18",
+   "label": "K",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Gives 'more realistic' and the priests' curiosity, not Mu's point about hiding your thoughts (c7-b132)"
+  },
+  {
+   "id": "f18",
+   "label": "M",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the reason isn't given, though c7-b127/132 give it"
+  },
+  {
+   "id": "f18",
+   "label": "P",
+   "claims": 6,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "cant",
+   "note": "Says the reason isn't given; 'pleased that Zei cooperated' and 'Den or another priest' can't be checked"
+  },
+  {
+   "id": "f18",
+   "label": "R",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the motivation isn't explained"
+  },
+  {
+   "id": "f19",
+   "label": "K",
+   "claims": 2,
+   "supported": 0,
+   "unsupported_but_true": 2,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says Nine's reasoning isn't recorded, though c10-b119 has it; cites nothing"
+  },
+  {
+   "id": "f19",
+   "label": "M",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says Nine's view isn't shown"
+  },
+  {
+   "id": "f19",
+   "label": "P",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says Nine's view isn't shown"
+  },
+  {
+   "id": "f19",
+   "label": "R",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Gives the market-trading and one-of-three-groups reasons; leaves out that they talk digitally through neck bands"
+  },
+  {
+   "id": "f20",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f20",
+   "label": "M",
+   "claims": 4,
+   "supported": 3,
+   "unsupported_but_true": 1,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": "Calls Mu 'the officials'; the list of skills draws on c10-b196/b201, which it doesn't cite"
+  },
+  {
+   "id": "f20",
+   "label": "P",
+   "claims": 6,
+   "supported": 5,
+   "unsupported_but_true": 1,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't call Minpentai a disguise, though c10-b194/b202 do"
+  },
+  {
+   "id": "f20",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f21",
+   "label": "K",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f21",
+   "label": "M",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f21",
+   "label": "P",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f21",
+   "label": "R",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f22",
+   "label": "K",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f22",
+   "label": "M",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f22",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f22",
+   "label": "R",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f23",
+   "label": "K",
+   "claims": 5,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": "Wrongly says Bai isn't there and that it isn't the way to the final (c7-b43/44 show both); gives the c7-b38 line to Zei, but its speaker isn't shown"
+  },
+  {
+   "id": "f23",
+   "label": "M",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f23",
+   "label": "P",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": "Brief; the sabotage suspicion is only implied"
+  },
+  {
+   "id": "f23",
+   "label": "R",
+   "claims": 2,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "Answers with arriving at the game, not the chip-factory explosion; puts Mu at the tunnel entrance, though she waited past the third turn and through a door (c7-b44)"
+  },
+  {
+   "id": "f24",
+   "label": "K",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f24",
+   "label": "M",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f24",
+   "label": "P",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f24",
+   "label": "R",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f25",
+   "label": "K",
+   "claims": 4,
+   "supported": 0,
+   "unsupported_but_true": 1,
+   "unsupported": 3,
+   "correct": "wrong",
+   "note": "Explains the city-final comeback with the defensive c14/c15 game and calls him city champion from c14-b87; leaves out the sixteen-strategy factory"
+  },
+  {
+   "id": "f25",
+   "label": "M",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f25",
+   "label": "P",
+   "claims": 6,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "cant",
+   "note": "Says the comeback isn't shown; calling it a 'semi-final against Gun Caibai' can't be checked"
+  },
+  {
+   "id": "f25",
+   "label": "R",
+   "claims": 5,
+   "supported": 2,
+   "unsupported_but_true": 1,
+   "unsupported": 2,
+   "correct": "cant",
+   "note": "Says the turning point isn't shown; cites the c5 finals for the city final and ties c9-b21 to it without support"
+  },
+  {
+   "id": "f26",
+   "label": "K",
+   "claims": 6,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 3,
+   "correct": "yes",
+   "note": "Core answer right; 'megacorps' and who says c10-b24/25/26 (the 'Jahn's listener' / 'Jahn answers' roles) can't be checked from the blocks"
+  },
+  {
+   "id": "f26",
+   "label": "M",
+   "claims": 2,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "Says the threat led to Mogna's 'collapse'; the book says Mogna 'folded', meaning it gave in and joined"
+  },
+  {
+   "id": "f26",
+   "label": "P",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Gives the threat but not that Mogna gave in the next day"
+  },
+  {
+   "id": "f26",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f27",
+   "label": "K",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": "Says 'millions of times'; the book says a million"
+  },
+  {
+   "id": "f27",
+   "label": "M",
+   "claims": 4,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "yes",
+   "note": "Who asks c9-b91 and who answers c9-b92 can't be checked from the blocks"
+  },
+  {
+   "id": "f27",
+   "label": "P",
+   "claims": 5,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": "Who asks c9-b91 and who answers c9-b92 can't be checked from the blocks"
+  },
+  {
+   "id": "f27",
+   "label": "R",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f28",
+   "label": "K",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f28",
+   "label": "M",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f28",
+   "label": "P",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f28",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f29",
+   "label": "K",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f29",
+   "label": "M",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f29",
+   "label": "P",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f29",
+   "label": "R",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f30",
+   "label": "K",
+   "claims": 3,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "partly",
+   "note": "Names Pelae but reads 'wants to learn the process' into her question instead of giving her chemistry plan (c6-b79)"
+  },
+  {
+   "id": "f30",
+   "label": "M",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Names Pelae; says her goal isn't shown (it is chemistry, c6-b79)"
+  },
+  {
+   "id": "f30",
+   "label": "P",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Names Pelae; says her goal isn't shown"
+  },
+  {
+   "id": "f30",
+   "label": "R",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Names Pelae; says her goal isn't shown"
+  },
+  {
+   "id": "f31",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f31",
+   "label": "M",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the reminder isn't shown, though c8-b117 has it"
+  },
+  {
+   "id": "f31",
+   "label": "P",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the reminder isn't shown, though c8-b117 has it"
+  },
+  {
+   "id": "f31",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f32",
+   "label": "K",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says her feelings aren't stated, though c9-b21/22 state them"
+  },
+  {
+   "id": "f32",
+   "label": "M",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f32",
+   "label": "P",
+   "claims": 3,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "cant",
+   "note": "Says her feelings aren't shown; gives the 'best game of your life' line (c7-b125) to Zei, though Mu's pause after it suggests Mu said it"
+  },
+  {
+   "id": "f32",
+   "label": "R",
+   "claims": 5,
+   "supported": 4,
+   "unsupported_but_true": 1,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says her feelings aren't shown; 'playing a game' at c10-b156 isn't in that block"
+  },
+  {
+   "id": "f33",
+   "label": "K",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f33",
+   "label": "M",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f33",
+   "label": "P",
+   "claims": 6,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "Calls Alagael 'she'; the book uses 'his' (c6-b96). Also says Mov was explaining to Pelae, which can't be checked"
+  },
+  {
+   "id": "f33",
+   "label": "R",
+   "claims": 3,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "Calls Alagael 'she'; the book uses 'his' (c6-b96)"
+  },
+  {
+   "id": "f34",
+   "label": "K",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f34",
+   "label": "M",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f34",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f34",
+   "label": "R",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f35",
+   "label": "K",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f35",
+   "label": "M",
+   "claims": 9,
+   "supported": 9,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f35",
+   "label": "P",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": "Text is cut off mid-sentence ('...')"
+  },
+  {
+   "id": "f35",
+   "label": "R",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": "Text has an ellipsis gap"
+  },
+  {
+   "id": "f36",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the moment isn't shown, though c14-b22/23 have it"
+  },
+  {
+   "id": "f36",
+   "label": "M",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the moment isn't shown"
+  },
+  {
+   "id": "f36",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f36",
+   "label": "R",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the moment isn't shown"
+  },
+  {
+   "id": "f37",
+   "label": "K",
+   "claims": 5,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "cant",
+   "note": "Says he is never shown privately unsure, though c13-b14 shows it; c13-b99 is only a non-binding proposal, not something the group 'agrees'"
+  },
+  {
+   "id": "f37",
+   "label": "M",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says it can't answer"
+  },
+  {
+   "id": "f37",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f37",
+   "label": "R",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the scene isn't shown"
+  },
+  {
+   "id": "f38",
+   "label": "K",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f38",
+   "label": "M",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f38",
+   "label": "P",
+   "claims": 6,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": "Says Fin proposed the pipeline (c7-b15), but the blocks don't show who said it"
+  },
+  {
+   "id": "f38",
+   "label": "R",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f39",
+   "label": "K",
+   "claims": 4,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "cant",
+   "note": "Says Den's decision isn't shown, though c15-b119 shows it; calling the speaker 'an official' can't be checked"
+  },
+  {
+   "id": "f39",
+   "label": "M",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f39",
+   "label": "P",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says Den's decision isn't shown"
+  },
+  {
+   "id": "f39",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f40",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f40",
+   "label": "M",
+   "claims": 6,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "cant",
+   "note": "Says the restaurant interruption isn't shown and describes the c1 home dinner; 'Gladias comes home' isn't in the blocks"
+  },
+  {
+   "id": "f40",
+   "label": "P",
+   "claims": 2,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "Says Lily's game broke up the dinner and Seila hugged her in response; the interruption was Lord Ephelion's broadcast, and Seila went to unplug the screen"
+  },
+  {
+   "id": "f40",
+   "label": "R",
+   "claims": 3,
+   "supported": 2,
+   "unsupported_but_true": 1,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f41",
+   "label": "K",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says Zei's advice isn't shown, though c15-b110 and c15-b61 have it"
+  },
+  {
+   "id": "f41",
+   "label": "M",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says Zei's advice isn't shown, though c15-b110 has it"
+  },
+  {
+   "id": "f41",
+   "label": "P",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f41",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't include the advice"
+  },
+  {
+   "id": "f42",
+   "label": "K",
+   "claims": 8,
+   "supported": 8,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f42",
+   "label": "M",
+   "claims": 8,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "yes",
+   "note": "'Kau relied only on his own eternal glider factories' overstates c14-b91; leaves out that Deluin built no ships"
+  },
+  {
+   "id": "f42",
+   "label": "P",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f42",
+   "label": "R",
+   "claims": 8,
+   "supported": 8,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f43",
+   "label": "K",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "no",
+   "note": "Describes the overheard meeting itself (c13-b30), not the later two meetings and the trail going cold (c15-b36)"
+  },
+  {
+   "id": "f43",
+   "label": "M",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "no",
+   "note": "Describes the eavesdropping at the overheard meeting, not what he found afterwards (c15-b36)"
+  },
+  {
+   "id": "f43",
+   "label": "P",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "no",
+   "note": "Describes the c6 and c13 tailing episodes, not the later meetings about Silverchat and Dreadknot (c15-b36)"
+  },
+  {
+   "id": "f43",
+   "label": "R",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says what Mov learned isn't given; describes c13-b30 instead of c15-b36"
+  },
+  {
+   "id": "f44",
+   "label": "K",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f44",
+   "label": "M",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Gives secondary clues and says the method isn't shown; misses the no-internet waiting room and the collected devices (c12-b133/134)"
+  },
+  {
+   "id": "f44",
+   "label": "P",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "no",
+   "note": "Gives the sealed rule-setting and announcement timing, not the no-internet waiting room and the collected devices"
+  },
+  {
+   "id": "f44",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f45",
+   "label": "K",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Says the rules aren't laid out; gives only the reset every thousand turns, through Zei's glider factory, not the XOR onto the shrine's corners"
+  },
+  {
+   "id": "f45",
+   "label": "M",
+   "claims": 4,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "partly",
+   "note": "Gives the thousand-turn rock reset and the factory use; no XOR rule; says the full rules aren't given"
+  },
+  {
+   "id": "f45",
+   "label": "P",
+   "claims": 7,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "wrong",
+   "note": "Says changes are XORed onto the four corner regions 'of the board'; c14-b33 says regions near the four corners of the shrine"
+  },
+  {
+   "id": "f45",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f46",
+   "label": "K",
+   "claims": 4,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "cant",
+   "note": "Says the mechanism isn't shown, though c13-b76 shows it; calling c6-b160 'his Keeper decision' and the c10-b99 booth a 'Keeper meeting' isn't stated in those blocks"
+  },
+  {
+   "id": "f46",
+   "label": "M",
+   "claims": 3,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "wrong",
+   "note": "Says the committees that select and approve Keepers are drawn anonymously from a large pool; c7-b131 says Parliament committees approve them, and the random anonymous committees are the Courts'"
+  },
+  {
+   "id": "f46",
+   "label": "P",
+   "claims": 3,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "no",
+   "note": "Gives general opacity ('randomly selected committees', 'anonymous channels') instead of hidden faces and neck bands with randomized AI voices (c13-b76); the committee claim isn't in c7-b130"
+  },
+  {
+   "id": "f46",
+   "label": "R",
+   "claims": 6,
+   "supported": 4,
+   "unsupported_but_true": 0,
+   "unsupported": 2,
+   "correct": "cant",
+   "note": "Says how isn't explained; calling the c7-b130 speaker 'Bai's companion' and c10-b99 his 'second' meeting can't be checked"
+  },
+  {
+   "id": "f47",
+   "label": "K",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f47",
+   "label": "M",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f47",
+   "label": "P",
+   "claims": 2,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f47",
+   "label": "R",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f48",
+   "label": "K",
+   "claims": 3,
+   "supported": 3,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f48",
+   "label": "M",
+   "claims": 8,
+   "supported": 8,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f48",
+   "label": "P",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f48",
+   "label": "R",
+   "claims": 3,
+   "supported": 2,
+   "unsupported_but_true": 0,
+   "unsupported": 1,
+   "correct": "partly",
+   "note": "Gives only the Gun-Deluin practice game, not watching all games, making friends and joining practice sessions (c14-b16); says she puts the impatience down to scoring, though she says it carried on past what scoring rewards"
+  },
+  {
+   "id": "f49",
+   "label": "K",
+   "claims": 6,
+   "supported": 6,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f49",
+   "label": "M",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f49",
+   "label": "P",
+   "claims": 0,
+   "supported": 0,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "cant",
+   "note": "Says the passages don't say"
+  },
+  {
+   "id": "f49",
+   "label": "R",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f50",
+   "label": "K",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f50",
+   "label": "M",
+   "claims": 7,
+   "supported": 7,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f50",
+   "label": "P",
+   "claims": 1,
+   "supported": 1,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f50",
+   "label": "R",
+   "claims": 5,
+   "supported": 5,
+   "unsupported_but_true": 0,
+   "unsupported": 0,
+   "correct": "yes",
+   "note": ""
+  }
+ ]
+}

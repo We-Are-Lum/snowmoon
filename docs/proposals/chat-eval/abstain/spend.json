@@ -1,0 +1,10 @@
+{
+ "cap_usd": 3,
+ "spent_usd": 2.2033518000000014,
+ "by_model": {
+  "openai/gpt-oss-120b": 0.16597304999999996,
+  "openai/gpt-oss-safeguard-20b": 0.12101175000000015,
+  "openai/gpt-5.6-sol": 1.9163670000000002
+ },
+ "calls": 1028
+}

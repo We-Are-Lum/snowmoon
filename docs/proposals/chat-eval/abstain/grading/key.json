@@ -1,0 +1,352 @@
+{
+ "f01": {
+  "K": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f02": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f03": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "M": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-filter.json"
+ },
+ "f04": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f05": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f06": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct.json"
+ },
+ "f07": {
+  "K": "docs/proposals/chat-eval/abstain/run-search.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f08": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search.json",
+  "R": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct.json"
+ },
+ "f09": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f10": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f11": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f12": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f13": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "M": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f14": {
+  "K": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search.json"
+ },
+ "f15": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f16": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search.json"
+ },
+ "f17": {
+  "K": "docs/proposals/chat-eval/abstain/run-search.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f18": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f19": {
+  "K": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f20": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search.json"
+ },
+ "f21": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f22": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f23": {
+  "K": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-filter.json"
+ },
+ "f24": {
+  "K": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search.json"
+ },
+ "f25": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f26": {
+  "K": "docs/proposals/chat-eval/abstain/run-search.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f27": {
+  "K": "docs/proposals/chat-eval/abstain/run-search.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct.json"
+ },
+ "f28": {
+  "K": "docs/proposals/chat-eval/abstain/run-search.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f29": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "M": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search.json"
+ },
+ "f30": {
+  "K": "docs/proposals/chat-eval/abstain/run-search.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct.json"
+ },
+ "f31": {
+  "K": "docs/proposals/chat-eval/abstain/run-search.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct.json"
+ },
+ "f32": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f33": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search.json"
+ },
+ "f34": {
+  "K": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct.json"
+ },
+ "f35": {
+  "K": "docs/proposals/chat-eval/abstain/run-search.json",
+  "M": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-filter.json"
+ },
+ "f36": {
+  "K": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search.json"
+ },
+ "f37": {
+  "K": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f38": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search.json"
+ },
+ "f39": {
+  "K": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search.json"
+ },
+ "f40": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-filter.json"
+ },
+ "f41": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f42": {
+  "K": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search.json"
+ },
+ "f43": {
+  "K": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-filter.json"
+ },
+ "f44": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search.json",
+  "P": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct.json"
+ },
+ "f45": {
+  "K": "docs/proposals/chat-eval/abstain/run-search.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f46": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f47": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search.json",
+  "R": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-filter.json"
+ },
+ "f48": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "M": "docs/proposals/chat-eval/abstain/run-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search.json",
+  "T": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json"
+ },
+ "f49": {
+  "K": "docs/proposals/chat-eval/abstain/run-search.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ },
+ "f50": {
+  "K": "docs/proposals/chat-eval/abstain/run-search-instruct.json",
+  "M": "docs/proposals/chat-eval/abstain/run-search-filter.json",
+  "P": "docs/proposals/chat-eval/abstain/run-search.json",
+  "R": "docs/proposals/chat-eval/abstain/run-search-instruct-filter.json",
+  "T": "docs/proposals/chat-eval/abstain/run-instruct-filter.json"
+ }
+}
