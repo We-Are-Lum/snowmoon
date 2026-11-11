@@ -420,9 +420,12 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
    screen (above the safe area, on a paper band) until its own place scrolls into view. CSS only. It goes back to its
    place, never covering anything, while the person types (a focused field: the keyboard is up), while a model's notice
    or the 18+ box is open (they sit right above it), and while the sign-in choices are open. Wider screens: unchanged. */
-@media (max-width: 767px) {
-  .mk-page[data-step="remix"] > .mk-make { position: sticky; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 3; box-shadow: 0 0 0 12px var(--paper); }
-  .mk-page[data-step="remix"]:has(.dz-notice, textarea:focus, input:focus, .mk-make[aria-expanded="true"]) > .mk-make { position: static; box-shadow: none; }
+/* Only where :has() works (owner, 2026-11-11): without it the button couldn't step back, so it stays in its place there. */
+@supports selector(:has(*)) {
+  @media (max-width: 767px) {
+    .mk-page[data-step="remix"] > .mk-make { position: sticky; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 3; box-shadow: 0 0 0 12px var(--paper); }
+    .mk-page[data-step="remix"]:has(.dz-notice, textarea:focus, input:focus, .mk-make[aria-expanded="true"]) > .mk-make { position: static; box-shadow: none; }
+  }
 }
 .mk-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .mk-again { min-height: 56px; }
