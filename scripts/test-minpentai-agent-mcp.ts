@@ -136,7 +136,7 @@ try {
   check('M23 the record reveals the computer\'s random value, matching the commitment shown at the start', /^[0-9a-f]{64}$/.test(String(rec.out.computer_random)) && rec.out.computer_random_commitment === committed && createHash('sha256').update(String(rec.out.computer_random)).digest('hex') === committed);
   check('M19 every commitment in the record has its salt', recTurns.length > 0 && recTurns.every((t) => /^[0-9a-f]{64}$/.test(t.C.salt) && /^[0-9a-f]{64}$/.test(t.A.salt) && /^[0-9a-f]{64}$/.test(t.C.commitment)));
   const after = await (await fetch(live)).text();
-  // The page as #107 left it: the whole board at the end; the end says why (owner, 2026-11-04: "Over: you won on towers, 5 to 1, at step 144").
+  // The page as #107 left it: the whole board at the end; the end says why (owner, 2026-11-04; worded 2026-11-11: "Over: you won with more towers standing, 5 to 1, at step 144").
   check('M20 after the end the live link shows the whole board and why it ended', /Over: [^<]*at step \d+/.test(after) && /The whole board at the end/.test(after), (after.match(/Over: [^<]{0,120}/) ?? ['no "Over:"'])[0]);
   // The table (0032_minpentai_agent_matches.sql v2): the exact ruleset, updated_at stamped on every save, nobody but the server reads it, and the server can't delete.
   const row = (await S.pg.query<{ ruleset: string; level: number; stamped: boolean }>(`select ruleset, level, updated_at > created_at as stamped from studio.mp_agent_matches where id = $1`, [id])).rows[0];
@@ -176,7 +176,8 @@ try {
     const nodraft = await take(people.A.token, 1), nodraftBody = (await nodraft.json()) as { error?: string };
     check('M42 with no draft there is nothing to take', nodraft.status === 400 && /no draft/.test(nodraftBody.error ?? ''), nodraftBody.error ?? '');
     const page1 = await (await fetch(live2)).text();
-    check('M43 the live page shows the turn just played, ready to replay in place, with its summary', /Watch turn 0 again in 2D/.test(page1) && /took this turn on the live page/.test(page1));
+    // The page's own wording (2026-11-11): "You took this turn here, approving your AI's draft.", never the AI's "Your person took this turn…", and not as a lead line.
+    check('M43 the live page shows the turn just played, ready to replay in place, with its summary in the page\'s words', /Watch turn 0 again in 2D/.test(page1) && /what your side saw/.test(page1) && /You took this turn here, approving your AI/.test(page1) && !/Your person took this turn|you \(their AI\)/.test(page1));
     void t0;
   }
 } finally {
