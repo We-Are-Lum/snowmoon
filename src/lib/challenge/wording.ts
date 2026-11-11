@@ -59,8 +59,8 @@ export const CHALLENGE_WORDING = {
     CHALLENGE.pictureEntries
       ? `Remixing is free: ${numberWord(IMAGES.generationsPerDay)} pictures a day.`
       : `Remixing is free: ${numberWord(IMAGES.designs.remixesPerDay)} remixes a day. A remix is one sheet’s three views; if one of them fails, make it again inside the same remix without using another.`,
-    // The owner's reread (2026-11-09), Backstory.
-    'You can add a short backstory in your own words; it’s shown as invented by you, not from the book.',
+    // The owner's reread (2026-11-09), Backstory; "short" dropped next to the 2,000-character limit (owner, 2026-11-12).
+    'You can add a backstory in your own words; it’s shown as invented by you, not from the book.',
     'Entering is free. There is no prize for now.',
     'Post your version anywhere with its link. If you’re remixing someone’s post, quote or reply to it.',
     `A Farcaster account passes the site’s check with a Neynar score of at least ${CHALLENGE.neynarMinScore}, fixed for the whole challenge; Lens and Bluesky accounts pass their own checks, the same ones that let them make pictures.`,
