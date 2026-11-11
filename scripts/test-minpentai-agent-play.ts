@@ -720,7 +720,8 @@ playOut('play', 202);
     e.apply(w, s, { C: placed, A: [] });
     watch.appear(w);
     for (let i = 0; i < s.every; i++) { e.step(w, s, kills); watch.look(w); }
-    ok(watch.done().includes(`Your glider from (${x}, ${ty}), heading east, flew out of your sight at once.`), `a glider out of sight on its first step: "flew out of your sight at once" (${JSON.stringify(watch.done())})`);
+    // Here it flies on along the row to Amber's tower and destroys it: the kill report is tied to it too.
+    ok(watch.done().includes(`Your glider from (${x}, ${ty}), heading east, flew out of your sight at once; destroyed the enemy tower at (16, ${ty}) at step 12 (kill report).`), `a glider out of sight on its first step: "flew out of your sight at once" (${JSON.stringify(watch.done())})`);
   }
   // Fix 3.6: a hit on an enemy square in sight is told, in the glider's story, and not again on its own line.
   {
