@@ -484,7 +484,7 @@ The owner raised the backstory box's limit from 400 to 2,000 characters (the fie
 read one constant, `BACKSTORY_MAX`). The words that name it: the refusal, now "Write the backstory in up to 2,000
 characters." (v6: "… up to 400 characters."). No legal text names the limit (Privacy §4 says "If you add a backstory
 to a challenge picture, it is kept and shown with the picture."; Terms and consent don't mention it). For the owner: the
-rules line drops "short" (owner, 2026-11-12), since it read oddly next to 2,000 characters:
+rules line drops "short" (owner, 2026-11-11), since it read oddly next to 2,000 characters:
 - Before: "You can add a short backstory in your own words; it’s shown as invented by you, not from the book."
 - After: "You can add a backstory in your own words; it’s shown as invented by you, not from the book."
 
