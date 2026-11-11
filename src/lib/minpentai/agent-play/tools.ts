@@ -3,12 +3,13 @@ import { ToolInputError } from '../../agent/tools';
 import { AGENTS, appUrl } from '../../config';
 import { draftsFor, playFor, type Agent } from '../../agents/core';
 import type { AgentTool } from '../../agents/tools';
-import { CURRENT, DRAFTS, RULESETS, autopilot, linkOpens, newSolo, parseOrders, recordOf, resign, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type ModelClaim, type RulesetName, type SoloMatch } from './solo';
+import { CLOCKS, PRACTICE_RULESETS, joinPractice, newLink, newPractice, CURRENT, DRAFTS, RULESETS, autopilot, linkOpens, newSolo, parseOrders, recordOf, resign, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type ModelClaim, type RulesetName, type SoloMatch } from './solo';
 import { PIECES_PAGE, toolNotes } from './rules-text';
 import { BASE, BASE_DRAWN } from '../versions/schema';
-import { insert, listFor, liveCount, load, newId, newSeed, save, StoreError } from './store';
+import { insert, listFor, listOpen, liveCount, load, newId, newSeed, save, StoreError } from './store';
+import type { Side } from '../versions/engine';
 import { planSoon } from './quiet';
-import { changeFor, mineFor, NOT_YOURS } from './act';
+import { changeFor, joinFor, mineFor, nameOf, NOT_YOURS } from './act';
 import { randomBytes, createHash } from 'node:crypto';
 
 /**
@@ -28,7 +29,7 @@ const only = (args: Record<string, unknown>, keys: string[]) => {
 const on = (agent: Agent) => { if (!playFor(agent.person)) throw new ToolInputError('Minpentai agent play is not open to you yet'); };
 
 const mine = (agent: Agent, id: unknown) => mineFor(agent.person, id);
-const change = <T,>(agent: Agent, id: unknown, f: (m: SoloMatch) => T): Promise<T> => changeFor(agent.person, id, f);
+const change = <T,>(agent: Agent, id: unknown, f: (m: SoloMatch, side: Side) => T): Promise<T> => changeFor(agent.person, id, f);
 const guard = <T,>(f: () => T): T => { try { return f(); } catch (e) { if (e instanceof SoloError) throw new ToolInputError(e.message); throw e; } };
 
 function modelOf(v: unknown): ModelClaim | null {
@@ -81,7 +82,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     async run(agent, args) {
       on(agent);
       only(args, []);
-      return { matches: (await listFor(agent.person)).map((r) => ({ match_id: r.id, ruleset: r.ruleset, level: r.level, over: r.over, started_at: r.created_at })) };
+      return { matches: (await listFor(agent.person)).map((r) => ({ match_id: r.id, kind: r.kind === 'practice' ? 'practice (against a person)' : 'against the site computer', ruleset: r.ruleset, ...(r.kind === 'practice' ? {} : { level: r.level }), over: r.over, started_at: r.created_at })) };
     },
   },
   {
@@ -91,7 +92,8 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     async run(agent, args) {
       on(agent);
       only(args, ['match_id']);
-      return viewFor((await mine(agent, args.match_id)).m);
+      const { m, side } = await mine(agent, args.match_id);
+      return viewFor(m, side);
     },
   },
   {
@@ -114,9 +116,9 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     async run(agent, args) {
       on(agent);
       only(args, ['match_id', 'belief', 'scenarios', 'steps', 'use_last_seen']);
-      const { m } = await mine(agent, args.match_id);
+      const { m, side } = await mine(agent, args.match_id);
       if (m.end) throw new ToolInputError('the match is over: see minpentai_get_record');
-      return guard(() => simulate(m, args as Parameters<typeof simulate>[1]));
+      return guard(() => simulate(m, args as Parameters<typeof simulate>[1], side));
     },
   },
   {
@@ -126,27 +128,28 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     async run(agent, args) {
       on(agent);
       only(args, ['match_id', 'x', 'y']);
-      const { m } = await mine(agent, args.match_id);
+      const { m, side } = await mine(agent, args.match_id);
       if (m.end) throw new ToolInputError('the match is over: see minpentai_get_record');
-      return guard(() => symbolLaunches(m, { x: args.x, y: args.y }));
+      return guard(() => symbolLaunches(m, { x: args.x, y: args.y }, side));
     },
   },
   {
     name: 'minpentai_submit_orders', title: 'Submit your side\'s orders', scope: 'play', writes: true, counts: 'reads',
-    description: `Your side's placements for the open turn, replacing any you sent before. Sent with final: false they are a draft: your person sees it on their live page (faint on the board, its cost and lane warnings) and can approve it there with Take turn, which plays the turn as theirs; or they tell you to send it with final: true. Say whose they are: "person" (your person chose them) or "agent" (you chose them under your person\'s standing order). Returns only whether they were accepted, the commitment (sha256 of the orders and a fresh secret salt, revealed with them after the turn; Take turn on the live page keeps it) and the points left; with final: true also how the turn resolved (call minpentai_get_view for what happened). With final: true the turn resolves now: both sides\' orders are revealed and applied together, and the match runs to the next turn to act. Try them in minpentai_simulate first: it warns when a placement blocks your own launch lanes. ${NOTES.core}`,
+    description: `Your side's placements for the open turn, replacing any you sent before. Sent with final: false they are a draft: your person sees it on their live page (faint on the board, its cost and lane warnings) and can approve it there with Take turn, which plays the turn as theirs; or they tell you to send it with final: true. Say whose they are: "person" (your person chose them) or "agent" (you chose them under your person\'s standing order). Returns only whether they were accepted, the commitment (sha256 of the orders and a fresh secret salt, revealed with them after the turn; Take turn on the live page keeps it) and the points left; with final: true also how the turn resolved (call minpentai_get_view for what happened). With final: true the turn resolves now (in a practice match, once both sides\' final orders are in; until then the reply says waiting_for, and final orders can\'t be changed): both sides\' orders are revealed and applied together, and the match runs to the next turn to act. Try them in minpentai_simulate first: it warns when a placement blocks your own launch lanes. ${NOTES.core}`,
     inputSchema: { type: 'object', properties: { match_id: MATCH, turn: { type: 'integer', minimum: 0 }, placements: PLACEMENTS, source: { enum: ['person', 'agent'] }, final: { type: 'boolean' }, note: { type: 'string', maxLength: 280 } }, required: ['match_id', 'turn', 'placements', 'source'], additionalProperties: false },
     async run(agent, args) {
       on(agent);
       only(args, ['match_id', 'turn', 'placements', 'source', 'final', 'note']);
       if (args.source !== 'person' && args.source !== 'agent') throw new ToolInputError('source must be "person" or "agent"');
       const note = typeof args.note === 'string' ? args.note.replace(/[\x00-\x1f]/g, ' ').slice(0, 280) : undefined;
-      const out = await change(agent, args.match_id, (m) => {
-        const ps = parseOrders(args.placements, rulesOf(m).s);
-        return { r: submit(m, { turn: Number(args.turn), placements: ps, source: args.source as 'person' | 'agent', final: args.final === true, note, now: new Date().toISOString() }), m };
+      const out = await change(agent, args.match_id, (m, side) => {
+        const ps = parseOrders(args.placements, rulesOf(m).s, side);
+        return { r: submit(m, { turn: Number(args.turn), placements: ps, source: args.source as 'person' | 'agent', final: args.final === true, note, now: new Date().toISOString() }, side), m, side };
       });
-      const r = out.r as ReturnType<typeof submit> & { resolved?: unknown };
-      // Small replies (owner, 2026-11-04): no echo of the view; get_view has it.
-      return { accepted: r.accepted, commitment: r.commitment, points_left: r.points_left, ...(r.resolved ? { resolved: r.resolved } : {}) };
+      const r = out.r as ReturnType<typeof submit> & { resolved?: unknown; waiting_for?: string };
+      // Small replies (owner, 2026-11-04): no echo of the view; get_view has it. A practice match's final orders wait
+      // for the other side's (waiting_for).
+      return { accepted: r.accepted, commitment: r.commitment, points_left: r.points_left, ...(r.waiting_for ? { waiting_for: r.waiting_for } : {}), ...(r.resolved ? { resolved: r.resolved } : {}) };
     },
   },
   {
@@ -156,8 +159,8 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     async run(agent, args) {
       on(agent);
       only(args, ['match_id', 'turn']);
-      const out = await change(agent, args.match_id, (m) => ({ r: autopilot(m, { turn: Number(args.turn), now: new Date().toISOString() }), m }));
-      return { ...out.r, view: viewFor(out.m) };
+      const out = await change(agent, args.match_id, (m, side) => ({ r: autopilot(m, { turn: Number(args.turn), now: new Date().toISOString() }, side), m, side }));
+      return { ...out.r, view: viewFor(out.m, out.side) };
     },
   },
   {
@@ -167,7 +170,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     async run(agent, args) {
       on(agent);
       only(args, ['match_id', 'text', 'preset']);
-      return await change(agent, args.match_id, (m) => setStanding(m, args.text, args.preset));
+      return await change(agent, args.match_id, (m, side) => setStanding(m, args.text, args.preset, side));
     },
   },
   {
@@ -177,7 +180,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     async run(agent, args) {
       on(agent);
       only(args, ['match_id']);
-      return await change(agent, args.match_id, (m) => resign(m));
+      return await change(agent, args.match_id, (m, side) => resign(m, side));
     },
   },
   {
@@ -187,8 +190,7 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
     async run(agent, args) {
       on(agent);
       only(args, ['match_id']);
-      const secret = randomBytes(24).toString('base64url');
-      const id = await change(agent, args.match_id, (m) => { m.linkHash = createHash('sha256').update(secret).digest('hex'); return m.id; });
+      const { id, secret } = await change(agent, args.match_id, (m, side) => ({ id: m.id, secret: newLink(m, side) }));
       return { live_url: liveUrl(id, secret) };
     },
   },
@@ -203,6 +205,60 @@ export const MINPENTAI_TOOLS: AgentTool[] = [
       // Missing and unfinished read the same, so this can't be used to learn that a match exists or how it stands.
       if (!r || !r.m.end) throw new ToolInputError('no finished match with that id');
       return recordOf(r.m);
+    },
+  },
+  {
+    name: 'minpentai_create_practice', title: 'Create a practice match against another person', scope: 'play', writes: true, counts: 'reads',
+    description: `Creates a practice match between your person (Cyan) and another person (Amber), who plays through their own AI or their live page. Practice matches are free and never count toward any ranking. Choose the ruleset ("book-2", the book edition, or "play-3", Play's rules; for people drafts are open to, also "book-4", their default; book-2 is everyone else's default), the turn clock ("15m", "4h" or "24h", default; when it runs out, the site computer plays that side's turn under its standing order), and private (default: a single-use invite link, valid 24 hours, that you give to one person) or public (listed on the open list for anyone signed in). show_name: whether your person's name appears in the public record after the end (the other player always sees it during the match). Each side's orders stay sealed (a commitment) until both are in. Nobody can watch the match while it's on; its record and replay are public when it ends. Rules invented for this edition, the book edition's pieces drawn from the book.`,
+    inputSchema: { type: 'object', properties: { ruleset: { enum: [...PRACTICE_RULESETS, ...(DRAFTS as string[])] }, clock: { enum: Object.keys(CLOCKS) }, public: { type: 'boolean' }, show_name: { type: 'boolean' }, model: MODEL }, additionalProperties: false },
+    async run(agent, args) {
+      on(agent);
+      only(args, ['ruleset', 'clock', 'public', 'show_name', 'model']);
+      // Default (owner, 2026-11-03): book-4, the one tuned for contact, for the people drafts are open to; book-2 for everyone else.
+      const ruleset = (args.ruleset ?? (draftsFor(agent.person) ? 'book-4' : 'book-2')) as RulesetName;
+      if (!PRACTICE_RULESETS.includes(ruleset) && !((DRAFTS as unknown[]).includes(ruleset) && draftsFor(agent.person))) throw new ToolInputError(`ruleset must be one of ${PRACTICE_RULESETS.join(', ')}`);
+      if ((await liveCount(agent.person)) >= MAX_LIVE) throw new ToolInputError(`your person already has ${MAX_LIVE} live matches; finish or resign one first`);
+      const name = await nameOf(agent.person);
+      const { m, linkSecret, invite } = guard(() => newPractice({ id: newId(), ruleset, seed: newSeed(), person: agent.person, name, showName: args.show_name === true, agent: { id: agent.id, name: agent.name, model: modelOf(args.model) }, clock: (args.clock ?? '24h') as keyof typeof CLOCKS, public: args.public === true, now: new Date().toISOString() }));
+      await insert(m);
+      return {
+        match_id: m.id, side: 'Cyan', live_url: liveUrl(m.id, linkSecret),
+        ...(invite ? { invite_url: `${appUrl()}/minpentai/practice/join?m=${m.id}&i=${invite}`, invite_note: 'Single use, valid 24 hours: give it to one person. Shown once.' } : { listed: 'on the open list until someone joins' }),
+        view: viewFor(m, 'C'),
+      };
+    },
+  },
+  {
+    name: 'minpentai_list_open_practice', title: 'Practice matches waiting for a player', scope: 'play', writes: false, counts: 'reads',
+    description: 'Public practice matches waiting for a second player: ruleset, turn clock, who created it, and when. Join one with minpentai_join_practice. Matches already being played are never listed (nobody watches a match while it is on).',
+    inputSchema: { type: 'object', properties: {}, additionalProperties: false },
+    async run(agent, args) {
+      on(agent);
+      only(args, []);
+      return { open: (await listOpen()).filter((r) => r.state.versus?.players.C !== agent.person).map((r) => ({ match_id: r.id, ruleset: r.ruleset, clock_seconds: r.state.versus!.clockSec, created_by: r.state.versus!.names.C, created_at: r.created_at })) };
+    },
+  },
+  {
+    name: 'minpentai_join_practice', title: 'Join a practice match', scope: 'play', writes: true, counts: 'reads',
+    description: 'Joins a practice match as Amber: a public one from the open list (match_id), or a private one with its invite (the m= and i= parts of the invite link). The turn clock starts now. Returns your live link (your side only) and your first view. show_name: whether your person\'s name appears in the public record after the end.',
+    inputSchema: { type: 'object', properties: { match_id: MATCH, invite: { type: 'string' }, show_name: { type: 'boolean' }, model: MODEL }, required: ['match_id'], additionalProperties: false },
+    async run(agent, args) {
+      on(agent);
+      only(args, ['match_id', 'invite', 'show_name', 'model']);
+      const { m, secret } = await joinFor(agent.person, { matchId: args.match_id, invite: typeof args.invite === 'string' ? args.invite : undefined, showName: args.show_name === true, agent: { id: agent.id, name: agent.name, model: modelOf(args.model) } });
+      return { match_id: m.id, side: 'Amber', live_url: liveUrl(m.id, secret), view: viewFor(m, 'A') };
+    },
+  },
+  {
+    name: 'minpentai_practice_alerts', title: '"Your turn" alerts for a practice match', scope: 'play', writes: true, counts: 'reads',
+    description: 'Turns "your turn" alerts on or off for your person in a practice match. On: returns a private ntfy topic; your person subscribes to it in the free ntfy app (ntfy.sh) and gets a short alert each time a turn opens or the match ends. The alert says only that, with a link to their matches: no board, no orders, no names. ntfy learns the topic name, not who your person is.',
+    inputSchema: { type: 'object', properties: { match_id: MATCH, on: { type: 'boolean' } }, required: ['match_id', 'on'], additionalProperties: false },
+    async run(agent, args) {
+      on(agent);
+      only(args, ['match_id', 'on']);
+      const topic = args.on === true ? `snowmoon-${randomBytes(12).toString('hex')}` : null;
+      await change(agent, args.match_id, (m, side) => { if (!m.versus) throw new ToolInputError('alerts are for practice matches between people'); m.versus.notify[side] = topic; return null; });
+      return topic ? { on: true, topic, subscribe: `https://ntfy.sh/${topic}`, note: 'Private: anyone with the topic name gets the alerts. Turn alerts off to stop them.' } : { on: false };
     },
   },
 ];

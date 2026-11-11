@@ -77,6 +77,8 @@ export interface Orders {
   placements: Placement<AnyPiece>[]; source: Source; preset?: Preset; salt: string; commitment: string; final: boolean; note?: string; at: string;
   /** Taken with the live page's Take turn (owner, 2026-11-03): who drafted the orders the person approved there. */
   via?: 'page'; drafted_by?: Source;
+  /** A practice match: the turn's clock ran out, so the site computer played it under the side's standing order. */
+  clock?: true;
 }
 export interface RevealedTurn { turn: number; step: number; C: Omit<Orders, 'final' | 'note'>; A: Omit<Orders, 'final' | 'note'> }
 
@@ -128,7 +130,42 @@ export interface SoloMatch {
   standing: { text: string; preset: Preset } | null;
   history: RevealedTurn[];
   end: { win: Side | 'D'; how: 'towers' | 'time' | 'resigned'; step: number } | null;
+  /** A practice match between two people (owner, 2026-11-03; docs/proposals/minpentai-matches-between-people.md). */
+  versus?: Versus;
 }
+export type Standing = { text: string; preset: Preset };
+export type TurnSummary = { turn: number; from: number; lines: string[] };
+/**
+ * The second person and what belongs to each side. Cyan (C) is the person who created the match (SoloMatch.person,
+ * .agent, .standing, .summary, .linkHash); Amber (A) is here. Each side sees only its own fog view; orders stay sealed
+ * (a per-turn commitment) until both are in.
+ */
+export interface Versus {
+  players: { C: number; A: number | null };
+  /** Shown to the other player while the match is on; in the public record only where showNames says so. */
+  names: { C: string; A: string | null };
+  showNames: { C: boolean; A: boolean };
+  agentA: SoloMatch['agent'] | null;
+  /** The turn clock, in seconds, and when the open turn's runs out (ms; null until both have joined). */
+  clockSec: number;
+  deadline: number | null;
+  public: boolean;
+  /** A private match's invite: sha256 of its token, single use, and when it expires (ms). */
+  invite: { hash: string; expires: number } | null;
+  linkHashA: string | null;
+  standingA: Standing | null;
+  summaryA?: TurnSummary;
+  /** Opted-in ntfy topics for "your turn" alerts, per side (random names; null: off). */
+  notify: { C: string | null; A: string | null };
+}
+export const CLOCKS = { '15m': 15 * 60, '4h': 4 * 3600, '24h': 24 * 3600 } as const;
+/** Which side a person plays in a match, or null. */
+export function sideOf(m: SoloMatch, person: number): Side | null {
+  if (m.versus) return m.versus.players.C === person ? 'C' : m.versus.players.A === person ? 'A' : null;
+  return m.person === person ? PERSON : null;
+}
+const standingOf = (m: SoloMatch, me: Side) => (me === 'A' ? m.versus?.standingA ?? null : m.standing);
+const summaryOf = (m: SoloMatch, me: Side) => (me === 'A' ? m.versus?.summaryA : m.summary);
 
 // ---------- rules ----------
 
@@ -151,7 +188,7 @@ export const commit = (ps: Placement<AnyPiece>[], salt: string) => sha256(orders
 
 /** The computer's random numbers for a turn: the seed, the turn, and the committed server-only value. */
 const cpuWord = (cpu: string) => parseInt(cpu.slice(0, 8), 16) >>> 1;
-const turnRng = (m: Pick<SoloMatch, 'seed' | 'turn' | 'cpu'>, who: 1 | 2) => rng(((m.seed * 7919 + m.turn * 31 + who) ^ cpuWord(m.cpu)) >>> 0);
+const turnRng = (m: Pick<SoloMatch, 'seed' | 'turn' | 'cpu'>, who: 1 | 2 | 3) => rng(((m.seed * 7919 + m.turn * 31 + who) ^ cpuWord(m.cpu)) >>> 0);
 type PlanState = Pick<SoloMatch, 'ruleset' | 'computer' | 'seed' | 'level' | 'cpu' | 'w' | 'ls' | 'turn' | 'own' | 'remember'>;
 /** Side o's memory of its own pieces out of sight, for the computer, when the match's computer plans with it. */
 const memoryFor = (m: PlanState, o: Side) => (m.remember && m.own ? JSON.parse(JSON.stringify(m.own[o])) as OwnSeen : undefined);
@@ -162,9 +199,9 @@ function computerPlan(m: PlanState) {
   return searchPlan({ e, s, o, view: e.fog(m.w, s, o), lastSeen: { ...m.ls[o] }, ownSeen: memoryFor(m, o), snap: e.towers(m.w, o), points: pointsOf(m, s), rng: turnRng(m, 1), level: m.level, ...computerOf(m) }).placements;
 }
 /** What the site computer plays for the person's side when asked to (the fallback, under a preset). */
-function fallbackPlan(m: PlanState, preset: Preset) {
+function fallbackPlan(m: PlanState, preset: Preset, me: Side = PERSON) {
   const { s, e } = rulesOf(m);
-  return searchPlan({ e, s, o: PERSON, view: e.fog(m.w, s, PERSON), lastSeen: { ...m.ls[PERSON] }, ownSeen: memoryFor(m, PERSON), snap: e.towers(m.w, PERSON), points: pointsOf(m, s), rng: turnRng(m, 2), level: FALLBACK_LEVEL, preset, ...computerOf(m) }).placements;
+  return searchPlan({ e, s, o: me, view: e.fog(m.w, s, me), lastSeen: { ...m.ls[me] }, ownSeen: memoryFor(m, me), snap: e.towers(m.w, me), points: pointsOf(m, s), rng: turnRng(m, me === 'A' ? 3 : 2), level: FALLBACK_LEVEL, preset, ...computerOf(m) }).placements;
 }
 
 /** Both sides' memory of their own pieces, after the board changed (placements appearing, or a step). */
@@ -214,11 +251,89 @@ export function newSolo(o: { id: string; ruleset: RulesetName; level: number; se
 
 export class SoloError extends Error {}
 
+const hashIs = (secret: unknown, hash: string | null | undefined) => {
+  if (typeof secret !== 'string' || secret.length < 16 || secret.length > 64 || !hash) return false;
+  const a = Buffer.from(sha256(secret), 'hex'), b = Buffer.from(hash, 'hex');
+  return a.length === b.length && timingSafeEqual(a, b);
+};
 /** Whether a live link's secret opens this match (constant time). */
 export function linkOpens(m: SoloMatch, secret: string): boolean {
-  if (typeof secret !== 'string' || secret.length < 16 || secret.length > 64) return false;
-  const a = Buffer.from(sha256(secret), 'hex'), b = Buffer.from(m.linkHash, 'hex');
-  return a.length === b.length && timingSafeEqual(a, b);
+  return linkSide(m, secret) !== null;
+}
+/** The side a live link's secret opens: each player of a practice match has their own link, showing their side only. */
+export function linkSide(m: SoloMatch, secret: string): Side | null {
+  if (hashIs(secret, m.linkHash)) return 'C';
+  if (m.versus && hashIs(secret, m.versus.linkHashA)) return 'A';
+  return null;
+}
+/** A new live link for a side (the old one stops working). Returns the secret. */
+export function newLink(m: SoloMatch, me: Side): string {
+  const secret = randomBytes(24).toString('base64url');
+  if (me === 'A') m.versus!.linkHashA = sha256(secret); else m.linkHash = sha256(secret);
+  return secret;
+}
+
+// ---------- practice matches between people (owner, 2026-11-03) ----------
+
+/** The rulesets a practice match may use: the current two, and drafts for the people they're opened to. */
+export const PRACTICE_RULESETS: RulesetName[] = ['book-2', 'play-3'];
+/**
+ * A new practice match. Its creator plays Cyan. A private match comes with an invite (single use, 24 hours); a public
+ * one is listed until someone joins. Like a solo match it has a committed random value: it decides only the moves the
+ * site computer makes for a side whose clock runs out, so they can be checked from the record.
+ */
+export function newPractice(o: { id: string; ruleset: RulesetName; seed: number; person: number; name: string; showName: boolean; agent: SoloMatch['agent']; clock: keyof typeof CLOCKS; public: boolean; now: string }): { m: SoloMatch; linkSecret: string; invite: string | null } {
+  if (!(o.clock in CLOCKS)) throw new SoloError(`clock must be one of ${Object.keys(CLOCKS).join(', ')}`);
+  const { m, linkSecret } = newSolo({ id: o.id, ruleset: o.ruleset, level: 0, seed: o.seed, person: o.person, agent: o.agent, now: o.now });
+  const invite = o.public ? null : randomBytes(18).toString('base64url');
+  m.versus = {
+    players: { C: o.person, A: null }, names: { C: o.name, A: null }, showNames: { C: o.showName, A: false }, agentA: null,
+    clockSec: CLOCKS[o.clock], deadline: null, public: o.public,
+    invite: invite ? { hash: sha256(invite), expires: (Date.parse(o.now) || 0) + 24 * 3600_000 } : null,
+    linkHashA: null, standingA: null, notify: { C: null, A: null },
+  };
+  return { m, linkSecret, invite };
+}
+/**
+ * The second person joins as Amber: through the private invite (single use, before it expires) or from the open list.
+ * The turn clock starts now. Returns Amber's live-link secret.
+ */
+export function joinPractice(m: SoloMatch, o: { person: number; name: string; showName: boolean; agent: SoloMatch['agent']; invite?: string; now: string }): string {
+  const v = m.versus;
+  if (!v || m.end) throw new SoloError('no practice match waiting for a player with that id');
+  if (v.players.A !== null) throw new SoloError('this match already has two players');
+  if (v.players.C === o.person) throw new SoloError('you created this match: send the invite to someone else');
+  const now = Date.parse(o.now) || 0;
+  if (!v.public) {
+    if (!v.invite || !hashIs(o.invite, v.invite.hash)) throw new SoloError('that invite doesn\'t open this match');
+    if (now > v.invite.expires) throw new SoloError('that invite has expired: ask for a new one');
+  }
+  v.players.A = o.person; v.names.A = o.name; v.showNames.A = o.showName; v.agentA = o.agent; v.invite = null;
+  m.openedAt = now;
+  v.deadline = now + v.clockSec * 1000;
+  return newLink(m, 'A');
+}
+/**
+ * The turn clock: if the open turn's clock has run out, the site computer plays it for every side whose final orders
+ * aren't in, under that side's standing order (balanced if none), and the turn resolves. Repeats while turns are
+ * overdue (both players away). True if anything was played.
+ */
+export function runClock(m: SoloMatch, now: string): boolean {
+  const v = m.versus;
+  let played = false;
+  for (let i = 0; i < 40 && v && !m.end && v.players.A !== null && v.deadline !== null && (Date.parse(now) || 0) > v.deadline; i++) {
+    const at = new Date(v.deadline).toISOString();
+    for (const me of ['C', 'A'] as const) {
+      if (m.pend[me]?.final) continue;
+      const preset = standingOf(m, me)?.preset ?? 'balanced';
+      const placements = fallbackPlan(m, preset, me);
+      const salt = randomBytes(32).toString('hex');
+      m.pend[me] = { placements, source: 'site-computer', preset, salt, commitment: commit(placements, salt), final: true, clock: true, at };
+    }
+    resolve(m, at);
+    played = true;
+  }
+  return played;
 }
 
 // ---------- what a side is shown ----------
@@ -265,23 +380,33 @@ export function rulesFor(m: Pick<SoloMatch, 'ruleset' | 'seed'>) {
 }
 
 /** Everything the person's side is shown: its view of the board and the turn. Nothing else. */
-export function viewFor(m: SoloMatch) {
+export function viewFor(m: SoloMatch, me: Side = PERSON) {
   const { s, e, rule } = rulesOf(m);
-  const me = PERSON, view = e.fog(m.w, s, me), see = e.sees(m.w, s, me);
+  const them = other(me), view = e.fog(m.w, s, me), see = e.sees(m.w, s, me), vs = m.versus;
+  const mine = m.pend[me], theirs = m.pend[them], summary = summaryOf(m, me);
   // Ore only where the rock and every square beside it are in sight (as fog() keeps it).
   const oreSeen = (k: number) => { const [x, y] = e.XY(k); return see.has(k) && [[1, 0], [-1, 0], [0, 1], [0, -1]].every(([dx, dy]) => !e.inb(x + dx, y + dy) || see.has(e.K(x + dx, y + dy))); };
-  const can = canPlaceKeys(m);
+  const can = canPlaceKeys(m, me);
   const over = !!m.end;
   const lastSeen = Object.entries(m.ls[me]).filter(([k]) => !view.tw[+k]).map(([k, step]) => ({ x: e.XY(+k)[0], y: e.XY(+k)[1], step }));
   const mineOut = outOfSight(e, m.w, s, me, ownOf(m)[me]);
   // The enemy's possible placement area (owner, 2026-11-04: fix 6): within its reach of every enemy tower this side
   // sees or last saw, less squares it sees taken. Only the towers it knows of: one it never saw adds more.
-  const theirTowers = [...e.towers(view, other(me)), ...lastSeen.map((t) => e.K(t.x, t.y))];
-  const enemyArea = [...e.lit(view, other(me), s.reach, theirTowers)].filter((k) => !see.has(k) || e.empty(view, k));
+  const theirTowers = [...e.towers(view, them), ...lastSeen.map((t) => e.K(t.x, t.y))];
+  const enemyArea = [...e.lit(view, them, s.reach, theirTowers)].filter((k) => !see.has(k) || e.empty(view, k));
   return {
     match_id: m.id,
-    side: 'Cyan',
-    opponent: { kind: 'site computer', level: m.level, random_commitment: m.cpuCommit },
+    side: me === 'C' ? 'Cyan' : 'Amber',
+    opponent: vs
+      ? {
+          // A person. Their orders stay sealed: only that they've sent final orders, and the commitment to them.
+          kind: 'person', name: vs.names[them], joined: vs.players[them] !== null,
+          sent_final_orders: !!theirs?.final, commitment: theirs?.final ? theirs.commitment : null,
+          clock: { seconds: vs.clockSec, runs_out_at: vs.deadline ? new Date(vs.deadline).toISOString() : null },
+          clock_random_commitment: m.cpuCommit,
+        }
+      : { kind: 'site computer', level: m.level, random_commitment: m.cpuCommit },
+    ...(vs ? { practice: 'a practice match between people: never counted toward any ranking' } : {}),
     ruleset: rulesetName(m.ruleset),
     rule,
     phase: over ? 'over' : m.turn === 0 ? 'setup' : 'act',
@@ -296,7 +421,7 @@ export function viewFor(m: SoloMatch) {
     costs: costsOf(s),
     // book-4's kill reports: every enemy tower this side's gliders destroyed, seen or not, and the count for both
     // sides (the tie-break counts them). Nothing else from the dark.
-    ...(s.killReports ? { towers_destroyed: { by_you: m.kills.C, by_opponent: m.kills.A }, your_kills: (m.kills.log ?? []).filter((x) => x.o === me).map((x) => ({ x: e.XY(x.k)[0], y: e.XY(x.k)[1], step: x.step })) } : {}),
+    ...(s.killReports ? { towers_destroyed: { by_you: m.kills[me], by_opponent: m.kills[them] }, your_kills: (m.kills.log ?? []).filter((x) => x.o === me).map((x) => ({ x: e.XY(x.k)[0], y: e.XY(x.k)[1], step: x.step })) } : {}),
     ...(s.gliderSight || s.symbolGliderSight ? { glider_sight: { plain: s.gliderSight ?? 0, symbol: s.symbolGliderSight ?? 0 } } : {}),
     // book-3's limits, said only where a ruleset sets them (book-1 and book-2 views are unchanged).
     ...(s.maxTowers ? { towers_at_most: s.maxTowers, ...(s.symbolsCapped ? { symbols_count_toward_the_cap: true } : {}) } : {}),
@@ -313,24 +438,24 @@ export function viewFor(m: SoloMatch) {
     my_pieces_out_of_sight: piecesOut(e, mineOut),
     enemy_can_place_from_last_seen: { squares: rowRanges(e, enemyArea), how: `the squares within ${s.reach} (the ${2 * s.reach + 1} x ${2 * s.reach + 1} box) of every enemy tower you see or last saw, less squares you see taken: where the enemy could place next turn if those towers still stand. A tower you never saw adds more.` },
     can_place: rowRanges(e, can),
-    my_orders: m.pend.C ? { placements: m.pend.C.placements.map(orderOut), source: m.pend.C.source, final: m.pend.C.final, commitment: m.pend.C.commitment, ...(m.pend.C.note ? { note: m.pend.C.note } : {}) } : null,
-    standing_order: m.standing,
-    my_turns: m.history.map((h) => ({ turn: h.turn, step: h.step, placements: h.C.placements.map(orderOut), source: h.C.source, ...(h.C.preset ? { preset: h.C.preset } : {}), ...(h.C.via === 'page' ? { taken_on_the_live_page: true, drafted_by: h.C.drafted_by } : {}) })),
+    my_orders: mine ? { placements: mine.placements.map(orderOut), source: mine.source, final: mine.final, commitment: mine.commitment, ...(mine.note ? { note: mine.note } : {}) } : null,
+    standing_order: standingOf(m, me),
+    my_turns: m.history.map((h) => ({ turn: h.turn, step: h.step, placements: h[me].placements.map(orderOut), source: h[me].source, ...(h[me].preset ? { preset: h[me].preset } : {}), ...(h[me].via === 'page' ? { taken_on_the_live_page: true, drafted_by: h[me].drafted_by } : {}), ...(h[me].clock ? { clock_ran_out: true } : {}) })),
     end: m.end,
     // Agent help (2026-11-02), kept in their own fields: the rules for this ruleset, and the person's page.
     ...rulesFor(m),
     // What the person's side saw happen in the last turn's steps, in words (summary.ts); empty before the first.
-    last_turn_summary: m.summary ? { turn: m.summary.turn, from_step: m.summary.from, lines: m.summary.lines } : null,
+    last_turn_summary: summary ? { turn: summary.turn, from_step: summary.from, lines: summary.lines } : null,
   };
 }
 
-/** The empty squares the person's side may place on now, within reach of the towers it holds. */
-function canPlaceKeys(m: SoloMatch): number[] {
+/** The empty squares a side may place on now, within reach of the towers it holds (all of them in its sight). */
+function canPlaceKeys(m: SoloMatch, me: Side = PERSON): number[] {
   const { s, e } = rulesOf(m);
-  return [...e.lit(m.w, PERSON, s.reach, e.towers(m.w, PERSON))].filter((k) => e.empty(m.w, k)).sort((a, b) => a - b);
+  return [...e.lit(m.w, me, s.reach, e.towers(m.w, me))].filter((k) => e.empty(m.w, k)).sort((a, b) => a - b);
 }
 /** can_place as [x, y] pairs (the live page's board marks them). */
-export const canPlaceList = (m: SoloMatch): [number, number][] => { const { e } = rulesOf(m); return canPlaceKeys(m).map((k) => e.XY(k)); };
+export const canPlaceList = (m: SoloMatch, me: Side = PERSON): [number, number][] => { const { e } = rulesOf(m); return canPlaceKeys(m, me).map((k) => e.XY(k)); };
 
 /**
  * Squares as compact rows (owner, 2026-11-04: fix 9), one string a row, top first: "y=3: x=0-4, 6" is (0,3) to (4,3)
@@ -396,7 +521,7 @@ export function costsOf(s: Settings) {
 // ---------- orders ----------
 
 /** An agent's placements as the engine's, or a plain-words reason they can't be. */
-export function parseOrders(list: unknown, s: Settings): Placement<AnyPiece>[] {
+export function parseOrders(list: unknown, s: Settings, me: Side = PERSON): Placement<AnyPiece>[] {
   if (!Array.isArray(list)) throw new SoloError('placements must be a list');
   if (list.length > 40) throw new SoloError('at most 40 placements a turn');
   return list.map((q: OrderIn, i) => {
@@ -414,7 +539,7 @@ export function parseOrders(list: unknown, s: Settings): Placement<AnyPiece>[] {
       if (q.slant !== '/' && q.slant !== '\\') throw new SoloError(`placements[${i}].slant must be "/" or "\\"`);
       dx = q.slant === '/' ? 1 : -1;
     }
-    return { t, o: PERSON, x: q.x, y: q.y, dx, dy };
+    return { t, o: me, x: q.x, y: q.y, dx, dy };
   });
 }
 
@@ -423,41 +548,47 @@ export function parseOrders(list: unknown, s: Settings): Placement<AnyPiece>[] {
  * real board: placing reads only squares within reach, all of which the side can see (the fog invariant), so a
  * refusal says nothing about the dark. With `final`, the turn resolves at once.
  */
-export function submit(m: SoloMatch, o: { turn: number; placements: Placement<AnyPiece>[]; source: Source; final: boolean; note?: string; now: string; preset?: Preset; via?: 'page'; drafted_by?: Source; keepSalt?: string }) {
+export function submit(m: SoloMatch, o: { turn: number; placements: Placement<AnyPiece>[]; source: Source; final: boolean; note?: string; now: string; preset?: Preset; via?: 'page'; drafted_by?: Source; clock?: true; keepSalt?: string }, me: Side = PERSON) {
   if (m.end) throw new SoloError('the match is over');
   if (o.turn !== m.turn) throw new SoloError(`turn ${o.turn} is not open; the open turn is ${m.turn}`);
+  // A practice match: sealed orders can't be changed once final (the other side has seen the commitment).
+  if (m.versus && m.pend[me]?.final) throw new SoloError('your final orders for this turn are in; waiting for the other side');
   const { s, e } = rulesOf(m);
-  const why = e.refuse(m.w, s, PERSON, e.towers(m.w, PERSON), pointsOf(m, s), o.placements);
+  if (o.placements.some((p) => p.o !== me)) throw new SoloError('placements are for your own side only');
+  const why = e.refuse(m.w, s, me, e.towers(m.w, me), pointsOf(m, s), o.placements);
   if (why) throw new SoloError(`not accepted: ${why}`);
-  const replaced = !!m.pend.C;
+  const replaced = !!m.pend[me];
   // Take turn keeps the draft's salt, so its commitment stays the one the AI was given (owner, 2026-11-04: fix 11).
   const salt = o.keepSalt ?? randomBytes(32).toString('hex');
-  m.pend.C = { placements: o.placements, source: o.source, ...(o.preset ? { preset: o.preset } : {}), salt, commitment: commit(o.placements, salt), final: o.final, ...(o.note ? { note: o.note } : {}), ...(o.via ? { via: o.via, drafted_by: o.drafted_by } : {}), at: o.now };
+  m.pend[me] = { placements: o.placements, source: o.source, ...(o.preset ? { preset: o.preset } : {}), salt, commitment: commit(o.placements, salt), final: o.final, ...(o.note ? { note: o.note } : {}), ...(o.via ? { via: o.via, drafted_by: o.drafted_by } : {}), ...(o.clock ? { clock: true as const } : {}), at: o.now };
   const spent = o.placements.reduce((t, p) => t + e.cost(s, p.t), 0);
-  const out = { accepted: true, commitment: m.pend.C.commitment, replaced_previous: replaced, points_left: pointsOf(m, s) - spent };
-  if (o.final) return { ...out, resolved: resolve(m, o.now) };
-  return out;
+  const out = { accepted: true, commitment: m.pend[me]!.commitment, replaced_previous: replaced, points_left: pointsOf(m, s) - spent };
+  if (!o.final) return out;
+  // Against the site computer the turn resolves now; between people, once both sides' final orders are in.
+  if (m.versus && !(m.versus.players.A !== null && m.pend[other(me)]?.final)) return { ...out, waiting_for: 'the other side\'s final orders' };
+  return { ...out, resolved: resolve(m, o.now) };
 }
 
 /**
  * The live page's Take turn (owner, 2026-11-03): the person, signed in, approves the draft their AI sent with
  * submit_orders (final: false). Recorded as the person's ("person"), taken on the page, with who drafted it.
  */
-export function takeTurnOnPage(m: SoloMatch, o: { turn: number; now: string }) {
+export function takeTurnOnPage(m: SoloMatch, o: { turn: number; now: string }, me: Side = PERSON) {
   if (m.end) throw new SoloError('the match is over');
   if (o.turn !== m.turn) throw new SoloError(`turn ${o.turn} is not open; the open turn is ${m.turn}`);
-  const d = m.pend.C;
+  const d = m.pend[me];
   if (!d) throw new SoloError('there is no draft to take: ask your AI to send this turn\'s orders with final: false first');
-  return submit(m, { turn: o.turn, placements: d.placements, source: 'person', final: true, note: d.note, now: o.now, via: 'page', drafted_by: d.source, keepSalt: d.salt });
+  if (d.final) throw new SoloError('your final orders for this turn are in; waiting for the other side');
+  return submit(m, { turn: o.turn, placements: d.placements, source: 'person', final: true, note: d.note, now: o.now, via: 'page', drafted_by: d.source, keepSalt: d.salt }, me);
 }
 
 /** The open turn's draft as the live page shows it: the pieces, their cost against the points, and lane warnings. */
-export function draftInfo(m: SoloMatch) {
-  const d = m.pend.C;
+export function draftInfo(m: SoloMatch, me: Side = PERSON) {
+  const d = m.pend[me];
   if (!d || m.end) return null;
-  const { s, e } = rulesOf(m), view = e.fog(m.w, s, PERSON);
+  const { s, e } = rulesOf(m), view = e.fog(m.w, s, me);
   const cost = d.placements.reduce((t, p) => t + e.cost(s, p.t), 0);
-  return { placements: d.placements.map(orderOut), source: d.source, final: d.final, cost, points: pointsOf(m, s), warnings: laneWarnings(e, view, s, e.towers(view, PERSON), d.placements), ...(d.note ? { note: d.note } : {}) };
+  return { placements: d.placements.map(orderOut), source: d.source, final: d.final, cost, points: pointsOf(m, s), warnings: laneWarnings(e, view, s, e.towers(view, me), d.placements), ...(d.note ? { note: d.note } : {}) };
 }
 
 /**
@@ -466,15 +597,15 @@ export function draftInfo(m: SoloMatch) {
  * frame is the person's side's view (engine.fog: their gliders and squares in sight, enemy pieces while in sight,
  * book-4's symbol-glider sight) and the squares it sees; once it's over, `whole` gives the whole board.
  */
-export function turnFrames(m: SoloMatch, turn: number, whole = false) {
+export function turnFrames(m: SoloMatch, turn: number, whole = false, me: Side = PERSON) {
   if (whole && !m.end) throw new SoloError('the whole board only once the match is over');
   const { s, e } = rulesOf(m);
   const w = e.world(s), kills: Kills = { C: 0, A: 0 };
   const frame = () => {
-    if (whole) return { step: w.step, board: boardOut(e, w, PERSON, () => true), seen: null };
-    const see = e.sees(w, s, PERSON), view = e.fog(w, s, PERSON);
+    if (whole) return { step: w.step, board: boardOut(e, w, me, () => true), seen: null };
+    const see = e.sees(w, s, me), view = e.fog(w, s, me);
     const oreSeen = (k: number) => { const [x, y] = e.XY(k); return see.has(k) && [[1, 0], [-1, 0], [0, 1], [0, -1]].every(([dx, dy]) => !e.inb(x + dx, y + dy) || see.has(e.K(x + dx, y + dy))); };
-    return { step: w.step, board: boardOut(e, view, PERSON, oreSeen), seen: [...see].sort((a, b) => a - b).map((k) => e.XY(k)) };
+    return { step: w.step, board: boardOut(e, view, me, oreSeen), seen: [...see].sort((a, b) => a - b).map((k) => e.XY(k)) };
   };
   for (const h of m.history) {
     e.apply(w, s, { C: h.C.placements, A: h.A.placements });
@@ -488,51 +619,50 @@ export function turnFrames(m: SoloMatch, turn: number, whole = false) {
 }
 
 /**
- * How a finished match ended, in words for the person's live page (owner, 2026-11-04: fix 3): who won and why, e.g. "you
+ * How a finished match ended, in words for a side's live page (owner, 2026-11-04: fix 3): who won and why, e.g. "you
  * won on towers, 5 to 1, at step 144" or "you won at step 126: every enemy tower destroyed". Only once it's over (the
- * tower counts are then the record's).
+ * tower counts are then the record's). Between people the other side is `they` (the page passes their name).
  */
-export function endText(m: SoloMatch): string | null {
+export function endText(m: SoloMatch, me: Side = PERSON, they = m.versus ? 'your opponent' : 'the site computer'): string | null {
   if (!m.end) return null;
-  const { s, e } = rulesOf(m), { win, how, step } = m.end;
-  const mine = e.towers(m.w, PERSON).length, theirs = e.towers(m.w, COMPUTER).length;
-  const who = win === PERSON ? 'you won' : win === COMPUTER ? 'the site computer won' : 'a draw';
-  if (how === 'resigned') return `you resigned at step ${step}`;
-  if (s.win === 'first-blood') return `${who} at step ${step}: the first tower destroyed decides (towers destroyed ${m.kills.C} to ${m.kills.A})`;
+  const { s, e } = rulesOf(m), { win, how, step } = m.end, them = other(me);
+  const mine = e.towers(m.w, me).length, theirs = e.towers(m.w, them).length;
+  const who = win === me ? 'you won' : win === them ? `${they} won` : 'a draw';
+  if (how === 'resigned') return win === me ? `${they} resigned at step ${step}` : `you resigned at step ${step}`;
+  if (s.win === 'first-blood') return `${who} at step ${step}: the first tower destroyed decides (towers destroyed ${m.kills[me]} to ${m.kills[them]})`;
   if (!mine && !theirs) return `a draw at step ${step}: both sides' last towers fell at once`;
   if (!theirs) return `you won at step ${step}: every enemy tower destroyed`;
-  if (!mine) return `the site computer won at step ${step}: every tower of yours destroyed`;
+  if (!mine) return `${they} won at step ${step}: every tower of yours destroyed`;
   // The winner's count first: "you won on towers, 5 to 1", "the site computer won on towers, 4 to 2".
   if (mine !== theirs) return `${who} on towers, ${Math.max(mine, theirs)} to ${Math.min(mine, theirs)}, at step ${step}`;
-  return s.tieBreak && m.kills.C !== m.kills.A ? `${who} at step ${step}: towers level ${mine} to ${theirs}, so towers destroyed decide, ${m.kills.C} to ${m.kills.A}` : `a draw at step ${step}: towers level, ${mine} to ${theirs}`;
+  return s.tieBreak && m.kills[me] !== m.kills[them] ? `${who} at step ${step}: towers level ${mine} to ${theirs}, so towers destroyed decide, ${m.kills[me]} to ${m.kills[them]}` : `a draw at step ${step}: towers level, ${mine} to ${theirs}`;
 }
 
 /**
- * While the match goes on (fix 3): where the enemy's towers are as far as the person's side knows, the ones it sees and
- * those it last saw. The match going on says they have at least one.
+ * While the match goes on (fix 3): where the enemy's towers are as far as a side knows, the ones it sees and those it
+ * last saw. The match going on says they have at least one.
  */
-export function stillStanding(m: SoloMatch): string | null {
+export function stillStanding(m: SoloMatch, me: Side = PERSON): string | null {
   if (m.end) return null;
-  const { s, e } = rulesOf(m), view = e.fog(m.w, s, PERSON);
-  const seen = e.towers(view, COMPUTER), last = Object.keys(m.ls[PERSON]).map(Number).filter((k) => !view.tw[k]);
+  const { s, e } = rulesOf(m), view = e.fog(m.w, s, me);
+  const seen = e.towers(view, other(me)), last = Object.keys(m.ls[me]).map(Number).filter((k) => !view.tw[k]);
   const at = (ks: number[]) => ks.slice(0, 4).map((k) => `(${e.XY(k)[0]}, ${e.XY(k)[1]})`).join(', ') + (ks.length > 4 ? ` and ${ks.length - 4} more` : '');
   if (!seen.length && !last.length) return 'They still have towers, somewhere out of your sight.';
   return `They still have towers: ${[seen.length ? `in sight at ${at(seen)}` : '', last.length ? `last seen at ${at(last)}` : ''].filter(Boolean).join('; ')}.`;
 }
 
-/** The squares the person's side sees now, as a replay frame gives them (the 3D view's cloud covers the rest). */
-export function sightOf(m: SoloMatch): [number, number][] {
+/** The squares a side sees now, as a replay frame gives them (the 3D view's cloud covers the rest). */
+export function sightOf(m: SoloMatch, me: Side = PERSON): [number, number][] {
   const { s, e } = rulesOf(m);
-  return [...e.sees(m.w, s, PERSON)].sort((a, b) => a - b).map((k) => e.XY(k));
+  return [...e.sees(m.w, s, me)].sort((a, b) => a - b).map((k) => e.XY(k));
 }
 
 /** The site computer plays the person's own side this turn, under the standing order's preset (the fallback). */
-export function autopilot(m: SoloMatch, o: { turn: number; now: string }) {
+export function autopilot(m: SoloMatch, o: { turn: number; now: string }, me: Side = PERSON) {
   if (m.end) throw new SoloError('the match is over');
   if (o.turn !== m.turn) throw new SoloError(`turn ${o.turn} is not open; the open turn is ${m.turn}`);
-  const { s, e } = rulesOf(m);
-  const preset = m.standing?.preset ?? 'balanced';
-  return submit(m, { turn: o.turn, placements: fallbackPlan(m, preset), source: 'site-computer', final: true, now: o.now, preset });
+  const preset = standingOf(m, me)?.preset ?? 'balanced';
+  return submit(m, { turn: o.turn, placements: fallbackPlan(m, preset, me), source: 'site-computer', final: true, now: o.now, preset }, me);
 }
 
 /** Plans the site computer's orders for the open turn if they aren't yet. True if it planned them now. */
@@ -540,15 +670,16 @@ export function autopilot(m: SoloMatch, o: { turn: number; now: string }) {
 export const QUIET_MS = 3000;
 
 export function planComputer(m: SoloMatch, now: string): boolean {
-  if (m.end || m.pend.A) return false;
+  if (m.end || m.pend.A || m.versus) return false; // between people there is no site computer
   m.pend.A = computerOrders(m, now);
   return true;
 }
 
 /** A side's turn summary watcher (summary.ts), from the board before the placements, with the turn's opening lines. */
-function watchTurn(e: Engine, s: Settings, me: Side, before: World, kills: Kills, o: Pick<Orders, 'placements' | 'via' | 'drafted_by'>) {
+function watchTurn(e: Engine, s: Settings, me: Side, before: World, kills: Kills, o: Pick<Orders, 'placements' | 'via' | 'drafted_by' | 'clock'>) {
   const watch = new TurnWatch(e, s, me, before, kills, o.placements);
   if (o.via === 'page') watch.say(`Your person took this turn on the live page, approving the orders ${o.drafted_by === 'agent' ? 'you (their AI) drafted' : 'drafted before'}.`);
+  if (o.clock) watch.say('The turn\'s clock ran out, so the site computer played it for your side under your standing order.');
   return watch;
 }
 
@@ -585,25 +716,30 @@ function resolve(m: SoloMatch, now: string) {
   const C = m.pend.C!, A = m.pend.A!;
   const strip = ({ final: _f, note: _n, ...x }: Orders) => x;
   m.history.push({ turn: m.turn, step: m.w.step, C: strip(C), A: strip(A) });
-  // The person's turn summary, from their side's view at each frame (summary.ts).
+  // The person's turn summary, from their side's view at each frame (summary.ts); between people, Amber gets her own,
+  // from her own view.
   const watch = watchTurn(e, s, PERSON, e.clone(m.w), m.kills, C);
+  const watchA = m.versus ? watchTurn(e, s, 'A', e.clone(m.w), m.kills, A) : null;
   const own = (m.own = ownOf({ ...m, history: m.history.slice(0, -1) }));
   e.apply(m.w, s, { C: C.placements, A: A.placements });
   e.updSeen(m.w, s, m.ls, m.kills);
   updOwn(e, m.w, s, own);
   watch.appear(m.w);
+  watchA?.appear(m.w);
   const from = m.w.step, turn = m.turn;
-  const note = () => { m.summary = { turn, from, lines: watch.done() }; };
+  const note = () => { m.summary = { turn, from, lines: watch.done() }; if (watchA) m.versus!.summaryA = { turn, from, lines: watchA.done() }; };
   do {
     e.step(m.w, s, m.kills);
     e.updSeen(m.w, s, m.ls, m.kills);
     updOwn(e, m.w, s, own);
     watch.look(m.w);
+    watchA?.look(m.w);
     const v = verdict(e, m.w, s, m.kills);
     if (v) {
       note();
       m.end = { win: v, how: e.towers(m.w, 'C').length && e.towers(m.w, 'A').length ? 'time' : 'towers', step: m.w.step };
-      m.pend = { C: null, A: m.pend.A };
+      m.pend = { C: null, A: m.versus ? null : m.pend.A };
+      if (m.versus) m.versus.deadline = null;
       return { over: true, end: m.end };
     }
   } while (m.w.step - from < s.every);
@@ -611,21 +747,24 @@ function resolve(m: SoloMatch, now: string) {
   m.turn++;
   m.pend = { C: null, A: null };
   m.openedAt = Date.parse(now) || 0;
+  if (m.versus) m.versus.deadline = m.openedAt + m.versus.clockSec * 1000;
   return { over: false, turn: m.turn, step: m.w.step };
 }
 
-export function setStanding(m: SoloMatch, text: unknown, preset: unknown) {
+export function setStanding(m: SoloMatch, text: unknown, preset: unknown, me: Side = PERSON) {
   if (m.end) throw new SoloError('the match is over');
   if (typeof text !== 'string' || !text.trim() || text.length > 500) throw new SoloError('text must be 1 to 500 characters');
   if (!PRESETS.includes(preset as Preset)) throw new SoloError(`preset must be one of ${PRESETS.join(', ')}`);
-  m.standing = { text: text.trim(), preset: preset as Preset };
+  const st = { text: text.trim(), preset: preset as Preset };
+  if (me === 'A') m.versus!.standingA = st; else m.standing = st;
   return { ok: true, preset };
 }
 
-export function resign(m: SoloMatch) {
+export function resign(m: SoloMatch, me: Side = PERSON) {
   if (m.end) throw new SoloError('the match is over');
-  m.end = { win: COMPUTER, how: 'resigned', step: m.w.step };
-  m.pend = { C: null, A: m.pend.A };
+  m.end = { win: other(me), how: 'resigned', step: m.w.step };
+  m.pend = { C: null, A: m.versus ? null : m.pend.A };
+  if (m.versus) m.versus.deadline = null;
   return { ok: true, over: true };
 }
 
@@ -639,7 +778,14 @@ export function recordOf(m: SoloMatch) {
     ...(m.remember ? { computer_remembers_own_pieces: true } : {}),
     // Nothing that leads back to the person (owner, 2026-10-31): no Farcaster name or ID, and no agent name, since the
     // site shows agents elsewhere as "<name>, agent of @person". The model, as the agent declared it.
-    sides: { C: { kind: 'person', model: m.agent.model ? { ...m.agent.model, label: 'self-reported' } : null }, A: { kind: 'site computer', level: m.level } },
+    sides: m.versus
+      ? {
+          // Two people. Each side's model as its agent declared it; a name only where that player chose to show it.
+          C: { kind: 'person', ...(m.versus.showNames.C ? { name: m.versus.names.C } : {}), model: m.agent.model ? { ...m.agent.model, label: 'self-reported' } : null },
+          A: { kind: 'person', ...(m.versus.showNames.A && m.versus.names.A ? { name: m.versus.names.A } : {}), model: m.versus.agentA?.model ? { ...m.versus.agentA.model, label: 'self-reported' } : null },
+        }
+      : { C: { kind: 'person', model: m.agent.model ? { ...m.agent.model, label: 'self-reported' } : null }, A: { kind: 'site computer', level: m.level } },
+    ...(m.versus ? { practice: 'a practice match between people: never counted toward any ranking', clock_seconds: m.versus.clockSec } : {}),
     turns: m.history.map((h) => ({ turn: h.turn, step: h.step, C: { ...h.C, placements: h.C.placements.map(orderOut) }, A: { ...h.A, placements: h.A.placements.map(orderOut) } })),
     end: m.end,
     final_position: boardOut(e, m.w, PERSON, () => true),
@@ -665,7 +811,7 @@ export function replay(m: Pick<SoloMatch, 'ruleset' | 'seed' | 'history' | 'end'
  * and from the seed, that value and the revealed orders, every move the site computer made (for its own side, and for
  * the person's side when asked to) comes out the same. Returns the problems found; empty when all agree.
  */
-export function checkComputer(r: Pick<SoloMatch, 'ruleset' | 'computer' | 'seed' | 'level' | 'cpu' | 'cpuCommit' | 'history' | 'remember'>): string[] {
+export function checkComputer(r: Pick<SoloMatch, 'ruleset' | 'computer' | 'seed' | 'level' | 'cpu' | 'cpuCommit' | 'history' | 'remember' | 'versus'>): string[] {
   const out: string[] = [];
   if (sha256(r.cpu) !== r.cpuCommit) out.push('the revealed computer value does not match its commitment');
   const { s, e } = rulesOf(r);
@@ -675,8 +821,11 @@ export function checkComputer(r: Pick<SoloMatch, 'ruleset' | 'computer' | 'seed'
   const kills: Kills = { C: 0, A: 0, ...(s.killReports ? { log: [] } : {}) };
   for (const h of r.history) {
     st.turn = h.turn;
-    if (ordersText(computerPlan(st)) !== ordersText(h.A.placements)) out.push(`turn ${h.turn}: the computer's orders don't follow from the record`);
-    if (h.C.source === 'site-computer' && ordersText(fallbackPlan(st, h.C.preset ?? 'balanced')) !== ordersText(h.C.placements)) out.push(`turn ${h.turn}: the site computer's orders for the person don't follow from the record`);
+    // Between people there is no site computer side; it only plays a side whose clock ran out (or that asked).
+    if (!r.versus && ordersText(computerPlan(st)) !== ordersText(h.A.placements)) out.push(`turn ${h.turn}: the computer's orders don't follow from the record`);
+    for (const me of r.versus ? (['C', 'A'] as const) : (['C'] as const)) {
+      if (h[me].source === 'site-computer' && ordersText(fallbackPlan(st, h[me].preset ?? 'balanced', me)) !== ordersText(h[me].placements)) out.push(`turn ${h.turn}: the site computer's orders for ${me === 'C' ? 'Cyan' : 'Amber'} don't follow from the record`);
+    }
     e.apply(st.w, s, { C: h.C.placements, A: h.A.placements });
     e.updSeen(st.w, s, st.ls, kills);
     updOwn(e, st.w, s, st.own!);
@@ -693,9 +842,9 @@ export function checkComputer(r: Pick<SoloMatch, 'ruleset' | 'computer' | 'seed'
  * and the agent's own belief, never from the real board. A belief piece may only go where the side can't see
  * (where it can see, it already knows); scenario orders are checked on that imagined board.
  */
-export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { name: string; placements: unknown }[]; steps?: number; use_last_seen?: boolean }) {
+export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { name: string; placements: unknown }[]; steps?: number; use_last_seen?: boolean }, me: Side = PERSON) {
   const { s, e } = rulesOf(m);
-  const me = PERSON, them = other(me);
+  const them = other(me);
   const view = e.fog(m.w, s, me), see = e.sees(view, s, me);
   // The board as this side believes it: its view, its own pieces out of sight where it last saw them (as the site
   // computer believes its own: search.ts belief), enemy towers where it last saw them unless use_last_seen is false
@@ -739,7 +888,7 @@ export function simulate(m: SoloMatch, args: { belief?: Belief; scenarios: { nam
     scenarios: args.scenarios.map((sc) => {
       const name = typeof sc?.name === 'string' ? sc.name.slice(0, 60) : '';
       let ps: Placement<AnyPiece>[];
-      try { ps = parseOrders(sc?.placements, s); } catch (err) { return { name, legal: false, why_not: (err as Error).message }; }
+      try { ps = parseOrders(sc?.placements, s, me); } catch (err) { return { name, legal: false, why_not: (err as Error).message }; }
       const why = e.refuse(board, s, me, snap, pts, ps);
       if (why) return { name, legal: false, why_not: why };
       const w = e.clone(board);
@@ -778,11 +927,11 @@ export interface Belief { towers?: { x: number; y: number }[]; squares?: { x: nu
  * converging launches for a target square"). From the side's view only, with no guesses about the dark: each option
  * is checked by flying its three launches together in the engine (help.ts converging). Stores nothing.
  */
-export function symbolLaunches(m: SoloMatch, args: { x: unknown; y: unknown }) {
+export function symbolLaunches(m: SoloMatch, args: { x: unknown; y: unknown }, me: Side = PERSON) {
   if (m.end) throw new SoloError('the match is over');
   if (!Number.isInteger(args.x) || !Number.isInteger(args.y)) throw new SoloError('x and y must be whole numbers');
   const { s, e } = rulesOf(m);
-  const me = PERSON, view = e.fog(m.w, s, me), x = args.x as number, y = args.y as number;
+  const view = e.fog(m.w, s, me), x = args.x as number, y = args.y as number;
   const pts = pointsOf(m, s), cost = 3 * (s.costSeed ?? 0);
   const r = converging(e, e.clone(view), s, me, e.towers(view, me), pts, x, y);
   return {

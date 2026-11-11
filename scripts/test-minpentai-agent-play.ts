@@ -21,7 +21,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { verdict, type AnyPiece, type Kills, type Placement } from '../src/lib/minpentai/versions/engine';
-import { CURRENT, DRAFTS, REVISIONS, RULESETS, draftInfo, endText, fromRows, ownOf, stillStanding, takeTurnOnPage, turnFrames, turnSummaries, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { joinPractice, linkSide, newPractice, runClock, sideOf, sightOf, CURRENT, DRAFTS, REVISIONS, RULESETS, draftInfo, endText, fromRows, ownOf, stillStanding, takeTurnOnPage, turnFrames, turnSummaries, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
 const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
@@ -31,16 +31,17 @@ const start = (family: 'book' | 'play', seed: number, level = 2) => newSolo({ id
 const json = (m: SoloMatch) => JSON.parse(JSON.stringify(m)) as SoloMatch;
 
 /** A scripted agent: from the view only, a tower toward the enemy if it can, else a glider east; it compares two plans with simulate first. */
-function scripted(m: SoloMatch) {
-  const v = viewFor(m);
+function scripted(m: SoloMatch, me: 'C' | 'A' = 'C') {
+  const v = viewFor(m, me);
+  const east = (a: [number, number], b: [number, number]) => (me === 'C' ? b[0] - a[0] : a[0] - b[0]) || a[1] - b[1];
   const cells = fromRows(v.can_place);
   if (!cells.length) return [];
-  const east = [...cells].sort((a, b) => b[0] - a[0] || a[1] - b[1]);
+  const ahead = [...cells].sort(east);
   const plans: Record<string, unknown[]> = {
-    tower: [{ piece: 'tower', x: east[0][0], y: east[0][1] }],
-    glider: [{ piece: 'glider', x: east[0][0], y: east[0][1], dir: 'E' }],
+    tower: [{ piece: 'tower', x: ahead[0][0], y: ahead[0][1] }],
+    glider: [{ piece: 'glider', x: ahead[0][0], y: ahead[0][1], dir: me === 'C' ? 'E' : 'W' }],
   };
-  const sim = simulate(m, { scenarios: Object.entries(plans).map(([name, placements]) => ({ name, placements })) }) as { scenarios: { name: string; legal: boolean; result?: { my_towers: { now: number } } }[] };
+  const sim = simulate(m, { scenarios: Object.entries(plans).map(([name, placements]) => ({ name, placements })) }, me) as { scenarios: { name: string; legal: boolean; result?: { my_towers: { now: number } } }[] };
   const best = sim.scenarios.filter((s) => s.legal).sort((a, b) => (b.result!.my_towers.now - a.result!.my_towers.now))[0];
   return best ? plans[best.name] : [];
 }
@@ -735,6 +736,147 @@ playOut('play', 202);
   const end = instantReplays([{ board: b0, seen: null }, { board: b1, seen: null }], [12, 12], { ended: true });
   ok(end.length === 2 && end.some((x) => x.tier === 4 && x.at[0] === 9) && end.some((x) => x.tier === 1), 'after the end (the whole board), the last tower to fall is the final replay');
   ok(instantReplays([{ board: b0, seen: null }, { board: b1, seen: null }], [12, 12], { ended: true, only: 'big' }).every((x) => x.tier >= 3), '"big moments" keeps only towers and the end');
+}
+
+// ---------- 11. Practice matches between people (owner, 2026-11-03) ----------
+{
+  const t0 = '2026-11-03T10:00:00.000Z', at = (min: number) => new Date(Date.parse(t0) + min * 60_000).toISOString();
+  const mk = (pub: boolean, clock: '15m' | '4h' | '24h' = '15m') => newPractice({ id: pub ? 'tpract000001' : 'tpract000002', ruleset: 'book-2', seed: 211, person: 6786, name: '@owner', showName: true, agent: { id: null, name: 'Rook', model: { name: 'Model C', maker: 'Maker', weights: 'open' } }, clock, public: pub, now: t0 });
+  const { m, linkSecret, invite } = mk(false);
+  ok(!!invite && m.versus!.invite!.expires === Date.parse(t0) + 24 * 3600_000 && m.versus!.deadline === null, 'a private match: an invite valid 24 hours; no clock until someone joins');
+  const join = (o: Partial<Parameters<typeof joinPractice>[1]>) => joinPractice(m, { person: 777, name: '@guest', showName: false, agent: { id: null, name: 'Bishop', model: { name: 'Model A', maker: 'Other', weights: 'closed' } }, invite: invite!, now: at(1), ...o });
+  throwsLike(() => join({ invite: 'wrongwrongwrongwrong' }), /doesn't open/, 'a wrong invite is refused');
+  throwsLike(() => join({ now: at(25 * 60) }), /expired/, 'an expired invite is refused');
+  throwsLike(() => join({ person: 6786 }), /you created this match/, 'the creator can\'t join their own match');
+  const secretA = join({});
+  throwsLike(() => joinPractice(m, { person: 888, name: '@third', showName: false, agent: { id: null, name: 'X', model: null }, invite: invite!, now: at(2) }), /already has two players/, 'the invite is single use: nobody joins twice');
+  ok(linkSide(m, linkSecret) === 'C' && linkSide(m, secretA) === 'A' && linkSide(m, 'nonsensenonsensenonsense') === null, 'each player\'s live link opens their own side only');
+  ok(m.versus!.deadline === Date.parse(at(1)) + 15 * 60_000 && sideOf(m, 777) === 'A' && sideOf(m, 6786) === 'C' && sideOf(m, 5) === null, 'joined: the clock runs from now; each person has their side');
+  // Sealed orders: Cyan's final orders don't resolve the turn; Amber sees only that they're in, as a commitment.
+  const cOrders = parseOrders(scripted(m), rulesOf(m).s, 'C');
+  const rc = submit(m, { turn: 0, placements: cOrders, source: 'agent', final: true, now: at(2) }, 'C') as Record<string, unknown>;
+  const va = viewFor(m, 'A') as Record<string, any>;
+  ok(m.turn === 0 && rc.waiting_for !== undefined && va.opponent.sent_final_orders === true && va.opponent.commitment === m.pend.C!.commitment && va.my_orders === null && va.side === 'Amber', 'Cyan\'s final orders wait for Amber; Amber sees only that they are in, and their commitment');
+  ok(!JSON.stringify(va).includes(m.pend.C!.salt) && !('placements' in va.opponent), 'nothing of Cyan\'s orders reaches Amber but the commitment');
+  throwsLike(() => submit(m, { turn: 0, placements: [], source: 'agent', final: true, now: at(3) }, 'C'), /final orders for this turn are in/, 'final orders can\'t be changed');
+  throwsLike(() => submit(m, { turn: 0, placements: cOrders, source: 'agent', final: false, now: at(3) }, 'A'), /your own side only/, 'a side can\'t place the other side\'s pieces');
+  // Amber's view is her fog view: the same with every hidden Cyan piece removed.
+  const twinA = json(m), { e, s } = rulesOf(m), seeA = e.sees(twinA.w, s, 'A');
+  for (const k of Object.keys(twinA.w.tw)) if (twinA.w.tw[+k] === 'C' && !seeA.has(+k)) delete twinA.w.tw[+k];
+  for (const k of Object.keys(twinA.w.sq)) if (twinA.w.sq[+k].o === 'C' && !seeA.has(+k)) delete twinA.w.sq[+k];
+  twinA.w.gl = twinA.w.gl.filter((g) => g.o !== 'C' || seeA.has(e.K(g.x, g.y)));
+  ok(isDeepStrictEqual(JSON.parse(JSON.stringify(viewFor(m, 'A'))), JSON.parse(JSON.stringify(viewFor(twinA, 'A')))), 'Amber\'s view is the same with every hidden Cyan piece removed');
+  const aOrders = parseOrders([{ piece: 'tower', x: e.XY(e.L.towers.A[0])[0] - 2, y: e.XY(e.L.towers.A[0])[1] }], s, 'A');
+  const ra = submit(m, { turn: 0, placements: aOrders, source: 'person', final: true, now: at(4) }, 'A') as Record<string, any>;
+  ok(ra.resolved && m.turn === 1 && m.history[0].A.source === 'person' && m.history[0].C.commitment === rc.commitment && m.summary && m.versus!.summaryA && m.versus!.deadline === Date.parse(at(4)) + 15 * 60_000, 'with both in, the turn resolves; each side gets its own summary; the next turn\'s clock starts');
+  // The clock: Amber is away; when it runs out, the site computer plays her turn under her standing order.
+  setStanding(m, 'Keep my towers walled.', 'defend', 'A');
+  submit(m, { turn: 1, placements: [], source: 'agent', final: true, now: at(5) }, 'C');
+  ok(!runClock(m, at(10)) && m.turn === 1, 'before the clock runs out nothing is played');
+  ok(runClock(m, at(4 + 16)) && m.turn === 2 && m.history[1].A.source === 'site-computer' && m.history[1].A.clock === true && m.history[1].A.preset === 'defend' && m.history[1].C.source === 'agent', 'after it runs out, Amber\'s turn is played under her standing order, marked as the clock\'s');
+  ok(/clock ran out/.test(m.versus!.summaryA!.lines[0]) && (viewFor(m, 'A') as any).my_turns[1].clock_ran_out === true, 'Amber\'s summary and view say so');
+  // Both away for an hour: every overdue turn is played, then it waits.
+  const before = m.turn; runClock(m, at(4 + 16 + 60));
+  ok(m.turn > before + 2 && m.history.slice(before).every((h) => h.C.clock && h.A.clock), 'both away: each overdue turn is played for both, one clock at a time');
+  ok(checkComputer(json(m)).length === 0, 'every move the site computer made for either side follows from the record and the committed value');
+  resign(m, 'A');
+  ok(m.end?.win === 'C' && m.end.how === 'resigned', 'Amber resigns: Cyan wins');
+  const rec = recordOf(m) as Record<string, any>;
+  ok(rec.sides.C.name === '@owner' && !('name' in rec.sides.A) && rec.sides.A.model.label === 'self-reported' && /never counted/.test(rec.practice), 'the record: a name only where that player chose it, models self-reported, never counted');
+  // A public match: no invite, on the open list until someone joins.
+  const pub = mk(true).m;
+  ok(pub.versus!.invite === null && pub.versus!.public, 'a public match has no invite');
+  joinPractice(pub, { person: 999, name: '@open', showName: false, agent: { id: null, name: 'Y', model: null }, now: at(1) });
+  ok(pub.versus!.players.A === 999, 'anyone may join a public one');
+  // Solo matches are untouched: no versus, the computer still plays and replays.
+  const solo = start('book', 212).m;
+  ok(!solo.versus && sideOf(solo, 6786) === 'C' && (viewFor(solo) as any).opponent.kind === 'site computer', 'a solo match is as before');
+}
+
+// ---------- 12. Fog between people: twin practice matches, for each side (2026-11-11) ----------
+// Everything a side is told comes from its own view plus its own last-seen memory, in a match between people as against
+// the computer: matches that differ only out of one side's sight give that side the same view, summaries, big moments,
+// "they still have towers", sight and sandbox.
+{
+  type Me = 'C' | 'A';
+  const t0 = '2026-11-11T01:00:00.000Z', at = (min: number) => new Date(Date.parse(t0) + min * 60_000).toISOString();
+  const versus = (id: string, ruleset: RulesetName, seed: number) => {
+    const { m } = newPractice({ id, ruleset, seed, person: 6786, name: '@owner', showName: false, agent: { id: null, name: 'Rook', model: null }, clock: '24h', public: true, now: t0 });
+    joinPractice(m, { person: 777, name: '@guest', showName: false, agent: { id: null, name: 'Bishop', model: null }, now: t0 });
+    return m;
+  };
+  const sumOf = (x: SoloMatch, me: Me) => (me === 'C' ? x.summary : x.versus!.summaryA);
+  const told = (x: SoloMatch, me: Me) => JSON.parse(JSON.stringify({
+    view: { ...viewFor(x, me), my_orders: null }, stories: turnSummaries(x, me), still: stillStanding(x, me), sight: sightOf(x, me),
+    sim: x.end ? null : simulate(x, { scenarios: [{ name: 'wait', placements: [] }], steps: 12 }, me), summary: sumOf(x, me) ?? null,
+  }));
+  /** The real board with every piece of the other side that `me` can't see removed. */
+  const hide = (x: SoloMatch, me: Me) => {
+    const twin = json(x), { e, s } = rulesOf(x), them = me === 'C' ? 'A' : 'C', see = e.sees(twin.w, s, me);
+    for (const k of Object.keys(twin.w.tw)) if (twin.w.tw[+k] === them && !see.has(+k)) delete twin.w.tw[+k];
+    for (const k of Object.keys(twin.w.sq)) if (twin.w.sq[+k].o === them && !see.has(+k)) delete twin.w.sq[+k];
+    twin.w.gl = twin.w.gl.filter((g) => g.o !== them || see.has(e.K(g.x, g.y)));
+    for (const f of ['mir', 'fa'] as const) { const o = twin.w[f] as Record<number, { o: string }> | undefined; if (o) for (const k of Object.keys(o)) if (o[+k].o === them && !see.has(+k)) delete o[+k]; }
+    if (twin.w.sd) for (const k of Object.keys(twin.w.sd)) if (twin.w.sd[+k] === them && !see.has(+k)) delete twin.w.sd[+k];
+    if (twin.w.mw) twin.w.mw = twin.w.mw.filter((w) => w.o !== them || e.wallCells(w).some(([wx, wy], i) => w.c[i] && e.inb(wx, wy) && see.has(e.K(wx, wy))));
+    return twin;
+  };
+  for (const [ruleset, seed] of [['book-4', 311], ['book-2', 312]] as const) {
+    const m = versus(`tvs${ruleset.replace('-', '')}${seed}`.slice(0, 12).padEnd(12, '0'), ruleset, seed);
+    const hidden: Record<Me, boolean> = { C: true, A: true }, steps: Record<Me, boolean> = { C: true, A: true };
+    const twins: Record<Me, number> = { C: 0, A: 0 }, changed: Record<Me, number> = { C: 0, A: 0 };
+    let minute = 0;
+    while (!m.end && m.turn < 8) {
+      const when = at(++minute), { e, s } = rulesOf(m);
+      const orders = { C: parseOrders(scripted(m, 'C'), s, 'C'), A: parseOrders(scripted(m, 'A'), s, 'A') };
+      for (const me of ['C', 'A'] as const) {
+        const them: Me = me === 'C' ? 'A' : 'C';
+        // The whole of the other side out of sight removed: the same view, sight and sandbox now.
+        if (!isDeepStrictEqual(told(m, me), told(hide(m, me), me))) { hidden[me] = false; console.log('  hidden differs', ruleset, me, m.turn); }
+        // The turn ahead: the other side's squares changed where `me` sees nothing at any frame and no glider or wall
+        // comes near, then both sides play the same orders in both matches.
+        const pw = e.clone(m.w), seen = new Set<number>(), near = new Set<number>();
+        const mark = () => {
+          for (const k of e.sees(pw, s, me)) seen.add(k);
+          const around = (x: number, y: number) => { for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (e.inb(x + dx, y + dy)) near.add(e.K(x + dx, y + dy)); };
+          for (const g of pw.gl) around(g.x, g.y);
+          for (const w of pw.mw ?? []) for (const [x, y] of e.wallCells(w)) around(x, y);
+        };
+        mark();
+        e.apply(pw, s, orders);
+        mark();
+        const from = pw.step;
+        do { e.step(pw, s); mark(); } while (pw.step - from < s.every && !verdict(e, pw, s));
+        const a = json(m), b = json(m);
+        let n = 0;
+        for (let k = 0; k < e.W * e.H && n < 4; k++) {
+          if (seen.has(k) || near.has(k)) continue;
+          if (b.w.sq[k]?.o === them) { delete b.w.sq[k]; n++; } else if (e.empty(b.w, k) && !Object.keys(m.ls[me]).includes(String(k))) { b.w.sq[k] = { o: them, hp: 1 }; n++; }
+        }
+        if (!n) continue;
+        changed[me] += n;
+        for (const x of [a, b]) for (const side of ['C', 'A'] as const) submit(x, { turn: x.turn, placements: orders[side], source: 'agent', final: true, now: when }, side);
+        if (isDeepStrictEqual(told(a, me), told(b, me))) twins[me]++;
+        else { steps[me] = false; console.log('  differs', ruleset, me, 'turn', m.turn, JSON.stringify(sumOf(a, me)?.lines), JSON.stringify(sumOf(b, me)?.lines)); }
+      }
+      for (const side of ['C', 'A'] as const) submit(m, { turn: m.turn, placements: orders[side], source: 'agent', final: true, now: when }, side);
+      // Each side's memory of its own pieces: where it sees, what it sees (as solo matches keep it).
+      for (const me of ['C', 'A'] as const) {
+        const see = e.sees(m.w, s, me), mem = ownOf(m)[me];
+        for (const k of see) { const q = m.w.sq[k]; if ((q?.o === me) !== (k in mem.sq) || (q?.o === me && mem.sq[k].hp !== q.hp)) steps[me] = false; }
+      }
+    }
+    ok(!!m.own && m.remember === 1 && m.history.length > 2, `${ruleset} versus: the match keeps each side's own-pieces memory (own, remember) like a solo match`);
+    for (const me of ['C', 'A'] as const) {
+      const name = me === 'C' ? 'Cyan' : 'Amber';
+      ok(hidden[me], `${ruleset} versus, ${name}: every turn, the view, sight, "they still have towers", summaries and sandbox are the same with every hidden piece of the other side removed`);
+      ok(steps[me] && twins[me] > 0 && changed[me] > 0, `${ruleset} versus, ${name}: every turn's summary, stories, big moments and view are the same with the other side's squares out of sight changed (${twins[me]} turns, ${changed[me]} squares), and its own-pieces memory is what it sees`);
+    }
+    // The end, said from each side, and the record replays.
+    resign(m, 'A');
+    ok(/your opponent resigned/.test(endText(m, 'C')!) && /you resigned/.test(endText(m, 'A')!) && endText(m, 'C', '@guest')!.includes('@guest'), `${ruleset} versus: the end line is said from each side`);
+    ok(checkComputer(json(m)).length === 0, `${ruleset} versus: the record checks`);
+  }
 }
 
 console.log(`minpentai agent play: ${checks} checks passed`);

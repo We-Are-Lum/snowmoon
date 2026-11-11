@@ -22,7 +22,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   if (!Number.isInteger(turn)) return NextResponse.json({ error: 'turn missing' }, { status: 400 });
   if (!playFor(person)) return NextResponse.json({ error: 'no match of yours with that id' }, { status: 404 });
   try {
-    const out = await changeFor(person, id, (m) => takeTurnOnPage(m, { turn, now: new Date().toISOString() }));
+    const out = await changeFor(person, id, (m, side) => takeTurnOnPage(m, { turn, now: new Date().toISOString() }, side));
     return NextResponse.json({ ok: true, resolved: 'resolved' in out ? out.resolved : null });
   } catch (e) {
     if (e instanceof ToolInputError) return NextResponse.json({ error: e.message }, { status: /no match of yours/.test(e.message) ? 404 : 400 });
