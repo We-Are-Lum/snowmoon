@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { playFor } from '~/lib/agents/core';
-import { canPlaceList, draftInfo, endText, linkOpens, sightOf, stillStanding, turnFrames, turnSummaries, viewFor } from '~/lib/minpentai/agent-play/solo';
+import { PERSON, canPlaceList, draftInfo, endText, linkOpens, sightOf, stillStanding, turnFrames, turnSummaries, viewFor } from '~/lib/minpentai/agent-play/solo';
 import { load } from '~/lib/minpentai/agent-play/store';
 import { settle } from '~/lib/minpentai/agent-play/quiet';
 import { MinpentaiTags } from '../../mp-tags';
@@ -44,13 +44,16 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
   const draft = draftInfo(m);
   const book = m.ruleset.startsWith('book');
   const latestTurn = m.history.at(-1)?.turn;
-  const sums = turnSummaries(m);
+  // The page's own wording of the summaries (owner, 2026-11-11): "You took this turn here, approving your AI's draft."
+  const sums = turnSummaries(m, PERSON, 'page');
   const last = v.my_turns.at(-1);
-  // The end says why (owner, 2026-11-04): "Over: you won on towers, 5 to 1, at step 144."
+  // The end says why (owner, 2026-11-04; worded 2026-11-11): "Over: you won with more towers standing, 3 to 1, at step 144."
   const status = end
     ? `Over: ${endText(m)}.`
     : `Turn ${v.turn}${v.phase === 'setup' ? ' (setup)' : ''} · step ${v.step}/${v.max_steps} · you (Cyan) v the site computer, level ${v.opponent.level}`;
-  const tally = 'towers_destroyed' in v && v.towers_destroyed ? `destroyed ${v.towers_destroyed.by_you}–${v.towers_destroyed.by_opponent}` : null;
+  // Towers destroyed, not towers left (owner, 2026-11-11): and while the match goes on, that they may have towers you
+  // haven't seen (fix 2; no count of theirs: the fog stays).
+  const tally = 'towers_destroyed' in v && v.towers_destroyed ? `towers destroyed ${v.towers_destroyed.by_you}–${v.towers_destroyed.by_opponent}${end ? '' : ' (they may have towers you haven’t seen)'}` : null;
   const past = v.my_turns.filter((t) => t.turn !== latestTurn).reverse().map((t) => ({
     turn: t.turn, step: t.step, line: brief(t.placements as Move[]), kills: sums.find((x) => x.turn === t.turn)?.kills ?? 0, lost: sums.find((x) => x.turn === t.turn)?.lost ?? 0,
     // A turn the person approved on this page reads as theirs, drafted by whom (owner, 2026-11-04: not "you placed").
@@ -67,7 +70,7 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
           draft={draft && !draft.final ? { placements: draft.placements, cost: draft.cost, points: draft.points, warnings: draft.warnings, note: draft.note, who: cap(WHO[draft.source] ?? draft.source) } : null}
           canTake={!end} turn={v.turn} points={v.points}
           latest={latestTurn !== undefined ? { turn: latestTurn, frames: turnFrames(m, latestTurn, !!end), whole: !!end } : null}
-          summary={v.last_turn_summary?.lines ?? null}
+          summary={sums.find((x) => x.turn === latestTurn)?.lines ?? null}
           big={sums.find((x) => x.turn === latestTurn)?.big ?? []}
           still={(m.kills.C > 0 || sums.some((x) => x.kills > 0)) ? stillStanding(m) : null}
         />
