@@ -85,15 +85,17 @@ export default async function About() {
         of the request. The image is shown to you as a draft, kept only on your device; it becomes public only if you publish
         it. The book&apos;s text is never sent to a model.
       </p>
-      {/* Model-drafted wording (the image gate, Neynar score; owner, 2026-10-09). */}
+      {/* Model-drafted wording (the image gate, Neynar score; owner, 2026-10-09; decisions not scores, branch check-decisions, 2026-11-04, pending the owner's reread).
+          The assistant's words: A2 of docs/legal/assistant-any-account-step1.md, "reviewed by the coordinator, approved by the owner" (2026-11-05), as drafted. */}
       <p>
-        Neynar receives your Farcaster ID when you make an image, to look up its account score, which decides whether you can
-        make images. The score is kept for a day.
+        Neynar receives your Farcaster ID when you make an image or ask the assistant and your account has no current check, to
+        look up its account score, which decides whether you can make images and ask the assistant. The score isn&apos;t kept: only whether your account passed and when,
+        for up to 90 days (a day if it didn&apos;t pass).
       </p>
       <p>Rules: {RULES}</p>
       <p>
         A published image shows who made it, that it is AI-generated and not by the author, and its recipe with the exact prompt.
-        It is shown with your name (Farcaster name or wallet address). A Farcaster name is the one Farcaster&apos;s relay gave
+        It is shown with your name (Farcaster name, wallet address, Lens username or Bluesky handle). A Farcaster name is the one Farcaster&apos;s relay gave
         our server when you signed in on this website; otherwise our server asks Farcaster&apos;s public API (api.farcaster.xyz) for the username of your Farcaster
         ID, sending only the ID, and keeps the answer for a day.
         Its maker can hide it at once. Anyone signed in can report it: one report of anything sexual involving a minor hides it
@@ -107,9 +109,12 @@ export default async function About() {
         <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
       </p>
       <h2>Signing in</h2>
-      {/* Model-drafted wording; the same sentence is shown at the sign-in step (src/components/sign-in.tsx). */}
+      {/* Model-drafted wording. A1 of docs/legal/signin-release-2026-11-05.md, "reviewed by the coordinator, approved by
+          the owner" (2026-11-05), word for word; A2, the byline above, likewise. The assistant's words: A1 of
+          docs/legal/assistant-any-account-step1.md, "reviewed by the coordinator, approved by the owner" (2026-11-05), as drafted. */}
       <p>
-        Reading needs no account. Saving cards, liking, making images and asking the assistant need a Farcaster sign-in. Inside a
+        Reading needs no account. Saving cards and liking need a Farcaster sign-in, and the assistant a Farcaster, Lens or
+        Bluesky account that passes the site&apos;s check, or an account linked to one. Making images needs a sign-in. Inside a
         Farcaster app it happens by itself. On this website, {SIGN_IN_SERVICES.charAt(0).toLowerCase() + SIGN_IN_SERVICES.slice(1)}
       </p>
       <h2 id="services">Where it runs</h2>
@@ -118,7 +123,9 @@ export default async function About() {
           docs/wording-for-approval-2026-11-04.md section 11 on branch wording-for-approval). */}
       <p>
         Vercel hosts the site and sees your IP address and browser details, as any web host does. Cloudflare stores and serves
-        the pictures and audio. Supabase holds the database. A report or share link opens GitHub, Farcaster, X, Bluesky or
+        the pictures and audio. Supabase holds the database. OpenAI and Google receive, through Vercel AI Gateway, the prompts and
+        pictures for some of the project's own pictures and for a challenge picture someone makes with one of their closed models, and nothing about you, and neither may train on them (OpenAI
+        may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law; Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days). A report or share link opens GitHub, Farcaster, X, Bluesky or
         Lens, where what you post is public. When an image is reported, ntfy delivers us a short alert that carries no content
         and nothing about you. When someone adds a post to a version's page, our server asks Bluesky or Lens for that post,
         sending only its details, to check that it links there; it sends nothing about you, and your browser never contacts

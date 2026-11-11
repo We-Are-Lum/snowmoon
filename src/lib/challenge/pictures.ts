@@ -1,0 +1,173 @@
+import 'server-only';
+import type postgres from 'postgres';
+import { CHALLENGE, IMAGES, WORK_ID } from '../config';
+import { bookCharacter } from '../images/designs';
+import { refusedBases } from './bases';
+import { remixLines } from './lineage';
+import { momentById } from './moments';
+import { basesOf } from './rules';
+import { publishedStyles } from './make';
+
+/**
+ * The challenge's pictures (owner, 2026-11-05; docs/proposals/challenge-moments.md §2.1; the moments switched off,
+ * owner 2026-11-08): one picture of a challenge character (at one of the moments only while CHALLENGE.moments is on), made through the site's image pipeline from the remix screen
+ * (/challenge/make). What it is is in its recipe, which the server signed before publishing (the ticket's `challenge`,
+ * recorded as the recipe's params.challenge: the character remixed, the moment, and the picture it started from); its
+ * links say what it was built on: a `uses` link to the base sheet it started from, or a `remixed_from` link to the
+ * challenge picture it started from. No migration: the challenge tables and anchors take any element version.
+ *
+ * A picture counts as a remix for the challenge (picturesCount) when (with the moments on) its moment is one of the fifteen, its character is
+ * a challenge character (at any of the fifteen: owner, answer 4, "Surprise me" draws from all of them; answer 10, it
+ * counts for the character remixed, the others drawn from their current default looks), and its line reaches one of
+ * that character's bases: itself or a picture it was remixed from, step by step, `uses` a base (while the character
+ * has no bases yet, any sheet of that character).
+ * Read-only.
+ */
+type Sql = postgres.Sql | postgres.TransactionSql;
+
+export interface ChallengePicture {
+  versionId: string;
+  elementId: string;
+  /** The character remixed (CHALLENGE.characters' slug). */
+  character: string;
+  /** The moment's id (src/lib/challenge/moments.ts); '' for a picture made with the moments off (CHALLENGE.moments). */
+  moment: string;
+  /** The published style it was made in (its design element id), when its recipe records one. */
+  styleElement: string | null;
+  /** The version it started from (a base sheet or another challenge picture). */
+  from: string | null;
+  byName: string | null;
+  byFid: number;
+  thumb: string | null;
+  createdAt: string;
+  /** Its words, as written (the recipe's user prompt): shown on its page. */
+  words: string;
+  /** Hidden or not published: never listed. */
+  status: string;
+}
+
+const row = (r: Record<string, unknown>): ChallengePicture => {
+  const p = (r.params ?? {}) as { challenge?: { character?: string; moment?: string; from?: string; style?: { elementId?: string | null } }; by_name?: string; user_prompt?: string };
+  return {
+    versionId: String(r.version_id), elementId: String(r.element_id), character: p.challenge?.character ?? '', moment: p.challenge?.moment ?? '',
+    styleElement: p.challenge?.style?.elementId ?? null,
+    from: p.challenge?.from ?? null, byName: p.by_name ?? null, byFid: Number(r.created_by_fid), thumb: (r.asset_url as string | null) ?? null,
+    createdAt: new Date(r.created_at as string).toISOString(), words: p.user_prompt ?? '', status: String(r.status),
+  };
+};
+
+/**
+ * Every published challenge picture of the six, newest first, or one by its version. With the moments on, only those at
+ * one of the fifteen; with them off (CHALLENGE.moments; owner, 2026-11-08), a picture needs no moment (one made with a
+ * moment is still a challenge picture, shown without it).
+ */
+export async function challengePictures(sql: Sql, opts: { versionId?: string; includeHidden?: boolean; momentsOn?: boolean } = {}): Promise<ChallengePicture[]> {
+  const momentsOn = opts.momentsOn ?? CHALLENGE.moments;
+  const rows = await sql`
+    select e.id as element_id, e.created_by_fid, e.status, v.id as version_id, v.asset_url, date_trunc('milliseconds', v.created_at) as created_at, r.params
+    from studio.elements e
+    join studio.element_versions v on v.element_id = e.id and v.version_no = 1
+    join studio.recipes r on r.id = v.recipe_id
+    where e.element_type = 'image' and e.work_id = ${WORK_ID} and r.params ? 'challenge'
+      ${opts.includeHidden ? sql`` : sql`and e.status = 'published'`}
+      ${opts.versionId ? sql`and v.id = ${opts.versionId}` : sql``}
+    order by date_trunc('milliseconds', v.created_at) desc, e.id desc`;
+  return rows.map(row).filter((p) => CHALLENGE.characters.includes(p.character) && (!momentsOn || momentById(p.moment) !== null));
+}
+
+/** One step of a picture's line: the pictures it was remixed from (nearest first), then itself. */
+type Step = { elementId: string; versionId: string };
+
+/**
+ * Whether each picture counts as a remix for the challenge: a valid moment and character (checked by
+ * challengePictures), and its line reaches one of its character's bases through `uses` (a base by its element or
+ * version id; a refused base doesn't count). While the character has no bases yet, a `uses` link to any published sheet
+ * of that character counts, as sheets did before the bases.
+ */
+export async function picturesCount(sql: Sql, pics: ChallengePicture[], bases: Record<string, readonly string[]> = CHALLENGE.bases): Promise<Map<string, boolean>> {
+  const out = new Map<string, boolean>(pics.map((p) => [p.versionId, false]));
+  if (!pics.length) return out;
+  const lines = await remixLines(sql as postgres.Sql, pics.map((p) => p.elementId));
+  const steps = new Map<string, Step[]>(pics.map((p) => [p.versionId, [{ elementId: p.elementId, versionId: p.versionId }, ...(lines.get(p.elementId) ?? [])]]));
+  const all = [...new Set([...steps.values()].flat().map((s) => s.versionId))];
+  const used = await sql<{ from_version_id: string; to_version: string; to_element: string; entity: string }[]>`
+    select l.from_version_id::text, tv.id::text as to_version, te.id::text as to_element, en.name as entity
+    from studio.links l
+    join studio.element_versions tv on tv.id = l.to_version_id
+    join studio.elements te on te.id = tv.element_id and te.element_type = 'design' and te.status = 'published'
+    join studio.entities en on en.id = te.entity_id and en.kind = 'character'
+    where l.kind = 'uses' and l.from_version_id in ${sql(all)}`;
+  const refused = await refusedBases(sql, bases);
+  for (const p of pics) {
+    const name = bookCharacter(p.character)?.name;
+    const picked = basesOf(p.character, bases).filter((id) => !refused.has(id));
+    const anyBase = basesOf(p.character, bases).length === 0;
+    const mine = new Set(steps.get(p.versionId)!.map((s) => s.versionId));
+    out.set(p.versionId, used.some((u) => mine.has(u.from_version_id) && u.entity === name && (anyBase || picked.includes(u.to_version.toLowerCase()) || picked.includes(u.to_element.toLowerCase()))));
+  }
+  return out;
+}
+
+/**
+ * What the remix screen starts from (/challenge/make?from=<version>): one of a challenge character's published sheets
+ * (a base, or before the bases are picked its newest sheet) by its front view, or a published challenge picture. Null
+ * for anything else. `sha256` is the reference picture's, so the server reads exactly the bytes it names.
+ */
+export type Source =
+  | { kind: 'sheet'; versionId: string; character: string; url: string; sha256: string; width: number; height: number; text: string; title: string; by: string | null; byFid: number; versionNo: number; moment: null; styleElement: string | null }
+  | { kind: 'picture'; versionId: string; character: string; url: string; sha256: string; width: number; height: number; moment: string; by: string | null; byFid: number; styleElement: string | null };
+
+export async function sourceOf(sql: Sql, versionId: string, opts: { anySheet?: boolean } = {}): Promise<Source | null> {
+  if (!/^[0-9a-f-]{36}$/i.test(versionId)) return null;
+  const [d] = await sql`
+    select v.id, v.body, v.version_no, e.created_by_fid, en.name from studio.element_versions v
+    join studio.elements e on e.id = v.element_id join studio.entities en on en.id = e.entity_id
+    where v.id = ${versionId} and e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and en.kind = 'character'`;
+  if (d) {
+    const character = CHALLENGE.characters.find((s) => bookCharacter(s)?.name === String(d.name));
+    const b = (d.body ?? {}) as { views?: { front?: { url: string; sha256: string; recipe?: { width?: number; height?: number; style?: { text?: string } | null } } }; text?: string; title?: string; by_name?: string | null; style?: { version_id?: string } | null };
+    const f = b.views?.front;
+    if (!character || !f) return null;
+    // Once the character's bases are picked, only a base is a sheet to start from (by its element or version id).
+    const picked = basesOf(character);
+    if (picked.length && !opts.anySheet) {
+      const [e] = await sql<{ element_id: string }[]>`select element_id::text from studio.element_versions where id = ${versionId}`;
+      if (!picked.includes(String(d.id).toLowerCase()) && !picked.includes(String(e?.element_id ?? '').toLowerCase())) return null;
+    }
+    // Its style (body.style.version_id), as its design element, so the remix screen can start on it (owner, 2026-11-08).
+    const sv = b.style?.version_id && /^[0-9a-f-]{36}$/i.test(b.style.version_id) ? b.style.version_id : null;
+    const [st] = sv ? await sql<{ element_id: string }[]>`select element_id::text from studio.element_versions where id = ${sv}` : [];
+    // A base made in a style that wasn't published when it went up (the launch bases: body.style null, the front's recipe
+    // recording the style's text; owner, 2026-11-09): the published style with exactly that text, once there is one
+    // ("Animated series"), so a remix starts in its base's own look.
+    const recipeText = !st && typeof f.recipe?.style?.text === 'string' ? f.recipe.style.text.trim() : '';
+    const byText = recipeText ? (await publishedStyles(sql as never).catch(() => [])).find((s) => s.text.trim() === recipeText) : undefined;
+    return { kind: 'sheet', versionId: String(d.id), character, url: f.url, sha256: f.sha256, width: f.recipe?.width ?? 576, height: f.recipe?.height ?? 768, text: b.text ?? '', title: b.title ?? '', by: b.by_name ?? null, byFid: Number(d.created_by_fid), versionNo: Number(d.version_no), moment: null, styleElement: st?.element_id ?? byText?.elementId ?? null };
+  }
+  const [p] = await challengePictures(sql, { versionId });
+  if (!p || !p.thumb) return null;
+  const [v] = await sql<{ asset_sha256: string }[]>`select asset_sha256 from studio.element_versions where id = ${versionId}`;
+  return { kind: 'picture', versionId: p.versionId, character: p.character, url: p.thumb, sha256: v.asset_sha256, width: IMAGES.size.width, height: IMAGES.size.height, moment: p.moment, by: p.byName, byFid: p.byFid, styleElement: p.styleElement };
+}
+
+/**
+ * A character's current default look (owner, answer 10, and the accounts session, 2026-11-05: "drawn from their CURRENT
+ * DEFAULT LOOKS"): the published sheet CHALLENGE.defaultLooks names for the character (an element id, at its newest
+ * version, or a version id); without one, its first base; before the bases are picked, its newest published sheet. Only
+ * for the site's own pictures: the other characters in a moment, sent as reference pictures. The hub still shows a
+ * character's bases in a fresh random order (P5g); this names no base as the default there. Null when there is none.
+ */
+export async function defaultLook(sql: Sql, character: string, looks: Record<string, string | null> = CHALLENGE.defaultLooks): Promise<Extract<Source, { kind: 'sheet' }> | null> {
+  const name = bookCharacter(character)?.name;
+  if (!name) return null;
+  const set = looks[character] ?? null;
+  const want = set && /^[0-9a-f-]{36}$/i.test(set) ? set.toLowerCase() : (basesOf(character)[0] ?? null);
+  const rows = await sql`
+    select v.id from studio.element_versions v join studio.elements e on e.id = v.element_id join studio.entities en on en.id = e.entity_id
+    where e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and en.kind = 'character' and en.name = ${name}
+      ${want ? sql`and (v.id::text = ${want} or e.id::text = ${want})` : sql``}
+    order by (v.id::text = ${want ?? ''}) desc, v.version_no desc, v.created_at desc limit 1`;
+  if (!rows[0]) return null;
+  const s = await sourceOf(sql, String(rows[0].id), { anySheet: true });
+  return s?.kind === 'sheet' ? s : null;
+}

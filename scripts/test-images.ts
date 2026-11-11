@@ -119,7 +119,8 @@ const identity = await sql`select table_name, column_name from information_schem
   and (is_identity = 'YES' or column_default like 'nextval%')`;
 check('no row numbers on image_costs or image_asks', identity.length === 0, JSON.stringify(identity));
 const askCols = (await cols('image_asks')).map((c) => String(c.column_name)).sort().join(',');
-check('image_asks holds only the FID and the time', askCols === 'at,fid', askCols);
+// With 0040_remix_model_choice.sql (branch remix-model-choice), also which pool the row counts in ('open' or 'closed'): still no person beyond the FID.
+check('image_asks holds only the FID, the time and its pool', askCols === 'at,fid' || askCols === 'at,fid,pool', askCols);
 
 // The caps.
 for (let i = 0; i < IMAGES.generationsPerDay - 1; i++) {

@@ -131,8 +131,11 @@
 
 /* 9d */
 /* 9d, as in the prototype: centred in the panel. */
-.as-signed-out { display: flex; flex-direction: column; gap: 16px; }
-.as-signed-out > * { margin: 0; }
+.as-signed-out, .as-refused { display: flex; flex-direction: column; gap: 16px; }
+.as-signed-out > *, .as-refused > * { margin: 0; }
+.as-refused .as-body { font-size: 17px; line-height: 1.45; color: var(--body); text-wrap: pretty; }
+.as-refused .as-signin { margin-top: 6px; }
+.panel .as:has(.as-refused) { justify-content: center; padding: 0 30px 24px; }
 .as-signed-out h1 { font-size: 30px; line-height: 1.15; margin: 0; }
 .as-signed-out .as-body { font-size: 17px; line-height: 1.45; color: var(--body); text-wrap: pretty; }
 .as-signed-out .as-signin { margin-top: 6px; } /* the same button as the menu's sign-in (owner, 2026-10-19) */

@@ -35,6 +35,9 @@ export interface Frame {
   createdAt: string;
 }
 
+/** How a frame names its maker, after the linked-wallet credit (src/lib/wallet/credit.ts): the frame page and the admin activity page. */
+export const frameByline = (f: Pick<Frame, 'byName' | 'person'>) => (f.byName ? (f.person < 0 ? f.byName : `@${f.byName}`) : f.person > 0 ? `FID ${f.person}` : 'a wallet account');
+
 const testStore = () => (testFakes() && process.env.REMIX_TEST_STORE ? process.env.REMIX_TEST_STORE : null); // never on Vercel (testFakes)
 export const frameStorageReady = () => Boolean(testStore()) || storageReady();
 

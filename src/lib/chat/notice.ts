@@ -21,12 +21,20 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: '49f57678bb4d379f',
+  reviewedFor: '70a28a9c8ee48471',
   /** Who did that reread: the coding agent, or the owner. */
-  by: 'owner (FID 6786)',
-  on: '2026-10-24',
+  by: 'agent',
+  on: '2026-11-05',
   note:
-    'Reread by the owner (FID 6786) on 2026-10-24 ("#36: stamp it"), words unchanged, for #36: the chat routes now take a ' +
+    'Reviewed by the coding agent (Claude, a closed model by Anthropic) on 2026-11-05, for branch assistant-any-account ' +
+    '(step 1): the notice\'s new words match how the chat now works. The routes go through src/lib/chat/gate.ts with ' +
+    'ASSISTANT.anyAccount on: every account passes its network\'s check (Neynar, the Lens score, the Bluesky check), a ' +
+    'Lens or Bluesky account not linked to a FID asks under its own account, and questions are counted with that account ' +
+    '(item 4, "with your account"); cost records stay daily totals with no account (0007). No new service receives ' +
+    'questions. The words themselves are the owner\'s approval of 2026-11-05 (N1 of docs/legal/assistant-any-account-step1.md, ' +
+    'with the owner\'s last sentence; "reviewed by the coordinator, approved by the owner"), recorded in ownerReread (P6f). ' +
+    'Before that: reread by the coding agent on 2026-11-05 (fingerprint 40720350e2e80a2b, words unchanged) for the gate with the switch off. ' +
+    'Previous reread: Reread by the owner (FID 6786) on 2026-10-24 ("#36: stamp it"), words unchanged, for #36: the chat routes now take a ' +
     'wallet linked to a FID as that FID (getPerson) and answer an unlinked wallet 403. The notice still holds: questions are ' +
     'counted "under your Farcaster ID", which for a linked wallet is the FID it is linked to; nothing new is sent or kept. ' +
     'Previous reread: Reread by the owner (FID 6786) on 2026-10-14 ("Stamp it"), words unchanged, for the glossary pointers ' +
@@ -42,7 +50,9 @@ export const NOTICE_REVIEW: {
     'The owner (FID 6786) reread and approved all four items as worded here on 2026-10-08, after applying 0007.',
   /** The words (noticeKey of the items as shown now) the owner last reread, and when. */
   // 2026-10-15: item 3's heading "(not the Grok of X)", the owner's addition, reread as shown ("ok good").
-  ownerReread: { words: '1xrxl4h', on: '2026-10-15' },
+  // 2026-11-05: item 4's new words (N1 of docs/legal/assistant-any-account-step1.md, with the owner's last sentence),
+  // "reviewed by the coordinator, approved by the owner". The words before were 1xrxl4h.
+  ownerReread: { words: '1ijrpib', on: '2026-11-05' },
 };
 
 export function noticeItems({ host, provider, model }: { host: string | null; provider: string | null; model: string }): [string, string][] {
@@ -59,7 +69,7 @@ export function noticeItems({ host, provider, model }: { host: string | null; pr
     [
       'Your questions are saved only on this device',
       `They are sent to ${provider}${host ? ` (or through ${host} when ${provider} is busy)` : ''} to be answered, and never published. Another device won’t have them. ` +
-        'The app records only how many you ask and when, under your Farcaster ID, to count the daily limit. Cost records are kept without your ID.',
+        'The app records only how many you ask and when, with your account, to count the daily limit. Cost records aren’t linked to your account.',
     ],
   ];
 }

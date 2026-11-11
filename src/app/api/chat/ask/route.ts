@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getPerson } from '~/lib/auth';
+import { getPerson, signedInAs } from '~/lib/auth';
+import { mayAsk } from '~/lib/chat/gate';
 import { db } from '~/lib/db';
 import { AskError, ask, type AskInput } from '~/lib/chat/ask';
 import { complete, directKey, gatewayToken, promptFile, servingAllowed, ModelUnavailable } from '~/lib/chat/model';
@@ -10,21 +11,23 @@ import { complete, directKey, gatewayToken, promptFile, servingAllowed, ModelUna
  * Body: { question, limit, attached?, history? }.
  */
 export async function POST(request: Request) {
-  // A Farcaster sign-in, or a wallet linked to a FID, asks as that FID (owner, 2026-10-22: Luis, signed in with his linked
-  // wallet, was asked to sign in again); the limit is still counted per Farcaster account. A wallet not linked to one is
-  // answered 403, not 401, so the browser keeps its wallet session.
-  const fid = await getPerson(request);
-  if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to use the assistant' }, { status: 401 });
-  if (fid < 0) return NextResponse.json({ error: 'Sign in with Farcaster to use the assistant' }, { status: 403 });
+  // A Farcaster sign-in, or a wallet, Lens or Bluesky account linked to a FID, asks as that FID (owner, 2026-10-22: Luis,
+  // signed in with his linked wallet, was asked to sign in again; 2026-11-05: Lens and Bluesky the same). Who else may ask,
+  // and the network check at a question, is src/lib/chat/gate.ts (ASSISTANT). A refusal is 403 (or 503 when a check
+  // can't be reached), not 401, so the browser keeps its session; it uses no question.
+  const person = await getPerson(request);
+  if (person === null) return NextResponse.json({ error: 'Sign in to use the assistant' }, { status: 401 });
   const sql = db();
   const token = gatewayToken(request);
   if (!sql || (!token && !directKey()) || !servingAllowed()) return NextResponse.json({ error: 'The assistant is not available on this deployment' }, { status: 503 });
   try {
+    const gate = await mayAsk(sql, person, { lookUp: true, signedInAs: signedInAs(request) });
+    if (!gate.ok) return NextResponse.json({ error: gate.error, reason: gate.reason, account: gate.account }, { status: gate.status });
     const input = (await request.json()) as AskInput;
     const result = await ask(
       {
         sql,
-        fid,
+        fid: person,
         complete: (model, messages, opts) => complete(token, model, messages, opts),
         systemPrompt: promptFile('chat-ask.md'),
         guardPolicy: promptFile('chat-guard.md'),

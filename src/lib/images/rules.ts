@@ -29,5 +29,5 @@ export function blockedName(prompt: string): string | null {
 }
 
 /** The rules shown above Generate (decision 9: shown on the screen, not part of the hashed consent). */
-export const RULES = 'No real people. No sexual content. Nothing violent or hateful. No characters or logos from other works. Don’t ask for words in the picture.';
+export const RULES = 'No real people. No sexual content. Nothing violent or hateful. No characters or logos from other works. Don’t ask for words in the picture. No self-harm, extremism or election campaigning. Describe styles by look, not by artist, studio or film.';
 

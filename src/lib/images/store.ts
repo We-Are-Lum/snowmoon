@@ -1,6 +1,37 @@
 import 'server-only';
 import { CopyObjectCommand, DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { IMAGES } from '../config';
+import { mkdirSync, readFileSync, writeFileSync, copyFileSync, rmSync, existsSync } from 'node:fs';
+import path from 'node:path';
+import { IMAGES, REHEARSAL } from '../config';
+
+/**
+ * The rehearsal's own store (branch contest, 2026-11-04): under the rehearsal switch only (REHEARSAL.on: this machine,
+ * never on Vercel, a database on this machine) and with REHEARSAL_STORE set to a folder, every picture is kept in that
+ * folder instead of R2, and served by /api/rehearsal/file/<key> on that server (R2_IMAGES_PUBLIC_URL points there). So
+ * a rehearsal writes nothing to the real buckets. `public/` and `private/` stand in for the two buckets.
+ */
+export function rehearsalStore(): string | null {
+  const dir = process.env.REHEARSAL_STORE;
+  return REHEARSAL.on && dir && path.isAbsolute(dir) ? dir : null;
+}
+/** A key the rehearsal store accepts: the readers' images and the rehearsal's seeded bases, nothing else. */
+export const REHEARSAL_KEY = /^(images\/readers\/[0-9a-f]{32}\.jpg|brought-in\/[A-Za-z0-9/_.-]{1,200})$/;
+const localPath = (which: 'public' | 'private', key: string) => {
+  const dir = rehearsalStore();
+  if (!dir || !REHEARSAL_KEY.test(key) || key.includes('..')) throw new Error('rehearsal store: refused key');
+  return path.join(dir, which, key);
+};
+const localPut = (which: 'public' | 'private', key: string, bytes: Buffer) => {
+  const f = localPath(which, key);
+  mkdirSync(path.dirname(f), { recursive: true });
+  writeFileSync(f, bytes);
+};
+/** A file of the rehearsal store's public half, for its route; null when the switch is off or there's no such file. */
+export function rehearsalFile(key: string): Buffer | null {
+  if (!rehearsalStore() || !REHEARSAL_KEY.test(key) || key.includes('..')) return null;
+  const f = localPath('public', key);
+  return existsSync(f) ? readFileSync(f) : null;
+}
 
 /**
  * Readers' images on Cloudflare R2 (decision 25): published images in the public media bucket,
@@ -69,10 +100,15 @@ export async function checkStorage() {
 export const keyFor = (sha256: string) => `images/readers/${sha256.slice(0, 32)}.jpg`;
 
 export function storageReady(): boolean {
+  if (rehearsalStore()) return Boolean(process.env.R2_IMAGES_PUBLIC_URL);
   return missingStorage().length === 0;
 }
 
 export async function putPublic(sha256: string, bytes: Buffer, contentType: string): Promise<string> {
+  if (rehearsalStore()) {
+    localPut('public', keyFor(sha256), bytes);
+    return `${process.env.R2_IMAGES_PUBLIC_URL!.replace(/\/$/, '')}/${keyFor(sha256)}`;
+  }
   const { client, pub, url } = r2();
   const key = keyFor(sha256);
   await client.send(new PutObjectCommand({ Bucket: pub, Key: key, Body: bytes, ContentType: contentType, CacheControl: `public, max-age=${IMAGES.cacheSeconds}` }));
@@ -81,6 +117,14 @@ export async function putPublic(sha256: string, bytes: Buffer, contentType: stri
 
 /** Hide: keep the bytes privately, then remove the public copy (record and bytes kept, as docs/removal.md allows). */
 export async function moveToPrivate(sha256: string): Promise<void> {
+  if (rehearsalStore()) {
+    const from = localPath('public', keyFor(sha256));
+    if (existsSync(from)) {
+      localPut('private', keyFor(sha256), readFileSync(from));
+      rmSync(from);
+    }
+    return;
+  }
   const { client, pub, priv } = r2();
   const key = keyFor(sha256);
   await client.send(new CopyObjectCommand({ Bucket: priv, Key: key, CopySource: `${pub}/${key}` }));
@@ -89,6 +133,14 @@ export async function moveToPrivate(sha256: string): Promise<void> {
 
 /** Unhide (the author's own hide only): put the public copy back. */
 export async function restorePublic(sha256: string): Promise<void> {
+  if (rehearsalStore()) {
+    const from = localPath('private', keyFor(sha256));
+    if (existsSync(from)) {
+      mkdirSync(path.dirname(localPath('public', keyFor(sha256))), { recursive: true });
+      copyFileSync(from, localPath('public', keyFor(sha256)));
+    }
+    return;
+  }
   const { client, pub, priv } = r2();
   const key = keyFor(sha256);
   await client.send(new CopyObjectCommand({ Bucket: pub, Key: key, CopySource: `${priv}/${key}`, CacheControl: `public, max-age=${IMAGES.cacheSeconds}`, MetadataDirective: 'REPLACE', ContentType: 'image/jpeg' }));
@@ -100,11 +152,16 @@ export async function restorePublic(sha256: string): Promise<void> {
  * person while a draft and to anyone once published. Never written before the scan has passed.
  */
 export async function putPrivate(key: string, bytes: Buffer, contentType: string): Promise<void> {
+  if (rehearsalStore()) return localPut('private', key, bytes);
   const { client, priv } = r2();
   await client.send(new PutObjectCommand({ Bucket: priv, Key: key, Body: bytes, ContentType: contentType }));
 }
 
 export async function getPrivate(key: string): Promise<Buffer | null> {
+  if (rehearsalStore()) {
+    const f = localPath('private', key);
+    return existsSync(f) ? readFileSync(f) : null;
+  }
   const { client, priv } = r2();
   const out = await client.send(new GetObjectCommand({ Bucket: priv, Key: key })).catch(() => null);
   if (!out?.Body) return null;

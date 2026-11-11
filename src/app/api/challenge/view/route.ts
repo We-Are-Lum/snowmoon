@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
-import { challengeView } from '~/lib/challenge/view';
+import { challengeView, characterView } from '~/lib/challenge/view';
+import { rulesView } from '~/lib/challenge/rules-view';
+import { remixesView } from '~/lib/challenge/remixes-view';
 import { challengeVisibleTo } from '~/lib/challenge/visibility';
 
 /**
- * /challenge's data, for the admins' view while the challenge is admin-only (CHALLENGE.public off; owner, 2026-11-04).
+ * /challenge's data (or /challenge/rules' or /challenge/remixes', with ?page=), for the admins' view while the challenge is admin-only (CHALLENGE.public off; owner, 2026-11-04).
  * Everyone but an admin gets 404, as /challenge itself answers. Never cached: who asks decides the answer.
  */
 export const dynamic = 'force-dynamic';
@@ -13,5 +15,13 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: Request) {
   const fid = await getFid(request);
   if (!challengeVisibleTo(fid)) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-  return NextResponse.json(await challengeView(db()), { headers: { 'Cache-Control': 'private, no-store' } });
+  // ?page=rules or ?page=remixes (with the feed's ?character= and ?before=): those pages' data (owner, 2026-11-04:
+  // admins see /challenge/rules and /challenge/remixes too, exactly like /challenge).
+  const q = new URL(request.url).searchParams;
+  const page = q.get('page');
+  const sql = db();
+  // ?page=character&character=<slug>: a character's page (owner, 2026-11-08); 404 for a slug that isn't one of the six.
+  const view = page === 'rules' ? await rulesView(sql) : page === 'remixes' ? await remixesView(sql, { character: q.get('character'), before: q.get('before') }) : page === 'character' ? await characterView(sql, q.get('character') ?? '') : await challengeView(sql);
+  if (!view) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  return NextResponse.json(view, { headers: { 'Cache-Control': 'private, no-store' } });
 }

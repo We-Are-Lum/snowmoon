@@ -25,21 +25,24 @@ export const DB_LIMITS = {
   silentMs: Number(process.env.DB_SILENT_MS) || 30_000,
 };
 
-/** The socket for one connection: keepalive on, and closed if it goes silent for DB_LIMITS.silentMs. */
+/**
+ * The socket for one connection: keepalive on, and closed if it goes silent for DB_LIMITS.silentMs. Handed to
+ * postgres.js at once, before it connects: postgres.js listens for 'connect' and 'error' on it itself. (Until
+ * 2026-11-08 this waited for 'connect' and rejected on an error; postgres.js then never released that connection, so
+ * after a refused connect on each of the pool's connections every later query hung for good: one refusal with a local
+ * test database's single connection, six in a row against the pooler. test:try-again and test:db-limits L6 prove it.)
+ */
 function limitedSocket(o: { host: string[]; port: number[] }): Promise<net.Socket> {
-  return new Promise((resolve, reject) => {
-    const s = net.connect({ host: o.host[0], port: o.port[0] });
-    s.setKeepAlive(true, DB_LIMITS.keepAliveSeconds * 1000);
-    // Closed without an error on purpose: postgres.js then fails the waiting query (CONNECTION_CLOSED) and marks the
-    // connection closed in the same step, so the next query opens a new one. Destroyed with an error, the query failed
-    // first and a query arriving in between was handed the dead connection and hung (test:db-limits L3).
-    s.setTimeout(DB_LIMITS.silentMs, () => {
-      console.error(`database connection silent for ${DB_LIMITS.silentMs / 1000} s; closed so the next query reconnects`);
-      s.destroy();
-    });
-    s.once('connect', () => resolve(s));
-    s.once('error', reject);
+  const s = net.connect({ host: o.host[0], port: o.port[0] });
+  s.setKeepAlive(true, DB_LIMITS.keepAliveSeconds * 1000);
+  // Closed without an error on purpose: postgres.js then fails the waiting query (CONNECTION_CLOSED) and marks the
+  // connection closed in the same step, so the next query opens a new one. Destroyed with an error, the query failed
+  // first and a query arriving in between was handed the dead connection and hung (test:db-limits L3).
+  s.setTimeout(DB_LIMITS.silentMs, () => {
+    console.error(`database connection silent for ${DB_LIMITS.silentMs / 1000} s; closed so the next query reconnects`);
+    s.destroy();
   });
+  return Promise.resolve(s);
 }
 
 /** The options every connection here uses. `socket` and `max_pipeline` are postgres.js options its types leave out (src/connection.js). */

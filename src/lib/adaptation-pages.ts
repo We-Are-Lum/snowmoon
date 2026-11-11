@@ -1,4 +1,5 @@
 import 'server-only';
+import { isSocialPerson } from './people';
 import { db } from './db';
 import { forgetName, lookupFid, lookupName, NAME } from './names';
 import { linkedTo, walletsOf } from './wallet/credit';
@@ -371,6 +372,8 @@ export async function resolveHandle(raw: string): Promise<Resolved> {
 
 /** The handle for a person's URLs: their Farcaster name, or a wallet account's full address. Null for a FID with no name. */
 export async function handleFor(person: Person): Promise<string | null> {
+  // A Lens or Bluesky account (branch signin-lens-bluesky) has no /@ handle yet.
+  if (isSocialPerson(person)) return null;
   if (person < 0) return walletAddress(-person);
   const name = await lookupName(person);
   if (name) return name.toLowerCase();
