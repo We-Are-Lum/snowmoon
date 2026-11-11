@@ -1,17 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { authFetch, useAuth, useWalletSession } from '~/lib/client-auth';
+import { authFetch, useAuth, useSocialSession, useWalletSession } from '~/lib/client-auth';
 import { PublishedTextField } from '../publish-words';
 
 /** A signed-in person's note on a published version: public at once, with their name (owner, 2026-10-20). DRAFT wording. */
 export function NoteForm({ on }: { on: string }) {
   const auth = useAuth();
   const wallet = useWalletSession();
+  const social = useSocialSession();
   const [text, setText] = useState('');
   const [note, setNote] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  if (auth.kind !== 'signed-in' && !wallet) return <p className="you-note">Sign in to leave a note.</p>;
+  if (auth.kind !== 'signed-in' && !wallet && !social) return <p className="you-note">Sign in to leave a note.</p>;
   const send = async () => {
     setBusy(true);
     setNote(null);

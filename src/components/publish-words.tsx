@@ -27,6 +27,7 @@ export function PublishedTextField({
   onChange,
   rows = 3,
   maxLength,
+  placeholder,
 }: {
   id: string;
   label: string;
@@ -34,11 +35,13 @@ export function PublishedTextField({
   onChange: (v: string) => void;
   rows?: number;
   maxLength?: number;
+  /** Shown in the empty box (the remix challenge: "Describe what to change"). */
+  placeholder?: string;
 }) {
   return (
     <div className="published-field">
       <label htmlFor={id}>{label}</label>
-      <textarea id={id} rows={rows} value={value} maxLength={maxLength} onChange={(e) => onChange(e.target.value)} aria-describedby={`${id}-line`} />
+      <textarea id={id} rows={rows} value={value} maxLength={maxLength} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} aria-describedby={`${id}-line`} />
       <p id={`${id}-line`} className="publication-line">
         {PUBLICATION_LINE}
       </p>

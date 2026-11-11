@@ -16,6 +16,7 @@ export const SHARE_WORDING = {
   already: 'Already listed.',
   postedOnHead: 'Posted on',
   postedOnNote: 'Posts that link to this page, newest first, as their writers or the people who added them listed them. Shown as links only.',
-  seeIt: (network: string) => `See it on ${network}`,
+  /** Only a link, never a like, recast or reply count (branch contest, 2026-11-04; CHALLENGE.socialCounts off). Draft wording. */
+  seeIt: (network: string) => `See the conversation on ${network}`,
   remove: 'Remove',
 };

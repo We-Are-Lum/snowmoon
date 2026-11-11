@@ -1,7 +1,10 @@
 import { createHash } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { getFid } from '~/lib/auth';
+import { designPerson } from '~/lib/social/design-person';
+import { getSocial, getWallet } from '~/lib/auth';
+import { isSocialPerson } from '~/lib/people';
+import { socialByline } from '~/lib/social/byline';
 import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
@@ -20,6 +23,7 @@ import { IMAGE_WORDING } from '~/lib/images/wording';
 import { putPublic, storageReady } from '~/lib/images/store';
 import { readSampleTicket, type SampleTicket } from '~/lib/images/ticket';
 import { bylineName } from '~/lib/names';
+import { DEFAULT_SHEET_MODEL, isClosedModelId, oneChoice, sheetModel } from '~/lib/images/sheet-models';
 
 /**
  * Publish a style or a character sheet (step 4): a new style, a sheet for one of the book's
@@ -48,11 +52,15 @@ const recipeOf = (t: SampleTicket): DesignPicture['recipe'] => ({
   prompt: t.prompt, model: t.model, endpoint: t.endpoint, host: t.host, settings: t.settings, seed: t.seed, request_id: t.requestId,
   cost_usd: Number(t.costUsd.toFixed(4)), made_at: t.at, width: t.width, height: t.height, ...(t.references ? { references: t.references } : {}),
   ...(t.style ? { style: { version_id: t.style.versionId, title: t.style.title, text: t.style.text } } : {}),
-  checks: { prompt: t.guard, host_safety_checker: 'passed' }, assist: SAMPLE_ASSIST as unknown as DesignPicture['recipe']['assist'],
+  // A closed model returns no safety checker result: its maker's filters run where we can't see them (recipe-lines.ts).
+  checks: { prompt: t.guard, host_safety_checker: isClosedModelId(t.model) ? 'not run' : 'passed' }, assist: SAMPLE_ASSIST as unknown as DesignPicture['recipe']['assist'],
 });
 
 export async function POST(request: Request) {
-  const fid = await getFid(request);
+  // A Farcaster sign-in; a Bluesky one too once its check is on (src/lib/social/design-person.ts).
+  const fid = await designPerson(request);
+  // A wallet or another sign-in that can't make sheets: 403, since a 401 would sign it out.
+  if (fid === null && (getWallet(request) || getSocial(request))) return NextResponse.json({ error: 'Sign in with Farcaster to publish' }, { status: 403 });
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to publish' }, { status: 401 });
   if (!IMAGES.enabled) return no('Publishing is switched off for now', 503);
   const sql = db();
@@ -112,6 +120,13 @@ export async function POST(request: Request) {
       views[slot] = got;
     }
     if (!views.front) return no('Make the front view first', 400);
+    // One model per sheet (branch remix-model-choice): every view from the same choice, a closed one only on a remix
+    // of a character sheet while IMAGES.designs.modelChoice is on, and each view made by that choice's own model.
+    const choiceId = oneChoice(Object.values(views).map((x) => ({ choice: x!.t.choice })));
+    if (!choiceId) return no(IMAGE_WORDING.designs.models.mixed, 400);
+    const choice = sheetModel(choiceId);
+    if (!choice || (choiceId !== DEFAULT_SHEET_MODEL && (mode !== 'fork' || kind !== 'character'))) return no(IMAGE_WORDING.designs.models.notOffered, 400);
+    for (const [slot, x] of Object.entries(views)) if (x!.t.model !== (slot === 'front' ? choice.front : choice.views).id) return no(IMAGE_WORDING.designs.models.mixed, 400);
     // Every view in one published style, the front's (owner, 2026-10-14).
     const styleId = views.front.t.style?.versionId;
     if (!styleId) return no('The front view was made without a style. Choose a style and make it again.', 400);
@@ -129,13 +144,19 @@ export async function POST(request: Request) {
     const src = typeof body.from === 'string' ? await designByVersion(sql, body.from) : null;
     if (!src || src.kind !== kind) return no('No such design', 404);
     if (mode === 'version' && src.byFid !== fid) return no('Only its maker can add a version. Remix it to make your own.', 403);
+    // A remix's front view starts from the source's front view, as a reference picture (owner, 2026-11-04: "the source
+    // is always a reference picture"); its recipe records it. A source with no front view (text alone) has none to send.
+    const srcFront = kind !== 'style' ? src.shown.body.views?.front : undefined;
+    if (srcFront && views.front && !(views.front.t.source?.sha256 === srcFront.sha256 && views.front.t.references?.some((r) => r.sha256 === srcFront.sha256)))
+      return no('The front view wasn’t made from the sheet you’re remixing. Make it again here.', 400);
   }
 
   // The name is published too: the model check reads it (decision 1); the text was checked with its pictures.
   const named2 = await checkWords(sql, request, title);
   if (!named2.ok) return no(named2.error, named2.status);
 
-  const by = await bylineName(fid, body.nameProof);
+  // A Bluesky account is named by its handle, as checked at sign-in (src/lib/social/byline.ts).
+  const by = isSocialPerson(fid) ? (socialByline(request, fid) ?? { name: null, source: null }) : await bylineName(fid, body.nameProof);
   const put = async (p: { t: SampleTicket; bytes: Buffer }): Promise<DesignPicture> => ({ url: await putPublic(p.t.sha256, p.bytes, 'image/jpeg'), sha256: p.t.sha256, recipe: recipeOf(p.t) });
   const design: DesignBody = {
     title,
@@ -150,17 +171,17 @@ export async function POST(request: Request) {
   try {
     const out = await makeDesign(sql, { fid, mode, kind, styleName: mode === 'create' && kind === 'style' ? title : undefined, character: character ?? undefined, place: place ?? undefined, fromVersionId: typeof body.from === 'string' ? body.from : undefined, body: design });
     // The remix challenge: whether this version can be an entry is decided now, once, and stored (never on page view).
-    let challenge: { kind: 'entry' | 'unchecked'; text: string } | null = null;
+    let challenge: { kind: 'candidate' | 'unchecked'; text: string } | null = null;
     if (kind === 'character' && mode !== 'create') {
       await recordEligibility(sql, out.versionId, fid);
       // Its count and entries list change now, as after a mark (launch rehearsal, 2026-11-02: /challenge lagged up to a minute).
       revalidatePath('/challenge');
-      // The confirmation says whether it is now an entry, or that it won't count because Neynar didn't answer (owner, 2026-11-03).
+      // The confirmation says it can be submitted as an entry, or that it can't because Neynar didn't answer (owner, 2026-11-03; Submit, 2026-11-04).
       const st = await publishStanding(sql, out.versionId);
       const full = st ? (bookCharacter(st.character)?.name ?? st.character) : '';
       const name = full.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? full;
       // The words are written here, so the form's script carries none of the challenge's (owner, 2026-11-04).
-      if (st) challenge = { kind: st.kind, text: st.kind === 'entry' ? CW.publishedEntry(name) : CW.publishedUnchecked(name) };
+      if (st) challenge = { kind: st.kind, text: st.kind === 'candidate' ? CW.publishedCandidate(name) : CW.publishedUnchecked(name) };
     }
     revalidatePath('/references/designs');
     return NextResponse.json({ versionId: out.versionId, page: `/references/designs/${out.versionId}`, challenge });
