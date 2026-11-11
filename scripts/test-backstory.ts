@@ -47,12 +47,14 @@ const need = (c: boolean, what: string) => (c ? [] : [what]);
 const rules = (rb: typeof readBackstory) => [
   ...need(rb(undefined).ok && (rb(undefined) as { backstory: unknown }).backstory === null, 'no backstory is fine'),
   ...need((rb({ text: '  ' }) as { backstory: unknown }).backstory === null, 'blank is none'),
-  ...need((rb({ text: 'x'.repeat(BACKSTORY_MAX) }) as { backstory: { text: string } }).backstory.text.length === BACKSTORY_MAX, '400 characters are taken'),
-  ...need(!rb({ text: 'x'.repeat(BACKSTORY_MAX + 1) }).ok, '401 characters are refused'),
+  ...need((rb({ text: 'x'.repeat(BACKSTORY_MAX) }) as { backstory: { text: string } }).backstory.text.length === BACKSTORY_MAX, '2,000 characters are taken'),
+  ...need(!rb({ text: 'x'.repeat(BACKSTORY_MAX + 1) }).ok, '2,001 characters are refused'),
+  ...need(BACKSTORY_MAX === 2000 && readBackstory({ text: 'x'.repeat(2001) }).ok === false && (readBackstory({ text: 'x'.repeat(2001) }) as { error: string }).error === 'Write the backstory in up to 2,000 characters.', 'the limit isn\'t 2,000, or 2,001 isn\'t refused in the words'),
+  ...need(/maxLength=\{BACKSTORY_MAX\}/.test(read('src/components/challenge-backstory.tsx')) && /const bs = t\.challenge \? readBackstory\(body\.backstory\)/.test(read('src/app/api/images/publish/route.ts')), 'the field or the server doesn\'t use the limit'),
   ...need(!rb({ text: 42 }).ok && !rb('just a string').ok, 'only typed text is taken'),
   ...need(JSON.stringify((rb({ text: 'a', spoils: true }) as { backstory: unknown }).backstory) === '{"text":"a"}', 'something besides the typed text is kept (a spoiler tick)'),
 ];
-proven('B1 the box takes typed text up to 400 characters, nothing else', rules(readBackstory), rules(() => ({ ok: true, backstory: { text: 'x'.repeat(999), spoils: true } as never })));
+proven('B1 the box takes typed text up to 2,000 characters (owner, 2026-11-11), nothing else; the field and the server use the same limit', rules(readBackstory), rules(() => ({ ok: true, backstory: { text: 'x'.repeat(999), spoils: true } as never })));
 
 // B2
 const comp = read('src/components/challenge-backstory.tsx');

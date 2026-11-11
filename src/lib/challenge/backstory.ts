@@ -7,7 +7,8 @@
  * refusal lets the maker edit it or publish without it. No model writes, fills or suggests it (scripts/test-backstory.ts
  * proves it). Pure: no network, no database; the browser and the server both read it.
  */
-export const BACKSTORY_MAX = 400;
+/** At most this many characters (owner: 400 on 2026-11-09; 2,000 on 2026-11-11). The field, the server and the tests read it. */
+export const BACKSTORY_MAX = 2000;
 
 export const BACKSTORY_WORDING = {
   label: 'Backstory',
@@ -17,7 +18,7 @@ export const BACKSTORY_WORDING = {
   /** DRAFT wording (the agent's), for the refusal and the admin's button. */
   refused: 'The prompt check didn’t allow this backstory. Change it, or publish without it.',
   withoutIt: 'Publish without it',
-  tooLong: (n: number) => `Write the backstory in up to ${n} characters.`,
+  tooLong: (n: number) => `Write the backstory in up to ${n.toLocaleString('en-US')} characters.`,
 } as const;
 
 export interface Backstory {

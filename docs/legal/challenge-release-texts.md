@@ -478,3 +478,12 @@ The same on the preview and the picture's page, the owner's words exactly (repla
 at random from four for a closed model (setting {letter}); it describes the book at {blocks}.") No legal text changes;
 keys unchanged (privacy `k5nsr6`, terms `1finiyh`).
 
+## Backstory limit (2026-11-11, branch backstory-2000)
+
+The owner raised the backstory box's limit from 400 to 2,000 characters (the field, the server's check and the tests
+read one constant, `BACKSTORY_MAX`). The words that name it: the refusal, now "Write the backstory in up to 2,000
+characters." (v6: "… up to 400 characters."). No legal text names the limit (Privacy §4 says "If you add a backstory
+to a challenge picture, it is kept and shown with the picture."; Terms and consent don't mention it). For the owner: the
+rules line says "You can add a **short** backstory in your own words; …" — still the approved words, unchanged here;
+"short" may read oddly next to 2,000 characters.
+
