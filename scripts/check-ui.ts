@@ -1788,6 +1788,23 @@ async function checkChallengeLive() {
       await open(page, p);
       if (!(await page.locator(sel).count())) fail(`${p} @${w} (${scheme}, live): shows no ${sel}`);
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`${p} @${w} (${scheme}, live): scrolls sideways`);
+      // The assistant starts closed on the challenge's pages (owner, 2026-11-10): no panel at load; at 1440 one tap opens it.
+      if (await page.locator('.panel').isVisible()) fail(`${p} @${w} (${scheme}, live): the assistant panel is open at load`);
+      if (w >= 1200 && !(await page.locator('.panel-reopen').isVisible())) fail(`${p} @${w} (${scheme}, live): no control to open the assistant`);
+      if (w < 1200 && (await page.locator('.panel-reopen').isVisible())) fail(`${p} @${w} (${scheme}, live): an assistant panel control at phone width (there is no panel there)`);
+    }
+    if (w >= 1200) {
+      // One tap opens it; opened on a challenge page, it stays open there on this device; closed, it starts closed again.
+      await page.locator('.panel-reopen').click();
+      if (!(await page.locator('.panel').isVisible())) fail(`/challenge/entries @${w} (${scheme}, live): one tap doesn't open the assistant`);
+      await open(page, '/challenge/zei');
+      if (!(await page.locator('.panel').isVisible())) fail(`/challenge/zei @${w} (${scheme}, live): opened on a challenge page before, the assistant starts closed again`);
+      await page.locator('.panel-close').click();
+      await open(page, '/challenge');
+      if (await page.locator('.panel').isVisible()) fail(`/challenge @${w} (${scheme}, live): closed on a challenge page, the assistant opens again`);
+      // Elsewhere unchanged: open on a chapter unless closed there.
+      await open(page, '/chapter/1');
+      if (!(await page.locator('.panel').isVisible())) fail(`/chapter/1 @${w} (${scheme}, live): the assistant panel is no longer open by default outside the challenge`);
     }
     await page.close();
   }

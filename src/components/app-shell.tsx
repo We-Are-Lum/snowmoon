@@ -7,6 +7,7 @@ import { readingPlace } from '~/lib/glossary-view';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { inMiniApp, signOut, signOutSocial, signOutWallet, useAuth, useSocialSession, useWalletAlongside, useWalletSession, type AuthState } from '~/lib/client-auth';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
+import { CHALLENGE_PANEL_KEY, challengePanelOpen, isChallengePath } from '~/lib/panel';
 import { COMING, navItems, type NavItem } from '~/lib/nav';
 import { CHALLENGE } from '~/lib/config';
 import { isAdmin } from '~/lib/admins';
@@ -27,7 +28,9 @@ import '../app/assistant/assistant.css';
  * - 768–1199px: the rail collapsed to its expand control, opening over the page;
  * - 1200px and up: the rail open (wordmark, collapse, the destinations, the chapters with their
  *   state, theme, account) and the assistant beside the page, always there unless closed; on Minpentai's
- *   pages it starts closed, and opening or closing it there isn't remembered.
+ *   pages it starts closed, and opening or closing it there isn't remembered; on the remix challenge's pages it starts
+ *   closed unless the person opened it on a challenge page before on this device (challengePanelOpen).
+ *   Under 1200px there is no panel (the assistant is its own page), so nothing changes there.
  * Tells the Farcaster host the app is ready (once).
  */
 export function AppShell({ chapters, adaptations, intro, children }: { chapters: number; adaptations: number; intro: Intro; children: React.ReactNode }) {
@@ -39,6 +42,9 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
   const [panel, setPanel] = useState(true);
   // Minpentai pages start with the assistant closed (owner, 2026-10-20); opening it there lasts for this visit only.
   const [mpPanel, setMpPanel] = useState(false);
+  // The remix challenge's pages start with the assistant closed (owner, 2026-11-10), unless the person opened it on a
+  // challenge page before, on this device (remembered on the device only; closing it there forgets it).
+  const [chPanel, setChPanel] = useState(false);
   const [last, setLast] = useState(1);
   const [opened, setOpened] = useState<Set<number>>(new Set());
 
@@ -49,6 +55,7 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
     try {
       setCollapsed(localStorage.getItem('snowmoon.rail') === 'collapsed');
       setPanel(localStorage.getItem('snowmoon.panel') !== 'closed');
+      setChPanel(challengePanelOpen(localStorage.getItem(CHALLENGE_PANEL_KEY)));
     } catch {
       /* defaults */
     }
@@ -92,9 +99,10 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
   // The remix challenge's item: for everyone once the owner opens it (CHALLENGE.public), for admins before.
   const items = navItems(last, adaptations, CHALLENGE.public || (auth.kind === 'signed-in' && isAdmin(auth.fid)));
   const onMp = path === '/minpentai' || path.startsWith('/minpentai/');
-  const showPanel = (onMp ? mpPanel : panel) && !path.startsWith('/assistant');
-  const openPanel = () => (onMp ? setMpPanel(true) : (setPanel(true), remember('snowmoon.panel', null)));
-  const closePanel = () => (onMp ? setMpPanel(false) : (setPanel(false), remember('snowmoon.panel', 'closed')));
+  const onChallenge = isChallengePath(path);
+  const showPanel = (onMp ? mpPanel : onChallenge ? chPanel : panel) && !path.startsWith('/assistant');
+  const openPanel = () => (onMp ? setMpPanel(true) : onChallenge ? (setChPanel(true), remember(CHALLENGE_PANEL_KEY, 'open')) : (setPanel(true), remember('snowmoon.panel', null)));
+  const closePanel = () => (onMp ? setMpPanel(false) : onChallenge ? (setChPanel(false), remember(CHALLENGE_PANEL_KEY, null)) : (setPanel(false), remember('snowmoon.panel', 'closed')));
 
   return (
     <div className={`shell${collapsed ? ' rail-collapsed' : ''}${showPanel ? ' with-panel' : ''}`}>
