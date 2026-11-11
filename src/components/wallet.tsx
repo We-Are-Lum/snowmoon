@@ -61,18 +61,16 @@ interface Balance {
 }
 
 /**
- * The 30-day note (owner, 2026-10-22), in the owner's words, to everyone until WALLET_LINKS.announceUntil; "Privacy §7"
- * links to the Privacy page. Read on the client, so it leaves on its own when the date passes.
+ * The "New:" note (owner, 2026-10-22; words changed 2026-11-05: "New: sign in with Lens or Bluesky."), to everyone until WALLET_LINKS.announceUntil;
+ * read on the client, so it leaves on its own when the date passes.
  */
 export function LinkNote({ className = 'ic-note' }: { className?: string }) {
   const [shown, setShown] = useState(false);
   useEffect(() => setShown(linkNoteShown()), []);
   if (!shown) return null;
-  const [lead] = LINK_NOTE.split('Privacy §7.');
   return (
     <p className={className} data-note="wallet-links">
-      {lead}
-      <Link href="/privacy">Privacy §7</Link>.
+      {LINK_NOTE}
     </p>
   );
 }

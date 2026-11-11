@@ -1,0 +1,17 @@
+/* /admin/activity (admins only; src/components/admin-activity.tsx). */
+.aa { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; display: flex; flex-direction: column; gap: 20px; color: var(--body); min-width: 0; }
+.aa h1 { margin: 0; font-weight: 400; font-size: 32px; color: var(--ink); }
+.aa h2 { margin: 0; font-weight: 400; font-size: 22px; color: var(--ink); }
+.aa-kicker { margin: 0; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
+.aa-note { margin: 0; font-size: 14px; line-height: 1.45; }
+.aa-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.aa-controls button, .aa-controls input { font: inherit; font-size: 14px; padding: 6px 10px; border: 1px solid var(--rule); background: transparent; color: var(--ink); border-radius: 6px; }
+.aa-controls button[aria-pressed='true'] { border-color: var(--ink); }
+.aa-controls input { min-width: 0; flex: 1 1 180px; }
+.aa-section { display: flex; flex-direction: column; gap: 8px; padding-top: 16px; border-top: 1px solid var(--rule); min-width: 0; }
+.aa-scroll { overflow-x: auto; max-width: 100%; }
+.aa table { border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+.aa th, .aa td { padding: 4px 8px; border-bottom: 1px solid var(--rule); text-align: right; white-space: nowrap; }
+.aa tbody th { text-align: left; font-weight: 400; color: var(--ink); white-space: normal; min-width: 220px; position: sticky; left: 0; background: var(--paper, Canvas); }
+.aa-list { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 15px; }
+.aa-only { font: inherit; font-size: 12px; margin-left: 6px; padding: 1px 6px; border: 1px solid var(--rule); background: transparent; color: var(--body); border-radius: 4px; }

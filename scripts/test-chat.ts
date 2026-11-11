@@ -311,6 +311,25 @@ try {
     check(`exactly ${CHAT.messagesPerDay} questions counted`, n === CHAT.messagesPerDay, String(n));
   }
   {
+    // Lens and Bluesky accounts' own numbers (src/lib/people.ts: at most -1,000,000,000; step 1 of "the assistant for
+    // any account", 2026-11-05): chat_calls (0006, rebuilt in 0007) has no check on fid's sign, fid is bigint, the
+    // index is (fid, at), and the limit counts `where fid = $1`, so they are counted as they are, each apart. No migration.
+    answerText = 'Commentary.';
+    const lens = -1_000_000_007;
+    const bsky = -1_000_000_008;
+    let last = '';
+    for (let i = 0; i < CHAT.messagesPerDay + 1; i++) last = (await ask(deps(lens), { question: 'Gladias vote', limit: 1 })).state;
+    check(`a Lens account's message ${CHAT.messagesPerDay + 1} in a day is refused`, last === 'limit', last);
+    const [{ n }] = await sql`select count(*)::int as n from studio.chat_calls where fid = ${lens} and kind = 'ask'`;
+    check(`exactly ${CHAT.messagesPerDay} of the Lens account's questions counted, under its own number`, n === CHAT.messagesPerDay, String(n));
+    const other = await ask(deps(bsky), { question: 'Gladias vote', limit: 1 });
+    check('a Bluesky account is counted apart from the Lens account', other.state !== 'limit', other.state);
+    await sql`insert into studio.chat_calls (fid, kind, model) values (${'-9223372036854775807'}::bigint, 'ask', ${CHAT.model})`.then(
+      () => check('chat_calls takes the smallest bigint (no sign check on fid)', true),
+      (e) => failures.push(`chat_calls refused a very negative number: ${(e as Error).message}`),
+    );
+  }
+  {
     // Spend is shared by everyone: fill the day close to the cap with one big recorded call.
     await sql`insert into studio.chat_costs (kind, model, provider, calls, cost_usd) values ('answer', 'spend-test', '', 1, ${CHAT.dailySpendCapUsd - 0.0001})`;
     const res = await ask(deps(106), { question: 'Gladias vote', limit: 1 });

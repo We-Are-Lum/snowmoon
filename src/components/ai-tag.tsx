@@ -4,8 +4,9 @@
  * its accessible name. For a style's samples and a sheet's views; a reader's image keeps AiLabel,
  * which opens how it was made. check:principles P2b reads the declaration here.
  */
-export function AiTag({ what, by }: { what?: string; by?: string }) {
-  const tip = `${what ? `${what}: ` : ''}AI-generated, not by the author${by ? ` · by ${by}` : ''}`;
+export function AiTag({ what, by, note }: { what?: string; by?: string; note?: string }) {
+  // `note`: one more sentence after the declaration (the remix challenge's cards: "Look invented by this edition: …").
+  const tip = `${what ? `${what}: ` : ''}AI-generated, not by the author${by ? ` · by ${by}` : ''}${note ? `. ${note}` : ''}`;
   return (
     <span className="ai-tag" tabIndex={0} data-ai="tag">
       <span aria-hidden="true">AI</span>

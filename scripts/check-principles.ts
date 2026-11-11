@@ -12,6 +12,7 @@
  * (read-only) when STUDIO_DATABASE_URL is set. Page checks fetch the deployed
  * site; the third-party request check drives the local Chrome.
  */
+import { p1cProblems } from './lib/p1c';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -24,19 +25,29 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, CHALLENGE, CHAT, IMAGES, REPO_URL, imagesDailySpendCapUsd } from '../src/lib/config';
+import { AGENTS, ASSISTANT, CHALLENGE, CHAT, CLOSED_PROVIDERS, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, imagesDailySpendCapUsd } from '../src/lib/config';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
+import { rehearsalOn } from '../src/lib/challenge/rehearsal-switch';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
-import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
+import { LEGAL, MODEL_NOTICES, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 import { MENTIONS_FILE, byMentionsThenName, mentionsFile } from './lib/character-mentions';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
-import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, p5gProblems } from './lib/p5g';
+import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, P5I_FILES, p5gProblems, p5iProblems } from './lib/p5g';
+import { P5B_PLANTS, p5bProblems } from './lib/p5b';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
+import { p2mProblems, p6acProblems, p9gProblems } from './lib/challenge-moments';
+import { CARDS } from '../src/lib/challenge/cards';
+import { MOMENTS } from '../src/lib/challenge/moments';
+import { spoilerExceptionOn } from '../src/lib/challenge/spoilers';
+import { DEFAULT_SHEET_MODEL, SHEET_MODELS, sheetModelProblems, sheetModelsOffered } from '../src/lib/images/sheet-models';
+import { modelChoicesFor } from '../src/lib/images/model-choice-view';
+import { consentClosedProblems, p6tProblems } from './lib/p6t';
+import { CHALLENGE_MODELS, DEFAULT_CHALLENGE_MODEL, challengeDefaultModel, challengeDefaultProblems, challengeModelProblems, challengeModelsFor, defaultCases } from '../src/lib/challenge/models';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -143,38 +154,35 @@ add({
 add({
   id: 'P1c',
   principle: 1,
-  name: 'in the database, every version of a published element has a recipe (a style or sheet: every one of its pictures)',
+  name: 'in the database, every version of a published element has a recipe (a style or sheet: every one of its pictures; a style version with no pictures only when a later version has samples with recipes, and then the latest has them)',
   load: async () => {
     const url = process.env.STUDIO_DATABASE_URL;
-    type Row = { id: string; recipe_id: string | null; element_type: string; body: unknown };
+    type Row = { id: string; recipe_id: string | null; element_type: string; body: unknown; element_id: string; version_no: number; kind: string | null };
     if (!url) return { rows: [] as Row[], skipped: true };
     const sql = postgres(url, { prepare: false, max: 1 });
     const rows = await sql<Row[]>`
-      select v.id, v.recipe_id, e.element_type, v.body from studio.element_versions v join studio.elements e on e.id = v.element_id where e.status = 'published'`;
+      select v.id, v.recipe_id, e.element_type, v.body, e.id::text as element_id, v.version_no, en.kind
+      from studio.element_versions v join studio.elements e on e.id = v.element_id left join studio.entities en on en.id = e.entity_id
+      where e.status = 'published'`;
     await sql.end();
     return { rows: [...rows], skipped: false };
   },
-  // A style or character sheet (element_type 'design') keeps a recipe inside its body for each of its
-  // pictures (samples, views) rather than a recipe_id (owner, 2026-10-14): it passes only when it has
-  // at least one picture and every picture's recipe names its prompt and model. Anything else needs recipe_id.
+  // The rule lives in scripts/lib/p1c.ts (shared with scripts/test-publish-style.ts): a style or sheet passes when it has
+  // at least one picture and every picture's recipe names its prompt and model; anything else needs recipe_id. One narrow
+  // exception (owner, 2026-11-10): a style version with no pictures, when a later version of it has samples with recipes;
+  // a style that uses it must have them in its latest version. Other styles: the general rule (samples or views).
   run: ({ rows, skipped }) => {
     if (skipped) return ['skipped: STUDIO_DATABASE_URL not set'];
-    const pictures = (body: unknown) => {
-      const b = (body ?? {}) as { samples?: unknown; views?: unknown };
-      const views = b.views && typeof b.views === 'object' ? Object.values(b.views as Record<string, unknown>) : [];
-      return [...(Array.isArray(b.samples) ? b.samples : []), ...views] as { recipe?: { prompt?: string; model?: string } }[];
-    };
-    const inBody = (r: { element_type: string; body: unknown }) => {
-      const ps = pictures(r.body);
-      return r.element_type === 'design' && ps.length > 0 && ps.every((p) => !!p?.recipe?.prompt && !!p?.recipe?.model);
-    };
-    return rows.filter((r: { recipe_id: string | null }) => !r.recipe_id && !inBody(r as never)).map((r: { id: string }) => `version ${r.id} has no recipe`);
+    return p1cProblems(rows as never);
   },
   plant: (c) => {
     c.skipped = false;
-    // A version with neither kind of recipe, and a style whose second sample has none.
-    c.rows.push({ id: 'planted', recipe_id: null, element_type: 'image', body: {} });
-    c.rows.push({ id: 'planted-style', recipe_id: null, element_type: 'design', body: { samples: [{ recipe: { prompt: 'p', model: 'm' } }, {}] } });
+    // A version with neither kind of recipe, a style whose second sample has none, and (owner, 2026-11-10) a style whose
+    // latest version is empty after one with samples: the exception never excuses the latest.
+    c.rows.push({ id: 'planted', recipe_id: null, element_type: 'image', body: {}, element_id: 'p0', version_no: 1, kind: null });
+    c.rows.push({ id: 'planted-style', recipe_id: null, element_type: 'design', body: { samples: [{ recipe: { prompt: 'p', model: 'm' } }, {}] }, element_id: 'p1', version_no: 1, kind: 'style' });
+    c.rows.push({ id: 'planted-v1', recipe_id: null, element_type: 'design', body: { samples: [{ recipe: { prompt: 'p', model: 'm' } }] }, element_id: 'p2', version_no: 1, kind: 'style' });
+    c.rows.push({ id: 'planted-v2-empty', recipe_id: null, element_type: 'design', body: { samples: [] }, element_id: 'p2', version_no: 2, kind: 'style' });
   },
 });
 
@@ -372,6 +380,14 @@ add({
         for (const [what, re] of [['kept with the link', /kept with the link/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
           if (!re.test(text)) problems.push(`${file}: the agent address box must say it is ${what}`);
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the agent address box must not send its text anywhere itself`);
+        continue;
+      }
+      if (file.endsWith('components/handle-field.tsx')) {
+        // The Bluesky handle at sign-in (branch signin-lens-bluesky): sent to our server to start the sign-in, never published.
+        for (const [what, re] of [['sent to us to sign you in', /Sent to us to find your Bluesky server and sign you in/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the handle box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the handle box must not send its text anywhere itself`);
+        if (/<textarea\b/.test(text)) problems.push(`${file}: the handle box must be a single-line input`);
         continue;
       }
       if (file.endsWith('components/post-link-field.tsx')) {
@@ -1028,6 +1044,8 @@ add({
     endpoints.set(IMAGES.guardModel, 'src/lib/config.ts IMAGES.guardModel');
     // Step 4: reference pictures (a sheet's side and back views; images made with a sheet's views).
     endpoints.set(IMAGES.editModel.endpoint, 'src/lib/config.ts IMAGES.editModel');
+    // Model choice (IMAGES.designs.modelChoice): every model a sheet's views can be made with, offered or not.
+    for (const m of SHEET_MODELS) for (const c of [m.front, m.views]) endpoints.set(c.endpoint, `src/lib/images/sheet-models.ts ${m.id}`);
     return { models: json('config/models.json').models, used: [...used.entries()], endpoints: [...endpoints.entries()] };
   },
   run: ({ models, used, endpoints }) => {
@@ -1102,6 +1120,59 @@ add({
   plant: (c) => {
     c.skipped = '';
     c.ids = [...c.ids, '00000000-0000-0000-0000-00000000dead'];
+  },
+});
+
+// P3e (branch remix-model-choice): the remix form's model picker keeps the open models the default and first in the
+// list, whether the switch is on or off; every closed choice names its maker; every model it calls is on the allowlist.
+add({
+  id: 'P3e',
+  principle: 3,
+  name: 'the default is open: the remix form\'s and the challenge\'s model choice list the open models first, as the default (one exception: GPT Image 2.5 Sunburst for the challenge, for those who can use it, until entries close); closed ones name their maker and are allowlisted',
+  load: async () => ({
+    all: clone(SHEET_MODELS) as unknown as (typeof SHEET_MODELS)[number][],
+    offeredOn: sheetModelsOffered(true, true).map((m) => m.id) as string[],
+    offeredOff: sheetModelsOffered(false).map((m) => m.id) as string[],
+    form: (modelChoicesFor('fork', 'character', true) ?? []).map((m) => ({ id: m.id, open: m.open })),
+    allowlist: (json('config/models.json').models as { id: string; open_weights: boolean; maker?: string }[]),
+    // The challenge's Model row (branch challenge-models): the same rule, for a visitor where every model is offered.
+    challenge: clone(CHALLENGE_MODELS) as unknown as (typeof CHALLENGE_MODELS)[number][],
+    challengeOn: challengeModelsFor({ country: 'FR', region: null }, true, true).map((m) => ({ id: m.id, open: m.open })),
+    challengeOff: challengeModelsFor({ country: 'FR', region: null }, false).map((m) => m.id) as string[],
+    // The row's starting model for every kind of visitor (owner, 2026-11-09: P3's one exception, the challenge only).
+    defaults: defaultCases().map((c) => ({ c, id: challengeDefaultModel(c) as string })),
+  }),
+  run: (c) => {
+    const p = sheetModelProblems(c.all);
+    p.push(...challengeModelProblems(c.challenge).map((x) => `challenge: ${x}`));
+    p.push(...challengeDefaultProblems(c.defaults).slice(0, 5).map((x) => `challenge: ${x}`));
+    if (!c.challengeOn.length || c.challengeOn[0].id !== DEFAULT_CHALLENGE_MODEL || !c.challengeOn[0].open) p.push('challenge: the Model row does not offer the open default first');
+    if (c.challengeOff.length !== 1 || c.challengeOff[0] !== DEFAULT_CHALLENGE_MODEL) p.push(`challenge: with CHALLENGE.modelChoice off, more than the open default is offered: ${c.challengeOff.join(', ')}`);
+    for (const m of c.challenge) {
+      const a = c.allowlist.find((x) => x.id === m.allowlistId || x.id === m.allowlistId.replace(/-edit$/, ''));
+      if (!a) { p.push(`challenge: ${m.id}: ${m.allowlistId} is not on config/models.json`); continue; }
+      if (a.open_weights !== m.open) p.push(`challenge: ${m.id}: says ${m.open ? 'open' : 'closed'}, config/models.json says open_weights ${a.open_weights}`);
+      if (!m.open && a.maker !== m.maker) p.push(`challenge: ${m.id}: maker ${m.maker} differs from config/models.json (${a.maker})`);
+    }
+    if (c.offeredOn[0] !== DEFAULT_SHEET_MODEL) p.push(`with the switch on, the first choice offered is ${c.offeredOn[0]}`);
+    if (c.offeredOff.length !== 1 || c.offeredOff[0] !== DEFAULT_SHEET_MODEL) p.push(`with the switch off, more than the open default is offered: ${c.offeredOff.join(', ')}`);
+    if (!c.form.length || c.form[0].id !== DEFAULT_SHEET_MODEL || !c.form[0].open) p.push('the remix form does not show the open default first');
+    for (const m of c.all) {
+      for (const id of [m.front.id, m.views.id]) {
+        const a = c.allowlist.find((x) => x.id === id || x.id === id.replace(/-edit$/, ''));
+        if (!a) { p.push(`${m.id}: ${id} is not on config/models.json`); continue; }
+        if (a.open_weights !== m.open) p.push(`${m.id}: says ${m.open ? 'open' : 'closed'}, config/models.json says open_weights ${a.open_weights}`);
+        if (!m.open && a.maker !== m.maker) p.push(`${m.id}: maker ${m.maker} differs from config/models.json (${a.maker})`);
+      }
+    }
+    return p;
+  },
+  plant: (c) => {
+    c.all = [...c.all].reverse();
+    c.form = [...c.form].reverse();
+    c.challenge = [...c.challenge].reverse();
+    // A wider default: GPT for a wallet account too.
+    c.defaults = c.defaults.map((d) => (d.c.wallet ? { ...d, id: 'gpt-image-2.5-sunburst' } : d));
   },
 });
 
@@ -1189,18 +1260,13 @@ add({
 add({
   id: 'P5b',
   principle: 5,
-  name: 'moderator and admin powers: hide, and write a labelled pick, nothing else',
+  name: 'moderator and admin powers: hide, and write a labelled pick; only an admin-only page (404 to everyone else) may sort',
   load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
-  run: (files) =>
-    files
-      // Every admin check goes through isAdmin (src/lib/admins.ts, owner 2026-10-29: "ADMINS replaces the scattered owner lists").
-      .filter((f: { file: string; text: string }) => /MODERATOR_FIDS|\bADMINS\b|\bisAdmin\(/.test(f.text) && !f.file.endsWith('config.ts') && !f.file.endsWith('src/lib/admins.ts'))
-      // The one write admins may make beyond hiding (owner, reread 2026-10-29): a pick, in studio.admin_picks.
-      .map((f: { file: string; text: string }) => ({ ...f, text: f.text.replace(/(insert into|update|delete from)\s+studio\.admin_picks\b[^`]*`/gi, '') }))
-      .filter((f: { text: string }) => /status\s*[:=]\s*['"](published|draft)['"]|set\s+status\s*=\s*'(published|draft)'|order by|\.sort\(/i.test(f.text))
-      .map((f: { file: string }) => `${f.file}: moderator or admin code does more than hide or pick`),
+  // The rule and its one exception (owner, 2026-11-05) live in scripts/lib/p5b.ts; test:admin-activity proves each fault.
+  run: (files) => p5bProblems(files),
   plant: (files) => {
-    files.push({ file: 'src/planted.ts', text: "if (ADMINS.includes(fid)) await sql`update studio.elements set status = 'published'`" });
+    // A PUBLIC page that checks isAdmin and sorts by counts must still fail.
+    files.push(P5B_PLANTS.publicSort);
   },
 });
 // A pick is always labelled and switchable, and the reader's choice stays on their device (owner, reread 2026-10-29).
@@ -1247,16 +1313,73 @@ add({
 // The remix challenge (owner, 2026-10-31: "No ordering by engagement or payment"): entries, sheets to start from and
 // "Posted on" are in time order and nothing else (scripts/lib/p5g.ts). One narrow exception (owner, 2026-11-04): "Bases
 // to start from" may follow the bases' fixed style order (CHALLENGE.baseStyles), there only; entries stay time order.
+// A second (owner, 2026-11-04): /challenge's random selection, a fresh unweighted shuffle of every remix on each visit.
 add({
   id: 'P5g',
   principle: 5,
-  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order',
+  name: 'the remix challenge orders entries, sheets and "Posted on" by time only (never by likes, built-on, scores or payments); only "Bases to start from" may follow the bases\' fixed style order; only a character\'s whole list of bases, the entries\' "Shuffled" order, "Surprise me" (the curated moments, in book order) and the Style row\'s "Random" (every published style) may shuffle, unweighted',
   load: async () => walk('src', /\.tsx?$/).filter((f) => P5G_FILES.test(f)).map((f) => ({ file: f, text: read(f) })),
   run: (files) => p5gProblems(files),
   plant: (files) => {
-    // An entries list ordered by style: the bases' exception must not reach it.
-    const i = files.findIndex((f: { file: string }) => f.file === 'src/lib/challenge/entries.ts');
-    files[i] = { ...files[i], text: files[i].text.replace(/export async function standing\(/, 'export const planted = (entries) => entries.sort(baseStyleOrder);\nexport async function standing(') };
+    // A weighted shuffle (owner, 2026-11-04): the random selection's exception must not let one through. (The bases'
+    // planted violation, an entries list ordered by style, is proven in scripts/test-challenge.ts.)
+    const i = files.findIndex((f: { file: string }) => f.file === 'src/lib/challenge/shuffle.ts');
+    files[i] = { ...files[i], text: files[i].text.replace('export function shuffleFresh<T>(items: readonly T[]', 'export function shuffleFresh<T extends { likes: number }>(items: readonly T[]').replace('const j = below(i + 1, random);', 'const j = below(Math.min(i + 1, 1 + out[i].likes), random);') };
+  },
+});
+// While the challenge runs (owner, 2026-11-04): no remix, like or built-on count on its remix cards, and no "most
+// remixed" sort on the feed: newest first, by character, and nothing else (scripts/lib/p5g.ts, p5iProblems).
+add({
+  id: 'P5i',
+  principle: 5,
+  name: 'the challenge\'s remix cards and feed show no remix, like or built-on count, and the feed has no "most remixed" sort (newest first only)',
+  load: async () => P5I_FILES.map((f) => ({ file: f, text: read(f) })),
+  run: (files) => p5iProblems(files),
+  plant: (files) => {
+    // A like count on the card.
+    const i = files.findIndex((f: { file: string }) => f.file === 'src/components/challenge-remix-card.tsx');
+    files[i] = { ...files[i], text: files[i].text.replace('<span className="ch-card-by">', '<span className="ch-card-likes">{r.likes} likes</span><span className="ch-card-by">') };
+  },
+});
+// P2m (branch challenge-moments, owner 2026-11-05, answer 2): the six character cards and the moments' titles and scene
+// lines are drafted by the coding agent; /challenge doesn't go public until the owner approves them (CHALLENGE.cardsApproved,
+// CHALLENGE.sceneLinesApproved), and until then every card carries the "Draft wording" mark.
+add({
+  id: 'P2m',
+  principle: 2,
+  name: 'the challenge\'s agent-drafted cards and scene lines are approved by the owner before /challenge goes public, and marked "Draft wording" until then',
+  load: async () => ({ c: { public: CHALLENGE.public as boolean, cardsApproved: CHALLENGE.cardsApproved as boolean, sceneLinesApproved: CHALLENGE.sceneLinesApproved as boolean }, files: [{ file: 'src/lib/challenge/view.ts', text: read('src/lib/challenge/view.ts') }] }),
+  run: ({ c, files }) => p2mProblems(c, files),
+  plant: (x) => {
+    x.c.public = true;
+    x.c.cardsApproved = false;
+  },
+});
+// P9g (branch challenge-moments, owner 2026-11-05, answer 1, approved): principle 9's recorded exception for the remix
+// challenge. /challenge and its remix screens may show the six cards and the curated moments from the whole book; the
+// first layer is written without major turns (its facts from chapters 1-14), the deeper layers say "May spoil later
+// chapters.", every moment chip shows its chapter, every quote is word for word, nothing else is shown, nothing outside
+// the challenge's pages uses these words, and it ends when entries close.
+add({
+  id: 'P9g',
+  principle: 9,
+  name: 'the remix challenge\'s exception stays narrow: only its six cards and curated moments, quoted word for word; the first layer from chapters 1-14; nothing marked as a spoiler on its pages (owner, 2026-11-09); chapters on every moment chip; the reader\'s chapter gating unchanged; nowhere else; ended when entries close',
+  load: async () => ({
+    files: walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
+    cards: clone(CARDS),
+    moments: clone(MOMENTS),
+    characters: [...CHALLENGE.characters],
+    blocks: Object.fromEntries(loadBlocks(ROOT)),
+    dates: { opens: CHALLENGE.dates.opens, closes: CHALLENGE.dates.closes },
+  }),
+  run: (c) => p9gProblems({ ...c, blocks: new Map(Object.entries(c.blocks)), on: spoilerExceptionOn }),
+  plant: (c) => {
+    // One word changed in a moment's quote, a first-layer fact from chapter 24, and the cards' words shown on a sheet page.
+    c.moments[2].quotes[0].text = c.moments[2].quotes[0].text.replace('shine', 'win');
+    c.cards[2].facts[0] = { text: 'Second place', block: 'c24-b48', quote: 'I got second place in the Pafogai Du Minpentai games' };
+    c.files.push({ file: 'src/app/references/designs/[id]/planted.tsx', text: "import { CARDS } from '~/lib/challenge/cards';" });
+    // A spoiler mark back on a challenge page (owner, 2026-11-09: none there).
+    c.files.push({ file: 'src/components/challenge-planted.tsx', text: "export const L = 'May spoil later chapters.';" });
   },
 });
 // Character lists (owner, 2026-11-04: "list characters by how often they're named in the book, most first, everywhere
@@ -1387,7 +1510,9 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com', url: 'https://fonts.googleapis.com/css2?family=Inter', type: 'stylesheet' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores', 'wallet_links', 'challenge_marks', 'version_posts', 'challenge_eligibility', 'check_decisions', 'sheet_remix_asks', 'social_links'];
+/** How each private table names the person: a FID, except check_decisions (the account, as text). */
+const personIs42 = (t: string) => (t === 'check_decisions' ? `account = '42'` : 'fid = 42');
 add({
   id: 'P6b',
   principle: 6,
@@ -1412,18 +1537,28 @@ add({
       insert into studio.removal_log (element_id, step, by_fid, role, reason) values ('00000000-0000-0000-0000-0000000000b1','reported',42,'reader','spam');
       insert into studio.wallet_accounts (address) values ('0x${'4'.repeat(40)}');
       insert into studio.wallet_links (account_id, fid, how) select id, 42, 'signed' from studio.wallet_accounts where address = '0x${'4'.repeat(40)}';
+      insert into studio.social_accounts (kind, subject, handle) values ('bluesky', 'did:plc:${'a'.repeat(24)}', 'someone.bsky.social');
+      insert into studio.social_links (account_id, fid) select id, 42 from studio.social_accounts where subject = 'did:plc:${'a'.repeat(24)}';
       -- The remix challenge (0033_remix_challenge.sql): a mark, a listed post and an eligibility decision, by FID 42.
       do $$ begin if to_regclass('studio.challenge_marks') is not null then
         insert into studio.challenge_marks (challenge, fid, character, version_id) values ('remix-2026-11', 42, 'bai', '00000000-0000-0000-0000-0000000000f1');
         insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ('00000000-0000-0000-0000-0000000000f1', 'lens', '1', 'someone', now(), 'https://hey.xyz/posts/abc', 42);
         insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values ('00000000-0000-0000-0000-0000000000f1', 'remix-2026-11', 42, 'passed', true);
+      end if; end $$;
+      -- Check decisions (0034_check_decisions): FID 42 passed.
+      do $$ begin if to_regclass('studio.check_decisions') is not null then
+        insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '42', 'neynar-score>=0.7', true);
+      end if; end $$;
+      -- Free remixes (0037_remix_count.sql, branch remix-submit): one view of a remix, by FID 42.
+      do $$ begin if to_regclass('studio.sheet_remix_asks') is not null then
+        insert into studio.sheet_remix_asks (remix, fid, units, slot) values ('00000000-0000-4000-8000-0000000000a1', 42, 1, 'front');
       end if; end $$;`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
       for (const t of PRIVATE_FID_TABLES) {
         await db.exec(`set role ${role}`);
         try {
-          const r = await db.query<{ n: number }>(`select count(*)::int as n from studio.${t} where fid = 42`);
+          const r = await db.query<{ n: number }>(`select count(*)::int as n from studio.${t} where ${personIs42(t)}`);
           if (r.rows[0].n > 0) problems.push(`${role} can read individual rows of studio.${t}`);
         } catch {
           // permission denied: private, as intended
@@ -1486,7 +1621,7 @@ add({
     return {
       enabled: IMAGES.enabled,
       // Open beyond the invited list: the gate decides by score, not by the list alone.
-      openBeyondInvited: /lookUp\(/.test(gate),
+      openBeyondInvited: /checkNeynar\(/.test(gate),
       terms: page('src/app/terms/page.tsx'),
       // The page renders the words kept in src/lib/legal.ts; read both.
       privacy: page('src/app/privacy/page.tsx') === null ? null : `${page('src/app/privacy/page.tsx')}\n${page('src/lib/legal.ts') ?? ''}`,
@@ -1511,6 +1646,140 @@ add({
 // Keys that bypass row-level security, or connect as the database owner, must
 // not sit on the Vercel project at all (owner decision, Oct 5, 2026).
 const FORBIDDEN_VARS = /^(SUPABASE_SERVICE_ROLE_KEY|SUPABASE_SECRET_KEY|SUPABASE_JWT_SECRET|POSTGRES_[A-Z0-9_]*)$/;
+// The rehearsal switch (branch contest, 2026-11-04): CHALLENGE_REHEARSAL=on runs the challenge as if opened, with admins
+// eligible and test stand-ins, on this machine only. Production must ignore it, and so must any Vercel deployment and
+// any database that isn't on this machine; the config must read it only through rehearsalOn, and the target must not
+// be running it (its /api/rehearsal/file answers 404 there, and /challenge stays as CHALLENGE.public says).
+add({
+  id: 'P6w',
+  principle: 6,
+  name: 'the rehearsal switch (CHALLENGE_REHEARSAL=on) is ignored on production, on any Vercel deployment and with a database elsewhere, and the site has no test sign-in',
+  load: async () => {
+    const local = 'postgres://postgres@127.0.0.1:54329/postgres';
+    const on = { CHALLENGE_REHEARSAL: 'on', STUDIO_DATABASE_URL: local };
+    const cases: [string, Record<string, string>][] = [
+      ['VERCEL_ENV=production', { ...on, VERCEL_ENV: 'production' }],
+      ['VERCEL_ENV=production without VERCEL', { ...on, VERCEL_ENV: 'production', VERCEL: '' }],
+      ['VERCEL=1 (any Vercel deployment)', { ...on, VERCEL: '1' }],
+      ['VERCEL_ENV=preview', { ...on, VERCEL_ENV: 'preview' }],
+      ['NEXT_PUBLIC_VERCEL_ENV=production', { ...on, NEXT_PUBLIC_VERCEL_ENV: 'production' }],
+      ['the production pooler as the database', { ...on, STUDIO_DATABASE_URL: 'postgres://studio_writer.x:y@aws-0-us-west-1.pooler.supabase.com:6543/postgres' }],
+    ];
+    return {
+      // Which switch to run: the real one, or the plant's (functions can't be in the loaded data, which is cloned).
+      fn: 'real' as 'real' | 'planted',
+      cases,
+      local: on,
+      config: read('src/lib/config.ts'),
+      auth: read('src/lib/auth.ts'),
+      file: await fetch(`${BASE}/api/rehearsal/file/images/readers/${'0'.repeat(32)}.jpg`, { redirect: 'manual' }).then((r) => r.status, () => 0),
+    };
+  },
+  run: (c) => {
+    const problems: string[] = [];
+    // The plant: a switch that reads only CHALLENGE_REHEARSAL, ignoring VERCEL_ENV and the database.
+    const on = c.fn === 'planted' ? (env: Record<string, string | undefined>) => env.CHALLENGE_REHEARSAL === 'on' : rehearsalOn;
+    const fn = { rehearsalOn: on };
+    for (const [what, env] of c.cases) {
+      if (fn.rehearsalOn(env)) problems.push(`the rehearsal switch is on with ${what}`);
+    }
+    // It must still work where it is meant to (else this check proves nothing about the cases above).
+    if (!fn.rehearsalOn(c.local)) problems.push('the rehearsal switch is off on this machine with a local database: the check above proves nothing');
+    if (!/typeof window === 'undefined'\s*\? rehearsalOn\(process\.env\)/.test(c.config) || /process\.env\.CHALLENGE_REHEARSAL\b/.test(c.config.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, ''))) problems.push('src/lib/config.ts reads CHALLENGE_REHEARSAL other than through rehearsalOn');
+    // The dress run's test sign-in lives only on branch contest-rehearsal, which never merges (owner, 2026-11-04).
+    if (/rehearsal-test-|rehearsalTestFid|REHEARSAL_TEST_SIGNIN/.test(c.auth)) problems.push('src/lib/auth.ts has the dress run\'s test sign-in: it belongs only on branch contest-rehearsal');
+    if (c.file !== 404) problems.push(`${BASE}/api/rehearsal/file answers ${c.file}, not 404: the target is running the rehearsal`);
+    return problems;
+  },
+  plant: (c) => {
+    c.fn = 'planted';
+  },
+});
+// Sign-in checks keep the decision, never the score (owner, 2026-11-04): no table the site can write holds a score
+// column, the decision store holds no number at all, and no site code writes a score.
+add({
+  id: 'P6x',
+  principle: 6,
+  name: 'sign-in checks store the decision (passed, when, the rule), never a score or the numbers behind it',
+  load: async () => ({
+    extra: '',
+    code: walk('src', /\.tsx?$/).map((f) => ({ f, t: read(f).replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '') })),
+  }),
+  run: async ({ extra, code }) => {
+    const problems: string[] = [];
+    const db = await pglite(extra);
+    const writable = await db.query<{ t: string; c: string }>(`
+      select c.table_name as t, c.column_name as c from information_schema.columns c
+      where c.table_schema = 'studio' and c.column_name ~ '(^|_)scores?($|_)'
+        -- A table about a person or account (a version's ranking score, e.g. living_snapshots, is not a check).
+        and exists (select 1 from information_schema.columns p where p.table_schema = 'studio' and p.table_name = c.table_name and p.column_name ~ '(^|_)(fid|account)$')
+        and (has_table_privilege('studio_writer', format('studio.%I', c.table_name), 'INSERT') or has_table_privilege('studio_writer', format('studio.%I', c.table_name), 'UPDATE'))`);
+    for (const r of writable.rows) problems.push(`studio.${r.t}.${r.c}: the site (studio_writer) can store a score`);
+    const store = await db.query<{ c: string; d: string }>(`select column_name as c, data_type as d from information_schema.columns where table_schema = 'studio' and table_name = 'check_decisions'`);
+    if (store.rows.length === 0) problems.push('studio.check_decisions is missing (0034_check_decisions)');
+    for (const r of store.rows) if (/numeric|real|double|integer|bigint|smallint|json/.test(r.d)) problems.push(`studio.check_decisions.${r.c} (${r.d}) can hold a number`);
+    await db.close();
+    for (const { f, t } of code as { f: string; t: string }[]) {
+      if (/\b(insert\s+into|update)\s+studio\.image_scores\b/i.test(t)) problems.push(`${f} writes a Neynar score to studio.image_scores`);
+      if (/studio\.check_decisions[^`]*\bscore\b/i.test(t)) problems.push(`${f} writes a score into studio.check_decisions`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    c.extra = `alter table studio.check_decisions add column score numeric; grant insert on studio.image_scores to studio_writer;`;
+    (c.code as { f: string; t: string }[]).push({ f: 'src/lib/images/planted.ts', t: 'await sql`insert into studio.image_scores (fid, score) values (1, 0.9)`;' });
+  },
+});
+
+// The admin activity page (owner, 2026-11-05; docs/proposals/admin-activity.md): admins only, never cached, totals
+// for everything private. P6's single letters are all taken on main or a branch, hence P6aa.
+add({
+  id: 'P6aa',
+  principle: 6,
+  name: 'the admin activity page answers 404 to anyone but an admin, is never cached, and returns no per-person private count',
+  load: async () => {
+    const live = async (p: string, headers: Record<string, string> = {}) => {
+      const r = await fetch(BASE + p, { headers: { 'cache-control': 'no-cache', ...headers }, redirect: 'manual' });
+      return { p, status: r.status, cache: r.headers.get('cache-control') ?? '', body: await r.text() };
+    };
+    const { defs, PRIVATE_WORDS } = await import('../src/lib/admin-activity-defs');
+    const { CHALLENGE } = await import('../src/lib/config');
+    return {
+      lib: read('src/lib/admin-activity.ts'),
+      route: read('src/app/api/admin/activity/route.ts'),
+      defs: defs(CHALLENGE.id),
+      words: PRIVATE_WORDS,
+      live: [await live('/admin/activity'), await live('/api/admin/activity'), await live('/api/admin/activity', { authorization: 'Bearer not-a-token' })],
+    };
+  },
+  run: async (c) => {
+    const { defProblems } = await import('../src/lib/admin-activity-defs');
+    const problems: string[] = [];
+    // The gate comes first: nothing is read before isAdmin says yes.
+    const fn = c.lib.slice(c.lib.indexOf('export async function adminActivity('));
+    const gate = fn.search(/if \(!isAdmin\(fid\)\) return \{ status: 404/);
+    const firstRead = fn.search(/\bsql\.begin\(|\bsql`|\btx`/);
+    if (gate < 0 || (firstRead >= 0 && firstRead < gate)) problems.push('src/lib/admin-activity.ts: adminActivity reads before (or without) the isAdmin 404 gate');
+    if (!/sql\.begin\('read only'/.test(c.lib)) problems.push('src/lib/admin-activity.ts: not one read-only transaction');
+    if (/\b(insert\s+into|update\s+studio\.|delete\s+from)\b/i.test(c.lib)) problems.push('src/lib/admin-activity.ts: writes');
+    if (/export\s+(async\s+)?function\s+(POST|PUT|PATCH|DELETE)\b/.test(c.route)) problems.push('src/app/api/admin/activity/route.ts: has a write handler');
+    if (!/'Cache-Control': 'private, no-store'/.test(c.route) || !/headers: NO_STORE/.test(c.route)) problems.push('src/app/api/admin/activity/route.ts: not every answer is private, no-store');
+    if (!/adminActivity\(db\(\), fid/.test(c.route)) problems.push('src/app/api/admin/activity/route.ts: does not answer through adminActivity (the gate)');
+    // Every count is a total: its key names only category columns (never a person) and its number is an aggregate.
+    for (const d of c.defs) problems.push(...defProblems(d));
+    // Live, signed out and with a bad token: 404, never cached, and none of the page's words.
+    for (const l of c.live) {
+      if (l.status !== 404) problems.push(`${l.p}: answers ${l.status} signed out, not 404`);
+      if (!/no-store/.test(l.cache)) problems.push(`${l.p}: Cache-Control is "${l.cache}", without no-store`);
+      for (const w of c.words) if (l.body.includes(w)) problems.push(`${l.p}: the signed-out answer holds "${w}"`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    // A per-person count: the number of pictures each FID asked for.
+    c.defs.push({ id: 'planted', section: 'making', unit: 'count', key: 'fid::text', n: 'count(*)', from: 'studio.image_asks where true', ts: 'at' });
+  },
+});
 add({
   id: 'P6d',
   principle: 6,
@@ -1601,11 +1870,28 @@ const SERVICES: [string, RegExp][] = [
   ['GitHub', /\bGitHub\b/g],
   // Owner's Privacy wording of 2026-10-10 names these two as well.
   ['ntfy', /\bntfy\b/g],
+  // Closed models' makers, as providers that receive prompts and pictures through Vercel AI Gateway (branches
+  // closed-model-bases and remix-model-choice, 2026-11-04). "gpt-oss" names a model, not the provider receiving anything.
+  ['OpenAI', /\bOpenAI\b/g],
+  ['Google', /\bGoogle\b(?! Fonts)/g],
   ['Spotify', /\bSpotify\b/g],
 ];
+/** Makers named for provenance only: some pictures the owner made with them outside the site are brought in with the
+ *  recipe the owner reports, and nothing is sent to them. They are not services, so P6g and P6h never ask the Privacy
+ *  page to name them (owner, 2026-11-04, choice 5.4: Midjourney). P6h does check that About, if it names one, says the
+ *  site sends nothing to it. */
+const PROVENANCE_ONLY = ['Midjourney'];
 /** At Generate, the image prompt goes to Groq (the check; through Vercel AI Gateway when Groq is busy) and
  *  fal.ai (the image), the FID to Neynar (the gate). The gateway is named on the consent screen too (owner, 2026-10-10). */
-const AT_GENERATE = ['Groq', 'Vercel AI Gateway', 'fal.ai', 'Neynar'];
+/** Each closed model's maker, as a remixer can pick it once model choice is on. */
+const CLOSED_MAKERS = [...new Set([...sheetModelsOffered(true).filter((m) => !m.open).map((m) => m.provider.name), ...CHALLENGE_MODELS.filter((m) => !m.open).map((m) => m.maker)])];
+/** Is any model choice on (the challenge's Model row, branch challenge-models, or the sheet form's picker)? */
+const MODEL_CHOICE_ON = (CHALLENGE.modelChoice as boolean) || (IMAGES.designs.modelChoice as boolean);
+const AT_GENERATE = [
+  'Groq', 'Vercel AI Gateway', 'fal.ai', 'Neynar',
+  // With model choice on (IMAGES.designs.modelChoice), each offered closed model's maker receives the prompt too.
+  ...(MODEL_CHOICE_ON ? CLOSED_MAKERS : []),
+];
 const named = (text: string) => new Set(SERVICES.filter(([, re]) => text.match(re)).map(([n]) => n));
 const diff = (a: Set<string>, b: Set<string>) => [...a].filter((x) => !b.has(x));
 const pageText = (html: string, sel: string) => {
@@ -1620,6 +1906,9 @@ interface Named {
   about: string;
   notice: string;
   consent: string;
+  /** The closed models' notices (src/lib/legal.ts MODEL_NOTICES), by maker: label, title and text. A notice, not the
+   *  consent (owner, 2026-11-04: own-words-v5 carries the closed-model sentence). */
+  modelNotices: Record<string, string>;
 }
 let namedCache: Named | null = null;
 async function loadNamed(): Promise<Named> {
@@ -1633,6 +1922,7 @@ async function loadNamed(): Promise<Named> {
       about: pageText(await page('/about'), '.shell-main .page, main .page, .page'),
       notice: currentNoticeItems().flat().join('\n'),
       consent: [w.line, w.title, ...w.text].join('\n'),
+      modelNotices: Object.fromEntries(Object.entries(MODEL_NOTICES).map(([k, n]) => [k, [n.label, n.title, ...n.text].join('\n')])),
     };
   }
   return clone(namedCache);
@@ -1647,7 +1937,8 @@ add({
     if (!c.privacy.length) return ['/privacy: no policy text served (.legal p, .legal li)'];
     const p = privacyAll(c);
     const problems: string[] = [];
-    for (const [where, text] of [['About', c.about], ['the assistant\'s notice', c.notice], ['the image consent screen', c.consent]] as const)
+    const sources: [string, string][] = [['About', c.about], ['the assistant\'s notice', c.notice], ['the image consent screen', c.consent], ...Object.entries(c.modelNotices).map(([k, t]) => [`${k}'s closed-model notice`, t] as [string, string])];
+    for (const [where, text] of sources)
       for (const s of diff(named(text), p)) problems.push(`${where} names ${s}; the Privacy page does not`);
     for (const s of AT_GENERATE) if (!p.has(s)) problems.push(`the Privacy page does not name ${s}, which receives the prompt or the Farcaster ID at Generate`);
     return problems;
@@ -1664,9 +1955,15 @@ add({
   run: (c: Named) => {
     const p = privacyAll(c), a = named(c.about);
     if (!c.about.trim()) return ['/about: no page text served'];
+    // A maker named for provenance only (PROVENANCE_ONLY) needs no Privacy line, but About must say nothing goes to it.
+    const sentences = c.about.split(/(?<=[.;])\s+/);
+    const provenance = PROVENANCE_ONLY.filter((m) => sentences.some((u) => new RegExp(`\\b${m}\\b`).test(u)))
+      .filter((m) => !sentences.some((u) => new RegExp(`\\bnothing to ${m}\\b`).test(u)))
+      .map((m) => `About names ${m} (provenance only) but doesn't say the site sends nothing to ${m}`);
     return [
       ...diff(p, a).map((s) => `the Privacy page names ${s}; About does not`),
       ...diff(a, p).map((s) => `About names ${s}; the Privacy page does not`),
+      ...provenance,
     ];
   },
   plant: (c: Named) => {
@@ -1695,13 +1992,18 @@ add({
 add({
   id: 'P6j',
   principle: 6,
-  name: 'the image consent screen (config/consent.json, current) names exactly the services that receive the prompt or the FID at Generate',
+  name: 'the image consent screen (config/consent.json, current) names exactly the services that receive the prompt or the FID at Generate; with model choice on, it says what each closed model\'s maker receives and keeps',
   load: loadNamed,
   run: (c: Named) => {
     const got = named(c.consent), want = new Set(AT_GENERATE);
     return [
       ...diff(want, got).map((s) => `the consent screen does not name ${s}, which receives the prompt or the Farcaster ID at Generate`),
       ...diff(got, want).map((s) => `the consent screen names ${s}, which receives nothing at Generate`),
+      // With model choice on, the consent screen (own-words-v5, for everyone; owner, 2026-11-04) says what each closed
+      // model's maker receives and keeps. The closed models' notice is only a notice.
+      ...(MODEL_CHOICE_ON
+        ? consentClosedProblems(c.consent, CLOSED_MAKERS, Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])))
+        : []),
     ];
   },
   plant: (c: Named) => {
@@ -1763,6 +2065,98 @@ add({
   },
 });
 
+// P6p (branch signin-lens-bluesky): a way to sign in is shown only when Privacy names the outside service it goes
+// through (§7) and what we keep for it (§4): Lens (the Lens API) and Bluesky (the person's Bluesky server). Turning one on
+// in SIGN_IN_METHODS before the owner has reread those lines (docs/legal/signin-lens-bluesky-draft.md) fails here.
+add({
+  id: 'P6p',
+  principle: 6,
+  name: 'Lens and Bluesky sign-in are on only when Privacy §4 and §7 describe them',
+  load: async () => ({
+    on: SIGN_IN_METHODS.filter((m) => m.on).map((m) => m.id as string),
+    s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+    s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' '),
+  }),
+  run: (c) => {
+    const problems: string[] = [];
+    const need: Record<string, [string, RegExp, RegExp]> = {
+      // Since the remix challenge (main, 2026-10-31) Privacy §7 already names Bluesky and Lens (they receive a post's
+      // details) and "our server" in the same sentence, so the patterns name the sign-in lines themselves: "Lens
+      // account" / "Bluesky account" in §4, Lens's API (api.lens.xyz) and the Bluesky server, "your PDS", in §7.
+      lens: ['Lens', /\bLens account\b/, /\bLens(?:'s|’s)? API\b|\bapi\.lens\.xyz\b/],
+      bluesky: ['Bluesky', /\bBluesky account\b/, /\bBluesky\b[^.]*\bPDS\b/],
+    };
+    for (const id of c.on) {
+      const n = need[id];
+      if (!n) continue;
+      if (!n[1].test(c.s4)) problems.push(`${n[0]} sign-in is on (SIGN_IN_METHODS), but Privacy §4 doesn't say what is kept for a ${n[0]} account: the owner's reread of docs/legal/signin-lens-bluesky-draft.md first`);
+      if (!n[2].test(c.s7)) problems.push(`${n[0]} sign-in is on (SIGN_IN_METHODS), but Privacy §7 doesn't name the outside service it goes through: the owner's reread of docs/legal/signin-lens-bluesky-draft.md first`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    // Bluesky on, with §4's Bluesky line gone (now that the lines are in, turning it on alone would pass).
+    c.on = [...c.on, 'bluesky'];
+    c.s4 = c.s4.replace(/\bBluesky account\b/g, 'account');
+  },
+});
+
+// P6y (branch bluesky-check, owner 2026-11-04; was P6v, which find-a-moment, remix-model-choice and shortlist-vote use): the Bluesky check (SOCIAL_SIGN_IN.bluesky.check) is on only once Privacy
+// §7 names Bluesky's AppView (public.api.bsky.app), says the DID is what it receives, and that only the outcome is
+// kept (docs/legal/bluesky-check-draft.md, the owner's reread). Legal texts describe today.
+add({
+  id: 'P6y',
+  principle: 6,
+  name: 'the Bluesky check is on only when Privacy §7 names the AppView, the DID it receives, and that only the outcome is kept',
+  load: async () => ({ on: SOCIAL_SIGN_IN.bluesky.check.on as boolean, s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' ') }),
+  run: (c) => {
+    if (!c.on) return [];
+    const problems: string[] = [];
+    if (!/public\.api\.bsky\.app/.test(c.s7) || !/\bDID\b/.test(c.s7)) problems.push('the Bluesky check is on (SOCIAL_SIGN_IN.bluesky.check.on), but Privacy §7 doesn\'t name Bluesky\'s AppView (public.api.bsky.app) and the DID it receives: the owner\'s reread of docs/legal/bluesky-check-draft.md first');
+    if (!/keep only whether your account passed/.test(c.s7)) problems.push('the Bluesky check is on, but Privacy §7 doesn\'t say only its outcome is kept');
+    return problems;
+  },
+  plant: (c) => {
+    c.on = true;
+    c.s7 = c.s7.replace(/public\.api\.bsky\.app/g, 'the AppView');
+  },
+});
+
+// P6ab (branch assistant-any-account, owner 2026-11-05): the assistant's one rule (ASSISTANT.anyAccount: everyone who
+// asks passes their own network's check; Lens and Bluesky accounts ask under their own number) is on only once the
+// owner's reread words say so (docs/legal/assistant-any-account-step1.md): Privacy §5 no longer counts questions only
+// under a Farcaster ID; §7 says Neynar, Lens and Bluesky are asked when someone asks the assistant; the notice no longer
+// says "under your Farcaster ID". Legal texts describe today (pattern of P6p).
+add({
+  id: 'P6ab',
+  principle: 6,
+  name: 'the assistant opens to Lens and Bluesky (and checks Neynar) only when Privacy §5, §7 and the notice say so',
+  load: async () => ({
+    on: ASSISTANT.anyAccount as boolean,
+    s5: (PRIVACY.sections.find((s) => s.n === 5)?.body ?? []).flat().join(' '),
+    s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat().join(' '),
+    notice: currentNoticeItems().flat().join(' '),
+  }),
+  run: (c) => {
+    if (!c.on) return [];
+    const problems: string[] = [];
+    const sentences = c.s7.split(/(?<=[.!?])\s+(?=[A-Z])/);
+    const says = (what: RegExp) => sentences.some((x) => what.test(x) && /\bassistant\b/.test(x));
+    const why = "the owner's reread of docs/legal/assistant-any-account-step1.md first";
+    if (/Under your Farcaster ID/i.test(c.s5)) problems.push(`ASSISTANT.anyAccount is on, but Privacy §5 still counts questions under your Farcaster ID only: ${why}`);
+    if (!says(/\bNeynar receives your Farcaster ID\b/)) problems.push(`ASSISTANT.anyAccount is on (Farcaster accounts pass Neynar to ask), but Privacy §7's Neynar sentence doesn't name the assistant: ${why}`);
+    if (!says(/\bLens score\b/)) problems.push(`ASSISTANT.anyAccount is on, but Privacy §7's Lens score sentence doesn't name the assistant: ${why}`);
+    if (!says(/public\.api\.bsky\.app/)) problems.push(`ASSISTANT.anyAccount is on, but Privacy §7's Bluesky check sentence doesn't name the assistant: ${why}`);
+    if (/\bFarcaster ID\b/.test(c.notice)) problems.push(`ASSISTANT.anyAccount is on, but the assistant's notice still says questions are recorded under your Farcaster ID: ${why}`);
+    return problems;
+  },
+  plant: (c) => {
+    // The switch on with today's words (all of which name only the Farcaster ID, or images only).
+    c.on = true;
+    c.s5 = c.s5 + ' Under your Farcaster ID we record only how many questions you ask.';
+  },
+});
+
 // P6q: the remix challenge (branch remix-challenge, owner 2026-10-31). Its entries (CHALLENGE.entries: marks kept, Neynar
 // asked about makers, entries shown) and "Posted on" (CHALLENGE.posts: posts kept, Neynar, Bluesky and Lens asked) are
 // on only once the owner's Privacy words say so (docs/legal/remix-challenge-draft.md). Legal texts describe today.
@@ -1796,6 +2190,23 @@ add({
   },
 });
 
+// P6ac (branch challenge-moments, owner 2026-11-05): entries as pictures (CHALLENGE.pictureEntries) only while Terms §6e
+// and Privacy §4 describe them (docs/legal/challenge-moments-draft.md). Legal texts describe today. The id was free on
+// main and every remote branch (2026-11-05).
+add({
+  id: 'P6ac',
+  principle: 6,
+  name: 'entries as pictures of the challenge\'s characters (CHALLENGE.pictureEntries) are on only while Terms §6e and Privacy §4 say so',
+  load: async () => ({ on: CHALLENGE.pictureEntries as boolean, terms: clone(TERMS.sections), privacy: clone(PRIVACY.sections) }),
+  run: (c) => p6acProblems(c.on, c.terms, c.privacy),
+  plant: (c) => {
+    // On, with the words from before the owner's reread (2026-11-06): sheets, not pictures.
+    c.on = true;
+    for (const sec of c.terms) if (String(sec.n) === '6e') sec.body = ['During the challenge, anyone signed in may remix its characters\' sheets.'];
+    for (const sec of c.privacy) if (String(sec.n) === '4') sec.body = ['If you take part in the remix challenge: for each version of a challenge character you publish, whether it can count as an entry.'];
+  },
+});
+
 // P6u: the remix challenge is admin-only until the owner opens it (owner, 2026-11-04: "/challenge is admin-only for
 // now"; nothing opens by date alone). While CHALLENGE.public is off, with the clock past the open date (dates.opens):
 // entries are not taken (no eligibility stored at publish, so Neynar isn't asked; no marking), sheets stay
@@ -1805,7 +2216,7 @@ add({
 add({
   id: 'P6u',
   principle: 6,
-  name: 'while CHALLENGE.public is off, the dates open nothing (entries, open sheets, the $15 cap) and /challenge answers 404 to a non-admin',
+  name: 'while CHALLENGE.public is off, the dates open nothing (entries, open sheets, the challenge\'s cap) and /challenge answers 404 to a non-admin',
   load: async () => {
     const at = new Date(Date.parse(CHALLENGE.dates.opens) + 3600_000);
     const r = await fetch(`${BASE}/challenge`, { headers: { 'cache-control': 'no-cache' }, redirect: 'manual' }).catch(() => null);
@@ -1835,16 +2246,51 @@ add({
     if (c.status !== 404) problems.push(`${BASE}/challenge answers ${c.status} to a signed-out visitor, not 404`);
     // The whole HTML, its inline page data included; a link to /challenge in the markup itself.
     for (const [where, html] of [['/challenge', c.html], ['/', c.home]] as const) {
-      const m = /Remix the cast|remix challenge/i.exec(String(html)) ?? /href="\/challenge"/.exec(String(html).replace(/<script[\s\S]*?<\/script>/gi, ''));
+      const m = /Remix the cast|Remix challenge|remix challenge/i.exec(String(html)) ?? /href="\/challenge"/.exec(String(html).replace(/<script[\s\S]*?<\/script>/gi, ''));
       if (m) problems.push(`${BASE}${where}: its HTML names the challenge ("${m[0]}")`);
     }
     return problems;
   },
   plant: (c) => {
+    // The planted state is the switch off with the dates opening things anyway (so the proof holds once it is on too).
+    c.pub = false;
     c.cap = CHALLENGE.dailySpendCapUsd;
     c.entries = true;
     c.sheets = 'export const challengeSheetsOpen = (now = new Date()) => CHALLENGE.openSheets && phase(now) === \'open\';';
     c.status = 200;
+  },
+});
+
+// P6v: Submit (branch remix-submit, owner 2026-11-04). A remix becomes an entry only when its maker presses Submit,
+// which keeps the submission and the post link (studio.challenge_marks, studio.version_posts). Legal texts describe
+// today: while entries are on, Privacy §4 must say what Submit keeps, and the code must keep marks only through Submit
+// (no "latest version counts" path left). P6v was free on main and every remote branch (2026-11-04); it was P6u until main took P6u for admin-only.
+add({
+  id: 'P6v',
+  principle: 6,
+  name: 'Submit: while entries are on, Privacy §4 says what Submit keeps (the submission and the link to your own post); only Submit writes a submission, and it checks the post is the submitter\'s',
+  load: async () => ({
+    entries: CHALLENGE.entries as boolean,
+    s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+    writers: walk('src', /\.tsx?$/).filter((f) => /insert into studio\.challenge_marks/.test(read(f))),
+    route: read('src/app/api/challenge/submit/route.ts'),
+  }),
+  run: (c) => {
+    const problems: string[] = [];
+    if (c.entries && !/you submit as an entry/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say what Submit keeps (docs/legal/remix-submit-draft.md)');
+    if (c.entries && !/link to your own post/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say Submit keeps the link to your own post');
+    if (c.entries && !/checks with its network that you wrote it/i.test(c.s4)) problems.push('CHALLENGE.entries is on, but Privacy §4 does not say Submit checks that you wrote the post');
+    // Answer 9.4 (owner, 2026-11-04): the post must be the submitter's own. The route checks it; §4 says "your own post".
+    if (!/const mine = writerCheck\(got\.post, \{[\s\S]{0,300}?\}\);\s*if \(mine === 'not-yours'\) return no\(SUBMIT_WORDING\.notYourPost, 403\);\s*if \(mine === 'unknown'\) return no\([^;]*SUBMIT_WORDING\.blueskyUnknown, 403\);/.test(c.route))
+      problems.push('src/app/api/challenge/submit/route.ts: Submit does not check that the post is the submitter\'s own (writerCheck)');
+    if (c.writers.join() !== 'src/lib/challenge/entries.ts') problems.push(`submissions are written outside Submit (src/lib/challenge/entries.ts, submitEntry): ${c.writers.join(', ') || 'nowhere'}`);
+    return problems;
+  },
+  plant: (c) => {
+    c.entries = true;
+    c.s4 = 'If you take part in the remix challenge: which of your versions you mark as your entry for each character, and when.';
+    c.writers = ['src/lib/challenge/entries.ts', 'src/app/api/challenge/mark/route.ts'];
+    c.route = c.route.replace('const mine = writerCheck(', 'const mine = (() => \'ok\')(');
   },
 });
 
@@ -1868,6 +2314,38 @@ add({
   plant: (c) => {
     c.allowed = true;
     c.units = c.units.map((u: string) => u.replace(/\bOpenAI\b/g, 'a model maker'));
+  },
+});
+
+// P6t (branch remix-model-choice, 2026-11-04): model choice (IMAGES.designs.modelChoice) sends a remixer's prompt and
+// front view to each offered closed model's maker through Vercel AI Gateway. The switch may be on only while Privacy
+// names each of them there, with what it receives and how it is kept, and the consent screen (own-words-v5, for
+// everyone; owner, 2026-11-04, choice 6.1 reversed) says what each receives and keeps (legal texts describe today). P6t was free on main and on deep-funding, social-read (P6p), sheet-help, find-a-moment (P6v, P6w) and
+// challenge-three-bases (P6s, its closed-model bases) when picked; P6r is taken on three of them.
+add({
+  id: 'P6t',
+  principle: 6,
+  name: 'model choice is on only while Privacy §4 and §7 (with each maker\'s retention) and the consent screen name each offered closed model\'s maker, through Vercel AI Gateway',
+  load: async () => {
+    const c = json('config/consent.json');
+    const w = c.versions[c.current];
+    return {
+      on: MODEL_CHOICE_ON,
+      providers: CLOSED_MAKERS as string[],
+      retention: Object.fromEntries(Object.entries(CLOSED_PROVIDERS).map(([k, v]) => [k, v.retentionWords as string])),
+      s4: (PRIVACY.sections.find((s) => s.n === 4)?.body ?? []).flat().join(' '),
+      s7: (PRIVACY.sections.find((s) => s.n === 7)?.body ?? []).flat() as string[],
+      consent: [w.line, w.title, ...w.text].join('\n'),
+    };
+  },
+  run: (c) => p6tProblems(c),
+  plant: (c) => {
+    c.on = true;
+    c.providers = ['OpenAI'];
+    // Privacy §7 names OpenAI, but not how long it may keep them.
+    c.s7 = ['OpenAI receives, through Vercel AI Gateway, the prompt for each view. It may keep them, and does not train on them.'];
+    c.consent = 'Your prompt goes to fal.ai.';
+    c.s4 = 'Character sheets you publish.';
   },
 });
 

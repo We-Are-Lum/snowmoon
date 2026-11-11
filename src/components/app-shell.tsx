@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { readingPlace } from '~/lib/glossary-view';
 import { sdk } from '@farcaster/miniapp-sdk';
-import { inMiniApp, signOut, signOutWallet, useAuth, useWalletAlongside, useWalletSession, type AuthState } from '~/lib/client-auth';
+import { inMiniApp, signOut, signOutSocial, signOutWallet, useAuth, useSocialSession, useWalletAlongside, useWalletSession, type AuthState } from '~/lib/client-auth';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
 import { COMING, navItems, type NavItem } from '~/lib/nav';
 import { CHALLENGE } from '~/lib/config';
@@ -15,11 +15,9 @@ import { Assistant } from './assistant';
 import { ReplayIntro } from './first-visit';
 import { ExternalLinks } from './external-links';
 import { LegalLine } from './legal-line';
-import { SignInButton } from './sign-in';
+import { SignInChoices } from './sign-in-choices';
 import { ThemeSwitch } from './theme-switch';
 import { ImageZoom } from './image-zoom';
-import { WalletSignInButton } from './wallet';
-import { IMAGE_WORDING } from '~/lib/images/wording';
 import '../app/assistant/assistant.css';
 
 /**
@@ -304,32 +302,55 @@ function TopbarAvatar({ auth, current }: { auth: AuthState; current: boolean }) 
 const YOU_TITLE = 'You: your account, wallet and work';
 
 /**
- * Who is signed in, at the foot of the rail and the menu sheet. The name links to /you. Signed out, it offers Farcaster first,
- * then a wallet (owner, 2026-10-18: the simple step; the editor's own wallet sign-in, reused). A wallet
+ * Who is signed in, at the foot of the rail and the menu sheet. The name links to /you. Signed out, it offers Farcaster and
+ * a wallet as equals (owner, 2026-10-30; before, 2026-10-18, Farcaster first and filled). A wallet
  * session (no Farcaster one) shows its shortened address and a Sign out that ends it. Farcaster-only
  * features keep their own sign-in prompts. Inside a Farcaster app there is no wallet option.
  */
 /**
- * The account, at the top of the phone menu and at the foot of the wide-screen rail (owner, 2026-10-19). Signed out: two full-width buttons and one
- * line. Signed in: a row with a monogram and the name (or the shortened address), then Sign out as a row.
+ * The account, at the top of the phone menu and at the foot of the wide-screen rail (owner, 2026-10-19). Signed out: the ways to sign in as equal
+ * full-width buttons, a line under each, and the owner's line under all. Signed in: a row with a monogram and the name (or the shortened address), then Sign out as a row.
  * The monogram is drawn here, not a profile picture: a picture would be fetched from a host Privacy doesn't name.
  */
+/** Signed out on the website: one "Sign in" button; pressed, the ways to sign in (SignInChoices) in its place. */
+function SignInOpener() {
+  const [open, setOpen] = useState(false);
+  if (open) return <SignInChoices wallet />;
+  return (
+    <button type="button" className="menu-signin signin-open" aria-expanded={false} onClick={() => setOpen(true)}>
+      {SIGN_IN_OPEN}
+    </button>
+  );
+}
+/** The one button's word (2026-11-06). */
+const SIGN_IN_OPEN = 'Sign in';
+
 function MenuAccount({ auth, where = 'menu' }: { auth: AuthState; where?: 'menu' | 'rail' }) {
   const at = where === 'rail' ? ' rail-account' : '';
   const wallet = useWalletSession();
   // A wallet linked to a Farcaster account is signed in as that account: its name, not the address (2026-11-04).
-  const name = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? (wallet.linked?.name ?? wallet.short) : null;
+  // A Lens or Bluesky sign-in (branch signin-lens-bluesky), when there is no Farcaster or wallet one.
+  const social = useSocialSession();
+  const name = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? (wallet.linked?.name ?? wallet.short) : social ? social.name : null;
+  // On the You page, signed out, the page itself offers the ways to sign in: the rail and the menu don't repeat them,
+  // so each button (and any error it shows) is on the screen once (2026-11-05, the owner's localhost sign-ins).
+  // The same on Bluesky's return page (2026-11-06): when a sign-in fails there, the page offers the ways to sign in under
+  // its error, so the rail and the menu don't repeat them.
+  const path = usePathname();
+  const onYou = path === '/you' || path === '/sign-in/bluesky';
   if (auth.kind === 'loading') return <div className={`menu-account${at}`} aria-busy="true" />;
+  if (name === null && onYou) return null;
   if (name === null)
     return (
       <div className={`menu-account menu-account-out${at}`}>
-        <SignInButton className="menu-signin menu-signin-primary" label={IMAGE_WORDING.prepaid.menuSignIn} />
-        {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton className="menu-signin menu-signin-outline" note={false} />}
-        <p className="menu-signin-note">{IMAGE_WORDING.prepaid.signInNote}</p>
+        {/* Farcaster and a wallet as equals (owner, 2026-10-30), from SIGN_IN_METHODS; inside a Farcaster app, no wallet.
+            On the website, one "Sign in" button opens the choice (2026-11-06, Garance: the four stacked took a quarter of
+            the screen); inside a Farcaster app there is only Farcaster, shown as it is. */}
+        {auth.kind === 'signed-out' && !auth.inApp ? <SignInOpener /> : <SignInChoices wallet={false} />}
       </div>
     );
-  const out = auth.kind === 'signed-in' ? (auth.via === 'website' ? signOut : null) : signOutWallet;
-  const letter = auth.kind === 'signed-in' ? (auth.username?.[0] ?? '#') : wallet?.linked ? (wallet.linked.name.replace(/^@/, '')[0] ?? '#') : (wallet?.address[2] ?? '0');
+  const out = auth.kind === 'signed-in' ? (auth.via === 'website' ? signOut : null) : wallet ? signOutWallet : signOutSocial;
+  const letter = auth.kind === 'signed-in' ? (auth.username?.[0] ?? '#') : wallet?.linked ? (wallet.linked.name.replace(/^@/, '')[0] ?? '#') : wallet ? (wallet.address[2] ?? '0') : (social?.name.replace(/^lens\//, '')[0] ?? '#');
   return (
     <div className={`menu-account${at}`}>
       <p className="menu-account-row">

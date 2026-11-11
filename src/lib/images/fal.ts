@@ -18,6 +18,14 @@ export interface Made {
 }
 
 export class ImageUnavailable extends Error {}
+/**
+ * The model's own safety check refused the request (branch challenge-models, 2026-11-08: a fal model answered 422
+ * content_policy_violation for one style test prompt; a closed model's gateway answers a moderation block). Treated
+ * like a picture the host's safety checker flagged: counted, dropped, and answered as "blocked" (src/lib/images/paid.ts).
+ */
+export class ImageRefused extends Error {}
+/** Does a provider's error answer say its content policy or moderation refused it? */
+export const refusedByPolicy = (status: number, body: string) => (status === 400 || status === 422) && /content_policy|moderation|safety|content_filter/i.test(body);
 
 type Size = { width: number; height: number };
 
@@ -31,7 +39,11 @@ async function call(endpoint: string, body: Record<string, unknown>, settings: R
     body: JSON.stringify({ ...body, ...settings }),
   }).catch(() => null);
   if (!res) throw new ImageUnavailable('fal.ai did not answer');
-  if (!res.ok) throw new ImageUnavailable(`fal.ai ${res.status}`);
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    if (refusedByPolicy(res.status, text)) throw new ImageRefused(`fal.ai ${res.status}`);
+    throw new ImageUnavailable(`fal.ai ${res.status}`);
+  }
   const j = (await res.json()) as { images?: { url?: string; content_type?: string }[]; seed?: number; has_nsfw_concepts?: boolean[] };
   const url = j.images?.[0]?.url ?? '';
   const m = url.match(/^data:([^;]+);base64,(.+)$/);
@@ -86,3 +98,4 @@ export async function makeEdit(
   const made = await call(IMAGES.editModel.endpoint, { prompt, image_urls }, settings, mp * IMAGES.editPricePerMp);
   return made;
 }
+

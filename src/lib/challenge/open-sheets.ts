@@ -24,7 +24,8 @@ export const privacyDescribesChallenge = (privacy = PRIVACY) => /remix challenge
  * Sheets open to everyone who passes the gate: the owner has opened the challenge (CHALLENGE.public; owner, 2026-11-04:
  * nothing opens by date alone), the switch, inside the entry window (from CHALLENGE.dates), once Privacy says so.
  */
-export const challengeSheetsOpen = (now = new Date(), privacy = PRIVACY, pub: boolean = CHALLENGE.public) => pub && CHALLENGE.openSheets && phase(now) === 'open' && privacyDescribesChallenge(privacy);
+// Entries as pictures (CHALLENGE.pictureEntries, branch challenge-moments): sheets go back to invitation only.
+export const challengeSheetsOpen = (now = new Date(), privacy = PRIVACY, pub: boolean = CHALLENGE.public) => pub && CHALLENGE.openSheets && phase(now) === 'open' && privacyDescribesChallenge(privacy) && !CHALLENGE.pictureEntries;
 
 export const isChallengeCharacter = (entityName: string) => CHALLENGE.characters.some((s) => bookCharacter(s)?.name === entityName);
 
