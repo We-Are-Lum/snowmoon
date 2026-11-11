@@ -591,7 +591,14 @@ playOut('play', 202);
   ok(auto.every((p) => p === auto[0]), 'and so is the site computer\'s plan for your side');
   const b = belief({ e, o: 'A', view: e.fog(ms[2].w, s, 'A'), lastSeen: {}, ownSeen: ms[2].own!.A });
   ok(b.sq[kA]?.o === 'A' && b.sq[kA].hp === 2 && !belief({ e, o: 'A', view: e.fog(ms[2].w, s, 'A'), lastSeen: {} }).sq[kA], 'the computer believes its square is where it last saw it (only with the memory)');
-  ok(checkComputer(json(ms[0])).length === 0, 'a match whose computer remembers still replays');
+  // A match played for real, its computer remembering its own pieces: its record replays to the same computer orders.
+  // (Not ms[0]: its board was edited by hand above, so a replay from the record can't reproduce it, and whether that
+  // happens to change the computer's plan depends on the match's random value: the check passed or failed by chance.)
+  {
+    const mm = newSolo({ id: 'trem00000001', ruleset: 'book-4', level: 2, seed: 11, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+    while (!mm.end && mm.turn < 4) { planComputer(mm, now()); submit(mm, { turn: mm.turn, placements: parseOrders(scripted(mm), rulesOf(mm).s), source: 'agent', final: true, now: now() }); }
+    ok(!!mm.remember && checkComputer(json(mm)).length === 0, 'a match whose computer remembers still replays');
+  }
   // Simulate (fix 4): last-seen enemy towers by default, use_last_seen: false leaves them out; every square of a belief
   // you can see is named at once.
   {
