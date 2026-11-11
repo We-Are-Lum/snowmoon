@@ -52,3 +52,20 @@
 .gl-clip-note { margin: 0; }
 
 .gl-draftline { margin: 24px 0 0; }
+
+/* The model-written explanation (owner-only for now): set apart from the book's quotes, labelled. */
+.gl-written { margin: 8px 0 16px; padding: 12px 14px; border: 1px dashed var(--rule); border-radius: var(--radius); }
+.gl-written h2 { margin-top: 0; }
+.gl-written-label { margin: 0 0 8px; font-size: var(--text-small); }
+.gl-written-ai { display: inline-block; padding: 2px 6px; border: 1px solid var(--ink); border-radius: var(--radius); font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; }
+.gl-written-text { margin: 0; }
+.gl-written-cites { font-size: var(--text-small); white-space: normal; }
+.gl-written-cites a { padding: 4px 0; }
+
+/* The bake-off (owner-only). */
+.gl-bake-counts { border-collapse: collapse; margin: 8px 0 16px; font-size: var(--text-small); }
+.gl-bake-counts th, .gl-bake-counts td { padding: 6px 10px; border-bottom: 1px solid var(--rule); text-align: left; }
+.gl-bake-entry { border-top: 1px solid var(--rule); padding-top: 8px; }
+.gl-bake-col ol { padding-left: 20px; }
+.gl-bake-col li { margin: 6px 0; }
+.gl-bake-col li[data-supported='false'] { text-decoration: underline wavy; text-underline-offset: 3px; }

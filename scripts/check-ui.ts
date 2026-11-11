@@ -1615,6 +1615,9 @@ async function checkAiLabels() {
         `try{localStorage.setItem('snowmoon.read-to','32');localStorage.setItem('snowmoon.signin',${JSON.stringify(JSON.stringify({ token, fid: 6786, username: 'naaate', nameProof: null, exp }))})}catch(e){}`,
       );
       await page.route('**/api/chat/status**', (r) => r.abort());
+      // The glossary's written explanations ask the server with this fake token, which it can't verify offline:
+      // owner-only and not what this pass checks (npm run test:glossary-explanations does).
+      await page.route('**/api/glossary/written/**', (r) => r.abort());
       await page.route('**/api/images/status**', async (r) => {
         // The real answer, then the signed-in parts stood in. A request still in flight when its page closes has nowhere
         // to go: ignore it (2026-10-30: one closed mid-fetch and the uncaught error ended the whole run).
