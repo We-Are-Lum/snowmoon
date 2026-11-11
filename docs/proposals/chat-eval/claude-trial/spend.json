@@ -1,0 +1,11 @@
+{
+ "cap_usd": 5,
+ "spent_usd": 1.5218083500000008,
+ "by_model": {
+  "openai/gpt-oss-120b": 0.033174449999999994,
+  "claude-opus-5-5": 1.0204167999999996,
+  "openai/gpt-oss-safeguard-20b": 0.04748309999999999,
+  "claude-sonnet-5-5": 0.42073399999999994
+ },
+ "calls": 512
+}
