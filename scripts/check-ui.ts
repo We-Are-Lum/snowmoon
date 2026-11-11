@@ -1796,11 +1796,12 @@ async function checkChallengeLive() {
     }
     if (w >= 1200) {
       // One tap opens it; opened on a challenge page, it stays open there on this device; closed, it starts closed again.
-      await page.locator('.panel-reopen').click();
+      // (A missing control is reported above; the taps then fail softly, so the rest of check:ui still runs.)
+      await page.locator('.panel-reopen').click({ timeout: 5000 }).catch(() => {});
       if (!(await page.locator('.panel').isVisible())) fail(`/challenge/entries @${w} (${scheme}, live): one tap doesn't open the assistant`);
       await open(page, '/challenge/zei');
       if (!(await page.locator('.panel').isVisible())) fail(`/challenge/zei @${w} (${scheme}, live): opened on a challenge page before, the assistant starts closed again`);
-      await page.locator('.panel-close').click();
+      await page.locator('.panel-close').click({ timeout: 5000 }).catch(() => {});
       await open(page, '/challenge');
       if (await page.locator('.panel').isVisible()) fail(`/challenge @${w} (${scheme}, live): closed on a challenge page, the assistant opens again`);
       // Elsewhere unchanged: open on a chapter unless closed there.
