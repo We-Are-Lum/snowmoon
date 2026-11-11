@@ -12,6 +12,7 @@
  * (read-only) when STUDIO_DATABASE_URL is set. Page checks fetch the deployed
  * site; the third-party request check drives the local Chrome.
  */
+import { p1cProblems } from './lib/p1c';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -153,38 +154,35 @@ add({
 add({
   id: 'P1c',
   principle: 1,
-  name: 'in the database, every version of a published element has a recipe (a style or sheet: every one of its pictures)',
+  name: 'in the database, every version of a published element has a recipe (a style or sheet: every one of its pictures; a style version with no pictures only when a later version has samples with recipes, and then the latest has them)',
   load: async () => {
     const url = process.env.STUDIO_DATABASE_URL;
-    type Row = { id: string; recipe_id: string | null; element_type: string; body: unknown };
+    type Row = { id: string; recipe_id: string | null; element_type: string; body: unknown; element_id: string; version_no: number; kind: string | null };
     if (!url) return { rows: [] as Row[], skipped: true };
     const sql = postgres(url, { prepare: false, max: 1 });
     const rows = await sql<Row[]>`
-      select v.id, v.recipe_id, e.element_type, v.body from studio.element_versions v join studio.elements e on e.id = v.element_id where e.status = 'published'`;
+      select v.id, v.recipe_id, e.element_type, v.body, e.id::text as element_id, v.version_no, en.kind
+      from studio.element_versions v join studio.elements e on e.id = v.element_id left join studio.entities en on en.id = e.entity_id
+      where e.status = 'published'`;
     await sql.end();
     return { rows: [...rows], skipped: false };
   },
-  // A style or character sheet (element_type 'design') keeps a recipe inside its body for each of its
-  // pictures (samples, views) rather than a recipe_id (owner, 2026-10-14): it passes only when it has
-  // at least one picture and every picture's recipe names its prompt and model. Anything else needs recipe_id.
+  // The rule lives in scripts/lib/p1c.ts (shared with scripts/test-publish-style.ts): a style or sheet passes when it has
+  // at least one picture and every picture's recipe names its prompt and model; anything else needs recipe_id. One narrow
+  // exception (owner, 2026-11-10): a style version with no pictures, when a later version of it has samples with recipes;
+  // a style that uses it must have them in its latest version. Other styles: the general rule (samples or views).
   run: ({ rows, skipped }) => {
     if (skipped) return ['skipped: STUDIO_DATABASE_URL not set'];
-    const pictures = (body: unknown) => {
-      const b = (body ?? {}) as { samples?: unknown; views?: unknown };
-      const views = b.views && typeof b.views === 'object' ? Object.values(b.views as Record<string, unknown>) : [];
-      return [...(Array.isArray(b.samples) ? b.samples : []), ...views] as { recipe?: { prompt?: string; model?: string } }[];
-    };
-    const inBody = (r: { element_type: string; body: unknown }) => {
-      const ps = pictures(r.body);
-      return r.element_type === 'design' && ps.length > 0 && ps.every((p) => !!p?.recipe?.prompt && !!p?.recipe?.model);
-    };
-    return rows.filter((r: { recipe_id: string | null }) => !r.recipe_id && !inBody(r as never)).map((r: { id: string }) => `version ${r.id} has no recipe`);
+    return p1cProblems(rows as never);
   },
   plant: (c) => {
     c.skipped = false;
-    // A version with neither kind of recipe, and a style whose second sample has none.
-    c.rows.push({ id: 'planted', recipe_id: null, element_type: 'image', body: {} });
-    c.rows.push({ id: 'planted-style', recipe_id: null, element_type: 'design', body: { samples: [{ recipe: { prompt: 'p', model: 'm' } }, {}] } });
+    // A version with neither kind of recipe, a style whose second sample has none, and (owner, 2026-11-10) a style whose
+    // latest version is empty after one with samples: the exception never excuses the latest.
+    c.rows.push({ id: 'planted', recipe_id: null, element_type: 'image', body: {}, element_id: 'p0', version_no: 1, kind: null });
+    c.rows.push({ id: 'planted-style', recipe_id: null, element_type: 'design', body: { samples: [{ recipe: { prompt: 'p', model: 'm' } }, {}] }, element_id: 'p1', version_no: 1, kind: 'style' });
+    c.rows.push({ id: 'planted-v1', recipe_id: null, element_type: 'design', body: { samples: [{ recipe: { prompt: 'p', model: 'm' } }] }, element_id: 'p2', version_no: 1, kind: 'style' });
+    c.rows.push({ id: 'planted-v2-empty', recipe_id: null, element_type: 'design', body: { samples: [] }, element_id: 'p2', version_no: 2, kind: 'style' });
   },
 });
 
