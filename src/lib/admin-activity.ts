@@ -138,7 +138,7 @@ async function publicLists(tx: Sql, maker: number | null, here: Set<string>, byl
     title: r.title || r.entity, by: designByline(r.by_name, Number(r.by_fid), r.role), href: `/references/designs/${r.id}`, at: iso(r.created_at), note: r.title ? r.entity : null,
   });
   const images = await tx<{ id: string; created_at: string; by_fid: string; by_name: string | null; chapter: number | null }[]>`
-    select v.id::text, e.created_at, e.created_by_fid::text as by_fid, r.params->>'by_name' as by_name, (select a.chapter from studio.anchors a where a.version_id = v.id limit 1) as chapter
+    select v.id::text, e.created_at, e.created_by_fid::text as by_fid, r.params->>'by_name' as by_name, (select a.chapter from studio.anchors a where a.version_id = v.id and not (r.params ? 'challenge') limit 1) as chapter
     from studio.elements e join studio.element_versions v on v.element_id = e.id join studio.recipes r on r.id = v.recipe_id
     where e.element_type = 'image' and e.status = 'published' and e.work_id = ${WORK_ID} and r.source = 'in_app' ${by('e.created_by_fid')}
     order by e.created_at desc limit 25`;

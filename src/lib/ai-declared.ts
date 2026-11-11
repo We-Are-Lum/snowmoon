@@ -1,4 +1,5 @@
 import { IMAGES } from './config';
+import { NO_PASSAGE } from './images/no-passage';
 import type { RecipeView } from './recipe-view';
 
 /**
@@ -60,7 +61,8 @@ export function readerImageView(o: {
   versionId: string | null;
   by: string;
   prompt?: string;
-  chapter: number;
+  /** Null for a remix challenge picture, which has no passage (owner, 2026-11-10). */
+  chapter: number | null;
   where?: string | null;
   date?: string;
   model?: string;
@@ -72,7 +74,7 @@ export function readerImageView(o: {
     github: full ?? '',
     whose: WHOSE.reader(o.by),
     full: full ? { href: full, text: 'Full recipe →' } : null,
-    what: `An image for Chapter ${o.chapter}${o.where ? `, ${o.where}` : ''}, made by a reader for one passage, not canon.`,
+    what: o.chapter === null ? NO_PASSAGE.what : `An image for Chapter ${o.chapter}${o.where ? `, ${o.where}` : ''}, made by a reader for one passage, not canon.`,
     model: { name: o.model ?? `${IMAGES.model.name}, open weights`, licence: IMAGES.model.licence, where: `on ${IMAGES.model.host}, a hosted service` },
     prompt: o.prompt ? { label: 'The prompt, as the person wrote it', text: o.prompt } : null,
     inputs: [],

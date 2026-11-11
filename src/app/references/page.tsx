@@ -1,4 +1,5 @@
 import { InfoLabel } from '~/components/info-label';
+import { hasPassage, type Anchored } from '~/lib/images/no-passage';
 import { IMAGES } from '~/lib/config';
 import { db } from '~/lib/db';
 import { feed, type ReaderImage } from '~/lib/images/data';
@@ -18,7 +19,7 @@ export const revalidate = 60;
 /** How many items the front page shows, across all kinds. */
 const LATEST = 60;
 
-function moment(im: ReaderImage): MomentItem {
+function moment(im: Anchored<ReaderImage>): MomentItem {
   const place = inPassage(im.chapter, im.start, im.end).place;
   return {
     versionId: im.versionId,
@@ -49,7 +50,8 @@ export default async function Pictures({ searchParams }: { searchParams: Promise
   const moments = q.show === 'moments' || q.sort === 'liked';
   const sort = q.sort === 'liked' ? 'liked' : 'new';
   const sql = db();
-  const images = sql ? await feed(sql, sort, LATEST).catch(() => []) : [];
+  // Moments are readers' images of passages: a remix challenge picture has none (owner, 2026-11-10), so it is listed on /challenge only.
+  const images = (sql ? await feed(sql, sort, LATEST).catch(() => []) : []).filter(hasPassage);
   const empty = <p className="pictures-empty">Nothing is published here yet.</p>;
   let latest: LatestItem[] = [];
   if (!moments && sql) {

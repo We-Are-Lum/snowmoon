@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { NO_PASSAGE } from '~/lib/images/no-passage';
 import path from 'node:path';
 import { ImageResponse } from 'next/og';
 import sharp from 'sharp';
@@ -24,7 +25,8 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   const sql = db();
   const im = sql ? await imageByVersion(sql, (await params).id).catch(() => null) : null;
   if (!im) return new Response('No such image', { status: 404 });
-  const where = [`SNOWMOON · CHAPTER ${im.chapter}`, passageLabel(im.chapter, im.start, im.end)].filter(Boolean).join(' · ');
+  // A remix challenge picture has no passage (owner, 2026-11-10).
+  const where = im.chapter === null || im.start === null || im.end === null ? `SNOWMOON · ${NO_PASSAGE.label.toUpperCase()}` : [`SNOWMOON · CHAPTER ${im.chapter}`, passageLabel(im.chapter, im.start, im.end)].filter(Boolean).join(' · ');
   const png = new ImageResponse(
     (
       <div style={{ width: W, height: H, display: 'flex', flexDirection: 'column', background: '#161614', fontFamily: 'DM Mono' }}>

@@ -46,7 +46,7 @@ export default async function Home() {
     versionId: im.versionId,
     url: im.url,
     chapter: im.chapter,
-    where: passageLabel(im.chapter, im.start, im.end),
+    where: im.chapter === null || im.start === null || im.end === null ? null : passageLabel(im.chapter, im.start, im.end),
     by: byline(im.byName, im.byFid),
     at: im.createdAt,
     alt: `AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`,

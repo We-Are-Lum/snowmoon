@@ -1,5 +1,6 @@
 'use client';
 
+import { chapterLabel } from '~/lib/images/no-passage';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
@@ -12,7 +13,7 @@ import { AiLabel } from './recipe-sheet';
  * had styles, character sheets and planning threads, which this edition does not have yet). Nothing is
  * covered by chapter (owner, 2026-10-14). The time is served as a date and shown as "n min ago" once loaded.
  */
-export type HomeFeedItem = { versionId: string; url: string; chapter: number; where: string | null; by: string; at: string; alt: string; prompt: string };
+export type HomeFeedItem = { versionId: string; url: string; chapter: number | null; where: string | null; by: string; at: string; alt: string; prompt: string };
 
 function ago(iso: string, now: number): string {
   const m = Math.max(0, Math.round((now - Date.parse(iso)) / 60000));
@@ -46,7 +47,7 @@ export function HomeFeed({ items, unavailable }: { items: HomeFeedItem[]; unavai
                 </Link>
                 <div className="home-feed-body">
                   <span className="home-feed-what">
-                    Chapter {im.chapter}
+                    {chapterLabel(im.chapter)}
                     {im.where ? ` · ${im.where}` : ''}
                   </span>
                   <p className="block-caption home-feed-caption">
