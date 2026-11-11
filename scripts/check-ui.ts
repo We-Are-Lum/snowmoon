@@ -1809,7 +1809,24 @@ async function checkChallengeLive() {
       if (!(await page.locator('.panel').isVisible())) fail(`/chapter/1 @${w} (${scheme}, live): the assistant panel is no longer open by default outside the challenge`);
     }
     // One line when these pass, so a skipped check can't pass for a silent one (owner, 2026-11-10).
-    if (failures.length === before) console.log(`ok   challenge pages @${w} (${scheme}): load and settle; the assistant panel closed at load on 4 pages${w >= 1200 ? '; one tap opens it; opened there it starts open again; closed there it starts closed; /chapter/1 still opens by default' : '; no panel control at phone width'}`);
+    // "Make it" in reach on phones (owner, 2026-11-11): under 768px it sticks to the bottom of the first screen, and goes
+    // back to its place while a field has focus (the keyboard is up); at 1440 it never sticks.
+    const base = (Object.values(CHALLENGE.bases as Record<string, string[]>).flat()[0]) ?? null;
+    if (base) {
+      await open(page, `/challenge/make?from=${base}`);
+      const make = page.locator('.mk-page[data-step="remix"] > .mk-make').first();
+      await make.waitFor({ timeout: 15000 }).catch(() => fail(`/challenge/make @${w} (${scheme}, live): no "Make it" button`));
+      const at = async () => make.evaluate((e) => ({ pos: getComputedStyle(e).position, bottom: e.getBoundingClientRect().bottom, top: e.getBoundingClientRect().top, vh: window.innerHeight }));
+      const s = await at().catch(() => null);
+      if (s && w < 768) {
+        if (s.pos !== 'sticky' || s.bottom > s.vh || s.top < 0) fail(`/challenge/make @${w} (${scheme}, live): "Make it" isn't on the first screen (${JSON.stringify(s)})`);
+        await page.locator('#mk-words').focus().catch(() => {});
+        const f = await at().catch(() => null);
+        if (f?.pos !== 'static') fail(`/challenge/make @${w} (${scheme}, live): "Make it" stays stuck over the page while the change box has focus`);
+        await page.locator('#mk-words').blur().catch(() => {});
+      } else if (s && s.pos !== 'static') fail(`/challenge/make @${w} (${scheme}, live): "Make it" sticks on a wide screen`);
+    }
+    if (failures.length === before) console.log(`ok   challenge pages @${w} (${scheme}): "Make it" ${w < 768 ? 'on the first screen, back in place while typing' : 'in its place'}; the assistant panel closed at load on 4 pages${w >= 1200 ? '; one tap opens it; opened there it starts open again; closed there it starts closed; /chapter/1 still opens by default' : '; no panel control at phone width'}`);
     await page.close();
   }
 }
