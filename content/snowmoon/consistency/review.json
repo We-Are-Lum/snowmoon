@@ -1,0 +1,330 @@
+{
+ "about": "A check by eye of the measured scores (scores.json). The coding agent (Claude, a closed model) looked at every one of the 106 measured images beside its characters' sheets on 2026-10-23. DRAFT for the owner: the owner's own look decides.",
+ "picking": "Redos are picked from this by-eye list only, never from the automatic scores (owner, 2026-10-23: \"The automatic scores were wrong 6 times in 10, so don't use them to pick redos: use the by-eye list, and I'll judge the trial by eye.\").",
+ "by": "coding agent (Claude, closed model), 2026-10-23",
+ "finding": "The commonest fault is a double: a character's costume (or hair) copied onto a second person in the same picture. The automatic scores catch that only sometimes (the 'possible double' flag); they mostly measure the figure taken to be the character, and that step fails when a character is small, seated or seen from behind.",
+ "problems": [
+  {
+   "id": "c2-b122-sweeping",
+   "characters": [
+    "zei",
+    "fin"
+   ],
+   "note": "Zei is drawn with an animal's face; Fin's red hooded jacket is copied onto a second, older man with a broom."
+  },
+  {
+   "id": "c14-b030-semifinal-arena",
+   "characters": [
+    "zei"
+   ],
+   "note": "Zei appears twice: a second boy in his orange jacket sits across the arena."
+  },
+  {
+   "id": "c21-b019-civics-score",
+   "characters": [
+    "lily",
+    "seila"
+   ],
+   "note": "Lily wears Seila's rust-orange coat over her grey poncho: clothes swapped between the two references."
+  },
+  {
+   "id": "c9-b105-sealed-car",
+   "characters": [
+    "zei",
+    "den"
+   ],
+   "note": "A second boy beside Zei has Zei's hair with the blue streak."
+  },
+  {
+   "id": "c7-b049-toast",
+   "characters": [
+    "mu",
+    "zei"
+   ],
+   "note": "A third person, blond, wears Zei's orange-and-black outfit."
+  },
+  {
+   "id": "c5-b043-spiral-ramp",
+   "characters": [
+    "zei",
+    "bai"
+   ],
+   "note": "A second boy beside Zei wears a copy of his outfit."
+  },
+  {
+   "id": "c11-b081-broken-redball",
+   "characters": [
+    "zven"
+   ],
+   "note": "Zven appears twice: two boys in his yellow tunic and green shorts."
+  },
+  {
+   "id": "c1-b132-food-boxes",
+   "characters": [
+    "gladias",
+    "zven"
+   ],
+   "note": "A blond boy at the table wears Zven's yellow-and-green tunic."
+  },
+  {
+   "id": "c13-b065-hijacked-screen",
+   "characters": [
+    "seila",
+    "lily"
+   ],
+   "note": "Two girls in Lily's grey poncho."
+  },
+  {
+   "id": "c2-b038-foil-classroom",
+   "characters": [
+    "zei",
+    "fin"
+   ],
+   "note": "Neither Zei (orange jacket, blue streak) nor Fin (red poncho) can be picked out among the students."
+  },
+  {
+   "id": "c28-b057-zven-sofa",
+   "characters": [
+    "zven",
+    "seila"
+   ],
+   "note": "A second woman wears Seila's rust-orange coat."
+  },
+  {
+   "id": "c23-b078-red-call",
+   "characters": [
+    "gladias"
+   ],
+   "note": "Gladias has red hair and a sleeveless olive top, not his chestnut hair and cream sleeves."
+  },
+  {
+   "id": "c19-b110-sealed-tea",
+   "characters": [
+    "gladias",
+    "zei"
+   ],
+   "note": "Zei, small at the back, wears black, without his orange jacket."
+  },
+  {
+   "id": "c19-b098-download-cable",
+   "characters": [
+    "zei"
+   ],
+   "note": "A second figure wears Zei's black bodysuit with cyan seams."
+  },
+  {
+   "id": "c31-b009-reunion-hug",
+   "characters": [
+    "deluin",
+    "zei"
+   ],
+   "note": "A third person, seen from behind, wears an orange jacket like Zei's."
+  },
+  {
+   "id": "c27-b114-countdown-chant",
+   "characters": [
+    "zei",
+    "bai"
+   ],
+   "note": "A second person wears Bai's outfit.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  },
+  {
+   "id": "c7-b100-audience",
+   "characters": [
+    "fin"
+   ],
+   "note": "A second red-haired boy wears Fin's yellow sneakers.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  },
+  {
+   "id": "c6-b100-assembly",
+   "characters": [
+    "gladias",
+    "mov"
+   ],
+   "note": "Possibly Mov's vest on another man.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  },
+  {
+   "id": "c2-b003-electronics-street",
+   "characters": [
+    "zei",
+    "fin"
+   ],
+   "note": "Stray text: a garbled shop sign.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  },
+  {
+   "id": "c16-b060-helisport-broadcast",
+   "characters": [
+    "gladias",
+    "febric"
+   ],
+   "note": "Stray text: a tiny brand mark on a TV.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  },
+  {
+   "id": "c28-b013-general-arrives",
+   "characters": [
+    "lektor",
+    "den"
+   ],
+   "note": "Den's robe is brown-olive instead of grey.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  },
+  {
+   "id": "c12-b013-priests-on-platform",
+   "characters": [
+    "zei"
+   ],
+   "note": "Seven robed priests where the passage has six.",
+   "by": "found by eye, coding agent (image-check pilot), 2026-10-24"
+  }
+ ],
+ "measured_worst10": {
+  "c12-b139-drone-scan": "measurement error: Zei is there, small and seated in the centre, and looks right; a tiny figure at the side was taken for him",
+  "c19-b110-sealed-tea": "real, minor: Zei, small at the back, without his jacket",
+  "c2-b038-foil-classroom": "real: neither character can be picked out",
+  "c23-b004-green-cafeteria": "measurement error: Fin looks right; Gladias is tiny in the background",
+  "c31-b066-broken-gates": "measurement error: Seila stands beside Gladias and looks right, but the detector did not separate her from him",
+  "c4-b003-camera-ladder": "measurement error: Fin looks right (the hair-colour score is off)",
+  "c14-b030-semifinal-arena": "real: Zei appears twice",
+  "c13-b065-hijacked-screen": "real: Lily's poncho on a second girl",
+  "c8-b016-bus-debate": "measurement error: Gladias looks right",
+  "c26-b075-seila-runs": "measurement error: Gladias is seen from behind (the back of his head was taken for a face)"
+ },
+ "by_design": {
+  "c29-b109-zei-weeps": "Zei's white-and-grey jacket: the book's snow jacket (c29-b2)",
+  "c29-b002-snowy-hill-sunrise": "the same snow jacket",
+  "c20-b174-standing-up": "Seila in an open privacy robe (the scene's robe)",
+  "c16-b110-trip-news": "Gladias in an open privacy robe",
+  "c16-b060-helisport-broadcast": "Gladias in an open privacy robe",
+  "c3-b092-booth": "robed (the scene's privacy robe)",
+  "c6-b100-assembly": "robed (the scene's privacy robe)",
+  "c18-b079-pyramid-view": "robed (the scene's privacy robe)"
+ },
+ "trial10": [
+  "c2-b122-sweeping",
+  "c14-b030-semifinal-arena",
+  "c21-b019-civics-score",
+  "c9-b105-sealed-car",
+  "c7-b049-toast",
+  "c5-b043-spiral-ramp",
+  "c11-b081-broken-redball",
+  "c1-b132-food-boxes",
+  "c13-b065-hijacked-screen",
+  "c2-b038-foil-classroom"
+ ],
+ "trial10_why": "The ten worst real problems found by eye, most severe first. Only three of them are in the measured worst 10; the measured list is mostly measurement errors. Six are two-character images, so the who-is-who wording is tested.",
+ "unmeasured": {
+  "c26-b132-drone-escape": "The Drive copy (sha256 c4a4239e88998d2c…, 2026-10-04 12:22 PDT) is the first render: two drones, seed 26632, recorded in commit 0500a18. The job was rewritten that night (one drone, one rider, seed 27632) and re-rendered; commit 4f381af replaced the recipe (sha256 b0bbfa6c912601b1…). The re-render was never copied to Drive and is no longer on disk. Excluded from publishing in both versions; never in published.json.",
+  "c27-b071-tea-robot": "The Drive copy (sha256 60399962853b9068…, 2026-10-04 12:27 PDT) is the first render: Gladias and Zei, seed 27571 (0500a18). Rewritten that night to Gladias alone, seed 28571, and re-rendered; 4f381af replaced the recipe (sha256 9a15e0a83fc7418e…). The re-render was never copied to Drive and is no longer on disk. Excluded from publishing in both versions; never in published.json."
+ },
+ "trial_doubles": {
+  "about": "The trial, double or not, per picture: by eye (coding agent, 2026-10-24) and by the Argon check (google/gemini-4-argon via the illustration-check script, problem type reference_copy_in_crowd; the full answers stay private, private/argon/). No scores; the owner picks by eye.",
+  "a_still_doubled_by_eye": [
+   "c1-b132-food-boxes",
+   "c11-b081-broken-redball",
+   "c13-b065-hijacked-screen",
+   "c21-b019-civics-score",
+   "c7-b049-toast"
+  ],
+  "by_eye": {
+   "c2-b122-sweeping|original": true,
+   "c2-b122-sweeping|a": false,
+   "c2-b122-sweeping|b": true,
+   "c2-b122-sweeping|c2": true,
+   "c14-b030-semifinal-arena|original": true,
+   "c14-b030-semifinal-arena|a": false,
+   "c14-b030-semifinal-arena|b": false,
+   "c14-b030-semifinal-arena|c2": false,
+   "c21-b019-civics-score|original": true,
+   "c21-b019-civics-score|a": true,
+   "c21-b019-civics-score|b": true,
+   "c21-b019-civics-score|c2": true,
+   "c9-b105-sealed-car|original": true,
+   "c9-b105-sealed-car|a": false,
+   "c9-b105-sealed-car|b": true,
+   "c9-b105-sealed-car|c2": false,
+   "c7-b049-toast|original": true,
+   "c7-b049-toast|a": true,
+   "c7-b049-toast|b": true,
+   "c7-b049-toast|c2": false,
+   "c5-b043-spiral-ramp|original": true,
+   "c5-b043-spiral-ramp|a": false,
+   "c5-b043-spiral-ramp|b": true,
+   "c5-b043-spiral-ramp|c2": true,
+   "c11-b081-broken-redball|original": true,
+   "c11-b081-broken-redball|a": true,
+   "c11-b081-broken-redball|b": true,
+   "c11-b081-broken-redball|c2": false,
+   "c1-b132-food-boxes|original": true,
+   "c1-b132-food-boxes|a": true,
+   "c1-b132-food-boxes|b": true,
+   "c1-b132-food-boxes|c2": false,
+   "c13-b065-hijacked-screen|original": true,
+   "c13-b065-hijacked-screen|a": true,
+   "c13-b065-hijacked-screen|b": true,
+   "c13-b065-hijacked-screen|c2": false,
+   "c2-b038-foil-classroom|original": false,
+   "c2-b038-foil-classroom|a": false,
+   "c2-b038-foil-classroom|b": true,
+   "c2-b038-foil-classroom|c2": false
+  },
+  "argon": {
+   "c2-b122-sweeping|original": true,
+   "c2-b122-sweeping|a": false,
+   "c2-b122-sweeping|b": true,
+   "c2-b122-sweeping|c2": true,
+   "c14-b030-semifinal-arena|original": true,
+   "c14-b030-semifinal-arena|a": false,
+   "c14-b030-semifinal-arena|b": true,
+   "c14-b030-semifinal-arena|c2": false,
+   "c21-b019-civics-score|original": true,
+   "c21-b019-civics-score|a": true,
+   "c21-b019-civics-score|b": true,
+   "c21-b019-civics-score|c2": true,
+   "c9-b105-sealed-car|original": true,
+   "c9-b105-sealed-car|a": false,
+   "c9-b105-sealed-car|b": true,
+   "c9-b105-sealed-car|c2": false,
+   "c7-b049-toast|original": true,
+   "c7-b049-toast|a": true,
+   "c7-b049-toast|b": true,
+   "c7-b049-toast|c2": false,
+   "c5-b043-spiral-ramp|original": true,
+   "c5-b043-spiral-ramp|a": false,
+   "c5-b043-spiral-ramp|b": true,
+   "c5-b043-spiral-ramp|c2": false,
+   "c11-b081-broken-redball|original": true,
+   "c11-b081-broken-redball|a": true,
+   "c11-b081-broken-redball|b": true,
+   "c11-b081-broken-redball|c2": false,
+   "c1-b132-food-boxes|original": true,
+   "c1-b132-food-boxes|a": true,
+   "c1-b132-food-boxes|b": true,
+   "c1-b132-food-boxes|c2": false,
+   "c13-b065-hijacked-screen|original": true,
+   "c13-b065-hijacked-screen|a": true,
+   "c13-b065-hijacked-screen|b": true,
+   "c13-b065-hijacked-screen|c2": false,
+   "c2-b038-foil-classroom|original": true,
+   "c2-b038-foil-classroom|a": false,
+   "c2-b038-foil-classroom|b": true,
+   "c2-b038-foil-classroom|c2": false
+  },
+  "notes": {
+   "c2-b038-foil-classroom|c2": "no double, but Fin is missing",
+   "c14-b030-semifinal-arena|b": "Argon: a second figure wears Zei's black bodysuit and grey trousers; on a second look that is fair",
+   "c2-b038-foil-classroom|original": "Argon: Zei's look split across students and Fin's yellow shoes repeated; not confirmed by eye at this size",
+   "c5-b043-spiral-ramp|c2": "by eye yes, partly: a person behind Zei wears an orange-yellow jacket with his white panels (jeans, seen from behind); Argon says no. The first table left this cell unmarked by mistake."
+  }
+ },
+ "owner_pick": {
+  "choice": "c2",
+  "text": "(c) v2 front-view crop chosen by the owner, 2026-10-24",
+  "model": "qwen-image-edit-2511",
+  "references": "each sheet's front view (left third) and the location plate"
+ }
+}

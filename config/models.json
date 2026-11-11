@@ -56,6 +56,68 @@
       }
     },
     {
+      "id": "flux2-klein-base-4b",
+      "kind": "image",
+      "repo": "black-forest-labs/FLUX.2-klein-base-4B",
+      "revision": "a3b4f4849157f664bdbc776fd7453c2783562f4d",
+      "license_line": "license: apache-2.0",
+      "license_checked": {
+        "by": "coding agent, approved by the owner",
+        "on": "2026-10-23",
+        "source": "https://huggingface.co/black-forest-labs/FLUX.2-klein-base-4B/blob/a3b4f4849157f664bdbc776fd7453c2783562f4d/README.md"
+      },
+      "notes": "The undistilled sibling of flux2-klein-4b (the card: \"Trained without step or guidance distillation\"; its example runs 50 steps at guidance 4). Multi-reference edit, up to 4 references on fal. Added for the consistency trial (owner, 2026-10-23: \"Add klein base 4B and Qwen-Image-Edit-2511 to the allowlist with their licence lines before anything they draw is published\"). Hosted on fal for now; locally it would take many times klein 4B's 4 steps.",
+      "capabilities": {
+        "max_references": 4,
+        "edit": true
+      },
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "fal.ai",
+        "endpoints": {
+          "fal-ai/flux-2/klein/4b/base/edit": 0.009
+        },
+        "price_unit": "USD per megapixel of input and output",
+        "price_seen": "2026-10-23"
+      },
+      "model_record": "endpoint, date and request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "Apache-2.0",
+      "open_weights": true,
+      "weights": "https://huggingface.co/black-forest-labs/FLUX.2-klein-base-4B"
+    },
+    {
+      "id": "qwen-image-edit-2511",
+      "kind": "image",
+      "repo": "Qwen/Qwen-Image-Edit-2511",
+      "revision": "6f3ccc0b56e431dc6a0c2b2039706d7d26f22cb9",
+      "license_line": "license: apache-2.0",
+      "license_checked": {
+        "by": "coding agent, approved by the owner",
+        "on": "2026-10-23",
+        "source": "https://huggingface.co/Qwen/Qwen-Image-Edit-2511/blob/6f3ccc0b56e431dc6a0c2b2039706d7d26f22cb9/README.md"
+      },
+      "notes": "20B multi-image edit model (the card: \"Qwen-Image is licensed under Apache 2.0.\"; it \"further enhances consistency in multi-person group photos\"). Its template labels inputs \"Picture 1\", \"Picture 2\"; trained and shown with 1-3 inputs. Hosted only (far beyond the 8 GB Mac). Added for the consistency trial (owner, 2026-10-23). Not to be confused with Qwen-Image-2.1, whose Qwen Research licence is non-commercial and does not fit.",
+      "capabilities": {
+        "max_references": 3,
+        "edit": true
+      },
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "fal.ai",
+        "endpoints": {
+          "fal-ai/qwen-image-edit-2511": 0.03
+        },
+        "price_unit": "USD per megapixel",
+        "price_seen": "2026-10-23"
+      },
+      "model_record": "endpoint, date and request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "Apache-2.0",
+      "open_weights": true,
+      "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2511"
+    },
+    {
       "id": "z-image-turbo",
       "kind": "image",
       "repo": "Tongyi-MAI/Z-Image-Turbo",

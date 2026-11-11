@@ -29,7 +29,7 @@ const TAKES = exists('adaptations/fifteen-days/takes/takes.json') ? readJson('ad
 function modelOf(endpoint) {
   if (!endpoint) return null;
   if (endpoint.startsWith('local')) return { id: 'none', name: 'No model: a local edit in code', licence: 'GPL-3.0, with the code', weights: null };
-  const id = endpoint.includes('klein/4b') ? 'flux2-klein-4b' : endpoint.includes('qwen-image-edit') ? 'qwen-image-edit-2509' : endpoint.includes('z-image') ? 'z-image-turbo' : null;
+  const id = endpoint.includes('klein/4b/base') ? 'flux2-klein-base-4b' : endpoint.includes('klein/4b') ? 'flux2-klein-4b' : endpoint.includes('qwen-image-edit-2511') ? 'qwen-image-edit-2511' : endpoint.includes('qwen-image-edit') ? 'qwen-image-edit-2509' : endpoint.includes('z-image') ? 'z-image-turbo' : null;
   const m = id && MODELS[id];
   return m ? { id, name: m.repo ?? id, licence: m.license, weights: m.weights ?? null, host: endpoint } : { id: endpoint, name: endpoint, licence: 'unknown', weights: null, host: endpoint };
 }
