@@ -5,7 +5,8 @@
  * A write route (POST, PUT, PATCH, DELETE under src/app/api or src/app/mcp) passes in one of these ways:
  *  1. It requires a signed-in person: getFid, getPerson or getWallet, answering 401 without one.
  *  2. It hands every request to a shared sign-in wrapper (P4A_WRAPPERS) that checks getFid and answers 401.
- *  3. A named sign-in exemption: the route is how a sign-in happens (website, wallet).
+ *  3. A named sign-in exemption: the route is how a sign-in happens (website, wallet; and Lens and Bluesky, which
+ *     are also checked: socialSignInProblems).
  *  4. The open read API at /api/mcp, while it stays read only.
  *  5. (owner, 2026-10-20: "routes that only create drafts pass; any route that can publish or keep still
  *     fails") An agent's route: it requires an agent's token (agentFromRequest, 401 without one) and
@@ -25,7 +26,50 @@ export const P4A_WRAPPERS = [{ module: '~/lib/minpentai/play-server/route', file
 // cannot require one. It writes nothing of ours; it opens a channel on Farcaster's relay.
 // Named exemption (owner, 2026-10-13: wallet sign-in): the wallet sign-in route is the sign-in; it
 // writes only the account row, and only for a signature checked against the wallet.
+// Named exemptions (branch signin-lens-bluesky, owner's item 5 of 2026-10-31; the owner's yes of 2026-11-04, item 14:
+// "yes to the four P4a exemptions"): Lens and Bluesky sign-in. Unlike the two above, these are checked, not only named
+// (socialSignInProblems): each answers 404 while its sign-in is off, imports only the sign-in modules, touches no
+// database itself and can't publish or keep; the two starts (lens/challenge, bluesky/start) write nothing of ours; the
+// two finishes (lens/verify, bluesky/callback) write only the account row (studio.social_accounts, through
+// src/lib/social/sign-in.ts and socialAccountFor), and only for a proof Lens or the person's Bluesky authorization
+// server accepted.
+export const P4A_SOCIAL_SIGN_IN = new Set([
+  'src/app/api/auth/lens/challenge/route.ts',
+  'src/app/api/auth/lens/verify/route.ts',
+  'src/app/api/auth/bluesky/start/route.ts',
+  'src/app/api/auth/bluesky/callback/route.ts',
+]);
 export const P4A_EXEMPT = new Set(['src/app/api/auth/web/start/route.ts', 'src/app/api/wallet/sign-in/route.ts']);
+const SOCIAL_ROUTE_IMPORTS = new Set(['next/server', '~/lib/config', '~/lib/social/lens', '~/lib/social/atproto', '~/lib/social/session', '~/lib/social/sign-in']);
+/** The sign-in modules those routes reach, which must not touch the database (sign-in.ts is read separately). */
+const SOCIAL_PURE_MODULES = ['src/lib/social/lens.ts', 'src/lib/social/atproto.ts', 'src/lib/social/session.ts'];
+
+/** Problems with one Lens or Bluesky sign-in route (P4A_SOCIAL_SIGN_IN), or with the modules it uses. */
+export function socialSignInProblems(r: Src, read: (rel: string) => string): string[] {
+  const out: string[] = [];
+  const code = stripComments(r.src);
+  if (!/if \(!signInOpen\('(lens|bluesky)'\)\) return new NextResponse\('Not found', \{ status: 404 \}\);/.test(code)) out.push(`${r.file}: a sign-in route that doesn't answer 404 while its sign-in is off`);
+  for (const imp of importsOf(r.src)) if (!SOCIAL_ROUTE_IMPORTS.has(imp.from)) out.push(`${r.file}: sign-in route imports ${imp.from}, not a sign-in module`);
+  if (/\bdb\(|sql`/.test(code)) out.push(`${r.file}: sign-in route touches the database itself`);
+  if (PUBLISH_OR_KEEP.test(code)) out.push(`${r.file}: sign-in route can publish or keep`);
+  for (const f of SOCIAL_PURE_MODULES) {
+    const m = stripComments(read(f));
+    if (/from '\.\.\/db'|from '~\/lib\/db'|\bsql`|(?:insert into|update|delete from)\s+studio\./.test(m)) out.push(`${r.file}: its sign-in module ${f} touches the database`);
+    for (const imp of importsOf(m)) if (imp.from.startsWith('.') && !['../config', './session'].includes(imp.from)) out.push(`${r.file}: its sign-in module ${f} imports ${imp.from}`);
+  }
+  const signIn = stripComments(read('src/lib/social/sign-in.ts'));
+  for (const imp of importsOf(signIn)) {
+    if (imp.from === './accounts' && imp.names.some((n) => n !== 'socialAccountFor')) out.push(`${r.file}: src/lib/social/sign-in.ts takes ${imp.names.join(', ')} from accounts, not only socialAccountFor`);
+    if (imp.from.startsWith('.') && !['../db', './accounts', './session'].includes(imp.from)) out.push(`${r.file}: src/lib/social/sign-in.ts imports ${imp.from}`);
+  }
+  if (/(?:insert into|update|delete from)\s+studio\./.test(signIn)) out.push(`${r.file}: src/lib/social/sign-in.ts writes the database itself`);
+  const accounts = stripComments(read('src/lib/social/accounts.ts'));
+  const fn = accounts.match(/export async function socialAccountFor\([\s\S]*?\n\}/)?.[0] ?? '';
+  if (!fn) out.push(`${r.file}: socialAccountFor not found in src/lib/social/accounts.ts`);
+  for (const m of fn.matchAll(/(?:insert into|update|delete from)\s+studio\.(\w+)/g)) if (m[1] !== 'social_accounts') out.push(`${r.file}: socialAccountFor writes studio.${m[1]}, not the account row`);
+  if (/\bupdate\s+set\b/.test(fn) && !/on conflict \(kind, subject\) do update set handle = excluded\.handle, last_sign_in_at = now\(\)/.test(fn)) out.push(`${r.file}: socialAccountFor changes more than the handle and the time`);
+  return [...new Set(out)];
+}
 // Named exemption (owner, 2026-10-19: "read API open without sign-in at a low rate"): MCP sends every message,
 // reads included, as a POST. The MCP route is exempt only while it stays read only: it must not touch the database
 // itself (its one write is the rate counter, inside src/lib/agent/rate.ts) and every tool it serves is read only.
@@ -141,6 +185,7 @@ export function p4aProblems(routes: Src[], read: (rel: string) => string): strin
   for (const r of routes) {
     if (!isWrite(r.src)) continue;
     if (P4A_EXEMPT.has(r.file)) continue;
+    if (P4A_SOCIAL_SIGN_IN.has(r.file)) { problems.push(...socialSignInProblems(r, read)); continue; }
     if (P4A_READ_ONLY.has(r.file) && !/\bdb\(|sql`|from '~\/lib\/db'/.test(r.src) && !/readOnlyHint: false/.test(r.src)) continue;
     if (P4A_AGENT_SIGN_IN.has(r.file)) { problems.push(...signInProblems(r, read)); continue; }
     // Any route an agent can reach is judged as an agent's route, even if it also checks a person.

@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { NextResponse } from 'next/server';
+import { referencePicture } from '~/lib/images/reference-picture';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
@@ -42,15 +43,6 @@ const asDesign = (p: MyPick): TicketDesign => ({
   versionId: p.versionId, kind: p.kind, entity: p.entity, title: p.title, by: designByline(p.byName, p.byFid, p.byRole), versionNo: p.versionNo, text: p.text, assist: p.assist,
 });
 
-/** A picked sheet's view, fetched from the readers' public bucket and checked against its sha256. */
-async function referencePicture(url: string, sha256: string) {
-  const base = process.env.R2_IMAGES_PUBLIC_URL?.replace(/\/$/, '');
-  if (!base || !url.startsWith(`${base}/`)) return null;
-  const res = await fetch(url).catch(() => null);
-  if (!res?.ok) return null;
-  const bytes = Buffer.from(await res.arrayBuffer());
-  return createHash('sha256').update(bytes).digest('hex') === sha256 ? bytes : null;
-}
 const no = (error: string, status: number, extra: Record<string, unknown> = {}) => NextResponse.json({ error, ...extra }, { status });
 
 export async function POST(request: Request) {

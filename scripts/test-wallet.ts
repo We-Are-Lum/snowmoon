@@ -305,27 +305,45 @@ check('prepaid spend has its own daily cap', !capped.ok && capped.refusal === 'p
   // What Neynar says now, for the re-check tests (address → FIDs that verify it), and addresses for which it is down.
   const now: Record<string, number[]> = {};
   const neynarDown = new Set<string>();
+  // Neynar as it answers (checked against the real API, 2026-11-03, on FID 6786's addresses): a user is grouped under
+  // the address only for the address_types asked; verified_address alone answers 404 for a custody address.
+  let lastTypes: string | null = null;
+  const MIXED = addr(0xa8), CUST2 = addr(0xa9);
+  // Each with a twin for its planted run (links can't be deleted, so the planted run gets its own wallet).
+  const VER = addr(0xd71), VER_P = addr(0xd72), CUST = addr(0xd73), CUST_P = addr(0xd74);
   globalThis.fetch = (async (input: string | URL | Request) => {
     const u = new URL(String(input));
     if (u.hostname !== 'api.neynar.com') throw new Error(`unexpected fetch ${u.hostname}`);
     calls++;
     const a = u.searchParams.get('addresses')!;
-    if (u.searchParams.get('address_types') !== 'verified_address') return new Response('{}', { status: 400 });
+    const types = (lastTypes = u.searchParams.get('address_types') ?? 'custody_address,verified_address').split(',');
+    if (types.some((t) => t !== 'custody_address' && t !== 'verified_address')) return new Response('{}', { status: 400 });
     if (a === DOWN || neynarDown.has(a)) throw new TypeError('fetch failed');
     if (a in now) return new Response(JSON.stringify({ [a]: now[a].map((f) => user(f, [a])) }), { status: 200, headers: { 'content-type': 'application/json' } });
     if (a === NONE) return new Response(JSON.stringify({ code: 'NotFound' }), { status: 404 });
-    const by: Record<string, unknown[]> = {
+    const by: Record<string, { fid: number; custody_address: string; verified_addresses: { eth_addresses: string[] } }[]> = {
       [ONE]: [user(5001, [ONE])],
       [TWO]: [user(5002, [TWO]), user(5003, [TWO.toUpperCase().replace('0X', '0x')])],
       [LAZY]: [user(5004, [LAZY])],
-      // A custody address is not a verification: Neynar may group it under the address, but it doesn't count.
-      [CUSTODY]: [user(5005, [])],
+      // The custody address of FID 5005 (the address that owns the account), verified by no one.
+      [CUSTODY]: [{ ...user(5005, []), custody_address: CUSTODY }],
+      [CUST]: [{ ...user(5012, []), custody_address: CUST }],
+      [CUST_P]: [{ ...user(5012, []), custody_address: CUST_P }],
+      [VER]: [user(5011, [VER])],
+      [VER_P]: [user(5011, [VER_P])],
+      // One account's custody address and another's verification: two accounts, no link.
+      [CUST2]: [{ ...user(5007, []), custody_address: CUST2 }, user(5008, [CUST2])],
+      // Neynar answers in lower case whatever the case asked; the account's own record may be checksummed.
+      [MIXED]: [user(5009, ['0x' + MIXED.slice(2).toUpperCase()])],
       // The two seeded wallets, still verified by their FIDs.
       '0x003276c5c24cdaff1d804170ab5cbb914f51f78a': [user(6852, ['0x003276c5c24cdaff1d804170ab5cbb914f51f78a'])],
       '0x317a1ea96dc4b10c1ea60e3af59c472316d31303': [user(193912, ['0x317a1ea96dc4b10c1ea60e3af59c472316d31303'])],
       [String(IMAGES.prepaid.payTo).toLowerCase()]: [user(5006, [String(IMAGES.prepaid.payTo).toLowerCase()])],
     };
-    return new Response(JSON.stringify({ [a]: by[a] ?? [] }), { status: 200, headers: { 'content-type': 'application/json' } });
+    const key = a.toLowerCase();
+    const shown = (by[key] ?? []).filter((x) => (types.includes('custody_address') && x.custody_address.toLowerCase() === key) || (types.includes('verified_address') && x.verified_addresses.eth_addresses.some((e) => e.toLowerCase() === key)));
+    if (!shown.length) return new Response(JSON.stringify({ code: 'NotFound' }), { status: 404 });
+    return new Response(JSON.stringify({ [key]: shown }), { status: 200, headers: { 'content-type': 'application/json' } });
   }) as typeof fetch;
   process.env.NEYNAR_API_KEY = 'test-key';
 
@@ -348,7 +366,7 @@ check('prepaid spend has its own daily cap', !capped.ok && capped.refusal === 'p
   const accTwo = await acc(TWO);
   const before2 = calls;
   const t = await L.autoLink(S, accTwo, TWO);
-  const t2 = await L.verifiedFids(S, accTwo, TWO);
+  const t2 = await L.farcasterFids(S, accTwo, TWO);
   check('two Farcaster accounts claiming one address: not linked automatically', t.linked === null && t.why === 'more than one account' && (await L.readLink(S, accTwo)).ever === false, JSON.stringify(t));
   check('the lookup is kept (like the score cache): asked once, then answered from the cache', calls === before2 + 1 && t2.ok && t2.fromCache && t2.fids.join() === '5002,5003', JSON.stringify(t2));
   // Neynar down: plain wallet, nothing kept, quickly.
@@ -358,9 +376,61 @@ check('prepaid spend has its own daily cap', !capped.ok && capped.refusal === 'p
   const [keptDown] = await sql`select count(*)::int as n from studio.wallet_fid_lookups where account_id = ${accDown}`;
   check('Neynar down: the wallet signs in as itself, nothing is linked, the failure is not kept', down.linked === null && (await L.linkedFidFor(S, accDown, DOWN)) === null && keptDown.n === 0 && Date.now() - d0 < 3000, JSON.stringify(down));
   const accNone = await acc(NONE);
-  check('no Farcaster account verified it (Neynar answers 404): not linked, and the answer is kept', (await L.autoLink(S, accNone, NONE)).why === 'no account' && (await L.verifiedFids(S, accNone, NONE)).ok);
-  const accCustody = await acc(CUSTODY);
-  check('a custody address that no one verified is not linked', (await L.autoLink(S, accCustody, CUSTODY)).linked === null);
+  check('no Farcaster account verified it (Neynar answers 404): not linked, and the answer is kept', (await L.autoLink(S, accNone, NONE)).why === 'no account' && (await L.farcasterFids(S, accNone, NONE)).ok);
+  check('the lookup asks Neynar for custody and verified addresses together', lastTypes === 'custody_address,verified_address', String(lastTypes));
+
+  // 2026-11-04 (owner): a wallet that is verified by, or is the custody address of, exactly one Farcaster account is
+  // linked; none, or two or more, are not. Each case also runs a planted violation that the check must catch.
+  /** The check passes on the real code and fails on the planted one, so it tests what it says. */
+  const catches = async (name: string, ok: (fid: number | null) => boolean, real: () => Promise<number | null>, planted: () => Promise<number | null>) => {
+    const r = await real(), p = await planted();
+    check(name, ok(r), `got ${r}`);
+    check(`${name} (a planted violation is caught: ${p})`, !ok(p));
+  };
+  const auto = async (a: string) => (await L.autoLink(S, await acc(a), a)).linked;
+  const fresh = async (a: string) => {
+    await sql`delete from studio.wallet_fid_lookups where account_id = ${await acc(a)}`;
+  };
+  /** The planted lookup: only one address type asked, as before 2026-11-04 (or the other way round). */
+  const withTypes = async <T,>(types: string, f: () => Promise<T>) => {
+    const keep = L.NEYNAR_BY_ADDRESS.types;
+    L.NEYNAR_BY_ADDRESS.types = types;
+    try {
+      return await f();
+    } finally {
+      L.NEYNAR_BY_ADDRESS.types = keep;
+    }
+  };
+  await catches('a custody-only address (the account\'s own, verified by no one) is linked to that account', (f) => f === 5012,
+    () => auto(CUST),
+    () => withTypes('verified_address', () => auto(CUST_P)));
+  check('…as \'verified\' (Farcaster lists it as the account\'s)', (await L.readLink(S, await acc(CUST))).active?.how === 'verified');
+  await catches('a verified address is linked to the account that verified it', (f) => f === 5011,
+    () => auto(VER),
+    () => withTypes('custody_address', () => auto(VER_P)));
+  // A mixed-case address: the session's address in checksum case, the account's record checksummed too.
+  const MIXED_CASE = '0x' + MIXED.slice(2).toUpperCase();
+  const caseBlind = (body: unknown, a: string) => Object.entries(body as Record<string, { fid: number; verified_addresses: { eth_addresses: string[] } }[]>)
+    .filter(([k]) => k === a).flatMap(([, v]) => v).filter((x) => x.verified_addresses.eth_addresses.includes(a)).map((x) => x.fid);
+  const mixedBody = { [MIXED]: [user(5009, [MIXED_CASE])] };
+  await catches('a mixed-case address matches (compared in lower case)', (f) => f === 5009,
+    async () => L.soleFid(L.fidsIn(mixedBody, MIXED_CASE)),
+    async () => L.soleFid(caseBlind(mixedBody, MIXED_CASE)));
+  await catches('…and a wallet signed in with its checksummed address is linked', (f) => f === 5009,
+    async () => (await fresh(MIXED), (await L.autoLink(S, await acc(MIXED), MIXED_CASE)).linked),
+    async () => L.soleFid(caseBlind({ [MIXED]: [user(5009, [MIXED_CASE])] }, MIXED)));
+  // Two accounts: one's custody address and another's verification. No link, and the page says how many.
+  await catches('an address on two Farcaster accounts (custody of one, verified by another) is not linked', (f) => f === null,
+    () => auto(CUST2),
+    async () => { const fids = L.fidsIn({ [CUST2]: [{ ...user(5007, []), custody_address: CUST2 }, user(5008, [CUST2])] }, CUST2); return fids[0] ?? null; });
+  check('…and the kept answer says two accounts, for the page to say so', (await L.keptLookup(S, await acc(CUST2)))?.length === 2 && (await L.autoLink(S, await acc(CUST2), CUST2)).why === 'more than one account');
+  // None: Neynar answers 404; and a user grouped under the address whose own record doesn't have it doesn't count.
+  const strayBody = { [NONE]: [user(5099, [addr(0xbeef)])] };
+  await catches('an address on no Farcaster account is not linked', (f) => f === null,
+    async () => (await fresh(NONE), auto(NONE)),
+    async () => L.soleFid(Object.values(strayBody).flat().map((x) => x.fid)));
+  check('…a user Neynar groups under the address without having it is not counted', L.fidsIn(strayBody, NONE).length === 0);
+  check('…and the kept answer says none, for the page to say so', (await L.keptLookup(S, await acc(NONE)))?.length === 0 && (await L.autoLink(S, await acc(NONE), NONE)).why === 'no account');
   // Lazily, on the first getPerson-style read.
   const accLazy = await acc(LAZY);
   check('the automatic link happens lazily on the first signed-in request', (await L.linkedFidFor(S, accLazy, LAZY)) === 5004 && (await L.readLink(S, accLazy)).active?.how === 'verified');
@@ -568,7 +638,7 @@ await sql.end();
     const { LINK_NOTE, linkNoteShown } = await import('../src/lib/wallet/announce');
     const { WALLET_LINKS: WLN } = await import('../src/lib/config');
     const until = WLN.announceUntil;
-    check('the note is in the owner\'s words', LINK_NOTE === 'New: if your wallet is verified on Farcaster, it now links to that account automatically. Privacy §7.');
+    check('the note is in the owner\'s words (2026-11-05)', LINK_NOTE === 'New: sign in with Lens or Bluesky.');
     check('the note ends 30 days after the earliest merge day (2026-11-21 or later)', until >= '2026-11-21');
     check('the note shows before its end date, through the whole last day', linkNoteShown(new Date('2026-10-22T12:00:00Z')) && linkNoteShown(new Date(`${until}T23:59:59Z`)));
     check('…and is gone after it, with no deploy', !linkNoteShown(new Date(Date.parse(`${until}T00:00:00Z`) + 24 * 3600 * 1000)) && !linkNoteShown(new Date('2027-01-01T00:00:00Z')));

@@ -2,6 +2,7 @@ import 'server-only';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { IMAGES } from '../config';
 import { SHORTHAND_ASSIST_SOURCE } from './sheets';
+import type { SheetModelId } from './sheet-models';
 
 /**
  * A draft image is never stored on the server (docs/proposals/add-an-image.md, section 5). The
@@ -46,6 +47,35 @@ export interface Ticket {
    * project's shorthand text added for those without a picked sheet. Absent on older drafts.
    */
   sheets?: TicketSheets;
+  /**
+   * A remix challenge picture (branch challenge-moments, 2026-11-05), made on the remix screen (/challenge/make): the
+   * character remixed, the moment (its id, and the scene line sent, this edition's, drafted by the coding agent), and
+   * the version it started from (a base sheet, published as a 'uses' link through `designs`, or a challenge picture,
+   * published as a 'remixed_from' link). Recorded in the recipe's params.challenge. Absent on every other image.
+   */
+  challenge?: TicketChallenge;
+}
+
+export interface TicketChallenge {
+  character: string;
+  /** The moment's id and the scene line sent; absent for a picture made with the moments off (CHALLENGE.moments, 2026-11-08). */
+  moment?: string;
+  scene?: string;
+  from: string;
+  fromKind: 'sheet' | 'picture';
+  /**
+   * The style row's choice (branch challenge-simple, 2026-11-08): 'published' (a published style, also a 'uses' link
+   * through `designs`), 'random' (the server's draw; `label` and `elementId` say which it drew), 'preset' (this
+   * edition's preset) or 'own' (the person's own words, `text`). `text` is exactly what was added to the prompt.
+   */
+  style?: { choice: 'same' | 'preset' | 'published' | 'random' | 'own'; id: string | null; elementId: string | null; label: string | null; text: string };
+  /** The model chosen on the Model row (src/lib/challenge/models.ts). */
+  model?: string;
+  /**
+   * The setting drawn for a closed model's picture (src/lib/challenge/settings.ts; owner, 2026-11-09): its letter, the
+   * text put in the setting line, and the book's blocks it describes (this edition's description, not a quote).
+   */
+  setting?: { id: string; text: string; blocks: string[] };
 }
 
 export interface TicketSheets {
@@ -98,6 +128,12 @@ export interface SampleTicket {
   references?: { sha256: string }[];
   /** For a sheet's views: the published style version whose text is in the prompt. */
   style?: { versionId: string; title: string; text: string };
+  /** For a remix's front view (owner, 2026-11-04): the version remixed, whose front view was sent as a reference picture. */
+  source?: { versionId: string; sha256: string };
+  /** For a sheet's views counted as a remix: the remix's id (src/lib/images/remixes.ts). */
+  remix?: string;
+  /** The sheet's model choice (src/lib/images/sheet-models.ts), set only when it isn't the open default; absent means 'open'. */
+  choice?: SheetModelId;
   guard: { model: string; verdict: 'ok' };
   at: string;
 }
@@ -147,7 +183,7 @@ export function readSampleTicket(token: string): SampleTicket | null {
 }
 
 /** Which inputs a model drafted: the file style's text, a model-drafted design's text, the project's shorthand. */
-export function recipeAssist(t: Pick<Ticket, 'style' | 'designs' | 'sheets'>) {
+export function recipeAssist(t: Pick<Ticket, 'style' | 'designs' | 'sheets'> & { challenge?: TicketChallenge }) {
   const drafted: string[] = [];
   const sources: string[] = [];
   if (t.style) {
@@ -161,5 +197,32 @@ export function recipeAssist(t: Pick<Ticket, 'style' | 'designs' | 'sheets'>) {
     drafted.push('character and place shorthand');
     sources.push(SHORTHAND_ASSIST_SOURCE);
   }
+  // A challenge picture's scene line: this edition's, drafted by the coding agent (src/lib/challenge/moments.ts).
+  if (t.challenge?.moment) {
+    drafted.push('moment scene line');
+    sources.push(`src/lib/challenge/moments.ts (${t.challenge.moment})`);
+  }
   return drafted.length ? { model: 'claude-coding-agent', drafted, source: sources.join('; ') } : null;
+}
+
+/**
+ * A remix in progress (owner, 2026-11-04: count remixes, not pictures): its id, whose it is and the units it uses.
+ * Given with every view of the remix, made or failed, so the person makes its other views, or one again, inside it.
+ */
+export interface RemixTicket {
+  v: 1;
+  kind: 'remix';
+  fid: number;
+  remix: string;
+  units: number;
+  at: string;
+}
+
+export function signRemixTicket(t: RemixTicket): string {
+  return sign(t);
+}
+
+export function readRemixTicket(token: string): RemixTicket | null {
+  const t = read(token);
+  return t && t.kind === 'remix' ? (t as unknown as RemixTicket) : null;
 }

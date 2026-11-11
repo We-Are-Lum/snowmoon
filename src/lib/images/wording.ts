@@ -100,7 +100,7 @@ export const IMAGE_WORDING = {
       yourPick: '○ Your pick',
       noSheets: 'No sheets yet.',
       drafted: 'Text drafted by the coding agent, a closed model',
-      bookOrder: 'In the order the book first tells of them',
+      bookOrder: 'Most named in the book first',
       myPicksLink: 'My picks →',
     },
     page: {
@@ -141,6 +141,21 @@ export const IMAGE_WORDING = {
       bookNone: 'Nothing yet in the chapters you’ve read.',
       howMade: 'How the pictures were made',
       pictureRecipe: (i: number) => `Picture ${i}`,
+    },
+    /** Model choice on the remix form (branch remix-model-choice, IMAGES.designs.modelChoice; DRAFT wording, the owner's to approve). */
+    models: {
+      legend: 'Model for this sheet',
+      note: 'Chosen once for the whole sheet: the front, side and back all come from this model. Changing it marks the views to make again.',
+      openDefault: 'The site’s open models (the default)',
+      // Each closed picture uses CLOSED_IMAGES.countsAs (3) of the day's free pictures (branch challenge-models).
+      // No time here: the screen says when, in the visitor's own time (src/components/challenge-model-row.tsx resetLocal).
+      closedLimit: 'A closed model uses 3 of today’s pictures, and you have fewer left. You can still use an open model.',
+      // {reset}: 00:00 UTC in the visitor's own time, filled in by the browser from the answer's resetAt (never by the server).
+      closedSpend: 'Closed models have reached today’s spending limit for everyone. The open models still work; closed ones come back at {reset}.',
+      changed: 'These views were made with another model. Make them again with this one.',
+      mixed: 'The views were made with more than one model. Make them again with one.',
+      notOffered: 'That model isn’t offered here.',
+      walletOnly: 'Closed models are for Farcaster accounts for now.',
     },
     form: {
       newStyle: 'New style',
@@ -192,6 +207,16 @@ export const IMAGE_WORDING = {
       notReady: 'Making styles and sheets isn’t set up on this deployment yet.',
       consentFirst: 'Before your first style or sheet: how your words are published.',
       readAndAgree: 'Read and agree',
+      // A remix's form (owner, 2026-11-04: the least is typing a prompt and pressing Remix; the rest is preselected).
+      // Drafted by the coding agent (Claude, a closed model by Anthropic). Draft wording.
+      remixText: 'What to change · your text for the sheet',
+      remix: 'Remix',
+      remixing: (view: string) => `Making the ${view} view…`,
+      remixNote: 'Remix makes the three views in turn, starting from the sheet you’re remixing as a reference picture. If one fails, make it again below: it stays inside the same remix.',
+      options: (style: string | null) => `Options · ${style ? `style: ${style}` : 'choose a style'} · name`,
+      optionsNote: 'Everything here starts as the sheet you’re remixing has it. Change any of it before you press Remix.',
+      fromSource: 'Made from the sheet you’re remixing, sent as a reference picture.',
+      remixesLeft: (n: number, perRemix: number) => `Each remix is a sheet’s three views (up to ${perRemix} pictures, so a view that fails can be made again inside it) · ${n} remixes left today`,
     },
     picks: {
       title: 'My picks',
@@ -427,6 +452,7 @@ const DESIGN_SCREENS: Record<keyof typeof IMAGE_WORDING.designs, { screen: strin
   about: { screen: 'About', where: 'src/app/about/page.tsx (Pictures section)' },
   report: { screen: 'Report a style or a sheet', where: 'src/components/image-actions.tsx' },
   moderate: { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx' },
+  models: { screen: 'Remix · model for this sheet (IMAGES.designs.modelChoice, off)', where: 'src/components/design-form.tsx, src/lib/images/paid.ts (refusals)' },
   sheets: { screen: 'Character and place sheets, and “In this passage”', where: 'src/app/references/designs/place/[slug]/page.tsx, character/[slug]/page.tsx, design-sheets.tsx, image-composer.tsx, src/app/image/[id]/page.tsx, chapter pages' },
 };
 function filled(v: unknown): string {
@@ -446,5 +472,7 @@ IMAGE_WORDING_ROWS.push(
   { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx (a design)', text: 'AI-generated pictures · not by the author' },
   { screen: 'Add an image · compose (from your picks)', where: 'src/components/image-composer.tsx (chip key)', text: 'Character' },
   { screen: 'New style, new sheet, fork, new version', where: 'src/lib/images/design-rules.ts (sample subjects, part of each sample’s public prompt)', text: 'A wide street with tall trees and low buildings, a few people walking, daytime. / A small room with a desk, a window and a plant, seen from the doorway. / A footpath through tall trees, a small drone flying overhead. / A market square at dusk, seen from above.' },
+  // Owner, 2026-11-04 (item 4): a remix's front view starts from the source's front view, as a reference picture. Draft.
+  { screen: 'New style, new sheet, fork, new version', where: 'src/lib/images/design-rules.ts (REMIX_SOURCE_LINES, part of a remix front view’s public prompt)', text: 'Start from the person in the reference picture, and change them as the text below says. / Start from the place in the reference picture, and change it as the text below says.' },
   { screen: 'New style, new sheet, fork, new version', where: 'src/lib/images/design-rules.ts (view lines, part of each view’s public prompt)', text: 'Character reference picture: one person, full body, standing, seen from the front, plain light grey background. / The same person as in the reference picture, full body, standing, seen from the side, plain light grey background. Keep the face, hair and clothes the same. / … seen from behind … Keep the hair and clothes the same.' },
 );

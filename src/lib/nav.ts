@@ -46,7 +46,7 @@ export function navItems(last: number, adaptations: number, challenge = false): 
     { key: 'assistant', label: 'Assistant', href: '/assistant' },
     // The remix challenge (owner, 2026-11-03: a /challenge link in the menu). Its page's own title; last, so the
     // owner's order above is unchanged.
-    { key: 'challenge', label: 'Remix the cast', href: '/challenge' },
+    { key: 'challenge', label: 'Remix challenge', href: '/challenge' },
   ];
   // Adaptations are out of view for now (ADAPTATIONS.visible); the challenge until the owner opens it, but to admins.
   return items.filter((i) => (i.key !== 'adaptations' || ADAPTATIONS.visible) && (i.key !== 'challenge' || challenge));

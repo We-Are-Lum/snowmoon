@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { socialPerson } from './people';
 import { sdk } from '@farcaster/miniapp-sdk';
+import { SIGN_IN_METHODS, SOCIAL_SIGN_IN } from './config';
 
 /**
  * Sign-in on the client, one helper for every signed-in call (docs/proposals/web-sign-in.md).
@@ -18,14 +20,23 @@ const EVENT = 'snowmoon:signin';
  * of Farcaster. A Farcaster sign-in, when there is one, wins.
  */
 const WALLET_KEY = 'snowmoon.wallet';
-const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/you', '/api/scenes/', '/api/make/', '/api/oauth/approve', '/api/agents', '/api/direction', '/api/drafts', '/api/notes', '/api/requests', '/api/designs/picks', '/api/chat/status', '/api/chat/ask', '/api/minpentai/m/'];
+// /api/challenge/make: the remix screen's Make takes a Lens or Bluesky sign-in (getPerson), as Make an image does
+// (pre-flight 2026-11-07: without it a Lens or Bluesky person's Make went unsigned and was answered "Sign in to make it").
+const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/you', '/api/scenes/', '/api/make/', '/api/oauth/approve', '/api/agents', '/api/direction', '/api/drafts', '/api/notes', '/api/requests', '/api/designs/picks', '/api/challenge/make', '/api/chat/status', '/api/chat/ask', '/api/minpentai/m/'];
 /**
  * Routes matched exactly rather than by prefix: hiding one's own picture (the You page, owner 2026-10-18).
  * Not every /api/images/<id>/… route: like and report take a Farcaster sign-in only, and a wallet
  * token sent there would be answered 401, which signs the wallet out.
  */
-const WALLET_EXACT = [/^\/api\/images\/[0-9a-f-]{36}\/hide$/];
-const takesWallet = (url: string) => WALLET_ROUTES.some((r) => url.startsWith(r)) || WALLET_EXACT.some((r) => r.test(url));
+const WALLET_EXACT = [/^\/api\/images\/[0-9a-f-]{36}\/hide$/, /^\/api\/challenge\/submit$/];
+/**
+ * Making and publishing a sheet's views take a Bluesky sign-in too, once Bluesky sign-in and its check are on (owner,
+ * 2026-11-04; src/lib/social/design-person.ts). Only then: before, a wallet token sent there would be answered 401.
+ */
+const SHEET_ROUTES = [/^\/api\/designs$/, /^\/api\/designs\/sample$/];
+const sheetsTakeBluesky = Boolean(SIGN_IN_METHODS.find((m) => m.id === 'bluesky')?.on) && SOCIAL_SIGN_IN.bluesky.check.on;
+const takesWallet = (url: string) =>
+  WALLET_ROUTES.some((r) => url.startsWith(r)) || WALLET_EXACT.some((r) => r.test(url)) || (sheetsTakeBluesky && SHEET_ROUTES.some((r) => r.test(url)));
 
 interface WebSession {
   token: string;
@@ -87,6 +98,11 @@ export interface WalletSessionState {
   /** 0x1234…abcd, the byline. */
   short: string;
   exp: number;
+  /**
+   * The Farcaster account this wallet signs in as (src/lib/wallet/links.ts), as the server last said (2026-11-04:
+   * the menu kept showing the address of a wallet the server had linked). Null: not linked. Absent: not asked yet.
+   */
+  linked?: { fid: number; name: string } | null;
 }
 
 function readWallet(): WalletSessionState | null {
@@ -109,6 +125,36 @@ export function saveWalletSession(token: string, address: string) {
   window.dispatchEvent(new Event(EVENT));
 }
 
+/**
+ * Ask the server who this wallet signs in as (the balance route, which also makes the automatic link), and keep the
+ * answer with the session. Once per page load at most; right after a sign-in, and for a session kept from before
+ * the menu showed links. Failures (a 401 included) leave the session as it was: it is never signed out from here.
+ */
+let linkAsked: Promise<void> | null = null;
+export function refreshWalletLink(force = false): Promise<void> {
+  if (linkAsked && !force) return linkAsked;
+  linkAsked = (async () => {
+    const w = readWallet();
+    if (!w) return;
+    // A plain fetch, not walletFetch: this question never ends the session. A 401 or any failure here leaves the
+    // session as it is, and the menu shows the address (2026-11-04, check:ui: the 401 signed a valid session out).
+    const res = await fetch('/api/wallet/balance', { headers: { Authorization: `Bearer ${w.token}` } }).catch(() => null);
+    if (!res?.ok) return;
+    const b = (await res.json().catch(() => null)) as { address?: string; linked?: { fid: number; name: string } | null } | null;
+    const now = readWallet();
+    if (!b || !now || now.token !== w.token || b.address?.toLowerCase() !== now.address) return;
+    const linked = b.linked && Number.isInteger(b.linked.fid) && typeof b.linked.name === 'string' ? { fid: b.linked.fid, name: b.linked.name } : null;
+    if (now.linked !== undefined && now.linked?.fid === linked?.fid && now.linked?.name === linked?.name) return;
+    try {
+      localStorage.setItem(WALLET_KEY, JSON.stringify({ ...now, linked }));
+    } catch {
+      return;
+    }
+    window.dispatchEvent(new Event(EVENT));
+  })();
+  return linkAsked;
+}
+
 export function signOutWallet() {
   try {
     localStorage.removeItem(WALLET_KEY);
@@ -126,6 +172,8 @@ export function useWalletSession(): WalletSessionState | null {
     const check = async () => {
       const w = (await inMiniApp()) || readSession() ? null : readWallet();
       if (alive) setState(w);
+      // A session that hasn't asked yet (one kept from before 2026-11-04) asks once.
+      if (w && w.linked === undefined) void refreshWalletLink();
     };
     void check();
     const again = () => void check();
@@ -159,6 +207,134 @@ export function useWalletAlongside(): WalletSessionState | null {
   return state;
 }
 
+/**
+ * A Lens or Bluesky sign-in (branch signin-lens-bluesky; src/lib/social/session.ts), kept apart like the wallet's:
+ * sent only to the routes that take a wallet (WALLET_ROUTES), and only when there is no Farcaster or wallet sign-in
+ * on this device. Lasts a day.
+ */
+const SOCIAL_KEY = 'snowmoon.social';
+
+export interface SocialSessionState {
+  token: string;
+  kind: 'lens' | 'bluesky';
+  /** As shown: the Bluesky handle, or the Lens username ("lens/<name>"), or "a Lens account" / "a Bluesky account". */
+  name: string;
+  exp: number;
+}
+
+function readSocial(): SocialSessionState | null {
+  try {
+    const s = JSON.parse(localStorage.getItem(SOCIAL_KEY) ?? 'null') as SocialSessionState | null;
+    return s && s.exp * 1000 > Date.now() + 120_000 ? s : null;
+  } catch {
+    return null;
+  }
+}
+
+/** The person number behind a Lens or Bluesky session token ("s1.<body>.<signature>"; src/lib/social/session.ts), or null. */
+export function socialSessionPerson(token: string): number | null {
+  try {
+    const body = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) as { account?: unknown };
+    return typeof body.account === 'number' ? socialPerson(body.account) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveSocialSession(token: string, kind: 'lens' | 'bluesky', handle: string | null) {
+  const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) as { exp: number };
+  try {
+    localStorage.setItem(SOCIAL_KEY, JSON.stringify({ token, kind, name: handle ?? (kind === 'lens' ? 'a Lens account' : 'a Bluesky account'), exp: payload.exp }));
+  } catch {
+    /* storage blocked */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+export function signOutSocial() {
+  try {
+    localStorage.removeItem(SOCIAL_KEY);
+  } catch {
+    /* nothing stored */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+/**
+ * The Lens or Bluesky session kept on this device, whatever else is signed in: the You page sends it beside a Farcaster
+ * sign-in (X-Social-Session) to offer and make a link (owner, 2026-11-04, 3a).
+ */
+export const socialOnDevice = (): SocialSessionState | null => readSocial();
+
+/**
+ * A second Lens or Bluesky sign-in, kept only to link it (a Bluesky account to the Lens account signed in): it never
+ * signs anyone in, and is dropped once the link is made or refused.
+ */
+const SOCIAL_LINK_KEY = 'snowmoon.social.link';
+export function saveSocialLinkSession(token: string, kind: 'lens' | 'bluesky', handle: string | null) {
+  const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) as { exp: number };
+  try {
+    localStorage.setItem(SOCIAL_LINK_KEY, JSON.stringify({ token, kind, name: handle ?? (kind === 'lens' ? 'a Lens account' : 'a Bluesky account'), exp: payload.exp }));
+  } catch {
+    /* storage blocked */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+export function socialLinkSession(): SocialSessionState | null {
+  try {
+    const s = JSON.parse(localStorage.getItem(SOCIAL_LINK_KEY) ?? 'null') as SocialSessionState | null;
+    return s && s.exp * 1000 > Date.now() + 120_000 ? s : null;
+  } catch {
+    return null;
+  }
+}
+export function dropSocialLinkSession() {
+  try {
+    localStorage.removeItem(SOCIAL_LINK_KEY);
+  } catch {
+    /* nothing stored */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+/** Both Lens/Bluesky slots on this device, re-read whenever a sign-in changes (the You page's link panel). */
+export function useSocialDevice(): { main: SocialSessionState | null; link: SocialSessionState | null } {
+  const [state, setState] = useState<{ main: SocialSessionState | null; link: SocialSessionState | null }>({ main: null, link: null });
+  useEffect(() => {
+    const check = () => setState({ main: readSocial(), link: socialLinkSession() });
+    check();
+    window.addEventListener(EVENT, check);
+    window.addEventListener('storage', check);
+    return () => {
+      window.removeEventListener(EVENT, check);
+      window.removeEventListener('storage', check);
+    };
+  }, []);
+  return state;
+}
+
+/** The Lens or Bluesky session, when it is the one in use (no Farcaster or wallet sign-in here); else null. */
+export function useSocialSession(): SocialSessionState | null {
+  const [state, setState] = useState<SocialSessionState | null>(null);
+  useEffect(() => {
+    let alive = true;
+    const check = async () => {
+      const s = (await inMiniApp()) || readSession() || readWallet() ? null : readSocial();
+      if (alive) setState(s);
+    };
+    void check();
+    const again = () => void check();
+    window.addEventListener(EVENT, again);
+    window.addEventListener('storage', again);
+    return () => {
+      alive = false;
+      window.removeEventListener(EVENT, again);
+      window.removeEventListener('storage', again);
+    };
+  }, []);
+  return state;
+}
+
 /** fetch with the person's token when there is one; a plain fetch otherwise. */
 /**
  * fetch with the wallet session's token, whatever else is signed in: for a wallet's own things when the
@@ -184,11 +360,13 @@ export async function authFetch(url: string, init?: RequestInit): Promise<Respon
   const s = readSession();
   if (!s) {
     const w = takesWallet(url) ? readWallet() : null;
-    if (!w) return fetch(url, init);
+    // A Lens or Bluesky sign-in goes where a wallet's would, when there is no wallet one.
+    const o = !w && takesWallet(url) && !url.startsWith('/api/wallet/') ? readSocial() : null;
+    if (!w && !o) return fetch(url, init);
     const headers = new Headers(init?.headers);
-    headers.set('Authorization', `Bearer ${w.token}`);
+    headers.set('Authorization', `Bearer ${(w ?? o)!.token}`);
     const res = await fetch(url, { ...init, headers });
-    if (res.status === 401) signOutWallet();
+    if (res.status === 401) (w ? signOutWallet : signOutSocial)();
     return res;
   }
   const headers = new Headers(init?.headers);

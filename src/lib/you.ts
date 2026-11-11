@@ -1,4 +1,6 @@
 import 'server-only';
+import { isSocialPerson, socialAccountOf } from './people';
+import { socialAccount } from './social/accounts';
 import type postgres from 'postgres';
 import { db } from './db';
 import { WORK_ID } from './config';
@@ -27,7 +29,7 @@ type Sql = postgres.Sql;
 
 /** Name order everywhere (owner, 2026-10-18): Farcaster name, then Basename, then the shortened address. */
 export interface Who {
-  kind: 'farcaster' | 'wallet';
+  kind: 'farcaster' | 'wallet' | 'lens' | 'bluesky';
   /** As shown: @name, FID n, alice.base.eth or 0x1234…abcd. */
   name: string;
   /** The handle in /@<handle> links: a Farcaster name, or a wallet account's full address. Null for a FID with no name. */
@@ -44,6 +46,14 @@ export async function whoIs(person: Person, walletAddress?: string | null): Prom
     const username = await lookupName(person).catch(() => null);
     const handle = await handleFor(person).catch(() => null);
     return { kind: 'farcaster', name: username ? `@${username}` : handle ? `@${handle}` : `FID ${person}`, handle, fid: person, username: username ?? handle };
+  }
+  if (isSocialPerson(person)) {
+    // A Lens or Bluesky account not linked to a Farcaster account (branch signin-lens-bluesky): its handle as checked
+    // at its last sign-in. No /@ page for it yet, so no handle in links.
+    const sql = db();
+    const row = sql ? await socialAccount(sql, socialAccountOf(person)).catch(() => null) : null;
+    const kind = row?.kind ?? 'bluesky';
+    return { kind, name: row?.handle ?? (kind === 'lens' ? 'a Lens account' : 'a Bluesky account'), handle: null };
   }
   const address = (walletAddress ?? (await handleFor(person).catch(() => null)) ?? '').toLowerCase();
   const basename = SHOW_BASENAMES && address ? await basenameOf(address) : null;

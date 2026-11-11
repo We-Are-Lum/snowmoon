@@ -3,11 +3,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ILLUSTRATION_CHECK, IMAGES } from '~/lib/config';
-import { authFetch, signOut, signOutWallet, useAuth, useWalletAlongside, walletFetch } from '~/lib/client-auth';
+import { authFetch, refreshWalletLink, signOut, signOutSocial, signOutWallet, useAuth, useSocialDevice, useSocialSession, useWalletAlongside, walletFetch } from '~/lib/client-auth';
+import { signInOpen } from '~/lib/config';
+import { SocialLinks, type SocialView } from './social-links';
 import { frameView, labelFor, pictureView, posterAlt, posterView } from '~/lib/scene-posters';
 import type { BoardItem, FrameItem, OwnWork, PictureItem, SceneItem, Who } from '~/lib/you';
 import { AiLabel } from './recipe-sheet';
 import { SignInButton } from './sign-in';
+import { SignInChoices } from './sign-in-choices';
 import { LinkNote, WalletPanel, WalletSignInButton } from './wallet';
 import { AgentsOnYou } from './agents/agents-you';
 import { exactDollars } from '~/lib/wallet/price-text';
@@ -31,17 +34,25 @@ const W = {
   kindFarcaster: 'Farcaster',
   kindWallet: 'Wallet',
   kindBasename: 'Wallet · Basename',
+  // The account's own network (2026-11-05, the owner's localhost sign-ins). DRAFT wording (coding agent).
+  kindLens: 'Lens',
+  kindBluesky: 'Bluesky',
   fid: 'Farcaster ID',
   basename: 'Basename',
   address: 'Wallet address',
   profile: 'Your public page',
   profileNote: 'Anyone can open it. It shows the scenes, remix frames and storyboards you have published here, and nothing you have hidden.',
   noProfile: 'Your public page needs a Farcaster name.',
+  /** A Lens or Bluesky account has no /@ page (2026-11-05). DRAFT wording (coding agent). */
+  // Owner, 2026-11-05 (draft wording): no push to link Farcaster; linked accounts v2 gives every Snowmoon account a public page.
+  socialProfile: (_kind: 'Lens' | 'Bluesky') => 'Public pages for Lens and Bluesky accounts aren\u2019t ready yet.',
   signOutFarcaster: 'Sign out',
   signOutWallet: 'Sign out of this wallet',
   bothWork: 'Signed in with Farcaster and a wallet on this device: the work of both accounts is listed together; each piece is hidden by its own account.',
   inApp: 'Signed in through your Farcaster app.',
   wallet: 'Wallet',
+  /** Signed in with Lens or Bluesky (2026-11-05): no balance in this release; a wallet sign-in pays. DRAFT wording (coding agent). */
+  socialWallet: (kind: 'Lens' | 'Bluesky') => `A ${kind} account has no balance here. To prepay for images and Remix frames, sign in with a wallet; while it is signed in, you make them as the wallet’s account.`,
   framePrice: (usd: string) => `Up to $${usd} a Remix frame: the estimated cost plus ${Math.round(IMAGES.prepaid.markup * 100)}%. A frame with fewer pictures sent costs less.`,
   farcasterWallet:
     'A Farcaster account has no balance here: References and Remix use your free daily count. Sign in with a wallet too to see its balance, add funds or add a payment. While Farcaster is signed in, Pictures and Remix still make things as your Farcaster account.',
@@ -81,7 +92,10 @@ const W = {
   linkYes: 'Link them',
   linkNo: 'Not now',
   linked: (wallet: string, to: string) => `${wallet} is linked to ${to}: signing in with it signs you in as ${to}.`,
-  linkedHow: { verified: 'Linked because that account verified this address on Farcaster.', signed: 'Linked by you, signed in with both.', maintainer: 'Linked by the maintainer, checked on Farcaster.' },
+  /** Why a wallet isn't linked automatically, from the last lookup (2026-11-04, owner: "says so plainly"). DRAFT wording (coding agent). */
+  foundNone: 'Not linked automatically: no Farcaster account has this wallet as its custody address or as a verified address.',
+  foundMany: (n: number) => `Not linked automatically: ${n} Farcaster accounts list this wallet, so it isn’t linked to any of them on its own. You can link it to yours below.`,
+  linkedHow: { verified: 'Linked because Farcaster lists this address as that account’s (its custody address or a verified address).', signed: 'Linked by you, signed in with both.', maintainer: 'Linked by the maintainer, checked on Farcaster.' },
   /** Signed in with Farcaster: a wallet linked to this account (owner, 2026-10-22: "Either side can unlink"). */
   linkedWallet: (wallet: string) => `${wallet} is linked to this account: signing in with it signs you in here.`,
   linkedEarlier: (to: string) => `What you made with this wallet shows under ${to}, and is listed with your work below.`,
@@ -91,6 +105,8 @@ const W = {
   unlinkYes: 'Unlink',
   unlinkNo: 'Keep it',
   viaWallet: 'Signed in with your linked wallet.',
+  /** Signed in with a Lens or Bluesky account linked to this Farcaster account (2026-11-05). DRAFT wording (coding agent). */
+  viaSocial: (kind: 'Lens' | 'Bluesky') => `Signed in with your linked ${kind} account.`,
 } as const;
 
 interface Side {
@@ -106,6 +122,8 @@ interface YouData extends Side {
   link: LinkView | null;
   /** Signed in with Farcaster: the wallets linked to it, other than the one in `link`. */
   linkedWallets: { address: string; short: string; how: LinkHow }[];
+  /** Lens and Bluesky links (owner, 2026-11-04, 3a), while either sign-in is on. */
+  social: SocialView | null;
 }
 /** How a link reads: 'maintainer' is LINKED_WALLETS or seeded from it (src/app/api/you/route.ts). */
 type LinkHow = 'verified' | 'signed' | 'maintainer';
@@ -114,12 +132,19 @@ interface LinkView {
   linked: { fid: number; how: LinkHow; at: string | null; name: string } | null;
   canUnlink: boolean;
   offer: boolean;
+  /** For an unlinked wallet: how many Farcaster accounts the last lookup found (null: not looked up). */
+  found: number | null;
   /** The FID signed in with Farcaster on this device, if any: who the offer links to. */
   to: number | null;
 }
 type Fetcher = (url: string, init?: RequestInit) => Promise<Response>;
 /** Whose a listed item is, and which session acts for it (Hide goes with that account's own token). */
 type Mine<T> = T & { by: Who; fetcher: Fetcher | null };
+
+/** The network's name as shown, for a Lens or Bluesky account. */
+const networkOf = (kind: 'lens' | 'bluesky') => (kind === 'lens' ? W.kindLens : W.kindBluesky);
+/** The label beside the account's name: its own network (2026-11-05). */
+const kindLabel = (who: Who) => (who.kind === 'wallet' ? (who.basename ? W.kindBasename : W.kindWallet) : who.kind === 'farcaster' ? W.kindFarcaster : networkOf(who.kind));
 
 const dollars = (usd: number) => (usd >= 1 ? usd.toFixed(2) : usd.toFixed(4).replace(/0+$/, '').replace(/\.$/, ''));
 const day = (iso: string) => iso.slice(0, 10);
@@ -130,18 +155,29 @@ export function YouPage() {
   const wallet = useWalletAlongside();
   const [data, setData] = useState<YouData | null>(null);
   const [failed, setFailed] = useState(false);
-  const signedIn = auth.kind === 'signed-in' || (auth.kind === 'signed-out' && wallet !== null);
+  // A Lens or Bluesky sign-in: the one in use (nothing else signed in), and both slots on this device for the link panel.
+  const social = useSocialSession();
+  const device = useSocialDevice();
+  const signedIn = auth.kind === 'signed-in' || (auth.kind === 'signed-out' && (wallet !== null || social !== null));
   const both = auth.kind === 'signed-in' && wallet !== null;
-  const key = `${auth.kind === 'signed-in' ? `f${auth.fid}` : ''}${wallet ? `w${wallet.address}` : ''}`;
+  // The Lens or Bluesky account the link panel is about: beside a Farcaster sign-in, the one on this device; signed in
+  // with Lens, a Bluesky sign-in kept only to link it; signed in with Lens or Bluesky alone, that one.
+  const hereToken = auth.kind === 'signed-in' ? device.main : social?.kind === 'lens' && device.link ? device.link : social;
+  const besideToken = auth.kind === 'signed-in' ? device.main : social?.kind === 'lens' ? device.link : null;
+  const key = `${auth.kind === 'signed-in' ? `f${auth.fid}` : ''}${wallet ? `w${wallet.address}` : ''}${social ? `s${social.token.slice(-12)}` : ''}${besideToken ? `b${besideToken.token.slice(-12)}` : ''}`;
 
   const load = useCallback(async () => {
     setFailed(false);
-    // With both, the Farcaster token goes as usual and the wallet's own token beside it (src/app/api/you/route.ts).
-    const res = await authFetch('/api/you', both && wallet ? { headers: { 'x-wallet-session': wallet.token } } : undefined).catch(() => null);
+    // With both, the Farcaster token goes as usual and the wallet's own token beside it (src/app/api/you/route.ts);
+    // a Lens or Bluesky sign-in beside it goes the same way, for the link panel.
+    const headers: Record<string, string> = {};
+    if (both && wallet) headers['x-wallet-session'] = wallet.token;
+    if (besideToken) headers['x-social-session'] = besideToken.token;
+    const res = await authFetch('/api/you', Object.keys(headers).length ? { headers } : undefined).catch(() => null);
     if (res?.ok) setData((await res.json()) as YouData);
     else if (res?.status === 401) setData(null);
     else setFailed(true);
-  }, [both, wallet]);
+  }, [both, wallet, besideToken]);
   useEffect(() => {
     setData(null);
     if (key && auth.kind !== 'loading') void load();
@@ -154,8 +190,7 @@ export function YouPage() {
         <p className="you-lede">{W.signedOut}</p>
         <LinkNote className="you-note" />
         <div className="you-sign-in">
-          <SignInButton className="ic-secondary" />
-          {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton />}
+          <SignInChoices wallet={auth.kind === 'signed-out' && !auth.inApp} />
         </div>
       </Frame>
     );
@@ -195,12 +230,24 @@ export function YouPage() {
         <h2 id="you-account">{W.account}</h2>
         <AccountRows
           who={who}
-          signOut={auth.kind === 'signed-in' && auth.via === 'farcaster-app' ? null : auth.kind === 'signed-in' ? signOut : signOutWallet}
-          viaWallet={auth.kind !== 'signed-in' && who.kind === 'farcaster'}
+          signOut={auth.kind === 'signed-in' && auth.via === 'farcaster-app' ? null : auth.kind === 'signed-in' ? signOut : wallet ? signOutWallet : signOutSocial}
+          viaWallet={auth.kind !== 'signed-in' && who.kind === 'farcaster' && wallet !== null}
+          viaSocial={auth.kind !== 'signed-in' && who.kind === 'farcaster' && wallet === null && social ? social.kind : null}
         />
         {data.wallet && <AccountRows who={data.wallet.who} signOut={signOutWallet} />}
         {data.link && <LinkPanel view={data.link} to={who.kind === 'farcaster' ? who : null} reload={load} />}
         {(data.linkedWallets ?? []).map((lw) => <LinkedWallet key={lw.address} w={lw} reload={load} />)}
+        {data.social && (
+          <SocialLinks
+            view={data.social}
+            hereToken={hereToken}
+            bearer={auth.kind === 'signed-in' ? null : social}
+            farcaster={auth.kind === 'signed-in'}
+            lensOn={signInOpen('lens')}
+            blueskyOn={signInOpen('bluesky')}
+            reload={() => void load()}
+          />
+        )}
       </section>
 
       <section className="you-section" aria-labelledby="you-wallet">
@@ -215,8 +262,8 @@ export function YouPage() {
           </>
         ) : (
           <>
-            <p className="you-note">{W.farcasterWallet}</p>
-            {auth.kind === 'signed-in' && auth.via === 'website' && <WalletSignInButton />}
+            <p className="you-note">{who.kind === 'lens' || who.kind === 'bluesky' ? W.socialWallet(networkOf(who.kind)) : W.farcasterWallet}</p>
+            {((auth.kind === 'signed-in' && auth.via === 'website') || (auth.kind === 'signed-out' && !auth.inApp && social !== null)) && <WalletSignInButton />}
           </>
         )}
       </section>
@@ -237,15 +284,16 @@ export function YouPage() {
 }
 
 /** One signed-in account's rows: its name (name order: Farcaster, Basename, address), its ids, its public page, and Sign out. */
-function AccountRows({ who, signOut: out, viaWallet = false }: { who: Who; signOut: (() => void) | null; viaWallet?: boolean }) {
+function AccountRows({ who, signOut: out, viaWallet = false, viaSocial = null }: { who: Who; signOut: (() => void) | null; viaWallet?: boolean; viaSocial?: 'lens' | 'bluesky' | null }) {
   return (
     <div className="you-account" data-kind={who.kind}>
       <p className="you-name">
         {who.name}
-        <span className="label you-kind">{who.kind === 'wallet' ? (who.basename ? W.kindBasename : W.kindWallet) : W.kindFarcaster}</span>
+        <span className="label you-kind">{kindLabel(who)}</span>
       </p>
+      {/* Only the rows that apply to this account (2026-11-05): a Lens or Bluesky account has no FID or address here. */}
       <dl className="you-facts">
-        {who.kind === 'farcaster' ? (
+        {who.kind === 'farcaster' && (
           <>
             {who.username && who.name !== `@${who.username}` && (
               <div>
@@ -253,12 +301,15 @@ function AccountRows({ who, signOut: out, viaWallet = false }: { who: Who; signO
                 <dd>@{who.username}</dd>
               </div>
             )}
-            <div>
-              <dt className="label">{W.fid}</dt>
-              <dd>{who.fid}</dd>
-            </div>
+            {who.fid !== undefined && (
+              <div>
+                <dt className="label">{W.fid}</dt>
+                <dd>{who.fid}</dd>
+              </div>
+            )}
           </>
-        ) : (
+        )}
+        {who.kind === 'wallet' && (
           <>
             {who.basename && who.name !== who.basename && (
               <div>
@@ -266,18 +317,21 @@ function AccountRows({ who, signOut: out, viaWallet = false }: { who: Who; signO
                 <dd>{who.basename}</dd>
               </div>
             )}
-            <div>
-              <dt className="label">{W.address}</dt>
-              <dd className="you-addr">{who.address}</dd>
-            </div>
+            {who.address && (
+              <div>
+                <dt className="label">{W.address}</dt>
+                <dd className="you-addr">{who.address}</dd>
+              </div>
+            )}
           </>
         )}
         <div>
           <dt className="label">{W.profile}</dt>
-          <dd>{who.handle ? <Link href={`/@${who.handle}`}>{`/@${who.handle}`}</Link> : W.noProfile}</dd>
+          <dd>{who.handle ? <Link href={`/@${who.handle}`}>{`/@${who.handle}`}</Link> : who.kind === 'lens' || who.kind === 'bluesky' ? W.socialProfile(networkOf(who.kind)) : W.noProfile}</dd>
         </div>
       </dl>
       {who.handle && <p className="you-note">{W.profileNote}</p>}
+      {viaSocial && <p className="you-note">{W.viaSocial(networkOf(viaSocial))}</p>}
       {viaWallet ? (
         <p className="you-note">{W.viaWallet}</p>
       ) : out ? (
@@ -308,6 +362,8 @@ function LinkPanel({ view, to, reload }: { view: LinkView; to: Who | null; reloa
     setAsking(false);
     if (!r?.ok) return setNote(out?.error ?? W.couldNot);
     setNote(null);
+    // The menu's name follows the link (2026-11-04).
+    void refreshWalletLink(true);
     reload();
   };
   const linkNow = async () => {
@@ -357,10 +413,12 @@ function LinkPanel({ view, to, reload }: { view: LinkView; to: Who | null; reloa
       </div>
     );
   }
-  if (!view.offer || later) return null;
+  const why = view.found === 0 ? W.foundNone : view.found !== null && view.found > 1 ? W.foundMany(view.found) : null;
+  if (!view.offer || later) return why ? <p className="you-note" data-link-found={view.found ?? ''}>{why}</p> : null;
   return (
     <div className="you-link" aria-label={W.linkTitle}>
       <h3 className="label">{W.linkTitle}</h3>
+      {why && <p className="you-note" data-link-found={view.found ?? ''}>{why}</p>}
       {view.to === null || !to ? (
         <>
           <p className="you-note">{W.linkOffer}</p>

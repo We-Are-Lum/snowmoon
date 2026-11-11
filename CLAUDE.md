@@ -24,6 +24,11 @@ snowmoon.party is an independent, open adaptation of *Snowmoon* by Vitalik Buter
   worktree that needs an install gets its own copy: remove the symlink first (`rm node_modules`, which removes only the
   link), then install.
 - Commit and push work to its branch; open a PR when the owner asks for one. Don't leave work only on the local machine.
+- **No agent deletes, moves or overwrites any `.env*` file in the main checkout.** A worktree removes only its own link
+  or copy, and worktrees are removed only with `git worktree remove`. Every `rm`, `unlink` or `mv` uses an absolute path
+  inside the agent's own worktree, never a relative path after `;` (owner, 2026-11-09, after an agent's
+  `… && cd ../snowmoon-style-test && … ; unlink .env.local` failed before the `cd` and deleted the main checkout's
+  `.env.local` on 2026-11-08).
 - Remove worktrees with `git worktree remove` (never `rm -rf`), only when merged and with no uncommitted or unpushed work; never delete an unmerged branch. Propose a cleanup plan before deleting anything.
 
 ## Database migrations
@@ -33,6 +38,15 @@ snowmoon.party is an independent, open adaptation of *Snowmoon* by Vitalik Buter
 - **Every read-back includes an insert and a delete of a realistic row**, not only a look at the schema, so a constraint that can't accept real data is caught (owner, 2026-10-30, after 0025's check failed every insert for a week).
 - Give the owner the SQL in one block: dry run, migration, read-back. Never ask for or paste secrets in chat.
 - Production checks by an agent are **read-only**: a read-only transaction as `studio_writer` (`begin read only; … rollback;`).
+
+## Secrets and keys
+
+- **Agents never pull or read production secrets:** no `vercel env pull` for production (or preview), no `vercel env
+  ls --decrypt`, and no copying a production key from anywhere. If a key an agent needs isn't in `.env.local`, it stops
+  and tells the owner (owner, 2026-11-04, after an agent pulled production settings to find the Neynar key).
+- **Never use another service's demo or docs key** (e.g. Neynar's public docs key) in place of the site's own: what it
+  sends goes out under someone else's account and terms. Stop and tell the owner instead (owner, 2026-11-04).
+- Never print a key, put one in chat, or commit one; keys live in git-ignored env files.
 
 ## Checks
 

@@ -1,4 +1,5 @@
 import 'server-only';
+import { isWalletPerson } from '../people';
 import { ToolInputError } from '../agent/tools';
 import { editorData, type DataShot } from '../agent/data';
 import { getVersion } from '../adaptation-pages';
@@ -76,7 +77,7 @@ export async function tryFrame(agent: Agent, args: Record<string, unknown>) {
   const { adaptation, version, shot } = await ownShot(agent, args);
   const n = note(args.note);
   if (!remixShot(adaptation, version, shot.id)?.prompt) throw new ToolInputError('this shot has no prompt and camera to redraw from');
-  const price = agent.person < 0 ? framePrice(adaptation, version, shot.id) : null;
+  const price = isWalletPerson(agent.person) ? framePrice(adaptation, version, shot.id) : null;
   return draftEdit(agent, adaptation, version, shot, { type: 'frame', note: n, estimate_usd: frameEstimate(), ...(price !== null ? { price_usd: price } : {}) }, `Shot ${shot.n}: a new frame`, args.answering);
 }
 

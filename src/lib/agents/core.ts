@@ -1,4 +1,5 @@
 import 'server-only';
+import { isSocialPerson, socialAccountOf } from '../people';
 import { createHash, randomBytes } from 'node:crypto';
 import type postgres from 'postgres';
 import { AGENTS, appUrl } from '../config';
@@ -29,6 +30,12 @@ export async function allowed(person: number | null): Promise<boolean> {
   if (person === null || !agentsOn()) return false;
   const test = agentsTestOn() ? (process.env.AGENTS_TEST_ALLOW ?? '').toLowerCase().split(',').map((x) => x.trim()).filter(Boolean) : [];
   if (person > 0) return AGENTS.people.fids.includes(person) || test.includes(String(person));
+  if (isSocialPerson(person)) {
+    // A Lens or Bluesky account (not linked to a Farcaster account): matched as 'lens:<address>' or 'bluesky:<DID>'.
+    const [a] = await sql()<{ kind: string; subject: string }[]>`select kind, subject from studio.social_accounts where id = ${socialAccountOf(person)}`.catch(() => []);
+    const id = a ? `${a.kind}:${a.subject}`.toLowerCase() : null;
+    return !!id && (AGENTS.people.social.some((x) => x.toLowerCase() === id) || test.includes(id));
+  }
   const [w] = await sql()<{ address: string }[]>`select address from studio.wallet_accounts where id = ${-person}`;
   const a = w?.address?.toLowerCase();
   // Compared lowercase on both sides, so a checksummed address in AGENTS.people.wallets still matches.

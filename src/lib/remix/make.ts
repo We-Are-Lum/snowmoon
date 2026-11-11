@@ -5,6 +5,7 @@ import { IMAGES, REMIX } from '../config';
 import { checkPrompt, type GuardResult } from '../images/guard';
 import { ImageUnavailable, makeEdit, type Made } from '../images/fal';
 import { blockedName } from '../images/rules';
+import { FREE_WORDING } from '../social/free';
 import { IMAGE_WORDING } from '../images/wording';
 import { fundedBy, perDay, reserve, settle, type Refusal, type Spend } from './limits';
 import type { RemixPicture, RemixShot } from './shot';
@@ -46,6 +47,8 @@ export const SAY: Record<Refusal, (person: number) => string> = {
   'free-off': () => 'Free remix frames are paused for now.',
   balance: () => IMAGE_WORDING.prepaid.lowBalance,
   'prepaid-spend': () => IMAGE_WORDING.prepaid.dailyCap,
+  /** A Lens or Bluesky account without free generations (src/lib/social/free.ts). DRAFT wording. */
+  'no-free': () => FREE_WORDING.none,
 };
 
 export function remixPictures(layout: RemixPicture, shot: RemixShot): RemixPicture[] {

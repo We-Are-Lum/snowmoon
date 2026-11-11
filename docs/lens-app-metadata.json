@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schemas.lens.dev/app/1.0.0.json",
+  "lens": {
+    "name": "Snowmoon Party",
+    "tagline": "Snowmoon by Vitalik Buterin, read and illustrated in the open.",
+    "description": "An independent, open edition of the novel Snowmoon by Vitalik Buterin (GPL v3), with read-aloud audio, pictures and a game. Not affiliated with or endorsed by the author. Operated by Lum LLC.",
+    "logo": "https://snowmoon.party/icon.png",
+    "url": "https://snowmoon.party",
+    "developer": "Lum LLC",
+    "platforms": ["web"],
+    "termsOfService": "https://snowmoon.party/terms",
+    "privacyPolicy": "https://snowmoon.party/privacy"
+  }
+}
