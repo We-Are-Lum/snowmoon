@@ -1,0 +1,175 @@
+{
+ "about": "Lord Ephelion portraits, step 1 (owner's brief, 2026-11-11): three head-and-shoulders portraits from text, GPT Image 2.5, Animated series. The look is this edition's invention (the book never describes him). Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "cap_usd": 0.3,
+ "stop_at_usd": 0.3,
+ "clothes": "wearing an immaculate ice-blue high-collared formal coat over a white waistcoat, with silver trim and white gloves; the collar is modest and frames the face without towering over it, with a small lion emblem at the collar",
+ "base_style": {
+  "title": "Animated series",
+  "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.",
+  "source": "docs/starting-sheet-drafts/directions/plan.json, styles[\"Animated series\"] (branch challenge-styles)"
+ },
+ "book_based": {
+  "detail": "a man",
+  "block": "c21-b76"
+ },
+ "variants": {
+  "a": "a man in his early fifties with fair skin, a kind, open face, warm crow's feet and a faint smile at rest, sharp attentive grey eyes looking directly at the viewer, short neat silver-grey hair, clean-shaven, a long narrow face, slim build with a scholar's slight stoop, one gloved hand raised mid-explanation",
+  "b": "a man in his early fifties with deep brown skin, a kind, open face, warm crow's feet and a faint smile at rest, sharp attentive dark eyes looking directly at the viewer, close-cropped grey hair and a short neat grey beard, a broad gentle face, slim build with a scholar's slight stoop, gloved hands loosely clasped in front",
+  "c": "a man in his early fifties with light golden-brown skin, a kind, open face, warm crow's feet and a faint smile at rest, sharp attentive dark-brown eyes looking directly at the viewer, short neat black hair greying at the temples, clean-shaven, a rounder face with high cheekbones, thin wire-rimmed glasses, slim build with a scholar's slight stoop, one gloved hand raised mid-explanation"
+ },
+ "prompts": {
+  "15125d83b7cc2dba4b202ce21a3ec4b441d6a5e22fa3d5c3fc230a25b787137c": "Head-and-shoulders portrait, three-quarter view, framed down to mid-chest so the hands show: one person, on a plain flat off-white background with no scenery, even lighting.\n\nThe person is a man in his early fifties with fair skin, a kind, open face, warm crow's feet and a faint smile at rest, sharp attentive grey eyes looking directly at the viewer, short neat silver-grey hair, clean-shaven, a long narrow face, slim build with a scholar's slight stoop, one gloved hand raised mid-explanation, wearing an immaculate ice-blue high-collared formal coat over a white waistcoat, with silver trim and white gloves; the collar is modest and frames the face without towering over it, with a small lion emblem at the collar.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+  "dec9dd74e02ebfe57a59c9605906c8ea252a7a9476de3e2b8b0953f9a25d6a8b": "Head-and-shoulders portrait, three-quarter view, framed down to mid-chest so the hands show: one person, on a plain flat off-white background with no scenery, even lighting.\n\nThe person is a man in his early fifties with deep brown skin, a kind, open face, warm crow's feet and a faint smile at rest, sharp attentive dark eyes looking directly at the viewer, close-cropped grey hair and a short neat grey beard, a broad gentle face, slim build with a scholar's slight stoop, gloved hands loosely clasped in front, wearing an immaculate ice-blue high-collared formal coat over a white waistcoat, with silver trim and white gloves; the collar is modest and frames the face without towering over it, with a small lion emblem at the collar.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nNo text, no lettering, no signs with words.",
+  "3a62fced2b69cab8b2dc8505caf3106738651269d820fec7307b3f6d717a3a65": "Head-and-shoulders portrait, three-quarter view, framed down to mid-chest so the hands show: one person, on a plain flat off-white background with no scenery, even lighting.\n\nThe person is a man in his early fifties with light golden-brown skin, a kind, open face, warm crow's feet and a faint smile at rest, sharp attentive dark-brown eyes looking directly at the viewer, short neat black hair greying at the temples, clean-shaven, a rounder face with high cheekbones, thin wire-rimmed glasses, slim build with a scholar's slight stoop, one gloved hand raised mid-explanation, wearing an immaculate ice-blue high-collared formal coat over a white waistcoat, with silver trim and white gloves; the collar is modest and frames the face without towering over it, with a small lion emblem at the collar.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "guard",
+   "variant": "a",
+   "prompt_sha256": "15125d83b7cc2dba4b202ce21a3ec4b441d6a5e22fa3d5c3fc230a25b787137c",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00011445,
+   "cost_source": "reported",
+   "worst_usd": 0.000575025,
+   "at": "2026-11-11T23:36:59.982Z"
+  },
+  {
+   "kind": "guard",
+   "variant": "b",
+   "prompt_sha256": "dec9dd74e02ebfe57a59c9605906c8ea252a7a9476de3e2b8b0953f9a25d6a8b",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000126075,
+   "cost_source": "reported",
+   "worst_usd": 0.000576225,
+   "at": "2026-11-11T23:37:00.952Z"
+  },
+  {
+   "kind": "guard",
+   "variant": "c",
+   "prompt_sha256": "3a62fced2b69cab8b2dc8505caf3106738651269d820fec7307b3f6d717a3a65",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.00012705,
+   "cost_source": "reported",
+   "worst_usd": 0.000581025,
+   "at": "2026-11-11T23:37:01.507Z"
+  },
+  {
+   "kind": "endpoint-list",
+   "model": "gpt",
+   "status": "ok",
+   "retention": {
+    "provider": "openai",
+    "zero_data_retention": false,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-11T23:37:02.190Z",
+    "kept": {
+     "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+     "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+     "source": "https://developers.openai.com/api/docs/guides/your-data",
+     "read": "2026-11-03"
+    }
+   },
+   "cost_usd": 0,
+   "at": "2026-11-11T23:37:02.190Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "a",
+   "file": "ephelion-portrait-a-gpt.jpg",
+   "prompt_sha256": "15125d83b7cc2dba4b202ce21a3ec4b441d6a5e22fa3d5c3fc230a25b787137c",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M76FHNJJDYQRGB7K5BH6RGXN",
+   "status": "ok",
+   "cost_usd": 0.042355,
+   "cost_source": "reported by the gateway",
+   "sha256": "6415dda58b505108d2ab8af76a05a970b88e1657e7868c9361a46c9a03e7b896",
+   "original_sha256": "48047211bd35f08a6fa3d80bed5008964ba0faf3ba740835d6d0108a6fb8ea01",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "attempt": 1,
+   "at": "2026-11-11T23:37:26.379Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "b",
+   "file": "ephelion-portrait-b-gpt.jpg",
+   "prompt_sha256": "dec9dd74e02ebfe57a59c9605906c8ea252a7a9476de3e2b8b0953f9a25d6a8b",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M76FJD60FT87FHAMVBHJMTXP",
+   "status": "ok",
+   "cost_usd": 0.04237,
+   "cost_source": "reported by the gateway",
+   "sha256": "d9ea996f56544a83dc78e8956d80e83cb4da8f5cb60a86da606a2fc5a89d55e6",
+   "original_sha256": "74d85e32350f02ee1de7111be050cb53ac7a0a4bc460121bca49b644f6939798",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "attempt": 1,
+   "at": "2026-11-11T23:37:50.432Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "variant": "c",
+   "file": "ephelion-portrait-c-gpt.jpg",
+   "prompt_sha256": "3a62fced2b69cab8b2dc8505caf3106738651269d820fec7307b3f6d717a3a65",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M76FK4NWEA2YBG5QY7QFFF29",
+   "status": "ok",
+   "cost_usd": 0.042455,
+   "cost_source": "reported by the gateway",
+   "sha256": "9c96a75316fa24a04245bba319edba9d475249a598ec4240a22c04a94a669255",
+   "original_sha256": "7d8a6c48677bd3c0ab01cc9b6bd76f272e4964315a5f1ebeb9414b2e1062f712",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "attempt": 1,
+   "at": "2026-11-11T23:38:18.957Z"
+  }
+ ]
+}
