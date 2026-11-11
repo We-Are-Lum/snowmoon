@@ -416,6 +416,14 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .mk-make, .mk-publish { border: 0; cursor: pointer; width: 100%; }
 .mk-make:disabled, .mk-publish:disabled { opacity: 0.6; cursor: default; }
 @media (min-width: 640px) { .mk-make, .mk-publish { width: auto; align-self: flex-start; min-width: 280px; } }
+/* "Make it" stays in reach on phones (owner, 2026-11-11): under 768px the remix screen's button sticks to the bottom of the
+   screen (above the safe area, on a paper band) until its own place scrolls into view. CSS only. It goes back to its
+   place, never covering anything, while the person types (a focused field: the keyboard is up), while a model's notice
+   or the 18+ box is open (they sit right above it), and while the sign-in choices are open. Wider screens: unchanged. */
+@media (max-width: 767px) {
+  .mk-page[data-step="remix"] > .mk-make { position: sticky; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 3; box-shadow: 0 0 0 12px var(--paper); }
+  .mk-page[data-step="remix"]:has(.dz-notice, textarea:focus, input:focus, .mk-make[aria-expanded="true"]) > .mk-make { position: static; box-shadow: none; }
+}
 .mk-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .mk-again { min-height: 56px; }
 .mk-at, .mk-words { margin: 0; }
