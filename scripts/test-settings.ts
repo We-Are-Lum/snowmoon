@@ -18,6 +18,7 @@ import path from 'node:path';
 import { readFileSync } from 'node:fs';
 import { CHALLENGE_SETTINGS, drawSetting, settingLine, settingRecord, type ChallengeSetting } from '../src/lib/challenge/settings';
 import { SETTING_WORDING } from '../src/lib/challenge/settings-wording';
+import { challengeRecord } from '../src/lib/images/anchor';
 import { remixPrompt } from '../src/lib/challenge/make';
 import { SCENE_LINE } from '../src/lib/challenge/looks';
 import { KEEP_LINE } from '../src/lib/challenge/styles';
@@ -110,7 +111,7 @@ const rec = settingRecord(CHALLENGE_SETTINGS[1]);
 const recorded = (src: string) => [
   ...need(/\.\.\.\(setting \? \{ setting: settingRecord\(setting\) \} : \{\}\),/.test(src), 'the ticket\'s challenge doesn\'t record the setting'),
   ...need(JSON.stringify(rec) === JSON.stringify({ id: 'A', text: WANT.A[0], blocks: WANT.A[1] }), 'the record isn\'t letter, text, blocks'),
-  ...need(/setting\?: \{ id: string; text: string; blocks: string\[\] \};/.test(ticket) && /\.\.\.\(t\.challenge \? \{ challenge: t\.challenge \} : \{\}\)/.test(publish), 'the recipe doesn\'t keep the ticket\'s challenge (and its setting)'),
+  ...need(/setting\?: \{ id: string; text: string; blocks: string\[\] \};/.test(ticket) && /\.\.\.\(t\.challenge \? \{ challenge: challengeRecord\(t\.challenge\) \} : \{\}\)/.test(publish) && 'setting' in challengeRecord({ character: 'zei', from: 'f', fromKind: 'sheet', setting: { id: 'A', text: 't', blocks: [] } }), 'the recipe doesn\'t keep the ticket\'s challenge (and its setting)'),
   ...need(/setting: readSetting\(\(p\.challenge as \{ setting\?: unknown \} \| undefined\)\?\.setting\)/.test(data), '"How it was made" doesn\'t read it back'),
   ...need(/\{SETTING_WORDING\.head\}/.test(page) && /SETTING_WORDING\.line\(im\.setting\)/.test(page) && /SETTING_WORDING\.line\(d\.setting\)/.test(preview), 'the picture page or the preview doesn\'t show it'),
   ...need(SETTING_WORDING.head === 'Setting' && SETTING_WORDING.line(rec) === `${WANT.A[0]}. This edition's description of the book's world, not a quote, picked at random from four (setting A); based on c1-b2, c1-b13, c1-b4.`, `the wording: ${SETTING_WORDING.line(rec)}`),
