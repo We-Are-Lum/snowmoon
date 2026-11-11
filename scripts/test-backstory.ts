@@ -118,6 +118,7 @@ const order = (prompt: string) => need(prompt === ['give her a red coat', 'Bai i
     ...Object.entries(L).flatMap(([k, t]) => [
       ...need(/^[0-9a-f]{64}$/.test(k), `${k.slice(0, 12)}: not a sha256`),
       ...need(t.startsWith(LOOK_PREFIX) && t.endsWith('.'), `${k.slice(0, 12)}: doesn't start "${LOOK_PREFIX}"`),
+      ...need(!/\b(hair|ponytail|braid|twists|coils|curls|coat|jacket|wearing)\b/i.test(t) && t.length <= 100, `${k.slice(0, 12)}: not the short shape (skin, eyes, signature details; no hair or clothes)`),
       ...need(blockedName(t) === null && !/\b(studio|ghibli|disney|pixar|film|movie|anime|manga|in the style of|artist)\b/i.test(t), `${k.slice(0, 12)}: names a studio, film, artist or blocked name`),
     ]),
     // Every launch base that isn't its character's default has its own line; a default keeps the character's line.
@@ -146,8 +147,9 @@ const order = (prompt: string) => need(prompt === ['give her a red coat', 'Bai i
   const route = read('src/app/api/challenge/make/route.ts');
   const wired = (src: string) => need(/look: lookForBase\(src\.character, await baseFrontOf\(sql, src\)\)/.test(src) && /includeHidden: true/.test(read('src/lib/challenge/pictures.ts')), 'the make route doesn\'t use the base\'s line (through hidden pictures too)');
   const [plantDeep] = await walk(async (s) => (s === 'r2' ? null : walkToBase(s, async () => undefined, async () => null)));
-  proven('L4 one look line per base (keyed by its front), a remix uses its base\'s line through every step, the default base and no base use the character\'s; the make route uses it', [...baseRules(BASE_LOOKS), ...sel, ...walked, ...wired(route)], [
+  proven('L4 one look line per base (keyed by its front), short (skin, eyes, signature details; no hair or clothes), a remix uses its base\'s line through every step, the default base and no base use the character\'s; the make route uses it', [...baseRules(BASE_LOOKS), ...sel, ...walked, ...wired(route)], [
     ...baseRules({ ...BASE_LOOKS, [front('gladias:a')]: 'Unless the change says otherwise: a man with warm light-brown skin.', [front('gladias:b')]: 'Unless the change says otherwise: x.' }),
+    ...baseRules({ ...BASE_LOOKS, [front('deluin:a')]: 'Unless the change says otherwise: a man with deep brown skin, shoulder-length black hair in loose twists and dark brown eyes.' }),
     ...(plantDeep === front('gladias:a') ? [] : ['planted: a walk that stops at the first step loses the base']),
     ...wired(route.replace('lookForBase(src.character, await baseFrontOf(sql, src))', 'lookFor(src.character)')),
   ]);
