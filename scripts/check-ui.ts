@@ -110,6 +110,7 @@ import QRCode from 'qrcode';
 import { BOOK_MENTIONS } from '../src/lib/character-order';
 import { ASSISTANT, CHALLENGE, SIGN_IN_METHODS, SUPPORT } from '../src/lib/config';
 import { SIGN_IN_CHOICES } from '../src/lib/sign-in-text';
+import { CHALLENGE_LINKS } from '../src/lib/challenge/landing-wording';
 import { ASK_WORDING, type AccountKind } from '../src/lib/chat/who-can-ask';
 
 /** The ways to sign in that are on (SIGN_IN_METHODS, in order; the sign-in release of 2026-11-05 turns Lens and Bluesky on). */
@@ -1925,6 +1926,14 @@ async function checkChallengeLanding() {
       // The ways: Remix a picture, Add a backstory, Join the collab (owner, 2026-11-11); then New to Snowmoon?, Rules, About the pictures.
       const ways = (await page.locator('.chh-way .chh-way-title').allTextContents()).map((t) => t.trim());
       if (ways.join('|') !== 'Remix a picture|Add a backstory|Join the collab') fail(`/challenge ${tag}: the ways read ${ways.join(', ')}, not "Remix a picture, Add a backstory, Join the collab"`);
+      // Each outside link (owner, 2026-11-11): set, the card links to it (shown without "https://") and has no "coming soon"; not set, it says so.
+      for (const [title, key, pending] of [['Add a backstory', 'bounty', '(bounty opens soon)'], ['Join the collab', 'collab', '(link coming soon)']] as const) {
+        const card = page.locator('.chh-way', { has: page.locator('.chh-way-title', { hasText: title }) });
+        const want = CHALLENGE_LINKS[key];
+        const hrefs = await card.locator('a[href^="http"]').evaluateAll((els) => els.map((e) => `${e.getAttribute('href')}|${(e.textContent ?? '').trim()}`));
+        const text = (await card.textContent()) ?? '';
+        if (want ? hrefs.join() !== `${want}|${want.replace(/^https?:\/\//, '')}` || text.includes(pending) : hrefs.length > 0 || !text.includes(pending)) fail(`/challenge ${tag}: "${title}" doesn't show ${want ? `its link ${want}` : `"${pending}"`} (links: ${hrefs.join() || 'none'})`);
+      }
       const details = (await page.locator('.chh-detail summary > span:first-child').allTextContents()).map((t) => t.trim());
       if (details.join('|') !== [LW.home.newTitle, LW.home.rulesTitle, LW.home.aboutTitle].join('|')) fail(`/challenge ${tag}: the details read ${details.join(', ')}`);
       if (((await page.locator('.chh-pitch').textContent()) ?? '').trim() !== LW.home.pitch) fail(`/challenge ${tag}: the pitch isn't the owner's`);

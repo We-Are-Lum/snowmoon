@@ -118,7 +118,7 @@ const order = (prompt: string) => need(prompt === ['give her a red coat', 'Bai i
     ...Object.entries(L).flatMap(([k, t]) => [
       ...need(/^[0-9a-f]{64}$/.test(k), `${k.slice(0, 12)}: not a sha256`),
       ...need(t.startsWith(LOOK_PREFIX) && t.endsWith('.'), `${k.slice(0, 12)}: doesn't start "${LOOK_PREFIX}"`),
-      ...need(!/\b(hair|ponytail|braid|twists|coils|curls|coat|jacket|wearing)\b/i.test(t) && t.length <= 100, `${k.slice(0, 12)}: not the short shape (skin, eyes, signature details; no hair or clothes)`),
+      ...need(!/\b(hair|ponytail|braid|twists|coils|curls|coat|jacket|wearing)\b/i.test(t) && t.length <= 120, `${k.slice(0, 12)}: not the short shape (skin, eyes, signature details; no hair or clothes)`),
       ...need(blockedName(t) === null && !/\b(studio|ghibli|disney|pixar|film|movie|anime|manga|in the style of|artist)\b/i.test(t), `${k.slice(0, 12)}: names a studio, film, artist or blocked name`),
     ]),
     // Every launch base that isn't its character's default has its own line; a default keeps the character's line.

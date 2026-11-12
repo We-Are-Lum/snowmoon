@@ -125,8 +125,10 @@ CHALLENGE.pictureEntries = false;
   const B = CHALLENGE.bases as Record<string, string[]>;
   const F = CHALLENGE.firstRemixes as Record<string, string[]>;
   const D = CHALLENGE.defaultLooks as Record<string, string | null>;
+  // Lord Ephelion joins (owner, 2026-11-11) before his bases are published (publish-bases refuses a character the challenge
+  // doesn't have): his list stays empty until the config PR after the owner's run; every other list is full.
   check('committed bases: one per base slot for each character, each a version id', CHALLENGE.characters.every((c) => B[c].length === CHALLENGE.baseCount[c] && B[c].every((id) => uuid.test(id))), JSON.stringify(B));
-  check('committed default looks: each character\'s first base (its current default)', CHALLENGE.characters.every((c) => D[c] === B[c][0]), JSON.stringify(D));
+  check('committed default looks: each character\'s first base (its current default)', CHALLENGE.characters.every((c) => D[c] === (B[c][0] ?? null)), JSON.stringify(D));
   check('committed first remixes: version ids, never a base', CHALLENGE.characters.every((c) => F[c].every((id) => uuid.test(id) && !B[c].includes(id))), JSON.stringify(F));
   check('committed first remixes: within the limit (firstRemixesProblems finds nothing)', R.firstRemixesProblems().length === 0, R.firstRemixesProblems().join('; '));
   for (const c of CHALLENGE.characters) { B[c] = []; F[c] = []; D[c] = null; }
@@ -312,9 +314,9 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
 // --- The bases (owner, 2026-11-03: three; 2026-11-04 after the restart: one per character) -----------------------
 {
   const committedMax = CHALLENGE.maxBases;
-  check('committed: three bases for Deluin and Gladias, one for the rest, three at most (owner, 2026-11-04)', committedMax === 3 && CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join() === 'zei:1,gladias:3,bai:1,seila:1,deluin:3,mu:1', CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join());
-  check('committed: at most one base is used for Zei, three for Deluin', R.basesOf('zei', { zei: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222'] }).length === 1 && R.basesOf('deluin', { deluin: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 3);
-  proof('a second base for a one-base character is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), mu: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222'] }).length === 1);
+  check('committed: three bases for every character (owner, 2026-11-11), three at most', committedMax === 3 && CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join() === 'zei:3,gladias:3,bai:3,seila:3,deluin:3,mu:3,ephelion:3', CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join());
+  check('committed: at most three bases are used for Zei, as for Deluin', R.basesOf('zei', { zei: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 3 && R.basesOf('deluin', { deluin: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 3);
+  proof('a fourth base for a character is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), mu: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 1);
   check('no look is called canonical or official (the word is "current default")', !/\b(canonical|official)\b/i.test(read('src/lib/config.ts')) && !/\b(canonical|official)\b/i.test(read('src/lib/challenge/landing-wording.ts')));
   // The rule itself works for any number; the checks below exercise it with three.
   CHALLENGE.maxBases = 3;
@@ -335,7 +337,7 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   check('at most three bases are used', R.basesOf('zei', { zei: [B1, B2, B3, '44444444-4444-4444-8444-444444444444'] }).length === 3);
   proof('a fourth base is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), zei: [B1, B2, B3, '44444444-4444-4444-8444-444444444444'] }).length === 1);
   proof('a base that is not a design id (a slug) is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), zei: ['zei-starting-point'] }).length === 1);
-  proof('a missing character list is caught', R.basesProblems({ zei: [] }).length === 5);
+  proof('a missing character list is caught', R.basesProblems({ zei: [] }).length === CHALLENGE.characters.length - 1);
   const otherLine = [step('99999999-9999-4999-8999-999999999999')];
   const anyFork = (line: { elementId: string; versionId: string }[]) => line.length > 0; // the rule before the bases
   proof('the old rule (any fork), used once the bases are picked, is caught', anyFork(otherLine) !== R.remixOfBase('zei', otherLine, bases));
@@ -351,7 +353,7 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   check('first remixes: at most two are used, in the order given', R.firstRemixesOf('zei', { zei: [F2, F1, F3] }).join() === [F2, F1].join());
   proof('a third first remix is caught', R.firstRemixesProblems({ ...empty, zei: [F1, F2, F3] }).length === 1);
   proof('a first remix that is not a design id is caught', R.firstRemixesProblems({ ...empty, zei: ['zei-remix'] }).length === 1);
-  proof('a missing character list is caught', R.firstRemixesProblems({ zei: [] }).length === 5);
+  proof('a missing character list is caught', R.firstRemixesProblems({ zei: [] }).length === CHALLENGE.characters.length - 1);
 }
 
 // --- Bases by closed models, the bases' style order, and P5g's one exception (owner, 2026-11-04) --------------------
@@ -676,7 +678,7 @@ function copyProblems(t: string): string[] {
   return p;
 }
 check('the rules copy: no prize for now, the final version and any prize decided before entries close, remixes only, no bounty, no promises (mint, rewards, payouts), no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
-check('the rules name the six characters most named in the book first (owner, 2026-11-04)', W.intro().includes('Zei, Gladias, Bai, Seila, Deluin or Mu'));
+check('the rules name the characters most named in the book first, Lord Ephelion by his title (owner, 2026-11-04 and 2026-11-11)', W.intro().includes('Zei, Gladias, Bai, Seila, Deluin, Mu or Lord Ephelion'));
 proof('a promised mint is caught', copyProblems(`${copy} Each version is then minted as an open edition in Snowmoon WIP.`).length > 0);
 proof('rules without "no prize for now" are caught', copyProblems(copy.replaceAll(NO_PRIZE, '')).length > 0);
 proof('a reward pot is caught', copyProblems(`${copy} Plus an extra reward pot.`).length > 0);
@@ -902,7 +904,7 @@ check('entries: not a new sheet made from scratch (forks only)', !ids.includes(f
 check('entries: not an admin; the admin is listed apart', !ids.includes(fAdmin.versionId) && st.byAdmins.some((v) => v.versionId === fAdmin.versionId));
 check('entries: not the starting sheets made before the window', !ids.includes(baiStart.versionId) && !ids.includes(zeiStart.versionId));
 check('entries: what was submitted, three', ids.length === 3, ids.join());
-check('entrants per character: Bai 2 (500, 6852), Zei 1 (6852), others 0, in CHALLENGE order', [...st.entrants].map(([c, n]) => `${c}:${n}`).join() === 'zei:1,gladias:0,bai:2,seila:0,deluin:0,mu:0', [...st.entrants].map(([c, n]) => `${c}:${n}`).join());
+check('entrants per character: Bai 2 (500, 6852), Zei 1 (6852), others 0, in CHALLENGE order', [...st.entrants].map(([c, n]) => `${c}:${n}`).join() === 'zei:1,gladias:0,bai:2,seila:0,deluin:0,mu:0,ephelion:0', [...st.entrants].map(([c, n]) => `${c}:${n}`).join());
 {
   // The owner's first remixes (owner, 2026-11-04) are not entries: never in the entries or the admins' list, no Entry
   // badge or admin line on their page, no count. Here an eligible person's entry and the admin's version stand in.

@@ -615,13 +615,14 @@ export const CHALLENGE = {
    */
   moments: false as boolean,
   /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
-  characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'] as readonly string[],
+  characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu', 'ephelion'] as readonly string[],
   /**
    * Characters who join during the challenge (owner, 2026-11-11: "Lord Ephelion's tile shows 'joins mid-challenge' until
    * his date"): /challenge shows each as a tile with no picture until it is in `characters`. The date, when the owner
    * sets it, is the day he joins; until then null. Adding him to `characters` (PR E) is what opens his page.
    */
-  joining: { ephelion: null } as Record<string, string | null>,
+  // Lord Ephelion joined on 2026-11-11 (owner: "Ephelion joins tonight"), so no one is left to join.
+  joining: {} as Record<string, string | null>,
   /**
    * Each character's bases (owner, 2026-11-04): published sheets to start from, at most CHALLENGE.baseCount for the
    * character (never more than CHALLENGE.maxBases). Deluin and Gladias have three each: their current default look,
@@ -634,14 +635,16 @@ export const CHALLENGE = {
    * remixOfBase); while a character's list is empty, a fork of any of its sheets counts, as before, so nothing breaks
    * before the picks.
    */
-  // Published by the owner's run of scripts/publish-bases.ts, 2026-11-06 (version ids; the current default first).
+  // Published by the owner's runs of scripts/publish-bases.ts, 2026-11-06 and 2026-11-12 (version ids; the current default first).
   bases: {
-    zei: ['bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d'],
+    zei: ['bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d', 'bda27851-647f-4461-865a-edf9baf35108', 'b0fee329-7996-4a67-af37-923c7ef72dbd'],
     gladias: ['68364375-0f33-46fd-9755-2fd2b551198a', '8a491b21-2d32-4673-946c-cff28728088b', 'd5b4c137-71d6-430d-84e1-9ec4044568dc'],
-    bai: ['110d5973-31c2-4d96-9a88-5838d8a6d868'],
-    seila: ['1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba'],
+    bai: ['110d5973-31c2-4d96-9a88-5838d8a6d868', '9ef62849-538e-4c7c-af36-0e069c9541d9', 'fd583b12-62f7-47d7-a247-740bf87528d8'],
+    seila: ['1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba', 'ca078691-677d-4efb-bfa7-50de6c83afd8', '2c597a57-949d-49f8-9c55-e84ad1b26d02'],
     deluin: ['75a94420-df70-4f43-a3a6-4c2b571e72ab', 'a69718e0-89d9-465f-a783-d4b98aefbe85', '0a126522-d3d5-4e12-a674-18f49dbffbed'],
-    mu: ['15a9af1d-9eef-4e25-be57-738d9823dd74'],
+    mu: ['15a9af1d-9eef-4e25-be57-738d9823dd74', 'cd616bd9-55bd-4fdd-9c27-56bd7dcc061c', '6f5cd043-39a4-4458-bd42-9a33518f01cf'],
+    // Lord Ephelion's three (owner-approved 2026-11-11), published 2026-11-12: A, B, C.
+    ephelion: ['589fd5cb-63a0-4c19-8e1d-5c7704d0262c', 'f913bec7-cbae-4ab5-9865-6c7e4ce9dc7f', '082be0d1-8864-4a76-a5ff-a750d3a6cdc4'],
   } as Record<string, readonly string[]>,
   /**
    * Each character's current default look (owner, 2026-11-05, answer 10; the accounts session's note of that evening):
@@ -662,9 +665,11 @@ export const CHALLENGE = {
     seila: '1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba',
     deluin: '75a94420-df70-4f43-a3a6-4c2b571e72ab',
     mu: '15a9af1d-9eef-4e25-be57-738d9823dd74',
+    // Lord Ephelion: look A (picks-ephelion-2026-11-11.json, current_default), published 2026-11-12.
+    ephelion: '589fd5cb-63a0-4c19-8e1d-5c7704d0262c',
   } as Record<string, string | null>,
-  /** How many bases each character has (owner, 2026-11-04): three for Deluin and Gladias, one for the rest for now. */
-  baseCount: { zei: 1, gladias: 3, bai: 1, seila: 1, deluin: 3, mu: 1 } as Record<string, number>,
+  /** How many bases each character has (owner, 2026-11-11): three for every character. */
+  baseCount: { zei: 3, gladias: 3, bai: 3, seila: 3, deluin: 3, mu: 3, ephelion: 3 } as Record<string, number>,
   /** The most bases any character may have. */
   maxBases: 3,
   /**
@@ -685,6 +690,7 @@ export const CHALLENGE = {
     seila: ['399836db-6cd9-49e3-9302-77686b2a1161', 'b9983b8c-cde4-40c1-8601-f3f4702d1742'],
     deluin: ['fb80b4b1-bd9f-4fd1-87ef-4e8003347aaf', '42588f48-6673-478e-ab54-8e30372743c0'],
     mu: ['2f29b048-0e82-4d87-8193-9cfffedc9123', 'bb08afdb-f77f-4e07-b451-756460922714'],
+    ephelion: [],
   } as Record<string, readonly string[]>,
   firstRemixesShown: 2,
   /**

@@ -26,6 +26,7 @@ import { isWalletNumber } from '~/lib/images/remixes';
 import { baseFrontOf, defaultLook, sourceOf } from '~/lib/challenge/pictures';
 import { spoilerExceptionOn } from '~/lib/challenge/spoilers';
 import { challengeVisibleTo } from '~/lib/challenge/visibility';
+import { callNameOf } from '~/lib/challenge/names';
 
 /**
  * The remix screen's API (branch challenge-moments, 2026-11-05; docs/proposals/challenge-moments.md §1.3 S2).
@@ -121,7 +122,7 @@ export async function POST(request: Request) {
   const gate = await mayGenerate(sql, fid);
   if (!gate.ok) return no(gate.error, gate.status, { reason: gate.reason });
 
-  const callName = (slug: string) => (bookCharacter(slug)?.name ?? slug).split(' ')[0];
+  const callName = (slug: string) => callNameOf(bookCharacter(slug)?.name ?? slug);
   const name = callName(src.character);
   const moment = r.moment;
   // The Style row (moments off): a listed style, Random's draw from the published styles, or the person's own words.
