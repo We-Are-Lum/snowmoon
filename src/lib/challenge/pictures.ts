@@ -4,6 +4,7 @@ import { CHALLENGE, IMAGES, WORK_ID } from '../config';
 import { bookCharacter } from '../images/designs';
 import { refusedBases } from './bases';
 import { remixLines } from './lineage';
+import { walkToBase } from './looks';
 import { momentById } from './moments';
 import { basesOf } from './rules';
 import { publishedStyles } from './make';
@@ -148,6 +149,26 @@ export async function sourceOf(sql: Sql, versionId: string, opts: { anySheet?: b
   if (!p || !p.thumb) return null;
   const [v] = await sql<{ asset_sha256: string }[]>`select asset_sha256 from studio.element_versions where id = ${versionId}`;
   return { kind: 'picture', versionId: p.versionId, character: p.character, url: p.thumb, sha256: v.asset_sha256, width: IMAGES.size.width, height: IMAGES.size.height, moment: p.moment, by: p.byName, byFid: p.byFid, styleElement: p.styleElement };
+}
+
+/**
+ * The front picture (sha256) of the base a source's line reaches (owner, 2026-11-11, per-base look lines): a sheet's own
+ * front; for a challenge picture, the picture it started from, step by step (params.challenge.from, hidden pictures
+ * included, up to 64 steps), until a sheet. Null when the line reaches no sheet. Read-only.
+ */
+export async function baseFrontOf(sql: Sql, src: Source): Promise<string | null> {
+  if (src.kind === 'sheet') return src.sha256;
+  return walkToBase(
+    src.versionId,
+    async (id) => {
+      const [p] = await challengePictures(sql, { versionId: id, includeHidden: true });
+      return p ? p.from : undefined;
+    },
+    async (id) => {
+      const s = await sourceOf(sql, id, { anySheet: true });
+      return s?.kind === 'sheet' ? s.sha256 : null;
+    },
+  );
 }
 
 /**

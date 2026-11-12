@@ -296,7 +296,7 @@ check('config: a current default look per challenge character, each a design id 
   }
   check('own style: a real person on the blocked list is refused before any model is asked (blockedName)', blockedName(M.remixPrompt({ words: 'x', name: 'Zei', style: 'portrait of Vitalik' })) === 'Vitalik');
   const route = read('src/app/api/challenge/make/route.ts');
-  check('the route checks the whole prompt (the words and the style\'s words) with the prompt check', /remixPrompt\(\{ words: r\.words, name, (look: lookFor\(src\.character\), )?style: style!\.text(, \.\.\.\(setting \? \{ setting: settingLine\(setting\) \} : \{\}\))? \}\)/.test(route) && /checkText: prompt,/.test(route) && /blockedName\(job\.checkText\)/.test(read('src/lib/images/paid.ts')) && /checkPrompt\(job\.checkText/.test(read('src/lib/images/paid.ts')));
+  check('the route checks the whole prompt (the words and the style\'s words) with the prompt check', /remixPrompt\(\{ words: r\.words, name, (look: lookForBase\(src\.character, await baseFrontOf\(sql, src\)\), )?style: style!\.text(, \.\.\.\(setting \? \{ setting: settingLine\(setting\) \} : \{\}\))? \}\)/.test(route) && /checkText: prompt,/.test(route) && /blockedName\(job\.checkText\)/.test(read('src/lib/images/paid.ts')) && /checkPrompt\(job\.checkText/.test(read('src/lib/images/paid.ts')));
   // The Model row: a list from the server; the route refuses anything not in it.
   const models = MD.challengeModels();
   // Branch challenge-models: with no country (no closed model offered), the edit model alone (Qwen dropped, owner, 2026-11-09).
