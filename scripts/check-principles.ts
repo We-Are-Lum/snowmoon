@@ -575,6 +575,8 @@ const DESIGN_IMAGE_FILES = [
   'src/components/design-form.tsx',
   'src/components/my-picks.tsx',
   'src/components/moderate-queue.tsx',
+  // The remix screen's "See examples" panel: each published style's samples (owner, 2026-11-12).
+  'src/components/style-examples.tsx',
 ];
 /**
  * Where people see a picture away from the book's text (owner, 2026-11-12): link previews, the challenge pages'

@@ -26,6 +26,12 @@ export const MAKE_WORDING = {
   sameStyle: 'Same as this picture',
   /** The own-style box's label. DRAFT wording. */
   ownStyleLabel: 'Your style, in a few words',
+  // DRAFT (owner, 2026-11-12): the Style row explains itself ("Luis asked what 'Mood' means"). "See examples" under the
+  // row opens a panel (a bottom sheet on phones) with each published style's name, words and samples.
+  seeExamples: 'See examples',
+  examplesTitle: 'Styles',
+  examplesClose: 'Close',
+  examplesLead: 'Tap a style to use it.',
   /** In "How it was made" when Random drew the style, after "Style: " (owner, 2026-11-08: "Style: {style}, drawn at random"). */
   randomDrew: (label: string) => `${label}, drawn at random`,
   model: 'Model',
@@ -60,3 +66,17 @@ export const MAKE_WORDING = {
   ownLong: (n: number) => `Write your style in up to ${n} characters.`,
   noModel: 'Pick one of the models listed.',
 };
+
+/**
+ * How a published style is named on the screen, by its stored title (owner, 2026-11-12: "Show the Mood style as 'Moody
+ * graphic novel'"). A display label only: the published style keeps its title and version, so the allowlist
+ * (CHALLENGE.offeredStyles), Random's draw and every recipe (params.challenge.style.label, the design's 'uses' link)
+ * still name it "Mood". Renaming it in the database would publish a new version. DRAFT (owner, 2026-11-12).
+ */
+export const STYLE_LABELS: Readonly<Record<string, string>> = {
+  Mood: 'Moody graphic novel', // DRAFT (owner, 2026-11-12)
+};
+/** A style's name as shown: its display label when it has one, else its stored title. */
+export const styleLabel = (name: string): string => STYLE_LABELS[name.trim()] ?? name;
+/** A style sample's alt text (no "not by the author": that stays beside the book's text; owner, 2026-11-12). DRAFT (owner, 2026-11-12). */
+export const sampleAlt = (label: string) => `AI-generated sample of the ${label} style`;
