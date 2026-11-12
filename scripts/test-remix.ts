@@ -237,7 +237,7 @@ try {
       String(row.prompt).includes('Changes for this remix, in the remixer\'s own words: Make it night, with lanterns along the railing.') && String(row.prompt).endsWith('No text, no lettering, no signs with words.') &&
       recipe.model?.id === 'flux2-klein-4b-edit' && (recipe.pictures ?? []).length === 4 && recipe.pictures![0].role === 'layout' && recipe.pictures![3].role === 'plate' && (recipe.pictures ?? []).every((p) => /^[0-9a-f]{64}$/.test(p.sent_sha256)) &&
       typeof recipe.camera?.fov === 'number' && Number((balance0 as { b: number }).b) - Number((balance1 as { b: number }).b) > 0 &&
-      pageRes.status === 200 && html.includes('Make it night, with lanterns along the railing.') && html.includes('<span>AI-generated image</span>') && !html.includes('<span>AI-generated image, not by the author</span>') && html.includes('Pictures sent, in order') && html.includes(String(row?.image_sha256));
+      pageRes.status === 200 && html.includes('Make it night, with lanterns along the railing.') && /AI-generated · by /.test(html) && !/AI image · by/.test(html) && html.includes('Pictures sent, in order') && html.includes(String(row?.image_sha256));
     check('R8', 'Generate: the frame is saved to their remix, labelled, with its page and recipe; the balance is debited', pass, { text: t.slice(0, 300), pictures: recipe.pictures?.map((p) => p.role), debited: Number((balance0 as { b: number }).b) - Number((balance1 as { b: number }).b), page: pageRes.status }, madeShot);
 
     // R9 a blocked prompt, and a bad layout

@@ -91,8 +91,8 @@ export default async function RemixFramePage({ params }: Props) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={f.imageUrl} alt={`A remix of shot ${r.shot?.n ?? f.shotId}, made by ${who}: ${f.ownWords}`} width={r.size?.width ?? 1024} height={r.size?.height ?? 576} />
         <figcaption className="label">
-          {/* "not by the author" only beside the book's text (owner, 2026-11-12): here the words are the remixer's own. */}
-          AI image · by {maker ? <Link href={`/@${maker}`}>{who}</Link> : who} · <span>AI-generated image</span>
+          {/* "not by the author" only beside the book's text (owner, 2026-11-12): here the words are the remixer's own. Like the share cards: "AI-generated · by {name}". */}
+          AI-generated · by {maker ? <Link href={`/@${maker}`}>{who}</Link> : who}
         </figcaption>
       </figure>
       <section className="rx-words" aria-label="Their words">
