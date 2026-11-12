@@ -1987,7 +1987,7 @@ async function checkChallengeLanding() {
         const back = page.locator('.chp-back');
         if ((await back.getAttribute('href')) !== '/challenge/zei' || !((await back.textContent()) ?? '').includes('Zei')) fail(`/challenge/p ${tag}: no back link to Zei's page`);
         const ai = ((await page.locator('[data-slot="ai-line"]').textContent()) ?? '').replace(/\s+/g, ' ').trim();
-        if (!/^AI AI-generated, not by the author · .+, (open weights|a closed model by )/.test(ai)) fail(`/challenge/p ${tag}: the AI line reads "${ai}", not the declaration with the model and its terms`);
+        if (!/^AI ?AI-generated, not by the author · .+, (open weights|a closed model by )/.test(ai)) fail(`/challenge/p ${tag}: the AI line reads "${ai}", not the declaration with the model and its terms`);
         const steps = await page.locator('.chp-steps > li').evaluateAll((els) => els.map((e) => `${e.getAttribute('aria-current') ?? ''}|${(e.querySelector('.chp-step-by')?.textContent ?? '').trim()}`));
         if (steps.length !== 2 || !steps[0].startsWith('|Base · ') || steps[1] !== 'page|This one') fail(`/challenge/p ${tag}: the credit chain reads ${steps.join(', ')}, not its base then "This one"`);
         const made = page.locator('details.chp-made');

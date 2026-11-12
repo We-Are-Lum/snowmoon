@@ -34,12 +34,25 @@ export type ChainStep = { versionId: string; thumb: string | null; href: string 
 
 /**
  * The credit chain (owner-approved redesign, screen 4): what the picture was remixed from, oldest first (src/lib/
- * challenge/lineage.ts), then the picture itself. A base is labelled "Base · {maker}"; a picture by its maker. Only
- * published steps link. Read-only.
+ * challenge/lineage.ts), its base first (the 'uses' link of the line's oldest picture), then the picture itself. A base
+ * is labelled "Base · {maker}" and isn't linked (no crumb into References on the flow); a published picture links to its
+ * page. Read-only.
  */
-async function creditChain(sql: Sql, p: { elementId: string; versionId: string; thumb: string | null }, self: string): Promise<ChainStep[]> {
+async function creditChain(sql: Sql, p: { elementId: string; versionId: string; thumb: string | null; character: string }, self: string): Promise<ChainStep[]> {
   const line = (await remixLines(sql, [p.elementId]).catch(() => new Map())).get(p.elementId) ?? [];
-  const ids = line.map((a: { versionId: string }) => a.versionId);
+  const pics: string[] = line.map((a: { versionId: string }) => a.versionId);
+  // The base: the oldest picture in the line (or this one) uses its character's sheet ('uses', as picturesCount reads it).
+  const oldest = pics.length ? pics[pics.length - 1] : p.versionId;
+  const name = bookCharacter(p.character)?.name ?? '';
+  const [base] = await sql<{ to_version: string }[]>`
+    select tv.id::text as to_version
+    from studio.links l
+    join studio.element_versions tv on tv.id = l.to_version_id
+    join studio.elements te on te.id = tv.element_id and te.element_type = 'design'
+    join studio.entities en on en.id = te.entity_id and en.kind = 'character' and en.name = ${name}
+    where l.kind = 'uses' and l.from_version_id = ${oldest}
+    limit 1`.catch(() => []);
+  const ids = base ? [...pics, base.to_version] : pics;
   const rows = ids.length
     ? await sql<{ version_id: string; element_type: string; created_by_fid: number; status: string; asset_url: string | null; body: Record<string, unknown> | null; p_by_name: string | null }[]>`
         select v.id::text as version_id, e.element_type, e.created_by_fid, e.status, v.asset_url, v.body, r.params->>'by_name' as p_by_name
@@ -57,7 +70,7 @@ async function creditChain(sql: Sql, p: { elementId: string; versionId: string; 
       const image = r.element_type === 'image';
       const who = image ? designByline(r.p_by_name, Number(r.created_by_fid)) : designByline(b.by_name ?? null, Number(r.created_by_fid), b.role ?? null);
       const published = r.status === 'published';
-      return { versionId: id, thumb: image ? r.asset_url : (b.views?.front?.url ?? null), href: published ? (image ? `/challenge/p/${id}` : `/references/designs/${id}`) : null, label: image ? who : `${L.baseLabel} · ${who}`, current: false };
+      return { versionId: id, thumb: image ? r.asset_url : (b.views?.front?.url ?? null), href: published && image ? `/challenge/p/${id}` : null, label: image ? who : `${L.baseLabel} · ${who}`, current: false };
     })
     .filter((x: ChainStep | null): x is ChainStep => x !== null);
   return [...steps, { versionId: p.versionId, thumb: p.thumb, href: null, label: self, current: true }];
