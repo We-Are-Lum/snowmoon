@@ -16,6 +16,7 @@ import { LANDING_WORDING as L } from './landing-wording';
 import { PICTURE_WORDING as P } from './picture-wording';
 import { sameTexts, shareMaker, textsFor } from './share-makers';
 import type { PostedOnItem } from '~/components/posted-on';
+import { callNameOf } from './names';
 
 /**
  * A challenge picture's page, /challenge/p/<version> (owner, 2026-11-05; docs/proposals/challenge-moments.md §1.3
@@ -26,7 +27,7 @@ import type { PostedOnItem } from '~/components/posted-on';
  */
 type Sql = postgres.Sql;
 
-const callName = (slug: string) => (bookCharacter(slug)?.name ?? slug).split(' ')[0];
+const callName = (slug: string) => callNameOf(bookCharacter(slug)?.name ?? slug);
 
 export async function pictureView(sql: Sql, versionId: string, now: Date = new Date()) {
   const [p] = await challengePictures(sql, { versionId });

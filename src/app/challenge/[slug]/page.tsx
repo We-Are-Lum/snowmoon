@@ -5,6 +5,7 @@ import { db } from '~/lib/db';
 import { bookCharacter } from '~/lib/images/designs';
 import { characterView } from '~/lib/challenge/view';
 import { ChallengeCharacterBody } from '~/components/challenge-character';
+import { callNameOf } from '~/lib/challenge/names';
 
 /**
  * A character's page in the remix challenge, /challenge/<slug> (owner, 2026-11-08, the simpler challenge): its name,
@@ -23,7 +24,7 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!CHALLENGE.public) return { robots: { index: false, follow: false } };
   const { slug } = await params;
-  const name = (bookCharacter(slug)?.name ?? slug).split(' ')[0];
+  const name = callNameOf(bookCharacter(slug)?.name ?? slug);
   return { title: `${name}: Remix challenge`, description: `The remix challenge on Snowmoon Party: ${name}'s bases and every remix.` };
 }
 

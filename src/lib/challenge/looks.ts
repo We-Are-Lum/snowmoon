@@ -13,6 +13,8 @@ export const CHARACTER_LOOKS: Readonly<Record<string, string>> = {
   seila: 'Unless the change says otherwise: a woman with deep brown skin and small round gold-rimmed glasses.',
   deluin: 'Unless the change says otherwise: a man with warm tan skin and dark brown eyes.',
   mu: 'Unless the change says otherwise: a woman with medium brown skin and thin red-framed glasses.',
+  // Lord Ephelion (owner-approved 2026-11-11): his look A, the current default. The book doesn't describe him.
+  ephelion: 'Unless the change says otherwise: a man with fair skin and grey eyes.',
 };
 
 /**
@@ -40,6 +42,10 @@ export const BASE_LOOKS: Readonly<Record<string, string>> = {
   '5a59f88f1665e1c56104e11ae168de523aae4a168be68ff41f778e7cfb43bde2': 'Unless the change says otherwise: a woman with fair skin and small round gold-rimmed glasses.',
   '0217a068691527f6ab30a82b71fa346b5d636d84f003bd8f61ff0ed83ee95ff9': 'Unless the change says otherwise: a woman with pale skin and thin red-framed glasses.',
   '79d25dba94f2486ee899f4b189021ecfaa6778466ce1853f4f4412f130114b52': 'Unless the change says otherwise: a woman with deep brown skin and thin red-framed glasses.',
+  // Lord Ephelion's three bases (owner-approved 2026-11-11, with charcoal trousers and black shoes; ephelion-trousers ledger).
+  dda578d6eb6c7b2d7aebecd720b90cec6ee61423cc43c6992390e651d2877f57: 'Unless the change says otherwise: a man with fair skin and grey eyes.',
+  c5239b8f3c40e3934f37984e55d52dee6f9b64b15f15320b6940162bd534e0b7: 'Unless the change says otherwise: a man with deep brown skin, a short grey beard and dark eyes.',
+  b5ea77f470b0183ca32efc4af5e17eac78a9e882defaae82d14db806b891fbc3: 'Unless the change says otherwise: a man with light golden-brown skin, thin wire-rimmed glasses and dark brown eyes.',
 };
 
 /** The look line for a picture whose line reaches the base with this front (sha256), or its character's line. */

@@ -10,6 +10,7 @@ import { shuffleFresh } from './shuffle';
 import { KEEP_LINE, SAME_STYLE, OWN_STYLE_MAX, presetOptions, readStyleChoice, STYLE_PRESETS, type StyleChoice, type StyleOption, type StylePreset } from './styles';
 import { SCENE_LINE } from './looks';
 import { firstAppearsBlock } from './first-appears';
+import { callNameOf } from './names';
 
 /**
  * The remix screen's server half (branch challenge-moments, 2026-11-05; simplified on branch challenge-simple,
@@ -72,7 +73,7 @@ export function readMake(body: unknown, momentsOn: boolean = CHALLENGE.moments):
   return { ok: true, from, moment, words, style, model: typeof b.model === 'string' ? b.model : '' };
 }
 
-const callName = (slug: string) => (bookCharacter(slug)?.name ?? slug).split(' ')[0];
+const callName = (slug: string) => callNameOf(bookCharacter(slug)?.name ?? slug);
 
 /** A published style, as the row lists it and the prompt uses it. */
 export interface PublishedStyle {

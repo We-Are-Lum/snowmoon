@@ -1,6 +1,7 @@
 import { CHALLENGE, IMAGES } from '../config';
 import { dateText, windowText } from './rules';
 import { SHARE_WORDING } from './share-wording';
+import { callNameOfSlug } from './names';
 
 /**
  * The remix challenge's words. DRAFT wording: the rules are the plan's draft copy (docs/proposals/remix-challenge-plan.md,
@@ -10,7 +11,7 @@ import { SHARE_WORDING } from './share-wording';
  */
 const d = (k: Parameters<typeof dateText>[0], time = false) => dateText(k, { time });
 /** The characters' call names, most named in the book first, from CHALLENGE.characters (their files' slugs). */
-const callNames = () => CHALLENGE.characters.map((s) => s.charAt(0).toUpperCase() + s.slice(1));
+const callNames = () => CHALLENGE.characters.map(callNameOfSlug);
 const listed = (xs: string[], last = 'or') => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} ${last} ${xs[xs.length - 1]}`);
 const numberWord = (n: number) => ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][n] ?? String(n);
 

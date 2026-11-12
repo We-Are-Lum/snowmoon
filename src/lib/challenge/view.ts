@@ -10,6 +10,7 @@ import { basesOf, baseCountOf } from './rules';
 import { CHALLENGE_WORDING as W } from './wording';
 import { LANDING_WORDING as L } from './landing-wording';
 import { firstAppearsHref, firstAppearsWords } from './first-appears';
+import { callNameOf } from './names';
 
 /**
  * What /challenge and a character's page (/challenge/<slug>) show, as plain data with their words already written
@@ -51,7 +52,7 @@ export interface CharacterView {
   firstAppears?: { href: string; words: string };
 }
 
-const callName = (name: string) => name.split(' ')[0];
+const callName = callNameOf;
 
 /** Where tapping a picture goes: its remix screen (R2), with the moment kept only while the moments are on. */
 export const remixHref = (versionId: string, moment?: string | null) => `/challenge/make?from=${versionId}${CHALLENGE.moments && moment ? `&moment=${encodeURIComponent(moment)}` : ''}`;

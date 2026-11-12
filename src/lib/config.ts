@@ -615,7 +615,7 @@ export const CHALLENGE = {
    */
   moments: false as boolean,
   /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
-  characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu'] as readonly string[],
+  characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu', 'ephelion'] as readonly string[],
   /**
    * Each character's bases (owner, 2026-11-04): published sheets to start from, at most CHALLENGE.baseCount for the
    * character (never more than CHALLENGE.maxBases). Deluin and Gladias have three each: their current default look,
@@ -636,6 +636,8 @@ export const CHALLENGE = {
     seila: ['1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba'],
     deluin: ['75a94420-df70-4f43-a3a6-4c2b571e72ab', 'a69718e0-89d9-465f-a783-d4b98aefbe85', '0a126522-d3d5-4e12-a674-18f49dbffbed'],
     mu: ['15a9af1d-9eef-4e25-be57-738d9823dd74'],
+    // Lord Ephelion's three (owner-approved 2026-11-11): empty until the owner's publish-bases run, then their version ids.
+    ephelion: [],
   } as Record<string, readonly string[]>,
   /**
    * Each character's current default look (owner, 2026-11-05, answer 10; the accounts session's note of that evening):
@@ -656,9 +658,11 @@ export const CHALLENGE = {
     seila: '1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba',
     deluin: '75a94420-df70-4f43-a3a6-4c2b571e72ab',
     mu: '15a9af1d-9eef-4e25-be57-738d9823dd74',
+    // Lord Ephelion: look A once published (picks-ephelion-2026-11-11.json, current_default); until then his first base.
+    ephelion: null,
   } as Record<string, string | null>,
   /** How many bases each character has (owner, 2026-11-04): three for Deluin and Gladias, one for the rest for now. */
-  baseCount: { zei: 1, gladias: 3, bai: 1, seila: 1, deluin: 3, mu: 1 } as Record<string, number>,
+  baseCount: { zei: 1, gladias: 3, bai: 1, seila: 1, deluin: 3, mu: 1, ephelion: 3 } as Record<string, number>,
   /** The most bases any character may have. */
   maxBases: 3,
   /**
@@ -679,6 +683,7 @@ export const CHALLENGE = {
     seila: ['399836db-6cd9-49e3-9302-77686b2a1161', 'b9983b8c-cde4-40c1-8601-f3f4702d1742'],
     deluin: ['fb80b4b1-bd9f-4fd1-87ef-4e8003347aaf', '42588f48-6673-478e-ab54-8e30372743c0'],
     mu: ['2f29b048-0e82-4d87-8193-9cfffedc9123', 'bb08afdb-f77f-4e07-b451-756460922714'],
+    ephelion: [],
   } as Record<string, readonly string[]>,
   firstRemixesShown: 2,
   /**

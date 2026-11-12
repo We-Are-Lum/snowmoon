@@ -78,7 +78,9 @@ check('config: a current default look per challenge character, each a design id 
   check('moments: fifteen at launch', MOMENTS.length === 15, String(MOMENTS.length));
   check('moments: in the book\'s order, each quote inside its passage, each with a challenge character, a title and a scene line', momentShapeProblems(MOMENTS, CHALLENGE.characters).length === 0, momentShapeProblems(MOMENTS, CHALLENGE.characters).join('; '));
   check('moments: every quote is word for word at its block', quoteProblems(momentQuotes(MOMENTS), blocks).length === 0, quoteProblems(momentQuotes(MOMENTS), blocks).join('; '));
-  check('moments: every challenge character is in at least two', CHALLENGE.characters.every((c) => momentsWith(c).length >= 2), CHALLENGE.characters.map((c) => `${c} ${momentsWith(c).length}`).join(', '));
+  // Lord Ephelion joined after the moments were turned off (CHALLENGE.moments, 2026-11-08), so he has none.
+  const AFTER_MOMENTS = new Set(['ephelion']);
+  check('moments: every challenge character is in at least two (one who joined after the moments were turned off is in none)', CHALLENGE.characters.every((c) => (AFTER_MOMENTS.has(c) ? momentsWith(c).length === 0 && !CHALLENGE.moments : momentsWith(c).length >= 2)), CHALLENGE.characters.map((c) => `${c} ${momentsWith(c).length}`).join(', '));
   check('moments: every chip says its chapter ("Ch N")', MOMENTS.every((m) => chapterChip(m) === `Ch ${m.chapter}`));
   check('moments: titles name no major turn of the book (spot list)', !MOMENTS.some((m) => /\b(dies|dead|alive|traitor|Delwart|Lily|rescued|freed|wins|lost)\b/i.test(m.title)));
   const swapped = clone(MOMENTS) as typeof MOMENTS extends readonly (infer T)[] ? T[] : never;
@@ -614,7 +616,8 @@ check('config: a current default look per challenge character, each a design id 
   const R = await import('../src/lib/challenge/rules');
   // The owner's words, exactly; "12 to 29 November" is his literal (2026-11-09), and the page builds it from CHALLENGE.dates, so the
   // two can't drift: if the dates move, this check fails until the owner's line is moved with them.
-  const INTRO = 'From 12 to 29 November, make your own picture of Zei, Gladias, Bai, Seila, Deluin or Mu: start from one of their pictures, change what you like, pick a style and a model, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.';
+  // Lord Ephelion joined on 2026-11-11 (owner): the list of names comes from CHALLENGE.characters, so he is named last.
+  const INTRO = 'From 12 to 29 November, make your own picture of Zei, Gladias, Bai, Seila, Deluin, Mu or Lord Ephelion: start from one of their pictures, change what you like, pick a style and a model, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.';
   check('rules intro: the owner\'s words, exactly (moments off)', CHALLENGE.pictureEntries && !CHALLENGE.moments && W.intro() === INTRO, W.intro());
   check('rules intro: its "12 to 29 November" is CHALLENGE.dates (opens 12 Nov 00:00 PT, the last minute 29 Nov 23:59 PT)', R.windowText() === '12 to 29 November' && R.pacificWallTime(CHALLENGE.dates.opens) === '2026-11-12 00:00' && R.pacificWallTime(new Date(Date.parse(CHALLENGE.dates.closes) - 60_000).toISOString()) === '2026-11-29 23:59' && INTRO.includes(`From ${R.windowText()},`));
   {

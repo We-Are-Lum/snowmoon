@@ -7,6 +7,7 @@ import { entryHref, standing, type Standing } from './entries';
 import { entrantCounts, phase } from './rules';
 import { CHALLENGE_WORDING as W } from './wording';
 import { LANDING_WORDING as L } from './landing-wording';
+import { callNameOf } from './names';
 
 /**
  * Everything /challenge/rules shows (owner, 2026-11-04: the rules behind /challenge's "Rules" link), as plain data with
@@ -52,7 +53,7 @@ export interface RulesView {
   byAdmins: { href: string; text: string }[];
 }
 
-const callName = (name: string) => name.split(' ')[0];
+const callName = callNameOf;
 
 export async function rulesView(sql: Sql | null, now: Date = new Date()): Promise<RulesView> {
   const chars = CHALLENGE.characters.map((s) => bookCharacter(s)).filter((c): c is NonNullable<typeof c> => Boolean(c));
