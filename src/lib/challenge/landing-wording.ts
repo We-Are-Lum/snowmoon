@@ -86,6 +86,24 @@ export const LANDING_WORDING = {
   entriesNone: 'No entries yet.',
   entriesNoneFor: (name: string) => `No entries for ${name} yet.`,
   back: '← The remix challenge',
+  /**
+   * The redesigned home (Claude Design's handoff, owner-approved 2026-11-11). The pitch is the owner's (approved). DRAFT
+   * until the owner's OK: the "Remix a picture" card's tag and line, the three details' titles, and "About the pictures".
+   * The other two ways (backstories, the collab) wait for the owner's rewards decision and aren't shown.
+   */
+  home: {
+    pitch: 'Help find the characters you’d love, hate, or can’t stop thinking about.',
+    closes: (when: string) => `Entries close ${when}.`,
+    ways: [{ n: '1', title: 'Remix a picture', tag: 'START HERE', body: 'Pick a character, start from a base or anyone’s remix, describe a change, then publish and post it.' }],
+    newTitle: 'New to Snowmoon?',
+    rulesTitle: 'Rules',
+    aboutTitle: 'About the pictures',
+    about: 'Every picture here is AI-generated, not by the author. Each one names its model, and closed models name their maker. Lists are newest first.',
+    /** The owner's words (2026-11-11). */
+    joins: (name: string) => `${name} joins mid-challenge.`,
+    joinsNote: 'joins mid-challenge',
+    homeFrom: (block: string) => `the book, ${block}`,
+  },
   untitled: (name: string) => `${name}, remixed`,
   pictureAlt: (name: string) => `AI-generated front view of ${name}, not by the author`,
   /** A challenge picture or a card's picture (branch challenge-moments). */

@@ -8,3 +8,11 @@
 export const isChallengePath = (path: string) => path === '/challenge' || path.startsWith('/challenge/');
 export const CHALLENGE_PANEL_KEY = 'snowmoon.panel.challenge';
 export const challengePanelOpen = (stored: string | null): boolean => stored === 'open';
+
+/**
+ * The rail on the remix challenge's pages (the redesign, owner 2026-11-11: "The rail's state remembered per device:
+ * fine"): collapsed to its 56px strip unless the person opened it on a challenge page before, on this device. Kept on the
+ * device only, as the panel's choice is; elsewhere the rail keeps its own remembered state (snowmoon.rail).
+ */
+export const CHALLENGE_RAIL_KEY = 'snowmoon.rail.challenge';
+export const challengeRailOpen = (stored: string | null): boolean => stored === 'open';
