@@ -86,7 +86,7 @@ export function ChallengePreview({ id }: { id: string }) {
       </nav>
       <figure className="mk-figure">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="mk-picture" src={d.image} alt={`AI-generated picture of ${d.name}, not by the author`} />
+        <img className="mk-picture" src={d.image} alt={`AI-generated picture of ${d.name}`} />
         <figcaption className="mk-cap">
           <AiTag />
           <span className="mk-from">

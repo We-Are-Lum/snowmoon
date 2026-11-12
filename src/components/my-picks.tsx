@@ -47,7 +47,7 @@ export function MyPicks() {
       <div className="dz-pick-line">
         {p.thumb && p.available ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img className="dz-thumb" src={p.thumb} alt="AI-generated sample, not by the author" width={56} height={44} />
+          <img className="dz-thumb" src={p.thumb} alt="AI-generated sample" width={56} height={44} />
         ) : (
           <span className="dz-thumb dz-thumb-empty" aria-hidden="true" />
         )}
@@ -125,7 +125,7 @@ function Compare({ pick, onDone }: { pick: PickView; onDone: (msg: string | null
         <figure>
           {mine ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={mine} alt="AI-generated sample of your version, not by the author" />
+            <img src={mine} alt="AI-generated sample of your version" />
           ) : (
             <span className="dz-slot-empty" aria-hidden="true" />
           )}
@@ -134,7 +134,7 @@ function Compare({ pick, onDone }: { pick: PickView; onDone: (msg: string | null
         <figure>
           {newer?.pictures[0] ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={newer.pictures[0]} alt="AI-generated sample of the newer version, not by the author" />
+            <img src={newer.pictures[0]} alt="AI-generated sample of the newer version" />
           ) : (
             <span className="dz-slot-empty" aria-hidden="true" />
           )}

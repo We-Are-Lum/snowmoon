@@ -134,7 +134,9 @@ async function checkRemixEmbed(base: string, id: string, where: string) {
   }
   if (t['twitter:card'] !== 'summary_large_image') fail(`${where}: twitter:card is ${t['twitter:card']}`);
   for (const k of ['og:title', 'og:description', 'twitter:title', 'twitter:description']) if (!t[k]) fail(`${where}: no ${k}`);
-  if (!/not by the author/.test(t['og:description'] ?? '')) fail(`${where}: og:description doesn't say the picture is AI-generated, not by the author`);
+  // "Not by the author" only beside the book's text, not in link previews (owner, 2026-11-12).
+  if (!/AI-generated/.test(t['og:description'] ?? '')) fail(`${where}: og:description doesn't say the picture is AI-generated`);
+  if (/not by the author/i.test(t['og:description'] ?? '')) fail(`${where}: og:description still says "not by the author" (only beside the book's text, owner 2026-11-12)`);
   for (const k of ['og:image', 'twitter:image']) {
     if (!t[k]?.endsWith(`/api/design-card/${id}?shape=og`)) fail(`${where}: ${k} is ${t[k]}`);
     else {

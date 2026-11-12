@@ -34,7 +34,7 @@ export function ChallengeRemixLanding(p: {
       <ChallengeArrival text={L.arrival(p.name, p.phase)} linkText={L.arrivalLink} />
       <figure className="rl-figure">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="rl-picture" src={p.front.url} alt={`AI-generated front view of ${p.name}, not by the author`} width={p.front.recipe.width} height={p.front.recipe.height} data-zoom="" tabIndex={0} />
+        <img className="rl-picture" src={p.front.url} alt={`AI-generated front view of ${p.name}`} width={p.front.recipe.width} height={p.front.recipe.height} data-zoom="" tabIndex={0} />
         <figcaption className="rl-caption">
           <span className="rl-maker">{p.remix ? L.remixOf(p.by) : L.maker(p.by)}</span>
           <span className="rl-ai">

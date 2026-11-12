@@ -87,7 +87,7 @@ export async function rulesView(sql: Sql | null, now: Date = new Date()): Promis
     meta: CHALLENGE.pictureEntries ? designByline(e.byName, e.maker) : `${designByline(e.byName, e.maker)} · v${e.versionNo}`, thumb: e.thumb })),
     entriesNone: W.entriesNone,
     badge: W.badge,
-    alt: CHALLENGE.pictureEntries ? 'AI-generated picture, not by the author' : 'AI-generated front view, not by the author',
+    alt: CHALLENGE.pictureEntries ? 'AI-generated picture' : 'AI-generated front view',
     adminsHead: CHALLENGE.entries && st.byAdmins.length > 0 ? W.adminsHead : null,
     byAdmins: st.byAdmins.map((v) => ({ href: entryHref(v.versionId), text: [W.entryLabel(nameOf(v.character), v.title), designByline(v.byName, v.maker), ...(CHALLENGE.pictureEntries ? [] : [`v${v.versionNo}`])].join(' · ') })),
   };
