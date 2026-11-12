@@ -2342,8 +2342,10 @@ try {
       // The hub's words were approved (owner, 2026-11-06): no "Draft wording" mark until something on it is a draft again.
       if (CHALLENGE.cardsApproved === /Draft wording/.test(text)) fail(`/challenge (${scheme}): the "Draft wording" mark doesn't follow the approval`);
       // The characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json).
-      const heads = (await page.locator('.cc-card h2').allTextContents()).map((h) => h.split(' ')[0]);
-      if (heads.join() !== 'Zei,Gladias,Bai,Seila,Deluin,Mu') fail(`/challenge (${scheme}): the characters read ${heads.join(', ')}`);
+      // Every challenge character by its call name, in CHALLENGE.characters' order (Lord Ephelion joined on 2026-11-12).
+      const { callNameOf, callNameOfSlug } = await import('../src/lib/challenge/names');
+      const heads = (await page.locator('.cc-card h2').allTextContents()).map((h) => callNameOf(h.trim()));
+      if (heads.join() !== CHALLENGE.characters.map(callNameOfSlug).join()) fail(`/challenge (${scheme}): the characters read ${heads.join(', ')}, not ${CHALLENGE.characters.map(callNameOfSlug).join(', ')}`);
       // The short page (owner, 2026-11-04): the deadline in its one line, the rules behind "Rules".
       if (!/Entries (open|close|closed) .*PT/.test(text)) fail(`/challenge (${scheme}): no deadline in its one line`);
       if ((await page.locator('a.ch-rules-link').getAttribute('href').catch(() => null)) !== '/challenge/rules') fail(`/challenge (${scheme}): no "Rules" link`);
