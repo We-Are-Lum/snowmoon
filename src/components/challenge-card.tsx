@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { designByline } from '~/lib/images/byline';
 import { shuffleFresh } from '~/lib/challenge/shuffle';
 import { AiTag } from './ai-tag';
@@ -21,7 +21,7 @@ import { AiTag } from './ai-tag';
  * No challenge words live in this file (it is in scripts everyone is served): they all come in `w` and the card's
  * data, from the server's view (src/lib/challenge/view.ts).
  */
-export type CardTile = { versionId: string; thumb: string | null; title: string; byName: string | null; byFid: number; href: string; label: string | null };
+export type CardTile = { versionId: string; thumb: string | null; title: string; byName: string | null; byFid: number; href: string; label: string | null; /** A published picture's own page (/challenge/p/<id>); `href` is then its remix screen. */ page?: string };
 export type CardWords = {
   bases: string;
   remixes: string;
@@ -133,4 +133,95 @@ export function TileBase({ c, alt }: { c: Pick<CardData, 'bases'>; alt: string }
   if (!pick?.thumb) return <span className="chh-img cc-empty" aria-hidden="true" />;
   // eslint-disable-next-line @next/next/no-img-element
   return <img className="chh-img" src={pick.thumb} alt={alt} width={576} height={768} data-version={pick.versionId} />;
+}
+
+/**
+ * A character's starting pictures on its page (the redesign, screen 2; owner-approved 2026-11-11): every base, in a
+ * fresh random order per visit (P5g's draw, as the bases row has), 3 across at 3:4 on a desktop; on a phone a
+ * scroll-snap row with dots. Each has its AI label, its style's name and "Remix this" (its remix screen; on a phone a
+ * button on the picture). Until the draw, empty slots, so the server's order is never shown.
+ */
+export function CharacterBases({ c, alt, remixThis }: { c: Pick<CardData, 'bases'>; alt: string; remixThis: string }) {
+  const [bases, setBases] = useState<CardTile[] | null>(c.bases.length > 1 ? null : c.bases);
+  const [at, setAt] = useState(0);
+  const listRef = useRef<HTMLUListElement>(null);
+  useEffect(() => {
+    setBases(c.bases.length > 1 ? shuffleFresh(c.bases) : c.bases);
+  }, [c.bases]);
+  // The phone's dots follow the slide in view (no library: an IntersectionObserver on the row's slides).
+  useEffect(() => {
+    const ul = listRef.current;
+    if (!ul || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) if (e.isIntersecting) setAt(Number((e.target as HTMLElement).dataset.i ?? 0));
+      },
+      { root: ul, threshold: 0.6 },
+    );
+    ul.querySelectorAll<HTMLElement>(':scope > li').forEach((li) => io.observe(li));
+    return () => io.disconnect();
+  }, [bases]);
+  if (!c.bases.length) return null;
+  return (
+    <>
+      <ul className="chc-bases" role="list" ref={listRef}>
+        {(bases ?? c.bases).map((t, i) => (
+          <li key={bases ? t.versionId : `slot-${i}`} data-i={i}>
+            <figure className="chc-base">
+              {bases ? (
+                <Link className="chc-pic" href={t.href} data-version={t.versionId} prefetch={false}>
+                  {t.thumb ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img className="chc-img" src={t.thumb} alt={alt} width={576} height={768} />
+                  ) : (
+                    <span className="chc-img cc-empty" aria-hidden="true" />
+                  )}
+                </Link>
+              ) : (
+                <span className="chc-pic" aria-hidden="true">
+                  <span className="chc-img cc-empty" />
+                </span>
+              )}
+              <span className="chc-ai">
+                <AiTag />
+              </span>
+              {bases && (
+                <figcaption className="chc-cap">
+                  <span className="chc-style">{t.label}</span>
+                  <Link className="chc-remix-this" href={t.href} prefetch={false} data-slot="remix-this">
+                    {remixThis}
+                  </Link>
+                </figcaption>
+              )}
+            </figure>
+          </li>
+        ))}
+      </ul>
+      {c.bases.length > 1 && (
+        <p className="chc-dots" aria-hidden="true">
+          {c.bases.map((t, i) => (
+            <span key={t.versionId} className={i === at ? 'chc-dot on' : 'chc-dot'} />
+          ))}
+        </p>
+      )}
+    </>
+  );
+}
+
+/** "Remix {name}": the remix screen of one of the character's bases, drawn afresh on each visit (P5g's draw). */
+export function RemixCharacter({ c, text }: { c: Pick<CardData, 'bases'>; text: string }) {
+  const [pick, setPick] = useState<CardTile | null>(c.bases.length === 1 ? c.bases[0] : null);
+  useEffect(() => {
+    setPick(c.bases.length > 1 ? shuffleFresh(c.bases)[0] : (c.bases[0] ?? null));
+  }, [c.bases]);
+  if (!c.bases.length) return null;
+  return pick ? (
+    <Link className="chc-remix" href={pick.href} prefetch={false} data-version={pick.versionId}>
+      {text}
+    </Link>
+  ) : (
+    <span className="chc-remix" aria-hidden="true">
+      {text}
+    </span>
+  );
 }

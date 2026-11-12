@@ -104,6 +104,21 @@ export const LANDING_WORDING = {
     joinsNote: 'joins mid-challenge',
     homeFrom: (block: string) => `the book, ${block}`,
   },
+  /**
+   * A character's redesigned page (Claude Design's handoff, screen 2). Approved (owner, 2026-11-11): "Starting pictures",
+   * "Every remix of {name}", "newest first", "Remix {name}". DRAFT until the owner's OK: "Remix this", "Read more about
+   * {name}", "{n} bases" and the looks line.
+   */
+  character: {
+    startHead: 'Starting pictures',
+    basesCount: (n: number) => `${n} ${n === 1 ? 'base' : 'bases'}`,
+    everyHead: (name: string) => `Every remix of ${name}`,
+    newestFirst: 'newest first',
+    remix: (name: string) => `Remix ${name}`,
+    remixThis: 'Remix this',
+    readMore: (name: string) => `Read more about ${name}`,
+    looks: (name: string) => `The book doesn’t describe ${name}’s looks. Every picture’s look is this edition’s.`,
+  },
   untitled: (name: string) => `${name}, remixed`,
   pictureAlt: (name: string) => `AI-generated front view of ${name}, not by the author`,
   /** A challenge picture or a card's picture (branch challenge-moments). */

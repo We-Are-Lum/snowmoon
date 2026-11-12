@@ -529,3 +529,92 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .chh-detail[open] .chh-plus { transform: rotate(45deg); }
 .chh-detail p { margin: 0 0 12px; color: var(--body); }
 .chh-detail a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* A character's page (the redesign's screen 2; owner-approved 2026-11-11): on a desktop a sticky 400px column and the
+   pictures beside it; on a phone the bases first as a swipe row, then the line, Read more and the remixes two across. */
+.ch-char { max-width: 1280px; margin: 0 auto; padding: 16px var(--gutter) 64px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.chc-side { display: contents; }
+.chc-back { order: 0; margin: 0; }
+.chc-back a, .chc-first a, .chc-older a, .chc-more summary { display: inline-flex; align-items: center; min-height: var(--tap); }
+.chc-admin { order: 0; }
+.ch-char h1.chc-name { order: 1; margin: 0; font-family: var(--reading); font-weight: 400; font-size: 34px; line-height: 1.1; }
+.chc-start { order: 2; }
+.chc-line { order: 3; }
+.chc-more { order: 4; }
+.chc-first { order: 5; margin: 0; }
+.ch-char .cc-note { order: 5; }
+.chc-remix-row { order: 6; margin: 0; display: none; }
+.chc-picked { order: 7; }
+.chc-every { order: 8; }
+.chc-foot { order: 9; }
+.chc-line .cc-line { margin: 0; font-size: 19px; line-height: 1.5; color: var(--ink); }
+.chc-line .cc-mark { display: block; margin-top: 6px; font-family: var(--label); font-size: 12px; color: var(--muted); }
+.chc-more { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.chc-more summary { font-size: 19px; color: var(--link); cursor: pointer; list-style: none; width: 100%; }
+.chc-more summary::-webkit-details-marker { display: none; }
+.chc-more-body { padding-bottom: 12px; display: flex; flex-direction: column; gap: 12px; }
+.chc-more-body p { margin: 0; color: var(--body); }
+.chc-facts { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.chc-facts li { display: flex; flex-direction: column; gap: 2px; }
+.chc-fact { font-size: 17px; color: var(--ink); }
+.chc-quote { font-size: 16px; font-style: italic; color: var(--body); }
+.chc-block { font-family: var(--label); font-size: 12px; color: var(--muted); }
+.chc-looks { font-size: 16px; }
+.chc-remix { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 22px; background: var(--btn); color: var(--btn-ink); border-radius: var(--radius); font-size: 19px; text-decoration: none; }
+.chc-remix:hover { text-decoration: underline; }
+.chc-remix:focus-visible, .chc-pic:focus-visible, .chc-remix-this:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.chc-section { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.chc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.ch-char h2.chc-h2 { margin: 0; font-family: var(--reading); font-weight: 400; font-size: 22px; line-height: 1.2; }
+.chc-meta { font-family: var(--label); font-size: 12px; color: var(--muted); white-space: nowrap; }
+.chc-wide-only { display: none; }
+/* The bases: a scroll-snap row with dots on a phone. */
+.chc-bases { margin: 0; padding: 0; list-style: none; display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.chc-bases::-webkit-scrollbar { display: none; }
+.chc-bases > li { flex: 0 0 min(300px, 80%); scroll-snap-align: start; min-width: 0; }
+.chc-base, .chc-remix-card { position: relative; margin: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.chc-pic { display: block; aspect-ratio: 3 / 4; max-width: 100%; background: var(--soft); border-radius: var(--radius); overflow: hidden; }
+.chc-pic-wide { aspect-ratio: 16 / 9; }
+.chc-img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.chc-wide-img { object-fit: contain; object-position: center; }
+.chc-img.cc-empty { background: var(--soft); }
+.chc-ai { position: absolute; left: 8px; top: 8px; z-index: 2; background: color-mix(in srgb, var(--paper) 92%, transparent); border-radius: 3px; padding: 0 4px; }
+.chc-base .chc-ai { top: auto; bottom: 8px; }
+.chc-remix-card .chc-ai { top: 6px; }
+.chc-cap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 8px; font-size: 16px; color: var(--body); min-width: 0; }
+.chc-by { min-width: 0; overflow-wrap: anywhere; }
+.chc-remix-this { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--link); text-decoration: underline; }
+/* On a phone each base's "Remix this" is a button on its picture, bottom right; the style's name stays below. */
+.chc-base .chc-remix-this { position: absolute; right: 8px; bottom: 34px; z-index: 2; padding: 0 14px; background: var(--btn); color: var(--btn-ink); border-radius: var(--radius); text-decoration: none; }
+.chc-base .chc-cap { min-height: 24px; }
+.chc-dots { margin: -4px 0 0; display: flex; justify-content: center; gap: 4px; }
+.chc-dot { width: 6px; height: 4px; border-radius: 2px; background: var(--faint); }
+.chc-dot.on { width: 16px; background: var(--ink); }
+.chc-grid { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 10px; }
+.chc-older { margin: 0; text-align: center; }
+.chc-older a { color: var(--link); }
+@media (min-width: 1024px) {
+  .ch-char { display: grid; grid-template-columns: 400px minmax(0, 1fr); column-gap: 48px; row-gap: 0; padding: 28px 56px 64px; align-items: start; }
+  .chc-back, .chc-admin, .chc-foot { grid-column: 1 / -1; }
+  .chc-back { grid-row: 1; margin-bottom: 16px; }
+  .chc-admin { grid-row: 2; margin: 0 0 16px; }
+  .chc-start, .chc-picked { margin-bottom: 40px; }
+  .chc-foot { margin-top: 40px; }
+  .chc-side { display: flex; flex-direction: column; gap: 16px; grid-column: 1; grid-row: 3 / span 3; position: sticky; top: 24px; }
+  .ch-char h1.chc-name { font-size: 64px; line-height: 1; }
+  .chc-line .cc-line { font-size: 22px; line-height: 1.4; }
+  .chc-remix-row { display: block; margin-top: 8px; }
+  .chc-remix { padding: 14px 22px; }
+  .chc-start, .chc-picked, .chc-every { grid-column: 2; }
+  .chc-start { grid-row: 3; }
+  .chc-picked { grid-row: 4; }
+  .chc-every { grid-row: 5; }
+  .chc-foot { grid-row: 6; }
+  .ch-char h2.chc-h2 { font-size: 26px; }
+  .chc-wide-only { display: inline; }
+  .chc-narrow-only { display: none; }
+  .chc-bases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; overflow: visible; }
+  .chc-base .chc-remix-this { position: static; padding: 0; background: none; color: var(--link); text-decoration: underline; }
+  .chc-dots { display: none; }
+  .chc-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px 16px; }
+}
