@@ -90,6 +90,11 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
   const entry = standing?.kind === 'entry';
   // Submit for its maker, while entries are open and pictures are the entries (the component checks who is signed in).
   const submit: SubmitWords | null = open && (standing?.kind === 'candidate' || entry) ? { ...submitWords(entry, name), postText: P.postText(name, m?.title ?? null) } : null;
+  // An admin's own picture (owner, 2026-11-12): its maker sees Submit to share it as an example (never an entry); once
+  // submitted, it is marked "Admin example" with its ⓘ.
+  const example = standing?.kind === 'admin' && standing.example;
+  const exampleSubmit: SubmitWords | null =
+    open && standing?.kind === 'admin' && !standing.example ? { ...submitWords(false, name), postText: P.postText(name, m?.title ?? null), done: CW.exampleSubmitted, example: true } : null;
   const posts: PostedOnItem[] = CHALLENGE.posts ? (await postsFor(sql, p.versionId).catch(() => [])).map(({ id, network, handle, at, url }) => ({ id, network, handle, at, url })) : [];
   const maker = designByline(p.byName, p.byFid);
   // Its backstory (owner, 2026-11-09): in its version's body (new pictures only).
@@ -121,8 +126,10 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
     /** Who it's invented by, as the page names its maker ('@name'). */
     maker,
     badge: entry ? CW.badge : null,
-    note: standing?.kind === 'admin' ? CW.adminNote : !CHALLENGE.pictureEntries ? P.notEntriesYet : null,
-    submit,
+    /** "Admin example" and its ⓘ (owner, 2026-11-12): an admin's picture submitted with its post. */
+    example: example ? { label: CW.exampleLabel, info: CW.exampleInfo } : null,
+    note: standing?.kind === 'admin' ? (example ? null : CW.adminNote) : !CHALLENGE.pictureEntries ? P.notEntriesYet : null,
+    submit: submit ?? exampleSubmit,
     posts,
     /** "AI-generated · {model}, a closed model by {maker}" (owner, 2026-11-12: no "not by the author" in sight here;
      *  the AI label's hidden declaration keeps it). */
@@ -138,7 +145,7 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
       startedFrom: chain.length > 1 ? chain[chain.length - 2].label : null,
       prompt: im?.prompt ?? null,
     },
-    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: P.oneADay, postTexts: sameTexts(P.postText(name, m?.title ?? null)), othersTexts: textsFor([shareMaker(p.byName, p.byFid)], (who) => (m ? P.othersText(name, m.title, who) : P.othersTextPlain(name, who))), remixThis: P.remixThis, remixedFrom: P.remixedFrom, madeHead: P.recipe, madeWords: P.wordsHead, madeStyle: P.madeStyle, madeModel: P.madeModel, madeFrom: P.madeFrom, madePrompt: P.madePrompt, madeFull: P.madeFull, shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: P.thenSubmit, on: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') } },
+    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: exampleSubmit ? null : P.oneADay, postsHead: P.postsHead, postsNote: P.postsNote, postTexts: sameTexts(P.postText(name, m?.title ?? null)), othersTexts: textsFor([shareMaker(p.byName, p.byFid)], (who) => (m ? P.othersText(name, m.title, who) : P.othersTextPlain(name, who))), remixThis: P.remixThis, remixedFrom: P.remixedFrom, madeHead: P.recipe, madeWords: P.wordsHead, madeStyle: P.madeStyle, madeModel: P.madeModel, madeFrom: P.madeFrom, madePrompt: P.madePrompt, madeFull: P.madeFull, shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: exampleSubmit ? CW.exampleSubmitHead : P.thenSubmit, on: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') } },
   };
 }
 export type PictureView = NonNullable<Awaited<ReturnType<typeof pictureView>>>;

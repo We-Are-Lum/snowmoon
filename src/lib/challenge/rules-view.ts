@@ -56,7 +56,7 @@ const callName = (name: string) => name.split(' ')[0];
 
 export async function rulesView(sql: Sql | null, now: Date = new Date()): Promise<RulesView> {
   const chars = CHALLENGE.characters.map((s) => bookCharacter(s)).filter((c): c is NonNullable<typeof c> => Boolean(c));
-  const none: Standing = { entries: [], byAdmins: [], entrants: entrantCounts([]) };
+  const none: Standing = { entries: [], byAdmins: [], examples: [], entrants: entrantCounts([]) };
   const st: Standing = sql && CHALLENGE.entries ? await standing(sql).catch(() => none) : none;
   const ph = phase(now);
   const nameOf = (slug: string) => callName(chars.find((c) => c.slug === slug)?.name ?? slug);

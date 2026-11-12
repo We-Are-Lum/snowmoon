@@ -11,6 +11,7 @@ import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { CHALLENGE } from '../../src/lib/config';
 import { MOMENTS } from '../../src/lib/challenge/moments';
+import { gatePglite } from '../lib/pglite-gate';
 
 const ROOT = path.resolve(import.meta.dirname, '../..');
 const PICS = ['https://media.snowmoon.party/images/seed/c1/c1-b013-sky-bridge-64be33275e53.jpg', 'https://media.snowmoon.party/images/seed/c1/c1-b005-toy-drone-ea7f59a8c05f.jpg'];
@@ -38,10 +39,18 @@ export const FIXTURE_CHALLENGE = (() => {
     const character = i % 2 ? 'bai' : 'zei';
     remixes.push({ versionId: id(5, i + 1), character, createdAt: new Date(Date.UTC(2026, 9, 30, 20 - i)).toISOString(), from: sheets[character][i % 3], title: `Remix ${i + 1}` });
   }
-  return { sheets, remixes, styles };
+  // Inside the entry window (owner, 2026-11-12, admin examples): two submitted entries of Zei and, made between them, an
+  // admin's picture submitted with its post (an "Admin example", never an entry). Newest first. Added only when
+  // check:ui asks (addEntries), after the feed's checks, so the remixes above stay the feed's whole list until then.
+  const entries = [
+    { versionId: id(10, 1), fid: 900, example: false, createdAt: '2026-11-12T12:00:00.000Z' },
+    { versionId: id(10, 2), fid: 6786, example: true, createdAt: '2026-11-12T11:00:00.000Z' },
+    { versionId: id(10, 3), fid: 901, example: false, createdAt: '2026-11-12T10:00:00.000Z' },
+  ].map((x, i) => ({ ...x, character: 'zei', post: { handle: `fixture${x.fid}`, url: `https://farcaster.xyz/fixture${x.fid}/0x${String(i + 1).repeat(8)}`, id: `0x${String(i + 1).repeat(40)}` } }));
+  return { sheets, remixes, styles, entries };
 })();
 
-export async function startChallengeDb(port: number): Promise<{ url: string; stop: () => Promise<void> }> {
+export async function startChallengeDb(port: number): Promise<{ url: string; stop: () => Promise<void>; addEntries: () => Promise<void> }> {
   const db = new PGlite();
   await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
   for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) {
@@ -99,9 +108,33 @@ export async function startChallengeDb(port: number): Promise<{ url: string; sto
     await db.query(`insert into studio.anchors (version_id, work_id, chapter, start_idx, end_idx) values ($1,'snowmoon',$2,$3,$4)`, [r.versionId, anchor.chapter, anchor.start, anchor.end]);
     await db.query(`insert into studio.links (from_version_id, to_version_id, kind) values ($1,$2,'uses')`, [r.versionId, base]);
   }
+  // The entries and the admin example (FIXTURE_CHALLENGE.entries), as Submit leaves them: each a challenge picture of Zei
+  // from its first sheet, with its eligibility decided at publish and its post listed; the two entries also have their
+  // row in studio.challenge_marks, the admin example none (owner, 2026-11-12).
+  const addEntries = async () => {
+    if (!CHALLENGE.pictureEntries) return;
+    const base = FIXTURE_CHALLENGE.sheets.zei[0];
+    for (const [i, x] of FIXTURE_CHALLENGE.entries.entries()) {
+      const recipe = id(11, i + 1), element = id(12, i + 1);
+      const challenge = { character: x.character, from: base, fromKind: 'sheet', model: 'flux2-klein-4b-edit' };
+      await db.query(`insert into studio.recipes (id, source, provider, model, model_version, prompt, params, seed, cost_usd, created_by_fid, created_at) values ($1,'in_app','fal.ai','flux2-klein-4b-edit','e','p',$2,1,0.009,$3,$4)`,
+        [recipe, JSON.stringify({ user_prompt: `Entry ${i + 1}`, by_name: `fixture${x.fid}`, anchor: { chapter: 2, start: 2, end: 2 }, challenge }), x.fid, x.createdAt]);
+      await db.query(`insert into studio.elements (id, work_id, element_type, created_by_fid, status, created_at) values ($1,'snowmoon','image',$2,'published',$3)`, [element, x.fid, x.createdAt]);
+      await db.query(`insert into studio.element_versions (id, element_id, version_no, body, asset_url, asset_sha256, recipe_id, created_at) values ($1,$2,1,$3,$4,$5,$6,$7)`, [x.versionId, element, JSON.stringify({ lettering: [] }), PICS[i % 2], String(i + 7).repeat(64).slice(0, 64), recipe, x.createdAt]);
+      await db.query(`insert into studio.anchors (version_id, work_id, chapter, start_idx, end_idx) values ($1,'snowmoon',2,2,2)`, [x.versionId]);
+      await db.query(`insert into studio.links (from_version_id, to_version_id, kind) values ($1,$2,'uses')`, [x.versionId, base]);
+      await db.query(`insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values ($1,$2,$3,$4,$5)`, [x.versionId, CHALLENGE.id, x.fid, x.example ? 'admin' : 'passed', !x.example]);
+      await db.query(`insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ($1,'farcaster',$2,$3,$4,$5,$6)`, [x.versionId, x.post.id, x.post.handle, x.createdAt, x.post.url, x.fid]);
+      if (!x.example) await db.query(`insert into studio.challenge_marks (challenge, fid, character, version_id, marked_at) values ($1,$2,$3,$4,$5)`, [CHALLENGE.id, x.fid, x.character, x.versionId, x.createdAt]);
+    }
+  };
+  // The site holds PGlite's one session through the socket; addEntries' direct writes wait until it is between
+  // pipelines (scripts/lib/pglite-gate.ts), so they never land inside one of the site's queries.
+  gatePglite(db);
   const server = new PGLiteSocketServer({ db, port, host: '127.0.0.1' });
   await server.start();
   return {
+    addEntries,
     url: `postgres://postgres@127.0.0.1:${port}/postgres`,
     stop: async () => {
       await server.stop();

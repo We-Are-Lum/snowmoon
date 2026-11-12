@@ -134,26 +134,61 @@ export async function eligibilityOf(sql: Sql, versions: ChallengeVersion[]): Pro
   return out;
 }
 
+/**
+ * Admin examples (owner, 2026-11-12): an admin's picture is never an entry, but its maker may submit it with its post,
+ * to be shown as an example. Submit then writes only the post (studio.version_posts, by the admin), never a row of
+ * studio.challenge_marks, so no entry, count or reward ever reads it. An example is an admin's version (eligibility
+ * 'admin') with a listed post its maker added. Of `versions`, the ids that are examples. Empty without the table.
+ */
+export async function exampleIds(sql: Sql, versions: ChallengeVersion[], elig: Map<string, Eligibility>): Promise<Set<string>> {
+  const admins = versions.filter((v) => elig.get(v.versionId)?.why === 'admin');
+  if (!admins.length) return new Set();
+  try {
+    const rows = await sql<{ version_id: string; fid: string }[]>`
+      select version_id::text, fid from studio.version_posts where version_id in ${sql(admins.map((v) => v.versionId))}`;
+    const by = new Set(rows.map((r) => `${String(r.version_id)} ${Number(r.fid)}`));
+    return new Set(admins.filter((v) => by.has(`${v.versionId} ${v.maker}`)).map((v) => v.versionId));
+  } catch (e) {
+    if (!missing(e)) console.error('challenge: examples not read', (e as { code?: string }).code ?? (e as Error).name);
+    return new Set();
+  }
+}
+
 export interface Standing {
   entries: ChallengeVersion[];
   /** Versions admins made in the window: shown plainly as not eligible for rewards. */
   byAdmins: ChallengeVersion[];
+  /**
+   * Admin examples (owner, 2026-11-12), newest first: admins' versions submitted with their post. Never entries: not in
+   * `entries`, `entrants` or anything counted or rewarded from them.
+   */
+  examples: ChallengeVersion[];
   /** Per character, how many different eligible people submitted an entry for it (a count, not a ranking). */
   entrants: Map<string, number>;
 }
 
 /** The entries so far (submitted), and the admins' versions, each newest first. Nothing while CHALLENGE.entries is off. */
 export async function standing(sql: Sql): Promise<Standing> {
-  if (!CHALLENGE.entries) return { entries: [], byAdmins: [], entrants: entrantCounts([]) };
+  if (!CHALLENGE.entries) return { entries: [], byAdmins: [], examples: [], entrants: entrantCounts([]) };
   const versions = (await windowVersions(sql)).filter((v) => v.forked);
   const submissions = await readSubmissions(sql);
   const elig = await eligibilityOf(sql, versions);
   const entries = chooseEntries(versions.filter((v) => elig.get(v.versionId)?.eligible === true), submissions, () => true);
   const byAdmins = versions.filter((v) => elig.get(v.versionId)?.why === 'admin');
-  return { entries, byAdmins, entrants: entrantCounts(entries) };
+  const ex = await exampleIds(sql, byAdmins, elig);
+  return { entries, byAdmins, examples: byAdmins.filter((v) => ex.has(v.versionId)), entrants: entrantCounts(entries) };
 }
 
-export type VersionStanding = { kind: 'entry'; character: string } | { kind: 'admin' } | { kind: 'candidate'; character: string } | null;
+/**
+ * The list on /challenge/entries (owner, 2026-11-12): the entries and the admin examples together, newest first by
+ * when each picture was made (the entries' own order), each example marked. Shown only: counts and rewards read
+ * `entries` and `entrants` (standing), never this list.
+ */
+export function entriesWithExamples(st: Pick<Standing, 'entries' | 'examples'>): (ChallengeVersion & { example: boolean })[] {
+  return [...st.entries.map((v) => ({ ...v, example: false })), ...st.examples.map((v) => ({ ...v, example: true }))].sort(newestFirst);
+}
+
+export type VersionStanding = { kind: 'entry'; character: string } | { kind: 'admin'; example: boolean } | { kind: 'candidate'; character: string } | null;
 
 /**
  * What a version page shows: "Entry" once its maker submitted it; for an eligible remix not submitted yet,
@@ -165,7 +200,7 @@ export async function versionStanding(sql: Sql, versionId: string): Promise<Vers
   const v = (await windowVersions(sql)).find((x) => x.versionId === versionId && x.forked);
   if (!v) return null;
   const e = (await eligibilityOf(sql, [v])).get(v.versionId);
-  if (e?.why === 'admin') return { kind: 'admin' };
+  if (e && e.why === 'admin') return { kind: 'admin', example: (await exampleIds(sql, [v], new Map([[v.versionId, e]]))).has(v.versionId) };
   if (!e?.eligible) return null;
   const entered = chooseEntries([v], await readSubmissions(sql), () => true).length > 0;
   return { kind: entered ? 'entry' : 'candidate', character: v.character };
@@ -232,7 +267,7 @@ export const SUBMIT_WORDING = {
 export async function submitEntry(sql: Sql, fid: number, versionId: string, post: Post | null, now = new Date()): Promise<SubmitResult> {
   if (!CHALLENGE.entries || !CHALLENGE.posts) return { ok: false, why: SUBMIT_WORDING.off, status: 503 };
   // Until the owner opens the challenge (CHALLENGE.public; owner, 2026-11-04), only admins may submit, to test it; an
-  // admin's version is never eligible, so it is refused below and changes no one's standing.
+  // admin's version is never eligible: it becomes an example below (submitExample) and changes no one's standing.
   if (!challengeVisibleTo(fid)) return { ok: false, why: SUBMIT_WORDING.off, status: 503 };
   if (phase(now) === 'before') return { ok: false, why: SUBMIT_WORDING.opens(), status: 409 };
   if (!inWindow(now)) return { ok: false, why: SUBMIT_WORDING.closed, status: 409 };
@@ -243,7 +278,10 @@ export async function submitEntry(sql: Sql, fid: number, versionId: string, post
     if (early && early.byFid === fid && Date.parse(early.createdAt) < Date.parse(CHALLENGE.dates.opens)) return { ok: false, why: SUBMIT_WORDING.beforeOpen, status: 403 };
     return { ok: false, why: SUBMIT_WORDING.notYours, status: 403 };
   }
-  if ((await eligibilityOf(sql, [v])).get(v.versionId)?.eligible !== true) return { ok: false, why: SUBMIT_WORDING.notEligible, status: 403 };
+  const elig = (await eligibilityOf(sql, [v])).get(v.versionId);
+  // An admin's own picture (owner, 2026-11-12): submitted as an example, never an entry (submitExample).
+  if (elig?.why === 'admin') return submitExample(sql, fid, versionId, post);
+  if (elig?.eligible !== true) return { ok: false, why: SUBMIT_WORDING.notEligible, status: 403 };
   if (!post) return { ok: false, why: SUBMIT_WORDING.needsPost, status: 400 };
   try {
     return await sql.begin(async (tx) => {
@@ -262,6 +300,30 @@ export async function submitEntry(sql: Sql, fid: number, versionId: string, post
     });
   } catch (e) {
     if (missing(e) || noColumn(e)) return { ok: false, why: SUBMIT_WORDING.notYet, status: 503 };
+    throw e;
+  }
+}
+
+/**
+ * An admin's Submit on their own picture (owner, 2026-11-12): the same post checks as anyone's (the route's verifiedPost
+ * and writerCheck: the post links to the page and is theirs), then, under the same lock, each version once, and only
+ * the post is listed (studio.version_posts, by the admin). No row of studio.challenge_marks is written, so it is never
+ * an entry, uses no day and is in no count or reward; it shows as an "Admin example" (exampleIds). Nothing to withdraw.
+ */
+async function submitExample(sql: Sql, fid: number, versionId: string, post: Post | null): Promise<SubmitResult> {
+  if (!post) return { ok: false, why: SUBMIT_WORDING.needsPost, status: 400 };
+  try {
+    return await sql.begin(async (tx) => {
+      await tx`select pg_advisory_xact_lock(hashtext('snowmoon.challenge.submit'), ${fid}::int)`;
+      const had = await tx`select 1 from studio.version_posts where version_id = ${versionId} and fid = ${fid} limit 1`;
+      if (had.length) return { ok: false as const, why: SUBMIT_WORDING.already, status: 409 };
+      const listed = await tx`insert into studio.version_posts ${tx({ version_id: versionId, network: post.network, post_id: post.id, handle: post.handle, posted_at: post.at, url: post.url, fid })}
+        on conflict (version_id, network, post_id) do nothing returning id`;
+      if (!listed.length) return { ok: false as const, why: SUBMIT_WORDING.already, status: 409 };
+      return { ok: true as const, left: 0 };
+    });
+  } catch (e) {
+    if (missing(e)) return { ok: false, why: SUBMIT_WORDING.notYet, status: 503 };
     throw e;
   }
 }

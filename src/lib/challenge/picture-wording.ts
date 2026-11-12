@@ -54,4 +54,7 @@ export const PICTURE_WORDING = {
   another: 'Make another',
   /** While pictures aren't the entries yet (CHALLENGE.pictureEntries off: Terms and Privacy don't say so yet). */
   notEntriesYet: 'Pictures can’t be submitted as entries yet.',
+  // DRAFT (owner, 2026-11-12): the posts submitted for this picture, newest first (the coding agent's words).
+  postsHead: 'Posts',
+  postsNote: 'Posts submitted for this picture, newest first. Shown as links only.',
 };

@@ -27,7 +27,7 @@ export function InfoLabel({
   /** The label's word, read with the declaration (not shown): "Redrawn", "AI description", "Invented", "Draft", "Book". */
   word: string;
   /** For checks and styling: data-label. */
-  kind: 'redrawn' | 'ai-description' | 'invented' | 'draft' | 'book' | 'about';
+  kind: 'redrawn' | 'ai-description' | 'invented' | 'draft' | 'book' | 'about' | 'admin-example';
   /** The full declaration, in one sentence; read by screen readers with the word. */
   declaration: string;
   title: string;
