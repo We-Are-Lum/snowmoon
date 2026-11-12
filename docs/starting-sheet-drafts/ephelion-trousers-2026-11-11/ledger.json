@@ -1,0 +1,179 @@
+{
+ "about": "Lord Ephelion, step 3 (owner, 2026-11-11): the three approved fronts with dark charcoal trousers and black shoes, each an edit of its front, GPT Image 2.5. The look is this edition's invention. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT. Test pictures only.",
+ "cap_usd": 0.2,
+ "stop_at_usd": 0.2,
+ "base_style": {
+  "title": "Animated series",
+  "text": "Animated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.",
+  "source": "docs/starting-sheet-drafts/directions/plan.json, styles[\"Animated series\"] (branch challenge-styles)"
+ },
+ "book_based": {
+  "detail": "a man",
+  "block": "c21-b76"
+ },
+ "edit": "The same person as in reference image 1, exactly as he is: the same face, hair, glasses or beard (if any), pose, ice-blue high-collared coat, white waistcoat, silver trim, white gloves and lion emblem, the same plain light grey background and framing. Change only his trousers to dark charcoal formal trousers and his shoes to polished black formal shoes.",
+ "fronts": {
+  "a": "8f0044557a81570abc9398044385adb5e0c5eaefb7c3019e76b268f25811d784",
+  "b": "5449a928ec7219d66ffb1d868d02035e25a31a899180e3882e079bf6acc151b3",
+  "c": "cb380ee95f9fe6237f5d407003013b3e8ec797a31459125f29a935192639facc"
+ },
+ "prompts": {
+  "54978ab5328bdaefc6620ba750fb4ea4c3c896fc03d9fce0d6993accbf1fed27": "The same person as in reference image 1, exactly as he is: the same face, hair, glasses or beard (if any), pose, ice-blue high-collared coat, white waistcoat, silver trim, white gloves and lion emblem, the same plain light grey background and framing. Change only his trousers to dark charcoal formal trousers and his shoes to polished black formal shoes.\n\nAnimated series look: clean bold black ink outlines of even weight, flat saturated cel colour with a single hard-edged shadow tone, simple graphic shapes, large expressive eyes and readable eyebrows, lively faces full of personality, slightly stylised proportions, crisp characters against soft muted backgrounds, clear readable faces and hands.\n\nNo text, no lettering, no signs with words."
+ },
+ "calls": [
+  {
+   "kind": "endpoint-list",
+   "model": "gpt",
+   "status": "ok",
+   "retention": {
+    "provider": "openai",
+    "zero_data_retention": false,
+    "no_training": true,
+    "endpoint_list_read_at": "2026-11-12T00:08:23.375Z",
+    "kept": {
+     "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+     "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+     "source": "https://developers.openai.com/api/docs/guides/your-data",
+     "read": "2026-11-03"
+    }
+   },
+   "cost_usd": 0,
+   "at": "2026-11-12T00:08:23.376Z"
+  },
+  {
+   "kind": "guard",
+   "file": "ephelion-front-a-charcoal-gpt.jpg",
+   "prompt_sha256": "54978ab5328bdaefc6620ba750fb4ea4c3c896fc03d9fce0d6993accbf1fed27",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000151425,
+   "cost_source": "reported",
+   "worst_usd": 0.00054765,
+   "at": "2026-11-12T00:08:25.012Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "file": "ephelion-front-a-charcoal-gpt.jpg",
+   "step": "trousers",
+   "variant": "a",
+   "prompt_sha256": "54978ab5328bdaefc6620ba750fb4ea4c3c896fc03d9fce0d6993accbf1fed27",
+   "reference_sha256": "8f0044557a81570abc9398044385adb5e0c5eaefb7c3019e76b268f25811d784",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M76HB4B3VC9XDW92H49Q5JKG",
+   "status": "ok",
+   "cost_usd": 0.048134,
+   "cost_source": "reported by the gateway",
+   "sha256": "dda578d6eb6c7b2d7aebecd720b90cec6ee61423cc43c6992390e651d2877f57",
+   "original_sha256": "00c8a5d3835f6dfae28cf95859e0cf7a67ba07e4b5f93eae0d597d629bd154be",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "attempt": 1,
+   "at": "2026-11-12T00:08:48.454Z"
+  },
+  {
+   "kind": "guard",
+   "file": "ephelion-front-b-charcoal-gpt.jpg",
+   "prompt_sha256": "54978ab5328bdaefc6620ba750fb4ea4c3c896fc03d9fce0d6993accbf1fed27",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000193425,
+   "cost_source": "reported",
+   "worst_usd": 0.00054765,
+   "at": "2026-11-12T00:08:49.440Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "file": "ephelion-front-b-charcoal-gpt.jpg",
+   "step": "trousers",
+   "variant": "b",
+   "prompt_sha256": "54978ab5328bdaefc6620ba750fb4ea4c3c896fc03d9fce0d6993accbf1fed27",
+   "reference_sha256": "5449a928ec7219d66ffb1d868d02035e25a31a899180e3882e079bf6acc151b3",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M76HBW5FE9RPBA2RSCAKACWZ",
+   "status": "ok",
+   "cost_usd": 0.048134,
+   "cost_source": "reported by the gateway",
+   "sha256": "c5239b8f3c40e3934f37984e55d52dee6f9b64b15f15320b6940162bd534e0b7",
+   "original_sha256": "cf11919b484fb5734d40dddf3c35ceda32a87cb3dfe003188b28e8fe68bfa37a",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "attempt": 1,
+   "at": "2026-11-12T00:09:11.947Z"
+  },
+  {
+   "kind": "guard",
+   "file": "ephelion-front-c-charcoal-gpt.jpg",
+   "prompt_sha256": "54978ab5328bdaefc6620ba750fb4ea4c3c896fc03d9fce0d6993accbf1fed27",
+   "max_tokens": 1200,
+   "status": "ok",
+   "cost_usd": 0.000226125,
+   "cost_source": "reported",
+   "worst_usd": 0.00054765,
+   "at": "2026-11-12T00:09:13.040Z"
+  },
+  {
+   "kind": "picture",
+   "model": "gpt",
+   "file": "ephelion-front-c-charcoal-gpt.jpg",
+   "step": "trousers",
+   "variant": "c",
+   "prompt_sha256": "54978ab5328bdaefc6620ba750fb4ea4c3c896fc03d9fce0d6993accbf1fed27",
+   "reference_sha256": "cb380ee95f9fe6237f5d407003013b3e8ec797a31459125f29a935192639facc",
+   "endpoint": "openai/gpt-image-2.5-sunburst",
+   "host": "Vercel AI Gateway",
+   "request_id": "gen_01M76HCK69B3E30PK722CXTK5F",
+   "status": "ok",
+   "cost_usd": 0.048134,
+   "cost_source": "reported by the gateway",
+   "sha256": "b5ea77f470b0183ca32efc4af5e17eac78a9e882defaae82d14db806b891fbc3",
+   "original_sha256": "a21197191c4ba5e537686863c85bb0f0a24b58a23d99c091f27f3caf28b61dd5",
+   "original_size": "1024x1536",
+   "converted": "toView to 576x768 (contain, padded with its own corner colour)",
+   "settings": {
+    "size": "1024x1536",
+    "quality": "high",
+    "n": 1,
+    "output_format": "png",
+    "gateway": {
+     "only": [
+      "openai"
+     ],
+     "disallowPromptTraining": true
+    }
+   },
+   "content_credentials": "C2PA manifest in the original",
+   "attempt": 1,
+   "at": "2026-11-12T00:09:37.550Z"
+  }
+ ]
+}
