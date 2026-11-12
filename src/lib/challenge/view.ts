@@ -6,9 +6,10 @@ import type { CardData, CardTile, CardWords, CharacterData } from '~/components/
 import { startingSheets } from './entries';
 import { challengePictures } from './pictures';
 import { cardOf } from './cards';
-import { basesOf, baseCountOf } from './rules';
+import { basesOf, baseCountOf, phase, shortDateText, windowText } from './rules';
+import { homeOf } from './homes';
 import { CHALLENGE_WORDING as W } from './wording';
-import { LANDING_WORDING as L } from './landing-wording';
+import { CHALLENGE_LINKS, LANDING_WORDING as L } from './landing-wording';
 import { firstAppearsHref, firstAppearsWords } from './first-appears';
 
 /**
@@ -38,7 +39,14 @@ export interface ChallengeView {
   /** The hub's "Draft wording" mark: none since the owner approved its words (2026-11-06). */
   draftShort: string | null;
   notAffiliated: string;
-  cards: { c: CardData; w: CardWords }[];
+  cards: { c: CardData; w: CardWords; home: { place: string; block: string; from: string } | null }[];
+  /** The redesigned home (owner-approved 2026-11-11): the pitch, the window, the ways, the details and who joins later. */
+  pitch: string;
+  window: string;
+  closes: string | null;
+  ways: { n: string; title: string; tag: string; body: string; href: string | null; pending: string | null }[];
+  details: { title: string; body: string[]; link?: { href: string; text: string } }[];
+  joining: { slug: string; name: string; text: string; note: string }[];
 }
 
 export interface CharacterView {
@@ -89,9 +97,12 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
     chars.map(async (slug) => {
       const { bases, note } = await basesTiles(sql, slug);
       const c = cardFor(slug, bases, note);
-      return { c, w: cardWords(c.name) };
+      const h = homeOf(slug);
+      return { c, w: cardWords(c.name), home: h ? { place: h.place, block: h.block, from: L.home.homeFrom(h.block) } : null };
     }),
   );
+  const H = L.home;
+  const ph = phase();
   return {
     adminNote: adminNote(),
     title: W.title,
@@ -102,6 +113,26 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
     draftShort: CHALLENGE.cardsApproved ? null : W.draftShort,
     notAffiliated: W.notAffiliated,
     cards,
+    pitch: H.pitch,
+    window: windowText(),
+    closes: ph === 'closed' ? null : H.closes(shortDateText('closes')),
+    ways: H.ways.map((w) => {
+      const x = w as { link?: keyof typeof CHALLENGE_LINKS; pending?: string };
+      const href = x.link ? CHALLENGE_LINKS[x.link] : null;
+      return { n: w.n, title: w.title, tag: w.tag, body: w.body, href, pending: x.link && !href ? (x.pending ?? null) : null };
+    }),
+    details: [
+      { title: H.newTitle, body: [W.intro()] },
+      { title: H.rulesTitle, body: [L.line()], link: { href: '/challenge/rules', text: L.rulesTitle } },
+      { title: H.aboutTitle, body: [H.about] },
+    ],
+    // Characters still to join (CHALLENGE.joining) that aren't challenge characters yet: a tile with no picture.
+    joining: Object.keys(CHALLENGE.joining)
+      .filter((s) => !CHALLENGE.characters.includes(s) && bookCharacter(s))
+      .map((s) => {
+        const name = bookCharacter(s)!.name;
+        return { slug: s, name, text: H.joins(name), note: H.joinsNote };
+      }),
   };
 }
 

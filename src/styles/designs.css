@@ -464,3 +464,68 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .mk-backstory-text { margin: 0 0 4px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .mk-backstory-by { margin: 0; font-size: 14px; }
 .mk-publish-without { margin: 8px 0; }
+
+/* The remix challenge home, redesigned (Claude Design's handoff, screen 1; owner-approved 2026-11-11): the full width of
+   the main column (up to 1280px), pictures first. Phone: the gutter; desktop: 56px each side. */
+.ch-home { max-width: 1280px; margin: 0 auto; padding: 28px var(--gutter) 64px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+@media (min-width: 1024px) { .ch-home { padding: 40px 56px 64px; } }
+.chh-head { display: flex; flex-direction: column; gap: 12px; }
+@media (min-width: 1024px) { .chh-head { flex-direction: row; justify-content: space-between; align-items: flex-end; gap: 32px; } }
+.chh-head-main { min-width: 0; max-width: 46rem; }
+.ch-home h1.chh-title { font-family: var(--reading); font-weight: 400; font-size: 38px; line-height: 1; margin: 0 0 12px; }
+@media (min-width: 1024px) { .ch-home h1.chh-title { font-size: 56px; } }
+.chh-pitch { margin: 0; font-size: 20px; line-height: 1.35; color: var(--body); }
+@media (min-width: 1024px) { .chh-pitch { font-size: 24px; } }
+.chh-when { display: flex; flex-direction: column; gap: 4px; }
+@media (min-width: 1024px) { .chh-when { text-align: right; align-items: flex-end; } }
+.chh-window { margin: 0; font-size: 20px; }
+@media (min-width: 1024px) { .chh-window { font-size: 24px; } }
+.chh-closes { margin: 0; font-family: var(--label); font-size: 12px; color: var(--muted); }
+.chh-links { margin: 4px 0 0; }
+.chh-links a { display: inline-flex; align-items: center; min-height: 44px; }
+/* The ways to take part: <details> cards; opening one doesn't stretch the others. */
+.chh-ways { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: start; }
+@media (min-width: 1024px) { .chh-ways { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.chh-way { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); }
+.chh-way summary { display: flex; align-items: baseline; gap: 12px; min-height: 48px; padding: 12px 16px; box-sizing: border-box; cursor: pointer; list-style: none; }
+.chh-way summary::-webkit-details-marker, .chh-detail summary::-webkit-details-marker { display: none; }
+.chh-n { font-family: var(--label); font-size: 12px; color: var(--muted); }
+.chh-way-title { font-size: 21px; flex: 1; }
+.chh-tag { font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; color: var(--link); }
+.chh-way p { margin: 0; padding: 0 16px 16px; font-size: 17px; color: var(--body); }
+/* The characters: 2 across on a phone, 3 on a tablet, 4 on a desktop. */
+.chh-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
+@media (min-width: 768px) { .chh-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .chh-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 20px; } }
+.chh-tile { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.chh-pic-wrap { position: relative; }
+.chh-pic { display: block; aspect-ratio: 3 / 4; max-width: 100%; background: var(--soft); border-radius: var(--radius); overflow: hidden; }
+.chh-img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.chh-img.cc-empty { background: var(--soft); }
+.chh-empty { display: flex; align-items: center; justify-content: center; border: 1px dashed var(--faint); box-sizing: border-box; padding: 16px; text-align: center; color: var(--body); }
+.chh-empty p { margin: 0; font-size: 17px; line-height: 1.5; }
+.chh-ai { position: absolute; left: 8px; bottom: 8px; z-index: 2; background: color-mix(in srgb, var(--paper) 92%, transparent); border-radius: 3px; padding: 0 4px; }
+.chh-cap { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 8px; }
+.ch-home h2.chh-name { margin: 0; font-family: var(--reading); font-weight: 400; font-size: 22px; line-height: 1.2; }
+@media (min-width: 1024px) { .ch-home h2.chh-name { font-size: 28px; } }
+.chh-name a { color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+.chh-name a:hover { text-decoration: underline; }
+/* The name's link covers the tile, so tapping the picture opens the character's page too; the AI label sits above it. */
+.chh-tile { position: relative; }
+.chh-tile.cc-card { padding: 0; border: 0; border-radius: 0; background: transparent; }
+/* The touch rule in shell.css makes every link its own 44px box; here the name's link stays static, so its cover is the tile's. */
+.chh-tile .cc-name-link { position: static; }
+.chh-tile .cc-name-link::after { content: ''; position: absolute; inset: 0; left: 0; top: 0; width: auto; height: auto; transform: none; z-index: 1; border-radius: var(--radius); }
+.chh-tile .cc-name-link:focus-visible { outline: none; }
+.chh-tile .cc-name-link:focus-visible::after { outline: 2px solid var(--link); outline-offset: 2px; }
+.chh-note { margin: 0; font-family: var(--label); font-size: 12px; color: var(--muted); }
+.chh-block { white-space: nowrap; }
+/* New to Snowmoon?, Rules, About the pictures: rows under a top rule; 3 across on a desktop. */
+.chh-details { border-top: 1px solid var(--rule); padding-top: 12px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 12px; align-items: start; }
+@media (min-width: 1024px) { .chh-details { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.chh-detail { border-bottom: 1px solid var(--rule); }
+.chh-detail summary { display: flex; justify-content: space-between; align-items: center; min-height: 48px; font-size: 20px; cursor: pointer; list-style: none; }
+.chh-plus { font-family: var(--label); color: var(--muted); }
+.chh-detail[open] .chh-plus { transform: rotate(45deg); }
+.chh-detail p { margin: 0 0 12px; color: var(--body); }
+.chh-detail a { display: inline-flex; align-items: center; min-height: 44px; }

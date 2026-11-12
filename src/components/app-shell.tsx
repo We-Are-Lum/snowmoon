@@ -7,7 +7,7 @@ import { readingPlace } from '~/lib/glossary-view';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { inMiniApp, signOut, signOutSocial, signOutWallet, useAuth, useSocialSession, useWalletAlongside, useWalletSession, type AuthState } from '~/lib/client-auth';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
-import { CHALLENGE_PANEL_KEY, challengePanelOpen, isChallengePath } from '~/lib/panel';
+import { CHALLENGE_PANEL_KEY, CHALLENGE_RAIL_KEY, challengePanelOpen, challengeRailOpen, isChallengePath } from '~/lib/panel';
 import { COMING, navItems, type NavItem } from '~/lib/nav';
 import { CHALLENGE } from '~/lib/config';
 import { isAdmin } from '~/lib/admins';
@@ -45,6 +45,8 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
   // The remix challenge's pages start with the assistant closed (owner, 2026-11-10), unless the person opened it on a
   // challenge page before, on this device (remembered on the device only; closing it there forgets it).
   const [chPanel, setChPanel] = useState(false);
+  // The rail on challenge pages (owner, 2026-11-11): collapsed unless opened there before on this device.
+  const [chRail, setChRail] = useState(false);
   const [last, setLast] = useState(1);
   const [opened, setOpened] = useState<Set<number>>(new Set());
 
@@ -56,6 +58,7 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
       setCollapsed(localStorage.getItem('snowmoon.rail') === 'collapsed');
       setPanel(localStorage.getItem('snowmoon.panel') !== 'closed');
       setChPanel(challengePanelOpen(localStorage.getItem(CHALLENGE_PANEL_KEY)));
+      setChRail(challengeRailOpen(localStorage.getItem(CHALLENGE_RAIL_KEY)));
     } catch {
       /* defaults */
     }
@@ -101,11 +104,12 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
   const onMp = path === '/minpentai' || path.startsWith('/minpentai/');
   const onChallenge = isChallengePath(path);
   const showPanel = (onMp ? mpPanel : onChallenge ? chPanel : panel) && !path.startsWith('/assistant');
+  const railCollapsed = onChallenge ? !chRail : collapsed;
   const openPanel = () => (onMp ? setMpPanel(true) : onChallenge ? (setChPanel(true), remember(CHALLENGE_PANEL_KEY, 'open')) : (setPanel(true), remember('snowmoon.panel', null)));
   const closePanel = () => (onMp ? setMpPanel(false) : onChallenge ? (setChPanel(false), remember(CHALLENGE_PANEL_KEY, null)) : (setPanel(false), remember('snowmoon.panel', 'closed')));
 
   return (
-    <div className={`shell${collapsed ? ' rail-collapsed' : ''}${showPanel ? ' with-panel' : ''}`}>
+    <div className={`shell${railCollapsed ? ' rail-collapsed' : ''}${showPanel ? ' with-panel' : ''}${onChallenge ? ' on-challenge' : ''}`}>
       <ImageZoom />
       <header className="topbar">
         {path.startsWith('/assistant') ? (
@@ -146,11 +150,16 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
           <button
             type="button"
             className="rail-collapse"
-            aria-label={collapsed || !railOpen ? 'Expand the sidebar' : 'Collapse the sidebar'}
+            aria-label={railCollapsed || !railOpen ? 'Expand the sidebar' : 'Collapse the sidebar'}
             onClick={() => {
               if (window.matchMedia('(min-width: 1200px)').matches) {
-                setCollapsed(!collapsed);
-                remember('snowmoon.rail', collapsed ? null : 'collapsed');
+                if (onChallenge) {
+                  setChRail(!chRail);
+                  remember(CHALLENGE_RAIL_KEY, chRail ? null : 'open');
+                } else {
+                  setCollapsed(!collapsed);
+                  remember('snowmoon.rail', collapsed ? null : 'collapsed');
+                }
               } else setRailOpen(!railOpen);
             }}
           >

@@ -86,8 +86,36 @@ export const LANDING_WORDING = {
   entriesNone: 'No entries yet.',
   entriesNoneFor: (name: string) => `No entries for ${name} yet.`,
   back: '← The remix challenge',
+  /**
+   * The redesigned home (Claude Design's handoff, owner-approved 2026-11-11). The pitch is the owner's (approved). The
+   * "Remix a picture" card's line is the owner's (2026-11-11: posting alone isn't entering); its tag, the three details'
+   * titles and "About the pictures" were approved by the owner the same evening.
+   * The other two ways, "Add a backstory" and "Join the collab", are shown without amounts (owner, 2026-11-11).
+   */
+  home: {
+    pitch: 'Help find the characters you’d love, hate, or can’t stop thinking about.',
+    closes: (when: string) => `Entries close ${when}.`,
+    ways: [
+      { n: '1', title: 'Remix a picture', tag: 'START HERE', body: 'Pick a character, start from a base or anyone’s remix, describe a change, then publish, post it on Farcaster, Lens or Bluesky, and submit your post.' },
+      // The owner's words (2026-11-11). The link is CHALLENGE_LINKS.bounty; until it is set, the line ends "(bounty opens soon)".
+      { n: '2', title: 'Add a backstory', tag: '', body: 'Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', link: 'bounty' as const, pending: '(bounty opens soon)' },
+      // The owner's words (2026-11-11). The link is CHALLENGE_LINKS.collab; until it is set, the line ends "(link coming soon)".
+      { n: '3', title: 'Join the collab', tag: '', body: 'Farcaster accounts with a high enough Neynar score can join the Snowmoon collab, to chat, give feedback and work on Snowmoon together:', link: 'collab' as const, pending: '(link coming soon)' },
+    ],
+    newTitle: 'New to Snowmoon?',
+    rulesTitle: 'Rules',
+    aboutTitle: 'About the pictures',
+    about: 'Every picture here is AI-generated, not by the author. Each one names its model, and closed models name their maker. Lists are newest first.',
+    /** The owner's words (2026-11-11). */
+    joins: (name: string) => `${name} joins mid-challenge.`,
+    joinsNote: 'joins mid-challenge',
+    homeFrom: (block: string) => `the book, ${block}`,
+  },
   untitled: (name: string) => `${name}, remixed`,
   pictureAlt: (name: string) => `AI-generated front view of ${name}, not by the author`,
   /** A challenge picture or a card's picture (branch challenge-moments). */
   pictureAltMoment: (name: string) => `AI-generated picture of ${name}, not by the author`,
 };
+
+/** The two outside links on the challenge home (owner, 2026-11-11). Null until the owner gives them: the card says so. */
+export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: null, collab: null };
