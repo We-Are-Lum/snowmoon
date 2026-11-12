@@ -1995,6 +1995,8 @@ async function checkChallengeLanding() {
         if (w >= 1024) {
           const [f, sd] = await Promise.all([page.locator('.chp-figure').boundingBox(), page.locator('.chp-side').boundingBox()]);
           if (!f || !sd || sd.x < f.x + f.width || Math.abs(sd.width - 440) > 2) fail(`/challenge/p ${tag}: not two columns (the picture, then a 440px column)`);
+          const over = await page.locator('.chp-side').evaluate((side) => { const r = side.getBoundingClientRect().right; return [...side.querySelectorAll('*')].filter((e) => e.getBoundingClientRect().right > r + 1).map((e) => e.className || e.tagName).slice(0, 3); });
+          if (over.length) fail(`/challenge/p ${tag}: the column's contents run past its edge (${over.join(', ')})`);
         }
         await snap('picture', true);
       }

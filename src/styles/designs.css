@@ -576,3 +576,5 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
   .chp-step-by { display: block; }
   .chp-arrow { margin-top: 0; }
 }
+/* In the picture page's 440px column the share buttons stay two across (four in a row overflowed it). */
+.chp-side .sf-buttons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
