@@ -80,6 +80,46 @@ for (const h of ['/minpentai', '/minpentai?lesson=1']) {
   }
   if (t['og:image:width'] !== '1200' || t['og:image:height'] !== '630') fail(`${h}: og:image is not declared 1200×630`);
 }
+// The challenge poster as /challenge's link preview, only while entries are open (owner, 2026-11-12): Farcaster's embed
+// the 1200×800 JPEG, Open Graph and the X card (summary_large_image) the 1200×630 JPEG, both served from public/challenge/
+// with their recipe beside them. Before or after the window: the site's card (embed.png) and no og:image, as before.
+// A target that doesn't serve the poster yet (a deploy before this change) is said, not failed.
+{
+  const { POSTER } = await import('../src/lib/challenge/poster');
+  const { phase } = await import('../src/lib/challenge/rules');
+  const jpegSize = (b: Buffer) => {
+    for (let i = 2; i + 9 < b.length; ) {
+      if (b[i] !== 0xff) return '';
+      const m = b[i + 1], len = b.readUInt16BE(i + 2);
+      if (m >= 0xc0 && m <= 0xcf && m !== 0xc4 && m !== 0xc8 && m !== 0xcc) return `${b.readUInt16BE(i + 7)}x${b.readUInt16BE(i + 5)}`;
+      i += 2 + len;
+    }
+    return '';
+  };
+  const served = (await fetch(`${BASE}/challenge/poster-recipe.json`)).ok;
+  const h = '/challenge';
+  const t = metaTags(await (await fetch(BASE + h)).text());
+  const e = t['fc:miniapp'] ? JSON.parse(t['fc:miniapp']) : null;
+  if (!CHALLENGE.public) console.log(`${h}: the challenge isn't public on this build; its preview wasn't checked`);
+  else if (!served) console.log(`${h}: this target doesn't serve the poster yet (a deploy before it); its preview wasn't checked`);
+  else if (phase() === 'open') {
+    if (!String(e?.imageUrl).endsWith(POSTER.embed)) fail(`${h}: fc:miniapp image is ${e?.imageUrl}, not the poster (${POSTER.embed})`);
+    if (t['twitter:card'] !== 'summary_large_image') fail(`${h}: twitter:card is ${t['twitter:card']}, not summary_large_image`);
+    for (const k of ['og:image', 'twitter:image']) if (!t[k]?.endsWith(POSTER.og)) fail(`${h}: ${k} is ${t[k]}, not the poster (${POSTER.og})`);
+    if (t['og:image:width'] !== '1200' || t['og:image:height'] !== '630') fail(`${h}: og:image is not declared 1200×630`);
+    if (!/AI-generated/.test(t['og:image:alt'] ?? '') || /not by the author/i.test(t['og:image:alt'] ?? '')) fail(`${h}: og:image:alt doesn't say AI-generated (or says "not by the author")`);
+    for (const [path, want] of [[POSTER.embed, '1200x800'], [POSTER.og, '1200x630']] as const) {
+      const r = await fetch(BASE + path);
+      const got = r.ok && /^image\/jpeg/.test(r.headers.get('content-type') ?? '') ? jpegSize(Buffer.from(await r.arrayBuffer())) : `${r.status} ${r.headers.get('content-type')}`;
+      if (got !== want) fail(`${h}: ${path} is ${got}, not a ${want} JPEG`);
+    }
+    const recipe = (await (await fetch(`${BASE}/challenge/poster-recipe.json`)).json()) as { model?: { id?: string; maker?: string }; prompt?: string; references?: unknown[]; cost_usd?: number };
+    if (!recipe.model?.id || !recipe.model.maker || !recipe.prompt || (recipe.references ?? []).length !== 7 || typeof recipe.cost_usd !== 'number') fail(`${h}: the poster's recipe is missing its model, prompt, seven references or cost`);
+  } else {
+    if (!String(e?.imageUrl).endsWith('/embed.png')) fail(`${h}: outside the entry window, fc:miniapp image is ${e?.imageUrl}, not the site's card`);
+    if (t['og:image']) fail(`${h}: outside the entry window, og:image is ${t['og:image']} (want none, as before)`);
+  }
+}
 // A shared ladder win keeps its own card, unchanged (src/app/minpentai/result/page.tsx).
 {
   const h = '/minpentai/result?r=3&s=42';

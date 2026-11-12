@@ -39,8 +39,8 @@ export const CHALLENGE_WORDING = {
       : `From ${windowText()}, make your own version of ${listed(callNames())} on snowmoon.party: start from a published sheet, or from someone else’s remix, change it, and publish. Your version gets its own page, credited back to what you built on.`,
   nextHead: 'What happens next.',
   // Owner, 2026-11-12: "There is no prize for now" is dropped from the rules; the prize line waits for his rewards
-  // decision. DRAFT: the second sentence stays, because Terms §6e says the challenge page sets out what happens after.
-  next: () => 'How the final version is chosen, and any prize, are added to the rules before entries close.',
+  // decision. Matches Terms §6e's backstory sentences (2026-11-12); "the final version" dropped.
+  next: () => 'How any other rewards are chosen is added to the rules before entries close.',
   rulesHead: 'The rules.',
   // Much shorter (owner, 2026-11-12): remixing; only remixes count; additions; Submit is a full entry, one a day, and
   // withdrawing; where to post; the poidh bounty is an optional extra; the Neynar score figure. DRAFT wording, except
