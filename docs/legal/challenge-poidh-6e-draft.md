@@ -1,11 +1,11 @@
-# The poidh backstory bounty: Terms §6e (DRAFT, needs the owner's reread)
+# The poidh backstory bounty: Terms §6e (reread by the owner, 2026-11-12)
 
-**DRAFT.** Written by a coding agent (Claude, a closed model by Anthropic) on 2026-11-12, on branch `terms-6e-poidh`, for
+**Reread by the owner (FID 6786) on 2026-11-12**, with one change: "The backstory bounty runs on poidh (poidh.xyz)."
+Written by a coding agent (Claude, a closed model by Anthropic) on 2026-11-12, on branch `terms-6e-poidh`, for
 the owner's reread. The new sentences are the owner's own words (2026-11-12); the agent only placed them.
 
-Legal texts describe today. This ships in the same release as card 2's link to the bounty, and only after the owner says
-"reread". `LEGAL.ownerReread` is not touched: until the reread, Terms shows its "Draft wording" line and
-`check:principles` P6l is red.
+Legal texts describe today. This ships in the same release as card 2's link to the bounty. On the owner's word,
+`LEGAL.ownerReread.terms` is set to these words (`1mt1kb5`, 2026-11-12), so `check:principles` P6l is green.
 
 ## What changes in practice
 
@@ -33,7 +33,7 @@ Three changes. The rest of §6e is word for word as before. "Before" is quoted f
 | | Text |
 |---|---|
 | Before | There is no prize for now. How the final version is chosen, and any prize, are added to the challenge's rules before entries close. |
-| After | The backstory bounty runs on poidh. Its rules are in the bounty itself, and poidh's own terms cover entering it, choosing the winner and being paid. Submitting to it costs a small network fee on Base, paid to the network, not to us. How any other rewards are chosen is added to the challenge's rules before entries close. |
+| After | The backstory bounty runs on poidh (poidh.xyz). Its rules are in the bounty itself, and poidh's own terms cover entering it, choosing the winner and being paid. Submitting to it costs a small network fee on Base, paid to the network, not to us. How any other rewards are chosen is added to the challenge's rules before entries close. |
 
 "The final version" is dropped (owner, 2026-11-12).
 
@@ -48,12 +48,12 @@ Three changes. The rest of §6e is word for word as before. "Before" is quoted f
 > the Service during the challenge by an account we invited or one that passed the site's check when it was published.
 > Each person can submit one entry a day (Pacific time), for any character, and can withdraw any of them until entries
 > close; a withdrawn entry still uses its day. Admins can make pictures, but theirs aren't entries. The backstory bounty
-> runs on poidh. Its rules are in the bounty itself, and poidh's own terms cover entering it, choosing the winner and
+> runs on poidh (poidh.xyz). Its rules are in the bounty itself, and poidh's own terms cover entering it, choosing the winner and
 > being paid. Submitting to it costs a small network fee on Base, paid to the network, not to us. How any other rewards
 > are chosen is added to the challenge's rules before entries close. We may change or end the challenge, and the page
 > will say so.
 
-The Terms words become `qsxabj` (from `1finiyh`). Privacy is unchanged.
+The Terms words become `1mt1kb5` (from `1finiyh`). Privacy is unchanged.
 
 ## The code that matches it
 
