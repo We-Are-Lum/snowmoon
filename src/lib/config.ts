@@ -621,7 +621,8 @@ export const CHALLENGE = {
    * his date"): /challenge shows each as a tile with no picture until it is in `characters`. The date, when the owner
    * sets it, is the day he joins; until then null. Adding him to `characters` (PR E) is what opens his page.
    */
-  joining: { ephelion: null } as Record<string, string | null>,
+  // Lord Ephelion joined on 2026-11-11 (owner: "Ephelion joins tonight"), so no one is left to join.
+  joining: {} as Record<string, string | null>,
   /**
    * Each character's bases (owner, 2026-11-04): published sheets to start from, at most CHALLENGE.baseCount for the
    * character (never more than CHALLENGE.maxBases). Deluin and Gladias have three each: their current default look,
