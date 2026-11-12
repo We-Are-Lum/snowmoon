@@ -34,7 +34,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { drawRules, engine, layout, other, rng as vrng, verdict, type AnyPiece, type Engine, type Kills, type Placement as VPlacement, type World as VWorld } from '../src/lib/minpentai/versions/engine';
 import type { Settings } from '../src/lib/minpentai/versions/schema';
 import { LADDER_LEVELS, SEARCH_LEVELS, TOP_LEVEL, searchPlan } from '../src/lib/minpentai/versions/search';
-import { COMPUTERS, FALLBACK_LEVEL, RULESETS as SOLO_RULESETS, autopilot, newSolo, planComputer, rulesOf, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { COMPUTERS, FALLBACK_LEVEL, REVISIONS, RULESETS as SOLO_RULESETS, autopilot, newSolo, planComputer, rulesOf, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 import { settings as snapSettings } from '../src/lib/minpentai/snap/versions';
 
 let pass = 0;
@@ -266,15 +266,20 @@ check('twins: the search computer, every level (0-3, and Play\'s Easy and Fair),
     ['Easy', { level: -1, config: LADDER_LEVELS[1] }], ['Fair', { level: -1, config: LADDER_LEVELS[2] }],
   ];
   let n = 0;
-  for (const [name] of ALL_RULESETS) {
-    const ps = POS.get(name)!, comp = name in COMPUTERS ? COMPUTERS[name as RulesetName] : {};
+  // Each ruleset's computer, and its revised computer where it has one (REVISIONS: book-4's guarding computer).
+  const comps = ALL_RULESETS.flatMap(([name]) => [
+    [name, name, name in COMPUTERS ? COMPUTERS[name as RulesetName] : {}] as const,
+    ...(REVISIONS[name as RulesetName] ? [[`${name} revision ${REVISIONS[name as RulesetName]!.computer}`, name, { book: REVISIONS[name as RulesetName]!.book, comp: REVISIONS[name as RulesetName]!.comp }] as const] : []),
+  ]);
+  for (const [label, name, comp] of comps) {
+    const ps = POS.get(name)!;
     for (const [lname, lv] of levels) {
       // The deepest levels are slow: fewer positions for them.
       const some = lv.level >= 2 ? ps.filter((_, i) => i % 6 === 1) : ps.filter((_, i) => i % 2 === 0);
       for (const p of some) for (const o of ['A', 'C'] as const) {
         const pts = (p.w.step === 0 ? p.s.setupPoints : p.s.points) + p.saved[o];
         const why = twinsAgree(p, o, 100 + n, (w) => searchPlan({ e: p.e, s: p.s, o, view: w, lastSeen: { ...p.ls[o] }, snap: p.e.towers(w, o), points: pts, rng: vrng(p.seed * 3 + p.turn), ...lv, ...comp }).placements);
-        if (why) return `${name}, ${lname}: ${why}`;
+        if (why) return `${label}, ${lname}: ${why}`;
         n++;
       }
     }

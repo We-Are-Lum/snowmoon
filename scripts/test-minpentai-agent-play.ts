@@ -21,7 +21,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { verdict, type AnyPiece, type Kills, type Placement } from '../src/lib/minpentai/versions/engine';
-import { CURRENT, DRAFTS, RULESETS, draftInfo, takeTurnOnPage, turnFrames, turnSummaries, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
+import { CURRENT, DRAFTS, REVISIONS, RULESETS, draftInfo, takeTurnOnPage, turnFrames, turnSummaries, autopilot, checkComputer, planComputer, ordersText, linkOpens, newSolo, parseOrders, recordOf, replay, resign, rulesFor, rulesOf, setStanding, simulate, SoloError, submit, symbolLaunches, viewFor, type RulesetName, type SoloMatch } from '../src/lib/minpentai/agent-play/solo';
 
 let checks = 0;
 const ok = (cond: unknown, what: string) => { checks++; assert.ok(cond, what); };
@@ -252,6 +252,19 @@ playOut('play', 202);
   ok(viewsFog, 'every book-4 view is the same with every hidden enemy piece removed');
   ok(dropped, `every tower your gliders destroyed is reported with its square and counted, and leaves your last-seen (${reported} reported)`);
   ok(checkComputer(json(four)).length === 0, 'a book-4 match plays to the end and replays with its computer');
+  // The computer's revision (2026-11-04): a new book-4 match records revision 2 (the guarding computer); a match
+  // without one, every book-4 match started before, keeps replaying with the first computer.
+  ok(four.computer === REVISIONS['book-4']!.computer && four.computer === 2 && recordOf(four).computer_revision === 2, 'a new book-4 match records the computer revision it is played against, and its record says so');
+  {
+    const old = mk('tbook4000007', 87);
+    delete old.computer;
+    while (!old.end) submit(old, { turn: old.turn, placements: parseOrders(scripted(old), rulesOf(old).s), source: 'agent', final: true, now: now() });
+    ok(checkComputer(json(old)).length === 0 && !('computer_revision' in recordOf(old)), 'a book-4 match without a revision plays and replays with the first computer');
+    ok(checkComputer({ ...json(old), computer: 2 }).some((x) => /computer's orders don't follow/.test(x)), 'replayed as revision 2, its computer moves don\'t follow: the revision matters');
+    let threw = false;
+    try { checkComputer({ ...json(old), computer: 99 }); } catch (x) { threw = x instanceof SoloError; }
+    ok(threw, 'an unknown computer revision is refused');
+  }
   // Symbol gliders see 2 around them: a symbol glider of Cyan's in flight lights the squares beside it.
   const m2 = mk('tbook4000002', 82), r2 = rulesOf(m2);
   m2.w.gl.push({ id: 99, o: 'C', x: 9, y: 7, dx: 1, dy: 0, seed: 1 } as never);
