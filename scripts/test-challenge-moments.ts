@@ -624,6 +624,7 @@ check('config: a current default look per challenge character, each a design id 
     Object.assign(CHALLENGE.dates, keep);
   }
   check('rules: no moment in the intro or the rules', !/moment/i.test(W.intro() + W.rules().join(' ')));
+  check('rules: says new starting pictures and characters may be added during the challenge (owner, 2026-11-11), right after which pictures count', W.rules()[2] === 'New starting pictures and characters may be added during the challenge.' && /^Only remixes count/.test(W.rules()[1]));
   const RV = await import('../src/lib/challenge/rules-view');
   const rv = await RV.rulesView(null);
   check('rules page: no "Draft wording" mark on the page or the intro', rv.draft === null && rv.introDraft === null);
