@@ -214,6 +214,7 @@ export const CARDS: readonly CharacterCard[] = [
   },
   // Lord Ephelion (joined 2026-11-11). Drafted by the coding agent (Claude, a closed model by Anthropic): DRAFT until
   // the owner's OK. The book never describes his looks; it makes clear he is a man (c21-b76).
+  // Approved (owner, 2026-11-11) with one change: the c21-b76 fact replaced by his poster's own words (c3-b5).
   {
     slug: 'ephelion',
     line: 'The Arctic ambassador to Veridia, whose speeches and debates reach Veridians on their screens.',
@@ -224,11 +225,11 @@ export const CARDS: readonly CharacterCard[] = [
     ],
     more: {
       description:
-        'Lord Ephelion speaks for the Arctics in Veridia: in a live debate with the president of Veridia National University, on posters, and in messages that take over screens. His speeches aggravate many Veridians, and the book says he aims to win some of them to the Arctic cause. It never describes his looks.',
+        'Lord Ephelion speaks for the Arctics in Veridia: in a live debate with the president of Veridia National University, on posters, and in messages that take over screens. His speeches aggravate many Veridians, though his poster asks them to join him. It never describes his looks.',
       facts: [
         { text: 'Signs as consul to Veridia', block: 'c3-b5', quote: 'Arctic Empire consul to Veridia.' },
         { text: 'His speeches aggravate people', block: 'c13-b11', quote: 'even Ephelion\'s speeches, it just always aggravates people so much' },
-        { text: 'Wants Veridians to join the Arctic cause', block: 'c21-b76', quote: 'Ephelion\'s goal is to inspire people inside Veridia to join the Arctic cause.' },
+        { text: 'His poster asks Veridians to join him', block: 'c3-b5', quote: 'Join us, and we will build it together.' },
       ],
     },
     appears: [
