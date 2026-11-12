@@ -43,81 +43,163 @@ export function ChallengePicture({ id }: { id: string }) {
   // Until the sign-in is known, neither the maker's "Post it" nor a visitor's "Remix this" (no flash of the wrong one).
   const known = auth.kind !== 'loading';
   return (
-    <div className="mk-page" data-step="published">
-      <nav className="mk-bar mk-bar-end">
+    <div className="mk-page chp" data-step="published">
+      <nav className="mk-bar chp-bar">
+        <Link className="chp-back" href={`/challenge/${v.character}`}>
+          ← {v.name}
+        </Link>
         <Link className="mk-close" href={hub} aria-label={v.w.close}>
           ✕
         </Link>
       </nav>
-      <figure className="mk-figure">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="mk-picture" src={v.url} alt={v.alt} />
-        <figcaption className="mk-cap">
-          <AiTag /> {v.badge && <span className="ch-badge">{v.badge}</span>}
-        </figcaption>
-      </figure>
-      {/* Its backstory, under the picture (owner, 2026-11-09): invented by its maker, not from the book. */}
-      {v.backstory && <BackstoryShown backstory={v.backstory} maker={v.maker} />}
-      {known && mine && <ChallengeShareFirst path={path} w={{ head: v.w.published, texts: v.w.postTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} onCast={setCastHash} />}
-      {/* Anyone else (owner, 2026-11-07): "Remix this" first, not "Post it"; sharing it never says "My remix". */}
-      {known && !mine && (
-        <>
-          {v.remixHref && (
-            <Link className="rl-remix mk-remix-this" href={v.remixHref}>
-              {v.w.remixThis}
-            </Link>
+      <div className="chp-grid">
+        <figure className="mk-figure chp-figure">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="mk-picture chp-img" src={v.url} alt={v.alt} />
+          <figcaption className="mk-cap chp-cap">
+            <AiTag />{v.aiMaker && <span className="chp-ai-maker"> · {v.aiMaker}</span>} {v.badge && <span className="ch-badge">{v.badge}</span>}
+          </figcaption>
+        </figure>
+        <div className="chp-side">
+          {/* Its backstory, under the picture (owner, 2026-11-09): invented by its maker, not from the book. */}
+          {v.backstory && <BackstoryShown backstory={v.backstory} maker={v.maker} />}
+          {known && mine && <ChallengeShareFirst path={path} w={{ head: v.w.published, texts: v.w.postTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} onCast={setCastHash} />}
+          {/* Anyone else (owner, 2026-11-07): "Remix this" first, not "Post it"; sharing it never says "My remix". */}
+          {known && !mine && (
+            <>
+              {v.remixHref && (
+                <Link className="rl-remix mk-remix-this" href={v.remixHref}>
+                  {v.w.remixThis}
+                </Link>
+              )}
+              <ChallengeShareFirst path={path} w={{ head: null, texts: v.w.othersTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} />
+            </>
           )}
-          <ChallengeShareFirst path={path} w={{ head: null, texts: v.w.othersTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} />
-        </>
-      )}
-      {known && mine && v.notYet && (
-        <section className="sf-submit">
-          <p className="ch-not-yet">{v.notYet}</p>
-        </section>
-      )}
-      {known && mine && v.beforeOpen && (
-        <section className="sf-submit">
-          <p className="ch-before-open">
-            {v.beforeOpen.text}
-            <Link href={v.beforeOpen.href}>{v.beforeOpen.link}</Link>
-            {v.beforeOpen.after}
+          {known && mine && v.notYet && (
+            <section className="sf-submit">
+              <p className="ch-not-yet">{v.notYet}</p>
+            </section>
+          )}
+          {known && mine && v.beforeOpen && (
+            <section className="sf-submit">
+              <p className="ch-before-open">
+                {v.beforeOpen.text}
+                <Link href={v.beforeOpen.href}>{v.beforeOpen.link}</Link>
+                {v.beforeOpen.after}
+              </p>
+            </section>
+          )}
+          {v.submit && (
+            <section className="sf-submit" aria-label={v.w.thenSubmit}>
+              <ChallengeSubmit
+                versionId={v.versionId}
+                byFid={v.byFid}
+                words={v.submit}
+                path={path}
+                compact
+                castHash={castHash}
+                before={
+                  <h2 className="sf-head">
+                    {v.w.thenSubmit} <span className="dz-muted">· {v.w.oneADay}</span>
+                  </h2>
+                }
+              />
+            </section>
+          )}
+          {!signedIn && (
+            <p className="mk-signin-line">
+              {v.w.signInLine} <Link href="/challenge/rules">{v.w.rules}</Link>
+            </p>
+          )}
+          <h1 className="mk-title">{v.title}</h1>
+          <p className="dz-muted mk-by">
+            {v.by} · {v.date}
           </p>
-        </section>
-      )}
-      {v.submit && (
-        <section className="sf-submit" aria-label={v.w.thenSubmit}>
-          <ChallengeSubmit
-            versionId={v.versionId}
-            byFid={v.byFid}
-            words={v.submit}
-            path={path}
-            compact
-            castHash={castHash}
-            before={
-              <h2 className="sf-head">
-                {v.w.thenSubmit} <span className="dz-muted">· {v.w.oneADay}</span>
+          {/* The full AI line (owner's rule): the declaration, the model and, for a closed model, its maker. */}
+          <p className="chp-ai" data-slot="ai-line">
+            <span className="chp-ai-chip" aria-hidden="true">
+              AI
+            </span>
+            <span>{v.aiLine}</span>
+          </p>
+          {v.chain.length > 0 && (
+            <section className="chp-chain" aria-labelledby="chp-chain-h">
+              <h2 id="chp-chain-h" className="chp-h">
+                {v.w.remixedFrom}
               </h2>
-            }
-          />
-        </section>
-      )}
-      {!signedIn && (
-        <p className="mk-signin-line">
-          {v.w.signInLine} <Link href="/challenge/rules">{v.w.rules}</Link>
-        </p>
-      )}
-      <h1 className="mk-title">{v.title}</h1>
-      <p className="dz-muted mk-by">{v.by}</p>
-      {v.words && (
-        <p className="mk-words">
-          <span className="dz-muted">{v.w.wordsHead}:</span> “{v.words}”
-        </p>
-      )}
-      {v.note && <p className="dz-muted">{v.note}</p>}
-      {v.posts.length > 0 && <PostedOn versionId={v.versionId} posts={v.posts} />}
-      <p className="mk-links">
-        <Link href={`/image/${v.versionId}`}>{v.w.recipe}</Link> · <Link href="/challenge/entries">{v.w.every}</Link> · <Link href={hub}>{v.w.another}</Link>
-      </p>
+              <ol className="chp-steps">
+                {v.chain.map((c, i) => (
+                  <li key={c.versionId} className={c.current ? 'chp-step chp-current' : 'chp-step'} aria-current={c.current ? 'page' : undefined}>
+                    {i > 0 && (
+                      <span className="chp-arrow" aria-hidden="true">
+                        →
+                      </span>
+                    )}
+                    {c.href ? (
+                      <Link className="chp-thumb" href={c.href} prefetch={false}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        {c.thumb ? <img src={c.thumb} alt="" width={100} height={100} loading="lazy" /> : <span className="cc-empty" />}
+                        <span className="chp-step-by">{c.label}</span>
+                      </Link>
+                    ) : (
+                      <span className="chp-thumb">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        {c.thumb ? <img src={c.thumb} alt="" width={100} height={100} loading="lazy" /> : <span className="cc-empty" />}
+                        <span className="chp-step-by">{c.label}</span>
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
+          {v.note && <p className="dz-muted">{v.note}</p>}
+          {v.posts.length > 0 && <PostedOn versionId={v.versionId} posts={v.posts} />}
+          <details className="chp-made">
+            <summary>{v.w.madeHead}</summary>
+            <dl className="chp-made-list">
+              {v.words && (
+                <>
+                  <dt>{v.w.madeWords}</dt>
+                  <dd className="mk-words">“{v.words}”</dd>
+                </>
+              )}
+              {v.made.style && (
+                <>
+                  <dt>{v.w.madeStyle}</dt>
+                  <dd>{v.made.style}</dd>
+                </>
+              )}
+              {v.made.model && (
+                <>
+                  <dt>{v.w.madeModel}</dt>
+                  <dd>{v.made.model}</dd>
+                </>
+              )}
+              {v.made.startedFrom && (
+                <>
+                  <dt>{v.w.madeFrom}</dt>
+                  <dd>{v.made.startedFrom}</dd>
+                </>
+              )}
+              {v.made.prompt && (
+                <>
+                  <dt>{v.w.madePrompt}</dt>
+                  <dd>
+                    <pre className="chp-prompt">{v.made.prompt}</pre>
+                  </dd>
+                </>
+              )}
+            </dl>
+            <p className="chp-full">
+              <Link href={`/image/${v.versionId}`}>{v.w.madeFull} →</Link>
+            </p>
+          </details>
+          <p className="mk-links">
+            <Link href="/challenge/entries">{v.w.every}</Link> · <Link href={hub}>{v.w.another}</Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

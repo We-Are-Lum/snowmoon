@@ -37,6 +37,19 @@ export const PICTURE_WORDING = {
   /** The owner's line (2026-11-05, answer 7), with "Rules" beside it; no other rules text on the flow. */
   signInLine: 'Sign in with Farcaster, Lens or Bluesky to enter.',
   recipe: 'How it was made',
+  /**
+   * The redesigned page (Claude Design's handoff, screen 4; owner-approved plan 2026-11-11). DRAFT until the owner's OK:
+   * "Remixed from", "This one", "Style", "Model", "Started from", "The exact prompt", "Full recipe". The AI line is the
+   * site's own declaration ("AI-generated, not by the author") with the model's name and terms from the model list.
+   */
+  aiLine: 'AI-generated, not by the author',
+  remixedFrom: 'Remixed from',
+  thisOne: 'This one',
+  madeStyle: 'Style',
+  madeModel: 'Model',
+  madeFrom: 'Started from',
+  madePrompt: 'The exact prompt',
+  madeFull: 'Full recipe',
   another: 'Make another',
   /** While pictures aren't the entries yet (CHALLENGE.pictureEntries off: Terms and Privacy don't say so yet). */
   notEntriesYet: 'Pictures can’t be submitted as entries yet.',

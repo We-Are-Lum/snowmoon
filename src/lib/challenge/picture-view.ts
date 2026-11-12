@@ -9,6 +9,9 @@ import { shownMoment } from './moment-switch';
 import { challengePictures } from './pictures';
 import { postsFor } from './posts';
 import { backstoryOf } from './backstories';
+import { remixLines } from './lineage';
+import { imageByVersion } from '../images/data';
+import { closedModel, modelName, modelTerms } from '../images/recipe-lines';
 import { challengeOpenNow, phase } from './rules';
 import { submitWords, type SubmitWords } from './sheet-lines';
 import { CHALLENGE_WORDING as CW } from './wording';
@@ -25,6 +28,40 @@ import type { PostedOnItem } from '~/components/posted-on';
  * component (src/components/challenge-picture.tsx). Read-only: never asks Neynar or anyone.
  */
 type Sql = postgres.Sql;
+
+/** One step of a picture's credit chain (the redesign's CreditChain): a picture or a base it was remixed from. */
+export type ChainStep = { versionId: string; thumb: string | null; href: string | null; label: string; current: boolean };
+
+/**
+ * The credit chain (owner-approved redesign, screen 4): what the picture was remixed from, oldest first (src/lib/
+ * challenge/lineage.ts), then the picture itself. A base is labelled "Base · {maker}"; a picture by its maker. Only
+ * published steps link. Read-only.
+ */
+async function creditChain(sql: Sql, p: { elementId: string; versionId: string; thumb: string | null }, self: string): Promise<ChainStep[]> {
+  const line = (await remixLines(sql, [p.elementId]).catch(() => new Map())).get(p.elementId) ?? [];
+  const ids = line.map((a: { versionId: string }) => a.versionId);
+  const rows = ids.length
+    ? await sql<{ version_id: string; element_type: string; created_by_fid: number; status: string; asset_url: string | null; body: Record<string, unknown> | null; p_by_name: string | null }[]>`
+        select v.id::text as version_id, e.element_type, e.created_by_fid, e.status, v.asset_url, v.body, r.params->>'by_name' as p_by_name
+        from studio.element_versions v join studio.elements e on e.id = v.element_id left join studio.recipes r on r.id = v.recipe_id
+        where v.id in ${sql(ids)}`.catch(() => [])
+    : [];
+  const by = new Map(rows.map((r) => [r.version_id, r]));
+  const steps: ChainStep[] = ids
+    .slice()
+    .reverse()
+    .map((id: string) => {
+      const r = by.get(id);
+      if (!r) return null;
+      const b = (r.body ?? {}) as { views?: { front?: { url?: string } }; by_name?: string; role?: string };
+      const image = r.element_type === 'image';
+      const who = image ? designByline(r.p_by_name, Number(r.created_by_fid)) : designByline(b.by_name ?? null, Number(r.created_by_fid), b.role ?? null);
+      const published = r.status === 'published';
+      return { versionId: id, thumb: image ? r.asset_url : (b.views?.front?.url ?? null), href: published ? (image ? `/challenge/p/${id}` : `/references/designs/${id}`) : null, label: image ? who : `${L.baseLabel} · ${who}`, current: false };
+    })
+    .filter((x: ChainStep | null): x is ChainStep => x !== null);
+  return [...steps, { versionId: p.versionId, thumb: p.thumb, href: null, label: self, current: true }];
+}
 
 const callName = (slug: string) => (bookCharacter(slug)?.name ?? slug).split(' ')[0];
 
@@ -45,6 +82,10 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
   // Its backstory (owner, 2026-11-09): in its version's body (new pictures only).
   const [vb] = await sql<{ body: unknown }[]>`select body from studio.element_versions where id = ${p.versionId}`;
   const backstory = backstoryOf(vb?.body);
+  // The redesign (screen 4): the model and its maker, the date, the chain and the recipe's main lines.
+  const im = await imageByVersion(sql, p.versionId).catch(() => null);
+  const model = im?.model ? `${modelName(im.model)}, ${modelTerms(im.model)}` : null;
+  const chain = await creditChain(sql, p, P.thisOne);
   return {
     versionId: p.versionId,
     /** Remixing it (anyone but its maker): its remix screen from the owner's flip (before the open date too) until entries close; none after. */
@@ -70,7 +111,20 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
     note: standing?.kind === 'admin' ? CW.adminNote : !CHALLENGE.pictureEntries ? P.notEntriesYet : null,
     submit,
     posts,
-    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: P.oneADay, postTexts: sameTexts(P.postText(name, m?.title ?? null)), othersTexts: textsFor([shareMaker(p.byName, p.byFid)], (who) => (m ? P.othersText(name, m.title, who) : P.othersTextPlain(name, who))), remixThis: P.remixThis, shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: P.thenSubmit, on: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') } },
+    /** "AI-generated, not by the author · {model}, a closed model by {maker}" (the full line; owner's rule). */
+    aiLine: model ? `${P.aiLine} · ${model}` : P.aiLine,
+    /** A closed model's maker, for the phone's chip ("AI · OpenAI"); null for an open model. */
+    aiMaker: im?.model ? (closedModel(im.model)?.closed ? (closedModel(im.model)?.maker ?? null) : null) : null,
+    /** The day it was made, Pacific time ("14 Nov"). */
+    date: new Date(p.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'America/Los_Angeles' }),
+    chain: chain.length > 1 ? chain : [],
+    made: {
+      style: im?.style?.text ?? null,
+      model,
+      startedFrom: chain.length > 1 ? chain[chain.length - 2].label : null,
+      prompt: im?.prompt ?? null,
+    },
+    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: P.oneADay, postTexts: sameTexts(P.postText(name, m?.title ?? null)), othersTexts: textsFor([shareMaker(p.byName, p.byFid)], (who) => (m ? P.othersText(name, m.title, who) : P.othersTextPlain(name, who))), remixThis: P.remixThis, remixedFrom: P.remixedFrom, madeHead: P.recipe, madeWords: P.wordsHead, madeStyle: P.madeStyle, madeModel: P.madeModel, madeFrom: P.madeFrom, madePrompt: P.madePrompt, madeFull: P.madeFull, shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: P.thenSubmit, on: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') } },
   };
 }
 export type PictureView = NonNullable<Awaited<ReturnType<typeof pictureView>>>;

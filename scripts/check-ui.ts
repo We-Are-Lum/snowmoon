@@ -1977,6 +1977,28 @@ async function checkChallengeLanding() {
       const missing = await page.goto(`${LOCAL}/challenge/lektor`, { waitUntil: 'load' });
       if (missing?.status() !== 404) fail(`/challenge/lektor ${tag}: answers ${missing?.status()}, not 404`);
 
+      // A picture's page: the redesign's screen 4 (owner-approved plan, 2026-11-11). The back link to its character, the
+      // full AI line (the declaration and the model's name and terms), the credit chain (its base, then itself), "How it
+      // was made" closed with the full recipe linked, two columns on a desktop, no sideways scroll.
+      {
+        const pic = FX.remixes.find((r) => r.character === 'zei')!;
+        await at(`/challenge/p/${pic.versionId}`, 'h1.mk-title');
+        if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/p ${tag}: scrolls sideways`);
+        const back = page.locator('.chp-back');
+        if ((await back.getAttribute('href')) !== '/challenge/zei' || !((await back.textContent()) ?? '').includes('Zei')) fail(`/challenge/p ${tag}: no back link to Zei's page`);
+        const ai = ((await page.locator('[data-slot="ai-line"]').textContent()) ?? '').replace(/\s+/g, ' ').trim();
+        if (!/^AI AI-generated, not by the author · .+, (open weights|a closed model by )/.test(ai)) fail(`/challenge/p ${tag}: the AI line reads "${ai}", not the declaration with the model and its terms`);
+        const steps = await page.locator('.chp-steps > li').evaluateAll((els) => els.map((e) => `${e.getAttribute('aria-current') ?? ''}|${(e.querySelector('.chp-step-by')?.textContent ?? '').trim()}`));
+        if (steps.length !== 2 || !steps[0].startsWith('|Base · ') || steps[1] !== 'page|This one') fail(`/challenge/p ${tag}: the credit chain reads ${steps.join(', ')}, not its base then "This one"`);
+        const made = page.locator('details.chp-made');
+        if ((await made.count()) !== 1 || (await made.evaluate((d) => (d as HTMLDetailsElement).open)) || ((await made.locator('summary').textContent()) ?? '').trim() !== 'How it was made' || (await made.locator(`a[href="/image/${pic.versionId}"]`).count()) !== 1) fail(`/challenge/p ${tag}: no closed "How it was made" with the full recipe linked`);
+        if (w >= 1024) {
+          const [f, sd] = await Promise.all([page.locator('.chp-figure').boundingBox(), page.locator('.chp-side').boundingBox()]);
+          if (!f || !sd || sd.x < f.x + f.width || Math.abs(sd.width - 440) > 2) fail(`/challenge/p ${tag}: not two columns (the picture, then a 440px column)`);
+        }
+        await snap('picture', true);
+      }
+
       // The remix screen (owner, 2026-11-08): the picture small, one box, the Style row (the published styles, Random,
       // Write your own; Zei's base starts on its own style), the Model row (one chip, the model and its maker), Make it;
       // no moments.
