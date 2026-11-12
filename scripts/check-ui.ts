@@ -1927,6 +1927,14 @@ async function checkChallengeLanding() {
       if (ways.join('|') !== 'Remix a picture|Add a backstory|Join the collab') fail(`/challenge ${tag}: the ways read ${ways.join(', ')}, not "Remix a picture, Add a backstory, Join the collab"`);
       const details = (await page.locator('.chh-detail summary > span:first-child').allTextContents()).map((t) => t.trim());
       if (details.join('|') !== [LW.home.newTitle, LW.home.rulesTitle, LW.home.aboutTitle].join('|')) fail(`/challenge ${tag}: the details read ${details.join(', ')}`);
+      // Owner, 2026-11-12: card 1 is a whole entry; card 2 "Extra credit", card 3 "Optional"; "New to Snowmoon?" is about
+      // the book, with "Learn more" linking to /about.
+      const tags = (await page.locator('.chh-way').evaluateAll((els) => els.map((e) => e.querySelector('.chh-tag')?.textContent?.trim() ?? ''))).join('|');
+      if (tags !== LW.home.ways.map((x) => x.tag).join('|') || !/Extra credit\|Optional$/.test(tags)) fail(`/challenge ${tag}: the cards' tags read ${tags}`);
+      const way1 = ((await page.locator('.chh-way').first().locator('p').textContent()) ?? '').trim();
+      if (way1 !== LW.home.ways[0].body) fail(`/challenge ${tag}: card 1 reads "${way1}"`);
+      const newTo = page.locator('.chh-detail').first();
+      if (!((await newTo.textContent()) ?? '').includes(LW.home.newBody) || (await newTo.locator('a[href="/about"]').count()) !== 1) fail(`/challenge ${tag}: "New to Snowmoon?" isn't the book line with a "Learn more" link to /about`);
       if (((await page.locator('.chh-pitch').textContent()) ?? '').trim() !== LW.home.pitch) fail(`/challenge ${tag}: the pitch isn't the owner's`);
       if (await page.locator('.ch-pick, .cc-hero').count()) fail(`/challenge ${tag}: the old random block or big picture is still on the hub`);
       await zei.scrollIntoViewIfNeeded();
@@ -1950,6 +1958,24 @@ async function checkChallengeLanding() {
         opened = await page.waitForURL('**/challenge/zei', { timeout: 10000, waitUntil: 'commit' }).then(() => true, () => false);
       }
       if (!opened) fail(`/challenge ${tag}: tapping Zei's picture didn't open /challenge/zei`);
+
+      // The rules page (owner, 2026-11-12): the short rules; on a desktop "Entries so far" in its own column beside them,
+      // on a phone below them as before.
+      await at('/challenge/rules', '.ch-rules-page');
+      await checkFloors(page, `/challenge/rules ${tag} (local data)`, scheme);
+      if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/rules ${tag}: scrolls sideways`);
+      {
+        const { CHALLENGE_WORDING: CW } = await import('../src/lib/challenge/wording');
+        const items = (await page.locator('.ch-rules li').allTextContents()).map((t) => t.trim());
+        if (items.join('|') !== [...CW.rules(), CW.adminsLine].join('|')) fail(`/challenge/rules ${tag}: the rules read ${items.join(' | ')}`);
+        if (/no prize for now/i.test((await page.locator('.ch-rules-page').textContent()) ?? '')) fail(`/challenge/rules ${tag}: it still says "no prize for now"`);
+        const main = await page.locator('.ch-rules-main').boundingBox();
+        const side = await page.locator('.ch-rules-side').boundingBox();
+        if (!main || !side) fail(`/challenge/rules ${tag}: no rules column or entries column`);
+        else if (w >= 1024 ? !(side.x >= main.x + main.width && Math.abs(side.y - main.y) < 40) : !(side.y >= main.y + main.height - 1 && Math.abs(side.x - main.x) < 2)) fail(`/challenge/rules ${tag}: "Entries so far" is ${w >= 1024 ? 'not in a column beside the rules' : 'not below the rules'} (${JSON.stringify({ main, side })})`);
+        if (((await page.locator('.ch-rules-side h2').first().textContent()) ?? '').trim() === '') fail(`/challenge/rules ${tag}: the entries column has no heading`);
+      }
+      await snap('rules', true);
 
       // A character's page (owner, 2026-11-08): the name, the one line, "Bases", then "Remixes": every published picture of
       // the character, newest first, whole at 16:9, each opening its remix screen; no count. Gladias has none yet.
@@ -2323,9 +2349,9 @@ try {
       if (/Draft wording/.test(text)) fail(`/challenge/rules (${scheme}): a "Draft wording" mark is still on the rules page`);
       if (!/(A new sheet|A picture) made from scratch isn’t an entry/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say only remixes count`);
       if (!/Entries (open|close|closed) .*Pacific/.test(text)) fail(`/challenge/rules (${scheme}): no deadline in Pacific time`);
-      if (!/submit one remix a day/.test(text)) fail(`/challenge/rules (${scheme}): the rules are missing`);
+      if (!/submit one (remix|picture) a day/.test(text)) fail(`/challenge/rules (${scheme}): the rules are missing`);
       if (!/theirs aren’t entries/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say admins' pictures aren't entries`);
-      if (!/There is no prize for now\./.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say there is no prize for now`);
+      // "There is no prize for now" left the rules (owner, 2026-11-12); the local run checks the new rules word for word.
       if (!/Farcaster, Lens or Bluesky account that passes the site’s check/.test(text)) fail(`/challenge/rules (${scheme}): it doesn't say who can enter`);
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/rules (${scheme}): scrolls sideways`);
       await shot(page, 'challenge-rules', scheme);

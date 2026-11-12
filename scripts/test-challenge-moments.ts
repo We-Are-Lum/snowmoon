@@ -637,7 +637,15 @@ check('config: a current default look per challenge character, each a design id 
     check('home notes: each quote is the book\'s words in its block, and the place is part of it; Deluin is Redshire (c14-b31); Bai, Seila and Mu have none', homesOk(HOMES) && HOMES.deluin?.place === 'Redshire' && HOMES.deluin.block === 'c14-b31' && !HOMES.bai && !HOMES.seila && !HOMES.mu);
     check('home notes: planted, a note not in its block (Deluin from the United Cities) fails', !homesOk({ ...HOMES, deluin: { place: 'United Cities', block: 'c14-b31', quote: 'Deluin from the United Cities' } }));
   }
-  check('rules: says new starting pictures and characters may be added during the challenge (owner, 2026-11-11), right after which pictures count', W.rules()[2] === 'New starting pictures and characters may be added during the challenge.' && /^Only remixes count/.test(W.rules()[1]));
+  check('rules: says new starting pictures and characters may be added during the challenge (owner, 2026-11-11), right after which pictures count', W.rules()[1] === 'New starting pictures and characters may be added during the challenge.' && /Only remixes count/.test(W.rules()[0]));
+  // Owner, 2026-11-12: much shorter rules; posts anywhere, including X, but the one you submit is on Farcaster, Lens or Bluesky.
+  check('rules: six lines (withdrawing and the score figure kept), then the admins line with no names (owner, 2026-11-12)', W.rules().length === 6 && W.rules().some((r) => r.includes('withdraw a submission')) && W.rules().some((r) => r.includes('Neynar score of at least')) && W.adminsLine === 'Admins can make pictures too, but theirs aren’t entries.' && !/@garance|owner/.test(W.adminsLine));
+  check('rules: share anywhere, including X; the submitted post on Farcaster, Lens or Bluesky (owner, 2026-11-12)', W.rules().includes('Share your picture anywhere, including X. The post you submit must be on Farcaster, Lens or Bluesky, because that’s where the site can check it’s yours.'));
+  {
+    const LWm = (await import('../src/lib/challenge/landing-wording')).LANDING_WORDING;
+    check('home: card 1 is the owner\'s whole-entry line, with no prize claim until the rewards are in the rules (owner, 2026-11-12)', LWm.home.ways[0].body === 'Remix a character: pick one, describe your change, publish, then post it and submit your post. That’s a full entry. You can stop here.' && !/prize/i.test(LWm.home.ways.map((x) => x.body).join(' ')));
+  }
+  check('rules: no "no prize for now" (owner, 2026-11-12: the prize line waits for his rewards decision)', !/no prize/i.test([W.next(), ...W.rules()].join(' ')));
   const RV = await import('../src/lib/challenge/rules-view');
   const rv = await RV.rulesView(null);
   check('rules page: no "Draft wording" mark on the page or the intro', rv.draft === null && rv.introDraft === null);

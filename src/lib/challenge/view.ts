@@ -122,7 +122,7 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
       return { n: w.n, title: w.title, tag: w.tag, body: w.body, href, pending: x.link && !href ? (x.pending ?? null) : null };
     }),
     details: [
-      { title: H.newTitle, body: [W.intro()] },
+      { title: H.newTitle, body: [H.newBody], link: { href: '/about', text: H.newLink } },
       { title: H.rulesTitle, body: [L.line()], link: { href: '/challenge/rules', text: L.rulesTitle } },
       { title: H.aboutTitle, body: [H.about] },
     ],

@@ -659,26 +659,29 @@ check('the guidance line is shown', share.includes('If you’re remixing someone
 // --- The rules copy (owner's decisions, 2026-10-31) -------------------------------------------------------------
 const W = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
 const copy = [W.intro(), W.next(), ...W.rules(), W.adminsLine].join(' ');
-// Owner, 2026-11-05 evening: no prize for now; how the final version is chosen, and any prize, come later.
+// Owner, 2026-11-05 evening: no prize for now; how the final version is chosen, and any prize, come later. Owner,
+// 2026-11-12: "There is no prize for now" is dropped from the rules; the prize line waits for his rewards decision.
 const NO_PRIZE = 'There is no prize for now.';
 const LATER = 'How the final version is chosen, and any prize, are added to the rules before entries close.';
 const MINT_PLAN = NO_PRIZE;
 const PROMISES = /\b(mint(ed|s|ing)?|rewards?|reward pot|credit test|deep fund\w*|payouts?|split on|token for you|you will (get|receive)|guaranteed?|\$\s?\d|\d+\s?(ETH|USDC|dollars))\b|\bwallet\b/i;
 const NO_BOUNTY = /\bbount(y|ies)\b|\bpoidh\b/i;
+const POIDH_RULE = 'The poidh bounty for backstories is an optional extra.';
 function copyProblems(t: string): string[] {
   const p: string[] = [];
-  if (!t.includes(NO_PRIZE) || !t.includes(LATER)) p.push('the rules don\'t say there is no prize for now, and that how the final version is chosen comes before entries close');
+  if (!t.includes(LATER)) p.push('the rules don\'t say how the final version is chosen comes before entries close');
   const m = t.match(PROMISES);
   if (m) p.push(`promises or a wallet path: "${m[0]}"`);
   if (!/(A new sheet|A picture) made from scratch isn’t an entry/.test(t)) p.push('it does not say only remixes count');
-  // No bounties at all (owner, 2026-11-04): no bounty, no poidh, anywhere in the challenge's words.
-  if (NO_BOUNTY.test(t)) p.push(`a bounty is back: "${t.match(NO_BOUNTY)![0]}"`);
+  // No bounties (owner, 2026-11-04), except the poidh bounty as an optional extra (owner, 2026-11-11 and 2026-11-12).
+  const tb = t.replace(POIDH_RULE, '');
+  if (NO_BOUNTY.test(tb)) p.push(`a bounty is back: "${tb.match(NO_BOUNTY)![0]}"`);
   return p;
 }
-check('the rules copy: no prize for now, the final version and any prize decided before entries close, remixes only, no bounty, no promises (mint, rewards, payouts), no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
+check('the rules copy: the final version and any prize decided before entries close, remixes only, no bounty but the poidh line, no promises (mint, rewards, payouts), no wallet path', copyProblems(copy).length === 0 && !copy.includes(NO_PRIZE), copyProblems(copy).join('; '));
 check('the rules name the six characters most named in the book first (owner, 2026-11-04)', W.intro().includes('Zei, Gladias, Bai, Seila, Deluin or Mu'));
 proof('a promised mint is caught', copyProblems(`${copy} Each version is then minted as an open edition in Snowmoon WIP.`).length > 0);
-proof('rules without "no prize for now" are caught', copyProblems(copy.replaceAll(NO_PRIZE, '')).length > 0);
+proof('rules without "how the final version is chosen" are caught', copyProblems(copy.replaceAll(LATER, '')).length > 0);
 proof('a reward pot is caught', copyProblems(`${copy} Plus an extra reward pot.`).length > 0);
 proof('a wallet path back in the rules is caught', copyProblems(`${copy} Or a wallet linked to one.`).length > 0);
 proof('a bounty back in the rules (the old per-character rule) is caught', copyProblems(`${copy} There is one poidh bounty for each character.`).length > 0);
@@ -689,17 +692,20 @@ proof('a bounty back in the rules (the old per-character rule) is caught', copyP
   // Only these exact lines of landing-wording.ts are allowed; any other bounty or poidh mention still fails.
   const BOUNTY_ALLOWED = [
     "      // The owner's words (2026-11-11). The link is CHALLENGE_LINKS.bounty; until it is set, the line ends \"(bounty opens soon)\".",
-    "      { n: '2', title: 'Add a backstory', tag: '', body: 'Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', link: 'bounty' as const, pending: '(bounty opens soon)' },",
+    "      // Tagged \"Extra credit\" (owner, 2026-11-12).",
+    "      { n: '2', title: 'Add a backstory', tag: 'Extra credit', body: 'Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', link: 'bounty' as const, pending: '(bounty opens soon)' },",
     "export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: null, collab: 'https://collab.venturetothex.com/c/snowmoon' };",
   ];
-  const stripAllowed = (f: string, text: string) => (f.endsWith('landing-wording.ts') ? text.split('\n').filter((l) => !BOUNTY_ALLOWED.includes(l)).join('\n') : text);
+  // The rules' poidh line (owner, 2026-11-12) and its comment, in wording.ts.
+  const RULE_ALLOWED = ["    'The poidh bounty for backstories is an optional extra.',", "  // withdrawing; where to post; the poidh bounty is an optional extra; the Neynar score figure. DRAFT wording, except"];
+  const stripAllowed = (f: string, text: string) => (f.endsWith('landing-wording.ts') ? text.split('\n').filter((l) => !BOUNTY_ALLOWED.includes(l)).join('\n') : f.endsWith('challenge/wording.ts') || f === 'wording.ts' ? text.split('\n').filter((l) => !RULE_ALLOWED.includes(l)).join('\n') : text);
   const pages = ['src/app/challenge', 'src/lib/challenge'].flatMap((d) => readdirSync(path.join(ROOT, d), { recursive: true }).map(String).filter((f) => /\.tsx?$/.test(f)).map((f) => stripAllowed(f, readFileSync(path.join(ROOT, d, f), 'utf8')))).join('\n');
-  const wordsNoCard = words.replaceAll('Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', '').replaceAll('(bounty opens soon)', '').replaceAll('bounty', (m) => m);
+  const wordsNoCard = words.replaceAll('Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', '').replaceAll(POIDH_RULE, '').replaceAll('(bounty opens soon)', '').replaceAll('bounty', (m) => m);
   check('no bounty: none in the config, the wording or the challenge\'s pages, except the home\'s "Add a backstory" card (owner, 2026-11-11)', !('bounties' in CHALLENGE) && !('bountyAmount' in CHALLENGE) && !NO_BOUNTY.test(wordsNoCard) && !NO_BOUNTY.test(pages), (wordsNoCard.match(NO_BOUNTY) ?? pages.match(NO_BOUNTY) ?? [''])[0]);
   proof('a second bounty mention in landing-wording.ts is caught (the exception is those lines only)', NO_BOUNTY.test(stripAllowed('landing-wording.ts', "x\n  more: 'A poidh bounty for Zei.',\n")));
   proof('a bounty planted in a page is caught', NO_BOUNTY.test(`${pages}\n<p>The poidh bounty</p>`));
 }
-proof('rules without "forks only" are caught', copyProblems(copy.replace('A new sheet made from scratch isn’t an entry.', '')).length > 0);
+proof('rules without "forks only" are caught', copyProblems(copy.replace('A picture made from scratch isn’t an entry.', '')).length > 0);
 
 // --- Sheets open to everyone only inside the window, and only once Privacy says so -------------------------------
 {
@@ -1429,7 +1435,8 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('c no new Neynar lookup: only the Generate gate, the assistant\'s gate and the publish recorder call it (and its own file)', lookups.join() === ['src/lib/challenge/record.ts', 'src/lib/chat/gate.ts', 'src/lib/images/gate.ts', 'src/lib/images/neynar.ts'].join(), lookups.join());
   // d. The rule says an account below the check can't remix.
   const rules = CW.rules().join(' ');
-  check('d the rule says an account below the check can\'t remix', /can’t remix or enter/.test(rules) && !/To count as an entry, sign in/.test(rules));
+  // Owner, 2026-11-12: the rules are much shorter; who can enter is said once, up front, on the rules page (whoCanEnter).
+  check('d the rules page says up front which accounts can enter, and the rules don\'t say "To count as an entry, sign in"', /passes the site’s check/.test(CW.whoCanEnter()) && !/To count as an entry, sign in/.test(rules));
   // e. Remix, not Fork; the entry line at publish; the share text in the window.
   check('e1 the button and the form\'s title say "Remix" (one wording, every style and sheet)', IW.page.fork === 'Remix' && IW.form.fork === 'Remix' && /\{W\.page\.fork\}/.test(read('src/components/design-bar.tsx')) && /W\.form\.fork/.test(read('src/app/references/designs/new/page.tsx')));
   check('e1 no "Fork" left in what people read', !walk('src').some((f) => /'[^']*\bFork\b[^']*'/.test(stripComments(read(f)))));
