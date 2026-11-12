@@ -664,15 +664,16 @@ const copy = [W.intro(), W.next(), ...W.rules(), W.adminsLine].join(' ');
 // Owner, 2026-11-05 evening: no prize for now; how the final version is chosen, and any prize, come later. Owner,
 // 2026-11-12: "There is no prize for now" is dropped from the rules; the prize line waits for his rewards decision.
 const NO_PRIZE = 'There is no prize for now.';
-const LATER = 'How the final version is chosen, and any prize, are added to the rules before entries close.';
+const LATER = 'How any other rewards are chosen is added to the rules before entries close.';
 const MINT_PLAN = NO_PRIZE;
 const PROMISES = /\b(mint(ed|s|ing)?|rewards?|reward pot|credit test|deep fund\w*|payouts?|split on|token for you|you will (get|receive)|guaranteed?|\$\s?\d|\d+\s?(ETH|USDC|dollars))\b|\bwallet\b/i;
 const NO_BOUNTY = /\bbount(y|ies)\b|\bpoidh\b/i;
 const POIDH_RULE = 'The poidh bounty for backstories is an optional extra.';
 function copyProblems(t: string): string[] {
   const p: string[] = [];
-  if (!t.includes(LATER)) p.push('the rules don\'t say how the final version is chosen comes before entries close');
-  const m = t.match(PROMISES);
+  if (!t.includes(LATER)) p.push('the rules don\'t say how any other rewards are chosen comes before entries close');
+  // "How any other rewards are chosen…" (Terms §6e, owner 2026-11-12) is the one place "rewards" may appear.
+  const m = t.replace(LATER, '').match(PROMISES);
   if (m) p.push(`promises or a wallet path: "${m[0]}"`);
   if (!/(A new sheet|A picture) made from scratch isn’t an entry/.test(t)) p.push('it does not say only remixes count');
   // No bounties (owner, 2026-11-04), except the poidh bounty as an optional extra (owner, 2026-11-11 and 2026-11-12).
@@ -683,7 +684,7 @@ function copyProblems(t: string): string[] {
 check('the rules copy: the final version and any prize decided before entries close, remixes only, no bounty but the poidh line, no promises (mint, rewards, payouts), no wallet path', copyProblems(copy).length === 0 && !copy.includes(NO_PRIZE), copyProblems(copy).join('; '));
 check('the rules name the characters most named in the book first, Lord Ephelion by his title (owner, 2026-11-04 and 2026-11-11)', W.intro().includes('Zei, Gladias, Bai, Seila, Deluin, Mu or Lord Ephelion'));
 proof('a promised mint is caught', copyProblems(`${copy} Each version is then minted as an open edition in Snowmoon WIP.`).length > 0);
-proof('rules without "how the final version is chosen" are caught', copyProblems(copy.replaceAll(LATER, '')).length > 0);
+proof('rules without "how any other rewards are chosen" are caught', copyProblems(copy.replaceAll(LATER, '')).length > 0);
 proof('a reward pot is caught', copyProblems(`${copy} Plus an extra reward pot.`).length > 0);
 proof('a wallet path back in the rules is caught', copyProblems(`${copy} Or a wallet linked to one.`).length > 0);
 proof('a bounty back in the rules (the old per-character rule) is caught', copyProblems(`${copy} There is one poidh bounty for each character.`).length > 0);
@@ -696,7 +697,9 @@ proof('a bounty back in the rules (the old per-character rule) is caught', copyP
     "      // The owner's words (2026-11-11). The link is CHALLENGE_LINKS.bounty; until it is set, the line ends \"(bounty opens soon)\".",
     "      // Tagged \"Extra credit\" (owner, 2026-11-12).",
     "      { n: '2', title: 'Add a backstory', tag: 'Extra credit', body: 'Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', link: 'bounty' as const, pending: '(bounty opens soon)' },",
-    "export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: null, collab: 'https://collab.venturetothex.com/c/snowmoon' };",
+    "export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: 'https://poidh.xyz/base/bounty/1546', collab: 'https://collab.venturetothex.com/c/snowmoon' };",
+    " * The bounty (owner, 2026-11-12): poidh.xyz's bounty 1546, \"Snowmoon Character Backstory\", id 560 on the contract. It",
+    " * goes live only with Terms §6e's bounty sentences (branch terms-6e-poidh). */",
   ];
   // The rules' poidh line (owner, 2026-11-12) and its comment, in wording.ts.
   const RULE_ALLOWED = ["    'The poidh bounty for backstories is an optional extra.',", "  // withdrawing; where to post; the poidh bounty is an optional extra; the Neynar score figure. DRAFT wording, except"];
