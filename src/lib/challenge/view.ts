@@ -10,7 +10,7 @@ import { basesOf, baseCountOf, firstRemixesOf, phase, shortDateText, windowText 
 import { FEED_PAGE, cursorOf } from './remixes';
 import { homeOf } from './homes';
 import { CHALLENGE_WORDING as W } from './wording';
-import { LANDING_WORDING as L } from './landing-wording';
+import { CHALLENGE_LINKS, LANDING_WORDING as L } from './landing-wording';
 import { firstAppearsHref, firstAppearsWords } from './first-appears';
 
 /**
@@ -45,7 +45,7 @@ export interface ChallengeView {
   pitch: string;
   window: string;
   closes: string | null;
-  ways: { n: string; title: string; tag: string; body: string }[];
+  ways: { n: string; title: string; tag: string; body: string; href: string | null; pending: string | null }[];
   details: { title: string; body: string[]; link?: { href: string; text: string } }[];
   joining: { slug: string; name: string; text: string; note: string }[];
 }
@@ -143,7 +143,11 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
     pitch: H.pitch,
     window: windowText(),
     closes: ph === 'closed' ? null : H.closes(shortDateText('closes')),
-    ways: [...H.ways],
+    ways: H.ways.map((w) => {
+      const x = w as { link?: keyof typeof CHALLENGE_LINKS; pending?: string };
+      const href = x.link ? CHALLENGE_LINKS[x.link] : null;
+      return { n: w.n, title: w.title, tag: w.tag, body: w.body, href, pending: x.link && !href ? (x.pending ?? null) : null };
+    }),
     details: [
       { title: H.newTitle, body: [W.intro()] },
       { title: H.rulesTitle, body: [L.line()], link: { href: '/challenge/rules', text: L.rulesTitle } },

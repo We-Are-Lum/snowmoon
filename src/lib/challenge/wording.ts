@@ -51,6 +51,8 @@ export const CHALLENGE_WORDING = {
       : CHALLENGE.pictureEntries
       ? 'Only remixes count: start from one of a character’s pictures on the challenge page and set it at one of the moments. A picture made from scratch isn’t an entry.'
       : 'Only remixes count: for each character, start from one of its bases, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
+    // The owner's words (2026-11-11): bases and characters (Lord Ephelion) are added during the challenge.
+    'New starting pictures and characters may be added during the challenge.',
     // Draft wording (owner, 2026-11-04: Submit and the post link; branch contest, 2026-11-04: one a day, no total cap).
     'A remix becomes an entry only when you press Submit on its page, with a link to your own post about it on Farcaster, Bluesky or Lens. You can submit one remix a day (Pacific time), for any character, as many days as you like. Until entries close you can withdraw a submission; that day’s submission isn’t given back.',
     // Draft wording (owner, 2026-11-03: make it clear an account below the check can't remix; launch rehearsal item 3).

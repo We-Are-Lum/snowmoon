@@ -6,7 +6,7 @@ import { TileBase } from './challenge-card';
 /**
  * /challenge, the home (Claude Design's handoff, screen 1; owner-approved 2026-11-11), drawn from its data
  * (src/lib/challenge/view.ts), which carries every word: the title, the owner's pitch and the window; the ways to take
- * part (only "Remix a picture" until the owner decides the rewards); one tile per character in CHALLENGE.characters'
+ * part (Remix a picture, Add a backstory, Join the collab; owner, 2026-11-11); one tile per character in CHALLENGE.characters'
  * order (P5h), each a fresh random base (P5g), its name and, where the book states it, its home with the block id;
  * then the characters still to join (CHALLENGE.joining); then "New to Snowmoon?", "Rules" and "About the pictures".
  * Nothing is ordered by likes, payments or anything but chance (P5, P7). No hooks here (TileBase is the client part),
@@ -42,9 +42,20 @@ export function ChallengeBody({ v }: { v: ChallengeView }) {
             <summary>
               <span className="chh-n">{w.n}</span>
               <span className="chh-way-title">{w.title}</span>
-              <span className="chh-tag">{w.tag}</span>
+              {w.tag && <span className="chh-tag">{w.tag}</span>}
             </summary>
-            <p>{w.body}</p>
+            <p>
+              {w.body}
+              {w.href && (
+                <>
+                  {' '}
+                  <a href={w.href} target="_blank" rel="noopener">
+                    {w.href.replace(/^https?:\/\//, '')}
+                  </a>
+                </>
+              )}
+              {w.pending && <> {w.pending}</>}
+            </p>
           </details>
         ))}
       </div>
