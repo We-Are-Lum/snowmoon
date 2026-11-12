@@ -118,3 +118,19 @@ export function ChallengeCard({ c, w }: { c: CardData; w: CardWords }) {
     </section>
   );
 }
+
+/**
+ * A character's tile on /challenge (the redesign, owner 2026-11-11: "a fresh random base on each visit"): one of its
+ * bases, drawn afresh in this browser on each visit with the challenge's one uniform shuffle (P5g's allowed draw, as the
+ * bases row already shuffles). A character with one base shows it at once; with several, an empty slot until the draw,
+ * so the server's order is never shown.
+ */
+export function TileBase({ c, alt }: { c: Pick<CardData, 'bases'>; alt: string }) {
+  const [pick, setPick] = useState<CardTile | null>(c.bases.length === 1 ? c.bases[0] : null);
+  useEffect(() => {
+    setPick(c.bases.length > 1 ? shuffleFresh(c.bases)[0] : (c.bases[0] ?? null));
+  }, [c.bases]);
+  if (!pick?.thumb) return <span className="chh-img cc-empty" aria-hidden="true" />;
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img className="chh-img" src={pick.thumb} alt={alt} width={576} height={768} data-version={pick.versionId} />;
+}

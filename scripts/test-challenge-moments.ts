@@ -627,6 +627,19 @@ check('config: a current default look per challenge character, each a design id 
     Object.assign(CHALLENGE.dates, keep);
   }
   check('rules: no moment in the intro or the rules', !/moment/i.test(W.intro() + W.rules().join(' ')));
+  {
+    // The home's notes (owner, 2026-11-11): each character's home only where the book states it, its quote word for word
+    // in its block (content/snowmoon/text), the place part of the quote; Deluin's is Redshire; none for Bai, Seila or Mu.
+    const { HOMES } = await import('../src/lib/challenge/homes');
+    const block = (id: string) => {
+      const [c, b] = id.slice(1).split('-b').map(Number);
+      const ch = JSON.parse(read(`content/snowmoon/text/chapter-${c}.json`)) as { blocks: { idx: number; content: string }[] };
+      return (ch.blocks.find((x) => x.idx === b)?.content ?? '').replace(/<[^>]+>/g, '');
+    };
+    const homesOk = (H: typeof HOMES) => Object.values(H).every((h) => block(h.block).includes(h.quote) && h.quote.includes(h.place));
+    check('home notes: each quote is the book\'s words in its block, and the place is part of it; Deluin is Redshire (c14-b31); Bai, Seila and Mu have none', homesOk(HOMES) && HOMES.deluin?.place === 'Redshire' && HOMES.deluin.block === 'c14-b31' && !HOMES.bai && !HOMES.seila && !HOMES.mu);
+    check('home notes: planted, a note not in its block (Deluin from the United Cities) fails', !homesOk({ ...HOMES, deluin: { place: 'United Cities', block: 'c14-b31', quote: 'Deluin from the United Cities' } }));
+  }
   check('rules: says new starting pictures and characters may be added during the challenge (owner, 2026-11-11), right after which pictures count', W.rules()[2] === 'New starting pictures and characters may be added during the challenge.' && /^Only remixes count/.test(W.rules()[1]));
   const RV = await import('../src/lib/challenge/rules-view');
   const rv = await RV.rulesView(null);

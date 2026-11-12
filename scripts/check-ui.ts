@@ -1851,6 +1851,13 @@ async function checkChallengeLanding() {
     // copy and renders a fresh one from the local data in the background. Wait for the fresh one.
     // The same for a character's page (owner, 2026-11-08), which lists the fixture's own remixes (the hub lists only the
     // bases, whose ids are the configured ones, so the hub waits for its base and Zei's page for its remixes).
+    // Gladias's page too: the build's copy lists the live database's remixes of Gladias (@naaate's), and the local data
+    // has none, so wait until a fresh copy shows no remix tile (it failed three times on 11 Nov when read too early).
+    for (let i = 0; i < 90; i++) {
+      const html = await fetch(`${LOCAL}/challenge/gladias`).then((r) => r.text(), () => '');
+      if (html.includes('ch-character-page') && !html.includes('cc-tile-pic')) break;
+      await new Promise((r) => setTimeout(r, 1000));
+    }
     for (const [p, want] of [['/challenge/zei', [FX.remixes[0].versionId]], ['/challenge', [FX.sheets.zei[0], FX.sheets.bai[0]]]] as const) {
       for (let i = 0; ; i++) {
         const html = await fetch(`${LOCAL}${p}`).then((r) => r.text(), () => '');
@@ -1889,53 +1896,60 @@ async function checkChallengeLanding() {
       // The characters in CHALLENGE.characters' order, whatever it is.
       const order = await page.locator('.cc-card').evaluateAll((els) => els.map((e) => e.getAttribute('data-character')));
       if (order.join() !== CHALLENGE.characters.join()) fail(`/challenge ${tag}: the characters read ${order.join()}, not CHALLENGE.characters (${CHALLENGE.characters.join()})`);
-      // The plain list (owner, 2026-11-08, the simpler challenge): each character's name (a link to its page), its approved
-      // one line (verbatim, with "This edition's summary") and its bases, each opening its remix screen; nothing else:
-      // no facts, "More about", "Where they appear", moments or remixes, and no count. The row outside a picture opens
-      // the character's page.
-      const { CARDS } = await import('../src/lib/challenge/cards');
+      // The redesigned home (Claude Design's handoff, screen 1; owner-approved 2026-11-11): each character a tile (one of
+      // its bases, drawn afresh per visit), its name a link to its page that covers the tile, and its home only where the
+      // book states it (src/lib/challenge/homes.ts, with the block id); no remix links, facts, moments or counts.
+      const { HOMES } = await import('../src/lib/challenge/homes');
+      const { LANDING_WORDING: LW } = await import('../src/lib/challenge/landing-wording');
       for (const slug of CHALLENGE.characters) {
         const row = page.locator(`.cc-card[data-character="${slug}"]`);
         if ((await row.locator('h2 a.cc-name-link').getAttribute('href')) !== `/challenge/${slug}`) fail(`/challenge ${tag}: ${slug}'s name doesn't link its page`);
-        const line = ((await row.locator('.cc-line').textContent()) ?? '').trim();
-        const want = CARDS.find((c) => c.slug === slug)!.line;
-        if (!line.startsWith(want) || !/This edition’s summary$/.test(line)) fail(`/challenge ${tag}: ${slug}'s line isn't its approved one line with "This edition's summary" ("${line}")`);
-        if (await row.locator('.cc-facts, .cc-moments, .cc-toggle, .cc-more, .cc-appears, .cc-remixes, .cc-chip').count()) fail(`/challenge ${tag}: ${slug}'s row shows more than its name, line and bases`);
-        if (/\bCh \d+\b|Moments picked|More about|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test((await row.textContent()) ?? '')) fail(`/challenge ${tag}: ${slug}'s row shows a moment, a deeper layer or a count`);
+        const note = ((await row.locator('.chh-note').textContent().catch(() => null)) ?? '').replace(/\s+/g, ' ').trim();
+        const h = HOMES[slug];
+        if (h ? note !== `${h.place} · ${h.block}` : note !== '') fail(`/challenge ${tag}: ${slug}'s note reads "${note}", not ${h ? `"${h.place} · ${h.block}"` : 'nothing (the book doesn\'t state a home)'}`);
+        if (await row.locator('.cc-facts, .cc-moments, .cc-toggle, .cc-more, .cc-appears, .cc-remixes, .cc-chip').count()) fail(`/challenge ${tag}: ${slug}'s tile shows more than its picture, name and home`);
+        if (/\bCh \d+\b|Moments picked|More about|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test((await row.textContent()) ?? '')) fail(`/challenge ${tag}: ${slug}'s tile shows a moment, a deeper layer or a count`);
       }
+      if (await page.locator('.ch-home a[href^="/challenge/make"]').count()) fail(`/challenge ${tag}: the home links a remix screen directly (a tile opens its character's page)`);
       const zei = page.locator('.cc-card[data-character="zei"]');
-      if (!CHALLENGE.cardsApproved && !/Draft wording/.test((await zei.locator('.cc-line').textContent()) ?? '')) fail(`/challenge ${tag}: an unapproved card has no "Draft wording" mark`);
-      if (!(await zei.locator('.cc-ai [data-ai="tag"]').count())) fail(`/challenge ${tag}: Zei's bases have no AI label`);
-      const heroTip = (await zei.locator('.cc-ai [data-ai="tag"] .sr-only').textContent()) ?? '';
-      if (!/Look invented by this edition/.test(heroTip)) fail(`/challenge ${tag}: the bases' label doesn't say the look is this edition's (${heroTip})`);
-      const tileHrefs = await zei.locator('.cc-row a.cc-tile').evaluateAll((els) => els.map((e) => e.getAttribute('href') ?? ''));
-      if (!tileHrefs.length || !tileHrefs.every((h) => /^\/challenge\/make\?from=[0-9a-f-]{36}$/.test(h))) fail(`/challenge ${tag}: a base doesn't open its remix screen (${tileHrefs.join()})`);
+      if (!(await zei.locator('.chh-ai [data-ai="tag"]').count())) fail(`/challenge ${tag}: Zei's picture has no AI label`);
+      const heroTip = (await zei.locator('.chh-ai [data-ai="tag"] .sr-only').textContent()) ?? '';
+      if (!/Look invented by this edition/.test(heroTip)) fail(`/challenge ${tag}: the picture's label doesn't say the look is this edition's (${heroTip})`);
+      const drawn = await zei.locator('img.chh-img').getAttribute('data-version').catch(() => null);
+      if (!drawn || !FX.sheets.zei.includes(drawn)) fail(`/challenge ${tag}: Zei's tile doesn't show one of Zei's bases (${drawn})`);
+      // Who joins later (CHALLENGE.joining, not yet a character): a tile with no picture and the owner's words.
+      for (const slug of Object.keys(CHALLENGE.joining).filter((x) => !CHALLENGE.characters.includes(x))) {
+        const j = page.locator(`.chh-joining[data-character="${slug}"]`);
+        if (!/joins mid-challenge\./.test((await j.textContent().catch(() => '')) ?? '') || (await j.locator('img, a').count())) fail(`/challenge ${tag}: ${slug} has no "joins mid-challenge" tile, or it has a picture or a link`);
+      }
+      // The ways: Remix a picture, Add a backstory, Join the collab (owner, 2026-11-11); then New to Snowmoon?, Rules, About the pictures.
+      const ways = (await page.locator('.chh-way .chh-way-title').allTextContents()).map((t) => t.trim());
+      if (ways.join('|') !== 'Remix a picture|Add a backstory|Join the collab') fail(`/challenge ${tag}: the ways read ${ways.join(', ')}, not "Remix a picture, Add a backstory, Join the collab"`);
+      const details = (await page.locator('.chh-detail summary > span:first-child').allTextContents()).map((t) => t.trim());
+      if (details.join('|') !== [LW.home.newTitle, LW.home.rulesTitle, LW.home.aboutTitle].join('|')) fail(`/challenge ${tag}: the details read ${details.join(', ')}`);
+      if (((await page.locator('.chh-pitch').textContent()) ?? '').trim() !== LW.home.pitch) fail(`/challenge ${tag}: the pitch isn't the owner's`);
       if (await page.locator('.ch-pick, .cc-hero').count()) fail(`/challenge ${tag}: the old random block or big picture is still on the hub`);
       await zei.scrollIntoViewIfNeeded();
       await snap('row');
       if (w === 390 && scheme === 'light') await snap('full', true);
       if (w === 1440) await snap('full', true);
-      // The row outside a picture opens the character's page.
-      // A real tap on the line's text: the name's link covers the row, so the tap lands on it (Playwright's own click
-      // refuses an element another one covers, which is the point here). In the middle of the screen, clear of the sticky top bar. Tapped up to three times a second apart: a tap that lands
-      // while the page is still hydrating can be lost (seen at 390 dark and 424 when no full-page shot came first); what
-      // is checked is that the tap, once the page is ready, lands on the name's link and opens the page.
+      // Tapping Zei's picture opens his page: the name's link covers the tile. A real tap in the middle of the picture,
+      // up to three times a second apart (a tap while the page is still hydrating can be lost).
       let opened = false;
       for (let i = 0; i < 3 && !opened; i++) {
         await page.waitForTimeout(1000);
-        await zei.locator('.cc-line').evaluate((e) => e.scrollIntoView({ block: 'center' }));
-        const lineBox = await zei.locator('.cc-line').boundingBox();
-        const under = lineBox ? await page.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return { href: e?.getAttribute('href') ?? null, what: e ? `${e.tagName.toLowerCase()}.${String(e.className).replace(/\s+/g, '.')}` : 'nothing', x, y, vw: window.innerWidth, vh: window.innerHeight }; }, [lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2]) : null;
-        const hit = under?.href ?? null;
-        if (hit !== '/challenge/zei') {
-          fail(`/challenge ${tag}: the middle of Zei's line is covered by ${JSON.stringify(under)}, not the name's link`);
+        await zei.locator('.chh-pic').evaluate((e) => e.scrollIntoView({ block: 'center' }));
+        const box = await zei.locator('.chh-pic').boundingBox();
+        const under = box ? await page.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return { href: e?.getAttribute('href') ?? null, what: e ? `${e.tagName.toLowerCase()}.${String(e.className).replace(/\s+/g, '.')}` : 'nothing' }; }, [box.x + box.width / 2, box.y + box.height / 2]) : null;
+        if (under?.href !== '/challenge/zei') {
+          fail(`/challenge ${tag}: the middle of Zei's picture is covered by ${JSON.stringify(under)}, not the name's link`);
           await snap('row-tap-miss');
+          break;
         }
-        if (lineBox) await page.mouse.click(lineBox.x + lineBox.width / 2, lineBox.y + lineBox.height / 2);
+        if (box) await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
         opened = await page.waitForURL('**/challenge/zei', { timeout: 10000, waitUntil: 'commit' }).then(() => true, () => false);
-        if (hit !== '/challenge/zei') break;
       }
-      if (!opened) fail(`/challenge ${tag}: tapping Zei's row outside a picture didn't open /challenge/zei`);
+      if (!opened) fail(`/challenge ${tag}: tapping Zei's picture didn't open /challenge/zei`);
 
       // A character's page (owner, 2026-11-08): the name, the one line, "Bases", then "Remixes": every published picture of
       // the character, newest first, whole at 16:9, each opening its remix screen; no count. Gladias has none yet.
@@ -1957,7 +1971,9 @@ async function checkChallengeLanding() {
       if (/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test((await page.locator('.ch-character-page').textContent()) ?? '')) fail(`/challenge/zei ${tag}: shows a moment or a count`);
       await snap('character', true);
       await at('/challenge/gladias', '.ch-character-page');
-      if (!/No remixes of Gladias yet/.test((await page.locator('.ch-char-remixes .ch-feed-none').textContent().catch(() => '')) ?? '')) fail(`/challenge/gladias ${tag}: no empty state`);
+      // Waited for, not read at once (it failed three times on 11 Nov and passed on each re-run); a miss says what was there.
+      const none = await page.waitForSelector('.ch-char-remixes .ch-feed-none', { timeout: 20000 }).then((e) => e.textContent(), () => null);
+      if (!/No remixes of Gladias yet/.test(none ?? '')) fail(`/challenge/gladias ${tag}: no empty state (the remixes section reads "${((await page.locator('.ch-char-remixes').textContent().catch(() => '')) ?? '').trim().slice(0, 160)}"; the page: ${page.url()})`);
       const missing = await page.goto(`${LOCAL}/challenge/lektor`, { waitUntil: 'load' });
       if (missing?.status() !== 404) fail(`/challenge/lektor ${tag}: answers ${missing?.status()}, not 404`);
 

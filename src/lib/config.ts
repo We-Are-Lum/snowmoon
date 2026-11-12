@@ -617,6 +617,12 @@ export const CHALLENGE = {
   /** The characters, by their file in content/snowmoon/designs/characters, most named in the book first (owner, 2026-11-04; content/snowmoon/characters-by-mentions.json, checked by test:character-order and P5h). */
   characters: ['zei', 'gladias', 'bai', 'seila', 'deluin', 'mu', 'ephelion'] as readonly string[],
   /**
+   * Characters who join during the challenge (owner, 2026-11-11: "Lord Ephelion's tile shows 'joins mid-challenge' until
+   * his date"): /challenge shows each as a tile with no picture until it is in `characters`. The date, when the owner
+   * sets it, is the day he joins; until then null. Adding him to `characters` (PR E) is what opens his page.
+   */
+  joining: { ephelion: null } as Record<string, string | null>,
+  /**
    * Each character's bases (owner, 2026-11-04): published sheets to start from, at most CHALLENGE.baseCount for the
    * character (never more than CHALLENGE.maxBases). Deluin and Gladias have three each: their current default look,
    * recast a and recast b (drafts in branch challenge-styles, docs/starting-sheet-drafts/directions/*-recast-*.jpg);
