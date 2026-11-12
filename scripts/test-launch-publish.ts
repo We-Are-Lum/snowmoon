@@ -15,7 +15,7 @@ import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { CHALLENGE } from '../src/lib/config';
-import { MIDJOURNEY_LABEL, applyGate, descriptor, pinned, planBase, readLedger, readPicks, sha } from './lib/launch-publish';
+import { MIDJOURNEY_LABEL, applyGate, descriptor, pinned, planBase, readLedger, readPicks, recipeFromPictureRow, recipeProblems, sha } from './lib/launch-publish';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const DRAFTS = process.env.DRAFTS || '/Users/nathan/snowmoon-challenge-styles/docs/starting-sheet-drafts';
@@ -46,9 +46,39 @@ check('no base links to an unpublished style: body.style is null, and each view 
 check('the sheet\'s text is the front\'s descriptor', descriptor('The same person.\n\nAnimated series look: x.\n\na young man, tall\n\nNo text.') === 'a young man, tall');
 check('applyGate: a dry run is never refused', applyGate({ apply: false, confirmed: false, isPublic: true, refusals: ['x'] }).length === 0);
 check('applyGate: --apply without --confirm-owner-go is refused', applyGate({ apply: true, confirmed: false, isPublic: false, refusals: [] }).some((x) => /confirm-owner-go/.test(x)));
-check('applyGate: --apply while CHALLENGE.public is on is refused (it follows public, not the open date)', applyGate({ apply: true, confirmed: true, isPublic: true, refusals: [] }).some((x) => /CHALLENGE\.public is on/.test(x)));
+check('applyGate: --apply while CHALLENGE.public is on, with no bases named (first remixes), is refused', applyGate({ apply: true, confirmed: true, isPublic: true, refusals: [] }).some((x) => /CHALLENGE\.public is on/.test(x)));
+// Owner, 2026-11-11: bases may be added to a live challenge, front views only, still behind --confirm-owner-go.
+{
+  const front = { file: 'f.jpg', sha256: 'a'.repeat(64) };
+  check('applyGate: while public, front-only bases pass with --confirm-owner-go', applyGate({ apply: true, confirmed: true, isPublic: true, refusals: [], picks: [{ key: 'zei:gpt-a', views: { front } }] }).length === 0);
+  check('applyGate: while public, a base with a side or back view is refused', applyGate({ apply: true, confirmed: true, isPublic: true, refusals: [], picks: [{ key: 'zei:gpt-a', views: { front } }, { key: 'mu:x', views: { front, back: front } }] }).some((x) => /only a front view/.test(x) && /mu:x/.test(x)));
+  check('applyGate: while public, front-only bases without --confirm-owner-go are refused', applyGate({ apply: true, confirmed: false, isPublic: true, refusals: [], picks: [{ key: 'zei:gpt-a', views: { front } }] }).some((x) => /confirm-owner-go/.test(x)));
+}
 check('applyGate: a closed-model refusal is kept', applyGate({ apply: true, confirmed: true, isPublic: false, refusals: ['zei: closed'] }).includes('zei: closed'));
 check('applyGate: all clear passes', applyGate({ apply: true, confirmed: true, isPublic: false, refusals: [] }).length === 0);
+
+// A later test ledger (owner, 2026-11-11: Bases Pick 2, Lord Ephelion): a recast's recipe read from its row.
+{
+  const dir = mkdtempSync(path.join(tmpdir(), 'picture-ledger-'));
+  const bytes = Buffer.from('a picture');
+  const prompt = 'with deep brown skin\n\nZei is the person in reference image 1, the main figure.';
+  const ps = sha(Buffer.from(prompt));
+  writeFileSync(path.join(dir, 'pick.jpg'), bytes);
+  const led = { prompts: { [ps]: prompt }, refs: { zei: { version: 'bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d', sha256: 'b'.repeat(64) } }, calls: [
+    { kind: 'guard', prompt_sha256: ps, status: 'ok', cost_usd: 0.0002 },
+    { kind: 'picture', model: 'gpt', character: 'zei', file: 'pick.jpg', prompt_sha256: ps, endpoint: 'openai/gpt-image-2.5-sunburst', host: 'Vercel AI Gateway', request_id: 'gen_x', status: 'ok', cost_usd: 0.048, sha256: sha(bytes), original_sha256: 'c'.repeat(64), original_size: '1024x1536', converted: 'toView to 576x768', settings: { size: '1024x1536', gateway: { only: ['openai'], disallowPromptTraining: true } }, at: '2026-11-10T08:27:21.938Z' },
+  ] };
+  writeFileSync(path.join(dir, 'ledger.json'), JSON.stringify(led));
+  const r = recipeFromPictureRow(path.join(dir, 'ledger.json'), 'pick.jpg');
+  check('a recast\'s recipe from its ledger row is complete (prompt by sha256, model, host, request id, cost, size, prompt check, assist)', !!r && recipeProblems(r.recipe).length === 0 && r.recipe.prompt === prompt && r.recipe.checks.prompt.verdict === 'ok' && r.recipe.request_id === 'gen_x', JSON.stringify(r && recipeProblems(r.recipe)));
+  check('a recast\'s recipe names the published base front it was edited from', r?.recipe.references?.[0]?.sha256 === 'b'.repeat(64) && /bffc7b6a/.test(r?.recipe.references?.[0]?.what ?? ''));
+  check('a row that is missing (or failed) gives no recipe', recipeFromPictureRow(path.join(dir, 'ledger.json'), 'other.jpg') === undefined);
+  const pick = { key: 'zei:gpt-a', character: 'zei', title: 'Animated series, look a (GPT)', current_default: false, text: 'a young man of eighteen, deep brown skin', views: { front: { file: path.join(dir, 'pick.jpg'), sha256: sha(bytes), ledger: path.join(dir, 'ledger.json'), row: 'pick.jpg' } } };
+  const plan = planBase(DRAFTS, ledger, pick, 'naaate');
+  check('a base from a later ledger plans with no problem: its file by absolute path, its text given, front only', plan.problems.length === 0 && plan.text === pick.text && plan.pics.length === 1 && plan.body({ front: 'u' }).assist?.source === `${path.basename(dir)}/ledger.json`, plan.problems.join('; '));
+  const tampered = planBase(DRAFTS, ledger, { ...pick, views: { front: { ...pick.views.front, sha256: 'd'.repeat(64) } } }, 'naaate');
+  check('planted: a later-ledger base whose pinned sha256 differs is refused', tampered.problems.some((x) => /sha256/.test(x)));
+}
 
 // A tampered drafts folder (planted): every file linked, one front changed by a byte.
 const tmp = mkdtempSync(path.join(tmpdir(), 'launch-publish-'));
