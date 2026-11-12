@@ -87,14 +87,15 @@ export const LANDING_WORDING = {
   entriesNoneFor: (name: string) => `No entries for ${name} yet.`,
   back: '← The remix challenge',
   /**
-   * The redesigned home (Claude Design's handoff, owner-approved 2026-11-11). The pitch is the owner's (approved). DRAFT
-   * until the owner's OK: the "Remix a picture" card's tag and line, the three details' titles, and "About the pictures".
+   * The redesigned home (Claude Design's handoff, owner-approved 2026-11-11). The pitch is the owner's (approved). The
+   * "Remix a picture" card's line is the owner's (2026-11-11: posting alone isn't entering); its tag, the three details'
+   * titles and "About the pictures" were approved by the owner the same evening.
    * The other two ways (backstories, the collab) wait for the owner's rewards decision and aren't shown.
    */
   home: {
     pitch: 'Help find the characters you’d love, hate, or can’t stop thinking about.',
     closes: (when: string) => `Entries close ${when}.`,
-    ways: [{ n: '1', title: 'Remix a picture', tag: 'START HERE', body: 'Pick a character, start from a base or anyone’s remix, describe a change, then publish and post it.' }],
+    ways: [{ n: '1', title: 'Remix a picture', tag: 'START HERE', body: 'Pick a character, start from a base or anyone’s remix, describe a change, then publish, post it on Farcaster, Lens or Bluesky, and submit your post.' }],
     newTitle: 'New to Snowmoon?',
     rulesTitle: 'Rules',
     aboutTitle: 'About the pictures',
