@@ -112,16 +112,16 @@ export const LANDING_WORDING = {
     newLink: 'Learn more',
     rulesTitle: 'Rules',
     aboutTitle: 'About the pictures',
-    about: 'Every picture here is AI-generated, not by the author. Each one names its model, and closed models name their maker. Lists are newest first.',
+    about: 'Every picture here is AI-generated. Each one names its model, and closed models name their maker. Lists are newest first.',
     /** The owner's words (2026-11-11). */
     joins: (name: string) => `${name} joins mid-challenge.`,
     joinsNote: 'joins mid-challenge',
     homeFrom: (block: string) => `the book, ${block}`,
   },
   untitled: (name: string) => `${name}, remixed`,
-  pictureAlt: (name: string) => `AI-generated front view of ${name}, not by the author`,
+  pictureAlt: (name: string) => `AI-generated front view of ${name}`,
   /** A challenge picture or a card's picture (branch challenge-moments). */
-  pictureAltMoment: (name: string) => `AI-generated picture of ${name}, not by the author`,
+  pictureAltMoment: (name: string) => `AI-generated picture of ${name}`,
 };
 
 /** The two outside links on the challenge home (owner, 2026-11-11). Null until the owner gives them: the card says so. */

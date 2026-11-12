@@ -194,8 +194,11 @@ in 25 words or fewer and records `written_by { fid, date }`.
   recipe sheet is checked like the chapter's. Pictures carry a short "AI ⓘ" label, the
   declaration on hover and in its accessible name (owner, 2026-10-15); on a chapter page, where
   pictures sit beside the book's text, "not by the author" is also shown, once, beside the first
-  picture (owner, 2026-10-15). The first-visit intro's images (its recipe and
-  record cards) carry the same image label (owner, 2026-10-10). The home page's "Just made"
+  picture (owner, 2026-10-15). Away from the book's text it is not in sight: the share cards say
+  "AI-generated · by {name}", and link previews, the challenge pages' words, alt texts, captions
+  and the About page say "AI-generated" without it. The AI label's hidden declaration and the
+  recipe sheet's "Who made it" still say "not by the author" (owner, 2026-11-12). The
+  first-visit intro's images (its recipe and record cards) carry the same image label (owner, 2026-10-10). The home page's "Just made"
   (`src/components/home-feed.tsx`) shows each reader's image with the same
   label, or its empty state.
 - `P2c`: every narration and dialogue line in an adaptation script carries a

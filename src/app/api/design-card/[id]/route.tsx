@@ -10,7 +10,7 @@ import { CARD_SIZE, LANDING_WORDING as L, isLanding, landingPicture } from '~/li
 /**
  * A remix page's link preview picture (owner, 2026-11-04): the sheet's front view, whole (padded, never cropped), on
  * the dark paper, with its words drawn in code: the challenge, the character, the maker, and that the picture is
- * AI-generated, not by the author. ?shape=og is 1200×630 (Open Graph: Bluesky, Lens, X); otherwise 1200×800, the 3:2
+ * AI-generated, and by whom. ?shape=og is 1200×630 (Open Graph: Bluesky, Lens, X); otherwise 1200×800, the 3:2
  * Farcaster's mini app embed needs (600×400 to 3000×2000, under 10 MB; PNG, as its sharing guide recommends).
  * Only a published version of a challenge character's sheet with a front view: anything else, hidden or unpublished
  * included, answers 404 and is not cached, so a hidden version's card stops within the 5 minutes it is cached for.
@@ -49,7 +49,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
             {title && <div style={{ display: 'flex', fontFamily: 'Crimson Pro', fontSize: 40, marginTop: 16, color: '#D9D5CC' }}>{title.slice(0, 60)}</div>}
             <div style={{ display: 'flex', fontSize: 26, marginTop: 28, color: '#D9D5CC' }}>{(d.remixedFrom ? L.remixOf(by) : L.maker(by)).slice(0, 48)}</div>
           </div>
-          <div style={{ display: 'flex', fontSize: 18, letterSpacing: 1, color: '#A39F96' }}>{L.cardAi}</div>
+          <div style={{ display: 'flex', fontSize: 18, letterSpacing: 1, color: '#A39F96' }}>{L.cardAi(by)}</div>
         </div>
       </div>
     ),

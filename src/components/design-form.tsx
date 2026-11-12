@@ -228,7 +228,7 @@ export function DesignForm(p: Props) {
       <li key={key} className={`dz-slot${pic ? ' has-pic' : ''}${pic && !fresh(pic) ? ' is-stale' : ''}`}>
         {pic ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={pic.image} alt={`AI-generated ${slot === 'sample' ? 'sample' : `${label} view`}, not by the author`} width={slot === 'sample' || p.kind === 'location' ? 1024 : 576} height={slot === 'sample' || p.kind === 'location' ? 576 : 768} />
+          <img src={pic.image} alt={`AI-generated ${slot === 'sample' ? 'sample' : `${label} view`}`} width={slot === 'sample' || p.kind === 'location' ? 1024 : 576} height={slot === 'sample' || p.kind === 'location' ? 576 : 768} />
         ) : (
           <span className="dz-slot-empty" aria-hidden="true" />
         )}
