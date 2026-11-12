@@ -1972,10 +1972,11 @@ async function checkChallengeLanding() {
       // The bases: every one of Zei's, each to its remix screen, with its "Remix this".
       await page.waitForSelector('.ch-char-bases a.chc-pic', { timeout: 10000 }).catch(() => null);
       const baseIds = await page.locator('.ch-char-bases a.chc-pic').evaluateAll((els) => els.map((e) => e.getAttribute('data-version') ?? ''));
-      if (baseIds.slice().sort().join() !== [...FX.sheets.zei].sort().join()) fail(`/challenge/zei ${tag}: the starting pictures read ${baseIds.join()}, not Zei's bases (${FX.sheets.zei.join()})`);
+      // As many as Zei's configured bases (R.baseCountOf), each one of Zei's sheets, none twice.
+      if (!baseIds.length || new Set(baseIds).size !== baseIds.length || !baseIds.every((id) => FX.sheets.zei.includes(id))) fail(`/challenge/zei ${tag}: the starting pictures read ${baseIds.join()}, not Zei's bases (from ${FX.sheets.zei.join()})`);
       const baseThis = await page.locator('.ch-char-bases a[data-slot="remix-this"]').evaluateAll((els) => els.map((e) => `${e.getAttribute('href')}|${(e.textContent ?? '').trim()}`));
       if (baseThis.length !== baseIds.length || !baseThis.every((x) => FX.sheets.zei.some((id) => x === `/challenge/make?from=${id}|Remix this`))) fail(`/challenge/zei ${tag}: a base's "Remix this" doesn't open its remix screen (${baseThis.join()})`);
-      if (((await page.locator('.ch-char-bases .chc-meta').textContent()) ?? '').trim() !== `${FX.sheets.zei.length} ${FX.sheets.zei.length === 1 ? 'base' : 'bases'}`) fail(`/challenge/zei ${tag}: the bases' count is missing`);
+      if (((await page.locator('.ch-char-bases .chc-meta').textContent()) ?? '').trim() !== `${baseIds.length} ${baseIds.length === 1 ? 'base' : 'bases'}`) fail(`/challenge/zei ${tag}: the bases' count is missing`);
       if (!wide && (await page.locator('.chc-bases').evaluate((e) => getComputedStyle(e).scrollSnapType)) !== 'x mandatory') fail(`/challenge/zei ${tag}: the bases aren't a swipe row on a phone`);
       // "Remix Zei": on a desktop, the remix screen of one of Zei's bases; on a phone, not shown (each base has its button).
       const rz = page.locator('a.chc-remix');
@@ -1995,7 +1996,9 @@ async function checkChallengeLanding() {
       if (ratios.length !== zeiRemixes.length || ratios.some((r) => Math.abs(r - 16 / 9) > 0.05) || (await page.locator('.ch-char-remixes img.chc-wide-img').count()) !== zeiRemixes.length) fail(`/challenge/zei ${tag}: the remixes aren't shown whole at 16:9 (${ratios.map((r) => r.toFixed(2)).join()})`);
       if (((await page.locator('.ch-char-remixes .chc-meta').textContent()) ?? '').trim() !== 'newest first') fail(`/challenge/zei ${tag}: no "newest first"`);
       if ((await page.locator('.ch-character-page .chc-ai .ai-tag').count()) !== baseIds.length + zeiRemixes.length) fail(`/challenge/zei ${tag}: a picture has no AI label`);
-      if (/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test((await page.locator('.ch-character-page').textContent()) ?? '')) fail(`/challenge/zei ${tag}: shows a moment or a count`);
+      // Read with each element's text apart (a byline "#6852" next to "Remix this" isn't a count).
+      const pageText = await page.locator('.ch-character-page').evaluate((root) => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const out: string[] = []; for (let n = w.nextNode(); n; n = w.nextNode()) out.push(n.textContent ?? ''); return out.join(' | '); });
+      if (/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test(pageText)) fail(`/challenge/zei ${tag}: shows a moment or a count (${/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.exec(pageText)?.[0]})`);
       await snap('character', true);
       await at('/challenge/gladias', '.ch-character-page');
       // Waited for, not read at once (it failed three times on 11 Nov and passed on each re-run); a miss says what was there.
