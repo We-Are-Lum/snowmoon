@@ -36,8 +36,9 @@ export const BASE_LOOKS: Readonly<Record<string, string>> = {
   // The owner's picks of 2026-11-11 (Bases Pick 2), lines ready for when they are published.
   '98620d0109e2354bddc269471ec59f8a23089ad9bce6a457a0d09091262f4aee': 'Unless the change says otherwise: a man with deep brown skin and dark eyes.',
   '88de0a4709d0579fb06d2e1352098b01d25e7e2f7879e3a2b70384343422789a': 'Unless the change says otherwise: a man with fair skin and grey eyes.',
-  a4f423406eb2a73125e242e9e36d90cf8c20a1bb40ea2553058431b39e2d7274: 'Unless the change says otherwise: a woman with light olive skin, tattooed arms and gold earrings.',
-  '259315795906cf7b5c994eb63dbc412657080fb3f91bc5b09486711a3e7dc903': 'Unless the change says otherwise: a woman with fair freckled skin, tattooed arms and gold earrings.',
+  // Bai a2 and b2: amber drop earrings (owner, 2026-11-11); her character line keeps gold.
+  a4f423406eb2a73125e242e9e36d90cf8c20a1bb40ea2553058431b39e2d7274: 'Unless the change says otherwise: a woman with light olive skin, tattooed arms and amber drop earrings.',
+  '259315795906cf7b5c994eb63dbc412657080fb3f91bc5b09486711a3e7dc903': 'Unless the change says otherwise: a woman with fair freckled skin, tattooed arms and amber drop earrings.',
   '22ef5e6602ab1167c02befaaa331fde0e3a36990166b7e3fa75a3d2950545c3c': 'Unless the change says otherwise: a woman with light tan skin and small round gold-rimmed glasses.',
   '5a59f88f1665e1c56104e11ae168de523aae4a168be68ff41f778e7cfb43bde2': 'Unless the change says otherwise: a woman with fair skin and small round gold-rimmed glasses.',
   '0217a068691527f6ab30a82b71fa346b5d636d84f003bd8f61ff0ed83ee95ff9': 'Unless the change says otherwise: a woman with pale skin and thin red-framed glasses.',

@@ -118,4 +118,4 @@ export const LANDING_WORDING = {
 };
 
 /** The two outside links on the challenge home (owner, 2026-11-11). Null until the owner gives them: the card says so. */
-export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: null, collab: null };
+export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: null, collab: 'https://collab.venturetothex.com/c/snowmoon' };

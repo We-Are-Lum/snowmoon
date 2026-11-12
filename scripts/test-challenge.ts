@@ -693,7 +693,7 @@ proof('a bounty back in the rules (the old per-character rule) is caught', copyP
   const BOUNTY_ALLOWED = [
     "      // The owner's words (2026-11-11). The link is CHALLENGE_LINKS.bounty; until it is set, the line ends \"(bounty opens soon)\".",
     "      { n: '2', title: 'Add a backstory', tag: '', body: 'Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', link: 'bounty' as const, pending: '(bounty opens soon)' },",
-    "export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: null, collab: null };",
+    "export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: null, collab: 'https://collab.venturetothex.com/c/snowmoon' };",
   ];
   const stripAllowed = (f: string, text: string) => (f.endsWith('landing-wording.ts') ? text.split('\n').filter((l) => !BOUNTY_ALLOWED.includes(l)).join('\n') : text);
   const pages = ['src/app/challenge', 'src/lib/challenge'].flatMap((d) => readdirSync(path.join(ROOT, d), { recursive: true }).map(String).filter((f) => /\.tsx?$/.test(f)).map((f) => stripAllowed(f, readFileSync(path.join(ROOT, d, f), 'utf8')))).join('\n');
