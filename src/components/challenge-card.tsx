@@ -168,7 +168,8 @@ export function CharacterBases({ c, alt, remixThis }: { c: Pick<CardData, 'bases
         {(bases ?? c.bases).map((t, i) => (
           <li key={bases ? t.versionId : `slot-${i}`} data-i={i}>
             <figure className="chc-base">
-              {bases ? (
+              <span className="chc-frame">
+                {bases ? (
                 <Link className="chc-pic" href={t.href} data-version={t.versionId} prefetch={false}>
                   {t.thumb ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -182,8 +183,9 @@ export function CharacterBases({ c, alt, remixThis }: { c: Pick<CardData, 'bases
                   <span className="chc-img cc-empty" />
                 </span>
               )}
-              <span className="chc-ai">
-                <AiTag />
+                <span className="chc-ai">
+                  <AiTag />
+                </span>
               </span>
               {bases && (
                 <figcaption className="chc-cap">

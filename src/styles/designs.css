@@ -548,7 +548,7 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .chc-every { order: 8; }
 .chc-foot { order: 9; }
 .chc-line .cc-line { margin: 0; font-size: 19px; line-height: 1.5; color: var(--ink); }
-.chc-line .cc-mark { display: block; margin-top: 6px; font-family: var(--label); font-size: 12px; color: var(--muted); }
+.chc-line .cc-mark { display: block; text-transform: none; letter-spacing: 0; margin-top: 6px; font-family: var(--label); font-size: 12px; color: var(--muted); }
 .chc-more { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
 .chc-more summary { font-size: 19px; color: var(--link); cursor: pointer; list-style: none; width: 100%; }
 .chc-more summary::-webkit-details-marker { display: none; }
@@ -579,6 +579,7 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .chc-wide-img { object-fit: contain; object-position: center; }
 .chc-img.cc-empty { background: var(--soft); }
 .chc-ai { position: absolute; left: 8px; top: 8px; z-index: 2; background: color-mix(in srgb, var(--paper) 92%, transparent); border-radius: 3px; padding: 0 4px; }
+.chc-frame { position: relative; display: block; min-width: 0; }
 .chc-base .chc-ai { top: auto; bottom: 8px; }
 .chc-remix-card .chc-ai { top: 6px; }
 .chc-cap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 8px; font-size: 16px; color: var(--body); min-width: 0; }

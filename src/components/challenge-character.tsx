@@ -25,6 +25,7 @@ function RemixGrid({ tiles, alt, remixThis, label }: { tiles: CardTile[]; alt: s
       {tiles.map((t) => (
         <li key={t.versionId}>
           <figure className="chc-remix-card">
+            <span className="chc-frame">
             <Link className="chc-pic chc-pic-wide" href={t.page ?? t.href} data-version={t.versionId} data-slot="remix-page" prefetch={false}>
               {t.thumb ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -33,8 +34,9 @@ function RemixGrid({ tiles, alt, remixThis, label }: { tiles: CardTile[]; alt: s
                 <span className="chc-img cc-empty" aria-hidden="true" />
               )}
             </Link>
-            <span className="chc-ai">
-              <AiTag />
+              <span className="chc-ai">
+                <AiTag />
+              </span>
             </span>
             <figcaption className="chc-cap">
               <span className="chc-by">{designByline(t.byName, t.byFid)}</span>
