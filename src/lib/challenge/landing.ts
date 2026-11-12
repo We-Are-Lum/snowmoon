@@ -69,9 +69,10 @@ export const LANDING_WORDING = {
   arrivalLink: 'How the challenge works',
   /** The card's words, drawn in code. */
   cardTop: 'SNOWMOON · REMIX CHALLENGE',
-  cardAi: 'AI-GENERATED PICTURE · NOT BY THE AUTHOR',
+  /** AI-generated · by {name}; "not by the author" is only beside the book's text (owner, 2026-11-12). */
+  cardAi: (by: string) => `AI-GENERATED PICTURE · BY ${by.toUpperCase()}`,
   previewTitle: (name: string, title: string) => (title.trim() ? `${name}: ${title.trim()}` : name),
-  previewDescription: (name: string, by: string) => `A version of ${name} by ${by}, remixed on Snowmoon Party. AI-generated picture, not by the author.`,
+  previewDescription: (name: string, by: string) => `A version of ${name} by ${by}, remixed on Snowmoon Party. AI-generated picture.`,
   embedButton: 'Remix this', // at most 32 characters (the mini app spec)
 };
 
