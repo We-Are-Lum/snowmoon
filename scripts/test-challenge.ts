@@ -685,8 +685,18 @@ proof('a bounty back in the rules (the old per-character rule) is caught', copyP
 {
   // No bounty anywhere in the challenge (owner, 2026-11-04): not in the config, not in any of its words, not on its pages.
   const words = Object.values(W).flatMap((v) => (typeof v === 'function' ? [String((v as (...a: string[]) => unknown)('Zei', 'Zei'))] : Array.isArray(v) ? v.map(String) : [String(v)])).join(' ');
-  const pages = ['src/app/challenge', 'src/lib/challenge'].flatMap((d) => readdirSync(path.join(ROOT, d), { recursive: true }).map(String).filter((f) => /\.tsx?$/.test(f)).map((f) => readFileSync(path.join(ROOT, d, f), 'utf8'))).join('\n');
-  check('no bounty: none in the config, the wording or the challenge\'s pages', !('bounties' in CHALLENGE) && !('bountyAmount' in CHALLENGE) && !NO_BOUNTY.test(words) && !NO_BOUNTY.test(pages), (words.match(NO_BOUNTY) ?? pages.match(NO_BOUNTY) ?? [''])[0]);
+  // One exception (owner, 2026-11-11, reversing 2026-11-04): the home's "Add a backstory" card points to the poidh bounty.
+  // Only these exact lines of landing-wording.ts are allowed; any other bounty or poidh mention still fails.
+  const BOUNTY_ALLOWED = [
+    "      // The owner's words (2026-11-11). The link is CHALLENGE_LINKS.bounty; until it is set, the line ends \"(bounty opens soon)\".",
+    "      { n: '2', title: 'Add a backstory', tag: '', body: 'Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', link: 'bounty' as const, pending: '(bounty opens soon)' },",
+    "export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: null, collab: null };",
+  ];
+  const stripAllowed = (f: string, text: string) => (f.endsWith('landing-wording.ts') ? text.split('\n').filter((l) => !BOUNTY_ALLOWED.includes(l)).join('\n') : text);
+  const pages = ['src/app/challenge', 'src/lib/challenge'].flatMap((d) => readdirSync(path.join(ROOT, d), { recursive: true }).map(String).filter((f) => /\.tsx?$/.test(f)).map((f) => stripAllowed(f, readFileSync(path.join(ROOT, d, f), 'utf8')))).join('\n');
+  const wordsNoCard = words.replaceAll('Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', '').replaceAll('(bounty opens soon)', '').replaceAll('bounty', (m) => m);
+  check('no bounty: none in the config, the wording or the challenge\'s pages, except the home\'s "Add a backstory" card (owner, 2026-11-11)', !('bounties' in CHALLENGE) && !('bountyAmount' in CHALLENGE) && !NO_BOUNTY.test(wordsNoCard) && !NO_BOUNTY.test(pages), (wordsNoCard.match(NO_BOUNTY) ?? pages.match(NO_BOUNTY) ?? [''])[0]);
+  proof('a second bounty mention in landing-wording.ts is caught (the exception is those lines only)', NO_BOUNTY.test(stripAllowed('landing-wording.ts', "x\n  more: 'A poidh bounty for Zei.',\n")));
   proof('a bounty planted in a page is caught', NO_BOUNTY.test(`${pages}\n<p>The poidh bounty</p>`));
 }
 proof('rules without "forks only" are caught', copyProblems(copy.replace('A new sheet made from scratch isn’t an entry.', '')).length > 0);

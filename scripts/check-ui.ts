@@ -1922,9 +1922,9 @@ async function checkChallengeLanding() {
         const j = page.locator(`.chh-joining[data-character="${slug}"]`);
         if (!/joins mid-challenge\./.test((await j.textContent().catch(() => '')) ?? '') || (await j.locator('img, a').count())) fail(`/challenge ${tag}: ${slug} has no "joins mid-challenge" tile, or it has a picture or a link`);
       }
-      // The ways: only "Remix a picture" until the owner decides the rewards; then New to Snowmoon?, Rules, About the pictures.
+      // The ways: Remix a picture, Add a backstory, Join the collab (owner, 2026-11-11); then New to Snowmoon?, Rules, About the pictures.
       const ways = (await page.locator('.chh-way .chh-way-title').allTextContents()).map((t) => t.trim());
-      if (ways.join('|') !== 'Remix a picture') fail(`/challenge ${tag}: the ways read ${ways.join(', ')}, not only "Remix a picture"`);
+      if (ways.join('|') !== 'Remix a picture|Add a backstory|Join the collab') fail(`/challenge ${tag}: the ways read ${ways.join(', ')}, not "Remix a picture, Add a backstory, Join the collab"`);
       const details = (await page.locator('.chh-detail summary > span:first-child').allTextContents()).map((t) => t.trim());
       if (details.join('|') !== [LW.home.newTitle, LW.home.rulesTitle, LW.home.aboutTitle].join('|')) fail(`/challenge ${tag}: the details read ${details.join(', ')}`);
       if (((await page.locator('.chh-pitch').textContent()) ?? '').trim() !== LW.home.pitch) fail(`/challenge ${tag}: the pitch isn't the owner's`);
