@@ -40,9 +40,10 @@ export const PICTURE_WORDING = {
   /**
    * The redesigned page (Claude Design's handoff, screen 4; owner-approved plan 2026-11-11). DRAFT until the owner's OK:
    * "Remixed from", "This one", "Style", "Model", "Started from", "The exact prompt", "Full recipe". The AI line is the
-   * site's own declaration ("AI-generated, not by the author") with the model's name and terms from the model list.
+   * site's own "AI-generated" with the model's name and terms from the model list (owner, 2026-11-12: no "not by the author"
+   * in sight; the AI label's hidden declaration keeps it). The AI line's wording is approved (owner, 2026-11-12).
    */
-  aiLine: 'AI-generated, not by the author',
+  aiLine: 'AI-generated',
   remixedFrom: 'Remixed from',
   thisOne: 'This one',
   madeStyle: 'Style',

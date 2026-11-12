@@ -124,7 +124,8 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
     note: standing?.kind === 'admin' ? CW.adminNote : !CHALLENGE.pictureEntries ? P.notEntriesYet : null,
     submit,
     posts,
-    /** "AI-generated, not by the author · {model}, a closed model by {maker}" (the full line; owner's rule). */
+    /** "AI-generated · {model}, a closed model by {maker}" (owner, 2026-11-12: no "not by the author" in sight here;
+     *  the AI label's hidden declaration keeps it). */
     aiLine: model ? `${P.aiLine} · ${model}` : P.aiLine,
     /** A closed model's maker, for the phone's chip ("AI · OpenAI"); null for an open model. */
     aiMaker: im?.model ? (closedModel(im.model)?.closed ? (closedModel(im.model)?.maker ?? null) : null) : null,
