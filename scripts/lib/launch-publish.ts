@@ -21,8 +21,14 @@ export const DRAFTS_SOURCE = 'docs/starting-sheet-drafts (branch challenge-style
 
 export const sha = (b: Buffer) => createHash('sha256').update(b).digest('hex');
 
-export interface PinnedFile { file: string; sha256: string }
-export interface BasePick { key: string; character: string; title: string; current_default: boolean; views: Partial<Record<Slot, PinnedFile>>; missing?: string }
+/**
+ * A pinned file. `file` is relative to the drafts folder, or absolute. With `ledger` (an absolute path to a later test
+ * ledger: kind 'picture' rows, prompts by sha256; owner, 2026-11-11, the picks of Bases Pick 2 and Lord Ephelion), its
+ * recipe is read from that ledger's row whose `file` is `row` (recipeFromPictureRow) instead of directions/ledger.json.
+ */
+export interface PinnedFile { file: string; sha256: string; ledger?: string; row?: string }
+/** `text`: the sheet's text when the front's prompt has no character descriptor (a recast's prompt describes only the change). */
+export interface BasePick { key: string; character: string; title: string; current_default: boolean; views: Partial<Record<Slot, PinnedFile>>; missing?: string; text?: string }
 export interface RemixPick { file: string; sha256: string; base: string; base_proposed_by_agent: string; owner_confirmed: boolean; title: string }
 export interface Picks { about: string; drafts: string; bases: BasePick[]; first_remixes: RemixPick[] }
 
@@ -45,7 +51,7 @@ export const readPicks = (file: string): Picks => JSON.parse(readFileSync(file, 
 
 /** The bytes of a pinned file, refused if its sha256 changed. */
 export function pinned(drafts: string, p: PinnedFile): Buffer {
-  const b = readFileSync(path.join(drafts, p.file));
+  const b = readFileSync(path.isAbsolute(p.file) ? p.file : path.join(drafts, p.file));
   const s = sha(b);
   if (s !== p.sha256) throw new Error(`${p.file}: sha256 is ${s}, not the pinned ${p.sha256}: refused`);
   return b;
@@ -55,6 +61,41 @@ type LedgerCall = { file?: string; sha256?: string; kind?: string; recipe?: Reci
 export function readLedger(drafts: string): Map<string, LedgerCall> {
   const l = JSON.parse(readFileSync(path.join(drafts, 'directions/ledger.json'), 'utf8')) as { calls: LedgerCall[] };
   return new Map(l.calls.filter((c) => c.kind === 'image' && c.file).map((c) => [c.file!, c]));
+}
+
+/** A later test ledger (bases-pick-2, ephelion-*): its rows, prompts by sha256, and the bases it edited (refs). */
+type PictureLedger = { prompts: Record<string, string>; refs?: Record<string, { sha256: string; version?: string }>; calls: Record<string, unknown>[] };
+const pictureLedgers = new Map<string, PictureLedger>();
+const readPictureLedger = (file: string): PictureLedger => {
+  if (!pictureLedgers.has(file)) pictureLedgers.set(file, JSON.parse(readFileSync(file, 'utf8')) as PictureLedger);
+  return pictureLedgers.get(file)!;
+};
+/** The prompt check's model (src/lib/images/guard.ts), as the launch recipes record it. */
+export const PROMPT_CHECK_MODEL = 'openai/gpt-oss-safeguard-20b';
+
+/**
+ * A full recipe from a later test ledger's row (owner, 2026-11-11): the prompt (by its sha256), the model and its host,
+ * the settings and conversion, the request id, the reported cost, when, the size, the picture it was edited from (a
+ * published base's front, or the earlier step it was edited from), the prompt check's verdict, and what the coding
+ * agent drafted. Undefined when the row isn't there or wasn't made.
+ */
+export function recipeFromPictureRow(ledgerFile: string, rowFile: string): { recipe: Recipe; sha256: string } | undefined {
+  const l = readPictureLedger(ledgerFile);
+  const row = l.calls.find((c) => c.kind === 'picture' && c.file === rowFile && c.status === 'ok') as Record<string, any> | undefined; // eslint-disable-line @typescript-eslint/no-explicit-any
+  if (!row) return undefined;
+  const prompt = l.prompts[row.prompt_sha256 as string];
+  const guard = l.calls.find((c) => c.kind === 'guard' && c.prompt_sha256 === row.prompt_sha256) as { status?: string } | undefined;
+  const refSha = (row.reference_sha256 as string | undefined) ?? (row.character && l.refs?.[row.character as string]?.sha256);
+  const refWhat = row.reference_sha256 ? 'the earlier step of this picture, recorded in the same ledger or the one before it' : row.character ? `the published base front of ${row.character} (version ${l.refs?.[row.character as string]?.version ?? 'unknown'})` : '';
+  const recipe: Recipe = {
+    prompt, model: 'gpt-image-2.5-sunburst', endpoint: String(row.endpoint), host: String(row.host),
+    settings: { ...(row.settings as Record<string, unknown>), converted: { from: 'image/png', sha256: row.original_sha256, original_size: row.original_size, to: 'jpeg', fit: row.converted } },
+    seed: null, request_id: (row.request_id as string | null) ?? null, cost_usd: Number(row.cost_usd), made_at: String(row.at), width: 576, height: 768,
+    ...(refSha ? { references: [{ sha256: String(refSha), what: refWhat }] } : {}),
+    checks: { prompt: { model: PROMPT_CHECK_MODEL, verdict: guard?.status === 'ok' ? 'ok' : 'not run' }, host_safety_checker: 'not run' },
+    assist: { model: 'claude-coding-agent', drafted: ['prompt'], source: path.basename(path.dirname(ledgerFile)) + '/ledger.json' },
+  };
+  return { recipe, sha256: String(row.sha256) };
 }
 
 /** What a recipe lacks before it can be published (empty when complete). */
@@ -90,8 +131,9 @@ export function planBase(drafts: string, ledger: Map<string, LedgerCall>, pick: 
   for (const slot of SLOTS) {
     const f = pick.views[slot];
     if (!f) continue;
-    const call = ledger.get(f.file);
-    if (!call) { problems.push(`${f.file}: not in the drafts' ledger`); continue; }
+    const fromRow = f.ledger ? recipeFromPictureRow(f.ledger, f.row ?? path.basename(f.file)) : undefined;
+    const call = f.ledger ? (fromRow ? { sha256: fromRow.sha256, recipe: fromRow.recipe } : undefined) : ledger.get(f.file);
+    if (!call) { problems.push(`${f.file}: not in ${f.ledger ? path.basename(path.dirname(f.ledger)) + '/ledger.json' : "the drafts' ledger"}`); continue; }
     if (call.sha256 !== f.sha256) problems.push(`${f.file}: the ledger's sha256 is not the pinned one`);
     let bytes: Buffer;
     try { bytes = pinned(drafts, f); } catch (e) { problems.push((e as Error).message); continue; }
@@ -104,7 +146,8 @@ export function planBase(drafts: string, ledger: Map<string, LedgerCall>, pick: 
   let text = '';
   const front = pics.find((p) => p.slot === 'front');
   if (front) {
-    try { text = descriptor(front.recipe.prompt); } catch (e) { problems.push((e as Error).message); }
+    if (pick.text) text = pick.text;
+    else try { text = descriptor(front.recipe.prompt); } catch (e) { problems.push((e as Error).message); }
     if (text.length > textMax) problems.push(`the sheet's text is ${text.length} characters, over ${textMax}`);
   }
   const missing = SLOTS.filter((s) => !pick.views[s]);
@@ -116,7 +159,9 @@ export function planBase(drafts: string, ledger: Map<string, LedgerCall>, pick: 
     by_name: byName,
     by_name_source: null,
     role: 'maintainer',
-    assist: { model: 'claude-coding-agent', drafted: ['character descriptor', 'view prompts'], source: `${DRAFTS_SOURCE}, directions/ledger.json` },
+    assist: pick.views.front?.ledger
+      ? { model: 'claude-coding-agent', drafted: ['sheet text', 'prompts'], source: `${path.basename(path.dirname(pick.views.front.ledger))}/ledger.json` }
+      : { model: 'claude-coding-agent', drafted: ['character descriptor', 'view prompts'], source: `${DRAFTS_SOURCE}, directions/ledger.json` },
     style: null,
   });
   return { pick, pics, text, missing, problems, body };
@@ -182,16 +227,20 @@ export function remixRecipe(r: MjRecipe, converted: { sha256: string; width: num
 }
 
 /**
- * The gates before anything is written, as one pure function (tested): --apply needs --confirm-owner-go; the challenge
- * must still be private (bases and first remixes go up after the launch PR is live and before CHALLENGE.public is
- * turned on; this replaces seed-designs' "refuses from CHALLENGE.dates.opens"); closed-model bases wait for
- * CHALLENGE.closedBasesAllowed (closedBaseRefusal, given here as its result per base).
+ * The gates before anything is written, as one pure function (tested): --apply needs --confirm-owner-go; closed-model
+ * bases wait for CHALLENGE.closedBasesAllowed (closedBaseRefusal, given here as its result per base). While the
+ * challenge is public, only bases with a front view alone can be added (owner, 2026-11-11: "adding bases to a live
+ * challenge, front views only, still behind --confirm-owner-go"); before the flip, any base (the launch's rule).
  */
-export function applyGate(o: { apply: boolean; confirmed: boolean; isPublic: boolean; refusals: string[] }): string[] {
+export function applyGate(o: { apply: boolean; confirmed: boolean; isPublic: boolean; refusals: string[]; picks?: Pick<BasePick, 'key' | 'views'>[] }): string[] {
   const out: string[] = [];
   if (!o.apply) return out;
   if (!o.confirmed) out.push('--apply needs --confirm-owner-go (the owner\'s go)');
-  if (o.isPublic) out.push('CHALLENGE.public is on: bases and first remixes go up while the challenge is still admin-only (after the launch PR is live, before the flip)');
+  if (o.isPublic) {
+    const withViews = (o.picks ?? []).filter((p) => p.views.side || p.views.back).map((p) => p.key);
+    if (!o.picks) out.push('CHALLENGE.public is on: only bases (front views only) can be added to a live challenge, not first remixes');
+    else if (withViews.length) out.push(`CHALLENGE.public is on: only a front view can be added to a live challenge (${withViews.join(', ')} ${withViews.length > 1 ? 'have' : 'has'} side or back views)`);
+  }
   out.push(...o.refusals);
   return out;
 }
