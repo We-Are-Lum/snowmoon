@@ -33,6 +33,8 @@ export const MODEL_WORDING = {
    * can use a closed model here. Such a picture uses none of today's pictures (src/lib/images/limits.ts giveBack).
    */
   openBlocked: (closedOk: boolean) => `This picture was blocked by the open model's safety check. Try other words${closedOk ? ', or a closed model' : ''}.`,
+  /** Redesign D: the closed models' notice dialog's way out, which picks the open default instead (Esc does the same). */
+  useOpen: 'Use the open model', // DRAFT (redesign D, 2026-11-12)
   noticeFirst: 'Read the model’s notice first.',
   adultFirst: 'Confirm you’re 18 or older first.',
 } as const;

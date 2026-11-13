@@ -7,7 +7,7 @@ import { ChallengeMake } from '~/components/challenge-make';
 export default function ChallengeMakeNotFound() {
   return (
     <ChallengeFlowGate fallback={<NotFound />}>
-      <div className="page prose ch-page">
+      <div className="page prose ch-page mk-wrap">
         <Suspense>
           <ChallengeMake />
         </Suspense>

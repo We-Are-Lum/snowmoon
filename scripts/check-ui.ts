@@ -1811,12 +1811,14 @@ async function checkChallengeLive() {
     }
     // One line when these pass, so a skipped check can't pass for a silent one (owner, 2026-11-10).
     // "Make it" in reach on phones (owner, 2026-11-11): under 768px it sticks to the bottom of the first screen, and goes
-    // back to its place while a field has focus (the keyboard is up); at 1440 it never sticks.
+    // back to its place while a field has focus (the keyboard is up); at 1440 it never sticks. Redesign D (2026-11-12):
+    // the button sits in the MakeBar (.mk-makebar, with the line under it), so the bar is what sticks; at 1440 the bar is
+    // the foot of the right-hand panel, in its place.
     const base = (Object.values(CHALLENGE.bases as Record<string, string[]>).flat()[0]) ?? null;
     if (base) {
       await open(page, `/challenge/make?from=${base}`);
-      const make = page.locator('.mk-page[data-step="remix"] > .mk-make').first();
-      await make.waitFor({ timeout: 15000 }).catch(() => fail(`/challenge/make @${w} (${scheme}, live): no "Make it" button`));
+      const make = page.locator('.mk-page[data-step="remix"] > .mk-makebar').first();
+      await make.locator('.mk-make').first().waitFor({ timeout: 15000 }).catch(() => fail(`/challenge/make @${w} (${scheme}, live): no "Make it" button in the MakeBar`));
       const at = async () => make.evaluate((e) => ({ pos: getComputedStyle(e).position, bottom: e.getBoundingClientRect().bottom, top: e.getBoundingClientRect().top, vh: window.innerHeight }));
       const s = await at().catch(() => null);
       if (s && w < 768) {

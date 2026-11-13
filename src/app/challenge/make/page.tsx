@@ -15,7 +15,7 @@ export const metadata: Metadata = { robots: { index: false, follow: false } };
 export default function ChallengeMakePage() {
   if (!CHALLENGE.public) notFound();
   return (
-    <div className="page prose ch-page">
+    <div className="page prose ch-page mk-wrap">
       <Suspense>
         <ChallengeMake />
       </Suspense>

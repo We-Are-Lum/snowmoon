@@ -423,17 +423,6 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .mk-make, .mk-publish { border: 0; cursor: pointer; width: 100%; }
 .mk-make:disabled, .mk-publish:disabled { opacity: 0.6; cursor: default; }
 @media (min-width: 640px) { .mk-make, .mk-publish { width: auto; align-self: flex-start; min-width: 280px; } }
-/* "Make it" stays in reach on phones (owner, 2026-11-11): under 768px the remix screen's button sticks to the bottom of the
-   screen (above the safe area, on a paper band) until its own place scrolls into view. CSS only. It goes back to its
-   place, never covering anything, while the person types (a focused field: the keyboard is up), while a model's notice
-   or the 18+ box is open (they sit right above it), and while the sign-in choices are open. Wider screens: unchanged. */
-/* Only where :has() works (owner, 2026-11-11): without it the button couldn't step back, so it stays in its place there. */
-@supports selector(:has(*)) {
-  @media (max-width: 767px) {
-    .mk-page[data-step="remix"] > .mk-make { position: sticky; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 3; box-shadow: 0 0 0 12px var(--paper); }
-    .mk-page[data-step="remix"]:has(.dz-notice, textarea:focus, input:focus, .mk-make[aria-expanded="true"]) > .mk-make { position: static; box-shadow: none; }
-  }
-}
 .mk-actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .mk-again { min-height: 56px; }
 .mk-at, .mk-words { margin: 0; }
@@ -500,6 +489,139 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .mk-backstory-text { margin: 0 0 4px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .mk-backstory-by { margin: 0; font-size: 14px; }
 .mk-publish-without { margin: 8px 0; }
+
+/* Redesign D (Claude Design's handoff, screen 3, 2026-11-12): the remix screen (/challenge/make) and its preview
+   (/challenge/make/<draft>), scoped to .mk-d so the published picture's page keeps the rules above. Phone and tablet:
+   one column under the screen's own bar ("‹ Back", "Remixing {name}", ✕). From 1024px: a full-height page, the picture
+   (or the original and the new one side by side) on the left, a 520px panel on the right whose body scrolls over the
+   MakeBar. Colours are the site's tokens only. */
+.mk-d { gap: 18px; }
+.mk-d .mk-bar { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; min-height: 44px; margin: calc(-1 * var(--space-5)) calc(-1 * var(--gutter)) 0; padding: 0 16px; border-bottom: 1px solid var(--rule); }
+.mk-d .mk-back { justify-self: start; padding: 0; }
+.mk-d .mk-close { justify-self: end; }
+.mk-d .mk-back-name { display: none; }
+.ch-page .mk-d h1.mk-title { margin: 0; font-family: var(--reading); font-weight: 400; font-size: 18px; line-height: 1.2; text-align: center; }
+.mk-d .mk-pictures { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.mk-d .mk-figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; min-height: 0; }
+.mk-d .mk-frame { position: relative; flex: none; height: 300px; border-radius: var(--radius); overflow: hidden; background: var(--soft); }
+.mk-d[data-step="preview"] .mk-new .mk-frame { height: 440px; }
+.mk-d .mk-frame .mk-picture { display: block; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; object-fit: contain; border-radius: 0; background: transparent; }
+.mk-d .mk-ai { position: absolute; left: 8px; bottom: 8px; z-index: 2; padding: 0 4px; border-radius: 3px; background: color-mix(in srgb, var(--paper) 92%, transparent); }
+.mk-d .mk-cap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; font-size: 16px; line-height: 1.35; color: var(--body); }
+.mk-d[data-step="preview"] .mk-orig { display: none; }
+.mk-d .mk-panel { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+/* The change box (and every published box here): its label at reading size, a card field with an ink border. */
+.mk-d .published-field { display: flex; flex-direction: column; gap: 6px; }
+.mk-d .published-field label { font-size: 17px; line-height: 1.3; color: var(--ink); }
+.mk-d .published-field textarea { box-sizing: border-box; width: 100%; padding: 10px 12px; border: 1px solid var(--ink); border-radius: var(--radius); background: var(--card); color: var(--ink); font-family: var(--reading); font-size: 18px; line-height: 1.4; resize: vertical; }
+.mk-d .published-field textarea:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.mk-d .publication-line { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); }
+/* The Style and Model rows: fieldsets with a legend. */
+.mk-d .mk-styles, .mk-d .mk-model { gap: 4px; }
+.mk-d .mk-set { display: flex; flex-direction: column; gap: 8px; min-width: 0; margin: 0; padding: 0; border: 0; }
+.mk-d .mk-legend { padding: 0 0 8px; font-size: 17px; line-height: 1.3; }
+.mk-d .mk-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.mk-d .mk-chips .cc-chip { min-height: 40px; padding: 0 14px; border: 1px solid var(--rule); border-radius: 20px; background: transparent; color: var(--ink); font-family: var(--reading); font-size: 17px; white-space: nowrap; cursor: pointer; }
+.mk-d .mk-chips .cc-chip:hover { border-color: var(--ink); }
+.mk-d .mk-chips .cc-chip > [aria-hidden='true'] { margin-left: 6px; }
+.mk-d .mk-chips .cc-chip[aria-pressed='true'] { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.mk-d .mk-styles .published-field { margin-top: 4px; }
+.mk-d .mk-models { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.mk-d .mk-model-chip { box-sizing: border-box; display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px; padding: 0 14px; border: 1px solid var(--rule); border-radius: var(--radius); background: transparent; color: var(--ink); font-family: var(--reading); font-size: 17px; text-align: left; cursor: pointer; }
+.mk-d .mk-model-chip:hover { border-color: var(--ink); }
+.mk-d .mk-model-chip[aria-pressed='true'] { border-color: var(--ink); background: var(--card); color: var(--ink); }
+.mk-d .mk-model-tag { flex: none; font-family: var(--label); font-size: var(--text-label); color: var(--body); white-space: nowrap; }
+.mk-d .mk-model-meta { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.55; color: var(--body); }
+.mk-d .mk-model-few, .mk-d .mk-model-note, .mk-d .mk-model-cap { margin: 0; }
+/* The MakeBar: "Make it" (or Try again and Publish, 1:2), errors inline above it, what it uses under it. */
+.mk-d .mk-makebar { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.mk-d .mk-make, .mk-d .mk-publish { width: 100%; min-width: 0; min-height: 52px; align-self: stretch; padding: 0 16px; border: 0; border-radius: var(--radius); background: var(--ink); color: var(--paper); font-family: var(--reading); font-size: 20px; letter-spacing: 0; text-transform: none; cursor: pointer; }
+.mk-d .mk-make:focus-visible, .mk-d .mk-publish:focus-visible, .mk-d .mk-again:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.mk-d .mk-uses { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); text-align: center; }
+.mk-d .mk-error { margin: 0 0 4px; }
+.mk-d .mk-makebar .signin-choices { margin: 0 0 8px; }
+.mk-d .mk-actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 8px; }
+.mk-d .mk-again { min-height: 52px; border: 1px solid var(--ink); border-radius: var(--radius); background: transparent; color: var(--ink); font-family: var(--reading); font-size: 18px; letter-spacing: 0; text-transform: none; }
+/* After Make it: the words as published, the recipe line, the backstory, How it was made. */
+.mk-d .mk-said { display: flex; flex-direction: column; gap: 4px; }
+.mk-d .mk-said-label { margin: 0; font-size: 16px; color: var(--muted); }
+.mk-d .mk-words { margin: 0; font-size: 19px; line-height: 1.4; overflow-wrap: anywhere; }
+.mk-d .mk-recipe { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); overflow-wrap: anywhere; }
+.mk-d .mk-story { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.mk-d .mk-story summary, .mk-d .mk-how summary { list-style: none; }
+.mk-d .mk-story summary::-webkit-details-marker, .mk-d .mk-how summary::-webkit-details-marker { display: none; }
+.mk-d .mk-story summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 48px; font-size: 18px; cursor: pointer; }
+.mk-d .mk-count { font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.mk-d .mk-story .mk-backstory { margin: 0 0 8px; }
+.mk-d .mk-story .published-field textarea { border-color: var(--rule); }
+.mk-d .mk-story-shown { margin: 0 0 14px; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); }
+.mk-d .mk-publish-without { margin: 0; }
+/* Phones: the Style chips scroll sideways (no scrollbar); the MakeBar is pinned to the bottom of the screen. */
+@media (max-width: 767px) {
+  .page.mk-wrap { padding-bottom: 0; }
+  .mk-d .mk-chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 calc(-1 * var(--gutter)); padding: 0 var(--gutter) 2px; scrollbar-width: none; }
+  .mk-d .mk-chips::-webkit-scrollbar { display: none; }
+  .mk-d .mk-chips li { flex: none; }
+  .mk-d .mk-chips .cc-chip { min-height: 44px; border-radius: 22px; }
+  .mk-d .mk-model-chip { padding: 0 12px; font-size: 16px; }
+  .mk-d > .mk-makebar { margin: 0 calc(-1 * var(--gutter)); padding: 10px 16px 24px; border-top: 1px solid var(--ink); background: var(--paper); }
+}
+@media (pointer: coarse) { .mk-d .mk-chips .cc-chip { min-height: 44px; } }
+/* "Make it" stays in reach on phones (owner, 2026-11-11): under 768px the MakeBar sticks to the bottom of the screen. CSS
+   only. It goes back to its place, never covering anything, while the person types (a focused field: the keyboard is up)
+   and while the sign-in choices are open. Only where :has() works (owner, 2026-11-11): without it the bar couldn't step
+   back, so it stays in its place there. A closed model's notice is a modal dialog now, over everything. */
+@supports selector(:has(*)) {
+  @media (max-width: 767px) {
+    .mk-d > .mk-makebar { position: sticky; bottom: 0; z-index: 3; }
+    .mk-d:has(textarea:focus, input:focus, .mk-make[aria-expanded="true"]) > .mk-makebar { position: static; }
+  }
+}
+/* Desktop: the full-height page, picture left, panel right. */
+@media (min-width: 1024px) {
+  .page.mk-wrap { max-width: none; margin: 0; padding: 0; }
+  .mk-d { display: grid; grid-template-columns: minmax(0, 1fr) 520px; grid-template-rows: auto minmax(0, 1fr) auto; gap: 0; height: 100vh; height: 100dvh; }
+  .mk-d .mk-bar { grid-column: 1 / -1; grid-row: 1; display: grid; grid-template-columns: minmax(0, 1fr) 520px; align-items: stretch; margin: 0; padding: 0; border-bottom: 0; }
+  .mk-d .mk-bar .mk-back, .mk-d .mk-bar .mk-close { display: none; }
+  .mk-d .mk-back-name, .mk-d[data-step="preview"] .mk-bar .mk-back { display: inline-flex; align-items: center; min-height: 44px; grid-column: 1; grid-row: 1; justify-self: start; align-self: end; margin: 28px 0 0 56px; padding: 0; font-size: 18px; text-decoration: none; }
+  .ch-page .mk-d h1.mk-title { grid-column: 2; grid-row: 1; padding: 28px 32px 0; border-left: 1px solid var(--rule); font-size: 34px; text-align: left; }
+  .mk-d .mk-pictures { grid-column: 1; grid-row: 2 / 4; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 16px; min-height: 0; padding: 14px 40px 32px 56px; }
+  .mk-d .mk-frame, .mk-d[data-step="preview"] .mk-new .mk-frame { flex: 1; height: auto; min-height: 0; }
+  .mk-d .mk-new .mk-frame { outline: 2px solid var(--ink); }
+  .mk-d[data-step="preview"] .mk-orig { display: flex; }
+  .mk-d .mk-from { display: none; }
+  .mk-d .mk-ai { left: 10px; bottom: 10px; }
+  .mk-d .mk-panel { grid-column: 2; grid-row: 2; min-height: 0; overflow-y: auto; overscroll-behavior: contain; gap: 22px; padding: 22px 32px 20px; border-left: 1px solid var(--rule); }
+  .mk-d .mk-makebar { grid-column: 2; grid-row: 3; gap: 6px; max-height: 50vh; overflow-y: auto; padding: 16px 32px 20px; border-left: 1px solid var(--rule); border-top: 1px solid var(--rule); background: var(--paper); }
+  .mk-d .mk-make, .mk-d .mk-publish { font-size: 21px; }
+  .mk-d .mk-again { font-size: 19px; }
+  .mk-d .published-field label, .mk-d .mk-legend { font-size: 18px; }
+  .mk-d #mk-words { padding: 12px 14px; font-size: 19px; }
+  .mk-d .mk-story summary { font-size: 19px; }
+}
+
+/* The closed models' notice (redesign D, "AdultNotice"; src/components/challenge-model-row.tsx): a modal dialog, centred
+   460px on the scrim; a bottom sheet under 768px. Its words are the legal texts (MODEL_NOTICES, ADULT_CONFIRM). */
+.mk-notice { box-sizing: border-box; width: 460px; max-width: calc(100vw - 32px); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 26px 28px; border: 0; border-radius: 4px; background: var(--card); color: var(--ink); }
+.mk-notice::backdrop { background: var(--scrim); }
+.mk-notice .dz-notice { display: flex; flex-direction: column; gap: 14px; }
+.ch-page .mk-notice h2.dz-notice-title, .mk-notice h2.dz-notice-title { margin: 0; font-family: var(--reading); font-weight: 400; font-size: 26px; line-height: 1.2; }
+.mk-notice .dz-note { font-family: var(--reading); font-size: 18px; line-height: 1.45; color: var(--body); }
+.mk-notice .dz-row { display: flex; gap: 10px; align-items: center; min-height: 44px; font-size: 18px; cursor: pointer; }
+.mk-notice .dz-row input { flex: none; width: 20px; height: 20px; margin: 0; accent-color: var(--ink); }
+.mk-notice .dz-notice-buttons { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.mk-notice .dz-notice-buttons .ic-primary { grid-column: 1 / -1; min-height: 46px; font-family: var(--reading); font-size: 18px; letter-spacing: 0; text-transform: none; }
+.mk-notice .dz-notice-buttons .ic-link, .mk-notice .dz-notice-cancel { align-self: stretch; min-height: 46px; font-family: var(--reading); font-size: 17px; line-height: 1.2; text-transform: none; }
+.mk-notice .dz-notice-cancel { border-color: var(--ink); }
+.mk-notice button:focus-visible, .mk-notice input:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+@media (max-width: 767px) {
+  .mk-notice { position: fixed; inset: auto 0 0 0; margin: 0; width: 100%; max-width: 100%; max-height: 85dvh; padding: 22px 22px 30px; border-radius: var(--radius-sheet) var(--radius-sheet) 0 0; }
+  .ch-page .mk-notice h2.dz-notice-title, .mk-notice h2.dz-notice-title { font-size: 23px; }
+  .mk-notice .dz-note { font-size: 17px; }
+  .mk-notice .dz-row input { width: 22px; height: 22px; }
+  .mk-notice .dz-notice-buttons { grid-template-columns: minmax(0, 1fr); }
+  .mk-notice .dz-notice-buttons .ic-primary { min-height: 50px; }
+}
 
 /* The remix challenge home, redesigned (Claude Design's handoff, screen 1; owner-approved 2026-11-11): the full width of
    the main column (up to 1280px), pictures first. Phone: the gutter; desktop: 56px each side. */

@@ -41,6 +41,10 @@ export const MAKE_WORDING = {
    */
   modelChip: `${IMAGES.editModel.name} · Black Forest Labs · open`,
   makeIt: 'Make it',
+  // Redesign D (Claude Design's handoff, screen 3; 2026-11-12): the line under "Make it", what one picture uses ({n}: 1,
+  // or 3 for a closed model) and, when the server knows it, how many of today's pictures are left. DRAFT wording.
+  uses: 'uses {n} of today’s pictures', // DRAFT (redesign D, 2026-11-12)
+  left: '{n} left', // DRAFT (redesign D, 2026-11-12)
   making: 'Making it…',
   signIn: 'Sign in to make it',
   remixing: (name: string) => `Remixing ${name}`,
@@ -52,6 +56,8 @@ export const MAKE_WORDING = {
   publishing: 'Publishing…',
   howMade: 'How it was made',
   startedFrom: 'Started from',
+  /** Redesign D: the new picture's caption, beside the one it started from (it lives only in this tab until published). */
+  yourRemix: 'Your remix · only in this tab until you publish', // DRAFT (redesign D, 2026-11-12)
   /** Asked once when leaving a made picture unpublished (it is only in this tab until published). */
   leave: 'Leave without publishing? The picture isn’t saved anywhere until you publish it.',
   gone: 'This preview is no longer here (it lives only in the tab that made it). Make it again.',

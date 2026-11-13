@@ -4,6 +4,7 @@ import { CHALLENGE, IMAGES } from '../config';
 import { bookCharacter, listDesigns } from '../images/designs';
 import { chapterChip, momentById, MOMENTS, readerHref, type Moment } from './moments';
 import { MAKE_WORDING as M, sampleAlt, styleLabel } from './make-wording';
+import { LANDING_WORDING } from './landing-wording';
 import { challengeModels, modelChipText, type ModelRowEntry } from './models';
 import type { Source } from './pictures';
 import { shuffleFresh } from './shuffle';
@@ -178,7 +179,7 @@ export function makeView(src: Source, opts: { styles: readonly PublishedStyle[];
     defaultStyle,
     ownStyleMax: OWN_STYLE_MAX,
     models: models.map((m) => ({ ...m, chip: modelChipText(m) })),
-    w: { ...M, remixing: M.remixing(name), picture: M.picture(name), ownStyleLabel: M.ownStyleLabel, wordsLabel: momentsOn ? M.wordsLabel : M.changeLabel(name), wordsPlaceholder: momentsOn ? M.wordsPlaceholder : '' },
+    w: { ...M, remixing: M.remixing(name), picture: M.picture(name), pictureAlt: LANDING_WORDING.pictureAltMoment(name), ownStyleLabel: M.ownStyleLabel, wordsLabel: momentsOn ? M.wordsLabel : M.changeLabel(name), wordsPlaceholder: momentsOn ? M.wordsPlaceholder : '' },
   };
 }
 export type MakeView = ReturnType<typeof makeView>;
