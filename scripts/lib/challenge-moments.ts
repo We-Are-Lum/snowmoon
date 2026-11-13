@@ -13,6 +13,7 @@ import type { Moment } from '../../src/lib/challenge/moments';
 import { quoteProblems } from '../../src/lib/challenge/book-quotes';
 import { cardQuotes, cardShapeProblems, FIRST_LAYER_MAX_CHAPTER } from '../../src/lib/challenge/cards';
 import { momentShapeProblems } from '../../src/lib/challenge/moments';
+import { LATER_LABEL, learnMoreProblems, type LearnMoreText } from '../../src/lib/challenge/learn-more';
 
 export type Files = { file: string; text: string }[];
 const stripComments = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
@@ -29,6 +30,9 @@ export const P9G_FILES = {
   make: 'src/components/challenge-make.tsx',
   makeLib: 'src/lib/challenge/make.ts',
   makeApi: 'src/app/api/challenge/make/route.ts',
+  learnView: 'src/lib/challenge/learn-more-view.ts',
+  learnData: 'src/lib/challenge/learn-more.ts',
+  character: 'src/components/challenge-character.tsx',
 };
 /** Where the cards' and moments' words may be imported: the challenge's own code only. */
 const MAY_IMPORT = /^src\/lib\/challenge\/|^src\/app\/challenge\/|^src\/app\/api\/challenge\/|^src\/components\/challenge-[a-z-]+\.tsx$/;
@@ -43,6 +47,8 @@ export function p9gProblems(p: {
   /** spoilerExceptionOn, from src/lib/challenge/spoilers.ts. */
   on: (now: Date, dates: { opens: string; closes: string }) => boolean;
   dates: { opens: string; closes: string };
+  /** "Learn more about {name}" (owner, 2026-11-12): the texts and the fold's label. Defaults to the committed ones. */
+  learn?: { texts: Readonly<Record<string, LearnMoreText>>; label: string };
 }): string[] {
   const out: string[] = [];
   // Only the six characters' cards and the curated moments, and every quote word for word at its block.
@@ -59,10 +65,33 @@ export function p9gProblems(p: {
   const viewDeeper = /\.(facts|more|appears)\b|from '\.\/moments'/.exec(view);
   if (viewDeeper) out.push(`${P9G_FILES.view}: the pages' data carries more than a card's one line, or the moments ("${viewDeeper[0]}")`);
   if (!/line: cardOf\(slug\)\?\.line/.test(view)) out.push(`${P9G_FILES.view}: a character's line isn't its card's one line`);
-  // "Read more about {name}" (owner, 2026-11-12: ADD): the first-layer facts, and only through firstLayerFacts, which reads
-  // a card's `facts` (never `more` or `appears`) and keeps none past chapter FIRST_LAYER_MAX_CHAPTER.
-  const factsUse = view.match(/\bfacts\s*:[^,}]*/g) ?? [];
-  for (const u of factsUse) if (!/^facts\s*:\s*firstLayerFacts\(slug\)$/.test(u.trim()) && !/^facts\s*:\s*\{/.test(u.trim())) out.push(`${P9G_FILES.view}: the page's facts aren't the first layer's (firstLayerFacts): "${u.trim()}"`);
+  // "Learn more about {name}" (owner, 2026-11-12; P9 in docs/principles.md): its fallback facts are the first layer's,
+  // only through firstLayerFacts, which reads a card's `facts` (never `more` or `appears`) and keeps none past chapter
+  // FIRST_LAYER_MAX_CHAPTER; the pages' data carries no facts of its own.
+  const learnView = stripComments(get(p.files, P9G_FILES.learnView) ?? '');
+  const factsUse = [...(view.match(/\bfacts\s*:[^,}]*/g) ?? []).map((u) => [P9G_FILES.view, u] as const), ...(learnView.match(/\bfacts\s*:[^,}]*/g) ?? []).map((u) => [P9G_FILES.learnView, u] as const)];
+  for (const [f, u] of factsUse) if (!/^facts\s*:\s*(shown \? \[\] : )?firstLayerFacts\(slug\)$/.test(u.trim()) && !/^facts\s*:\s*\{/.test(u.trim())) out.push(`${f}: the page's facts aren't the first layer's (firstLayerFacts): "${u.trim()}"`);
+  // The texts: shown only when they keep the rule ("who", "start", "drives" and "Room to invent." cite chapters 1 to 14);
+  // the owner's (approved) texts must keep it; "later" only inside its fold, labelled exactly, closed by default; the
+  // glossary's notes from chapters 1 to 14 outside the fold.
+  const learn = p.learn ?? { texts: {} as Record<string, LearnMoreText>, label: LATER_LABEL };
+  if (learn.label !== 'Later in the book (spoilers)') out.push(`${P9G_FILES.learnData}: the fold's label is "${learn.label}", not exactly "Later in the book (spoilers)"`);
+  for (const [slug, t] of Object.entries(learn.texts)) if (t.approved) out.push(...learnMoreProblems(slug, t));
+  if (p.learn && !/const shown = t && learnMoreProblems\(slug\)\.length === 0 \? t : null;/.test(learnView)) out.push(`${P9G_FILES.learnView}: a character's texts are shown without keeping the rule (learnMoreProblems)`);
+  if (p.learn && (!/later: \{ head: LATER_LABEL, segs: render\(slug, 'later', shown\.later, Infinity\) \}/.test(learnView) || (learnView.match(/OPEN_MAX_CHAPTER\)/g) ?? []).length < 4 || (learnView.match(/Infinity\)/g) ?? []).length !== 1)) out.push(`${P9G_FILES.learnView}: the open parts' glossary notes aren't held to chapters 1 to 14, or "later" isn't the fold's`);
+  const comp = stripComments(get(p.files, P9G_FILES.character) ?? '');
+  if (p.learn) {
+    const fold = /<details className="chc-later"(\s[^>]*)?>[\s\S]*?<\/details>/.exec(comp);
+    if (!fold) out.push(`${P9G_FILES.character}: no fold for "later" (<details className="chc-later">)`);
+    else {
+      if (fold[1] && /\bopen\b/.test(fold[1])) out.push(`${P9G_FILES.character}: the spoilers fold is open by default`);
+      if (!/<summary>\{P\.learn\.text\.later\.head\}<\/summary>/.test(fold[0])) out.push(`${P9G_FILES.character}: the fold's summary isn't its label`);
+      const outside = comp.replace(fold[0], '');
+      if (/\.later\b/.test(outside)) out.push(`${P9G_FILES.character}: "later" is shown outside its fold`);
+    }
+  }
+  // The label and the words "spoilers" / "Later in the book" only in the texts' own file (the fold's constant).
+  for (const f of p.files) if (MAY_IMPORT.test(f.file) && f.file !== P9G_FILES.learnData && /\(spoilers\)/i.test(stripComments(f.text))) out.push(`${f.file}: a spoiler label outside the "Learn more" fold`);
   const cardsSrc = stripComments(get(p.files, P9G_FILES.cards) ?? '');
   const fl = /export const firstLayerFacts = [\s\S]*?;\n/.exec(cardsSrc)?.[0] ?? '';
   if (!fl) out.push(`${P9G_FILES.cards}: no firstLayerFacts`);

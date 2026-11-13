@@ -130,7 +130,15 @@ export const LANDING_WORDING = {
     newestFirst: 'newest first',
     remix: (name: string) => `Remix ${name}`,
     remixThis: 'Remix this',
-    readMore: (name: string) => `Read more about ${name}`,
+    // "Learn more about {name}" (owner, 2026-11-12): one expander, replacing "Read where {name} first appears" and "Read
+    // more". The heads are the owner's; the ⓘ's words and the "Draft wording" mark are DRAFT (coding agent).
+    learnMore: (name: string) => `Learn more about ${name}`,
+    whoHead: (pronoun: 'he' | 'she') => (pronoun === 'she' ? 'Who she is.' : 'Who he is.'),
+    startText: 'At the start.',
+    drivesHead: (pronoun: 'he' | 'she') => (pronoun === 'she' ? 'What drives her.' : 'What drives him.'),
+    inventHead: 'Room to invent.',
+    glossaryLink: 'In the glossary →',
+    draft: 'Draft wording',
     looks: (name: string) => `The book doesn’t describe ${name}’s looks. Every picture’s look is this edition’s.`,
     // "Read more"'s facts (owner, 2026-11-12: ADD the first-layer facts). DRAFT wording (coding agent): the note and the chip.
     factsNote: 'From chapters 1 to 14. Each line is this edition’s; the quote under it is the book’s, word for word.',

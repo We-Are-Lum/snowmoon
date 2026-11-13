@@ -98,7 +98,8 @@ check('config: a current default look per challenge character, each a design id 
 // --- P9g, P2m, P6ac -------------------------------------------------------------------------------------------------
 {
   const files = walk('src').map((f) => ({ file: f, text: read(f) }));
-  const base = { files, cards: CARDS, moments: MOMENTS, characters: CHALLENGE.characters, blocks, on: spoilerExceptionOn, dates: CHALLENGE.dates };
+  const LM = await import('../src/lib/challenge/learn-more');
+  const base = { files, cards: CARDS, moments: MOMENTS, characters: CHALLENGE.characters, blocks, on: spoilerExceptionOn, dates: CHALLENGE.dates, learn: { texts: LM.LEARN_MORE, label: LM.LATER_LABEL as string } };
   const p9 = p9gProblems(base);
   check('P9g passes as committed', p9.length === 0, p9.join('; '));
   const plant = (f: string, g: (x: string) => string) => files.map((x) => (x.file === f ? { ...x, text: g(x.text) } : x));
@@ -110,13 +111,25 @@ check('config: a current default look per challenge character, each a design id 
   proof('P9g: a card showing its second layer again (its description) fails', p9gProblems({ ...base, files: plant('src/components/challenge-card.tsx', (x) => x.replace('{c.line} <span className="cc-mark">', '{c.line} {c.more.description} <span className="cc-mark">')) }).length > 0);
   proof('P9g: a card fetching "Where they appear" again fails', p9gProblems({ ...base, files: plant('src/components/challenge-card.tsx', (x) => x + "\nconst appears = () => fetch('/api/challenge/appears?character=zei');") }).length > 0);
   proof('P9g: the pages\' data carrying facts fails', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace("line: cardOf(slug)?.line ?? ''", "line: cardOf(slug)?.line ?? '', facts: cardOf(slug)?.facts")) }).length > 0);
-  proof('P9g: the pages\' data carrying the moments fails', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace("import { cardOf, firstLayerFacts } from './cards';", "import { cardOf, firstLayerFacts } from './cards';\nimport { momentsWith } from './moments';")) }).length > 0);
-  // "Read more about {name}" (owner, 2026-11-12: ADD): the first-layer facts, only through firstLayerFacts.
-  check('P9g: "Read more" carries each card\'s first-layer facts, none past chapter 14, each word for word', CARDS.every((c) => {
+  proof('P9g: the pages\' data carrying the moments fails', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace("import { cardOf } from './cards';", "import { cardOf } from './cards';\nimport { momentsWith } from './moments';")) }).length > 0);
+  // "Learn more about {name}" (owner, 2026-11-12): its fallback is the first-layer facts, only through firstLayerFacts.
+  check('P9g: "Learn more"\'s fallback carries each card\'s first-layer facts, none past chapter 14, each word for word', CARDS.every((c) => {
     const f = firstLayerFacts(c.slug);
     return f.length === c.facts.length && f.every((x) => x.chapter >= 1 && x.chapter <= 14 && !!x.quote);
   }));
-  proof('P9g: the page\'s facts from the second layer fail', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace('facts: firstLayerFacts(slug)', 'facts: (cardOf(slug)?.more.facts ?? [])')) }).length > 0);
+  proof('P9g: the page\'s facts from the second layer fail', p9gProblems({ ...base, files: plant('src/lib/challenge/learn-more-view.ts', (x) => x.replace('facts: shown ? [] : firstLayerFacts(slug)', 'facts: (cardOf(slug)?.more.facts ?? [])')) }).length > 0);
+  // "Learn more" (owner, 2026-11-12): the whole book only inside its fold, labelled exactly, closed by default.
+  const comp = read('src/components/challenge-character.tsx');
+  proof('P9g: whole-book text ("later") outside the fold fails', p9gProblems({ ...base, files: plant('src/components/challenge-character.tsx', (x) => x.replace('<details className="chc-later">', '<p><Segs segs={P.learn.text.later.segs} more="" /></p>\n                <details className="chc-later">')) }).length > 0);
+  proof('P9g: the fold with another label fails', p9gProblems({ ...base, learn: { ...base.learn, label: 'Later in the book' } }).length > 0);
+  proof('P9g: the fold\'s label written elsewhere on the challenge fails', p9gProblems({ ...base, files: plant('src/lib/challenge/landing-wording.ts', (x) => x + "\nexport const X = 'Later in the book (spoilers)';") }).length > 0);
+  proof('P9g: the fold open by default fails', p9gProblems({ ...base, files: plant('src/components/challenge-character.tsx', (x) => x.replace('<details className="chc-later">', '<details className="chc-later" open>')) }).length > 0);
+  proof('P9g: a later-chapter citation in Zei\'s "At the start." (the owner\'s text) fails', p9gProblems({ ...base, learn: { ...base.learn, texts: { ...LM.LEARN_MORE, zei: { ...LM.LEARN_MORE.zei, start: [...LM.LEARN_MORE.zei.start, { cite: 'c29-b110' }] } } } }).length > 0);
+  proof('P9g: texts shown without keeping the rule fail', p9gProblems({ ...base, files: plant('src/lib/challenge/learn-more-view.ts', (x) => x.replace('const shown = t && learnMoreProblems(slug).length === 0 ? t : null;', 'const shown = t ?? null;')) }).length > 0);
+  proof('P9g: glossary notes from any chapter in the open parts fail', p9gProblems({ ...base, files: plant('src/lib/challenge/learn-more-view.ts', (x) => x.replace("render(slug, 'start', shown.start, OPEN_MAX_CHAPTER)", "render(slug, 'start', shown.start, Infinity)")) }).length > 0);
+  check('P9g: the fold is a nested <details> closed by default, after "At the start." and before "What drives"', /<details className="chc-later">\s*<summary>\{P\.learn\.text\.later\.head\}<\/summary>/.test(comp) && comp.indexOf('data-part="start"') < comp.indexOf('chc-later') && comp.indexOf('chc-later') < comp.indexOf('data-part="drives"') && LM.LATER_LABEL === 'Later in the book (spoilers)');
+  check('Learn more: Zei\'s texts are the owner\'s (approved), keep the rule, and are shown', LM.LEARN_MORE.zei.approved && LM.learnMoreProblems('zei').length === 0);
+  check('Learn more: every citation is a block that exists in the book', Object.entries(LM.LEARN_MORE).every(([, x]) => [x.who, x.start, x.later, x.drives, ...x.invent].flat().every((s) => !('cite' in s) || blocks.has(/^(c\d+-b\d+)/.exec(s.cite)![1]))));
   proof('P9g: firstLayerFacts reading the second layer fails', p9gProblems({ ...base, files: plant('src/lib/challenge/cards.ts', (x) => x.replace('(cardOf(slug)?.facts ?? [])', '(cardOf(slug)?.more.facts ?? [])')) }).length > 0);
   proof('P9g: firstLayerFacts without its chapter 14 limit fails', p9gProblems({ ...base, files: plant('src/lib/challenge/cards.ts', (x) => x.replace('.filter((f) => chapterOf(f.block) <= FIRST_LAYER_MAX_CHAPTER)', '')) }).length > 0);
   proof('P9g: the remix screen sent the moments whatever the switch says fails', p9gProblems({ ...base, files: plant('src/lib/challenge/make.ts', (x) => x.replace('moments: momentsOn ? momentChips() : []', 'moments: momentChips()')) }).length > 0);
@@ -165,23 +178,18 @@ check('config: a current default look per challenge character, each a design id 
   // A character's page: only the six; no database here, so empty lists.
   const zei = await V.characterView(null, 'zei');
   check('character page: the name, the one line, the bases and the remixes (none without a database), its back link', zei !== null && zei.c.name === 'Zei' && zei.c.line === cardOf('zei')!.line && Array.isArray(zei.c.bases) && zei.c.remixes.length === 0 && zei.w.none === 'No remixes of Zei yet.' && zei.back === '← The remix challenge');
-  // "Read where {Name} first appears" (owner, 2026-11-09): each of the six pages, the words, the reader link at the card's
-  // first "appears" block (the same block a picture is anchored to), and that block is in the book's text.
+  // "Learn more about {Name}" (owner, 2026-11-12): one expander on each of the six pages, in place of "Read where {Name}
+  // first appears" and "Read more"; Zei's with the owner's texts, the others with the first layer's facts until theirs
+  // keep the rule.
   {
-    const FA = await import('../src/lib/challenge/first-appears');
-    const CD = await import('../src/lib/challenge/cards');
-    const MK = await import('../src/lib/challenge/make');
     const rows = await Promise.all(CHALLENGE.characters.map(async (slug) => ({ slug, v: await V.characterView(null, slug) })));
-    const ok = (check: (slug: string, href: string, words: string) => boolean) => rows.every(({ slug, v }) => v?.firstAppears && check(slug, v.firstAppears.href, v.firstAppears.words));
-    check('first appears: each of the six pages links "Read where {Name} first appears" to the reader at the card\'s first block, which exists in the text and anchors its pictures', ok((slug, href, words) => {
-      const block = CD.CARDS.find((c) => c.slug === slug)!.appears[0].block;
-      const m = /^c(\d+)-b(\d+)$/.exec(block)!;
-      const a = MK.characterAnchor(slug);
-      return words === `Read where ${rows.find((r) => r.slug === slug)!.v!.c.name} first appears` && href === `/chapter/${m[1]}#${block}` && blocks.has(block) && a.chapter === Number(m[1]) && a.start === Number(m[2]);
-    }) && rows.find((r) => r.slug === 'zei')!.v!.firstAppears!.href === '/chapter/2#c2-b2' && rows.find((r) => r.slug === 'zei')!.v!.firstAppears!.words === 'Read where Zei first appears');
-    proof('first appears: a link to a block that isn\'t in the text fails', !blocks.has('c2-b99999') && FA.firstAppearsBlock('nobody') === 'c1-b1');
-    const comp = read('src/components/challenge-character.tsx');
-    check('first appears: the link sits under the one line, prefetch off', comp.indexOf('data-slot="first-appears"') > comp.indexOf('<CardLine') && comp.indexOf('data-slot="first-appears"') < comp.indexOf('ch-char-bases') && /prefetch=\{false\} data-slot="first-appears"/.test(comp));
+    const LM = await import('../src/lib/challenge/learn-more');
+    check('Learn more: each of the six pages has "Learn more about {Name}" and no "Read where … first appears"', rows.every(({ v }) => v?.page.learn.title === `Learn more about ${v!.c.name.split(' ')[0]}` && !('firstAppears' in v!)));
+    const z = rows.find((r) => r.slug === 'zei')!.v!.page.learn;
+    check('Learn more: Zei\'s shows the owner\'s texts, no Draft mark, its fold labelled exactly, citations linking to the reader\'s first block', z.text !== null && z.draft === null && z.text.later.head === 'Later in the book (spoilers)' && z.text.start.segs.some((s) => s.kind === 'cite' && s.label === 'c2-b98–b103' && s.href === '/chapter/2#c2-b98') && z.facts.length === 0);
+    check('Learn more: a term with a glossary entry opens it (a note from chapters 1 to 14 outside the fold); a DRAFT term shows as plain words', z.text!.who.segs.some((s) => s.kind === 'term' && s.term === 'Minpentai' && s.note !== null && s.href === '/glossary/minpentai') && z.text!.start.segs.some((s) => s.kind === 'term' && s.term === 'compute box' && s.note === null && s.href === null) && LM.DRAFT_GLOSSARY.some((d) => d.term === 'compute box'));
+    const others = rows.filter((r) => r.slug !== 'zei');
+    check('Learn more: a character whose texts don\'t keep the rule yet shows the first layer\'s facts instead', others.every(({ slug, v }) => (LM.learnMoreProblems(slug).length > 0 ? v!.page.learn.text === null && v!.page.learn.facts.length > 0 : v!.page.learn.text !== null)));
   }
   check('character page: null (404) for anything but the six', (await V.characterView(null, 'lektor')) === null && (await V.characterView(null, 'entries')) === null && (await V.characterView(null, '')) === null);
   const page = read('src/app/challenge/[slug]/page.tsx');

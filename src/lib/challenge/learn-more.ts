@@ -1,0 +1,1760 @@
+/**
+ * "Learn more about {Name}" on a challenge character's page (owner, 2026-11-12): who the character is, written for
+ * someone who knows nothing about the story; the start; the whole book behind a fold labelled exactly "Later in the
+ * book (spoilers)", closed by default; what drives them; and room to invent. Data only (it may still change), brought in
+ * word for word from docs/learn-more-drafts/texts.json (branch learn-more-texts, commit 6eb6b046). Zei's is the owner's
+ * (approved: true); every other is the coding agent's DRAFT (Claude, a closed model by Anthropic) until he approves it.
+ * Segments: plain text; a glossary term (its existing glossary entry's slug, or null for a DRAFT entry, which isn't
+ * shipped); a citation to a block of the book ("c4-b72", or a range "c2-b98–b103").
+ * The rule (docs/principles.md P9, owner 2026-11-12; scripts/lib/challenge-moments.ts p9g): "who", "start" and "drives"
+ * cite chapters 1 to 14 only; "later" shows only inside its fold.
+ */
+export type Segment = { text: string } | { term: string; glossaryId: string | null } | { cite: string };
+
+export interface LearnMoreText {
+  name: string;
+  pronoun: 'he' | 'she';
+  /** Who wrote it: the owner's own, or the coding agent's draft. */
+  author: string;
+  approved: boolean;
+  who: Segment[];
+  start: Segment[];
+  later: Segment[];
+  drives: Segment[];
+  /** "Room to invent.": one item per list entry. */
+  invent: Segment[][];
+}
+
+export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
+  "zei": {
+    "name": "Zei",
+    "pronoun": "he",
+    "author": "owner (exact, as written by him; do not edit)",
+    "who": [
+      {
+        "text": "Zei Leimin is a young "
+      },
+      {
+        "term": "Minpentai",
+        "glossaryId": "minpentai"
+      },
+      {
+        "text": " player from Pafogai Du, a city in "
+      },
+      {
+        "term": "Dzego",
+        "glossaryId": "dzego"
+      },
+      {
+        "text": " "
+      },
+      {
+        "cite": "c14-b31"
+      },
+      {
+        "cite": "c7-b61"
+      },
+      {
+        "text": ". Minpentai is a strategy game that Dzego takes very seriously. Zei is quick and competitive, and he plays so cleverly that Den, who recruits him into defense, says he nearly reinvented parts of cryptography in a single game "
+      },
+      {
+        "cite": "c9-b66"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "start": [
+      {
+        "text": "In the middle of a lecture, an "
+      },
+      {
+        "term": "Arctic",
+        "glossaryId": "arctics"
+      },
+      {
+        "text": " bomb tears through his school. A stranger had moved his class to another room minutes before, which saved his life, but a stone breaks his left arm "
+      },
+      {
+        "cite": "c2-b98–b103"
+      },
+      {
+        "cite": "c9-b75"
+      },
+      {
+        "text": ". He's playing for prize money to buy his mom a new "
+      },
+      {
+        "term": "compute box",
+        "glossaryId": null
+      },
+      {
+        "text": " "
+      },
+      {
+        "cite": "c4-b73"
+      },
+      {
+        "text": ". His rival Bai has beaten him three times out of three, yet in a big match he hands her the deciding turn: \"your chance to shine\" "
+      },
+      {
+        "cite": "c4-b72"
+      },
+      {
+        "cite": "c4-b129"
+      },
+      {
+        "text": ". He wins the money "
+      },
+      {
+        "cite": "c7-b138"
+      },
+      {
+        "text": ", takes on secret defense work he can't tell even his best friend Fin about "
+      },
+      {
+        "cite": "c9-b73"
+      },
+      {
+        "cite": "c10-b206"
+      },
+      {
+        "text": ", and makes the national top four "
+      },
+      {
+        "cite": "c14-b31"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "later": [
+      {
+        "text": "Mu tells him what Minpentai is really for: \"It's military training.\" "
+      },
+      {
+        "cite": "c10-b194"
+      },
+      {
+        "text": ". When the war comes, Zei commands drones against the Arctics "
+      },
+      {
+        "cite": "c29-b110"
+      },
+      {
+        "text": ". He loses Den "
+      },
+      {
+        "cite": "c29-b108"
+      },
+      {
+        "cite": "c29-b115"
+      },
+      {
+        "text": ", and a message from Deluin, now secretly working inside the Arctic command, turns the battle "
+      },
+      {
+        "cite": "c29-b114"
+      },
+      {
+        "text": ". The championship final is cancelled and Zei is given the title "
+      },
+      {
+        "cite": "c31-b26"
+      },
+      {
+        "text": ". By the end, he argues that \"AI should be a player, not the game.\" "
+      },
+      {
+        "cite": "c32-b47"
+      }
+    ],
+    "drives": [
+      {
+        "text": "Winning, and what it buys his mom. After the bomb, something bigger: a stranger saved his life, and he wonders if it's his turn to do the same for someone else "
+      },
+      {
+        "cite": "c9-b76"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "invent": [
+      [
+        {
+          "text": "His father: the book never mentions him."
+        }
+      ],
+      [
+        {
+          "text": "His life in Pafogai Du before the bomb, and how he started playing."
+        }
+      ],
+      [
+        {
+          "text": "What the injury changed, beyond a slightly slower hand."
+        }
+      ],
+      [
+        {
+          "text": "What it costs him to keep secrets from Fin and his mom."
+        }
+      ],
+      [
+        {
+          "text": "His looks: every look on this site is this edition's invention."
+        }
+      ]
+    ],
+    "approved": true
+  },
+  "gladias": {
+    "name": "Gladias",
+    "pronoun": "he",
+    "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+    "who": [
+      {
+        "text": "Gladias lives in "
+      },
+      {
+        "term": "Meldan",
+        "glossaryId": "meldan"
+      },
+      {
+        "text": ", the capital of "
+      },
+      {
+        "term": "Veridia",
+        "glossaryId": "veridia"
+      },
+      {
+        "text": " "
+      },
+      {
+        "cite": "c1-b1"
+      },
+      {
+        "text": ". He is an "
+      },
+      {
+        "term": "Acolyte",
+        "glossaryId": "acolyte"
+      },
+      {
+        "text": ", a member in training of the "
+      },
+      {
+        "term": "Order of Steering",
+        "glossaryId": "order-of-steering"
+      },
+      {
+        "text": ", the group behind Veridia's taxes and subsidies "
+      },
+      {
+        "cite": "c1-b56"
+      },
+      {
+        "cite": "c1-b57"
+      },
+      {
+        "text": ". At home are his wife Seila, who writes a blog, and four children: Zven and Lily are theirs, Febric and Hreda belong to their co-family "
+      },
+      {
+        "cite": "c1-b101–b102"
+      },
+      {
+        "cite": "c3-b89"
+      },
+      {
+        "cite": "c1-b125"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "start": [
+      {
+        "text": "Sent to rate a violent band's concert, he risks the score his career depends on and gives the neutral rating "
+      },
+      {
+        "cite": "c1-b58"
+      },
+      {
+        "cite": "c1-b62"
+      },
+      {
+        "cite": "c1-b68"
+      },
+      {
+        "cite": "c1-b69"
+      },
+      {
+        "cite": "c1-b71"
+      },
+      {
+        "text": ". Someone shouts that he's an Order member, whose tasks must stay secret, so he wipes the videos of his face from a stranger's "
+      },
+      {
+        "term": "hand device",
+        "glossaryId": null
+      },
+      {
+        "text": " and runs "
+      },
+      {
+        "cite": "c1-b73"
+      },
+      {
+        "cite": "c1-b76"
+      },
+      {
+        "cite": "c1-b83–b85"
+      },
+      {
+        "text": ". That night a message arrives: \"I know that you are in the Order.\" "
+      },
+      {
+        "cite": "c1-b138"
+      },
+      {
+        "text": ". The sender, Delwart, asks him to become a "
+      },
+      {
+        "term": "Keeper",
+        "glossaryId": "keepers"
+      },
+      {
+        "text": " and \"just vote to delete every rubric you see.\" "
+      },
+      {
+        "cite": "c3-b87"
+      },
+      {
+        "cite": "c3-b112"
+      },
+      {
+        "text": ". Seila, told only that someone suggested it, urges the same choice for another reason: to help "
+      },
+      {
+        "term": "Dzego",
+        "glossaryId": "dzego"
+      },
+      {
+        "text": " "
+      },
+      {
+        "cite": "c5-b102"
+      },
+      {
+        "cite": "c5-b113"
+      },
+      {
+        "text": ". He applies, and his acceptance vote ties ten to ten until the chairman lets him in "
+      },
+      {
+        "cite": "c6-b158"
+      },
+      {
+        "cite": "c8-b97"
+      },
+      {
+        "cite": "c8-b101"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "later": [
+      {
+        "text": "When the "
+      },
+      {
+        "term": "Arctics",
+        "glossaryId": "arctics"
+      },
+      {
+        "text": " take "
+      },
+      {
+        "term": "Redshire",
+        "glossaryId": "redshire"
+      },
+      {
+        "text": ", he turns on Delwart, who now says he works for "
+      },
+      {
+        "term": "Silverchat",
+        "glossaryId": "silverchat"
+      },
+      {
+        "text": " and sends him to Dzego to learn from them "
+      },
+      {
+        "cite": "c15-b6"
+      },
+      {
+        "cite": "c15-b29"
+      },
+      {
+        "cite": "c16-b13"
+      },
+      {
+        "cite": "c16-b25–b27"
+      },
+      {
+        "text": ". Seila works out the truth: \"He's an Arctic.\" "
+      },
+      {
+        "cite": "c21-b71"
+      },
+      {
+        "text": ". \"Gladias, you idiot!\" she shouts "
+      },
+      {
+        "cite": "c21-b49"
+      },
+      {
+        "text": ", and he promises her no more secrets "
+      },
+      {
+        "cite": "c21-b91"
+      },
+      {
+        "cite": "c21-b104–b106"
+      },
+      {
+        "text": ". His daughter Lily falls for Arctic ideas and runs away "
+      },
+      {
+        "cite": "c23-b88"
+      },
+      {
+        "cite": "c23-b91"
+      },
+      {
+        "text": ". He tells Den: \"Spy on us.\" That way they can spy on the spies "
+      },
+      {
+        "cite": "c24-b76"
+      },
+      {
+        "cite": "c24-b77"
+      },
+      {
+        "cite": "c24-b80"
+      },
+      {
+        "text": ". Five judges turn down his plan to use the courts "
+      },
+      {
+        "cite": "c25-b88"
+      },
+      {
+        "cite": "c26-b162"
+      },
+      {
+        "cite": "c26-b190"
+      },
+      {
+        "cite": "c26-b194"
+      },
+      {
+        "text": ", so Seila makes it democratic with a Silverchat poll "
+      },
+      {
+        "cite": "c27-b11"
+      },
+      {
+        "cite": "c27-b15"
+      },
+      {
+        "text": ". At the end, in "
+      },
+      {
+        "term": "Northglade",
+        "glossaryId": "northglade"
+      },
+      {
+        "text": ", Lily runs out and hugs him: \"Dad!\" "
+      },
+      {
+        "cite": "c31-b66"
+      },
+      {
+        "cite": "c31-b77"
+      }
+    ],
+    "drives": [
+      {
+        "text": "His family. He can't sleep knowing \"three of the four children he loved dearly\" are in Arctic hands "
+      },
+      {
+        "cite": "c24-b2–b6"
+      },
+      {
+        "text": ". He wants Veridia to defend itself, and he has bursts of courage, like his risky vote at the concert "
+      },
+      {
+        "cite": "c21-b96"
+      },
+      {
+        "cite": "c1-b71"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "invent": [
+      [
+        {
+          "text": "His age, and how he came to join the Order."
+        }
+      ],
+      [
+        {
+          "text": "How he and Seila met, and their life before the story starts."
+        }
+      ],
+      [
+        {
+          "text": "What his days as a Keeper are like beyond the votes the book shows."
+        }
+      ],
+      [
+        {
+          "text": "What he is like as a father day to day, beyond the moments the book shows."
+        }
+      ],
+      [
+        {
+          "text": "His looks: every look on this site is this edition's invention."
+        }
+      ]
+    ],
+    "approved": false
+  },
+  "bai": {
+    "name": "Bai",
+    "pronoun": "she",
+    "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+    "who": [
+      {
+        "text": "Bai Jahen is a "
+      },
+      {
+        "term": "Minpentai",
+        "glossaryId": "minpentai"
+      },
+      {
+        "text": " player from Pafogai Du, a city in "
+      },
+      {
+        "term": "Dzego",
+        "glossaryId": "dzego"
+      },
+      {
+        "text": " "
+      },
+      {
+        "cite": "c7-b61"
+      },
+      {
+        "cite": "c7-b62"
+      },
+      {
+        "text": ". She is Zei's rival: she had beaten him three out of three times, and \"was hardly magnanimous in victory\" "
+      },
+      {
+        "cite": "c4-b72"
+      },
+      {
+        "text": ". Behind the teasing, she grew up on her own: her parents were killed in a lab explosion when she was small, and she had to make her own money "
+      },
+      {
+        "cite": "c9-b13–b17"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "start": [
+      {
+        "text": "She taunts Zei that she'll snatch the prize money he wants for his mom's new "
+      },
+      {
+        "term": "compute box",
+        "glossaryId": null
+      },
+      {
+        "text": " and spend it on a vacation in "
+      },
+      {
+        "term": "Redshire",
+        "glossaryId": "redshire"
+      },
+      {
+        "text": " "
+      },
+      {
+        "cite": "c4-b73"
+      },
+      {
+        "text": ". Put on the same team, the two barely exchange a word "
+      },
+      {
+        "cite": "c4-b99"
+      },
+      {
+        "text": ", but when Zei hands her the deciding "
+      },
+      {
+        "term": "intervention turn",
+        "glossaryId": null
+      },
+      {
+        "text": ", she copies his trick on her third try "
+      },
+      {
+        "cite": "c4-b129"
+      },
+      {
+        "cite": "c4-b135"
+      },
+      {
+        "text": ". Mu reveals the teams were picked on purpose, as \"a psychological trial\" "
+      },
+      {
+        "cite": "c4-b148"
+      },
+      {
+        "cite": "c4-b150"
+      },
+      {
+        "text": ". She travels with Zei and his mom to "
+      },
+      {
+        "term": "Freetown",
+        "glossaryId": "freetown"
+      },
+      {
+        "text": " "
+      },
+      {
+        "cite": "c5-b4–b6"
+      },
+      {
+        "text": ". In the final she sets a trap along her diagonals that Zei falls into "
+      },
+      {
+        "cite": "c7-b96"
+      },
+      {
+        "text": ", but he outplays her and she resigns "
+      },
+      {
+        "cite": "c7-b117"
+      },
+      {
+        "cite": "c7-b120"
+      },
+      {
+        "text": ". Afterwards, in tears, she tells Fin that Zei has taken away the one thing she had "
+      },
+      {
+        "cite": "c9-b2"
+      },
+      {
+        "cite": "c9-b19"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "later": [
+      {
+        "text": "Den's people ask her to take notes on all the contestants' strategies "
+      },
+      {
+        "cite": "c12-b110"
+      },
+      {
+        "text": ", and she warns Zei not to rush, because the other players are \"way too impatient\" "
+      },
+      {
+        "cite": "c14-b22"
+      },
+      {
+        "cite": "c14-b24"
+      },
+      {
+        "text": ". She flies to "
+      },
+      {
+        "term": "Veridia",
+        "glossaryId": "veridia"
+      },
+      {
+        "text": " with Zei, Gladias and Den "
+      },
+      {
+        "cite": "c26-b1–b2"
+      },
+      {
+        "text": ", where her advice helps a general, Lektor, become head general "
+      },
+      {
+        "cite": "c28-b94"
+      },
+      {
+        "cite": "c28-b96"
+      },
+      {
+        "text": ". In the war, Deluin, now a commander on the "
+      },
+      {
+        "term": "Arctic",
+        "glossaryId": "arctics"
+      },
+      {
+        "text": " side, sends Zei a plan "
+      },
+      {
+        "cite": "c29-b114"
+      },
+      {
+        "text": ". Bai says \"I don't know if we can trust Deluin.\" and asks him instead to send the raw weights of the Arctic drones' AI "
+      },
+      {
+        "cite": "c29-b127"
+      },
+      {
+        "cite": "c29-b130–b132"
+      },
+      {
+        "text": ". By the end, she is thinking of spending a year in "
+      },
+      {
+        "term": "Thaldur",
+        "glossaryId": "thaldur"
+      },
+      {
+        "text": " to understand how the Arctics think and look for a path to peace "
+      },
+      {
+        "cite": "c32-b98"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "drives": [
+      {
+        "text": "Success, because growing up alone it was all she had: \"All I have is my achievements and my success.\" "
+      },
+      {
+        "cite": "c9-b19"
+      },
+      {
+        "text": ". And curiosity about how other people think: \"I do want to understand you guys better.\" "
+      },
+      {
+        "cite": "c9-b22"
+      },
+      {
+        "text": ", the same wish she later turns on the Arctics "
+      },
+      {
+        "cite": "c32-b98"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "invent": [
+      [
+        {
+          "text": "Her parents: who they were, and what their lab worked on."
+        }
+      ],
+      [
+        {
+          "text": "Life at her aunt's, and the side jobs she did in high school."
+        }
+      ],
+      [
+        {
+          "text": "How she started playing, and who taught her."
+        }
+      ],
+      [
+        {
+          "text": "What she and Zei become to each other after the war."
+        }
+      ],
+      [
+        {
+          "text": "Her looks: every look on this site is this edition's invention."
+        }
+      ]
+    ],
+    "approved": false
+  },
+  "seila": {
+    "name": "Seila",
+    "pronoun": "she",
+    "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+    "who": [
+      {
+        "text": "Seila is a blogger from "
+      },
+      {
+        "term": "Veridia",
+        "glossaryId": "veridia"
+      },
+      {
+        "text": " who writes about economics and culture "
+      },
+      {
+        "cite": "c5-b61"
+      },
+      {
+        "cite": "c5-b64"
+      },
+      {
+        "text": ". She is married to Gladias "
+      },
+      {
+        "cite": "c3-b89"
+      },
+      {
+        "text": ". Zven and Lily are their children, and Febric and Hreda come from their "
+      },
+      {
+        "term": "co-family",
+        "glossaryId": null
+      },
+      {
+        "text": ", Vil and Daia, who take turns with them caring for all four "
+      },
+      {
+        "cite": "c1-b125"
+      },
+      {
+        "cite": "c5-b64"
+      },
+      {
+        "text": ". She is gentle with the kids, and she is the one who sees through a stranger's lies when her husband doesn't "
+      },
+      {
+        "cite": "c1-b120"
+      },
+      {
+        "cite": "c21-b55"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "start": [
+      {
+        "text": "When Lily comes home with sixty percent on a history exam, Seila hugs her: \"It's okay to not be good at everything\" "
+      },
+      {
+        "cite": "c1-b119"
+      },
+      {
+        "cite": "c1-b120"
+      },
+      {
+        "text": ". While the kids are away, she travels to "
+      },
+      {
+        "term": "Freetown",
+        "glossaryId": "freetown"
+      },
+      {
+        "text": " to see her friend Jahn "
+      },
+      {
+        "cite": "c1-b134"
+      },
+      {
+        "text": ". There she meets two young "
+      },
+      {
+        "term": "Minpentai",
+        "glossaryId": "minpentai"
+      },
+      {
+        "text": " players from "
+      },
+      {
+        "term": "Dzego",
+        "glossaryId": "dzego"
+      },
+      {
+        "text": ", Zei and Bai, and is stunned to hear Zei's classroom was bombed "
+      },
+      {
+        "cite": "c5-b56–b58"
+      },
+      {
+        "cite": "c5-b70"
+      },
+      {
+        "cite": "c5-b72"
+      },
+      {
+        "cite": "c5-b73"
+      },
+      {
+        "text": ". When Gladias wonders whether to become a "
+      },
+      {
+        "term": "Keeper",
+        "glossaryId": "keepers"
+      },
+      {
+        "text": ", she tells him: \"Yeah become a Keeper definitely. It's exactly the right choice.\" "
+      },
+      {
+        "cite": "c5-b113"
+      },
+      {
+        "cite": "c5-b116"
+      },
+      {
+        "text": ". And when an "
+      },
+      {
+        "term": "Arctic",
+        "glossaryId": "arctics"
+      },
+      {
+        "text": " message takes over a restaurant screen at a family dinner, she gets up to unplug it "
+      },
+      {
+        "cite": "c13-b62"
+      },
+      {
+        "cite": "c13-b64"
+      },
+      {
+        "cite": "c13-b65"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "later": [
+      {
+        "text": "The "
+      },
+      {
+        "term": "Arctic Empire",
+        "glossaryId": "arctic-empire"
+      },
+      {
+        "text": " invades "
+      },
+      {
+        "term": "Northglade",
+        "glossaryId": "northglade"
+      },
+      {
+        "text": ", where Febric and Hreda are; they reach safety in the "
+      },
+      {
+        "term": "Greater Plum Harbor",
+        "glossaryId": "greater-plum-harbor"
+      },
+      {
+        "text": " "
+      },
+      {
+        "cite": "c20-b5"
+      },
+      {
+        "cite": "c20-b6"
+      },
+      {
+        "cite": "c20-b10"
+      },
+      {
+        "text": ". With Gladias's friend Mov, she tracks down other Keepers whom Delwart, the man who had been meeting Gladias, had approached "
+      },
+      {
+        "cite": "c20-b30"
+      },
+      {
+        "cite": "c20-b42"
+      },
+      {
+        "cite": "c21-b61"
+      },
+      {
+        "text": ", and works it out: \"Delwart is not from "
+      },
+      {
+        "term": "Silverchat",
+        "glossaryId": "silverchat"
+      },
+      {
+        "text": ".\" "
+      },
+      {
+        "cite": "c20-b179"
+      },
+      {
+        "text": ". He's an Arctic, she tells Gladias "
+      },
+      {
+        "cite": "c21-b71"
+      },
+      {
+        "text": ". She finds Lily cheering Arctic propaganda, screams at her, and Lily runs away "
+      },
+      {
+        "cite": "c23-b81"
+      },
+      {
+        "cite": "c23-b84"
+      },
+      {
+        "cite": "c23-b90"
+      },
+      {
+        "cite": "c23-b91"
+      },
+      {
+        "text": ". Her next idea is a Silverchat poll: \"We make it democratic.\" "
+      },
+      {
+        "cite": "c27-b11"
+      },
+      {
+        "cite": "c27-b15"
+      },
+      {
+        "text": ". In the end the family is together again in Northglade "
+      },
+      {
+        "cite": "c31-b77–b79"
+      },
+      {
+        "text": ", and she says: \"I just hope we have peace\" "
+      },
+      {
+        "cite": "c32-b95"
+      }
+    ],
+    "drives": [
+      {
+        "text": "Her family: she promises Febric and Hreda she will do everything she can to bring them home "
+      },
+      {
+        "cite": "c20-b11"
+      },
+      {
+        "text": ". And the world she loves, which is \"already enough to be worth fighting for.\" "
+      },
+      {
+        "cite": "c27-b95"
+      }
+    ],
+    "invent": [
+      [
+        {
+          "text": "Her own parents and childhood: the book never shows them."
+        }
+      ],
+      [
+        {
+          "text": "How she and Gladias met."
+        }
+      ],
+      [
+        {
+          "text": "How she met Jahn, and what he is to her."
+        }
+      ],
+      [
+        {
+          "text": "What her blog posts say, and who reads them."
+        }
+      ],
+      [
+        {
+          "text": "Her looks: every look on this site is this edition's invention."
+        }
+      ]
+    ],
+    "approved": false
+  },
+  "deluin": {
+    "name": "Deluin",
+    "pronoun": "he",
+    "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+    "who": [
+      {
+        "text": "Deluin is an older teenage "
+      },
+      {
+        "term": "Minpentai",
+        "glossaryId": "minpentai"
+      },
+      {
+        "text": " player from "
+      },
+      {
+        "term": "Redshire",
+        "glossaryId": "redshire"
+      },
+      {
+        "text": ", one of four foreign contestants brought in to play in "
+      },
+      {
+        "term": "Dzego",
+        "glossaryId": "dzego"
+      },
+      {
+        "text": " "
+      },
+      {
+        "cite": "c12-b70"
+      },
+      {
+        "cite": "c12-b75"
+      },
+      {
+        "cite": "c12-b80"
+      },
+      {
+        "text": ". He tops the qualifiers, winning six games of six "
+      },
+      {
+        "cite": "c14-b31"
+      },
+      {
+        "text": ". He laughs easily and likes to tease, and he and Zei quickly become friends "
+      },
+      {
+        "cite": "c12-b77"
+      },
+      {
+        "cite": "c14-b102"
+      },
+      {
+        "cite": "c14-b130"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "start": [
+      {
+        "text": "He sits down beside Zei at the tournament and says \"Hi, I'm Deluin\" "
+      },
+      {
+        "cite": "c12-b70"
+      },
+      {
+        "cite": "c12-b71"
+      },
+      {
+        "text": ". In the semifinal against Kau he builds walls and simply fortifies, and wins "
+      },
+      {
+        "cite": "c14-b90"
+      },
+      {
+        "cite": "c14-b91"
+      },
+      {
+        "cite": "c14-b94"
+      },
+      {
+        "text": ". Over tea he invites Zei home, shows him pictures of castles, pine forests and snow-topped red mountains, and jokes that he'll pay for the trip with his championship winnings "
+      },
+      {
+        "cite": "c14-b120"
+      },
+      {
+        "cite": "c14-b124"
+      },
+      {
+        "cite": "c14-b130"
+      },
+      {
+        "text": ". Then the "
+      },
+      {
+        "term": "Arctic Empire",
+        "glossaryId": "arctic-empire"
+      },
+      {
+        "text": " invades and annexes Redshire "
+      },
+      {
+        "cite": "c15-b6"
+      },
+      {
+        "text": ". He writes to Zei: \"Don't worry, I am alive. Though it looks like I'm not going to be getting back to Dzego anytime soon.\" "
+      },
+      {
+        "cite": "c15-b53"
+      },
+      {
+        "text": ". The finals are cancelled "
+      },
+      {
+        "cite": "c15-b82"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "later": [
+      {
+        "text": "Weeks later, a hidden letter reaches Zei: the Arctics have taken Redshire's devices, his parents have chosen to cooperate with them, and he will play along to win their trust "
+      },
+      {
+        "cite": "c19-b153"
+      },
+      {
+        "text": ". His Minpentai record and his parents' standing make him one of the Arctic commanders "
+      },
+      {
+        "cite": "c29-b114"
+      },
+      {
+        "text": ". In the war he secretly sends Zei tactics against the southern flank he controls "
+      },
+      {
+        "cite": "c29-b114"
+      },
+      {
+        "text": ". Bai insists he prove himself first "
+      },
+      {
+        "cite": "c29-b130"
+      },
+      {
+        "text": ", so he hands over access to the Arctic drones' simulated environment "
+      },
+      {
+        "cite": "c30-b4"
+      },
+      {
+        "text": ". Afterwards he meets Zei, Bai and Mu on a snowy mountain in "
+      },
+      {
+        "term": "Northglade",
+        "glossaryId": "northglade"
+      },
+      {
+        "text": " "
+      },
+      {
+        "cite": "c31-b1"
+      },
+      {
+        "cite": "c31-b7"
+      },
+      {
+        "cite": "c31-b8"
+      },
+      {
+        "text": ", and hears there is basically no chance of getting Redshire back "
+      },
+      {
+        "cite": "c31-b58"
+      },
+      {
+        "cite": "c31-b59"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "drives": [
+      {
+        "text": "Being useful from the inside. He plays along with the Arctics in the hope of helping Zei one day, though \"I do not share their sympathies.\" "
+      },
+      {
+        "cite": "c19-b153"
+      },
+      {
+        "text": ". And his home: he believes even beautiful nature takes human work to maintain "
+      },
+      {
+        "cite": "c14-b127"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "invent": [
+      [
+        {
+          "text": "His life in Redshire before the tournament, and how he started playing."
+        }
+      ],
+      [
+        {
+          "text": "His parents, beyond the choice they made."
+        }
+      ],
+      [
+        {
+          "text": "What it costs him to command Arctic forces while working against them."
+        }
+      ],
+      [
+        {
+          "text": "Where he goes once Redshire is lost."
+        }
+      ],
+      [
+        {
+          "text": "His looks: every look on this site is this edition's invention."
+        }
+      ]
+    ],
+    "approved": false
+  },
+  "mu": {
+    "name": "Mu",
+    "pronoun": "she",
+    "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+    "who": [
+      {
+        "text": "Mu is an older woman who knows Zei through "
+      },
+      {
+        "term": "Minpentai",
+        "glossaryId": "minpentai"
+      },
+      {
+        "text": ", a strategy game that "
+      },
+      {
+        "term": "Dzego",
+        "glossaryId": "dzego"
+      },
+      {
+        "text": " takes very seriously "
+      },
+      {
+        "cite": "c4-b62"
+      },
+      {
+        "cite": "c4-b64"
+      },
+      {
+        "cite": "c10-b187"
+      },
+      {
+        "text": ". She waits for the players before and after their matches, explains the priests' hidden rules and hands out the prizes "
+      },
+      {
+        "cite": "c7-b44"
+      },
+      {
+        "cite": "c4-b144"
+      },
+      {
+        "cite": "c4-b148"
+      },
+      {
+        "cite": "c7-b136"
+      },
+      {
+        "text": ". She is also one of the few who know about the "
+      },
+      {
+        "term": "Kungaupei",
+        "glossaryId": "kungaupei"
+      },
+      {
+        "text": ", a "
+      },
+      {
+        "term": "Dzegojan",
+        "glossaryId": "dzegojan"
+      },
+      {
+        "text": " group "
+      },
+      {
+        "cite": "c15-b79"
+      },
+      {
+        "cite": "c27-b54"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "start": [
+      {
+        "text": "Before Zei's quarter-final, she warns him that on a team, diplomacy matters: \"You're a math guy, not a diplomat.\" "
+      },
+      {
+        "cite": "c4-b67"
+      },
+      {
+        "text": ". From the sidelines she sees that Zei and his rival Bai don't get along, and that their side is suffering for it "
+      },
+      {
+        "cite": "c4-b118"
+      },
+      {
+        "text": ". Afterwards she tells them the secret: she had pushed the priests to be more creative, and the teams were not chosen at random. The game was \"a psychological trial\", and they passed "
+      },
+      {
+        "cite": "c4-b148"
+      },
+      {
+        "cite": "c4-b150"
+      },
+      {
+        "text": ". After the next match she draws the lesson: \"it's not just thinking well that matters, it's also hiding your thoughts\" "
+      },
+      {
+        "cite": "c7-b132"
+      },
+      {
+        "text": ". Then, with Den, she tells Zei what Minpentai is really for: \"It's military training.\" "
+      },
+      {
+        "cite": "c10-b194"
+      }
+    ],
+    "later": [
+      {
+        "text": "On the Kungaupei's mission to rescue the son of "
+      },
+      {
+        "term": "Redshire",
+        "glossaryId": "redshire"
+      },
+      {
+        "text": "'s president, she supervises the surveillance, having flown in on Zei's plane in a different cabin "
+      },
+      {
+        "cite": "c27-b54"
+      },
+      {
+        "cite": "c26-b96"
+      },
+      {
+        "cite": "c26-b98"
+      },
+      {
+        "text": ". When the plan collapses, she saves it with a new one "
+      },
+      {
+        "cite": "c26-b122"
+      },
+      {
+        "cite": "c26-b153"
+      },
+      {
+        "text": ": with admin passwords from people in Redshire, she takes over the streetlights and a few dozen automated cars "
+      },
+      {
+        "cite": "c26-b156"
+      },
+      {
+        "text": ", and gets the targets away by car and sea drone "
+      },
+      {
+        "cite": "c26-b137"
+      },
+      {
+        "text": ". In the war against the "
+      },
+      {
+        "term": "Arctics",
+        "glossaryId": "arctics"
+      },
+      {
+        "text": ", when Den's base is destroyed, she takes over his command "
+      },
+      {
+        "cite": "c29-b108"
+      },
+      {
+        "cite": "c29-b110"
+      },
+      {
+        "text": ". With coordinates Zei passes on from Deluin, she surrounds the remaining Arctic drone fleet "
+      },
+      {
+        "cite": "c30-b65"
+      },
+      {
+        "cite": "c30-b72"
+      },
+      {
+        "text": ". At the end, she and Su are trusted to handle the Kungaupei "
+      },
+      {
+        "cite": "c32-b74"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "drives": [
+      {
+        "text": "The future, and the young defenders the game exists to raise "
+      },
+      {
+        "cite": "c10-b195"
+      },
+      {
+        "text": ". Before a match she raises a glass: \"To our future,\" "
+      },
+      {
+        "cite": "c7-b49"
+      },
+      {
+        "text": ". On the morning of the battle, asked if they are ready, she says no: \"But nothing meaningful ever happens when people are ready.\" "
+      },
+      {
+        "cite": "c29-b4"
+      },
+      {
+        "cite": "c29-b5"
+      }
+    ],
+    "invent": [
+      [
+        {
+          "text": "Her own past: whether she ever played Minpentai, and how she came to work with the priests."
+        }
+      ],
+      [
+        {
+          "text": "How she joined the Kungaupei, and what she has given up to keep it secret."
+        }
+      ],
+      [
+        {
+          "text": "How she and Zei first met, and what she does away from the matches."
+        }
+      ],
+      [
+        {
+          "text": "Her looks: every look on this site is this edition's invention."
+        }
+      ]
+    ],
+    "approved": false
+  },
+  "ephelion": {
+    "name": "Lord Ephelion",
+    "pronoun": "he",
+    "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+    "who": [
+      {
+        "text": "Lord Ephelion is the "
+      },
+      {
+        "term": "Arctic Empire",
+        "glossaryId": "arctic-empire"
+      },
+      {
+        "text": "'s consul, also called its ambassador, to "
+      },
+      {
+        "term": "Veridia",
+        "glossaryId": "veridia"
+      },
+      {
+        "text": " "
+      },
+      {
+        "cite": "c3-b5"
+      },
+      {
+        "cite": "c8-b17"
+      },
+      {
+        "text": ". He is the Arctics' voice in Veridia: his messages turn up on posters and on screens "
+      },
+      {
+        "cite": "c6-b143"
+      },
+      {
+        "cite": "c13-b63"
+      },
+      {
+        "text": "."
+      }
+    ],
+    "start": [
+      {
+        "text": "His open letter tells Veridia's young people that their country is too comfortable, and asks them to build a stronger one with the Arctics: \"Join us, and we will build it together.\" "
+      },
+      {
+        "cite": "c3-b5"
+      },
+      {
+        "text": ". He debates Professor Sylka live, arguing that economic growth is the only lasting progress "
+      },
+      {
+        "cite": "c8-b17"
+      },
+      {
+        "cite": "c8-b26–b31"
+      },
+      {
+        "text": ". Gladias, listening on the "
+      },
+      {
+        "term": "autobus",
+        "glossaryId": "autobus"
+      },
+      {
+        "text": ", calls him \"A gifted demagogue\" "
+      },
+      {
+        "cite": "c8-b37"
+      },
+      {
+        "text": ", and others complain about \"Lord Ephelion giving his sermons all the time.\" "
+      },
+      {
+        "cite": "c11-b109"
+      }
+    ],
+    "later": [
+      {
+        "text": "His broadcast cuts into a sports game in a restaurant, telling people that \"Life is not fair - and should not be fair.\" Seila gets up to unplug the screen "
+      },
+      {
+        "cite": "c13-b62–b65"
+      },
+      {
+        "text": ". When the Arctics invade the province of Northshore, he is reported to be there "
+      },
+      {
+        "cite": "c20-b8"
+      },
+      {
+        "text": ". Gladias and Seila's daughter Lily turns out to have been following his sermons, and runs away from home "
+      },
+      {
+        "cite": "c1-b125"
+      },
+      {
+        "cite": "c24-b40"
+      },
+      {
+        "text": ". Seila sums him up: \"Ephelion and Delwart are not intellectuals, they are propagandists.\" "
+      },
+      {
+        "cite": "c21-b75"
+      }
+    ],
+    "drives": [
+      {
+        "text": "In Seila's reading, his goal is \"to inspire people inside Veridia to join the Arctic cause.\" "
+      },
+      {
+        "cite": "c21-b76"
+      },
+      {
+        "text": ". In his own words: strength, winning and growth. \"Grow stronger.\" "
+      },
+      {
+        "cite": "c13-b64"
+      }
+    ],
+    "invent": [
+      [
+        {
+          "text": "His face: the book shows \"An image of Lord Ephelion\" on a screen but never describes it "
+        },
+        {
+          "cite": "c13-b63"
+        },
+        {
+          "text": "."
+        }
+      ],
+      [
+        {
+          "text": "His life in the Arctic Empire, and how he became its consul."
+        }
+      ],
+      [
+        {
+          "text": "What he is like away from his speeches, and whether he believes them."
+        }
+      ],
+      [
+        {
+          "text": "His looks: every look on this site is this edition's invention."
+        }
+      ]
+    ],
+    "approved": false
+  }
+};
+
+/**
+ * The DRAFT glossary entries the texts name (docs/learn-more-drafts/glossary.json): not shipped as glossary entries (the
+ * glossary has no drafts), so their terms show without an ⓘ until the owner approves them.
+ */
+export const DRAFT_GLOSSARY: readonly { term: string; slug: string; quote: string; block: string }[] = [
+  {
+    "term": "co-family",
+    "slug": "co-family",
+    "quote": "Febric and Hreda were from their co-family, Uncle Vil and Aunt Daia.",
+    "block": "c1-b125"
+  },
+  {
+    "term": "compute box",
+    "slug": "compute-box",
+    "quote": "carrying his hand device in one hand, attached by a cable to a larger compute box in the other.",
+    "block": "c1-b111"
+  },
+  {
+    "term": "hand device",
+    "slug": "hand-device",
+    "quote": "signs with colored blinking lights advertising all kinds of electronics: hand devices, watches, compute boxes",
+    "block": "c2-b3"
+  },
+  {
+    "term": "intervention turn",
+    "slug": "intervention-turn",
+    "quote": "At the same time, the first intervention turn came. Here, all players were able to put down more squares near any copy of their symbols.",
+    "block": "c4-b110"
+  }
+];
+
+/** The chapter of a citation ("c14-b31" → 14; "c2-b98–b103" → 2). */
+export const citeChapter = (cite: string): number => Number(/^c(\d+)-b\d+/.exec(cite)?.[1] ?? NaN);
+/** Where a citation goes in the reader: its first block. */
+export const citeHref = (cite: string): string => {
+  const m = /^c(\d+)-b(\d+)/.exec(cite);
+  return m ? `/chapter/${m[1]}#c${m[1]}-b${m[2]}` : '/chapter/1';
+};
+/** The last chapter the open parts may cite (the first layer, as #160's facts). */
+export const OPEN_MAX_CHAPTER = 14;
+/** The fold's label, exactly (owner, 2026-11-12). */
+export const LATER_LABEL = 'Later in the book (spoilers)';
+
+/** What breaks the rule in one character's texts: a citation past chapter 14 outside "later". */
+export function learnMoreProblems(slug: string, t: LearnMoreText | undefined = LEARN_MORE[slug]): string[] {
+  if (!t) return [`${slug}: no texts`];
+  const p: string[] = [];
+  const open: [string, Segment[]][] = [['who', t.who], ['start', t.start], ['drives', t.drives], ...t.invent.map((x, i) => [`invent ${i + 1}`, x] as [string, Segment[]])];
+  for (const [part, segs] of open) for (const s of segs) if ('cite' in s && !(citeChapter(s.cite) <= OPEN_MAX_CHAPTER)) p.push(`${slug}: "${part}" cites ${s.cite}, past chapter ${OPEN_MAX_CHAPTER} (only "${LATER_LABEL}" may)`);
+  return p;
+}

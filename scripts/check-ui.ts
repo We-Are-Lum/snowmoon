@@ -1986,8 +1986,8 @@ async function checkChallengeLanding() {
       }
       await snap('rules', true);
 
-      // A character's page: the redesign's screen 2 (owner-approved 2026-11-11). The name, the one line, "Read more about
-      // Zei" (closed), "Read where Zei first appears", "Remix Zei" (desktop: to one of Zei's bases); "Starting pictures"
+      // A character's page: the redesign's screen 2 (owner-approved 2026-11-11). The name, the one line, "Learn more about
+      // Zei" (closed; owner, 2026-11-12), "Remix Zei" (desktop: to one of Zei's bases); "Starting pictures"
       // (Zei's bases, each with "Remix this"); "Every remix of Zei", newest first, whole at 16:9: each picture opens its
       // page, each "Remix this" its remix screen. On a phone the bases are a swipe row. No count. Gladias has none yet.
       await at('/challenge/zei', '.ch-character-page');
@@ -1995,24 +1995,36 @@ async function checkChallengeLanding() {
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways`);
       const wide = w >= 1024;
       if (((await page.locator('.ch-character-page h1').textContent()) ?? '').trim() !== 'Zei') fail(`/challenge/zei ${tag}: the heading isn't "Zei"`);
-      // "Read where Zei first appears" (owner, 2026-11-09): to the reader at Zei's first block.
-      const fa = page.locator('.ch-character-page a[data-slot="first-appears"]');
-      if ((await fa.count()) !== 1 || ((await fa.textContent()) ?? '').trim() !== 'Read where Zei first appears →' || (await fa.getAttribute('href')) !== '/chapter/2#c2-b2') fail(`/challenge/zei ${tag}: no "Read where Zei first appears" to /chapter/2#c2-b2 (${await fa.getAttribute('href').catch(() => 'none')})`);
-      const more = page.locator('.ch-character-page details.chc-more');
-      if ((await more.count()) !== 1 || (await more.evaluate((d) => (d as HTMLDetailsElement).open)) || ((await more.locator('summary').textContent()) ?? '').trim() !== 'Read more about Zei') fail(`/challenge/zei ${tag}: no closed "Read more about Zei"`);
-      if (!((await more.textContent()) ?? '').includes('The book doesn’t describe Zei’s looks.')) fail(`/challenge/zei ${tag}: "Read more" doesn't say the look is this edition's`);
-      // Its first-layer facts (owner, 2026-11-12: ADD): each line, the book's words and "Ch N · block", chapters 1 to 14 only.
+      // "Learn more about Zei" (owner, 2026-11-12): one expander, closed; no "Read where Zei first appears", no second one.
+      if (await page.locator('.ch-character-page a[data-slot="first-appears"]').count()) fail(`/challenge/zei ${tag}: "Read where Zei first appears" is still there`);
+      const more = page.locator('.ch-character-page details.chc-learn');
+      if ((await page.locator('.ch-character-page details.chc-more').count()) !== 1 || (await more.count()) !== 1 || (await more.evaluate((d) => (d as HTMLDetailsElement).open)) || ((await more.locator(':scope > summary').textContent()) ?? '').trim() !== 'Learn more about Zei') fail(`/challenge/zei ${tag}: not one closed "Learn more about Zei"`);
       {
-        const { firstLayerFacts } = await import('../src/lib/challenge/cards');
-        await more.locator('summary').click();
-        const facts = await more.locator('li.chc-fact').evaluateAll((els) => els.map((e) => ({ block: e.getAttribute('data-block') ?? '', text: e.querySelector('.chc-fact-text')?.textContent?.trim() ?? '', quote: e.querySelector('.chc-fact-quote')?.textContent?.trim() ?? '', cite: e.querySelector('.chc-fact-cite')?.textContent?.trim() ?? '' })));
-        const want = firstLayerFacts('zei');
-        if (facts.length !== want.length || !want.every((f, i) => facts[i].block === f.block && facts[i].text === f.text && facts[i].quote === f.quote && facts[i].cite === `Ch ${f.chapter} · ${f.block}`)) fail(`/challenge/zei ${tag}: "Read more" doesn't show Zei's first-layer facts with their quotes and chapters (${JSON.stringify(facts)})`);
-        if (facts.some((f) => Number(/^c(\d+)-/.exec(f.block)?.[1]) > 14)) fail(`/challenge/zei ${tag}: "Read more" shows a fact past chapter 14`);
-        if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways with "Read more" open`);
+        // Opens on one tap: the owner's texts in order, the spoilers fold nested and closed, the looks line last.
+        await more.locator(':scope > summary').click();
+        const parts = await more.locator('[data-part]').evaluateAll((els) => els.map((e) => e.getAttribute('data-part')));
+        if (!(await more.evaluate((d) => (d as HTMLDetailsElement).open)) || parts.join() !== 'who,start,later,drives,invent') fail(`/challenge/zei ${tag}: "Learn more" doesn't open on a tap, or its parts read ${parts.join()}`);
+        const fold = more.locator('details.chc-later');
+        if ((await fold.count()) !== 1 || (await fold.evaluate((d) => (d as HTMLDetailsElement).open)) || ((await fold.locator('summary').textContent()) ?? '').trim() !== 'Later in the book (spoilers)') fail(`/challenge/zei ${tag}: no closed fold "Later in the book (spoilers)"`);
+        if (await more.locator('[data-part="later"]').isVisible()) fail(`/challenge/zei ${tag}: the spoilers show before the fold is opened`);
+        if (!((await more.textContent()) ?? '').includes('The book doesn’t describe Zei’s looks.')) fail(`/challenge/zei ${tag}: "Learn more" doesn't say the look is this edition's`);
+        const cite = more.locator('[data-part="start"] a.chc-cite').first();
+        if ((await cite.getAttribute('href')) !== '/chapter/2#c2-b98') fail(`/challenge/zei ${tag}: a citation doesn't link to the reader's block (${await cite.getAttribute('href')})`);
+        if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways with "Learn more" open`);
         await more.scrollIntoViewIfNeeded();
-        await snap('character-read-more');
-        await more.locator('summary').click();
+        await snap('character-learn-more');
+        // The ⓘ of a glossary term opens its entry (a sentence from the book and the glossary page); a DRAFT term has none.
+        const i = more.locator('[data-part="who"] button.chc-term-i').first();
+        await i.click();
+        const note = more.locator('[data-part="who"] .chc-term-note').first();
+        if (!(await note.isVisible()) || !(await note.locator('a[href^="/glossary/"]').count())) fail(`/challenge/zei ${tag}: the ⓘ doesn't open the glossary entry`);
+        await page.keyboard.press('Escape');
+        if (await more.locator('[data-part="start"] .chc-term').filter({ hasText: 'compute box' }).locator('button').count()) fail(`/challenge/zei ${tag}: a DRAFT glossary term has an ⓘ`);
+        await fold.locator('summary').click();
+        if (!(await more.locator('[data-part="later"]').isVisible())) fail(`/challenge/zei ${tag}: the spoilers fold doesn't open`);
+        if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways with the spoilers open`);
+        await fold.locator('summary').click();
+        await more.locator(':scope > summary').click();
       }
       const heads = await page.locator('.ch-character-page h2.chc-h2').evaluateAll((els) => els.map((e) => (e as HTMLElement).innerText.trim()));
       const wantHeads = wide ? 'Starting pictures|Every remix of Zei' : 'Starting pictures|Every remix';
@@ -2046,7 +2058,7 @@ async function checkChallengeLanding() {
       if ((await page.locator('.ch-character-page .chc-ai .ai-tag').count()) !== baseIds.length + zeiRemixes.length) fail(`/challenge/zei ${tag}: a picture has no AI label`);
       // Read with each element's text apart (a byline "#6852" next to "Remix this" isn't a count). "Read more"'s facts cite
       // their chapter ("Ch 4 · c4-b79"; owner, 2026-11-12: ADD), checked above; no moment chip or count anywhere else.
-      const pageText = await page.locator('.ch-character-page').evaluate((root) => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const out: string[] = []; for (let n = w.nextNode(); n; n = w.nextNode()) if (!n.parentElement?.closest('.chc-facts')) out.push(n.textContent ?? ''); return out.join(' | '); });
+      const pageText = await page.locator('.ch-character-page').evaluate((root) => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const out: string[] = []; for (let n = w.nextNode(); n; n = w.nextNode()) if (!n.parentElement?.closest('.chc-facts, .chc-learn')) out.push(n.textContent ?? ''); return out.join(' | '); });
       if (/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test(pageText)) fail(`/challenge/zei ${tag}: shows a moment or a count (${/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.exec(pageText)?.[0]})`);
       await snap('character', true);
       await at('/challenge/gladias', '.ch-character-page');

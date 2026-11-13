@@ -12,6 +12,7 @@
  * (read-only) when STUDIO_DATABASE_URL is set. Page checks fetch the deployed
  * site; the third-party request check drives the local Chrome.
  */
+import { LATER_LABEL, LEARN_MORE, type LearnMoreText } from '../src/lib/challenge/learn-more';
 import { p1cProblems } from './lib/p1c';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -1404,7 +1405,7 @@ add({
 add({
   id: 'P9g',
   principle: 9,
-  name: 'the remix challenge\'s exception stays narrow: only its six cards and curated moments, quoted word for word; the first layer from chapters 1-14 (a character page\'s "Read more" shows only its facts, owner 2026-11-12); nothing marked as a spoiler on its pages (owner, 2026-11-09); chapters on every moment chip; the reader\'s chapter gating unchanged; nowhere else; ended when entries close',
+  name: 'the remix challenge\'s exception stays narrow: only its six cards and curated moments, quoted word for word; the first layer from chapters 1-14 (a character page\'s "Learn more": the whole book only inside its fold labelled "Later in the book (spoilers)", closed by default, owner 2026-11-12); nothing marked as a spoiler on its pages (owner, 2026-11-09); chapters on every moment chip; the reader\'s chapter gating unchanged; nowhere else; ended when entries close',
   load: async () => ({
     files: walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
     cards: clone(CARDS),
@@ -1412,6 +1413,7 @@ add({
     characters: [...CHALLENGE.characters],
     blocks: Object.fromEntries(loadBlocks(ROOT)),
     dates: { opens: CHALLENGE.dates.opens, closes: CHALLENGE.dates.closes },
+    learn: { texts: clone(LEARN_MORE) as Record<string, LearnMoreText>, label: LATER_LABEL as string },
   }),
   run: (c) => p9gProblems({ ...c, blocks: new Map(Object.entries(c.blocks)), on: spoilerExceptionOn }),
   plant: (c) => {
@@ -1421,6 +1423,8 @@ add({
     c.files.push({ file: 'src/app/references/designs/[id]/planted.tsx', text: "import { CARDS } from '~/lib/challenge/cards';" });
     // "Read more" reading the second layer's facts (owner, 2026-11-12: only the first layer's).
     c.files = c.files.map((f) => (f.file === 'src/lib/challenge/cards.ts' ? { ...f, text: f.text.replace('(cardOf(slug)?.facts ?? [])', '(cardOf(slug)?.more.facts ?? [])') } : f));
+    // Learn more (owner, 2026-11-12): a later-chapter citation in Zei's "At the start." (the owner's text).
+    c.learn.texts.zei.start = [...c.learn.texts.zei.start, { cite: 'c29-b110' }];
     // A spoiler mark back on a challenge page (owner, 2026-11-09: none there).
     c.files.push({ file: 'src/components/challenge-planted.tsx', text: "export const L = 'May spoil later chapters.';" });
   },

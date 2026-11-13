@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { CharacterView } from '~/lib/challenge/view';
+import type { Rendered } from '~/lib/challenge/learn-more-view';
 import type { CardTile } from './challenge-card';
 import { designByline } from '~/lib/images/byline';
 import { AiTag } from './ai-tag';
@@ -51,6 +52,46 @@ function RemixGrid({ tiles, alt, remixThis, label }: { tiles: CardTile[]; alt: s
   );
 }
 
+/**
+ * A "Learn more" text: plain words; citations as small links to the reader's block; glossary terms with a small ⓘ that
+ * opens the entry in a popover (no script: the browser's popover; where it isn't supported the note shows inline), the
+ * glossary page linked inside. A DRAFT glossary term has no entry yet, so it shows as plain words.
+ */
+function Segs({ segs, more }: { segs: Rendered[]; more: string }) {
+  return (
+    <>
+      {segs.map((s, i) =>
+        s.kind === 'text' ? (
+          <span key={i}>{s.text}</span>
+        ) : s.kind === 'cite' ? (
+          <Link key={i} className="chc-cite" href={s.href} prefetch={false}>
+            {s.label}
+          </Link>
+        ) : (
+          <span key={i} className="chc-term">
+            {s.term}
+            {s.note && (
+              <>
+                <button type="button" className="chc-term-i" popoverTarget={s.id} aria-label={`What is ${s.term}?`}>
+                  ⓘ
+                </button>
+                <span id={s.id} popover="auto" className="chc-term-note" role="note">
+                  <strong>{s.term}</strong> <q>{s.note.text}</q> <span className="chc-cite">{s.note.cite}</span>{' '}
+                  {s.href && (
+                    <Link href={s.href} prefetch={false}>
+                      {more}
+                    </Link>
+                  )}
+                </span>
+              </>
+            )}
+          </span>
+        ),
+      )}
+    </>
+  );
+}
+
 export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
   const { c, w, page: P } = v;
   return (
@@ -64,35 +105,64 @@ export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
         <div className="chc-line">
           <CardLine c={c} w={w} />
         </div>
-        <details className="chc-more">
-          <summary>{P.more.title}</summary>
+        {/* "Learn more about {name}" (owner, 2026-11-12): one expander. The whole book only inside the nested fold,
+            labelled exactly "Later in the book (spoilers)", closed by default (docs/principles.md P9g). */}
+        <details className="chc-more chc-learn">
+          <summary>{P.learn.title}</summary>
           <div className="chc-more-body">
-            {P.more.facts.length > 0 && (
+            {P.learn.draft && <p className="as-draft ch-draft">{P.learn.draft}</p>}
+            {P.learn.text ? (
               <>
-                <p className="chc-facts-note">{P.more.factsNote}</p>
-                <ul className="chc-facts">
-                  {P.more.facts.map((f, i) => (
-                    <li key={f.block} className="chc-fact" data-block={f.block}>
-                      <span className="chc-fact-text">{f.text}</span>
-                      <q className="chc-fact-quote">{f.quote}</q>
-                      <span className="chc-fact-cite">
-                        {P.more.chips[i]} · {f.block}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                <p className="chc-learn-part" data-part="who">
+                  <strong>{P.learn.text.who.head}</strong> <Segs segs={P.learn.text.who.segs} more={P.learn.glossaryLink} />
+                </p>
+                <p className="chc-learn-part" data-part="start">
+                  <strong>{P.learn.text.start.head}</strong> <Segs segs={P.learn.text.start.segs} more={P.learn.glossaryLink} />
+                </p>
+                <details className="chc-later">
+                  <summary>{P.learn.text.later.head}</summary>
+                  <p className="chc-learn-part" data-part="later">
+                    <Segs segs={P.learn.text.later.segs} more={P.learn.glossaryLink} />
+                  </p>
+                </details>
+                <p className="chc-learn-part" data-part="drives">
+                  <strong>{P.learn.text.drives.head}</strong> <Segs segs={P.learn.text.drives.segs} more={P.learn.glossaryLink} />
+                </p>
+                <div className="chc-learn-part" data-part="invent">
+                  <strong>{P.learn.text.invent.head}</strong>
+                  <ul className="chc-invent">
+                    {P.learn.text.invent.items.map((it, i) => (
+                      <li key={i}>
+                        <Segs segs={it} more={P.learn.glossaryLink} />
+                      </li>
+                    ))}
+                    <li className="chc-looks">{P.learn.looks}</li>
+                  </ul>
+                </div>
+              </>
+            ) : (
+              <>
+                {P.learn.facts.length > 0 && (
+                  <>
+                    <p className="chc-facts-note">{P.learn.factsNote}</p>
+                    <ul className="chc-facts">
+                      {P.learn.facts.map((f, i) => (
+                        <li key={f.block} className="chc-fact" data-block={f.block}>
+                          <span className="chc-fact-text">{f.text}</span>
+                          <q className="chc-fact-quote">{f.quote}</q>
+                          <span className="chc-fact-cite">
+                            {P.learn.chips[i]} · {f.block}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+                <p className="chc-looks">{P.learn.looks}</p>
               </>
             )}
-            <p className="chc-looks">{P.more.looks}</p>
           </div>
         </details>
-        {v.firstAppears && (
-          <p className="ch-first-appears chc-first">
-            <Link href={v.firstAppears.href} prefetch={false} data-slot="first-appears">
-              {v.firstAppears.words} →
-            </Link>
-          </p>
-        )}
         {c.note && <p className="dz-muted cc-note">{c.note}</p>}
         <p className="chc-remix-row">
           <RemixCharacter c={c} text={P.remix} />

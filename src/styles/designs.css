@@ -596,6 +596,20 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .chc-quote { font-size: 16px; font-style: italic; color: var(--body); }
 .chc-block { font-family: var(--label); font-size: 12px; color: var(--muted); }
 .chc-looks { font-size: 16px; }
+/* "Learn more about {name}" (owner, 2026-11-12): its parts, the nested spoilers fold, citations and the glossary ⓘ. */
+.chc-learn-part { margin: 0; color: var(--body); line-height: 1.55; }
+.chc-learn-part strong { font-weight: 600; }
+.chc-cite { font-family: var(--label); font-size: 12px; color: var(--muted); margin-left: 3px; white-space: nowrap; }
+a.chc-cite { color: var(--link); }
+.chc-later { border: 1px solid var(--rule); border-radius: 6px; padding: 0 12px; }
+.chc-later summary { cursor: pointer; min-height: var(--tap); display: flex; align-items: center; font-weight: 600; }
+.chc-later[open] { padding-bottom: 10px; }
+.chc-invent { margin: 6px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.chc-term { white-space: normal; }
+.chc-term-i { border: 0; background: none; padding: 0 2px; margin: 0; font: inherit; font-size: 0.85em; color: var(--link); cursor: pointer; vertical-align: super; line-height: 1; min-width: 24px; min-height: 24px; }
+.chc-term-note { max-width: min(92vw, 420px); padding: 14px 16px; border: 1px solid var(--rule); border-radius: 8px; background: var(--paper); color: var(--body); font-size: 15px; line-height: 1.5; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18); }
+.chc-term-note q { display: block; margin: 6px 0; }
+.chc-term-note::backdrop { background: rgba(0, 0, 0, 0.15); }
 .chc-facts-note { font-size: 14px; color: var(--muted); }
 .chc-facts { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
 .chc-fact { display: flex; flex-direction: column; gap: 2px; min-width: 0; }

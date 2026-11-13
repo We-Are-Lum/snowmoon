@@ -804,6 +804,17 @@ sheet page's gating removed; the assistant's limit is `test:chat`'s.
   `P9g` now checks that the pages' data reads facts only through `firstLayerFacts` and that it reads a card's first-layer
   `facts` only, with the chapter 14 limit; its proofs plant the second layer's facts in the page's data, in
   `firstLayerFacts`, and the limit removed.
+  **"Learn more" (owner, 2026-11-12: "Update P9g to allow these texts, spoilers included inside their labelled fold,
+  with proofs"):** on a challenge character's page, one expander "Learn more about {name}" replaces "Read where {name}
+  first appears" and "Read more". Its texts (`src/lib/challenge/learn-more.ts`), written for someone who knows nothing
+  of the story, may include whole-book material only inside a nested fold labelled exactly "Later in the book
+  (spoilers)", closed by default; nowhere else on the challenge. "Who he/she is.", "At the start.", "What drives
+  him/her." and "Room to invent." cite chapters 1 to 14 only, and the glossary notes their ⓘ opens come from chapters 1
+  to 14 too (inside the fold, any chapter). A character's texts are shown only when they keep that rule; until then the
+  expander shows the first layer's facts. The owner's own texts must keep it. `P9g` checks the fold's exact label, that
+  it isn't open by default, that "later" appears only inside it, that the label appears nowhere else in the challenge's
+  code, the gate and the chapter limits; its proofs plant whole-book text outside the fold, a wrong label, the fold
+  open by default, and a chapter 29 citation in "At the start.".
 
 ---
 
