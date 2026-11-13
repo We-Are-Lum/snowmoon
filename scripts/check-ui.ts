@@ -2211,6 +2211,10 @@ async function checkChallengeLanding() {
                 entries: [pic(ent, { post: { url: ent.post.url, handle: ent.post.handle, network: 'farcaster' }, canWithdraw: true }), pic(exampleFx, { example: true, createdAt: '2026-11-12T11:00:00.000Z', post: { url: exampleFx.post.url, handle: exampleFx.post.handle, network: 'farcaster' } })],
                 w: words,
               };
+              // The stand-in session isn't a real token: any other API that answers 401 would sign the browser out (authFetch),
+              // so here those answers become empty ones. Registered first, so the stand-ins below take precedence.
+              const keepSignedIn = async (r: Route) => { const res = await r.fetch().catch(() => null); if (!res || res.status() === 401) await r.fulfill({ status: 200, json: {} }); else await r.fulfill({ response: res }); };
+              await page.route('**/api/**', keepSignedIn);
               await page.route('**/api/challenge/mine', (r) => r.fulfill({ json: mine }));
               await page.route('**/api/you', (r) => r.fulfill({ json: { who: { kind: 'farcaster', name: `@fixture${ent.fid}`, handle: `fixture${ent.fid}`, fid: ent.fid, username: `fixture${ent.fid}` }, work: { stored: true, scenes: [], frames: [], boards: [], pictures: [] }, prices: null, maintainer: false, wallet: null, link: null, linkedWallets: [], social: null } }));
               await page.goto(`${LOCAL}/you`, { waitUntil: 'load' });
@@ -2233,6 +2237,7 @@ async function checkChallengeLanding() {
                 await sec.scrollIntoViewIfNeeded();
                 if (SHOTS) await sec.screenshot({ path: path.join(SHOTS, `challenge-yours-${tag.replace(/[^0-9a-z×]+/gi, '-')}.png`) });
               }
+              await page.evaluate((fid) => localStorage.setItem('snowmoon.signin', JSON.stringify({ token: 'stand-in', fid, username: `fixture${fid}`, nameProof: null, exp: Math.floor(Date.now() / 1000) + 3600 })), ent.fid);
               await page.goto(`${LOCAL}/challenge`, { waitUntil: 'load' });
               const yours = page.locator('.chh-links a.ch-yours-link');
               await yours.waitFor({ timeout: 10000 }).catch(() => {});
@@ -2240,6 +2245,7 @@ async function checkChallengeLanding() {
               if (SHOTS) await page.locator('.chh-head').screenshot({ path: path.join(SHOTS, `challenge-yours-link-${tag.replace(/[^0-9a-z×]+/gi, '-')}.png`) });
               await page.unroute('**/api/challenge/mine');
               await page.unroute('**/api/you');
+              await page.unroute('**/api/**', keepSignedIn);
             }
             await page.unroute('**/api/challenge/submit');
             await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
