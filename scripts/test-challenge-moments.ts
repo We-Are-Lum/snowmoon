@@ -538,6 +538,28 @@ check('config: a current default look per challenge character, each a design id 
     check('a base made in a published style: the remix screen starts on that style', srcStyled?.styleElement === styleD.elementId);
     const styles = await (await import('../src/lib/challenge/make')).publishedStyles(sql as never);
     check('the published styles: listed with their names and texts', styles.some((x) => x.id === `style:${styleD.elementId}` && x.label === 'Quiet, warm light' && x.text === 'Quiet, warm light; soft shadows.'));
+    // The credit chain with a picture hidden mid-line (owner, 2026-11-12): base → plain (501) → mid (502, hidden) → top.
+    // The hidden step reads "A hidden picture", with no picture, name or link, and "Started from" says the same.
+    {
+      await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '502', 'neynar-score>=0.7', true) on conflict do nothing`;
+      const mid = await picture({ fid: 502, character: 'bai', moment: '', from: plain.versionId, remixedFrom: plain.versionId });
+      const top = await picture({ fid: 501, character: 'bai', moment: '', from: mid.versionId, remixedFrom: mid.versionId });
+      const before = await V.pictureView(S, top.versionId);
+      const midBefore = before?.chain.find((c) => c.versionId === mid.versionId);
+      proof('chain: before it is hidden, the middle picture shows its maker, its picture and its link', midBefore?.label === '@p502' && !!midBefore.thumb && midBefore.href === `/challenge/p/${mid.versionId}` && before?.made.startedFrom === '@p502');
+      await sql`update studio.elements set status = 'hidden' where id = ${mid.elementId}`;
+      const after = await V.pictureView(S, top.versionId);
+      const labels = after?.chain.map((c) => c.label) ?? [];
+      const hidden = after?.chain.find((c) => c.versionId === mid.versionId);
+      check(
+        'chain: a picture hidden mid-line reads "A hidden picture", with no picture, name or link; the rest of the line is unchanged, and "Started from" says "A hidden picture"',
+        labels.length === 4 && labels[0].startsWith('Base · ') && labels[1] === '@p501' && labels[2] === 'A hidden picture' && labels[3] === 'This one' &&
+          hidden?.thumb === null && hidden?.href === null && hidden?.hidden === true && !JSON.stringify(hidden).includes('p502') &&
+          !!after?.chain[1].href && after?.made.startedFrom === 'A hidden picture',
+        labels.join(' → '),
+      );
+      await sql`update studio.elements set status = 'published' where id = ${mid.elementId}`;
+    }
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styledBase = styled.versionId;
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styleEl = styleD.elementId;
     (globalThis as { __keepCount?: unknown }).__keepCount = keepCount;
