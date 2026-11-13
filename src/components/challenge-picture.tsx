@@ -103,7 +103,7 @@ export function ChallengePicture({ id }: { id: string }) {
           />
         </section>
       )}
-      {/* Its maker only (owner, 2026-11-12): add or change its backstory, and submit it to the bounty (the component asks the server who made it). */}
+      {/* Its maker only (owner, 2026-11-12): add or change its backstory, and send it on from here (the component below asks the server who made it). */}
       {known && (signedIn || wallet !== null) && <ChallengeBackstoryBounty versionId={v.versionId} onBackstory={(b) => setV({ ...v, backstory: b })} />}
       {!signedIn && (
         <p className="mk-signin-line">
