@@ -2058,7 +2058,9 @@ async function checkChallengeLanding() {
             if ((await sm.locator('img').getAttribute('loading')) !== 'lazy') fail(`/challenge/make ${tag}: a sample doesn't load lazily`);
             if ((await sm.locator('[data-ai="tag"]').count()) !== 1) fail(`/challenge/make ${tag}: a sample has no AI label`);
           }
-          if (/not by the author/i.test((await dlg.evaluate((d) => (d as HTMLElement).innerText)) ?? '')) fail(`/challenge/make ${tag}: the examples panel shows "not by the author" (owner, 2026-11-12: only beside the book's text)`);
+          // Its visible words only: each sample's AiTag keeps the hidden declaration (screen readers, and the tip on hover or
+          // focus), as the /challenge tiles do (kept on purpose, owner 2026-11-12).
+          if (/not by the author/i.test((await dlg.evaluate((d) => { const c = d.cloneNode(true) as HTMLElement; c.querySelectorAll('.sr-only, .ai-tag-tip').forEach((n) => n.remove()); return c.textContent ?? ''; })) ?? '')) fail(`/challenge/make ${tag}: the examples panel shows "not by the author" (owner, 2026-11-12: only beside the book's text)`);
           for (const b of await dlg.locator('.se-close, .se-pick, .se-sample-pick').all()) {
             const bb = await b.boundingBox();
             if (bb && bb.height < 44) fail(`/challenge/make ${tag}: a tap target in the examples panel is ${Math.round(bb.height)}px tall`);
