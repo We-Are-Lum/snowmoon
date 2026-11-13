@@ -49,7 +49,7 @@ def main():
         sys.exit(1)
 
     texts = {d['slug']: {k: d[k] for k in ('name', 'pronoun', 'author', 'who', 'start', 'later', 'drives', 'invent')} for d in chars}
-    json.dump({'about': 'Learn more texts, one per challenge character. Segments: {text} | {term, glossaryId} | {cite}. Zei is the owner\'s text, exact; the others are DRAFT, drafted by the coding agent (Claude, a closed model by Anthropic).', 'characters': texts},
+    json.dump({'about': 'Learn more texts, one per challenge character. Segments: {text} | {term, glossaryId} | {cite}. Zei is the owner\'s text, exact (his corrected version of 2026-11-12); the others were drafted by the coding agent (Claude, a closed model by Anthropic) and approved by the owner on 2026-11-12.', 'characters': texts},
               open(os.path.join(out, 'texts.json'), 'w'), indent=1, ensure_ascii=False)
 
     # Glossary: every term used, existing or DRAFT.
@@ -80,7 +80,7 @@ def main():
             print(f'PROBLEM glossary draft for {term!r}: quote not in {h["block"]}')
             sys.exit(1)
         entries.append({'term': term, 'status': 'DRAFT', 'glossaryId': None, 'draft': {'slug': h['slug'], 'term': h.get('display', term), 'quote': h['quote'], 'block': h['block'], 'note': h.get('note')}, 'in': sorted(u['in'])})
-    json.dump({'about': 'Every ⓘ term in the Learn more texts: its existing entry in content/snowmoon/glossary.json, or a DRAFT entry quoted word for word from the book with its block (DRAFT until the owner approves it).', 'terms': entries},
+    json.dump({'about': 'Every ⓘ term in the Learn more texts: its existing entry in content/snowmoon/glossary.json, or a DRAFT entry quoted word for word from the book with its block (approved by the owner on 2026-11-12; not yet in the site glossary).', 'terms': entries},
               open(os.path.join(out, 'glossary.json'), 'w'), indent=1, ensure_ascii=False)
 
     # Review page.
@@ -122,7 +122,7 @@ def main():
             secs.append(f'<details class="spoil"><summary>{esc(heads[k])}</summary>{body}</details>' if k == 'later' else body)
         inv = ''.join(f'<li>{seg_html(line)}</li>' for line in d['invent'])
         inv_checks = checks([s for line in d['invent'] for s in line])
-        who = 'The owner’s text, exactly as written.' if d['slug'] == 'zei' else 'DRAFT, drafted by the coding agent (Claude, a closed model by Anthropic).'
+        who = 'The owner’s text, exactly as written.' if d['slug'] == 'zei' else 'Drafted by the coding agent (Claude, a closed model by Anthropic); approved by the owner on 2026-11-12.'
         blocks.append(f'<section id="{esc(d["slug"])}"><h2>Learn more about {esc(d["name"])}</h2><p class="by">{who}</p>{"".join(secs)}<p><b>Room to invent.</b></p><ul>{inv}</ul>{f"<details class=check><summary>The book’s text for these cites</summary><ul>{inv_checks}</ul></details>" if inv_checks else ""}</section>')
 
     def gl_row(e):
@@ -167,8 +167,8 @@ table {{ border-collapse: collapse; width: 100%; font-size: 13px; }} th, td {{ b
 </head>
 <body>
 <main>
-<h1>Learn More Texts<span class="draftmark">DRAFT</span></h1>
-<div class="note">The expandable “Learn more about …” texts for the seven challenge characters. Zei’s is the owner’s text, exactly as written; the other six are DRAFT, drafted by the coding agent (Claude, a closed model by Anthropic). Every quotation was checked as an exact substring of its cited block; under each section, “The book’s text for these cites” shows the blocks for checking the paraphrases. ⓘ marks a glossary term (amber: no entry yet; a DRAFT entry is in the table at the end). Block links open the reader.</div>
+<h1>Learn More Texts</h1>
+<div class="note">The expandable “Learn more about …” texts for the seven challenge characters. Zei’s is the owner’s text, exactly as written (his corrected version of 2026-11-12); the other six were drafted by the coding agent (Claude, a closed model by Anthropic) and approved by the owner on 2026-11-12, as were the four glossary entries in the table at the end (not yet in the site glossary). Every quotation was checked as an exact substring of its cited block; under each section, “The book’s text for these cites” shows the blocks for checking the paraphrases. ⓘ marks a glossary term (amber: no entry yet; a DRAFT entry is in the table at the end). Block links open the reader.</div>
 <nav>{" · ".join(f'<a href="#{esc(d["slug"])}">{esc(d["name"])}</a>' for d in chars)} · <a href="#glossary">Glossary</a></nav>
 {"".join(blocks)}
 <section id="glossary"><h2>Glossary terms</h2><p class="by">Every ⓘ term: its existing entry in content/snowmoon/glossary.json, or a DRAFT entry quoted word for word from the book.</p><div class="tablewrap"><table><thead><tr><th>Term</th><th>Status</th><th>Entry</th><th>Used in</th></tr></thead><tbody>{"".join(gl_row(e) for e in entries)}</tbody></table></div></section>

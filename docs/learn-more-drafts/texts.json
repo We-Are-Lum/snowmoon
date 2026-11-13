@@ -1,5 +1,5 @@
 {
- "about": "Learn more texts, one per challenge character. Segments: {text} | {term, glossaryId} | {cite}. Zei is the owner's text, exact; the others are DRAFT, drafted by the coding agent (Claude, a closed model by Anthropic).",
+ "about": "Learn more texts, one per challenge character. Segments: {text} | {term, glossaryId} | {cite}. Zei is the owner's text, exact (his corrected version of 2026-11-12); the others were drafted by the coding agent (Claude, a closed model by Anthropic) and approved by the owner on 2026-11-12.",
  "characters": {
   "zei": {
    "name": "Zei",
@@ -30,10 +30,16 @@
      "cite": "c7-b61"
     },
     {
+     "cite": "c5-b69–b70"
+    },
+    {
      "text": ". Minpentai is a strategy game that Dzego takes very seriously. Zei is quick and competitive, and he plays so cleverly that Den, who recruits him into defense, says he nearly reinvented parts of cryptography in a single game "
     },
     {
      "cite": "c9-b66"
+    },
+    {
+     "cite": "c9-b75"
     },
     {
      "text": "."
@@ -48,10 +54,13 @@
      "glossaryId": "arctics"
     },
     {
-     "text": " bomb tears through his school. A stranger had moved his class to another room minutes before, which saved his life, but a stone breaks his left arm "
+     "text": " bomb tears through his classroom. A stranger had moved his class to another room minutes before, which saved his life, but a stone breaks his left arm "
     },
     {
-     "cite": "c2-b98–b103"
+     "cite": "c2-b98–b104"
+    },
+    {
+     "cite": "c5-b72"
     },
     {
      "cite": "c9-b75"
@@ -82,6 +91,9 @@
      "text": ". He wins the money "
     },
     {
+     "cite": "c7-b120"
+    },
+    {
      "cite": "c7-b138"
     },
     {
@@ -94,7 +106,7 @@
      "cite": "c10-b206"
     },
     {
-     "text": ", and makes the national top four "
+     "text": ", and reaches the top four of the qualifiers "
     },
     {
      "cite": "c14-b31"
@@ -108,13 +120,16 @@
      "text": "Mu tells him what Minpentai is really for: \"It's military training.\" "
     },
     {
-     "cite": "c10-b194"
+     "cite": "c10-b191–b194"
     },
     {
-     "text": ". When the war comes, Zei commands drones against the Arctics "
+     "text": ". When the war comes, Zei directs drone tactics against the Arctics "
     },
     {
      "cite": "c29-b110"
+    },
+    {
+     "cite": "c30-b2"
     },
     {
      "text": ". He loses Den "
@@ -126,10 +141,26 @@
      "cite": "c29-b115"
     },
     {
-     "text": ", and a message from Deluin, now secretly working inside the Arctic command, turns the battle "
+     "text": ". Deluin, now secretly a commander on the Arctic side, sends him a way through and access to the Arctic drones' simulator "
     },
     {
      "cite": "c29-b114"
+    },
+    {
+     "cite": "c30-b4"
+    },
+    {
+     "text": ", and his side wins back "
+    },
+    {
+     "term": "Northglade",
+     "glossaryId": "northglade"
+    },
+    {
+     "text": " "
+    },
+    {
+     "cite": "c30-b68–b72"
     },
     {
      "text": ". The championship final is cancelled and Zei is given the title "
@@ -141,7 +172,7 @@
      "text": ". By the end, he argues that \"AI should be a player, not the game.\" "
     },
     {
-     "cite": "c32-b47"
+     "cite": "c32-b42–b47"
     }
    ],
    "drives": [
@@ -186,7 +217,7 @@
   "gladias": {
    "name": "Gladias",
    "pronoun": "he",
-   "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner on 2026-11-12",
    "who": [
     {
      "text": "Gladias lives in "
@@ -413,7 +444,7 @@
      "cite": "c24-b2–b6"
     },
     {
-     "text": ", and he wants Veridia to defend itself "
+     "text": ", and he tries to convince Dzego to come and help defend Veridia "
     },
     {
      "cite": "c21-b96"
@@ -519,7 +550,7 @@
   "bai": {
    "name": "Bai",
    "pronoun": "she",
-   "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner on 2026-11-12",
    "who": [
     {
      "text": "Bai Jahen is a "
@@ -775,7 +806,7 @@
   "seila": {
    "name": "Seila",
    "pronoun": "she",
-   "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner on 2026-11-12",
    "who": [
     {
      "text": "Seila is a blogger from "
@@ -1076,7 +1107,7 @@
   "deluin": {
    "name": "Deluin",
    "pronoun": "he",
-   "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner on 2026-11-12",
    "who": [
     {
      "text": "Deluin is an older teenage "
@@ -1314,7 +1345,7 @@
   "mu": {
    "name": "Mu",
    "pronoun": "she",
-   "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner on 2026-11-12",
    "who": [
     {
      "text": "Mu is an older woman who knows Zei through "
@@ -1550,7 +1581,7 @@
   "ephelion": {
    "name": "Lord Ephelion",
    "pronoun": "he",
-   "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner on 2026-11-12",
    "who": [
     {
      "text": "Lord Ephelion is the "

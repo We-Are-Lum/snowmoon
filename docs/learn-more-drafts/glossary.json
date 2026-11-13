@@ -1,5 +1,5 @@
 {
- "about": "Every ⓘ term in the Learn more texts: its existing entry in content/snowmoon/glossary.json, or a DRAFT entry quoted word for word from the book with its block (DRAFT until the owner approves it).",
+ "about": "Every ⓘ term in the Learn more texts: its existing entry in content/snowmoon/glossary.json, or a DRAFT entry quoted word for word from the book with its block (approved by the owner on 2026-11-12; not yet in the site glossary).",
  "terms": [
   {
    "term": "Acolyte",
@@ -203,7 +203,8 @@
    "in": [
     "deluin",
     "gladias",
-    "seila"
+    "seila",
+    "zei"
    ]
   },
   {
