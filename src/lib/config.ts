@@ -1092,6 +1092,32 @@ export const MINPENTAI_PLAY = {
   dailyKeepDays: 90,
 } as const;
 
+/**
+ * The remix challenge's backstory bounty on poidh (owner, 2026-11-12; branch challenge-backstory-bounty): poidh.xyz's
+ * bounty 1546, "Snowmoon Character Backstory", which is bounty 560 on the contract (poidh.xyz's number minus 986).
+ * Public values, not secrets. Before anything is pinned, the server reads bounties(POIDH_BOUNTY_ID) on Base and goes on
+ * only if its issuer is POIDH_BOUNTY_ISSUER (the owner's wallet; read on Base on 2026-11-12: issuer 0x5bE8…4dCA, name
+ * "Snowmoon Character Backstory", 0.033 ETH, unclaimed). The app only sends claims from the maker's own wallet; voting,
+ * accepting and withdrawing happen on poidh.xyz (src/lib/challenge/landing-wording.ts CHALLENGE_LINKS).
+ */
+export const POIDH_BOUNTY_ID = 560;
+export const POIDH_BOUNTY_ISSUER = '0x5bE8bDC96c423f265FC589ff8611e4C72eE94dCA' as `0x${string}`;
+export const POIDH = {
+  /** PoidhV3 on Base (verified source on Basescan, no proxy; the address poidh-app itself uses, checked 2026-10-21). */
+  core: '0x5555Fa783936C260f77385b4E153B9725feF1719' as `0x${string}`,
+  chainId: 8453,
+  /** Claims per person sent through the app (claims made on poidh.xyz itself aren't counted). */
+  claimsPerPerson: 3,
+  /** A claim's description is cut to this many characters (the backstory, then the picture's page link). */
+  descriptionMax: 1500,
+  /** Pins per person (new picture-and-backstory pairs pinned to IPFS), sent or not: a bound on what we pin. */
+  pinsPerPerson: 9,
+  /** An unsent pin counts toward the claims for this long, so three pins can't become more than three claims at once. */
+  pendingMinutes: 15,
+  /** How long the server waits for a claim's transaction to land before answering 202. */
+  receiptWaitMs: 60_000,
+} as const;
+
 export function appUrl(): string {
   return process.env.NEXT_PUBLIC_URL?.replace(/\/$/, '') || 'http://localhost:3000';
 }

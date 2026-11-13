@@ -22,7 +22,9 @@ const EVENT = 'snowmoon:signin';
 const WALLET_KEY = 'snowmoon.wallet';
 // /api/challenge/make: the remix screen's Make takes a Lens or Bluesky sign-in (getPerson), as Make an image does
 // (pre-flight 2026-11-07: without it a Lens or Bluesky person's Make went unsigned and was answered "Sign in to make it").
-const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/you', '/api/scenes/', '/api/make/', '/api/oauth/approve', '/api/agents', '/api/direction', '/api/drafts', '/api/notes', '/api/requests', '/api/designs/picks', '/api/challenge/make', '/api/chat/status', '/api/chat/ask', '/api/minpentai/m/'];
+// /api/challenge/backstory: a picture's maker adds a backstory (any sign-in) and, from a wallet sign-in, submits it to
+// the poidh bounty (branch challenge-backstory-bounty).
+const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/', '/api/remix/', '/api/you', '/api/scenes/', '/api/make/', '/api/oauth/approve', '/api/agents', '/api/direction', '/api/drafts', '/api/notes', '/api/requests', '/api/designs/picks', '/api/challenge/make', '/api/challenge/backstory', '/api/chat/status', '/api/chat/ask', '/api/minpentai/m/'];
 /**
  * Routes matched exactly rather than by prefix: hiding one's own picture (the You page, owner 2026-10-18).
  * Not every /api/images/<id>/… route: like and report take a Farcaster sign-in only, and a wallet

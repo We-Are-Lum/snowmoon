@@ -3,13 +3,14 @@
 import Link from 'next/link';
 import NotFound from 'next/dist/client/components/builtin/not-found';
 import { useEffect, useState } from 'react';
-import { authFetch, socialSessionPerson, useAuth, useSocialSession } from '~/lib/client-auth';
+import { authFetch, socialSessionPerson, useAuth, useSocialSession, useWalletSession } from '~/lib/client-auth';
 import type { PictureView } from '~/lib/challenge/picture-view';
 import { AiTag } from './ai-tag';
 import { ChallengeShareFirst } from './challenge-share-first';
 import { ChallengeSubmit } from './challenge-submit';
 import { PostedOn } from './posted-on';
 import { BackstoryShown } from './challenge-backstory';
+import { ChallengeBackstoryBounty } from './challenge-backstory-bounty';
 
 /**
  * A challenge picture's page, /challenge/p/<version>, share first (owner, 2026-11-05; docs/proposals/challenge-moments.md
@@ -24,6 +25,7 @@ import { BackstoryShown } from './challenge-backstory';
 export function ChallengePicture({ id }: { id: string }) {
   const auth = useAuth();
   const social = useSocialSession();
+  const wallet = useWalletSession();
   const [v, setV] = useState<PictureView | null | 'missing'>(null);
   const [castHash, setCastHash] = useState<string | null>(null);
   useEffect(() => {
@@ -101,6 +103,8 @@ export function ChallengePicture({ id }: { id: string }) {
           />
         </section>
       )}
+      {/* Its maker only (owner, 2026-11-12): add or change its backstory, and submit it to the bounty (the component asks the server who made it). */}
+      {known && (signedIn || wallet !== null) && <ChallengeBackstoryBounty versionId={v.versionId} onBackstory={(b) => setV({ ...v, backstory: b })} />}
       {!signedIn && (
         <p className="mk-signin-line">
           {v.w.signInLine} <Link href="/challenge/rules">{v.w.rules}</Link>

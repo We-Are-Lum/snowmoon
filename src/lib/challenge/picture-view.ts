@@ -8,7 +8,7 @@ import { chapterChip } from './moments';
 import { shownMoment } from './moment-switch';
 import { challengePictures } from './pictures';
 import { postsFor } from './posts';
-import { backstoryOf } from './backstories';
+import { backstoryOf, currentBackstory } from './backstories';
 import { challengeOpenNow, phase } from './rules';
 import { submitWords, type SubmitWords } from './sheet-lines';
 import { CHALLENGE_WORDING as CW } from './wording';
@@ -43,9 +43,11 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
   const submit: SubmitWords | null = open && (standing?.kind === 'candidate' || entry) ? { ...submitWords(entry, name), postText: P.postText(name, m?.title ?? null) } : null;
   const posts: PostedOnItem[] = CHALLENGE.posts ? (await postsFor(sql, p.versionId).catch(() => [])).map(({ id, network, handle, at, url }) => ({ id, network, handle, at, url })) : [];
   const maker = designByline(p.byName, p.byFid);
-  // Its backstory (owner, 2026-11-09): in its version's body (new pictures only).
+  // Its backstory (owner, 2026-11-09): in its version's body (new pictures only); since 2026-11-12 the newest its maker
+  // added on this page (studio.challenge_backstories, append-only), else the body's.
   const [vb] = await sql<{ body: unknown }[]>`select body from studio.element_versions where id = ${p.versionId}`;
-  const backstory = backstoryOf(vb?.body);
+  const cb = await currentBackstory(sql, p.versionId, vb?.body).catch(() => null);
+  const backstory = cb ? { text: cb.text, at: cb.at } : backstoryOf(vb?.body);
   return {
     versionId: p.versionId,
     /** Remixing it (anyone but its maker): its remix screen from the owner's flip (before the open date too) until entries close; none after. */

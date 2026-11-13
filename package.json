@@ -95,6 +95,7 @@
     "test:publish-style": "tsx --conditions=react-server scripts/test-publish-style.ts",
     "test:settings": "tsx --conditions=react-server scripts/test-settings.ts",
     "test:image-asks-back-sql": "tsx scripts/test-image-asks-back-sql.ts",
+    "test:backstory-bounty": "tsx --conditions=react-server scripts/test-backstory-bounty.ts",
     "test:backstory": "tsx --conditions=react-server scripts/test-backstory.ts",
     "characters:mentions": "tsx scripts/characters-by-mentions.ts",
     "test:character-order": "tsx --conditions=react-server scripts/test-character-order.ts",

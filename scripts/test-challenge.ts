@@ -693,6 +693,9 @@ proof('a bounty back in the rules (the old per-character rule) is caught', copyP
   const words = Object.values(W).flatMap((v) => (typeof v === 'function' ? [String((v as (...a: string[]) => unknown)('Zei', 'Zei'))] : Array.isArray(v) ? v.map(String) : [String(v)])).join(' ');
   // One exception (owner, 2026-11-11, reversing 2026-11-04): the home's "Add a backstory" card points to the poidh bounty.
   // Only these exact lines of landing-wording.ts are allowed; any other bounty or poidh mention still fails.
+  // A second exception (owner's spec, 2026-11-12): a picture's maker submits its backstory to the bounty from its page.
+  // That flow lives outside the challenge's own pages and words, in src/lib/poidh/, src/app/api/challenge/backstory/ and
+  // src/components/challenge-backstory-bounty.tsx (scripts/test-backstory-bounty.ts tests it); this scan stays as it was.
   const BOUNTY_ALLOWED = [
     "      // The owner's words (2026-11-11). The link is CHALLENGE_LINKS.bounty; until it is set, the line ends \"(bounty opens soon)\".",
     "      // Tagged \"Extra credit\" (owner, 2026-11-12).",

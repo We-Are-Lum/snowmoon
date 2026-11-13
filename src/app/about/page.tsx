@@ -129,7 +129,9 @@ export default async function About() {
         Lens, where what you post is public. When an image is reported, ntfy delivers us a short alert that carries no content
         and nothing about you. When someone adds a post to a version's page, our server asks Bluesky or Lens for that post,
         sending only its details, to check that it links there; it sends nothing about you, and your browser never contacts
-        them for this. Every outside service, and what each receives, is in the <a href="/privacy">Privacy Policy</a>;
+        them for this. {/* DRAFT (branch challenge-backstory-bounty, 2026-11-12; the coding agent's, with Privacy §7's unreread item): */}
+        If you submit a backstory to the poidh bounty from here, Pinata receives the picture and the backstory and pins them to
+        IPFS, where anyone can read them. Every outside service, and what each receives, is in the <a href="/privacy">Privacy Policy</a>;
         the rules for using this site are in the <a href="/terms">Terms</a>.
       </p>
       <h2>Theme</h2>
