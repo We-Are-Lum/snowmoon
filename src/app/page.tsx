@@ -12,11 +12,17 @@ import { IntroOnce } from '~/components/first-visit';
 import { HomeSky } from '~/components/home-sky';
 import { HomeStart } from '~/components/home-start';
 import { HomeMomentCard } from '~/components/home-moment';
-import { HomeFeed, type HomeFeedItem } from '~/components/home-feed';
+import { HomeFeed, type HomeFeedItem, type HomePoster } from '~/components/home-feed';
 import { HomeMinpentai } from '~/components/home-minpentai';
 import { SceneCard } from '~/components/scene-card';
 import { CHALLENGE } from '~/lib/config';
 import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
+import { phase } from '~/lib/challenge/rules';
+import { POSTER } from '~/lib/challenge/poster';
+import { POSTER_LABEL, posterView } from '~/lib/challenge/poster-view';
+import { bookCharacter } from '~/lib/images/designs';
+import { callNameOf } from '~/lib/challenge/names';
+import { NO_PASSAGE } from '~/lib/images/no-passage';
 import '../styles/home.css';
 
 // Rendered per request, like /images: "Just made" is the newest images now. (With ISR, revalidate = 60,
@@ -42,7 +48,11 @@ export default async function Home() {
   const images = sql
     ? await Promise.race([feed(sql, 'new', 5), new Promise<null>((r) => setTimeout(() => r(null), 2000))]).catch(() => null)
     : null;
+  // A remix challenge picture (no passage): titled "Zei · by @name" and linking to its own page (owner, 2026-11-12).
+  const challengeTitle = (slug: string | null | undefined, by: string) => (slug ? `${callNameOf(bookCharacter(slug)?.name ?? slug)} · by ${by}` : null);
   const items: HomeFeedItem[] = (images ?? []).map((im) => ({
+    title: im.chapter === null ? challengeTitle(im.challengeCharacter, byline(im.byName, im.byFid)) : null,
+    href: im.chapter === null ? NO_PASSAGE.page(im.versionId) : `/image/${im.versionId}`,
     versionId: im.versionId,
     url: im.url,
     chapter: im.chapter,
@@ -52,6 +62,12 @@ export default async function Home() {
     alt: `AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`,
     prompt: im.userPrompt,
   }));
+
+  // The challenge poster above "Just made", only while entries are open (owner, 2026-11-12), and its card then sits
+  // second, in the right-hand column on a wide screen. Before or after the window, "Just made" alone, where it was.
+  const poster: HomePoster | null =
+    CHALLENGE.public && phase() === 'open' ? { src: POSTER.embed, alt: POSTER.alt, width: 1200, height: 800, label: POSTER_LABEL, view: posterView() } : null;
+  const feedCard = <HomeFeed items={items} unavailable={images === null} poster={poster} />;
 
   // Model-drafted wording (Claude Design, adapted by the coding agent): the descriptions below.
   const book = [
@@ -115,8 +131,9 @@ export default async function Home() {
       <div className="home-body">
         <div className="home-cards">
           <SceneCard />
+          {poster && feedCard}
           <HomeMomentCard moments={HOME_MOMENTS} />
-          <HomeFeed items={items} unavailable={images === null} />
+          {!poster && feedCard}
           <HomeMinpentai />
         </div>
 

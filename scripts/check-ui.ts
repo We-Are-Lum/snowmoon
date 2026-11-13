@@ -2061,6 +2061,49 @@ async function checkChallengeLanding() {
       await snap('feed-bai');
       await at('/challenge/remixes?character=gladias');
       if (!/No remixes of Gladias yet/.test((await page.locator('.ch-feed-none').textContent().catch(() => '')) ?? '')) fail(`/challenge/remixes?character=gladias ${tag}: no empty state`);
+
+      // Home (owner, 2026-11-12): while entries are open, the poster heads the "Just made" card, which sits second (the
+      // right-hand column on a wide screen): "Remix challenge", the 1200×800 linking to /challenge with its AI label and
+      // recipe, then "Just made" as a subheading. Challenge pictures in the feed read "Zei · by @name" and link to their page.
+      {
+        const { phase } = await import('../src/lib/challenge/rules');
+        const { POSTER } = await import('../src/lib/challenge/poster');
+        await page.evaluate((v) => localStorage.setItem('snowmoon.intro-seen', v), JSON.parse(readFileSync('config/intro.json', 'utf8')).version as string);
+        await at('/', '.home-feed');
+        const open = CHALLENGE.public && phase() === 'open';
+        const card = page.locator('.home-feed');
+        const poster = card.locator('.home-poster');
+        if (open) {
+          if ((await card.locator('#home-challenge-head').textContent())?.trim() !== 'Remix challenge') fail(`/ ${tag}: the "Just made" card isn't headed "Remix challenge" while entries are open`);
+          if (!(await poster.locator('a[href="/challenge"] img').getAttribute('src').catch(() => ''))?.endsWith(POSTER.embed)) fail(`/ ${tag}: no poster (${POSTER.embed}) linking to /challenge`);
+          if ((await poster.locator('img').getAttribute('alt')) !== POSTER.alt) fail(`/ ${tag}: the poster's alt isn't the poster's`);
+          if (!(await poster.locator('button.ai-label[aria-haspopup="dialog"]').count())) fail(`/ ${tag}: the poster has no AI label`);
+          if ((await card.locator('#home-feed-head').evaluate((e) => e.tagName)) !== 'H3' || !/Just made/.test((await card.locator('#home-feed-head').textContent()) ?? '')) fail(`/ ${tag}: "Just made" isn't a subheading under the poster`);
+          if ((await page.locator('.home-cards > *').nth(1).getAttribute('class'))?.includes('home-feed') !== true) fail(`/ ${tag}: the "Just made" card isn't second`);
+          if (w >= 1024) {
+            const [a, b] = await Promise.all([page.locator('.home-cards > *').first().boundingBox(), card.boundingBox()]);
+            if (!a || !b || b.x <= a.x || Math.abs(b.y - a.y) > 2) fail(`/ ${tag}: the poster card isn't in the right-hand column beside the first card`);
+          }
+          // The recipe behind the ⓘ: the sheet opens with the model and its maker.
+          await poster.locator('button.ai-label').click();
+          const sheet = page.locator('[role="dialog"]');
+          await sheet.waitFor({ timeout: 5000 }).catch(() => {});
+          if (!/GPT Image 2\.5 \(OpenAI, a closed model\)/.test((await sheet.textContent().catch(() => '')) ?? '')) fail(`/ ${tag}: the poster's recipe sheet doesn't name the model and its maker`);
+          await page.keyboard.press('Escape');
+          await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+        } else if (await poster.count()) fail(`/ ${tag}: the poster shows outside the entry window`);
+        const rows = await card.locator('.home-feed-list li').evaluateAll((els) => els.map((li) => ({ href: li.querySelector('a')?.getAttribute('href') ?? '', what: li.querySelector('.home-feed-what')?.textContent?.trim() ?? '' })));
+        const ch = rows.filter((r) => r.href.startsWith('/challenge/p/'));
+        if (!ch.length) fail(`/ ${tag}: no challenge picture in "Just made" links to its own page (${rows.map((r) => r.href).join(', ')})`);
+        for (const r of ch) if (!/^(Zei|Bai) · by \S/.test(r.what)) fail(`/ ${tag}: a challenge picture reads "${r.what}", not "{name} · by @name"`);
+        if (rows.some((r) => r.what === 'Remix challenge')) fail(`/ ${tag}: a feed item still reads "Remix challenge"`);
+        await checkFloors(page, `/ ${tag} (home)`, scheme);
+        if (SHOTS) {
+          await card.scrollIntoViewIfNeeded();
+          await page.screenshot({ path: path.join(SHOTS, `${name('home')}.png`), fullPage: false });
+          await page.locator('.home-cards').screenshot({ path: path.join(SHOTS, `${name('home-cards')}.png`) });
+        }
+      }
       await page.close();
     }
   } finally {

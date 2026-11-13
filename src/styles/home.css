@@ -54,6 +54,12 @@
 /* Just made */
 .home-feed { gap: 0; }
 .home-feed .home-card-head { padding-bottom: 6px; }
+/* The challenge poster above it while entries are open (owner, 2026-11-12); "Just made" then a subheading. */
+.home-poster { margin: 0 0 18px; display: flex; flex-direction: column; gap: 6px; }
+.home-poster-link { display: block; }
+.home-poster img { display: block; width: 100%; max-width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; background: var(--soft); }
+.home-poster-link:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.home-feed-sub { margin: 0; padding: 10px 0 6px; border-top: 1px solid var(--rule); display: flex; align-items: center; gap: 8px; font-family: var(--label); font-size: var(--text-label); font-weight: 400; line-height: 1.5; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 .home-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--veridia); flex: none; }
 .home-feed-list { margin: 0; padding: 0; list-style: none; }
 .home-feed-list li { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--rule); }
