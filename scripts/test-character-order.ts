@@ -102,8 +102,8 @@ check('Make an image, your picked character sheets', picked.join() === 'Zei Leim
 check('My picks (inBookOrder by entity name)', inBookOrder([{ e: 'Mu' }, { e: 'Seila' }, { e: 'Zei Leimin' }], (x) => x.e).map((x) => x.e).join() === 'Zei Leimin,Seila,Mu');
 const cast = castText(4).split('.')[0].split('; ').map((s) => s.split(':')[0]);
 check('the Make your own coach\'s cast list', cast.slice(0, 4).join() === 'Zei,Gladias,Bai,Seila' && cast.join() === inBookOrder(cast, (n) => bookCharacters().find((c) => c.name.split(' ').includes(n))!.slug).join(), cast.join());
-check('/challenge: CHALLENGE.characters', CHALLENGE.characters.join() === want([...CHALLENGE.characters]) && CHALLENGE.characters.join() === 'zei,gladias,bai,seila,deluin,mu', CHALLENGE.characters.join());
-check('/challenge: the rules name them in that order', CHALLENGE_WORDING.intro().includes('Zei, Gladias, Bai, Seila, Deluin or Mu'));
+check('/challenge: CHALLENGE.characters', CHALLENGE.characters.join() === want([...CHALLENGE.characters]) && CHALLENGE.characters.join() === 'zei,gladias,bai,seila,deluin,mu,ephelion', CHALLENGE.characters.join());
+check('/challenge: the rules name them in that order', CHALLENGE_WORDING.intro().includes('Zei, Gladias, Bai, Seila, Deluin, Mu or Lord Ephelion'));
 const card = (term: string, chapter: number, kind: 'character' | 'place', slug: string) => ({ term, chapter, sheets: [{ kind, slug, name: slug, href: '' }] });
 const cards = [card('autobus', 1, 'place', 'autobus'), card('mu', 4, 'character', 'mu'), card('kalimar', 1, 'place', 'kalimar-footpaths'), card('gladias', 1, 'character', 'gladias'), card('zei', 2, 'character', 'zei')].sort(byReferenceOrder);
 check('the glossary references: characters first, most named first, then the other words by chapter', cards.map((c) => c.term).join() === 'zei,gladias,mu,autobus,kalimar', cards.map((c) => c.term).join());

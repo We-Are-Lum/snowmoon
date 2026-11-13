@@ -75,6 +75,8 @@ export const HOME_TEXT = {
   continue: (n: number) => `Continue · Chapter ${n}`,
   about: 'Licence and sources',
   moment: { head: (n: number) => `A moment from chapter ${n}`, read: 'Read from here →', another: 'Another ↻' },
+  // The challenge poster above "Just made" while entries are open (owner, 2026-11-12): the heading is the owner's word.
+  challenge: { head: 'Remix challenge' },
   feed: { head: 'Just made · All AI-assisted', all: 'Everything made →', empty: 'Nothing published yet.', unavailable: 'Nothing to show right now.' },
   game: {
     head: 'Minpentai · Playing itself',

@@ -10,6 +10,9 @@ import { CHALLENGE } from '~/lib/config';
 export function ChallengeRulesBody({ v }: { v: RulesView }) {
   return (
     <div className="page prose ch-page ch-rules-page">
+      {/* On a desktop, "Entries so far" sits in its own column beside the rules (owner, 2026-11-12); a phone stacks them as before. */}
+      <div className="ch-rules-cols">
+      <div className="ch-rules-main">
       <p className="label ip-crumb">
         <Link href="/challenge">{v.back}</Link>
       </p>
@@ -40,6 +43,8 @@ export function ChallengeRulesBody({ v }: { v: RulesView }) {
         </ul>
         <p className="dz-note">{v.notAffiliated}</p>
       </section>
+      </div>
+      <div className="ch-rules-side">
 
       {v.counts && (
         <section className="dz-section ch-counts" aria-labelledby="ch-counts">
@@ -103,6 +108,8 @@ export function ChallengeRulesBody({ v }: { v: RulesView }) {
           </>
         )}
       </section>
+      </div>
+      </div>
     </div>
   );
 }

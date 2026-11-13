@@ -8,6 +8,7 @@ import { entryHref, standing } from '~/lib/challenge/entries';
 import { LANDING_WORDING as L } from '~/lib/challenge/landing-wording';
 import { ChallengeEntriesList } from '~/components/challenge-entries-list';
 import type { RemixCardWords } from '~/components/challenge-remix-card';
+import { callNameOf } from '~/lib/challenge/names';
 
 /**
  * Every submission (branch contest, 2026-11-04): the entries so far, newest first, filterable by character
@@ -22,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: 'Every entry', description: 'Every entry in the Snowmoon remix challenge, newest first.' };
 }
 type Props = { searchParams: Promise<{ character?: string }> };
-const callName = (name: string) => name.split(' ')[0];
+const callName = callNameOf;
 
 export default async function ChallengeEntries({ searchParams }: Props) {
   if (!CHALLENGE.public) notFound();

@@ -125,8 +125,10 @@ CHALLENGE.pictureEntries = false;
   const B = CHALLENGE.bases as Record<string, string[]>;
   const F = CHALLENGE.firstRemixes as Record<string, string[]>;
   const D = CHALLENGE.defaultLooks as Record<string, string | null>;
+  // Lord Ephelion joins (owner, 2026-11-11) before his bases are published (publish-bases refuses a character the challenge
+  // doesn't have): his list stays empty until the config PR after the owner's run; every other list is full.
   check('committed bases: one per base slot for each character, each a version id', CHALLENGE.characters.every((c) => B[c].length === CHALLENGE.baseCount[c] && B[c].every((id) => uuid.test(id))), JSON.stringify(B));
-  check('committed default looks: each character\'s first base (its current default)', CHALLENGE.characters.every((c) => D[c] === B[c][0]), JSON.stringify(D));
+  check('committed default looks: each character\'s first base (its current default)', CHALLENGE.characters.every((c) => D[c] === (B[c][0] ?? null)), JSON.stringify(D));
   check('committed first remixes: version ids, never a base', CHALLENGE.characters.every((c) => F[c].every((id) => uuid.test(id) && !B[c].includes(id))), JSON.stringify(F));
   check('committed first remixes: within the limit (firstRemixesProblems finds nothing)', R.firstRemixesProblems().length === 0, R.firstRemixesProblems().join('; '));
   for (const c of CHALLENGE.characters) { B[c] = []; F[c] = []; D[c] = null; }
@@ -312,9 +314,9 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
 // --- The bases (owner, 2026-11-03: three; 2026-11-04 after the restart: one per character) -----------------------
 {
   const committedMax = CHALLENGE.maxBases;
-  check('committed: three bases for Deluin and Gladias, one for the rest, three at most (owner, 2026-11-04)', committedMax === 3 && CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join() === 'zei:1,gladias:3,bai:1,seila:1,deluin:3,mu:1', CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join());
-  check('committed: at most one base is used for Zei, three for Deluin', R.basesOf('zei', { zei: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222'] }).length === 1 && R.basesOf('deluin', { deluin: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 3);
-  proof('a second base for a one-base character is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), mu: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222'] }).length === 1);
+  check('committed: three bases for every character (owner, 2026-11-11), three at most', committedMax === 3 && CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join() === 'zei:3,gladias:3,bai:3,seila:3,deluin:3,mu:3,ephelion:3', CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join());
+  check('committed: at most three bases are used for Zei, as for Deluin', R.basesOf('zei', { zei: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 3 && R.basesOf('deluin', { deluin: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 3);
+  proof('a fourth base for a character is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), mu: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 1);
   check('no look is called canonical or official (the word is "current default")', !/\b(canonical|official)\b/i.test(read('src/lib/config.ts')) && !/\b(canonical|official)\b/i.test(read('src/lib/challenge/landing-wording.ts')));
   // The rule itself works for any number; the checks below exercise it with three.
   CHALLENGE.maxBases = 3;
@@ -335,7 +337,7 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   check('at most three bases are used', R.basesOf('zei', { zei: [B1, B2, B3, '44444444-4444-4444-8444-444444444444'] }).length === 3);
   proof('a fourth base is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), zei: [B1, B2, B3, '44444444-4444-4444-8444-444444444444'] }).length === 1);
   proof('a base that is not a design id (a slug) is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), zei: ['zei-starting-point'] }).length === 1);
-  proof('a missing character list is caught', R.basesProblems({ zei: [] }).length === 5);
+  proof('a missing character list is caught', R.basesProblems({ zei: [] }).length === CHALLENGE.characters.length - 1);
   const otherLine = [step('99999999-9999-4999-8999-999999999999')];
   const anyFork = (line: { elementId: string; versionId: string }[]) => line.length > 0; // the rule before the bases
   proof('the old rule (any fork), used once the bases are picked, is caught', anyFork(otherLine) !== R.remixOfBase('zei', otherLine, bases));
@@ -351,7 +353,7 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   check('first remixes: at most two are used, in the order given', R.firstRemixesOf('zei', { zei: [F2, F1, F3] }).join() === [F2, F1].join());
   proof('a third first remix is caught', R.firstRemixesProblems({ ...empty, zei: [F1, F2, F3] }).length === 1);
   proof('a first remix that is not a design id is caught', R.firstRemixesProblems({ ...empty, zei: ['zei-remix'] }).length === 1);
-  proof('a missing character list is caught', R.firstRemixesProblems({ zei: [] }).length === 5);
+  proof('a missing character list is caught', R.firstRemixesProblems({ zei: [] }).length === CHALLENGE.characters.length - 1);
 }
 
 // --- Bases by closed models, the bases' style order, and P5g's one exception (owner, 2026-11-04) --------------------
@@ -659,26 +661,30 @@ check('the guidance line is shown', share.includes('If you’re remixing someone
 // --- The rules copy (owner's decisions, 2026-10-31) -------------------------------------------------------------
 const W = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
 const copy = [W.intro(), W.next(), ...W.rules(), W.adminsLine].join(' ');
-// Owner, 2026-11-05 evening: no prize for now; how the final version is chosen, and any prize, come later.
+// Owner, 2026-11-05 evening: no prize for now; how the final version is chosen, and any prize, come later. Owner,
+// 2026-11-12: "There is no prize for now" is dropped from the rules; the prize line waits for his rewards decision.
 const NO_PRIZE = 'There is no prize for now.';
-const LATER = 'How the final version is chosen, and any prize, are added to the rules before entries close.';
+const LATER = 'How any other rewards are chosen is added to the rules before entries close.';
 const MINT_PLAN = NO_PRIZE;
 const PROMISES = /\b(mint(ed|s|ing)?|rewards?|reward pot|credit test|deep fund\w*|payouts?|split on|token for you|you will (get|receive)|guaranteed?|\$\s?\d|\d+\s?(ETH|USDC|dollars))\b|\bwallet\b/i;
 const NO_BOUNTY = /\bbount(y|ies)\b|\bpoidh\b/i;
+const POIDH_RULE = 'The poidh bounty for backstories is an optional extra.';
 function copyProblems(t: string): string[] {
   const p: string[] = [];
-  if (!t.includes(NO_PRIZE) || !t.includes(LATER)) p.push('the rules don\'t say there is no prize for now, and that how the final version is chosen comes before entries close');
-  const m = t.match(PROMISES);
+  if (!t.includes(LATER)) p.push('the rules don\'t say how any other rewards are chosen comes before entries close');
+  // "How any other rewards are chosen…" (Terms §6e, owner 2026-11-12) is the one place "rewards" may appear.
+  const m = t.replace(LATER, '').match(PROMISES);
   if (m) p.push(`promises or a wallet path: "${m[0]}"`);
   if (!/(A new sheet|A picture) made from scratch isn’t an entry/.test(t)) p.push('it does not say only remixes count');
-  // No bounties at all (owner, 2026-11-04): no bounty, no poidh, anywhere in the challenge's words.
-  if (NO_BOUNTY.test(t)) p.push(`a bounty is back: "${t.match(NO_BOUNTY)![0]}"`);
+  // No bounties (owner, 2026-11-04), except the poidh bounty as an optional extra (owner, 2026-11-11 and 2026-11-12).
+  const tb = t.replace(POIDH_RULE, '');
+  if (NO_BOUNTY.test(tb)) p.push(`a bounty is back: "${tb.match(NO_BOUNTY)![0]}"`);
   return p;
 }
-check('the rules copy: no prize for now, the final version and any prize decided before entries close, remixes only, no bounty, no promises (mint, rewards, payouts), no wallet path', copyProblems(copy).length === 0, copyProblems(copy).join('; '));
-check('the rules name the six characters most named in the book first (owner, 2026-11-04)', W.intro().includes('Zei, Gladias, Bai, Seila, Deluin or Mu'));
+check('the rules copy: the final version and any prize decided before entries close, remixes only, no bounty but the poidh line, no promises (mint, rewards, payouts), no wallet path', copyProblems(copy).length === 0 && !copy.includes(NO_PRIZE), copyProblems(copy).join('; '));
+check('the rules name the characters most named in the book first, Lord Ephelion by his title (owner, 2026-11-04 and 2026-11-11)', W.intro().includes('Zei, Gladias, Bai, Seila, Deluin, Mu or Lord Ephelion'));
 proof('a promised mint is caught', copyProblems(`${copy} Each version is then minted as an open edition in Snowmoon WIP.`).length > 0);
-proof('rules without "no prize for now" are caught', copyProblems(copy.replaceAll(NO_PRIZE, '')).length > 0);
+proof('rules without "how any other rewards are chosen" are caught', copyProblems(copy.replaceAll(LATER, '')).length > 0);
 proof('a reward pot is caught', copyProblems(`${copy} Plus an extra reward pot.`).length > 0);
 proof('a wallet path back in the rules is caught', copyProblems(`${copy} Or a wallet linked to one.`).length > 0);
 proof('a bounty back in the rules (the old per-character rule) is caught', copyProblems(`${copy} There is one poidh bounty for each character.`).length > 0);
@@ -689,17 +695,22 @@ proof('a bounty back in the rules (the old per-character rule) is caught', copyP
   // Only these exact lines of landing-wording.ts are allowed; any other bounty or poidh mention still fails.
   const BOUNTY_ALLOWED = [
     "      // The owner's words (2026-11-11). The link is CHALLENGE_LINKS.bounty; until it is set, the line ends \"(bounty opens soon)\".",
-    "      { n: '2', title: 'Add a backstory', tag: '', body: 'Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', link: 'bounty' as const, pending: '(bounty opens soon)' },",
-    "export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: null, collab: 'https://collab.venturetothex.com/c/snowmoon' };",
+    "      // Tagged \"Extra credit\" (owner, 2026-11-12).",
+    "      { n: '2', title: 'Add a backstory', tag: 'Extra credit', body: 'Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', link: 'bounty' as const, pending: '(bounty opens soon)' },",
+    "export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: 'https://poidh.xyz/base/bounty/1546', collab: 'https://collab.venturetothex.com/c/snowmoon' };",
+    " * The bounty (owner, 2026-11-12): poidh.xyz's bounty 1546, \"Snowmoon Character Backstory\", id 560 on the contract. It",
+    " * goes live only with Terms §6e's bounty sentences (branch terms-6e-poidh). */",
   ];
-  const stripAllowed = (f: string, text: string) => (f.endsWith('landing-wording.ts') ? text.split('\n').filter((l) => !BOUNTY_ALLOWED.includes(l)).join('\n') : text);
+  // The rules' poidh line (owner, 2026-11-12) and its comment, in wording.ts.
+  const RULE_ALLOWED = ["    'The poidh bounty for backstories is an optional extra.',", "  // withdrawing; where to post; the poidh bounty is an optional extra; the Neynar score figure. DRAFT wording, except"];
+  const stripAllowed = (f: string, text: string) => (f.endsWith('landing-wording.ts') ? text.split('\n').filter((l) => !BOUNTY_ALLOWED.includes(l)).join('\n') : f.endsWith('challenge/wording.ts') || f === 'wording.ts' ? text.split('\n').filter((l) => !RULE_ALLOWED.includes(l)).join('\n') : text);
   const pages = ['src/app/challenge', 'src/lib/challenge'].flatMap((d) => readdirSync(path.join(ROOT, d), { recursive: true }).map(String).filter((f) => /\.tsx?$/.test(f)).map((f) => stripAllowed(f, readFileSync(path.join(ROOT, d, f), 'utf8')))).join('\n');
-  const wordsNoCard = words.replaceAll('Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', '').replaceAll('(bounty opens soon)', '').replaceAll('bounty', (m) => m);
+  const wordsNoCard = words.replaceAll('Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', '').replaceAll(POIDH_RULE, '').replaceAll('(bounty opens soon)', '').replaceAll('bounty', (m) => m);
   check('no bounty: none in the config, the wording or the challenge\'s pages, except the home\'s "Add a backstory" card (owner, 2026-11-11)', !('bounties' in CHALLENGE) && !('bountyAmount' in CHALLENGE) && !NO_BOUNTY.test(wordsNoCard) && !NO_BOUNTY.test(pages), (wordsNoCard.match(NO_BOUNTY) ?? pages.match(NO_BOUNTY) ?? [''])[0]);
   proof('a second bounty mention in landing-wording.ts is caught (the exception is those lines only)', NO_BOUNTY.test(stripAllowed('landing-wording.ts', "x\n  more: 'A poidh bounty for Zei.',\n")));
   proof('a bounty planted in a page is caught', NO_BOUNTY.test(`${pages}\n<p>The poidh bounty</p>`));
 }
-proof('rules without "forks only" are caught', copyProblems(copy.replace('A new sheet made from scratch isn’t an entry.', '')).length > 0);
+proof('rules without "forks only" are caught', copyProblems(copy.replace('A picture made from scratch isn’t an entry.', '')).length > 0);
 
 // --- Sheets open to everyone only inside the window, and only once Privacy says so -------------------------------
 {
@@ -902,7 +913,7 @@ check('entries: not a new sheet made from scratch (forks only)', !ids.includes(f
 check('entries: not an admin; the admin is listed apart', !ids.includes(fAdmin.versionId) && st.byAdmins.some((v) => v.versionId === fAdmin.versionId));
 check('entries: not the starting sheets made before the window', !ids.includes(baiStart.versionId) && !ids.includes(zeiStart.versionId));
 check('entries: what was submitted, three', ids.length === 3, ids.join());
-check('entrants per character: Bai 2 (500, 6852), Zei 1 (6852), others 0, in CHALLENGE order', [...st.entrants].map(([c, n]) => `${c}:${n}`).join() === 'zei:1,gladias:0,bai:2,seila:0,deluin:0,mu:0', [...st.entrants].map(([c, n]) => `${c}:${n}`).join());
+check('entrants per character: Bai 2 (500, 6852), Zei 1 (6852), others 0, in CHALLENGE order', [...st.entrants].map(([c, n]) => `${c}:${n}`).join() === 'zei:1,gladias:0,bai:2,seila:0,deluin:0,mu:0,ephelion:0', [...st.entrants].map(([c, n]) => `${c}:${n}`).join());
 {
   // The owner's first remixes (owner, 2026-11-04) are not entries: never in the entries or the admins' list, no Entry
   // badge or admin line on their page, no count. Here an eligible person's entry and the admin's version stand in.
@@ -1429,7 +1440,8 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
   check('c no new Neynar lookup: only the Generate gate, the assistant\'s gate and the publish recorder call it (and its own file)', lookups.join() === ['src/lib/challenge/record.ts', 'src/lib/chat/gate.ts', 'src/lib/images/gate.ts', 'src/lib/images/neynar.ts'].join(), lookups.join());
   // d. The rule says an account below the check can't remix.
   const rules = CW.rules().join(' ');
-  check('d the rule says an account below the check can\'t remix', /can’t remix or enter/.test(rules) && !/To count as an entry, sign in/.test(rules));
+  // Owner, 2026-11-12: the rules are much shorter; who can enter is said once, up front, on the rules page (whoCanEnter).
+  check('d the rules page says up front which accounts can enter, and the rules don\'t say "To count as an entry, sign in"', /passes the site’s check/.test(CW.whoCanEnter()) && !/To count as an entry, sign in/.test(rules));
   // e. Remix, not Fork; the entry line at publish; the share text in the window.
   check('e1 the button and the form\'s title say "Remix" (one wording, every style and sheet)', IW.page.fork === 'Remix' && IW.form.fork === 'Remix' && /\{W\.page\.fork\}/.test(read('src/components/design-bar.tsx')) && /W\.form\.fork/.test(read('src/app/references/designs/new/page.tsx')));
   check('e1 no "Fork" left in what people read', !walk('src').some((f) => /'[^']*\bFork\b[^']*'/.test(stripComments(read(f)))));

@@ -1,0 +1,104 @@
+{
+  "what": "The remix challenge poster, used as /challenge's link preview while entries are open (owner, 2026-11-12). AI-generated.",
+  "made_by": "A coding agent (Claude, a closed model by Anthropic), for the owner, who picked it (finalist A, GPT Image 2.5) on 2026-11-12.",
+  "model": {
+    "name": "GPT Image 2.5",
+    "id": "openai/gpt-image-2.5-sunburst",
+    "maker": "OpenAI",
+    "closed": true,
+    "via": "Vercel AI Gateway",
+    "endpoint": "https://ai-gateway.vercel.sh/v1/images/edits",
+    "settings": {
+      "size": "1536x1024",
+      "quality": "high",
+      "n": 1,
+      "output_format": "png",
+      "gateway": {
+        "only": [
+          "openai"
+        ],
+        "disallowPromptTraining": true
+      },
+      "retention": {
+        "provider": "openai",
+        "zero_data_retention": false,
+        "no_training": true,
+        "endpoint_list_read_at": "2026-11-12T19:37:47.707Z",
+        "kept": {
+          "quote": "By default, abuse monitoring logs are generated for all API feature usage and retained for up to 30 days, unless longer retention is required by law, or is reasonably necessary to protect our services or any third party from harm.",
+          "images_row": "/v1/images/edits: abuse monitoring retention 30 days, application state retention none",
+          "source": "https://developers.openai.com/api/docs/guides/your-data",
+          "read": "2026-11-03"
+        }
+      }
+    }
+  },
+  "request_id": "gen_01M78M8B3Q9K69W7AN4FRG6NFS",
+  "cost_usd": 0.086938,
+  "cost_source": "gateway response",
+  "at": "2026-11-12T19:38:23.198Z",
+  "prompt": "Reference images 1 to 7 each show one character, in this order:\n1. Zei: a young man with light golden-tan skin and dark eyes, spiky black hair with a teal streak, an orange jacket over a black shirt.\n2. Gladias: a man with warm light-brown skin, a short beard and dark eyes, short dark hair, a green high-collared tunic.\n3. Bai: a woman with dark brown skin, tattooed arms and gold earrings, long magenta hair swept to one side, a yellow-green vest.\n4. Seila: a woman with deep brown skin and small round gold-rimmed glasses, long dark braids, a rust-orange high-collared coat.\n5. Deluin: a young man with warm tan skin and dark brown eyes, long straight black hair, a cream cable-knit sweater with a grey hood.\n6. Mu: an older woman with medium brown skin and thin red-framed glasses, short silver-grey hair, a dark grey uniform with blue sleeves and gold trim.\n7. Lord Ephelion: a man with fair skin and grey eyes, swept-back silver hair, a pale blue long coat with a high collar over a white vest.\n\nMake one wide, cinematic movie-poster illustration of all seven together, in the same illustrated animated-series style as the references. Their faces and shoulders are layered together and overlap at different sizes, fading softly into each other: Zei large in the centre foreground, Lord Ephelion looming larger above and behind him, the other five arranged around them at varied sizes and turned toward the centre. Each character must stay clearly themselves: the same face, skin tone, hair, glasses, earrings and clothing as in their reference image.\n\nDramatic cold lighting: a large pale full moon low behind the group, cold blue moonlight and ice-blue rim light on their faces, deep navy shadows, drifting snow. A near-future world: faint glass towers and soft city lights far below in the snow. A cold palette of snow white, ice blue and navy, with each character's own hair and clothing colours kept as small warm accents. Nothing fantasy or medieval.\n\nNo text, letters, numbers, logos, signatures or watermarks anywhere in the image. Keep the bottom fifth darker and quieter, for a title to be added later.",
+  "references": [
+    {
+      "character": "zei",
+      "version_id": "bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d",
+      "url": "https://pictures.snowmoon.party/images/readers/131f235227a54b06f6f11253f37a09b5.jpg",
+      "title": "Animated series",
+      "sha256": "131f235227a54b06f6f11253f37a09b5001bf5f72326a6c9949a21800990dc7c"
+    },
+    {
+      "character": "gladias",
+      "version_id": "68364375-0f33-46fd-9755-2fd2b551198a",
+      "url": "https://pictures.snowmoon.party/images/readers/b9b6c00952cb47e936dc601676a7c34b.jpg",
+      "title": "Animated series, look b",
+      "sha256": "b9b6c00952cb47e936dc601676a7c34b916355e8b4f979db4d7465ea024d0947"
+    },
+    {
+      "character": "bai",
+      "version_id": "110d5973-31c2-4d96-9a88-5838d8a6d868",
+      "url": "https://pictures.snowmoon.party/images/readers/01538922456b9bf61192ed291b8f2659.jpg",
+      "title": "Animated series",
+      "sha256": "01538922456b9bf61192ed291b8f26595c694599b94eb95be8b60ce931b76a96"
+    },
+    {
+      "character": "seila",
+      "version_id": "1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba",
+      "url": "https://pictures.snowmoon.party/images/readers/3ef4825ca8f49aabf05ddcdaa8119e9b.jpg",
+      "title": "Animated series",
+      "sha256": "3ef4825ca8f49aabf05ddcdaa8119e9b229f523a3dfc1dc2af0238cbc95a4d13"
+    },
+    {
+      "character": "deluin",
+      "version_id": "75a94420-df70-4f43-a3a6-4c2b571e72ab",
+      "url": "https://pictures.snowmoon.party/images/readers/2b45d17da426df0304fc84ded0f3f0c4.jpg",
+      "title": "Animated series, look b",
+      "sha256": "2b45d17da426df0304fc84ded0f3f0c464472c55c96aa517735f9837368432d4"
+    },
+    {
+      "character": "mu",
+      "version_id": "15a9af1d-9eef-4e25-be57-738d9823dd74",
+      "url": "https://pictures.snowmoon.party/images/readers/3e6ae696865441d24aa1dde262dac043.jpg",
+      "title": "Animated series",
+      "sha256": "3e6ae696865441d24aa1dde262dac043964ab8c9633d19174eb7074091087fb5"
+    },
+    {
+      "character": "ephelion",
+      "version_id": "589fd5cb-63a0-4c19-8e1d-5c7704d0262c",
+      "url": "https://pictures.snowmoon.party/images/readers/dda578d6eb6c7b2d7aebecd720b90cec.jpg",
+      "title": "Animated series, A",
+      "sha256": "dda578d6eb6c7b2d7aebecd720b90cec6ee61423cc43c6992390e651d2877f57"
+    }
+  ],
+  "output_sha256": "f67f82e3e86dcc03dc372f7b3656b9c77dbaf08c5c43f54c78ca3927260f3c18",
+  "made_in_code": "No model after the one call: the source (1536x1024) is cropped and scaled, and the text (\"SNOWMOON\", \"Remix challenge · open until 29 November\", \"snowmoon.party\", \"AI-generated\") is drawn over it in code (sharp + SVG). Futura and Avenir Next.",
+  "files": {
+    "poster-1200x800.jpg": {
+      "use": "Farcaster miniapp embed (3:2)",
+      "sha256": "a2c67be61f11000b160e82d92422147b17edee52b591cea6915cf77ef8089ebb"
+    },
+    "poster-1200x630.jpg": {
+      "use": "Open Graph and the X card (summary_large_image)",
+      "sha256": "921fd83fc652318600c9016732ed6db56e87e6dc3f5f5d8d58a70a5466203c57"
+    }
+  }
+}

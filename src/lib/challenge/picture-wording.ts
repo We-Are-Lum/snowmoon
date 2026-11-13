@@ -46,6 +46,8 @@ export const PICTURE_WORDING = {
   aiLine: 'AI-generated',
   remixedFrom: 'Remixed from',
   thisOne: 'This one',
+  /** A step of the chain that isn't published (owner's words, 2026-11-12). */
+  hiddenStep: 'A hidden picture',
   madeStyle: 'Style',
   madeModel: 'Model',
   madeFrom: 'Started from',

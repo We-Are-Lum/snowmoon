@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const sql = db();
   const v = sql && /^[0-9a-f-]{36}$/i.test(id) ? await pictureView(sql, id.toLowerCase()).catch(() => null) : null;
   if (!v) return { title: 'Not found', robots: { index: false } };
-  const description = `${v.by}, on ${APP_NAME}. AI-generated picture, not by the author.`;
+  const description = `${v.by}, on ${APP_NAME}. AI-generated picture.`;
   // Cast in Farcaster (pre-flight 2026-11-07): the picture's own card and a button that opens this page, with the remix pages' button ("Remix this") and an image's
   // page does (src/app/image/[id]/page.tsx); without it the cast showed the site's card and opened the home page.
   const embed = JSON.stringify({

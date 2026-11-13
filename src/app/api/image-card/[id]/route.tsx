@@ -10,7 +10,7 @@ import { byline } from '~/lib/images/byline';
 
 /**
  * A reader's image as a share card, like quote cards: 1200×800, the image above, and below it
- * what it is (AI-generated, by whom, not by the author) and where it belongs in the book. Words
+ * what it is (AI-generated, by whom) and where it belongs in the book. Words
  * drawn in code. Only published images; cached for minutes, so a hidden image's card stops too.
  */
 export const runtime = 'nodejs';
@@ -33,7 +33,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={im.url} width={W} height={IMG_H} style={{ width: W, height: IMG_H, objectFit: 'cover' }} alt="" />
         <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'space-between', padding: '0 40px', fontSize: 22, color: '#A39F96', letterSpacing: 1 }}>
-          <div style={{ display: 'flex' }}>{`AI-GENERATED IMAGE · BY ${byline(im.byName, im.byFid).toUpperCase()} · NOT BY THE AUTHOR`}</div>
+          <div style={{ display: 'flex' }}>{`AI-GENERATED IMAGE · BY ${byline(im.byName, im.byFid).toUpperCase()}`}</div>
           <div style={{ display: 'flex' }}>{where}</div>
         </div>
       </div>
