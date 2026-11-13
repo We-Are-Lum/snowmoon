@@ -1817,8 +1817,10 @@ async function checkChallengeLive() {
     const base = (Object.values(CHALLENGE.bases as Record<string, string[]>).flat()[0]) ?? null;
     if (base) {
       await open(page, `/challenge/make?from=${base}`);
-      const make = page.locator('.mk-page[data-step="remix"] > .mk-makebar').first();
-      await make.locator('.mk-make').first().waitFor({ timeout: 15000 }).catch(() => fail(`/challenge/make @${w} (${scheme}, live): no "Make it" button in the MakeBar`));
+      // Live reads production: until redesign D is deployed there, the button is still the page's own child (.mk-make);
+      // after, it sits in the MakeBar. Either is the thing that sticks.
+      await page.locator('.mk-page[data-step="remix"] > .mk-makebar .mk-make, .mk-page[data-step="remix"] > .mk-make').first().waitFor({ timeout: 15000 }).catch(() => fail(`/challenge/make @${w} (${scheme}, live): no "Make it" button`));
+      const make = (await page.locator('.mk-page[data-step="remix"] > .mk-makebar').count()) ? page.locator('.mk-page[data-step="remix"] > .mk-makebar').first() : page.locator('.mk-page[data-step="remix"] > .mk-make').first();
       const at = async () => make.evaluate((e) => ({ pos: getComputedStyle(e).position, bottom: e.getBoundingClientRect().bottom, top: e.getBoundingClientRect().top, vh: window.innerHeight }));
       const s = await at().catch(() => null);
       if (s && w < 768) {
