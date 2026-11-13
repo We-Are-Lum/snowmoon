@@ -25,6 +25,9 @@ export const FIXTURE_CHALLENGE = (() => {
   const styles = [
     { element: id(8, 1), version: id(9, 1), name: 'Quiet, warm light', text: 'Quiet, warm light; soft shadows, calm colours.' },
     { element: id(8, 2), version: id(9, 2), name: 'Printed', text: 'Printed: flat inks, visible halftone, a slightly off register.' },
+    // An offered style (CHALLENGE.offeredStyles), so the Style row and "See examples" (owner, 2026-11-12) list one: shown as
+    // "Moody graphic novel" (STYLE_LABELS). Version 2 holds four samples (the panel shows three); version 1, one.
+    { element: id(8, 3), version: id(9, 3), name: 'Mood', text: 'Fixture mood: deep shadows, muted colours, heavy ink.', samples: 4, older: id(9, 4) },
   ];
   const sheets: Record<string, string[]> = { zei: [], bai: [] };
   const remixes: { versionId: string; character: string; createdAt: string; from: string; title: string }[] = [];
@@ -58,7 +61,9 @@ export async function startChallengeDb(port: number): Promise<{ url: string; sto
     const en = id(1, 10 + i);
     await db.query(`insert into studio.entities (id, work_id, kind, name) values ($1,'snowmoon','style',$2)`, [en, st.name]);
     await db.query(`insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id, status, created_at) values ($1,'snowmoon','design',6786,$2,'published',$3)`, [st.element, en, new Date(Date.UTC(2026, 9, 20, 10 - i)).toISOString()]);
-    await db.query(`insert into studio.element_versions (id, element_id, version_no, body, created_at) values ($1,$2,1,$3,$4)`, [st.version, st.element, JSON.stringify({ title: st.name, text: st.text, samples: [{ url: PICS[i % 2], sha256: 'b'.repeat(64) }], views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null }), new Date(Date.UTC(2026, 9, 20, 10 - i)).toISOString()]);
+    const vbody = (n: number) => JSON.stringify({ title: st.name, text: st.text, samples: Array.from({ length: n }, (_, k) => ({ url: PICS[(i + k) % 2], sha256: 'b'.repeat(64) })), views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null });
+    if (st.older) await db.query(`insert into studio.element_versions (id, element_id, version_no, body, created_at) values ($1,$2,1,$3,$4)`, [st.older, st.element, vbody(1), new Date(Date.UTC(2026, 9, 20, 10 - i)).toISOString()]);
+    await db.query(`insert into studio.element_versions (id, element_id, version_no, body, created_at) values ($1,$2,$3,$4,$5)`, [st.version, st.element, st.older ? 2 : 1, vbody(st.samples ?? 1), new Date(Date.UTC(2026, 9, 20, 10 - i, st.older ? 30 : 0)).toISOString()]);
   }
   const body = (title: string, pic: string, style: { version_id: string; title: string } | null = null) =>
     JSON.stringify({ title, text: 'Fixture sheet.', samples: [], views: { front: { url: pic, sha256: 'a'.repeat(64), recipe: { prompt: 'p', model: 'z-image-turbo', endpoint: 'e', host: 'fal.ai', settings: {}, seed: 1, request_id: 'r', cost_usd: 0.003, made_at: '2026-10-20T00:00:00Z', width: 576, height: 768, checks: { prompt: { model: 'g', verdict: 'ok' }, host_safety_checker: 'passed' }, assist: null } } }, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style });

@@ -2066,8 +2066,11 @@ async function checkChallengeLanding() {
       const styleChips = (await page.locator('.mk-styles .cc-chip').allTextContents()).map((t) => t.replace('⟳', '').trim());
       // "Same as this picture" first and chosen (owner, 2026-11-09), then the published styles, Random, Write your own.
       // Only the offered styles (CHALLENGE.offeredStyles, "Animated series"; owner, 2026-11-09); Random only with one to draw.
-      const offeredFx = FX.styles.map((x) => x.name).filter((n) => CHALLENGE.offeredStyles.includes(n));
+      // Each by its display label (STYLE_LABELS: the fixture's "Mood" reads "Moody graphic novel"; owner, 2026-11-12).
+      const { styleLabel } = await import('../src/lib/challenge/make-wording');
+      const offeredFx = CHALLENGE.offeredStyles.filter((n) => FX.styles.some((x) => x.name === n)).map(styleLabel);
       const wantChips = ['Same as this picture', ...offeredFx, ...(offeredFx.length ? ['Random'] : []), 'Write your own'];
+      if (!offeredFx.includes('Moody graphic novel') || styleChips.includes('Mood')) fail(`/challenge/make ${tag}: the fixture's "Mood" isn't shown as "Moody graphic novel" (${styleChips.join(', ')})`);
       if (styleChips.join('|') !== wantChips.join('|')) fail(`/challenge/make ${tag}: the Style row reads ${styleChips.join(', ')}, not ${wantChips.join(', ')}`);
       if ((await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style')) !== 'same') fail(`/challenge/make ${tag}: the Style row doesn't start on "Same as this picture"`);
       const models = (await page.locator('.mk-model .cc-chip').allTextContents()).map((t) => t.trim());
@@ -2076,6 +2079,59 @@ async function checkChallengeLanding() {
       if (models.join('|') !== 'FLUX.2 [klein] 4B · Black Forest Labs · open') fail(`/challenge/make ${tag}: the Model row reads ${models.join(', ')}`);
       if (await page.locator('.mk-moments, .mk-strip, .mk-surprise, .mk-quotes').count()) fail(`/challenge/make ${tag}: shows the moments while they are off`);
       await snap('make', true);
+      // "See examples" under the Style row (owner, 2026-11-12): a dialog with each offered published style (its label,
+      // words and up to three samples, each with the AI label), none of the three special chips; tapping a style picks
+      // it in the row and closes the panel. A bottom sheet under 768px (at the bottom, full width), a side panel wider.
+      {
+        const link = page.locator('.mk-styles .se-link');
+        if ((await link.count()) !== 1 || ((await link.textContent()) ?? '').trim() !== 'See examples') fail(`/challenge/make ${tag}: no "See examples" link under the Style row`);
+        else {
+          await link.click();
+          const dlg = page.getByRole('dialog', { name: 'Styles' });
+          await dlg.waitFor({ timeout: 5000 }).catch(() => fail(`/challenge/make ${tag}: "See examples" doesn't open a dialog named "Styles"`));
+          if ((await dlg.getAttribute('aria-modal')) !== 'true') fail(`/challenge/make ${tag}: the examples panel isn't aria-modal`);
+          const names = (await dlg.locator('.se-name').allTextContents()).map((t) => t.trim());
+          if (names.join('|') !== offeredFx.join('|')) fail(`/challenge/make ${tag}: the examples panel lists ${names.join(', ')}, not ${offeredFx.join(', ')}`);
+          if (names.some((n) => ['Same as this picture', 'Random', 'Write your own'].includes(n)) || (await dlg.locator('[data-style="same"], [data-style="random"], [data-style="own"]').count())) fail(`/challenge/make ${tag}: the examples panel shows a special chip`);
+          const moodRow = dlg.locator('.se-style').filter({ has: page.locator('.se-name', { hasText: 'Moody graphic novel' }) });
+          const samples = moodRow.locator('.se-sample');
+          if ((await samples.count()) !== 3) fail(`/challenge/make ${tag}: "Moody graphic novel" shows ${await samples.count()} samples, not three (its newest version has four)`);
+          if (((await moodRow.locator('.se-words').textContent()) ?? '').trim() !== FX.styles.find((x) => x.name === 'Mood')?.text) fail(`/challenge/make ${tag}: "Moody graphic novel" doesn't show its words`);
+          for (const sm of await samples.all()) {
+            if ((await sm.locator('img').getAttribute('alt')) !== 'AI-generated sample of the Moody graphic novel style') fail(`/challenge/make ${tag}: a sample's alt is ${await sm.locator('img').getAttribute('alt')}`);
+            if ((await sm.locator('img').getAttribute('loading')) !== 'lazy') fail(`/challenge/make ${tag}: a sample doesn't load lazily`);
+            if ((await sm.locator('[data-ai="tag"]').count()) !== 1) fail(`/challenge/make ${tag}: a sample has no AI label`);
+          }
+          // Its visible words only: each sample's AiTag keeps the hidden declaration (screen readers, and the tip on hover or
+          // focus), as the /challenge tiles do (kept on purpose, owner 2026-11-12).
+          if (/not by the author/i.test((await dlg.evaluate((d) => { const c = d.cloneNode(true) as HTMLElement; c.querySelectorAll('.sr-only, .ai-tag-tip').forEach((n) => n.remove()); return c.textContent ?? ''; })) ?? '')) fail(`/challenge/make ${tag}: the examples panel shows "not by the author" (owner, 2026-11-12: only beside the book's text)`);
+          for (const b of await dlg.locator('.se-close, .se-pick, .se-sample-pick').all()) {
+            const bb = await b.boundingBox();
+            if (bb && bb.height < 44) fail(`/challenge/make ${tag}: a tap target in the examples panel is ${Math.round(bb.height)}px tall`);
+          }
+          const box = await dlg.boundingBox();
+          const vp = page.viewportSize()!;
+          const sheet = Boolean(box && Math.abs(box.y + box.height - vp.height) <= 1 && box.x <= 1 && Math.abs(box.width - vp.width) <= 1);
+          if (w < 768 && !sheet) fail(`/challenge/make ${tag}: the examples panel isn't a bottom sheet (${JSON.stringify(box)})`);
+          if (w >= 768 && (!box || box.width >= vp.width - 1)) fail(`/challenge/make ${tag}: the examples panel fills the width on a wide screen (${JSON.stringify(box)})`);
+          if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/make ${tag} (See examples): scrolls sideways`);
+          await checkFloors(page, `/challenge/make ${tag} (See examples)`, scheme);
+          await snap('style-examples');
+          // Escape closes it, and focus goes back to the link.
+          await page.keyboard.press('Escape');
+          if (await dlg.isVisible()) fail(`/challenge/make ${tag}: Escape doesn't close the examples panel`);
+          else if (!(await link.evaluate((e) => e === document.activeElement))) fail(`/challenge/make ${tag}: focus doesn't go back to "See examples"`);
+          // Tapping a style's sample picks it in the row and closes the panel.
+          await link.click();
+          await dlg.waitFor({ timeout: 5000 }).catch(() => {});
+          const moodId = await moodRow.getAttribute('data-style');
+          await moodRow.locator('.se-sample-pick').first().click();
+          if (await dlg.isVisible()) fail(`/challenge/make ${tag}: tapping a sample doesn't close the examples panel`);
+          if ((await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style')) !== moodId) fail(`/challenge/make ${tag}: tapping a sample doesn't pick "Moody graphic novel" in the Style row`);
+          await snap('style-examples-picked');
+          await page.locator('.mk-styles .cc-chip[data-style="same"]').click();
+        }
+      }
       await page.locator('.mk-styles .cc-chip[data-style="own"]').click();
       if (!(await page.locator('#mk-own-style').count()) || (await page.locator('#mk-own-style').getAttribute('maxlength')) !== '120') fail(`/challenge/make ${tag}: "Write your own" doesn't open a box of at most 120 characters`);
       if (!(await page.locator('#mk-own-style-line').count())) fail(`/challenge/make ${tag}: "Write your own" has no publication line (P1f)`);
