@@ -217,7 +217,7 @@
   "gladias": {
    "name": "Gladias",
    "pronoun": "he",
-   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner on 2026-11-12",
+   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner",
    "who": [
     {
      "text": "Gladias lives in "
@@ -550,7 +550,7 @@
   "bai": {
    "name": "Bai",
    "pronoun": "she",
-   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner on 2026-11-12",
+   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner",
    "who": [
     {
      "text": "Bai Jahen is a "
@@ -806,7 +806,7 @@
   "seila": {
    "name": "Seila",
    "pronoun": "she",
-   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner on 2026-11-12",
+   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner",
    "who": [
     {
      "text": "Seila is a blogger from "
@@ -1107,7 +1107,7 @@
   "deluin": {
    "name": "Deluin",
    "pronoun": "he",
-   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner on 2026-11-12",
+   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner",
    "who": [
     {
      "text": "Deluin is an older teenage "
@@ -1345,7 +1345,7 @@
   "mu": {
    "name": "Mu",
    "pronoun": "she",
-   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner on 2026-11-12",
+   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner",
    "who": [
     {
      "text": "Mu is an older woman who knows Zei through "
@@ -1581,7 +1581,7 @@
   "ephelion": {
    "name": "Lord Ephelion",
    "pronoun": "he",
-   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner on 2026-11-12",
+   "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner",
    "who": [
     {
      "text": "Lord Ephelion is the "
