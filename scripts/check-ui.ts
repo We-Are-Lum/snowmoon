@@ -2198,8 +2198,55 @@ async function checkChallengeLanding() {
               await box.scrollIntoViewIfNeeded();
               if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-picture-submit-box-${w}x${h}-${scheme}.png`) });
             }
+            // "Your challenge pictures" (owner, 2026-11-12) on the You page, for the same stand-in maker: "Published, not
+            // submitted" with "Submit your post" to the picture's submit box, then "Entries" with the post and Withdraw, an
+            // admin's example labelled. The You page's own data and the list's are stood in for (the list's logic is
+            // test-challenge-moments'); the words are the server's. Then "Yours" on the challenge home, and not signed out.
+            {
+              const { MINE_WORDING: MW } = await import('../src/lib/challenge/mine-wording');
+              const words = { ...MW, exampleLabel: CWX.exampleLabel, exampleInfo: CWX.exampleInfo };
+              const pic = (x: { versionId: string }, o: object) => ({ versionId: x.versionId, href: `/challenge/p/${x.versionId}`, thumb: null, name: 'Zei', createdAt: '2026-11-12T12:00:00.000Z', example: false, post: null, canWithdraw: false, ...o });
+              const mine = {
+                published: [pic(FX.remixes[0], { createdAt: '2026-11-12T13:00:00.000Z' })],
+                entries: [pic(ent, { post: { url: ent.post.url, handle: ent.post.handle, network: 'farcaster' }, canWithdraw: true }), pic(exampleFx, { example: true, createdAt: '2026-11-12T11:00:00.000Z', post: { url: exampleFx.post.url, handle: exampleFx.post.handle, network: 'farcaster' } })],
+                w: words,
+              };
+              await page.route('**/api/challenge/mine', (r) => r.fulfill({ json: mine }));
+              await page.route('**/api/you', (r) => r.fulfill({ json: { who: { kind: 'farcaster', name: `@fixture${ent.fid}`, handle: `fixture${ent.fid}`, fid: ent.fid, username: `fixture${ent.fid}` }, work: { stored: true, scenes: [], frames: [], boards: [], pictures: [] }, prices: null, maintainer: false, wallet: null, link: null, linkedWallets: [], social: null } }));
+              await page.goto(`${LOCAL}/you`, { waitUntil: 'load' });
+              const sec = page.locator('#your-challenge-pictures');
+              await sec.waitFor({ timeout: 15000 }).catch(() => {});
+              if (!(await sec.isVisible().catch(() => false))) fail(`/you ${tag}: no "Your challenge pictures"`);
+              else {
+                const heads = (await sec.locator('h3').allTextContents()).map((t) => t.trim());
+                if (heads.join('|') !== 'Published, not submitted|Entries') fail(`/you ${tag}: the groups read ${heads.join(', ')}`);
+                const sub = sec.locator('[data-group="ch-mine-published"] a.ch-mine-submit');
+                if ((await sub.textContent())?.trim() !== 'Submit your post' || (await sub.getAttribute('href')) !== `/challenge/p/${FX.remixes[0].versionId}#submit`) fail(`/you ${tag}: no "Submit your post" to the picture's submit box`);
+                const rows = await sec.locator('[data-group="ch-mine-entries"] li').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-version')}:${e.getAttribute('data-example') ?? ''}:${e.querySelector('.ch-mine-post')?.getAttribute('href') ?? ''}:${e.querySelector('.ch-mine-withdraw') ? 'w' : ''}`));
+                if (rows.join() !== `${ent.versionId}::${ent.post.url}:w,${exampleFx.versionId}:admin:${exampleFx.post.url}:`) fail(`/you ${tag}: "Entries" reads ${rows.join()}`);
+                if (!(await sec.locator('[data-example="admin"] .ch-example .ch-badge').count())) fail(`/you ${tag}: the admin example isn't labelled`);
+                await sec.locator('.ch-mine-withdraw').first().click();
+                if (!((await sec.locator('.ch-mine-ask').textContent().catch(() => '')) ?? '').includes('Withdraw this entry?')) fail(`/you ${tag}: Withdraw doesn't ask first`);
+                await sec.locator('.ch-mine-ask button', { hasText: 'Cancel' }).click();
+                if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/you ${tag}: scrolls sideways`);
+                await checkFloors(page, `/you ${tag} (your challenge pictures)`, scheme);
+                await sec.scrollIntoViewIfNeeded();
+                if (SHOTS) await sec.screenshot({ path: path.join(SHOTS, `challenge-yours-${tag.replace(/[^0-9a-z×]+/gi, '-')}.png`) });
+              }
+              await page.goto(`${LOCAL}/challenge`, { waitUntil: 'load' });
+              const yours = page.locator('.chh-links a.ch-yours-link');
+              await yours.waitFor({ timeout: 10000 }).catch(() => {});
+              if ((await yours.textContent().catch(() => ''))?.trim() !== 'Yours' || (await yours.getAttribute('href').catch(() => '')) !== '/you#your-challenge-pictures') fail(`/challenge ${tag}: no "Yours" beside "Rules · Every entry" when signed in`);
+              if (SHOTS) await page.locator('.chh-head').screenshot({ path: path.join(SHOTS, `challenge-yours-link-${tag.replace(/[^0-9a-z×]+/gi, '-')}.png`) });
+              await page.unroute('**/api/challenge/mine');
+              await page.unroute('**/api/you');
+            }
             await page.unroute('**/api/challenge/submit');
             await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
+            await page.goto(`${LOCAL}/challenge`, { waitUntil: 'load' });
+            await page.waitForSelector('.chh-links', { timeout: 30000 });
+            await page.waitForTimeout(500);
+            if (await page.locator('.ch-yours-link').count()) fail(`/challenge ${tag}: "Yours" shows signed out`);
           }
         } finally {
           await page.close();

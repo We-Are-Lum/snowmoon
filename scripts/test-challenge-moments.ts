@@ -423,6 +423,19 @@ check('config: a current default look per challenge character, each a design id 
   const st = await E.standing(S);
   check('the entries: Bai has one entrant, the picture by 500', st.entries.length === 1 && st.entries[0].versionId === fromBase.versionId && st.entrants.get('bai') === 1);
   check('entries link to the picture\'s page', E.entryHref(fromBase.versionId) === `/challenge/p/${fromBase.versionId}`);
+  // "Your challenge pictures" (owner, 2026-11-12): the maker's own, in two groups. 500's entry with its post and Withdraw;
+  // their candidate under "Published, not submitted"; a picture made from scratch in neither; nothing of anyone else's.
+  {
+    const Mi = await import('../src/lib/challenge/mine');
+    const m500 = await Mi.myChallengePictures(S, 500);
+    const m501 = await Mi.myChallengePictures(S, 501);
+    const e = m500.entries.find((x) => x.versionId === fromBase.versionId);
+    check('yours: the entry under "Entries" with its post and Withdraw while entries are open', m500.entries.length === 1 && !!e && e.canWithdraw && !e.example && !!e.post?.url && e.href === `/challenge/p/${fromBase.versionId}`, JSON.stringify(m500.entries));
+    check('yours: a picture they can still submit under "Published, not submitted"; one made from scratch in neither group', m500.published.some((x) => x.versionId === second.versionId && !x.canWithdraw && !x.post) && ![...m500.published, ...m500.entries].some((x) => x.versionId === scratch.versionId));
+    proof('yours: nothing of anyone else\'s', ![...m501.published, ...m501.entries].some((x) => x.versionId === fromBase.versionId || x.versionId === second.versionId));
+    check('yours: newest first in each group', m500.published.every((x, i, a) => i === 0 || a[i - 1].createdAt >= x.createdAt));
+    check('yours: the groups\' names are the owner\'s', m500.w.publishedHead === 'Published, not submitted' && m500.w.entriesHead === 'Entries' && m500.w.submit === 'Submit your post' && m500.w.title === 'Your challenge pictures');
+  }
   // Admin examples (owner, 2026-11-12): an admin's picture, submitted with its post, is shown as an example on its page
   // and on /challenge/entries (newest first among the entries, by when each was made), and is in no count or reward.
   {
