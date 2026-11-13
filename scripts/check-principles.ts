@@ -595,6 +595,9 @@ const NOT_AUTHOR_DROPPED_FILES = [
   'src/app/references/page.tsx',
   'src/components/agents/piece-version.tsx',
   'src/app/about/page.tsx',
+  // A shot's remix page: the remixer's own words, not the book's (owner, 2026-11-12). The adaptation editor's captions
+  // keep it: a shot's lines come from the book.
+  'src/app/remix/[id]/page.tsx',
 ];
 add({
   id: 'P2b',

@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { db } from '~/lib/db';
 import { APP_NAME, appUrl } from '~/lib/config';
-import { AI_DECLARED } from '~/lib/ai-declared';
 import { getAdaptation, sceneHandleFor } from '~/lib/adaptation-pages';
 import { frameById, frameByline, type Frame } from '~/lib/remix/frames';
 import { credit } from '~/lib/wallet/credit';
@@ -92,7 +91,8 @@ export default async function RemixFramePage({ params }: Props) {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={f.imageUrl} alt={`A remix of shot ${r.shot?.n ?? f.shotId}, made by ${who}: ${f.ownWords}`} width={r.size?.width ?? 1024} height={r.size?.height ?? 576} />
         <figcaption className="label">
-          AI image · by {maker ? <Link href={`/@${maker}`}>{who}</Link> : who} · <span>{AI_DECLARED.image}</span>
+          {/* "not by the author" only beside the book's text (owner, 2026-11-12): here the words are the remixer's own. Like the share cards: "AI-generated · by {name}". */}
+          AI-generated · by {maker ? <Link href={`/@${maker}`}>{who}</Link> : who}
         </figcaption>
       </figure>
       <section className="rx-words" aria-label="Their words">
