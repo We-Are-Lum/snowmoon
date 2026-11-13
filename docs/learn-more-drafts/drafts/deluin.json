@@ -1,0 +1,232 @@
+{
+ "slug": "deluin",
+ "name": "Deluin",
+ "pronoun": "he",
+ "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+ "who": [
+  {
+   "text": "Deluin is an older teenage "
+  },
+  {
+   "term": "Minpentai",
+   "glossaryId": "minpentai"
+  },
+  {
+   "text": " player from "
+  },
+  {
+   "term": "Redshire",
+   "glossaryId": "redshire"
+  },
+  {
+   "text": ", one of four foreign contestants brought in to play in "
+  },
+  {
+   "term": "Dzego",
+   "glossaryId": "dzego"
+  },
+  {
+   "text": " "
+  },
+  {
+   "cite": "c12-b70"
+  },
+  {
+   "cite": "c12-b75"
+  },
+  {
+   "cite": "c12-b80"
+  },
+  {
+   "text": ". He tops the qualifiers, winning six games of six "
+  },
+  {
+   "cite": "c14-b31"
+  },
+  {
+   "text": ". He laughs easily and likes to tease, and he and Zei quickly become friends "
+  },
+  {
+   "cite": "c12-b77"
+  },
+  {
+   "cite": "c14-b102"
+  },
+  {
+   "cite": "c14-b130"
+  },
+  {
+   "text": "."
+  }
+ ],
+ "start": [
+  {
+   "text": "He sits down beside Zei at the tournament and says \"Hi, I'm Deluin\" "
+  },
+  {
+   "cite": "c12-b70"
+  },
+  {
+   "cite": "c12-b71"
+  },
+  {
+   "text": ". In the semifinal against Kau he builds walls and simply fortifies, and wins "
+  },
+  {
+   "cite": "c14-b90"
+  },
+  {
+   "cite": "c14-b91"
+  },
+  {
+   "cite": "c14-b94"
+  },
+  {
+   "text": ". Over tea he invites Zei home, shows him pictures of castles, pine forests and snow-topped red mountains, and jokes that he'll pay for the trip with his championship winnings "
+  },
+  {
+   "cite": "c14-b120"
+  },
+  {
+   "cite": "c14-b124"
+  },
+  {
+   "cite": "c14-b130"
+  },
+  {
+   "text": ". Then the "
+  },
+  {
+   "term": "Arctic Empire",
+   "glossaryId": "arctic-empire"
+  },
+  {
+   "text": " invades and annexes Redshire "
+  },
+  {
+   "cite": "c15-b6"
+  },
+  {
+   "text": ". He writes to Zei: \"Don't worry, I am alive. Though it looks like I'm not going to be getting back to Dzego anytime soon.\" "
+  },
+  {
+   "cite": "c15-b53"
+  },
+  {
+   "text": ". The finals are cancelled "
+  },
+  {
+   "cite": "c15-b82"
+  },
+  {
+   "text": "."
+  }
+ ],
+ "later": [
+  {
+   "text": "Weeks later, a hidden letter reaches Zei: the Arctics have taken Redshire's devices, his parents have chosen to cooperate with them, and he will play along to win their trust "
+  },
+  {
+   "cite": "c19-b153"
+  },
+  {
+   "text": ". His Minpentai record and his parents' standing make him one of the Arctic commanders "
+  },
+  {
+   "cite": "c29-b114"
+  },
+  {
+   "text": ". In the war he secretly sends Zei tactics against the southern flank he controls "
+  },
+  {
+   "cite": "c29-b114"
+  },
+  {
+   "text": ". Bai insists he prove himself first "
+  },
+  {
+   "cite": "c29-b130"
+  },
+  {
+   "text": ", so he hands over access to the Arctic drones' simulated environment "
+  },
+  {
+   "cite": "c30-b4"
+  },
+  {
+   "text": ". Afterwards he meets Zei, Bai and Mu on a snowy mountain in "
+  },
+  {
+   "term": "Northglade",
+   "glossaryId": "northglade"
+  },
+  {
+   "text": " "
+  },
+  {
+   "cite": "c31-b1"
+  },
+  {
+   "cite": "c31-b7"
+  },
+  {
+   "cite": "c31-b8"
+  },
+  {
+   "text": ", and hears there is basically no chance of getting Redshire back "
+  },
+  {
+   "cite": "c31-b58"
+  },
+  {
+   "cite": "c31-b59"
+  },
+  {
+   "text": "."
+  }
+ ],
+ "drives": [
+  {
+   "text": "Being useful from the inside. He plays along with the Arctics in the hope of helping Zei one day, though \"I do not share their sympathies.\" "
+  },
+  {
+   "cite": "c19-b153"
+  },
+  {
+   "text": ". And his home: he believes even beautiful nature takes human work to maintain "
+  },
+  {
+   "cite": "c14-b127"
+  },
+  {
+   "text": "."
+  }
+ ],
+ "invent": [
+  [
+   {
+    "text": "His life in Redshire before the tournament, and how he started playing."
+   }
+  ],
+  [
+   {
+    "text": "His parents, beyond the choice they made."
+   }
+  ],
+  [
+   {
+    "text": "What it costs him to command Arctic forces while working against them."
+   }
+  ],
+  [
+   {
+    "text": "Where he goes once Redshire is lost."
+   }
+  ],
+  [
+   {
+    "text": "His looks: every look on this site is this edition's invention."
+   }
+  ]
+ ]
+}

@@ -1,0 +1,325 @@
+{
+ "slug": "gladias",
+ "name": "Gladias",
+ "pronoun": "he",
+ "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+ "who": [
+  {
+   "text": "Gladias lives in "
+  },
+  {
+   "term": "Meldan",
+   "glossaryId": "meldan"
+  },
+  {
+   "text": ", the capital of "
+  },
+  {
+   "term": "Veridia",
+   "glossaryId": "veridia"
+  },
+  {
+   "text": " "
+  },
+  {
+   "cite": "c1-b1"
+  },
+  {
+   "text": ". He is an "
+  },
+  {
+   "term": "Acolyte",
+   "glossaryId": "acolyte"
+  },
+  {
+   "text": ", a member in training of the "
+  },
+  {
+   "term": "Order of Steering",
+   "glossaryId": "order-of-steering"
+  },
+  {
+   "text": ", the group behind Veridia's taxes and subsidies "
+  },
+  {
+   "cite": "c1-b56"
+  },
+  {
+   "cite": "c1-b57"
+  },
+  {
+   "text": ". At home are his wife Seila, who writes a blog, and four children: Zven and Lily are theirs, Febric and Hreda belong to their co-family "
+  },
+  {
+   "cite": "c1-b101–b102"
+  },
+  {
+   "cite": "c3-b89"
+  },
+  {
+   "cite": "c1-b125"
+  },
+  {
+   "text": "."
+  }
+ ],
+ "start": [
+  {
+   "text": "Sent to rate a violent band's concert, he risks the score his career depends on and gives the neutral rating "
+  },
+  {
+   "cite": "c1-b58"
+  },
+  {
+   "cite": "c1-b62"
+  },
+  {
+   "cite": "c1-b68"
+  },
+  {
+   "cite": "c1-b69"
+  },
+  {
+   "cite": "c1-b71"
+  },
+  {
+   "text": ". Someone shouts that he's an Order member, whose tasks must stay secret, so he wipes the videos of his face from a stranger's "
+  },
+  {
+   "term": "hand device",
+   "glossaryId": null
+  },
+  {
+   "text": " and runs "
+  },
+  {
+   "cite": "c1-b73"
+  },
+  {
+   "cite": "c1-b76"
+  },
+  {
+   "cite": "c1-b83–b85"
+  },
+  {
+   "text": ". That night a message arrives: \"I know that you are in the Order.\" "
+  },
+  {
+   "cite": "c1-b138"
+  },
+  {
+   "text": ". The sender, Delwart, asks him to become a "
+  },
+  {
+   "term": "Keeper",
+   "glossaryId": "keepers"
+  },
+  {
+   "text": " and \"just vote to delete every rubric you see.\" "
+  },
+  {
+   "cite": "c3-b87"
+  },
+  {
+   "cite": "c3-b112"
+  },
+  {
+   "text": ". Seila, told only that someone suggested it, urges the same choice for another reason: to help "
+  },
+  {
+   "term": "Dzego",
+   "glossaryId": "dzego"
+  },
+  {
+   "text": " "
+  },
+  {
+   "cite": "c5-b102"
+  },
+  {
+   "cite": "c5-b113"
+  },
+  {
+   "text": ". He applies, and his acceptance vote ties ten to ten until the chairman lets him in "
+  },
+  {
+   "cite": "c6-b158"
+  },
+  {
+   "cite": "c8-b97"
+  },
+  {
+   "cite": "c8-b101"
+  },
+  {
+   "text": "."
+  }
+ ],
+ "later": [
+  {
+   "text": "When the "
+  },
+  {
+   "term": "Arctics",
+   "glossaryId": "arctics"
+  },
+  {
+   "text": " take "
+  },
+  {
+   "term": "Redshire",
+   "glossaryId": "redshire"
+  },
+  {
+   "text": ", he turns on Delwart, who now says he works for "
+  },
+  {
+   "term": "Silverchat",
+   "glossaryId": "silverchat"
+  },
+  {
+   "text": " and sends him to Dzego to learn from them "
+  },
+  {
+   "cite": "c15-b6"
+  },
+  {
+   "cite": "c15-b29"
+  },
+  {
+   "cite": "c16-b13"
+  },
+  {
+   "cite": "c16-b25–b27"
+  },
+  {
+   "text": ". Seila works out the truth: \"He's an Arctic.\" "
+  },
+  {
+   "cite": "c21-b71"
+  },
+  {
+   "text": ". \"Gladias, you idiot!\" she shouts "
+  },
+  {
+   "cite": "c21-b49"
+  },
+  {
+   "text": ", and he promises her no more secrets "
+  },
+  {
+   "cite": "c21-b91"
+  },
+  {
+   "cite": "c21-b104–b106"
+  },
+  {
+   "text": ". His daughter Lily falls for Arctic ideas and runs away "
+  },
+  {
+   "cite": "c23-b88"
+  },
+  {
+   "cite": "c23-b91"
+  },
+  {
+   "text": ". He tells Den: \"Spy on us.\" That way they can spy on the spies "
+  },
+  {
+   "cite": "c24-b76"
+  },
+  {
+   "cite": "c24-b77"
+  },
+  {
+   "cite": "c24-b80"
+  },
+  {
+   "text": ". Five judges turn down his plan to use the courts "
+  },
+  {
+   "cite": "c25-b88"
+  },
+  {
+   "cite": "c26-b162"
+  },
+  {
+   "cite": "c26-b190"
+  },
+  {
+   "cite": "c26-b194"
+  },
+  {
+   "text": ", so Seila makes it democratic with a Silverchat poll "
+  },
+  {
+   "cite": "c27-b11"
+  },
+  {
+   "cite": "c27-b15"
+  },
+  {
+   "text": ". At the end, in "
+  },
+  {
+   "term": "Northglade",
+   "glossaryId": "northglade"
+  },
+  {
+   "text": ", Lily runs out and hugs him: \"Dad!\" "
+  },
+  {
+   "cite": "c31-b66"
+  },
+  {
+   "cite": "c31-b77"
+  }
+ ],
+ "drives": [
+  {
+   "text": "His family. He can't sleep knowing \"three of the four children he loved dearly\" are in Arctic hands "
+  },
+  {
+   "cite": "c24-b2–b6"
+  },
+  {
+   "text": ". He wants Veridia to defend itself, and he has bursts of courage, like his risky vote at the concert "
+  },
+  {
+   "cite": "c21-b96"
+  },
+  {
+   "cite": "c1-b71"
+  },
+  {
+   "text": "."
+  }
+ ],
+ "invent": [
+  [
+   {
+    "text": "His age, and how he came to join the Order."
+   }
+  ],
+  [
+   {
+    "text": "How he and Seila met, and their life before the story starts."
+   }
+  ],
+  [
+   {
+    "text": "What his days as a Keeper are like beyond the votes the book shows."
+   }
+  ],
+  [
+   {
+    "text": "What he is like as a father day to day, beyond the moments the book shows."
+   }
+  ],
+  [
+   {
+    "text": "His looks: every look on this site is this edition's invention."
+   }
+  ]
+ ]
+}

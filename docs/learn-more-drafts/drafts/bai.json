@@ -1,0 +1,25 @@
+{
+ "slug": "bai",
+ "name": "Bai",
+ "pronoun": "she",
+ "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+ "who": [
+  {"text": "Bai Jahen is a "}, {"term": "Minpentai", "glossaryId": "minpentai"}, {"text": " player from Pafogai Du, a city in "}, {"term": "Dzego", "glossaryId": "dzego"}, {"text": " "}, {"cite": "c7-b61"}, {"cite": "c7-b62"}, {"text": ". She is Zei's rival: she had beaten him three out of three times, and \"was hardly magnanimous in victory\" "}, {"cite": "c4-b72"}, {"text": ". Behind the teasing, she grew up on her own: her parents were killed in a lab explosion when she was small, and she had to make her own money "}, {"cite": "c9-b13–b17"}, {"text": "."}
+ ],
+ "start": [
+  {"text": "She taunts Zei that she'll snatch the prize money he wants for his mom's new "}, {"term": "compute box", "glossaryId": null}, {"text": " and spend it on a vacation in "}, {"term": "Redshire", "glossaryId": "redshire"}, {"text": " "}, {"cite": "c4-b73"}, {"text": ". Put on the same team, the two barely exchange a word "}, {"cite": "c4-b99"}, {"text": ", but when Zei hands her the deciding "}, {"term": "intervention turn", "glossaryId": null}, {"text": ", she copies his trick on her third try "}, {"cite": "c4-b129"}, {"cite": "c4-b135"}, {"text": ". Mu reveals the teams were picked on purpose, as \"a psychological trial\" "}, {"cite": "c4-b148"}, {"cite": "c4-b150"}, {"text": ". She travels with Zei and his mom to "}, {"term": "Freetown", "glossaryId": "freetown"}, {"text": " "}, {"cite": "c5-b4–b6"}, {"text": ". In the final she sets a trap along her diagonals that Zei falls into "}, {"cite": "c7-b96"}, {"text": ", but he outplays her and she resigns "}, {"cite": "c7-b117"}, {"cite": "c7-b120"}, {"text": ". Afterwards, in tears, she tells Fin that Zei has taken away the one thing she had "}, {"cite": "c9-b2"}, {"cite": "c9-b19"}, {"text": "."}
+ ],
+ "later": [
+  {"text": "Den's people ask her to take notes on all the contestants' strategies "}, {"cite": "c12-b110"}, {"text": ", and she warns Zei not to rush, because the other players are \"way too impatient\" "}, {"cite": "c14-b22"}, {"cite": "c14-b24"}, {"text": ". She flies to "}, {"term": "Veridia", "glossaryId": "veridia"}, {"text": " with Zei, Gladias and Den "}, {"cite": "c26-b1–b2"}, {"text": ", where her advice helps a general, Lektor, become head general "}, {"cite": "c28-b94"}, {"cite": "c28-b96"}, {"text": ". In the war, Deluin, now a commander on the "}, {"term": "Arctic", "glossaryId": "arctics"}, {"text": " side, sends Zei a plan "}, {"cite": "c29-b114"}, {"text": ". Bai says \"I don't know if we can trust Deluin.\" and asks him instead to send the raw weights of the Arctic drones' AI "}, {"cite": "c29-b127"}, {"cite": "c29-b130–b132"}, {"text": ". By the end, she is thinking of spending a year in "}, {"term": "Thaldur", "glossaryId": "thaldur"}, {"text": " to understand how the Arctics think and look for a path to peace "}, {"cite": "c32-b98"}, {"text": "."}
+ ],
+ "drives": [
+  {"text": "Success, because growing up alone it was all she had: \"All I have is my achievements and my success.\" "}, {"cite": "c9-b19"}, {"text": ". And curiosity about how other people think: \"I do want to understand you guys better.\" "}, {"cite": "c9-b22"}, {"text": ", the same wish she later turns on the Arctics "}, {"cite": "c32-b98"}, {"text": "."}
+ ],
+ "invent": [
+  [{"text": "Her parents: who they were, and what their lab worked on."}],
+  [{"text": "Life at her aunt's, and the side jobs she did in high school."}],
+  [{"text": "How she started playing, and who taught her."}],
+  [{"text": "What she and Zei become to each other after the war."}],
+  [{"text": "Her looks: every look on this site is this edition's invention."}]
+ ]
+}

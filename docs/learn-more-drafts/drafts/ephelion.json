@@ -1,0 +1,150 @@
+{
+ "slug": "ephelion",
+ "name": "Lord Ephelion",
+ "pronoun": "he",
+ "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+ "who": [
+  {
+   "text": "Lord Ephelion is the "
+  },
+  {
+   "term": "Arctic Empire",
+   "glossaryId": "arctic-empire"
+  },
+  {
+   "text": "'s consul, also called its ambassador, to "
+  },
+  {
+   "term": "Veridia",
+   "glossaryId": "veridia"
+  },
+  {
+   "text": " "
+  },
+  {
+   "cite": "c3-b5"
+  },
+  {
+   "cite": "c8-b17"
+  },
+  {
+   "text": ". He is the Arctics' voice in Veridia: his messages turn up on posters and on screens "
+  },
+  {
+   "cite": "c6-b143"
+  },
+  {
+   "cite": "c13-b63"
+  },
+  {
+   "text": "."
+  }
+ ],
+ "start": [
+  {
+   "text": "His open letter tells Veridia's young people that their country is too comfortable, and asks them to build a stronger one with the Arctics: \"Join us, and we will build it together.\" "
+  },
+  {
+   "cite": "c3-b5"
+  },
+  {
+   "text": ". He debates Professor Sylka live, arguing that economic growth is the only lasting progress "
+  },
+  {
+   "cite": "c8-b17"
+  },
+  {
+   "cite": "c8-b26–b31"
+  },
+  {
+   "text": ". Gladias, listening on the "
+  },
+  {
+   "term": "autobus",
+   "glossaryId": "autobus"
+  },
+  {
+   "text": ", calls him \"A gifted demagogue\" "
+  },
+  {
+   "cite": "c8-b37"
+  },
+  {
+   "text": ", and others complain about \"Lord Ephelion giving his sermons all the time.\" "
+  },
+  {
+   "cite": "c11-b109"
+  }
+ ],
+ "later": [
+  {
+   "text": "His broadcast cuts into a sports game in a restaurant, telling people that \"Life is not fair - and should not be fair.\" Seila gets up to unplug the screen "
+  },
+  {
+   "cite": "c13-b62–b65"
+  },
+  {
+   "text": ". When the Arctics invade the province of Northshore, he is reported to be there "
+  },
+  {
+   "cite": "c20-b8"
+  },
+  {
+   "text": ". Gladias and Seila's daughter Lily turns out to have been following his sermons, and runs away from home "
+  },
+  {
+   "cite": "c1-b125"
+  },
+  {
+   "cite": "c24-b40"
+  },
+  {
+   "text": ". Seila sums him up: \"Ephelion and Delwart are not intellectuals, they are propagandists.\" "
+  },
+  {
+   "cite": "c21-b75"
+  }
+ ],
+ "drives": [
+  {
+   "text": "In Seila's reading, his goal is \"to inspire people inside Veridia to join the Arctic cause.\" "
+  },
+  {
+   "cite": "c21-b76"
+  },
+  {
+   "text": ". In his own words: strength, winning and growth. \"Grow stronger.\" "
+  },
+  {
+   "cite": "c13-b64"
+  }
+ ],
+ "invent": [
+  [
+   {
+    "text": "His face: the book shows \"An image of Lord Ephelion\" on a screen but never describes it "
+   },
+   {
+    "cite": "c13-b63"
+   },
+   {
+    "text": "."
+   }
+  ],
+  [
+   {
+    "text": "His life in the Arctic Empire, and how he became its consul."
+   }
+  ],
+  [
+   {
+    "text": "What he is like away from his speeches, and whether he believes them."
+   }
+  ],
+  [
+   {
+    "text": "His looks: every look on this site is this edition's invention."
+   }
+  ]
+ ]
+}

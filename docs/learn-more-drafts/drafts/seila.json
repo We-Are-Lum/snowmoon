@@ -1,0 +1,292 @@
+{
+ "slug": "seila",
+ "name": "Seila",
+ "pronoun": "she",
+ "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+ "who": [
+  {
+   "text": "Seila is a blogger from "
+  },
+  {
+   "term": "Veridia",
+   "glossaryId": "veridia"
+  },
+  {
+   "text": " who writes about economics and culture "
+  },
+  {
+   "cite": "c5-b61"
+  },
+  {
+   "cite": "c5-b64"
+  },
+  {
+   "text": ". She is married to Gladias "
+  },
+  {
+   "cite": "c3-b89"
+  },
+  {
+   "text": ". Zven and Lily are their children, and Febric and Hreda come from their "
+  },
+  {
+   "term": "co-family",
+   "glossaryId": null
+  },
+  {
+   "text": ", Vil and Daia, who take turns with them caring for all four "
+  },
+  {
+   "cite": "c1-b125"
+  },
+  {
+   "cite": "c5-b64"
+  },
+  {
+   "text": ". She is gentle with the kids, and she is the one who sees through a stranger's lies when her husband doesn't "
+  },
+  {
+   "cite": "c1-b120"
+  },
+  {
+   "cite": "c21-b55"
+  },
+  {
+   "text": "."
+  }
+ ],
+ "start": [
+  {
+   "text": "When Lily comes home with sixty percent on a history exam, Seila hugs her: \"It's okay to not be good at everything\" "
+  },
+  {
+   "cite": "c1-b119"
+  },
+  {
+   "cite": "c1-b120"
+  },
+  {
+   "text": ". While the kids are away, she travels to "
+  },
+  {
+   "term": "Freetown",
+   "glossaryId": "freetown"
+  },
+  {
+   "text": " to see her friend Jahn "
+  },
+  {
+   "cite": "c1-b134"
+  },
+  {
+   "text": ". There she meets two young "
+  },
+  {
+   "term": "Minpentai",
+   "glossaryId": "minpentai"
+  },
+  {
+   "text": " players from "
+  },
+  {
+   "term": "Dzego",
+   "glossaryId": "dzego"
+  },
+  {
+   "text": ", Zei and Bai, and is stunned to hear Zei's classroom was bombed "
+  },
+  {
+   "cite": "c5-b56–b58"
+  },
+  {
+   "cite": "c5-b70"
+  },
+  {
+   "cite": "c5-b72"
+  },
+  {
+   "cite": "c5-b73"
+  },
+  {
+   "text": ". When Gladias wonders whether to become a "
+  },
+  {
+   "term": "Keeper",
+   "glossaryId": "keepers"
+  },
+  {
+   "text": ", she tells him: \"Yeah become a Keeper definitely. It's exactly the right choice.\" "
+  },
+  {
+   "cite": "c5-b113"
+  },
+  {
+   "cite": "c5-b116"
+  },
+  {
+   "text": ". And when an "
+  },
+  {
+   "term": "Arctic",
+   "glossaryId": "arctics"
+  },
+  {
+   "text": " message takes over a restaurant screen at a family dinner, she gets up to unplug it "
+  },
+  {
+   "cite": "c13-b62"
+  },
+  {
+   "cite": "c13-b64"
+  },
+  {
+   "cite": "c13-b65"
+  },
+  {
+   "text": "."
+  }
+ ],
+ "later": [
+  {
+   "text": "The "
+  },
+  {
+   "term": "Arctic Empire",
+   "glossaryId": "arctic-empire"
+  },
+  {
+   "text": " invades "
+  },
+  {
+   "term": "Northglade",
+   "glossaryId": "northglade"
+  },
+  {
+   "text": ", where Febric and Hreda are; they reach safety in the "
+  },
+  {
+   "term": "Greater Plum Harbor",
+   "glossaryId": "greater-plum-harbor"
+  },
+  {
+   "text": " "
+  },
+  {
+   "cite": "c20-b5"
+  },
+  {
+   "cite": "c20-b6"
+  },
+  {
+   "cite": "c20-b10"
+  },
+  {
+   "text": ". With Gladias's friend Mov, she tracks down other Keepers whom Delwart, the man who had been meeting Gladias, had approached "
+  },
+  {
+   "cite": "c20-b30"
+  },
+  {
+   "cite": "c20-b42"
+  },
+  {
+   "cite": "c21-b61"
+  },
+  {
+   "text": ", and works it out: \"Delwart is not from "
+  },
+  {
+   "term": "Silverchat",
+   "glossaryId": "silverchat"
+  },
+  {
+   "text": ".\" "
+  },
+  {
+   "cite": "c20-b179"
+  },
+  {
+   "text": ". He's an Arctic, she tells Gladias "
+  },
+  {
+   "cite": "c21-b71"
+  },
+  {
+   "text": ". She finds Lily cheering Arctic propaganda, screams at her, and Lily runs away "
+  },
+  {
+   "cite": "c23-b81"
+  },
+  {
+   "cite": "c23-b84"
+  },
+  {
+   "cite": "c23-b90"
+  },
+  {
+   "cite": "c23-b91"
+  },
+  {
+   "text": ". Her next idea is a Silverchat poll: \"We make it democratic.\" "
+  },
+  {
+   "cite": "c27-b11"
+  },
+  {
+   "cite": "c27-b15"
+  },
+  {
+   "text": ". In the end the family is together again in Northglade "
+  },
+  {
+   "cite": "c31-b77–b79"
+  },
+  {
+   "text": ", and she says: \"I just hope we have peace\" "
+  },
+  {
+   "cite": "c32-b95"
+  }
+ ],
+ "drives": [
+  {
+   "text": "Her family: she promises Febric and Hreda she will do everything she can to bring them home "
+  },
+  {
+   "cite": "c20-b11"
+  },
+  {
+   "text": ". And the world she loves, which is \"already enough to be worth fighting for.\" "
+  },
+  {
+   "cite": "c27-b95"
+  }
+ ],
+ "invent": [
+  [
+   {
+    "text": "Her own parents and childhood: the book never shows them."
+   }
+  ],
+  [
+   {
+    "text": "How she and Gladias met."
+   }
+  ],
+  [
+   {
+    "text": "How she met Jahn, and what he is to her."
+   }
+  ],
+  [
+   {
+    "text": "What her blog posts say, and who reads them."
+   }
+  ],
+  [
+   {
+    "text": "Her looks: every look on this site is this edition's invention."
+   }
+  ]
+ ]
+}
