@@ -1,6 +1,7 @@
 import 'server-only';
 import { glossaryTerm } from '../glossary';
 import { firstLayerFacts } from './cards';
+import { callNameOf } from './names';
 import { LANDING_WORDING as L } from './landing-wording';
 import { LATER_LABEL, LEARN_MORE, OPEN_MAX_CHAPTER, citeHref, learnMoreProblems, type Segment } from './learn-more';
 
@@ -56,7 +57,8 @@ export function learnMoreView(slug: string, name: string): LearnMoreView {
   const P = L.character;
   const t = LEARN_MORE[slug];
   const shown = t && learnMoreProblems(slug).length === 0 ? t : null;
-  const call = name.split(' ')[0];
+  // The book's call name: "Zei", and "Lord Ephelion" with his title (src/lib/challenge/names.ts).
+  const call = callNameOf(name);
   return {
     title: P.learnMore(call),
     draft: shown && !shown.approved ? P.draft : null,

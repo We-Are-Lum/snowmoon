@@ -184,12 +184,17 @@ check('config: a current default look per challenge character, each a design id 
   {
     const rows = await Promise.all(CHALLENGE.characters.map(async (slug) => ({ slug, v: await V.characterView(null, slug) })));
     const LM = await import('../src/lib/challenge/learn-more');
-    check('Learn more: each of the six pages has "Learn more about {Name}" and no "Read where … first appears"', rows.every(({ v }) => v?.page.learn.title === `Learn more about ${v!.c.name.split(' ')[0]}` && !('firstAppears' in v!)));
+    check('Learn more: each challenge character\'s page has "Learn more about {Name}" (the call name; "Lord Ephelion" with his title) and no "Read where … first appears"', rows.every(({ v }) => v?.page.learn.title === `Learn more about ${/^(Lord|Lady) /.test(v!.c.name) ? v!.c.name : v!.c.name.split(' ')[0]}` && !('firstAppears' in v!)));
     const z = rows.find((r) => r.slug === 'zei')!.v!.page.learn;
     check('Learn more: Zei\'s shows the owner\'s texts, no Draft mark, its fold labelled exactly, citations linking to the reader\'s first block', z.text !== null && z.draft === null && z.text.later.head === 'Later in the book (spoilers)' && z.text.start.segs.some((s) => s.kind === 'cite' && s.label === 'c2-b98–b103' && s.href === '/chapter/2#c2-b98') && z.facts.length === 0);
     check('Learn more: a term with a glossary entry opens it (a note from chapters 1 to 14 outside the fold); a DRAFT term shows as plain words', z.text!.who.segs.some((s) => s.kind === 'term' && s.term === 'Minpentai' && s.note !== null && s.href === '/glossary/minpentai') && z.text!.start.segs.some((s) => s.kind === 'term' && s.term === 'compute box' && s.note === null && s.href === null) && LM.DRAFT_GLOSSARY.some((d) => d.term === 'compute box'));
     const others = rows.filter((r) => r.slug !== 'zei');
     check('Learn more: a character whose texts don\'t keep the rule yet shows the first layer\'s facts instead', others.every(({ slug, v }) => (LM.learnMoreProblems(slug).length > 0 ? v!.page.learn.text === null && v!.page.learn.facts.length > 0 : v!.page.learn.text !== null)));
+    // Since learn-more-texts aee6da1c (2026-11-12) every draft keeps the rule: all six pages show their texts, the five
+    // drafts marked "Draft wording", Zei's (the owner's) not. Lord Ephelion's texts wait until he is a challenge character.
+    check('Learn more: every challenge character\'s texts keep the rule and show; the drafts carry "Draft wording", Zei\'s doesn\'t', CHALLENGE.characters.every((s) => LM.learnMoreProblems(s).length === 0) && rows.every(({ slug, v }) => v!.page.learn.text !== null && v!.page.learn.facts.length === 0 && v!.page.learn.draft === (slug === 'zei' ? null : 'Draft wording')));
+    // Lord Ephelion's page exists only while he is a challenge character (CHALLENGE.characters, #159); his texts show there.
+    check('Learn more: Lord Ephelion\'s texts keep the rule and show on his page, which exists only while he is a challenge character', LM.learnMoreProblems('ephelion').length === 0 && (CHALLENGE.characters.includes('ephelion') ? (await V.characterView(null, 'ephelion'))?.page.learn.title === 'Learn more about Lord Ephelion' && (await V.characterView(null, 'ephelion'))?.page.learn.text !== null : (await V.characterView(null, 'ephelion')) === null));
   }
   check('character page: null (404) for anything but the six', (await V.characterView(null, 'lektor')) === null && (await V.characterView(null, 'entries')) === null && (await V.characterView(null, '')) === null);
   const page = read('src/app/challenge/[slug]/page.tsx');

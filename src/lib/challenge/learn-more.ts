@@ -2,7 +2,7 @@
  * "Learn more about {Name}" on a challenge character's page (owner, 2026-11-12): who the character is, written for
  * someone who knows nothing about the story; the start; the whole book behind a fold labelled exactly "Later in the
  * book (spoilers)", closed by default; what drives them; and room to invent. Data only (it may still change), brought in
- * word for word from docs/learn-more-drafts/texts.json (branch learn-more-texts, commit 6eb6b046). Zei's is the owner's
+ * word for word from docs/learn-more-drafts/texts.json (branch learn-more-texts, commit aee6da1c: every open part cites chapters 1 to 14). Zei's is the owner's
  * (approved: true); every other is the coding agent's DRAFT (Claude, a closed model by Anthropic) until he approves it.
  * Segments: plain text; a glossary term (its existing glossary entry's slug, or null for a DRAFT entry, which isn't
  * shipped); a citation to a block of the book ("c4-b72", or a range "c2-b98–b103").
@@ -222,7 +222,7 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "glossaryId": "meldan"
       },
       {
-        "text": ", the capital of "
+        "text": ", in "
       },
       {
         "term": "Veridia",
@@ -433,6 +433,18 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "cite": "c23-b91"
       },
       {
+        "text": ". He can't sleep knowing \"three of the four children he loved dearly\" are in Arctic hands "
+      },
+      {
+        "cite": "c24-b2–b6"
+      },
+      {
+        "text": ", and he wants Veridia to defend itself "
+      },
+      {
+        "cite": "c21-b96"
+      },
+      {
         "text": ". He tells Den: \"Spy on us.\" That way they can spy on the spies "
       },
       {
@@ -487,19 +499,16 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
     ],
     "drives": [
       {
-        "text": "His family. He can't sleep knowing \"three of the four children he loved dearly\" are in Arctic hands "
-      },
-      {
-        "cite": "c24-b2–b6"
-      },
-      {
-        "text": ". He wants Veridia to defend itself, and he has bursts of courage, like his risky vote at the concert "
-      },
-      {
-        "cite": "c21-b96"
+        "text": "Doing his job honestly, even when it costs him: at the concert he feels \"a burst of courage\" and takes the risk to his score "
       },
       {
         "cite": "c1-b71"
+      },
+      {
+        "text": ". And his family at home, the four children he and Seila raise with their co-family "
+      },
+      {
+        "cite": "c1-b125"
       },
       {
         "text": "."
@@ -518,12 +527,12 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       ],
       [
         {
-          "text": "What his days as a Keeper are like beyond the votes the book shows."
+          "text": "What his days in the Order are like beyond the votes the book shows."
         }
       ],
       [
         {
-          "text": "What he is like as a father day to day, beyond the moments the book shows."
+          "text": "What he is like as a father day to day."
         }
       ],
       [
@@ -760,15 +769,6 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       },
       {
         "cite": "c9-b22"
-      },
-      {
-        "text": ", the same wish she later turns on the Arctics "
-      },
-      {
-        "cite": "c32-b98"
-      },
-      {
-        "text": "."
       }
     ],
     "invent": [
@@ -789,7 +789,7 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       ],
       [
         {
-          "text": "What she and Zei become to each other after the war."
+          "text": "What she and Zei become to each other in the end."
         }
       ],
       [
@@ -844,13 +844,10 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "cite": "c5-b64"
       },
       {
-        "text": ". She is gentle with the kids, and she is the one who sees through a stranger's lies when her husband doesn't "
+        "text": ". She is gentle with the kids "
       },
       {
         "cite": "c1-b120"
-      },
-      {
-        "cite": "c21-b55"
       },
       {
         "text": "."
@@ -982,6 +979,12 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "cite": "c20-b10"
       },
       {
+        "text": ", and she promises them she will do everything she can to bring them home "
+      },
+      {
+        "cite": "c20-b11"
+      },
+      {
         "text": ". With Gladias's friend Mov, she tracks down other Keepers whom Delwart, the man who had been meeting Gladias, had approached "
       },
       {
@@ -1037,6 +1040,12 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "cite": "c27-b15"
       },
       {
+        "text": ". The world she loves is \"already enough to be worth fighting for.\" "
+      },
+      {
+        "cite": "c27-b95"
+      },
+      {
         "text": ". In the end the family is together again in Northglade "
       },
       {
@@ -1051,16 +1060,17 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
     ],
     "drives": [
       {
-        "text": "Her family: she promises Febric and Hreda she will do everything she can to bring them home "
+        "text": "Her family, and the people around her. When Gladias wonders about becoming a "
       },
       {
-        "cite": "c20-b11"
+        "term": "Keeper",
+        "glossaryId": "keepers"
       },
       {
-        "text": ". And the world she loves, which is \"already enough to be worth fighting for.\" "
+        "text": ", she wants it to do good for Dzego: \"Figure out how to make or adjust the rubrics to support Dzego better.\" "
       },
       {
-        "cite": "c27-b95"
+        "cite": "c5-b113"
       }
     ],
     "invent": [
@@ -1187,7 +1197,12 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "cite": "c14-b130"
       },
       {
-        "text": ". Then the "
+        "text": "."
+      }
+    ],
+    "later": [
+      {
+        "text": "The "
       },
       {
         "term": "Arctic Empire",
@@ -1212,12 +1227,16 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "cite": "c15-b82"
       },
       {
-        "text": "."
-      }
-    ],
-    "later": [
+        "text": ". "
+      },
       {
         "text": "Weeks later, a hidden letter reaches Zei: the Arctics have taken Redshire's devices, his parents have chosen to cooperate with them, and he will play along to win their trust "
+      },
+      {
+        "cite": "c19-b153"
+      },
+      {
+        "text": ", though \"I do not share their sympathies.\" "
       },
       {
         "cite": "c19-b153"
@@ -1280,13 +1299,16 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
     ],
     "drives": [
       {
-        "text": "Being useful from the inside. He plays along with the Arctics in the hope of helping Zei one day, though \"I do not share their sympathies.\" "
+        "text": "His friends and his home. He invites Zei to Redshire and shows him its castles, pine forests and red mountains "
       },
       {
-        "cite": "c19-b153"
+        "cite": "c14-b120"
       },
       {
-        "text": ". And his home: he believes even beautiful nature takes human work to maintain "
+        "cite": "c14-b124"
+      },
+      {
+        "text": ", and he believes even beautiful nature takes human work to maintain "
       },
       {
         "cite": "c14-b127"
@@ -1303,17 +1325,12 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       ],
       [
         {
-          "text": "His parents, beyond the choice they made."
+          "text": "His parents, and what they do."
         }
       ],
       [
         {
-          "text": "What it costs him to command Arctic forces while working against them."
-        }
-      ],
-      [
-        {
-          "text": "Where he goes once Redshire is lost."
+          "text": "Who he is closest to at home."
         }
       ],
       [
@@ -1371,29 +1388,6 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "cite": "c7-b136"
       },
       {
-        "text": ". She is also one of the few who know about the "
-      },
-      {
-        "term": "Kungaupei",
-        "glossaryId": "kungaupei"
-      },
-      {
-        "text": ", a "
-      },
-      {
-        "term": "Dzegojan",
-        "glossaryId": "dzegojan"
-      },
-      {
-        "text": " group "
-      },
-      {
-        "cite": "c15-b79"
-      },
-      {
-        "cite": "c27-b54"
-      },
-      {
         "text": "."
       }
     ],
@@ -1434,6 +1428,32 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
     ],
     "later": [
       {
+        "text": "She is one of the few who know about the "
+      },
+      {
+        "term": "Kungaupei",
+        "glossaryId": "kungaupei"
+      },
+      {
+        "text": ", a "
+      },
+      {
+        "term": "Dzegojan",
+        "glossaryId": "dzegojan"
+      },
+      {
+        "text": " group "
+      },
+      {
+        "cite": "c15-b79"
+      },
+      {
+        "cite": "c27-b54"
+      },
+      {
+        "text": ". "
+      },
+      {
         "text": "On the Kungaupei's mission to rescue the son of "
       },
       {
@@ -1472,6 +1492,18 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       },
       {
         "cite": "c26-b137"
+      },
+      {
+        "text": ". "
+      },
+      {
+        "text": "On the morning of the battle, asked if they are ready, she says no: \"But nothing meaningful ever happens when people are ready.\" "
+      },
+      {
+        "cite": "c29-b4"
+      },
+      {
+        "cite": "c29-b5"
       },
       {
         "text": ". In the war against the "
@@ -1520,15 +1552,6 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       },
       {
         "cite": "c7-b49"
-      },
-      {
-        "text": ". On the morning of the battle, asked if they are ready, she says no: \"But nothing meaningful ever happens when people are ready.\" "
-      },
-      {
-        "cite": "c29-b4"
-      },
-      {
-        "cite": "c29-b5"
       }
     ],
     "invent": [
@@ -1539,12 +1562,12 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       ],
       [
         {
-          "text": "How she joined the Kungaupei, and what she has given up to keep it secret."
+          "text": "How she and Zei first met, and what she does away from the matches."
         }
       ],
       [
         {
-          "text": "How she and Zei first met, and what she does away from the matches."
+          "text": "What she has given up for the work she keeps quiet about."
         }
       ],
       [
@@ -1659,17 +1682,23 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       },
       {
         "cite": "c21-b75"
+      },
+      {
+        "text": " In her reading, his goal is \"to inspire people inside Veridia to join the Arctic cause.\" "
+      },
+      {
+        "cite": "c21-b76"
       }
     ],
     "drives": [
       {
-        "text": "In Seila's reading, his goal is \"to inspire people inside Veridia to join the Arctic cause.\" "
+        "text": "In his own words: strength, winning and growth. \"Build the future.\" "
       },
       {
-        "cite": "c21-b76"
+        "cite": "c3-b5"
       },
       {
-        "text": ". In his own words: strength, winning and growth. \"Grow stronger.\" "
+        "text": " \"Grow stronger.\" "
       },
       {
         "cite": "c13-b64"
