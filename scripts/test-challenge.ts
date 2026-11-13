@@ -693,6 +693,9 @@ proof('a bounty back in the rules (the old per-character rule) is caught', copyP
   const words = Object.values(W).flatMap((v) => (typeof v === 'function' ? [String((v as (...a: string[]) => unknown)('Zei', 'Zei'))] : Array.isArray(v) ? v.map(String) : [String(v)])).join(' ');
   // One exception (owner, 2026-11-11, reversing 2026-11-04): the home's "Add a backstory" card points to the poidh bounty.
   // Only these exact lines of landing-wording.ts are allowed; any other bounty or poidh mention still fails.
+  // A second exception (owner's spec, 2026-11-12): a picture's maker submits its backstory to the bounty from its page.
+  // That flow lives outside the challenge's own pages and words, in src/lib/poidh/, src/app/api/challenge/backstory/ and
+  // src/components/challenge-backstory-bounty.tsx (scripts/test-backstory-bounty.ts tests it); this scan stays as it was.
   const BOUNTY_ALLOWED = [
     "      // The owner's words (2026-11-11). The link is CHALLENGE_LINKS.bounty; until it is set, the line ends \"(bounty opens soon)\".",
     "      // Tagged \"Extra credit\" (owner, 2026-11-12).",
@@ -704,11 +707,22 @@ proof('a bounty back in the rules (the old per-character rule) is caught', copyP
   // The rules' poidh line (owner, 2026-11-12) and its comment, in wording.ts.
   const RULE_ALLOWED = ["    'The poidh bounty for backstories is an optional extra.',", "  // withdrawing; where to post; the poidh bounty is an optional extra; the Neynar score figure. DRAFT wording, except"];
   const stripAllowed = (f: string, text: string) => (f.endsWith('landing-wording.ts') ? text.split('\n').filter((l) => !BOUNTY_ALLOWED.includes(l)).join('\n') : f.endsWith('challenge/wording.ts') || f === 'wording.ts' ? text.split('\n').filter((l) => !RULE_ALLOWED.includes(l)).join('\n') : text);
-  const pages = ['src/app/challenge', 'src/lib/challenge'].flatMap((d) => readdirSync(path.join(ROOT, d), { recursive: true }).map(String).filter((f) => /\.tsx?$/.test(f)).map((f) => stripAllowed(f, readFileSync(path.join(ROOT, d, f), 'utf8')))).join('\n');
+  // The bounty feature's own files (owner's spec, 2026-11-12) are the one place the submission flow may name it; every
+  // other file of the challenge (its pages, words, API routes and components) is scanned.
+  const BOUNTY_FEATURE = (f: string) => /^src\/app\/api\/challenge\/backstory\//.test(f) || f === 'src/components/challenge-backstory-bounty.tsx';
+  // The picture page mounts it: that one import line is allowed.
+  const MOUNT = "import { ChallengeBackstoryBounty } from './challenge-backstory-bounty';";
+  const pages = ['src/app/challenge', 'src/lib/challenge', 'src/app/api/challenge', 'src/components']
+    .flatMap((d) => readdirSync(path.join(ROOT, d), { recursive: true }).map(String).filter((f) => /\.tsx?$/.test(f)).map((f) => `${d}/${f}`))
+    .filter((f) => !f.startsWith('src/components/') || /^src\/components\/challenge-[a-z-]+\.tsx$/.test(f))
+    .filter((f) => !BOUNTY_FEATURE(f))
+    .map((f) => stripAllowed(f, readFileSync(path.join(ROOT, f), 'utf8')).split('\n').filter((l) => !(f === 'src/components/challenge-picture.tsx' && l === MOUNT)).join('\n'))
+    .join('\n');
   const wordsNoCard = words.replaceAll('Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', '').replaceAll(POIDH_RULE, '').replaceAll('(bounty opens soon)', '').replaceAll('bounty', (m) => m);
   check('no bounty: none in the config, the wording or the challenge\'s pages, except the home\'s "Add a backstory" card (owner, 2026-11-11)', !('bounties' in CHALLENGE) && !('bountyAmount' in CHALLENGE) && !NO_BOUNTY.test(wordsNoCard) && !NO_BOUNTY.test(pages), (wordsNoCard.match(NO_BOUNTY) ?? pages.match(NO_BOUNTY) ?? [''])[0]);
   proof('a second bounty mention in landing-wording.ts is caught (the exception is those lines only)', NO_BOUNTY.test(stripAllowed('landing-wording.ts', "x\n  more: 'A poidh bounty for Zei.',\n")));
   proof('a bounty planted in a page is caught', NO_BOUNTY.test(`${pages}\n<p>The poidh bounty</p>`));
+  check('no bounty: the scan reads the challenge\'s API routes and components too, all but the bounty feature\'s own files', pages.includes('ChallengeSubmit') && !pages.includes('ChallengeBackstoryBounty('));
 }
 proof('rules without "forks only" are caught', copyProblems(copy.replace('A picture made from scratch isn’t an entry.', '')).length > 0);
 

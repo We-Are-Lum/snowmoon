@@ -1916,6 +1916,8 @@ const SERVICES: [string, RegExp][] = [
   ['OpenAI', /\bOpenAI\b/g],
   ['Google', /\bGoogle\b(?! Fonts)/g],
   ['Spotify', /\bSpotify\b/g],
+  // The backstory bounty (branch challenge-backstory-bounty, 2026-11-12): Pinata pins a submitted picture and backstory.
+  ['Pinata', /\bPinata\b/g],
 ];
 /** Makers named for provenance only: some pictures the owner made with them outside the site are brought in with the
  *  recipe the owner reports, and nothing is sent to them. They are not services, so P6g and P6h never ask the Privacy

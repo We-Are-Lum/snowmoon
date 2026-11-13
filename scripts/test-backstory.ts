@@ -10,8 +10,9 @@
  *     placeholder); the only request is the publish or "Add backstory", which sends what was typed.
  *  B3 at publish (challenge pictures only) the check runs before anything is written, a refusal publishes nothing and
  *     lets the maker publish without it, and it goes into the version's body with the tick and when.
- *  B4 new pictures only (owner, 2026-11-09): no "Add backstory", no route, no table, no migration; a backstory is read
- *     from its version's body alone, and a picture without one shows none.
+ *  B4 (owner, 2026-11-12, replacing 2026-11-09's "new pictures only"): a maker adds a backstory on its picture's page as a
+ *     new row of studio.challenge_backstories (append-only); the newest row is the picture's backstory, else its body's;
+ *     the route never writes element_versions, and runs the same check first. A picture without either shows none.
  *  B5 the check is the image prompt check with 1,200 tokens (mocked), after the blocked names.
  *  B6 the page shows it under the picture, "Invented by @maker, not from the book", with no spoiler tick or mark
  *     (owner, 2026-11-09: none on the challenge's pages).
@@ -209,18 +210,21 @@ proven('L3 the prompt order: change words, reference line, look line, scene line
   proven('S2 the Style row offers "Same as this picture", "Animated series" (once published), Random (only from it; hidden with nothing to draw) and Write your own; the other published styles aren\'t offered', allow(M.offeredOnly), allow(((p: never) => p) as never));
 }
 
-// B4: new pictures only.
+// B4 (owner, 2026-11-12): added after publish, append-only; the newest wins, else the body's; the body is never edited.
 {
-  const { existsSync } = await import('node:fs');
   const { backstoryOf } = await import('../src/lib/challenge/backstories');
-  const only = (files: { route: boolean; migration: boolean; lib: string; picture: string }) => [
-    ...need(!files.route && !files.migration, 'an "Add backstory" route or a backstories table is back'),
-    ...need(!/challenge_backstories|addBackstory|AddBackstory/.test(files.lib + files.picture + comp), '"Add backstory" is still offered'),
-    ...need(backstoryOf({ lettering: [], backstory: { text: 'Written at publish.', at: '2026-11-09T00:00:00Z' } })?.text === 'Written at publish.' && backstoryOf({ lettering: [] }) === null, 'a backstory isn\'t read from the body alone'),
-  ];
   const lib = read('src/lib/challenge/backstories.ts');
-  const real = only({ route: existsSync(path.join(ROOT, 'src/app/api/challenge/backstory/route.ts')), migration: existsSync(path.join(ROOT, 'supabase/migrations/NEXT_challenge_backstories.sql')), lib, picture: pictureComp });
-  proven('B4 new pictures only: no "Add backstory", no route, no table; a backstory comes from its version\'s body', real, only({ route: true, migration: false, lib, picture: pictureComp }));
+  const route = read('src/app/api/challenge/backstory/route.ts');
+  const mig = read('supabase/migrations/NEXT_challenge_bounty_claims.sql');
+  const appendOnly = (files: { lib: string; route: string; mig: string }) => [
+    ...need(/insert into studio\.challenge_backstories/.test(files.lib) && !/update studio\.challenge_backstories|delete from studio\.challenge_backstories/.test(files.lib + files.route), 'a backstory row is updated or deleted'),
+    ...need(!/element_versions/.test(files.lib.slice(files.lib.indexOf('export async function addBackstory'))) && !/update studio\.element_versions|element_versions.*set /.test(files.route), 'adding a backstory edits a published version'),
+    ...need(/order by added_at desc, id desc limit 1/.test(files.lib) && /if \(added\) return added;/.test(files.lib), 'the newest added row isn\'t the one shown'),
+    ...need(files.route.indexOf('checkBackstory(') > 0 && files.route.indexOf('checkBackstory(') < files.route.indexOf('addBackstory(sql'), 'the check doesn\'t run before the row is kept'),
+    ...need(/revoke update, delete, truncate on studio\.challenge_backstories from studio_writer;/.test(files.mig) && /grant select, insert on studio\.challenge_backstories to studio_writer;/.test(files.mig), 'the table isn\'t append-only for the app'),
+    ...need(backstoryOf({ lettering: [], backstory: { text: 'Written at publish.', at: '2026-11-09T00:00:00Z' } })?.text === 'Written at publish.' && backstoryOf({ lettering: [] }) === null, 'a body\'s backstory isn\'t read'),
+  ];
+  proven('B4 a backstory added after publish is a new row (append-only), checked first; the newest is shown, else the body\'s; no published version is edited', appendOnly({ lib, route, mig }), appendOnly({ lib: lib.replace('insert into studio.challenge_backstories', 'update studio.challenge_backstories set'), route, mig }));
 }
 
 // B5: the check, on a local database (its costs are counted there).
