@@ -697,7 +697,7 @@ check('config: a current default look per challenge character, each a design id 
   }
   check('rules: says new starting pictures and characters may be added during the challenge (owner, 2026-11-11), right after which pictures count', W.rules()[1] === 'New starting pictures and characters may be added during the challenge.' && /Only remixes count/.test(W.rules()[0]));
   // Owner, 2026-11-12: much shorter rules; posts anywhere, including X, but the one you submit is on Farcaster, Lens or Bluesky.
-  check('rules: six lines (withdrawing and the score figure kept), then the admins line with no names (owner, 2026-11-12)', W.rules().length === 6 && W.rules().some((r) => r.includes('withdraw a submission')) && W.rules().some((r) => r.includes('Neynar score of at least')) && W.adminsLine === 'Admins can make pictures too, but theirs aren’t entries.' && !/@garance|owner/.test(W.adminsLine));
+  check('rules: six lines (withdrawing and the score figure kept), then the admins line with no names (owner, 2026-11-12; examples wording, admin examples)', W.rules().length === 6 && W.rules().some((r) => r.includes('withdraw a submission')) && W.rules().some((r) => r.includes('Neynar score of at least')) && W.adminsLine === 'Admins can share examples too, but theirs aren’t entries.' && !/@garance|owner/.test(W.adminsLine));
   check('rules: share anywhere, including X; the submitted post on Farcaster, Lens or Bluesky (owner, 2026-11-12)', W.rules().includes('Share your picture anywhere, including X. The post you submit must be on Farcaster, Lens or Bluesky, because that’s where the site can check it’s yours.'));
   {
     const LWm = (await import('../src/lib/challenge/landing-wording')).LANDING_WORDING;
