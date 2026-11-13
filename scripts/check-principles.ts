@@ -671,6 +671,9 @@ add({
     const homeRows = (home.match(/<ul class="home-feed-list"[\s\S]*?<\/ul>/)?.[0].match(/<li\b/g) ?? []).length;
     if (homeRows !== homeCaptions.length) problems.push(`/ "Just made": ${homeRows} images but ${homeCaptions.length} labels`);
     if (!homeRows && !/class="home-feed-empty"/.test(home)) problems.push('/ "Just made": neither images nor the empty state');
+    // The challenge poster above it while entries are open (owner, 2026-11-12): labelled like every other picture.
+    const posterCaption = home.match(/<figure class="home-poster">[\s\S]*?<\/figure>/)?.[0];
+    if (posterCaption) problems.push(...aiLabelProblems('/ the challenge poster', posterCaption.match(/<figcaption[\s\S]*?<\/figcaption>/)?.[0] ?? '', 'image'));
     if (imagePage) problems.push(...aiLabelProblems(`/image/${imagePage.id}`, imagePage.html.match(/<figcaption class="ip-caption">[\s\S]*?<\/figcaption>/)?.[0] ?? '', 'image'));
     // The wording itself (src/lib/ai-declared.ts).
     for (const l of wording.labels as string[]) if (!SAYS_AI.test(l)) problems.push(`src/lib/ai-declared.ts: label "${l}" does not say "AI"`);

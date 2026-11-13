@@ -688,6 +688,19 @@ check('config: a current default look per challenge character, each a design id 
   check('rules: no "no prize for now" (owner, 2026-11-12: the prize line waits for his rewards decision)', !/no prize/i.test([W.next(), ...W.rules()].join(' ')));
   const RV = await import('../src/lib/challenge/rules-view');
   const rv = await RV.rulesView(null);
+  {
+    // The poster as /challenge's link preview while entries are open (owner, 2026-11-12): served files, recipe beside them.
+    const { createHash } = await import('node:crypto');
+    const fs = await import('node:fs');
+    const { POSTER } = await import('../src/lib/challenge/poster');
+    const rec = JSON.parse(fs.readFileSync('public/challenge/poster-recipe.json', 'utf8')) as { model: { id: string; maker: string; closed: boolean }; prompt: string; references: { version_id: string; url: string }[]; cost_usd: number; files: Record<string, { sha256: string }> };
+    const sha = (f: string) => createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+    check('poster: both files are served from public/challenge/ and match their recipe\'s sha256', [POSTER.embed, POSTER.og].every((u) => rec.files[u.split('/').pop()!]?.sha256 === sha(`public${u}`)));
+    check('poster: its recipe names the model and maker, the prompt, the seven default bases and the cost', rec.model.id === 'openai/gpt-image-2.5-sunburst' && rec.model.maker === 'OpenAI' && rec.model.closed && rec.prompt.length > 100 && rec.references.length === 7 && rec.references.map((r) => r.version_id).join() === CHALLENGE.characters.map((c) => CHALLENGE.defaultLooks[c]).join() && rec.cost_usd > 0);
+    const page = fs.readFileSync('src/app/challenge/page.tsx', 'utf8');
+    check('poster: /challenge uses it only while entries are open (phase() === \'open\'), the site card otherwise', /const open = phase\(\) === 'open'/.test(page) && /open \? `\$\{appUrl\(\)\}\$\{POSTER\.embed\}` : `\$\{appUrl\(\)\}\/embed\.png`/.test(page) && /summary_large_image/.test(page));
+    check('poster: its alt says AI-generated, without "not by the author"', /AI-generated/.test(POSTER.alt) && !/not by the author/i.test(POSTER.alt));
+  }
   check('rules page: no "Draft wording" mark on the page or the intro', rv.draft === null && rv.introDraft === null);
 }
 

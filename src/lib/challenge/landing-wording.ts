@@ -124,5 +124,7 @@ export const LANDING_WORDING = {
   pictureAltMoment: (name: string) => `AI-generated picture of ${name}`,
 };
 
-/** The two outside links on the challenge home (owner, 2026-11-11). Null until the owner gives them: the card says so. */
-export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: null, collab: 'https://collab.venturetothex.com/c/snowmoon' };
+/** The two outside links on the challenge home (owner, 2026-11-11). Null until the owner gives them: the card says so.
+ * The bounty (owner, 2026-11-12): poidh.xyz's bounty 1546, "Snowmoon Character Backstory", id 560 on the contract. It
+ * goes live only with Terms §6e's bounty sentences (branch terms-6e-poidh). */
+export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: 'https://poidh.xyz/base/bounty/1546', collab: 'https://collab.venturetothex.com/c/snowmoon' };
