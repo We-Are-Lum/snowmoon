@@ -125,6 +125,9 @@ export const LANDING_WORDING = {
     remixThis: 'Remix this',
     readMore: (name: string) => `Read more about ${name}`,
     looks: (name: string) => `The book doesn’t describe ${name}’s looks. Every picture’s look is this edition’s.`,
+    // "Read more"'s facts (owner, 2026-11-12: ADD the first-layer facts). DRAFT wording (coding agent): the note and the chip.
+    factsNote: 'From chapters 1 to 14. Each line is this edition’s; the quote under it is the book’s, word for word.',
+    factChip: (n: number) => `Ch ${n}`,
   },
   untitled: (name: string) => `${name}, remixed`,
   pictureAlt: (name: string) => `AI-generated front view of ${name}, not by the author`,

@@ -795,6 +795,12 @@ sheet page's gating removed; the assistant's limit is `test:chat`'s.
   screen's moments are sent only with the switch on, each chip with its chapter, and the rest as before; its proofs
   plant a card's description back on the page, a fetch of the passages, facts or the moments in the pages' data, and
   the moments sent whatever the switch says.
+  **Widened (owner, 2026-11-12: "ADD"):** a character's page (/challenge/<slug>) shows its card's first-layer facts
+  under "Read more about {name}": each fact's line (this edition's), the book's words word for word, its block and
+  chapter, from chapters 1 to 14 only. Nothing else from the card: no description, second layer or "Where they appear".
+  `P9g` now checks that the pages' data reads facts only through `firstLayerFacts` and that it reads a card's first-layer
+  `facts` only, with the chapter 14 limit; its proofs plant the second layer's facts in the page's data, in
+  `firstLayerFacts`, and the limit removed.
 
 ---
 

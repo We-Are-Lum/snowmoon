@@ -67,6 +67,22 @@ export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
         <details className="chc-more">
           <summary>{P.more.title}</summary>
           <div className="chc-more-body">
+            {P.more.facts.length > 0 && (
+              <>
+                <p className="chc-facts-note">{P.more.factsNote}</p>
+                <ul className="chc-facts">
+                  {P.more.facts.map((f, i) => (
+                    <li key={f.block} className="chc-fact" data-block={f.block}>
+                      <span className="chc-fact-text">{f.text}</span>
+                      <q className="chc-fact-quote">{f.quote}</q>
+                      <span className="chc-fact-cite">
+                        {P.more.chips[i]} · {f.block}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
             <p className="chc-looks">{P.more.looks}</p>
           </div>
         </details>

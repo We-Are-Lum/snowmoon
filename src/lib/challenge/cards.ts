@@ -219,6 +219,14 @@ export const cardOf = (slug: string): CharacterCard | null => CARDS.find((c) => 
 /** The chapter of a block id ("c4-b70" → 4), or NaN. */
 export const chapterOf = (block: string) => Number(/^c(\d+)-b\d+$/.exec(block)?.[1] ?? NaN);
 
+/**
+ * "Read more about {name}" on a character's page (owner, 2026-11-12: ADD): the card's first-layer facts only, each with
+ * its book quote, block and chapter, and none past chapter FIRST_LAYER_MAX_CHAPTER. Never the second layer or "Where they
+ * appear" (P9g checks this function and that the page's data reads the facts only through it).
+ */
+export const firstLayerFacts = (slug: string): { text: string; block: string; quote: string; chapter: number }[] =>
+  (cardOf(slug)?.facts ?? []).filter((f) => chapterOf(f.block) <= FIRST_LAYER_MAX_CHAPTER).map((f) => ({ text: f.text, block: f.block, quote: f.quote, chapter: chapterOf(f.block) }));
+
 /** Every quote on the cards, for the word-for-word check. */
 export function cardQuotes(cards: readonly CharacterCard[] = CARDS): { where: string; block: string; text: string }[] {
   return cards.flatMap((c) => [

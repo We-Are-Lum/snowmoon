@@ -1363,7 +1363,7 @@ add({
 add({
   id: 'P9g',
   principle: 9,
-  name: 'the remix challenge\'s exception stays narrow: only its six cards and curated moments, quoted word for word; the first layer from chapters 1-14; nothing marked as a spoiler on its pages (owner, 2026-11-09); chapters on every moment chip; the reader\'s chapter gating unchanged; nowhere else; ended when entries close',
+  name: 'the remix challenge\'s exception stays narrow: only its six cards and curated moments, quoted word for word; the first layer from chapters 1-14 (a character page\'s "Read more" shows only its facts, owner 2026-11-12); nothing marked as a spoiler on its pages (owner, 2026-11-09); chapters on every moment chip; the reader\'s chapter gating unchanged; nowhere else; ended when entries close',
   load: async () => ({
     files: walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
     cards: clone(CARDS),
@@ -1378,6 +1378,8 @@ add({
     c.moments[2].quotes[0].text = c.moments[2].quotes[0].text.replace('shine', 'win');
     c.cards[2].facts[0] = { text: 'Second place', block: 'c24-b48', quote: 'I got second place in the Pafogai Du Minpentai games' };
     c.files.push({ file: 'src/app/references/designs/[id]/planted.tsx', text: "import { CARDS } from '~/lib/challenge/cards';" });
+    // "Read more" reading the second layer's facts (owner, 2026-11-12: only the first layer's).
+    c.files = c.files.map((f) => (f.file === 'src/lib/challenge/cards.ts' ? { ...f, text: f.text.replace('(cardOf(slug)?.facts ?? [])', '(cardOf(slug)?.more.facts ?? [])') } : f));
     // A spoiler mark back on a challenge page (owner, 2026-11-09: none there).
     c.files.push({ file: 'src/components/challenge-planted.tsx', text: "export const L = 'May spoil later chapters.';" });
   },

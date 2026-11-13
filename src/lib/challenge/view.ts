@@ -5,7 +5,7 @@ import { bookCharacter } from '../images/designs';
 import type { CardData, CardTile, CardWords, CharacterData } from '~/components/challenge-card';
 import { startingSheets } from './entries';
 import { challengePictures } from './pictures';
-import { cardOf } from './cards';
+import { cardOf, firstLayerFacts } from './cards';
 import { basesOf, baseCountOf, firstRemixesOf, phase, shortDateText, windowText } from './rules';
 import { FEED_PAGE, cursorOf } from './remixes';
 import { homeOf } from './homes';
@@ -60,16 +60,16 @@ export interface CharacterView {
   firstAppears?: { href: string; words: string };
   /**
    * The redesigned page (Claude Design's handoff, screen 2; owner-approved 2026-11-11). Every word is written here.
-   * - `more`: "Read more about {name}": for now only the line that the look is this edition's. The prototype also puts
-   *   the card's facts and description there; P9g keeps a card's one line the only words the pages carry (owner,
-   *   2026-11-08), so that waits for the owner's decision.
+   * - `more`: "Read more about {name}": the card's first-layer facts (chapters 1 to 14, each with the book's words and its
+   *   block; owner, 2026-11-12: ADD), then the line that the look is this edition's. Never the card's description,
+   *   second layer or "Where they appear" (P9g).
    * - `remix`: "Remix {name}", to the remix screen of one of its bases, drawn afresh in the browser (P5g).
    * - `picked`: the owner's first remixes of the character (CHALLENGE.firstRemixes), under "First remixes by @naaate".
    * - the grid: the newest FEED_PAGE remixes; "Older remixes" opens the rest in the feed (/challenge/remixes), a page at
    *   a time. No count of remixes (P5i).
    */
   page: {
-    more: { title: string; looks: string };
+    more: { title: string; looks: string; facts: { text: string; block: string; quote: string; chapter: number }[]; factsNote: string; chips: string[] };
     remix: string;
     remixThis: string;
     remixShort: string;
@@ -187,7 +187,7 @@ export async function characterView(sql: Sql | null, slug: string): Promise<Char
     notAffiliated: W.notAffiliated,
     firstAppears: { href: firstAppearsHref(slug), words: firstAppearsWords(c.name) },
     page: {
-      more: { title: P.readMore(c.name), looks: P.looks(c.name) },
+      more: { title: P.readMore(c.name), looks: P.looks(c.name), facts: firstLayerFacts(slug), factsNote: P.factsNote, chips: firstLayerFacts(slug).map((f) => P.factChip(f.chapter)) },
       remix: P.remix(c.name),
       remixThis: P.remixThis,
       remixShort: L.remix,
