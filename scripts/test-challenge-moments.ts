@@ -314,6 +314,36 @@ check('config: a current default look per challenge character, each a design id 
   check('moments off: every picture starts on "Same as this picture" (owner, 2026-11-09), with or without a style of its own', M.makeView({ ...src, styleElement: null }, { styles: pub }).defaultStyle === 'same');
   check('moments on (kept): the screen gets all fifteen', M.makeView(src, { styles: pub, momentsOn: true }).moments.length === 15);
   check('moments off: a picture is anchored to its character\'s first passage', JSON.stringify(M.characterAnchor('zei')) === JSON.stringify({ chapter: 2, start: 2, end: 2 }));
+
+  // "Mood" shown as "Moody graphic novel", and "See examples" (owner, 2026-11-12). A display label only: the published
+  // style keeps its title, so the allowlist, Random's draw and the recipe still name it "Mood".
+  const MW = await import('../src/lib/challenge/make-wording');
+  const mood = { id: 'style:em', label: 'Mood', text: 'Moody words.', elementId: 'em', versionId: 'vm', versionNo: 1, entity: 'Mood', title: 'Mood', byName: 'naaate', byFid: 6786, assist: null, samples: ['u1', 'u2', 'u3', 'u4'] };
+  const withMood = [...pub, mood];
+  const mvm = M.makeView(src, { styles: withMood, presets: [{ id: 'p1', label: 'Preset 1', prompt: 'p' }] });
+  check('labels: "Mood" shows as "Moody graphic novel"; any other style keeps its name', MW.styleLabel('Mood') === 'Moody graphic novel' && MW.styleLabel('Comic book') === 'Comic book' && MW.STYLE_LABELS.Mood === 'Moody graphic novel');
+  check('labels: the Style row shows the label, under the published style\'s own id', mvm.styles.find((x) => x.id === 'style:em')?.label === 'Moody graphic novel' && !mvm.styles.some((x) => x.label === 'Mood'));
+  const moodPick = M.resolveStyle({ kind: 'style', id: 'style:em' }, withMood);
+  const moodDraw = M.resolveStyle({ kind: 'random' }, withMood, [], (l) => l[3]);
+  check('labels: the recipe still records the stored name ("Mood"), picked or drawn, and its text', moodPick?.label === 'Mood' && moodPick.text === 'Moody words.' && moodPick.design?.title === 'Mood' && moodDraw?.label === 'Mood');
+  check('labels: the allowlist still matches the stored title "Mood"', M.offeredOnly(withMood, ['Mood']).map((x) => x.id).join() === 'style:em');
+  const route2 = read('src/app/api/challenge/make/route.ts');
+  check('labels: the route records style.label (the stored name) in the recipe, and shows the label only in its answer', /style: \{ choice: style\.choice, id: style\.id, elementId: style\.design\?\.elementId \?\? null, label: style\.label, text: style\.text \}/.test(route2) && /randomDrew\(styleLabel\(style\.label \?\? ''\)\)/.test(route2));
+  const recordsStored = (r: string) => /style: \{ choice: style\.choice, id: style\.id, elementId: style\.design\?\.elementId \?\? null, label: style\.label, text: style\.text \}/.test(r);
+  proof('labels: a recipe that records the display label is caught', !recordsStored(route2.replace('label: style.label, text: style.text', 'label: styleLabel(style.label ?? \'\'), text: style.text')));
+  const ex = mvm.examples;
+  check('examples: the published styles only, in the row\'s order (no preset, "Same as this picture", Random or Write your own)', ex.map((x) => x.id).join() === mvm.styles.filter((x) => x.kind === 'published').map((x) => x.id).join() && !ex.some((x) => ['same', 'random', 'own', 'preset:p1'].includes(x.id) || [MW.MAKE_WORDING.sameStyle, MW.MAKE_WORDING.random, MW.MAKE_WORDING.ownStyle].includes(x.label)));
+  const moodEx = ex.find((x) => x.id === 'style:em');
+  check('examples: each shows its label, its words, and at most three samples (the first three of its newest version)', moodEx?.label === 'Moody graphic novel' && moodEx.name === 'Mood' && moodEx.words === 'Moody words.' && moodEx.samples.map((x) => x.url).join() === 'u1,u2,u3' && ex.filter((x) => x.id !== 'style:em').every((x) => x.samples.length === 0));
+  check('examples: each sample\'s alt says it is an AI-generated sample of that style, never "not by the author"', moodEx!.samples.every((x) => x.alt === 'AI-generated sample of the Moody graphic novel style') && !JSON.stringify(ex).includes('not by the author'));
+  check('examples: the words are DRAFT (owner, 2026-11-12)', mvm.w.seeExamples === 'See examples' && mvm.w.examplesTitle === 'Styles' && mvm.w.examplesClose === 'Close' && /\/\/ DRAFT \(owner, 2026-11-12\)[^\n]*\n[^\n]*\n\s*seeExamples: 'See examples'/.test(read('src/lib/challenge/make-wording.ts')) && /Mood: 'Moody graphic novel', \/\/ DRAFT \(owner, 2026-11-12\)/.test(read('src/lib/challenge/make-wording.ts')));
+  const panel = read('src/components/style-examples.tsx');
+  const makeSrc = read('src/components/challenge-make.tsx');
+  check('panel: a modal dialog (aria-modal, labelled), a visible Close, Escape closes, focus back to the link', /<dialog\b/.test(panel) && /showModal\(\)/.test(panel) && /aria-modal="true"/.test(panel) && /aria-labelledby=\{titleId\}/.test(panel) && /onCancel=/.test(panel) && /className="se-close"[^>]*>\s*\{w\.examplesClose\}/.test(panel) && /opener\.current\?\.focus\(\)/.test(panel));
+  check('panel: every sample carries the AI label, loads lazily, and its alt is the server\'s; no "not by the author" in sight', /<img src=\{p\.url\} alt=\{p\.alt\} loading="lazy"/.test(panel) && /<figcaption className="se-sample-cap">\s*<AiTag \/>/.test(panel) && !/not by the author/i.test(panel));
+  check('panel: tapping a style\'s row or a sample picks it and closes; it knows nothing of the remix screen', (panel.match(/onClick=\{\(\) => pick\(s\.id\)\}/g) ?? []).length === 2 && /onPick\(id\);\s*close\(\);/.test(panel) && !/challenge-make|MakeView|mk-/.test(panel));
+  check('panel: mounted under the Style row with the server\'s examples, picking into the row', /<StyleExamples styles=\{view\.examples\} w=\{w\} selected=\{styleSel\} onPick=\{setStyleSel\} \/>/.test(makeSrc) && makeSrc.indexOf('<StyleExamples') > makeSrc.indexOf('className="mk-styles"') && makeSrc.indexOf('<StyleExamples') < makeSrc.indexOf('className="mk-model"'));
+  check('panel: a bottom sheet under 768px (full width, at the bottom), a side panel from 768px', /@media \(max-width: 767px\) \{\s*\.se-panel \{ position: fixed; inset: auto 0 0 0; margin: 0; width: 100%; max-width: 100%;/.test(read('src/styles/designs.css')) && /@media \(min-width: 768px\) \{\s*\.se-panel \{ position: fixed; inset: 0 0 0 auto;/.test(read('src/styles/designs.css')));
 }
 
 // --- Navigation (owner, 2026-11-05: one URL per step, back one step, ✕ to the card, words kept, publish replaces) -------
@@ -538,6 +568,13 @@ check('config: a current default look per challenge character, each a design id 
     check('a base made in a published style: the remix screen starts on that style', srcStyled?.styleElement === styleD.elementId);
     const styles = await (await import('../src/lib/challenge/make')).publishedStyles(sql as never);
     check('the published styles: listed with their names and texts', styles.some((x) => x.id === `style:${styleD.elementId}` && x.label === 'Quiet, warm light' && x.text === 'Quiet, warm light; soft shadows.'));
+    // "See examples" (owner, 2026-11-12): a style's samples are its NEWEST version's, as published.
+    const sample = (n: number) => ({ url: `https://media.snowmoon.party/test/sample-${n}.jpg`, sha256: String(n).repeat(64).slice(0, 64), recipe: null });
+    const sv1 = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'style', styleName: 'Sampled', body: { title: 'Sampled', text: 'Sampled words.', samples: [sample(1)], views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null } as never });
+    await DS.makeDesign(S as never, { fid: 6786, mode: 'version', kind: 'style', fromVersionId: sv1.versionId, body: { title: 'Sampled', text: 'Sampled words.', samples: [2, 3, 4, 5].map(sample), views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null } as never });
+    const sampled = (await (await import('../src/lib/challenge/make')).publishedStyles(sql as never)).find((x) => x.elementId === sv1.elementId);
+    const sampledEx = (await import('../src/lib/challenge/make')).styleExamples(sampled ? [sampled] : []);
+    check('examples (database): a style\'s samples are its newest version\'s, three shown', sampled?.versionNo === 2 && sampled.samples?.length === 4 && sampledEx[0]?.samples.map((x) => x.url.slice(-12)).join() === 'sample-2.jpg,sample-3.jpg,sample-4.jpg', JSON.stringify(sampled?.samples));
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styledBase = styled.versionId;
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styleEl = styleD.elementId;
     (globalThis as { __keepCount?: unknown }).__keepCount = keepCount;
