@@ -2177,6 +2177,30 @@ async function checkChallengeLanding() {
             if (x.example && !(((await page.locator('.chp-cap button.info-label[data-label="admin-example"]').textContent().catch(() => '')) ?? '').includes(CWX.exampleInfo))) fail(`/challenge/p ${tag}: the admin example's ⓘ doesn't say "${CWX.exampleInfo}"`);
             if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/p ${tag}: scrolls sideways`);
           }
+          // Item 2 (owner, 2026-11-12, admin examples): a non-admin who passed the check and made the picture (fixture FID 900,
+          // its entry) sees the submit box on #162's layout: in the right-hand column on a desktop, below the picture on a phone.
+          // Signed in in this browser only (a stand-in session; the submit API's GET answered for FID 900).
+          {
+            const ent = FX.entries.find((x) => !x.example)!;
+            await page.evaluate((fid) => localStorage.setItem('snowmoon.signin', JSON.stringify({ token: 'stand-in', fid, username: `fixture${fid}`, nameProof: null, exp: Math.floor(Date.now() / 1000) + 3600 })), ent.fid);
+            await page.route('**/api/challenge/submit', (r) => (r.request().method() === 'GET' ? r.fulfill({ json: { left: 1, versions: [], person: ent.fid } }) : r.continue()));
+            await page.goto(`${LOCAL}/challenge/p/${ent.versionId}`, { waitUntil: 'load' });
+            await page.waitForSelector('h1.mk-title', { timeout: 30000 });
+            const box = page.locator('.sf-submit .ch-submit');
+            await box.waitFor({ timeout: 10000 }).catch(() => {});
+            if (!(await box.isVisible().catch(() => false))) fail(`/challenge/p ${tag}: a non-admin maker who passed the check doesn't see the submit box`);
+            else {
+              if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/p ${tag}: scrolls sideways with the submit box`);
+              const [fig, side, b] = await Promise.all([page.locator('.chp-figure').boundingBox(), page.locator('.chp-side').boundingBox(), box.boundingBox()]);
+              if (!fig || !side || !b) fail(`/challenge/p ${tag}: no picture, column or box to measure`);
+              else if (w >= 1024 ? !(b.x >= side.x - 1 && b.x + b.width <= side.x + side.width + 1 && side.x >= fig.x + fig.width) : !(b.y >= fig.y + fig.height - 1)) fail(`/challenge/p ${tag}: the submit box isn't ${w >= 1024 ? 'in the right-hand column' : 'below the picture'}`);
+              if (await page.locator('.chp-cap .ch-example').count()) fail(`/challenge/p ${tag}: a non-admin's entry is marked "Admin example"`);
+              await box.scrollIntoViewIfNeeded();
+              if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-picture-submit-box-${w}x${h}-${scheme}.png`) });
+            }
+            await page.unroute('**/api/challenge/submit');
+            await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
+          }
         } finally {
           await page.close();
         }
