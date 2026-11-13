@@ -212,6 +212,34 @@ export const CARDS: readonly CharacterCard[] = [
       { block: 'c29-b5', quote: '"No", Mu replied. "But nothing meaningful ever happens when people are ready."' },
     ],
   },
+  // Lord Ephelion (joined 2026-11-11). Drafted by the coding agent (Claude, a closed model by Anthropic): DRAFT until
+  // the owner's OK. The book never describes his looks; it makes clear he is a man (c21-b76).
+  // Approved (owner, 2026-11-11) with one change: the c21-b76 fact replaced by his poster's own words (c3-b5).
+  {
+    slug: 'ephelion',
+    line: 'The Arctic ambassador to Veridia, whose speeches and debates reach Veridians on their screens.',
+    facts: [
+      { text: 'The Arctic ambassador to Veridia', block: 'c8-b17', quote: 'Lord Ephelion, Arctic ambassador to Veridia' },
+      { text: 'Debates Professor Sylka, president of VNU', block: 'c8-b17', quote: 'Live debate between Professor Sylka, president of VNU, and Lord Ephelion' },
+      { text: 'Gladias finds him a gifted demagogue', block: 'c8-b37', quote: 'A gifted demagogue, he concluded.' },
+    ],
+    more: {
+      description:
+        'Lord Ephelion speaks for the Arctics in Veridia: in a live debate with the president of Veridia National University, on posters, and in messages that take over screens. His speeches aggravate many Veridians, though his poster asks them to join him. It never describes his looks.',
+      facts: [
+        { text: 'Signs as consul to Veridia', block: 'c3-b5', quote: 'Arctic Empire consul to Veridia.' },
+        { text: 'His speeches aggravate people', block: 'c13-b11', quote: 'even Ephelion\'s speeches, it just always aggravates people so much' },
+        { text: 'His poster asks Veridians to join him', block: 'c3-b5', quote: 'Join us, and we will build it together.' },
+      ],
+    },
+    appears: [
+      { block: 'c3-b5', quote: 'Lord Ephelion' },
+      { block: 'c8-b26', quote: 'Sylka paused. Lord Ephelion started speaking.' },
+      { block: 'c11-b109', quote: 'we have to listen to Lord Ephelion giving his sermons all the time' },
+      { block: 'c13-b63', quote: 'An image of Lord Ephelion appeared on the left side of the screen, and a multi-paragraph message on the right side.' },
+      { block: 'c27-b74', quote: '"Do you remember Ephelion\'s debate with Sylka?"' },
+    ],
+  },
 ];
 
 export const cardOf = (slug: string): CharacterCard | null => CARDS.find((c) => c.slug === slug) ?? null;

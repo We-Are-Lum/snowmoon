@@ -95,7 +95,7 @@ for (const p of plans) {
   if (!CHALLENGE.characters.includes(p.pick.character)) refusals.push(`${p.pick.key}: ${p.pick.character} is not a challenge character`);
   say(`  body: ${JSON.stringify(body)}`);
 }
-const gate = applyGate({ apply: APPLY, confirmed: has('confirm-owner-go'), isPublic, refusals });
+const gate = applyGate({ apply: APPLY, confirmed: has('confirm-owner-go'), isPublic, refusals, picks: picks.bases });
 if (!APPLY) {
   say();
   if (refusals.length) say(`--apply would refuse: ${refusals.length} problem(s) above.`);

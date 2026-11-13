@@ -47,7 +47,8 @@ export interface ReaderImage {
   /** Sheets as text (2026-10-10): the characters and place this image is of, and the shorthand text added. */
   sheets: { characters: string[]; place: string | null; added: { kind: 'character' | 'place'; slug: string; name: string; text: string }[] } | null;
   /** A challenge picture's drawn setting (closed models only; src/lib/challenge/settings.ts), or null. */
-  setting: { id: string; text: string; blocks: string[] } | null;
+  setting: { id: string; text: string; blocks: string[] } | null;  /** A remix challenge picture's character (its slug, from params.challenge), else null. */
+  challengeCharacter?: string | null;
 }
 
 /**
@@ -106,6 +107,7 @@ function shape(r: Record<string, unknown>): ReaderImage {
     references: Array.isArray(p.references) ? (p.references as ReaderImage['references']) : [],
     sheets: p.sheets && typeof p.sheets === 'object' ? (p.sheets as ReaderImage['sheets']) : null,
     setting: readSetting((p.challenge as { setting?: unknown } | undefined)?.setting),
+    challengeCharacter: typeof (p.challenge as { character?: unknown } | undefined)?.character === 'string' ? ((p.challenge as { character: string }).character || null) : null,
   };
 }
 

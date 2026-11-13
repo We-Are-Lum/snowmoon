@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     button: { title: 'See it in Snowmoon', action: { type: 'launch_frame', name: APP_NAME, url: `${appUrl()}/image/${id}`, splashImageUrl: `${appUrl()}/splash.png`, splashBackgroundColor: PAPER } },
   });
   const title = im.chapter === null ? NO_PASSAGE.title : `An image for Snowmoon, Chapter ${im.chapter}`;
-  const description = `AI-generated image by ${byline(im.byName, im.byFid)}, not by the author.`;
+  const description = `AI-generated image by ${byline(im.byName, im.byFid)}.`;
   return {
     title,
     description,

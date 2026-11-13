@@ -5,6 +5,8 @@ import { db } from '~/lib/db';
 import { challengeView } from '~/lib/challenge/view';
 import { ChallengeBody } from '~/components/challenge-body';
 import { PAPER } from '~/lib/tokens';
+import { phase } from '~/lib/challenge/rules';
+import { POSTER } from '~/lib/challenge/poster';
 
 /**
  * The remix challenge's landing page, the short version (owner, 2026-11-04; docs/proposals/challenge-short-page.md;
@@ -22,13 +24,22 @@ export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   if (!CHALLENGE.public) return { robots: { index: false, follow: false } };
+  const open = phase() === 'open';
   // Cast in Farcaster (pre-flight 2026-11-07): the button opens /challenge, not the home page (the site's card otherwise).
   const embed = JSON.stringify({
     version: '1',
-    imageUrl: `${appUrl()}/embed.png`,
+    imageUrl: open ? `${appUrl()}${POSTER.embed}` : `${appUrl()}/embed.png`,
     button: { title: 'Remix challenge', action: { type: 'launch_frame', name: APP_NAME, url: `${appUrl()}/challenge`, splashImageUrl: `${appUrl()}/splash.png`, splashBackgroundColor: PAPER } },
   });
-  return { title: 'Remix challenge', description: 'The remix challenge on Snowmoon Party: pick a character, remix one of its bases.', other: { 'fc:miniapp': embed, 'fc:frame': embed } };
+  const title = 'Remix challenge';
+  const description = 'The remix challenge on Snowmoon Party: pick a character, remix one of its bases.';
+  const og = open
+    ? {
+        openGraph: { title, description, url: `${appUrl()}/challenge`, images: [{ url: `${appUrl()}${POSTER.og}`, width: 1200, height: 630, alt: POSTER.alt }] },
+        twitter: { card: 'summary_large_image' as const, title, description, images: [{ url: `${appUrl()}${POSTER.og}`, alt: POSTER.alt }] },
+      }
+    : {};
+  return { title, description, ...og, other: { 'fc:miniapp': embed, 'fc:frame': embed } };
 }
 
 export default async function ChallengePage() {

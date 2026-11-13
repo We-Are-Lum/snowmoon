@@ -8,6 +8,7 @@ import { challengePictures } from './pictures';
 import { shownMoment } from './moment-switch';
 import { CHALLENGE_WORDING as W } from './wording';
 import { LANDING_WORDING as L } from './landing-wording';
+import { callNameOf } from './names';
 
 /**
  * Everything /challenge/remixes ("See all") shows, as plain data with its words already written: every remix of the
@@ -32,7 +33,7 @@ export interface RemixesView {
   older: { href: string; text: string } | null;
   notAffiliated: string;
 }
-const callName = (name: string) => name.split(' ')[0];
+const callName = callNameOf;
 
 export async function remixesView(sql: Sql | null, q: { character?: string | null; before?: string | null }): Promise<RemixesView> {
   const chars = CHALLENGE.characters.map((s) => bookCharacter(s)).filter((c): c is NonNullable<typeof c> => Boolean(c));

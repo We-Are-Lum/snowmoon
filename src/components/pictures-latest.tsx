@@ -7,7 +7,7 @@ import { AiTag } from './ai-tag';
  * Pictures' front page (owner, 2026-10-14: "the feed shows updates in all of them"): the newest
  * moments, character sheets and styles in one list, newest first, each named by what it is. A
  * setting has no images of its own; each moment names the setting its passage is in. A sheet's or a style's
- * sample is AI-generated, not by the author, and says so.
+ * sample is AI-generated, and says so.
  */
 const W = IMAGE_WORDING.feed;
 

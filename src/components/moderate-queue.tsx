@@ -88,7 +88,7 @@ export function ModerateQueue() {
                     <img key={u} src={u} alt="A picture of the reported design" />
                   ))}
                 </div>
-                <figcaption className="mq-caption">AI-generated pictures · not by the author</figcaption>
+                <figcaption className="mq-caption">AI-generated pictures</figcaption>
               </figure>
               <div className="mq-detail">
                 <p className="mq-meta">

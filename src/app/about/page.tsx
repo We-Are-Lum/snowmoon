@@ -94,7 +94,7 @@ export default async function About() {
       </p>
       <p>Rules: {RULES}</p>
       <p>
-        A published image shows who made it, that it is AI-generated and not by the author, and its recipe with the exact prompt.
+        A published image shows who made it, that it is AI-generated, and its recipe with the exact prompt.
         It is shown with your name (Farcaster name, wallet address, Lens username or Bluesky handle). A Farcaster name is the one Farcaster&apos;s relay gave
         our server when you signed in on this website; otherwise our server asks Farcaster&apos;s public API (api.farcaster.xyz) for the username of your Farcaster
         ID, sending only the ID, and keeps the answer for a day.

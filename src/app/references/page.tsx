@@ -73,8 +73,8 @@ export default async function Pictures({ searchParams }: { searchParams: Promise
       <h1>{moments ? W.feed.menu[0].label : 'References'}</h1>
       {/* Less text, details behind ⓘ (owner, 2026-10-29); the AI declaration stays in view. */}
       <p>
-        {moments ? W.feed.momentsLead : 'Images readers made for the book.'} Each one is AI-generated, not by the author.{' '}
-        <InfoLabel word="About" kind="about" declaration="About these images" title="References" body={['Images readers made for the book with an image model: moments from its passages, its characters, its settings, and styles to build on. Each one is AI-generated, not by the author; its page shows the exact prompt that made it.']} />
+        {moments ? W.feed.momentsLead : 'Images readers made for the book.'} Each one is AI-generated.{' '}
+        <InfoLabel word="About" kind="about" declaration="About these images" title="References" body={['Images readers made for the book with an image model: moments from its passages, its characters, its settings, and styles to build on. Each one is AI-generated; its page shows the exact prompt that made it.']} />
       </p>
       <PicturesMenu current={moments ? 'moments' : null} />
       {/* Choose the text, then the prompt (owner, 2026-10-10); shown where "Add an image" shows. Model-drafted wording. */}

@@ -149,7 +149,7 @@ export default async function DesignPage({ params }: Props) {
           <div className="dz-grid">
             {pictures.map((p, i) => (
               // eslint-disable-next-line @next/next/no-img-element
-              <img key={p.sha256} src={p.url} alt={`AI-generated ${style ? 'sample' : (['front', 'side', 'back'] as const).filter((k) => body.views[k])[i] + ' view'}, not by the author`} width={p.recipe.width} height={p.recipe.height} loading="lazy" data-zoom="" tabIndex={0} />
+              <img key={p.sha256} src={p.url} alt={`AI-generated ${style ? 'sample' : (['front', 'side', 'back'] as const).filter((k) => body.views[k])[i] + ' view'}`} width={p.recipe.width} height={p.recipe.height} loading="lazy" data-zoom="" tabIndex={0} />
             ))}
           </div>
           <figcaption className="dz-caption">
@@ -199,9 +199,9 @@ export default async function DesignPage({ params }: Props) {
                 <li key={b.versionId}>
                   <Link href={`/image/${b.versionId}`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={b.url} alt="AI-generated image, not by the author" width={1024} height={576} loading="lazy" />
+                    <img src={b.url} alt="AI-generated image" width={1024} height={576} loading="lazy" />
                   </Link>
-                  <span className="dz-caption">{chapterLabel(b.chapter)} · AI-generated image · not by the author</span>
+                  <span className="dz-caption">{chapterLabel(b.chapter)} · AI-generated image</span>
                 </li>
               ))}
             </ul>

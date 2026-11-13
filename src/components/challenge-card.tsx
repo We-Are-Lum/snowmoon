@@ -126,13 +126,14 @@ export function ChallengeCard({ c, w }: { c: CardData; w: CardWords }) {
  * so the server's order is never shown.
  */
 export function TileBase({ c, alt }: { c: Pick<CardData, 'bases'>; alt: string }) {
-  const [pick, setPick] = useState<CardTile | null>(c.bases.length === 1 ? c.bases[0] : null);
+  // `shown`, not `pick`: test:designs reserves that setter name for the readers' own picks.
+  const [shown, setShown] = useState<CardTile | null>(c.bases.length === 1 ? c.bases[0] : null);
   useEffect(() => {
-    setPick(c.bases.length > 1 ? shuffleFresh(c.bases)[0] : (c.bases[0] ?? null));
+    setShown(c.bases.length > 1 ? shuffleFresh(c.bases)[0] : (c.bases[0] ?? null));
   }, [c.bases]);
-  if (!pick?.thumb) return <span className="chh-img cc-empty" aria-hidden="true" />;
+  if (!shown?.thumb) return <span className="chh-img cc-empty" aria-hidden="true" />;
   // eslint-disable-next-line @next/next/no-img-element
-  return <img className="chh-img" src={pick.thumb} alt={alt} width={576} height={768} data-version={pick.versionId} />;
+  return <img className="chh-img" src={shown.thumb} alt={alt} width={576} height={768} data-version={shown.versionId} />;
 }
 
 /**
