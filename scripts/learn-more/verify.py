@@ -23,6 +23,7 @@ import book  # noqa: E402
 
 SECTIONS = [('who', 'Who {p} is.'), ('start', 'At the start.'), ('later', 'Later in the book (spoilers).'), ('drives', 'What drives {o}.')]
 PRON = {'he': ('he', 'him', 'His'), 'she': ('she', 'her', 'Her')}
+SPOILER_FREE_UNTIL = 14
 QUOTE = re.compile(r'"([^"]+)"|“([^”]+)”')
 glossary = {t['slug'] for t in json.load(open(os.path.join(book.ROOT, 'content', 'snowmoon', 'glossary.json')))['terms']}
 
@@ -85,6 +86,12 @@ def check(d, facts=False):
             print(f'\n## {d["slug"]} · {key}\n{render(segs)}')
             for c, t in texts.items():
                 print(f'  [{c}] {t[:700]}')
+    # Spoiler rule (owner, 2026-11-12): outside "later", cite chapters 1-14 only.
+    for key in ('who', 'start', 'drives', 'invent'):
+        segs = [s for line in d[key] for s in line] if key == 'invent' else d[key]
+        for s in segs:
+            if 'cite' in s and book.parse(s['cite'])[0] > SPOILER_FREE_UNTIL:
+                problems.append(f'{d["slug"]}.{key}: cites {s["cite"]}, past chapter {SPOILER_FREE_UNTIL} outside "later"')
     last = render(d['invent'][-1], mark=False) if d['invent'] else ''
     if last != f'{P} looks: every look on this site is this edition\'s invention.':
         problems.append(f'{d["slug"]}.invent: must end with "{P} looks: every look on this site is this edition\'s invention."')

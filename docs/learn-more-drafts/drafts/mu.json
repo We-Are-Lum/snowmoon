@@ -4,21 +4,234 @@
  "pronoun": "she",
  "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
  "who": [
-  {"text": "Mu is an older woman who knows Zei through "}, {"term": "Minpentai", "glossaryId": "minpentai"}, {"text": ", a strategy game that "}, {"term": "Dzego", "glossaryId": "dzego"}, {"text": " takes very seriously "}, {"cite": "c4-b62"}, {"cite": "c4-b64"}, {"cite": "c10-b187"}, {"text": ". She waits for the players before and after their matches, explains the priests' hidden rules and hands out the prizes "}, {"cite": "c7-b44"}, {"cite": "c4-b144"}, {"cite": "c4-b148"}, {"cite": "c7-b136"}, {"text": ". She is also one of the few who know about the "}, {"term": "Kungaupei", "glossaryId": "kungaupei"}, {"text": ", a "}, {"term": "Dzegojan", "glossaryId": "dzegojan"}, {"text": " group "}, {"cite": "c15-b79"}, {"cite": "c27-b54"}, {"text": "."}
+  {
+   "text": "Mu is an older woman who knows Zei through "
+  },
+  {
+   "term": "Minpentai",
+   "glossaryId": "minpentai"
+  },
+  {
+   "text": ", a strategy game that "
+  },
+  {
+   "term": "Dzego",
+   "glossaryId": "dzego"
+  },
+  {
+   "text": " takes very seriously "
+  },
+  {
+   "cite": "c4-b62"
+  },
+  {
+   "cite": "c4-b64"
+  },
+  {
+   "cite": "c10-b187"
+  },
+  {
+   "text": ". She waits for the players before and after their matches, explains the priests' hidden rules and hands out the prizes "
+  },
+  {
+   "cite": "c7-b44"
+  },
+  {
+   "cite": "c4-b144"
+  },
+  {
+   "cite": "c4-b148"
+  },
+  {
+   "cite": "c7-b136"
+  },
+  {
+   "text": "."
+  }
  ],
  "start": [
-  {"text": "Before Zei's quarter-final, she warns him that on a team, diplomacy matters: \"You're a math guy, not a diplomat.\" "}, {"cite": "c4-b67"}, {"text": ". From the sidelines she sees that Zei and his rival Bai don't get along, and that their side is suffering for it "}, {"cite": "c4-b118"}, {"text": ". Afterwards she tells them the secret: she had pushed the priests to be more creative, and the teams were not chosen at random. The game was \"a psychological trial\", and they passed "}, {"cite": "c4-b148"}, {"cite": "c4-b150"}, {"text": ". After the next match she draws the lesson: \"it's not just thinking well that matters, it's also hiding your thoughts\" "}, {"cite": "c7-b132"}, {"text": ". Then, with Den, she tells Zei what Minpentai is really for: \"It's military training.\" "}, {"cite": "c10-b194"}
+  {
+   "text": "Before Zei's quarter-final, she warns him that on a team, diplomacy matters: \"You're a math guy, not a diplomat.\" "
+  },
+  {
+   "cite": "c4-b67"
+  },
+  {
+   "text": ". From the sidelines she sees that Zei and his rival Bai don't get along, and that their side is suffering for it "
+  },
+  {
+   "cite": "c4-b118"
+  },
+  {
+   "text": ". Afterwards she tells them the secret: she had pushed the priests to be more creative, and the teams were not chosen at random. The game was \"a psychological trial\", and they passed "
+  },
+  {
+   "cite": "c4-b148"
+  },
+  {
+   "cite": "c4-b150"
+  },
+  {
+   "text": ". After the next match she draws the lesson: \"it's not just thinking well that matters, it's also hiding your thoughts\" "
+  },
+  {
+   "cite": "c7-b132"
+  },
+  {
+   "text": ". Then, with Den, she tells Zei what Minpentai is really for: \"It's military training.\" "
+  },
+  {
+   "cite": "c10-b194"
+  }
  ],
  "later": [
-  {"text": "On the Kungaupei's mission to rescue the son of "}, {"term": "Redshire", "glossaryId": "redshire"}, {"text": "'s president, she supervises the surveillance, having flown in on Zei's plane in a different cabin "}, {"cite": "c27-b54"}, {"cite": "c26-b96"}, {"cite": "c26-b98"}, {"text": ". When the plan collapses, she saves it with a new one "}, {"cite": "c26-b122"}, {"cite": "c26-b153"}, {"text": ": with admin passwords from people in Redshire, she takes over the streetlights and a few dozen automated cars "}, {"cite": "c26-b156"}, {"text": ", and gets the targets away by car and sea drone "}, {"cite": "c26-b137"}, {"text": ". In the war against the "}, {"term": "Arctics", "glossaryId": "arctics"}, {"text": ", when Den's base is destroyed, she takes over his command "}, {"cite": "c29-b108"}, {"cite": "c29-b110"}, {"text": ". With coordinates Zei passes on from Deluin, she surrounds the remaining Arctic drone fleet "}, {"cite": "c30-b65"}, {"cite": "c30-b72"}, {"text": ". At the end, she and Su are trusted to handle the Kungaupei "}, {"cite": "c32-b74"}, {"text": "."}
+  {
+   "text": "She is one of the few who know about the "
+  },
+  {
+   "term": "Kungaupei",
+   "glossaryId": "kungaupei"
+  },
+  {
+   "text": ", a "
+  },
+  {
+   "term": "Dzegojan",
+   "glossaryId": "dzegojan"
+  },
+  {
+   "text": " group "
+  },
+  {
+   "cite": "c15-b79"
+  },
+  {
+   "cite": "c27-b54"
+  },
+  {
+   "text": ". "
+  },
+  {
+   "text": "On the Kungaupei's mission to rescue the son of "
+  },
+  {
+   "term": "Redshire",
+   "glossaryId": "redshire"
+  },
+  {
+   "text": "'s president, she supervises the surveillance, having flown in on Zei's plane in a different cabin "
+  },
+  {
+   "cite": "c27-b54"
+  },
+  {
+   "cite": "c26-b96"
+  },
+  {
+   "cite": "c26-b98"
+  },
+  {
+   "text": ". When the plan collapses, she saves it with a new one "
+  },
+  {
+   "cite": "c26-b122"
+  },
+  {
+   "cite": "c26-b153"
+  },
+  {
+   "text": ": with admin passwords from people in Redshire, she takes over the streetlights and a few dozen automated cars "
+  },
+  {
+   "cite": "c26-b156"
+  },
+  {
+   "text": ", and gets the targets away by car and sea drone "
+  },
+  {
+   "cite": "c26-b137"
+  },
+  {
+   "text": ". "
+  },
+  {
+   "text": "On the morning of the battle, asked if they are ready, she says no: \"But nothing meaningful ever happens when people are ready.\" "
+  },
+  {
+   "cite": "c29-b4"
+  },
+  {
+   "cite": "c29-b5"
+  },
+  {
+   "text": ". In the war against the "
+  },
+  {
+   "term": "Arctics",
+   "glossaryId": "arctics"
+  },
+  {
+   "text": ", when Den's base is destroyed, she takes over his command "
+  },
+  {
+   "cite": "c29-b108"
+  },
+  {
+   "cite": "c29-b110"
+  },
+  {
+   "text": ". With coordinates Zei passes on from Deluin, she surrounds the remaining Arctic drone fleet "
+  },
+  {
+   "cite": "c30-b65"
+  },
+  {
+   "cite": "c30-b72"
+  },
+  {
+   "text": ". At the end, she and Su are trusted to handle the Kungaupei "
+  },
+  {
+   "cite": "c32-b74"
+  },
+  {
+   "text": "."
+  }
  ],
  "drives": [
-  {"text": "The future, and the young defenders the game exists to raise "}, {"cite": "c10-b195"}, {"text": ". Before a match she raises a glass: \"To our future,\" "}, {"cite": "c7-b49"}, {"text": ". On the morning of the battle, asked if they are ready, she says no: \"But nothing meaningful ever happens when people are ready.\" "}, {"cite": "c29-b4"}, {"cite": "c29-b5"}
+  {
+   "text": "The future, and the young defenders the game exists to raise "
+  },
+  {
+   "cite": "c10-b195"
+  },
+  {
+   "text": ". Before a match she raises a glass: \"To our future,\" "
+  },
+  {
+   "cite": "c7-b49"
+  }
  ],
  "invent": [
-  [{"text": "Her own past: whether she ever played Minpentai, and how she came to work with the priests."}],
-  [{"text": "How she joined the Kungaupei, and what she has given up to keep it secret."}],
-  [{"text": "How she and Zei first met, and what she does away from the matches."}],
-  [{"text": "Her looks: every look on this site is this edition's invention."}]
+  [
+   {
+    "text": "Her own past: whether she ever played Minpentai, and how she came to work with the priests."
+   }
+  ],
+  [
+   {
+    "text": "How she and Zei first met, and what she does away from the matches."
+   }
+  ],
+  [
+   {
+    "text": "What she has given up for the work she keeps quiet about."
+   }
+  ],
+  [
+   {
+    "text": "Her looks: every look on this site is this edition's invention."
+   }
+  ]
  ]
 }

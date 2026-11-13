@@ -43,13 +43,10 @@
    "cite": "c5-b64"
   },
   {
-   "text": ". She is gentle with the kids, and she is the one who sees through a stranger's lies when her husband doesn't "
+   "text": ". She is gentle with the kids "
   },
   {
    "cite": "c1-b120"
-  },
-  {
-   "cite": "c21-b55"
   },
   {
    "text": "."
@@ -181,6 +178,12 @@
    "cite": "c20-b10"
   },
   {
+   "text": ", and she promises them she will do everything she can to bring them home "
+  },
+  {
+   "cite": "c20-b11"
+  },
+  {
    "text": ". With Gladias's friend Mov, she tracks down other Keepers whom Delwart, the man who had been meeting Gladias, had approached "
   },
   {
@@ -236,6 +239,12 @@
    "cite": "c27-b15"
   },
   {
+   "text": ". The world she loves is \"already enough to be worth fighting for.\" "
+  },
+  {
+   "cite": "c27-b95"
+  },
+  {
    "text": ". In the end the family is together again in Northglade "
   },
   {
@@ -250,16 +259,17 @@
  ],
  "drives": [
   {
-   "text": "Her family: she promises Febric and Hreda she will do everything she can to bring them home "
+   "text": "Her family, and the people around her. When Gladias wonders about becoming a "
   },
   {
-   "cite": "c20-b11"
+   "term": "Keeper",
+   "glossaryId": "keepers"
   },
   {
-   "text": ". And the world she loves, which is \"already enough to be worth fighting for.\" "
+   "text": ", she wants it to do good for Dzego: \"Figure out how to make or adjust the rubrics to support Dzego better.\" "
   },
   {
-   "cite": "c27-b95"
+   "cite": "c5-b113"
   }
  ],
  "invent": [
