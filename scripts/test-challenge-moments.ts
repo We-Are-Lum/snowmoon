@@ -78,7 +78,9 @@ check('config: a current default look per challenge character, each a design id 
   check('moments: fifteen at launch', MOMENTS.length === 15, String(MOMENTS.length));
   check('moments: in the book\'s order, each quote inside its passage, each with a challenge character, a title and a scene line', momentShapeProblems(MOMENTS, CHALLENGE.characters).length === 0, momentShapeProblems(MOMENTS, CHALLENGE.characters).join('; '));
   check('moments: every quote is word for word at its block', quoteProblems(momentQuotes(MOMENTS), blocks).length === 0, quoteProblems(momentQuotes(MOMENTS), blocks).join('; '));
-  check('moments: every challenge character is in at least two', CHALLENGE.characters.every((c) => momentsWith(c).length >= 2), CHALLENGE.characters.map((c) => `${c} ${momentsWith(c).length}`).join(', '));
+  // Lord Ephelion joined after the moments were turned off (CHALLENGE.moments, 2026-11-08), so he has none.
+  const AFTER_MOMENTS = new Set(['ephelion']);
+  check('moments: every challenge character is in at least two (one who joined after the moments were turned off is in none)', CHALLENGE.characters.every((c) => (AFTER_MOMENTS.has(c) ? momentsWith(c).length === 0 && !CHALLENGE.moments : momentsWith(c).length >= 2)), CHALLENGE.characters.map((c) => `${c} ${momentsWith(c).length}`).join(', '));
   check('moments: every chip says its chapter ("Ch N")', MOMENTS.every((m) => chapterChip(m) === `Ch ${m.chapter}`));
   check('moments: titles name no major turn of the book (spot list)', !MOMENTS.some((m) => /\b(dies|dead|alive|traitor|Delwart|Lily|rescued|freed|wins|lost)\b/i.test(m.title)));
   const swapped = clone(MOMENTS) as typeof MOMENTS extends readonly (infer T)[] ? T[] : never;
@@ -569,6 +571,28 @@ check('config: a current default look per challenge character, each a design id 
     check('a base made in a published style: the remix screen starts on that style', srcStyled?.styleElement === styleD.elementId);
     const styles = await (await import('../src/lib/challenge/make')).publishedStyles(sql as never);
     check('the published styles: listed with their names and texts', styles.some((x) => x.id === `style:${styleD.elementId}` && x.label === 'Quiet, warm light' && x.text === 'Quiet, warm light; soft shadows.'));
+    // The credit chain with a picture hidden mid-line (owner, 2026-11-12): base → plain (501) → mid (502, hidden) → top.
+    // The hidden step reads "A hidden picture", with no picture, name or link, and "Started from" says the same.
+    {
+      await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '502', 'neynar-score>=0.7', true) on conflict do nothing`;
+      const mid = await picture({ fid: 502, character: 'bai', moment: '', from: plain.versionId, remixedFrom: plain.versionId });
+      const top = await picture({ fid: 501, character: 'bai', moment: '', from: mid.versionId, remixedFrom: mid.versionId });
+      const before = await V.pictureView(S, top.versionId);
+      const midBefore = before?.chain.find((c) => c.versionId === mid.versionId);
+      proof('chain: before it is hidden, the middle picture shows its maker, its picture and its link', midBefore?.label === '@p502' && !!midBefore.thumb && midBefore.href === `/challenge/p/${mid.versionId}` && before?.made.startedFrom === '@p502');
+      await sql`update studio.elements set status = 'hidden' where id = ${mid.elementId}`;
+      const after = await V.pictureView(S, top.versionId);
+      const labels = after?.chain.map((c) => c.label) ?? [];
+      const hidden = after?.chain.find((c) => c.versionId === mid.versionId);
+      check(
+        'chain: a picture hidden mid-line reads "A hidden picture", with no picture, name or link; the rest of the line is unchanged, and "Started from" says "A hidden picture"',
+        labels.length === 4 && labels[0].startsWith('Base · ') && labels[1] === '@p501' && labels[2] === 'A hidden picture' && labels[3] === 'This one' &&
+          hidden?.thumb === null && hidden?.href === null && hidden?.hidden === true && !JSON.stringify(hidden).includes('p502') &&
+          !!after?.chain[1].href && after?.made.startedFrom === 'A hidden picture',
+        labels.join(' → '),
+      );
+      await sql`update studio.elements set status = 'published' where id = ${mid.elementId}`;
+    }
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styledBase = styled.versionId;
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styleEl = styleD.elementId;
     (globalThis as { __keepCount?: unknown }).__keepCount = keepCount;
@@ -647,7 +671,8 @@ check('config: a current default look per challenge character, each a design id 
   const R = await import('../src/lib/challenge/rules');
   // The owner's words, exactly; "12 to 29 November" is his literal (2026-11-09), and the page builds it from CHALLENGE.dates, so the
   // two can't drift: if the dates move, this check fails until the owner's line is moved with them.
-  const INTRO = 'From 12 to 29 November, make your own picture of Zei, Gladias, Bai, Seila, Deluin or Mu: start from one of their pictures, change what you like, pick a style and a model, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.';
+  // Lord Ephelion joined on 2026-11-11 (owner): the list of names comes from CHALLENGE.characters, so he is named last.
+  const INTRO = 'From 12 to 29 November, make your own picture of Zei, Gladias, Bai, Seila, Deluin, Mu or Lord Ephelion: start from one of their pictures, change what you like, pick a style and a model, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.';
   check('rules intro: the owner\'s words, exactly (moments off)', CHALLENGE.pictureEntries && !CHALLENGE.moments && W.intro() === INTRO, W.intro());
   check('rules intro: its "12 to 29 November" is CHALLENGE.dates (opens 12 Nov 00:00 PT, the last minute 29 Nov 23:59 PT)', R.windowText() === '12 to 29 November' && R.pacificWallTime(CHALLENGE.dates.opens) === '2026-11-12 00:00' && R.pacificWallTime(new Date(Date.parse(CHALLENGE.dates.closes) - 60_000).toISOString()) === '2026-11-29 23:59' && INTRO.includes(`From ${R.windowText()},`));
   {
@@ -670,9 +695,30 @@ check('config: a current default look per challenge character, each a design id 
     check('home notes: each quote is the book\'s words in its block, and the place is part of it; Deluin is Redshire (c14-b31); Bai, Seila and Mu have none', homesOk(HOMES) && HOMES.deluin?.place === 'Redshire' && HOMES.deluin.block === 'c14-b31' && !HOMES.bai && !HOMES.seila && !HOMES.mu);
     check('home notes: planted, a note not in its block (Deluin from the United Cities) fails', !homesOk({ ...HOMES, deluin: { place: 'United Cities', block: 'c14-b31', quote: 'Deluin from the United Cities' } }));
   }
-  check('rules: says new starting pictures and characters may be added during the challenge (owner, 2026-11-11), right after which pictures count', W.rules()[2] === 'New starting pictures and characters may be added during the challenge.' && /^Only remixes count/.test(W.rules()[1]));
+  check('rules: says new starting pictures and characters may be added during the challenge (owner, 2026-11-11), right after which pictures count', W.rules()[1] === 'New starting pictures and characters may be added during the challenge.' && /Only remixes count/.test(W.rules()[0]));
+  // Owner, 2026-11-12: much shorter rules; posts anywhere, including X, but the one you submit is on Farcaster, Lens or Bluesky.
+  check('rules: six lines (withdrawing and the score figure kept), then the admins line with no names (owner, 2026-11-12)', W.rules().length === 6 && W.rules().some((r) => r.includes('withdraw a submission')) && W.rules().some((r) => r.includes('Neynar score of at least')) && W.adminsLine === 'Admins can make pictures too, but theirs aren’t entries.' && !/@garance|owner/.test(W.adminsLine));
+  check('rules: share anywhere, including X; the submitted post on Farcaster, Lens or Bluesky (owner, 2026-11-12)', W.rules().includes('Share your picture anywhere, including X. The post you submit must be on Farcaster, Lens or Bluesky, because that’s where the site can check it’s yours.'));
+  {
+    const LWm = (await import('../src/lib/challenge/landing-wording')).LANDING_WORDING;
+    check('home: card 1 is the owner\'s whole-entry line, with no prize claim until the rewards are in the rules (owner, 2026-11-12)', LWm.home.ways[0].body === 'Remix a character: pick one, describe your change, publish, then post it and submit your post. That’s a full entry. You can stop here.' && !/prize/i.test(LWm.home.ways.map((x) => x.body).join(' ')));
+  }
+  check('rules: no "no prize for now" (owner, 2026-11-12: the prize line waits for his rewards decision)', !/no prize/i.test([W.next(), ...W.rules()].join(' ')));
   const RV = await import('../src/lib/challenge/rules-view');
   const rv = await RV.rulesView(null);
+  {
+    // The poster as /challenge's link preview while entries are open (owner, 2026-11-12): served files, recipe beside them.
+    const { createHash } = await import('node:crypto');
+    const fs = await import('node:fs');
+    const { POSTER } = await import('../src/lib/challenge/poster');
+    const rec = JSON.parse(fs.readFileSync('public/challenge/poster-recipe.json', 'utf8')) as { model: { id: string; maker: string; closed: boolean }; prompt: string; references: { version_id: string; url: string }[]; cost_usd: number; files: Record<string, { sha256: string }> };
+    const sha = (f: string) => createHash('sha256').update(fs.readFileSync(f)).digest('hex');
+    check('poster: both files are served from public/challenge/ and match their recipe\'s sha256', [POSTER.embed, POSTER.og].every((u) => rec.files[u.split('/').pop()!]?.sha256 === sha(`public${u}`)));
+    check('poster: its recipe names the model and maker, the prompt, the seven default bases and the cost', rec.model.id === 'openai/gpt-image-2.5-sunburst' && rec.model.maker === 'OpenAI' && rec.model.closed && rec.prompt.length > 100 && rec.references.length === 7 && rec.references.map((r) => r.version_id).join() === CHALLENGE.characters.map((c) => CHALLENGE.defaultLooks[c]).join() && rec.cost_usd > 0);
+    const page = fs.readFileSync('src/app/challenge/page.tsx', 'utf8');
+    check('poster: /challenge uses it only while entries are open (phase() === \'open\'), the site card otherwise', /const open = phase\(\) === 'open'/.test(page) && /open \? `\$\{appUrl\(\)\}\$\{POSTER\.embed\}` : `\$\{appUrl\(\)\}\/embed\.png`/.test(page) && /summary_large_image/.test(page));
+    check('poster: its alt says AI-generated, without "not by the author"', /AI-generated/.test(POSTER.alt) && !/not by the author/i.test(POSTER.alt));
+  }
   check('rules page: no "Draft wording" mark on the page or the intro', rv.draft === null && rv.introDraft === null);
 }
 

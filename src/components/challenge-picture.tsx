@@ -131,7 +131,7 @@ export function ChallengePicture({ id }: { id: string }) {
               </h2>
               <ol className="chp-steps">
                 {v.chain.map((c, i) => (
-                  <li key={c.versionId} className={c.current ? 'chp-step chp-current' : 'chp-step'} aria-current={c.current ? 'page' : undefined}>
+                  <li key={c.versionId} className={c.current ? 'chp-step chp-current' : 'chp-step'} aria-current={c.current ? 'page' : undefined} data-hidden={c.hidden ? '' : undefined}>
                     {i > 0 && (
                       <span className="chp-arrow" aria-hidden="true">
                         →

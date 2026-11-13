@@ -19,6 +19,7 @@ import { LANDING_WORDING as L } from './landing-wording';
 import { PICTURE_WORDING as P } from './picture-wording';
 import { sameTexts, shareMaker, textsFor } from './share-makers';
 import type { PostedOnItem } from '~/components/posted-on';
+import { callNameOf } from './names';
 
 /**
  * A challenge picture's page, /challenge/p/<version> (owner, 2026-11-05; docs/proposals/challenge-moments.md §1.3
@@ -30,7 +31,7 @@ import type { PostedOnItem } from '~/components/posted-on';
 type Sql = postgres.Sql;
 
 /** One step of a picture's credit chain (the redesign's CreditChain): a picture or a base it was remixed from. */
-export type ChainStep = { versionId: string; thumb: string | null; href: string | null; label: string; current: boolean };
+export type ChainStep = { versionId: string; thumb: string | null; href: string | null; label: string; current: boolean; hidden?: boolean };
 
 /**
  * The credit chain (owner-approved redesign, screen 4): what the picture was remixed from, oldest first (src/lib/
@@ -63,20 +64,23 @@ async function creditChain(sql: Sql, p: { elementId: string; versionId: string; 
   const steps: ChainStep[] = ids
     .slice()
     .reverse()
-    .map((id: string) => {
+    .map((id: string): ChainStep | null => {
       const r = by.get(id);
       if (!r) return null;
       const b = (r.body ?? {}) as { views?: { front?: { url?: string } }; by_name?: string; role?: string };
       const image = r.element_type === 'image';
       const who = image ? designByline(r.p_by_name, Number(r.created_by_fid)) : designByline(b.by_name ?? null, Number(r.created_by_fid), b.role ?? null);
       const published = r.status === 'published';
-      return { versionId: id, thumb: image ? r.asset_url : (b.views?.front?.url ?? null), href: published && image ? `/challenge/p/${id}` : null, label: image ? who : `${L.baseLabel} · ${who}`, current: false };
+      // A step that isn't published (hidden by its maker or a moderator): "A hidden picture", with no picture, name or
+      // link (owner, 2026-11-12). "Started from" then says the same.
+      if (!published) return { versionId: id, thumb: null, href: null, label: P.hiddenStep, current: false, hidden: true };
+      return { versionId: id, thumb: image ? r.asset_url : (b.views?.front?.url ?? null), href: image ? `/challenge/p/${id}` : null, label: image ? who : `${L.baseLabel} · ${who}`, current: false };
     })
     .filter((x: ChainStep | null): x is ChainStep => x !== null);
   return [...steps, { versionId: p.versionId, thumb: p.thumb, href: null, label: self, current: true }];
 }
 
-const callName = (slug: string) => (bookCharacter(slug)?.name ?? slug).split(' ')[0];
+const callName = (slug: string) => callNameOf(bookCharacter(slug)?.name ?? slug);
 
 export async function pictureView(sql: Sql, versionId: string, now: Date = new Date()) {
   const [p] = await challengePictures(sql, { versionId });

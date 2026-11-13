@@ -1,6 +1,7 @@
-import { CHALLENGE, IMAGES } from '../config';
+import { CHALLENGE } from '../config';
 import { dateText, windowText } from './rules';
 import { SHARE_WORDING } from './share-wording';
+import { callNameOfSlug } from './names';
 
 /**
  * The remix challenge's words. DRAFT wording: the rules are the plan's draft copy (docs/proposals/remix-challenge-plan.md,
@@ -10,9 +11,8 @@ import { SHARE_WORDING } from './share-wording';
  */
 const d = (k: Parameters<typeof dateText>[0], time = false) => dateText(k, { time });
 /** The characters' call names, most named in the book first, from CHALLENGE.characters (their files' slugs). */
-const callNames = () => CHALLENGE.characters.map((s) => s.charAt(0).toUpperCase() + s.slice(1));
+const callNames = () => CHALLENGE.characters.map(callNameOfSlug);
 const listed = (xs: string[], last = 'or') => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} ${last} ${xs[xs.length - 1]}`);
-const numberWord = (n: number) => ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'][n] ?? String(n);
 
 export const CHALLENGE_WORDING = {
   // The challenge's name (owner, 2026-11-06): "Remix challenge" (was "Remix the cast").
@@ -38,33 +38,22 @@ export const CHALLENGE_WORDING = {
         `From ${windowText()}, make your own picture of ${listed(callNames())}: start from one of their pictures, set it at a moment from the book, change what you like, and publish it. To enter, post it on Farcaster, Lens or Bluesky and submit the post. Your picture gets its own page, credited back to what you built on.`
       : `From ${windowText()}, make your own version of ${listed(callNames())} on snowmoon.party: start from a published sheet, or from someone else’s remix, change it, and publish. Your version gets its own page, credited back to what you built on.`,
   nextHead: 'What happens next.',
-  // Draft wording (owner, 2026-11-05 evening): no prize for now, and nothing promised about what follows.
-  next: () => 'There is no prize for now. How the final version is chosen, and any prize, are added to the rules before entries close.',
+  // Owner, 2026-11-12: "There is no prize for now" is dropped from the rules; the prize line waits for his rewards
+  // decision. Matches Terms §6e's backstory sentences (2026-11-12); "the final version" dropped.
+  next: () => 'How any other rewards are chosen is added to the rules before entries close.',
   rulesHead: 'The rules.',
+  // Much shorter (owner, 2026-11-12): remixing; only remixes count; additions; Submit is a full entry, one a day, and
+  // withdrawing; where to post; the poidh bounty is an optional extra; the Neynar score figure. DRAFT wording, except
+  // the owner's line on additions (2026-11-11) and the withdraw and score sentences (approved before).
   rules: () => [
-    'Make your remix on snowmoon.party with the site’s tools. Every recipe is published.',
-    // Draft wording (owner, 2026-11-04: one base per character, three for Deluin and Gladias; was three each, 2026-11-03).
-    // Entries as pictures (branch challenge-moments, CHALLENGE.pictureEntries; draft wording, switched with it).
-    CHALLENGE.pictureEntries && !CHALLENGE.moments
-      ? // DRAFT wording (branch challenge-simple, 2026-11-08): the moment clause dropped, the start matching Terms §6e's after-text.
-        'Only remixes count: start from one of a character’s pictures on the challenge pages, a base or any remix, including your own. A picture made from scratch isn’t an entry.'
-      : CHALLENGE.pictureEntries
-      ? 'Only remixes count: start from one of a character’s pictures on the challenge page and set it at one of the moments. A picture made from scratch isn’t an entry.'
-      : 'Only remixes count: for each character, start from one of its bases, or someone else’s remix. A new sheet made from scratch isn’t an entry.',
+    'Make your own picture by remixing: start from one of a character’s pictures on the challenge pages, a base or any remix, including your own. Only remixes count. A picture made from scratch isn’t an entry.',
     // The owner's words (2026-11-11): bases and characters (Lord Ephelion) are added during the challenge.
     'New starting pictures and characters may be added during the challenge.',
-    // Draft wording (owner, 2026-11-04: Submit and the post link; branch contest, 2026-11-04: one a day, no total cap).
-    'A remix becomes an entry only when you press Submit on its page, with a link to your own post about it on Farcaster, Bluesky or Lens. You can submit one remix a day (Pacific time), for any character, as many days as you like. Until entries close you can withdraw a submission; that day’s submission isn’t given back.',
-    // Draft wording (owner, 2026-11-03: make it clear an account below the check can't remix; launch rehearsal item 3).
-    `To remix at all, sign in with a Farcaster, Lens or Bluesky account that passes the site’s check. An account below it can’t make the pictures, so it can’t remix or enter. It’s checked when you press ${CHALLENGE.pictureEntries ? 'Make it' : 'Generate'}, and again when you publish.`,
-    // Draft wording (owner, 2026-11-04: free remixes count remixes, not pictures).
-    CHALLENGE.pictureEntries
-      ? `Remixing is free: ${numberWord(IMAGES.generationsPerDay)} pictures a day.`
-      : `Remixing is free: ${numberWord(IMAGES.designs.remixesPerDay)} remixes a day. A remix is one sheet’s three views; if one of them fails, make it again inside the same remix without using another.`,
-    // The owner's reread (2026-11-09), Backstory; "short" dropped next to the 2,000-character limit (owner, 2026-11-11).
-    'You can add a backstory in your own words; it’s shown as invented by you, not from the book.',
-    'Entering is free. There is no prize for now.',
-    'Post your version anywhere with its link. If you’re remixing someone’s post, quote or reply to it.',
+    // Withdrawing kept (owner, 2026-11-12), in the words approved before.
+    'Submitting your post is a full entry: press Submit on your picture’s page with the link to your post about it. You can submit one picture a day (Pacific time). Until entries close you can withdraw a submission; that day’s submission isn’t given back.',
+    'Share your picture anywhere, including X. The post you submit must be on Farcaster, Lens or Bluesky, because that’s where the site can check it’s yours.',
+    'The poidh bounty for backstories is an optional extra.',
+    // The Neynar score figure kept (owner, 2026-11-12), in the words approved before.
     `A Farcaster account passes the site’s check with a Neynar score of at least ${CHALLENGE.neynarMinScore}, fixed for the whole challenge; Lens and Bluesky accounts pass their own checks, the same ones that let them make pictures.`,
   ],
   // DRAFT (owner, 2026-11-12): admins' pictures may be submitted as examples, never entries.

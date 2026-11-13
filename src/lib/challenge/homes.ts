@@ -4,7 +4,7 @@
  * book's words exactly and must be in that block (scripts/test-challenge-moments.ts checks it against content/snowmoon/
  * text); `place` is the part of the quote shown under the name. Bai, Seila and Mu: the book doesn't state where they are
  * from, so they have no note. Gladias: only "what we get in Veridia" (c19-b51), not a statement of his home, so he has
- * none unless the owner decides otherwise.
+ * none (owner, 2026-11-12: "no home note; the book doesn't say where he's from").
  */
 export interface Home { place: string; block: string; quote: string }
 

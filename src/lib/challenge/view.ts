@@ -11,6 +11,7 @@ import { homeOf } from './homes';
 import { CHALLENGE_WORDING as W } from './wording';
 import { CHALLENGE_LINKS, LANDING_WORDING as L } from './landing-wording';
 import { firstAppearsHref, firstAppearsWords } from './first-appears';
+import { callNameOf } from './names';
 
 /**
  * What /challenge and a character's page (/challenge/<slug>) show, as plain data with their words already written
@@ -59,7 +60,7 @@ export interface CharacterView {
   firstAppears?: { href: string; words: string };
 }
 
-const callName = (name: string) => name.split(' ')[0];
+const callName = callNameOf;
 
 /** Where tapping a picture goes: its remix screen (R2), with the moment kept only while the moments are on. */
 export const remixHref = (versionId: string, moment?: string | null) => `/challenge/make?from=${versionId}${CHALLENGE.moments && moment ? `&moment=${encodeURIComponent(moment)}` : ''}`;
@@ -122,7 +123,7 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
       return { n: w.n, title: w.title, tag: w.tag, body: w.body, href, pending: x.link && !href ? (x.pending ?? null) : null };
     }),
     details: [
-      { title: H.newTitle, body: [W.intro()] },
+      { title: H.newTitle, body: [H.newBody], link: { href: '/about', text: H.newLink } },
       { title: H.rulesTitle, body: [L.line()], link: { href: '/challenge/rules', text: L.rulesTitle } },
       { title: H.aboutTitle, body: [H.about] },
     ],

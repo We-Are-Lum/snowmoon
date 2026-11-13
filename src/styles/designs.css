@@ -292,6 +292,13 @@ a.rl-remix:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .ch-line { margin: 8px 0 0; font-size: 19px; line-height: 1.4; }
 .ch-top-links { margin: 0 0 8px; }
 .ch-rules-link { display: inline-block; min-height: 44px; line-height: 44px; }
+/* /challenge/rules: on a desktop, the rules on the left and "Entries so far" in a column beside them (owner, 2026-11-12). */
+@media (min-width: 1024px) {
+  .page.ch-rules-page { max-width: 1120px; }
+  .ch-rules-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 360px); gap: 48px; align-items: start; }
+  .ch-rules-side > .dz-section:first-child { margin-top: 0; }
+}
+.ch-rules-main, .ch-rules-side { min-width: 0; }
 .ch-count-list { list-style: none; margin: 0; padding: 0; }
 .ch-count { padding: 4px 0; }
 .ch-triptych { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }

@@ -563,7 +563,8 @@ const READER_IMAGE_FILES = [
 ];
 /**
  * Step 4: styles' samples and sheets' views, wherever they are shown (thumbnails too). They declare
- * AI in words ("AI-generated", "not by the author"), not yet with the AI label (owner to decide).
+ * AI in words ("AI-generated"), not yet with the AI label (owner to decide). "Not by the author" is not
+ * in sight there: it is shown only beside the book's text, and the AI tag's hidden declaration carries it (owner, 2026-11-12).
  */
 const DESIGN_IMAGE_FILES = [
   'src/components/design-index.tsx',
@@ -575,10 +576,31 @@ const DESIGN_IMAGE_FILES = [
   'src/components/my-picks.tsx',
   'src/components/moderate-queue.tsx',
 ];
+/**
+ * Where people see a picture away from the book's text (owner, 2026-11-12): link previews, the challenge pages'
+ * words and pictures' alt texts, the references lead, an agent's piece, About. None of them says "not by the author"
+ * any more; it is shown only on chapter pages beside the first picture, and in the AI label's hidden declaration.
+ */
+const NOT_AUTHOR_DROPPED_FILES = [
+  ...DESIGN_IMAGE_FILES,
+  'src/lib/challenge/landing.ts',
+  'src/lib/challenge/landing-wording.ts',
+  'src/lib/challenge/rules-view.ts',
+  'src/components/challenge-preview.tsx',
+  'src/components/challenge-remix-landing.tsx',
+  'src/app/challenge/p/[id]/page.tsx',
+  'src/app/image/[id]/page.tsx',
+  'src/app/references/page.tsx',
+  'src/components/agents/piece-version.tsx',
+  'src/app/about/page.tsx',
+  // A shot's remix page: the remixer's own words, not the book's (owner, 2026-11-12). The adaptation editor's captions
+  // keep it: a shot's lines come from the book.
+  'src/app/remix/[id]/page.tsx',
+];
 add({
   id: 'P2b',
   principle: 2,
-  name: 'generated images and narration carry an AI label, with "AI-generated, not by the author" served and in the recipe sheet',
+  name: 'generated images and narration carry an AI label, with "AI-generated, not by the author" served and in the recipe sheet; "not by the author" is in sight only beside the book\'s text',
   load: async () => {
     const { AI_LABEL, AI_DECLARED, WHOSE } = await import('../src/lib/ai-declared');
     const ch1 = await page('/chapter/1');
@@ -609,13 +631,16 @@ add({
       sheetSource: code('src/components/recipe-sheet.tsx'),
       card: code('src/app/api/card/[n]/[range]/route.tsx'),
       imageCard: code('src/app/api/image-card/[id]/route.tsx'),
+      designCard: code('src/app/api/design-card/[id]/route.tsx'),
+      landing: code('src/lib/challenge/landing.ts'),
+      dropped: NOT_AUTHOR_DROPPED_FILES.map((f) => ({ file: f, text: code(f) })),
       // Readers' images drawn after load (the chapter strip, the composer, the moderators' queue): each uses the label.
       readers: READER_IMAGE_FILES.map((f) => ({ file: f, text: code(f) })),
       designs: DESIGN_IMAGE_FILES.map((f) => ({ file: f, text: code(f) })),
       player: code('src/components/chapter-player.tsx'),
     };
   },
-  run: ({ ch1, glossary, sheets, feed, home, imagePage, wording, sheetSource, card, imageCard, readers, designs, player }) => {
+  run: ({ ch1, glossary, sheets, feed, home, imagePage, wording, sheetSource, card, imageCard, designCard, landing, dropped, readers, designs, player }) => {
     const problems: string[] = [];
     // Chapter 1 as served: every seeded image's caption, and the narration credit.
     const figures = [...ch1.matchAll(/<figure class="seed-image"[\s\S]*?<\/figure>/g)].map((m) => m[0]);
@@ -647,6 +672,9 @@ add({
     const homeRows = (home.match(/<ul class="home-feed-list"[\s\S]*?<\/ul>/)?.[0].match(/<li\b/g) ?? []).length;
     if (homeRows !== homeCaptions.length) problems.push(`/ "Just made": ${homeRows} images but ${homeCaptions.length} labels`);
     if (!homeRows && !/class="home-feed-empty"/.test(home)) problems.push('/ "Just made": neither images nor the empty state');
+    // The challenge poster above it while entries are open (owner, 2026-11-12): labelled like every other picture.
+    const posterCaption = home.match(/<figure class="home-poster">[\s\S]*?<\/figure>/)?.[0];
+    if (posterCaption) problems.push(...aiLabelProblems('/ the challenge poster', posterCaption.match(/<figcaption[\s\S]*?<\/figcaption>/)?.[0] ?? '', 'image'));
     if (imagePage) problems.push(...aiLabelProblems(`/image/${imagePage.id}`, imagePage.html.match(/<figcaption class="ip-caption">[\s\S]*?<\/figcaption>/)?.[0] ?? '', 'image'));
     // The wording itself (src/lib/ai-declared.ts).
     for (const l of wording.labels as string[]) if (!SAYS_AI.test(l)) problems.push(`src/lib/ai-declared.ts: label "${l}" does not say "AI"`);
@@ -664,13 +692,21 @@ add({
     for (const r of designs as { file: string; text: string }[]) {
       if (/<AiTag\b/.test(r.text)) continue;
       if (!AI_GENERATED.test(r.text)) problems.push(`${r.file}: a style's sample or a sheet's view is shown without "AI-generated"`);
-      if (!NOT_AUTHOR.test(r.text)) problems.push(`${r.file}: a style's sample or a sheet's view is shown without "not by the author"`);
+    }
+    // Away from the book's text, "not by the author" is not in sight (owner, 2026-11-12).
+    for (const r of dropped as { file: string; text: string }[]) {
+      if (NOT_AUTHOR.test(r.text)) problems.push(`${r.file}: says "not by the author" where people see it, away from the book's text (owner, 2026-11-12: only beside the book's text)`);
     }
     if (!/<AiLabel\s+kind="voice"/.test(player)) problems.push('src/components/chapter-player.tsx: the player shows the narration without the AI label');
     if (!/<AiLabel\s+kind="image"/.test(player)) problems.push('src/components/chapter-player.tsx: the listen view shows an image without the AI label');
     // Pictures shared off the site carry the whole declaration in the picture: there is no sheet to open there.
     if (!AI_GENERATED.test(card)) problems.push('quote cards with an image do not label the image as AI-generated');
-    if (!AI_GENERATED.test(imageCard) || !NOT_AUTHOR.test(imageCard)) problems.push('the image share card does not say AI-generated and not by the author');
+    // The share cards say AI-generated · by {name}; "not by the author" is left to the book's text (owner, 2026-11-12).
+    if (!AI_GENERATED.test(imageCard) || !/ · BY \$\{byline\(/.test(imageCard)) problems.push('the image share card does not say AI-generated and by whom');
+    if (NOT_AUTHOR.test(imageCard)) problems.push('the image share card says "not by the author" (owner, 2026-11-12: AI-generated · by {name} only)');
+    const cardAi = landing.match(/\bcardAi:\s*\(by: string\)\s*=>\s*`([^`]*)`/)?.[1] ?? '';
+    if (!AI_GENERATED.test(cardAi) || !/ · BY \$\{by\b/.test(cardAi) || !/\{L\.cardAi\(by\)\}/.test(designCard)) problems.push('the remix share card (design-card, LANDING_WORDING.cardAi) does not say AI-generated and by whom');
+    if (NOT_AUTHOR.test(cardAi) || NOT_AUTHOR.test(designCard)) problems.push('the remix share card says "not by the author" (owner, 2026-11-12: AI-generated · by {name} only)');
     return problems;
   },
   plant: (c) => {
@@ -679,6 +715,9 @@ add({
     c.sheets.push({ what: 'planted', whose: 'The project made it.' });
     c.readers[0].text = c.readers[0].text.replace(/<AiLabel\b/g, '<Caption');
     c.card = c.card.replace(/AI[- ]generated/gi, 'picture');
+    c.imageCard = c.imageCard.replace(/`\}<\/div>/, ' · NOT BY THE AUTHOR`}</div>');
+    c.landing = c.landing.replace(/AI-GENERATED PICTURE/, 'PICTURE');
+    c.dropped[0].text += ' alt="AI-generated sample, not by the author"';
     c.ch1 = c.ch1.replace(/<span class="ai-not-author">[\s\S]*?<\/span>/g, '');
     c.home = c.home.replace(/class="home-feed-empty"/g, 'class="home-feed-x"').replace(/class="ai-label"/g, 'class="by-line"');
   },

@@ -96,26 +96,35 @@ export const LANDING_WORDING = {
     pitch: 'Help find the characters you’d love, hate, or can’t stop thinking about.',
     closes: (when: string) => `Entries close ${when}.`,
     ways: [
-      { n: '1', title: 'Remix a picture', tag: 'START HERE', body: 'Pick a character, start from a base or anyone’s remix, describe a change, then publish, post it on Farcaster, Lens or Bluesky, and submit your post.' },
+      // The owner's words (2026-11-12): card 1 is a complete entry on its own. "eligible for prizes" is added only once the
+      // rewards are in the rules.
+      { n: '1', title: 'Remix a picture', tag: 'START HERE', body: 'Remix a character: pick one, describe your change, publish, then post it and submit your post. That’s a full entry. You can stop here.' },
       // The owner's words (2026-11-11). The link is CHALLENGE_LINKS.bounty; until it is set, the line ends "(bounty opens soon)".
-      { n: '2', title: 'Add a backstory', tag: '', body: 'Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', link: 'bounty' as const, pending: '(bounty opens soon)' },
+      // Tagged "Extra credit" (owner, 2026-11-12).
+      { n: '2', title: 'Add a backstory', tag: 'Extra credit', body: 'Give your picture a backstory of one to three paragraphs, in your own words, and submit it to the poidh bounty:', link: 'bounty' as const, pending: '(bounty opens soon)' },
       // The owner's words (2026-11-11). The link is CHALLENGE_LINKS.collab; until it is set, the line ends "(link coming soon)".
-      { n: '3', title: 'Join the collab', tag: '', body: 'Farcaster accounts with a high enough Neynar score can join the Snowmoon collab, to chat, give feedback and work on Snowmoon together:', link: 'collab' as const, pending: '(link coming soon)' },
+      // Tagged "Optional" (owner, 2026-11-12).
+      { n: '3', title: 'Join the collab', tag: 'Optional', body: 'Farcaster accounts with a high enough Neynar score can join the Snowmoon collab, to chat, give feedback and work on Snowmoon together:', link: 'collab' as const, pending: '(link coming soon)' },
     ],
     newTitle: 'New to Snowmoon?',
+    /** About the book, not the contest (owner, 2026-11-12, his words), then a link to /about. */
+    newBody: 'Snowmoon is a novel by Vitalik Buterin, published under GPL-3.0. This site is an independent adaptation, not affiliated with him.',
+    newLink: 'Learn more',
     rulesTitle: 'Rules',
     aboutTitle: 'About the pictures',
-    about: 'Every picture here is AI-generated, not by the author. Each one names its model, and closed models name their maker. Lists are newest first.',
+    about: 'Every picture here is AI-generated. Each one names its model, and closed models name their maker. Lists are newest first.',
     /** The owner's words (2026-11-11). */
     joins: (name: string) => `${name} joins mid-challenge.`,
     joinsNote: 'joins mid-challenge',
     homeFrom: (block: string) => `the book, ${block}`,
   },
   untitled: (name: string) => `${name}, remixed`,
-  pictureAlt: (name: string) => `AI-generated front view of ${name}, not by the author`,
+  pictureAlt: (name: string) => `AI-generated front view of ${name}`,
   /** A challenge picture or a card's picture (branch challenge-moments). */
-  pictureAltMoment: (name: string) => `AI-generated picture of ${name}, not by the author`,
+  pictureAltMoment: (name: string) => `AI-generated picture of ${name}`,
 };
 
-/** The two outside links on the challenge home (owner, 2026-11-11). Null until the owner gives them: the card says so. */
-export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: null, collab: 'https://collab.venturetothex.com/c/snowmoon' };
+/** The two outside links on the challenge home (owner, 2026-11-11). Null until the owner gives them: the card says so.
+ * The bounty (owner, 2026-11-12): poidh.xyz's bounty 1546, "Snowmoon Character Backstory", id 560 on the contract. It
+ * goes live only with Terms §6e's bounty sentences (branch terms-6e-poidh). */
+export const CHALLENGE_LINKS: { bounty: string | null; collab: string | null } = { bounty: 'https://poidh.xyz/base/bounty/1546', collab: 'https://collab.venturetothex.com/c/snowmoon' };

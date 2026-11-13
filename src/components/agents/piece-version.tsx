@@ -146,7 +146,7 @@ function Work({ v, imageSrc }: { v: VersionView; imageSrc?: string | null }) {
       )}
       {v.kind === 'image' && v.image && imageSrc && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img className="piece-image" src={imageSrc} alt={`AI-made image, as declared by ${v.by}’s agent, not by the author: ${v.title}`} width={(v.image.checked as { width: number }).width} height={(v.image.checked as { height: number }).height} />
+        <img className="piece-image" src={imageSrc} alt={`AI-made image, as declared by ${v.by}’s agent: ${v.title}`} width={(v.image.checked as { width: number }).width} height={(v.image.checked as { height: number }).height} />
       )}
       {lines.length > 0 && <Lines lines={lines} />}
     </>
