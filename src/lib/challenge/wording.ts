@@ -56,8 +56,8 @@ export const CHALLENGE_WORDING = {
     // The Neynar score figure kept (owner, 2026-11-12), in the words approved before.
     `A Farcaster account passes the site’s check with a Neynar score of at least ${CHALLENGE.neynarMinScore}, fixed for the whole challenge; Lens and Bluesky accounts pass their own checks, the same ones that let them make pictures.`,
   ],
-  // The owner's words (2026-11-12): no names.
-  adminsLine: 'Admins can make pictures too, but theirs aren’t entries.',
+  // DRAFT (owner, 2026-11-12): admins' pictures may be submitted as examples, never entries.
+  adminsLine: 'Admins can share examples too, but theirs aren’t entries.',
   notAffiliated: 'An independent adaptation of Snowmoon by Vitalik Buterin (GPL-3.0), not affiliated with him.',
   deadline: () => `Entries close ${d('closes', true)}.`,
   opensOn: () => `Entries open ${d('opens', true)}.`,
@@ -85,6 +85,13 @@ export const CHALLENGE_WORDING = {
   /** A candidate's note once entries are closed: Submit is refused then (launch rehearsal, 2026-11-02). Draft wording. */
   candidateClosedNote: (name: string) => `Made during the remix challenge. Entries are closed: it wasn’t submitted as an entry for ${name}.`,
   adminNote: 'Made by an admin during the remix challenge: admins’ pictures and versions aren’t entries.',
+  // DRAFT (owner, 2026-11-12): an admin's picture submitted with its post is shown as an example, never an entry. The
+  // label and its ⓘ are the owner's words; the Submit lines for admins are the coding agent's (Claude, a closed model by
+  // Anthropic).
+  exampleLabel: 'Admin example',
+  exampleInfo: 'Not an entry: admins’ pictures can’t win anything.',
+  exampleSubmitHead: 'Then submit it as an example',
+  exampleSubmitted: 'Submitted as an example. It isn’t an entry.',
   // Submit (owner, 2026-11-04). Draft wording.
   submitHead: 'Submit as an entry',
   submitNote: () => 'A remix becomes an entry only when you submit it, with the link to your post about it on Farcaster, Bluesky or Lens; the post must be yours and link to this page. You can submit one remix a day (Pacific time).',

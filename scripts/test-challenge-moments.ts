@@ -423,12 +423,45 @@ check('config: a current default look per challenge character, each a design id 
   const st = await E.standing(S);
   check('the entries: Bai has one entrant, the picture by 500', st.entries.length === 1 && st.entries[0].versionId === fromBase.versionId && st.entrants.get('bai') === 1);
   check('entries link to the picture\'s page', E.entryHref(fromBase.versionId) === `/challenge/p/${fromBase.versionId}`);
+  // Admin examples (owner, 2026-11-12): an admin's picture, submitted with its post, is shown as an example on its page
+  // and on /challenge/entries (newest first among the entries, by when each was made), and is in no count or reward.
+  {
+    const R = await import('../src/lib/challenge/rules');
+    const PVX = await import('../src/lib/challenge/picture-view');
+    const marks = async () => Number((await sql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks`)[0].n);
+    const adminPic = await picture({ fid: 6786, character: 'bai', moment: 'c4-b129-symbol', from: base.versionId, uses: base.versionId });
+    const s0 = await E.standing(S);
+    const before = await PVX.pictureView(S, adminPic.versionId);
+    check('admin example: before Submit, its maker is offered Submit as an example (no day count), and it isn\'t marked yet', before?.submit?.example === true && before.submit.done === 'Submitted as an example. It isn’t an entry.' && before.w.thenSubmit === 'Then submit it as an example' && before.w.oneADay === null && before.example === null && before.note !== null);
+    const xpost = (id: string, fid: number, v: string) => ({ network: 'farcaster' as const, id: `0x${id.padEnd(40, '0')}`, handle: `p${fid}`, at: new Date().toISOString(), url: `https://farcaster.xyz/p${fid}/0x${id.padEnd(8, '0')}`, links: [`https://snowmoon.party/challenge/p/${v}`], writer: { fid } });
+    const m0 = await marks();
+    const r = await E.submitEntry(S, 6786, adminPic.versionId, xpost('ad1', 6786, adminPic.versionId) as never);
+    check('admin example: an admin\'s Submit goes through and writes no entry row', r.ok === true && (await marks()) === m0, JSON.stringify(r));
+    check('admin example: needs its post, like anyone\'s', ((x) => !x.ok && x.why === E.SUBMIT_WORDING.needsPost)(await E.submitEntry(S, 6786, adminPic.versionId, null)));
+    check('admin example: each version once', ((x) => !x.ok && x.why === E.SUBMIT_WORDING.already)(await E.submitEntry(S, 6786, adminPic.versionId, xpost('ad2', 6786, adminPic.versionId) as never)));
+    const s1 = await E.standing(S);
+    check('admin example: listed as an example, never an entry; counts and the equal share unchanged', s1.examples.map((v) => v.versionId).join() === adminPic.versionId && s1.entries.map((v) => v.versionId).join() === s0.entries.map((v) => v.versionId).join() && [...s1.entrants].join() === [...s0.entrants].join() && !R.equalSharePeople(s1.entries).includes(6786));
+    const after = await PVX.pictureView(S, adminPic.versionId);
+    check('admin example: its page marks it "Admin example" with the ⓘ words, offers no Submit, and lists its post under "Posts"', after?.example?.label === 'Admin example' && after.example.info === 'Not an entry: admins’ pictures can’t win anything.' && after.submit === null && after.badge === null && after.posts.length === 1 && after.posts[0].handle === 'p6786' && after.w.postsHead === 'Posts');
+    // A newer entry by someone else: the example sits between the two entries by time, and the counts don't change.
+    await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '502', 'neynar-score>=0.7', true)`;
+    const newer = await picture({ fid: 502, character: 'bai', moment: 'c4-b129-symbol', from: base.versionId, uses: base.versionId });
+    const m1 = await marks();
+    const r2 = await E.submitEntry(S, 502, newer.versionId, xpost('b1', 502, newer.versionId) as never);
+    check('a non-admin\'s Submit, unchanged: one entry row written', r2.ok === true && (await marks()) === m1 + 1, JSON.stringify(r2));
+    const s2 = await E.standing(S);
+    const listed = E.entriesWithExamples(s2);
+    check('/challenge/entries: the example between the two entries, newest first, marked', listed.map((v) => `${v.versionId}:${v.example}`).join() === [`${newer.versionId}:false`, `${adminPic.versionId}:true`, `${fromBase.versionId}:false`].join(), listed.map((v) => v.versionId).join());
+    check('/challenge/entries: the counts are the entries\' alone (Bai: 2 entrants, not 3)', s2.entrants.get('bai') === 2 && s2.entries.length === 2 && R.equalSharePeople(s2.entries).sort().join() === '500,502');
+    proof('an example counted (the shown list as the entries) is caught', R.entrantCounts(listed).get('bai') !== s2.entrants.get('bai'));
+    proof('an example ordered out of time (appended after the entries) is caught', [...s2.entries, ...s2.examples].map((v) => v.versionId).join() !== listed.map((v) => v.versionId).join());
+  }
   // The remix screen's sources: a base, or a challenge picture; nothing else.
   check('sources: a base and a challenge picture can be remixed; a sheet that isn\'t a base, an unknown id and a hidden thing can\'t', (await P.sourceOf(S, base.versionId))?.kind === 'sheet' && (await P.sourceOf(S, fromRemix.versionId))?.kind === 'picture' && (await P.sourceOf(S, otherSheet.versionId)) === null && (await P.sourceOf(S, randomUUID())) === null);
   // The picture's page data.
   const V = await import('../src/lib/challenge/picture-view');
   const pv = await V.pictureView(S, second.versionId);
-  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the owner\'s post text', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'My remix of Bai in “The championship final”, for the Snowmoon Party remix challenge' && pv.w.postTexts.plain === pv.submit?.postText && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
+  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the owner\'s post text', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'My remix of Bai in “The championship final”, for the Snowmoon Party remix challenge' && pv.w.postTexts.plain === pv.submit?.postText && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.' && pv.w.thenSubmit === 'Then submit it as an entry' && pv.w.oneADay === 'one a day' && pv.submit?.example === undefined && pv.example === null);
   // The feed (/challenge/remixes) with pictures as the entries: the challenge pictures, newest first, by character,
   // each linking to its page, with the viewer's own Newest / Shuffled order and no count.
   const RV = await import('../src/lib/challenge/remixes-view');
@@ -538,6 +571,28 @@ check('config: a current default look per challenge character, each a design id 
     check('a base made in a published style: the remix screen starts on that style', srcStyled?.styleElement === styleD.elementId);
     const styles = await (await import('../src/lib/challenge/make')).publishedStyles(sql as never);
     check('the published styles: listed with their names and texts', styles.some((x) => x.id === `style:${styleD.elementId}` && x.label === 'Quiet, warm light' && x.text === 'Quiet, warm light; soft shadows.'));
+    // The credit chain with a picture hidden mid-line (owner, 2026-11-12): base → plain (501) → mid (502, hidden) → top.
+    // The hidden step reads "A hidden picture", with no picture, name or link, and "Started from" says the same.
+    {
+      await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '502', 'neynar-score>=0.7', true) on conflict do nothing`;
+      const mid = await picture({ fid: 502, character: 'bai', moment: '', from: plain.versionId, remixedFrom: plain.versionId });
+      const top = await picture({ fid: 501, character: 'bai', moment: '', from: mid.versionId, remixedFrom: mid.versionId });
+      const before = await V.pictureView(S, top.versionId);
+      const midBefore = before?.chain.find((c) => c.versionId === mid.versionId);
+      proof('chain: before it is hidden, the middle picture shows its maker, its picture and its link', midBefore?.label === '@p502' && !!midBefore.thumb && midBefore.href === `/challenge/p/${mid.versionId}` && before?.made.startedFrom === '@p502');
+      await sql`update studio.elements set status = 'hidden' where id = ${mid.elementId}`;
+      const after = await V.pictureView(S, top.versionId);
+      const labels = after?.chain.map((c) => c.label) ?? [];
+      const hidden = after?.chain.find((c) => c.versionId === mid.versionId);
+      check(
+        'chain: a picture hidden mid-line reads "A hidden picture", with no picture, name or link; the rest of the line is unchanged, and "Started from" says "A hidden picture"',
+        labels.length === 4 && labels[0].startsWith('Base · ') && labels[1] === '@p501' && labels[2] === 'A hidden picture' && labels[3] === 'This one' &&
+          hidden?.thumb === null && hidden?.href === null && hidden?.hidden === true && !JSON.stringify(hidden).includes('p502') &&
+          !!after?.chain[1].href && after?.made.startedFrom === 'A hidden picture',
+        labels.join(' → '),
+      );
+      await sql`update studio.elements set status = 'published' where id = ${mid.elementId}`;
+    }
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styledBase = styled.versionId;
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styleEl = styleD.elementId;
     (globalThis as { __keepCount?: unknown }).__keepCount = keepCount;
@@ -585,7 +640,7 @@ check('config: a current default look per challenge character, each a design id 
   check('share first: the ready post is shown as it will be filled in (the text and this page\'s link)', /\{w\.texts\.plain\} <span className="sf-link">\{link\}<\/span>/.test(sf) && !/“\{w\.texts\.plain\}”/.test(sf) && /const link = `\$\{origin\}\$\{path\}`/.test(sf));
   check('share first: no script or request of the networks on our page (plain links; P6a)', !/<script|fetch\(/.test(sf));
   check('Submit B on the page: only the address and Submit (the buttons are above), with a cast just made handed to it', /<ChallengeSubmit\s+versionId=\{v\.versionId\}\s+byFid=\{v\.byFid\}\s+words=\{v\.submit\}\s+path=\{path\}\s+compact\s+castHash=\{castHash\}/.test(pic) && /\{!compact && \(/.test(read('src/components/challenge-submit.tsx')));
-  check('"Then submit it as an entry · one a day", and the owner\'s one line with "Rules" (no other rules text)', /\{v\.w\.thenSubmit\} <span className="dz-muted">· \{v\.w\.oneADay\}<\/span>/.test(pic) && /\{v\.w\.signInLine\} <Link href="\/challenge\/rules">\{v\.w\.rules\}<\/Link>/.test(pic));
+  check('"Then submit it as an entry · one a day", and the owner\'s one line with "Rules" (no other rules text)', /\{v\.w\.thenSubmit\} \{v\.w\.oneADay && <span className="dz-muted">· \{v\.w\.oneADay\}<\/span>\}/.test(pic) && /\{v\.w\.signInLine\} <Link href="\/challenge\/rules">\{v\.w\.rules\}<\/Link>/.test(pic));
   const W = (await import('../src/lib/challenge/picture-wording')).PICTURE_WORDING;
   check('the words: "Published. Now post it:", "Then submit it as an entry", "one a day", the sign-in line as the owner wrote it', W.published === 'Published. Now post it:' && W.thenSubmit === 'Then submit it as an entry' && W.oneADay === 'one a day' && W.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
   check('the ready post is the owner\'s text exactly (2026-11-07: with the moment; with none, the line of 2026-11-06)', W.postText('Bai', 'The quarterfinal') === 'My remix of Bai in “The quarterfinal”, for the Snowmoon Party remix challenge' && W.postText('Bai', null) === 'My remix of Bai, for the Snowmoon Party remix challenge');
@@ -642,7 +697,7 @@ check('config: a current default look per challenge character, each a design id 
   }
   check('rules: says new starting pictures and characters may be added during the challenge (owner, 2026-11-11), right after which pictures count', W.rules()[1] === 'New starting pictures and characters may be added during the challenge.' && /Only remixes count/.test(W.rules()[0]));
   // Owner, 2026-11-12: much shorter rules; posts anywhere, including X, but the one you submit is on Farcaster, Lens or Bluesky.
-  check('rules: six lines (withdrawing and the score figure kept), then the admins line with no names (owner, 2026-11-12)', W.rules().length === 6 && W.rules().some((r) => r.includes('withdraw a submission')) && W.rules().some((r) => r.includes('Neynar score of at least')) && W.adminsLine === 'Admins can make pictures too, but theirs aren’t entries.' && !/@garance|owner/.test(W.adminsLine));
+  check('rules: six lines (withdrawing and the score figure kept), then the admins line with no names (owner, 2026-11-12; examples wording, admin examples)', W.rules().length === 6 && W.rules().some((r) => r.includes('withdraw a submission')) && W.rules().some((r) => r.includes('Neynar score of at least')) && W.adminsLine === 'Admins can share examples too, but theirs aren’t entries.' && !/@garance|owner/.test(W.adminsLine));
   check('rules: share anywhere, including X; the submitted post on Farcaster, Lens or Bluesky (owner, 2026-11-12)', W.rules().includes('Share your picture anywhere, including X. The post you submit must be on Farcaster, Lens or Bluesky, because that’s where the site can check it’s yours.'));
   {
     const LWm = (await import('../src/lib/challenge/landing-wording')).LANDING_WORDING;

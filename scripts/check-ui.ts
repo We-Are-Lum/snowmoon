@@ -2012,6 +2012,32 @@ async function checkChallengeLanding() {
       const missing = await page.goto(`${LOCAL}/challenge/lektor`, { waitUntil: 'load' });
       if (missing?.status() !== 404) fail(`/challenge/lektor ${tag}: answers ${missing?.status()}, not 404`);
 
+      // A picture's page: the redesign's screen 4 (owner-approved plan, 2026-11-11). The back link to its character, the
+      // full AI line (the declaration and the model's name and terms), the credit chain (its base, then itself), "How it
+      // was made" closed with the full recipe linked, two columns on a desktop, no sideways scroll.
+      {
+        const pic = FX.remixes.find((r) => r.character === 'zei')!;
+        await at(`/challenge/p/${pic.versionId}`, 'h1.mk-title');
+        if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/p ${tag}: scrolls sideways`);
+        const back = page.locator('.chp-back');
+        if ((await back.getAttribute('href')) !== '/challenge/zei' || !((await back.textContent()) ?? '').includes('Zei')) fail(`/challenge/p ${tag}: no back link to Zei's page`);
+        const ai = ((await page.locator('[data-slot="ai-line"]').textContent()) ?? '').replace(/\s+/g, ' ').trim();
+        // Owner, 2026-11-12: "AI-generated · {model}, a closed model by {maker}", with no "not by the author" in sight.
+        if (!/^AI ?AI-generated · .+, (open weights|a closed model by )/.test(ai)) fail(`/challenge/p ${tag}: the AI line reads "${ai}", not "AI-generated" with the model and its terms`);
+        if (/not by the author/i.test(await page.locator('[data-slot="ai-line"]').innerText())) fail(`/challenge/p ${tag}: the AI line still shows "not by the author"`);
+        const steps = await page.locator('.chp-steps > li').evaluateAll((els) => els.map((e) => `${e.getAttribute('aria-current') ?? ''}|${(e.querySelector('.chp-step-by')?.textContent ?? '').trim()}`));
+        if (steps.length !== 2 || !steps[0].startsWith('|Base · ') || steps[1] !== 'page|This one') fail(`/challenge/p ${tag}: the credit chain reads ${steps.join(', ')}, not its base then "This one"`);
+        const made = page.locator('details.chp-made');
+        if ((await made.count()) !== 1 || (await made.evaluate((d) => (d as HTMLDetailsElement).open)) || ((await made.locator('summary').textContent()) ?? '').trim() !== 'How it was made' || (await made.locator(`a[href="/image/${pic.versionId}"]`).count()) !== 1) fail(`/challenge/p ${tag}: no closed "How it was made" with the full recipe linked`);
+        if (w >= 1024) {
+          const [f, sd] = await Promise.all([page.locator('.chp-figure').boundingBox(), page.locator('.chp-side').boundingBox()]);
+          if (!f || !sd || sd.x < f.x + f.width || Math.abs(sd.width - 440) > 2) fail(`/challenge/p ${tag}: not two columns (the picture, then a 440px column)`);
+          const over = await page.locator('.chp-side').evaluate((side) => { const r = side.getBoundingClientRect().right; return [...side.querySelectorAll('*')].filter((e) => e.getBoundingClientRect().right > r + 1).map((e) => e.className || e.tagName).slice(0, 3); });
+          if (over.length) fail(`/challenge/p ${tag}: the column's contents run past its edge (${over.join(', ')})`);
+        }
+        await snap('picture', true);
+      }
+
       // The remix screen (owner, 2026-11-08): the picture small, one box, the Style row (the published styles, Random,
       // Write your own; Zei's base starts on its own style), the Model row (one chip, the model and its maker), Make it;
       // no moments.
@@ -2105,6 +2131,80 @@ async function checkChallengeLanding() {
         }
       }
       await page.close();
+    }
+    // The entries page and admin examples (owner, 2026-11-12), after the feed's checks: two entries of Zei and, made
+    // between them, an admin's picture submitted with its post (FX.entries). /challenge/entries lists all three newest
+    // first, only the admin's marked "Admin example" with its ⓘ; on a desktop a grid of tiles (four across), on a phone
+    // the list as before (two across). A picture's page lists its posts under "Posts"; the example's is marked too.
+    if (CHALLENGE.pictureEntries) {
+      await data.addEntries();
+      const { CHALLENGE_WORDING: CWX } = await import('../src/lib/challenge/wording');
+      const exampleFx = FX.entries.find((x) => x.example)!;
+      for (const [w, h, touch, scheme, cols] of [
+        [390, 844, true, 'light', 2],
+        [1440, 900, false, 'dark', 4],
+      ] as const) {
+        const tag = `@${w}×${h} (${scheme})`;
+        const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+        try {
+          await page.goto(`${LOCAL}/challenge/entries`, { waitUntil: 'load' });
+          await page.waitForSelector('.ch-entries-list .ch-card', { timeout: 30000 });
+          await checkFloors(page, `/challenge/entries ${tag}`, scheme);
+          if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/entries ${tag}: scrolls sideways`);
+          const cards = await page.locator('.ch-entries-list .ch-card').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-version')}:${e.getAttribute('data-example') ?? ''}`));
+          const want = FX.entries.map((x) => `${x.versionId}:${x.example ? 'admin' : ''}`);
+          if (cards.join() !== want.join()) fail(`/challenge/entries ${tag}: the entries and the admin example aren't listed newest first, the example marked (${cards.join()})`);
+          const ex = page.locator(`.ch-card[data-version="${exampleFx.versionId}"] .ch-example`);
+          const exName = ((await ex.locator('button.info-label[data-label="admin-example"]').textContent().catch(() => '')) ?? '').replace(/\s+/g, ' ');
+          if (((await ex.locator('.ch-badge').textContent().catch(() => '')) ?? '').trim() !== CWX.exampleLabel || !exName.includes(CWX.exampleLabel) || !exName.includes(CWX.exampleInfo)) fail(`/challenge/entries ${tag}: the admin example isn't labelled "${CWX.exampleLabel}" with its ⓘ ("${CWX.exampleInfo}")`);
+          if ((await page.locator('.ch-entries-list .ch-example').count()) !== 1) fail(`/challenge/entries ${tag}: an entry is marked as an admin example`);
+          const shown = await page.locator('.ch-entries-list').evaluate((l) => getComputedStyle(l).gridTemplateColumns.split(' ').filter(Boolean).length);
+          if (shown !== cols) fail(`/challenge/entries ${tag}: ${shown} across, not ${cols}${w >= 1024 ? ' (the desktop grid)' : ' (the phone layout, unchanged)'}`);
+          if (w >= 1024) {
+            const tops = await page.locator('.ch-entries-list .ch-card').evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().top)));
+            if (new Set(tops).size !== 1) fail(`/challenge/entries ${tag}: the three tiles aren't side by side in one row (tops ${tops.join()})`);
+          }
+          if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-entries-${w}x${h}-${scheme}.png`), fullPage: true });
+          for (const x of [exampleFx, FX.entries.find((y) => !y.example)!]) {
+            await page.goto(`${LOCAL}/challenge/p/${x.versionId}`, { waitUntil: 'load' });
+            await page.waitForSelector('h1.mk-title', { timeout: 30000 });
+            const posted = page.locator('.ch-posted');
+            const head = ((await posted.locator('.dz-label').textContent().catch(() => '')) ?? '').trim();
+            const row = ((await posted.locator('.ch-posted-list li').first().textContent().catch(() => '')) ?? '').replace(/\s+/g, ' ');
+            if (head !== 'Posts' || !row.includes(`@${x.post.handle}`) || (await posted.locator(`a[href="${x.post.url}"]`).count()) !== 1) fail(`/challenge/p ${tag}: the picture's post isn't listed under "Posts" (network, @handle, date, link): "${head}" / "${row}"`);
+            const marked = await page.locator('.chp-cap .ch-example').count();
+            if (marked !== (x.example ? 1 : 0)) fail(`/challenge/p ${tag}: ${x.example ? 'the admin example isn\'t marked "Admin example"' : 'an entry is marked as an admin example'}`);
+            if (x.example && !(((await page.locator('.chp-cap button.info-label[data-label="admin-example"]').textContent().catch(() => '')) ?? '').includes(CWX.exampleInfo))) fail(`/challenge/p ${tag}: the admin example's ⓘ doesn't say "${CWX.exampleInfo}"`);
+            if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/p ${tag}: scrolls sideways`);
+          }
+          // Item 2 (owner, 2026-11-12, admin examples): a non-admin who passed the check and made the picture (fixture FID 900,
+          // its entry) sees the submit box on #162's layout: in the right-hand column on a desktop, below the picture on a phone.
+          // Signed in in this browser only (a stand-in session; the submit API's GET answered for FID 900).
+          {
+            const ent = FX.entries.find((x) => !x.example)!;
+            await page.evaluate((fid) => localStorage.setItem('snowmoon.signin', JSON.stringify({ token: 'stand-in', fid, username: `fixture${fid}`, nameProof: null, exp: Math.floor(Date.now() / 1000) + 3600 })), ent.fid);
+            await page.route('**/api/challenge/submit', (r) => (r.request().method() === 'GET' ? r.fulfill({ json: { left: 1, versions: [], person: ent.fid } }) : r.continue()));
+            await page.goto(`${LOCAL}/challenge/p/${ent.versionId}`, { waitUntil: 'load' });
+            await page.waitForSelector('h1.mk-title', { timeout: 30000 });
+            const box = page.locator('.sf-submit .ch-submit');
+            await box.waitFor({ timeout: 10000 }).catch(() => {});
+            if (!(await box.isVisible().catch(() => false))) fail(`/challenge/p ${tag}: a non-admin maker who passed the check doesn't see the submit box`);
+            else {
+              if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/p ${tag}: scrolls sideways with the submit box`);
+              const [fig, side, b] = await Promise.all([page.locator('.chp-figure').boundingBox(), page.locator('.chp-side').boundingBox(), box.boundingBox()]);
+              if (!fig || !side || !b) fail(`/challenge/p ${tag}: no picture, column or box to measure`);
+              else if (w >= 1024 ? !(b.x >= side.x - 1 && b.x + b.width <= side.x + side.width + 1 && side.x >= fig.x + fig.width) : !(b.y >= fig.y + fig.height - 1)) fail(`/challenge/p ${tag}: the submit box isn't ${w >= 1024 ? 'in the right-hand column' : 'below the picture'}`);
+              if (await page.locator('.chp-cap .ch-example').count()) fail(`/challenge/p ${tag}: a non-admin's entry is marked "Admin example"`);
+              await box.scrollIntoViewIfNeeded();
+              if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-picture-submit-box-${w}x${h}-${scheme}.png`) });
+            }
+            await page.unroute('**/api/challenge/submit');
+            await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
+          }
+        } finally {
+          await page.close();
+        }
+      }
     }
   } finally {
     server.kill();

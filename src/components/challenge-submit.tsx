@@ -12,7 +12,8 @@ import { PostLinkField } from './post-link-field';
  * the post and checks it links to this page, as "Add where you posted it" does. Up to three per person, across all
  * characters. Once submitted, the maker can withdraw it until entries close (asked once: "Withdraw this entry?"); the
  * day's submission isn't given back (the row stays, withdrawn: 0038_challenge_daily.sql). Its words come from
- * the server (`words`, src/lib/challenge/sheet-lines.ts), so this script carries none of the challenge's.
+ * the server (`words`, src/lib/challenge/sheet-lines.ts), so this script carries none of the challenge's. An admin's own
+ * picture (`words.example`, owner 2026-11-12) is submitted as an example: no day count and nothing to withdraw.
  *
  * "Post it first" (overnight run 2026-11-05, item 4): a button per network opens its own compose screen with the
  * server's short text and this page's link filled in: inside the Farcaster app the SDK's composeCast (the cast it makes
@@ -123,7 +124,7 @@ export function ChallengeSubmit({ versionId, byFid, words: W, path, compact = fa
               {W.withdrawCancel}
             </button>
           </p>
-        ) : (
+        ) : W.example ? null : (
           <p className="ch-mark">
             <button type="button" className="ic-secondary" onClick={() => setAsking(true)} disabled={busy}>
               {W.withdraw}
@@ -165,12 +166,12 @@ export function ChallengeSubmit({ versionId, byFid, words: W, path, compact = fa
             </>
           )}
           <PostLinkField id={`submit-${versionId}`} label={W.label} value={address} onChange={setAddress} />
-          <button type="submit" className="ic-primary" disabled={busy || !(address.trim() || castHash) || left === 0}>
+          <button type="submit" className="ic-primary" disabled={busy || !(address.trim() || castHash) || (left === 0 && !W.example)}>
             {W.submit}
           </button>
         </form>
       )}
-      {left !== null && <p className="dz-note">{W.left[left] ?? W.left[W.left.length - 1]}</p>}
+      {left !== null && !W.example && <p className="dz-note">{W.left[left] ?? W.left[W.left.length - 1]}</p>}
       {note && (
         <p className="ia-note" role="status">
           {note}
