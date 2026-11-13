@@ -118,6 +118,32 @@ export const LANDING_WORDING = {
     joinsNote: 'joins mid-challenge',
     homeFrom: (block: string) => `the book, ${block}`,
   },
+  /**
+   * A character's redesigned page (Claude Design's handoff, screen 2). Approved (owner, 2026-11-11): "Starting pictures",
+   * "Every remix of {name}", "newest first", "Remix {name}". DRAFT until the owner's OK: "Remix this", "Read more about
+   * {name}", "{n} bases" and the looks line.
+   */
+  character: {
+    startHead: 'Starting pictures',
+    basesCount: (n: number) => `${n} ${n === 1 ? 'base' : 'bases'}`,
+    everyHead: (name: string) => `Every remix of ${name}`,
+    newestFirst: 'newest first',
+    remix: (name: string) => `Remix ${name}`,
+    remixThis: 'Remix this',
+    // "Learn more about {name}" (owner, 2026-11-12): one expander, replacing "Read where {name} first appears" and "Read
+    // more". The heads are the owner's; the ⓘ's words and the "Draft wording" mark are DRAFT (coding agent).
+    learnMore: (name: string) => `Learn more about ${name}`,
+    whoHead: (pronoun: 'he' | 'she') => (pronoun === 'she' ? 'Who she is.' : 'Who he is.'),
+    startText: 'At the start.',
+    drivesHead: (pronoun: 'he' | 'she') => (pronoun === 'she' ? 'What drives her.' : 'What drives him.'),
+    inventHead: 'Room to invent.',
+    glossaryLink: 'In the glossary →',
+    draft: 'Draft wording',
+    looks: (name: string) => `The book doesn’t describe ${name}’s looks. Every picture’s look is this edition’s.`,
+    // "Read more"'s facts (owner, 2026-11-12: ADD the first-layer facts). DRAFT wording (coding agent): the note and the chip.
+    factsNote: 'From chapters 1 to 14. Each line is this edition’s; the quote under it is the book’s, word for word.',
+    factChip: (n: number) => `Ch ${n}`,
+  },
   untitled: (name: string) => `${name}, remixed`,
   pictureAlt: (name: string) => `AI-generated front view of ${name}`,
   /** A challenge picture or a card's picture (branch challenge-moments). */
