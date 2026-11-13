@@ -572,7 +572,7 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .chc-fact { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .chc-fact-text { font-size: 17px; color: var(--ink); }
 .chc-fact-quote { font-style: italic; color: var(--body); overflow-wrap: anywhere; }
-.chc-fact-cite { font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.chc-fact-cite { font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; color: var(--muted); }
 .chc-remix { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 22px; background: var(--btn); color: var(--btn-ink); border-radius: var(--radius); font-size: 19px; text-decoration: none; }
 .chc-remix:hover { text-decoration: underline; }
 .chc-remix:focus-visible, .chc-pic:focus-visible, .chc-remix-this:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
