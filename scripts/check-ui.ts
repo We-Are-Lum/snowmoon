@@ -1856,7 +1856,7 @@ async function checkChallengeLanding() {
     // has none, so wait until a fresh copy shows no remix tile (it failed three times on 11 Nov when read too early).
     for (let i = 0; i < 90; i++) {
       const html = await fetch(`${LOCAL}/challenge/gladias`).then((r) => r.text(), () => '');
-      if (html.includes('ch-character-page') && !html.includes('cc-tile-pic')) break;
+      if (html.includes('ch-character-page') && !html.includes('chc-wide-img')) break;
       await new Promise((r) => setTimeout(r, 1000));
     }
     for (const [p, want] of [['/challenge/zei', [FX.remixes[0].versionId]], ['/challenge', [FX.sheets.zei[0], FX.sheets.bai[0]]]] as const) {
@@ -1986,24 +1986,68 @@ async function checkChallengeLanding() {
       }
       await snap('rules', true);
 
-      // A character's page (owner, 2026-11-08): the name, the one line, "Bases", then "Remixes": every published picture of
-      // the character, newest first, whole at 16:9, each opening its remix screen; no count. Gladias has none yet.
+      // A character's page: the redesign's screen 2 (owner-approved 2026-11-11). The name, the one line, "Read more about
+      // Zei" (closed), "Read where Zei first appears", "Remix Zei" (desktop: to one of Zei's bases); "Starting pictures"
+      // (Zei's bases, each with "Remix this"); "Every remix of Zei", newest first, whole at 16:9: each picture opens its
+      // page, each "Remix this" its remix screen. On a phone the bases are a swipe row. No count. Gladias has none yet.
       await at('/challenge/zei', '.ch-character-page');
       await checkFloors(page, `/challenge/zei ${tag}`, scheme);
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways`);
+      const wide = w >= 1024;
       if (((await page.locator('.ch-character-page h1').textContent()) ?? '').trim() !== 'Zei') fail(`/challenge/zei ${tag}: the heading isn't "Zei"`);
-      // "Read where Zei first appears" (owner, 2026-11-09): under the one line, to the reader at Zei's first block.
+      // "Read where Zei first appears" (owner, 2026-11-09): to the reader at Zei's first block.
       const fa = page.locator('.ch-character-page a[data-slot="first-appears"]');
-      if ((await fa.count()) !== 1 || ((await fa.textContent()) ?? '').trim() !== 'Read where Zei first appears' || (await fa.getAttribute('href')) !== '/chapter/2#c2-b2') fail(`/challenge/zei ${tag}: no "Read where Zei first appears" to /chapter/2#c2-b2 (${await fa.getAttribute('href').catch(() => 'none')})`);
-      const heads = (await page.locator('.ch-character-page h2.cc-head').allTextContents()).map((t) => t.trim());
-      if (heads.join('|') !== 'Bases|Remixes') fail(`/challenge/zei ${tag}: the sections read ${heads.join(', ')}, not Bases, Remixes`);
+      if ((await fa.count()) !== 1 || ((await fa.textContent()) ?? '').trim() !== 'Read where Zei first appears →' || (await fa.getAttribute('href')) !== '/chapter/2#c2-b2') fail(`/challenge/zei ${tag}: no "Read where Zei first appears" to /chapter/2#c2-b2 (${await fa.getAttribute('href').catch(() => 'none')})`);
+      const more = page.locator('.ch-character-page details.chc-more');
+      if ((await more.count()) !== 1 || (await more.evaluate((d) => (d as HTMLDetailsElement).open)) || ((await more.locator('summary').textContent()) ?? '').trim() !== 'Read more about Zei') fail(`/challenge/zei ${tag}: no closed "Read more about Zei"`);
+      if (!((await more.textContent()) ?? '').includes('The book doesn’t describe Zei’s looks.')) fail(`/challenge/zei ${tag}: "Read more" doesn't say the look is this edition's`);
+      // Its first-layer facts (owner, 2026-11-12: ADD): each line, the book's words and "Ch N · block", chapters 1 to 14 only.
+      {
+        const { firstLayerFacts } = await import('../src/lib/challenge/cards');
+        await more.locator('summary').click();
+        const facts = await more.locator('li.chc-fact').evaluateAll((els) => els.map((e) => ({ block: e.getAttribute('data-block') ?? '', text: e.querySelector('.chc-fact-text')?.textContent?.trim() ?? '', quote: e.querySelector('.chc-fact-quote')?.textContent?.trim() ?? '', cite: e.querySelector('.chc-fact-cite')?.textContent?.trim() ?? '' })));
+        const want = firstLayerFacts('zei');
+        if (facts.length !== want.length || !want.every((f, i) => facts[i].block === f.block && facts[i].text === f.text && facts[i].quote === f.quote && facts[i].cite === `Ch ${f.chapter} · ${f.block}`)) fail(`/challenge/zei ${tag}: "Read more" doesn't show Zei's first-layer facts with their quotes and chapters (${JSON.stringify(facts)})`);
+        if (facts.some((f) => Number(/^c(\d+)-/.exec(f.block)?.[1]) > 14)) fail(`/challenge/zei ${tag}: "Read more" shows a fact past chapter 14`);
+        if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways with "Read more" open`);
+        await more.scrollIntoViewIfNeeded();
+        await snap('character-read-more');
+        await more.locator('summary').click();
+      }
+      const heads = await page.locator('.ch-character-page h2.chc-h2').evaluateAll((els) => els.map((e) => (e as HTMLElement).innerText.trim()));
+      const wantHeads = wide ? 'Starting pictures|Every remix of Zei' : 'Starting pictures|Every remix';
+      if (heads.join('|') !== wantHeads) fail(`/challenge/zei ${tag}: the sections read ${heads.join(', ')}, not ${wantHeads}`);
+      // The bases: every one of Zei's, each to its remix screen, with its "Remix this".
+      await page.waitForSelector('.ch-char-bases a.chc-pic', { timeout: 10000 }).catch(() => null);
+      const baseIds = await page.locator('.ch-char-bases a.chc-pic').evaluateAll((els) => els.map((e) => e.getAttribute('data-version') ?? ''));
+      // As many as Zei's configured bases (R.baseCountOf), each one of Zei's sheets, none twice.
+      if (!baseIds.length || new Set(baseIds).size !== baseIds.length || !baseIds.every((id) => FX.sheets.zei.includes(id))) fail(`/challenge/zei ${tag}: the starting pictures read ${baseIds.join()}, not Zei's bases (from ${FX.sheets.zei.join()})`);
+      const baseThis = await page.locator('.ch-char-bases a[data-slot="remix-this"]').evaluateAll((els) => els.map((e) => `${e.getAttribute('href')}|${(e.textContent ?? '').trim()}`));
+      if (baseThis.length !== baseIds.length || !baseThis.every((x) => FX.sheets.zei.some((id) => x === `/challenge/make?from=${id}|Remix this`))) fail(`/challenge/zei ${tag}: a base's "Remix this" doesn't open its remix screen (${baseThis.join()})`);
+      if (((await page.locator('.ch-char-bases .chc-meta').textContent()) ?? '').trim() !== `${baseIds.length} ${baseIds.length === 1 ? 'base' : 'bases'}`) fail(`/challenge/zei ${tag}: the bases' count is missing`);
+      if (!wide && (await page.locator('.chc-bases').evaluate((e) => getComputedStyle(e).scrollSnapType)) !== 'x mandatory') fail(`/challenge/zei ${tag}: the bases aren't a swipe row on a phone`);
+      // "Remix Zei": on a desktop, the remix screen of one of Zei's bases; on a phone, not shown (each base has its button).
+      const rz = page.locator('a.chc-remix');
+      if (wide) {
+        await page.waitForSelector('a.chc-remix', { timeout: 10000 }).catch(() => null);
+        const href = await rz.getAttribute('href').catch(() => null);
+        if (!(await rz.isVisible().catch(() => false)) || ((await rz.textContent()) ?? '').trim() !== 'Remix Zei' || !FX.sheets.zei.some((id) => href === `/challenge/make?from=${id}`)) fail(`/challenge/zei ${tag}: no "Remix Zei" to one of Zei's bases (${href})`);
+        if ((await page.locator('.chc-side').evaluate((e) => getComputedStyle(e).position)) !== 'sticky') fail(`/challenge/zei ${tag}: the left column isn't sticky`);
+      } else if (await rz.isVisible().catch(() => false)) fail(`/challenge/zei ${tag}: "Remix Zei" shows on a phone`);
+      // Every remix of Zei: newest first, whole at 16:9; the picture opens its page, "Remix this" its remix screen.
       const zeiRemixes = FX.remixes.filter((r) => r.character === 'zei').map((r) => r.versionId);
-      const shown = await page.locator('.ch-char-remixes a.cc-tile').evaluateAll((els) => els.map((e) => e.getAttribute('data-version') ?? ''));
-      if (shown.join() !== zeiRemixes.join()) fail(`/challenge/zei ${tag}: the remixes read ${shown.join()}, not every one of Zei's, newest first (${zeiRemixes.join()})`);
-      const remixHrefs = await page.locator('.ch-char-remixes a.cc-tile').evaluateAll((els) => els.map((e) => e.getAttribute('href') ?? ''));
-      if (!remixHrefs.every((h, i) => h === `/challenge/make?from=${zeiRemixes[i]}`)) fail(`/challenge/zei ${tag}: a remix doesn't open its remix screen (${remixHrefs.join()})`);
-      if ((await page.locator('.ch-char-remixes img.cc-tile-pic').count()) !== zeiRemixes.length) fail(`/challenge/zei ${tag}: the remixes aren't shown whole at 16:9`);
-      if (/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test((await page.locator('.ch-character-page').textContent()) ?? '')) fail(`/challenge/zei ${tag}: shows a moment or a count`);
+      const shown = await page.locator('.ch-char-remixes a[data-slot="remix-page"]').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-version')}|${e.getAttribute('href')}`));
+      if (shown.join() !== zeiRemixes.map((id) => `${id}|/challenge/p/${id}`).join()) fail(`/challenge/zei ${tag}: the remixes read ${shown.join()}, not every one of Zei's, newest first, each to its page (${zeiRemixes.join()})`);
+      const remixHrefs = await page.locator('.ch-char-remixes a[data-slot="remix-this"]').evaluateAll((els) => els.map((e) => e.getAttribute('href') ?? ''));
+      if (remixHrefs.join() !== zeiRemixes.map((id) => `/challenge/make?from=${id}`).join()) fail(`/challenge/zei ${tag}: a remix's "Remix this" doesn't open its remix screen (${remixHrefs.join()})`);
+      const ratios = await page.locator('.ch-char-remixes .chc-pic-wide').evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); return r.width / r.height; }));
+      if (ratios.length !== zeiRemixes.length || ratios.some((r) => Math.abs(r - 16 / 9) > 0.05) || (await page.locator('.ch-char-remixes img.chc-wide-img').count()) !== zeiRemixes.length) fail(`/challenge/zei ${tag}: the remixes aren't shown whole at 16:9 (${ratios.map((r) => r.toFixed(2)).join()})`);
+      if (((await page.locator('.ch-char-remixes .chc-meta').textContent()) ?? '').trim() !== 'newest first') fail(`/challenge/zei ${tag}: no "newest first"`);
+      if ((await page.locator('.ch-character-page .chc-ai .ai-tag').count()) !== baseIds.length + zeiRemixes.length) fail(`/challenge/zei ${tag}: a picture has no AI label`);
+      // Read with each element's text apart (a byline "#6852" next to "Remix this" isn't a count). "Read more"'s facts cite
+      // their chapter ("Ch 4 · c4-b79"; owner, 2026-11-12: ADD), checked above; no moment chip or count anywhere else.
+      const pageText = await page.locator('.ch-character-page').evaluate((root) => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const out: string[] = []; for (let n = w.nextNode(); n; n = w.nextNode()) if (!n.parentElement?.closest('.chc-facts')) out.push(n.textContent ?? ''); return out.join(' | '); });
+      if (/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test(pageText)) fail(`/challenge/zei ${tag}: shows a moment or a count (${/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.exec(pageText)?.[0]})`);
       await snap('character', true);
       await at('/challenge/gladias', '.ch-character-page');
       // Waited for, not read at once (it failed three times on 11 Nov and passed on each re-run); a miss says what was there.

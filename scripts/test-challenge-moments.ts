@@ -33,7 +33,7 @@ function walk(dir: string): string[] {
 }
 const clone = <T>(v: T): T => structuredClone(v);
 
-const { CARDS, cardQuotes, cardShapeProblems, FIRST_LAYER_MAX_CHAPTER } = await import('../src/lib/challenge/cards');
+const { CARDS, cardQuotes, cardShapeProblems, FIRST_LAYER_MAX_CHAPTER, firstLayerFacts } = await import('../src/lib/challenge/cards');
 const { MOMENTS, momentShapeProblems, inBookOrder, chapterChip, momentsWith } = await import('../src/lib/challenge/moments');
 const { quoteProblems } = await import('../src/lib/challenge/book-quotes');
 const { loadBlocks } = await import('./lib/glossary');
@@ -110,7 +110,15 @@ check('config: a current default look per challenge character, each a design id 
   proof('P9g: a card showing its second layer again (its description) fails', p9gProblems({ ...base, files: plant('src/components/challenge-card.tsx', (x) => x.replace('{c.line} <span className="cc-mark">', '{c.line} {c.more.description} <span className="cc-mark">')) }).length > 0);
   proof('P9g: a card fetching "Where they appear" again fails', p9gProblems({ ...base, files: plant('src/components/challenge-card.tsx', (x) => x + "\nconst appears = () => fetch('/api/challenge/appears?character=zei');") }).length > 0);
   proof('P9g: the pages\' data carrying facts fails', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace("line: cardOf(slug)?.line ?? ''", "line: cardOf(slug)?.line ?? '', facts: cardOf(slug)?.facts")) }).length > 0);
-  proof('P9g: the pages\' data carrying the moments fails', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace("import { cardOf } from './cards';", "import { cardOf } from './cards';\nimport { momentsWith } from './moments';")) }).length > 0);
+  proof('P9g: the pages\' data carrying the moments fails', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace("import { cardOf, firstLayerFacts } from './cards';", "import { cardOf, firstLayerFacts } from './cards';\nimport { momentsWith } from './moments';")) }).length > 0);
+  // "Read more about {name}" (owner, 2026-11-12: ADD): the first-layer facts, only through firstLayerFacts.
+  check('P9g: "Read more" carries each card\'s first-layer facts, none past chapter 14, each word for word', CARDS.every((c) => {
+    const f = firstLayerFacts(c.slug);
+    return f.length === c.facts.length && f.every((x) => x.chapter >= 1 && x.chapter <= 14 && !!x.quote);
+  }));
+  proof('P9g: the page\'s facts from the second layer fail', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace('facts: firstLayerFacts(slug)', 'facts: (cardOf(slug)?.more.facts ?? [])')) }).length > 0);
+  proof('P9g: firstLayerFacts reading the second layer fails', p9gProblems({ ...base, files: plant('src/lib/challenge/cards.ts', (x) => x.replace('(cardOf(slug)?.facts ?? [])', '(cardOf(slug)?.more.facts ?? [])')) }).length > 0);
+  proof('P9g: firstLayerFacts without its chapter 14 limit fails', p9gProblems({ ...base, files: plant('src/lib/challenge/cards.ts', (x) => x.replace('.filter((f) => chapterOf(f.block) <= FIRST_LAYER_MAX_CHAPTER)', '')) }).length > 0);
   proof('P9g: the remix screen sent the moments whatever the switch says fails', p9gProblems({ ...base, files: plant('src/lib/challenge/make.ts', (x) => x.replace('moments: momentsOn ? momentChips() : []', 'moments: momentChips()')) }).length > 0);
   proof('P9g: a moment chip on the remix screen without its chapter fails', p9gProblems({ ...base, files: plant('src/components/challenge-make.tsx', (x) => x.replaceAll('{m.title} <span className="cc-chip-ch">· {m.chip}</span>', '{m.title}')) }).length > 0);
   proof('P9g: the cards\' words imported on a sheet page fail', p9gProblems({ ...base, files: [...files, { file: 'src/app/references/designs/[id]/planted.tsx', text: "import { CARDS } from '~/lib/challenge/cards';" }] }).length > 0);
