@@ -1,0 +1,262 @@
+{
+ "about": "Every ⓘ term in the Learn more texts: its existing entry in content/snowmoon/glossary.json, or a DRAFT entry quoted word for word from the book with its block (DRAFT until the owner approves it).",
+ "terms": [
+  {
+   "term": "Acolyte",
+   "status": "existing",
+   "glossaryId": "acolyte",
+   "glossaryTerm": "Acolyte",
+   "in": [
+    "gladias"
+   ]
+  },
+  {
+   "term": "Arctic",
+   "status": "existing",
+   "glossaryId": "arctics",
+   "glossaryTerm": "Arctics",
+   "in": [
+    "bai",
+    "seila",
+    "zei"
+   ]
+  },
+  {
+   "term": "Arctic Empire",
+   "status": "existing",
+   "glossaryId": "arctic-empire",
+   "glossaryTerm": "Arctic Empire",
+   "in": [
+    "deluin",
+    "ephelion",
+    "seila"
+   ]
+  },
+  {
+   "term": "Arctics",
+   "status": "existing",
+   "glossaryId": "arctics",
+   "glossaryTerm": "Arctics",
+   "in": [
+    "gladias",
+    "mu"
+   ]
+  },
+  {
+   "term": "autobus",
+   "status": "existing",
+   "glossaryId": "autobus",
+   "glossaryTerm": "autobus",
+   "in": [
+    "ephelion"
+   ]
+  },
+  {
+   "term": "co-family",
+   "status": "DRAFT",
+   "glossaryId": null,
+   "draft": {
+    "slug": "co-family",
+    "term": "co-family",
+    "quote": "Febric and Hreda were from their co-family, Uncle Vil and Aunt Daia.",
+    "block": "c1-b125",
+    "note": null
+   },
+   "in": [
+    "seila"
+   ]
+  },
+  {
+   "term": "compute box",
+   "status": "DRAFT",
+   "glossaryId": null,
+   "draft": {
+    "slug": "compute-box",
+    "term": "compute box",
+    "quote": "carrying his hand device in one hand, attached by a cable to a larger compute box in the other.",
+    "block": "c1-b111",
+    "note": null
+   },
+   "in": [
+    "bai",
+    "zei"
+   ]
+  },
+  {
+   "term": "Dzego",
+   "status": "existing",
+   "glossaryId": "dzego",
+   "glossaryTerm": "Dzego",
+   "in": [
+    "bai",
+    "deluin",
+    "gladias",
+    "mu",
+    "seila",
+    "zei"
+   ]
+  },
+  {
+   "term": "Dzegojan",
+   "status": "existing",
+   "glossaryId": "dzegojan",
+   "glossaryTerm": "Dzegojan",
+   "in": [
+    "mu"
+   ]
+  },
+  {
+   "term": "Freetown",
+   "status": "existing",
+   "glossaryId": "freetown",
+   "glossaryTerm": "Freetown",
+   "in": [
+    "bai",
+    "seila"
+   ]
+  },
+  {
+   "term": "Greater Plum Harbor",
+   "status": "existing",
+   "glossaryId": "greater-plum-harbor",
+   "glossaryTerm": "Greater Plum Harbor",
+   "in": [
+    "seila"
+   ]
+  },
+  {
+   "term": "hand device",
+   "status": "DRAFT",
+   "glossaryId": null,
+   "draft": {
+    "slug": "hand-device",
+    "term": "hand device",
+    "quote": "signs with colored blinking lights advertising all kinds of electronics: hand devices, watches, compute boxes",
+    "block": "c2-b3",
+    "note": null
+   },
+   "in": [
+    "gladias"
+   ]
+  },
+  {
+   "term": "intervention turn",
+   "status": "DRAFT",
+   "glossaryId": null,
+   "draft": {
+    "slug": "intervention-turn",
+    "term": "intervention turn",
+    "quote": "At the same time, the first intervention turn came. Here, all players were able to put down more squares near any copy of their symbols.",
+    "block": "c4-b110",
+    "note": null
+   },
+   "in": [
+    "bai"
+   ]
+  },
+  {
+   "term": "Keeper",
+   "status": "existing",
+   "glossaryId": "keepers",
+   "glossaryTerm": "Keepers",
+   "in": [
+    "gladias",
+    "seila"
+   ]
+  },
+  {
+   "term": "Kungaupei",
+   "status": "existing",
+   "glossaryId": "kungaupei",
+   "glossaryTerm": "Kungaupei",
+   "in": [
+    "mu"
+   ]
+  },
+  {
+   "term": "Meldan",
+   "status": "existing",
+   "glossaryId": "meldan",
+   "glossaryTerm": "Meldan",
+   "in": [
+    "gladias"
+   ]
+  },
+  {
+   "term": "Minpentai",
+   "status": "existing",
+   "glossaryId": "minpentai",
+   "glossaryTerm": "Minpentai",
+   "in": [
+    "bai",
+    "deluin",
+    "mu",
+    "seila",
+    "zei"
+   ]
+  },
+  {
+   "term": "Northglade",
+   "status": "existing",
+   "glossaryId": "northglade",
+   "glossaryTerm": "Northglade",
+   "in": [
+    "deluin",
+    "gladias",
+    "seila"
+   ]
+  },
+  {
+   "term": "Order of Steering",
+   "status": "existing",
+   "glossaryId": "order-of-steering",
+   "glossaryTerm": "Order of Steering",
+   "in": [
+    "gladias"
+   ]
+  },
+  {
+   "term": "Redshire",
+   "status": "existing",
+   "glossaryId": "redshire",
+   "glossaryTerm": "Redshire",
+   "in": [
+    "bai",
+    "deluin",
+    "gladias",
+    "mu"
+   ]
+  },
+  {
+   "term": "Silverchat",
+   "status": "existing",
+   "glossaryId": "silverchat",
+   "glossaryTerm": "Silverchat",
+   "in": [
+    "gladias",
+    "seila"
+   ]
+  },
+  {
+   "term": "Thaldur",
+   "status": "existing",
+   "glossaryId": "thaldur",
+   "glossaryTerm": "Thaldur",
+   "in": [
+    "bai"
+   ]
+  },
+  {
+   "term": "Veridia",
+   "status": "existing",
+   "glossaryId": "veridia",
+   "glossaryTerm": "Veridia",
+   "in": [
+    "bai",
+    "ephelion",
+    "gladias",
+    "seila"
+   ]
+  }
+ ]
+}

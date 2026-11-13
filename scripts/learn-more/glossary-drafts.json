@@ -1,1 +1,6 @@
-{}
+{
+ "compute box": {"slug": "compute-box", "quote": "carrying his hand device in one hand, attached by a cable to a larger compute box in the other.", "block": "c1-b111"},
+ "hand device": {"slug": "hand-device", "quote": "signs with colored blinking lights advertising all kinds of electronics: hand devices, watches, compute boxes", "block": "c2-b3"},
+ "intervention turn": {"slug": "intervention-turn", "quote": "At the same time, the first intervention turn came. Here, all players were able to put down more squares near any copy of their symbols.", "block": "c4-b110"},
+ "co-family": {"slug": "co-family", "quote": "Febric and Hreda were from their co-family, Uncle Vil and Aunt Daia.", "block": "c1-b125"}
+}
