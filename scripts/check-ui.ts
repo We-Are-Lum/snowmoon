@@ -2001,6 +2001,19 @@ async function checkChallengeLanding() {
       const more = page.locator('.ch-character-page details.chc-more');
       if ((await more.count()) !== 1 || (await more.evaluate((d) => (d as HTMLDetailsElement).open)) || ((await more.locator('summary').textContent()) ?? '').trim() !== 'Read more about Zei') fail(`/challenge/zei ${tag}: no closed "Read more about Zei"`);
       if (!((await more.textContent()) ?? '').includes('The book doesn’t describe Zei’s looks.')) fail(`/challenge/zei ${tag}: "Read more" doesn't say the look is this edition's`);
+      // Its first-layer facts (owner, 2026-11-12: ADD): each line, the book's words and "Ch N · block", chapters 1 to 14 only.
+      {
+        const { firstLayerFacts } = await import('../src/lib/challenge/cards');
+        await more.locator('summary').click();
+        const facts = await more.locator('li.chc-fact').evaluateAll((els) => els.map((e) => ({ block: e.getAttribute('data-block') ?? '', text: e.querySelector('.chc-fact-text')?.textContent?.trim() ?? '', quote: e.querySelector('.chc-fact-quote')?.textContent?.trim() ?? '', cite: e.querySelector('.chc-fact-cite')?.textContent?.trim() ?? '' })));
+        const want = firstLayerFacts('zei');
+        if (facts.length !== want.length || !want.every((f, i) => facts[i].block === f.block && facts[i].text === f.text && facts[i].quote === f.quote && facts[i].cite === `Ch ${f.chapter} · ${f.block}`)) fail(`/challenge/zei ${tag}: "Read more" doesn't show Zei's first-layer facts with their quotes and chapters (${JSON.stringify(facts)})`);
+        if (facts.some((f) => Number(/^c(\d+)-/.exec(f.block)?.[1]) > 14)) fail(`/challenge/zei ${tag}: "Read more" shows a fact past chapter 14`);
+        if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways with "Read more" open`);
+        await more.scrollIntoViewIfNeeded();
+        await snap('character-read-more');
+        await more.locator('summary').click();
+      }
       const heads = await page.locator('.ch-character-page h2.chc-h2').evaluateAll((els) => els.map((e) => (e as HTMLElement).innerText.trim()));
       const wantHeads = wide ? 'Starting pictures|Every remix of Zei' : 'Starting pictures|Every remix';
       if (heads.join('|') !== wantHeads) fail(`/challenge/zei ${tag}: the sections read ${heads.join(', ')}, not ${wantHeads}`);
