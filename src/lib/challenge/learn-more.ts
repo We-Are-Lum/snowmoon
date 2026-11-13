@@ -2,10 +2,11 @@
  * "Learn more about {Name}" on a challenge character's page (owner, 2026-11-12): who the character is, written for
  * someone who knows nothing about the story; the start; the whole book behind a fold labelled exactly "Later in the
  * book (spoilers)", closed by default; what drives them; and room to invent. Data only (it may still change), brought in
- * word for word from docs/learn-more-drafts/texts.json (branch learn-more-texts, commit aee6da1c: every open part cites chapters 1 to 14). Zei's is the owner's
- * (approved: true); every other is the coding agent's DRAFT (Claude, a closed model by Anthropic) until he approves it.
- * Segments: plain text; a glossary term (its existing glossary entry's slug, or null for a DRAFT entry, which isn't
- * shipped); a citation to a block of the book ("c4-b72", or a range "c2-b98–b103").
+ * word for word from docs/learn-more-drafts/texts.json (branch learn-more-texts, commit fa114237: every open part cites chapters 1 to 14). Zei's is the owner's
+ * own (his corrected version of 2026-11-12); the other six were drafted by the coding agent (Claude, a closed model by
+ * Anthropic) and approved by the owner on 2026-11-12. A text with approved: false would show marked "Draft wording".
+ * Segments: plain text; a glossary term (its existing glossary entry's slug, or null for an entry not yet in the site
+ * glossary); a citation to a block of the book ("c4-b72", or a range "c2-b98–b103").
  * The rule (docs/principles.md P9, owner 2026-11-12; scripts/lib/challenge-moments.ts p9g): "who", "start" and "drives"
  * cite chapters 1 to 14 only; "later" shows only inside its fold.
  */
@@ -55,10 +56,16 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "cite": "c7-b61"
       },
       {
+        "cite": "c5-b69–b70"
+      },
+      {
         "text": ". Minpentai is a strategy game that Dzego takes very seriously. Zei is quick and competitive, and he plays so cleverly that Den, who recruits him into defense, says he nearly reinvented parts of cryptography in a single game "
       },
       {
         "cite": "c9-b66"
+      },
+      {
+        "cite": "c9-b75"
       },
       {
         "text": "."
@@ -73,10 +80,13 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "glossaryId": "arctics"
       },
       {
-        "text": " bomb tears through his school. A stranger had moved his class to another room minutes before, which saved his life, but a stone breaks his left arm "
+        "text": " bomb tears through his classroom. A stranger had moved his class to another room minutes before, which saved his life, but a stone breaks his left arm "
       },
       {
-        "cite": "c2-b98–b103"
+        "cite": "c2-b98–b104"
+      },
+      {
+        "cite": "c5-b72"
       },
       {
         "cite": "c9-b75"
@@ -107,6 +117,9 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "text": ". He wins the money "
       },
       {
+        "cite": "c7-b120"
+      },
+      {
         "cite": "c7-b138"
       },
       {
@@ -119,7 +132,7 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "cite": "c10-b206"
       },
       {
-        "text": ", and makes the national top four "
+        "text": ", and reaches the top four of the qualifiers "
       },
       {
         "cite": "c14-b31"
@@ -133,13 +146,16 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "text": "Mu tells him what Minpentai is really for: \"It's military training.\" "
       },
       {
-        "cite": "c10-b194"
+        "cite": "c10-b191–b194"
       },
       {
-        "text": ". When the war comes, Zei commands drones against the Arctics "
+        "text": ". When the war comes, Zei directs drone tactics against the Arctics "
       },
       {
         "cite": "c29-b110"
+      },
+      {
+        "cite": "c30-b2"
       },
       {
         "text": ". He loses Den "
@@ -151,10 +167,26 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "cite": "c29-b115"
       },
       {
-        "text": ", and a message from Deluin, now secretly working inside the Arctic command, turns the battle "
+        "text": ". Deluin, now secretly a commander on the Arctic side, sends him a way through and access to the Arctic drones' simulator "
       },
       {
         "cite": "c29-b114"
+      },
+      {
+        "cite": "c30-b4"
+      },
+      {
+        "text": ", and his side wins back "
+      },
+      {
+        "term": "Northglade",
+        "glossaryId": "northglade"
+      },
+      {
+        "text": " "
+      },
+      {
+        "cite": "c30-b68–b72"
       },
       {
         "text": ". The championship final is cancelled and Zei is given the title "
@@ -166,7 +198,7 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "text": ". By the end, he argues that \"AI should be a player, not the game.\" "
       },
       {
-        "cite": "c32-b47"
+        "cite": "c32-b42–b47"
       }
     ],
     "drives": [
@@ -212,7 +244,7 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
   "gladias": {
     "name": "Gladias",
     "pronoun": "he",
-    "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+    "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner",
     "who": [
       {
         "text": "Gladias lives in "
@@ -439,7 +471,7 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         "cite": "c24-b2–b6"
       },
       {
-        "text": ", and he wants Veridia to defend itself "
+        "text": ", and he tries to convince Dzego to come and help defend Veridia "
       },
       {
         "cite": "c21-b96"
@@ -541,12 +573,12 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         }
       ]
     ],
-    "approved": false
+    "approved": true
   },
   "bai": {
     "name": "Bai",
     "pronoun": "she",
-    "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+    "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner",
     "who": [
       {
         "text": "Bai Jahen is a "
@@ -798,12 +830,12 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         }
       ]
     ],
-    "approved": false
+    "approved": true
   },
   "seila": {
     "name": "Seila",
     "pronoun": "she",
-    "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+    "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner",
     "who": [
       {
         "text": "Seila is a blogger from "
@@ -1100,12 +1132,12 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         }
       ]
     ],
-    "approved": false
+    "approved": true
   },
   "deluin": {
     "name": "Deluin",
     "pronoun": "he",
-    "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+    "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner",
     "who": [
       {
         "text": "Deluin is an older teenage "
@@ -1339,12 +1371,12 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         }
       ]
     ],
-    "approved": false
+    "approved": true
   },
   "mu": {
     "name": "Mu",
     "pronoun": "she",
-    "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+    "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner",
     "who": [
       {
         "text": "Mu is an older woman who knows Zei through "
@@ -1576,12 +1608,12 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         }
       ]
     ],
-    "approved": false
+    "approved": true
   },
   "ephelion": {
     "name": "Lord Ephelion",
     "pronoun": "he",
-    "author": "coding agent draft (Claude, a closed model by Anthropic), DRAFT",
+    "author": "coding agent draft (Claude, a closed model by Anthropic), approved by the owner",
     "who": [
       {
         "text": "Lord Ephelion is the "
@@ -1732,13 +1764,14 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
         }
       ]
     ],
-    "approved": false
+    "approved": true
   }
 };
 
 /**
- * The DRAFT glossary entries the texts name (docs/learn-more-drafts/glossary.json): not shipped as glossary entries (the
- * glossary has no drafts), so their terms show without an ⓘ until the owner approves them.
+ * The glossary entries the texts name that the site glossary doesn't have yet (docs/learn-more-drafts/glossary.json),
+ * approved by the owner on 2026-11-12. Not yet in content/snowmoon/glossary.json (its explanations are picked by the
+ * build's rule, not by hand), so their terms show without an ⓘ until they are.
  */
 export const DRAFT_GLOSSARY: readonly { term: string; slug: string; quote: string; block: string }[] = [
   {
