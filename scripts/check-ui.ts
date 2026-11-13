@@ -2044,8 +2044,9 @@ async function checkChallengeLanding() {
       if (ratios.length !== zeiRemixes.length || ratios.some((r) => Math.abs(r - 16 / 9) > 0.05) || (await page.locator('.ch-char-remixes img.chc-wide-img').count()) !== zeiRemixes.length) fail(`/challenge/zei ${tag}: the remixes aren't shown whole at 16:9 (${ratios.map((r) => r.toFixed(2)).join()})`);
       if (((await page.locator('.ch-char-remixes .chc-meta').textContent()) ?? '').trim() !== 'newest first') fail(`/challenge/zei ${tag}: no "newest first"`);
       if ((await page.locator('.ch-character-page .chc-ai .ai-tag').count()) !== baseIds.length + zeiRemixes.length) fail(`/challenge/zei ${tag}: a picture has no AI label`);
-      // Read with each element's text apart (a byline "#6852" next to "Remix this" isn't a count).
-      const pageText = await page.locator('.ch-character-page').evaluate((root) => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const out: string[] = []; for (let n = w.nextNode(); n; n = w.nextNode()) out.push(n.textContent ?? ''); return out.join(' | '); });
+      // Read with each element's text apart (a byline "#6852" next to "Remix this" isn't a count). "Read more"'s facts cite
+      // their chapter ("Ch 4 · c4-b79"; owner, 2026-11-12: ADD), checked above; no moment chip or count anywhere else.
+      const pageText = await page.locator('.ch-character-page').evaluate((root) => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const out: string[] = []; for (let n = w.nextNode(); n; n = w.nextNode()) if (!n.parentElement?.closest('.chc-facts')) out.push(n.textContent ?? ''); return out.join(' | '); });
       if (/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test(pageText)) fail(`/challenge/zei ${tag}: shows a moment or a count (${/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.exec(pageText)?.[0]})`);
       await snap('character', true);
       await at('/challenge/gladias', '.ch-character-page');
