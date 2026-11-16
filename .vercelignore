@@ -1,0 +1,22 @@
+# What a deploy never uploads (the safety PR, owner 2026-11-12). Production deploys come from main through git; this
+# keeps secrets and local-only files out of any upload made by hand from a working tree (the CLI sends the folder).
+# Only secrets and local files are listed: everything the build reads stays in.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.vercel
+.claude
+.next
+private/
+.venv
+.venv-*
+.voice-models
+narration-out
+images-out
+art-out
+summary-out
+open-call/
+*.log
+.DS_Store

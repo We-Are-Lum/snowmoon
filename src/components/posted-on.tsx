@@ -19,7 +19,7 @@ export interface PostedOnItem {
  * a link to the post on its network. No avatar, embed, picture or words from the networks (P6a). Signed in, the
  * person who added a post (or a moderator) sees Remove on it; who added what is never shown.
  */
-export function PostedOn({ versionId, posts }: { versionId: string; posts: PostedOnItem[] }) {
+export function PostedOn({ versionId, posts, head = W.postedOnHead, note = W.postedOnNote }: { versionId: string; posts: PostedOnItem[]; /** A challenge picture's page: "Posts" (owner, 2026-11-12). */ head?: string; note?: string }) {
   const auth = useAuth();
   const wallet = useWalletSession();
   const [removable, setRemovable] = useState<Set<string>>(new Set());
@@ -40,7 +40,7 @@ export function PostedOn({ versionId, posts }: { versionId: string; posts: Poste
   return (
     <section className="dz-section ch-posted" aria-labelledby={`posted-${versionId}`}>
       <p className="dz-label" id={`posted-${versionId}`}>
-        {W.postedOnHead}
+        {head}
       </p>
       <ul className="ch-posted-list">
         {shown.map((p) => (
@@ -59,7 +59,7 @@ export function PostedOn({ versionId, posts }: { versionId: string; posts: Poste
           </li>
         ))}
       </ul>
-      <p className="dz-note">{W.postedOnNote}</p>
+      <p className="dz-note">{note}</p>
     </section>
   );
 }

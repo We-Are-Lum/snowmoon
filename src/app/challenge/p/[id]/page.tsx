@@ -35,7 +35,7 @@ export default async function ChallengePicturePage({ params }: Props) {
   if (!CHALLENGE.public) notFound();
   const { id } = await params;
   return (
-    <div className="page prose ch-page">
+    <div className="ch-page chp-wrap">
       <ChallengePicture id={id} />
     </div>
   );

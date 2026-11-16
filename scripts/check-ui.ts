@@ -2056,6 +2056,32 @@ async function checkChallengeLanding() {
       const missing = await page.goto(`${LOCAL}/challenge/lektor`, { waitUntil: 'load' });
       if (missing?.status() !== 404) fail(`/challenge/lektor ${tag}: answers ${missing?.status()}, not 404`);
 
+      // A picture's page: the redesign's screen 4 (owner-approved plan, 2026-11-11). The back link to its character, the
+      // full AI line (the declaration and the model's name and terms), the credit chain (its base, then itself), "How it
+      // was made" closed with the full recipe linked, two columns on a desktop, no sideways scroll.
+      {
+        const pic = FX.remixes.find((r) => r.character === 'zei')!;
+        await at(`/challenge/p/${pic.versionId}`, 'h1.mk-title');
+        if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/p ${tag}: scrolls sideways`);
+        const back = page.locator('.chp-back');
+        if ((await back.getAttribute('href')) !== '/challenge/zei' || !((await back.textContent()) ?? '').includes('Zei')) fail(`/challenge/p ${tag}: no back link to Zei's page`);
+        const ai = ((await page.locator('[data-slot="ai-line"]').textContent()) ?? '').replace(/\s+/g, ' ').trim();
+        // Owner, 2026-11-12: "AI-generated · {model}, a closed model by {maker}", with no "not by the author" in sight.
+        if (!/^AI ?AI-generated · .+, (open weights|a closed model by )/.test(ai)) fail(`/challenge/p ${tag}: the AI line reads "${ai}", not "AI-generated" with the model and its terms`);
+        if (/not by the author/i.test(await page.locator('[data-slot="ai-line"]').innerText())) fail(`/challenge/p ${tag}: the AI line still shows "not by the author"`);
+        const steps = await page.locator('.chp-steps > li').evaluateAll((els) => els.map((e) => `${e.getAttribute('aria-current') ?? ''}|${(e.querySelector('.chp-step-by')?.textContent ?? '').trim()}`));
+        if (steps.length !== 2 || !steps[0].startsWith('|Base · ') || steps[1] !== 'page|This one') fail(`/challenge/p ${tag}: the credit chain reads ${steps.join(', ')}, not its base then "This one"`);
+        const made = page.locator('details.chp-made');
+        if ((await made.count()) !== 1 || (await made.evaluate((d) => (d as HTMLDetailsElement).open)) || ((await made.locator('summary').textContent()) ?? '').trim() !== 'How it was made' || (await made.locator(`a[href="/image/${pic.versionId}"]`).count()) !== 1) fail(`/challenge/p ${tag}: no closed "How it was made" with the full recipe linked`);
+        if (w >= 1024) {
+          const [f, sd] = await Promise.all([page.locator('.chp-figure').boundingBox(), page.locator('.chp-side').boundingBox()]);
+          if (!f || !sd || sd.x < f.x + f.width || Math.abs(sd.width - 440) > 2) fail(`/challenge/p ${tag}: not two columns (the picture, then a 440px column)`);
+          const over = await page.locator('.chp-side').evaluate((side) => { const r = side.getBoundingClientRect().right; return [...side.querySelectorAll('*')].filter((e) => e.getBoundingClientRect().right > r + 1).map((e) => e.className || e.tagName).slice(0, 3); });
+          if (over.length) fail(`/challenge/p ${tag}: the column's contents run past its edge (${over.join(', ')})`);
+        }
+        await snap('picture', true);
+      }
+
       // The remix screen (owner, 2026-11-08): the picture small, one box, the Style row (the published styles, Random,
       // Write your own; Zei's base starts on its own style), the Model row (one chip, the model and its maker), Make it;
       // no moments.
@@ -2066,8 +2092,11 @@ async function checkChallengeLanding() {
       const styleChips = (await page.locator('.mk-styles .cc-chip').allTextContents()).map((t) => t.replace('⟳', '').trim());
       // "Same as this picture" first and chosen (owner, 2026-11-09), then the published styles, Random, Write your own.
       // Only the offered styles (CHALLENGE.offeredStyles, "Animated series"; owner, 2026-11-09); Random only with one to draw.
-      const offeredFx = FX.styles.map((x) => x.name).filter((n) => CHALLENGE.offeredStyles.includes(n));
+      // Each by its display label (STYLE_LABELS: the fixture's "Mood" reads "Moody graphic novel"; owner, 2026-11-12).
+      const { styleLabel } = await import('../src/lib/challenge/make-wording');
+      const offeredFx = CHALLENGE.offeredStyles.filter((n) => FX.styles.some((x) => x.name === n)).map(styleLabel);
       const wantChips = ['Same as this picture', ...offeredFx, ...(offeredFx.length ? ['Random'] : []), 'Write your own'];
+      if (!offeredFx.includes('Moody graphic novel') || styleChips.includes('Mood')) fail(`/challenge/make ${tag}: the fixture's "Mood" isn't shown as "Moody graphic novel" (${styleChips.join(', ')})`);
       if (styleChips.join('|') !== wantChips.join('|')) fail(`/challenge/make ${tag}: the Style row reads ${styleChips.join(', ')}, not ${wantChips.join(', ')}`);
       if ((await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style')) !== 'same') fail(`/challenge/make ${tag}: the Style row doesn't start on "Same as this picture"`);
       const models = (await page.locator('.mk-model .cc-chip').allTextContents()).map((t) => t.trim());
@@ -2076,6 +2105,59 @@ async function checkChallengeLanding() {
       if (models.join('|') !== 'FLUX.2 [klein] 4B · Black Forest Labs · open') fail(`/challenge/make ${tag}: the Model row reads ${models.join(', ')}`);
       if (await page.locator('.mk-moments, .mk-strip, .mk-surprise, .mk-quotes').count()) fail(`/challenge/make ${tag}: shows the moments while they are off`);
       await snap('make', true);
+      // "See examples" under the Style row (owner, 2026-11-12): a dialog with each offered published style (its label,
+      // words and up to three samples, each with the AI label), none of the three special chips; tapping a style picks
+      // it in the row and closes the panel. A bottom sheet under 768px (at the bottom, full width), a side panel wider.
+      {
+        const link = page.locator('.mk-styles .se-link');
+        if ((await link.count()) !== 1 || ((await link.textContent()) ?? '').trim() !== 'See examples') fail(`/challenge/make ${tag}: no "See examples" link under the Style row`);
+        else {
+          await link.click();
+          const dlg = page.getByRole('dialog', { name: 'Styles' });
+          await dlg.waitFor({ timeout: 5000 }).catch(() => fail(`/challenge/make ${tag}: "See examples" doesn't open a dialog named "Styles"`));
+          if ((await dlg.getAttribute('aria-modal')) !== 'true') fail(`/challenge/make ${tag}: the examples panel isn't aria-modal`);
+          const names = (await dlg.locator('.se-name').allTextContents()).map((t) => t.trim());
+          if (names.join('|') !== offeredFx.join('|')) fail(`/challenge/make ${tag}: the examples panel lists ${names.join(', ')}, not ${offeredFx.join(', ')}`);
+          if (names.some((n) => ['Same as this picture', 'Random', 'Write your own'].includes(n)) || (await dlg.locator('[data-style="same"], [data-style="random"], [data-style="own"]').count())) fail(`/challenge/make ${tag}: the examples panel shows a special chip`);
+          const moodRow = dlg.locator('.se-style').filter({ has: page.locator('.se-name', { hasText: 'Moody graphic novel' }) });
+          const samples = moodRow.locator('.se-sample');
+          if ((await samples.count()) !== 3) fail(`/challenge/make ${tag}: "Moody graphic novel" shows ${await samples.count()} samples, not three (its newest version has four)`);
+          if (((await moodRow.locator('.se-words').textContent()) ?? '').trim() !== FX.styles.find((x) => x.name === 'Mood')?.text) fail(`/challenge/make ${tag}: "Moody graphic novel" doesn't show its words`);
+          for (const sm of await samples.all()) {
+            if ((await sm.locator('img').getAttribute('alt')) !== 'AI-generated sample of the Moody graphic novel style') fail(`/challenge/make ${tag}: a sample's alt is ${await sm.locator('img').getAttribute('alt')}`);
+            if ((await sm.locator('img').getAttribute('loading')) !== 'lazy') fail(`/challenge/make ${tag}: a sample doesn't load lazily`);
+            if ((await sm.locator('[data-ai="tag"]').count()) !== 1) fail(`/challenge/make ${tag}: a sample has no AI label`);
+          }
+          // Its visible words only: each sample's AiTag keeps the hidden declaration (screen readers, and the tip on hover or
+          // focus), as the /challenge tiles do (kept on purpose, owner 2026-11-12).
+          if (/not by the author/i.test((await dlg.evaluate((d) => { const c = d.cloneNode(true) as HTMLElement; c.querySelectorAll('.sr-only, .ai-tag-tip').forEach((n) => n.remove()); return c.textContent ?? ''; })) ?? '')) fail(`/challenge/make ${tag}: the examples panel shows "not by the author" (owner, 2026-11-12: only beside the book's text)`);
+          for (const b of await dlg.locator('.se-close, .se-pick, .se-sample-pick').all()) {
+            const bb = await b.boundingBox();
+            if (bb && bb.height < 44) fail(`/challenge/make ${tag}: a tap target in the examples panel is ${Math.round(bb.height)}px tall`);
+          }
+          const box = await dlg.boundingBox();
+          const vp = page.viewportSize()!;
+          const sheet = Boolean(box && Math.abs(box.y + box.height - vp.height) <= 1 && box.x <= 1 && Math.abs(box.width - vp.width) <= 1);
+          if (w < 768 && !sheet) fail(`/challenge/make ${tag}: the examples panel isn't a bottom sheet (${JSON.stringify(box)})`);
+          if (w >= 768 && (!box || box.width >= vp.width - 1)) fail(`/challenge/make ${tag}: the examples panel fills the width on a wide screen (${JSON.stringify(box)})`);
+          if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/make ${tag} (See examples): scrolls sideways`);
+          await checkFloors(page, `/challenge/make ${tag} (See examples)`, scheme);
+          await snap('style-examples');
+          // Escape closes it, and focus goes back to the link.
+          await page.keyboard.press('Escape');
+          if (await dlg.isVisible()) fail(`/challenge/make ${tag}: Escape doesn't close the examples panel`);
+          else if (!(await link.evaluate((e) => e === document.activeElement))) fail(`/challenge/make ${tag}: focus doesn't go back to "See examples"`);
+          // Tapping a style's sample picks it in the row and closes the panel.
+          await link.click();
+          await dlg.waitFor({ timeout: 5000 }).catch(() => {});
+          const moodId = await moodRow.getAttribute('data-style');
+          await moodRow.locator('.se-sample-pick').first().click();
+          if (await dlg.isVisible()) fail(`/challenge/make ${tag}: tapping a sample doesn't close the examples panel`);
+          if ((await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style')) !== moodId) fail(`/challenge/make ${tag}: tapping a sample doesn't pick "Moody graphic novel" in the Style row`);
+          await snap('style-examples-picked');
+          await page.locator('.mk-styles .cc-chip[data-style="same"]').click();
+        }
+      }
       await page.locator('.mk-styles .cc-chip[data-style="own"]').click();
       if (!(await page.locator('#mk-own-style').count()) || (await page.locator('#mk-own-style').getAttribute('maxlength')) !== '120') fail(`/challenge/make ${tag}: "Write your own" doesn't open a box of at most 120 characters`);
       if (!(await page.locator('#mk-own-style-line').count())) fail(`/challenge/make ${tag}: "Write your own" has no publication line (P1f)`);
@@ -2149,6 +2231,80 @@ async function checkChallengeLanding() {
         }
       }
       await page.close();
+    }
+    // The entries page and admin examples (owner, 2026-11-12), after the feed's checks: two entries of Zei and, made
+    // between them, an admin's picture submitted with its post (FX.entries). /challenge/entries lists all three newest
+    // first, only the admin's marked "Admin example" with its ⓘ; on a desktop a grid of tiles (four across), on a phone
+    // the list as before (two across). A picture's page lists its posts under "Posts"; the example's is marked too.
+    if (CHALLENGE.pictureEntries) {
+      await data.addEntries();
+      const { CHALLENGE_WORDING: CWX } = await import('../src/lib/challenge/wording');
+      const exampleFx = FX.entries.find((x) => x.example)!;
+      for (const [w, h, touch, scheme, cols] of [
+        [390, 844, true, 'light', 2],
+        [1440, 900, false, 'dark', 4],
+      ] as const) {
+        const tag = `@${w}×${h} (${scheme})`;
+        const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
+        try {
+          await page.goto(`${LOCAL}/challenge/entries`, { waitUntil: 'load' });
+          await page.waitForSelector('.ch-entries-list .ch-card', { timeout: 30000 });
+          await checkFloors(page, `/challenge/entries ${tag}`, scheme);
+          if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/entries ${tag}: scrolls sideways`);
+          const cards = await page.locator('.ch-entries-list .ch-card').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-version')}:${e.getAttribute('data-example') ?? ''}`));
+          const want = FX.entries.map((x) => `${x.versionId}:${x.example ? 'admin' : ''}`);
+          if (cards.join() !== want.join()) fail(`/challenge/entries ${tag}: the entries and the admin example aren't listed newest first, the example marked (${cards.join()})`);
+          const ex = page.locator(`.ch-card[data-version="${exampleFx.versionId}"] .ch-example`);
+          const exName = ((await ex.locator('button.info-label[data-label="admin-example"]').textContent().catch(() => '')) ?? '').replace(/\s+/g, ' ');
+          if (((await ex.locator('.ch-badge').textContent().catch(() => '')) ?? '').trim() !== CWX.exampleLabel || !exName.includes(CWX.exampleLabel) || !exName.includes(CWX.exampleInfo)) fail(`/challenge/entries ${tag}: the admin example isn't labelled "${CWX.exampleLabel}" with its ⓘ ("${CWX.exampleInfo}")`);
+          if ((await page.locator('.ch-entries-list .ch-example').count()) !== 1) fail(`/challenge/entries ${tag}: an entry is marked as an admin example`);
+          const shown = await page.locator('.ch-entries-list').evaluate((l) => getComputedStyle(l).gridTemplateColumns.split(' ').filter(Boolean).length);
+          if (shown !== cols) fail(`/challenge/entries ${tag}: ${shown} across, not ${cols}${w >= 1024 ? ' (the desktop grid)' : ' (the phone layout, unchanged)'}`);
+          if (w >= 1024) {
+            const tops = await page.locator('.ch-entries-list .ch-card').evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().top)));
+            if (new Set(tops).size !== 1) fail(`/challenge/entries ${tag}: the three tiles aren't side by side in one row (tops ${tops.join()})`);
+          }
+          if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-entries-${w}x${h}-${scheme}.png`), fullPage: true });
+          for (const x of [exampleFx, FX.entries.find((y) => !y.example)!]) {
+            await page.goto(`${LOCAL}/challenge/p/${x.versionId}`, { waitUntil: 'load' });
+            await page.waitForSelector('h1.mk-title', { timeout: 30000 });
+            const posted = page.locator('.ch-posted');
+            const head = ((await posted.locator('.dz-label').textContent().catch(() => '')) ?? '').trim();
+            const row = ((await posted.locator('.ch-posted-list li').first().textContent().catch(() => '')) ?? '').replace(/\s+/g, ' ');
+            if (head !== 'Posts' || !row.includes(`@${x.post.handle}`) || (await posted.locator(`a[href="${x.post.url}"]`).count()) !== 1) fail(`/challenge/p ${tag}: the picture's post isn't listed under "Posts" (network, @handle, date, link): "${head}" / "${row}"`);
+            const marked = await page.locator('.chp-cap .ch-example').count();
+            if (marked !== (x.example ? 1 : 0)) fail(`/challenge/p ${tag}: ${x.example ? 'the admin example isn\'t marked "Admin example"' : 'an entry is marked as an admin example'}`);
+            if (x.example && !(((await page.locator('.chp-cap button.info-label[data-label="admin-example"]').textContent().catch(() => '')) ?? '').includes(CWX.exampleInfo))) fail(`/challenge/p ${tag}: the admin example's ⓘ doesn't say "${CWX.exampleInfo}"`);
+            if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/p ${tag}: scrolls sideways`);
+          }
+          // Item 2 (owner, 2026-11-12, admin examples): a non-admin who passed the check and made the picture (fixture FID 900,
+          // its entry) sees the submit box on #162's layout: in the right-hand column on a desktop, below the picture on a phone.
+          // Signed in in this browser only (a stand-in session; the submit API's GET answered for FID 900).
+          {
+            const ent = FX.entries.find((x) => !x.example)!;
+            await page.evaluate((fid) => localStorage.setItem('snowmoon.signin', JSON.stringify({ token: 'stand-in', fid, username: `fixture${fid}`, nameProof: null, exp: Math.floor(Date.now() / 1000) + 3600 })), ent.fid);
+            await page.route('**/api/challenge/submit', (r) => (r.request().method() === 'GET' ? r.fulfill({ json: { left: 1, versions: [], person: ent.fid } }) : r.continue()));
+            await page.goto(`${LOCAL}/challenge/p/${ent.versionId}`, { waitUntil: 'load' });
+            await page.waitForSelector('h1.mk-title', { timeout: 30000 });
+            const box = page.locator('.sf-submit .ch-submit');
+            await box.waitFor({ timeout: 10000 }).catch(() => {});
+            if (!(await box.isVisible().catch(() => false))) fail(`/challenge/p ${tag}: a non-admin maker who passed the check doesn't see the submit box`);
+            else {
+              if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/p ${tag}: scrolls sideways with the submit box`);
+              const [fig, side, b] = await Promise.all([page.locator('.chp-figure').boundingBox(), page.locator('.chp-side').boundingBox(), box.boundingBox()]);
+              if (!fig || !side || !b) fail(`/challenge/p ${tag}: no picture, column or box to measure`);
+              else if (w >= 1024 ? !(b.x >= side.x - 1 && b.x + b.width <= side.x + side.width + 1 && side.x >= fig.x + fig.width) : !(b.y >= fig.y + fig.height - 1)) fail(`/challenge/p ${tag}: the submit box isn't ${w >= 1024 ? 'in the right-hand column' : 'below the picture'}`);
+              if (await page.locator('.chp-cap .ch-example').count()) fail(`/challenge/p ${tag}: a non-admin's entry is marked "Admin example"`);
+              await box.scrollIntoViewIfNeeded();
+              if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-picture-submit-box-${w}x${h}-${scheme}.png`) });
+            }
+            await page.unroute('**/api/challenge/submit');
+            await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
+          }
+        } finally {
+          await page.close();
+        }
+      }
     }
   } finally {
     server.kill();

@@ -322,6 +322,36 @@ check('config: a current default look per challenge character, each a design id 
   check('moments off: every picture starts on "Same as this picture" (owner, 2026-11-09), with or without a style of its own', M.makeView({ ...src, styleElement: null }, { styles: pub }).defaultStyle === 'same');
   check('moments on (kept): the screen gets all fifteen', M.makeView(src, { styles: pub, momentsOn: true }).moments.length === 15);
   check('moments off: a picture is anchored to its character\'s first passage', JSON.stringify(M.characterAnchor('zei')) === JSON.stringify({ chapter: 2, start: 2, end: 2 }));
+
+  // "Mood" shown as "Moody graphic novel", and "See examples" (owner, 2026-11-12). A display label only: the published
+  // style keeps its title, so the allowlist, Random's draw and the recipe still name it "Mood".
+  const MW = await import('../src/lib/challenge/make-wording');
+  const mood = { id: 'style:em', label: 'Mood', text: 'Moody words.', elementId: 'em', versionId: 'vm', versionNo: 1, entity: 'Mood', title: 'Mood', byName: 'naaate', byFid: 6786, assist: null, samples: ['u1', 'u2', 'u3', 'u4'] };
+  const withMood = [...pub, mood];
+  const mvm = M.makeView(src, { styles: withMood, presets: [{ id: 'p1', label: 'Preset 1', prompt: 'p' }] });
+  check('labels: "Mood" shows as "Moody graphic novel"; any other style keeps its name', MW.styleLabel('Mood') === 'Moody graphic novel' && MW.styleLabel('Comic book') === 'Comic book' && MW.STYLE_LABELS.Mood === 'Moody graphic novel');
+  check('labels: the Style row shows the label, under the published style\'s own id', mvm.styles.find((x) => x.id === 'style:em')?.label === 'Moody graphic novel' && !mvm.styles.some((x) => x.label === 'Mood'));
+  const moodPick = M.resolveStyle({ kind: 'style', id: 'style:em' }, withMood);
+  const moodDraw = M.resolveStyle({ kind: 'random' }, withMood, [], (l) => l[3]);
+  check('labels: the recipe still records the stored name ("Mood"), picked or drawn, and its text', moodPick?.label === 'Mood' && moodPick.text === 'Moody words.' && moodPick.design?.title === 'Mood' && moodDraw?.label === 'Mood');
+  check('labels: the allowlist still matches the stored title "Mood"', M.offeredOnly(withMood, ['Mood']).map((x) => x.id).join() === 'style:em');
+  const route2 = read('src/app/api/challenge/make/route.ts');
+  check('labels: the route records style.label (the stored name) in the recipe, and shows the label only in its answer', /style: \{ choice: style\.choice, id: style\.id, elementId: style\.design\?\.elementId \?\? null, label: style\.label, text: style\.text \}/.test(route2) && /randomDrew\(styleLabel\(style\.label \?\? ''\)\)/.test(route2));
+  const recordsStored = (r: string) => /style: \{ choice: style\.choice, id: style\.id, elementId: style\.design\?\.elementId \?\? null, label: style\.label, text: style\.text \}/.test(r);
+  proof('labels: a recipe that records the display label is caught', !recordsStored(route2.replace('label: style.label, text: style.text', 'label: styleLabel(style.label ?? \'\'), text: style.text')));
+  const ex = mvm.examples;
+  check('examples: the published styles only, in the row\'s order (no preset, "Same as this picture", Random or Write your own)', ex.map((x) => x.id).join() === mvm.styles.filter((x) => x.kind === 'published').map((x) => x.id).join() && !ex.some((x) => ['same', 'random', 'own', 'preset:p1'].includes(x.id) || [MW.MAKE_WORDING.sameStyle, MW.MAKE_WORDING.random, MW.MAKE_WORDING.ownStyle].includes(x.label)));
+  const moodEx = ex.find((x) => x.id === 'style:em');
+  check('examples: each shows its label, its words, and at most three samples (the first three of its newest version)', moodEx?.label === 'Moody graphic novel' && moodEx.name === 'Mood' && moodEx.words === 'Moody words.' && moodEx.samples.map((x) => x.url).join() === 'u1,u2,u3' && ex.filter((x) => x.id !== 'style:em').every((x) => x.samples.length === 0));
+  check('examples: each sample\'s alt says it is an AI-generated sample of that style, never "not by the author"', moodEx!.samples.every((x) => x.alt === 'AI-generated sample of the Moody graphic novel style') && !JSON.stringify(ex).includes('not by the author'));
+  check('examples: the words are DRAFT (owner, 2026-11-12)', mvm.w.seeExamples === 'See examples' && mvm.w.examplesTitle === 'Styles' && mvm.w.examplesClose === 'Close' && /\/\/ DRAFT \(owner, 2026-11-12\)[^\n]*\n[^\n]*\n\s*seeExamples: 'See examples'/.test(read('src/lib/challenge/make-wording.ts')) && /Mood: 'Moody graphic novel', \/\/ DRAFT \(owner, 2026-11-12\)/.test(read('src/lib/challenge/make-wording.ts')));
+  const panel = read('src/components/style-examples.tsx');
+  const makeSrc = read('src/components/challenge-make.tsx');
+  check('panel: a modal dialog (aria-modal, labelled), a visible Close, Escape closes, focus back to the link', /<dialog\b/.test(panel) && /showModal\(\)/.test(panel) && /aria-modal="true"/.test(panel) && /aria-labelledby=\{titleId\}/.test(panel) && /onCancel=/.test(panel) && /className="se-close"[^>]*>\s*\{w\.examplesClose\}/.test(panel) && /opener\.current\?\.focus\(\)/.test(panel));
+  check('panel: every sample carries the AI label, loads lazily, and its alt is the server\'s; no "not by the author" in sight', /<img src=\{p\.url\} alt=\{p\.alt\} loading="lazy"/.test(panel) && /<figcaption className="se-sample-cap">\s*<AiTag \/>/.test(panel) && !/not by the author/i.test(panel));
+  check('panel: tapping a style\'s row or a sample picks it and closes; it knows nothing of the remix screen', (panel.match(/onClick=\{\(\) => pick\(s\.id\)\}/g) ?? []).length === 2 && /onPick\(id\);\s*close\(\);/.test(panel) && !/challenge-make|MakeView|mk-/.test(panel));
+  check('panel: mounted under the Style row with the server\'s examples, picking into the row', /<StyleExamples styles=\{view\.examples\} w=\{w\} selected=\{styleSel\} onPick=\{setStyleSel\} \/>/.test(makeSrc) && makeSrc.indexOf('<StyleExamples') > makeSrc.indexOf('className="mk-styles"') && makeSrc.indexOf('<StyleExamples') < makeSrc.indexOf('className="mk-model"'));
+  check('panel: a bottom sheet under 768px (full width, at the bottom), a side panel from 768px', /@media \(max-width: 767px\) \{\s*\.se-panel \{ position: fixed; inset: auto 0 0 0; margin: 0; width: 100%; max-width: 100%;/.test(read('src/styles/designs.css')) && /@media \(min-width: 768px\) \{\s*\.se-panel \{ position: fixed; inset: 0 0 0 auto;/.test(read('src/styles/designs.css')));
 }
 
 // --- Navigation (owner, 2026-11-05: one URL per step, back one step, ✕ to the card, words kept, publish replaces) -------
@@ -431,12 +461,45 @@ check('config: a current default look per challenge character, each a design id 
   const st = await E.standing(S);
   check('the entries: Bai has one entrant, the picture by 500', st.entries.length === 1 && st.entries[0].versionId === fromBase.versionId && st.entrants.get('bai') === 1);
   check('entries link to the picture\'s page', E.entryHref(fromBase.versionId) === `/challenge/p/${fromBase.versionId}`);
+  // Admin examples (owner, 2026-11-12): an admin's picture, submitted with its post, is shown as an example on its page
+  // and on /challenge/entries (newest first among the entries, by when each was made), and is in no count or reward.
+  {
+    const R = await import('../src/lib/challenge/rules');
+    const PVX = await import('../src/lib/challenge/picture-view');
+    const marks = async () => Number((await sql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks`)[0].n);
+    const adminPic = await picture({ fid: 6786, character: 'bai', moment: 'c4-b129-symbol', from: base.versionId, uses: base.versionId });
+    const s0 = await E.standing(S);
+    const before = await PVX.pictureView(S, adminPic.versionId);
+    check('admin example: before Submit, its maker is offered Submit as an example (no day count), and it isn\'t marked yet', before?.submit?.example === true && before.submit.done === 'Submitted as an example. It isn’t an entry.' && before.w.thenSubmit === 'Then submit it as an example' && before.w.oneADay === null && before.example === null && before.note !== null);
+    const xpost = (id: string, fid: number, v: string) => ({ network: 'farcaster' as const, id: `0x${id.padEnd(40, '0')}`, handle: `p${fid}`, at: new Date().toISOString(), url: `https://farcaster.xyz/p${fid}/0x${id.padEnd(8, '0')}`, links: [`https://snowmoon.party/challenge/p/${v}`], writer: { fid } });
+    const m0 = await marks();
+    const r = await E.submitEntry(S, 6786, adminPic.versionId, xpost('ad1', 6786, adminPic.versionId) as never);
+    check('admin example: an admin\'s Submit goes through and writes no entry row', r.ok === true && (await marks()) === m0, JSON.stringify(r));
+    check('admin example: needs its post, like anyone\'s', ((x) => !x.ok && x.why === E.SUBMIT_WORDING.needsPost)(await E.submitEntry(S, 6786, adminPic.versionId, null)));
+    check('admin example: each version once', ((x) => !x.ok && x.why === E.SUBMIT_WORDING.already)(await E.submitEntry(S, 6786, adminPic.versionId, xpost('ad2', 6786, adminPic.versionId) as never)));
+    const s1 = await E.standing(S);
+    check('admin example: listed as an example, never an entry; counts and the equal share unchanged', s1.examples.map((v) => v.versionId).join() === adminPic.versionId && s1.entries.map((v) => v.versionId).join() === s0.entries.map((v) => v.versionId).join() && [...s1.entrants].join() === [...s0.entrants].join() && !R.equalSharePeople(s1.entries).includes(6786));
+    const after = await PVX.pictureView(S, adminPic.versionId);
+    check('admin example: its page marks it "Admin example" with the ⓘ words, offers no Submit, and lists its post under "Posts"', after?.example?.label === 'Admin example' && after.example.info === 'Not an entry: admins’ pictures can’t win anything.' && after.submit === null && after.badge === null && after.posts.length === 1 && after.posts[0].handle === 'p6786' && after.w.postsHead === 'Posts');
+    // A newer entry by someone else: the example sits between the two entries by time, and the counts don't change.
+    await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '502', 'neynar-score>=0.7', true)`;
+    const newer = await picture({ fid: 502, character: 'bai', moment: 'c4-b129-symbol', from: base.versionId, uses: base.versionId });
+    const m1 = await marks();
+    const r2 = await E.submitEntry(S, 502, newer.versionId, xpost('b1', 502, newer.versionId) as never);
+    check('a non-admin\'s Submit, unchanged: one entry row written', r2.ok === true && (await marks()) === m1 + 1, JSON.stringify(r2));
+    const s2 = await E.standing(S);
+    const listed = E.entriesWithExamples(s2);
+    check('/challenge/entries: the example between the two entries, newest first, marked', listed.map((v) => `${v.versionId}:${v.example}`).join() === [`${newer.versionId}:false`, `${adminPic.versionId}:true`, `${fromBase.versionId}:false`].join(), listed.map((v) => v.versionId).join());
+    check('/challenge/entries: the counts are the entries\' alone (Bai: 2 entrants, not 3)', s2.entrants.get('bai') === 2 && s2.entries.length === 2 && R.equalSharePeople(s2.entries).sort().join() === '500,502');
+    proof('an example counted (the shown list as the entries) is caught', R.entrantCounts(listed).get('bai') !== s2.entrants.get('bai'));
+    proof('an example ordered out of time (appended after the entries) is caught', [...s2.entries, ...s2.examples].map((v) => v.versionId).join() !== listed.map((v) => v.versionId).join());
+  }
   // The remix screen's sources: a base, or a challenge picture; nothing else.
   check('sources: a base and a challenge picture can be remixed; a sheet that isn\'t a base, an unknown id and a hidden thing can\'t', (await P.sourceOf(S, base.versionId))?.kind === 'sheet' && (await P.sourceOf(S, fromRemix.versionId))?.kind === 'picture' && (await P.sourceOf(S, otherSheet.versionId)) === null && (await P.sourceOf(S, randomUUID())) === null);
   // The picture's page data.
   const V = await import('../src/lib/challenge/picture-view');
   const pv = await V.pictureView(S, second.versionId);
-  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the owner\'s post text', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'My remix of Bai in “The championship final”, for the Snowmoon Party remix challenge' && pv.w.postTexts.plain === pv.submit?.postText && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
+  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the owner\'s post text', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'My remix of Bai in “The championship final”, for the Snowmoon Party remix challenge' && pv.w.postTexts.plain === pv.submit?.postText && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.' && pv.w.thenSubmit === 'Then submit it as an entry' && pv.w.oneADay === 'one a day' && pv.submit?.example === undefined && pv.example === null);
   // The feed (/challenge/remixes) with pictures as the entries: the challenge pictures, newest first, by character,
   // each linking to its page, with the viewer's own Newest / Shuffled order and no count.
   const RV = await import('../src/lib/challenge/remixes-view');
@@ -546,6 +609,35 @@ check('config: a current default look per challenge character, each a design id 
     check('a base made in a published style: the remix screen starts on that style', srcStyled?.styleElement === styleD.elementId);
     const styles = await (await import('../src/lib/challenge/make')).publishedStyles(sql as never);
     check('the published styles: listed with their names and texts', styles.some((x) => x.id === `style:${styleD.elementId}` && x.label === 'Quiet, warm light' && x.text === 'Quiet, warm light; soft shadows.'));
+    // The credit chain with a picture hidden mid-line (owner, 2026-11-12): base → plain (501) → mid (502, hidden) → top.
+    // The hidden step reads "A hidden picture", with no picture, name or link, and "Started from" says the same.
+    {
+      await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '502', 'neynar-score>=0.7', true) on conflict do nothing`;
+      const mid = await picture({ fid: 502, character: 'bai', moment: '', from: plain.versionId, remixedFrom: plain.versionId });
+      const top = await picture({ fid: 501, character: 'bai', moment: '', from: mid.versionId, remixedFrom: mid.versionId });
+      const before = await V.pictureView(S, top.versionId);
+      const midBefore = before?.chain.find((c) => c.versionId === mid.versionId);
+      proof('chain: before it is hidden, the middle picture shows its maker, its picture and its link', midBefore?.label === '@p502' && !!midBefore.thumb && midBefore.href === `/challenge/p/${mid.versionId}` && before?.made.startedFrom === '@p502');
+      await sql`update studio.elements set status = 'hidden' where id = ${mid.elementId}`;
+      const after = await V.pictureView(S, top.versionId);
+      const labels = after?.chain.map((c) => c.label) ?? [];
+      const hidden = after?.chain.find((c) => c.versionId === mid.versionId);
+      check(
+        'chain: a picture hidden mid-line reads "A hidden picture", with no picture, name or link; the rest of the line is unchanged, and "Started from" says "A hidden picture"',
+        labels.length === 4 && labels[0].startsWith('Base · ') && labels[1] === '@p501' && labels[2] === 'A hidden picture' && labels[3] === 'This one' &&
+          hidden?.thumb === null && hidden?.href === null && hidden?.hidden === true && !JSON.stringify(hidden).includes('p502') &&
+          !!after?.chain[1].href && after?.made.startedFrom === 'A hidden picture',
+        labels.join(' → '),
+      );
+      await sql`update studio.elements set status = 'published' where id = ${mid.elementId}`;
+    }
+    // "See examples" (owner, 2026-11-12): a style's samples are its NEWEST version's, as published.
+    const sample = (n: number) => ({ url: `https://media.snowmoon.party/test/sample-${n}.jpg`, sha256: String(n).repeat(64).slice(0, 64), recipe: null });
+    const sv1 = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'style', styleName: 'Sampled', body: { title: 'Sampled', text: 'Sampled words.', samples: [sample(1)], views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null } as never });
+    await DS.makeDesign(S as never, { fid: 6786, mode: 'version', kind: 'style', fromVersionId: sv1.versionId, body: { title: 'Sampled', text: 'Sampled words.', samples: [2, 3, 4, 5].map(sample), views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null } as never });
+    const sampled = (await (await import('../src/lib/challenge/make')).publishedStyles(sql as never)).find((x) => x.elementId === sv1.elementId);
+    const sampledEx = (await import('../src/lib/challenge/make')).styleExamples(sampled ? [sampled] : []);
+    check('examples (database): a style\'s samples are its newest version\'s, three shown', sampled?.versionNo === 2 && sampled.samples?.length === 4 && sampledEx[0]?.samples.map((x) => x.url.slice(-12)).join() === 'sample-2.jpg,sample-3.jpg,sample-4.jpg', JSON.stringify(sampled?.samples));
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styledBase = styled.versionId;
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styleEl = styleD.elementId;
     (globalThis as { __keepCount?: unknown }).__keepCount = keepCount;
@@ -593,7 +685,7 @@ check('config: a current default look per challenge character, each a design id 
   check('share first: the ready post is shown as it will be filled in (the text and this page\'s link)', /\{w\.texts\.plain\} <span className="sf-link">\{link\}<\/span>/.test(sf) && !/“\{w\.texts\.plain\}”/.test(sf) && /const link = `\$\{origin\}\$\{path\}`/.test(sf));
   check('share first: no script or request of the networks on our page (plain links; P6a)', !/<script|fetch\(/.test(sf));
   check('Submit B on the page: only the address and Submit (the buttons are above), with a cast just made handed to it', /<ChallengeSubmit\s+versionId=\{v\.versionId\}\s+byFid=\{v\.byFid\}\s+words=\{v\.submit\}\s+path=\{path\}\s+compact\s+castHash=\{castHash\}/.test(pic) && /\{!compact && \(/.test(read('src/components/challenge-submit.tsx')));
-  check('"Then submit it as an entry · one a day", and the owner\'s one line with "Rules" (no other rules text)', /\{v\.w\.thenSubmit\} <span className="dz-muted">· \{v\.w\.oneADay\}<\/span>/.test(pic) && /\{v\.w\.signInLine\} <Link href="\/challenge\/rules">\{v\.w\.rules\}<\/Link>/.test(pic));
+  check('"Then submit it as an entry · one a day", and the owner\'s one line with "Rules" (no other rules text)', /\{v\.w\.thenSubmit\} \{v\.w\.oneADay && <span className="dz-muted">· \{v\.w\.oneADay\}<\/span>\}/.test(pic) && /\{v\.w\.signInLine\} <Link href="\/challenge\/rules">\{v\.w\.rules\}<\/Link>/.test(pic));
   const W = (await import('../src/lib/challenge/picture-wording')).PICTURE_WORDING;
   check('the words: "Published. Now post it:", "Then submit it as an entry", "one a day", the sign-in line as the owner wrote it', W.published === 'Published. Now post it:' && W.thenSubmit === 'Then submit it as an entry' && W.oneADay === 'one a day' && W.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
   check('the ready post is the owner\'s text exactly (2026-11-07: with the moment; with none, the line of 2026-11-06)', W.postText('Bai', 'The quarterfinal') === 'My remix of Bai in “The quarterfinal”, for the Snowmoon Party remix challenge' && W.postText('Bai', null) === 'My remix of Bai, for the Snowmoon Party remix challenge');
@@ -650,7 +742,7 @@ check('config: a current default look per challenge character, each a design id 
   }
   check('rules: says new starting pictures and characters may be added during the challenge (owner, 2026-11-11), right after which pictures count', W.rules()[1] === 'New starting pictures and characters may be added during the challenge.' && /Only remixes count/.test(W.rules()[0]));
   // Owner, 2026-11-12: much shorter rules; posts anywhere, including X, but the one you submit is on Farcaster, Lens or Bluesky.
-  check('rules: six lines (withdrawing and the score figure kept), then the admins line with no names (owner, 2026-11-12)', W.rules().length === 6 && W.rules().some((r) => r.includes('withdraw a submission')) && W.rules().some((r) => r.includes('Neynar score of at least')) && W.adminsLine === 'Admins can make pictures too, but theirs aren’t entries.' && !/@garance|owner/.test(W.adminsLine));
+  check('rules: six lines (withdrawing and the score figure kept), then the admins line with no names (owner, 2026-11-12; examples wording, admin examples)', W.rules().length === 6 && W.rules().some((r) => r.includes('withdraw a submission')) && W.rules().some((r) => r.includes('Neynar score of at least')) && W.adminsLine === 'Admins can share examples too, but theirs aren’t entries.' && !/@garance|owner/.test(W.adminsLine));
   check('rules: share anywhere, including X; the submitted post on Farcaster, Lens or Bluesky (owner, 2026-11-12)', W.rules().includes('Share your picture anywhere, including X. The post you submit must be on Farcaster, Lens or Bluesky, because that’s where the site can check it’s yours.'));
   {
     const LWm = (await import('../src/lib/challenge/landing-wording')).LANDING_WORDING;
