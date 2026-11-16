@@ -22,6 +22,7 @@ const get = (files: Files, f: string) => files.find((x) => x.file === f)?.text ?
 export const P9G_FILES = {
   card: 'src/components/challenge-card.tsx',
   view: 'src/lib/challenge/view.ts',
+  cards: 'src/lib/challenge/cards.ts',
   appears: 'src/app/api/challenge/appears/route.ts',
   spoilers: 'src/lib/challenge/spoilers.ts',
   wording: 'src/lib/challenge/landing-wording.ts',
@@ -58,6 +59,14 @@ export function p9gProblems(p: {
   const viewDeeper = /\.(facts|more|appears)\b|from '\.\/moments'/.exec(view);
   if (viewDeeper) out.push(`${P9G_FILES.view}: the pages' data carries more than a card's one line, or the moments ("${viewDeeper[0]}")`);
   if (!/line: cardOf\(slug\)\?\.line/.test(view)) out.push(`${P9G_FILES.view}: a character's line isn't its card's one line`);
+  // "Read more about {name}" (owner, 2026-11-12: ADD): the first-layer facts, and only through firstLayerFacts, which reads
+  // a card's `facts` (never `more` or `appears`) and keeps none past chapter FIRST_LAYER_MAX_CHAPTER.
+  const factsUse = view.match(/\bfacts\s*:[^,}]*/g) ?? [];
+  for (const u of factsUse) if (!/^facts\s*:\s*firstLayerFacts\(slug\)$/.test(u.trim()) && !/^facts\s*:\s*\{/.test(u.trim())) out.push(`${P9G_FILES.view}: the page's facts aren't the first layer's (firstLayerFacts): "${u.trim()}"`);
+  const cardsSrc = stripComments(get(p.files, P9G_FILES.cards) ?? '');
+  const fl = /export const firstLayerFacts = [\s\S]*?;\n/.exec(cardsSrc)?.[0] ?? '';
+  if (!fl) out.push(`${P9G_FILES.cards}: no firstLayerFacts`);
+  else if (!/cardOf\(slug\)\?\.facts\b/.test(fl) || /\.(more|appears|description)\b/.test(fl) || !/chapterOf\(f\.block\) <= FIRST_LAYER_MAX_CHAPTER/.test(fl)) out.push(`${P9G_FILES.cards}: firstLayerFacts reads more than the first layer's facts, or keeps facts past chapter ${FIRST_LAYER_MAX_CHAPTER}`);
   // The moments: shown on the remix screen only while CHALLENGE.moments is on, every chip with its chapter, and the
   // remix screen's moments end with the exception (GET and POST).
   const make = get(p.files, P9G_FILES.make);

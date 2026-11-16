@@ -104,7 +104,7 @@ async function main() {
       await shot('challenge');
       await page.goto(`${LOCAL}/challenge/zei`, { waitUntil: 'load' });
       await shot('character');
-      await page.locator('.ch-char-bases .cc-tile').first().click();
+      await page.locator('.ch-char-bases a.chc-pic').first().click();
       await page.waitForSelector('.mk-source');
       await shot('remix');
       await page.locator('.mk-page textarea').first().fill('Zei in a winter coat, snow in his hair');
