@@ -681,10 +681,12 @@ a.chc-cite { color: var(--link); }
   .ch-char h2.chc-h2 { font-size: 26px; }
   .chc-wide-only { display: inline; }
   .chc-narrow-only { display: none; }
-  .chc-bases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; overflow: visible; }
+  /* Bigger pictures, fewer to a row (owner, 2026-11-16, after Garance saw them shrink): the bases two across (as before
+     the redesign, which had them 3 across, about 230px at 1440) and the remixes three (the handoff's four were 168px). */
+  .chc-bases { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; overflow: visible; }
   .chc-base .chc-remix-this { position: static; padding: 0; background: none; color: var(--link); text-decoration: underline; }
   .chc-dots { display: none; }
-  .chc-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px 16px; }
+  .chc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 16px; }
 }
 /* A challenge picture's page (the redesign's screen 4; owner-approved plan 2026-11-11): on a desktop the picture at the
    column's full width and a 440px column beside it; on a phone the picture full-bleed under the bar. The order inside

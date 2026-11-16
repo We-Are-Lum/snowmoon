@@ -2038,17 +2038,20 @@ async function checkChallengeLanding() {
       if (baseThis.length !== baseIds.length || !baseThis.every((x) => FX.sheets.zei.some((id) => x === `/challenge/make?from=${id}|Remix this`))) fail(`/challenge/zei ${tag}: a base's "Remix this" doesn't open its remix screen (${baseThis.join()})`);
       if (((await page.locator('.ch-char-bases .chc-meta').textContent()) ?? '').trim() !== `${baseIds.length} ${baseIds.length === 1 ? 'base' : 'bases'}`) fail(`/challenge/zei ${tag}: the bases' count is missing`);
       if (!wide && (await page.locator('.chc-bases').evaluate((e) => getComputedStyle(e).scrollSnapType)) !== 'x mandatory') fail(`/challenge/zei ${tag}: the bases aren't a swipe row on a phone`);
-      // The pictures' size (picture-size, 2026-11-16: Garance saw them shrink). The handoff: "about 1280px usable at 1440",
-      // a 400px column, the bases 3 across (gap 16) in the rest, so each about 264px wide; on a phone a 300px slide (80% at
-      // most). At 1024 the column gives up its share, so the bases stay at least 160px (they were 125 with a fixed 400px).
+      // The pictures' size (picture-size, 2026-11-16: Garance saw them shrink to ~230px bases and four small remixes a
+      // row). Desktop: "about 1280px usable at 1440" (the handoff), a 400px column, then the bases two across (each about
+      // 404px at 1440) and the remixes three (about 264px); at 1024 the column gives up its share (bases about 261px,
+      // remixes 169px; they were 125 and 90). Phone: a 300px slide (80% at most); the remixes two across.
       {
-        const baseWidths = async () => page.locator('.ch-char-bases img.chc-img').evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().width)));
-        const bw = await baseWidths();
-        if (!bw.length || bw.some((x) => x < (wide ? 255 : 270))) fail(`/challenge/zei ${tag}: the bases are ${bw.join(', ')}px wide, under ${wide ? 255 : 270}px`);
+        const widths = async (sel: string) => page.locator(sel).evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().width)));
+        const B = '.ch-char-bases .chc-pic', R = '.ch-char-remixes .chc-pic';
+        const bw = await widths(B), rw = await widths(R);
+        if (!bw.length || bw.some((x) => x < (wide ? 380 : 270))) fail(`/challenge/zei ${tag}: the bases are ${bw.join(', ')}px wide, under ${wide ? 380 : 270}px`);
+        if (!rw.length || rw.some((x) => x < (wide ? 250 : 150))) fail(`/challenge/zei ${tag}: the remixes are ${rw.join(', ')}px wide, under ${wide ? 250 : 150}px`);
         if (wide) {
           await page.setViewportSize({ width: 1024, height: 768 });
-          const narrow = await baseWidths();
-          if (narrow.some((x) => x < 160)) fail(`/challenge/zei @1024: the bases are ${narrow.join(', ')}px wide, under 160px`);
+          const nb = await widths(B), nr = await widths(R);
+          if (nb.some((x) => x < 240) || nr.some((x) => x < 150)) fail(`/challenge/zei @1024: the bases are ${nb.join(', ')}px and the remixes ${nr.join(', ')}px wide, under 240 and 150`);
           await page.setViewportSize({ width: w, height: h });
         }
       }
