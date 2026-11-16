@@ -87,9 +87,9 @@ export const CHALLENGE_WORDING = {
   adminNote: 'Made by an admin during the remix challenge: admins’ pictures and versions aren’t entries.',
   // DRAFT (owner, 2026-11-12): an admin's picture submitted with its post is shown as an example, never an entry. The
   // label and its ⓘ are the owner's words; the Submit lines for admins are the coding agent's (Claude, a closed model by
-  // Anthropic).
+  // Anthropic). The ⓘ changed on the owner's word (2026-11-16): he may still reward an admin's work another way.
   exampleLabel: 'Admin example',
-  exampleInfo: 'Not an entry: admins’ pictures can’t win anything.',
+  exampleInfo: 'Not an entry in the challenge.',
   exampleSubmitHead: 'Then submit it as an example',
   exampleSubmitted: 'Submitted as an example. It isn’t an entry.',
   // Submit (owner, 2026-11-04). Draft wording.
