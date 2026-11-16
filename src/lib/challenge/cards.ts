@@ -55,7 +55,7 @@ export const FIRST_LAYER_MAX_CHAPTER = 14;
 export const CARDS: readonly CharacterCard[] = [
   {
     slug: 'zei',
-    line: 'An eighteen-year-old Minpentai player from Pafogai Du, in Dzego, and one of the book’s main characters.',
+    line: 'A young Minpentai player from Pafogai Du, in Dzego, and one of the book’s main characters.',
     facts: [
       { text: 'Plays Minpentai, a high-school programming game', block: 'c4-b79', quote: 'a high-school programming game' },
       { text: 'A math guy, not a diplomat, Mu tells him', block: 'c4-b67', quote: 'You\'re a math guy, not a diplomat.' },

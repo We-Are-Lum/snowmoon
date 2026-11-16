@@ -210,21 +210,3 @@ export function CharacterBases({ c, alt, remixThis }: { c: Pick<CardData, 'bases
     </>
   );
 }
-
-/** "Remix {name}": the remix screen of one of the character's bases, drawn afresh on each visit (P5g's draw). */
-export function RemixCharacter({ c, text }: { c: Pick<CardData, 'bases'>; text: string }) {
-  const [pick, setPick] = useState<CardTile | null>(c.bases.length === 1 ? c.bases[0] : null);
-  useEffect(() => {
-    setPick(c.bases.length > 1 ? shuffleFresh(c.bases)[0] : (c.bases[0] ?? null));
-  }, [c.bases]);
-  if (!c.bases.length) return null;
-  return pick ? (
-    <Link className="chc-remix" href={pick.href} prefetch={false} data-version={pick.versionId}>
-      {text}
-    </Link>
-  ) : (
-    <span className="chc-remix" aria-hidden="true">
-      {text}
-    </span>
-  );
-}

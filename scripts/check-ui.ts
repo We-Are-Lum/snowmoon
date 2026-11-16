@@ -1945,6 +1945,16 @@ async function checkChallengeLanding() {
       const newTo = page.locator('.chh-detail').first();
       if (!((await newTo.textContent()) ?? '').includes(LW.home.newBody) || (await newTo.locator('a[href="/about"]').count()) !== 1) fail(`/challenge ${tag}: "New to Snowmoon?" isn't the book line with a "Learn more" link to /about`);
       if (((await page.locator('.chh-pitch').textContent()) ?? '').trim() !== LW.home.pitch) fail(`/challenge ${tag}: the pitch isn't the owner's`);
+      // "Rules" and "Every entry" (the design pass, owner 2026-11-16): outlined buttons, side by side, under the dates.
+      {
+        const btns = page.locator('.chh-links a.chh-btn');
+        const got = await btns.evaluateAll((els) => els.map((e) => { const s = getComputedStyle(e); const r = e.getBoundingClientRect(); return { t: (e.textContent ?? '').trim(), href: e.getAttribute('href'), border: parseFloat(s.borderTopWidth) > 0 && s.borderTopStyle !== 'none', h: r.height, y: r.top, x: r.left, w: r.width }; }));
+        const dates = await page.locator('.chh-window').boundingBox();
+        if (got.map((g) => `${g.t}|${g.href}`).join() !== `${LW.rulesLink}|/challenge/rules,${LW.entriesLink}|/challenge/entries`) fail(`/challenge ${tag}: the buttons read ${got.map((g) => `${g.t}|${g.href}`).join()}, not "Rules" and "Every entry"`);
+        else if (!got.every((g) => g.border && g.h >= 44)) fail(`/challenge ${tag}: "Rules" and "Every entry" aren't outlined buttons at least 44px tall`);
+        else if (Math.abs(got[0].y - got[1].y) > 2 || got[1].x < got[0].x + got[0].w) fail(`/challenge ${tag}: "Rules" and "Every entry" aren't side by side`);
+        else if (!dates || got[0].y < dates.y + dates.height - 1) fail(`/challenge ${tag}: the buttons aren't under the dates`);
+      }
       if (await page.locator('.ch-pick, .cc-hero').count()) fail(`/challenge ${tag}: the old random block or big picture is still on the hub`);
       await zei.scrollIntoViewIfNeeded();
       await snap('row');
@@ -1986,10 +1996,12 @@ async function checkChallengeLanding() {
       }
       await snap('rules', true);
 
-      // A character's page: the redesign's screen 2 (owner-approved 2026-11-11). The name, the one line, "Learn more about
-      // Zei" (closed; owner, 2026-11-12), "Remix Zei" (desktop: to one of Zei's bases); "Starting pictures"
-      // (Zei's bases, each with "Remix this"); "Every remix of Zei", newest first, whole at 16:9: each picture opens its
-      // page, each "Remix this" its remix screen. On a phone the bases are a swipe row. No count. Gladias has none yet.
+      // A character's page: the redesign's screen 2 (owner-approved 2026-11-11), after the design pass (owner, 2026-11-16).
+      // Top to bottom: the name, the one line, "Learn more about Zei" (an outlined button, full width on a phone, that
+      // opens the expander in place); "Make your own Zei" and its line; "Start from a base" (Zei's bases, each with
+      // "Remix this"); "Start from someone's remix" (the first remixes, then every remix of Zei, newest first, whole at
+      // 16:9: each picture opens its page, each tile's visible "Remix this" its remix screen). On a phone the bases are a
+      // swipe row. No count. Gladias has no remixes yet.
       await at('/challenge/zei', '.ch-character-page');
       await checkFloors(page, `/challenge/zei ${tag}`, scheme);
       if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways`);
@@ -2000,6 +2012,9 @@ async function checkChallengeLanding() {
       const more = page.locator('.ch-character-page details.chc-learn');
       if ((await page.locator('.ch-character-page details.chc-more').count()) !== 1 || (await more.count()) !== 1 || (await more.evaluate((d) => (d as HTMLDetailsElement).open)) || ((await more.locator(':scope > summary').textContent()) ?? '').trim() !== 'Learn more about Zei') fail(`/challenge/zei ${tag}: not one closed "Learn more about Zei"`);
       {
+        // The button: the summary drawn as an outlined button, full width on a phone, at least 44px tall.
+        const btn = await more.locator(':scope > summary.chc-learn-btn').evaluate((e) => { const s = getComputedStyle(e); return { border: parseFloat(s.borderTopWidth) > 0 && s.borderTopStyle !== 'none', w: e.getBoundingClientRect().width, h: e.getBoundingClientRect().height, side: (e.closest('.chc-side') as HTMLElement | null)?.getBoundingClientRect().width ?? 0 }; }).catch(() => null);
+        if (!btn || !btn.border || btn.h < 44 || (!wide && Math.abs(btn.w - btn.side) > 2)) fail(`/challenge/zei ${tag}: "Learn more about Zei" isn't an outlined button${wide ? '' : ' across the width'} (${JSON.stringify(btn)})`);
         // Opens on one tap: the owner's texts in order, the spoilers fold nested and closed, the looks line last.
         await more.locator(':scope > summary').click();
         const parts = await more.locator('[data-part]').evaluateAll((els) => els.map((e) => e.getAttribute('data-part')));
@@ -2026,36 +2041,54 @@ async function checkChallengeLanding() {
         await fold.locator('summary').click();
         await more.locator(':scope > summary').click();
       }
-      const heads = await page.locator('.ch-character-page h2.chc-h2').evaluateAll((els) => els.map((e) => (e as HTMLElement).innerText.trim()));
-      const wantHeads = wide ? 'Starting pictures|Every remix of Zei' : 'Starting pictures|Every remix';
-      if (heads.join('|') !== wantHeads) fail(`/challenge/zei ${tag}: the sections read ${heads.join(', ')}, not ${wantHeads}`);
-      // The bases: every one of Zei's, each to its remix screen, with its "Remix this".
+      // The order, top to bottom on a phone (name, line, button, "Make your own", the two choices); on a desktop the
+      // first three in the sticky left column and "Make your own" beside it.
+      {
+        const order = await page.locator('.ch-character-page').evaluate((root) => {
+          const at = (sel: string) => { const e = root.querySelector(sel); return e ? e.getBoundingClientRect() : null; };
+          const r = { name: at('h1.chc-name'), line: at('.chc-line'), btn: at('.chc-learn-btn'), make: at('h2.chc-make-h2'), base: at('[data-choice="base"] h3'), remix: at('[data-choice="remix"] h3') };
+          return Object.fromEntries(Object.entries(r).map(([k, v]) => [k, v && { x: v.left, y: v.top, b: v.bottom }]));
+        });
+        const o = order as Record<string, { x: number; y: number; b: number } | null>;
+        const seq = ['name', 'line', 'btn', 'make', 'base', 'remix'];
+        if (seq.some((k) => !o[k])) fail(`/challenge/zei ${tag}: a part is missing (${seq.filter((k) => !o[k]).join(', ')})`);
+        else {
+          const left = ['name', 'line', 'btn'];
+          const right = ['make', 'base', 'remix'];
+          const down = (ks: string[]) => ks.every((k, i) => i === 0 || o[k]!.y >= o[ks[i - 1]]!.b - 1);
+          const ok = wide ? down(left) && down(right) && o.make!.x > o.btn!.x + 100 && (await page.locator('.chc-side').evaluate((e) => getComputedStyle(e).position)) === 'sticky' : down(seq);
+          if (!ok) fail(`/challenge/zei ${tag}: the parts aren't in order (${JSON.stringify(o)})`);
+        }
+        const words = await page.locator('.chc-make').evaluate((e) => ({ h2: e.querySelector('h2')?.textContent?.trim(), line: e.querySelector('.chc-make-line')?.textContent?.trim(), h3: [...e.querySelectorAll('h3')].map((h) => h.textContent?.trim()).join('|'), lines: [...e.querySelectorAll('.chc-choice-line')].map((h) => h.textContent?.trim()).join('|') }));
+        const want = { h2: 'Make your own Zei', line: 'Start from a picture, describe what to change, then publish and post it.', h3: 'Start from a base|Start from someone’s remix', lines: 'Zei’s starting looks.|Build on what others made. They’re credited.' };
+        if (JSON.stringify(words) !== JSON.stringify(want)) fail(`/challenge/zei ${tag}: "Make your own" reads ${JSON.stringify(words)}`);
+        if (await page.locator('a.chc-remix').count()) fail(`/challenge/zei ${tag}: the old "Remix Zei" button is still there`);
+      }
+      // The bases: every one of Zei's, each to its remix screen, with its visible "Remix this".
       await page.waitForSelector('.ch-char-bases a.chc-pic', { timeout: 10000 }).catch(() => null);
       const baseIds = await page.locator('.ch-char-bases a.chc-pic').evaluateAll((els) => els.map((e) => e.getAttribute('data-version') ?? ''));
       // As many as Zei's configured bases (R.baseCountOf), each one of Zei's sheets, none twice.
       if (!baseIds.length || new Set(baseIds).size !== baseIds.length || !baseIds.every((id) => FX.sheets.zei.includes(id))) fail(`/challenge/zei ${tag}: the starting pictures read ${baseIds.join()}, not Zei's bases (from ${FX.sheets.zei.join()})`);
       const baseThis = await page.locator('.ch-char-bases a[data-slot="remix-this"]').evaluateAll((els) => els.map((e) => `${e.getAttribute('href')}|${(e.textContent ?? '').trim()}`));
       if (baseThis.length !== baseIds.length || !baseThis.every((x) => FX.sheets.zei.some((id) => x === `/challenge/make?from=${id}|Remix this`))) fail(`/challenge/zei ${tag}: a base's "Remix this" doesn't open its remix screen (${baseThis.join()})`);
-      if (((await page.locator('.ch-char-bases .chc-meta').textContent()) ?? '').trim() !== `${baseIds.length} ${baseIds.length === 1 ? 'base' : 'bases'}`) fail(`/challenge/zei ${tag}: the bases' count is missing`);
+      if (await page.locator('.ch-char-bases .chc-meta').count()) fail(`/challenge/zei ${tag}: the bases still show a count`);
       if (!wide && (await page.locator('.chc-bases').evaluate((e) => getComputedStyle(e).scrollSnapType)) !== 'x mandatory') fail(`/challenge/zei ${tag}: the bases aren't a swipe row on a phone`);
-      // "Remix Zei": on a desktop, the remix screen of one of Zei's bases; on a phone, not shown (each base has its button).
-      const rz = page.locator('a.chc-remix');
-      if (wide) {
-        await page.waitForSelector('a.chc-remix', { timeout: 10000 }).catch(() => null);
-        const href = await rz.getAttribute('href').catch(() => null);
-        if (!(await rz.isVisible().catch(() => false)) || ((await rz.textContent()) ?? '').trim() !== 'Remix Zei' || !FX.sheets.zei.some((id) => href === `/challenge/make?from=${id}`)) fail(`/challenge/zei ${tag}: no "Remix Zei" to one of Zei's bases (${href})`);
-        if ((await page.locator('.chc-side').evaluate((e) => getComputedStyle(e).position)) !== 'sticky') fail(`/challenge/zei ${tag}: the left column isn't sticky`);
-      } else if (await rz.isVisible().catch(() => false)) fail(`/challenge/zei ${tag}: "Remix Zei" shows on a phone`);
+      // Every tile, base or remix, shows its own "Remix this" (the first base on a phone; the rest are off to the side).
+      {
+        const tiles = await page.locator('.ch-char-remixes figure.chc-remix-card').evaluateAll((els) => els.map((f) => { const a = f.querySelector('a[data-slot="remix-this"]') as HTMLElement | null; const r = a?.getBoundingClientRect(); const s = a ? getComputedStyle(a) : null; return !!a && (a.textContent ?? '').trim() === 'Remix this' && !!r && r.width > 0 && r.height >= 24 && s!.visibility !== 'hidden' && s!.display !== 'none'; }));
+        if (tiles.some((x) => !x)) fail(`/challenge/zei ${tag}: a remix tile has no visible "Remix this"`);
+        if (!(await page.locator('.ch-char-bases a[data-slot="remix-this"]').first().isVisible())) fail(`/challenge/zei ${tag}: the first base's "Remix this" isn't visible`);
+      }
       // Every remix of Zei: newest first, whole at 16:9; the picture opens its page, "Remix this" its remix screen.
       const zeiRemixes = FX.remixes.filter((r) => r.character === 'zei').map((r) => r.versionId);
-      const shown = await page.locator('.ch-char-remixes a[data-slot="remix-page"]').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-version')}|${e.getAttribute('href')}`));
+      const shown = await page.locator('.ch-char-remixes > .chc-grid a[data-slot="remix-page"]').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-version')}|${e.getAttribute('href')}`));
       if (shown.join() !== zeiRemixes.map((id) => `${id}|/challenge/p/${id}`).join()) fail(`/challenge/zei ${tag}: the remixes read ${shown.join()}, not every one of Zei's, newest first, each to its page (${zeiRemixes.join()})`);
-      const remixHrefs = await page.locator('.ch-char-remixes a[data-slot="remix-this"]').evaluateAll((els) => els.map((e) => e.getAttribute('href') ?? ''));
+      const remixHrefs = await page.locator('.ch-char-remixes > .chc-grid a[data-slot="remix-this"]').evaluateAll((els) => els.map((e) => e.getAttribute('href') ?? ''));
       if (remixHrefs.join() !== zeiRemixes.map((id) => `/challenge/make?from=${id}`).join()) fail(`/challenge/zei ${tag}: a remix's "Remix this" doesn't open its remix screen (${remixHrefs.join()})`);
-      const ratios = await page.locator('.ch-char-remixes .chc-pic-wide').evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); return r.width / r.height; }));
-      if (ratios.length !== zeiRemixes.length || ratios.some((r) => Math.abs(r - 16 / 9) > 0.05) || (await page.locator('.ch-char-remixes img.chc-wide-img').count()) !== zeiRemixes.length) fail(`/challenge/zei ${tag}: the remixes aren't shown whole at 16:9 (${ratios.map((r) => r.toFixed(2)).join()})`);
-      if (((await page.locator('.ch-char-remixes .chc-meta').textContent()) ?? '').trim() !== 'newest first') fail(`/challenge/zei ${tag}: no "newest first"`);
-      if ((await page.locator('.ch-character-page .chc-ai .ai-tag').count()) !== baseIds.length + zeiRemixes.length) fail(`/challenge/zei ${tag}: a picture has no AI label`);
+      const ratios = await page.locator('.ch-char-remixes > .chc-grid .chc-pic-wide').evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); return r.width / r.height; }));
+      if (ratios.length !== zeiRemixes.length || ratios.some((r) => Math.abs(r - 16 / 9) > 0.05) || (await page.locator('.ch-char-remixes > .chc-grid img.chc-wide-img').count()) !== zeiRemixes.length) fail(`/challenge/zei ${tag}: the remixes aren't shown whole at 16:9 (${ratios.map((r) => r.toFixed(2)).join()})`);
+      if (((await page.locator('.ch-char-remixes .chc-sub-head .chc-meta').textContent()) ?? '').trim() !== 'newest first') fail(`/challenge/zei ${tag}: no "newest first"`);
+      if ((await page.locator('.ch-character-page .chc-ai .ai-tag').count()) !== baseIds.length + zeiRemixes.length + (await page.locator('.chc-picked .chc-remix-card').count())) fail(`/challenge/zei ${tag}: a picture has no AI label`);
       // Read with each element's text apart (a byline "#6852" next to "Remix this" isn't a count). "Read more"'s facts cite
       // their chapter ("Ch 4 · c4-b79"; owner, 2026-11-12: ADD), checked above; no moment chip or count anywhere else.
       const pageText = await page.locator('.ch-character-page').evaluate((root) => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const out: string[] = []; for (let n = w.nextNode(); n; n = w.nextNode()) if (!n.parentElement?.closest('.chc-facts, .chc-learn')) out.push(n.textContent ?? ''); return out.join(' | '); });
