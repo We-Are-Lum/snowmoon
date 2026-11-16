@@ -114,6 +114,22 @@ export const CHALLENGE_WORDING = {
   withdrawCancel: 'Cancel',
   /** Under the question (owner, 2026-11-07, approved). */
   withdrawAskNote: 'It still counts as today’s entry, so you can enter again tomorrow.',
+  /**
+   * A challenge picture's page, /challenge/p/<version> (owner, 2026-11-16). DRAFT wording until the owner's OK. "Share"
+   * and "Remix" for everyone, its maker included (the rules let you remix your own); "Share" opens the list of "Post on
+   * Farcaster", "Post on Bluesky", "Post on Lens" and "Copy link" (open right after publishing, closed on any later
+   * visit); for its maker, "Submit your post" below them until it is submitted. Every word here is the owner's
+   * (2026-11-16). Any word on these parts of the page the owner didn't give was written by the coding agent (Claude, a
+   * closed model by Anthropic); this block adds none: "Link copied." and "one a day" are the page's existing words
+   * (./picture-wording.ts).
+   */
+  picturePage: {
+    remix: 'Remix',
+    share: 'Share',
+    postOn: { farcaster: 'Post on Farcaster', bluesky: 'Post on Bluesky', lens: 'Post on Lens' },
+    copy: 'Copy link',
+    submitHead: 'Submit your post',
+  },
   // Share and "Posted on": the words that don't name the challenge are in ./share-wording.ts.
   ...SHARE_WORDING,
   /** While entries are open, on a challenge character's sheet (owner, 2026-11-03: the share text mentions the challenge). Draft wording. */

@@ -23,8 +23,9 @@ import { callNameOf } from './names';
 
 /**
  * A challenge picture's page, /challenge/p/<version> (owner, 2026-11-05; docs/proposals/challenge-moments.md §1.3
- * S4–S5), share first: the post buttons and the ready post (its words and this page's link) right under the picture,
- * then for its maker Submit (one a day, unchanged; option B: paste the post's address), then its character and moment,
+ * S4–S5), share first: "Share" and "Remix" right under the picture (owner, 2026-11-16), Share opening the post buttons
+ * and the ready post (its words and this page's link), then for its maker "Submit your post" (one a day, unchanged;
+ * option B: paste the post's address), then its character and moment,
  * who made it and their words. Plain data with its words written here, for the page's
  * component (src/components/challenge-picture.tsx). Read-only: never asks Neynar or anyone.
  */
@@ -110,7 +111,7 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
   const chain = await creditChain(sql, p, P.thisOne);
   return {
     versionId: p.versionId,
-    /** Remixing it (anyone but its maker): its remix screen from the owner's flip (before the open date too) until entries close; none after. */
+    /** "Remix" (owner, 2026-11-16: for everyone, its maker included): its remix screen from the owner's flip (before the open date too) until entries close; none after. */
     remixHref: CHALLENGE.public && phase(now) !== 'closed' ? `/challenge/make?from=${p.versionId}` : null,
     /**
      * Its maker's line in place of Submit (owner, 2026-11-07): before the open date, "Entries open …" for every picture;
@@ -149,7 +150,7 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
       startedFrom: chain.length > 1 ? chain[chain.length - 2].label : null,
       prompt: im?.prompt ?? null,
     },
-    w: { close: P.close, published: P.published, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: exampleSubmit ? null : P.oneADay, postsHead: P.postsHead, postsNote: P.postsNote, postTexts: sameTexts(P.postText(name, m?.title ?? null)), othersTexts: textsFor([shareMaker(p.byName, p.byFid)], (who) => (m ? P.othersText(name, m.title, who) : P.othersTextPlain(name, who))), remixThis: P.remixThis, remixedFrom: P.remixedFrom, madeHead: P.recipe, madeWords: P.wordsHead, madeStyle: P.madeStyle, madeModel: P.madeModel, madeFrom: P.madeFrom, madePrompt: P.madePrompt, madeFull: P.madeFull, shareHead: P.shareHead, copy: P.copy, copied: P.copied, thenSubmit: exampleSubmit ? CW.exampleSubmitHead : P.thenSubmit, on: { farcaster: CW.submitPostOn('Farcaster'), bluesky: CW.submitPostOn('Bluesky'), lens: CW.submitPostOn('Lens') } },
+    w: { close: P.close, wordsHead: P.wordsHead, recipe: P.recipe, every: L.entriesLink, another: P.another, signInLine: P.signInLine, rules: L.rulesLink, oneADay: exampleSubmit ? null : P.oneADay, postsHead: P.postsHead, postsNote: P.postsNote, postTexts: sameTexts(P.postText(name, m?.title ?? null)), othersTexts: textsFor([shareMaker(p.byName, p.byFid)], (who) => (m ? P.othersText(name, m.title, who) : P.othersTextPlain(name, who))), remixedFrom: P.remixedFrom, madeHead: P.recipe, madeWords: P.wordsHead, madeStyle: P.madeStyle, madeModel: P.madeModel, madeFrom: P.madeFrom, madePrompt: P.madePrompt, madeFull: P.madeFull, copy: CW.picturePage.copy, copied: P.copied, share: CW.picturePage.share, remix: CW.picturePage.remix, thenSubmit: exampleSubmit ? CW.exampleSubmitHead : CW.picturePage.submitHead, on: CW.picturePage.postOn },
   };
 }
 export type PictureView = NonNullable<Awaited<ReturnType<typeof pictureView>>>;

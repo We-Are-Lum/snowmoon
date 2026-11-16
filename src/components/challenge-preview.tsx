@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { authFetch, webNameProof } from '~/lib/client-auth';
 import { loadDraft, markPublished, saveDraft, type FlowDraft } from '~/lib/challenge/flow-storage';
+import { justPublishedHref } from '~/lib/challenge/just-published';
 import { AiTag } from './ai-tag';
 import { BackstoryField } from './challenge-backstory';
 import { BACKSTORY_WORDING } from '~/lib/challenge/backstory';
@@ -68,7 +69,7 @@ export function ChallengePreview({ id }: { id: string }) {
       return setError(out.error ?? 'Could not publish it');
     }
     markPublished(d, out.versionId);
-    router.replace(`/challenge/p/${out.versionId}`);
+    router.replace(justPublishedHref(out.versionId));
   };
   const close = () => {
     if (window.confirm(w.leave)) router.push(hub);
