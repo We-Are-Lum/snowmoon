@@ -198,7 +198,8 @@ proven('L3 the prompt order: change words, reference line, look line, scene line
       ...need(offered.map((s) => s.label).join() === OFFERED, `offered: ${offered.map((s) => s.label).join()}`),
       ...need(draws.every((l) => OFFERED.split(',').includes(l ?? '')) && new Set(draws).size === 4, `Random drew ${[...new Set(draws)].join()}`),
       ...need(M.resolveStyle({ kind: 'style', id: 'style:e4' }, offered) === null, 'a style not offered (Bolder) is taken'),
-      ...need(v.defaultStyle === 'same' && v.styles.map((s) => s.label).join() === OFFERED, 'the row isn\'t "Same as this picture" and the four'),
+      // The row shows "Mood" by its display label (owner, 2026-11-12); the allowlist and the draw keep the stored name.
+      ...need(v.defaultStyle === 'same' && v.styles.map((s) => s.label).join() === 'Animated series,Comic book,Comic 3D mix,Moody graphic novel', 'the row isn\'t "Same as this picture" and the four'),
       // Before "Animated series" is published: "Same as this picture" and Write your own; Random hidden; a Random request refused.
       ...need(none.length === 0 && M.makeView(src as never, { styles: none }).styles.length === 0 && M.resolveStyle({ kind: 'random' }, none) === null, 'with nothing offered, Random still draws'),
       ...need(/\{hasPublished && \(/.test(screen) && screen.indexOf('{hasPublished && (') < screen.indexOf('data-style="random"') && /data-style="own"/.test(screen), 'Random isn\'t hidden with nothing to draw from, or Write your own is missing'),

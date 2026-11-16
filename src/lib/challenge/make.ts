@@ -3,11 +3,11 @@ import type postgres from 'postgres';
 import { CHALLENGE, IMAGES } from '../config';
 import { bookCharacter, listDesigns } from '../images/designs';
 import { chapterChip, momentById, MOMENTS, readerHref, type Moment } from './moments';
-import { MAKE_WORDING as M } from './make-wording';
+import { MAKE_WORDING as M, sampleAlt, styleLabel } from './make-wording';
 import { challengeModels, modelChipText, type ModelRowEntry } from './models';
 import type { Source } from './pictures';
 import { shuffleFresh } from './shuffle';
-import { KEEP_LINE, SAME_STYLE, OWN_STYLE_MAX, presetOptions, readStyleChoice, STYLE_PRESETS, type StyleChoice, type StyleOption, type StylePreset } from './styles';
+import { EXAMPLE_SAMPLES, KEEP_LINE, SAME_STYLE, OWN_STYLE_MAX, presetOptions, readStyleChoice, STYLE_PRESETS, type StyleChoice, type StyleExample, type StyleOption, type StylePreset } from './styles';
 import { SCENE_LINE } from './looks';
 import { firstAppearsBlock } from './first-appears';
 import { callNameOf } from './names';
@@ -88,6 +88,8 @@ export interface PublishedStyle {
   byName: string | null;
   byFid: number;
   assist: unknown;
+  /** Its newest version's published samples' addresses (the "See examples" panel; owner, 2026-11-12). */
+  samples?: string[];
 }
 
 /** The site's published styles (studio.entities kind 'style' with a published design), each design at its newest version, newest first. */
@@ -95,7 +97,7 @@ export async function publishedStyles(sql: postgres.Sql): Promise<PublishedStyle
   const rows = await listDesigns(sql, 'style').catch(() => []);
   return rows
     .filter((r) => r.text.trim())
-    .map((r) => ({ id: `style:${r.elementId}`, label: r.title.trim() || r.entity, text: r.text, elementId: r.elementId, versionId: r.versionId, versionNo: r.versionNo, entity: r.entity, title: r.title, byName: r.byName, byFid: r.byFid, assist: r.assist }));
+    .map((r) => ({ id: `style:${r.elementId}`, label: r.title.trim() || r.entity, text: r.text, elementId: r.elementId, versionId: r.versionId, versionNo: r.versionNo, entity: r.entity, title: r.title, byName: r.byName, byFid: r.byFid, assist: r.assist, samples: r.samples }));
 }
 
 /**
@@ -146,12 +148,25 @@ export function characterAnchor(character: string): { chapter: number; start: nu
   return { chapter: Number(m[1]), start: Number(m[2]), end: Number(m[2]) };
 }
 
+/**
+ * The "See examples" panel's styles (owner, 2026-11-12): the published styles the row lists, in the row's order, each with
+ * its label, words and up to EXAMPLE_SAMPLES of its newest version's samples. Nothing else: no preset, "Same as this
+ * picture", Random or Write your own.
+ */
+export const styleExamples = (published: readonly PublishedStyle[]): StyleExample[] =>
+  published.map((s) => {
+    const label = styleLabel(s.label);
+    return { id: s.id, name: s.label, label, words: s.text, samples: (s.samples ?? []).slice(0, EXAMPLE_SAMPLES).map((url) => ({ url, alt: sampleAlt(label) })) };
+  });
+
 /** The remix screen's data: the picture tapped, its styles and models, the moments (only while on), and every word. */
 export function makeView(src: Source, opts: { styles: readonly PublishedStyle[]; presets?: readonly StylePreset[]; models?: readonly ModelRowEntry[]; momentsOn?: boolean } = { styles: [] }) {
   const name = callName(src.character);
   const momentsOn = opts.momentsOn ?? CHALLENGE.moments;
   const models = opts.models ?? challengeModels();
-  const styles: StyleOption[] = [...presetOptions(opts.presets ?? STYLE_PRESETS), ...opts.styles.map((s) => ({ id: s.id, kind: 'published' as const, label: s.label }))];
+  // The row shows each style's display label (STYLE_LABELS: "Mood" as "Moody graphic novel"; owner, 2026-11-12); its id,
+  // and so what is sent, drawn and recorded, is the published style's, under its stored name.
+  const styles: StyleOption[] = [...presetOptions(opts.presets ?? STYLE_PRESETS), ...opts.styles.map((s) => ({ id: s.id, kind: 'published' as const, label: styleLabel(s.label) }))];
   // The picture's own style when it has one that is listed; else the first.
   // "Same as this picture" is the default (owner, 2026-11-09): a remix keeps the look of the picture it starts from.
   const defaultStyle = SAME_STYLE.id;
@@ -159,6 +174,7 @@ export function makeView(src: Source, opts: { styles: readonly PublishedStyle[];
     source: { versionId: src.versionId, kind: src.kind, character: src.character, name, url: src.url, moment: momentsOn ? src.moment : null },
     moments: momentsOn ? momentChips() : [],
     styles,
+    examples: styleExamples(opts.styles),
     defaultStyle,
     ownStyleMax: OWN_STYLE_MAX,
     models: models.map((m) => ({ ...m, chip: modelChipText(m) })),

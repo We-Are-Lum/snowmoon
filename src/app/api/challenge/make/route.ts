@@ -11,7 +11,7 @@ import { signTicket, type TicketDesign } from '~/lib/images/ticket';
 import { bookCharacter } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
 import { makeView, momentPrompt, othersIn, challengeStyles, readMake, remixPrompt, resolveStyle } from '~/lib/challenge/make';
-import { MAKE_WORDING } from '~/lib/challenge/make-wording';
+import { MAKE_WORDING, styleLabel } from '~/lib/challenge/make-wording';
 import { CHALLENGE_CLOSED_DEFAULT, challengeDefaultModel, challengeModel, closedUsableBy, DEFAULT_CHALLENGE_MODEL, reserveUsd, modelView, noticeProblem } from '~/lib/challenge/models';
 import { oneCharacterProblem } from '~/lib/challenge/one-character';
 import { challengeSpend, makeWith, recipeModel } from '~/lib/challenge/make-model';
@@ -185,7 +185,7 @@ export async function POST(request: Request) {
     },
   });
   return NextResponse.json(
-    { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, prompt, left: paid.left, style: style ? (style.choice === 'random' ? MAKE_WORDING.randomDrew(style.label ?? '') : style.label) : null, setting: setting ? settingRecord(setting) : null },
+    { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, prompt, left: paid.left, style: style ? (style.choice === 'random' ? MAKE_WORDING.randomDrew(styleLabel(style.label ?? '')) : style.label === null ? null : styleLabel(style.label)) : null, setting: setting ? settingRecord(setting) : null },
     { headers: { 'Cache-Control': 'no-store' } },
   );
 }
