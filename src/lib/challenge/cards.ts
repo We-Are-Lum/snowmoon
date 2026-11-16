@@ -112,7 +112,7 @@ export const CARDS: readonly CharacterCard[] = [
   },
   {
     slug: 'bai',
-    line: 'Zei’s Minpentai rival from Pafogai Du, about his age, confident and teasing.',
+    line: 'Zei’s Minpentai rival in Pafogai Du, about his age, confident and teasing.',
     facts: [
       { text: 'About Zei’s age', block: 'c4-b70', quote: 'Another woman walked in, about the same age as Zei.' },
       { text: 'Has beaten Zei three times out of three', block: 'c4-b72', quote: 'Bai had beaten him three out of three times over the past years' },
@@ -217,7 +217,7 @@ export const CARDS: readonly CharacterCard[] = [
   // Approved (owner, 2026-11-11) with one change: the c21-b76 fact replaced by his poster's own words (c3-b5).
   {
     slug: 'ephelion',
-    line: 'The Arctic ambassador to Veridia, whose speeches and debates reach Veridians on their screens.',
+    line: 'The Arctic ambassador to Veridia, whose speeches and live debate reach Veridians on their screens.',
     facts: [
       { text: 'The Arctic ambassador to Veridia', block: 'c8-b17', quote: 'Lord Ephelion, Arctic ambassador to Veridia' },
       { text: 'Debates Professor Sylka, president of VNU', block: 'c8-b17', quote: 'Live debate between Professor Sylka, president of VNU, and Lord Ephelion' },

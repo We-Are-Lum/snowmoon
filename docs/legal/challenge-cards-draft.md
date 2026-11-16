@@ -75,7 +75,9 @@ Gladias lives in Meldan, the capital of Veridia, with his wife Seila and their c
 
 ## Bai
 
-**One line (this edition’s):** Zei’s Minpentai rival from Pafogai Du, about his age, confident and teasing.
+(Owner, 2026-11-16: “in Pafogai Du”, not “from”: the book places her there by chapter 14 but says she is from there only later. Needs the owner’s reread.)
+
+**One line (this edition’s):** Zei’s Minpentai rival in Pafogai Du, about his age, confident and teasing.
 
 **First layer: facts** (this edition’s phrase · block · the book’s words)
 
