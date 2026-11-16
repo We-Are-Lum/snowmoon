@@ -895,7 +895,33 @@ check('S5 Submit needs the post link', ((r) => !r.ok && r.why === E.SUBMIT_WORDI
 proof('S5 a Submit without a post that went through would be caught', (await E.standing(S)).entries.length === 0);
 check('S5 Submit: only your own version', ((r) => !r.ok && r.why === E.SUBMIT_WORDING.notYours)(await submit(501, f500a.versionId)));
 check('S5 Submit: not a version below the check', ((r) => !r.ok && r.why === E.SUBMIT_WORDING.notEligible)(await submit(501, f501.versionId)));
-check('S5 Submit: not an admin\'s version', !(await submit(193912, fAdmin.versionId)).ok);
+{
+  // An admin's own version (owner, 2026-11-12): Submit makes it an example, never an entry: only its post is listed (by
+  // the admin), no row of studio.challenge_marks is written, and nothing counted or rewarded reads it.
+  const [m0] = await sql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks`;
+  const ex = await submit(193912, fAdmin.versionId);
+  const [m1] = await sql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks`;
+  check('S5 Submit: an admin\'s version goes through as an example and writes no entry row', ex.ok && m1.n === m0.n, JSON.stringify(ex));
+  check('S5 Submit: the admin example\'s post is listed, by the admin', (await P.postsFor(S, fAdmin.versionId)).some((x) => x.addedBy === 193912));
+  check('S5 Submit: an admin example is submitted once', ((r) => !r.ok && r.why === E.SUBMIT_WORDING.already)(await submit(193912, fAdmin.versionId)));
+  const sx = await E.standing(S);
+  check('S5 an admin example: listed as an example, not an entry, in no count', sx.examples.some((v) => v.versionId === fAdmin.versionId) && !sx.entries.some((v) => v.versionId === fAdmin.versionId) && [...sx.entrants.values()].every((n) => n === 0) && !R.equalSharePeople(sx.entries).includes(193912));
+  proof('S5 an example counted as an entry is caught', R.entrantCounts([...sx.entries, ...sx.examples]).get('zei') !== sx.entrants.get('zei'));
+  check('S5 an admin example\'s page: the admin line, marked as an example', ((s) => s?.kind === 'admin' && s.example)(await E.versionStanding(S, fAdmin.versionId)));
+  // In the code: an admin's Submit never writes an entry row, and every count is made from the entries alone.
+  const examplesProblems = (src: string) => {
+    const p: string[] = [];
+    const body = src.slice(src.indexOf('async function submitExample('), src.indexOf('export async function withdrawEntry('));
+    if (!body || /challenge_marks/.test(body)) p.push('the admin example\'s Submit writes or reads studio.challenge_marks');
+    if (!/entrants: entrantCounts\(entries\) \};\n\}/.test(src)) p.push('standing\'s count is not made from the entries alone');
+    if (!/if \(elig\?\.why === 'admin'\) return submitExample\(sql, fid, versionId, post\);\n  if \(elig\?\.eligible !== true\) return \{ ok: false, why: SUBMIT_WORDING\.notEligible/.test(src)) p.push('only admins take the example path');
+    return p;
+  };
+  const srcE = read('src/lib/challenge/entries.ts');
+  check('S5 in the code: an admin example writes no entry row; counts come from the entries alone', examplesProblems(srcE).length === 0, examplesProblems(srcE).join('; '));
+  proof('S5 an admin example written into challenge_marks is caught', examplesProblems(srcE.replace("return { ok: true as const, left: 0 };", "await tx`insert into studio.challenge_marks ${tx({ challenge: CHALLENGE.id, fid, character: 'zei', version_id: versionId })}`;\n      return { ok: true as const, left: 0 };")).length > 0);
+  proof('S5 a count that adds the examples is caught', examplesProblems(srcE.replace('entrants: entrantCounts(entries) };', 'entrants: entrantCounts([...entries, ...byAdmins]) };')).length > 0);
+}
 check('S5 Submit: not a sheet made from scratch', !(await submit(503, fScratch.versionId)).ok);
 // One a Pacific day: 6852's first submission is moved back a day (as if made yesterday) before the second.
 const yesterday = (fid: number) => sql`update studio.challenge_marks set marked_at = marked_at - interval '1 day' where fid = ${fid}`;

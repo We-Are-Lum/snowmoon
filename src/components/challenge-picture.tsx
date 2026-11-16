@@ -9,6 +9,7 @@ import { AiTag } from './ai-tag';
 import { ChallengeShareFirst } from './challenge-share-first';
 import { ChallengeSubmit } from './challenge-submit';
 import { PostedOn } from './posted-on';
+import { AdminExampleLabel } from './admin-example-label';
 import { BackstoryShown } from './challenge-backstory';
 
 /**
@@ -58,6 +59,7 @@ export function ChallengePicture({ id }: { id: string }) {
           <img className="mk-picture chp-img" src={v.url} alt={v.alt} />
           <figcaption className="mk-cap chp-cap">
             <AiTag />{v.aiMaker && <span className="chp-ai-maker"> · {v.aiMaker}</span>} {v.badge && <span className="ch-badge">{v.badge}</span>}
+            {v.example && <AdminExampleLabel label={v.example.label} info={v.example.info} />}
           </figcaption>
         </figure>
         <div className="chp-side">
@@ -100,7 +102,7 @@ export function ChallengePicture({ id }: { id: string }) {
                 castHash={castHash}
                 before={
                   <h2 className="sf-head">
-                    {v.w.thenSubmit} <span className="dz-muted">· {v.w.oneADay}</span>
+                    {v.w.thenSubmit} {v.w.oneADay && <span className="dz-muted">· {v.w.oneADay}</span>}
                   </h2>
                 }
               />
@@ -154,7 +156,7 @@ export function ChallengePicture({ id }: { id: string }) {
             </section>
           )}
           {v.note && <p className="dz-muted">{v.note}</p>}
-          {v.posts.length > 0 && <PostedOn versionId={v.versionId} posts={v.posts} />}
+          {v.posts.length > 0 && <PostedOn versionId={v.versionId} posts={v.posts} head={v.w.postsHead} note={v.w.postsNote} />}
           <details className="chp-made">
             <summary>{v.w.madeHead}</summary>
             <dl className="chp-made-list">

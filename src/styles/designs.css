@@ -240,6 +240,14 @@ a.dz-fork:hover { text-decoration: none; }
 .ch-deadline { margin: 8px 0 16px; }
 .ch-badge { display: inline-block; padding: 0 6px; border: 1px solid var(--ink); border-radius: var(--radius); font-family: var(--label); font-size: var(--text-label); line-height: 18px; text-transform: uppercase; }
 .ch-standing { margin: 8px 0 0; }
+.ch-example { display: inline-flex; align-items: center; gap: 2px; vertical-align: middle; }
+/* The entries page on a desktop (owner, 2026-11-12): a wide grid of tiles like the redesigned home's, not the phone's
+   column; the phone keeps its two-across list. */
+@media (min-width: 1024px) {
+  .page.ch-entries-page { max-width: 1280px; padding: 40px 56px 64px; }
+  .ch-entries-page .ch-entries-list { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 20px; }
+  .ch-entries-page .ch-card-img { border-radius: var(--radius); }
+}
 .ch-standing p { margin: 0; }
 .ch-share { margin-top: 16px; }
 .ch-guidance { margin-top: 8px; }
