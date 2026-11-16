@@ -33,7 +33,7 @@ function walk(dir: string): string[] {
 }
 const clone = <T>(v: T): T => structuredClone(v);
 
-const { CARDS, cardQuotes, cardShapeProblems, FIRST_LAYER_MAX_CHAPTER } = await import('../src/lib/challenge/cards');
+const { CARDS, cardQuotes, cardShapeProblems, FIRST_LAYER_MAX_CHAPTER, firstLayerFacts } = await import('../src/lib/challenge/cards');
 const { MOMENTS, momentShapeProblems, inBookOrder, chapterChip, momentsWith } = await import('../src/lib/challenge/moments');
 const { quoteProblems } = await import('../src/lib/challenge/book-quotes');
 const { loadBlocks } = await import('./lib/glossary');
@@ -98,7 +98,8 @@ check('config: a current default look per challenge character, each a design id 
 // --- P9g, P2m, P6ac -------------------------------------------------------------------------------------------------
 {
   const files = walk('src').map((f) => ({ file: f, text: read(f) }));
-  const base = { files, cards: CARDS, moments: MOMENTS, characters: CHALLENGE.characters, blocks, on: spoilerExceptionOn, dates: CHALLENGE.dates };
+  const LM = await import('../src/lib/challenge/learn-more');
+  const base = { files, cards: CARDS, moments: MOMENTS, characters: CHALLENGE.characters, blocks, on: spoilerExceptionOn, dates: CHALLENGE.dates, learn: { texts: LM.LEARN_MORE, label: LM.LATER_LABEL as string } };
   const p9 = p9gProblems(base);
   check('P9g passes as committed', p9.length === 0, p9.join('; '));
   const plant = (f: string, g: (x: string) => string) => files.map((x) => (x.file === f ? { ...x, text: g(x.text) } : x));
@@ -111,6 +112,26 @@ check('config: a current default look per challenge character, each a design id 
   proof('P9g: a card fetching "Where they appear" again fails', p9gProblems({ ...base, files: plant('src/components/challenge-card.tsx', (x) => x + "\nconst appears = () => fetch('/api/challenge/appears?character=zei');") }).length > 0);
   proof('P9g: the pages\' data carrying facts fails', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace("line: cardOf(slug)?.line ?? ''", "line: cardOf(slug)?.line ?? '', facts: cardOf(slug)?.facts")) }).length > 0);
   proof('P9g: the pages\' data carrying the moments fails', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace("import { cardOf } from './cards';", "import { cardOf } from './cards';\nimport { momentsWith } from './moments';")) }).length > 0);
+  // "Learn more about {name}" (owner, 2026-11-12): its fallback is the first-layer facts, only through firstLayerFacts.
+  check('P9g: "Learn more"\'s fallback carries each card\'s first-layer facts, none past chapter 14, each word for word', CARDS.every((c) => {
+    const f = firstLayerFacts(c.slug);
+    return f.length === c.facts.length && f.every((x) => x.chapter >= 1 && x.chapter <= 14 && !!x.quote);
+  }));
+  proof('P9g: the page\'s facts from the second layer fail', p9gProblems({ ...base, files: plant('src/lib/challenge/learn-more-view.ts', (x) => x.replace('facts: shown ? [] : firstLayerFacts(slug)', 'facts: (cardOf(slug)?.more.facts ?? [])')) }).length > 0);
+  // "Learn more" (owner, 2026-11-12): the whole book only inside its fold, labelled exactly, closed by default.
+  const comp = read('src/components/challenge-character.tsx');
+  proof('P9g: whole-book text ("later") outside the fold fails', p9gProblems({ ...base, files: plant('src/components/challenge-character.tsx', (x) => x.replace('<details className="chc-later">', '<p><Segs segs={P.learn.text.later.segs} more="" /></p>\n                <details className="chc-later">')) }).length > 0);
+  proof('P9g: the fold with another label fails', p9gProblems({ ...base, learn: { ...base.learn, label: 'Later in the book' } }).length > 0);
+  proof('P9g: the fold\'s label written elsewhere on the challenge fails', p9gProblems({ ...base, files: plant('src/lib/challenge/landing-wording.ts', (x) => x + "\nexport const X = 'Later in the book (spoilers)';") }).length > 0);
+  proof('P9g: the fold open by default fails', p9gProblems({ ...base, files: plant('src/components/challenge-character.tsx', (x) => x.replace('<details className="chc-later">', '<details className="chc-later" open>')) }).length > 0);
+  proof('P9g: a later-chapter citation in Zei\'s "At the start." (the owner\'s text) fails', p9gProblems({ ...base, learn: { ...base.learn, texts: { ...LM.LEARN_MORE, zei: { ...LM.LEARN_MORE.zei, start: [...LM.LEARN_MORE.zei.start, { cite: 'c29-b110' }] } } } }).length > 0);
+  proof('P9g: texts shown without keeping the rule fail', p9gProblems({ ...base, files: plant('src/lib/challenge/learn-more-view.ts', (x) => x.replace('const shown = t && learnMoreProblems(slug).length === 0 ? t : null;', 'const shown = t ?? null;')) }).length > 0);
+  proof('P9g: glossary notes from any chapter in the open parts fail', p9gProblems({ ...base, files: plant('src/lib/challenge/learn-more-view.ts', (x) => x.replace("render(slug, 'start', shown.start, OPEN_MAX_CHAPTER)", "render(slug, 'start', shown.start, Infinity)")) }).length > 0);
+  check('P9g: the fold is a nested <details> closed by default, after "At the start." and before "What drives"', /<details className="chc-later">\s*<summary>\{P\.learn\.text\.later\.head\}<\/summary>/.test(comp) && comp.indexOf('data-part="start"') < comp.indexOf('chc-later') && comp.indexOf('chc-later') < comp.indexOf('data-part="drives"') && LM.LATER_LABEL === 'Later in the book (spoilers)');
+  check('Learn more: Zei\'s texts are the owner\'s (approved), keep the rule, and are shown', LM.LEARN_MORE.zei.approved && LM.learnMoreProblems('zei').length === 0);
+  check('Learn more: every citation is a block that exists in the book', Object.entries(LM.LEARN_MORE).every(([, x]) => [x.who, x.start, x.later, x.drives, ...x.invent].flat().every((s) => !('cite' in s) || blocks.has(/^(c\d+-b\d+)/.exec(s.cite)![1]))));
+  proof('P9g: firstLayerFacts reading the second layer fails', p9gProblems({ ...base, files: plant('src/lib/challenge/cards.ts', (x) => x.replace('(cardOf(slug)?.facts ?? [])', '(cardOf(slug)?.more.facts ?? [])')) }).length > 0);
+  proof('P9g: firstLayerFacts without its chapter 14 limit fails', p9gProblems({ ...base, files: plant('src/lib/challenge/cards.ts', (x) => x.replace('.filter((f) => chapterOf(f.block) <= FIRST_LAYER_MAX_CHAPTER)', '')) }).length > 0);
   proof('P9g: the remix screen sent the moments whatever the switch says fails', p9gProblems({ ...base, files: plant('src/lib/challenge/make.ts', (x) => x.replace('moments: momentsOn ? momentChips() : []', 'moments: momentChips()')) }).length > 0);
   proof('P9g: a moment chip on the remix screen without its chapter fails', p9gProblems({ ...base, files: plant('src/components/challenge-make.tsx', (x) => x.replaceAll('{m.title} <span className="cc-chip-ch">· {m.chip}</span>', '{m.title}')) }).length > 0);
   proof('P9g: the cards\' words imported on a sheet page fail', p9gProblems({ ...base, files: [...files, { file: 'src/app/references/designs/[id]/planted.tsx', text: "import { CARDS } from '~/lib/challenge/cards';" }] }).length > 0);
@@ -157,23 +178,37 @@ check('config: a current default look per challenge character, each a design id 
   // A character's page: only the six; no database here, so empty lists.
   const zei = await V.characterView(null, 'zei');
   check('character page: the name, the one line, the bases and the remixes (none without a database), its back link', zei !== null && zei.c.name === 'Zei' && zei.c.line === cardOf('zei')!.line && Array.isArray(zei.c.bases) && zei.c.remixes.length === 0 && zei.w.none === 'No remixes of Zei yet.' && zei.back === '← The remix challenge');
-  // "Read where {Name} first appears" (owner, 2026-11-09): each of the six pages, the words, the reader link at the card's
-  // first "appears" block (the same block a picture is anchored to), and that block is in the book's text.
+  // "Learn more about {Name}" (owner, 2026-11-12): one expander on each of the six pages, in place of "Read where {Name}
+  // first appears" and "Read more"; Zei's with the owner's texts, the others with the first layer's facts until theirs
+  // keep the rule.
   {
-    const FA = await import('../src/lib/challenge/first-appears');
-    const CD = await import('../src/lib/challenge/cards');
-    const MK = await import('../src/lib/challenge/make');
     const rows = await Promise.all(CHALLENGE.characters.map(async (slug) => ({ slug, v: await V.characterView(null, slug) })));
-    const ok = (check: (slug: string, href: string, words: string) => boolean) => rows.every(({ slug, v }) => v?.firstAppears && check(slug, v.firstAppears.href, v.firstAppears.words));
-    check('first appears: each of the six pages links "Read where {Name} first appears" to the reader at the card\'s first block, which exists in the text and anchors its pictures', ok((slug, href, words) => {
-      const block = CD.CARDS.find((c) => c.slug === slug)!.appears[0].block;
-      const m = /^c(\d+)-b(\d+)$/.exec(block)!;
-      const a = MK.characterAnchor(slug);
-      return words === `Read where ${rows.find((r) => r.slug === slug)!.v!.c.name} first appears` && href === `/chapter/${m[1]}#${block}` && blocks.has(block) && a.chapter === Number(m[1]) && a.start === Number(m[2]);
-    }) && rows.find((r) => r.slug === 'zei')!.v!.firstAppears!.href === '/chapter/2#c2-b2' && rows.find((r) => r.slug === 'zei')!.v!.firstAppears!.words === 'Read where Zei first appears');
-    proof('first appears: a link to a block that isn\'t in the text fails', !blocks.has('c2-b99999') && FA.firstAppearsBlock('nobody') === 'c1-b1');
-    const comp = read('src/components/challenge-character.tsx');
-    check('first appears: the link sits under the one line, prefetch off', comp.indexOf('data-slot="first-appears"') > comp.indexOf('<CardLine') && comp.indexOf('data-slot="first-appears"') < comp.indexOf('ch-char-bases') && /prefetch=\{false\} data-slot="first-appears"/.test(comp));
+    const LM = await import('../src/lib/challenge/learn-more');
+    check('Learn more: each challenge character\'s page has "Learn more about {Name}" (the call name; "Lord Ephelion" with his title) and no "Read where … first appears"', rows.every(({ v }) => v?.page.learn.title === `Learn more about ${/^(Lord|Lady) /.test(v!.c.name) ? v!.c.name : v!.c.name.split(' ')[0]}` && !('firstAppears' in v!)));
+    const z = rows.find((r) => r.slug === 'zei')!.v!.page.learn;
+    check('Learn more: Zei\'s shows the owner\'s texts, no Draft mark, its fold labelled exactly, citations linking to the reader\'s first block', z.text !== null && z.draft === null && z.text.later.head === 'Later in the book (spoilers)' && z.text.start.segs.some((s) => s.kind === 'cite' && s.label === 'c2-b98–b104' && s.href === '/chapter/2#c2-b98') && z.facts.length === 0);
+    check('Learn more: a term with a glossary entry opens it (a note from chapters 1 to 14 outside the fold)', z.text!.who.segs.some((s) => s.kind === 'term' && s.term === 'Minpentai' && s.note !== null && s.href === '/glossary/minpentai'));
+    // The four terms added to the glossary on 2026-11-16: the rule's pick for two, the owner's hand-pick for two (NOTE_PICKS).
+    const terms = rows.flatMap(({ v }) => { const t = v!.page.learn.text; return t ? [t.who, t.start, t.later, t.drives].flatMap((p) => p.segs).concat(t.invent.items.flat()) : []; }).filter((s) => s.kind === 'term');
+    const noteOf = (slug: string) => terms.find((s) => s.kind === 'term' && s.href === `/glossary/${slug}`);
+    const want: Record<string, [string, string]> = {
+      'co-family': ['c1-b125', 'Febric and Hreda were from their co-family'],
+      'compute-box': ['c1-b111', 'attached by a cable to a larger compute box'],
+      'hand-device': ['c1-b137', "At that moment, Gladias's hand device buzzed. He took it out. A single notification popped up."],
+      'intervention-turn': ['c4-b110', 'At the same time, the first intervention turn came. Here, all players were able to put down more squares near any copy of their symbols.'],
+    };
+    for (const [slug, [cite, text]] of Object.entries(want)) {
+      const s = noteOf(slug);
+      check(`Learn more: "${slug}" opens its glossary entry, its note ${cite}`, !!s && s.kind === 'term' && s.note?.cite === cite && s.note.text.includes(text) && s.note.href === `/glossary/${slug}`);
+    }
+    check('Learn more: every term in the texts has a glossary entry now (no plain-words term left)', terms.every((s) => s.kind === 'term' && s.href !== null && s.note !== null) && Object.keys(LM.NOTE_PICKS).sort().join() === 'hand-device,intervention-turn');
+    const others = rows.filter((r) => r.slug !== 'zei');
+    check('Learn more: a character whose texts don\'t keep the rule yet shows the first layer\'s facts instead', others.every(({ slug, v }) => (LM.learnMoreProblems(slug).length > 0 ? v!.page.learn.text === null && v!.page.learn.facts.length > 0 : v!.page.learn.text !== null)));
+    // Since learn-more-texts fa114237 (owner, 2026-11-12) every text keeps the rule and is approved: all the pages show
+    // their texts, none marked "Draft wording".
+    check('Learn more: every challenge character\'s texts keep the rule, are approved and show, with no "Draft wording" mark', CHALLENGE.characters.every((s) => LM.learnMoreProblems(s).length === 0 && LM.LEARN_MORE[s]?.approved === true) && rows.every(({ v }) => v!.page.learn.text !== null && v!.page.learn.facts.length === 0 && v!.page.learn.draft === null));
+    // Lord Ephelion's page exists only while he is a challenge character (CHALLENGE.characters, #159); his texts show there.
+    check('Learn more: Lord Ephelion\'s texts keep the rule and show on his page, which exists only while he is a challenge character', LM.learnMoreProblems('ephelion').length === 0 && (CHALLENGE.characters.includes('ephelion') ? (await V.characterView(null, 'ephelion'))?.page.learn.title === 'Learn more about Lord Ephelion' && (await V.characterView(null, 'ephelion'))?.page.learn.text !== null : (await V.characterView(null, 'ephelion')) === null));
   }
   check('character page: null (404) for anything but the six', (await V.characterView(null, 'lektor')) === null && (await V.characterView(null, 'entries')) === null && (await V.characterView(null, '')) === null);
   const page = read('src/app/challenge/[slug]/page.tsx');
@@ -314,6 +349,36 @@ check('config: a current default look per challenge character, each a design id 
   check('moments off: every picture starts on "Same as this picture" (owner, 2026-11-09), with or without a style of its own', M.makeView({ ...src, styleElement: null }, { styles: pub }).defaultStyle === 'same');
   check('moments on (kept): the screen gets all fifteen', M.makeView(src, { styles: pub, momentsOn: true }).moments.length === 15);
   check('moments off: a picture is anchored to its character\'s first passage', JSON.stringify(M.characterAnchor('zei')) === JSON.stringify({ chapter: 2, start: 2, end: 2 }));
+
+  // "Mood" shown as "Moody graphic novel", and "See examples" (owner, 2026-11-12). A display label only: the published
+  // style keeps its title, so the allowlist, Random's draw and the recipe still name it "Mood".
+  const MW = await import('../src/lib/challenge/make-wording');
+  const mood = { id: 'style:em', label: 'Mood', text: 'Moody words.', elementId: 'em', versionId: 'vm', versionNo: 1, entity: 'Mood', title: 'Mood', byName: 'naaate', byFid: 6786, assist: null, samples: ['u1', 'u2', 'u3', 'u4'] };
+  const withMood = [...pub, mood];
+  const mvm = M.makeView(src, { styles: withMood, presets: [{ id: 'p1', label: 'Preset 1', prompt: 'p' }] });
+  check('labels: "Mood" shows as "Moody graphic novel"; any other style keeps its name', MW.styleLabel('Mood') === 'Moody graphic novel' && MW.styleLabel('Comic book') === 'Comic book' && MW.STYLE_LABELS.Mood === 'Moody graphic novel');
+  check('labels: the Style row shows the label, under the published style\'s own id', mvm.styles.find((x) => x.id === 'style:em')?.label === 'Moody graphic novel' && !mvm.styles.some((x) => x.label === 'Mood'));
+  const moodPick = M.resolveStyle({ kind: 'style', id: 'style:em' }, withMood);
+  const moodDraw = M.resolveStyle({ kind: 'random' }, withMood, [], (l) => l[3]);
+  check('labels: the recipe still records the stored name ("Mood"), picked or drawn, and its text', moodPick?.label === 'Mood' && moodPick.text === 'Moody words.' && moodPick.design?.title === 'Mood' && moodDraw?.label === 'Mood');
+  check('labels: the allowlist still matches the stored title "Mood"', M.offeredOnly(withMood, ['Mood']).map((x) => x.id).join() === 'style:em');
+  const route2 = read('src/app/api/challenge/make/route.ts');
+  check('labels: the route records style.label (the stored name) in the recipe, and shows the label only in its answer', /style: \{ choice: style\.choice, id: style\.id, elementId: style\.design\?\.elementId \?\? null, label: style\.label, text: style\.text \}/.test(route2) && /randomDrew\(styleLabel\(style\.label \?\? ''\)\)/.test(route2));
+  const recordsStored = (r: string) => /style: \{ choice: style\.choice, id: style\.id, elementId: style\.design\?\.elementId \?\? null, label: style\.label, text: style\.text \}/.test(r);
+  proof('labels: a recipe that records the display label is caught', !recordsStored(route2.replace('label: style.label, text: style.text', 'label: styleLabel(style.label ?? \'\'), text: style.text')));
+  const ex = mvm.examples;
+  check('examples: the published styles only, in the row\'s order (no preset, "Same as this picture", Random or Write your own)', ex.map((x) => x.id).join() === mvm.styles.filter((x) => x.kind === 'published').map((x) => x.id).join() && !ex.some((x) => ['same', 'random', 'own', 'preset:p1'].includes(x.id) || [MW.MAKE_WORDING.sameStyle, MW.MAKE_WORDING.random, MW.MAKE_WORDING.ownStyle].includes(x.label)));
+  const moodEx = ex.find((x) => x.id === 'style:em');
+  check('examples: each shows its label, its words, and at most three samples (the first three of its newest version)', moodEx?.label === 'Moody graphic novel' && moodEx.name === 'Mood' && moodEx.words === 'Moody words.' && moodEx.samples.map((x) => x.url).join() === 'u1,u2,u3' && ex.filter((x) => x.id !== 'style:em').every((x) => x.samples.length === 0));
+  check('examples: each sample\'s alt says it is an AI-generated sample of that style, never "not by the author"', moodEx!.samples.every((x) => x.alt === 'AI-generated sample of the Moody graphic novel style') && !JSON.stringify(ex).includes('not by the author'));
+  check('examples: the words are DRAFT (owner, 2026-11-12)', mvm.w.seeExamples === 'See examples' && mvm.w.examplesTitle === 'Styles' && mvm.w.examplesClose === 'Close' && /\/\/ DRAFT \(owner, 2026-11-12\)[^\n]*\n[^\n]*\n\s*seeExamples: 'See examples'/.test(read('src/lib/challenge/make-wording.ts')) && /Mood: 'Moody graphic novel', \/\/ DRAFT \(owner, 2026-11-12\)/.test(read('src/lib/challenge/make-wording.ts')));
+  const panel = read('src/components/style-examples.tsx');
+  const makeSrc = read('src/components/challenge-make.tsx');
+  check('panel: a modal dialog (aria-modal, labelled), a visible Close, Escape closes, focus back to the link', /<dialog\b/.test(panel) && /showModal\(\)/.test(panel) && /aria-modal="true"/.test(panel) && /aria-labelledby=\{titleId\}/.test(panel) && /onCancel=/.test(panel) && /className="se-close"[^>]*>\s*\{w\.examplesClose\}/.test(panel) && /opener\.current\?\.focus\(\)/.test(panel));
+  check('panel: every sample carries the AI label, loads lazily, and its alt is the server\'s; no "not by the author" in sight', /<img src=\{p\.url\} alt=\{p\.alt\} loading="lazy"/.test(panel) && /<figcaption className="se-sample-cap">\s*<AiTag \/>/.test(panel) && !/not by the author/i.test(panel));
+  check('panel: tapping a style\'s row or a sample picks it and closes; it knows nothing of the remix screen', (panel.match(/onClick=\{\(\) => pick\(s\.id\)\}/g) ?? []).length === 2 && /onPick\(id\);\s*close\(\);/.test(panel) && !/challenge-make|MakeView|mk-/.test(panel));
+  check('panel: mounted under the Style row with the server\'s examples, picking into the row', /<StyleExamples styles=\{view\.examples\} w=\{w\} selected=\{styleSel\} onPick=\{setStyleSel\} \/>/.test(makeSrc) && makeSrc.indexOf('<StyleExamples') > makeSrc.indexOf('className="mk-styles"') && makeSrc.indexOf('<StyleExamples') < makeSrc.indexOf('className="mk-model"'));
+  check('panel: a bottom sheet under 768px (full width, at the bottom), a side panel from 768px', /@media \(max-width: 767px\) \{\s*\.se-panel \{ position: fixed; inset: auto 0 0 0; margin: 0; width: 100%; max-width: 100%;/.test(read('src/styles/designs.css')) && /@media \(min-width: 768px\) \{\s*\.se-panel \{ position: fixed; inset: 0 0 0 auto;/.test(read('src/styles/designs.css')));
 }
 
 // --- Navigation (owner, 2026-11-05: one URL per step, back one step, ✕ to the card, words kept, publish replaces) -------
@@ -606,6 +671,13 @@ check('config: a current default look per challenge character, each a design id 
       );
       await sql`update studio.elements set status = 'published' where id = ${mid.elementId}`;
     }
+    // "See examples" (owner, 2026-11-12): a style's samples are its NEWEST version's, as published.
+    const sample = (n: number) => ({ url: `https://media.snowmoon.party/test/sample-${n}.jpg`, sha256: String(n).repeat(64).slice(0, 64), recipe: null });
+    const sv1 = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'style', styleName: 'Sampled', body: { title: 'Sampled', text: 'Sampled words.', samples: [sample(1)], views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null } as never });
+    await DS.makeDesign(S as never, { fid: 6786, mode: 'version', kind: 'style', fromVersionId: sv1.versionId, body: { title: 'Sampled', text: 'Sampled words.', samples: [2, 3, 4, 5].map(sample), views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null } as never });
+    const sampled = (await (await import('../src/lib/challenge/make')).publishedStyles(sql as never)).find((x) => x.elementId === sv1.elementId);
+    const sampledEx = (await import('../src/lib/challenge/make')).styleExamples(sampled ? [sampled] : []);
+    check('examples (database): a style\'s samples are its newest version\'s, three shown', sampled?.versionNo === 2 && sampled.samples?.length === 4 && sampledEx[0]?.samples.map((x) => x.url.slice(-12)).join() === 'sample-2.jpg,sample-3.jpg,sample-4.jpg', JSON.stringify(sampled?.samples));
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styledBase = styled.versionId;
     (globalThis as { __styledBase?: string; __styleEl?: string }).__styleEl = styleD.elementId;
     (globalThis as { __keepCount?: unknown }).__keepCount = keepCount;
