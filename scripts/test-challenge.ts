@@ -449,7 +449,10 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
   // remixes are every published one, newest first, with no "Show more".
   const charPage = read('src/components/challenge-character.tsx');
   check('a character\'s bases are shuffled afresh in the browser, the whole list; its remixes are not shuffled (owner, 2026-11-08)', /setBases\(c\.bases\.length > 1 \? shuffleFresh\(c\.bases\) : c\.bases\)/.test(card) && /'use client'/.test(card) && !/shuffleFresh\(c\.remixes\)/.test(card + charPage) && /await (remixes|challengePictures)\(sql\)/.test(read('src/lib/challenge/view.ts')));
-  check('a character\'s page shows every remix, newest first, with no "Show more"', /<Row tiles=\{c\.remixes\} alt=\{w\.alt\} label=\{w\.remixes\} lazy picture \/>/.test(charPage) && !/Show more|showMore|slice\(0, shown\)/.test(card + charPage));
+  // The redesign (screen 2, owner-approved 2026-11-11): the newest FEED_PAGE, in the database's order, then "Older remixes"
+  // to the rest in the feed (/challenge/remixes, a page at a time); no "Show more", no infinite scroll.
+  const viewSrc = read('src/lib/challenge/view.ts');
+  check('a character\'s page shows its remixes newest first, a page at a time ("Older remixes" to the feed), with no "Show more"', /<RemixGrid tiles=\{c\.remixes\}/.test(charPage) && /mine\.slice\(0, FEED_PAGE\)/.test(viewSrc) && /\/challenge\/remixes\?character=\$\{slug\}&before=/.test(viewSrc) && !/Show more|showMore|slice\(0, shown\)/.test(card + charPage));
   proof('P5g: shuffling only some of the bases fails', p5gProblems(plantIn('src/components/challenge-card.tsx', (x) => x.replace('shuffleFresh(c.bases)', 'shuffleFresh(c.bases.slice(1))'))).length > 0);
   proof('P5g: bases put in a fixed order by the page fails', p5gProblems(plantIn('src/components/challenge-card.tsx', (x) => x.replace('shuffleFresh(c.bases)', '[...c.bases].sort((a, b) => a.title.localeCompare(b.title))'))).length > 0);
   proof('P5g: a weighted shuffle (it reads likes) fails', p5gProblems(plantIn('src/lib/challenge/shuffle.ts', (x) => x.replace('export function shuffleFresh<T>(items: readonly T[]', 'export function shuffleFresh<T extends { likes: number }>(items: readonly T[]').replace('const j = below(i + 1, random);', 'const j = below(Math.min(i + 1, 1 + out[i].likes), random);'))).length > 0);
@@ -895,7 +898,33 @@ check('S5 Submit needs the post link', ((r) => !r.ok && r.why === E.SUBMIT_WORDI
 proof('S5 a Submit without a post that went through would be caught', (await E.standing(S)).entries.length === 0);
 check('S5 Submit: only your own version', ((r) => !r.ok && r.why === E.SUBMIT_WORDING.notYours)(await submit(501, f500a.versionId)));
 check('S5 Submit: not a version below the check', ((r) => !r.ok && r.why === E.SUBMIT_WORDING.notEligible)(await submit(501, f501.versionId)));
-check('S5 Submit: not an admin\'s version', !(await submit(193912, fAdmin.versionId)).ok);
+{
+  // An admin's own version (owner, 2026-11-12): Submit makes it an example, never an entry: only its post is listed (by
+  // the admin), no row of studio.challenge_marks is written, and nothing counted or rewarded reads it.
+  const [m0] = await sql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks`;
+  const ex = await submit(193912, fAdmin.versionId);
+  const [m1] = await sql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks`;
+  check('S5 Submit: an admin\'s version goes through as an example and writes no entry row', ex.ok && m1.n === m0.n, JSON.stringify(ex));
+  check('S5 Submit: the admin example\'s post is listed, by the admin', (await P.postsFor(S, fAdmin.versionId)).some((x) => x.addedBy === 193912));
+  check('S5 Submit: an admin example is submitted once', ((r) => !r.ok && r.why === E.SUBMIT_WORDING.already)(await submit(193912, fAdmin.versionId)));
+  const sx = await E.standing(S);
+  check('S5 an admin example: listed as an example, not an entry, in no count', sx.examples.some((v) => v.versionId === fAdmin.versionId) && !sx.entries.some((v) => v.versionId === fAdmin.versionId) && [...sx.entrants.values()].every((n) => n === 0) && !R.equalSharePeople(sx.entries).includes(193912));
+  proof('S5 an example counted as an entry is caught', R.entrantCounts([...sx.entries, ...sx.examples]).get('zei') !== sx.entrants.get('zei'));
+  check('S5 an admin example\'s page: the admin line, marked as an example', ((s) => s?.kind === 'admin' && s.example)(await E.versionStanding(S, fAdmin.versionId)));
+  // In the code: an admin's Submit never writes an entry row, and every count is made from the entries alone.
+  const examplesProblems = (src: string) => {
+    const p: string[] = [];
+    const body = src.slice(src.indexOf('async function submitExample('), src.indexOf('export async function withdrawEntry('));
+    if (!body || /challenge_marks/.test(body)) p.push('the admin example\'s Submit writes or reads studio.challenge_marks');
+    if (!/entrants: entrantCounts\(entries\) \};\n\}/.test(src)) p.push('standing\'s count is not made from the entries alone');
+    if (!/if \(elig\?\.why === 'admin'\) return submitExample\(sql, fid, versionId, post\);\n  if \(elig\?\.eligible !== true\) return \{ ok: false, why: SUBMIT_WORDING\.notEligible/.test(src)) p.push('only admins take the example path');
+    return p;
+  };
+  const srcE = read('src/lib/challenge/entries.ts');
+  check('S5 in the code: an admin example writes no entry row; counts come from the entries alone', examplesProblems(srcE).length === 0, examplesProblems(srcE).join('; '));
+  proof('S5 an admin example written into challenge_marks is caught', examplesProblems(srcE.replace("return { ok: true as const, left: 0 };", "await tx`insert into studio.challenge_marks ${tx({ challenge: CHALLENGE.id, fid, character: 'zei', version_id: versionId })}`;\n      return { ok: true as const, left: 0 };")).length > 0);
+  proof('S5 a count that adds the examples is caught', examplesProblems(srcE.replace('entrants: entrantCounts(entries) };', 'entrants: entrantCounts([...entries, ...byAdmins]) };')).length > 0);
+}
 check('S5 Submit: not a sheet made from scratch', !(await submit(503, fScratch.versionId)).ok);
 // One a Pacific day: 6852's first submission is moved back a day (as if made yesterday) before the second.
 const yesterday = (fid: number) => sql`update studio.challenge_marks set marked_at = marked_at - interval '1 day' where fid = ${fid}`;
@@ -1550,7 +1579,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
     check('F1 a sheet shared by anyone but its maker doesn\'t say "My remix"', !/my remix/i.test(CWx.shareTextOthers('Zei', 'naaate')) && /const texts = othersTexts && !mine \? othersTexts : makersTexts;/.test(share));
     const css = read('src/styles/designs.css');
     const card = read('src/components/challenge-card.tsx');
-    check('F2 the challenge\'s pictures are shown whole at 16:9 (cards, Every remix, Every entry, the rules\' list)', /\.cc-tile-img\.cc-tile-pic \{ aspect-ratio: 16 \/ 9; object-fit: contain; \}/.test(css) && /\.ch-pics \.ch-card-img \{ aspect-ratio: 16 \/ 9; object-fit: contain; \}/.test(css) && read('src/components/challenge-character.tsx').includes('label={w.remixes} lazy picture />') && read('src/app/challenge/entries/page.tsx').includes('pictures: CHALLENGE.pictureEntries') && read('src/components/challenge-remixes-body.tsx').includes('pictures: true'));
+    check('F2 the challenge\'s pictures are shown whole at 16:9 (cards, Every remix, Every entry, the rules\' list)', /\.cc-tile-img\.cc-tile-pic \{ aspect-ratio: 16 \/ 9; object-fit: contain; \}/.test(css) && /\.ch-pics \.ch-card-img \{ aspect-ratio: 16 \/ 9; object-fit: contain; \}/.test(css) && /\.chc-pic-wide \{ aspect-ratio: 16 \/ 9; \}/.test(css) && /\.chc-wide-img \{ object-fit: contain;/.test(css) && read('src/components/challenge-character.tsx').includes('className="chc-pic chc-pic-wide"') && read('src/app/challenge/entries/page.tsx').includes('pictures: CHALLENGE.pictureEntries') && read('src/components/challenge-remixes-body.tsx').includes('pictures: true'));
     const make = read('src/components/challenge-make.tsx');
     const at = (x: string) => make.indexOf(x);
     // Owner, 2026-11-08: the picture small, the one box, the Style row, the Model row, then "Make it"; the moments (strip

@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(vercel)",
+      "Bash(vercel .)",
+      "Bash(vercel deploy:*)",
+      "Bash(vercel --prod:*)",
+      "Bash(vercel --prebuilt:*)",
+      "Bash(vercel build:*)",
+      "Bash(vercel pull:*)",
+      "Bash(vercel env pull:*)",
+      "Bash(vercel env ls --decrypt:*)",
+      "Bash(vercel env add:*)",
+      "Bash(vercel env rm:*)",
+      "Bash(vercel promote:*)",
+      "Bash(vercel rollback:*)",
+      "Bash(npx vercel:*)",
+      "Bash(~/.npm-global/bin/vercel deploy:*)",
+      "Bash(~/.npm-global/bin/vercel --prod:*)",
+      "Bash(~/.npm-global/bin/vercel pull:*)",
+      "Bash(~/.npm-global/bin/vercel env pull:*)",
+      "Bash(/Users/nathan/.npm-global/bin/vercel deploy:*)",
+      "Bash(/Users/nathan/.npm-global/bin/vercel --prod:*)",
+      "Bash(/Users/nathan/.npm-global/bin/vercel pull:*)",
+      "Bash(/Users/nathan/.npm-global/bin/vercel env pull:*)",
+      "Read(**/.env)",
+      "Read(**/.env.local)",
+      "Read(**/.env.*.local)",
+      "Read(**/.env.production)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)",
+      "Write(**/.env)",
+      "Write(**/.env.*)"
+    ]
+  }
+}

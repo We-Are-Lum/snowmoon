@@ -9,19 +9,19 @@
  },
  "sources": {
   "pronunciation_sha256": "81a5c2fe59fda14824d8465b630ca3bf07b205c08518250999699b51eaff317d",
-  "review_sha256": "f9553c570bb994d384fc0f069513c46cf2a8649075cde403531445bdcfeb3973",
+  "review_sha256": "8885e64ada2d7cc8bf5fb846d243f7da294d6bfa1deb6f295464792e0f2816dd",
   "text_blocks_sha256": "14cce96f6da8a69258a2e77ee5f7540d7dbeb7ab8895b4ef377415b9dfbe2d76",
-  "entities_sha256": "b2a410905b332901fec15779a58b8ab35cd7011ee5861b14dd099f8149659aa3",
+  "entities_sha256": "72ba2de7659aec50b9524d7b09fd2f5e5ced1e330f2a3fea0c641352eba9f694",
   "narration_sha256": "4152445eac7a5423d4f3f09034a046f5045ee9617a8becf13de6d8641e7c880c",
   "narration_voice": "kokoro-af_heart"
  },
  "counts": {
-  "terms": 207,
-  "with_explanation": 25,
-  "with_clip": 181,
+  "terms": 211,
+  "with_explanation": 26,
+  "with_clip": 185,
   "from_pronunciation": 192,
   "from_entity": 3,
-  "from_review": 12,
+  "from_review": 16,
   "excluded": 146
  },
  "terms": [
@@ -1638,6 +1638,40 @@
    "clip": null
   },
   {
+   "slug": "co-family",
+   "term": "co-family",
+   "aliases": [
+    "co-families"
+   ],
+   "source": "review",
+   "kind": "coinage",
+   "respelling": null,
+   "first": "c1-b125",
+   "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b125",
+    "chapter": 1,
+    "idx": 125,
+    "text": "This was Gladias and Seila's fourth last dinner with the kids - of whom Zven and Lily were theirs, and Febric and Hreda were from their co-family, Uncle Vil and Aunt Daia."
+   },
+   "explanations": [],
+   "mentions": {
+    "1": [
+     125
+    ]
+   },
+   "mention_count": 1,
+   "clip": {
+    "block": "c1-b125",
+    "chapter": 1,
+    "idx": 125,
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c1/b125-aeeaac04b4f7.m4a",
+    "duration_ms": 18325,
+    "start_ms": 1515360,
+    "chapter_url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-1-17e6392d460b.m4a"
+   }
+  },
+  {
    "slug": "colorball",
    "term": "Colorball",
    "aliases": [],
@@ -1667,6 +1701,62 @@
     "duration_ms": 7175,
     "start_ms": 656320,
     "chapter_url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-8-17c430f909c8.m4a"
+   }
+  },
+  {
+   "slug": "compute-box",
+   "term": "compute box",
+   "aliases": [
+    "compute boxes"
+   ],
+   "source": "review",
+   "kind": "coinage",
+   "respelling": null,
+   "first": "c1-b111",
+   "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b111",
+    "chapter": 1,
+    "idx": 111,
+    "text": "The older teenage boy, Febric, walked down more slowly, carrying his hand device in one hand, attached by a cable to a larger compute box in the other."
+   },
+   "explanations": [],
+   "mentions": {
+    "1": [
+     111
+    ],
+    "2": [
+     3
+    ],
+    "4": [
+     73
+    ],
+    "6": [
+     122
+    ],
+    "7": [
+     138
+    ],
+    "9": [
+     18
+    ],
+    "18": [
+     19,
+     20
+    ],
+    "22": [
+     135
+    ]
+   },
+   "mention_count": 9,
+   "clip": {
+    "block": "c1-b111",
+    "chapter": 1,
+    "idx": 111,
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c1/b111-bcd60be9a2ac.m4a",
+    "duration_ms": 10225,
+    "start_ms": 1432660,
+    "chapter_url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-1-17e6392d460b.m4a"
    }
   },
   {
@@ -5176,6 +5266,181 @@
    }
   },
   {
+   "slug": "hand-device",
+   "term": "hand device",
+   "aliases": [
+    "hand devices"
+   ],
+   "source": "review",
+   "kind": "coinage",
+   "respelling": null,
+   "first": "c1-b9",
+   "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b9",
+    "chapter": 1,
+    "idx": 9,
+    "text": "And playing into Gladias's ear this whole time, there was an audio program from Emerald, the local AI running from Gladias's hand device, explaining the nuances of airborne virus transmission and how to calculate how much a given change to a building's ventilation or density might affect total city-wide cases in an epidemic."
+   },
+   "explanations": [],
+   "mentions": {
+    "1": [
+     9,
+     17,
+     22,
+     24,
+     25,
+     41,
+     52,
+     54,
+     66,
+     77,
+     78,
+     82,
+     85,
+     108,
+     111,
+     124,
+     137
+    ],
+    "2": [
+     3,
+     45,
+     46,
+     109
+    ],
+    "3": [
+     54,
+     59
+    ],
+    "4": [
+     4,
+     77,
+     81,
+     114,
+     119
+    ],
+    "5": [
+     42
+    ],
+    "6": [
+     39,
+     45,
+     131,
+     132,
+     160,
+     161
+    ],
+    "7": [
+     2,
+     35,
+     37,
+     138
+    ],
+    "8": [
+     4,
+     16,
+     17
+    ],
+    "9": [
+     111,
+     133
+    ],
+    "10": [
+     2,
+     58,
+     76,
+     92,
+     93,
+     110,
+     114,
+     122,
+     124,
+     126,
+     156,
+     159
+    ],
+    "11": [
+     142
+    ],
+    "12": [
+     11,
+     57,
+     134,
+     139
+    ],
+    "13": [
+     68,
+     69
+    ],
+    "14": [
+     124
+    ],
+    "15": [
+     15,
+     20,
+     49,
+     73
+    ],
+    "16": [
+     78,
+     94
+    ],
+    "17": [
+     53,
+     109
+    ],
+    "18": [
+     19,
+     61,
+     84
+    ],
+    "19": [
+     99,
+     122,
+     123,
+     152
+    ],
+    "20": [
+     3,
+     9,
+     17,
+     178
+    ],
+    "21": [
+     40
+    ],
+    "22": [
+     10,
+     135
+    ],
+    "23": [
+     42,
+     81
+    ],
+    "25": [
+     33
+    ],
+    "27": [
+     34,
+     53
+    ],
+    "28": [
+     57
+    ]
+   },
+   "mention_count": 92,
+   "clip": {
+    "block": "c1-b66",
+    "chapter": 1,
+    "idx": 66,
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c1/b066-ea767c1d1ea3.m4a",
+    "duration_ms": 2650,
+    "start_ms": 963550,
+    "chapter_url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-1-17e6392d460b.m4a"
+   }
+  },
+  {
    "slug": "hapton",
    "term": "Hapton",
    "aliases": [],
@@ -5764,6 +6029,100 @@
     "duration_ms": 9075,
     "start_ms": 726880,
     "chapter_url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-3-35c67769ace4.m4a"
+   }
+  },
+  {
+   "slug": "intervention-turn",
+   "term": "intervention turn",
+   "aliases": [
+    "intervention turns"
+   ],
+   "source": "review",
+   "kind": "coinage",
+   "respelling": null,
+   "first": "c4-b109",
+   "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b109",
+    "chapter": 4,
+    "idx": 109,
+    "text": "Zei cursed silently, and spent his next intervention turn putting up more walls facing Bai."
+   },
+   "explanations": [
+    {
+     "block": "c7-b107",
+     "chapter": 7,
+     "idx": 107,
+     "text": "Part of the factory had been built during the intervention turn, the rest continued to be constructed in real time out of nearby rock formations by gliders."
+    }
+   ],
+   "mentions": {
+    "4": [
+     109,
+     110,
+     113,
+     116,
+     121,
+     124,
+     126,
+     129,
+     135,
+     138
+    ],
+    "7": [
+     88,
+     93,
+     102,
+     107,
+     110,
+     115
+    ],
+    "10": [
+     159
+    ],
+    "12": [
+     156,
+     189,
+     193,
+     194,
+     195
+    ],
+    "14": [
+     33,
+     35,
+     38,
+     45,
+     46,
+     47,
+     49,
+     50,
+     54,
+     56,
+     58,
+     59,
+     64,
+     69,
+     73,
+     76,
+     78,
+     79,
+     83,
+     84,
+     85
+    ],
+    "24": [
+     84
+    ]
+   },
+   "mention_count": 44,
+   "clip": {
+    "block": "c4-b129",
+    "chapter": 4,
+    "idx": 129,
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c4/b129-9697f50ca22c.m4a",
+    "duration_ms": 3650,
+    "start_ms": 1449700,
+    "chapter_url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-4-df37ad8db068.m4a"
    }
   },
   {

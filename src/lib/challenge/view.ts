@@ -6,11 +6,12 @@ import type { CardData, CardTile, CardWords, CharacterData } from '~/components/
 import { startingSheets } from './entries';
 import { challengePictures } from './pictures';
 import { cardOf } from './cards';
-import { basesOf, baseCountOf, phase, shortDateText, windowText } from './rules';
+import { learnMoreView, type LearnMoreView } from './learn-more-view';
+import { basesOf, baseCountOf, firstRemixesOf, phase, shortDateText, windowText } from './rules';
+import { FEED_PAGE, cursorOf } from './remixes';
 import { homeOf } from './homes';
 import { CHALLENGE_WORDING as W } from './wording';
 import { CHALLENGE_LINKS, LANDING_WORDING as L } from './landing-wording';
-import { firstAppearsHref, firstAppearsWords } from './first-appears';
 import { callNameOf } from './names';
 import { styleLabel } from './make-wording';
 
@@ -57,8 +58,29 @@ export interface CharacterView {
   c: CharacterData;
   w: CardWords;
   notAffiliated: string;
-  /** "Read where {Name} first appears" (owner, 2026-11-09): the reader at the character's first block. */
-  firstAppears?: { href: string; words: string };
+  /**
+   * The redesigned page (Claude Design's handoff, screen 2; owner-approved 2026-11-11). Every word is written here.
+   * - `learn`: "Learn more about {name}" (owner, 2026-11-12): one expander (src/lib/challenge/learn-more-view.ts), in
+   *   place of "Read where {name} first appears" and "Read more"; the whole book only inside its fold (P9g).
+   * - `remix`: "Remix {name}", to the remix screen of one of its bases, drawn afresh in the browser (P5g).
+   * - `picked`: the owner's first remixes of the character (CHALLENGE.firstRemixes), under "First remixes by @naaate".
+   * - the grid: the newest FEED_PAGE remixes; "Older remixes" opens the rest in the feed (/challenge/remixes), a page at
+   *   a time. No count of remixes (P5i).
+   */
+  page: {
+    learn: LearnMoreView;
+    remix: string;
+    remixThis: string;
+    remixShort: string;
+    startHead: string;
+    basesCount: string;
+    everyHead: string;
+    everyShort: string;
+    newestFirst: string;
+    pickedHead: string;
+    picked: CardTile[];
+    older: { href: string; text: string } | null;
+  };
 }
 
 const callName = callNameOf;
@@ -78,6 +100,8 @@ const adminNote = () => (CHALLENGE.public ? null : 'Admins only for now: everyon
 
 type Tileable = { versionId: string; thumb: string | null; title?: string; byName: string | null; byFid: number };
 const tile = (r: Tileable, label: string | null): CardTile => ({ versionId: r.versionId, thumb: r.thumb, title: r.title ?? '', byName: r.byName, byFid: r.byFid, href: remixHref(r.versionId), label });
+/** A published challenge picture: its picture opens its page (/challenge/p/<id>), and "Remix this" its remix screen. */
+const pictureTile = (r: Tileable): CardTile => ({ ...tile(r, null), page: `/challenge/p/${r.versionId}` });
 
 /** A character's bases as tiles (every one; the browser shuffles them); before the picks, its newest published sheet. A base's label is its style's display label (STYLE_LABELS, owner 2026-11-12). */
 async function basesTiles(sql: Sql | null, slug: string): Promise<{ bases: CardTile[]; note: string | null }> {
@@ -145,8 +169,33 @@ export async function characterView(sql: Sql | null, slug: string): Promise<Char
   // Every published challenge picture (no filter, limit or order beyond the database's newest first), then this
   // character's: its remixes, the viewer's own and the owner's first remixes included.
   const all = sql ? await challengePictures(sql).catch(() => []) : [];
-  const remixes = all.filter((p) => p.character === slug).map((p) => tile(p, null));
+  const mine = all.filter((p) => p.character === slug);
+  const remixes = mine.slice(0, FEED_PAGE).map(pictureTile);
   const c: CharacterData = { ...cardFor(slug, bases, note), remixes };
-  // "Read where {Name} first appears" (owner, 2026-11-09): the reader at the character's first block.
-  return { adminNote: adminNote(), back: L.back, c, w: cardWords(c.name), notAffiliated: W.notAffiliated, firstAppears: { href: firstAppearsHref(slug), words: firstAppearsWords(c.name) } };
+  const P = L.character;
+  // The owner's first remixes, in the configured order, by element or version id (as entries.ts reads them).
+  const firsts = firstRemixesOf(slug);
+  const picked = firsts.map((id) => mine.find((p) => p.versionId === id || p.elementId === id)).filter((p): p is NonNullable<typeof p> => Boolean(p)).map(pictureTile);
+  const older = mine.length > FEED_PAGE ? { href: `/challenge/remixes?character=${slug}&before=${encodeURIComponent(cursorOf(mine[FEED_PAGE - 1]))}`, text: L.feedOlder } : null;
+  return {
+    adminNote: adminNote(),
+    back: L.back,
+    c,
+    w: cardWords(c.name),
+    notAffiliated: W.notAffiliated,
+    page: {
+      learn: learnMoreView(slug, c.name),
+      remix: P.remix(c.name),
+      remixThis: P.remixThis,
+      remixShort: L.remix,
+      startHead: P.startHead,
+      basesCount: P.basesCount(bases.length),
+      everyHead: P.everyHead(c.name),
+      everyShort: L.feedTitle,
+      newestFirst: P.newestFirst,
+      pickedHead: L.firstRemixesHead,
+      picked,
+      older,
+    },
+  };
 }

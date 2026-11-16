@@ -33,7 +33,7 @@ function walk(dir: string): string[] {
 }
 const clone = <T>(v: T): T => structuredClone(v);
 
-const { CARDS, cardQuotes, cardShapeProblems, FIRST_LAYER_MAX_CHAPTER } = await import('../src/lib/challenge/cards');
+const { CARDS, cardQuotes, cardShapeProblems, FIRST_LAYER_MAX_CHAPTER, firstLayerFacts } = await import('../src/lib/challenge/cards');
 const { MOMENTS, momentShapeProblems, inBookOrder, chapterChip, momentsWith } = await import('../src/lib/challenge/moments');
 const { quoteProblems } = await import('../src/lib/challenge/book-quotes');
 const { loadBlocks } = await import('./lib/glossary');
@@ -98,7 +98,8 @@ check('config: a current default look per challenge character, each a design id 
 // --- P9g, P2m, P6ac -------------------------------------------------------------------------------------------------
 {
   const files = walk('src').map((f) => ({ file: f, text: read(f) }));
-  const base = { files, cards: CARDS, moments: MOMENTS, characters: CHALLENGE.characters, blocks, on: spoilerExceptionOn, dates: CHALLENGE.dates };
+  const LM = await import('../src/lib/challenge/learn-more');
+  const base = { files, cards: CARDS, moments: MOMENTS, characters: CHALLENGE.characters, blocks, on: spoilerExceptionOn, dates: CHALLENGE.dates, learn: { texts: LM.LEARN_MORE, label: LM.LATER_LABEL as string } };
   const p9 = p9gProblems(base);
   check('P9g passes as committed', p9.length === 0, p9.join('; '));
   const plant = (f: string, g: (x: string) => string) => files.map((x) => (x.file === f ? { ...x, text: g(x.text) } : x));
@@ -111,6 +112,26 @@ check('config: a current default look per challenge character, each a design id 
   proof('P9g: a card fetching "Where they appear" again fails', p9gProblems({ ...base, files: plant('src/components/challenge-card.tsx', (x) => x + "\nconst appears = () => fetch('/api/challenge/appears?character=zei');") }).length > 0);
   proof('P9g: the pages\' data carrying facts fails', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace("line: cardOf(slug)?.line ?? ''", "line: cardOf(slug)?.line ?? '', facts: cardOf(slug)?.facts")) }).length > 0);
   proof('P9g: the pages\' data carrying the moments fails', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace("import { cardOf } from './cards';", "import { cardOf } from './cards';\nimport { momentsWith } from './moments';")) }).length > 0);
+  // "Learn more about {name}" (owner, 2026-11-12): its fallback is the first-layer facts, only through firstLayerFacts.
+  check('P9g: "Learn more"\'s fallback carries each card\'s first-layer facts, none past chapter 14, each word for word', CARDS.every((c) => {
+    const f = firstLayerFacts(c.slug);
+    return f.length === c.facts.length && f.every((x) => x.chapter >= 1 && x.chapter <= 14 && !!x.quote);
+  }));
+  proof('P9g: the page\'s facts from the second layer fail', p9gProblems({ ...base, files: plant('src/lib/challenge/learn-more-view.ts', (x) => x.replace('facts: shown ? [] : firstLayerFacts(slug)', 'facts: (cardOf(slug)?.more.facts ?? [])')) }).length > 0);
+  // "Learn more" (owner, 2026-11-12): the whole book only inside its fold, labelled exactly, closed by default.
+  const comp = read('src/components/challenge-character.tsx');
+  proof('P9g: whole-book text ("later") outside the fold fails', p9gProblems({ ...base, files: plant('src/components/challenge-character.tsx', (x) => x.replace('<details className="chc-later">', '<p><Segs segs={P.learn.text.later.segs} more="" /></p>\n                <details className="chc-later">')) }).length > 0);
+  proof('P9g: the fold with another label fails', p9gProblems({ ...base, learn: { ...base.learn, label: 'Later in the book' } }).length > 0);
+  proof('P9g: the fold\'s label written elsewhere on the challenge fails', p9gProblems({ ...base, files: plant('src/lib/challenge/landing-wording.ts', (x) => x + "\nexport const X = 'Later in the book (spoilers)';") }).length > 0);
+  proof('P9g: the fold open by default fails', p9gProblems({ ...base, files: plant('src/components/challenge-character.tsx', (x) => x.replace('<details className="chc-later">', '<details className="chc-later" open>')) }).length > 0);
+  proof('P9g: a later-chapter citation in Zei\'s "At the start." (the owner\'s text) fails', p9gProblems({ ...base, learn: { ...base.learn, texts: { ...LM.LEARN_MORE, zei: { ...LM.LEARN_MORE.zei, start: [...LM.LEARN_MORE.zei.start, { cite: 'c29-b110' }] } } } }).length > 0);
+  proof('P9g: texts shown without keeping the rule fail', p9gProblems({ ...base, files: plant('src/lib/challenge/learn-more-view.ts', (x) => x.replace('const shown = t && learnMoreProblems(slug).length === 0 ? t : null;', 'const shown = t ?? null;')) }).length > 0);
+  proof('P9g: glossary notes from any chapter in the open parts fail', p9gProblems({ ...base, files: plant('src/lib/challenge/learn-more-view.ts', (x) => x.replace("render(slug, 'start', shown.start, OPEN_MAX_CHAPTER)", "render(slug, 'start', shown.start, Infinity)")) }).length > 0);
+  check('P9g: the fold is a nested <details> closed by default, after "At the start." and before "What drives"', /<details className="chc-later">\s*<summary>\{P\.learn\.text\.later\.head\}<\/summary>/.test(comp) && comp.indexOf('data-part="start"') < comp.indexOf('chc-later') && comp.indexOf('chc-later') < comp.indexOf('data-part="drives"') && LM.LATER_LABEL === 'Later in the book (spoilers)');
+  check('Learn more: Zei\'s texts are the owner\'s (approved), keep the rule, and are shown', LM.LEARN_MORE.zei.approved && LM.learnMoreProblems('zei').length === 0);
+  check('Learn more: every citation is a block that exists in the book', Object.entries(LM.LEARN_MORE).every(([, x]) => [x.who, x.start, x.later, x.drives, ...x.invent].flat().every((s) => !('cite' in s) || blocks.has(/^(c\d+-b\d+)/.exec(s.cite)![1]))));
+  proof('P9g: firstLayerFacts reading the second layer fails', p9gProblems({ ...base, files: plant('src/lib/challenge/cards.ts', (x) => x.replace('(cardOf(slug)?.facts ?? [])', '(cardOf(slug)?.more.facts ?? [])')) }).length > 0);
+  proof('P9g: firstLayerFacts without its chapter 14 limit fails', p9gProblems({ ...base, files: plant('src/lib/challenge/cards.ts', (x) => x.replace('.filter((f) => chapterOf(f.block) <= FIRST_LAYER_MAX_CHAPTER)', '')) }).length > 0);
   proof('P9g: the remix screen sent the moments whatever the switch says fails', p9gProblems({ ...base, files: plant('src/lib/challenge/make.ts', (x) => x.replace('moments: momentsOn ? momentChips() : []', 'moments: momentChips()')) }).length > 0);
   proof('P9g: a moment chip on the remix screen without its chapter fails', p9gProblems({ ...base, files: plant('src/components/challenge-make.tsx', (x) => x.replaceAll('{m.title} <span className="cc-chip-ch">· {m.chip}</span>', '{m.title}')) }).length > 0);
   proof('P9g: the cards\' words imported on a sheet page fail', p9gProblems({ ...base, files: [...files, { file: 'src/app/references/designs/[id]/planted.tsx', text: "import { CARDS } from '~/lib/challenge/cards';" }] }).length > 0);
@@ -157,23 +178,37 @@ check('config: a current default look per challenge character, each a design id 
   // A character's page: only the six; no database here, so empty lists.
   const zei = await V.characterView(null, 'zei');
   check('character page: the name, the one line, the bases and the remixes (none without a database), its back link', zei !== null && zei.c.name === 'Zei' && zei.c.line === cardOf('zei')!.line && Array.isArray(zei.c.bases) && zei.c.remixes.length === 0 && zei.w.none === 'No remixes of Zei yet.' && zei.back === '← The remix challenge');
-  // "Read where {Name} first appears" (owner, 2026-11-09): each of the six pages, the words, the reader link at the card's
-  // first "appears" block (the same block a picture is anchored to), and that block is in the book's text.
+  // "Learn more about {Name}" (owner, 2026-11-12): one expander on each of the six pages, in place of "Read where {Name}
+  // first appears" and "Read more"; Zei's with the owner's texts, the others with the first layer's facts until theirs
+  // keep the rule.
   {
-    const FA = await import('../src/lib/challenge/first-appears');
-    const CD = await import('../src/lib/challenge/cards');
-    const MK = await import('../src/lib/challenge/make');
     const rows = await Promise.all(CHALLENGE.characters.map(async (slug) => ({ slug, v: await V.characterView(null, slug) })));
-    const ok = (check: (slug: string, href: string, words: string) => boolean) => rows.every(({ slug, v }) => v?.firstAppears && check(slug, v.firstAppears.href, v.firstAppears.words));
-    check('first appears: each of the six pages links "Read where {Name} first appears" to the reader at the card\'s first block, which exists in the text and anchors its pictures', ok((slug, href, words) => {
-      const block = CD.CARDS.find((c) => c.slug === slug)!.appears[0].block;
-      const m = /^c(\d+)-b(\d+)$/.exec(block)!;
-      const a = MK.characterAnchor(slug);
-      return words === `Read where ${rows.find((r) => r.slug === slug)!.v!.c.name} first appears` && href === `/chapter/${m[1]}#${block}` && blocks.has(block) && a.chapter === Number(m[1]) && a.start === Number(m[2]);
-    }) && rows.find((r) => r.slug === 'zei')!.v!.firstAppears!.href === '/chapter/2#c2-b2' && rows.find((r) => r.slug === 'zei')!.v!.firstAppears!.words === 'Read where Zei first appears');
-    proof('first appears: a link to a block that isn\'t in the text fails', !blocks.has('c2-b99999') && FA.firstAppearsBlock('nobody') === 'c1-b1');
-    const comp = read('src/components/challenge-character.tsx');
-    check('first appears: the link sits under the one line, prefetch off', comp.indexOf('data-slot="first-appears"') > comp.indexOf('<CardLine') && comp.indexOf('data-slot="first-appears"') < comp.indexOf('ch-char-bases') && /prefetch=\{false\} data-slot="first-appears"/.test(comp));
+    const LM = await import('../src/lib/challenge/learn-more');
+    check('Learn more: each challenge character\'s page has "Learn more about {Name}" (the call name; "Lord Ephelion" with his title) and no "Read where … first appears"', rows.every(({ v }) => v?.page.learn.title === `Learn more about ${/^(Lord|Lady) /.test(v!.c.name) ? v!.c.name : v!.c.name.split(' ')[0]}` && !('firstAppears' in v!)));
+    const z = rows.find((r) => r.slug === 'zei')!.v!.page.learn;
+    check('Learn more: Zei\'s shows the owner\'s texts, no Draft mark, its fold labelled exactly, citations linking to the reader\'s first block', z.text !== null && z.draft === null && z.text.later.head === 'Later in the book (spoilers)' && z.text.start.segs.some((s) => s.kind === 'cite' && s.label === 'c2-b98–b104' && s.href === '/chapter/2#c2-b98') && z.facts.length === 0);
+    check('Learn more: a term with a glossary entry opens it (a note from chapters 1 to 14 outside the fold)', z.text!.who.segs.some((s) => s.kind === 'term' && s.term === 'Minpentai' && s.note !== null && s.href === '/glossary/minpentai'));
+    // The four terms added to the glossary on 2026-11-16: the rule's pick for two, the owner's hand-pick for two (NOTE_PICKS).
+    const terms = rows.flatMap(({ v }) => { const t = v!.page.learn.text; return t ? [t.who, t.start, t.later, t.drives].flatMap((p) => p.segs).concat(t.invent.items.flat()) : []; }).filter((s) => s.kind === 'term');
+    const noteOf = (slug: string) => terms.find((s) => s.kind === 'term' && s.href === `/glossary/${slug}`);
+    const want: Record<string, [string, string]> = {
+      'co-family': ['c1-b125', 'Febric and Hreda were from their co-family'],
+      'compute-box': ['c1-b111', 'attached by a cable to a larger compute box'],
+      'hand-device': ['c1-b137', "At that moment, Gladias's hand device buzzed. He took it out. A single notification popped up."],
+      'intervention-turn': ['c4-b110', 'At the same time, the first intervention turn came. Here, all players were able to put down more squares near any copy of their symbols.'],
+    };
+    for (const [slug, [cite, text]] of Object.entries(want)) {
+      const s = noteOf(slug);
+      check(`Learn more: "${slug}" opens its glossary entry, its note ${cite}`, !!s && s.kind === 'term' && s.note?.cite === cite && s.note.text.includes(text) && s.note.href === `/glossary/${slug}`);
+    }
+    check('Learn more: every term in the texts has a glossary entry now (no plain-words term left)', terms.every((s) => s.kind === 'term' && s.href !== null && s.note !== null) && Object.keys(LM.NOTE_PICKS).sort().join() === 'hand-device,intervention-turn');
+    const others = rows.filter((r) => r.slug !== 'zei');
+    check('Learn more: a character whose texts don\'t keep the rule yet shows the first layer\'s facts instead', others.every(({ slug, v }) => (LM.learnMoreProblems(slug).length > 0 ? v!.page.learn.text === null && v!.page.learn.facts.length > 0 : v!.page.learn.text !== null)));
+    // Since learn-more-texts fa114237 (owner, 2026-11-12) every text keeps the rule and is approved: all the pages show
+    // their texts, none marked "Draft wording".
+    check('Learn more: every challenge character\'s texts keep the rule, are approved and show, with no "Draft wording" mark', CHALLENGE.characters.every((s) => LM.learnMoreProblems(s).length === 0 && LM.LEARN_MORE[s]?.approved === true) && rows.every(({ v }) => v!.page.learn.text !== null && v!.page.learn.facts.length === 0 && v!.page.learn.draft === null));
+    // Lord Ephelion's page exists only while he is a challenge character (CHALLENGE.characters, #159); his texts show there.
+    check('Learn more: Lord Ephelion\'s texts keep the rule and show on his page, which exists only while he is a challenge character', LM.learnMoreProblems('ephelion').length === 0 && (CHALLENGE.characters.includes('ephelion') ? (await V.characterView(null, 'ephelion'))?.page.learn.title === 'Learn more about Lord Ephelion' && (await V.characterView(null, 'ephelion'))?.page.learn.text !== null : (await V.characterView(null, 'ephelion')) === null));
   }
   check('character page: null (404) for anything but the six', (await V.characterView(null, 'lektor')) === null && (await V.characterView(null, 'entries')) === null && (await V.characterView(null, '')) === null);
   const page = read('src/app/challenge/[slug]/page.tsx');
@@ -453,12 +488,45 @@ check('config: a current default look per challenge character, each a design id 
   const st = await E.standing(S);
   check('the entries: Bai has one entrant, the picture by 500', st.entries.length === 1 && st.entries[0].versionId === fromBase.versionId && st.entrants.get('bai') === 1);
   check('entries link to the picture\'s page', E.entryHref(fromBase.versionId) === `/challenge/p/${fromBase.versionId}`);
+  // Admin examples (owner, 2026-11-12): an admin's picture, submitted with its post, is shown as an example on its page
+  // and on /challenge/entries (newest first among the entries, by when each was made), and is in no count or reward.
+  {
+    const R = await import('../src/lib/challenge/rules');
+    const PVX = await import('../src/lib/challenge/picture-view');
+    const marks = async () => Number((await sql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks`)[0].n);
+    const adminPic = await picture({ fid: 6786, character: 'bai', moment: 'c4-b129-symbol', from: base.versionId, uses: base.versionId });
+    const s0 = await E.standing(S);
+    const before = await PVX.pictureView(S, adminPic.versionId);
+    check('admin example: before Submit, its maker is offered Submit as an example (no day count), and it isn\'t marked yet', before?.submit?.example === true && before.submit.done === 'Submitted as an example. It isn’t an entry.' && before.w.thenSubmit === 'Then submit it as an example' && before.w.oneADay === null && before.example === null && before.note !== null);
+    const xpost = (id: string, fid: number, v: string) => ({ network: 'farcaster' as const, id: `0x${id.padEnd(40, '0')}`, handle: `p${fid}`, at: new Date().toISOString(), url: `https://farcaster.xyz/p${fid}/0x${id.padEnd(8, '0')}`, links: [`https://snowmoon.party/challenge/p/${v}`], writer: { fid } });
+    const m0 = await marks();
+    const r = await E.submitEntry(S, 6786, adminPic.versionId, xpost('ad1', 6786, adminPic.versionId) as never);
+    check('admin example: an admin\'s Submit goes through and writes no entry row', r.ok === true && (await marks()) === m0, JSON.stringify(r));
+    check('admin example: needs its post, like anyone\'s', ((x) => !x.ok && x.why === E.SUBMIT_WORDING.needsPost)(await E.submitEntry(S, 6786, adminPic.versionId, null)));
+    check('admin example: each version once', ((x) => !x.ok && x.why === E.SUBMIT_WORDING.already)(await E.submitEntry(S, 6786, adminPic.versionId, xpost('ad2', 6786, adminPic.versionId) as never)));
+    const s1 = await E.standing(S);
+    check('admin example: listed as an example, never an entry; counts and the equal share unchanged', s1.examples.map((v) => v.versionId).join() === adminPic.versionId && s1.entries.map((v) => v.versionId).join() === s0.entries.map((v) => v.versionId).join() && [...s1.entrants].join() === [...s0.entrants].join() && !R.equalSharePeople(s1.entries).includes(6786));
+    const after = await PVX.pictureView(S, adminPic.versionId);
+    check('admin example: its page marks it "Admin example" with the ⓘ words, offers no Submit, and lists its post under "Posts"', after?.example?.label === 'Admin example' && after.example.info === 'Not an entry: admins’ pictures can’t win anything.' && after.submit === null && after.badge === null && after.posts.length === 1 && after.posts[0].handle === 'p6786' && after.w.postsHead === 'Posts');
+    // A newer entry by someone else: the example sits between the two entries by time, and the counts don't change.
+    await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '502', 'neynar-score>=0.7', true)`;
+    const newer = await picture({ fid: 502, character: 'bai', moment: 'c4-b129-symbol', from: base.versionId, uses: base.versionId });
+    const m1 = await marks();
+    const r2 = await E.submitEntry(S, 502, newer.versionId, xpost('b1', 502, newer.versionId) as never);
+    check('a non-admin\'s Submit, unchanged: one entry row written', r2.ok === true && (await marks()) === m1 + 1, JSON.stringify(r2));
+    const s2 = await E.standing(S);
+    const listed = E.entriesWithExamples(s2);
+    check('/challenge/entries: the example between the two entries, newest first, marked', listed.map((v) => `${v.versionId}:${v.example}`).join() === [`${newer.versionId}:false`, `${adminPic.versionId}:true`, `${fromBase.versionId}:false`].join(), listed.map((v) => v.versionId).join());
+    check('/challenge/entries: the counts are the entries\' alone (Bai: 2 entrants, not 3)', s2.entrants.get('bai') === 2 && s2.entries.length === 2 && R.equalSharePeople(s2.entries).sort().join() === '500,502');
+    proof('an example counted (the shown list as the entries) is caught', R.entrantCounts(listed).get('bai') !== s2.entrants.get('bai'));
+    proof('an example ordered out of time (appended after the entries) is caught', [...s2.entries, ...s2.examples].map((v) => v.versionId).join() !== listed.map((v) => v.versionId).join());
+  }
   // The remix screen's sources: a base, or a challenge picture; nothing else.
   check('sources: a base and a challenge picture can be remixed; a sheet that isn\'t a base, an unknown id and a hidden thing can\'t', (await P.sourceOf(S, base.versionId))?.kind === 'sheet' && (await P.sourceOf(S, fromRemix.versionId))?.kind === 'picture' && (await P.sourceOf(S, otherSheet.versionId)) === null && (await P.sourceOf(S, randomUUID())) === null);
   // The picture's page data.
   const V = await import('../src/lib/challenge/picture-view');
   const pv = await V.pictureView(S, second.versionId);
-  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the owner\'s post text', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'My remix of Bai in “The championship final”, for the Snowmoon Party remix challenge' && pv.w.postTexts.plain === pv.submit?.postText && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
+  check('a picture\'s page: its character and moment with its chapter, and Submit for its maker with the owner\'s post text', pv?.title === 'Bai · The championship final (Ch 7)' && pv.submit?.postText === 'My remix of Bai in “The championship final”, for the Snowmoon Party remix challenge' && pv.w.postTexts.plain === pv.submit?.postText && pv.w.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.' && pv.w.thenSubmit === 'Then submit it as an entry' && pv.w.oneADay === 'one a day' && pv.submit?.example === undefined && pv.example === null);
   // The feed (/challenge/remixes) with pictures as the entries: the challenge pictures, newest first, by character,
   // each linking to its page, with the viewer's own Newest / Shuffled order and no count.
   const RV = await import('../src/lib/challenge/remixes-view');
@@ -568,6 +636,28 @@ check('config: a current default look per challenge character, each a design id 
     check('a base made in a published style: the remix screen starts on that style', srcStyled?.styleElement === styleD.elementId);
     const styles = await (await import('../src/lib/challenge/make')).publishedStyles(sql as never);
     check('the published styles: listed with their names and texts', styles.some((x) => x.id === `style:${styleD.elementId}` && x.label === 'Quiet, warm light' && x.text === 'Quiet, warm light; soft shadows.'));
+    // The credit chain with a picture hidden mid-line (owner, 2026-11-12): base → plain (501) → mid (502, hidden) → top.
+    // The hidden step reads "A hidden picture", with no picture, name or link, and "Started from" says the same.
+    {
+      await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '502', 'neynar-score>=0.7', true) on conflict do nothing`;
+      const mid = await picture({ fid: 502, character: 'bai', moment: '', from: plain.versionId, remixedFrom: plain.versionId });
+      const top = await picture({ fid: 501, character: 'bai', moment: '', from: mid.versionId, remixedFrom: mid.versionId });
+      const before = await V.pictureView(S, top.versionId);
+      const midBefore = before?.chain.find((c) => c.versionId === mid.versionId);
+      proof('chain: before it is hidden, the middle picture shows its maker, its picture and its link', midBefore?.label === '@p502' && !!midBefore.thumb && midBefore.href === `/challenge/p/${mid.versionId}` && before?.made.startedFrom === '@p502');
+      await sql`update studio.elements set status = 'hidden' where id = ${mid.elementId}`;
+      const after = await V.pictureView(S, top.versionId);
+      const labels = after?.chain.map((c) => c.label) ?? [];
+      const hidden = after?.chain.find((c) => c.versionId === mid.versionId);
+      check(
+        'chain: a picture hidden mid-line reads "A hidden picture", with no picture, name or link; the rest of the line is unchanged, and "Started from" says "A hidden picture"',
+        labels.length === 4 && labels[0].startsWith('Base · ') && labels[1] === '@p501' && labels[2] === 'A hidden picture' && labels[3] === 'This one' &&
+          hidden?.thumb === null && hidden?.href === null && hidden?.hidden === true && !JSON.stringify(hidden).includes('p502') &&
+          !!after?.chain[1].href && after?.made.startedFrom === 'A hidden picture',
+        labels.join(' → '),
+      );
+      await sql`update studio.elements set status = 'published' where id = ${mid.elementId}`;
+    }
     // "See examples" (owner, 2026-11-12): a style's samples are its NEWEST version's, as published.
     const sample = (n: number) => ({ url: `https://media.snowmoon.party/test/sample-${n}.jpg`, sha256: String(n).repeat(64).slice(0, 64), recipe: null });
     const sv1 = await DS.makeDesign(S as never, { fid: 6786, mode: 'create', kind: 'style', styleName: 'Sampled', body: { title: 'Sampled', text: 'Sampled words.', samples: [sample(1)], views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null } as never });
@@ -622,7 +712,7 @@ check('config: a current default look per challenge character, each a design id 
   check('share first: the ready post is shown as it will be filled in (the text and this page\'s link)', /\{w\.texts\.plain\} <span className="sf-link">\{link\}<\/span>/.test(sf) && !/“\{w\.texts\.plain\}”/.test(sf) && /const link = `\$\{origin\}\$\{path\}`/.test(sf));
   check('share first: no script or request of the networks on our page (plain links; P6a)', !/<script|fetch\(/.test(sf));
   check('Submit B on the page: only the address and Submit (the buttons are above), with a cast just made handed to it', /<ChallengeSubmit\s+versionId=\{v\.versionId\}\s+byFid=\{v\.byFid\}\s+words=\{v\.submit\}\s+path=\{path\}\s+compact\s+castHash=\{castHash\}/.test(pic) && /\{!compact && \(/.test(read('src/components/challenge-submit.tsx')));
-  check('"Then submit it as an entry · one a day", and the owner\'s one line with "Rules" (no other rules text)', /\{v\.w\.thenSubmit\} <span className="dz-muted">· \{v\.w\.oneADay\}<\/span>/.test(pic) && /\{v\.w\.signInLine\} <Link href="\/challenge\/rules">\{v\.w\.rules\}<\/Link>/.test(pic));
+  check('"Then submit it as an entry · one a day", and the owner\'s one line with "Rules" (no other rules text)', /\{v\.w\.thenSubmit\} \{v\.w\.oneADay && <span className="dz-muted">· \{v\.w\.oneADay\}<\/span>\}/.test(pic) && /\{v\.w\.signInLine\} <Link href="\/challenge\/rules">\{v\.w\.rules\}<\/Link>/.test(pic));
   const W = (await import('../src/lib/challenge/picture-wording')).PICTURE_WORDING;
   check('the words: "Published. Now post it:", "Then submit it as an entry", "one a day", the sign-in line as the owner wrote it', W.published === 'Published. Now post it:' && W.thenSubmit === 'Then submit it as an entry' && W.oneADay === 'one a day' && W.signInLine === 'Sign in with Farcaster, Lens or Bluesky to enter.');
   check('the ready post is the owner\'s text exactly (2026-11-07: with the moment; with none, the line of 2026-11-06)', W.postText('Bai', 'The quarterfinal') === 'My remix of Bai in “The quarterfinal”, for the Snowmoon Party remix challenge' && W.postText('Bai', null) === 'My remix of Bai, for the Snowmoon Party remix challenge');
@@ -679,7 +769,7 @@ check('config: a current default look per challenge character, each a design id 
   }
   check('rules: says new starting pictures and characters may be added during the challenge (owner, 2026-11-11), right after which pictures count', W.rules()[1] === 'New starting pictures and characters may be added during the challenge.' && /Only remixes count/.test(W.rules()[0]));
   // Owner, 2026-11-12: much shorter rules; posts anywhere, including X, but the one you submit is on Farcaster, Lens or Bluesky.
-  check('rules: six lines (withdrawing and the score figure kept), then the admins line with no names (owner, 2026-11-12)', W.rules().length === 6 && W.rules().some((r) => r.includes('withdraw a submission')) && W.rules().some((r) => r.includes('Neynar score of at least')) && W.adminsLine === 'Admins can make pictures too, but theirs aren’t entries.' && !/@garance|owner/.test(W.adminsLine));
+  check('rules: six lines (withdrawing and the score figure kept), then the admins line with no names (owner, 2026-11-12; examples wording, admin examples)', W.rules().length === 6 && W.rules().some((r) => r.includes('withdraw a submission')) && W.rules().some((r) => r.includes('Neynar score of at least')) && W.adminsLine === 'Admins can share examples too, but theirs aren’t entries.' && !/@garance|owner/.test(W.adminsLine));
   check('rules: share anywhere, including X; the submitted post on Farcaster, Lens or Bluesky (owner, 2026-11-12)', W.rules().includes('Share your picture anywhere, including X. The post you submit must be on Farcaster, Lens or Bluesky, because that’s where the site can check it’s yours.'));
   {
     const LWm = (await import('../src/lib/challenge/landing-wording')).LANDING_WORDING;

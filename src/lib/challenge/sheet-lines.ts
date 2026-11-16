@@ -47,6 +47,8 @@ export interface SubmitWords {
   postNote: string;
   postOn: { farcaster: string; bluesky: string; lens: string };
   postText: string;
+  /** An admin's own picture (owner, 2026-11-12): submitted as an example, never an entry; no day count and no Withdraw. */
+  example?: boolean;
 }
 export const submitWords = (submitted: boolean, name: string): SubmitWords => ({
   submitted,
