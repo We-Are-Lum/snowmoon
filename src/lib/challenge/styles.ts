@@ -41,6 +41,21 @@ export interface StyleOption {
   label: string;
 }
 
+/**
+ * One published style in the "See examples" panel (owner, 2026-11-12; src/components/style-examples.tsx): its id (as the
+ * Style row's), its stored name, the label shown (STYLE_LABELS), its words, and up to three of its newest version's
+ * published samples, each with its alt text. Presets, "Same as this picture", Random and Write your own are never here.
+ */
+export interface StyleExample {
+  id: string;
+  name: string;
+  label: string;
+  words: string;
+  samples: { url: string; alt: string }[];
+}
+/** How many samples the panel shows per style (owner, 2026-11-12: "two or three"). */
+export const EXAMPLE_SAMPLES = 3;
+
 /** What the screen sends: one of the listed styles, Random, or the person's own words. */
 export type StyleChoice = { kind: 'same' } | { kind: 'style'; id: string } | { kind: 'random' } | { kind: 'own'; text: string };
 

@@ -11,6 +11,7 @@ import { flowKeys, saveDraft, type FlowDraft } from '~/lib/challenge/flow-storag
 import { AiTag } from './ai-tag';
 import { ConsentScreen, PublishedTextField } from './publish-words';
 import { SignInChoices } from './sign-in-choices';
+import { StyleExamples } from './style-examples';
 import { useChallengeModel } from './challenge-model-row';
 import { oneCharacterProblem } from '~/lib/challenge/one-character';
 import { withReset } from '~/lib/challenge/model-wording';
@@ -22,7 +23,9 @@ import { withReset } from '~/lib/challenge/model-wording';
  * - the Style row: the presets and the site's published styles (from the server), "Random" (the server draws one of
  *   the published styles when the picture is made, and the recipe records both) and "Write your own" (a short box, also
  *   a PublishedTextField: its words go into the prompt, which is published, and through the prompt check). It starts
- *   on the picture's own style when it has one, else the first;
+ *   on the picture's own style when it has one, else the first. Each published style shows its display label
+ *   (STYLE_LABELS: "Mood" as "Moody graphic novel"), and "See examples" under the row opens StyleExamples (owner,
+ *   2026-11-12);
  * - the Model row: one chip per model the server lists (src/lib/challenge/models.ts), today one;
  * - Make it.
  * While the moments are on (CHALLENGE.moments; off since 2026-11-08), the server also sends the fifteen moments and the
@@ -231,6 +234,8 @@ export function ChallengeMake() {
               </button>
             </li>
           </ul>
+          {/* "See examples" (owner, 2026-11-12): each published style's name, words and samples; tapping one picks it. */}
+          <StyleExamples styles={view.examples} w={w} selected={styleSel} onPick={setStyleSel} />
           {styleSel === 'own' && <PublishedTextField id="mk-own-style" label={w.ownStyleLabel} value={ownStyle} onChange={setOwnStyle} rows={2} maxLength={view.ownStyleMax} />}
         </section>
       )}

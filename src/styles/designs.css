@@ -452,6 +452,35 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .mk-chips .cc-chip { background: transparent; color: var(--ink); font: inherit; font-size: 15px; cursor: pointer; text-align: left; }
 .mk-chips .cc-chip[aria-pressed='true'] { background: var(--btn); color: var(--btn-ink); border-color: var(--ink); }
 .mk-styles .published-field { margin-top: 4px; }
+/* "See examples" (owner, 2026-11-12; src/components/style-examples.tsx): a link under the Style row, and its panel, a
+   bottom sheet on phones (full width, from the bottom) and a panel on the right from 768px. */
+.se-link { align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; padding: 0; border: 0; background: transparent; color: var(--link); font: inherit; font-size: 15px; text-decoration: underline; cursor: pointer; }
+.se-panel { box-sizing: border-box; padding: 0; border: 0; background: var(--paper); color: var(--ink); overflow: hidden; }
+.se-panel::backdrop { background: var(--scrim); }
+.se-inner { display: flex; flex-direction: column; max-height: inherit; height: 100%; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; padding: 0 16px calc(20px + env(safe-area-inset-bottom)); }
+.se-head { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 0; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.se-title { margin: 0; font-size: 20px; }
+.se-close { min-height: 44px; min-width: 44px; padding: 0 8px; border: 0; background: transparent; color: var(--link); font: inherit; font-size: 16px; cursor: pointer; }
+.se-lead { margin: 10px 0 0; font-size: var(--text-small); }
+.se-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.se-style { display: flex; flex-direction: column; gap: 8px; padding: 12px 0 14px; border-bottom: 1px solid var(--rule); }
+.se-pick { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-height: 44px; width: 100%; padding: 6px 8px; margin: 0; box-sizing: border-box; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.se-pick:hover { border-color: var(--rule); }
+.se-pick[aria-pressed='true'] { border-color: var(--ink); }
+.se-pick:focus-visible, .se-close:focus-visible, .se-link:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.se-name { font-size: 17px; font-weight: 600; }
+.se-words { font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
+.se-samples { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.se-sample { margin: 0; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.se-sample-pick { display: block; width: 100%; min-height: 44px; padding: 0; border: 0; background: var(--soft); border-radius: 6px; overflow: hidden; cursor: pointer; }
+.se-sample-pick img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+.se-sample-cap { display: flex; }
+@media (max-width: 767px) {
+  .se-panel { position: fixed; inset: auto 0 0 0; margin: 0; width: 100%; max-width: 100%; max-height: 85dvh; border-radius: 16px 16px 0 0; }
+}
+@media (min-width: 768px) {
+  .se-panel { position: fixed; inset: 0 0 0 auto; margin: 0; width: 440px; max-width: 100vw; height: 100dvh; max-height: 100dvh; border-left: 1px solid var(--rule); }
+}
 /* Share first on a challenge picture's page (R3). */
 .sf-share, .sf-submit { display: flex; flex-direction: column; gap: 8px; }
 .ch-page h2.sf-head { margin: 4px 0 0; font-size: 19px; line-height: 1.3; }

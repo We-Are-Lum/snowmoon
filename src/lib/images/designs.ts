@@ -46,6 +46,8 @@ export interface DesignRow {
   updatedAt: string;
   builtOn: number;
   thumb: string | null;
+  /** The newest version's samples' addresses, in order (a style's "See examples", owner 2026-11-12). */
+  samples: string[];
   assist: DesignBody['assist'];
   /**
    * The credit a fork carries, for good. When the source was hidden since, only that it was a remix
@@ -111,6 +113,7 @@ function shape(r: Record<string, unknown>): DesignRow {
     updatedAt: new Date(r.updated_at as string).toISOString(),
     builtOn: Number(r.built_on),
     thumb: b.samples[0]?.url ?? b.views.front?.url ?? null,
+    samples: b.samples.map((p) => p.url).filter((u): u is string => typeof u === 'string' && u.length > 0),
     assist: b.assist,
     byRole: b.role,
     remixedFrom: !rf || !rb

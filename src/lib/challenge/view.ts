@@ -12,6 +12,7 @@ import { CHALLENGE_WORDING as W } from './wording';
 import { CHALLENGE_LINKS, LANDING_WORDING as L } from './landing-wording';
 import { firstAppearsHref, firstAppearsWords } from './first-appears';
 import { callNameOf } from './names';
+import { styleLabel } from './make-wording';
 
 /**
  * What /challenge and a character's page (/challenge/<slug>) show, as plain data with their words already written
@@ -78,12 +79,12 @@ const adminNote = () => (CHALLENGE.public ? null : 'Admins only for now: everyon
 type Tileable = { versionId: string; thumb: string | null; title?: string; byName: string | null; byFid: number };
 const tile = (r: Tileable, label: string | null): CardTile => ({ versionId: r.versionId, thumb: r.thumb, title: r.title ?? '', byName: r.byName, byFid: r.byFid, href: remixHref(r.versionId), label });
 
-/** A character's bases as tiles (every one; the browser shuffles them); before the picks, its newest published sheet. */
+/** A character's bases as tiles (every one; the browser shuffles them); before the picks, its newest published sheet. A base's label is its style's display label (STYLE_LABELS, owner 2026-11-12). */
 async function basesTiles(sql: Sql | null, slug: string): Promise<{ bases: CardTile[]; note: string | null }> {
   const list = sql ? await startingSheets(sql, slug).catch(() => []) : [];
   const picked = basesOf(slug).length > 0;
   const name = callName(bookCharacter(slug)?.name ?? slug);
-  const bases = list.slice(0, picked ? baseCountOf(slug) : 1).map((s) => tile(s, picked ? s.style || L.baseLabel : L.sheetLabel));
+  const bases = list.slice(0, picked ? baseCountOf(slug) : 1).map((s) => tile(s, picked ? (s.style ? styleLabel(s.style) : L.baseLabel) : L.sheetLabel));
   return { bases, note: picked ? null : bases.length ? L.noBasesYet(name) : L.noBasesNoSheet(name) };
 }
 
