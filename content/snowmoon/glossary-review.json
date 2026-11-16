@@ -29,7 +29,11 @@
   { "term": "Arctic Empire", "aliases": [], "kind": "place", "why": "capitalised in-world state" },
   { "term": "Arctic Emperor", "aliases": [], "kind": "name", "why": "capitalised in-world title" },
   { "term": "United Cities", "aliases": [], "kind": "place", "why": "capitalised in-world polity, c1-b134" },
-  { "term": "Ground Law", "aliases": [], "kind": "coinage", "why": "capitalised in-world law ('the fourteenth Ground Law', c25-b111)" }
+  { "term": "Ground Law", "aliases": [], "kind": "coinage", "why": "capitalised in-world law ('the fourteenth Ground Law', c25-b111)" },
+  { "term": "co-family", "aliases": ["co-families"], "match_case": false, "kind": "coinage", "why": "the book's word for a second household that shares the children, first c1-b125; a Learn more term (owner, 2026-11-16)" },
+  { "term": "compute box", "aliases": ["compute boxes"], "match_case": false, "kind": "coinage", "why": "the book's coined device, first c1-b111; a Learn more term (owner, 2026-11-16)" },
+  { "term": "hand device", "aliases": ["hand devices"], "match_case": false, "kind": "coinage", "why": "the book's coined device, first c1-b9; a Learn more term (owner, 2026-11-16)" },
+  { "term": "intervention turn", "aliases": ["intervention turns"], "match_case": false, "kind": "coinage", "why": "a Minpentai term of the book, first c4-b109; a Learn more term (owner, 2026-11-16)" }
  ],
  "exclude": [
   { "word": "Lily", "why": "character entity lily.json; an ordinary English given name" },

@@ -187,7 +187,21 @@ check('config: a current default look per challenge character, each a design id 
     check('Learn more: each challenge character\'s page has "Learn more about {Name}" (the call name; "Lord Ephelion" with his title) and no "Read where … first appears"', rows.every(({ v }) => v?.page.learn.title === `Learn more about ${/^(Lord|Lady) /.test(v!.c.name) ? v!.c.name : v!.c.name.split(' ')[0]}` && !('firstAppears' in v!)));
     const z = rows.find((r) => r.slug === 'zei')!.v!.page.learn;
     check('Learn more: Zei\'s shows the owner\'s texts, no Draft mark, its fold labelled exactly, citations linking to the reader\'s first block', z.text !== null && z.draft === null && z.text.later.head === 'Later in the book (spoilers)' && z.text.start.segs.some((s) => s.kind === 'cite' && s.label === 'c2-b98–b104' && s.href === '/chapter/2#c2-b98') && z.facts.length === 0);
-    check('Learn more: a term with a glossary entry opens it (a note from chapters 1 to 14 outside the fold); a term not yet in the site glossary shows as plain words', z.text!.who.segs.some((s) => s.kind === 'term' && s.term === 'Minpentai' && s.note !== null && s.href === '/glossary/minpentai') && z.text!.start.segs.some((s) => s.kind === 'term' && s.term === 'compute box' && s.note === null && s.href === null) && LM.DRAFT_GLOSSARY.some((d) => d.term === 'compute box'));
+    check('Learn more: a term with a glossary entry opens it (a note from chapters 1 to 14 outside the fold)', z.text!.who.segs.some((s) => s.kind === 'term' && s.term === 'Minpentai' && s.note !== null && s.href === '/glossary/minpentai'));
+    // The four terms added to the glossary on 2026-11-16: the rule's pick for two, the owner's hand-pick for two (NOTE_PICKS).
+    const terms = rows.flatMap(({ v }) => { const t = v!.page.learn.text; return t ? [t.who, t.start, t.later, t.drives].flatMap((p) => p.segs).concat(t.invent.items.flat()) : []; }).filter((s) => s.kind === 'term');
+    const noteOf = (slug: string) => terms.find((s) => s.kind === 'term' && s.href === `/glossary/${slug}`);
+    const want: Record<string, [string, string]> = {
+      'co-family': ['c1-b125', 'Febric and Hreda were from their co-family'],
+      'compute-box': ['c1-b111', 'attached by a cable to a larger compute box'],
+      'hand-device': ['c1-b137', "At that moment, Gladias's hand device buzzed. He took it out. A single notification popped up."],
+      'intervention-turn': ['c4-b110', 'At the same time, the first intervention turn came. Here, all players were able to put down more squares near any copy of their symbols.'],
+    };
+    for (const [slug, [cite, text]] of Object.entries(want)) {
+      const s = noteOf(slug);
+      check(`Learn more: "${slug}" opens its glossary entry, its note ${cite}`, !!s && s.kind === 'term' && s.note?.cite === cite && s.note.text.includes(text) && s.note.href === `/glossary/${slug}`);
+    }
+    check('Learn more: every term in the texts has a glossary entry now (no plain-words term left)', terms.every((s) => s.kind === 'term' && s.href !== null && s.note !== null) && Object.keys(LM.NOTE_PICKS).sort().join() === 'hand-device,intervention-turn');
     const others = rows.filter((r) => r.slug !== 'zei');
     check('Learn more: a character whose texts don\'t keep the rule yet shows the first layer\'s facts instead', others.every(({ slug, v }) => (LM.learnMoreProblems(slug).length > 0 ? v!.page.learn.text === null && v!.page.learn.facts.length > 0 : v!.page.learn.text !== null)));
     // Since learn-more-texts fa114237 (owner, 2026-11-12) every text keeps the rule and is approved: all the pages show

@@ -55,7 +55,7 @@ function RemixGrid({ tiles, alt, remixThis, label }: { tiles: CardTile[]; alt: s
 /**
  * A "Learn more" text: plain words; citations as small links to the reader's block; glossary terms with a small ⓘ that
  * opens the entry in a popover (no script: the browser's popover; where it isn't supported the note shows inline), the
- * glossary page linked inside. A DRAFT glossary term has no entry yet, so it shows as plain words.
+ * glossary page linked inside. A term with no entry (none today) shows as plain words.
  */
 function Segs({ segs, more }: { segs: Rendered[]; more: string }) {
   return (

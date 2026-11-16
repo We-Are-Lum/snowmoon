@@ -2013,13 +2013,13 @@ async function checkChallengeLanding() {
         if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways with "Learn more" open`);
         await more.scrollIntoViewIfNeeded();
         await snap('character-learn-more');
-        // The ⓘ of a glossary term opens its entry (a sentence from the book and the glossary page); a DRAFT term has none.
+        // The ⓘ of a glossary term opens its entry (a sentence from the book and the glossary page); every term has one.
         const i = more.locator('[data-part="who"] button.chc-term-i').first();
         await i.click();
         const note = more.locator('[data-part="who"] .chc-term-note').first();
         if (!(await note.isVisible()) || !(await note.locator('a[href^="/glossary/"]').count())) fail(`/challenge/zei ${tag}: the ⓘ doesn't open the glossary entry`);
         await page.keyboard.press('Escape');
-        if (await more.locator('[data-part="start"] .chc-term').filter({ hasText: 'compute box' }).locator('button').count()) fail(`/challenge/zei ${tag}: a DRAFT glossary term has an ⓘ`);
+        if (!(await more.locator('[data-part="start"] .chc-term').filter({ hasText: 'compute box' }).locator('a[href="/glossary/compute-box"]').count())) fail(`/challenge/zei ${tag}: "compute box" doesn't open its glossary entry`);
         await fold.locator('summary').click();
         if (!(await more.locator('[data-part="later"]').isVisible())) fail(`/challenge/zei ${tag}: the spoilers fold doesn't open`);
         if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways with the spoilers open`);

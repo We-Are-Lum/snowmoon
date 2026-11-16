@@ -3,7 +3,8 @@ import { glossaryTerm } from '../glossary';
 import { firstLayerFacts } from './cards';
 import { callNameOf } from './names';
 import { LANDING_WORDING as L } from './landing-wording';
-import { LATER_LABEL, LEARN_MORE, OPEN_MAX_CHAPTER, citeHref, learnMoreProblems, type Segment } from './learn-more';
+import { loadChapter } from '../book';
+import { LATER_LABEL, LEARN_MORE, NOTE_PICKS, OPEN_MAX_CHAPTER, citeChapter, citeHref, learnMoreProblems, type Segment } from './learn-more';
 
 /**
  * "Learn more about {Name}" as the page draws it (owner, 2026-11-12): one expander, replacing "Read where {Name} first
@@ -37,11 +38,23 @@ export interface LearnMoreView {
   glossaryLink: string;
 }
 
-/** A glossary entry's note: a sentence the book says about it, no later than `max` (its explanation, else its first sentence). */
+/** A hand-picked note's text: the book's block, exactly (speaker-colour span tags removed, as the glossary quotes). */
+function pickedNote(cite: string): { block: string; chapter: number; text: string } | null {
+  const chapter = citeChapter(cite);
+  const idx = Number(/-b(\d+)$/.exec(cite)?.[1]);
+  const b = loadChapter(chapter)?.blocks.find((x) => x.idx === idx);
+  return b ? { block: cite, chapter, text: b.content.replace(/<\/?span[^>]*>/g, '') } : null;
+}
+
+/**
+ * A glossary entry's note: a sentence the book says about it, no later than `max`: the owner's pick (NOTE_PICKS), else
+ * its explanation, else its first sentence.
+ */
 function note(slug: string, max: number): { text: string; cite: string; href: string } | null {
   const t = glossaryTerm(slug);
   if (!t) return null;
-  const e = t.explanations.find((x) => x.chapter <= max) ?? (t.firstSentence.chapter <= max ? t.firstSentence : null);
+  const pick = NOTE_PICKS[slug] ? pickedNote(NOTE_PICKS[slug]) : null;
+  const e = (pick && pick.chapter <= max ? pick : null) ?? t.explanations.find((x) => x.chapter <= max) ?? (t.firstSentence.chapter <= max ? t.firstSentence : null);
   return e ? { text: e.text, cite: e.block, href: `/glossary/${slug}` } : null;
 }
 

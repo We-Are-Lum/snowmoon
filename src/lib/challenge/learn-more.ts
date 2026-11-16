@@ -96,7 +96,7 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       },
       {
         "term": "compute box",
-        "glossaryId": null
+        "glossaryId": "compute-box"
       },
       {
         "text": " "
@@ -329,7 +329,7 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       },
       {
         "term": "hand device",
-        "glossaryId": null
+        "glossaryId": "hand-device"
       },
       {
         "text": " and runs "
@@ -625,7 +625,7 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       },
       {
         "term": "compute box",
-        "glossaryId": null
+        "glossaryId": "compute-box"
       },
       {
         "text": " and spend it on a vacation in "
@@ -651,7 +651,7 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       },
       {
         "term": "intervention turn",
-        "glossaryId": null
+        "glossaryId": "intervention-turn"
       },
       {
         "text": ", she copies his trick on her third try "
@@ -864,7 +864,7 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       },
       {
         "term": "co-family",
-        "glossaryId": null
+        "glossaryId": "co-family"
       },
       {
         "text": ", Vil and Daia, who take turns with them caring for all four "
@@ -1769,36 +1769,17 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
 };
 
 /**
- * The glossary entries the texts name that the site glossary doesn't have yet (docs/learn-more-drafts/glossary.json),
- * approved by the owner on 2026-11-12. Not yet in content/snowmoon/glossary.json (its explanations are picked by the
- * build's rule, not by hand), so their terms show without an ⓘ until they are.
+ * The four terms the texts named before the site glossary had them (co-family, compute box, hand device, intervention
+ * turn) are in content/snowmoon/glossary-review.json's `add` list since 2026-11-16, so the build's rule picks their
+ * entries. For two of them the owner hand-picked the sentence the ⓘ shows (owner, 2026-11-16): the rule finds no
+ * explaining sentence for "hand device" (its first sentence, c1-b9, is long and about something else) and picks
+ * c7-b107 for "intervention turn", which doesn't say what one is. A pick is a block id only; its text is the book's,
+ * read from the chapter file. The glossary pages themselves keep the rule's picks.
  */
-export const DRAFT_GLOSSARY: readonly { term: string; slug: string; quote: string; block: string }[] = [
-  {
-    "term": "co-family",
-    "slug": "co-family",
-    "quote": "Febric and Hreda were from their co-family, Uncle Vil and Aunt Daia.",
-    "block": "c1-b125"
-  },
-  {
-    "term": "compute box",
-    "slug": "compute-box",
-    "quote": "carrying his hand device in one hand, attached by a cable to a larger compute box in the other.",
-    "block": "c1-b111"
-  },
-  {
-    "term": "hand device",
-    "slug": "hand-device",
-    "quote": "signs with colored blinking lights advertising all kinds of electronics: hand devices, watches, compute boxes",
-    "block": "c2-b3"
-  },
-  {
-    "term": "intervention turn",
-    "slug": "intervention-turn",
-    "quote": "At the same time, the first intervention turn came. Here, all players were able to put down more squares near any copy of their symbols.",
-    "block": "c4-b110"
-  }
-];
+export const NOTE_PICKS: Readonly<Record<string, string>> = {
+  'hand-device': 'c1-b137',
+  'intervention-turn': 'c4-b110',
+};
 
 /** The chapter of a citation ("c14-b31" → 14; "c2-b98–b103" → 2). */
 export const citeChapter = (cite: string): number => Number(/^c(\d+)-b\d+/.exec(cite)?.[1] ?? NaN);
