@@ -92,7 +92,7 @@ export function ChallengePicture({ id }: { id: string }) {
             </section>
           )}
           {v.submit && (
-            <section className="sf-submit" aria-label={v.w.thenSubmit}>
+            <section className="sf-submit" id="submit" aria-label={v.w.thenSubmit}>
               <ChallengeSubmit
                 versionId={v.versionId}
                 byFid={v.byFid}

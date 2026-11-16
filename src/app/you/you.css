@@ -67,3 +67,15 @@
 .illus-who-notes { display: block; margin-top: 4px; color: var(--muted); }
 .illus-note { display: flex; flex-direction: column; gap: 8px; }
 .illus-note textarea { width: 100%; font: inherit; font-size: 16px; }
+
+/* Your challenge pictures (owner, 2026-11-12): two groups, newest first. */
+.ch-mine-group { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.ch-mine-group h3 { margin: 0; font-family: var(--label); font-size: var(--text-label); font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.ch-mine-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+.ch-mine-item { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; align-items: start; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+.ch-mine-thumb img, .ch-mine-thumb .cc-empty { display: block; width: 96px; height: 54px; object-fit: cover; background: var(--soft); }
+.ch-mine-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.ch-mine-name { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-size: 17px; }
+.ch-mine-at { font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.ch-mine-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.ch-mine-post { overflow-wrap: anywhere; }

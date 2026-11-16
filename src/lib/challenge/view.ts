@@ -13,6 +13,7 @@ import { homeOf } from './homes';
 import { CHALLENGE_WORDING as W } from './wording';
 import { CHALLENGE_LINKS, LANDING_WORDING as L } from './landing-wording';
 import { callNameOf } from './names';
+import { MINE_WORDING } from './mine-wording';
 import { styleLabel } from './make-wording';
 
 /**
@@ -39,6 +40,8 @@ export interface ChallengeView {
   line: string;
   rulesLink: string;
   entriesLink: string;
+  /** "Yours" beside them, shown only when signed in (owner, 2026-11-12): to "Your challenge pictures" on the You page. */
+  yoursLink: string;
   /** The hub's "Draft wording" mark: none since the owner approved its words (2026-11-06). */
   draftShort: string | null;
   notAffiliated: string;
@@ -135,6 +138,7 @@ export async function challengeView(sql: Sql | null): Promise<ChallengeView> {
     line: L.line(),
     rulesLink: L.rulesLink,
     entriesLink: L.entriesLink,
+    yoursLink: MINE_WORDING.yours,
     // Approved (owner, 2026-11-06; "reviewed by the coordinator, approved by the owner"): the hub's line and cards.
     draftShort: CHALLENGE.cardsApproved ? null : W.draftShort,
     notAffiliated: W.notAffiliated,

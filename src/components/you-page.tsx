@@ -1,5 +1,6 @@
 'use client';
 
+import { ChallengeMine } from './challenge-mine';
 import { chapterLabel } from '~/lib/images/no-passage';
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -268,6 +269,9 @@ export function YouPage() {
           </>
         )}
       </section>
+
+      {/* Your challenge pictures (owner, 2026-11-12): shown once loaded, while the challenge is open to you. */}
+      <ChallengeMine />
 
       <section className="you-section" aria-labelledby="you-work">
         <h2 id="you-work">{W.work}</h2>

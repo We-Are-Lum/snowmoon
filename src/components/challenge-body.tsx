@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { ChallengeView } from '~/lib/challenge/view';
 import { AiTag } from './ai-tag';
 import { TileBase } from './challenge-card';
+import { ChallengeYoursLink } from './challenge-mine';
 
 /**
  * /challenge, the home (Claude Design's handoff, screen 1; owner-approved 2026-11-11), drawn from its data
@@ -32,6 +33,7 @@ export function ChallengeBody({ v }: { v: ChallengeView }) {
             <Link href="/challenge/entries" className="ch-entries-link">
               {v.entriesLink}
             </Link>
+            <ChallengeYoursLink label={v.yoursLink} />
             {v.draftShort && <span className="as-draft ch-draft"> · {v.draftShort}</span>}
           </p>
         </div>
