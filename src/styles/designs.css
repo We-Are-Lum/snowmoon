@@ -656,9 +656,10 @@ a.chc-cite { color: var(--link); }
 .chc-remix-card .chc-ai { top: 6px; }
 .chc-cap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 8px; font-size: 16px; color: var(--body); min-width: 0; }
 .chc-by { min-width: 0; overflow-wrap: anywhere; }
-.chc-remix-this { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--link); text-decoration: underline; }
-/* On a phone each base's "Remix this" is a button on its picture, bottom right; the style's name stays below. */
-.chc-base .chc-remix-this { position: absolute; right: 8px; bottom: 34px; z-index: 2; padding: 0 14px; background: var(--btn); color: var(--btn-ink); border-radius: var(--radius); text-decoration: none; }
+/* "Remix this" (the design pass, owner 2026-11-16): one outlined button, the same on every base and remix tile, on a
+   phone and a desktop, at least 44px tall; it sits under the picture, never on it. */
+.chc-remix-this { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; min-height: var(--tap); padding: 0 14px; border: 1.5px solid var(--ink); border-radius: var(--radius); background: transparent; color: var(--ink); font-size: 16px; line-height: 1; text-decoration: none; white-space: nowrap; }
+.chc-remix-this:hover { background: var(--soft); }
 .chc-base .chc-cap { min-height: 24px; }
 .chc-dots { margin: -4px 0 0; display: flex; justify-content: center; gap: 4px; }
 .chc-dot { width: 6px; height: 4px; border-radius: 2px; background: var(--faint); }
@@ -681,7 +682,6 @@ a.chc-cite { color: var(--link); }
   .chc-wide-only { display: inline; }
   .chc-narrow-only { display: none; }
   .chc-bases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; overflow: visible; }
-  .chc-base .chc-remix-this { position: static; padding: 0; background: none; color: var(--link); text-decoration: underline; }
   .chc-dots { display: none; }
   .chc-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px 16px; }
 }

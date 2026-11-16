@@ -10,7 +10,9 @@ Other characters in a moment are drawn from their current default looks (`CHALLE
 
 ## Zei
 
-**One line (this edition’s):** An eighteen-year-old Minpentai player from Pafogai Du, in Dzego, and one of the book’s main characters.
+(Owner, 2026-11-16: the book never states Zei’s age, so the one line says “A young” and the description gives no age. Needs the owner’s reread.)
+
+**One line (this edition’s):** A young Minpentai player from Pafogai Du, in Dzego, and one of the book’s main characters.
 
 **First layer: facts** (this edition’s phrase · block · the book’s words)
 
@@ -22,7 +24,7 @@ Other characters in a moment are drawn from their current default looks (`CHALLE
 
 **Second layer ("More about", may spoil later chapters): description (this edition’s)**
 
-Zei Leimin is eighteen and lives in Pafogai Du, in Dzego, with his mother. He plays Minpentai, the book’s programming game, well enough to reach the quarterfinals and the championship, and Mu tells him he is a math guy, not a diplomat. He has a long rivalry with Bai, who has beaten him every time. The book gives his age and an arm that was broken and healed, but never his looks.
+Zei Leimin lives in Pafogai Du, in Dzego, with his mother. He plays Minpentai, the book’s programming game, well enough to reach the quarterfinals and the championship, and Mu tells him he is a math guy, not a diplomat. He has a long rivalry with Bai, who has beaten him every time. The book mentions an arm that was broken and healed, but never his looks.
 
 - Lives with his mother · `c5-b3` · ""Come on, Mom!", he shouted."
 - His left arm was broken and took a month to heal · `c9-b75` · "That arm had been broken and taken a month to heal"

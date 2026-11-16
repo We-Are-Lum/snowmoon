@@ -2078,6 +2078,11 @@ async function checkChallengeLanding() {
         const tiles = await page.locator('.ch-char-remixes figure.chc-remix-card').evaluateAll((els) => els.map((f) => { const a = f.querySelector('a[data-slot="remix-this"]') as HTMLElement | null; const r = a?.getBoundingClientRect(); const s = a ? getComputedStyle(a) : null; return !!a && (a.textContent ?? '').trim() === 'Remix this' && !!r && r.width > 0 && r.height >= 24 && s!.visibility !== 'hidden' && s!.display !== 'none'; }));
         if (tiles.some((x) => !x)) fail(`/challenge/zei ${tag}: a remix tile has no visible "Remix this"`);
         if (!(await page.locator('.ch-char-bases a[data-slot="remix-this"]').first().isVisible())) fail(`/challenge/zei ${tag}: the first base's "Remix this" isn't visible`);
+        // One button style for "Remix this" on bases and remix tiles (owner, 2026-11-16): outlined, the same look, ≥44px tall.
+        const look = (sel: string) => page.locator(sel).first().evaluate((e) => { const s = getComputedStyle(e); const r = e.getBoundingClientRect(); return { style: [s.borderTopWidth, s.borderTopStyle, s.borderTopColor, s.borderRadius, s.backgroundColor, s.color, s.fontSize, s.fontFamily, s.paddingLeft, s.textDecorationLine, s.position].join(' / '), h: r.height, outlined: parseFloat(s.borderTopWidth) > 0 && s.borderTopStyle !== 'none' }; }).catch(() => null);
+        const baseBtn = await look('.ch-char-bases a[data-slot="remix-this"]');
+        const tileBtn = await look('.ch-char-remixes > .chc-grid a[data-slot="remix-this"]');
+        if (!baseBtn || !tileBtn || baseBtn.style !== tileBtn.style || !baseBtn.outlined || baseBtn.h < 44 || tileBtn.h < 44) fail(`/challenge/zei ${tag}: "Remix this" isn't the same outlined button (≥44px) on a base and a remix tile (${JSON.stringify({ baseBtn, tileBtn })})`);
       }
       // Every remix of Zei: newest first, whole at 16:9; the picture opens its page, "Remix this" its remix screen.
       const zeiRemixes = FX.remixes.filter((r) => r.character === 'zei').map((r) => r.versionId);

@@ -139,8 +139,8 @@ export function TileBase({ c, alt }: { c: Pick<CardData, 'bases'>; alt: string }
 /**
  * A character's starting pictures on its page (the redesign, screen 2; owner-approved 2026-11-11): every base, in a
  * fresh random order per visit (P5g's draw, as the bases row has), 3 across at 3:4 on a desktop; on a phone a
- * scroll-snap row with dots. Each has its AI label, its style's name and "Remix this" (its remix screen; on a phone a
- * button on the picture). Until the draw, empty slots, so the server's order is never shown.
+ * scroll-snap row with dots. Each has its AI label, its style's name and "Remix this" (its remix screen; an outlined button
+ * under the picture, the same as on a remix tile: the design pass, owner 2026-11-16). Until the draw, empty slots, so the server's order is never shown.
  */
 export function CharacterBases({ c, alt, remixThis }: { c: Pick<CardData, 'bases'>; alt: string; remixThis: string }) {
   const [bases, setBases] = useState<CardTile[] | null>(c.bases.length > 1 ? null : c.bases);
