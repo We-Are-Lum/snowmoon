@@ -12,16 +12,14 @@ export default function OpenThreads() {
       </p>
       <h1>Open threads</h1>
       <p>Questions the book raises and never answers, as prompts for future adaptations.</p>
-      {/* Spoiler rule: whole-book material is opt-in, behind a clear warning. */}
+      {/* Shown in full (owner, 2026-11-17: principle 9 retired); until then behind "Show the open threads". The notice's
+          wording waits for the owner's reread. */}
       <section className="notice" aria-label="Spoiler warning">
         <p>
           <strong>Full spoilers, through the last chapter.</strong> Cited passages link into the reader.
         </p>
       </section>
-      <details className="spoiler-gate">
-        <summary>Show the open threads</summary>
-        <div className="doc" dangerouslySetInnerHTML={{ __html: html }} />
-      </details>
+      <div className="doc" dangerouslySetInnerHTML={{ __html: html }} />
     </div>
   );
 }

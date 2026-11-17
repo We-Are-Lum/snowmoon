@@ -133,5 +133,5 @@ for (const [p, body] of Object.entries(out)) {
   }
 }
 const n = counts();
-console.log(`minpentai kit: ${passages.length} passages (${PASSAGE_COUNT} expected; ${passages.filter((p) => p.shown).length} shown, ${passages.filter((p) => !p.shown).length} behind Spoilers); ${KIT_RULES.length} rules, ${n.book} from the book, ${n.invented} invented; every citation and quote checked against the book, every code place against its file`);
+console.log(`minpentai kit: ${passages.length} passages (${PASSAGE_COUNT} expected; ${passages.filter((p) => p.shown).length} shown, ${passages.filter((p) => !p.shown).length} not shown); ${KIT_RULES.length} rules, ${n.book} from the book, ${n.invented} invented; every citation and quote checked against the book, every code place against its file`);
 if (stale) process.exit(1);

@@ -1,14 +1,15 @@
 /**
  * "Learn more about {Name}" on a challenge character's page (owner, 2026-11-12): who the character is, written for
- * someone who knows nothing about the story; the start; the whole book behind a fold labelled exactly "Later in the
- * book (spoilers)", closed by default; what drives them; and room to invent. Data only (it may still change), brought in
+ * someone who knows nothing about the story; the start; "Later in the book.", shown in full (owner, 2026-11-17: spoilers
+ * no longer matter, principle 9 retired; from 2026-11-12 it was a fold labelled "Later in the book (spoilers)", closed by
+ * default); what drives them; and room to invent. Data only (it may still change), brought in
  * word for word from docs/learn-more-drafts/texts.json (branch learn-more-texts, commit fa114237: every open part cites chapters 1 to 14). Zei's is the owner's
  * own (his corrected version of 2026-11-12); the other six were drafted by the coding agent (Claude, a closed model by
  * Anthropic) and approved by the owner on 2026-11-12. A text with approved: false would show marked "Draft wording".
  * Segments: plain text; a glossary term (its existing glossary entry's slug, or null for an entry not yet in the site
  * glossary); a citation to a block of the book ("c4-b72", or a range "c2-b98–b103").
- * The rule (docs/principles.md P9, owner 2026-11-12; scripts/lib/challenge-moments.ts p9g): "who", "start" and "drives"
- * cite chapters 1 to 14 only; "later" shows only inside its fold.
+ * The texts were written to the rule of 2026-11-12 ("who", "start" and "drives" cite chapters 1 to 14; "later" may cite
+ * any chapter); that rule went with principle 9 on 2026-11-17, and the texts stay as written.
  */
 export type Segment = { text: string } | { term: string; glossaryId: string | null } | { cite: string };
 
@@ -1788,16 +1789,10 @@ export const citeHref = (cite: string): string => {
   const m = /^c(\d+)-b(\d+)/.exec(cite);
   return m ? `/chapter/${m[1]}#c${m[1]}-b${m[2]}` : '/chapter/1';
 };
-/** The last chapter the open parts may cite (the first layer, as #160's facts). */
-export const OPEN_MAX_CHAPTER = 14;
-/** The fold's label, exactly (owner, 2026-11-12). */
-export const LATER_LABEL = 'Later in the book (spoilers)';
+/** The "later" part's head (owner, 2026-11-17: a plain section; it was the fold "Later in the book (spoilers)"). */
+export const LATER_LABEL = 'Later in the book.';
 
-/** What breaks the rule in one character's texts: a citation past chapter 14 outside "later". */
+/** What keeps a character's texts from showing: none written yet. (No chapter rule since 2026-11-17.) */
 export function learnMoreProblems(slug: string, t: LearnMoreText | undefined = LEARN_MORE[slug]): string[] {
-  if (!t) return [`${slug}: no texts`];
-  const p: string[] = [];
-  const open: [string, Segment[]][] = [['who', t.who], ['start', t.start], ['drives', t.drives], ...t.invent.map((x, i) => [`invent ${i + 1}`, x] as [string, Segment[]])];
-  for (const [part, segs] of open) for (const s of segs) if ('cite' in s && !(citeChapter(s.cite) <= OPEN_MAX_CHAPTER)) p.push(`${slug}: "${part}" cites ${s.cite}, past chapter ${OPEN_MAX_CHAPTER} (only "${LATER_LABEL}" may)`);
-  return p;
+  return t ? [] : [`${slug}: no texts`];
 }

@@ -112,8 +112,8 @@ export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
           <div className="chc-line">
             <CardLine c={c} w={w} />
           </div>
-          {/* "Learn more about {name}" (owner, 2026-11-12): one expander. The whole book only inside the nested fold,
-              labelled exactly "Later in the book (spoilers)", closed by default (docs/principles.md P9g). */}
+          {/* "Learn more about {name}" (owner, 2026-11-12): one expander. "Later in the book." is a plain part like the
+              others (owner, 2026-11-17: principle 9 retired; it was a nested fold, closed by default). */}
           {/* A button that opens the expander in place (the design pass, owner 2026-11-16): the <details>' own summary, so
               it keeps its keyboard and screen-reader behaviour; only its look is a button's. */}
           <LearnMore title={P.learn.title}>
@@ -127,12 +127,9 @@ export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
                   <p className="chc-learn-part" data-part="start">
                     <strong>{P.learn.text.start.head}</strong> <Segs segs={P.learn.text.start.segs} more={P.learn.glossaryLink} />
                   </p>
-                  <details className="chc-later">
-                    <summary>{P.learn.text.later.head}</summary>
-                    <p className="chc-learn-part" data-part="later">
-                      <Segs segs={P.learn.text.later.segs} more={P.learn.glossaryLink} />
-                    </p>
-                  </details>
+                  <p className="chc-learn-part" data-part="later">
+                    <strong>{P.learn.text.later.head}</strong> <Segs segs={P.learn.text.later.segs} more={P.learn.glossaryLink} />
+                  </p>
                   <p className="chc-learn-part" data-part="drives">
                     <strong>{P.learn.text.drives.head}</strong> <Segs segs={P.learn.text.drives.segs} more={P.learn.glossaryLink} />
                   </p>

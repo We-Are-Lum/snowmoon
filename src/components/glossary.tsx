@@ -4,7 +4,7 @@ import { InfoLabel } from './info-label';
 import { MakeImageLink } from './make-image-link';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { lastChapter, openedChapters } from '~/lib/chat/device';
+import { lastChapter } from '~/lib/chat/device';
 import { AiLabel } from '~/components/recipe-sheet';
 import { AI_LABEL } from '~/lib/ai-declared';
 import { blockHref, parsePlace, quoteHtml, type GlossaryIndexEntry, type GlossaryTermView } from '~/lib/glossary-view';
@@ -12,25 +12,21 @@ import { blockHref, parsePlace, quoteHtml, type GlossaryIndexEntry, type Glossar
 /**
  * The glossary's index and term pages (data: content/snowmoon/glossary.json).
  *
- * Spoilers, as the Pictures feed does it: the furthest chapter opened on this device (at least 1)
- * limits what shows; anything later is covered with a count and "Show anyway". Until the device
- * is read (and in the server's HTML) the limit is Chapter 1. The page's data still carries later
- * chapters, as the feed's does.
+ * Every word, sentence and mention is shown, from the whole book: spoilers no longer matter anywhere on the site
+ * (owner, 2026-11-17; principle 9 retired). Until then the furthest chapter opened on this device covered later ones.
  *
  * Back: ?from=c3-b42 (set by the menu's Glossary link from the reader) returns to that block;
  * without it, to the chapter opened last on this device. Kept on every link inside the glossary.
  * Wording: drafted by the coding agent, not yet approved (one "Draft wording" line per screen).
  */
 function useReader() {
-  const [furthest, setFurthest] = useState(1);
   const [from, setFrom] = useState<string | null>(null);
   const [last, setLast] = useState(1);
   useEffect(() => {
-    setFurthest(Math.max(1, ...openedChapters()));
     setLast(lastChapter());
     setFrom(parsePlace(new URLSearchParams(window.location.search).get('from'))?.block ?? null);
   }, []);
-  return { furthest, from, last };
+  return { from, last };
 }
 
 const withFrom = (href: string, from: string | null) => (from ? `${href}?from=${from}` : href);
@@ -45,24 +41,10 @@ function BackLink({ from, last }: { from: string | null; last: number }) {
   );
 }
 
-function Cover({ children, action, onShow }: { children: React.ReactNode; action: string; onShow: () => void }) {
-  return (
-    <div className="gl-cover">
-      <p>{children}</p>
-      <button type="button" className="pictures-show" onClick={onShow}>
-        {action}
-      </button>
-    </div>
-  );
-}
-
 const DRAFT = <p className="as-draft gl-draftline">Draft wording</p>;
 
 export function GlossaryIndex({ entries, total, explained, method }: { entries: GlossaryIndexEntry[]; total: number; explained: number; method: string }) {
-  const { furthest, from, last } = useReader();
-  const [all, setAll] = useState(false);
-  const shown = entries.filter((e) => all || e.chapter <= furthest);
-  const hidden = entries.length - shown.length;
+  const { from, last } = useReader();
   return (
     <div className="page prose glossary">
       <BackLink from={from} last={last} />
@@ -84,9 +66,9 @@ export function GlossaryIndex({ entries, total, explained, method }: { entries: 
           links={[{ href: method, label: 'How it is built' }]}
         />
       </p>
-      <p className="gl-meta">{all ? `All ${total} words` : `Words up to Chapter ${furthest}, the furthest you've opened`}</p>
+      <p className="gl-meta">All {total} words</p>
       <ul className="gl-index">
-        {shown.map((e) => (
+        {entries.map((e) => (
           <li key={e.slug}>
             <Link href={withFrom(`/glossary/${e.slug}`, from)}>
               <span>{e.term}</span>
@@ -95,50 +77,17 @@ export function GlossaryIndex({ entries, total, explained, method }: { entries: 
           </li>
         ))}
       </ul>
-      {hidden > 0 && (
-        <Cover action="Show them anyway" onShow={() => setAll(true)}>
-          {hidden} more {hidden === 1 ? 'word first appears' : 'words first appear'} after Chapter {furthest}, past where you&apos;ve read.
-        </Cover>
-      )}
       {DRAFT}
     </div>
   );
 }
 
 export function GlossaryTerm({ t }: { t: GlossaryTermView }) {
-  const { furthest, from, last } = useReader();
-  const [all, setAll] = useState(false);
-  const within = (ch: number) => all || ch <= furthest;
-
-  if (!within(t.firstChapter)) {
-    return (
-      <div className="page prose glossary">
-        <BackLink from={from} last={last} />
-        <p className="label">Glossary</p>
-        <h1>A word from later in the book</h1>
-        <Cover action="Show it anyway" onShow={() => setAll(true)}>
-          This word first appears in Chapter {t.firstChapter}, past where you&apos;ve read.
-        </Cover>
-        <p>
-          <Link href={withFrom('/glossary', from)}>All words</Link>
-        </p>
-        {DRAFT}
-      </div>
-    );
-  }
-
-  const quotes = t.explanations.filter((e) => within(e.chapter));
-  const mentions = t.mentions.filter((m) => within(m.chapter));
-  const hiddenQuotes = t.explanations.length - quotes.length;
-  const hiddenMentions = t.mentions.filter((m) => !within(m.chapter)).reduce((n, m) => n + m.blocks.length, 0);
-  const clip = t.clip && within(t.clip.chapter) ? t.clip : null;
-  const first = within(t.firstSentence.chapter) ? t.firstSentence : null;
-  const hiddenParts = [
-    hiddenQuotes ? `${hiddenQuotes} ${hiddenQuotes === 1 ? 'sentence' : 'sentences'}` : '',
-    hiddenMentions ? `${hiddenMentions} ${hiddenMentions === 1 ? 'mention' : 'mentions'}` : '',
-    t.clip && !clip ? 'the clip' : '',
-    first ? '' : 'the first sentence',
-  ].filter(Boolean);
+  const { from, last } = useReader();
+  const quotes = t.explanations;
+  const mentions = t.mentions;
+  const clip = t.clip;
+  const first = t.firstSentence;
 
   return (
     <div className="page prose glossary">
@@ -182,9 +131,7 @@ export function GlossaryTerm({ t }: { t: GlossaryTermView }) {
           </blockquote>
         ))
       ) : (
-        <p className="gl-none">
-          {hiddenQuotes ? 'No sentence up to where you’ve read explains this word.' : 'The book has no sentence that explains this word, by the glossary’s rule.'}
-        </p>
+        <p className="gl-none">The book has no sentence that explains this word, by the glossary’s rule.</p>
       )}
 
       <h2>Every mention</h2>
@@ -201,11 +148,6 @@ export function GlossaryTerm({ t }: { t: GlossaryTermView }) {
           </li>
         ))}
       </ul>
-      {hiddenParts.length > 0 && (
-        <Cover action="Show them anyway" onShow={() => setAll(true)}>
-          Past Chapter {furthest}, where you&apos;ve read to: {hiddenParts.join(', ')}.
-        </Cover>
-      )}
       <p>
         <Link href={withFrom('/glossary', from)}>All words</Link>
       </p>

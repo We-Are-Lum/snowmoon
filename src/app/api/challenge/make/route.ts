@@ -26,7 +26,7 @@ import { isWalletNumber } from '~/lib/images/remixes';
 import { isSocialPerson } from '~/lib/people';
 import { freeFor } from '~/lib/social/free';
 import { baseFrontOf, defaultLook, sourceOf } from '~/lib/challenge/pictures';
-import { spoilerExceptionOn } from '~/lib/challenge/spoilers';
+import { phase } from '~/lib/challenge/rules';
 import { challengeVisibleTo } from '~/lib/challenge/visibility';
 import { callNameOf } from '~/lib/challenge/names';
 
@@ -64,11 +64,17 @@ import { callNameOf } from '~/lib/challenge/names';
 const no = (error: string, status: number, extra: Record<string, unknown> = {}) => NextResponse.json({ error, ...extra }, { status });
 const hidden = () => NextResponse.json({ error: 'Not found' }, { status: 404 });
 
+/**
+ * The remix screen works until entries close, as before (it was principle 9's challenge exception, spoilerExceptionOn,
+ * retired by the owner on 2026-11-17; the close is kept as it was, for the owner to decide separately).
+ */
+const makingOpen = (now: Date = new Date()) => phase(now) !== 'closed';
+
 export async function GET(request: Request) {
   const fid = await getFid(request);
   // Who is asking, for the Model row only: a wallet account sees why closed models aren't offered to it.
   const person = fid ?? (await getPerson(request).catch(() => null));
-  if (!challengeVisibleTo(fid) || !spoilerExceptionOn()) return hidden();
+  if (!challengeVisibleTo(fid) || !makingOpen()) return hidden();
   const sql = db();
   const from = new URL(request.url).searchParams.get('from') ?? '';
   const src = sql ? await sourceOf(sql, from).catch(() => null) : null;
@@ -99,7 +105,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const fid = await getPerson(request);
   if (fid === null) return NextResponse.json({ error: 'Sign in to make it' }, { status: 401 });
-  if (!challengeVisibleTo(fid) || !spoilerExceptionOn()) return hidden();
+  if (!challengeVisibleTo(fid) || !makingOpen()) return hidden();
   if (!IMAGES.enabled) return no('Making images is switched off for now', 503);
   const sql = db();
   if (!sql || !process.env.FAL_KEY || !process.env.IMAGES_TICKET_SECRET) return no('Making images is not set up on this deployment', 503);

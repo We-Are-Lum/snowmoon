@@ -300,7 +300,6 @@ export const IMAGE_WORDING = {
       bookBody: ['These are the book’s own words, verbatim, from the chapters you’ve read. Each one links to where it is.'],
       appears: 'Where it appears',
       appearsRow: (ch: number, scene: number, where: string) => `Chapter ${ch} · scene ${scene}${where ? ` · ${where}` : ''}`,
-      appearsLater: (n: number) => `And ${n} more ${n === 1 ? 'scene' : 'scenes'} past where you’ve read.`,
       appearsNote: 'Worked out from the book’s scenes, with no model: a scene is here when it quotes this place’s facts or has a seeded image of it.',
       images: 'Images',
       imagesNote: 'Readers’ images newest first, then this edition’s starting images in book order.',

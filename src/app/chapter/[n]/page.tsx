@@ -233,7 +233,7 @@ export default async function ChapterPage({ params }: Props) {
         );
       })}
       <ReadingRecord chapter={n} />
-      {/* Collapsed by default: the chapter's events stay hidden unless the reader opens it. */}
+      {/* Open by default (owner, 2026-11-17: spoilers no longer matter; principle 9 retired). */}
       <ChapterSummary chapter={n} />
       {/* Board 1b (there is no chapter menu yet): a private thread about this chapter. */}
       <Link className="ask-chapter" href={`/assistant?chapter=${n}`}>

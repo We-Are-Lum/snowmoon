@@ -1320,8 +1320,8 @@ async function checkHome(page: Page, scheme: 'light' | 'dark') {
   await still.close();
 }
 /**
- * The glossary (src/components/glossary.tsx): the index and a word's page meet the floors; later
- * chapters are covered until "Show anyway"; "Back" returns to the reading place, whether it came
+ * The glossary (src/components/glossary.tsx): the index and a word's page meet the floors; every word and
+ * every chapter shows, with no cover (owner, 2026-11-17: principle 9 retired); "Back" returns to the reading place, whether it came
  * in the URL or from the menu's Glossary link in the reader.
  */
 /** Minpentai Play at phone width: the hub, free play, a practice match, full screen and the rules page. */
@@ -1385,16 +1385,15 @@ async function checkPlay(page: Page, scheme: string) {
   if (!kit.includes('NOT AFFILIATED WITH THE AUTHOR')) fail(`/minpentai/build (${scheme}): no "not affiliated with the author" line`);
   const labels = await page.locator('.mp-kit .mp-rules-note .info-label').evaluateAll((els) => els.map((e) => e.getAttribute('data-label')));
   if (labels.join(',') !== 'book,invented,draft') fail(`/minpentai/build (${scheme}): labels are ${labels.join(', ')}, not Book, Invented and Draft`);
-  const all = await page.locator('.mp-kit-passage').count(), hidden = await page.locator('.mp-kit-spoilers .mp-kit-passage').count();
+  // Every passage shows, in one list (owner, 2026-11-17: principle 9 retired; chapters 15 on were under Spoilers).
+  const all = await page.locator('.mp-kit-passage').count();
   if (all !== 152) fail(`/minpentai/build (${scheme}): ${all} passages, not 152`);
-  if (await page.locator('.mp-kit-spoilers[open]').count()) fail(`/minpentai/build (${scheme}): Spoilers is open on arrival`);
-  if (await page.locator('.mp-kit-spoilers .mp-kit-passage').first().isVisible()) fail(`/minpentai/build (${scheme}): a spoiler passage shows before Spoilers is opened`);
-  const shownCh = await page.locator('.mp-kit-passage:not(.mp-kit-spoilers .mp-kit-passage) .mp-kit-meta a').evaluateAll((els) => els.map((e) => Number(/^c(\d+)-/.exec(e.textContent ?? '')?.[1])));
-  const hiddenCh = await page.locator('.mp-kit-spoilers .mp-kit-passage .mp-kit-meta a').evaluateAll((els) => els.map((e) => Number(/^c(\\d+)-/.exec(e.textContent ?? '')?.[1])));
-  if (shownCh.length !== 127 || shownCh.some((c) => c < 2 || c > 14) || hiddenCh.length !== 25 || hiddenCh.some((c) => c < 15)) fail(`/minpentai/build (${scheme}): shown must be exactly the 127 passages of chapters 2–14 and Spoilers the 25 of chapters 15 on (${shownCh.length} shown, ${hiddenCh.length} hidden)`);
-  await page.locator('.mp-kit-spoilers > summary').click();
-  if (!(await page.locator('.mp-kit-spoilers .mp-kit-passage').first().isVisible())) fail(`/minpentai/build (${scheme}): Spoilers does not open`);
-  await checkFloors(page, '/minpentai/build (Spoilers open)', scheme);
+  if (await page.locator('.mp-kit details, .mp-kit-spoilers').count()) fail(`/minpentai/build (${scheme}): a passage is folded away`);
+  const shownCh = await page.locator('.mp-kit-passage .mp-kit-meta a').evaluateAll((els) => els.map((e) => Number(/^c(\d+)-/.exec(e.textContent ?? '')?.[1])));
+  if (shownCh.length !== 152 || shownCh.filter((c) => c >= 15).length !== 25) fail(`/minpentai/build (${scheme}): ${shownCh.length} passages shown (${shownCh.filter((c) => c >= 15).length} from chapter 15 on), want all 152 (25 from chapter 15 on)`);
+  const lastPassage = page.locator('.mp-kit-passage').last();
+  await lastPassage.scrollIntoViewIfNeeded();
+  if (!(await lastPassage.isVisible())) fail(`/minpentai/build (${scheme}): the last passage doesn't show`);
 }
 /** ⤢ on a match: the frame covers the site (no top bar), the board upright, END TURN in view. */
 async function checkPlayFullScreen(page: Page, where: string, tall: number) {
@@ -1418,21 +1417,22 @@ async function checkGlossary(page: Page, scheme: string) {
   await open(page, '/glossary');
   await checkFloors(page, '/glossary', scheme);
   await shot(page, 'glossary-index', scheme);
+  // Every word, with no cover, for a reader who has opened nothing (owner, 2026-11-17: principle 9 retired).
   const rows = await page.locator('.gl-index li').count();
-  if (!(await page.locator('.gl-cover').isVisible())) fail('/glossary: words from later chapters are not covered');
-  await page.locator('.gl-cover button').click();
-  if ((await page.locator('.gl-index li').count()) <= rows) fail('/glossary: "Show them anyway" shows nothing more');
-  await checkFloors(page, '/glossary (all)', scheme);
+  const total = Number(/All (\d+) words/.exec((await page.locator('.gl-meta').first().textContent()) ?? '')?.[1]);
+  if (await page.locator('.gl-cover').count()) fail('/glossary: words are still covered');
+  if (!total || rows !== total) fail(`/glossary: ${rows} words listed, the page says ${total}`);
+  if (!(await page.locator('.gl-ch', { hasText: /Ch (1[5-9]|2\d|3[0-2])$/ }).count())) fail('/glossary: no word from chapter 15 on is listed');
 
   await open(page, '/glossary/zei?from=c1-b19');
   await checkFloors(page, '/glossary/zei', scheme);
   if ((await page.locator('.gl-back').getAttribute('href')) !== '/chapter/1#c1-b19') fail(`/glossary/zei?from=c1-b19: Back goes to ${await page.locator('.gl-back').getAttribute('href')}`);
   if ((await page.locator('a', { hasText: 'All words' }).getAttribute('href')) !== '/glossary?from=c1-b19') fail('/glossary/zei: "All words" drops the reading place');
-  // Zei first appears in chapter 2: covered for a reader at chapter 1.
-  if (!(await page.locator('.gl-cover').isVisible())) fail('/glossary/zei: a word from chapter 2 is not covered at chapter 1');
-  await shot(page, 'glossary-covered', scheme);
-  await page.locator('.gl-cover button').click();
+  // Zei first appears in chapter 2: shown in full to a reader at chapter 1, every mention to the last chapter.
+  if (await page.locator('.gl-cover').count()) fail('/glossary/zei: still covered for a reader at chapter 1');
   await page.waitForSelector('.gl-quote, .gl-none');
+  const lastMention = Math.max(...(await page.locator('.gl-mentions .gl-ch').allTextContents()).map((t) => Number(/(\d+)/.exec(t)?.[1] ?? 0)));
+  if (lastMention < 15) fail(`/glossary/zei: mentions stop at chapter ${lastMention}`);
   // "First appears": the sentence of the first block, linked to that block.
   if ((await page.locator('.gl-first .gl-cite').getAttribute('href').catch(() => null)) !== '/chapter/2#c2-b2') fail('/glossary/zei: "First appears" is missing or not linked to c2-b2');
   await checkFloors(page, '/glossary/zei (shown)', scheme);
@@ -1988,7 +1988,7 @@ async function checkChallengeLanding() {
         }, [pinned, below, last] as const);
       // A character's page on a desktop (owner, 2026-11-16), at 1024 and 1440, the side menu closed and open. First load:
       // "Start from someone's remix" (its heading) on the first screen at 1440 (not at 1024), the bases as many across as fit; the small link under "Make
-      // your own Zei" is a real in-page link to it, reached with the keyboard. Then Learn more and its spoilers fold open
+      // your own Zei" is a real in-page link to it, reached with the keyboard. Then Learn more opens (all of it, "Later in the book." included)
       // and the page scrolled from top to bottom: the left column, unpinned while Learn more is open, never overlaps the
       // footer; Learn more's last line is on the screen at some point; the looks line shows once. Closed again, the column
       // is pinned again.
@@ -2030,8 +2030,7 @@ async function checkChallengeLanding() {
             }
             const more = page.locator('.ch-character-page details.chc-learn');
             await more.locator(':scope > summary').click();
-            await more.locator('details.chc-later > summary').click();
-            if (!(await more.evaluate((d) => (d as HTMLDetailsElement).open)) || !(await more.locator('details.chc-later').evaluate((d) => (d as HTMLDetailsElement).open))) fail(`/challenge/zei ${t}: Learn more and its spoilers fold don't both open`);
+            if (!(await more.evaluate((d) => (d as HTMLDetailsElement).open)) || !(await more.locator('[data-part="later"]').isVisible())) fail(`/challenge/zei ${t}: Learn more doesn't open with "Later in the book." in full`);
             const looks = (((await more.textContent()) ?? '').match(/every look on this site is this edition|The book doesn’t describe Zei’s looks/g) ?? []).length;
             if (looks !== 1) fail(`/challenge/zei ${t}: the looks line shows ${looks} times, not once`);
             await openOverlayMenu('/challenge/zei', vw);
@@ -2197,14 +2196,15 @@ async function checkChallengeLanding() {
         // The button: the summary drawn as an outlined button, full width on a phone, at least 44px tall.
         const btn = await more.locator(':scope > summary.chc-learn-btn').evaluate((e) => { const s = getComputedStyle(e); return { border: parseFloat(s.borderTopWidth) > 0 && s.borderTopStyle !== 'none', w: e.getBoundingClientRect().width, h: e.getBoundingClientRect().height, side: (e.closest('.chc-side') as HTMLElement | null)?.getBoundingClientRect().width ?? 0 }; }).catch(() => null);
         if (!btn || !btn.border || btn.h < 44 || (!wide && Math.abs(btn.w - btn.side) > 2)) fail(`/challenge/zei ${tag}: "Learn more about Zei" isn't an outlined button${wide ? '' : ' across the width'} (${JSON.stringify(btn)})`);
-        // Opens on one tap: the owner's texts in order, the spoilers fold nested and closed, "Room to invent." ending with
+        // Opens on one tap: the owner's texts in order, "Later in the book." in full as a plain part (owner, 2026-11-17: no
+        // fold since principle 9 was retired), "Room to invent." ending with
         // the looks line, shown once (owner, 2026-11-16: the page's own looks line was a second one).
         await more.locator(':scope > summary').click();
         const parts = await more.locator('[data-part]').evaluateAll((els) => els.map((e) => e.getAttribute('data-part')));
         if (!(await more.evaluate((d) => (d as HTMLDetailsElement).open)) || parts.join() !== 'who,start,later,drives,invent') fail(`/challenge/zei ${tag}: "Learn more" doesn't open on a tap, or its parts read ${parts.join()}`);
-        const fold = more.locator('details.chc-later');
-        if ((await fold.count()) !== 1 || (await fold.evaluate((d) => (d as HTMLDetailsElement).open)) || ((await fold.locator('summary').textContent()) ?? '').trim() !== 'Later in the book (spoilers)') fail(`/challenge/zei ${tag}: no closed fold "Later in the book (spoilers)"`);
-        if (await more.locator('[data-part="later"]').isVisible()) fail(`/challenge/zei ${tag}: the spoilers show before the fold is opened`);
+        if (await more.locator('details details, details.chc-later').count()) fail(`/challenge/zei ${tag}: "Learn more" still has a fold inside it`);
+        const laterHead = ((await more.locator('[data-part="later"] > strong').first().textContent()) ?? '').trim();
+        if (!(await more.locator('[data-part="later"]').isVisible()) || laterHead !== 'Later in the book.') fail(`/challenge/zei ${tag}: "Later in the book." isn't shown in full (head "${laterHead}")`);
         {
           const lastInvent = ((await more.locator('[data-part="invent"] li').last().textContent()) ?? '').trim();
           const looksLines = ((await more.textContent()) ?? '').match(/every look on this site is this edition|The book doesn’t describe Zei’s looks/g) ?? [];
@@ -2223,10 +2223,6 @@ async function checkChallengeLanding() {
         if (!(await note.isVisible()) || !(await note.locator('a[href^="/glossary/"]').count())) fail(`/challenge/zei ${tag}: the ⓘ doesn't open the glossary entry`);
         await page.keyboard.press('Escape');
         if (!(await more.locator('[data-part="start"] .chc-term').filter({ hasText: 'compute box' }).locator('a[href="/glossary/compute-box"]').count())) fail(`/challenge/zei ${tag}: "compute box" doesn't open its glossary entry`);
-        await fold.locator('summary').click();
-        if (!(await more.locator('[data-part="later"]').isVisible())) fail(`/challenge/zei ${tag}: the spoilers fold doesn't open`);
-        if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways with the spoilers open`);
-        await fold.locator('summary').click();
         await more.locator(':scope > summary').click();
       }
       // The order, top to bottom on a phone (name, line, button, "Make your own", the two choices); on a desktop the

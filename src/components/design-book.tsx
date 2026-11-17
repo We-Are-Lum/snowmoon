@@ -1,26 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { openedChapters } from '~/lib/chat/device';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { BookLabel } from './design-sheets';
 
 /**
- * A character sheet's "What the book says" (Design 5a): the book's own words about the character,
- * only from chapters opened on this device, each linked to its place. Nothing a model wrote.
+ * A character sheet's "What the book says" (Design 5a): the book's own words about the character, from the whole book,
+ * each linked to its place. Nothing a model wrote. (Until 2026-11-17 only chapters opened on this device; principle 9
+ * retired by the owner that day.)
  */
 const W = IMAGE_WORDING.designs;
 
-function useFurthest() {
-  const [furthest, setFurthest] = useState<number | null>(null);
-  useEffect(() => setFurthest(Math.max(1, ...openedChapters())), []);
-  return furthest;
-}
-
 export function BookQuotes({ name, quotes }: { name: string; quotes: { chapter: number; idx: number; quote: string; fact?: string }[] }) {
-  const furthest = useFurthest();
-  const shown = furthest === null ? [] : quotes.filter((q) => q.chapter <= furthest);
+  const shown = quotes;
   return (
     <section className="dz-book" aria-label={`What the book says about ${name}`}>
       <p className="dz-label">

@@ -4,15 +4,14 @@ import { firstLayerFacts } from './cards';
 import { callNameOf } from './names';
 import { LANDING_WORDING as L } from './landing-wording';
 import { loadChapter } from '../book';
-import { LATER_LABEL, LEARN_MORE, NOTE_PICKS, OPEN_MAX_CHAPTER, citeChapter, citeHref, learnMoreProblems, type Segment } from './learn-more';
+import { LATER_LABEL, LEARN_MORE, NOTE_PICKS, citeChapter, citeHref, learnMoreProblems, type Segment } from './learn-more';
 
 /**
  * "Learn more about {Name}" as the page draws it (owner, 2026-11-12): one expander, replacing "Read where {Name} first
- * appears" and #160's "Read more". A character's texts (src/lib/challenge/learn-more.ts) are shown only when they keep
- * the rule (learnMoreProblems: "who", "start" and "drives" cite chapters 1 to 14); "later" goes only into its fold,
- * labelled exactly LATER_LABEL. A character whose texts don't keep it yet shows the first layer's facts instead
- * (firstLayerFacts, chapters 1 to 14), in the same expander. Each glossary term opens its entry: a sentence the book
- * says, from chapters 1 to 14 in the open parts (any chapter inside the fold), and the glossary page.
+ * appears" and #160's "Read more". A character's texts (src/lib/challenge/learn-more.ts) are shown in full, "later"
+ * included as a plain part headed LATER_LABEL (owner, 2026-11-17: principle 9 retired; it was a closed fold). A
+ * character with no texts yet shows the first layer's facts instead (firstLayerFacts), in the same expander. Each
+ * glossary term opens its entry: a sentence the book says, from any chapter, and the glossary page.
  */
 export type Rendered =
   | { kind: 'text'; text: string }
@@ -30,7 +29,7 @@ export interface LearnMoreView {
     drives: { head: string; segs: Rendered[] };
     invent: { head: string; items: Rendered[][] };
   } | null;
-  /** The fallback: the first layer's facts (chapters 1 to 14), when the texts aren't shown. */
+  /** The fallback: the first layer's facts, when a character has no texts. */
   facts: { text: string; block: string; quote: string; chapter: number }[];
   factsNote: string;
   chips: string[];
@@ -47,21 +46,21 @@ function pickedNote(cite: string): { block: string; chapter: number; text: strin
 }
 
 /**
- * A glossary entry's note: a sentence the book says about it, no later than `max`: the owner's pick (NOTE_PICKS), else
- * its explanation, else its first sentence.
+ * A glossary entry's note: a sentence the book says about it: the owner's pick (NOTE_PICKS), else its explanation, else
+ * its first sentence. (Until 2026-11-17 the open parts' notes came from chapters 1 to 14 only.)
  */
-function note(slug: string, max: number): { text: string; cite: string; href: string } | null {
+function note(slug: string): { text: string; cite: string; href: string } | null {
   const t = glossaryTerm(slug);
   if (!t) return null;
   const pick = NOTE_PICKS[slug] ? pickedNote(NOTE_PICKS[slug]) : null;
-  const e = (pick && pick.chapter <= max ? pick : null) ?? t.explanations.find((x) => x.chapter <= max) ?? (t.firstSentence.chapter <= max ? t.firstSentence : null);
+  const e = pick ?? t.explanations[0] ?? t.firstSentence;
   return e ? { text: e.text, cite: e.block, href: `/glossary/${slug}` } : null;
 }
 
-function render(slug: string, part: string, segs: readonly Segment[], max: number): Rendered[] {
+function render(slug: string, part: string, segs: readonly Segment[]): Rendered[] {
   return segs.map((s, i): Rendered => {
     if ('cite' in s) return { kind: 'cite', label: s.cite, href: citeHref(s.cite) };
-    if ('term' in s) return { kind: 'term', term: s.term, id: `lm-${slug}-${part}-${i}`, note: s.glossaryId ? note(s.glossaryId, max) : null, href: s.glossaryId ? `/glossary/${s.glossaryId}` : null };
+    if ('term' in s) return { kind: 'term', term: s.term, id: `lm-${slug}-${part}-${i}`, note: s.glossaryId ? note(s.glossaryId) : null, href: s.glossaryId ? `/glossary/${s.glossaryId}` : null };
     return { kind: 'text', text: s.text };
   });
 }
@@ -77,11 +76,11 @@ export function learnMoreView(slug: string, name: string): LearnMoreView {
     draft: shown && !shown.approved ? P.draft : null,
     text: shown
       ? {
-          who: { head: P.whoHead(shown.pronoun), segs: render(slug, 'who', shown.who, OPEN_MAX_CHAPTER) },
-          start: { head: P.startText, segs: render(slug, 'start', shown.start, OPEN_MAX_CHAPTER) },
-          later: { head: LATER_LABEL, segs: render(slug, 'later', shown.later, Infinity) },
-          drives: { head: P.drivesHead(shown.pronoun), segs: render(slug, 'drives', shown.drives, OPEN_MAX_CHAPTER) },
-          invent: { head: P.inventHead, items: shown.invent.map((x, i) => render(slug, `invent${i}`, x, OPEN_MAX_CHAPTER)) },
+          who: { head: P.whoHead(shown.pronoun), segs: render(slug, 'who', shown.who) },
+          start: { head: P.startText, segs: render(slug, 'start', shown.start) },
+          later: { head: LATER_LABEL, segs: render(slug, 'later', shown.later) },
+          drives: { head: P.drivesHead(shown.pronoun), segs: render(slug, 'drives', shown.drives) },
+          invent: { head: P.inventHead, items: shown.invent.map((x, i) => render(slug, `invent${i}`, x)) },
         }
       : null,
     facts: shown ? [] : firstLayerFacts(slug),

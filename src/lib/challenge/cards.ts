@@ -15,10 +15,10 @@
  * - `appears`: the book's own words, word for word, each with its block.
  * - the look: the book doesn't describe any of the six; every picture says "Look invented by this edition".
  *
- * Spoilers (P9's challenge exception, owner 2026-11-05, answer 1): the first layer (the line, the three facts, the
- * moments list) is written without the book's major turns, and its facts cite chapters 1 to FIRST_LAYER_MAX_CHAPTER
- * only (P9g checks it). The deeper layers ("More about", "Where they appear") may draw on the whole book (they aren't
- * shown since 2026-11-08), with no spoiler mark (owner, 2026-11-09). Each moment chip shows its chapter.
+ * Spoilers no longer matter anywhere on the site (owner, 2026-11-17: principle 9 retired). The first layer was written
+ * without the book's major turns, its facts from chapters 1 to 14, under P9's challenge exception (owner, 2026-11-05);
+ * the texts stay as written, but no chapter limit applies to any layer now. The deeper layers ("More about", "Where they
+ * appear") aren't shown on the pages since 2026-11-08 (a design choice, not a spoiler rule). Each moment chip shows its chapter.
  *
  * Plain data: served to the browser inside the page's data (the first and second layers). "Where they appear" is sent
  * only when opened (GET /api/challenge/appears).
@@ -41,16 +41,13 @@ export interface CharacterCard {
   slug: string;
   /** One line: this edition's summary, without major turns. */
   line: string;
-  /** About three facts, from chapters 1 to FIRST_LAYER_MAX_CHAPTER. */
+  /** About three facts (written from chapters 1 to 14; no limit since 2026-11-17). */
   facts: CardFact[];
   /** The second layer: a fuller description (this edition's words) and more facts, from anywhere in the book. */
   more: { description: string; facts: CardFact[] };
   /** The third layer: where the character appears, the book's words, in book order. */
   appears: CardPassage[];
 }
-
-/** The first layer's facts cite no block past this chapter (owner, 2026-11-05: the first layer has no major twists). */
-export const FIRST_LAYER_MAX_CHAPTER = 14;
 
 export const CARDS: readonly CharacterCard[] = [
   {
@@ -248,12 +245,11 @@ export const cardOf = (slug: string): CharacterCard | null => CARDS.find((c) => 
 export const chapterOf = (block: string) => Number(/^c(\d+)-b\d+$/.exec(block)?.[1] ?? NaN);
 
 /**
- * "Read more about {name}" on a character's page (owner, 2026-11-12: ADD): the card's first-layer facts only, each with
- * its book quote, block and chapter, and none past chapter FIRST_LAYER_MAX_CHAPTER. Never the second layer or "Where they
- * appear" (P9g checks this function and that the page's data reads the facts only through it).
+ * "Read more about {name}" on a character's page (owner, 2026-11-12: ADD): the card's first-layer facts, each with its
+ * book quote, block and chapter. (Until 2026-11-17 none past chapter 14, under principle 9, now retired.)
  */
 export const firstLayerFacts = (slug: string): { text: string; block: string; quote: string; chapter: number }[] =>
-  (cardOf(slug)?.facts ?? []).filter((f) => chapterOf(f.block) <= FIRST_LAYER_MAX_CHAPTER).map((f) => ({ text: f.text, block: f.block, quote: f.quote, chapter: chapterOf(f.block) }));
+  (cardOf(slug)?.facts ?? []).map((f) => ({ text: f.text, block: f.block, quote: f.quote, chapter: chapterOf(f.block) }));
 
 /** Every quote on the cards, for the word-for-word check. */
 export function cardQuotes(cards: readonly CharacterCard[] = CARDS): { where: string; block: string; text: string }[] {
@@ -264,7 +260,7 @@ export function cardQuotes(cards: readonly CharacterCard[] = CARDS): { where: st
   ]);
 }
 
-/** What is wrong with the cards' shape: one per challenge character, about three first-layer facts, no later chapter there, passages in book order. */
+/** What is wrong with the cards' shape: one per challenge character, about three first-layer facts, passages in book order. */
 export function cardShapeProblems(cards: readonly CharacterCard[] = CARDS, characters: readonly string[] = []): string[] {
   const p: string[] = [];
   const slugs = cards.map((c) => c.slug);
@@ -272,7 +268,6 @@ export function cardShapeProblems(cards: readonly CharacterCard[] = CARDS, chara
   for (const c of cards) {
     if (!c.line.trim() || !c.more.description.trim()) p.push(`${c.slug}: no line or description`);
     if (c.facts.length < 2 || c.facts.length > 4) p.push(`${c.slug}: ${c.facts.length} first-layer facts, not about three`);
-    for (const f of c.facts) if (!(chapterOf(f.block) <= FIRST_LAYER_MAX_CHAPTER)) p.push(`${c.slug}: a first-layer fact cites ${f.block}, past chapter ${FIRST_LAYER_MAX_CHAPTER}`);
     for (const f of [...c.facts, ...c.more.facts]) if (!f.text.trim() || !f.quote.trim()) p.push(`${c.slug}: a fact cites nothing`);
     const order = c.appears.map((a) => /^c(\d+)-b(\d+)$/.exec(a.block)).map((m) => (m ? Number(m[1]) * 1e4 + Number(m[2]) : NaN));
     if (!order.every((x, i) => Number.isFinite(x) && (i === 0 || order[i - 1] < x))) p.push(`${c.slug}: "Where they appear" isn't in book order`);
