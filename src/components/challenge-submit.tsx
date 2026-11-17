@@ -32,8 +32,11 @@ export function ChallengeSubmit({ versionId, byFid, words: W, path, compact = fa
   compact?: boolean;
   /** A cast just made by the share buttons above, in the Farcaster app: Submit sends it when no address is typed. */
   castHash?: string | null;
-  /** Shown above it, to its maker only (a challenge picture's page: "Then submit it as an entry · one a day"). */
-  before?: React.ReactNode;
+  /**
+   * Shown above it, to its maker only (a challenge picture's page: "Submit your post · one a day"). A function is given
+   * whether it is submitted, so the page can show its head only until then (owner, 2026-11-16).
+   */
+  before?: React.ReactNode | ((submitted: boolean) => React.ReactNode);
 }) {
   const auth = useAuth();
   const social = useSocialSession();
@@ -103,8 +106,8 @@ export function ChallengeSubmit({ versionId, byFid, words: W, path, compact = fa
   };
 
   return (
-    <div className="ch-submit">
-      {before}
+    <div className="ch-submit" data-submitted={done ? '' : undefined}>
+      {typeof before === 'function' ? before(done) : before}
       {done ? (
         asking ? (
           <p className="ch-mark ch-withdraw-ask" role="group" aria-label={W.withdrawAsk}>

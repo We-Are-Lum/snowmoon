@@ -11,12 +11,16 @@ import { ChallengeSubmit } from './challenge-submit';
 import { PostedOn } from './posted-on';
 import { AdminExampleLabel } from './admin-example-label';
 import { BackstoryShown } from './challenge-backstory';
+import { readJustPublished } from '~/lib/challenge/just-published';
 
 /**
  * A challenge picture's page, /challenge/p/<version>, share first (owner, 2026-11-05; docs/proposals/challenge-moments.md
- * §1.3 S4–S5): the picture with its AI label; then, before anything else, the post buttons with the ready post (for its
- * maker: "Published. Now post it:"); then "Then submit it as an entry · one a day" with Submit (paste the post's
- * address, option B; a cast just made in the Farcaster app fills it), the owner's one line ("Sign in with Farcaster,
+ * §1.3 S4–S5): the picture with its AI label; then, before anything else, "Share" and "Remix" (owner, 2026-11-16), for
+ * everyone, its maker included. "Share" opens the post buttons with the ready post (its maker's own words, or the
+ * others' words for anyone else); the list starts open right after publishing (the one-time ?published=1 the publish
+ * redirect adds, src/lib/challenge/just-published.ts, stripped from the address at once) and closed on any later visit.
+ * Then, for its maker until it is submitted, "Submit your post · one a day" with Submit (paste the post's address,
+ * option B; a cast just made in the Farcaster app fills it), the owner's one line ("Sign in with Farcaster,
  * Lens or Bluesky to enter.") and "Rules"; then the character and moment, who made it and their words, "Posted on", and
  * small links to how it was made, every entry and making another. "✕" goes to the hub at the character's card.
  * Publishing replaced the preview with this page, so back never returns to a publish button. Every word comes from the
@@ -27,6 +31,14 @@ export function ChallengePicture({ id }: { id: string }) {
   const social = useSocialSession();
   const [v, setV] = useState<PictureView | null | 'missing'>(null);
   const [castHash, setCastHash] = useState<string | null>(null);
+  // The share list: open right after publishing (the one-time mark in the address, removed at once), else closed.
+  const [shareOpen, setShareOpen] = useState(false);
+  useEffect(() => {
+    const { just, rest } = readJustPublished(window.location.search);
+    if (!just) return;
+    setShareOpen(true);
+    window.history.replaceState(null, '', `${window.location.pathname}${rest}${window.location.hash}`);
+  }, []);
   useEffect(() => {
     authFetch(`/api/challenge/picture?id=${encodeURIComponent(id)}`)
       .then(async (r) => (r.ok ? ((await r.json()) as PictureView) : 'missing'))
@@ -65,17 +77,24 @@ export function ChallengePicture({ id }: { id: string }) {
         <div className="chp-side">
           {/* Its backstory, under the picture (owner, 2026-11-09): invented by its maker, not from the book. */}
           {v.backstory && <BackstoryShown backstory={v.backstory} maker={v.maker} />}
-          {known && mine && <ChallengeShareFirst path={path} w={{ head: v.w.published, texts: v.w.postTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} onCast={setCastHash} />}
-          {/* Anyone else (owner, 2026-11-07): "Remix this" first, not "Post it"; sharing it never says "My remix". */}
-          {known && !mine && (
-            <>
+          {/* "Share" and "Remix" for everyone, its maker included (owner, 2026-11-16: the rules let you remix your own).
+              Sharing it never says "My remix" unless it's yours (owner, 2026-11-07). */}
+          {known && (
+            <div className="chp-actions" data-slot="picture-actions">
+              <button type="button" className="chp-btn chp-share-btn" data-slot="share" aria-expanded={shareOpen} aria-controls="chp-share-list" onClick={() => setShareOpen((o) => !o)}>
+                {v.w.share}
+              </button>
               {v.remixHref && (
-                <Link className="rl-remix mk-remix-this" href={v.remixHref}>
-                  {v.w.remixThis}
+                <Link className="chp-btn" data-slot="remix" href={v.remixHref}>
+                  {v.w.remix}
                 </Link>
               )}
-              <ChallengeShareFirst path={path} w={{ head: null, texts: v.w.othersTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} />
-            </>
+            </div>
+          )}
+          {known && (
+            <div id="chp-share-list" className="chp-share-list" data-slot="share-list" hidden={!shareOpen}>
+              <ChallengeShareFirst path={path} w={{ head: null, texts: mine ? v.w.postTexts : v.w.othersTexts, copy: v.w.copy, copied: v.w.copied, on: v.w.on }} onCast={mine ? setCastHash : undefined} />
+            </div>
           )}
           {known && mine && v.notYet && (
             <section className="sf-submit">
@@ -100,10 +119,13 @@ export function ChallengePicture({ id }: { id: string }) {
                 path={path}
                 compact
                 castHash={castHash}
-                before={
-                  <h2 className="sf-head">
-                    {v.w.thenSubmit} {v.w.oneADay && <span className="dz-muted">· {v.w.oneADay}</span>}
-                  </h2>
+                before={(submitted) =>
+                  // "Submit your post" until it is submitted (owner, 2026-11-16); then Withdraw alone.
+                  !submitted && (
+                    <h2 className="sf-head" data-slot="submit-head">
+                      {v.w.thenSubmit} {v.w.oneADay && <span className="dz-muted">· {v.w.oneADay}</span>}
+                    </h2>
+                  )
                 }
               />
             </section>

@@ -50,7 +50,11 @@ export const FIXTURE_CHALLENGE = (() => {
     { versionId: id(10, 2), fid: 6786, example: true, createdAt: '2026-11-12T11:00:00.000Z' },
     { versionId: id(10, 3), fid: 901, example: false, createdAt: '2026-11-12T10:00:00.000Z' },
   ].map((x, i) => ({ ...x, character: 'zei', post: { handle: `fixture${x.fid}`, url: `https://farcaster.xyz/fixture${x.fid}/0x${String(i + 1).repeat(8)}`, id: `0x${String(i + 1).repeat(40)}` } }));
-  return { sheets, remixes, styles, entries };
+  // A picture its maker hasn't submitted yet (owner, 2026-11-16: "Submit your post" stays below Share and Remix until
+  // then): made in the window from Zei's first sheet, its maker passed the check, no post and no entry row. Added with
+  // the entries (addEntries); it is in no entries list.
+  const candidate = { versionId: id(10, 4), fid: 902, character: 'zei', createdAt: '2026-11-12T09:00:00.000Z' };
+  return { sheets, remixes, styles, entries, candidate };
 })();
 
 export async function startChallengeDb(port: number): Promise<{ url: string; stop: () => Promise<void>; addEntries: () => Promise<void> }> {
@@ -132,6 +136,15 @@ export async function startChallengeDb(port: number): Promise<{ url: string; sto
       await db.query(`insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ($1,'farcaster',$2,$3,$4,$5,$6)`, [x.versionId, x.post.id, x.post.handle, x.createdAt, x.post.url, x.fid]);
       if (!x.example) await db.query(`insert into studio.challenge_marks (challenge, fid, character, version_id, marked_at) values ($1,$2,$3,$4,$5)`, [CHALLENGE.id, x.fid, x.character, x.versionId, x.createdAt]);
     }
+    const c = FIXTURE_CHALLENGE.candidate;
+    const recipe = id(11, 9), element = id(12, 9);
+    await db.query(`insert into studio.recipes (id, source, provider, model, model_version, prompt, params, seed, cost_usd, created_by_fid, created_at) values ($1,'in_app','fal.ai','flux2-klein-4b-edit','e','p',$2,1,0.009,$3,$4)`,
+      [recipe, JSON.stringify({ user_prompt: 'Not submitted yet', by_name: `fixture${c.fid}`, anchor: { chapter: 2, start: 2, end: 2 }, challenge: { character: c.character, from: base, fromKind: 'sheet', model: 'flux2-klein-4b-edit' } }), c.fid, c.createdAt]);
+    await db.query(`insert into studio.elements (id, work_id, element_type, created_by_fid, status, created_at) values ($1,'snowmoon','image',$2,'published',$3)`, [element, c.fid, c.createdAt]);
+    await db.query(`insert into studio.element_versions (id, element_id, version_no, body, asset_url, asset_sha256, recipe_id, created_at) values ($1,$2,1,$3,$4,$5,$6,$7)`, [c.versionId, element, JSON.stringify({ lettering: [] }), PICS[0], 'c'.repeat(64), recipe, c.createdAt]);
+    await db.query(`insert into studio.anchors (version_id, work_id, chapter, start_idx, end_idx) values ($1,'snowmoon',2,2,2)`, [c.versionId]);
+    await db.query(`insert into studio.links (from_version_id, to_version_id, kind) values ($1,$2,'uses')`, [c.versionId, base]);
+    await db.query(`insert into studio.challenge_eligibility (version_id, challenge, fid, decision, eligible) values ($1,$2,$3,'passed',true)`, [c.versionId, CHALLENGE.id, c.fid]);
   };
   // The site holds PGlite's one session through the socket; addEntries' direct writes wait until it is between
   // pipelines (scripts/lib/pglite-gate.ts), so they never land inside one of the site's queries.

@@ -119,17 +119,21 @@ export const LANDING_WORDING = {
     homeFrom: (block: string) => `the book, ${block}`,
   },
   /**
-   * A character's redesigned page (Claude Design's handoff, screen 2). Approved (owner, 2026-11-11): "Starting pictures",
-   * "Every remix of {name}", "newest first", "Remix {name}". DRAFT until the owner's OK: "Remix this", "Read more about
-   * {name}", "{n} bases" and the looks line.
+   * A character's redesigned page (Claude Design's handoff, screen 2). Approved (owner, 2026-11-11): "newest first".
+   * DRAFT until the owner's OK: "Remix this" and the looks line. The design pass (owner, 2026-11-16) replaced "Starting
+   * pictures", "Every remix of {name}", "Remix {name}" and "{n} bases" with "Make your own {name}" and its two choices.
    */
   character: {
-    startHead: 'Starting pictures',
-    basesCount: (n: number) => `${n} ${n === 1 ? 'base' : 'bases'}`,
-    everyHead: (name: string) => `Every remix of ${name}`,
     newestFirst: 'newest first',
-    remix: (name: string) => `Remix ${name}`,
     remixThis: 'Remix this',
+    // The design pass (owner, 2026-11-16, his words via the coordinator). DRAFT until the owner approves the page: "Make
+    // your own {name}", its line, the two choices' heads and lines.
+    makeHead: (name: string) => `Make your own ${name}`,
+    makeLine: 'Start from a picture, describe what to change, then publish and post it.',
+    fromBaseHead: 'Start from a base',
+    fromBaseLine: (name: string) => `${name}’s starting looks.`,
+    fromRemixHead: 'Start from someone’s remix',
+    fromRemixLine: 'Build on what others made. They’re credited.',
     // "Learn more about {name}" (owner, 2026-11-12): one expander, replacing "Read where {name} first appears" and "Read
     // more". The heads are the owner's; the ⓘ's words and the "Draft wording" mark are DRAFT (coding agent).
     learnMore: (name: string) => `Learn more about ${name}`,

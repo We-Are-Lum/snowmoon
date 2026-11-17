@@ -62,19 +62,23 @@ export interface CharacterView {
    * The redesigned page (Claude Design's handoff, screen 2; owner-approved 2026-11-11). Every word is written here.
    * - `learn`: "Learn more about {name}" (owner, 2026-11-12): one expander (src/lib/challenge/learn-more-view.ts), in
    *   place of "Read where {name} first appears" and "Read more"; the whole book only inside its fold (P9g).
-   * - `remix`: "Remix {name}", to the remix screen of one of its bases, drawn afresh in the browser (P5g).
+   * - The design pass (owner, 2026-11-16): under the learn-more button, "Make your own {name}" and its line, then two
+   *   choices, each with its head and line: "Start from a base" (the bases, each with "Remix this") and "Start from
+   *   someone's remix" (the owner's first remixes, then every remix, newest first, each with "Remix this"). No "Remix
+   *   {name}" button and no count of bases.
    * - `picked`: the owner's first remixes of the character (CHALLENGE.firstRemixes), under "First remixes by @naaate".
    * - the grid: the newest FEED_PAGE remixes; "Older remixes" opens the rest in the feed (/challenge/remixes), a page at
    *   a time. No count of remixes (P5i).
    */
   page: {
     learn: LearnMoreView;
-    remix: string;
     remixThis: string;
-    remixShort: string;
-    startHead: string;
-    basesCount: string;
-    everyHead: string;
+    makeHead: string;
+    makeLine: string;
+    fromBaseHead: string;
+    fromBaseLine: string;
+    fromRemixHead: string;
+    fromRemixLine: string;
     everyShort: string;
     newestFirst: string;
     pickedHead: string;
@@ -185,12 +189,13 @@ export async function characterView(sql: Sql | null, slug: string): Promise<Char
     notAffiliated: W.notAffiliated,
     page: {
       learn: learnMoreView(slug, c.name),
-      remix: P.remix(c.name),
       remixThis: P.remixThis,
-      remixShort: L.remix,
-      startHead: P.startHead,
-      basesCount: P.basesCount(bases.length),
-      everyHead: P.everyHead(c.name),
+      makeHead: P.makeHead(c.name),
+      makeLine: P.makeLine,
+      fromBaseHead: P.fromBaseHead,
+      fromBaseLine: P.fromBaseLine(c.name),
+      fromRemixHead: P.fromRemixHead,
+      fromRemixLine: P.fromRemixLine,
       everyShort: L.feedTitle,
       newestFirst: P.newestFirst,
       pickedHead: L.firstRemixesHead,
