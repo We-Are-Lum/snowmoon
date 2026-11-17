@@ -77,8 +77,10 @@ export class AskError extends Error {
   }
 }
 
-/** Room for the model's reasoning and a summary of up to about 250 words. */
+/** Room for the model's reasoning and a summary of up to about 180 words. */
 const ANSWER_TOKENS = 2500;
+/** The whole book: 32 notes to read and about 250 words (an empty answer at 2500, 2026-11-17). */
+const BOOK_ANSWER_TOKENS = 5000;
 const GUARD_TOKENS = 1500;
 const SEARCH_TOKENS = 600;
 /** The support check reads long summary answers and their notes: room to reason before its verdict (an empty verdict fails closed). */
@@ -125,7 +127,7 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   const question = words.corrected + routed.framing;
 
   // Worst case: search words, two answers (the retry), four guard calls and two support checks (each may be retried once).
-  const slot = await reserve(sql, fid, worstCaseUsd(2 * ANSWER_TOKENS + SEARCH_TOKENS, 4 * GUARD_TOKENS + 2 * SUPPORT_TOKENS, 32000));
+  const slot = await reserve(sql, fid, worstCaseUsd(2 * BOOK_ANSWER_TOKENS + SEARCH_TOKENS, 4 * GUARD_TOKENS + 2 * SUPPORT_TOKENS, 32000));
   if (!slot.ok) return { state: slot.reason };
 
   let passages: Passage[];
@@ -149,13 +151,14 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   const allowed = new Set([...passages.map((p) => p.id), ...routed.notes.flatMap((n) => n.sources)]);
 
   // Answer, then the guard; on a flag, one retry with a reminder. The flagged answer is never shown or sent back.
-  let clean = await answerOnce(deps, messages, allowed);
+  const answerTokens = routed.shape === 'book' ? BOOK_ANSWER_TOKENS : ANSWER_TOKENS;
+  let clean = await answerOnce(deps, messages, allowed, answerTokens);
   let verdict = await guard(deps, question, clean.shown);
   let regenerated = false;
   if (verdict.verdict === 'flagged') {
     regenerated = true;
     const reminder = deps.reminder.replace('{{REASON}}', verdict.reason || 'it read as writing for them');
-    clean = await answerOnce(deps, [...messages, { role: 'user', content: reminder }], allowed);
+    clean = await answerOnce(deps, [...messages, { role: 'user', content: reminder }], allowed, answerTokens);
     verdict = await guard(deps, question, clean.shown);
   }
   if (verdict.verdict === 'flagged') return { state: 'declined', left: slot.left };
@@ -195,8 +198,8 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
 }
 
 /** One answer from the model, cleaned: citations checked, the model's own quotations removed. Recorded with no text. */
-async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>) {
-  const answer = await deps.complete(CHAT.model, messages, { maxTokens: ANSWER_TOKENS, temperature: 0.4 });
+async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>, maxTokens = ANSWER_TOKENS) {
+  const answer = await deps.complete(CHAT.model, messages, { maxTokens, temperature: 0.4 });
   await record(deps.sql, {
     kind: 'answer', model: answer.model, provider: answer.provider,
     promptTokens: answer.promptTokens, completionTokens: answer.completionTokens, costUsd: answer.costUsd,
