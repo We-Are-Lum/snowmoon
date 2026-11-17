@@ -219,9 +219,6 @@ html:has(.mp-play.is-desk.is-fs) :is(.rail, .panel, .panel-reopen) { display: no
 .mp-kit-note { font-size: 16px; line-height: 1.45; color: var(--body); }
 .mp-kit-quote { margin: 0; padding-left: 14px; border-left: 2px solid var(--rule); font-size: 18px; line-height: 1.5; display: flex; flex-direction: column; gap: 8px; }
 .mp-kit-figure { font-size: 16px; color: var(--body); font-style: italic; }
-.mp-kit-spoilers { margin-top: 24px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-.mp-kit-spoilers > summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--link); }
-.mp-kit-spoilers > summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .mp-kit .mp-rules-note .ml-tag.info-label { min-height: 44px; }
 
 /* The one-time note about Play's rules draft 2 on the ladder. */

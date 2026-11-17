@@ -26,17 +26,6 @@
   color: var(--muted);
 }
 
-.spoiler-gate > summary {
-  display: flex;
-  align-items: center;
-  min-height: var(--tap);
-  cursor: pointer;
-  font-family: var(--label);
-  font-size: var(--text-label);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
 .seed-video { display: block; width: 100%; height: auto; background: var(--quote-bg); }
 
 /* Rendered markdown from adaptations/. */

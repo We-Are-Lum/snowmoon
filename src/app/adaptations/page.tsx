@@ -39,7 +39,7 @@ export default function Adaptations() {
             <Link href={`/adaptations/${s.slug}`}>
               <span className="seed-title">{s.title}</span>
               <span className="seed-line">{s.line}</span>
-              <span className="seed-meta">Spoilers through chapter {s.spoilers_through}</span>
+              <span className="seed-meta">Up to chapter {s.spoilers_through}</span>
             </Link>
           </li>
         ))}
@@ -47,7 +47,7 @@ export default function Adaptations() {
 
       <h2>Open threads</h2>
       <p>
-        <Link href="/adaptations/open-threads">Read the open threads</Link> (full spoilers).{' '}
+        <Link href="/adaptations/open-threads">Read the open threads</Link>.{' '}
         <InfoLabel word="About" kind="about" declaration="About the open threads" title="Open threads" body={['Eleven questions the book raises and never answers, each with the passages around it, as prompts for new adaptations.']} />
       </p>
     </div>

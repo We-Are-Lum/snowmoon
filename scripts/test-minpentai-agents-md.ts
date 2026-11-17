@@ -7,7 +7,7 @@
  * Checks:
  * - passages.md is up to date with the book (scripts/build-minpentai-passages.ts --check), holds 152
  *   passages, and every quoted line in it is word for word in its block of content/snowmoon/text;
- *   the spoiler heading comes before chapter 15 and nothing from chapter 15 on comes before it.
+ *   its chapters run straight through, with no spoiler heading (owner, 2026-11-17: principle 9 retired).
  * - agents.md: every repository path it names exists; every `npm run` script it names is in
  *   package.json; every block id it cites exists and is in passages.md; every "quote" (cN-bM) is
  *   word for word in that block; the ATTRIBUTION.md quote is word for word; the license is what
@@ -51,9 +51,7 @@ for (const [, id, , body] of entries) {
   const paras = blockParagraphs(b);
   ok(lines.length === paras.length && lines.every((l, i) => l === paras[i]), `passages.md: ${id} is not word for word`);
 }
-const spoiler = passagesMd.indexOf('## Spoilers: chapters 15');
-ok(spoiler > 0 && passagesMd.indexOf('### Chapter 15') > spoiler, 'passages.md: no spoiler heading before chapter 15');
-ok(![...passagesMd.slice(0, Math.max(0, spoiler)).matchAll(/^\*\*c(\d+)-b/gm)].some((m) => +m[1] >= 15), 'passages.md: a passage from chapter 15 on comes before the spoiler heading');
+ok(!/spoiler/i.test(passagesMd) && passagesMd.indexOf('### Chapter 14') < passagesMd.indexOf('### Chapter 15'), 'passages.md: a spoiler heading or note, or chapters out of order');
 const listed = new Set(entries.map((e) => e[1]));
 // Every block the rules documents cite is in chapters 2–14 (passages.md says so).
 for (const f of ['docs/minpentai-rules.md', 'src/app/minpentai/rules/rules-html.ts']) {

@@ -12,7 +12,6 @@
  * (read-only) when STUDIO_DATABASE_URL is set. Page checks fetch the deployed
  * site; the third-party request check drives the local Chrome.
  */
-import { LATER_LABEL, LEARN_MORE, type LearnMoreText } from '../src/lib/challenge/learn-more';
 import { p1cProblems } from './lib/p1c';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -41,10 +40,9 @@ import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, P5I_FILES, p5gProblems, p5i
 import { P5B_PLANTS, p5bProblems } from './lib/p5b';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
-import { p2mProblems, p6acProblems, p9gProblems } from './lib/challenge-moments';
+import { p2mProblems, p6acProblems, p8iProblems } from './lib/challenge-moments';
 import { CARDS } from '../src/lib/challenge/cards';
 import { MOMENTS } from '../src/lib/challenge/moments';
-import { spoilerExceptionOn } from '../src/lib/challenge/spoilers';
 import { DEFAULT_SHEET_MODEL, SHEET_MODELS, sheetModelProblems, sheetModelsOffered } from '../src/lib/images/sheet-models';
 import { modelChoicesFor } from '../src/lib/images/model-choice-view';
 import { consentClosedProblems, p6tProblems } from './lib/p6t';
@@ -1397,36 +1395,25 @@ add({
     x.c.cardsApproved = false;
   },
 });
-// P9g (branch challenge-moments, owner 2026-11-05, answer 1, approved): principle 9's recorded exception for the remix
-// challenge. /challenge and its remix screens may show the six cards and the curated moments from the whole book; the
-// first layer is written without major turns (its facts from chapters 1-14), the deeper layers say "May spoil later
-// chapters.", every moment chip shows its chapter, every quote is word for word, nothing else is shown, nothing outside
-// the challenge's pages uses these words, and it ends when entries close.
+// P8i (owner, 2026-11-17): principle 9 is retired, and with it P9g's spoiler rules (the first layer from chapters 1-14,
+// the "Later in the book (spoilers)" fold, no spoiler mark, chapters on moment chips, the reader's chapter gating, the
+// cards nowhere else, the exception's end). What wasn't about spoilers stays: the challenge's cards and moments quote
+// the book word for word at blocks that exist, one card per challenge character.
 add({
-  id: 'P9g',
-  principle: 9,
-  name: 'the remix challenge\'s exception stays narrow: only its six cards and curated moments, quoted word for word; the first layer from chapters 1-14 (a character page\'s "Learn more": the whole book only inside its fold labelled "Later in the book (spoilers)", closed by default, owner 2026-11-12); nothing marked as a spoiler on its pages (owner, 2026-11-09); chapters on every moment chip; the reader\'s chapter gating unchanged; nowhere else; ended when entries close',
+  id: 'P8i',
+  principle: 8,
+  name: "the remix challenge's cards and moments quote the book word for word, each at a block that exists; one card per challenge character, its \"Where they appear\" in book order (the part of the retired P9g that wasn't about spoilers)",
   load: async () => ({
-    files: walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
     cards: clone(CARDS),
     moments: clone(MOMENTS),
     characters: [...CHALLENGE.characters],
     blocks: Object.fromEntries(loadBlocks(ROOT)),
-    dates: { opens: CHALLENGE.dates.opens, closes: CHALLENGE.dates.closes },
-    learn: { texts: clone(LEARN_MORE) as Record<string, LearnMoreText>, label: LATER_LABEL as string },
   }),
-  run: (c) => p9gProblems({ ...c, blocks: new Map(Object.entries(c.blocks)), on: spoilerExceptionOn }),
+  run: (c) => p8iProblems({ ...c, blocks: new Map(Object.entries(c.blocks)) }),
   plant: (c) => {
-    // One word changed in a moment's quote, a first-layer fact from chapter 24, and the cards' words shown on a sheet page.
+    // One word changed in a moment's quote, and a card's fact quoting words its block doesn't hold.
     c.moments[2].quotes[0].text = c.moments[2].quotes[0].text.replace('shine', 'win');
-    c.cards[2].facts[0] = { text: 'Second place', block: 'c24-b48', quote: 'I got second place in the Pafogai Du Minpentai games' };
-    c.files.push({ file: 'src/app/references/designs/[id]/planted.tsx', text: "import { CARDS } from '~/lib/challenge/cards';" });
-    // "Read more" reading the second layer's facts (owner, 2026-11-12: only the first layer's).
-    c.files = c.files.map((f) => (f.file === 'src/lib/challenge/cards.ts' ? { ...f, text: f.text.replace('(cardOf(slug)?.facts ?? [])', '(cardOf(slug)?.more.facts ?? [])') } : f));
-    // Learn more (owner, 2026-11-12): a later-chapter citation in Zei's "At the start." (the owner's text).
-    c.learn.texts.zei.start = [...c.learn.texts.zei.start, { cite: 'c29-b110' }];
-    // A spoiler mark back on a challenge page (owner, 2026-11-09: none there).
-    c.files.push({ file: 'src/components/challenge-planted.tsx', text: "export const L = 'May spoil later chapters.';" });
+    c.cards[2].facts[0] = { ...c.cards[2].facts[0], quote: 'Words that are nowhere in the book' };
   },
 });
 // Character lists (owner, 2026-11-04: "list characters by how often they're named in the book, most first, everywhere
@@ -2790,7 +2777,7 @@ add({
 add({
   id: 'P8g',
   principle: 8,
-  name: 'the Minpentai kit\'s rules table (/minpentai/build, rules.json) cites real blocks with their words verbatim, marks every other rule invented with where it is in the code, lists all 152 passages, shows chapters 2–14 and keeps chapters 15 on in a closed Spoilers section',
+  name: 'the Minpentai kit\'s rules table (/minpentai/build, rules.json) cites real blocks with their words verbatim, marks every other rule invented with where it is in the code, lists all 152 passages and shows every one (owner, 2026-11-17: principle 9 retired; until then chapters 15 on were in a closed Spoilers section)',
   load: async () => {
     const { KIT_RULES } = await import('../src/lib/minpentai/kit-rules');
     const { findPassages } = await import('../src/lib/minpentai/kit');
@@ -2810,22 +2797,21 @@ add({
       problems.push('public/minpentai/rules.json is stale: run npx tsx scripts/build-minpentai-kit.ts');
     if (JSON.stringify(published.passages.map((p: { block: string; shownOnPage: boolean }) => [p.block, p.shownOnPage])) !== JSON.stringify(passages.map((p: { block: string; shown: boolean }) => [p.block, p.shown])))
       problems.push('public/minpentai/rules.json lists other passages than the book gives');
-    // Shown: exactly every passage of chapters 2–14; Spoilers: exactly chapters 15 on (owner, 2026-10-20).
-    for (const p of passages as { block: string; chapter: number; shown: boolean }[]) if (p.shown !== (p.chapter >= 2 && p.chapter <= 14)) problems.push(`${p.block}: ${p.shown ? 'shown' : 'under Spoilers'}, but chapters 2–14 are shown and 15 on are under Spoilers`);
-    // The page: Book, Invented and Draft labels, the not-affiliated line, and the Spoilers section closed by default.
+    // Shown: every passage (owner, 2026-11-17: principle 9 retired; from 2026-10-20 chapters 15 on were under Spoilers).
+    for (const p of passages as { block: string; chapter: number; shown: boolean }[]) if (!p.shown) problems.push(`${p.block}: not shown, but every passage is shown`);
+    // The page: Book, Invented and Draft labels, the not-affiliated line, every passage in one list, and no fold.
     if (!/<MinpentaiTags[\s\S]*?tags=\{\['book', 'rules', 'draft'\]\}/.test(page)) problems.push('/minpentai/build: not labelled Book, Invented and Draft');
     if (!/NOT AFFILIATED WITH THE AUTHOR/.test(page)) problems.push('/minpentai/build: no "not affiliated with the author" line');
-    const spoilers = page.match(/<details className="mp-kit-spoilers"[^>]*>/)?.[0];
-    if (!spoilers) problems.push('/minpentai/build: no Spoilers section');
-    else if (/\bopen\b/.test(spoilers)) problems.push('/minpentai/build: the Spoilers section is open by default');
+    if (/mp-kit-spoilers|<details/.test(page)) problems.push('/minpentai/build: a passage is folded away (no fold since 2026-11-17)');
+    if (!/<Chapters list=\{kit\.passages\} \/>/.test(page)) problems.push('/minpentai/build: the passages aren\'t shown as one list of all of them');
     return problems;
   },
   plant: (c) => {
     const r = c.rules.find((x: { cites?: { quote?: string }[] }) => x.cites?.some((q) => q.quote));
     const q = r.cites.find((x: { quote?: string }) => x.quote);
     q.quote = q.quote.replace(/\b(\w+)\b/, '$1s');
-    c.passages.find((p: { chapter: number }) => p.chapter >= 15)!.shown = true;
-    c.page = c.page.replace('<details className="mp-kit-spoilers">', '<details className="mp-kit-spoilers" open>');
+    c.passages.find((p: { chapter: number }) => p.chapter >= 15)!.shown = false;
+    c.page = c.page.replace('<Chapters list={kit.passages} />', '<Chapters list={shown} /><details className="mp-kit-spoilers"><Chapters list={rest} /></details>');
   },
 });
 

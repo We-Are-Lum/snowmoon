@@ -222,7 +222,7 @@ export async function ScenePage({ adaptation, version, handle, fixed }: { adapta
             </span>
             {r.after_chapter && <span className="label scene-muted">A scene after chapter {r.after_chapter}</span>}
             <h1 className="scene-title">{adaptation.title}</h1>
-            {r.spoilers_through && <span className="label scene-muted">Spoilers through chapter {r.spoilers_through}</span>}
+            {r.spoilers_through && <span className="label scene-muted">Up to chapter {r.spoilers_through}</span>}
           </div>
 
           <dl className="scene-facts">

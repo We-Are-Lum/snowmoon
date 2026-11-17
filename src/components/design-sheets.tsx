@@ -1,8 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { openedChapters } from '~/lib/chat/device';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 import { AiLabel } from './recipe-sheet';
@@ -11,7 +9,7 @@ import { InfoLabel } from './info-label';
 /**
  * Character and place sheets as text (owner, 2026-10-10): this edition's shorthand, labelled
  * "Invented ⓘ" (drafted by the coding agent), and the images of the character or place, each
- * AI-labelled. The book's words about them stay limited to the chapters opened on this device.
+ * AI-labelled. The book's words about them come from the whole book (owner, 2026-11-17: principle 9 retired).
  */
 const SH = IMAGE_WORDING.designs.sheets;
 
@@ -92,12 +90,9 @@ export function SheetImages({ images }: { images: SheetImage[] }) {
   );
 }
 
-/** Where a place appears: its scenes from the chapters opened on this device; later ones only counted. */
+/** Where a place appears: all its scenes, from the whole book (until 2026-11-17 only chapters opened on this device). */
 export function Appears({ rows }: { rows: { key: string; chapter: number; href: string; text: string }[] }) {
-  const [furthest, setFurthest] = useState<number | null>(null);
-  useEffect(() => setFurthest(Math.max(1, ...openedChapters())), []);
-  const shown = furthest === null ? [] : rows.filter((r) => r.chapter <= furthest);
-  const later = furthest === null ? 0 : rows.length - shown.length;
+  const shown = rows;
   return (
     <section className="dz-appears" aria-label={SH.appears}>
       <p className="dz-label">{SH.appears}</p>
@@ -112,7 +107,6 @@ export function Appears({ rows }: { rows: { key: string; chapter: number; href: 
           ))}
         </ul>
       )}
-      {later > 0 && <p className="dz-note">{SH.appearsLater(later)}</p>}
       <p className="dz-note">{SH.appearsNote}</p>
     </section>
   );

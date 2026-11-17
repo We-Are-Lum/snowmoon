@@ -1,5 +1,5 @@
 /* The glossary (src/components/glossary.tsx): plain pages on the app's tokens. Labels DM Mono 12,
-   reading text Crimson; every control at least 44px tall; the spoiler cover as the Pictures feed's. */
+   reading text Crimson; every control at least 44px tall. */
 
 .glossary .gl-back {
   display: inline-flex; align-items: center; min-height: 44px; margin: 0 0 4px;
@@ -20,12 +20,6 @@
 }
 .gl-index a:hover span:first-child, .gl-index a:focus-visible span:first-child { text-decoration: underline; }
 
-/* Past where the reader has read: covered, with a count and "Show anyway". */
-.gl-cover {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin: 16px 0; padding: 14px 16px;
-  background: var(--cover); color: var(--cover-ink); border-radius: var(--radius); font-size: 16px; line-height: 1.4;
-}
-.gl-cover p { margin: 0; }
 
 /* The book's sentences. */
 .gl-quote { margin: 12px 0; padding: 10px 14px; border-left: 2px solid var(--rule); background: var(--quote-bg); }

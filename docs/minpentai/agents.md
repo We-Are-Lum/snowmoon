@@ -132,7 +132,7 @@ The computer players
 
 ## The book's passages
 
-All 152 are in `docs/minpentai/passages.md` (https://snowmoon.party/minpentai/passages.md), word for word, with their block ids, in chapter order: every block that names Minpentai, plus every block that `docs/minpentai-rules.md` or Learn's words cite. **Spoilers**: the file has a spoiler heading before chapter 15; everything after it is from chapters 15–31. `npx tsx scripts/build-minpentai-passages.ts` writes it from the book; `npm run test:minpentai-agents` fails if it is out of date.
+All 152 are in `docs/minpentai/passages.md` (https://snowmoon.party/minpentai/passages.md), word for word, with their block ids, in chapter order: every block that names Minpentai, plus every block that `docs/minpentai-rules.md` or Learn's words cite. `npx tsx scripts/build-minpentai-passages.ts` writes it from the book; `npm run test:minpentai-agents` fails if it is out of date.
 
 ## Writing a computer player
 

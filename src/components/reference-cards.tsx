@@ -1,27 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { openedChapters } from '~/lib/chat/device';
 import { blockHref } from '~/lib/glossary-view';
 import type { ReferenceCard } from '~/lib/references';
 import { SheetImageCaption } from './design-sheets';
 
 /**
- * The References glossary (owner, 2026-10-29): one card per glossary term with images. Spoilers as the glossary does
- * them: a term first met after the furthest chapter opened on this device is covered until the reader asks.
+ * The References glossary (owner, 2026-10-29): one card per glossary term with images, every term shown (spoilers no
+ * longer matter anywhere on the site: owner, 2026-11-17, principle 9 retired; until then later terms were covered).
  * Model-drafted wording (coding agent, 2026-10-29), for the owner.
  */
 export function ReferenceCards({ cards }: { cards: ReferenceCard[] }) {
-  const [furthest, setFurthest] = useState(1);
-  const [all, setAll] = useState(false);
-  useEffect(() => setFurthest(Math.max(1, ...openedChapters())), []);
-  const shown = cards.filter((c) => all || c.chapter <= furthest);
-  const hidden = cards.length - shown.length;
   return (
     <>
       <ul className="ref-cards">
-        {shown.map((c) => (
+        {cards.map((c) => (
           <li key={c.slug} className="ref-card" data-term={c.slug}>
             <h2 className="ref-term">
               <Link href={`/glossary/${c.slug}`}>{c.term}</Link>
@@ -51,16 +44,6 @@ export function ReferenceCards({ cards }: { cards: ReferenceCard[] }) {
           </li>
         ))}
       </ul>
-      {hidden > 0 && (
-        <div className="gl-cover">
-          <p>
-            {hidden} more {hidden === 1 ? 'term first appears' : 'terms first appear'} after Chapter {furthest}, past where you&apos;ve read.
-          </p>
-          <button type="button" className="pictures-show" onClick={() => setAll(true)}>
-            Show them anyway
-          </button>
-        </div>
-      )}
     </>
   );
 }
