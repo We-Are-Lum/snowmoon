@@ -511,7 +511,7 @@ check('config: a current default look per challenge character, each a design id 
     const s1 = await E.standing(S);
     check('admin example: listed as an example, never an entry; counts and the equal share unchanged', s1.examples.map((v) => v.versionId).join() === adminPic.versionId && s1.entries.map((v) => v.versionId).join() === s0.entries.map((v) => v.versionId).join() && [...s1.entrants].join() === [...s0.entrants].join() && !R.equalSharePeople(s1.entries).includes(6786));
     const after = await PVX.pictureView(S, adminPic.versionId);
-    check('admin example: its page marks it "Admin example" with the ⓘ words, offers no Submit, and lists its post under "Posts"', after?.example?.label === 'Admin example' && after.example.info === 'Not an entry: admins’ pictures can’t win anything.' && after.submit === null && after.badge === null && after.posts.length === 1 && after.posts[0].handle === 'p6786' && after.w.postsHead === 'Posts');
+    check('admin example: its page marks it "Admin example" with the ⓘ words, offers no Submit, and lists its post under "Posts"', after?.example?.label === 'Admin example' && after.example.info === 'Not an entry in the challenge.' && after.submit === null && after.badge === null && after.posts.length === 1 && after.posts[0].handle === 'p6786' && after.w.postsHead === 'Posts');
     // A newer entry by someone else: the example sits between the two entries by time, and the counts don't change.
     await sql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '502', 'neynar-score>=0.7', true)`;
     const newer = await picture({ fid: 502, character: 'bai', moment: 'c4-b129-symbol', from: base.versionId, uses: base.versionId });

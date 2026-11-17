@@ -2084,6 +2084,23 @@ async function checkChallengeLanding() {
         const tileBtn = await look('.ch-char-remixes > .chc-grid a[data-slot="remix-this"]');
         if (!baseBtn || !tileBtn || baseBtn.style !== tileBtn.style || !baseBtn.outlined || baseBtn.h < 44 || tileBtn.h < 44) fail(`/challenge/zei ${tag}: "Remix this" isn't the same outlined button (≥44px) on a base and a remix tile (${JSON.stringify({ baseBtn, tileBtn })})`);
       }
+      // The pictures' size (picture-size, 2026-11-16: Garance saw them shrink to ~230px bases and four small remixes a
+      // row). Desktop: "about 1280px usable at 1440" (the handoff), a 400px column, then the bases two across (each about
+      // 404px at 1440) and the remixes three (about 264px); at 1024 the column gives up its share (bases about 261px,
+      // remixes 169px; they were 125 and 90). Phone: a 300px slide (80% at most); the remixes two across.
+      {
+        const widths = async (sel: string) => page.locator(sel).evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().width)));
+        const B = '.ch-char-bases .chc-pic', R = '.ch-char-remixes .chc-pic';
+        const bw = await widths(B), rw = await widths(R);
+        if (!bw.length || bw.some((x) => x < (wide ? 380 : 270))) fail(`/challenge/zei ${tag}: the bases are ${bw.join(', ')}px wide, under ${wide ? 380 : 270}px`);
+        if (!rw.length || rw.some((x) => x < (wide ? 250 : 150))) fail(`/challenge/zei ${tag}: the remixes are ${rw.join(', ')}px wide, under ${wide ? 250 : 150}px`);
+        if (wide) {
+          await page.setViewportSize({ width: 1024, height: 768 });
+          const nb = await widths(B), nr = await widths(R);
+          if (nb.some((x) => x < 240) || nr.some((x) => x < 150)) fail(`/challenge/zei @1024: the bases are ${nb.join(', ')}px and the remixes ${nr.join(', ')}px wide, under 240 and 150`);
+          await page.setViewportSize({ width: w, height: h });
+        }
+      }
       // Every remix of Zei: newest first, whole at 16:9; the picture opens its page, "Remix this" its remix screen.
       const zeiRemixes = FX.remixes.filter((r) => r.character === 'zei').map((r) => r.versionId);
       const shown = await page.locator('.ch-char-remixes > .chc-grid a[data-slot="remix-page"]').evaluateAll((els) => els.map((e) => `${e.getAttribute('data-version')}|${e.getAttribute('href')}`));
@@ -2128,6 +2145,20 @@ async function checkChallengeLanding() {
           if (!f || !sd || sd.x < f.x + f.width || Math.abs(sd.width - 440) > 2) fail(`/challenge/p ${tag}: not two columns (the picture, then a 440px column)`);
           const over = await page.locator('.chp-side').evaluate((side) => { const r = side.getBoundingClientRect().right; return [...side.querySelectorAll('*')].filter((e) => e.getBoundingClientRect().right > r + 1).map((e) => e.className || e.tagName).slice(0, 3); });
           if (over.length) fail(`/challenge/p ${tag}: the column's contents run past its edge (${over.join(', ')})`);
+          // The picture at the column's full width (picture-size, 2026-11-16): at 1440 about 1272 - 48 - 440 = 784px.
+          const pw = await page.locator('.chp-img').evaluate((e) => Math.round(e.getBoundingClientRect().width));
+          if (w >= 1440 && pw < 760) fail(`/challenge/p ${tag}: the picture is ${pw}px wide, under 760px`);
+          await page.setViewportSize({ width: 1024, height: 768 });
+          const pn = await page.locator('.chp-img').evaluate((e) => Math.round(e.getBoundingClientRect().width));
+          const over1024 = await page.locator('.chp-side').evaluate((side) => { const r = side.getBoundingClientRect().right; return [...side.querySelectorAll('*')].filter((e) => e.getBoundingClientRect().right > r + 1).map((e) => e.className || e.tagName).slice(0, 3); });
+          if (pn < 480) fail(`/challenge/p @1024: the picture is ${pn}px wide, under 480px`);
+          if (over1024.length) fail(`/challenge/p @1024: the column's contents run past its edge (${over1024.join(', ')})`);
+          await page.setViewportSize({ width: w, height: h });
+        }
+        // On a phone the picture runs full-bleed (the handoff), the screen's whole width.
+        if (w < 1024) {
+          const pw = await page.locator('.chp-img').evaluate((e) => Math.round(e.getBoundingClientRect().width));
+          if (Math.abs(pw - w) > 1) fail(`/challenge/p ${tag}: the picture is ${pw}px wide, not the screen's ${w}px`);
         }
         await snap('picture', true);
       }
