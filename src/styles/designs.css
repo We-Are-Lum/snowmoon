@@ -745,3 +745,5 @@ a.chp-btn:hover, .chp-btn:hover { background: var(--soft); text-decoration: none
 .chp-share-list .sf-button:hover { background: var(--soft); }
 /* "Submit your post", for its maker until it is submitted: set apart under the buttons. */
 .chp-side .sf-submit { border-top: 1px solid var(--rule); padding-top: 14px; }
+/* Anyone but its maker: Submit renders nothing, so its empty section takes no room and draws no rule. */
+.chp-side .sf-submit:empty { display: none; }

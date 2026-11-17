@@ -1553,8 +1553,11 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
     const others = PW.othersText('Zei', 'The wall comes down', 'someone');
     check('F1 sharing someone else\'s picture never says "My remix"; it names the moment and the maker', !/my remix/i.test(others) && others === 'Zei in “The wall comes down”, a remix by someone for the Snowmoon Party remix challenge');
     // Owner, 2026-11-16: "Remix" for everyone, its maker included; anyone but its maker shares it with the others' words.
-    check('F1 anyone sees "Remix" (to its remix screen), not "Post it", and anyone but the maker shares with the others\' words', pic.includes('{v.w.remix}') && pic.includes('texts: mine ? v.w.postTexts : v.w.othersTexts') && !pic.includes('v.w.shareHead'));
-    proof('F1 a page that gives a visitor its maker\'s words is caught', !pic.replace('texts: mine ? v.w.postTexts : v.w.othersTexts', 'texts: v.w.postTexts').includes('texts: mine ? v.w.postTexts : v.w.othersTexts'));
+    const f1 = (src: string) => src.includes('{v.w.remix}') && src.includes('texts: mine ? v.w.postTexts : v.w.othersTexts') && !src.includes('v.w.shareHead');
+    check('F1 anyone sees "Remix" (to its remix screen), not "Post it", and anyone but the maker shares with the others\' words', f1(pic));
+    // The bad version: a visitor gets the maker's words ("My remix…"); the F1 check itself must fail on it.
+    const f1Bad = pic.replace('texts: mine ? v.w.postTexts : v.w.othersTexts', 'texts: v.w.postTexts');
+    proof('F1 a page that gives a visitor its maker\'s words is caught', f1Bad !== pic && !f1(f1Bad));
     check('F1 the maker\'s own text names the moment; with none, exactly the line of 2026-11-06', PW.postText('Zei', 'The wall comes down') === 'My remix of Zei in “The wall comes down”, for the Snowmoon Party remix challenge' && PW.postText('Zei', null) === 'My remix of Zei, for the Snowmoon Party remix challenge');
     // The @ rule (owner, 2026-11-07): "@maker" only in the maker's own network's compose; Copy link and the ready text never.
     const SM = await import('../src/lib/challenge/share-makers');

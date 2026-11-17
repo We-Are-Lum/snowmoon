@@ -719,8 +719,12 @@ check('config: a current default look per challenge character, each a design id 
     const JP = await import('../src/lib/challenge/just-published');
     const id = '00000010-0000-4000-8000-000000000004';
     check('just published: publishing goes to the picture\'s page with ?published=1', JP.justPublishedHref(id) === `/challenge/p/${id}?published=1`);
-    check('just published: the mark is read and removed, other parameters kept', JSON.stringify(JP.readJustPublished('?published=1')) === JSON.stringify({ just: true, rest: '' }) && JSON.stringify(JP.readJustPublished('?a=b&published=1')) === JSON.stringify({ just: true, rest: '?a=b' }) && JSON.stringify(JP.readJustPublished('')) === JSON.stringify({ just: false, rest: '' }) && JSON.stringify(JP.readJustPublished('?a=b')) === JSON.stringify({ just: false, rest: '?a=b' }));
-    proof('just published: a later visit (no mark) read as just published is caught', JP.readJustPublished('?a=b').just === false);
+    const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+    const jpOk = (read: typeof JP.readJustPublished) => same(read('?published=1'), { just: true, rest: '' }) && same(read('?a=b&published=1'), { just: true, rest: '?a=b' }) && same(read(''), { just: false, rest: '' }) && same(read('?a=b'), { just: false, rest: '?a=b' });
+    check('just published: the mark is read and removed, other parameters kept', jpOk(JP.readJustPublished));
+    // The bad versions: every visit read as just published (the list always open), or the mark kept in the address.
+    proof('just published: a reader that opens the list on every visit is caught', !jpOk((q) => ({ ...JP.readJustPublished(q), just: true })));
+    proof('just published: a reader that keeps the mark in the address is caught', !jpOk((q) => ({ just: JP.readJustPublished(q).just, rest: q })));
   }
   check('Submit: its head only until it is submitted, then Withdraw alone (owner, 2026-11-16)', /before=\{\(submitted\) =>[\s\S]*?!submitted && \(/.test(pic) && /typeof before === 'function' \? before\(done\) : before/.test(read('src/components/challenge-submit.tsx')));
   check('share and remix: Share and Remix come before Submit, and Submit before the picture\'s title', pic.indexOf('data-slot="picture-actions"') < pic.indexOf('<ChallengeSubmit') && pic.indexOf('data-slot="share-list"') < pic.indexOf('<ChallengeSubmit') && pic.indexOf('<ChallengeSubmit') < pic.indexOf('<h1 className="mk-title">'));

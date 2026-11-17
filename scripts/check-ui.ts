@@ -2362,6 +2362,7 @@ async function checkChallengeLanding() {
             await actionsShow('another person', cand.versionId);
             if (await open()) fail(`/challenge/p ${tag} (another person): the share list starts open`);
             if (await submitHead.count()) fail(`/challenge/p ${tag} (another person): sees "${PP.submitHead}"`);
+            if (await page.locator('.chp-side .sf-submit').evaluateAll((els) => els.some((e) => e.getBoundingClientRect().height > 0))) fail(`/challenge/p ${tag} (another person): an empty Submit section takes room (its rule shows)`);
             if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-picture-others-${w}x${h}-${scheme}.png`) });
             await shareBtn.click();
             if (!(await open())) fail(`/challenge/p ${tag} (another person): Share doesn't open the list`);
