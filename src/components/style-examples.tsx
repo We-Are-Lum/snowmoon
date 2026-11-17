@@ -14,7 +14,8 @@ import { AiTag } from './ai-tag';
  * Self-contained so any layout can mount it (redesign D included): it takes the styles, the words, the chosen id and
  * `onPick`; it knows nothing of the remix screen. A native modal <dialog> (role dialog, modal, focus kept inside; Escape
  * closes), with a visible Close button; focus returns to the link on close. On phones (under 768px, the site's
- * breakpoint) it is a bottom sheet, full width; wider, a panel on the right. Samples load lazily, only once it is open,
+ * breakpoint) it is a full-screen sheet pinned to the top (owner, 2026-11-17: the bottom sheet sat below the screen on
+ * iPhone); wider, a panel on the right. Samples load lazily, only once it is open,
  * and each carries the AI label (AiTag), its alt saying it is an AI-generated sample of that style. A sample is a tap
  * target (out of the tab order: the style's row is the keyboard's one stop per style).
  */

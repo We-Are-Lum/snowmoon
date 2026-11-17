@@ -134,6 +134,9 @@ export const LANDING_WORDING = {
     fromBaseLine: (name: string) => `${name}’s starting looks.`,
     fromRemixHead: 'Start from someone’s remix',
     fromRemixLine: 'Build on what others made. They’re credited.',
+    // A small link under "Make your own {name}" to the remix choice (owner, 2026-11-16: it matches the heading, which
+    // keeps "someone’s"). DRAFT wording until the owner approves it.
+    toRemix: 'or start from someone’s remix ↓',
     // "Learn more about {name}" (owner, 2026-11-12): one expander, replacing "Read where {name} first appears" and "Read
     // more". The heads are the owner's; the ⓘ's words and the "Draft wording" mark are DRAFT (coding agent).
     learnMore: (name: string) => `Learn more about ${name}`,
