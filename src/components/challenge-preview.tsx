@@ -20,7 +20,7 @@ import { BACKSTORY_MAX, BACKSTORY_WORDING } from '~/lib/challenge/backstory';
  * Layout, redesign D (Claude Design's handoff, screen 3 after Make it, 2026-11-12): from 1024px the left side holds the
  * picture it started from and the new one side by side (the new one outlined), and the right panel "Your words", the
  * recipe line (style · model, maker, open/closed), the backstory (open), "How it was made", and the MakeBar with Try
- * again and Publish (1:2). On a phone, the new picture large, the backstory closed, the MakeBar pinned to the bottom.
+ * again and Publish (1:2). On a phone, the new picture large, the backstory closed, the MakeBar kept in place at the bottom.
  *
  * Navigation: "‹ Back" is the browser's back, to the remix screen with the words kept; "✕" goes to the hub at the
  * character's card, asking once when the picture isn't published. Publish replaces this page with the published
