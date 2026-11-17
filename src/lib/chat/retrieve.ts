@@ -6,9 +6,14 @@ import { blockIdOk, chapterOf } from './sanitize';
 
 /**
  * Retrieval for the reading assistant: Postgres full-text search over
- * studio.text_blocks (migration 0006), never past the chapter limit. No
- * embedding model (docs/proposals/chat.md, section 2).
+ * studio.text_blocks (migration 0006), over the whole book (owner, 2026-11-17:
+ * "Spoilers no longer matter"). The image coach (src/lib/make/coach.ts) still
+ * passes its draft's own chapter range as `upTo`. No embedding model
+ * (docs/proposals/chat.md, section 2).
  */
+/** The book's last chapter. */
+export const LAST_CHAPTER = 32;
+
 export interface Passage {
   id: string;
   chapter: number;
@@ -19,7 +24,7 @@ export interface Passage {
 
 export interface Retrieved {
   passages: Passage[];
-  /** True when later chapters match the question better than the allowed ones. */
+  /** With `upTo` (the coach only): true when later chapters match the question better than the allowed ones. */
   heldBack: boolean;
 }
 
@@ -93,16 +98,18 @@ export interface RetrieveOptions {
    * hits are taken. Evaluation only for now (docs/proposals/chat-eval/); the app passes none.
    */
   dense?: string[];
+  /** The last chapter to search (the image coach's draft range). The assistant passes none: the whole book. */
+  upTo?: number;
 }
 
 export async function retrieve(
   sql: postgres.Sql,
   rawQuestion: string,
-  limit: number,
   attached: string[] = [],
   opts: RetrieveOptions = {},
 ): Promise<Retrieved> {
   const { hits: nHits = CHAT.passages, before = CHAT.neighbours.before, after = CHAT.neighbours.after, scoring = 'bm25', dense } = opts;
+  const limit = opts.upTo ?? LAST_CHAPTER;
   if (!Number.isInteger(limit) || limit < 1) throw new Error('bad chapter limit');
   const question = expandAliases(rawQuestion);
   const base = scoring === 'bm25' ? SCORED : RANKED;
@@ -121,10 +128,10 @@ export async function retrieve(
       .map(([id]) => ({ chapter: chapterOf(id)!, idx: Number(id.split('-b')[1]), rank: words[0]?.rank ?? 0 }));
   }
 
-  // The same search past the limit: only its best score is used, never its text.
-  const later = (await sql.unsafe(`${base} select max(score) as rank from scored where chapter > $3`, [question, WORK_ID, limit, SEARCH_KINDS])) as unknown as {
+  // The same search past the coach's range: only its best score is used, never its text. The whole book has no "past".
+  const later = limit >= LAST_CHAPTER ? [{ rank: null }] : ((await sql.unsafe(`${base} select max(score) as rank from scored where chapter > $3`, [question, WORK_ID, limit, SEARCH_KINDS])) as unknown as {
     rank: number | null;
-  }[];
+  }[]);
   const best = Number(hits[0]?.rank ?? 0);
   const laterBest = Number(later[0]?.rank ?? 0);
   const heldBack = laterBest > 0 && laterBest > best * 1.5;
@@ -146,8 +153,8 @@ export async function retrieve(
   return { passages: passages.filter((p) => SEARCH_KINDS.includes(p.kind) || p.kind === 'figure'), heldBack };
 }
 
-/** The stored blocks for these ids that exist and are within the limit, in book order. */
-export async function blocksById(sql: postgres.Sql, ids: string[], limit: number): Promise<Passage[]> {
+/** The stored blocks for these ids that exist, in book order; with `limit` (the image coach), only those up to it. */
+export async function blocksById(sql: postgres.Sql, ids: string[], limit: number = LAST_CHAPTER): Promise<Passage[]> {
   const pairs = ids.filter(blockIdOk).map((id) => ({ ch: chapterOf(id)!, idx: Number(id.split('-b')[1]) })).filter((p) => p.ch <= limit);
   if (!pairs.length) return [];
   const rows = (await sql.unsafe(

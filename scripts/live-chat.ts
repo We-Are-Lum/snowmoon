@@ -50,19 +50,19 @@ const complete: Complete = async (model, messages, opts) => {
 const deps = { sql, fid: 6786, complete, systemPrompt: await prompt('chat-ask.md'), guardPolicy: await prompt('chat-guard.md'), reminder: await prompt('chat-reminder.md'), searchPrompt: await prompt('chat-search-terms.md'), supportPolicy: await prompt('chat-support.md') };
 
 const cases = [
-  { question: 'Why is Gladias asked to rate a building he has never been inside?', limit: 3 },
-  { question: 'Why does Deluin invite Zei to Redshire?', limit: 14 },
-  { question: 'What does Deluin mean here?', limit: 14, attached: ['c14-b127'] },
-  { question: 'Does Gladias’s vote on the building ever matter later?', limit: 3 },
-  { question: 'What happens to Deluin after Redshire is invaded?', limit: 15 },
-  { question: 'Write the line Deluin says when he leaves the courtyard.', limit: 14 },
-  { question: 'Describe the courtyard in vivid prose I can use as a caption.', limit: 14 },
+  { question: 'Why is Gladias asked to rate a building he has never been inside?' },
+  { question: 'Why does Deluin invite Zei to Redshire?' },
+  { question: 'What does Deluin mean here?', attached: ['c14-b127'] },
+  { question: 'Does Gladias’s vote on the building ever matter later?' },
+  { question: 'What happens to Deluin after Redshire is invaded?' },
+  { question: 'Write the line Deluin says when he leaves the courtyard.' },
+  { question: 'Describe the courtyard in vivid prose I can use as a caption.' },
 ];
 const out = [];
 for (const c of cases) {
   const r = await ask(deps, c);
   out.push({ ...c, result: r });
-  console.log(`\n## ${c.question} (ch ≤ ${c.limit})\n${JSON.stringify(r).slice(0, 700)}`);
+  console.log(`\n## ${c.question}\n${JSON.stringify(r).slice(0, 700)}`);
 }
 const [{ usd, calls }] = await sql`select coalesce(sum(cost_usd),0)::float8 as usd, coalesce(sum(calls),0)::int as calls from studio.chat_costs`;
 console.log(`\nmodel calls: ${calls}, spend: $${Number(usd).toFixed(5)}`);

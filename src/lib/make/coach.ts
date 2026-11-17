@@ -111,7 +111,7 @@ export async function coach(deps: CoachDeps, raw: unknown): Promise<CoachResult>
   if (!slot.ok) return slot.reason === 'limit' ? { state: 'limit', perDay: slot.perDay ?? MAKE.coachPerDay } : { state: 'spend' };
 
   const limit = input.draft.upTo;
-  const { passages } = await retrieve(sql, `${input.message} ${input.draft.idea}`.slice(0, 600), limit).catch((e) => {
+  const { passages } = await retrieve(sql, `${input.message} ${input.draft.idea}`.slice(0, 600), [], { upTo: limit }).catch((e) => {
     throw new CoachError((e as Error).message);
   });
   const own = ownWords(input.draft, [input.message, ...input.history!.filter((h) => h.role === 'user').map((h) => h.text)]);
