@@ -69,7 +69,7 @@ const noAi = (field: string, prev: string) => {
     ...need(!/from '[^']*(chat\/model|images\/guard|images\/fal|images\/closed)'/.test(field + read('src/lib/challenge/backstory.ts')), 'the box or its words import a model'),
   ];
 };
-proven('B2 no AI writes, fills or suggests the backstory: typed text only, the hints never in the box', noAi(comp, preview), noAi(comp.replace('value={p.text}', 'value={p.text || B.hints(p.name)[0]}').replace('rows={4}', 'rows={4} placeholder={B.hints(p.name)[0]}'), preview));
+proven('B2 no AI writes, fills or suggests the backstory: typed text only, the hints never in the box', noAi(comp, preview), noAi(comp.replace('value={p.text}', 'value={p.text || B.hints(p.name)[0]}').replace('rows={5}', 'rows={5} placeholder={B.hints(p.name)[0]}'), preview));
 
 // B3
 const pub = read('src/app/api/images/publish/route.ts');

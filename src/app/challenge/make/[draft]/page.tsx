@@ -15,7 +15,7 @@ export default async function ChallengePreviewPage({ params }: Props) {
   if (!CHALLENGE.public) notFound();
   const { draft } = await params;
   return (
-    <div className="page prose ch-page">
+    <div className="page prose ch-page mk-wrap">
       <ChallengePreview id={draft} />
     </div>
   );

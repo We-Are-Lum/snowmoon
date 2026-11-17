@@ -28,6 +28,7 @@ export function PublishedTextField({
   rows = 3,
   maxLength,
   placeholder,
+  hideLabel = false,
 }: {
   id: string;
   label: string;
@@ -37,10 +38,14 @@ export function PublishedTextField({
   maxLength?: number;
   /** Shown in the empty box (the remix challenge: "Describe what to change"). */
   placeholder?: string;
+  /** The label read aloud but not drawn, where a heading above already says it (the remix challenge's backstory summary). */
+  hideLabel?: boolean;
 }) {
   return (
     <div className="published-field">
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id} className={hideLabel ? 'sr-only' : undefined}>
+        {label}
+      </label>
       <textarea id={id} rows={rows} value={value} maxLength={maxLength} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} aria-describedby={`${id}-line`} />
       <p id={`${id}-line`} className="publication-line">
         {PUBLICATION_LINE}

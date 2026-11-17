@@ -41,6 +41,15 @@ export const MAKE_WORDING = {
    */
   modelChip: `${IMAGES.editModel.name} · Black Forest Labs · open`,
   makeIt: 'Make it',
+  // Redesign D (Claude Design's handoff, screen 3; 2026-11-12): the line under "Make it", what one picture uses ({n}: 1,
+  // or 3 for a closed model) and, when the server knows it, how many of today's pictures are left. DRAFT wording.
+  uses: 'uses {n} of today’s pictures', // DRAFT (redesign D, 2026-11-12)
+  left: '{n} left', // DRAFT (redesign D, 2026-11-12)
+  /**
+   * In place of Make it when the day's pictures are used up (owner, 2026-11-16: say so plainly, no Make it); {reset}: 00:00
+   * UTC in the visitor's time. Not when the 0 is freeFor's (an account without the free count): that shows its own line.
+   */
+  noneLeft: 'You’ve used all of today’s pictures. More pictures at {reset}.', // DRAFT (owner, 2026-11-16; as the closed-model line)
   making: 'Making it…',
   signIn: 'Sign in to make it',
   remixing: (name: string) => `Remixing ${name}`,
@@ -52,6 +61,10 @@ export const MAKE_WORDING = {
   publishing: 'Publishing…',
   howMade: 'How it was made',
   startedFrom: 'Started from',
+  /** Redesign D: the new picture's caption, beside the one it started from (it lives only in this tab until published). */
+  yourRemix: 'Your remix · only in this tab until you publish', // DRAFT (redesign D, 2026-11-12)
+  /** Under the new picture, before it's published: an unpublished picture can't be remixed (owner, 2026-11-16). */
+  publishFirst: 'To remix your remix, publish it first.', // the owner's words (2026-11-16)
   /** Asked once when leaving a made picture unpublished (it is only in this tab until published). */
   leave: 'Leave without publishing? The picture isn’t saved anywhere until you publish it.',
   gone: 'This preview is no longer here (it lives only in the tab that made it). Make it again.',

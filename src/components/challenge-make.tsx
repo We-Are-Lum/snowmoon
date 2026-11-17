@@ -38,6 +38,13 @@ import { withReset } from '~/lib/challenge/model-wording';
  * back finds them as typed. Once a picture made here is published, coming back here goes to the hub instead.
  *
  * Every word comes from the server's answer (src/lib/challenge/make-wording.ts); none lives in this script.
+ *
+ * Layout, redesign D (Claude Design's handoff, screen 3, 2026-11-12): from 1024px a full-height page, the picture large
+ * on the left (with its AI label and "The picture of {name} you start from"), and a 520px panel on the right: "Remixing
+ * {name}", the box, the Style row (a fieldset of toggle chips, "See examples" under it), the Model row (one option per
+ * model: its name, then its maker and open/closed), its body scrolling over the MakeBar ("Make it" and what it uses of
+ * today's pictures; errors inline above it). Under 1024px one column; under 768px the MakeBar is pinned to the bottom of
+ * the screen and the Style chips scroll sideways. A closed pick's notice is a modal dialog (a bottom sheet on phones).
  */
 type Wording = { version: string; line: string; title: string; text: string[]; sha256: string };
 type StyleSel = string; // 'same' (the default), a listed style's id, 'random' or 'own'
@@ -61,7 +68,7 @@ export function ChallengeMake() {
   const [consent, setConsent] = useState<Wording | null>(null);
   // The Model row (branch challenge-models): the server's list for this visitor; a closed pick waits for its maker's
   // notice and, once per device, the 18+ box; a wallet account sees why closed models aren't offered.
-  const loaded = view && view !== 'missing' ? (view as MakeView & { modelsNote?: string | null; picturesLeft?: number | null; defaultModel?: string | null; capLine?: { text: string; resetAt: string } | null }) : null;
+  const loaded = view && view !== 'missing' ? (view as MakeView & { modelsNote?: string | null; picturesLeft?: number | null; defaultModel?: string | null; capLine?: { text: string; resetAt: string } | null; notFree?: string | null }) : null;
   const mc = useChallengeModel(loaded?.models, loaded?.modelsNote ?? null, loaded?.defaultModel ?? null);
   // The latest make, for the notice asked at "Make it": answered, it makes the picture with the words as they are then.
   const makeRef = useRef<() => void>(() => {});
@@ -164,139 +171,194 @@ export function ChallengeMake() {
     }
   };
 
+  // Under "Make it" (redesign D): what this picture uses of today's pictures, and how many are left when the server knows.
+  const left = loaded?.picturesLeft;
+  // Why no Make it: the account has no free count (freeFor's own line), else the day's pictures are used up.
+  const notFree = loaded?.notFree ?? null;
+  const noneLeft = left === 0 && !notFree;
+  const blocked = signedIn && (notFree !== null || noneLeft);
+  const uses = model ? `${w.uses.replace('{n}', String(model.countsAs))}${typeof left === 'number' ? ` · ${w.left.replace('{n}', String(left))}` : ''}` : null;
+
+  // Redesign D (Claude Design's handoff, screen 3): on a wide screen the picture fills the left and the form is a panel on
+  // the right, its body scrolling over the bar with "Make it"; on a phone one column, the bar pinned to the bottom.
   return (
-    <div className="mk-page" data-step="remix">
+    <div className="mk-page mk-d" data-step="remix">
       <nav className="mk-bar">
         <button type="button" className="mk-back" onClick={() => router.back()}>
           {w.back}
         </button>
+        <Link className="mk-back-name" href={`/challenge/${view.source.character}`}>
+          ← {view.source.name}
+        </Link>
+        <h1 className="mk-title">{w.remixing}</h1>
         <Link className="mk-close" href={hub} aria-label={w.close}>
           ✕
         </Link>
       </nav>
-      <figure className="mk-figure">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="mk-picture mk-source" src={view.source.url} alt={w.picture} />
-        <figcaption className="mk-cap">
-          <span className="dz-muted">{w.remixing}</span> <AiTag />
-        </figcaption>
-      </figure>
-      <PublishedTextField id="mk-words" label={w.wordsLabel} value={words} onChange={setWords} rows={3} maxLength={600} placeholder={w.wordsPlaceholder || undefined} />
-      {momentsOn && (
-        <section className="mk-moments" aria-labelledby="mk-moment">
-          <div className="mk-moment-head">
-            <h2 id="mk-moment" className="cc-head">
-              {w.moment}
-            </h2>
-            <button type="button" className="cc-chip mk-surprise" onClick={surprise}>
-              {w.surprise} <span aria-hidden="true">⟳</span>
-            </button>
+      <div className="mk-pictures">
+        <figure className="mk-figure">
+          <div className="mk-frame">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="mk-picture mk-source" src={view.source.url} alt={w.pictureAlt} />
+            <span className="mk-ai">
+              <AiTag />
+            </span>
           </div>
-          <ul className="mk-strip" role="list" aria-label={w.momentsBy}>
-            {MOMENTS.map((m) => (
-              <li key={m.id}>
-                <button type="button" className="cc-chip" aria-pressed={m.id === moment} data-moment={m.id} onClick={() => go(m.id)}>
-                  {m.title} <span className="cc-chip-ch">· {m.chip}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-      {!momentsOn && (
-        <section className="mk-styles" aria-labelledby="mk-style">
-          <h2 id="mk-style" className="cc-head">
-            {w.style}
-          </h2>
-          <ul className="mk-chips" role="list" aria-label={w.style}>
-            <li>
-              <button type="button" className="cc-chip" aria-pressed={styleSel === 'same'} data-style="same" onClick={() => setStyleSel('same')}>
-                {w.sameStyle}
+          <figcaption className="mk-cap">{w.picture}</figcaption>
+        </figure>
+      </div>
+      <div className="mk-panel">
+        <PublishedTextField id="mk-words" label={w.wordsLabel} value={words} onChange={setWords} rows={3} maxLength={600} placeholder={w.wordsPlaceholder || undefined} />
+        {momentsOn && (
+          <section className="mk-moments" aria-labelledby="mk-moment">
+            <div className="mk-moment-head">
+              <h2 id="mk-moment" className="cc-head">
+                {w.moment}
+              </h2>
+              <button type="button" className="cc-chip mk-surprise" onClick={surprise}>
+                {w.surprise} <span aria-hidden="true">⟳</span>
               </button>
-            </li>
-            {view.styles.map((s) => (
-              <li key={s.id}>
-                <button type="button" className="cc-chip" aria-pressed={styleSel === s.id} data-style={s.id} onClick={() => setStyleSel(s.id)}>
-                  {s.label}
-                </button>
-              </li>
-            ))}
-            {hasPublished && (
-              <li>
-                <button type="button" className="cc-chip" aria-pressed={styleSel === 'random'} data-style="random" onClick={() => setStyleSel('random')}>
-                  {w.random} <span aria-hidden="true">⟳</span>
-                </button>
-              </li>
-            )}
-            <li>
-              <button type="button" className="cc-chip" aria-pressed={styleSel === 'own'} data-style="own" onClick={() => setStyleSel('own')}>
-                {w.ownStyle}
-              </button>
-            </li>
-          </ul>
-          {/* "See examples" (owner, 2026-11-12): each published style's name, words and samples; tapping one picks it. */}
-          <StyleExamples styles={view.examples} w={w} selected={styleSel} onPick={setStyleSel} />
-          {styleSel === 'own' && <PublishedTextField id="mk-own-style" label={w.ownStyleLabel} value={ownStyle} onChange={setOwnStyle} rows={2} maxLength={view.ownStyleMax} />}
-        </section>
-      )}
-      <section className="mk-model" aria-labelledby="mk-model-head">
-        <h2 id="mk-model-head" className="cc-head">
-          {w.model}
-        </h2>
-        <ul className="mk-chips" role="list" aria-label={w.model} data-slot="model-choice">
-          {view.models.map((m) => (
-            <li key={m.id}>
-              <button type="button" className="cc-chip mk-model-chip" aria-pressed={model?.id === m.id} data-model={m.id} onClick={() => mc.pick(m)}>
-                {m.chip}
-              </button>
-            </li>
-          ))}
-        </ul>
-        {/* A closed pick: its maker's notice (and the 18+ box the first time on this device), then its line. */}
-        {mc.notice}
-        {model && !model.open && !mc.notice && <p className="dz-muted mk-model-meta" data-slot="model-meta">{mc.meta(model)}</p>}
-        {!mc.notice && mc.tooFew(loaded?.picturesLeft) && <p className="dz-muted mk-model-few" data-slot="model-too-few">{mc.tooFew(loaded?.picturesLeft)}</p>}
-        {mc.note && <p className="dz-muted mk-model-note" data-slot="model-note">{mc.note}</p>}
-        {/* Today's closed spending limit reached: the row started on FLUX; the line, with {reset} in the visitor's time. */}
-        {loaded?.capLine && !mc.notice && <p className="dz-muted mk-model-cap" data-slot="model-cap">{withReset(loaded.capLine.text, loaded.capLine.resetAt)}</p>}
-      </section>
-      {signedIn ? (
-        <button type="button" className="rl-remix mk-make" onClick={make} disabled={busy}>
-          {busy ? w.making : w.makeIt}
-        </button>
-      ) : (
-        <>
-          <button type="button" className="rl-remix mk-make" aria-expanded={signIn} onClick={() => setSignIn((s) => !s)}>
-            {w.signIn}
-          </button>
-          {signIn && <SignInChoices wallet={false} />}
-        </>
-      )}
-      {error && (
-        <p className="ia-note" role="alert">
-          {error}
-        </p>
-      )}
-      {momentsOn && (
-        <section className="mk-moment-words" aria-label={w.momentsBy}>
-          <p className="dz-muted mk-by">{w.momentsBy}</p>
-          {chosen && (
-            <div className="mk-quotes" aria-live="polite">
-              {chosen.quotes.map((x) => (
-                <blockquote key={x.block} className="cc-quote" cite={x.href}>
-                  <p>{x.text}</p>
-                  <p className="cc-quote-foot">
-                    <span className="cc-block">{x.block}</span>{' '}
-                    <a href={x.href} target="_blank" rel="noopener">
-                      {w.readIt}
-                    </a>
-                  </p>
-                </blockquote>
-              ))}
             </div>
-          )}
+            <ul className="mk-strip" role="list" aria-label={w.momentsBy}>
+              {MOMENTS.map((m) => (
+                <li key={m.id}>
+                  <button type="button" className="cc-chip" aria-pressed={m.id === moment} data-moment={m.id} onClick={() => go(m.id)}>
+                    {m.title} <span className="cc-chip-ch">· {m.chip}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+        {!momentsOn && (
+          <section className="mk-styles" aria-labelledby="mk-style">
+            <fieldset className="mk-set">
+              <legend id="mk-style" className="mk-legend">
+                {w.style}
+              </legend>
+              <ul className="mk-chips" role="list">
+                <li>
+                  <button type="button" className="cc-chip" aria-pressed={styleSel === 'same'} data-style="same" onClick={() => setStyleSel('same')}>
+                    {w.sameStyle}
+                  </button>
+                </li>
+                {view.styles.map((s) => (
+                  <li key={s.id}>
+                    <button type="button" className="cc-chip" aria-pressed={styleSel === s.id} data-style={s.id} onClick={() => setStyleSel(s.id)}>
+                      {s.label}
+                    </button>
+                  </li>
+                ))}
+                {hasPublished && (
+                  <li>
+                    <button type="button" className="cc-chip" aria-pressed={styleSel === 'random'} data-style="random" onClick={() => setStyleSel('random')}>
+                      {w.random} <span aria-hidden="true">⟳</span>
+                    </button>
+                  </li>
+                )}
+                <li>
+                  <button type="button" className="cc-chip" aria-pressed={styleSel === 'own'} data-style="own" onClick={() => setStyleSel('own')}>
+                    {w.ownStyle}
+                  </button>
+                </li>
+              </ul>
+              {styleSel === 'own' && <PublishedTextField id="mk-own-style" label={w.ownStyleLabel} value={ownStyle} onChange={setOwnStyle} rows={1} maxLength={view.ownStyleMax} />}
+            </fieldset>
+            {/* "See examples" (owner, 2026-11-12): each published style's name, words and samples; tapping one picks it. */}
+            <StyleExamples styles={view.examples} w={w} selected={styleSel} onPick={setStyleSel} />
+          </section>
+        )}
+        <section className="mk-model" aria-labelledby="mk-model-head">
+          <fieldset className="mk-set">
+            <legend id="mk-model-head" className="mk-legend">
+              {w.model}
+            </legend>
+            {/* One option per model the server lists: its name, then "maker · open/closed" (the server's chip, split). */}
+            <ul className="mk-models" role="list" data-slot="model-choice">
+              {view.models.map((m) => {
+                const tag = m.chip.startsWith(`${m.label} · `) ? m.chip.slice(m.label.length + 3) : null;
+                return (
+                  <li key={m.id}>
+                    <button type="button" className="cc-chip mk-model-chip" aria-pressed={model?.id === m.id} data-model={m.id} onClick={() => mc.pick(m)}>
+                      {tag ? (
+                        <>
+                          <span className="mk-model-name">{m.label}</span>
+                          <span className="sr-only"> · </span>
+                          <span className="mk-model-tag">{tag}</span>
+                        </>
+                      ) : (
+                        <span className="mk-model-name">{m.chip}</span>
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </fieldset>
+          {/* A closed pick: its maker's notice (and the 18+ box the first time on this device) as a dialog, then its line. */}
+          {mc.notice}
+          {model && !model.open && !mc.notice && <p className="mk-model-meta" data-slot="model-meta">{mc.meta(model)}</p>}
+          {!mc.notice && !notFree && mc.tooFew(loaded?.picturesLeft) && <p className="dz-muted mk-model-few" data-slot="model-too-few">{mc.tooFew(loaded?.picturesLeft)}</p>}
+          {mc.note && <p className="dz-muted mk-model-note" data-slot="model-note">{mc.note}</p>}
+          {/* Today's closed spending limit reached: the row started on FLUX; the line, with {reset} in the visitor's time. */}
+          {loaded?.capLine && !mc.notice && <p className="dz-muted mk-model-cap" data-slot="model-cap">{withReset(loaded.capLine.text, loaded.capLine.resetAt)}</p>}
         </section>
-      )}
+        {momentsOn && (
+          <section className="mk-moment-words" aria-label={w.momentsBy}>
+            <p className="dz-muted mk-by">{w.momentsBy}</p>
+            {chosen && (
+              <div className="mk-quotes" aria-live="polite">
+                {chosen.quotes.map((x) => (
+                  <blockquote key={x.block} className="cc-quote" cite={x.href}>
+                    <p>{x.text}</p>
+                    <p className="cc-quote-foot">
+                      <span className="cc-block">{x.block}</span>{' '}
+                      <a href={x.href} target="_blank" rel="noopener">
+                        {w.readIt}
+                      </a>
+                    </p>
+                  </blockquote>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+      </div>
+      {/* The MakeBar: errors and limits inline above it, today's messages. */}
+      <div className="mk-makebar">
+        {error && (
+          <p className="ia-note mk-error" role="alert">
+            {error}
+          </p>
+        )}
+        {blocked ? (
+          // No Make it (owner, 2026-11-16): an account without the free count says why (its own line; waiting won't help),
+          // else the day's pictures are used up, said plainly.
+          notFree ? (
+            <p className="mk-none-left" data-slot="not-free" role="status">
+              {notFree}
+            </p>
+          ) : (
+            <p className="mk-none-left" data-slot="none-left" role="status">
+              {withReset(w.noneLeft, null)}
+            </p>
+          )
+        ) : signedIn ? (
+          // Pressing it keeps the focus where it is: while typing the bar sits in place under the fields, and moving the focus
+          // off the box would put the bar back at the bottom mid-press, so the press would miss it (390 wide, 2026-11-16).
+          <button type="button" className="rl-remix mk-make" onMouseDown={(e) => e.preventDefault()} onClick={make} disabled={busy}>
+            {busy ? w.making : w.makeIt}
+          </button>
+        ) : (
+          <>
+            {signIn && <SignInChoices wallet={false} />}
+            <button type="button" className="rl-remix mk-make" aria-expanded={signIn} onClick={() => setSignIn((s) => !s)}>
+              {w.signIn}
+            </button>
+          </>
+        )}
+        {uses && !blocked && <p className="mk-uses">{uses}</p>}
+      </div>
       {consent && <ConsentScreen wording={consent} name={auth.kind === 'signed-in' ? (auth.username ?? null) : null} onAgree={agree} onCancel={() => setConsent(null)} error={null} />}
     </div>
   );

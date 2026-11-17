@@ -10,7 +10,7 @@ export default function ChallengePreviewNotFound() {
   const { draft } = useParams<{ draft: string }>();
   return (
     <ChallengeFlowGate fallback={<NotFound />}>
-      <div className="page prose ch-page">
+      <div className="page prose ch-page mk-wrap">
         <ChallengePreview id={draft} />
       </div>
     </ChallengeFlowGate>

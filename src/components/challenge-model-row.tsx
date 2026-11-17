@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { CLOSED_PROVIDERS, type ClosedProvider } from '~/lib/config';
 import { MODEL_WORDING as W, resetLocal } from '~/lib/challenge/model-wording';
 import type { ModelRowEntry } from '~/lib/challenge/models';
@@ -70,7 +70,19 @@ export function useChallengeModel<T extends ModelRowEntry>(models: readonly T[] 
     const version = CLOSED_PROVIDERS[chosen.maker as ClosedProvider]?.noticeVersion;
     return { model: chosen.id, notice: { version, adult: true } };
   };
-  const notice = pending ? <ModelNotice maker={pending.pick.maker} askAdult={pending.askAdult} adultTicked={adultTicked} onTick={setAdultTicked} onAnswer={answer} /> : null;
+  /** "Use the open model" (and Esc): the notice closes unanswered, nothing is stored, and the row moves to the open default. */
+  const toOpen = () => {
+    then.current = null;
+    setPending(null);
+    const open = list?.find((m) => m.open);
+    if (open) setId(open.id);
+  };
+  // Redesign D: the notice is a modal dialog (a bottom sheet on phones); its words and what is kept are as before.
+  const notice = pending ? (
+    <NoticeDialog onCancel={toOpen}>
+      <ModelNotice maker={pending.pick.maker} askAdult={pending.askAdult} adultTicked={adultTicked} onTick={setAdultTicked} onAnswer={answer} inDialog cancel={{ label: W.useOpen, onCancel: toOpen }} />
+    </NoticeDialog>
+  ) : null;
   /** One line under a model's name: its terms, the price, and for a closed one its maker's label and that it uses 3. */
   const meta = (m: ModelRowEntry) => (m.open ? null : (W.closedLine[m.maker] ?? null));
   /** Today's free pictures left (from the server), when fewer than a closed picture needs: the line saying so. */
@@ -78,4 +90,54 @@ export function useChallengeModel<T extends ModelRowEntry>(models: readonly T[] 
   /** For a wallet account: the line shown in place of the closed models ("Closed models need a Farcaster, Lens or Bluesky sign-in."). */
   const note = modelsNote;
   return { list, chosen, pick, ready, readyNow, askFirst, body, notice, meta, note, tooFew, W };
+}
+
+/**
+ * The closed models' notice as a modal (redesign D, Claude Design's handoff screen 3, "AdultNotice"): a native <dialog>
+ * opened with showModal() (role dialog, aria-modal, the page behind inert), centred on a scrim on wide screens and a
+ * bottom sheet under 768px (src/styles/designs.css .mk-notice). Tab and Shift+Tab stay inside it; Esc is "Use the open
+ * model". Focus starts on its first control (the 18+ box when it is asked).
+ */
+function NoticeDialog({ children, onCancel }: { children: ReactNode; onCancel: () => void }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const d = ref.current;
+    if (!d) return;
+    const back = document.activeElement as HTMLElement | null;
+    if (!d.open) d.showModal();
+    d.querySelector<HTMLElement>('input, button:not([disabled])')?.focus();
+    return () => {
+      if (d.open) d.close();
+      back?.focus?.();
+    };
+  }, []);
+  const trap = (e: KeyboardEvent<HTMLDialogElement>) => {
+    if (e.key !== 'Tab') return;
+    const all = Array.from(e.currentTarget.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled])'));
+    if (!all.length) return;
+    const first = all[0], last = all[all.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
+  return (
+    <dialog
+      ref={ref}
+      className="mk-notice"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="dz-notice-title"
+      onKeyDown={trap}
+      onCancel={(e) => {
+        e.preventDefault();
+        onCancel();
+      }}
+    >
+      {children}
+    </dialog>
+  );
 }

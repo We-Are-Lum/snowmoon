@@ -8,7 +8,7 @@ import { PublishedTextField } from './publish-words';
  * itself (a PublishedTextField: typed text only, at most BACKSTORY_MAX characters, with the publication line). No request
  * and no model here: what's in the box is what was typed.
  */
-export function BackstoryField(p: { name: string; text: string; onText: (v: string) => void; id?: string }) {
+export function BackstoryField(p: { name: string; text: string; onText: (v: string) => void; id?: string; hideLabel?: boolean }) {
   const id = p.id ?? 'mk-backstory';
   return (
     <section className="mk-backstory" data-slot="backstory">
@@ -17,7 +17,7 @@ export function BackstoryField(p: { name: string; text: string; onText: (v: stri
           <li key={h}>{h}</li>
         ))}
       </ul>
-      <PublishedTextField id={id} label={`${B.label} ${B.optional}`} value={p.text} onChange={p.onText} rows={4} maxLength={BACKSTORY_MAX} />
+      <PublishedTextField id={id} label={`${B.label} ${B.optional}`} value={p.text} onChange={p.onText} rows={5} maxLength={BACKSTORY_MAX} hideLabel={p.hideLabel} />
     </section>
   );
 }

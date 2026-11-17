@@ -23,6 +23,8 @@ import { closedCapReached, generationsLeft } from '~/lib/images/limits';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { nextUtcMidnight } from '~/lib/images/paid';
 import { isWalletNumber } from '~/lib/images/remixes';
+import { isSocialPerson } from '~/lib/people';
+import { freeFor } from '~/lib/social/free';
 import { baseFrontOf, defaultLook, sourceOf } from '~/lib/challenge/pictures';
 import { spoilerExceptionOn } from '~/lib/challenge/spoilers';
 import { challengeVisibleTo } from '~/lib/challenge/visibility';
@@ -77,6 +79,11 @@ export async function GET(request: Request) {
   const row = modelView(where, { wallet });
   // Today's free pictures left, so the screen can say when a closed pick (3 of them) won't fit; null signed out or for a wallet.
   const picturesLeft = sql && person !== null && !isWalletNumber(person) ? await generationsLeft(sql, person).catch(() => null) : null;
+  // A 0 that isn't the day's pictures used up (owner, 2026-11-16): a Lens or Bluesky account without the free count
+  // (freeFor: link-needed, lens-not-open, …). Its own line (FREE_WORDING), not "More pictures at …": waiting won't help.
+  // `lookUp: false`: never asks Lens or Bluesky here; no decision yet gives null.
+  const free = sql && person !== null && isSocialPerson(person) ? await freeFor(sql, person, { lookUp: false }).catch(() => null) : null;
+  const notFree = free && free.free === false ? free.error : null;
   // The model the row starts on: GPT Image 2.5 Sunburst for someone who can use it, until entries close (P3's one
   // exception, owner 2026-11-09; models.ts challengeDefaultModel); FLUX for everyone else and after the close.
   // When one more closed picture would pass today's closed caps: start on FLUX and say so under the Model row (owner,
@@ -86,7 +93,7 @@ export async function GET(request: Request) {
   const capReached = sql && closedOffered && gpt ? await closedCapReached(sql, reserveUsd(gpt, IMAGES.size)).catch(() => false) : false;
   const defaultModel = challengeDefaultModel({ where, signedIn: person !== null, wallet, picturesLeft, now: new Date(), closedCapReached: capReached });
   const capLine = capReached ? { text: IMAGE_WORDING.designs.models.closedSpend, resetAt: nextUtcMidnight() } : null;
-  return NextResponse.json({ ...makeView(src, { styles: sql ? await challengeStyles(sql) : [], models: row.models }), modelsNote: row.note, picturesLeft, defaultModel: row.models.some((m) => m.id === defaultModel) ? defaultModel : DEFAULT_CHALLENGE_MODEL, capLine }, { headers: { 'Cache-Control': 'private, no-store' } });
+  return NextResponse.json({ ...makeView(src, { styles: sql ? await challengeStyles(sql) : [], models: row.models }), modelsNote: row.note, picturesLeft, defaultModel: row.models.some((m) => m.id === defaultModel) ? defaultModel : DEFAULT_CHALLENGE_MODEL, capLine, notFree }, { headers: { 'Cache-Control': 'private, no-store' } });
 }
 
 export async function POST(request: Request) {
