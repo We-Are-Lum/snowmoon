@@ -229,6 +229,7 @@ try {
     const res = await ask(deps(116), { question: 'What is the book about?' });
     const after = (await sql`select count(*)::int as n from studio.chat_calls where fid = 116`)[0].n;
     check('the whole book is answered with every chapter\'s first summary section', res.state === 'book' && res.chapters.length === 32 && res.chapters.every((c, i) => c.n === i + 1 && c.text.length > 40), res.state);
+    check('the whole book points to the passages each summary rests on', res.state === 'book' && res.chapters.every((c) => c.sources.slice(0, 2).some((id) => res.quotes.some((q) => q.id === id))), res.state === 'book' ? `${res.quotes.length} quotes` : '');
     check('the whole book calls no model and uses no message', calls.length === 0 && before === after, `${calls.length} calls`);
     const again = await ask(deps(116), { question: 'Summarize the whole book' });
     check('"summarize the whole book" is the same answer', again.state === 'book');

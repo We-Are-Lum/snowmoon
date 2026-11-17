@@ -162,3 +162,6 @@
 .as-book .as-book-chapter { margin: 0 0 12px; }
 .as-book .as-book-chapter h3 { margin: 0 0 2px; font-size: 16px; }
 .as-book .as-book-chapter p { margin: 0; text-wrap: pretty; }
+.as-book .as-book-words { margin: 4px 0 0; font-size: 14px; }
+.as-book .as-book-words > summary { cursor: pointer; color: var(--muted, inherit); }
+.as-book .as-book-words[open] > summary { margin-bottom: 6px; }

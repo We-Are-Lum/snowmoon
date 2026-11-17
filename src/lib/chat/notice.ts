@@ -21,12 +21,18 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: 'b2c084378ab28081',
+  reviewedFor: '39944f4367ab7b58',
   /** Who did that reread: the coding agent, or the owner. */
   by: 'agent',
   on: '2026-11-17',
   note:
-    'Reread again by the coding agent on 2026-11-17 after merging main into chat-summaries (principle 9 retired, #182) and the ' +
+    'Reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-17 for branch chat-summaries-2, words unchanged: ' +
+    '"what is the book about" is answered from the chapter summaries with no model and no message counted, each summary with ' +
+    'the passages it rests on (chapter, ¶, the book\'s words), so item 1 holds; answers that use notes run at another temperature; ' +
+    '"where was I" is cut to its words in code; the prompt asks for reported speech. No new service receives questions, nothing new is kept. ' +
+    'Items 3 and 4 now say a little more than happens for that one question (it goes to no model and is not counted); ' +
+    'raised with the owner, not changed (the words need the owner\'s reread). ' +
+    'Before that: reread again by the coding agent on 2026-11-17 after merging main into chat-summaries (principle 9 retired, #182) and the ' +
     'owner\'s approval of the notes line (NOTE_WORDING, no longer draft): words unchanged, still true. Privacy §3 now has the ' +
     'owner\'s reread words ("the chapter you\'re reading … so it can answer “where was I”"). ' +
     'Before that: reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-17 for branch chat-summaries, words unchanged: ' +

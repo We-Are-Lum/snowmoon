@@ -49,7 +49,7 @@ export type AskResult =
    * "What is the book about": each chapter's first summary section as written, with the summaries' AI label; no model is
    * called and no message is used (owner, 2026-11-17).
    */
-  | ({ state: 'book' } & BookInBrief)
+  | ({ state: 'book'; quotes: Quote[] } & BookInBrief)
   | { state: 'limit' }
   | { state: 'spend' };
 
@@ -132,7 +132,12 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   // Reviewed notes (src/lib/chat/notes.ts): a chapter or a Learn more character named, "where was I", the whole book.
   const routed = routeQuestion(words.corrected, input.position ?? null);
   if (routed.needsChapter) return { state: 'which' };
-  if (routed.shape === 'book') return { state: 'book', ...bookInBrief() };
+  if (routed.shape === 'book') {
+    // The whole book: each chapter's first summary section, with the book's words it rests on (its first two sources),
+    // so the reply points to passages like every answer (notice item 1). No model; no message used.
+    const brief = bookInBrief();
+    return { state: 'book', ...brief, quotes: await quotesFor(sql, brief.chapters.flatMap((c) => c.sources.slice(0, 2))) };
+  }
   const question = words.corrected + routed.framing;
 
   // Worst case: search words, two answers (the retry), four guard calls and two support checks (each may be retried once).
@@ -178,13 +183,7 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
 
   // Quotes come from the database, by id, never from the model's words.
   const blocks = await blocksById(sql, clean.cites);
-  const label = await labels(sql, blocks.map((b) => b.chapter));
-  const quotes: Quote[] = blocks.map((b) => ({
-    id: b.id,
-    chapter: b.chapter,
-    label: label.get(b.id) ?? null,
-    html: b.kind === 'paragraph' || b.kind === 'quote' ? renderMarkdown(b) : b.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
-  }));
+  const quotes = await quotesFor(sql, clean.cites, blocks);
   const found = new Set(quotes.map((q) => q.id));
   // The reviewed notes the answer rests on: those that give a block it cites.
   const used = routed.notes.filter((n) => n.sources.some((id) => found.has(id)));
@@ -208,6 +207,18 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
     glossary,
     dropped: clean.dropped.length + clean.cites.filter((c) => !found.has(c)).length,
   };
+}
+
+/** The book's words for these ids, from the database by id, with their ¶ labels. */
+async function quotesFor(sql: postgres.Sql, ids: string[], found?: Passage[]): Promise<Quote[]> {
+  const blocks = found ?? (await blocksById(sql, ids));
+  const label = await labels(sql, blocks.map((b) => b.chapter));
+  return blocks.map((b) => ({
+    id: b.id,
+    chapter: b.chapter,
+    label: label.get(b.id) ?? null,
+    html: b.kind === 'paragraph' || b.kind === 'quote' ? renderMarkdown(b) : b.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+  }));
 }
 
 /** One answer from the model, cleaned: citations checked, the model's own quotations removed. Recorded with no text. */
