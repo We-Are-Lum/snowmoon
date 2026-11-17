@@ -1,7 +1,8 @@
 # The assistant uses the whole book: lines for the owner's reread
 
-DRAFT. Written by the coding agent (Claude, a closed model by Anthropic) on 2026-11-17 for branch `chat-summaries`.
-Nothing here ships changed until the owner says "reread" (owner, 2026-11-17, item 5).
+Written by the coding agent (Claude, a closed model by Anthropic) on 2026-11-17 for branch `chat-summaries`.
+**Reread by the owner on 2026-11-17.** Privacy §3 ships in the owner's own words (below). The notes line (4a) is approved
+as drafted. The other new lines (4b, 4c) are the coding agent's DRAFT wording.
 
 The owner's decision (2026-11-17, item 0): "Spoilers no longer matter. The assistant uses the whole book for every
 question." The branch removes the assistant's chapter limit. It keeps the reader's chapter only as a hint for "where was I".
@@ -16,31 +17,23 @@ With the branch merged as it is, the current sentence would no longer be true.
 > These stay on your device, except that the assistant sends the furthest chapter, as a number (or another chapter you
 > choose for a conversation), with each question and its search of the book, so that answers stay within it; it isn't kept.
 
-**Proposed:**
+**Proposed by the coding agent:**
 
 > These stay on your device, except that the assistant sends the chapter you opened last, as a number, with each
 > question, so it can answer "where was I"; it isn't kept.
+
+**Reread by the owner (2026-11-17), exactly, as shipped:**
+
+> These stay on your device, except that the assistant sends the chapter you're reading, as a number, with each
+> question, so it can answer “where was I”; it isn't kept.
 
 Why: the branch sends `position` (the chapter opened last on this device, or the furthest opened when no last one is
 recorded) with every question. The server uses it only for "where was I / recap / what's happened so far", and keeps
 nothing. Nothing else in §3 changes ("the furthest chapter you have opened" is still stored on the device).
 
-## 2. Principle 9 (a principle: the owner decides)
+## 2. Principle 9
 
-`docs/principles.md` §9 is headed "Nothing past where a reader has read is shown, or sent to a model on their behalf,
-unless they choose it each time." Its remix-challenge exception says: "Nothing else is covered by this: the reader, the
-search, "Find a moment", **the assistant**, the sheets and every other page keep principle 9."
-
-The branch conflicts with that. Per CLAUDE.md, I'm raising the conflict here rather than editing the principle myself.
-Proposed addition, after the challenge exception:
-
-> **Recorded exception: the reading assistant (owner, 2026-11-17).** "Spoilers no longer matter. The assistant uses the
-> whole book for every question." The assistant's search, glossary words, attached passages, chapter summaries and
-> Learn more texts come from every chapter; it has no chapter limit and nothing is held back. The reader's chapter is
-> sent only as a hint for "where was I". The reader, the search, "Find a moment", the sheets and every other page keep
-> principle 9.
-
-The challenge exception's sentence would also drop "the assistant," from its list.
+Retired on main (#182, b52b185e) before this branch merged, so no exception is needed.
 
 ## 3. The assistant's screen (owner's words, removed as item 0 asks)
 
@@ -56,7 +49,7 @@ These are the owner's wording (`src/components/assistant.tsx`, `data-wording` = 
 
 ## 4. New wording on the branch (DRAFT, coding agent)
 
-a. **The notes line** under an answer that cites a reviewed note (`src/lib/chat/notes.ts`, `NOTE_WORDING`; item 3). It
+a. **The notes line** (approved by the owner as drafted, 2026-11-17) under an answer that cites a reviewed note (`src/lib/chat/notes.ts`, `NOTE_WORDING`; item 3). It
 uses the AI label the chapter summaries carry ("AI summary · written by an AI model, Claude, not by the author, and
 checked against the book by AI."):
 

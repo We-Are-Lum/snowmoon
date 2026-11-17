@@ -15,6 +15,7 @@ import { OWNER_WORDING } from '~/lib/wording';
 import type { AskResult, Quote } from '~/lib/chat/ask';
 import type { GlossaryLink } from '~/lib/chat/glossary';
 import { noticeItems, noticeKey } from '~/lib/chat/notice';
+import { NOTE_WORDING } from '~/lib/chat/notes';
 import type { Part } from '~/lib/chat/sanitize';
 import {
   currentChapter, deleteThread, lastChapter, markNoticeSeen, newThread, noticeSeen, saveThread, thread as loadThread, threads as loadThreads,
@@ -221,12 +222,12 @@ function GlossaryLinks({ links }: { links?: GlossaryLink[] }) {
 
 /**
  * Under an answer that rests on reviewed notes (owner, 2026-11-17): which ones, with the AI label the chapter summaries
- * carry. DRAFT wording (coding agent): src/lib/chat/notes.ts NOTE_WORDING.
+ * carry. Drafted by the coding agent, approved by the owner as drafted (2026-11-17): src/lib/chat/notes.ts NOTE_WORDING.
  */
 function NoteLines({ lines }: { lines?: string[] }) {
   if (!lines?.length) return null;
   return (
-    <div className="as-notes" data-wording="draft">
+    <div className="as-notes" data-wording={NOTE_WORDING.draft ? 'draft' : 'FID 6786'}>
       {lines.map((l) => (
         <p key={l} className="as-note">
           {l}

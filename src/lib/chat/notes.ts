@@ -202,9 +202,9 @@ function glossaryBlocks(slug: string): string[] {
   return [...new Set([e.first, ...e.explanations.map((x) => x.block)].filter(blockIdOk))].slice(0, 6);
 }
 
-/** The line under an answer that rests on reviewed notes. DRAFT wording (coding agent, 2026-11-17), for the owner. */
+/** The line under an answer that rests on reviewed notes. Drafted by the coding agent; approved by the owner as drafted (2026-11-17). */
 export const NOTE_WORDING = {
-  draft: true,
+  draft: false,
   summary: 'Uses the chapter summaries · AI summary, written by an AI model, Claude, not by the author, and checked against the book by AI.',
   learnMore: (name: string, owner: boolean) =>
     owner
