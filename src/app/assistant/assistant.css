@@ -157,3 +157,8 @@
 .as-section { padding: 10px 0 8px; letter-spacing: 0.06em; }
 .as-coming-row { display: flex; justify-content: space-between; letter-spacing: 0; margin-top: 22px; padding: 12px 0; border-top: 1px solid var(--rule); }
 .as-empty-row { margin: 0; padding: 12px 0; border-top: 1px dashed var(--faint); font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+
+/* "What is the book about" (2026-11-17): each chapter's summary under its chapter. */
+.as-book .as-book-chapter { margin: 0 0 12px; }
+.as-book .as-book-chapter h3 { margin: 0 0 2px; font-size: 16px; }
+.as-book .as-book-chapter p { margin: 0; text-wrap: pretty; }

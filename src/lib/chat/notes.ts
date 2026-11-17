@@ -3,6 +3,7 @@ import summaries from '../../../content/snowmoon/chapter-summaries.json';
 import glossary from '../../../content/snowmoon/glossary.json';
 import { LEARN_MORE, type Segment } from '../challenge/learn-more';
 import { blockIdOk } from './sanitize';
+import { REPO_URL } from '../config';
 
 /**
  * Reviewed notes for the reading assistant (owner, 2026-11-17): texts a person has checked against the book, sent to the
@@ -132,7 +133,7 @@ export function routeQuestion(question: string, position: number | null): Routed
   const blocks = characters.flatMap(glossaryBlocks);
   const framing =
     shape === 'where' && chapters.length
-      ? ` (The reader is on chapter ${chapters[chapters.length - 1]} and wants a recap of ${chapters.length > 1 ? `chapters ${chapters[0]} to ${chapters[chapters.length - 1]}` : `chapter ${chapters[0]}`}: what happens, in story order, from the reviewed notes.)`
+      ? ` (The reader is on chapter ${chapters[chapters.length - 1]} and wants a recap of ${chapters.length > 1 ? `chapters ${chapters[0]} to ${chapters[chapters.length - 1]}` : `chapter ${chapters[0]}`}: what happens, in story order, from the reviewed notes, in at most ${WORDS.where} words${chapters.length > 1 ? `, about ${Math.floor(WORDS.where / chapters.length)} per chapter` : ''}.)`
       : shape === 'book'
         ? ' (The reader wants the whole book in brief: its main story, in order, from the reviewed notes.)'
         : '';
@@ -200,6 +201,29 @@ function glossaryBlocks(slug: string): string[] {
   const e = ENTRIES.find((x) => x.slug === slug || x.term.toLowerCase() === name || x.term.toLowerCase().split(/\s+/)[0] === name);
   if (!e) return [];
   return [...new Set([e.first, ...e.explanations.map((x) => x.block)].filter(blockIdOk))].slice(0, 6);
+}
+
+/**
+ * The chapter summaries' AI label and licence line, as the chapter pages show them (src/components/chapter-summary.tsx,
+ * the owner's draft wording of 2026-10-10), without "Nothing from later chapters.", which a whole-book list can't say.
+ */
+export const SUMMARY_LABEL = {
+  made: 'AI summary · written by an AI model, Claude, not by the author, and checked against the book by AI.',
+  recipeHref: `${REPO_URL}/blob/main/content/snowmoon/chapter-summaries.json`,
+  licence: 'A summary of Snowmoon by Vitalik Buterin, modified from the book on 2026-10-10. GPL-3.0, like the book.',
+};
+
+/** The whole book, without a model (owner, 2026-11-17): each chapter's first summary section, under its chapter title. */
+export interface BookInBrief {
+  chapters: { n: number; text: string; sources: string[] }[];
+}
+export function bookInBrief(): BookInBrief {
+  return {
+    chapters: Object.keys(SUMMARIES)
+      .map(Number)
+      .sort((a, b) => a - b)
+      .map((n) => ({ n, text: SUMMARIES[String(n)][0].text, sources: SUMMARIES[String(n)][0].sources.filter(blockIdOk) })),
+  };
 }
 
 /** The line under an answer that rests on reviewed notes. Drafted by the coding agent; approved by the owner as drafted (2026-11-17). */

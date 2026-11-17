@@ -15,7 +15,7 @@ import { OWNER_WORDING } from '~/lib/wording';
 import type { AskResult, Quote } from '~/lib/chat/ask';
 import type { GlossaryLink } from '~/lib/chat/glossary';
 import { noticeItems, noticeKey } from '~/lib/chat/notice';
-import { NOTE_WORDING } from '~/lib/chat/notes';
+import { NOTE_WORDING, SUMMARY_LABEL } from '~/lib/chat/notes';
 import type { Part } from '~/lib/chat/sanitize';
 import {
   currentChapter, deleteThread, lastChapter, markNoticeSeen, newThread, noticeSeen, saveThread, thread as loadThread, threads as loadThreads,
@@ -263,8 +263,33 @@ function WhichChapter({ onPick }: { onPick: (n: number) => void }) {
   );
 }
 
+/**
+ * "What is the book about" (owner, 2026-11-17): no model. Each chapter's first summary section as written, under its
+ * chapter, with the AI label and licence line the chapter pages' summaries carry (src/components/chapter-summary.tsx).
+ */
+function BookInBriefReply({ chapters }: { chapters: { n: number; text: string }[] }) {
+  return (
+    <div className="as-reply as-book">
+      <p className="as-label">The book in brief · from the chapter summaries</p>
+      {chapters.map((c) => (
+        <section key={c.n} className="as-book-chapter">
+          <h3>
+            <Link href={`/chapter/${c.n}`}>Chapter {c.n}</Link>
+          </h3>
+          <p>{c.text}</p>
+        </section>
+      ))}
+      <p className="as-note">
+        {SUMMARY_LABEL.made} <a href={SUMMARY_LABEL.recipeHref}>How it was made</a>
+      </p>
+      <p className="as-note">{SUMMARY_LABEL.licence}</p>
+    </div>
+  );
+}
+
 function Reply({ m, onAsk }: { m: AnsweredMessage; onAsk: (question: string) => void }) {
   const r = m.result;
+  if (r.state === 'book') return <BookInBriefReply chapters={r.chapters} />;
   if (r.state === 'answer')
     return (
       <div className="as-reply">

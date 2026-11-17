@@ -31,7 +31,7 @@ import { promisify } from 'node:util';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
-import { ask, AskError, type Complete } from '../src/lib/chat/ask';
+import { ask, AskError, NOTES_TEMPERATURE, type Complete } from '../src/lib/chat/ask';
 import { retrieve } from '../src/lib/chat/retrieve';
 import { sanitizeReply } from '../src/lib/chat/sanitize';
 import { glossaryWords } from '../src/lib/chat/glossary';
@@ -223,17 +223,27 @@ try {
     check('"where was I" at chapter 8 sends chapters 6 to 8', ['c6', 'c7', 'c8'].every((c) => call.user.includes(`(summary ${c} §1)`)) && !call.user.includes('(summary c9'));
   }
   {
-    // The whole book: every chapter's first section; 250 words.
+    // The whole book (owner, 2026-11-17): each chapter's first summary section as written, no model, no message used.
     calls.length = 0;
-    const seenSystem: string[] = [];
+    const before = (await sql`select count(*)::int as n from studio.chat_calls where fid = 116`)[0].n;
+    const res = await ask(deps(116), { question: 'What is the book about?' });
+    const after = (await sql`select count(*)::int as n from studio.chat_calls where fid = 116`)[0].n;
+    check('the whole book is answered with every chapter\'s first summary section', res.state === 'book' && res.chapters.length === 32 && res.chapters.every((c, i) => c.n === i + 1 && c.text.length > 40), res.state);
+    check('the whole book calls no model and uses no message', calls.length === 0 && before === after, `${calls.length} calls`);
+    const again = await ask(deps(116), { question: 'Summarize the whole book' });
+    check('"summarize the whole book" is the same answer', again.state === 'book');
+  }
+  {
+    // Answers that use reviewed notes run cooler (NOTES_TEMPERATURE); others keep their temperature.
+    const temps: number[] = [];
     const spy: Complete = async (model, messages, opts) => {
-      if (model === CHAT.model && messages[messages.length - 1].content.startsWith('Reviewed')) seenSystem.push(messages[0].content);
+      if (model === CHAT.model && messages[messages.length - 1].content.includes('Question:')) temps.push(opts.temperature);
       return complete(model, messages, opts);
     };
-    await ask({ ...deps(116), complete: spy }, { question: 'What is the book about?' });
-    const call = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Reviewed notes'))!;
-    check('the whole book sends the first section of all 32 chapters', (call.user.match(/\(summary c\d+ §1\)/g) ?? []).length === 32);
-    check('the whole book may use about 250 words', seenSystem[0] === 'SYSTEM about 250 words', seenSystem[0]);
+    answerText = 'Commentary.';
+    await ask({ ...deps(117), complete: spy }, { question: 'What happens in chapter 3?' });
+    await ask({ ...deps(117), complete: spy }, { question: 'How does voting on buildings work in Veridia?' });
+    check('notes answers use NOTES_TEMPERATURE, others 0.4', temps[0] === NOTES_TEMPERATURE && temps[1] === 0.4, JSON.stringify(temps));
   }
   {
     // An attached block from a later chapter is used, not refused.
