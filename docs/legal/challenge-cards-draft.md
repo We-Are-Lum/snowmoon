@@ -10,7 +10,9 @@ Other characters in a moment are drawn from their current default looks (`CHALLE
 
 ## Zei
 
-**One line (this edition’s):** An eighteen-year-old Minpentai player from Pafogai Du, in Dzego, and one of the book’s main characters.
+(Owner, 2026-11-16: the book never states Zei’s age, so the one line says “A young” and the description gives no age. Needs the owner’s reread.)
+
+**One line (this edition’s):** A young Minpentai player from Pafogai Du, in Dzego, and one of the book’s main characters.
 
 **First layer: facts** (this edition’s phrase · block · the book’s words)
 
@@ -22,9 +24,9 @@ Other characters in a moment are drawn from their current default looks (`CHALLE
 
 **Second layer ("More about", may spoil later chapters): description (this edition’s)**
 
-Zei Leimin is eighteen and lives in Pafogai Du, in Dzego, with his mother. He plays Minpentai, the book’s programming game, well enough to reach the quarterfinals and the championship, and Mu tells him he is a math guy, not a diplomat. He has a long rivalry with Bai, who has beaten him every time. The book gives his age and an arm that was broken and healed, but never his looks.
+Zei Leimin lives in Pafogai Du, in Dzego. He plays Minpentai, the book’s programming game, well enough to reach the quarterfinals and the championship, and Mu tells him he is a math guy, not a diplomat. He has a long rivalry with Bai, who had beaten him three times out of three. The book mentions an arm that was broken and healed, but never his looks.
 
-- Lives with his mother · `c5-b3` · ""Come on, Mom!", he shouted."
+- His mother is Min · `c5-b4` · "Zei's mother, Min, hurried forward and came out through the door."
 - His left arm was broken and took a month to heal · `c9-b75` · "That arm had been broken and taken a month to heal"
 - Wears cabled glasses at the game console · `c4-b82` · "offering glasses attached to a long cable"
 - Later wears a white-and-grey jacket in the snow · `c29-b2` · "jackets covered in a mixture of white and grey"
@@ -73,7 +75,9 @@ Gladias lives in Meldan, the capital of Veridia, with his wife Seila and their c
 
 ## Bai
 
-**One line (this edition’s):** Zei’s Minpentai rival from Pafogai Du, about his age, confident and teasing.
+(Owner, 2026-11-16: “in Pafogai Du”, not “from”: the book places her there by chapter 14 but says she is from there only later. Needs the owner’s reread.)
+
+**One line (this edition’s):** Zei’s Minpentai rival in Pafogai Du, about his age, confident and teasing.
 
 **First layer: facts** (this edition’s phrase · block · the book’s words)
 
