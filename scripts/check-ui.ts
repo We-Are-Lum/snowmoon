@@ -2179,6 +2179,43 @@ async function checkChallengeLanding() {
       if (!(await page.locator('#mk-own-style-line').count())) fail(`/challenge/make ${tag}: "Write your own" has no publication line (P1f)`);
       await checkFloors(page, `/challenge/make ${tag} (Write your own)`, scheme);
       await snap('make-own', true);
+      // After Make it, before it's published (owner, 2026-11-16): under the new picture, "To remix this one, publish it
+      // first." (DRAFT), visible. Signed in in this browser only (a stand-in session); Make it is answered here, so no
+      // model is called and nothing is spent.
+      {
+        const { MAKE_WORDING: MKW } = await import('../src/lib/challenge/make-wording');
+        const src = (await page.locator('.mk-source').first().getAttribute('src')) ?? '';
+        const madeUrl = new URL(src, LOCAL).href;
+        await page.evaluate(() => localStorage.setItem('snowmoon.signin', JSON.stringify({ token: 'stand-in', fid: 4242, username: 'fixture4242', nameProof: null, exp: Math.floor(Date.now() / 1000) + 3600 })));
+        await page.route('**/api/**', async (r) => {
+          const req = r.request();
+          const u = new URL(req.url());
+          if (u.pathname === '/api/you') return r.fulfill({ json: { work: { images: [], scenes: [], designs: [] }, maintainer: false, prices: null, wallet: null, link: null, linkedWallets: [], who: { kind: 'farcaster', name: '@fixture4242', handle: 'fixture4242', fid: 4242, username: 'fixture4242' } } });
+          if (u.pathname === '/api/consent') return r.fulfill({ json: { wording: { sha256: 'x', title: 'x', text: ['x'] }, signedIn: true, agreed: true } });
+          if (u.pathname === '/api/challenge/make' && req.method() === 'POST') return r.fulfill({ json: { ticket: 'stand-in-ticket', image: madeUrl, prompt: '(stand-in: no model was called)', style: null, setting: null } });
+          if (u.pathname === '/api/challenge/make') {
+            const res = await r.fetch({ headers: { ...req.headers(), authorization: '' } });
+            return r.fulfill({ json: { ...(await res.json()), picturesLeft: 3, modelsNote: null } });
+          }
+          return r.fallback();
+        });
+        await at(`/challenge/make?from=${FX.sheets.zei[0]}`, '.mk-styles');
+        await page.locator('.mk-page textarea').first().fill('Zei in a winter coat');
+        await page.locator('.mk-make').first().click();
+        const ok = await page.waitForURL(/\/challenge\/make\/[0-9a-f-]{36}/, { timeout: 20000 }).then(() => true, () => false);
+        const line = page.locator('figure.mk-new [data-slot="publish-first"]');
+        if (!ok) fail(`/challenge/make ${tag}: Make it (answered here) didn't open the preview`);
+        else if (!(await line.waitFor({ timeout: 10000 }).then(() => true, () => false)) || !(await line.isVisible())) fail(`/challenge/make ${tag}: the preview doesn't show "${MKW.publishFirst}" under the new picture`);
+        else {
+          const [pic, b] = await Promise.all([page.locator('figure.mk-new .mk-picture').boundingBox(), line.boundingBox()]);
+          if (((await line.textContent()) ?? '').trim() !== MKW.publishFirst) fail(`/challenge/make ${tag}: the preview's line isn't exactly "${MKW.publishFirst}"`);
+          if (!pic || !b || b.y < pic.y + pic.height - 1) fail(`/challenge/make ${tag}: "${MKW.publishFirst}" isn't under the new picture`);
+          await line.scrollIntoViewIfNeeded();
+          if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-preview-publish-first-${w}x${h}-${scheme}.png`) });
+        }
+        await page.unroute('**/api/**');
+        await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
+      }
       await at('/challenge/remixes');
       // The feed: newest first; the filter shows one character's remixes only.
       await checkFloors(page, `/challenge/remixes ${tag}`, scheme);

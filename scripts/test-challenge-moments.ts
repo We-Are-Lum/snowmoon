@@ -397,6 +397,13 @@ check('config: a current default look per challenge character, each a design id 
   check('nav: no crumb into References on the flow', ![make, prev, pic].some((x) => /\/references\/designs/.test(x)));
   check('the remix screen\'s box is empty and carries the publication line (P1f); "Write your own" is a published box too', /<PublishedTextField id="mk-words" label=\{w\.wordsLabel\} value=\{words\}/.test(make) && /<PublishedTextField id="mk-own-style" label=\{w\.ownStyleLabel\} value=\{ownStyle\}/.test(make) && /maxLength=\{view\.ownStyleMax\}/.test(make) && /wordsPlaceholder: 'Describe what to change'/.test(read('src/lib/challenge/make-wording.ts')));
   check('the remix screen shows the moments only when the server sends them (with the switch on)', /\{momentsOn && \(\s*<section className="mk-moments"/.test(make) && /const momentsOn = view\.moments\.length > 0;/.test(make));
+  {
+    // Owner, 2026-11-16: under the new picture, before it's published, one DRAFT line saying it must be published to be remixed.
+    const prev = read('src/components/challenge-preview.tsx');
+    const mw = read('src/lib/challenge/make-wording.ts');
+    const fig = prev.slice(prev.indexOf('<figure className="mk-figure mk-new">'), prev.indexOf('<div className="mk-panel">'));
+    check('the preview: "To remix this one, publish it first." under the new picture, DRAFT', (await import('../src/lib/challenge/make-wording')).MAKE_WORDING.publishFirst === 'To remix this one, publish it first.' && /publishFirst: 'To remix this one, publish it first\.', \/\/ DRAFT/.test(mw) && fig.indexOf('</figcaption>') > 0 && fig.indexOf('{w.publishFirst}') > fig.indexOf('</figcaption>') && /data-slot="publish-first"/.test(fig));
+  }
   check('the remix screen names the model and its maker, one chip per model the server lists', /data-slot="model-choice"/.test(make) && /\{view\.models\.map\(\(m\) =>/.test(make) && /FLUX\.2 \[klein\] 4B · Black Forest Labs · open/.test((await import('../src/lib/challenge/make-wording')).MAKE_WORDING.modelChip));
   check('no script served to everyone imports the flow\'s words', ![make, prev, pic, read('src/components/challenge-flow-gate.tsx')].some((x) => /challenge\/(make-|picture-|landing-)?wording'/.test(x)));
 }

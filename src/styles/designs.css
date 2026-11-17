@@ -516,6 +516,7 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .mk-d .mk-frame .mk-picture { display: block; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; object-fit: contain; border-radius: 0; background: transparent; }
 .mk-d .mk-ai { position: absolute; left: 8px; bottom: 8px; z-index: 2; padding: 0 4px; border-radius: 3px; background: color-mix(in srgb, var(--paper) 92%, transparent); }
 .mk-d .mk-cap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; font-size: 16px; line-height: 1.35; color: var(--body); }
+.mk-publish-first { margin: 4px 0 0; font-size: 14px; line-height: 1.4; }
 .mk-d[data-step="preview"] .mk-orig { display: none; }
 .mk-d .mk-panel { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
 /* The change box (and every published box here): its label at reading size, a card field with an ink border. */

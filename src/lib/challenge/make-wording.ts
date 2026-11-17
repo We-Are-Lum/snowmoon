@@ -58,6 +58,8 @@ export const MAKE_WORDING = {
   startedFrom: 'Started from',
   /** Redesign D: the new picture's caption, beside the one it started from (it lives only in this tab until published). */
   yourRemix: 'Your remix · only in this tab until you publish', // DRAFT (redesign D, 2026-11-12)
+  /** Under the new picture, before it's published: an unpublished picture can't be remixed (owner, 2026-11-16). */
+  publishFirst: 'To remix this one, publish it first.', // DRAFT (owner's request, 2026-11-16)
   /** Asked once when leaving a made picture unpublished (it is only in this tab until published). */
   leave: 'Leave without publishing? The picture isn’t saved anywhere until you publish it.',
   gone: 'This preview is no longer here (it lives only in the tab that made it). Make it again.',

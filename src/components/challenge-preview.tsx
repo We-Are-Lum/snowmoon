@@ -130,6 +130,12 @@ export function ChallengePreview({ id }: { id: string }) {
               <img className="mk-thumb" src={d.sourceUrl} alt="" width={48} height={64} />
             </span>
           </figcaption>
+          {/* Before it's published it can't be remixed (owner, 2026-11-16); a preview stored before this line has none. */}
+          {w.publishFirst && (
+            <p className="mk-publish-first dz-muted" data-slot="publish-first">
+              {w.publishFirst}
+            </p>
+          )}
         </figure>
       </div>
       <div className="mk-panel">
