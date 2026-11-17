@@ -1987,7 +1987,7 @@ async function checkChallengeLanding() {
           return { overlaps: overlaps.slice(0, 3), lastSeen, steps: steps.length, max, position: getComputedStyle(pin).position };
         }, [pinned, below, last] as const);
       // A character's page on a desktop (owner, 2026-11-16), at 1024 and 1440, the side menu closed and open. First load:
-      // "Start from someone's remix" (its heading) on the first screen, the bases three across; the small link under "Make
+      // "Start from someone's remix" (its heading) on the first screen at 1440 (not at 1024), the bases as many across as fit; the small link under "Make
       // your own Zei" is a real in-page link to it, reached with the keyboard. Then Learn more and its spoilers fold open
       // and the page scrolled from top to bottom: the left column, unpinned while Learn more is open, never overlaps the
       // footer; Learn more's last line is on the screen at some point; the looks line shows once. Closed again, the column
@@ -2004,7 +2004,8 @@ async function checkChallengeLanding() {
             const bases = await page.locator('.chc-bases').evaluate((ul) => { const cols = getComputedStyle(ul).gridTemplateColumns.split(' ').map(parseFloat); return { cols, widths: [...ul.querySelectorAll(':scope > li')].map((li) => Math.round(li.getBoundingClientRect().width)) }; }).catch(() => null);
             if (!bases || !bases.widths.length || bases.widths.some((x) => x < 200) || bases.cols.some((c) => c < 199.5) || bases.widths.some((x) => Math.abs(x - bases.cols[0]) > 1.5)) fail(`/challenge/zei ${t}: the bases aren't each at least 200px in an auto-filled grid (${JSON.stringify(bases)})`);
             console.log(`note challenge/zei ${t}: bases ${bases?.cols.length ?? 0} across, ${bases?.widths.join(', ')}px; remix heading ${head.top}–${head.bottom} of ${head.h}`);
-            if (!(head.top >= 0 && head.bottom <= head.h)) fail(`/challenge/zei ${t}: "Start from someone’s remix" isn't on the first screen (its heading at ${head.top}–${head.bottom} of ${head.h})`);
+            // On the first screen at 1440 only (owner, 2026-11-17): at 1024 it sits just below, and the link under "Make your own" points to it.
+            if (vw === 1440 && !(head.top >= 0 && head.bottom <= head.h)) fail(`/challenge/zei ${t}: "Start from someone’s remix" isn't on the first screen (its heading at ${head.top}–${head.bottom} of ${head.h})`);
             if (menu === 'closed') {
               if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-character-first-${vw}-menu-${menu}-${scheme}.png`) });
               const link = page.locator('.chc-make-head a[data-slot="to-remix"]');
