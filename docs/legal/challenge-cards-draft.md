@@ -24,9 +24,9 @@ Other characters in a moment are drawn from their current default looks (`CHALLE
 
 **Second layer ("More about", may spoil later chapters): description (this edition’s)**
 
-Zei Leimin lives in Pafogai Du, in Dzego. He plays Minpentai, the book’s programming game, well enough to reach the quarterfinals and the championship, and Mu tells him he is a math guy, not a diplomat. He has a long rivalry with Bai, who had beaten him three times out of three (c4-b72). The book mentions an arm that was broken and healed, but never his looks.
+Zei Leimin lives in Pafogai Du, in Dzego. He plays Minpentai, the book’s programming game, well enough to reach the quarterfinals and the championship, and Mu tells him he is a math guy, not a diplomat. He has a long rivalry with Bai, who had beaten him three times out of three. The book mentions an arm that was broken and healed, but never his looks.
 
-- Lives with his mother · `c5-b3` · ""Come on, Mom!", he shouted."
+- His mother is Min · `c5-b4` · "Zei's mother, Min, hurried forward and came out through the door."
 - His left arm was broken and took a month to heal · `c9-b75` · "That arm had been broken and taken a month to heal"
 - Wears cabled glasses at the game console · `c4-b82` · "offering glasses attached to a long cable"
 - Later wears a white-and-grey jacket in the snow · `c29-b2` · "jackets covered in a mixture of white and grey"
