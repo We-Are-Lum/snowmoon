@@ -79,6 +79,8 @@ export interface CharacterView {
     fromBaseLine: string;
     fromRemixHead: string;
     fromRemixLine: string;
+    /** Under "Make your own {name}", the in-page link to the remix choice (owner, 2026-11-16; DRAFT wording). */
+    toRemix: string;
     everyShort: string;
     newestFirst: string;
     pickedHead: string;
@@ -196,6 +198,7 @@ export async function characterView(sql: Sql | null, slug: string): Promise<Char
       fromBaseLine: P.fromBaseLine(c.name),
       fromRemixHead: P.fromRemixHead,
       fromRemixLine: P.fromRemixLine,
+      toRemix: P.toRemix,
       everyShort: L.feedTitle,
       newestFirst: P.newestFirst,
       pickedHead: L.firstRemixesHead,

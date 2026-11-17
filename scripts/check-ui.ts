@@ -105,7 +105,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { createServer } from 'node:net';
 import path from 'node:path';
-import { chromium, type Browser, type Page, type Route } from 'playwright-core';
+import { chromium, devices, webkit, type Browser, type Page, type Route } from 'playwright-core';
 import QRCode from 'qrcode';
 import { BOOK_MENTIONS } from '../src/lib/character-order';
 import { ASSISTANT, CHALLENGE, SIGN_IN_METHODS, SUPPORT } from '../src/lib/config';
@@ -1836,6 +1836,53 @@ async function checkChallengeLive() {
   }
 }
 
+/**
+ * "See examples" on a phone (owner, 2026-11-17: on iPhone the bottom sheet sat almost entirely below the screen). Opened
+ * after scrolling down to the Style row: the panel's box inside the screen and filling it; Close visible and tappable
+ * (nothing over its middle); the list scrolls to its last style, which is then on the screen and tappable; picking it
+ * closes the panel and selects that style's chip in the row. `shot` (a path without extension) saves the open panel and
+ * the panel at its last style.
+ */
+async function checkSeeExamplesPhone(page: Page, url: string, tag: string, shot: string | null) {
+  await page.goto(url, { waitUntil: 'load' });
+  if (!(await page.waitForSelector('.mk-styles .se-link', { timeout: 30000 }).then(() => true, () => false))) return fail(`/challenge/make ${tag}: no "See examples" to open on a phone`);
+  await page.evaluate(() => document.fonts.ready);
+  await page.locator('.mk-styles').evaluate((e) => e.scrollIntoView({ block: 'end' }));
+  await page.waitForTimeout(300);
+  const scrolled = await page.evaluate(() => Math.round(scrollY));
+  await page.locator('.mk-styles .se-link').click();
+  const dlg = page.locator('dialog.se-panel');
+  if (!(await dlg.waitFor({ state: 'visible', timeout: 5000 }).then(() => true, () => false))) return fail(`/challenge/make ${tag}: "See examples" doesn't open its panel`);
+  await page.waitForTimeout(400);
+  const m = await page.evaluate(() => {
+    const vw = window.visualViewport?.width ?? innerWidth, vh = window.visualViewport?.height ?? innerHeight;
+    const r = document.querySelector('dialog.se-panel')!.getBoundingClientRect();
+    const c = document.querySelector('dialog.se-panel .se-close')!.getBoundingClientRect();
+    const hit = document.elementFromPoint(c.left + c.width / 2, c.top + c.height / 2);
+    return { vw, vh, box: { x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) }, close: { y: Math.round(c.top), b: Math.round(c.bottom), h: Math.round(c.height) }, closeHit: !!hit?.closest('.se-close') };
+  });
+  if (m.box.x < -1 || m.box.y < -1 || m.box.x + m.box.w > m.vw + 1 || m.box.y + m.box.h > m.vh + 1 || m.box.h < m.vh - 2 || m.box.w < m.vw - 2) fail(`/challenge/make ${tag}: the examples panel isn't the screen (scrolled ${scrolled}px first; ${JSON.stringify(m)})`);
+  if (m.close.y < 0 || m.close.b > m.vh || m.close.h < 44 || !m.closeHit) fail(`/challenge/make ${tag}: Close isn't visible and tappable in the examples panel (${JSON.stringify(m)})`);
+  if (shot) await page.screenshot({ path: `${shot}-open.png` });
+  // The list scrolls inside the panel to its last style.
+  const last = dlg.locator('.se-style').last();
+  const lastId = await last.getAttribute('data-style');
+  // The fixture offers few styles, so the list may fit the screen: when it does, the last style is pushed a screen and
+  // a half down for this check (padding on its row, removed before it is tapped), so the scrolling itself is tested.
+  const padded = await last.evaluate((li) => { const inner = li.closest('.se-inner') as HTMLElement; if (inner.scrollHeight > inner.clientHeight + 1) return false; (li as HTMLElement).style.paddingTop = `${Math.round(inner.clientHeight * 1.5)}px`; return true; });
+  await page.locator('dialog.se-panel .se-inner').evaluate((e) => e.scrollTo({ top: e.scrollHeight, behavior: 'instant' }));
+  await page.waitForTimeout(300);
+  const lp = await last.locator('.se-pick').evaluate((e) => { const r = e.getBoundingClientRect(); const vh = window.visualViewport?.height ?? innerHeight; const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); const inner = e.closest('.se-inner') as HTMLElement; const panel = e.closest('dialog')!.getBoundingClientRect(); return { top: Math.round(r.top), bottom: Math.round(r.bottom), vh, hit: !!hit && e.contains(hit), scrolled: Math.round(inner.scrollTop), innerH: inner.clientHeight, panelH: Math.round(panel.height), pageScrolled: Math.round(scrollY) }; });
+  if (lp.top < 0 || lp.bottom > lp.vh || !lp.hit || lp.scrolled <= 0 || Math.abs(lp.innerH - lp.panelH) > 2) fail(`/challenge/make ${tag}: the examples list doesn't scroll inside the panel to its last style (${JSON.stringify({ ...lp, padded })})`);
+  if (shot) await page.screenshot({ path: `${shot}-last.png` });
+  if (padded) await last.evaluate((li) => { (li as HTMLElement).style.paddingTop = ''; });
+  await last.locator('.se-pick').scrollIntoViewIfNeeded();
+  await last.locator('.se-pick').click();
+  if (await dlg.isVisible()) fail(`/challenge/make ${tag}: picking the last style doesn't close the examples panel`);
+  const chosen = await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style').catch(() => null);
+  if (chosen !== lastId) fail(`/challenge/make ${tag}: picking the last style (${lastId}) in the panel doesn't select its chip (${chosen})`);
+}
+
 async function checkChallengeLanding() {
   const { startChallengeDb, FIXTURE_CHALLENGE: FX } = await import('./fixtures/challenge-db');
   const data = await startChallengeDb(await freePort());
@@ -1894,6 +1941,137 @@ async function checkChallengeLanding() {
       const name = (s: string) => `challenge-${s}-${w}x${h}-${scheme}`;
       const snap = async (s: string, full = false) => {
         if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `${name(s)}.png`), fullPage: full });
+      };
+      // The app's side menu on a challenge page, closed or open (owner, 2026-11-16: check both): at 1200px and up the rail
+      // beside the page, remembered on the device (CHALLENGE_RAIL_KEY, read after hydration); under 1200px the rail over
+      // the page, opened with its control (.rail-collapse) and closed with Escape. `before` runs first, for what has to be
+      // tapped on the page before the rail covers it.
+      const RAIL_KEY = 'snowmoon.rail.challenge';
+      const loadWithMenu = async (p: string, sel: string, vw: number, menu: 'closed' | 'open') => {
+        await page.evaluate(([k, v]) => { try { if (v) localStorage.setItem(k, v); else localStorage.removeItem(k); } catch { /* none */ } }, [RAIL_KEY, menu === 'open' && vw >= 1200 ? 'open' : ''] as const);
+        await at(p, sel);
+        if (vw >= 1200) await page.waitForSelector(menu === 'open' ? '.shell:not(.rail-collapsed) .rail-body' : '.shell.rail-collapsed', { timeout: 10000 }).catch(() => fail(`${p} @${vw}: the side menu isn't ${menu}`));
+        else await page.waitForTimeout(500);
+      };
+      const openOverlayMenu = async (p: string, vw: number) => {
+        if (vw >= 1200) return;
+        await page.click('.rail-collapse');
+        if (!(await page.waitForSelector('.rail.is-open', { timeout: 5000 }).then(() => true, () => false))) fail(`${p} @${vw}: the side menu doesn't open over the page`);
+      };
+      const closeMenu = async (vw: number) => {
+        if (vw < 1200 && (await page.locator('.rail.is-open').count())) await page.keyboard.press('Escape');
+        await page.evaluate((k) => { try { localStorage.removeItem(k); } catch { /* none */ } }, RAIL_KEY);
+      };
+      // Scrolls the page from the top to the bottom, a third of a screen at a time, and measures at every step.
+      const scrollAndMeasure = (pinned: string, below: string, last: string | null) =>
+        page.evaluate(async ([pinnedSel, belowSel, lastSel]) => {
+          const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+          const max = document.documentElement.scrollHeight - innerHeight;
+          const steps: number[] = [];
+          for (let y = 0; y < max; y += Math.max(100, Math.round(innerHeight / 3))) steps.push(y);
+          steps.push(max);
+          const overlaps: string[] = [];
+          let lastSeen = !lastSel;
+          const pin = document.querySelector(pinnedSel)!;
+          const lastEl = lastSel ? document.querySelector(lastSel) : null;
+          for (const y of steps) {
+            window.scrollTo({ top: y, behavior: 'instant' });
+            await frame();
+            const a = pin.getBoundingClientRect();
+            for (const e of document.querySelectorAll(belowSel)) {
+              const b = e.getBoundingClientRect();
+              if (b.height > 0 && a.bottom > b.top + 1 && a.top < b.bottom - 1 && a.right > b.left + 1 && a.left < b.right - 1) overlaps.push(`at ${y}: ${Math.round(a.top)}–${Math.round(a.bottom)} over ${String((e as HTMLElement).className)} ${Math.round(b.top)}–${Math.round(b.bottom)}`);
+            }
+            if (lastEl) { const r = lastEl.getBoundingClientRect(); if (r.height > 0 && r.top >= 0 && r.bottom <= innerHeight) lastSeen = true; }
+          }
+          return { overlaps: overlaps.slice(0, 3), lastSeen, steps: steps.length, max, position: getComputedStyle(pin).position };
+        }, [pinned, below, last] as const);
+      // A character's page on a desktop (owner, 2026-11-16), at 1024 and 1440, the side menu closed and open. First load:
+      // "Start from someone's remix" (its heading) on the first screen at 1440 (not at 1024), the bases as many across as fit; the small link under "Make
+      // your own Zei" is a real in-page link to it, reached with the keyboard. Then Learn more and its spoilers fold open
+      // and the page scrolled from top to bottom: the left column, unpinned while Learn more is open, never overlaps the
+      // footer; Learn more's last line is on the screen at some point; the looks line shows once. Closed again, the column
+      // is pinned again.
+      const checkCharacterDesktop = async () => {
+        for (const [vw, vh] of [[1024, 768], [1440, 900]] as const) {
+          for (const menu of ['closed', 'open'] as const) {
+            const t = `@${vw}×${vh} (${scheme}, menu ${menu})`;
+            await page.setViewportSize({ width: vw, height: vh });
+            await loadWithMenu('/challenge/zei', '.ch-character-page', vw, menu);
+            const head = await page.locator('[data-choice="remix"] h3').evaluate((e) => { const r = e.getBoundingClientRect(); return { top: Math.round(r.top), bottom: Math.round(r.bottom), h: innerHeight }; });
+            // The bases (owner, 2026-11-16): every one at least 200px wide, as many across as fit (auto-fill), never
+            // stretched past their column: each base's width is one column's.
+            const bases = await page.locator('.chc-bases').evaluate((ul) => { const cols = getComputedStyle(ul).gridTemplateColumns.split(' ').map(parseFloat); return { cols, widths: [...ul.querySelectorAll(':scope > li')].map((li) => Math.round(li.getBoundingClientRect().width)) }; }).catch(() => null);
+            if (!bases || !bases.widths.length || bases.widths.some((x) => x < 200) || bases.cols.some((c) => c < 199.5) || bases.widths.some((x) => Math.abs(x - bases.cols[0]) > 1.5)) fail(`/challenge/zei ${t}: the bases aren't each at least 200px in an auto-filled grid (${JSON.stringify(bases)})`);
+            console.log(`note challenge/zei ${t}: bases ${bases?.cols.length ?? 0} across, ${bases?.widths.join(', ')}px; remix heading ${head.top}–${head.bottom} of ${head.h}`);
+            // On the first screen at 1440 only (owner, 2026-11-17): at 1024 it sits just below, and the link under "Make your own" points to it.
+            if (vw === 1440 && !(head.top >= 0 && head.bottom <= head.h)) fail(`/challenge/zei ${t}: "Start from someone’s remix" isn't on the first screen (its heading at ${head.top}–${head.bottom} of ${head.h})`);
+            if (menu === 'closed') {
+              if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-character-first-${vw}-menu-${menu}-${scheme}.png`) });
+              const link = page.locator('.chc-make-head a[data-slot="to-remix"]');
+              const ok = (await link.count()) === 1 && (await link.isVisible()) && (await link.getAttribute('href')) === '#from-remix' && ((await link.textContent()) ?? '').trim() === 'or start from someone’s remix ↓' && (await page.locator('section#from-remix[data-choice="remix"] h3#ch-remixes').count()) === 1;
+              if (!ok) fail(`/challenge/zei ${t}: no visible link "or start from someone’s remix ↓" to #from-remix under "Make your own Zei"`);
+              else {
+                // Reached with the keyboard: Tab from the heading before it lands on it; Enter goes to the remix choice.
+                await page.locator('h2.chc-make-h2').evaluate((e) => { (e as HTMLElement).tabIndex = -1; (e as HTMLElement).focus(); });
+                let focused = false;
+                for (let i = 0; i < 4 && !focused; i++) { await page.keyboard.press('Tab'); focused = await link.evaluate((e) => document.activeElement === e); }
+                if (!focused) fail(`/challenge/zei ${t}: the link to the remix choice isn't reached with Tab`);
+                else {
+                  await page.keyboard.press('Enter');
+                  await page.waitForTimeout(800);
+                  // At the top of the screen, or as near as the page can scroll (the fixture has few remixes, so the page
+                  // may end before the section reaches the top); its heading on screen either way.
+                  const at2 = await page.evaluate(() => { const r = document.querySelector('#from-remix h3')!.getBoundingClientRect(); return { hash: location.hash, top: Math.round(document.querySelector('#from-remix')!.getBoundingClientRect().top), headBottom: Math.round(r.bottom), atEnd: scrollY >= document.documentElement.scrollHeight - innerHeight - 2, scrolled: Math.round(scrollY), h: innerHeight }; });
+                  if (at2.hash !== '#from-remix' || at2.scrolled < 1 || at2.top < -2 || at2.headBottom > at2.h || (at2.top > 80 && !at2.atEnd)) fail(`/challenge/zei ${t}: Enter on the link doesn't bring the remix choice to the top (${JSON.stringify(at2)})`);
+                }
+                await page.evaluate(() => { history.replaceState(null, '', location.pathname); window.scrollTo({ top: 0, behavior: 'instant' }); });
+              }
+            }
+            const more = page.locator('.ch-character-page details.chc-learn');
+            await more.locator(':scope > summary').click();
+            await more.locator('details.chc-later > summary').click();
+            if (!(await more.evaluate((d) => (d as HTMLDetailsElement).open)) || !(await more.locator('details.chc-later').evaluate((d) => (d as HTMLDetailsElement).open))) fail(`/challenge/zei ${t}: Learn more and its spoilers fold don't both open`);
+            const looks = (((await more.textContent()) ?? '').match(/every look on this site is this edition|The book doesn’t describe Zei’s looks/g) ?? []).length;
+            if (looks !== 1) fail(`/challenge/zei ${t}: the looks line shows ${looks} times, not once`);
+            await openOverlayMenu('/challenge/zei', vw);
+            const m = await scrollAndMeasure('.chc-side', '.chc-foot', '.chc-learn .chc-more-body > :last-child li:last-child, .chc-learn .chc-more-body > p:last-child');
+            if (m.position !== 'static') fail(`/challenge/zei ${t}: the left column is still pinned (${m.position}) with Learn more open`);
+            if (m.overlaps.length) fail(`/challenge/zei ${t}: the left column runs over the footer (${m.overlaps.join('; ')})`);
+            if (!m.lastSeen) fail(`/challenge/zei ${t}: Learn more's last line is never on the screen while scrolling (${m.steps} steps to ${m.max}px)`);
+            if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-character-learn-bottom-${vw}-menu-${menu}-${scheme}.png`) });
+            await closeMenu(vw);
+            await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+            await more.locator(':scope > summary').click();
+            const closed = await page.locator('.chc-side').evaluate((e) => getComputedStyle(e).position);
+            if (closed !== 'sticky') fail(`/challenge/zei ${t}: with Learn more closed again the left column isn't pinned (${closed})`);
+            // Closed, pinned: still never over the footer.
+            const c2 = await scrollAndMeasure('.chc-side', '.chc-foot', null);
+            if (c2.overlaps.length) fail(`/challenge/zei ${t}: with Learn more closed the left column runs over the footer (${c2.overlaps.join('; ')})`);
+          }
+        }
+        await page.setViewportSize({ width: w, height: h });
+      };
+      // A picture's page on a desktop (owner, 2026-11-16): the picture is pinned the way the character page's column is.
+      // At 1024 and 1440, the side menu closed and open, "How it was made" open, the page scrolled from top to bottom: the
+      // picture stays inside its grid and never runs over anything after it.
+      const checkPictureDesktop = async (p: string) => {
+        for (const [vw, vh] of [[1024, 768], [1440, 900]] as const) {
+          for (const menu of ['closed', 'open'] as const) {
+            const t = `@${vw}×${vh} (${scheme}, menu ${menu})`;
+            await page.setViewportSize({ width: vw, height: vh });
+            await loadWithMenu(p, 'h1.mk-title', vw, menu);
+            await page.locator('details.chp-made > summary').click();
+            await openOverlayMenu(p, vw);
+            const m = await scrollAndMeasure('.chp-figure', '.chp-wrap ~ *, .chp-wrap + *, .ch-foot, footer', null);
+            const inside = await page.evaluate(() => { const f = document.querySelector('.chp-figure')!.getBoundingClientRect(), g = document.querySelector('.chp-grid')!.getBoundingClientRect(); return f.bottom <= g.bottom + 1 && f.top >= g.top - 1; });
+            if (m.position !== 'sticky') fail(`/challenge/p ${t}: the picture isn't pinned (${m.position})`);
+            if (m.overlaps.length || !inside) fail(`/challenge/p ${t}: the picture runs past its grid or over what follows (${m.overlaps.join('; ') || 'outside .chp-grid at the bottom'})`);
+            if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-picture-bottom-${vw}-menu-${menu}-${scheme}.png`) });
+            await closeMenu(vw);
+          }
+        }
+        await page.setViewportSize({ width: w, height: h });
       };
       await at('/challenge');
       await checkFloors(page, `/challenge ${tag} (local data)`, scheme);
@@ -2019,14 +2197,20 @@ async function checkChallengeLanding() {
         // The button: the summary drawn as an outlined button, full width on a phone, at least 44px tall.
         const btn = await more.locator(':scope > summary.chc-learn-btn').evaluate((e) => { const s = getComputedStyle(e); return { border: parseFloat(s.borderTopWidth) > 0 && s.borderTopStyle !== 'none', w: e.getBoundingClientRect().width, h: e.getBoundingClientRect().height, side: (e.closest('.chc-side') as HTMLElement | null)?.getBoundingClientRect().width ?? 0 }; }).catch(() => null);
         if (!btn || !btn.border || btn.h < 44 || (!wide && Math.abs(btn.w - btn.side) > 2)) fail(`/challenge/zei ${tag}: "Learn more about Zei" isn't an outlined button${wide ? '' : ' across the width'} (${JSON.stringify(btn)})`);
-        // Opens on one tap: the owner's texts in order, the spoilers fold nested and closed, the looks line last.
+        // Opens on one tap: the owner's texts in order, the spoilers fold nested and closed, "Room to invent." ending with
+        // the looks line, shown once (owner, 2026-11-16: the page's own looks line was a second one).
         await more.locator(':scope > summary').click();
         const parts = await more.locator('[data-part]').evaluateAll((els) => els.map((e) => e.getAttribute('data-part')));
         if (!(await more.evaluate((d) => (d as HTMLDetailsElement).open)) || parts.join() !== 'who,start,later,drives,invent') fail(`/challenge/zei ${tag}: "Learn more" doesn't open on a tap, or its parts read ${parts.join()}`);
         const fold = more.locator('details.chc-later');
         if ((await fold.count()) !== 1 || (await fold.evaluate((d) => (d as HTMLDetailsElement).open)) || ((await fold.locator('summary').textContent()) ?? '').trim() !== 'Later in the book (spoilers)') fail(`/challenge/zei ${tag}: no closed fold "Later in the book (spoilers)"`);
         if (await more.locator('[data-part="later"]').isVisible()) fail(`/challenge/zei ${tag}: the spoilers show before the fold is opened`);
-        if (!((await more.textContent()) ?? '').includes('The book doesn’t describe Zei’s looks.')) fail(`/challenge/zei ${tag}: "Learn more" doesn't say the look is this edition's`);
+        {
+          const lastInvent = ((await more.locator('[data-part="invent"] li').last().textContent()) ?? '').trim();
+          const looksLines = ((await more.textContent()) ?? '').match(/every look on this site is this edition|The book doesn’t describe Zei’s looks/g) ?? [];
+          if (!/^His looks: every look on this site is this edition's invention\.$/.test(lastInvent)) fail(`/challenge/zei ${tag}: "Room to invent." doesn't end with the looks line (it ends "${lastInvent}")`);
+          if (looksLines.length !== 1 || (await more.locator('.chc-looks').count())) fail(`/challenge/zei ${tag}: "Learn more" says the look is this edition's ${looksLines.length} times, not once (${looksLines.join(' | ')})`);
+        }
         const cite = more.locator('[data-part="start"] a.chc-cite').first();
         if ((await cite.getAttribute('href')) !== '/chapter/2#c2-b98') fail(`/challenge/zei ${tag}: a citation doesn't link to the reader's block (${await cite.getAttribute('href')})`);
         if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways with "Learn more" open`);
@@ -2089,19 +2273,20 @@ async function checkChallengeLanding() {
         if (!baseBtn || !tileBtn || baseBtn.style !== tileBtn.style || !baseBtn.outlined || baseBtn.h < 44 || tileBtn.h < 44) fail(`/challenge/zei ${tag}: "Remix this" isn't the same outlined button (≥44px) on a base and a remix tile (${JSON.stringify({ baseBtn, tileBtn })})`);
       }
       // The pictures' size (picture-size, 2026-11-16: Garance saw them shrink to ~230px bases and four small remixes a
-      // row). Desktop: "about 1280px usable at 1440" (the handoff), a 400px column, then the bases two across (each about
-      // 404px at 1440) and the remixes three (about 264px); at 1024 the column gives up its share (bases about 261px,
-      // remixes 169px; they were 125 and 90). Phone: a 300px slide (80% at most); the remixes two across.
+      // row). Desktop: "about 1280px usable at 1440" (the handoff), a 400px column, then the remixes three across (about
+      // 264px) and the bases as many across as fit at 200px or more (owner, 2026-11-16: one floor, every base at least
+      // 200px, at 1024 and 1440 with the side menu open and closed, checked in checkCharacterDesktop; it replaces #177's
+      // 380px at 1440 and 240px at 1024, for two across). Phone: a 300px slide (80% at most); the remixes two across.
       {
         const widths = async (sel: string) => page.locator(sel).evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().width)));
         const B = '.ch-char-bases .chc-pic', R = '.ch-char-remixes .chc-pic';
         const bw = await widths(B), rw = await widths(R);
-        if (!bw.length || bw.some((x) => x < (wide ? 380 : 270))) fail(`/challenge/zei ${tag}: the bases are ${bw.join(', ')}px wide, under ${wide ? 380 : 270}px`);
+        if (!bw.length || bw.some((x) => x < (wide ? 200 : 270))) fail(`/challenge/zei ${tag}: the bases are ${bw.join(', ')}px wide, under ${wide ? 200 : 270}px`);
         if (!rw.length || rw.some((x) => x < (wide ? 250 : 150))) fail(`/challenge/zei ${tag}: the remixes are ${rw.join(', ')}px wide, under ${wide ? 250 : 150}px`);
         if (wide) {
           await page.setViewportSize({ width: 1024, height: 768 });
           const nb = await widths(B), nr = await widths(R);
-          if (nb.some((x) => x < 240) || nr.some((x) => x < 150)) fail(`/challenge/zei @1024: the bases are ${nb.join(', ')}px and the remixes ${nr.join(', ')}px wide, under 240 and 150`);
+          if (nb.some((x) => x < 200) || nr.some((x) => x < 150)) fail(`/challenge/zei @1024: the bases are ${nb.join(', ')}px and the remixes ${nr.join(', ')}px wide, under 200 and 150`);
           await page.setViewportSize({ width: w, height: h });
         }
       }
@@ -2120,6 +2305,7 @@ async function checkChallengeLanding() {
       const pageText = await page.locator('.ch-character-page').evaluate((root) => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const out: string[] = []; for (let n = w.nextNode(); n; n = w.nextNode()) if (!n.parentElement?.closest('.chc-facts, .chc-learn')) out.push(n.textContent ?? ''); return out.join(' | '); });
       if (/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.test(pageText)) fail(`/challenge/zei ${tag}: shows a moment or a count (${/\bCh \d+\b|\d+\s*(likes?|remix(es)?|forks?|built on)\b/i.exec(pageText)?.[0]})`);
       await snap('character', true);
+      if (wide) await checkCharacterDesktop();
       await at('/challenge/gladias', '.ch-character-page');
       // Waited for, not read at once (it failed three times on 11 Nov and passed on each re-run); a miss says what was there.
       const none = await page.waitForSelector('.ch-char-remixes .ch-feed-none', { timeout: 20000 }).then((e) => e.textContent(), () => null);
@@ -2165,6 +2351,7 @@ async function checkChallengeLanding() {
           if (Math.abs(pw - w) > 1) fail(`/challenge/p ${tag}: the picture is ${pw}px wide, not the screen's ${w}px`);
         }
         await snap('picture', true);
+        if (w >= 1024) await checkPictureDesktop(`/challenge/p/${pic.versionId}`);
       }
 
       // The remix screen (owner, 2026-11-08): the picture small, one box, the Style row (the published styles, Random,
@@ -2192,7 +2379,8 @@ async function checkChallengeLanding() {
       await snap('make', true);
       // "See examples" under the Style row (owner, 2026-11-12): a dialog with each offered published style (its label,
       // words and up to three samples, each with the AI label), none of the three special chips; tapping a style picks
-      // it in the row and closes the panel. A bottom sheet under 768px (at the bottom, full width), a side panel wider.
+      // it in the row and closes the panel. Under 768px a full-screen sheet pinned to the top (owner, 2026-11-17: the
+      // bottom sheet sat below the screen on iPhone; it was checked as "at the bottom, full width"), a side panel wider.
       {
         const link = page.locator('.mk-styles .se-link');
         if ((await link.count()) !== 1 || ((await link.textContent()) ?? '').trim() !== 'See examples') fail(`/challenge/make ${tag}: no "See examples" link under the Style row`);
@@ -2222,8 +2410,8 @@ async function checkChallengeLanding() {
           }
           const box = await dlg.boundingBox();
           const vp = page.viewportSize()!;
-          const sheet = Boolean(box && Math.abs(box.y + box.height - vp.height) <= 1 && box.x <= 1 && Math.abs(box.width - vp.width) <= 1);
-          if (w < 768 && !sheet) fail(`/challenge/make ${tag}: the examples panel isn't a bottom sheet (${JSON.stringify(box)})`);
+          const sheet = Boolean(box && Math.abs(box.y) <= 1 && Math.abs(box.height - vp.height) <= 1 && box.x <= 1 && Math.abs(box.width - vp.width) <= 1);
+          if (w < 768 && !sheet) fail(`/challenge/make ${tag}: the examples panel isn't a full-screen sheet (${JSON.stringify(box)})`);
           if (w >= 768 && (!box || box.width >= vp.width - 1)) fail(`/challenge/make ${tag}: the examples panel fills the width on a wide screen (${JSON.stringify(box)})`);
           if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/make ${tag} (See examples): scrolls sideways`);
           await checkFloors(page, `/challenge/make ${tag} (See examples)`, scheme);
@@ -2241,6 +2429,28 @@ async function checkChallengeLanding() {
           if ((await page.locator('.mk-styles .cc-chip[aria-pressed="true"]').getAttribute('data-style')) !== moodId) fail(`/challenge/make ${tag}: tapping a sample doesn't pick "Moody graphic novel" in the Style row`);
           await snap('style-examples-picked');
           await page.locator('.mk-styles .cc-chip[data-style="same"]').click();
+        }
+      }
+      // On a phone (owner, 2026-11-17), opened after scrolling down to the Style row: the panel inside the screen, Close
+      // visible and tappable, the list scrolling to its last style, and picking it closes the panel and selects its chip.
+      // In Chromium here; in WebKit with an iPhone profile too, once, when WebKit is installed.
+      if (w < 768) {
+        const p2 = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch, isMobile: true });
+        await checkSeeExamplesPhone(p2, `${LOCAL}/challenge/make?from=${FX.sheets.zei[0]}`, `${tag} (Chromium)`, SHOTS ? path.join(SHOTS, `challenge-style-examples-phone-${w}x${h}-${scheme}`) : null);
+        await p2.context().close();
+        if (w === 390 && scheme === 'light') {
+          const wk = await webkit.launch(process.env.CHECK_UI_WEBKIT ? { executablePath: process.env.CHECK_UI_WEBKIT } : {}).catch((e: unknown) => {
+            console.log(`check:ui: "See examples" in WebKit (iPhone profile): NOT RUN, WebKit isn't installed (${String(e).split('\n')[0].slice(0, 160)})`);
+            return null;
+          });
+          if (wk) {
+            const ctx = await wk.newContext({ ...devices['iPhone 13'], colorScheme: 'light' });
+            // Nothing leaves the machine: only the local server answers.
+            await ctx.route((u) => !/^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?\//.test(u.href) && !u.href.startsWith('data:') && !u.href.startsWith('blob:'), (r) => r.abort());
+            await checkSeeExamplesPhone(await ctx.newPage(), `${LOCAL}/challenge/make?from=${FX.sheets.zei[0]}`, '@iPhone 13 (WebKit)', SHOTS ? path.join(SHOTS, 'challenge-style-examples-phone-webkit-iphone13') : null);
+            console.log(`check:ui: "See examples" in WebKit ${wk.version()} (iPhone 13 profile): run`);
+            await wk.close();
+          }
         }
       }
       await page.locator('.mk-styles .cc-chip[data-style="own"]').click();

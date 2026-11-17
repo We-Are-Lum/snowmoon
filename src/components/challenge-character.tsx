@@ -5,6 +5,7 @@ import type { CardTile } from './challenge-card';
 import { designByline } from '~/lib/images/byline';
 import { AiTag } from './ai-tag';
 import { CardLine, CharacterBases } from './challenge-card';
+import { LearnMore } from './challenge-learn-more';
 
 /**
  * A character's page, /challenge/<slug>: the redesign's screen 2 (Claude Design's handoff; owner-approved 2026-11-11),
@@ -17,6 +18,8 @@ import { CardLine, CharacterBases } from './challenge-card';
  * from someone's remix" (the owner's first remixes under their heading, then every remix of the character, newest
  * first, whole at 16:9, each with its own "Remix this"; "Older remixes" to the rest). No count of bases or remixes
  * (P5i). On a desktop the name, line and button are a sticky left column and "Make your own" is on the right.
+ * The column is pinned inside its own row (.chc-side-wrap), so it never runs over the footer, and unpinned while Learn
+ * more is open (owner, 2026-11-16). Under "Make your own", a link to the remix choice (desktop; DRAFT wording).
  *
  * A remix's picture opens its page; "Remix this" opens its remix screen. No hooks here, so the public page draws it on
  * the server and the admins' view (challenge-admin.tsx) in the browser.
@@ -101,71 +104,74 @@ export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
         <Link href="/challenge">{v.back}</Link>
       </p>
       {v.adminNote && <p className="dz-note ch-admin-only chc-admin">{v.adminNote}</p>}
-      <div className="chc-side">
-        <h1 className="chc-name">{c.name}</h1>
-        <div className="chc-line">
-          <CardLine c={c} w={w} />
-        </div>
-        {/* "Learn more about {name}" (owner, 2026-11-12): one expander. The whole book only inside the nested fold,
-            labelled exactly "Later in the book (spoilers)", closed by default (docs/principles.md P9g). */}
-        <details className="chc-more chc-learn">
+      {/* The left column's row (owner, 2026-11-16): the wrapper fills grid row 3, so the pinned column stays inside it and
+          never slides over the footer. */}
+      <div className="chc-side-wrap">
+        <div className="chc-side">
+          <h1 className="chc-name">{c.name}</h1>
+          <div className="chc-line">
+            <CardLine c={c} w={w} />
+          </div>
+          {/* "Learn more about {name}" (owner, 2026-11-12): one expander. The whole book only inside the nested fold,
+              labelled exactly "Later in the book (spoilers)", closed by default (docs/principles.md P9g). */}
           {/* A button that opens the expander in place (the design pass, owner 2026-11-16): the <details>' own summary, so
               it keeps its keyboard and screen-reader behaviour; only its look is a button's. */}
-          <summary className="chc-learn-btn">{P.learn.title}</summary>
-          <div className="chc-more-body">
-            {P.learn.draft && <p className="as-draft ch-draft">{P.learn.draft}</p>}
-            {P.learn.text ? (
-              <>
-                <p className="chc-learn-part" data-part="who">
-                  <strong>{P.learn.text.who.head}</strong> <Segs segs={P.learn.text.who.segs} more={P.learn.glossaryLink} />
-                </p>
-                <p className="chc-learn-part" data-part="start">
-                  <strong>{P.learn.text.start.head}</strong> <Segs segs={P.learn.text.start.segs} more={P.learn.glossaryLink} />
-                </p>
-                <details className="chc-later">
-                  <summary>{P.learn.text.later.head}</summary>
-                  <p className="chc-learn-part" data-part="later">
-                    <Segs segs={P.learn.text.later.segs} more={P.learn.glossaryLink} />
+          <LearnMore title={P.learn.title}>
+            <div className="chc-more-body">
+              {P.learn.draft && <p className="as-draft ch-draft">{P.learn.draft}</p>}
+              {P.learn.text ? (
+                <>
+                  <p className="chc-learn-part" data-part="who">
+                    <strong>{P.learn.text.who.head}</strong> <Segs segs={P.learn.text.who.segs} more={P.learn.glossaryLink} />
                   </p>
-                </details>
-                <p className="chc-learn-part" data-part="drives">
-                  <strong>{P.learn.text.drives.head}</strong> <Segs segs={P.learn.text.drives.segs} more={P.learn.glossaryLink} />
-                </p>
-                <div className="chc-learn-part" data-part="invent">
-                  <strong>{P.learn.text.invent.head}</strong>
-                  <ul className="chc-invent">
-                    {P.learn.text.invent.items.map((it, i) => (
-                      <li key={i}>
-                        <Segs segs={it} more={P.learn.glossaryLink} />
-                      </li>
-                    ))}
-                    <li className="chc-looks">{P.learn.looks}</li>
-                  </ul>
-                </div>
-              </>
-            ) : (
-              <>
-                {P.learn.facts.length > 0 && (
-                  <>
-                    <p className="chc-facts-note">{P.learn.factsNote}</p>
-                    <ul className="chc-facts">
-                      {P.learn.facts.map((f, i) => (
-                        <li key={f.block} className="chc-fact" data-block={f.block}>
-                          <span className="chc-fact-text">{f.text}</span>
-                          <q className="chc-fact-quote">{f.quote}</q>
-                          <span className="chc-fact-cite">
-                            {P.learn.chips[i]} · {f.block}
-                          </span>
+                  <p className="chc-learn-part" data-part="start">
+                    <strong>{P.learn.text.start.head}</strong> <Segs segs={P.learn.text.start.segs} more={P.learn.glossaryLink} />
+                  </p>
+                  <details className="chc-later">
+                    <summary>{P.learn.text.later.head}</summary>
+                    <p className="chc-learn-part" data-part="later">
+                      <Segs segs={P.learn.text.later.segs} more={P.learn.glossaryLink} />
+                    </p>
+                  </details>
+                  <p className="chc-learn-part" data-part="drives">
+                    <strong>{P.learn.text.drives.head}</strong> <Segs segs={P.learn.text.drives.segs} more={P.learn.glossaryLink} />
+                  </p>
+                  <div className="chc-learn-part" data-part="invent">
+                    <strong>{P.learn.text.invent.head}</strong>
+                    <ul className="chc-invent">
+                      {P.learn.text.invent.items.map((it, i) => (
+                        <li key={i}>
+                          <Segs segs={it} more={P.learn.glossaryLink} />
                         </li>
                       ))}
                     </ul>
-                  </>
-                )}
-                <p className="chc-looks">{P.learn.looks}</p>
-              </>
-            )}
-          </div>
-        </details>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {P.learn.facts.length > 0 && (
+                    <>
+                      <p className="chc-facts-note">{P.learn.factsNote}</p>
+                      <ul className="chc-facts">
+                        {P.learn.facts.map((f, i) => (
+                          <li key={f.block} className="chc-fact" data-block={f.block}>
+                            <span className="chc-fact-text">{f.text}</span>
+                            <q className="chc-fact-quote">{f.quote}</q>
+                            <span className="chc-fact-cite">
+                              {P.learn.chips[i]} · {f.block}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                  {/* Only here, with no Learn more text: "Room to invent" ends with its own looks line (owner, 2026-11-16). */}
+                  <p className="chc-looks">{P.learn.looks}</p>
+                </>
+              )}
+            </div>
+          </LearnMore>
+        </div>
       </div>
       {/* "Make your own {name}" and its two choices (the design pass, owner 2026-11-16; DRAFT wording). */}
       <section aria-labelledby="ch-make" className="chc-make">
@@ -174,6 +180,12 @@ export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
             {P.makeHead}
           </h2>
           <p className="chc-make-line">{P.makeLine}</p>
+          {/* The owner, 2026-11-16 (DRAFT wording): an in-page link to the remix choice, on a desktop. */}
+          <p className="chc-to-remix">
+            <a href="#from-remix" data-slot="to-remix">
+              {P.toRemix}
+            </a>
+          </p>
         </div>
         {c.note && <p className="dz-muted cc-note">{c.note}</p>}
         {c.bases.length > 0 && (
@@ -187,7 +199,7 @@ export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
             <CharacterBases c={c} alt={w.alt} remixThis={P.remixThis} />
           </section>
         )}
-        <section aria-labelledby="ch-remixes" className="ch-char-remixes chc-section chc-choice chc-every" data-choice="remix">
+        <section id="from-remix" aria-labelledby="ch-remixes" className="ch-char-remixes chc-section chc-choice chc-every" data-choice="remix">
           <div className="chc-choice-head">
             <h3 id="ch-remixes" className="chc-h3">
               {P.fromRemixHead}
