@@ -8,8 +8,9 @@
  * prepaid generations, the adaptation pages, Remix: drafted by the coding agent, reread by the owner;
  * Terms section 2's last words are the owner's), 2026-11-01 (agent play: Terms section 6d, Privacy section 4;
  * docs/legal/minpentai-agent-play-draft.md), 2026-11-01 again (the remix challenge: Terms sections 6e and 7, Privacy
- * sections 4, 6 and 7; docs/legal/remix-challenge-draft.md), and 2026-11-04 (the furthest chapter sent with assistant
- * questions: Privacy section 3; docs/legal/privacy-furthest-chapter-draft.md).
+ * sections 4, 6 and 7; docs/legal/remix-challenge-draft.md), 2026-11-04 (the furthest chapter sent with assistant
+ * questions: Privacy section 3; docs/legal/privacy-furthest-chapter-draft.md), and 2026-11-17 (the assistant uses the whole
+ * book; the chapter you're reading sent only for "where was I": Privacy section 3; docs/legal/assistant-whole-book-draft.md).
  * Only the owner changes the words.
  *
  * Kept true by check:principles:
@@ -44,7 +45,7 @@ export const LEGAL: {
   };
 } = {
   // MERGE DAY: the day PR #144 (Privacy §4's Lens score) merges and goes live. If the merge moves, this moves with it.
-  effective: '2026-11-10',
+  effective: '2026-11-17',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -258,7 +259,11 @@ export const LEGAL: {
     // you can change it before you make the picture." The words before were 18g3ada.
     // 2026-11-10, owner's reread of PR #144 ("Reread #144: Privacy §4, only the Lens phrase changes"): §4's challenge
     // item names "the Lens score for a Lens account" among the checks. The words before were k5nsr6.
-    privacy: { words: '1g9hf8', on: '2026-11-10', by: 'FID 6786' },
+    // 2026-11-17, owner's reread for #184 (the assistant uses the whole book; docs/legal/assistant-whole-book-draft.md),
+    // given exactly: §3 now says "the assistant sends the chapter you're reading, as a number, with each question, so it
+    // can answer “where was I”; it isn't kept." (was the furthest chapter, sent so that answers stay within it). The
+    // words before were 1g9hf8.
+    privacy: { words: 'lntwc3', on: '2026-11-17', by: 'FID 6786' },
   },
 };
 
@@ -292,7 +297,7 @@ export const PRIVACY: LegalDoc = {
   sections: [
     { n: 1, head: 'Who we are.', body: ['Lum LLC, a Wyoming limited liability company, operates Snowmoon Party.'] },
     { n: 2, head: 'The short version.', body: ['You can read and listen without an account, and we keep nothing about you when you do. We use no advertising or analytics trackers and set no cookies. We do not sell data.'] },
-    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet, Lens or Bluesky sign-in), a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, the Bluesky handle you last signed in with, to fill it in next time, and a payment you have sent but not yet seen credited. If you choose a closed model for a challenge picture, it also stores that you confirmed you are 18 or older, and which makers\' notices you asked not to be shown again; with each such picture we receive only that you confirmed, and don\'t keep it. These stay on your device, except that the assistant sends the furthest chapter, as a number (or another chapter you choose for a conversation), with each question and its search of the book, so that answers stay within it; it isn\'t kept. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
+    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet, Lens or Bluesky sign-in), a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, the Bluesky handle you last signed in with, to fill it in next time, and a payment you have sent but not yet seen credited. If you choose a closed model for a challenge picture, it also stores that you confirmed you are 18 or older, and which makers\' notices you asked not to be shown again; with each such picture we receive only that you confirmed, and don\'t keep it. These stay on your device, except that the assistant sends the chapter you\'re reading, as a number, with each question, so it can answer “where was I”; it isn\'t kept. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
     {
       n: 4,
       head: 'Kept by us when you sign in.',

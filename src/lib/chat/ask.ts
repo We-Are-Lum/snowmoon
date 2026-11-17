@@ -3,6 +3,7 @@ import { CHAT } from '../config';
 import { renderMarkdown } from '../render';
 import { blocksById, labels, retrieve, type Passage } from './retrieve';
 import { glossaryWords, type GlossaryLink } from './glossary';
+import { noteLines, routeQuestion, type Note } from './notes';
 import { blockIdOk, chapterOf, sanitizeReply, type Part } from './sanitize';
 import { record, reserve, worstCaseUsd } from './limits';
 
@@ -13,8 +14,11 @@ import { record, reserve, worstCaseUsd } from './limits';
  */
 export interface AskInput {
   question: string;
-  /** The last chapter this thread may use: what the reader has read, or more if they opted in. */
-  limit: number;
+  /**
+   * The chapter the reader is on (the one opened last on this device), or null when unknown. Only a hint, used only for
+   * "where was I" (owner, 2026-11-17); the assistant uses the whole book for every question.
+   */
+  position?: number | null;
   /** Blocks the reader attached ("ask about this"). */
   attached?: string[];
   /** Earlier turns of this thread, from the device. */
@@ -30,15 +34,17 @@ export interface Quote {
   html: string;
 }
 
-/** Glossary entries the question names, within the chapter limit: the reply points to them first. Absent in replies saved before 2026-10-14. */
+/** Glossary entries the question names: the reply points to them first. Absent in replies saved before 2026-10-14. */
 type Glossary = { glossary?: GlossaryLink[] };
 
 export type AskResult =
-  | ({ state: 'answer'; parts: Part[]; quotes: Quote[]; heldBack: boolean; left: number; guard: 'ok' | 'none'; dropped: number; regenerated: boolean } & Glossary)
-  | ({ state: 'held'; heldBack: true; left: number } & Glossary)
+  /** `notes`: one line per kind of reviewed note the answer cites (NOTE_WORDING), shown under it. Absent before 2026-11-17. */
+  | ({ state: 'answer'; parts: Part[]; quotes: Quote[]; notes?: string[]; left: number; guard: 'ok' | 'none'; dropped: number; regenerated: boolean } & Glossary)
   | { state: 'declined'; left: number }
   /** The answer's claims were not all supported by the passages it cited: shown as "the passages don't say". */
-  | ({ state: 'unsupported'; heldBack: boolean; left: number } & Glossary)
+  | ({ state: 'unsupported'; left: number } & Glossary)
+  /** "Where was I" with no reading position on this device: which chapter? No message is used. */
+  | { state: 'which' }
   | { state: 'limit' }
   | { state: 'spend' };
 
@@ -71,77 +77,94 @@ export class AskError extends Error {
   }
 }
 
-const ANSWER_TOKENS = 1200;
+/** Room for the model's reasoning and a summary of up to about 180 words. */
+const ANSWER_TOKENS = 2500;
+/** The whole book: 32 notes to read and about 250 words (an empty answer at 2500, 2026-11-17). */
+const BOOK_ANSWER_TOKENS = 5000;
 const GUARD_TOKENS = 1500;
 const SEARCH_TOKENS = 600;
+/** The support check reads long summary answers and their notes: room to reason before its verdict (an empty verdict fails closed). */
+const SUPPORT_TOKENS = 4000;
 
 function passagesText(passages: Passage[]): string {
   return passages.map((p) => `[${p.id}] ${p.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()}`).join('\n');
+}
+
+function notesText(notes: Note[]): string {
+  return notes.map((n) => `(${n.label}) ${n.text}`).join('\n');
+}
+
+/** The question for the model: the reviewed notes (if any), the book's passages, and the question. */
+export function userMessage(notes: Note[], passages: Passage[], question: string): string {
+  const head = notes.length ? `Reviewed notes (checked against the book by people; cite the block ids they give):\n${notesText(notes)}\n\n` : '';
+  return `${head}Passages from the book:\n${passagesText(passages)}\n\nQuestion: ${question}`;
 }
 
 export function validate(input: AskInput): AskInput {
   const question = String(input.question ?? '').trim();
   if (!question) throw new AskError('Ask a question about the book.');
   if (question.length > CHAT.questionMaxChars) throw new AskError(`Keep the question under ${CHAT.questionMaxChars} characters.`);
-  const limit = Number(input.limit);
-  if (!Number.isInteger(limit) || limit < 1 || limit > 32) throw new AskError('No chapter limit.');
+  const p = Number(input.position);
+  const position = input.position != null && Number.isInteger(p) && p >= 1 && p <= 32 ? p : null;
   const attached = (input.attached ?? []).map(String).slice(0, 4);
-  for (const id of attached) {
-    if (!blockIdOk(id)) throw new AskError(`Not a block: ${id}`);
-    if (chapterOf(id)! > limit) throw new AskError(`${id} is past chapter ${limit}, the limit for this thread.`);
-  }
+  for (const id of attached) if (!blockIdOk(id) || chapterOf(id)! > 32) throw new AskError(`Not a block: ${id}`);
   const history = (input.history ?? [])
     .filter((h) => (h.role === 'user' || h.role === 'assistant') && typeof h.text === 'string')
     .slice(-CHAT.historyTurns)
     .map((h) => ({ role: h.role, text: h.text.slice(0, 2000) }));
-  return { question, limit, attached, history };
+  return { question, position, attached, history };
 }
 
 export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   const input = validate(raw);
   const { sql, fid } = deps;
+  // Glossary words: their entries are pointed to first, and a misspelled one is searched as the book spells it.
+  const words = await glossaryWords(sql, input.question);
+  const glossary = words.links;
+  // Reviewed notes (src/lib/chat/notes.ts): a chapter or a Learn more character named, "where was I", the whole book.
+  const routed = routeQuestion(words.corrected, input.position ?? null);
+  if (routed.needsChapter) return { state: 'which' };
+  const question = words.corrected + routed.framing;
+
   // Worst case: search words, two answers (the retry), four guard calls and two support checks (each may be retried once).
-  const slot = await reserve(sql, fid, worstCaseUsd(2 * ANSWER_TOKENS + SEARCH_TOKENS, 6 * GUARD_TOKENS, 24000));
+  const slot = await reserve(sql, fid, worstCaseUsd(2 * BOOK_ANSWER_TOKENS + SEARCH_TOKENS, 4 * GUARD_TOKENS + 2 * SUPPORT_TOKENS, 32000));
   if (!slot.ok) return { state: slot.reason };
 
-  // Glossary words: their entries are pointed to first, and a misspelled one is searched as the book spells it.
-  // The model and the guards see a correction only to a word that appears by the limit.
-  const words = await glossaryWords(sql, input.question, input.limit);
-  const glossary = words.links;
-  const question = words.correctedWithin;
-
-  let retrieved;
+  let passages: Passage[];
   try {
     const terms = CHAT.searchTerms && deps.searchPrompt ? await searchTerms(deps, question) : '';
-    const dense = deps.dense ? await deps.dense(question, input.limit) : undefined;
-    retrieved = await retrieve(sql, terms ? `${words.corrected} ${terms}` : words.corrected, input.limit, input.attached, dense ? { dense } : {});
+    const dense = deps.dense ? await deps.dense(question, 32) : undefined;
+    const found = await retrieve(sql, terms ? `${words.corrected} ${terms}` : words.corrected, input.attached, dense ? { dense } : {});
+    // The named characters' glossary sentences, with the search's passages, in book order.
+    const extra = routed.blocks.length ? await blocksById(sql, routed.blocks) : [];
+    const seen = new Set(found.passages.map((p) => p.id));
+    passages = [...found.passages, ...extra.filter((p) => !seen.has(p.id))].sort((a, b) => a.chapter - b.chapter || a.idx - b.idx);
   } catch (e) {
     throw new AskError((e as Error).message);
   }
-  const { passages, heldBack } = retrieved;
-  if (!passages.length && heldBack) return { state: 'held', heldBack: true, left: slot.left, glossary };
 
   const messages: Message[] = [
-    { role: 'system', content: deps.systemPrompt.replace('{{LIMIT}}', String(input.limit)) },
+    { role: 'system', content: deps.systemPrompt.replace('{{WORDS}}', String(routed.words)) },
     ...input.history!.map((h) => ({ role: h.role, content: h.text })),
-    { role: 'user', content: `Passages from chapters 1–${input.limit}:\n${passagesText(passages)}\n\nQuestion: ${question}` },
+    { role: 'user', content: userMessage(routed.notes, passages, question) },
   ];
-  const allowed = new Set(passages.map((p) => p.id));
+  const allowed = new Set([...passages.map((p) => p.id), ...routed.notes.flatMap((n) => n.sources)]);
 
   // Answer, then the guard; on a flag, one retry with a reminder. The flagged answer is never shown or sent back.
-  let clean = await answerOnce(deps, messages, allowed);
+  const answerTokens = routed.shape === 'book' ? BOOK_ANSWER_TOKENS : ANSWER_TOKENS;
+  let clean = await answerOnce(deps, messages, allowed, answerTokens);
   let verdict = await guard(deps, question, clean.shown);
   let regenerated = false;
   if (verdict.verdict === 'flagged') {
     regenerated = true;
     const reminder = deps.reminder.replace('{{REASON}}', verdict.reason || 'it read as writing for them');
-    clean = await answerOnce(deps, [...messages, { role: 'user', content: reminder }], allowed);
+    clean = await answerOnce(deps, [...messages, { role: 'user', content: reminder }], allowed, answerTokens);
     verdict = await guard(deps, question, clean.shown);
   }
   if (verdict.verdict === 'flagged') return { state: 'declined', left: slot.left };
 
   // Quotes come from the database, by id, never from the model's words.
-  const blocks = await blocksById(sql, clean.cites, input.limit);
+  const blocks = await blocksById(sql, clean.cites);
   const label = await labels(sql, blocks.map((b) => b.chapter));
   const quotes: Quote[] = blocks.map((b) => ({
     id: b.id,
@@ -150,18 +173,22 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
     html: b.kind === 'paragraph' || b.kind === 'quote' ? renderMarkdown(b) : b.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
   }));
   const found = new Set(quotes.map((q) => q.id));
+  // The reviewed notes the answer rests on: those that give a block it cites.
+  const used = routed.notes.filter((n) => n.sources.some((id) => found.has(id)));
 
-  // The second guard question: every claim supported by the passages it cites? If not, or no verdict, it isn't shown.
+  // The second guard question: every claim supported by the passages it cites (or the reviewed notes that give them)?
+  // If not, or no verdict, it isn't shown.
   if (deps.supportPolicy) {
-    const supported = await supportCheck(deps, question, clean.shown, blocks, input.limit);
-    if (!supported) return { state: 'unsupported', heldBack, left: slot.left, glossary };
+    const supported = await supportCheck(deps, question, clean.shown, blocks, used);
+    if (!supported) return { state: 'unsupported', left: slot.left, glossary };
   }
   const parts = clean.parts.filter((p) => p.type === 'text' || found.has(p.id));
+  const lines = noteLines(used);
   return {
     state: 'answer',
     parts,
     quotes,
-    heldBack,
+    ...(lines.length ? { notes: lines } : {}),
     left: slot.left,
     guard: verdict.verdict === 'ok' ? 'ok' : 'none',
     regenerated,
@@ -171,8 +198,8 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
 }
 
 /** One answer from the model, cleaned: citations checked, the model's own quotations removed. Recorded with no text. */
-async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>) {
-  const answer = await deps.complete(CHAT.model, messages, { maxTokens: ANSWER_TOKENS, temperature: 0.4 });
+async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>, maxTokens = ANSWER_TOKENS) {
+  const answer = await deps.complete(CHAT.model, messages, { maxTokens, temperature: 0.4 });
   await record(deps.sql, {
     kind: 'answer', model: answer.model, provider: answer.provider,
     promptTokens: answer.promptTokens, completionTokens: answer.completionTokens, costUsd: answer.costUsd,
@@ -224,11 +251,12 @@ async function searchTerms(deps: AskDeps, question: string): Promise<string> {
 
 /**
  * Is every claim in the answer supported by the passages it cites? The guard model reads the
- * answer and the stored text of each cited block, with the block before it as context. Fails
+ * answer and the stored text of each cited block, with the block before it as context, and the
+ * reviewed notes that give those blocks (a summary sentence often rests on several). Fails
  * closed: no verdict after one retry counts as unsupported. Recorded as a guard call (no text).
  */
-async function supportCheck(deps: AskDeps, question: string, shown: string, cited: Passage[], limit: number): Promise<boolean> {
-  const before = await blocksById(deps.sql, cited.map((b) => `c${b.chapter}-b${b.idx - 1}`), limit);
+async function supportCheck(deps: AskDeps, question: string, shown: string, cited: Passage[], notes: Note[]): Promise<boolean> {
+  const before = await blocksById(deps.sql, cited.map((b) => `c${b.chapter}-b${b.idx - 1}`));
   const byId = new Map(before.map((b) => [b.id, b]));
   const passages = cited
     .map((b) => {
@@ -242,9 +270,10 @@ async function supportCheck(deps: AskDeps, question: string, shown: string, cite
       CHAT.guardModel,
       [
         { role: 'system', content: deps.supportPolicy! },
-        { role: 'user', content: `QUESTION:\n${question}\n\nCITED PASSAGES:\n${passages || '(none)'}\n\nANSWER:\n${shown}` },
+        // With reviewed notes, the question is whether the answer adds anything the notes and passages don't say.
+        { role: 'user', content: `QUESTION:\n${question}\n\n${notes.length ? `REVIEWED NOTES (support, like passages):\n${notesText(notes)}\n\n` : ''}CITED PASSAGES:\n${passages || '(none)'}\n\nANSWER:\n${shown}` },
       ],
-      { maxTokens: GUARD_TOKENS, temperature: 0 },
+      { maxTokens: SUPPORT_TOKENS, temperature: 0 },
     );
     const first = g.text.trim().split(/\s+/)[0]?.toUpperCase() ?? '';
     const verdict = first.startsWith('UNSUPPORTED') ? 'flagged' : first.startsWith('SUPPORTED') ? 'ok' : 'none';

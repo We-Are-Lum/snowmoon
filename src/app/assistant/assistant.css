@@ -39,7 +39,6 @@
   padding: 8px 0; border-bottom: 1px dashed var(--ink);
   font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase;
 }
-.as-limit { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px; padding: 6px 0; font-size: 15px; color: var(--muted); border-bottom: 1px solid var(--rule); }
 .as-picker select {
   padding: 4px 6px; border: 1px solid var(--rule); border-radius: var(--radius);
   background: var(--paper); color: var(--ink); font-family: var(--label); font-size: var(--text-label);
@@ -76,8 +75,11 @@
 .as-quote figcaption a { display: inline-block; padding: 6px 0; }
 
 /* 9b, 9c, refusals */
-.as-held { padding: 12px 14px; border: 1.5px dashed var(--muted); border-radius: var(--radius); }
-.as-held p { margin: 0 0 6px; }
+.as-which { padding: 12px 14px; border: 1.5px dashed var(--muted); border-radius: var(--radius); }
+.as-which p { margin: 0 0 6px; }
+/* The reviewed-notes line under an answer (2026-11-17): small print, like the chapter summary's AI label. */
+.as-notes { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--rule); }
+.as-notes .as-note { margin: 0 0 2px; font-size: 14px; line-height: 1.4; text-wrap: pretty; }
 .as-stop { padding: 12px 14px; border: 1px solid var(--rule); border-radius: var(--radius); }
 .as-stop p { margin: 0 0 6px; }
 .as-instead { margin: 0; padding-left: 1.1em; }

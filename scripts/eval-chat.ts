@@ -6,8 +6,10 @@
  *   QUESTIONS=fresh-questions.json …                    the held-out set (nothing was tuned on it)
  *
  * Questions and their answering blocks: docs/proposals/chat-eval/questions.json (chapters 1–15,
- * written by the coding agent with the blocks checked by hand). Every question is asked with the
- * thread limit at chapter 15. Runs on PGlite with migrations 0001–0007 and every block, like test:chat.
+ * written by the coding agent with the blocks checked by hand). Since 2026-11-17 every question is asked
+ * over the whole book (owner: "Spoilers no longer matter"); before, with the thread limit at chapter 15.
+ * QUESTIONS=summary-questions.json: the 16 summary, who-is, loose and whole-book questions (2026-11-17);
+ * a question's `position` is the reader's current chapter, for "where was I". Runs on PGlite with migrations 0001–0007 and every block, like test:chat.
  * --full spends money (well under a cent a question); its total is printed and goes in chat-spend.md.
  */
 import { readFile, writeFile } from 'node:fs/promises';
@@ -25,10 +27,9 @@ import { CHAT } from '../src/lib/config';
 const ROOT = path.resolve(import.meta.dirname, '..');
 const mode = process.argv[2];
 const out = process.argv[3];
-const LIMIT = 15;
 /** DENSE=path: block ids ranked per question by an embedding model (made offline), fused with the word search. */
 const DENSE = process.env.DENSE ? (JSON.parse(await readFile(process.env.DENSE, 'utf8')) as { model: string; ranks: Record<string, string[]> }) : null;
-interface Q { id: string; chapter: number; question: string; gold: string[]; answer_fact: string; type: string }
+interface Q { id: string; chapter: number; question: string; gold: string[]; answer_fact: string; type: string; position?: number }
 // QUESTIONS=fresh-questions.json for the held-out set (2026-10-07); the tuning set by default.
 const questions = JSON.parse(await readFile(path.join(ROOT, 'docs/proposals/chat-eval', process.env.QUESTIONS ?? 'questions.json'), 'utf8')) as Q[];
 
@@ -50,7 +51,7 @@ try {
   let first = 0;
   const misses: string[] = [];
   for (const q of questions) {
-    const r = await retrieve(sql, q.question, LIMIT, [], DENSE ? { dense: DENSE.ranks[q.id] } : {});
+    const r = await retrieve(sql, q.question, [], DENSE ? { dense: DENSE.ranks[q.id] } : {});
     const sent = new Set(r.passages.map((p) => p.id));
     const hit = q.gold.some((g) => sent.has(g));
     any += hit ? 1 : 0;
@@ -106,10 +107,10 @@ try {
     for (const [i, q] of questions.entries()) {
       current = q.id;
       // A fresh fid per question keeps the 30-a-day limit out of the way.
-      const result = await ask(deps(90000 + i), { question: q.question, limit: LIMIT });
+      const result = await ask(deps(90000 + i), { question: q.question, position: q.position ?? null });
       // What was searched and sent: the search words are the first call's text.
       const words = log.find((l) => l.q === q.id)?.text ?? '';
-      const passages = (await retrieve(sql, `${q.question} ${(words.match(/[\p{L}\p{N}][\p{L}\p{N}'-]*/gu) ?? []).slice(0, 20).join(' ')}`, LIMIT, [], DENSE ? { dense: DENSE.ranks[q.id] } : {})).passages.map((p) => p.id);
+      const passages = (await retrieve(sql, `${q.question} ${(words.match(/[\p{L}\p{N}][\p{L}\p{N}'-]*/gu) ?? []).slice(0, 20).join(' ')}`, [], DENSE ? { dense: DENSE.ranks[q.id] } : {})).passages.map((p) => p.id);
       results.push({ ...q, passages, result, calls: log.filter((l) => l.q === q.id) });
       console.log(`${q.id} ${result.state}${result.state === 'answer' && result.regenerated ? ' (regenerated)' : ''}`);
       if (process.env.EVAL_SPEND_CAP && (await spent()) > Number(process.env.EVAL_SPEND_CAP)) { console.log('spend cap reached, stopping'); break; }

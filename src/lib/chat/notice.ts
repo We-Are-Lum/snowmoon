@@ -21,12 +21,22 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: '70a28a9c8ee48471',
+  reviewedFor: 'b2c084378ab28081',
   /** Who did that reread: the coding agent, or the owner. */
   by: 'agent',
-  on: '2026-11-05',
+  on: '2026-11-17',
   note:
-    'Reviewed by the coding agent (Claude, a closed model by Anthropic) on 2026-11-05, for branch assistant-any-account ' +
+    'Reread again by the coding agent on 2026-11-17 after merging main into chat-summaries (principle 9 retired, #182) and the ' +
+    'owner\'s approval of the notes line (NOTE_WORDING, no longer draft): words unchanged, still true. Privacy §3 now has the ' +
+    'owner\'s reread words ("the chapter you\'re reading … so it can answer “where was I”"). ' +
+    'Before that: reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-17 for branch chat-summaries, words unchanged: ' +
+    'the assistant now uses the whole book (owner, 2026-11-17) and adds reviewed notes (chapter summaries, Learn more texts) ' +
+    'it may sum up, cited to their blocks. Item 1 still holds (answers point to the passages they rest on and show the ' +
+    'book\'s own words); no new service receives questions (items 3 and 4); nothing new is kept: the chapter opened last ' +
+    'is sent as a number with each question and used only for "where was I". Privacy §3\'s sentence about the furthest ' +
+    'chapter was to change only on the owner\'s reread (docs/legal/assistant-whole-book-draft.md). /about and the private box ' +
+    'say nothing about chapters. ' +
+    'Previous reread: Reviewed by the coding agent (Claude, a closed model by Anthropic) on 2026-11-05, for branch assistant-any-account ' +
     '(step 1): the notice\'s new words match how the chat now works. The routes go through src/lib/chat/gate.ts with ' +
     'ASSISTANT.anyAccount on: every account passes its network\'s check (Neynar, the Lens score, the Bluesky check), a ' +
     'Lens or Bluesky account not linked to a FID asks under its own account, and questions are counted with that account ' +

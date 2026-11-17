@@ -7,10 +7,14 @@
  * blocks with the real seed script, and talks to it as studio_writer, the app's
  * role. The model is a stand-in that returns whatever each case needs, so no
  * paid call is made. Checks:
- * - The spoiler limit: retrieval never returns a block past the thread's chapter
- *   limit; an attached block past it is refused before a message is spent; a
- *   question only later chapters answer is held back; citations past the limit
- *   are dropped.
+ * - The whole book (owner, 2026-11-17: "Spoilers no longer matter"): retrieval,
+ *   glossary words and attached blocks use every chapter; no chapter limit is
+ *   sent to the model.
+ * - Reviewed notes (src/lib/chat/notes.ts): a chapter named adds its summary
+ *   sections, a Learn more character named adds their whole text and glossary
+ *   sentences, "where was I" uses the reader's chapter (or asks which, spending
+ *   no message), the whole book uses every chapter's first section; an answer
+ *   citing a note's source is kept and labelled; the support check sees the note.
  * - Citations that don't exist: dropped and never rendered; every quote shown
  *   is the stored text of a real block, never the model's words.
  * - The daily limit (30) and the spend cap.
@@ -31,6 +35,7 @@ import { ask, AskError, type Complete } from '../src/lib/chat/ask';
 import { retrieve } from '../src/lib/chat/retrieve';
 import { sanitizeReply } from '../src/lib/chat/sanitize';
 import { glossaryWords } from '../src/lib/chat/glossary';
+import { chaptersNamed, charactersNamed, NOTE_WORDING, routeQuestion } from '../src/lib/chat/notes';
 import { CHAT } from '../src/lib/config';
 import { providerOptions, servedBy, servingAllowed } from '../src/lib/chat/provider';
 
@@ -68,33 +73,49 @@ try {
   const [{ n }] = await sql`select count(*)::int as n from studio.text_blocks`;
   check('seed loaded every block', n === 4322, String(n));
 
-  // --- The spoiler limit, at retrieval ---------------------------------------
-  for (const limit of [1, 3, 12, 15]) {
-    for (const q of ['What happens to Deluin after Redshire is invaded?', 'Who is Delwart really working for?', 'Why is Gladias asked to rate a building?', 'Minpentai walls gliders symbol']) {
-      const r = await retrieve(sql, q, limit);
-      const past = r.passages.filter((p) => p.chapter > limit).map((p) => p.id);
-      check(`retrieve(limit ${limit}) "${q}" stays within the limit`, past.length === 0, past.join(', '));
-    }
-  }
+  // --- The whole book, at retrieval ----------------------------------------
   {
-    // Deluin first appears in chapter 12: up to chapter 3 the book can't answer, later chapters can.
-    const r = await retrieve(sql, 'Deluin Redshire invaded', 3);
-    check('a question only later chapters answer is held back', r.heldBack, JSON.stringify(r.passages.map((p) => p.id)));
-    const r2 = await retrieve(sql, 'Gladias vote building sortition', 1);
-    check('a question chapter 1 answers is not held back', !r2.heldBack && r2.passages.length > 0);
+    // Deluin first appears in chapter 12: the search finds him there, with nothing held back.
+    const r = await retrieve(sql, 'Deluin Redshire invaded');
+    check('retrieval uses later chapters', r.passages.some((p) => p.chapter >= 12), JSON.stringify(r.passages.map((p) => p.id)));
+    check('nothing is held back over the whole book', !r.heldBack);
+    const r2 = await retrieve(sql, 'Gladias vote building sortition');
     check('a hit brings the block before it', r2.passages.some((p, i) => i > 0 && r2.passages[i - 1].chapter === p.chapter && r2.passages[i - 1].idx === p.idx - 1));
+    const att = await retrieve(sql, 'x', ['c14-b97']);
+    check('an attached block from any chapter is used', att.passages.some((p) => p.id === 'c14-b97'));
+    // The image coach keeps its own draft range.
+    const coach = await retrieve(sql, 'Deluin Redshire invaded', [], { upTo: 3 });
+    check("the coach's range still holds (upTo)", coach.passages.every((p) => p.chapter <= 3) && coach.heldBack, JSON.stringify(coach.passages.map((p) => p.id)));
   }
-  await retrieve(sql, 'x', 3, ['c14-b97']).then(
-    () => failures.push('an attached block past the limit was accepted by retrieve'),
-    () => passed++,
-  );
+
+  // --- Routing to reviewed notes (pure) -------------------------------------
+  {
+    const ch = (q: string) => chaptersNamed(q).join(',');
+    check('chapters named: digits, words, ranges, "ch"', ch('Summarize chapter 5') === '5' && ch('ch 7?') === '7' && ch('chapters 3 to 4') === '3,4' && ch('chapter twenty-one') === '21' && ch('Chapter five') === '5' && ch('chapters 2-9') === '2,3,4', [ch('chapters 2-9'), ch('chapter twenty-one')].join(' | '));
+    check('no chapter in an ordinary question', ch('How does voting on buildings work?') === '' && ch('Who chose 5 players?') === '');
+    const who = (q: string) => charactersNamed(q).join(',');
+    check('characters named in any case and through aliases', who('remind me about mu') === 'mu' && who('Who is Jahen?') === 'bai' && who('Who is Uncle Glad?') === 'gladias' && who('Lord Ephelion') === 'ephelion', [who('remind me about mu'), who('Who is Jahen?')].join(' | '));
+    check('a name inside a word is not a character', who('Is a mule a horse? Is muzei a word?') === '');
+    const r = (q: string, pos: number | null = null) => routeQuestion(q, pos);
+    check('a chapter named adds its summary sections, at 180 words', r("what's chapter 5 about?").shape === 'summary' && r("what's chapter 5 about?").notes.every((n) => n.label.startsWith('summary c5')) && r('ch 7?').words === 180);
+    check('a chapter named in any question adds its summary (not the verb)', r('Why does Zei go home in chapter 7?').notes.some((n) => n.label.startsWith('summary c7')) && r('Why does Zei go home in chapter 7?').words === 120);
+    const bai = r('Who is Bai?');
+    check('a Learn more character adds the whole text, the later part included, and glossary sentences', ['who', 'start', 'later', 'drives'].every((part) => bai.notes.some((n) => n.label === `learn-more bai ${part}`)) && bai.blocks.length > 0, JSON.stringify(bai.notes.map((n) => n.label)));
+    check('a Learn more note cites real block ids', bai.notes.every((n) => n.sources.length > 0 && n.sources.every((id) => /^c\d+-b\d+$/.test(id))));
+    check('"where was I" uses the current chapter and the two before', r('where was I?', 8).chapters.join(',') === '6,7,8' && r('where was I?', 1).chapters.join(',') === '1' && r('catch me up', 8).shape === 'where');
+    check('"where was I" with no chapter asks which', r('where was I?').needsChapter && !r('where was I?', 4).needsChapter);
+    check('"where was I, chapter 8" uses the chapter named', r("Where was I? I'm on chapter 8.").chapters.join(',') === '6,7,8');
+    const book = r('What is the book about?');
+    check('the whole book: the first section of every chapter, at 250 words', book.shape === 'book' && book.notes.length === 32 && book.notes.every((n) => / §1$/.test(n.label)) && book.words === 250 && r('Summarize the whole book').shape === 'book');
+    check('an ordinary question has no notes, at 120 words', r('How does voting on buildings work in Veridia?').notes.length === 0 && r('How does voting on buildings work in Veridia?').words === 120);
+  }
 
   // --- Citations, in the pure sanitizer --------------------------------------
   {
     const allowed = new Set(['c1-b20', 'c1-b21']);
     const s = sanitizeReply('He is chosen at random [c1-b20]. It was hard 【c1-b21】. Later he moves on (c19-b153) [c99-b1] [c1-b999].', allowed);
     check('allowed citations kept, in order', JSON.stringify(s.cites) === JSON.stringify(['c1-b20', 'c1-b21']), JSON.stringify(s.cites));
-    check('citations past the limit or not given are dropped', JSON.stringify(s.dropped) === JSON.stringify(['c19-b153', 'c99-b1', 'c1-b999']), JSON.stringify(s.dropped));
+    check('citations not given are dropped', JSON.stringify(s.dropped) === JSON.stringify(['c19-b153', 'c99-b1', 'c1-b999']), JSON.stringify(s.dropped));
     check('no dropped id survives in the text', !s.parts.some((p) => p.type === 'text' && /c\d+-b\d+/.test(p.text)));
     const q = sanitizeReply('He says "the whole point of Dzegoban is that there are only 256 roots" here [c1-b20], and "Sure!" too.', allowed);
     check('a quoted span of six words or more is removed', q.quotesRemoved === 1 && !q.parts.some((p) => p.type === 'text' && p.text.includes('256 roots')));
@@ -111,19 +132,16 @@ try {
   // --- Glossary words in the question ---------------------------------------
   {
     // Minpentai first appears in chapter 2; "minpetai" is one letter off and not a word of the book.
-    const g = await glossaryWords(sql, 'everything about the game of minpetai', 32);
-    check('a misspelled glossary word is corrected', g.corrected.endsWith('game of Minpentai') && g.correctedWithin === g.corrected, JSON.stringify(g));
+    const g = await glossaryWords(sql, 'everything about the game of minpetai');
+    check('a misspelled glossary word is corrected', g.corrected.endsWith('game of Minpentai'), JSON.stringify(g));
     check('the corrected word is pointed to in the glossary', JSON.stringify(g.links) === JSON.stringify([{ slug: 'minpentai', term: 'Minpentai' }]), JSON.stringify(g.links));
-    const early = await glossaryWords(sql, 'everything about the game of minpetai', 1);
-    check('no glossary entry past the limit is pointed to', early.links.length === 0, JSON.stringify(early.links));
-    check('the model sees no correction to a word past the limit', early.correctedWithin.endsWith('minpetai') && early.corrected.endsWith('Minpentai'), JSON.stringify(early));
-    const named = await glossaryWords(sql, 'Why did gladias go to Redshire, and who is Pafogai Du?', 32);
+    const named = await glossaryWords(sql, 'Why did gladias go to Redshire, and who is Pafogai Du?');
     check('people and places are not pointed to; a longer name wins over the shorter one inside it', named.links.map((l) => l.slug).join(',') === 'pafogai-du', JSON.stringify(named.links));
-    const lower = await glossaryWords(sql, 'who is pafogai du, and how is minpentai played?', 32);
+    const lower = await glossaryWords(sql, 'who is pafogai du, and how is minpentai played?');
     check('glossary words are found in any case, in the order asked', lower.links.map((l) => l.slug).join(',') === 'pafogai-du,minpentai', JSON.stringify(lower.links));
-    const plain = await glossaryWords(sql, 'What is the theme of Snowmoon? Is a fin a min? Which menu number does he order?', 32);
+    const plain = await glossaryWords(sql, 'What is the theme of Snowmoon? Is a fin a min? Which menu number does he order?');
     check("the book's title, short lower-case words and an alias in lower case are not glossary links", plain.links.map((l) => l.slug).join(',') === '', JSON.stringify(plain.links));
-    const book = await glossaryWords(sql, 'what does the herald say', 32);
+    const book = await glossaryWords(sql, 'what does the herald say');
     check('a word the book uses is not corrected', book.corrected === 'what does the herald say', JSON.stringify(book));
   }
 
@@ -145,18 +163,19 @@ try {
     if (messages[0].content === 'SUPPORT') supportSeen.push(messages[1].content);
     return { text, promptTokens: 1000, completionTokens: 200, costUsd: 0.0002, requestId: 'test', provider: 'test', model };
   };
-  const deps = (fid: number) => ({ sql, fid, complete, systemPrompt: 'SYSTEM up to {{LIMIT}}', guardPolicy: 'POLICY', reminder: 'REMINDER: {{REASON}}', searchPrompt: 'SEARCH', supportPolicy: 'SUPPORT' });
+  const deps = (fid: number) => ({ sql, fid, complete, systemPrompt: 'SYSTEM about {{WORDS}} words', guardPolicy: 'POLICY', reminder: 'REMINDER: {{REASON}}', searchPrompt: 'SEARCH', supportPolicy: 'SUPPORT' });
 
   {
     calls.length = 0;
-    const r1 = await retrieve(sql, 'Why is Gladias asked to rate a building?', 1);
+    const r1 = await retrieve(sql, 'Why is Gladias asked to rate a building?');
     const real = r1.passages[0].id;
-    // The model cites a real passage, a block that does not exist, and one past the limit, and quotes the book itself.
+    // The model cites a real passage, a block that does not exist, and one it wasn't given, and quotes the book itself.
     answerText = `He is chosen at random [${real}]. "As a citizen of Veridia, he had been randomly selected by cryptographic sortition" [c1-b9999]. Much later [c30-b47].`;
-    const res = await ask(deps(101), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    const res = await ask(deps(101), { question: 'Why is Gladias asked to rate a building?' });
     check('ask returns an answer', res.state === 'answer', res.state);
     if (res.state === 'answer') {
-      check('the nonexistent and past-limit citations are dropped', res.dropped === 2, String(res.dropped));
+      check('the nonexistent and not-given citations are dropped', res.dropped === 2, String(res.dropped));
+      check('an answer with no reviewed note carries no notes line', !res.notes);
       check('only real, allowed blocks are quoted', res.quotes.length === 1 && res.quotes[0].id === real, JSON.stringify(res.quotes.map((q) => q.id)));
       const [{ content }] = await sql`select content from studio.text_blocks where chapter = ${Number(real.slice(1, real.indexOf('-')))} and idx = ${Number(real.split('-b')[1])}`;
       const plain = (h: string) => h.replace(/<[^>]+>/g, '').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&').replace(/\*/g, '').trim();
@@ -165,28 +184,71 @@ try {
       check("the model's own quotation of the book is removed", !res.parts.some((p) => p.type === 'text' && p.text.includes('cryptographic sortition')));
     }
     const sent = calls.find((c) => c.model === CHAT.model && c.user !== 'Why is Gladias asked to rate a building?')!.user;
-    const sentPast = [...sent.matchAll(/\[c(\d+)-b\d+\]/g)].filter((m) => Number(m[1]) > 1);
-    check('nothing past the limit is sent to the model', sentPast.length === 0, sentPast.map((m) => m[0]).join(', '));
+    check('no chapter limit is sent to the model', !/chapters 1[–-]\d/.test(sent) && sent.includes('Passages from the book:'), sent.slice(0, 60));
+    check('a Learn more character in any question brings their notes (Gladias)', sent.startsWith('Reviewed notes') && sent.includes('(learn-more gladias who)'));
     check('every answer is checked by the guard', calls.some((c) => c.model === CHAT.guardModel));
   }
   {
-    const res = await ask(deps(102), { question: 'What happens to Deluin after Redshire is invaded?', limit: 3 });
-    check('a held-back question is answered with the held state', res.state === 'held' || (res.state === 'answer' && res.heldBack), res.state);
+    // A chapter named: its summary sections go to the model as reviewed notes; an answer citing their sources is kept.
+    calls.length = 0;
+    const src = routeQuestion('What happens in chapter 5?', null).notes[0].sources;
+    answerText = `Zei's class is moved and a bomb hits [${src[0]}]. Later he wonders why [${src[1]}].`;
+    const res = await ask(deps(102), { question: 'What happens in chapter 5?' });
+    const call = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Reviewed notes'));
+    check('a chapter summary is sent as a reviewed note', Boolean(call?.user.includes('(summary c5 §1)')), call?.user.slice(0, 120));
+    check('an answer citing a note\'s sources is kept', res.state === 'answer' && res.dropped === 0 && res.quotes.length === 2, JSON.stringify(res).slice(0, 200));
+    check('it carries the summary notes line', res.state === 'answer' && JSON.stringify(res.notes) === JSON.stringify([NOTE_WORDING.summary]), res.state === 'answer' ? JSON.stringify(res.notes) : res.state);
+    check('the support check sees the note', (supportSeen[supportSeen.length - 1] ?? '').includes('(summary c5 §1)') && (supportSeen[supportSeen.length - 1] ?? '').includes('REVIEWED NOTES'));
   }
   {
-    const before = (await sql`select count(*)::int as n from studio.chat_calls where fid = 103`)[0].n;
-    await ask(deps(103), { question: 'What does Deluin say?', limit: 3, attached: ['c14-b97'] }).then(
-      () => failures.push('an attached block past the limit was accepted'),
-      (e) => check('an attached block past the limit is refused', e instanceof AskError),
+    // A Learn more character: the whole text goes, the later part included; the notes line names it.
+    calls.length = 0;
+    const later = routeQuestion('Who is Bai?', null).notes.find((n) => n.label === 'learn-more bai later')!;
+    answerText = `Later she leaves [${later.sources[0]}].`;
+    const res = await ask(deps(114), { question: 'Who is Bai?' });
+    const call = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Reviewed notes'))!;
+    check('a Learn more character\'s later part is sent', call.user.includes('(learn-more bai later)'));
+    check('the Learn more notes line names the character', res.state === 'answer' && res.notes?.[0] === NOTE_WORDING.learnMore('Bai', false), res.state === 'answer' ? JSON.stringify(res.notes) : res.state);
+  }
+  {
+    // "Where was I" with no chapter known: which chapter? No message is spent, no model is called.
+    calls.length = 0;
+    const before = (await sql`select count(*)::int as n from studio.chat_calls where fid = 115`)[0].n;
+    const res = await ask(deps(115), { question: 'where was I?' });
+    const after = (await sql`select count(*)::int as n from studio.chat_calls where fid = 115`)[0].n;
+    check('"where was I" with no chapter asks which, spending nothing', res.state === 'which' && before === after && calls.length === 0, res.state);
+    answerText = 'Commentary.';
+    await ask(deps(115), { question: 'where was I?', position: 8 });
+    const call = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Reviewed notes'))!;
+    check('"where was I" at chapter 8 sends chapters 6 to 8', ['c6', 'c7', 'c8'].every((c) => call.user.includes(`(summary ${c} §1)`)) && !call.user.includes('(summary c9'));
+  }
+  {
+    // The whole book: every chapter's first section; 250 words.
+    calls.length = 0;
+    const seenSystem: string[] = [];
+    const spy: Complete = async (model, messages, opts) => {
+      if (model === CHAT.model && messages[messages.length - 1].content.startsWith('Reviewed')) seenSystem.push(messages[0].content);
+      return complete(model, messages, opts);
+    };
+    await ask({ ...deps(116), complete: spy }, { question: 'What is the book about?' });
+    const call = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Reviewed notes'))!;
+    check('the whole book sends the first section of all 32 chapters', (call.user.match(/\(summary c\d+ §1\)/g) ?? []).length === 32);
+    check('the whole book may use about 250 words', seenSystem[0] === 'SYSTEM about 250 words', seenSystem[0]);
+  }
+  {
+    // An attached block from a later chapter is used, not refused.
+    const res = await ask(deps(103), { question: 'What does Deluin say?', attached: ['c14-b97'] });
+    check('an attached block from any chapter is accepted', res.state !== 'declined', res.state);
+    await ask(deps(103), { question: 'What does Deluin say?', attached: ['not-a-block'] }).then(
+      () => failures.push('an attached id that is not a block was accepted'),
+      (e) => check('an attached id that is not a block is refused', e instanceof AskError),
     );
-    const after = (await sql`select count(*)::int as n from studio.chat_calls where fid = 103`)[0].n;
-    check('a refused question spends no message', before === after);
   }
   {
     calls.length = 0;
     guardText = 'VIOLATION writes a caption';
     answerText = 'Deluin sat there with tea; he waved at Zei, who came running [c14-b102].';
-    const res = await ask(deps(104), { question: 'Fix my caption', limit: 15 });
+    const res = await ask(deps(104), { question: 'Fix my caption' });
     check('a flagged answer is not shown', res.state === 'declined', res.state);
     guardText = 'OK';
     const answers = calls.filter((c) => c.model === CHAT.model && c.user !== 'Fix my caption');
@@ -197,7 +259,7 @@ try {
     calls.length = 0;
     guardQueue = ['VIOLATION reads as description', 'OK'];
     answerText = 'The courtyard matters because Deluin chooses it [c14-b102].';
-    const res = await ask(deps(107), { question: 'Why the courtyard?', limit: 15 });
+    const res = await ask(deps(107), { question: 'Why the courtyard?' });
     check('a flagged answer that passes on the retry is shown', res.state === 'answer' && res.regenerated, res.state);
     const [{ n }] = await sql`select count(*)::int as n from studio.chat_calls where fid = 107 and kind = 'ask'`;
     check('a regenerated answer counts as one question', n === 1, String(n));
@@ -207,7 +269,7 @@ try {
     // An empty verdict is asked again once; then the answer is shown unchecked ("none").
     calls.length = 0;
     guardQueue = ['', 'OK'];
-    const res = await ask(deps(108), { question: 'Gladias vote', limit: 1 });
+    const res = await ask(deps(108), { question: 'Gladias vote' });
     check('an empty guard verdict is retried once', res.state === 'answer' && calls.filter((c) => c.model === CHAT.guardModel && c.user.startsWith('USER REQUEST')).length === 2);
     guardQueue = [];
   }
@@ -217,7 +279,7 @@ try {
     calls.length = 0;
     searchText = 'Jahen orphan grandmother';
     answerText = 'Commentary.';
-    await ask(deps(109), { question: 'Who raised her?', limit: 9 });
+    await ask(deps(109), { question: 'Who raised her?' });
     const search = calls.find((c) => c.user === 'Who raised her?');
     check('the search-words call sees only the question', Boolean(search));
     const answerCall = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Passages'))!;
@@ -231,7 +293,7 @@ try {
     // A misspelled glossary word: searched and asked about as the book spells it, and its entry pointed to.
     calls.length = 0;
     answerText = 'Commentary.';
-    const res = await ask(deps(113), { question: 'tell me about minpetai', limit: 12 });
+    const res = await ask(deps(113), { question: 'tell me about minpetai' });
     const answerCall = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Passages'))!;
     check('the model is asked about the word as the book spells it', answerCall.user.endsWith('Question: tell me about Minpentai'), answerCall.user.slice(-60));
     check('the passages sent mention it', /Minpentai/.test(answerCall.user.split('Question:')[0]));
@@ -240,20 +302,20 @@ try {
 
   {
     // The second guard question: an unsupported answer becomes "the passages don't say".
-    const r1 = await retrieve(sql, 'Why is Gladias asked to rate a building?', 1);
+    const r1 = await retrieve(sql, 'Why is Gladias asked to rate a building?');
     const real = r1.passages[0].id;
     answerText = `He is chosen because he is the emperor [${real}].`;
     supportQueue = ['UNSUPPORTED the emperor claim'];
-    const res = await ask(deps(110), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    const res = await ask(deps(110), { question: 'Why is Gladias asked to rate a building?' });
     check('an unsupported answer is not shown', res.state === 'unsupported', res.state);
     const [{ content }] = await sql`select content from studio.text_blocks where chapter = ${Number(real.slice(1, real.indexOf('-')))} and idx = ${Number(real.split('-b')[1])}`;
     const seen = supportSeen[supportSeen.length - 1] ?? '';
     check('the support check sees the stored text of the cited block', seen.includes(String(content).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40)));
     supportQueue = ['', ''];
-    const res2 = await ask(deps(111), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    const res2 = await ask(deps(111), { question: 'Why is Gladias asked to rate a building?' });
     check('no verdict from the support check fails closed', res2.state === 'unsupported', res2.state);
     supportQueue = [];
-    const res3 = await ask(deps(112), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    const res3 = await ask(deps(112), { question: 'Why is Gladias asked to rate a building?' });
     check('a supported answer is shown', res3.state === 'answer', res3.state);
   }
 
@@ -276,9 +338,9 @@ try {
     const rowsBefore = (await sql`select count(*)::int as n from studio.chat_costs`)[0].n;
     const callsBefore = (await sql`select coalesce(sum(calls), 0)::int as n from studio.chat_costs`)[0].n;
     answerText = 'Commentary.';
-    await ask(deps(201), { question: 'Gladias vote', limit: 1 });
+    await ask(deps(201), { question: 'Gladias vote' });
     const rowsMid = (await sql`select count(*)::int as n from studio.chat_costs`)[0].n;
-    await ask(deps(202), { question: 'Gladias vote', limit: 1 });
+    await ask(deps(202), { question: 'Gladias vote' });
     const rowsAfter = (await sql`select count(*)::int as n from studio.chat_costs`)[0].n;
     const callsAfter = (await sql`select coalesce(sum(calls), 0)::int as n from studio.chat_costs`)[0].n;
     check('a second person\'s question adds to the totals without adding a row', rowsAfter === rowsMid && callsAfter > callsBefore, `rows ${rowsBefore}→${rowsMid}→${rowsAfter}, calls ${callsBefore}→${callsAfter}`);
@@ -305,7 +367,7 @@ try {
     answerText = 'Commentary.';
     const fid = 105;
     let last = '';
-    for (let i = 0; i < CHAT.messagesPerDay + 1; i++) last = (await ask(deps(fid), { question: 'Gladias vote', limit: 1 })).state;
+    for (let i = 0; i < CHAT.messagesPerDay + 1; i++) last = (await ask(deps(fid), { question: 'Gladias vote' })).state;
     check(`message ${CHAT.messagesPerDay + 1} in a day is refused`, last === 'limit', last);
     const [{ n }] = await sql`select count(*)::int as n from studio.chat_calls where fid = ${fid} and kind = 'ask'`;
     check(`exactly ${CHAT.messagesPerDay} questions counted`, n === CHAT.messagesPerDay, String(n));
@@ -318,11 +380,11 @@ try {
     const lens = -1_000_000_007;
     const bsky = -1_000_000_008;
     let last = '';
-    for (let i = 0; i < CHAT.messagesPerDay + 1; i++) last = (await ask(deps(lens), { question: 'Gladias vote', limit: 1 })).state;
+    for (let i = 0; i < CHAT.messagesPerDay + 1; i++) last = (await ask(deps(lens), { question: 'Gladias vote' })).state;
     check(`a Lens account's message ${CHAT.messagesPerDay + 1} in a day is refused`, last === 'limit', last);
     const [{ n }] = await sql`select count(*)::int as n from studio.chat_calls where fid = ${lens} and kind = 'ask'`;
     check(`exactly ${CHAT.messagesPerDay} of the Lens account's questions counted, under its own number`, n === CHAT.messagesPerDay, String(n));
-    const other = await ask(deps(bsky), { question: 'Gladias vote', limit: 1 });
+    const other = await ask(deps(bsky), { question: 'Gladias vote' });
     check('a Bluesky account is counted apart from the Lens account', other.state !== 'limit', other.state);
     await sql`insert into studio.chat_calls (fid, kind, model) values (${'-9223372036854775807'}::bigint, 'ask', ${CHAT.model})`.then(
       () => check('chat_calls takes the smallest bigint (no sign check on fid)', true),
@@ -332,7 +394,7 @@ try {
   {
     // Spend is shared by everyone: fill the day close to the cap with one big recorded call.
     await sql`insert into studio.chat_costs (kind, model, provider, calls, cost_usd) values ('answer', 'spend-test', '', 1, ${CHAT.dailySpendCapUsd - 0.0001})`;
-    const res = await ask(deps(106), { question: 'Gladias vote', limit: 1 });
+    const res = await ask(deps(106), { question: 'Gladias vote' });
     check('the spend cap stops new questions', res.state === 'spend', res.state);
   }
 

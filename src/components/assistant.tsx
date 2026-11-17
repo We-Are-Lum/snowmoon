@@ -15,9 +15,10 @@ import { OWNER_WORDING } from '~/lib/wording';
 import type { AskResult, Quote } from '~/lib/chat/ask';
 import type { GlossaryLink } from '~/lib/chat/glossary';
 import { noticeItems, noticeKey } from '~/lib/chat/notice';
+import { NOTE_WORDING } from '~/lib/chat/notes';
 import type { Part } from '~/lib/chat/sanitize';
 import {
-  deleteThread, markNoticeSeen, newThread, noticeSeen, readTo, saveThread, thread as loadThread, threads as loadThreads,
+  currentChapter, deleteThread, lastChapter, markNoticeSeen, newThread, noticeSeen, saveThread, thread as loadThread, threads as loadThreads,
   type AnsweredMessage, type Thread,
 } from '~/lib/chat/device';
 
@@ -203,7 +204,7 @@ function Answer({ parts, quotes }: { parts: Part[]; quotes: Quote[] }) {
   return <div className="as-answer">{out}</div>;
 }
 
-/** The glossary entries the question names, before the answer (owner, 2026-10-14). Only words that appear by the thread's limit. */
+/** The glossary entries the question names, before the answer (owner, 2026-10-14). */
 function GlossaryLinks({ links }: { links?: GlossaryLink[] }) {
   if (!links?.length) return null;
   return (
@@ -219,65 +220,67 @@ function GlossaryLinks({ links }: { links?: GlossaryLink[] }) {
   );
 }
 
-function ChapterPicker({ from, value, onChange, label }: { from: number; value: number; onChange: (n: number) => void; label: string }) {
+/**
+ * Under an answer that rests on reviewed notes (owner, 2026-11-17): which ones, with the AI label the chapter summaries
+ * carry. Drafted by the coding agent, approved by the owner as drafted (2026-11-17): src/lib/chat/notes.ts NOTE_WORDING.
+ */
+function NoteLines({ lines }: { lines?: string[] }) {
+  if (!lines?.length) return null;
   return (
-    <label className="as-picker">
-      <span className="as-visually-hidden">{label}</span>
-      <select value={value} onChange={(e) => onChange(Number(e.target.value))} aria-label={label}>
-        {Array.from({ length: 32 - from + 1 }, (_, i) => from + i).map((n) => (
-          <option key={n} value={n}>
-            Up to ch {n}
-          </option>
-        ))}
-      </select>
-    </label>
+    <div className="as-notes" data-wording={NOTE_WORDING.draft ? 'draft' : 'FID 6786'}>
+      {lines.map((l) => (
+        <p key={l} className="as-note">
+          {l}
+        </p>
+      ))}
+    </div>
   );
 }
 
-function Reply({ m, thread, onShow }: { m: AnsweredMessage; thread: Thread; onShow: (limit: number, question: string) => void }) {
+/** "Where was I" with no chapter known on this device: pick one, and it is asked again with that chapter. DRAFT wording. */
+function WhichChapter({ onPick }: { onPick: (n: number) => void }) {
+  const [n, setN] = useState(1);
+  return (
+    <div className="as-reply as-which" data-wording="draft">
+      <p className="as-label">Assistant · which chapter?</p>
+      <p>Which chapter are you on? Pick it and the assistant recaps it and the two before it.</p>
+      <div className="as-actions">
+        <label className="as-picker">
+          <span className="as-visually-hidden">The chapter you are on</span>
+          <select value={n} onChange={(e) => setN(Number(e.target.value))} aria-label="The chapter you are on">
+            {Array.from({ length: 32 }, (_, i) => i + 1).map((c) => (
+              <option key={c} value={c}>
+                Chapter {c}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button type="button" className="as-ink" onClick={() => onPick(n)}>
+          Recap
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function Reply({ m, onAsk }: { m: AnsweredMessage; onAsk: (question: string) => void }) {
   const r = m.result;
-  const [pick, setPick] = useState(Math.min(32, thread.limit + 1));
-  const [hidden, setHidden] = useState(false);
   if (r.state === 'answer')
     return (
       <div className="as-reply">
         <GlossaryLinks links={r.glossary} />
         <p className="as-label">Assistant · commentary</p>
         <Answer parts={r.parts} quotes={r.quotes} />
-        {r.heldBack && !hidden && (
-          <div className="as-held">
-            <p className="as-label">More in later chapters</p>
-            <p>A fuller answer uses chapters after {thread.limit}.</p>
-            <div className="as-actions">
-              <ChapterPicker from={thread.limit + 1} value={pick} onChange={setPick} label="Include chapters up to" />
-              <button type="button" className="as-ink" onClick={() => onShow(pick, m.question)}>
-                Show it
-              </button>
-              <button type="button" className="as-quiet" onClick={() => setHidden(true)}>
-                Keep it hidden
-              </button>
-            </div>
-          </div>
-        )}
+        <NoteLines lines={r.notes} />
       </div>
     );
-  if (r.state === 'held')
+  if (r.state === 'which') return <WhichChapter onPick={(n) => onAsk(`Where was I? I'm on chapter ${n}.`)} />;
+  // Threads saved before 2026-11-17 may hold a "held back" reply: shown as the passages not saying.
+  if ((r.state as string) === 'held')
     return (
-      <div className="as-reply as-held">
-        <GlossaryLinks links={r.glossary} />
-        <p className="as-label">Held back · needs chapters after {thread.limit}</p>
-        <p>Up to chapter {thread.limit}, the book doesn’t say. A fuller answer uses later chapters.</p>
-        {!hidden && (
-          <div className="as-actions">
-            <ChapterPicker from={thread.limit + 1} value={pick} onChange={setPick} label="Include chapters up to" />
-            <button type="button" className="as-ink" onClick={() => onShow(pick, m.question)}>
-              Show it
-            </button>
-            <button type="button" className="as-quiet" onClick={() => setHidden(true)}>
-              Keep it hidden
-            </button>
-          </div>
-        )}
+      <div className="as-reply">
+        <p className="as-label">Assistant · the passages don’t say</p>
+        <p>Ask again: the assistant now uses the whole book.</p>
       </div>
     );
   if (r.state === 'declined')
@@ -297,8 +300,7 @@ function Reply({ m, thread, onShow }: { m: AnsweredMessage; thread: Thread; onSh
       <div className="as-reply">
         <GlossaryLinks links={r.glossary} />
         <p className="as-label">Assistant · the passages don’t say</p>
-        <p>The passages found for this question don’t say. Try asking another way, or include more chapters.</p>
-        {r.heldBack && <p className="as-note">Later chapters may say more.</p>}
+        <p>The passages found for this question don’t say. Try asking another way.</p>
       </div>
     );
   if (r.state === 'limit')
@@ -307,7 +309,7 @@ function Reply({ m, thread, onShow }: { m: AnsweredMessage; thread: Thread; onSh
         <p className="as-label">0 left today</p>
         <p>You’ve used today’s messages. They come back at 00:00 UTC, in {untilUtcMidnight()}.</p>
         <p>Your threads are still here, and the book is open.</p>
-        <Link className="as-ink" href={`/chapter/${thread.limit}`}>
+        <Link className="as-ink" href={`/chapter/${lastChapter()}`}>
           Read the book
         </Link>
       </div>
@@ -351,12 +353,12 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
   const limitShown = last?.role === 'assistant' && last.result.state === 'limit';
 
   const send = useCallback(
-    async (question: string, limit?: number) => {
+    async (question: string) => {
       if (!t || !question.trim()) return;
       const go = noticeSeen(noticeKey(noticeItems(status))) ? true : await new Promise<boolean>((resolve) => setNotice(() => resolve));
       setNotice(null);
       if (!go) return;
-      const th: Thread = { ...t, limit: limit ?? t.limit };
+      const th: Thread = { ...t };
       const history = th.messages.slice(-6).map((m) => (m.role === 'user' ? { role: 'user' as const, text: m.text } : { role: 'assistant' as const, text: answerText(m) }));
       th.messages = [...th.messages, { role: 'user', text: question.trim(), at: new Date().toISOString() }];
       setT(th);
@@ -368,7 +370,8 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
         const res = await authedFetch('/api/chat/ask', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question: question.trim(), limit: th.limit, attached: th.messages.filter((m) => m.role === 'user').length === 1 ? th.attached : [], history }),
+          // The chapter opened last, only as a hint for "where was I" (owner, 2026-11-17).
+          body: JSON.stringify({ question: question.trim(), position: currentChapter(), attached: th.messages.filter((m) => m.role === 'user').length === 1 ? th.attached : [], history }),
         });
         // A 503 with a reason is the gate's "can't check your account right now", not the assistant being away.
         if (res.status === 503) {
@@ -390,24 +393,10 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
   );
 
   if (!t) return <p className="as-empty">This thread isn’t on this device.</p>;
-  const read = readTo();
   return (
     <section className="as-thread" aria-label="Private thread" data-wording={OWNER_WORDING.by}>
       <div className="as-kind">
         <span>○ Asking · private · never published</span>
-      </div>
-      <div className="as-limit">
-        <span>Answering from ch 1–{t.limit}{t.limit <= read ? ', what you’ve read' : ', by your choice'}</span>
-        <ChapterPicker
-          from={1}
-          value={t.limit}
-          onChange={(n) => {
-            const th = { ...t, limit: n };
-            setT(th);
-            saveThread(th);
-          }}
-          label="Chapters this thread may use"
-        />
       </div>
       {t.attached.map((id) => (
         <PassageCard key={id} id={id} />
@@ -419,7 +408,7 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
               {m.text}
             </p>
           ) : (
-            <Reply key={i} m={m} thread={t} onShow={(limit, question) => send(question, limit)} />
+            <Reply key={i} m={m} onAsk={(question) => void send(question)} />
           ),
         )}
         {t.messages.length === 0 && !busy && !reachedLimit && (
@@ -597,8 +586,8 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
     if (t) setOpen(t);
     else if (block && /^c\d+-b\d+$/.test(block)) {
       const ch = Number(block.slice(1, block.indexOf('-')));
-      go(newThread(Math.max(readTo(), ch), [block]).id);
-    } else if (Number.isInteger(chapter) && chapter >= 1 && chapter <= 32) go(newThread(Math.max(readTo(), chapter), [], chapter).id);
+      go(newThread([block], ch).id);
+    } else if (Number.isInteger(chapter) && chapter >= 1 && chapter <= 32) go(newThread([], chapter).id);
   }, [refresh, embedded]);
 
   const ready = status.kind === 'ready' ? status : null;
@@ -635,7 +624,7 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
       {!embedded && <h1>Assistant</h1>}
       <p className="as-intro">Help with reading the book. It comments; it never writes for you.</p>
       <div className="as-kinds">
-        <button type="button" className="as-start" onClick={() => show(newThread(readTo()).id)}>
+        <button type="button" className="as-start" onClick={() => show(newThread().id)}>
           <span className="as-start-title">○ Ask about the book</span>
           <span className="as-start-line">Private. Never published.</span>
         </button>
@@ -655,7 +644,7 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
                 <li key={t.id}>
                   <button type="button" onClick={() => show(t.id)}>
                     <span>{first && first.role === 'user' ? first.text : 'New thread'}</span>
-                    <span className="as-meta">ch 1–{t.limit} · {new Date(t.createdAt).toLocaleDateString()}</span>
+                    <span className="as-meta">{new Date(t.createdAt).toLocaleDateString()}</span>
                   </button>
                   <button type="button" className="as-delete" aria-label="Delete this thread from this device" onClick={() => { deleteThread(t.id); setList(loadThreads()); }}>
                     ×

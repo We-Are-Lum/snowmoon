@@ -1,8 +1,9 @@
 /**
  * Private threads live on this device only (localStorage), never on the server.
- * The reading record (the furthest chapter opened in the reader) lives here too:
- * it sets each new thread's spoiler limit. Every read and write survives blocked
- * storage by doing nothing.
+ * The reading record (the chapters opened in the reader) lives here too. The
+ * assistant uses the whole book (owner, 2026-11-17); the chapter opened last is
+ * sent with each question only as a hint, for "where was I". Every read and
+ * write survives blocked storage by doing nothing.
  */
 import type { AskResult } from './ask';
 
@@ -14,7 +15,7 @@ export interface AskedMessage {
 export interface AnsweredMessage {
   role: 'assistant';
   result: AskResult | { state: 'error'; error: string } | { state: 'unavailable' };
-  /** The question this answers, so a held-back answer can be asked again with more chapters. */
+  /** The question this answers. */
   question: string;
   at: string;
 }
@@ -23,8 +24,8 @@ export type Message = AskedMessage | AnsweredMessage;
 export interface Thread {
   id: string;
   createdAt: string;
-  /** The last chapter this thread may use. */
-  limit: number;
+  /** Threads saved before 2026-11-17 carry the chapter limit they had; it is no longer used. */
+  limit?: number;
   /** Blocks attached when the thread was opened ("ask about this"). */
   attached: string[];
   /** The chapter the thread was opened from ("ask about this chapter"), if any. */
@@ -74,6 +75,14 @@ export function openedChapters(): Set<number> {
   return s;
 }
 
+/** The chapter the reader is on, for the assistant's "where was I": the one opened last, else the furthest opened; null if none. */
+export function currentChapter(): number | null {
+  const n = get<number>(LAST, 0);
+  if (Number.isInteger(n) && n >= 1 && n <= 32) return n;
+  const far = get<number>(READ_TO, 0);
+  return Number.isInteger(far) && far >= 1 && far <= 32 ? far : null;
+}
+
 /** The chapter opened last on this device, for "Read · Ch n"; 1 if none. */
 export function lastChapter(): number {
   const n = get<number>(LAST, 0);
@@ -92,9 +101,9 @@ export function saveThread(t: Thread) {
 export function deleteThread(id: string) {
   set(THREADS, threads().filter((x) => x.id !== id));
 }
-export function newThread(limit: number, attached: string[] = [], chapter?: number): Thread {
+export function newThread(attached: string[] = [], chapter?: number): Thread {
   const id = typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : String(Date.now());
-  const t: Thread = { id, createdAt: new Date().toISOString(), limit, attached, ...(chapter ? { chapter } : {}), messages: [] };
+  const t: Thread = { id, createdAt: new Date().toISOString(), attached, ...(chapter ? { chapter } : {}), messages: [] };
   saveThread(t);
   return t;
 }

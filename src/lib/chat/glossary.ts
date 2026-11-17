@@ -57,13 +57,11 @@ function withinOneEdit(a: string, b: string): boolean {
 export interface GlossaryWords {
   /** The question with each misspelled glossary word as the book spells it. */
   corrected: string;
-  /** The same, correcting only to words that appear by the chapter limit: the model sees no later word. */
-  correctedWithin: string;
-  /** Entries the question names whose word first appears by the chapter limit, in the order asked. */
+  /** Entries the question names, in the order asked (the whole book: owner, 2026-11-17). */
   links: GlossaryLink[];
 }
 
-export async function glossaryWords(sql: postgres.Sql, question: string, limit: number): Promise<GlossaryWords> {
+export async function glossaryWords(sql: postgres.Sql, question: string): Promise<GlossaryWords> {
   // Where each entry is named; a form inside a longer one ("Pafogai" in "Pafogai Du") doesn't count.
   const found: { slug: string; start: number; end: number }[] = [];
   for (const e of ENTRIES)
@@ -78,7 +76,6 @@ export async function glossaryWords(sql: postgres.Sql, question: string, limit: 
 
   // A word not named, one letter off a glossary word, and never used in the book: a typo.
   let corrected = question;
-  let correctedWithin = question;
   const known = new Set(ENTRIES.flatMap((e) => e.forms.map((f) => f.toLowerCase())));
   for (const m of question.matchAll(/\p{L}+/gu)) {
     const w = m[0];
@@ -92,15 +89,14 @@ export async function glossaryWords(sql: postgres.Sql, question: string, limit: 
     if (used) continue;
     const fix = (s: string) => s.replace(word(w, 'u'), `$1${near.term}`);
     corrected = fix(corrected);
-    if (near.chapter <= limit) correctedWithin = fix(correctedWithin);
     named.push({ slug: near.slug, start: m.index!, end: m.index! + w.length });
   }
 
   const slugs = [...new Set(named.sort((a, b) => a.start - b.start).map((n) => n.slug))];
   const links = slugs
     .map((slug) => ENTRIES.find((e) => e.slug === slug)!)
-    .filter((e) => e.chapter <= limit && LINK_KINDS.has(e.kind))
+    .filter((e) => LINK_KINDS.has(e.kind))
     .slice(0, MAX_LINKS)
     .map((e) => ({ slug: e.slug, term: e.term }));
-  return { corrected, correctedWithin, links };
+  return { corrected, links };
 }

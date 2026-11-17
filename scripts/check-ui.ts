@@ -21,8 +21,9 @@
  * - The live voting screens (c1-b18, c1-b31, c7-b6) start where the book shows them, move by
  *   keyboard, and Reset returns them, with no request made and no storage changed.
  * - The assistant (/assistant) meets the same floors signed out (9d), the reader's "Ask about this" (1a), its home (1d),
- *   the first-time notice (2), a thread with an answer and quote cards (3), a held-back
- *   question (9b) and the daily limit (9c). The API is replayed from results recorded
+ *   the first-time notice (2), a thread with an answer and quote cards (3), an answer resting
+ *   on a chapter summary with its notes line, "where was I" asking which chapter (2026-11-17,
+ *   replacing the held-back screen 9b) and the daily limit (9c). The API is replayed from results recorded
  *   live (scripts/fixtures/chat-live-2026-10-07.json); quotes are checked against the
  *   stored text by test:chat. --shots=DIR also saves a screenshot of each.
  * - Make an image (/references/new; owner, 2026-10-10), light and dark: browse chapter 1, tap the first and last paragraph,
@@ -112,6 +113,7 @@ import { ASSISTANT, CHALLENGE, SIGN_IN_METHODS, SUPPORT } from '../src/lib/confi
 import { SIGN_IN_CHOICES } from '../src/lib/sign-in-text';
 import { CHALLENGE_LINKS } from '../src/lib/challenge/landing-wording';
 import { ASK_WORDING, type AccountKind } from '../src/lib/chat/who-can-ask';
+import { NOTE_WORDING } from '../src/lib/chat/notes';
 
 /** The ways to sign in that are on (SIGN_IN_METHODS, in order; the sign-in release of 2026-11-05 turns Lens and Bluesky on). */
 const SIGN_IN_ON = SIGN_IN_METHODS.filter((m) => m.on).map((m) => m.id);
@@ -208,7 +210,7 @@ async function checkSelectionFits(page: Page, where: string) {
   return out.length;
 }
 
-/** Screens 1a, 1b, 9d, 1d, 2, 3, 9b and 9c, with the chat API replayed from the live run. */
+/** Screens 1a, 1b, 9d, 1d, 2, 3, the notes line, "which chapter" and 9c, with the chat API replayed from the live run. */
 async function checkAssistant(page: Page, scheme: string) {
   // 1a: select a passage in the reader; "Ask about this" appears beside "Share quote".
   await open(page, '/chapter/1');
@@ -249,17 +251,20 @@ async function checkAssistant(page: Page, scheme: string) {
   await shot(page, '9d-signed-out', scheme);
 
   let left = 30;
-  const replies: { state: string; left?: number; heldBack?: boolean }[] = [
+  const replies: { state: string; left?: number; [k: string]: unknown }[] = [
     LIVE.results[0].result,
-    { state: 'unsupported', heldBack: false, left: 2 },
-    { state: 'held', heldBack: true, left: 1 },
+    { state: 'unsupported', left: 2 },
+    { state: 'answer', left: 1, parts: [{ type: 'text', text: 'Gladias is asked to rate a building ' }, { type: 'cite', id: 'c1-b19' }, { type: 'text', text: '.' }], quotes: [], notes: [NOTE_WORDING.summary], guard: 'ok', dropped: 0, regenerated: false },
+    { state: 'which' },
     { state: 'limit', left: 0 },
   ];
+  const sentBodies: { position?: unknown; limit?: unknown }[] = [];
   await page.route('**/api/chat/status', (r) =>
     r.fulfill({ json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', provider: 'Groq', perDay: 30, left } }),
   );
   await page.route('**/api/chat/ask', (r) => {
     const next = replies.shift()!;
+    sentBodies.push(JSON.parse(r.request().postData() ?? '{}'));
     left = typeof next.left === 'number' ? next.left : left;
     return r.fulfill({ json: next });
   });
@@ -327,12 +332,25 @@ async function checkAssistant(page: Page, scheme: string) {
   await checkFloors(page, '/assistant (unsupported)', scheme);
   await shot(page, '3b-unsupported', scheme);
 
-  await page.fill('#as-q', LIVE.results[4].question);
+  // The whole book (owner, 2026-11-17): no chapter picker or "Answering from ch 1–n"; the request carries no limit, only
+  // the reader's chapter as a hint (snowmoon.read-to is 3 here).
+  if (await page.locator('.as-limit, .as-picker').count()) fail(`/assistant (${scheme}): a chapter limit or picker still shows in the thread`);
+  if (sentBodies.some((b) => 'limit' in b)) fail(`/assistant (${scheme}): a question was sent with a chapter limit`);
+  if (sentBodies[0]?.position !== 3) fail(`/assistant (${scheme}): the reader's chapter isn't sent as the hint (${JSON.stringify(sentBodies[0])})`);
+  await page.fill('#as-q', 'What happens in chapter 1?');
   await page.click('.as-send');
-  await page.waitForSelector('.as-held');
-  await page.evaluate(() => document.querySelector('.as-held')?.scrollIntoView({ block: 'center' }));
-  await checkFloors(page, '/assistant (9b held back)', scheme);
-  await shot(page, '9b-held', scheme);
+  await page.waitForSelector('.as-notes .as-note');
+  const noteLine = (await page.locator('.as-notes .as-note').first().textContent())?.trim();
+  if (noteLine !== NOTE_WORDING.summary) fail(`/assistant (${scheme}): the notes line reads "${noteLine}", not the summaries' AI label`);
+  await page.evaluate(() => document.querySelector('.as-notes')?.scrollIntoView({ block: 'center' }));
+  await checkFloors(page, '/assistant (notes line)', scheme);
+  await shot(page, '3c-notes-line', scheme);
+  await page.fill('#as-q', 'where was I?');
+  await page.click('.as-send');
+  await page.waitForSelector('.as-which select');
+  await page.evaluate(() => document.querySelector('.as-which')?.scrollIntoView({ block: 'center' }));
+  await checkFloors(page, '/assistant (which chapter)', scheme);
+  await shot(page, '9b-which-chapter', scheme);
   await page.fill('#as-q', LIVE.results[3].question);
   await page.click('.as-send');
   await page.waitForSelector('.as-stop');
