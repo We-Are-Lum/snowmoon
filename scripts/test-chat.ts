@@ -35,7 +35,7 @@ import { ask, AskError, NOTES_TEMPERATURE, type Complete } from '../src/lib/chat
 import { retrieve } from '../src/lib/chat/retrieve';
 import { sanitizeReply } from '../src/lib/chat/sanitize';
 import { glossaryWords } from '../src/lib/chat/glossary';
-import { chaptersNamed, charactersNamed, NOTE_WORDING, routeQuestion } from '../src/lib/chat/notes';
+import { chaptersNamed, charactersNamed, countWords, fitWords, NOTE_WORDING, routeQuestion } from '../src/lib/chat/notes';
 import { CHAT } from '../src/lib/config';
 import { providerOptions, servedBy, servingAllowed } from '../src/lib/chat/provider';
 
@@ -244,6 +244,19 @@ try {
     await ask({ ...deps(117), complete: spy }, { question: 'What happens in chapter 3?' });
     await ask({ ...deps(117), complete: spy }, { question: 'How does voting on buildings work in Veridia?' });
     check('notes answers use NOTES_TEMPERATURE, others 0.4', temps[0] === NOTES_TEMPERATURE && temps[1] === 0.4, JSON.stringify(temps));
+  }
+  {
+    // "Where was I" is held to 180 words in code: whole sentences per chapter paragraph, the first always kept.
+    const long = (n: number) => `Chapter ${n} – ${'word '.repeat(40)}first [c${n}-b1]. ${'more '.repeat(40)}second [c${n}-b2]. ${'last '.repeat(20)}third.`;
+    const raw = [6, 7, 8].map(long).join('\n\n');
+    const fit = fitWords(raw, 180);
+    check('a long recap is cut to 180 words or fewer', countWords(raw) > 180 && countWords(fit) <= 180, `${countWords(raw)} -> ${countWords(fit)}`);
+    check('each chapter keeps its first sentence and its citation', [6, 7, 8].every((n) => fit.includes(`first [c${n}-b1].`)) && !fit.includes('second'), fit.slice(0, 80));
+    check('a recap within its words is unchanged', fitWords('Chapter 1 – Short [c1-b1].', 180) === 'Chapter 1 – Short [c1-b1].');
+    answerText = raw;
+    const res = await ask(deps(118), { question: "Where was I? I'm on chapter 8." });
+    const shown = res.state === 'answer' ? res.parts.map((p) => (p.type === 'text' ? p.text : '')).join('') : '';
+    check('"where was I" answers are shown within 180 words', res.state === 'answer' && countWords(shown) <= 180, `${res.state} ${countWords(shown)}`);
   }
   {
     // An attached block from a later chapter is used, not refused.

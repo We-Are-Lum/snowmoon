@@ -3,7 +3,7 @@ import { CHAT } from '../config';
 import { renderMarkdown } from '../render';
 import { blocksById, labels, retrieve, type Passage } from './retrieve';
 import { glossaryWords, type GlossaryLink } from './glossary';
-import { bookInBrief, noteLines, routeQuestion, type BookInBrief, type Note } from './notes';
+import { bookInBrief, fitWords, noteLines, routeQuestion, type BookInBrief, type Note } from './notes';
 import { blockIdOk, chapterOf, sanitizeReply, type Part } from './sanitize';
 import { record, reserve, worstCaseUsd } from './limits';
 
@@ -163,13 +163,15 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   const answerTokens = ANSWER_TOKENS;
   // Steadier summaries when the answer rests on reviewed notes (owner's trial, 2026-11-17).
   const temperature = routed.notes.length ? (deps.notesTemperature ?? NOTES_TEMPERATURE) : TEMPERATURE;
-  let clean = await answerOnce(deps, messages, allowed, answerTokens, temperature);
+  // "Where was I" is held to its words in code: the model alone runs long (owner, 2026-11-17, item 4).
+  const fit = routed.shape === 'where' ? routed.words : undefined;
+  let clean = await answerOnce(deps, messages, allowed, answerTokens, temperature, fit);
   let verdict = await guard(deps, question, clean.shown);
   let regenerated = false;
   if (verdict.verdict === 'flagged') {
     regenerated = true;
     const reminder = deps.reminder.replace('{{REASON}}', verdict.reason || 'it read as writing for them');
-    clean = await answerOnce(deps, [...messages, { role: 'user', content: reminder }], allowed, answerTokens, temperature);
+    clean = await answerOnce(deps, [...messages, { role: 'user', content: reminder }], allowed, answerTokens, temperature, fit);
     verdict = await guard(deps, question, clean.shown);
   }
   if (verdict.verdict === 'flagged') return { state: 'declined', left: slot.left };
@@ -209,13 +211,13 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
 }
 
 /** One answer from the model, cleaned: citations checked, the model's own quotations removed. Recorded with no text. */
-async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>, maxTokens = ANSWER_TOKENS, temperature = TEMPERATURE) {
+async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>, maxTokens = ANSWER_TOKENS, temperature = TEMPERATURE, fit?: number) {
   const answer = await deps.complete(CHAT.model, messages, { maxTokens, temperature });
   await record(deps.sql, {
     kind: 'answer', model: answer.model, provider: answer.provider,
     promptTokens: answer.promptTokens, completionTokens: answer.completionTokens, costUsd: answer.costUsd,
   });
-  const clean = sanitizeReply(answer.text, allowed);
+  const clean = sanitizeReply(fit ? fitWords(answer.text, fit) : answer.text, allowed);
   // The guard reads the answer as the person would see it, citations and all.
   return { ...clean, shown: clean.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('') };
 }

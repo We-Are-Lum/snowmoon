@@ -236,6 +236,38 @@ export const NOTE_WORDING = {
       : `Uses “Learn more about ${name}” · written by an AI model, Claude, not by the author, and approved by the site’s owner.`,
 };
 
+/** Words a reader sees: citations don't count. */
+export function countWords(text: string): number {
+  return text.replace(/\[[^\]]*\]|\bc\d+-b\d+\b/g, ' ').split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
+}
+
+/** A sentence ends at . ! or ?, after any closing quote and the citations that follow it. */
+const SENTENCE_END = /(?<=[.!?][”’"')\]]*(?:\s*\[c\d+[-‐‑‒–—]b\d+(?:\s*,\s*c\d+[-‐‑‒–—]b\d+)*\])*)\s+/u;
+
+/**
+ * "Where was I" within its words (owner, 2026-11-17, item 4): the model writes one paragraph per chapter and often runs
+ * long, so each paragraph keeps whole sentences up to its share of the limit (always its first sentence).
+ */
+export function fitWords(raw: string, limit: number): string {
+  const paras = raw.trim().split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+  if (!paras.length || countWords(raw) <= limit) return raw;
+  const share = Math.floor(limit / paras.length);
+  return paras
+    .map((p) => {
+      const sentences = p.split(SENTENCE_END);
+      const kept: string[] = [];
+      let n = 0;
+      for (const s of sentences) {
+        const w = countWords(s);
+        if (kept.length && n + w > share) break;
+        kept.push(s);
+        n += w;
+      }
+      return kept.join(' ');
+    })
+    .join('\n\n');
+}
+
 /** The note lines for the notes an answer cited, in order: summaries first, then each character. */
 export function noteLines(used: Note[]): string[] {
   const lines: string[] = [];
