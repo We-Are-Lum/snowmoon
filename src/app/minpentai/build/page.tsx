@@ -12,8 +12,8 @@ export const dynamic = 'force-static';
 /**
  * /minpentai/build: the Minpentai build-on kit as one page (kit part 1, section C; owner's go, 2026-10-20):
  * what exists, every rule marked from the book or invented (src/lib/minpentai/kit-rules.ts), and all 152
- * passages. Every passage from chapters 2–14 is shown; chapters 15 onward are inside a closed Spoilers
- * section (owner's decision, 2026-10-20). The passages are the book's words, read from content/snowmoon/text at build;
+ * passages, all shown in book order (owner, 2026-11-17: spoilers no longer matter; principle 9 retired. From 2026-10-20
+ * chapters 15 onward were inside a closed Spoilers section). The passages are the book's words, read from content/snowmoon/text at build;
  * everything else on the page is DRAFT wording, drafted by the coding agent, and labelled so.
  * Checked by npm run test:minpentai-kit, check:principles P8g and check:ui.
  */
@@ -84,7 +84,6 @@ function Rule({ r }: { r: KitRule }) {
 
 export default function MinpentaiBuildPage() {
   const n = counts();
-  const shown = kit.passages.filter((p) => p.shownOnPage), rest = kit.passages.filter((p) => !p.shownOnPage);
   const last = Math.max(...kit.passages.map((p) => p.chapter));
   const docs = `${REPO_URL}/tree/main/docs/minpentai`;
   return (
@@ -137,14 +136,10 @@ export default function MinpentaiBuildPage() {
       <section className="mp-kit-section" aria-labelledby="kit-passages">
         <h2 id="kit-passages">The book&apos;s passages</h2>
         <p>
-          {kit.passages.length} passages name Minpentai or are cited about its rules. Shown here: the {shown.length} from chapters {SHOWN_CHAPTERS[0]} to{' '}
-          {SHOWN_CHAPTERS[1]}. The other {rest.length}, from chapter {SHOWN_CHAPTERS[1] + 1} to {last}, are under Spoilers.
+          {kit.passages.length} passages name Minpentai or are cited about its rules, from chapter {Math.min(...kit.passages.map((p) => p.chapter))} to {last}, all
+          shown here in book order.
         </p>
-        <Chapters list={shown} />
-        <details className="mp-kit-spoilers">
-          <summary>Spoilers · the other {rest.length} passages, chapters {Math.min(...rest.map((p) => p.chapter))} to {last}</summary>
-          <Chapters list={rest} />
-        </details>
+        <Chapters list={kit.passages} />
       </section>
     </div>
   );

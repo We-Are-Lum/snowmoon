@@ -225,7 +225,7 @@ in 25 words or fewer and records `written_by { fid, date }`.
   moments' titles and scene lines (`src/lib/challenge/moments.ts`) are drafted by the coding agent and go to the
   owner in one pass; /challenge may not go public (`CHALLENGE.public`) until he approves them
   (`CHALLENGE.cardsApproved`, `CHALLENGE.sceneLinesApproved`), and until then every card carries the "Draft wording"
-  mark. Approved, with three changes (owner, 2026-11-06). The cards' and moments' quotes are the book's, word for word at their blocks (checked by `P9g`); the one line
+  mark. Approved, with three changes (owner, 2026-11-06). The cards' and moments' quotes are the book's, word for word at their blocks (checked by `P8i`, `P9g` until 2026-11-17); the one line
   and the description are marked "This edition's summary"; every picture's ⓘ says "Look invented by this edition: the
   book doesn't describe it." The scene line is a prompt, not story words: each recipe labels it model-drafted in
   `assist`. The proof turns /challenge public with the cards unapproved.
@@ -737,10 +737,16 @@ once the owner picks a version.)
   and every quote is word for word in its block; every invented rule names a
   place in the code that is in its file; the passages are 152; `rules.json`
   matches the table; the page is labelled Book, Invented and Draft, says it is
-  not affiliated with the author, shows every passage of chapters 2–14, and
-  keeps chapters 15 on in a Spoilers section closed by default (owner,
-  2026-10-20). `npm run test:minpentai-kit` checks the same and that the
-  generated files are current. The proof changes one quoted word, shows a chapter 15 passage and opens Spoilers.
+  not affiliated with the author, and shows every passage in one list, with no
+  fold (owner, 2026-11-17, principle 9 retired; from 2026-10-20 to then it showed
+  chapters 2–14 and kept chapters 15 on in a Spoilers section closed by default).
+  `npm run test:minpentai-kit` checks the same and that the generated files are
+  current. The proof changes one quoted word, leaves a chapter 15 passage unshown and folds the later passages away.
+- `P8i` (owner, 2026-11-17): the remix challenge's cards and moments quote the book
+  word for word, each at a block that exists; one card per challenge character, about
+  three first-layer facts, "Where they appear" in book order. This is the part of the
+  retired `P9g` that wasn't about spoilers. The proof changes one word in a moment's
+  quote and gives a card's fact words its block doesn't hold.
 - `npm run check:ingest`: the committed text, screens and figures re-parse
   byte-identical from the fetched source. `npm run test:render`: template cases.
 - Review: do generated images that depict boards, maps or screens (for example
@@ -752,7 +758,22 @@ once the owner picks a version.)
 
 ---
 
-## 9. Nothing past where a reader has read is shown, or sent to a model on their behalf, unless they choose it each time.
+## 9. ~~Nothing past where a reader has read is shown, or sent to a model on their behalf, unless they choose it each time.~~ Retired.
+
+**Retired by the owner on 2026-11-17: spoilers no longer matter anywhere on the site.** Nothing is hidden, folded,
+covered or limited because of spoilers or where a reader has read: the glossary and References show every word, a
+sheet's "What the book says" and "Where it appears" quote the whole book, a challenge character's "Learn more" shows
+"Later in the book." as a plain part, a chapter's summary is open, the adaptations and the Minpentai kit show
+everything. The reading progress ("Read to 6", "Read", "Reading") stays, as progress only. Its check `P9g` is gone; the
+part of it that wasn't about spoilers (the challenge's quotes word for word at real blocks) is now `P8i`. Left out of
+this change on purpose: the reading assistant (`src/lib/chat`, `src/components/assistant.tsx`, `/api/chat`), which
+another piece of work is changing; it keeps its own chapter limit until that work says otherwise. The owner reread the
+help and notice lines the same day: the sheets' "What the book says", the chapter summary's label, the adaptations'
+notices and the Minpentai agent files no longer mention spoilers or "the chapters you've read", and Make an image no
+longer marks chapters "past where you've read". Privacy §3 is unchanged (the furthest chapter is still kept, as
+progress, and the assistant still sends it); the podcast's "full spoilers" stays, as it says what the episode holds.
+
+The principle's history, as it stood when it was retired:
 
 Adopted by the owner on 2026-11-04 (reread pack item 12.1). Its full text, P9a to P9f and its status table are on
 branch `find-a-moment`, which hasn't merged into this branch yet; this section carries only the exception below and

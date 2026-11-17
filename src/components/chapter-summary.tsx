@@ -4,9 +4,9 @@ import { REPO_URL } from '~/lib/config';
 import summaries from '../../content/snowmoon/chapter-summaries.json';
 
 /**
- * A chapter's summary, collapsed until the reader opens it (owner, 2026-10-10), so nobody
- * sees this chapter's events unless they choose to. It rests only on this chapter and earlier
- * ones (scripts/chapter-summaries.ts check). Written by the coding agent, a closed model,
+ * A chapter's summary, open at the end of the chapter (owner, 2026-11-17: spoilers no longer matter anywhere on the
+ * site, principle 9 retired; it was collapsed from 2026-10-10 so nobody saw the chapter's events unless they chose to).
+ * It still folds away. It rests only on this chapter and earlier ones (scripts/chapter-summaries.ts check). Written by the coding agent, a closed model,
  * accepted by the owner as labelled and recorded (principle 3, 2026-10-10); declared as AI
  * where it is shown (principle 2). The label is the owner's draft wording.
  */
@@ -38,9 +38,9 @@ export function ChapterSummary({ chapter: n }: { chapter: number }) {
   const paras = (summaries.chapters as Record<string, Para[]>)[String(n)];
   if (!paras?.length) return null;
   return (
-    <details className="chapter-summary">
+    <details className="chapter-summary" open>
       <summary>
-        Chapter {n} in brief <span className="chapter-summary-warn">· spoilers for this chapter</span>
+        Chapter {n} in brief
       </summary>
       {paras.map((p) => (
         <div key={p.from_paragraph} className="chapter-summary-para">

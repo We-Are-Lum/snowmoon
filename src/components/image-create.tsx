@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { openedChapters } from '~/lib/chat/device';
 import { openComposer } from '~/lib/images/client';
 import { IMAGES } from '~/lib/config';
 import { IMAGE_WORDING } from '~/lib/images/wording';
@@ -15,8 +14,8 @@ import { SearchField } from './search-field';
  * chapter and tap the first paragraph, then the last (up to IMAGES.maxBlocks blocks, counted as the
  * server counts them on Generate), or search the book's text; then "Write the prompt →" opens the
  * composer, the same sheet as in the reader. Paragraphs and quotes can be tapped; screens and
- * figures are named in place and can sit inside a passage. Chapters past the furthest one opened on
- * this device are shown and marked, not hidden: the reader is choosing deliberately.
+ * figures are named in place and can sit inside a passage. Every chapter shows the same (owner, 2026-11-17: principle 9
+ * retired; chapters past the furthest one opened were marked "past where you've read" until then).
  * Model-drafted wording (src/lib/images/wording.ts, IMAGE_WORDING.create); one "Draft wording" line.
  */
 export type CreateBlock = { idx: number; kind: string; label: number | null; html: string | null };
@@ -40,11 +39,8 @@ export function ImageCreate({
   maxBlocks: number;
 }) {
   const [mode, setMode] = useState<'browse' | 'search'>('browse');
-  const [furthest, setFurthest] = useState<number | null>(null);
   const [sel, setSel] = useState<Sel | null>(initial ? { start: initial.start, end: initial.end, done: initial.open } : null);
   const [note, setNote] = useState<string | null>(null);
-  useEffect(() => setFurthest(Math.max(1, ...openedChapters())), []);
-  const ahead = (n: number) => furthest !== null && n > furthest;
 
   // A deep link opens the prompt at once; a search hit shows its paragraph, chosen.
   useEffect(() => {
@@ -92,7 +88,7 @@ export function ImageCreate({
       </div>
 
       {mode === 'search' ? (
-        <Search ahead={ahead} />
+        <Search />
       ) : !chapter ? (
         <section aria-labelledby="mi-chapters">
           <h2 id="mi-chapters" className="mi-h">
@@ -104,7 +100,6 @@ export function ImageCreate({
                 <Link href={`/references/new?chapter=${n}`}>
                   <span className="ch-num">Chapter {n}</span>
                   <span className="ch-dateline">{dateline}</span>
-                  {ahead(n) && <span className="mi-ahead">{W.ahead}</span>}
                 </Link>
               </li>
             ))}
@@ -119,7 +114,6 @@ export function ImageCreate({
             Chapter {chapter.n}
             {chapter.dateline && <span className="mi-dateline"> · {chapter.dateline}</span>}
           </h2>
-          {ahead(chapter.n) && <p className="mi-ahead mi-ahead-line">{W.ahead}</p>}
           <p className="mi-tap">{W.tap(maxBlocks)}</p>
           {/* The composer reads the passage from here: article.chapter > .block[id], with data-label. */}
           <article className="chapter mi-text" data-chapter={chapter.n}>
@@ -207,7 +201,7 @@ const loadCorpus = () =>
     }));
 
 /** Search the book's text on this device (no query leaves it), debounced; a hit opens its chapter with the paragraph chosen. */
-function Search({ ahead }: { ahead: (n: number) => boolean }) {
+function Search() {
   const [q, setQ] = useState('');
   const [state, setState] = useState<{ q: string; hits: Hit[]; more: boolean } | { error: string } | null>(null);
   const input = useRef<HTMLInputElement>(null);
@@ -252,7 +246,6 @@ function Search({ ahead }: { ahead: (n: number) => boolean }) {
                   <span className="mi-hit-where">
                     Chapter {h.chapter}
                     {h.label !== null ? ` · ¶ ${h.label}` : ''}
-                    {ahead(h.chapter) && <span className="mi-ahead"> · {W.ahead}</span>}
                   </span>
                   <span className="mi-hit-text">
                     {h.before}

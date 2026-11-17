@@ -7,7 +7,7 @@
  * - the six cards: every quote word for word at its block, one card per challenge character, about three first-layer
  *   facts from chapters 1-14 only, "Where they appear" in book order; the words are marked as this edition's;
  * - the fifteen moments (owner, answer 4): in the book's order, every quote word for word inside its passage;
- * - P9g (principle 9's challenge exception), P2m (cards and scene lines approved before public), P6ac (entries as
+ * - P8i (the cards' and moments' quotes; P9g until principle 9 was retired, 2026-11-17), P2m (cards and scene lines approved before public), P6ac (entries as
  *   pictures only once Terms and Privacy say so), each passing as committed and failing on its planted fault;
  * - the hub's data: the cards in CHALLENGE.characters' order, each with its moments ("Ch N"), the "Draft wording" mark
  *   while unapproved, no random block, first remixes only when they exist; and after the close, no deeper layer and no
@@ -33,12 +33,11 @@ function walk(dir: string): string[] {
 }
 const clone = <T>(v: T): T => structuredClone(v);
 
-const { CARDS, cardQuotes, cardShapeProblems, FIRST_LAYER_MAX_CHAPTER, firstLayerFacts } = await import('../src/lib/challenge/cards');
+const { CARDS, cardQuotes, cardShapeProblems, firstLayerFacts } = await import('../src/lib/challenge/cards');
 const { MOMENTS, momentShapeProblems, inBookOrder, chapterChip, momentsWith } = await import('../src/lib/challenge/moments');
 const { quoteProblems } = await import('../src/lib/challenge/book-quotes');
 const { loadBlocks } = await import('./lib/glossary');
-const { p9gProblems, p2mProblems, p6acProblems } = await import('./lib/challenge-moments');
-const { spoilerExceptionOn } = await import('../src/lib/challenge/spoilers');
+const { p8iProblems, p2mProblems, p6acProblems } = await import('./lib/challenge-moments');
 const { TERMS, PRIVACY } = await import('../src/lib/legal');
 const blocks = loadBlocks(ROOT);
 const momentQuotes = (ms: typeof MOMENTS) => ms.flatMap((m) => m.quotes.map((q) => ({ where: `moment ${m.id}`, block: q.block, text: q.text })));
@@ -47,16 +46,16 @@ const momentQuotes = (ms: typeof MOMENTS) => ms.flatMap((m) => m.quotes.map((q) 
 {
   const qs = cardQuotes();
   check('cards: every quote is word for word at its block', quoteProblems(qs, blocks).length === 0, quoteProblems(qs, blocks).join('; '));
-  check('cards: one per challenge character, about three first-layer facts each, from chapters 1-14, passages in book order', cardShapeProblems(CARDS, CHALLENGE.characters).length === 0, cardShapeProblems(CARDS, CHALLENGE.characters).join('; '));
-  check(`cards: the first layer stops at chapter ${FIRST_LAYER_MAX_CHAPTER}`, FIRST_LAYER_MAX_CHAPTER === 14);
+  check('cards: one per challenge character, about three first-layer facts each, passages in book order', cardShapeProblems(CARDS, CHALLENGE.characters).length === 0, cardShapeProblems(CARDS, CHALLENGE.characters).join('; '));
   check('cards: every card has a fuller description, more facts and at least four passages', CARDS.every((c) => c.more.description.length > 80 && c.more.facts.length >= 2 && c.appears.length >= 4));
   check('cards: the look is never described as the book\'s', CARDS.every((c) => !/\b(canon|official)\b/i.test(c.line + c.more.description)));
   const changed = clone(CARDS) as typeof CARDS extends readonly (infer T)[] ? T[] : never;
   changed[0].facts[0].quote = changed[0].facts[0].quote.replace('programming', 'computer');
   proof('a card quote with one word changed fails', quoteProblems(cardQuotes(changed), blocks).length > 0);
+  // Principle 9 retired (owner, 2026-11-17): a first-layer fact from a later chapter is allowed now.
   const deep = clone(CARDS) as typeof changed;
   deep[2].facts[0] = { text: 'Second place', block: 'c24-b48', quote: 'I got second place in the Pafogai Du Minpentai games' };
-  proof('a first-layer fact from chapter 24 fails', cardShapeProblems(deep, CHALLENGE.characters).length > 0);
+  check('a first-layer fact from chapter 24 is allowed (principle 9 retired, 2026-11-17)', cardShapeProblems(deep, CHALLENGE.characters).length === 0, cardShapeProblems(deep, CHALLENGE.characters).join('; '));
   const nothing = clone(CARDS) as typeof changed;
   nothing[1].facts[0].quote = '';
   proof('a fact that cites nothing fails', cardShapeProblems(nothing, CHALLENGE.characters).length > 0);
@@ -95,52 +94,41 @@ check('config: a current default look per challenge character, each a design id 
   check('moments: never sorted anywhere in the challenge code (their order is the book\'s)', !walk('src').some((f) => /MOMENTS[^;\n]*\.sort\(|momentsWith\([^)]*\)\.sort\(/.test(read(f))));
 }
 
-// --- P9g, P2m, P6ac -------------------------------------------------------------------------------------------------
+// --- P8i, P2m, P6ac -------------------------------------------------------------------------------------------------
 {
   const files = walk('src').map((f) => ({ file: f, text: read(f) }));
   const LM = await import('../src/lib/challenge/learn-more');
-  const base = { files, cards: CARDS, moments: MOMENTS, characters: CHALLENGE.characters, blocks, on: spoilerExceptionOn, dates: CHALLENGE.dates, learn: { texts: LM.LEARN_MORE, label: LM.LATER_LABEL as string } };
-  const p9 = p9gProblems(base);
-  check('P9g passes as committed', p9.length === 0, p9.join('; '));
+  // P8i (owner, 2026-11-17): what the retired P9g held that wasn't about spoilers: quotes word for word at real blocks.
+  const base = { cards: CARDS, moments: MOMENTS, characters: CHALLENGE.characters, blocks };
+  const p8 = p8iProblems(base);
+  check('P8i passes as committed', p8.length === 0, p8.join('; '));
   const plant = (f: string, g: (x: string) => string) => files.map((x) => (x.file === f ? { ...x, text: g(x.text) } : x));
-  // On the challenge's pages nothing is marked as a spoiler (owner, 2026-11-09), and the reader's own gating stays.
-  proof('P9g: "May spoil later chapters." back on a challenge picture\'s backstory fails', p9gProblems({ ...base, files: plant('src/components/challenge-backstory.tsx', (x) => x + "\nexport const SPOIL = 'May spoil later chapters.';") }).length > 0);
-  proof('P9g: a sheet\'s "What the book says" no longer gated by the chapters opened fails', p9gProblems({ ...base, files: plant('src/components/design-book.tsx', (x) => x.replace('quotes.filter((q) => q.chapter <= furthest)', 'quotes')) }).length > 0);
+  const moved = clone(MOMENTS) as typeof MOMENTS extends readonly (infer T)[] ? T[] : never;
+  moved[2].quotes[0].text = moved[2].quotes[0].text.replace('shine', 'win');
+  proof('P8i: one word changed in a moment\'s quote fails', p8iProblems({ ...base, moments: moved }).length > 0);
+  const wrong = clone(CARDS) as typeof CARDS extends readonly (infer T)[] ? T[] : never;
+  wrong[2].facts[0] = { ...wrong[2].facts[0], quote: 'Words that are nowhere in the book' };
+  proof('P8i: a card\'s fact quoting words its block doesn\'t hold fails', p8iProblems({ ...base, cards: wrong }).length > 0);
   check('no challenge wording or component carries a spoiler mark', !files.filter((x) => /^src\/(lib\/challenge|app\/challenge|components\/challenge-)/.test(x.file)).some((x) => /May spoil later chapters/.test(x.text)));
-  // The simpler challenge (owner, 2026-11-08): a card's one line only, and the moments only while CHALLENGE.moments is on.
-  proof('P9g: a card showing its second layer again (its description) fails', p9gProblems({ ...base, files: plant('src/components/challenge-card.tsx', (x) => x.replace('{c.line} <span className="cc-mark">', '{c.line} {c.more.description} <span className="cc-mark">')) }).length > 0);
-  proof('P9g: a card fetching "Where they appear" again fails', p9gProblems({ ...base, files: plant('src/components/challenge-card.tsx', (x) => x + "\nconst appears = () => fetch('/api/challenge/appears?character=zei');") }).length > 0);
-  proof('P9g: the pages\' data carrying facts fails', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace("line: cardOf(slug)?.line ?? ''", "line: cardOf(slug)?.line ?? '', facts: cardOf(slug)?.facts")) }).length > 0);
-  proof('P9g: the pages\' data carrying the moments fails', p9gProblems({ ...base, files: plant('src/lib/challenge/view.ts', (x) => x.replace("import { cardOf } from './cards';", "import { cardOf } from './cards';\nimport { momentsWith } from './moments';")) }).length > 0);
-  // "Learn more about {name}" (owner, 2026-11-12): its fallback is the first-layer facts, only through firstLayerFacts.
-  check('P9g: "Learn more"\'s fallback carries each card\'s first-layer facts, none past chapter 14, each word for word', CARDS.every((c) => {
+  // Principle 9 retired (owner, 2026-11-17): nothing on the site is hidden because of spoilers.
+  const code = (t: string) => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+  const left = files.filter((x) => /Later in the book \(spoilers\)|className="chc-later"|className="gl-cover"|spoilerExceptionOn|FIRST_LAYER_MAX_CHAPTER|OPEN_MAX_CHAPTER/.test(code(x.text))).map((x) => x.file);
+  check('retired P9: no spoiler fold, cover or chapter limit left in the challenge, the glossary, References or a sheet', left.length === 0 && !/openedChapters/.test(read('src/components/design-book.tsx') + read('src/components/design-sheets.tsx') + read('src/components/glossary.tsx') + read('src/components/reference-cards.tsx')), left.join(', '));
+  proof('retired P9: the scan finds a planted fold', plant('src/components/challenge-character.tsx', (x) => x + '<details className="chc-later">').some((x) => /className="chc-later"/.test(x.text)));
+  // "Learn more about {name}" (owner, 2026-11-12): its fallback is the first-layer facts, through firstLayerFacts.
+  check('"Learn more"\'s fallback carries each card\'s first-layer facts, each word for word', CARDS.every((c) => {
     const f = firstLayerFacts(c.slug);
-    return f.length === c.facts.length && f.every((x) => x.chapter >= 1 && x.chapter <= 14 && !!x.quote);
+    return f.length === c.facts.length && f.every((x) => x.chapter >= 1 && !!x.quote);
   }));
-  proof('P9g: the page\'s facts from the second layer fail', p9gProblems({ ...base, files: plant('src/lib/challenge/learn-more-view.ts', (x) => x.replace('facts: shown ? [] : firstLayerFacts(slug)', 'facts: (cardOf(slug)?.more.facts ?? [])')) }).length > 0);
-  // "Learn more" (owner, 2026-11-12): the whole book only inside its fold, labelled exactly, closed by default.
+  // "Later in the book." (owner, 2026-11-17): a plain part like the others, shown in full, after "At the start." and
+  // before "What drives"; it was a nested fold, "Later in the book (spoilers)", closed by default.
   const comp = read('src/components/challenge-character.tsx');
-  proof('P9g: whole-book text ("later") outside the fold fails', p9gProblems({ ...base, files: plant('src/components/challenge-character.tsx', (x) => x.replace('<details className="chc-later">', '<p><Segs segs={P.learn.text.later.segs} more="" /></p>\n                <details className="chc-later">')) }).length > 0);
-  proof('P9g: the fold with another label fails', p9gProblems({ ...base, learn: { ...base.learn, label: 'Later in the book' } }).length > 0);
-  proof('P9g: the fold\'s label written elsewhere on the challenge fails', p9gProblems({ ...base, files: plant('src/lib/challenge/landing-wording.ts', (x) => x + "\nexport const X = 'Later in the book (spoilers)';") }).length > 0);
-  proof('P9g: the fold open by default fails', p9gProblems({ ...base, files: plant('src/components/challenge-character.tsx', (x) => x.replace('<details className="chc-later">', '<details className="chc-later" open>')) }).length > 0);
-  proof('P9g: a later-chapter citation in Zei\'s "At the start." (the owner\'s text) fails', p9gProblems({ ...base, learn: { ...base.learn, texts: { ...LM.LEARN_MORE, zei: { ...LM.LEARN_MORE.zei, start: [...LM.LEARN_MORE.zei.start, { cite: 'c29-b110' }] } } } }).length > 0);
-  proof('P9g: texts shown without keeping the rule fail', p9gProblems({ ...base, files: plant('src/lib/challenge/learn-more-view.ts', (x) => x.replace('const shown = t && learnMoreProblems(slug).length === 0 ? t : null;', 'const shown = t ?? null;')) }).length > 0);
-  proof('P9g: glossary notes from any chapter in the open parts fail', p9gProblems({ ...base, files: plant('src/lib/challenge/learn-more-view.ts', (x) => x.replace("render(slug, 'start', shown.start, OPEN_MAX_CHAPTER)", "render(slug, 'start', shown.start, Infinity)")) }).length > 0);
-  check('P9g: the fold is a nested <details> closed by default, after "At the start." and before "What drives"', /<details className="chc-later">\s*<summary>\{P\.learn\.text\.later\.head\}<\/summary>/.test(comp) && comp.indexOf('data-part="start"') < comp.indexOf('chc-later') && comp.indexOf('chc-later') < comp.indexOf('data-part="drives"') && LM.LATER_LABEL === 'Later in the book (spoilers)');
+  check('Learn more: "Later in the book." is a plain part, in full, between "At the start." and "What drives"', LM.LATER_LABEL === 'Later in the book.' && !/<details className="chc-later"/.test(comp) && /<p className="chc-learn-part" data-part="later">\s*<strong>\{P\.learn\.text\.later\.head\}<\/strong>/.test(comp) && comp.indexOf('data-part="start"') < comp.indexOf('data-part="later"') && comp.indexOf('data-part="later"') < comp.indexOf('data-part="drives"'));
   // The looks line once (owner, 2026-11-16): "Room to invent." ends with its own looks line, so the page's looks line is
   // drawn only in the fallback (a character with no Learn more text).
   check('Learn more: the looks line once: every text\'s "Room to invent." ends with its looks line, and the page draws its own only in the fallback', Object.values(LM.LEARN_MORE).every((x) => /\blooks\b/.test(x.invent.at(-1)?.map((s) => ('text' in s ? s.text : '')).join('') ?? '')) && (comp.match(/\{P\.learn\.looks\}/g) ?? []).length === 1 && comp.indexOf('{P.learn.looks}') > comp.indexOf('P.learn.facts.length') && !/<li className="chc-looks">/.test(comp));
-  check('Learn more: Zei\'s texts are the owner\'s (approved), keep the rule, and are shown', LM.LEARN_MORE.zei.approved && LM.learnMoreProblems('zei').length === 0);
+  check('Learn more: Zei\'s texts are the owner\'s (approved), and are shown', LM.LEARN_MORE.zei.approved && LM.learnMoreProblems('zei').length === 0);
   check('Learn more: every citation is a block that exists in the book', Object.entries(LM.LEARN_MORE).every(([, x]) => [x.who, x.start, x.later, x.drives, ...x.invent].flat().every((s) => !('cite' in s) || blocks.has(/^(c\d+-b\d+)/.exec(s.cite)![1]))));
-  proof('P9g: firstLayerFacts reading the second layer fails', p9gProblems({ ...base, files: plant('src/lib/challenge/cards.ts', (x) => x.replace('(cardOf(slug)?.facts ?? [])', '(cardOf(slug)?.more.facts ?? [])')) }).length > 0);
-  proof('P9g: firstLayerFacts without its chapter 14 limit fails', p9gProblems({ ...base, files: plant('src/lib/challenge/cards.ts', (x) => x.replace('.filter((f) => chapterOf(f.block) <= FIRST_LAYER_MAX_CHAPTER)', '')) }).length > 0);
-  proof('P9g: the remix screen sent the moments whatever the switch says fails', p9gProblems({ ...base, files: plant('src/lib/challenge/make.ts', (x) => x.replace('moments: momentsOn ? momentChips() : []', 'moments: momentChips()')) }).length > 0);
-  proof('P9g: a moment chip on the remix screen without its chapter fails', p9gProblems({ ...base, files: plant('src/components/challenge-make.tsx', (x) => x.replaceAll('{m.title} <span className="cc-chip-ch">· {m.chip}</span>', '{m.title}')) }).length > 0);
-  proof('P9g: the cards\' words imported on a sheet page fail', p9gProblems({ ...base, files: [...files, { file: 'src/app/references/designs/[id]/planted.tsx', text: "import { CARDS } from '~/lib/challenge/cards';" }] }).length > 0);
-  proof('P9g: an exception that doesn\'t end at the close fails', p9gProblems({ ...base, on: () => true }).length > 0);
-  proof('P9g: passages served for anyone, not only the six, fail', p9gProblems({ ...base, files: plant('src/app/api/challenge/appears/route.ts', (x) => x.replace('CHALLENGE.characters.includes(slug)', 'true')) }).length > 0);
-  check('P9g: the exception holds until the close and ends at it', spoilerExceptionOn(new Date(Date.parse(CHALLENGE.dates.closes) - 1)) && !spoilerExceptionOn(new Date(Date.parse(CHALLENGE.dates.closes))));
 
   const c = { public: CHALLENGE.public, cardsApproved: CHALLENGE.cardsApproved, sceneLinesApproved: CHALLENGE.sceneLinesApproved };
   check('P2m: as committed, the cards and scene lines are approved (owner, 2026-11-06) and /challenge is public (the owner\'s flip)', c.public && c.cardsApproved && c.sceneLinesApproved && p2mProblems(c, files).length === 0, p2mProblems(c, files).join('; '));
@@ -193,8 +181,8 @@ check('config: a current default look per challenge character, each a design id 
     check('design pass: every character page has "Make your own {name}", its line, the link to the remix choice (owner, 2026-11-16) and the two choices\' heads and lines', rows.every(({ v }) => { const p = v!.page; return p.makeHead === `Make your own ${v!.c.name}` && p.makeLine === 'Start from a picture, describe what to change, then publish and post it.' && p.fromBaseHead === 'Start from a base' && p.fromBaseLine === `${v!.c.name}’s starting looks.` && p.fromRemixHead === 'Start from someone’s remix' && p.fromRemixLine === 'Build on what others made. They’re credited.' && p.toRemix === 'or start from someone’s remix ↓' && !('remix' in p) && !('basesCount' in p); }));
     check('design pass: Zei\'s one line starts "A young Minpentai player" (no age)', rows.find((r) => r.slug === 'zei')!.v!.c.line.startsWith('A young Minpentai player') && !/eighteen/i.test(rows.find((r) => r.slug === 'zei')!.v!.c.line));
     const z = rows.find((r) => r.slug === 'zei')!.v!.page.learn;
-    check('Learn more: Zei\'s shows the owner\'s texts, no Draft mark, its fold labelled exactly, citations linking to the reader\'s first block', z.text !== null && z.draft === null && z.text.later.head === 'Later in the book (spoilers)' && z.text.start.segs.some((s) => s.kind === 'cite' && s.label === 'c2-b98–b104' && s.href === '/chapter/2#c2-b98') && z.facts.length === 0);
-    check('Learn more: a term with a glossary entry opens it (a note from chapters 1 to 14 outside the fold)', z.text!.who.segs.some((s) => s.kind === 'term' && s.term === 'Minpentai' && s.note !== null && s.href === '/glossary/minpentai'));
+    check('Learn more: Zei\'s shows the owner\'s texts, no Draft mark, its "Later in the book." part, citations linking to the reader\'s first block', z.text !== null && z.draft === null && z.text.later.head === 'Later in the book.' && z.text.start.segs.some((s) => s.kind === 'cite' && s.label === 'c2-b98–b104' && s.href === '/chapter/2#c2-b98') && z.facts.length === 0);
+    check('Learn more: a term with a glossary entry opens it (a note from the book)', z.text!.who.segs.some((s) => s.kind === 'term' && s.term === 'Minpentai' && s.note !== null && s.href === '/glossary/minpentai'));
     // The four terms added to the glossary on 2026-11-16: the rule's pick for two, the owner's hand-pick for two (NOTE_PICKS).
     const terms = rows.flatMap(({ v }) => { const t = v!.page.learn.text; return t ? [t.who, t.start, t.later, t.drives].flatMap((p) => p.segs).concat(t.invent.items.flat()) : []; }).filter((s) => s.kind === 'term');
     const noteOf = (slug: string) => terms.find((s) => s.kind === 'term' && s.href === `/glossary/${slug}`);
@@ -222,7 +210,8 @@ check('config: a current default look per challenge character, each a design id 
   check('character page: gated and cached as /challenge (public switch, revalidate 60), only the six as pages', /if \(!CHALLENGE\.public\) notFound\(\);/.test(page) && /export const revalidate = 60;/.test(page) && /export const dynamicParams = false;/.test(page) && /CHALLENGE\.characters\.map\(\(slug\) => \(\{ slug \}\)\)/.test(page) && /page="character"/.test(read('src/app/challenge/[slug]/not-found.tsx')));
   check('character page: no route clash (entries, remixes, rules, make and p are their own folders, not characters)', ['entries', 'remixes', 'rules', 'make', 'p'].every((d) => readdirSync(path.join(ROOT, 'src/app/challenge')).includes(d) && !CHALLENGE.characters.includes(d)));
 
-  // "Where they appear": its own API, the six only, the book's words, only while the exception holds (no page calls it now).
+  // "Where they appear": its own API, the six only, the book's words (no page calls it now). Since principle 9 was
+  // retired (owner, 2026-11-17) it also answers after the close.
   const keep = { ...CHALLENGE.dates };
   const route = await import('../src/app/api/challenge/appears/route');
   const pub = CHALLENGE.public;
@@ -234,7 +223,7 @@ check('config: a current default look per challenge character, each a design id 
   check('appears: not for a character outside the six', (await get('character=lektor')).status === 404 && (await get('character=')).status === 404);
   CHALLENGE.dates.opens = '2026-01-01T00:00:00Z';
   CHALLENGE.dates.closes = '2026-01-02T00:00:00Z';
-  check('appears: not after the close', (await get('character=bai')).status === 404);
+  check('appears: still answers after the close (principle 9 retired, 2026-11-17)', (await get('character=bai')).status === 200);
   Object.assign(CHALLENGE.dates, keep);
   CHALLENGE.public = false;
   check('appears: admins only while the challenge is admin-only', (await get('character=bai')).status === 404);

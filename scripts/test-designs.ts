@@ -352,7 +352,7 @@ check('My picks and the composer show no built-on number', !/builtOn|built on/i.
   check('in this passage: whole words only', SH.namedAs('the minute', ['Min']) === null);
   check('in this passage: the scene\'s place, with its evidence block', JSON.stringify(SH.inPassage(1, 2, 5).place) === JSON.stringify({ slug: 'kalimar-footpaths', name: 'the footpaths of the Kalimar district', evidence: 'c1-b2' }));
 // Sheet summaries describe; they don't say where or when in the book (2026-10-10: no chapter numbers or later events,
-// which "Where it appears" shows with its spoiler cover).
+// which "Where it appears" shows).
 {
   for (const dir of ['characters', 'locations']) {
     for (const f of readdirSync(path.join(ROOT, 'content/snowmoon/designs', dir)).filter((x) => x.endsWith('.json'))) {

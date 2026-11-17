@@ -4,8 +4,6 @@
 
 **152 passages.** A block is listed if it names Minpentai, is cited in `docs/minpentai-rules.md`, or is cited by Learn's words (`src/lib/minpentai/learn-text.ts`); a cited range counts each of its blocks. A block id such as c4-b84 is chapter 4, block 84; on the site it is /chapter/4#c4-b84.
 
-**Spoilers.** Everything here is from the book. Every block the rules are read from is in chapters 2–14 (`docs/minpentai-rules.md` and the rules page cite nothing later). Chapters 15 to the end are under their own spoiler heading below.
-
 ### Chapter 2
 
 **c2-b11** (names Minpentai)
@@ -402,10 +400,6 @@
 
 **c14-b94** (cited in docs/minpentai-rules.md)
 > Ten thousand two hundred turns into the game, Deluin was announced the winner.
-
-## Spoilers: chapters 15–31 (25 passages)
-
-Stop here if you have not read past chapter 14.
 
 ### Chapter 15
 
