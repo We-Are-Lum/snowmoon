@@ -2382,6 +2382,97 @@ async function checkChallengeLanding() {
             await page.unroute('**/api/challenge/submit');
             await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
           }
+          // "Share" and "Remix" (owner, 2026-11-16): two outlined buttons under the picture for everyone, its maker
+          // included; Share's list ("Post on Farcaster", "Post on Bluesky", "Post on Lens", "Copy link") starts open right
+          // after publishing (the publish redirect's one-time ?published=1, stripped from the address) and closed on any
+          // later visit; for its maker, "Submit your post" below them until it is submitted.
+          {
+            const PP = CWX.picturePage;
+            const LIST = [PP.postOn.farcaster, PP.postOn.bluesky, PP.postOn.lens, PP.copy];
+            const cand = FX.candidate;
+            const actions = page.locator('[data-slot="picture-actions"]');
+            const list = page.locator('[data-slot="share-list"]');
+            const shareBtn = actions.locator('button[data-slot="share"]');
+            const remixBtn = actions.locator('a[data-slot="remix"]');
+            const open = async () => (await list.isVisible().catch(() => false)) && (await shareBtn.getAttribute('aria-expanded')) === 'true';
+            const actionsShow = async (where: string, versionId: string) => {
+              await actions.waitFor({ timeout: 10000 }).catch(() => {});
+              if (((await shareBtn.textContent().catch(() => '')) ?? '').trim() !== PP.share) fail(`/challenge/p ${tag} (${where}): no "${PP.share}" button`);
+              if (((await remixBtn.textContent().catch(() => '')) ?? '').trim() !== PP.remix || (await remixBtn.getAttribute('href').catch(() => null)) !== `/challenge/make?from=${versionId}`) fail(`/challenge/p ${tag} (${where}): no "${PP.remix}" button to its remix screen`);
+              const boxes = await actions.locator('.chp-btn').evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); const s = getComputedStyle(e); return { h: r.height, top: Math.round(r.top), border: s.borderTopStyle, bw: parseFloat(s.borderTopWidth), bg: s.backgroundColor }; }));
+              if (boxes.length !== 2 || boxes.some((b) => b.h < 44)) fail(`/challenge/p ${tag} (${where}): Share and Remix aren't two buttons at least 44px tall (${JSON.stringify(boxes)})`);
+              if (boxes.some((b) => b.border !== 'solid' || b.bw < 1)) fail(`/challenge/p ${tag} (${where}): Share and Remix aren't outlined buttons (${JSON.stringify(boxes)})`);
+              if (new Set(boxes.map((b) => b.top)).size !== 1) fail(`/challenge/p ${tag} (${where}): Share and Remix aren't side by side`);
+              if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/p ${tag} (${where}): scrolls sideways`);
+            };
+            const listReads = async (where: string) => {
+              const items = (await list.locator('.sf-button').allTextContents()).map((x) => x.trim());
+              if (items.join('|') !== LIST.join('|')) fail(`/challenge/p ${tag} (${where}): the share list reads ${items.join(', ')} (want ${LIST.join(', ')})`);
+              const hs = await list.locator('.sf-button').evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height));
+              if (hs.some((x) => x < 44)) fail(`/challenge/p ${tag} (${where}): a share button is under 44px tall (${hs.join()})`);
+              if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/p ${tag} (${where}): scrolls sideways with the list open`);
+            };
+            const submitHead = page.locator('[data-slot="submit-head"]');
+            const submitBelow = async (where: string) => {
+              await submitHead.waitFor({ timeout: 10000 }).catch(() => {});
+              if (!(await submitHead.isVisible().catch(() => false)) || !((await submitHead.textContent()) ?? '').startsWith(PP.submitHead)) return fail(`/challenge/p ${tag} (${where}): its maker doesn't see "${PP.submitHead}"`);
+              const [a, sh] = await Promise.all([actions.boundingBox(), submitHead.boundingBox()]);
+              const lb = (await list.isVisible()) ? await list.boundingBox() : null;
+              if (!a || !sh || sh.y < a.y + a.height || (lb && sh.y < lb.y + lb.height)) fail(`/challenge/p ${tag} (${where}): "${PP.submitHead}" isn't below Share and Remix${lb ? ' and the list' : ''}`);
+              if (!(await page.locator('.sf-submit .ch-submit button.ic-primary').isVisible().catch(() => false))) fail(`/challenge/p ${tag} (${where}): no Submit button under "${PP.submitHead}"`);
+            };
+            const signInAs = async (fid: number, left: number) => {
+              await page.evaluate((f) => localStorage.setItem('snowmoon.signin', JSON.stringify({ token: 'stand-in', fid: f, username: `fixture${f}`, nameProof: null, exp: Math.floor(Date.now() / 1000) + 3600 })), fid);
+              await page.route('**/api/challenge/submit', (r) => (r.request().method() === 'GET' ? r.fulfill({ json: { left, versions: [], person: fid } }) : r.continue()));
+            };
+            // Another person (signed out): Share and Remix, the list closed; Share opens it with the others' words.
+            await page.goto(`${LOCAL}/challenge/p/${cand.versionId}`, { waitUntil: 'load' });
+            await page.waitForSelector('h1.mk-title', { timeout: 30000 });
+            await actionsShow('another person', cand.versionId);
+            if (await open()) fail(`/challenge/p ${tag} (another person): the share list starts open`);
+            if (await submitHead.count()) fail(`/challenge/p ${tag} (another person): sees "${PP.submitHead}"`);
+            if (await page.locator('.chp-side .sf-submit').evaluateAll((els) => els.some((e) => e.getBoundingClientRect().height > 0))) fail(`/challenge/p ${tag} (another person): an empty Submit section takes room (its rule shows)`);
+            if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-picture-others-${w}x${h}-${scheme}.png`) });
+            await shareBtn.click();
+            if (!(await open())) fail(`/challenge/p ${tag} (another person): Share doesn't open the list`);
+            await listReads('another person');
+            if (/my remix/i.test(((await list.locator('.sf-ready').textContent().catch(() => '')) ?? ''))) fail(`/challenge/p ${tag} (another person): the ready post says "My remix"`);
+            await shareBtn.click();
+            if (await open()) fail(`/challenge/p ${tag} (another person): Share doesn't close the list again`);
+            // Its maker (a stand-in session for FID 902; the submit API's GET answered for it), right after publishing.
+            await signInAs(cand.fid, 1);
+            const { justPublishedHref } = await import('../src/lib/challenge/just-published');
+            await page.goto(`${LOCAL}${justPublishedHref(cand.versionId)}`, { waitUntil: 'load' });
+            await page.waitForSelector('h1.mk-title', { timeout: 30000 });
+            await list.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+            await actionsShow('just published', cand.versionId);
+            if (!(await open())) fail(`/challenge/p ${tag} (just published): the share list doesn't start open`);
+            await listReads('just published');
+            if (!/^My remix of Zei/.test(((await list.locator('.sf-ready').textContent().catch(() => '')) ?? '').trim())) fail(`/challenge/p ${tag} (just published): the ready post isn't its maker's own ("My remix of Zei…")`);
+            const after = new URL(page.url());
+            if (after.search !== '' || after.pathname !== `/challenge/p/${cand.versionId}`) fail(`/challenge/p ${tag} (just published): the one-time mark stays in the address (${after.pathname}${after.search})`);
+            await submitBelow('just published');
+            if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-picture-just-published-${w}x${h}-${scheme}.png`) });
+            // A later visit (a reload of the same address): closed, Submit still there.
+            await page.reload({ waitUntil: 'load' });
+            await page.waitForSelector('h1.mk-title', { timeout: 30000 });
+            await actionsShow('later visit', cand.versionId);
+            if (await open()) fail(`/challenge/p ${tag} (later visit): the share list starts open`);
+            await submitBelow('later visit');
+            if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-picture-later-visit-${w}x${h}-${scheme}.png`) });
+            await page.unroute('**/api/challenge/submit');
+            // Its maker once it is submitted (FID 900's entry): Share and Remix, no "Submit your post"; Withdraw instead.
+            const ent = FX.entries.find((x) => !x.example)!;
+            await signInAs(ent.fid, 0);
+            await page.goto(`${LOCAL}/challenge/p/${ent.versionId}`, { waitUntil: 'load' });
+            await page.waitForSelector('h1.mk-title', { timeout: 30000 });
+            await actionsShow('submitted', ent.versionId);
+            await page.locator('.sf-submit .ch-submit').waitFor({ timeout: 10000 }).catch(() => {});
+            if (await submitHead.count()) fail(`/challenge/p ${tag} (submitted): still shows "${PP.submitHead}" once submitted`);
+            if (!(await page.locator('.sf-submit .ch-submit[data-submitted]').isVisible().catch(() => false))) fail(`/challenge/p ${tag} (submitted): its maker doesn't see the submitted entry's Withdraw`);
+            await page.unroute('**/api/challenge/submit');
+            await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
+          }
         } finally {
           await page.close();
         }
