@@ -40,7 +40,7 @@ export function ChapterSummary({ chapter: n }: { chapter: number }) {
   return (
     <details className="chapter-summary" open>
       <summary>
-        Chapter {n} in brief <span className="chapter-summary-warn">· spoilers for this chapter</span>
+        Chapter {n} in brief
       </summary>
       {paras.map((p) => (
         <div key={p.from_paragraph} className="chapter-summary-para">

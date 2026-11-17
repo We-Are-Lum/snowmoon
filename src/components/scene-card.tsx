@@ -27,7 +27,7 @@ export async function SceneCard({ as = 'home' }: { as?: 'home' | 'list' }) {
           <img src={poster} alt={POSTER_ALT[v?.id ?? 1] ?? POSTER_ALT[1]} width={1280} height={720} />
         )}
         <span className="scene-card-title">Fifteen Days</span>
-        <span className="scene-card-by">by @naaate · spoilers through chapter 19</span>
+        <span className="scene-card-by">by @naaate · up to chapter 19</span>
       </Link>
       <p className="scene-card-label">
         <AiLabel kind="image" text={AI_LABEL.imageBy('@naaate')} view={POSTERS[v?.id ?? 1] ?? POSTER_V1} />

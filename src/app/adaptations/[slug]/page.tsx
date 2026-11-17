@@ -43,11 +43,10 @@ export default async function AdaptationSeed({ params }: Props) {
       )}
 
       {/* Shown in full (owner, 2026-11-17: spoilers no longer matter; principle 9 retired). Until then the piece and the
-          brief were behind "Show the adaptation" and "Show the brief". The notice's wording waits for the owner's reread. */}
-      <section className="notice" aria-label="Spoiler warning">
+          brief were behind "Show the adaptation" and "Show the brief"; the notice's wording is the owner's reread of 2026-11-17. */}
+      <section className="notice" aria-label="About this brief">
         <p>
-          <strong>Spoilers through chapter {seed.spoilers_through}.</strong> This brief quotes and discusses events up to
-          that chapter. Cited passages link into the reader.
+          This brief quotes and discusses events up to chapter {seed.spoilers_through}. Cited passages link into the reader.
         </p>
       </section>
       {docs.piece && docs.approval && (

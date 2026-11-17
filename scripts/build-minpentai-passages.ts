@@ -1,6 +1,6 @@
 /**
  * docs/minpentai/passages.md: every passage of the book about Minpentai, word for word, with its block
- * id, in chapter order; chapters 15 on under a spoiler heading. Served at /minpentai/passages.md and
+ * id, in chapter order, straight through (no spoiler heading since 2026-11-17). Served at /minpentai/passages.md and
  * linked from docs/minpentai/agents.md.
  *
  * A block is a passage if it names Minpentai, is cited in docs/minpentai-rules.md (the reading of the
@@ -21,8 +21,6 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const read = (p: string) => readFileSync(path.join(ROOT, p), 'utf8');
 export const OUT = 'docs/minpentai/passages.md';
 export const PASSAGE_COUNT = 152;
-/** Spoilers start here: the matches the rules come from are chapters 2–14. */
-export const SPOILERS_FROM = 15;
 
 export interface BookBlock { idx: number; kind: string; content: string }
 type Reason = 'names' | 'rules-doc' | 'learn';
@@ -91,16 +89,9 @@ export function passagesMd(book: Record<number, BookBlock[]>): { text: string; p
     '',
     `**${passages.length} passages.** A block is listed if it names Minpentai, is cited in \`docs/minpentai-rules.md\`, or is cited by Learn's words (\`src/lib/minpentai/learn-text.ts\`); a cited range counts each of its blocks. A block id such as c4-b84 is chapter 4, block 84; on the site it is /chapter/4#c4-b84.`,
     '',
-    `**Spoilers.** Everything here is from the book. Every block the rules are read from is in chapters 2–14 (\`docs/minpentai-rules.md\` and the rules page cite nothing later). Chapters ${SPOILERS_FROM} to the end are under their own spoiler heading below.`,
-    '',
   ];
-  let ch = 0, spoiled = false;
+  let ch = 0;
   for (const p of passages.filter((x) => x.block)) {
-    if (!spoiled && p.chapter >= SPOILERS_FROM) {
-      spoiled = true;
-      const later = passages.filter((x) => x.chapter >= SPOILERS_FROM);
-      out.push(`## Spoilers: chapters ${SPOILERS_FROM}–${Math.max(...later.map((x) => x.chapter))} (${later.length} passages)`, '', `Stop here if you have not read past chapter ${SPOILERS_FROM - 1}.`, '');
-    }
     if (p.chapter !== ch) { ch = p.chapter; out.push(`### Chapter ${ch}`, ''); }
     out.push(one(p));
   }

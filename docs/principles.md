@@ -767,8 +767,11 @@ sheet's "What the book says" and "Where it appears" quote the whole book, a chal
 everything. The reading progress ("Read to 6", "Read", "Reading") stays, as progress only. Its check `P9g` is gone; the
 part of it that wasn't about spoilers (the challenge's quotes word for word at real blocks) is now `P8i`. Left out of
 this change on purpose: the reading assistant (`src/lib/chat`, `src/components/assistant.tsx`, `/api/chat`), which
-another piece of work is changing; it keeps its own chapter limit until that work says otherwise. Text that still
-describes the old limit (legal, notices, help) changes only after the owner's reread.
+another piece of work is changing; it keeps its own chapter limit until that work says otherwise. The owner reread the
+help and notice lines the same day: the sheets' "What the book says", the chapter summary's label, the adaptations'
+notices and the Minpentai agent files no longer mention spoilers or "the chapters you've read", and Make an image no
+longer marks chapters "past where you've read". Privacy §3 is unchanged (the furthest chapter is still kept, as
+progress, and the assistant still sends it); the podcast's "full spoilers" stays, as it says what the episode holds.
 
 The principle's history, as it stood when it was retired:
 

@@ -28,7 +28,7 @@
  * - Make an image (/references/new; owner, 2026-10-10), light and dark: browse chapter 1, tap the first and last paragraph,
  *   the count and the 8-block cap's message, "Write the prompt" opens the composer (signed out: its sign-in prompt);
  *   search "kalimar" (chapter 1 ¶ 2, marked; tapping it chooses it); the deep link opens the prompt (invited, status
- *   mocked), bad ones fall back to browsing; chapters and hits past where you've read are marked, not hidden. Its
+ *   mocked), bad ones fall back to browsing; no chapter or hit is marked by where you've read (owner, 2026-11-17). Its
  *   links: the Pictures page's button, "Make one from this passage" in the feed and "Make an image of this passage"
  *   on an image's page (fixture images) and on the assistant's quote cards, each with the same range, shown only
  *   where "Add an image" shows.
@@ -757,7 +757,7 @@ async function checkLegalLine(page: Page, within: string, where: string, scheme:
 
 /**
  * "Make an image" (/references/new; owner, 2026-10-10): choose the text, then the prompt.
- * - Browse: the 32 chapters, those past the furthest opened on the device marked, not hidden; chapter 1's
+ * - Browse: the 32 chapters, none marked "past where you've read" (owner, 2026-11-17: principle 9 retired); chapter 1's
  *   paragraphs; tap the first and the last, the count, the 8-block cap refused with a message; "Write the
  *   prompt" opens the composer on that passage (signed out: its sign-in prompt; invited, status mocked: the prompt).
  * - Search: "Kalimar" finds chapter 1 ¶ 2 with the match marked; tapping it chooses that paragraph.
@@ -776,9 +776,8 @@ async function checkMakeImage(page: Page, scheme: string) {
   await checkFloors(page, '/references/new (chapters)', scheme);
   const rows = await page.locator('.mi-chapters li').count();
   if (rows !== 32) fail(`/references/new (${scheme}): ${rows} chapters listed, not 32`);
-  const marked = await page.locator('.mi-chapters li:has(.mi-ahead) .ch-num').allTextContents();
-  const opened = await page.evaluate(() => Math.max(...JSON.parse(localStorage.getItem('snowmoon.opened') ?? '[]').concat([Number(localStorage.getItem('snowmoon.read-to') ?? 1)])));
-  if (marked.length !== 32 - opened || marked[0] !== `Chapter ${opened + 1}`) fail(`/references/new (${scheme}): ${marked.length} chapters marked past where you've read (first ${marked[0]}), want ${32 - opened} from Chapter ${opened + 1}`);
+  // With a reader at chapter 3 (read-to above), no chapter is marked by where they've read.
+  if (await page.locator('.mi-ahead').count() || /past where you/i.test((await page.locator('.mi-chapters').textContent()) ?? '')) fail(`/references/new (${scheme}): a chapter is still marked "past where you've read"`);
   await page.locator('.mi-chapters a[href="/references/new?chapter=1"]').click();
   await page.waitForURL('**/references/new?chapter=1');
   await page.waitForSelector('.mi-pick');
@@ -827,7 +826,7 @@ async function checkMakeImage(page: Page, scheme: string) {
   const first = page.locator('.mi-hit').first();
   if ((await first.getAttribute('href')) !== '/references/new?chapter=1&pick=3') fail(`/references/new (${scheme}): the first "kalimar" hit points to ${await first.getAttribute('href')}, not chapter 1 ¶ 2 (c1-b3)`);
   if ((await first.locator('mark').textContent()) !== 'Kalimar') fail(`/references/new (${scheme}): the hit does not mark "Kalimar"`);
-  if (!(await page.locator('.mi-hit .mi-ahead').count())) fail(`/references/new (${scheme}): hits past where you've read are not marked`);
+  if (await page.locator('.mi-hit .mi-ahead').count()) fail(`/references/new (${scheme}): a hit is still marked "past where you've read"`);
   await checkFloors(page, '/references/new (search)', scheme);
   await first.click();
   await page.waitForURL('**/references/new?chapter=1&pick=3');
