@@ -7,6 +7,7 @@
  * loaded 0.160.0 from a CDN, which production pages may not do (principle 6).
  */
 import type * as THREE_NS from 'three';
+import { glowTexture, makeRenderer, makeStage } from './scene-kit';
 import { COL, H, SHIP, STRIKES, SYM, GLIDER, TOWERS, W, WORLD, clamp, lerp, smooth, strikePos, towerUp, wx, wz, type Sim } from '~/lib/minpentai/learn-game/broadcast';
 
 type T3 = typeof THREE_NS;
@@ -19,38 +20,10 @@ export interface Scene {
 export function buildScene(T: T3, el: HTMLElement): Scene {
   const size = () => [el.clientWidth || 390, el.clientHeight || 260] as const;
   const [w, h] = size();
-  const renderer = new T.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
-  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
-  renderer.setSize(w, h);
-  renderer.toneMapping = T.ACESFilmicToneMapping;
-  renderer.outputColorSpace = T.SRGBColorSpace;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = T.PCFSoftShadowMap;
-  el.appendChild(renderer.domElement);
-  renderer.domElement.style.display = 'block';
+  const renderer = makeRenderer(T, el, w, h, { preserve: true });
   const scene = new T.Scene();
-  scene.background = new T.Color('#050507');
-  scene.fog = new T.FogExp2('#050507', .016);
   const camera = new T.PerspectiveCamera(50, w / h, .1, 400);
-  scene.add(new T.HemisphereLight(0x8899aa, 0x080808, .55));
-  const sun = new T.DirectionalLight(0xffffff, 1.5);
-  sun.position.set(18, 40, 12);
-  sun.castShadow = true;
-  Object.assign(sun.shadow.camera, { left: -32, right: 32, top: 24, bottom: -24, near: 1, far: 100 });
-  sun.shadow.mapSize.set(1024, 1024);
-  scene.add(sun);
-  const floor = new T.Mesh(new T.PlaneGeometry(240, 240), new T.MeshStandardMaterial({ color: '#08080A', roughness: 1 }));
-  floor.rotation.x = -Math.PI / 2; floor.position.y = -.02; floor.receiveShadow = true; scene.add(floor);
-  const field = new T.Mesh(new T.PlaneGeometry(W, H), new T.MeshStandardMaterial({ color: '#0E0F13', roughness: .95 }));
-  field.rotation.x = -Math.PI / 2; field.receiveShadow = true; scene.add(field);
-  const gp: number[] = [];
-  for (let x = 0; x <= W; x++) gp.push(x - W / 2, .01, -H / 2, x - W / 2, .01, H / 2);
-  for (let z = 0; z <= H; z++) gp.push(-W / 2, .01, z - H / 2, W / 2, .01, z - H / 2);
-  const gg = new T.BufferGeometry(); gg.setAttribute('position', new T.Float32BufferAttribute(gp, 3));
-  const gridMat = new T.LineBasicMaterial({ color: '#1C1D24', transparent: true, opacity: .9 });
-  scene.add(new T.LineSegments(gg, gridMat));
-  const edge = new T.LineSegments(new T.EdgesGeometry(new T.BoxGeometry(W, .02, H)), new T.LineBasicMaterial({ color: '#4A4D5A' }));
-  edge.position.y = .02; scene.add(edge);
+  const { gridMat } = makeStage(T, scene, W, H, { shadow: [32, 24] });
   const D = new T.Object3D(), box = new T.BoxGeometry(1, 1, 1);
   const rockIdx: [number, number][] = [];
   WORLD.rock.forEach((v, k) => { if (v > 0) rockIdx.push([k, v]); });
@@ -68,12 +41,7 @@ export function buildScene(T: T3, el: HTMLElement): Scene {
   const crews = new T.InstancedMesh(new T.CapsuleGeometry(.12, .26, 4, 8), new T.MeshStandardMaterial({ color: '#ffffff', roughness: .6 }), WORLD.crews.length);
   crews.castShadow = true; scene.add(crews);
   WORLD.crews.forEach((c, i) => crews.setColorAt(i, new T.Color(COL[c.p])));
-  const gc = document.createElement('canvas'); gc.width = gc.height = 64;
-  const gx = gc.getContext('2d')!;
-  const grd = gx.createRadialGradient(32, 32, 0, 32, 32, 32);
-  grd.addColorStop(0, 'rgba(255,255,255,1)'); grd.addColorStop(.25, 'rgba(255,255,255,.45)'); grd.addColorStop(1, 'rgba(255,255,255,0)');
-  gx.fillStyle = grd; gx.fillRect(0, 0, 64, 64);
-  const glowTex = new T.CanvasTexture(gc);
+  const glowTex = glowTexture(T);
   const gpos = new Float32Array(260 * 3), gcol = new Float32Array(260 * 3), pg = new T.BufferGeometry();
   pg.setAttribute('position', new T.BufferAttribute(gpos, 3)); pg.setAttribute('color', new T.BufferAttribute(gcol, 3));
   const glow = new T.Points(pg, new T.PointsMaterial({ size: 1.5, map: glowTex, vertexColors: true, transparent: true, depthWrite: false, blending: T.AdditiveBlending, sizeAttenuation: true }));

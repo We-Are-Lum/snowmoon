@@ -471,4 +471,82 @@ playOut('play', 202);
   ok(whole.length === s.every + 1 && whole.every((f) => f.seen === null) && whole.some((f) => f.board.towers.some((q) => q.side === 'theirs')), 'after the end, the replay shows the whole board');
 }
 
+// ---------- The 3D action (owner, 2026-11-03): the same fog frames as the 2D board; every effect only from them ----------
+{
+  const { readFileSync } = await import('node:fs');
+  const { replayEvents, instantReplays } = await import('../src/app/minpentai/m/[id]/replay-events');
+  const dir = 'src/app/minpentai/m/[id]/';
+  const src = (f: string) => readFileSync(dir + f, 'utf8');
+  const top = src('live-top.tsx'), past = src('past-turns.tsx'), b3 = src('board-3d.tsx'), sc = src('replay-scene.ts'), ev = src('replay-events.ts'), kit = readFileSync('src/app/minpentai/scene-kit.ts', 'utf8');
+  // The props: on the live page, the frame playing (its board, the frame before's board, the squares seen), or when
+  // nothing plays the board as it stands from the same view (the page's own view and sight, or the last whole frame).
+  const ur = src('use-replays.ts');
+  ok(/<Board3D \{\.\.\.v3\} width=\{p\.width\} height=\{p\.height\} focus=\{r\.focus\} big=\{beside\}\s/.test(top) && (top.match(/<Board3D/g) ?? []).length === 1, 'the live page gives the 3D view v3, the size, the replay\'s focus and the piece size, nothing else');
+  ok(top.includes(`  const v3 = r.frame ? r.frame
+    : play === '3d' && f ? { board: f.board, prev: pb.prev?.board ?? null, seen: whole ? null : (f.seen as [number, number][]), stepMs: pb.stepMs }
+    : { board: idle.board, prev: null, seen: idle.seen, stepMs: 0 };`), 'v3 is an instant replay\'s frame, the frame playing, or the board as it stands');
+  ok(top.includes("const idle = whole && last ? { board: last.board, seen: null } : { board: p.current.board, seen: p.current.seen };") && /const f = play \? pb\.f : null;/.test(top) && /const pb = usePlayback\(frames, done, false\)/.test(top) && /const frames = p\.latest\?\.frames \?\? \[\]/.test(top) && /const r = useReplays\(frames, \{/.test(top), 'which come from the page\'s frames, its view and its sight');
+  // The replays' frame and focus: a frame of the same frames, and a moment instantReplays found in them.
+  ok(ur.includes('const m = rep ? rep.list[rep.k] : null, rf = rep ? frames[rep.j] : null, rprev = rep && rep.j > 0 ? frames[rep.j - 1] : null;')
+    && ur.includes("const frame = m && rf ? { board: rf.board, prev: rprev?.board ?? null, seen: o.whole ? null : (rf.seen as [number, number][]), stepMs: m.stepMs } : null;")
+    && ur.includes('const focus = m ? { at: m.at, mode: m.mode, ms: (m.to - m.from + 1) * m.stepMs + m.holdMs } : null;')
+    && ur.includes("const list = instantReplays(frames.map((x) => ({ board: x.board, seen: c.whole ? null : (x.seen as [number, number][]) })), c.size,")
+    && /setRep\(\{ list, k: 0, j: list\[0\]\.from \}\)/.test(ur), 'an instant replay shows the same frames, the camera on a moment instantReplays found in them');
+  ok(/<Board3D \{\.\.\.v3\} width=\{width\} height=\{height\} focus=\{r\.focus\}\s/.test(past) && (past.match(/<Board3D/g) ?? []).length === 1
+    && past.includes("const v3 = r.frame ? r.frame : f ? { board: f.board, prev: pb.prev?.board ?? null, seen: whole ? null : (f.seen as [number, number][]), stepMs: pb.stepMs } : null;")
+    && /const r = useReplays\(frames, \{ whole, ended: false,/.test(past), 'a past turn gives the 3D view its frame (or its replay\'s), the size and the replay\'s focus, nothing else');
+  // The 3D files read nothing from the site but types.
+  const siteImports = (t: string) => [...t.matchAll(/^import\s+(type\s+)?[^;]*?from\s+'([^']+)'/gm)].filter(([, ty, from]) => !ty && from.startsWith('~/'));
+  ok([b3, sc, ev, kit, ur].every((t) => !siteImports(t).length), 'the 3D files import nothing from the site but types');
+  // Every effect (flashes, debris, the camera's shake) is fired in one place, from replay-events' answer for the frames
+  // shown; the camera's path reads only the clock and the board's size.
+  const fireBody = sc.slice(sc.indexOf('  function fire(ev: ReplayEvent[])'), sc.indexOf('\n  }\n', sc.indexOf('  function fire(ev: ReplayEvent[])')));
+  const outside = sc.replace(fireBody, '');
+  ok(fireBody.length > 100 && !/flashes\.fire\(|debris\.burst\(|shake = Math\.max\(shake/.test(outside), 'flashes, debris and the shake are fired only from replay-events\' events');
+  ok(/const ev = replayEvents\(prev, board, seen, \[W, H\]\);/.test(sc) && /fire\(ev\);/.test(sc) && (sc.match(/fire\(ev\)/g) ?? []).length === 1, 'the events are the frames\' (the frame before, this one and its sight)');
+  const aim = sc.slice(sc.indexOf('cam.aim('), sc.indexOf(');', sc.indexOf('cam.aim(')));
+  ok(aim && !/board|state|ev\b|seen|glider/.test(aim), 'the camera\'s path reads only the clock and the board\'s size');
+  // The camera's focus in the scene comes only from that prop.
+  ok((sc.match(/focusOn = /g) ?? []).length === 1 && /focus\(f\) \{ focusOn = f \? \{ \.\.\.f, since: performance\.now\(\) \} : null; \}/.test(sc), 'the scene\'s replay camera is set only by focus()');
+  // replay-events on real frames: an effect only on a square in sight; a glider that leaves sight just fades.
+  const mm = newSolo({ id: 'tfx000000001', ruleset: 'book-4', level: 3, seed: 7, person: 6786, agent: { id: null, name: 'Rook', model: null }, now: now() }).m;
+  while (!mm.end && mm.turn < 10) submit(mm, { turn: mm.turn, placements: parseOrders(scripted(mm), rulesOf(mm).s), source: 'agent', final: true, now: now() });
+  const dims = viewFor(mm).board_size as { width: number; height: number };
+  let effects = 0, effectsOk = true, leaves = 0, glidesOk = true;
+  for (const t of mm.history.map((x) => x.turn)) {
+    const fr = turnFrames(mm, t);
+    for (let i = 1; i < fr.length; i++) {
+      const seen = fr[i].seen as [number, number][], lit = new Set(seen.map(([x, y]) => `${x},${y}`));
+      for (const e of replayEvents(fr[i - 1].board, fr[i].board, seen, [dims.width, dims.height])) {
+        if (e.kind === 'destroyed' || e.kind === 'hit' || e.kind === 'stopped') { effects++; if (!lit.has(`${e.at[0]},${e.at[1]}`)) effectsOk = false; }
+        if (e.kind === 'leave') leaves++;
+        if (e.kind === 'glide' && !(fr[i - 1].board.gliders.some((g) => g.x === e.from[0] && g.y === e.from[1]) && fr[i].board.gliders.some((g) => g.x === e.to[0] && g.y === e.to[1]))) glidesOk = false;
+      }
+    }
+  }
+  ok(effects > 0 && effectsOk, `every effect in ${effects} is on a square in sight`);
+  // Instant replays: every moment on a square its frame sees; the end's replay on the whole board only after the end.
+  let moments = 0, momentsOk = true, tiers = new Set<number>();
+  for (const t of mm.history.map((x) => x.turn)) {
+    const fr = turnFrames(mm, t).map((f) => ({ board: f.board, seen: f.seen as [number, number][] }));
+    for (const mo of instantReplays(fr, [dims.width, dims.height])) {
+      moments++; tiers.add(mo.tier);
+      if (!fr[mo.frame].seen.some(([x, y]) => x === mo.at[0] && y === mo.at[1]) || mo.from > mo.frame || mo.to < mo.frame) momentsOk = false;
+    }
+    if (instantReplays(fr, [dims.width, dims.height]).length > 2) momentsOk = false;
+  }
+  ok(moments > 0 && momentsOk, `every instant replay (${moments}, tiers ${[...tiers].join(', ')}) is of a moment on a square in sight, at most two a turn`);
+  ok(leaves > 0 && glidesOk, 'gliders glide only between squares both frames show, and fade out into the dark');
+  // The same events whatever happens out of sight: a destroyed piece out of sight, a hidden glider stopped there.
+  const b0 = { rocks: [], towers: [{ x: 9, y: 2, side: 'theirs' }], squares: [{ x: 3, y: 3, side: 'mine', hits_left: 2 }], gliders: [{ x: 4, y: 4, dir: 'E', side: 'mine' }, { x: 1, y: 1, dir: 'E', side: 'mine' }] } as unknown as Parameters<typeof replayEvents>[1];
+  const b1 = { rocks: [], towers: [], squares: [], gliders: [{ x: 5, y: 4, dir: 'E', side: 'mine' }] } as unknown as Parameters<typeof replayEvents>[1];
+  const out = replayEvents(b0, b1, [[4, 4], [5, 4], [1, 1]], [12, 12]);
+  ok(!out.some((e) => 'at' in e && (e.at[0] === 9 || e.at[0] === 3)) && out.some((e) => e.kind === 'leave' && e.at[0] === 1) && out.some((e) => e.kind === 'glide'), 'pieces gone out of sight make no effect; a glider whose next square is dark fades, whatever happened to it');
+  ok(isDeepStrictEqual(replayEvents(b0, b1, null, [12, 12]).filter((e) => e.kind === 'destroyed').length, 2), 'with the whole board (after the end), every piece gone shows');
+  ok(instantReplays([{ board: b0, seen: [[4, 4], [5, 4], [1, 1]] }, { board: b1, seen: [[4, 4], [5, 4], [1, 1]] }], [12, 12]).length === 0, 'a tower and a square destroyed out of sight are never replayed');
+  const end = instantReplays([{ board: b0, seen: null }, { board: b1, seen: null }], [12, 12], { ended: true });
+  ok(end.length === 2 && end.some((x) => x.tier === 4 && x.at[0] === 9) && end.some((x) => x.tier === 1), 'after the end (the whole board), the last tower to fall is the final replay');
+  ok(instantReplays([{ board: b0, seen: null }, { board: b1, seen: null }], [12, 12], { ended: true, only: 'big' }).every((x) => x.tier >= 3), '"big moments" keeps only towers and the end');
+}
+
 console.log(`minpentai agent play: ${checks} checks passed`);

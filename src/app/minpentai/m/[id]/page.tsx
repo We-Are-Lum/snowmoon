@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { playFor } from '~/lib/agents/core';
-import { draftInfo, linkOpens, turnFrames, turnSummaries, viewFor } from '~/lib/minpentai/agent-play/solo';
+import { draftInfo, linkOpens, sightOf, turnFrames, turnSummaries, viewFor } from '~/lib/minpentai/agent-play/solo';
 import { load } from '~/lib/minpentai/agent-play/store';
 import { settle } from '~/lib/minpentai/agent-play/quiet';
 import { MinpentaiTags } from '../../mp-tags';
@@ -59,7 +59,7 @@ export default async function LiveLink({ params, searchParams }: { params: Promi
         <h1 className="mb-live-title">{book ? 'Rocks and Mirrors' : 'Minpentai'}: your side</h1>
         <LiveTop
           matchId={m.id} width={v.board_size.width} height={v.board_size.height} status={status} tally={tally}
-          current={{ board: v.board, canPlace: v.can_place, lastSeen: v.last_seen_enemy_towers, marks: last ? last.placements : [] }}
+          current={{ board: v.board, seen: sightOf(m), canPlace: v.can_place, lastSeen: v.last_seen_enemy_towers, marks: last ? last.placements : [] }}
           draft={draft && !draft.final ? { placements: draft.placements, cost: draft.cost, points: draft.points, warnings: draft.warnings, note: draft.note, who: cap(WHO[draft.source] ?? draft.source) } : null}
           canTake={!end} turn={v.turn} points={v.points}
           latest={latestTurn !== undefined ? { turn: latestTurn, frames: turnFrames(m, latestTurn, !!end), whole: !!end } : null}
