@@ -19,7 +19,7 @@ export const BACKSTORY_WORDING = {
   refused: 'The prompt check didn’t allow this backstory. Change it, or publish without it.',
   withoutIt: 'Publish without it',
   /** Redesign D: under the box, how it will be shown and that no one else writes it. DRAFT (redesign D, 2026-11-12). */
-  shownAs: 'Shown as “Invented by you, not from the book”. Only you write it.',
+  shownAs: 'Shown as “Invented by you, not from the book”. Write it yourself; no AI writes or suggests it.', // the owner's words (2026-11-16)
   tooLong: (n: number) => `Write the backstory in up to ${n.toLocaleString('en-US')} characters.`,
 } as const;
 

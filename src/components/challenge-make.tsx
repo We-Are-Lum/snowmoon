@@ -68,7 +68,7 @@ export function ChallengeMake() {
   const [consent, setConsent] = useState<Wording | null>(null);
   // The Model row (branch challenge-models): the server's list for this visitor; a closed pick waits for its maker's
   // notice and, once per device, the 18+ box; a wallet account sees why closed models aren't offered.
-  const loaded = view && view !== 'missing' ? (view as MakeView & { modelsNote?: string | null; picturesLeft?: number | null; defaultModel?: string | null; capLine?: { text: string; resetAt: string } | null }) : null;
+  const loaded = view && view !== 'missing' ? (view as MakeView & { modelsNote?: string | null; picturesLeft?: number | null; defaultModel?: string | null; capLine?: { text: string; resetAt: string } | null; notFree?: string | null }) : null;
   const mc = useChallengeModel(loaded?.models, loaded?.modelsNote ?? null, loaded?.defaultModel ?? null);
   // The latest make, for the notice asked at "Make it": answered, it makes the picture with the words as they are then.
   const makeRef = useRef<() => void>(() => {});
@@ -173,6 +173,10 @@ export function ChallengeMake() {
 
   // Under "Make it" (redesign D): what this picture uses of today's pictures, and how many are left when the server knows.
   const left = loaded?.picturesLeft;
+  // Why no Make it: the account has no free count (freeFor's own line), else the day's pictures are used up.
+  const notFree = loaded?.notFree ?? null;
+  const noneLeft = left === 0 && !notFree;
+  const blocked = signedIn && (notFree !== null || noneLeft);
   const uses = model ? `${w.uses.replace('{n}', String(model.countsAs))}${typeof left === 'number' ? ` · ${w.left.replace('{n}', String(left))}` : ''}` : null;
 
   // Redesign D (Claude Design's handoff, screen 3): on a wide screen the picture fills the left and the form is a panel on
@@ -294,7 +298,7 @@ export function ChallengeMake() {
           {/* A closed pick: its maker's notice (and the 18+ box the first time on this device) as a dialog, then its line. */}
           {mc.notice}
           {model && !model.open && !mc.notice && <p className="mk-model-meta" data-slot="model-meta">{mc.meta(model)}</p>}
-          {!mc.notice && mc.tooFew(loaded?.picturesLeft) && <p className="dz-muted mk-model-few" data-slot="model-too-few">{mc.tooFew(loaded?.picturesLeft)}</p>}
+          {!mc.notice && !notFree && mc.tooFew(loaded?.picturesLeft) && <p className="dz-muted mk-model-few" data-slot="model-too-few">{mc.tooFew(loaded?.picturesLeft)}</p>}
           {mc.note && <p className="dz-muted mk-model-note" data-slot="model-note">{mc.note}</p>}
           {/* Today's closed spending limit reached: the row started on FLUX; the line, with {reset} in the visitor's time. */}
           {loaded?.capLine && !mc.notice && <p className="dz-muted mk-model-cap" data-slot="model-cap">{withReset(loaded.capLine.text, loaded.capLine.resetAt)}</p>}
@@ -327,7 +331,19 @@ export function ChallengeMake() {
             {error}
           </p>
         )}
-        {signedIn ? (
+        {blocked ? (
+          // No Make it (owner, 2026-11-16): an account without the free count says why (its own line; waiting won't help),
+          // else the day's pictures are used up, said plainly.
+          notFree ? (
+            <p className="mk-none-left" data-slot="not-free" role="status">
+              {notFree}
+            </p>
+          ) : (
+            <p className="mk-none-left" data-slot="none-left" role="status">
+              {withReset(w.noneLeft, null)}
+            </p>
+          )
+        ) : signedIn ? (
           <button type="button" className="rl-remix mk-make" onClick={make} disabled={busy}>
             {busy ? w.making : w.makeIt}
           </button>
@@ -339,7 +355,7 @@ export function ChallengeMake() {
             </button>
           </>
         )}
-        {uses && <p className="mk-uses">{uses}</p>}
+        {uses && !blocked && <p className="mk-uses">{uses}</p>}
       </div>
       {consent && <ConsentScreen wording={consent} name={auth.kind === 'signed-in' ? (auth.username ?? null) : null} onAgree={agree} onCancel={() => setConsent(null)} error={null} />}
     </div>

@@ -2210,14 +2210,20 @@ async function checkChallengeLanding() {
       if (!(await page.locator('#mk-own-style-line').count())) fail(`/challenge/make ${tag}: "Write your own" has no publication line (P1f)`);
       await checkFloors(page, `/challenge/make ${tag} (Write your own)`, scheme);
       await snap('make-own', true);
-      // After Make it, before it's published (owner, 2026-11-16): under the new picture, "To remix this one, publish it
-      // first." (DRAFT), visible. Signed in in this browser only (a stand-in session); Make it is answered here, so no
-      // model is called and nothing is spent.
+      // After Make it, before it's published (owner, 2026-11-16): under the new picture, "To remix your remix, publish it
+      // first.", visible; the new picture large and the start picture as the small "Started from" thumbnail, at every width;
+      // each frame the picture's own shape (no bands), for a landscape and a portrait picture. Then, with none of today's
+      // pictures left, the remix screen says so and offers no Make it. Signed in in this browser only (a stand-in session);
+      // Make it is answered here, so no model is called and nothing is spent.
       {
         const { MAKE_WORDING: MKW } = await import('../src/lib/challenge/make-wording');
-        const src = (await page.locator('.mk-source').first().getAttribute('src')) ?? '';
-        const madeUrl = new URL(src, LOCAL).href;
+        const sharp = (await import('sharp')).default;
+        const madeUrl = 'https://media.snowmoon.party/fixture/check-ui-made.jpg';
+        let left = 3;
+        let notFree: string | null = null;
+        let shape: [number, number] = [1200, 800];
         await page.evaluate(() => localStorage.setItem('snowmoon.signin', JSON.stringify({ token: 'stand-in', fid: 4242, username: 'fixture4242', nameProof: null, exp: Math.floor(Date.now() / 1000) + 3600 })));
+        await page.route(madeUrl, async (r) => r.fulfill({ contentType: 'image/jpeg', body: await sharp({ create: { width: shape[0], height: shape[1], channels: 3, background: { r: 120, g: 90, b: 160 } } }).jpeg().toBuffer() }));
         await page.route('**/api/**', async (r) => {
           const req = r.request();
           const u = new URL(req.url());
@@ -2226,24 +2232,68 @@ async function checkChallengeLanding() {
           if (u.pathname === '/api/challenge/make' && req.method() === 'POST') return r.fulfill({ json: { ticket: 'stand-in-ticket', image: madeUrl, prompt: '(stand-in: no model was called)', style: null, setting: null } });
           if (u.pathname === '/api/challenge/make') {
             const res = await r.fetch({ headers: { ...req.headers(), authorization: '' } });
-            return r.fulfill({ json: { ...(await res.json()), picturesLeft: 3, modelsNote: null } });
+            return r.fulfill({ json: { ...(await res.json()), picturesLeft: left, modelsNote: null, notFree } });
           }
           return r.fallback();
         });
-        await at(`/challenge/make?from=${FX.sheets.zei[0]}`, '.mk-styles');
-        await page.locator('.mk-page textarea').first().fill('Zei in a winter coat');
-        await page.locator('.mk-make').first().click();
-        const ok = await page.waitForURL(/\/challenge\/make\/[0-9a-f-]{36}/, { timeout: 20000 }).then(() => true, () => false);
-        const line = page.locator('figure.mk-new [data-slot="publish-first"]');
-        if (!ok) fail(`/challenge/make ${tag}: Make it (answered here) didn't open the preview`);
-        else if (!(await line.waitFor({ timeout: 10000 }).then(() => true, () => false)) || !(await line.isVisible())) fail(`/challenge/make ${tag}: the preview doesn't show "${MKW.publishFirst}" under the new picture`);
-        else {
-          const [pic, b] = await Promise.all([page.locator('figure.mk-new .mk-picture').boundingBox(), line.boundingBox()]);
-          if (((await line.textContent()) ?? '').trim() !== MKW.publishFirst) fail(`/challenge/make ${tag}: the preview's line isn't exactly "${MKW.publishFirst}"`);
-          if (!pic || !b || b.y < pic.y + pic.height - 1) fail(`/challenge/make ${tag}: "${MKW.publishFirst}" isn't under the new picture`);
-          await line.scrollIntoViewIfNeeded();
-          if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-preview-publish-first-${w}x${h}-${scheme}.png`) });
+        // A frame and its picture: the same box (±2px), so no bands; the picture loaded.
+        const fits = async (frame: string) => {
+          const img = page.locator(`${frame} .mk-picture`).first();
+          await img.evaluate((e) => (e as HTMLImageElement).decode().catch(() => {}));
+          const [f, i] = await Promise.all([page.locator(frame).first().boundingBox(), img.boundingBox()]);
+          return !!f && !!i && i.width > 40 && Math.abs(f.width - i.width) <= 2 && Math.abs(f.height - i.height) <= 2;
+        };
+        for (const [kind, size] of [['landscape', [1200, 800]], ['portrait', [800, 1200]]] as const) {
+          shape = [size[0], size[1]];
+          await at(`/challenge/make?from=${FX.sheets.zei[0]}`, '.mk-styles');
+          if (kind === 'landscape' && !(await fits('.mk-page[data-step="remix"] figure.mk-figure .mk-frame'))) fail(`/challenge/make ${tag}: the start picture's frame isn't the picture's own shape (bands)`);
+          await page.locator('.mk-page textarea').first().fill('Zei in a winter coat');
+          await page.locator('.mk-make').first().click();
+          const ok = await page.waitForURL(/\/challenge\/make\/[0-9a-f-]{36}/, { timeout: 20000 }).then(() => true, () => false);
+          const line = page.locator('figure.mk-new [data-slot="publish-first"]');
+          if (!ok) { fail(`/challenge/make ${tag}: Make it (answered here) didn't open the preview`); break; }
+          if (!(await line.waitFor({ timeout: 10000 }).then(() => true, () => false)) || !(await line.isVisible())) fail(`/challenge/make ${tag}: the preview doesn't show "${MKW.publishFirst}" under the new picture`);
+          else {
+            const [pic, b] = await Promise.all([page.locator('figure.mk-new .mk-picture').boundingBox(), line.boundingBox()]);
+            if (((await line.textContent()) ?? '').trim() !== MKW.publishFirst) fail(`/challenge/make ${tag}: the preview's line isn't exactly "${MKW.publishFirst}"`);
+            if (!pic || !b || b.y < pic.y + pic.height - 1) fail(`/challenge/make ${tag}: "${MKW.publishFirst}" isn't under the new picture`);
+          }
+          if (await page.locator('figure.mk-orig').isVisible()) fail(`/challenge/make ${tag} (${kind}): after Make it the start picture is still shown large beside the new one`);
+          if (!(await page.locator('figure.mk-new .mk-from .mk-thumb').isVisible())) fail(`/challenge/make ${tag} (${kind}): no "Started from" thumbnail under the new picture`);
+          if (!(await fits('figure.mk-new .mk-frame'))) fail(`/challenge/make ${tag} (${kind}): the new picture's frame isn't the picture's own shape (bands)`);
+          if (w >= 1024) {
+            const [pic, panel] = await Promise.all([page.locator('figure.mk-new .mk-picture').boundingBox(), page.locator('.mk-panel').boundingBox()]);
+            if (!pic || !panel || pic.x + pic.width > panel.x || pic.height < h * 0.5) fail(`/challenge/make ${tag} (${kind}): the new picture isn't large in the left column (${JSON.stringify(pic)})`);
+          }
+          if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/make ${tag} (${kind}): the preview scrolls sideways`);
+          if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-preview-${kind}-${w}x${h}-${scheme}.png`) });
         }
+        // None of today's pictures left: said plainly, and no Make it.
+        left = 0;
+        await at(`/challenge/make?from=${FX.sheets.zei[0]}`, '.mk-styles');
+        const none = page.locator('.mk-makebar [data-slot="none-left"]');
+        await none.waitFor({ timeout: 10000 }).catch(() => {});
+        const noneText = ((await none.textContent().catch(() => '')) ?? '').trim();
+        if (!(await none.isVisible().catch(() => false)) || !noneText.startsWith(MKW.noneLeft.split('{reset}')[0]) || noneText.includes('{reset}')) fail(`/challenge/make ${tag}: with no pictures left it doesn't say so ("${noneText}")`);
+        if (await page.locator('.mk-makebar .mk-make').count()) fail(`/challenge/make ${tag}: with no pictures left it still offers Make it`);
+        if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-make-none-left-${w}x${h}-${scheme}.png`) });
+        // A 0 that comes from freeFor (owner, 2026-11-16): a Bluesky account with no Farcaster or Lens linked, a Lens account
+        // while Lens isn't open. Its own FREE_WORDING line, not "More pictures at …" (waiting won't help); no Make it. The
+        // lines are read from src/lib/social/free.ts (server-only, so not imported here).
+        const freeSrc = readFileSync('src/lib/social/free.ts', 'utf8');
+        for (const key of ['linkNeeded', 'lensNotOpen'] as const) {
+          const want = new RegExp(`${key}:\\s*'([^']+)'`).exec(freeSrc)?.[1] ?? '';
+          notFree = want;
+          await at(`/challenge/make?from=${FX.sheets.zei[0]}`, '.mk-styles');
+          const nf = page.locator('.mk-makebar [data-slot="not-free"]');
+          await nf.waitFor({ timeout: 10000 }).catch(() => {});
+          const got = ((await nf.textContent().catch(() => '')) ?? '').trim();
+          if (!want || got !== want) fail(`/challenge/make ${tag}: an account without the free count (${key}) doesn't get its own line ("${got}")`);
+          if (await page.locator('.mk-makebar [data-slot="none-left"], .mk-makebar .mk-make, [data-slot="model-too-few"]').count()) fail(`/challenge/make ${tag}: an account without the free count (${key}) is told to wait, or offered Make it`);
+          if (SHOTS && key === 'linkNeeded') await page.screenshot({ path: path.join(SHOTS, `challenge-make-not-free-${w}x${h}-${scheme}.png`) });
+        }
+        notFree = null;
+        await page.unroute(madeUrl);
         await page.unroute('**/api/**');
         await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
       }

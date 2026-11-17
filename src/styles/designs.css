@@ -511,12 +511,15 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .ch-page .mk-d h1.mk-title { margin: 0; font-family: var(--reading); font-weight: 400; font-size: 18px; line-height: 1.2; text-align: center; }
 .mk-d .mk-pictures { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
 .mk-d .mk-figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; min-height: 0; }
-.mk-d .mk-frame { position: relative; flex: none; height: 300px; border-radius: var(--radius); overflow: hidden; background: var(--soft); }
-.mk-d[data-step="preview"] .mk-new .mk-frame { height: 440px; }
-.mk-d .mk-frame .mk-picture { display: block; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; object-fit: contain; border-radius: 0; background: transparent; }
+/* A frame takes the picture's own shape (owner, 2026-11-16: no grey bands): as wide and tall as the picture, which is held
+   to the column's width and a height cap; portrait and landscape alike. */
+.mk-d .mk-frame { position: relative; flex: none; align-self: center; width: fit-content; max-width: 100%; border-radius: var(--radius); overflow: hidden; }
+.mk-d .mk-frame .mk-picture { display: block; width: auto; height: auto; max-width: 100%; max-height: 300px; margin: 0; border-radius: 0; background: var(--soft); }
+.mk-d[data-step="preview"] .mk-new .mk-picture { max-height: 440px; }
 .mk-d .mk-ai { position: absolute; left: 8px; bottom: 8px; z-index: 2; padding: 0 4px; border-radius: 3px; background: color-mix(in srgb, var(--paper) 92%, transparent); }
 .mk-d .mk-cap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; font-size: 16px; line-height: 1.35; color: var(--body); }
-.mk-publish-first { margin: 4px 0 0; font-size: 14px; line-height: 1.4; }
+.mk-publish-first { margin: 4px 0 0; font-size: 14px; line-height: 1.4; text-wrap: pretty; }
+.mk-none-left { margin: 0; font-size: 17px; line-height: 1.4; color: var(--ink); text-wrap: pretty; }
 .mk-d[data-step="preview"] .mk-orig { display: none; }
 .mk-d .mk-panel { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
 /* The change box (and every published box here): its label at reading size, a card field with an ink border. */
@@ -564,6 +567,8 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
 .mk-d .mk-story .mk-backstory { margin: 0 0 8px; }
 .mk-d .mk-story .published-field textarea { border-color: var(--rule); }
 .mk-d .mk-story-shown { margin: 0 0 14px; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); }
+/* The small print under the fields wraps evenly, no lone last word (owner, 2026-11-16). */
+.mk-d .publication-line, .mk-d .mk-story-shown, .mk-d .mk-uses, .mk-d .mk-model-few, .mk-d .mk-model-cap { text-wrap: pretty; }
 .mk-d .mk-publish-without { margin: 0; }
 /* Phones: the Style chips scroll sideways (no scrollbar); the MakeBar is pinned to the bottom of the screen. */
 @media (max-width: 767px) {
@@ -594,11 +599,11 @@ a.cc-chip:hover { border-color: var(--ink); text-decoration: none; }
   .mk-d .mk-bar .mk-back, .mk-d .mk-bar .mk-close { display: none; }
   .mk-d .mk-back-name, .mk-d[data-step="preview"] .mk-bar .mk-back { display: inline-flex; align-items: center; min-height: 44px; grid-column: 1; grid-row: 1; justify-self: start; align-self: end; margin: 28px 0 0 56px; padding: 0; font-size: 18px; text-decoration: none; }
   .ch-page .mk-d h1.mk-title { grid-column: 2; grid-row: 1; padding: 28px 32px 0; border-left: 1px solid var(--rule); font-size: 34px; text-align: left; }
-  .mk-d .mk-pictures { grid-column: 1; grid-row: 2 / 4; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 16px; min-height: 0; padding: 14px 40px 32px 56px; }
-  .mk-d .mk-frame, .mk-d[data-step="preview"] .mk-new .mk-frame { flex: 1; height: auto; min-height: 0; }
-  .mk-d .mk-new .mk-frame { outline: 2px solid var(--ink); }
-  .mk-d[data-step="preview"] .mk-orig { display: flex; }
-  .mk-d .mk-from { display: none; }
+  /* One picture large in the left column: the start picture on the remix screen; after Make it the new one, with the start
+     picture as the small "Started from" thumbnail, as on the phone (owner, 2026-11-16). */
+  .mk-d .mk-pictures { grid-column: 1; grid-row: 2 / 4; display: flex; flex-direction: column; gap: 16px; min-height: 0; overflow-y: auto; padding: 14px 40px 32px 56px; }
+  .mk-d .mk-frame .mk-picture, .mk-d[data-step="preview"] .mk-new .mk-picture { max-height: calc(100dvh - 240px); }
+  .mk-d .mk-new .mk-frame { outline: 2px solid var(--ink); outline-offset: -2px; }
   .mk-d .mk-ai { left: 10px; bottom: 10px; }
   .mk-d .mk-panel { grid-column: 2; grid-row: 2; min-height: 0; overflow-y: auto; overscroll-behavior: contain; gap: 22px; padding: 22px 32px 20px; border-left: 1px solid var(--rule); }
   .mk-d .mk-makebar { grid-column: 2; grid-row: 3; gap: 6px; max-height: 50vh; overflow-y: auto; padding: 16px 32px 20px; border-left: 1px solid var(--rule); border-top: 1px solid var(--rule); background: var(--paper); }

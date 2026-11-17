@@ -398,11 +398,23 @@ check('config: a current default look per challenge character, each a design id 
   check('the remix screen\'s box is empty and carries the publication line (P1f); "Write your own" is a published box too', /<PublishedTextField id="mk-words" label=\{w\.wordsLabel\} value=\{words\}/.test(make) && /<PublishedTextField id="mk-own-style" label=\{w\.ownStyleLabel\} value=\{ownStyle\}/.test(make) && /maxLength=\{view\.ownStyleMax\}/.test(make) && /wordsPlaceholder: 'Describe what to change'/.test(read('src/lib/challenge/make-wording.ts')));
   check('the remix screen shows the moments only when the server sends them (with the switch on)', /\{momentsOn && \(\s*<section className="mk-moments"/.test(make) && /const momentsOn = view\.moments\.length > 0;/.test(make));
   {
-    // Owner, 2026-11-16: under the new picture, before it's published, one DRAFT line saying it must be published to be remixed.
+    // Owner, 2026-11-16: under the new picture, before it's published, one line (his words) saying it must be published to be remixed.
     const prev = read('src/components/challenge-preview.tsx');
     const mw = read('src/lib/challenge/make-wording.ts');
     const fig = prev.slice(prev.indexOf('<figure className="mk-figure mk-new">'), prev.indexOf('<div className="mk-panel">'));
-    check('the preview: "To remix this one, publish it first." under the new picture, DRAFT', (await import('../src/lib/challenge/make-wording')).MAKE_WORDING.publishFirst === 'To remix this one, publish it first.' && /publishFirst: 'To remix this one, publish it first\.', \/\/ DRAFT/.test(mw) && fig.indexOf('</figcaption>') > 0 && fig.indexOf('{w.publishFirst}') > fig.indexOf('</figcaption>') && /data-slot="publish-first"/.test(fig));
+    check('the preview: "To remix your remix, publish it first." (the owner\'s words) under the new picture', (await import('../src/lib/challenge/make-wording')).MAKE_WORDING.publishFirst === 'To remix your remix, publish it first.' && /publishFirst: 'To remix your remix, publish it first\.', \/\/ the owner's words/.test(mw) && fig.indexOf('</figcaption>') > 0 && fig.indexOf('{w.publishFirst}') > fig.indexOf('</figcaption>') && /data-slot="publish-first"/.test(fig));
+  }
+  {
+    // Owner, 2026-11-16: the 0-left line only when the day's pictures are used up. A 0 from freeFor (an account without the
+    // free count) sends that account's own FREE_WORDING line instead, and the screen shows it in place of Make it.
+    const route = read('src/app/api/challenge/make/route.ts');
+    const mk = read('src/components/challenge-make.tsx');
+    const FR = await import('../src/lib/social/free');
+    const MW2 = (await import('../src/lib/challenge/make-wording')).MAKE_WORDING;
+    const unlinked = await FR.freeFor(null, -(await import('../src/lib/people')).SOCIAL_PERSON_BASE - 7, { lookUp: false });
+    check('0 left: the route sends freeFor\'s own line (notFree) for an account without the free count, never asking Lens or Bluesky', /const free = sql && person !== null && isSocialPerson\(person\) \? await freeFor\(sql, person, \{ lookUp: false \}\)/.test(route) && /const notFree = free && free\.free === false \? free\.error : null;/.test(route) && /capLine, notFree \}/.test(route));
+    check('0 left: an unlinked Bluesky or Lens account\'s line is FREE_WORDING.linkNeeded; Lens-not-open has its own', unlinked?.free === false && unlinked.error === FR.FREE_WORDING.linkNeeded && FR.FREE_WORDING.lensNotOpen.length > 0);
+    check('0 left: the screen shows notFree first, else "More pictures at {reset}" only for a used-up day, and no Make it either way', /const noneLeft = left === 0 && !notFree;/.test(mk) && /data-slot="not-free"/.test(mk) && /data-slot="none-left"/.test(mk) && /\{blocked \? \(/.test(mk) && MW2.noneLeft === 'You’ve used all of today’s pictures. More pictures at {reset}.');
   }
   check('the remix screen names the model and its maker, one chip per model the server lists', /data-slot="model-choice"/.test(make) && /\{view\.models\.map\(\(m\) =>/.test(make) && /FLUX\.2 \[klein\] 4B · Black Forest Labs · open/.test((await import('../src/lib/challenge/make-wording')).MAKE_WORDING.modelChip));
   check('no script served to everyone imports the flow\'s words', ![make, prev, pic, read('src/components/challenge-flow-gate.tsx')].some((x) => /challenge\/(make-|picture-|landing-)?wording'/.test(x)));
