@@ -63,7 +63,7 @@ export const CARDS: readonly CharacterCard[] = [
     ],
     more: {
       description:
-        'Zei Leimin lives in Pafogai Du, in Dzego, with his mother. He plays Minpentai, the book’s programming game, well enough to reach the quarterfinals and the championship, and Mu tells him he is a math guy, not a diplomat. He has a long rivalry with Bai, who has beaten him every time. The book mentions an arm that was broken and healed, but never his looks.',
+        'Zei Leimin lives in Pafogai Du, in Dzego. He plays Minpentai, the book’s programming game, well enough to reach the quarterfinals and the championship, and Mu tells him he is a math guy, not a diplomat. He has a long rivalry with Bai, who had beaten him three times out of three (c4-b72). The book mentions an arm that was broken and healed, but never his looks.',
       facts: [
         { text: 'Lives with his mother', block: 'c5-b3', quote: '"Come on, Mom!", he shouted.' },
         { text: 'His left arm was broken and took a month to heal', block: 'c9-b75', quote: 'That arm had been broken and taken a month to heal' },
