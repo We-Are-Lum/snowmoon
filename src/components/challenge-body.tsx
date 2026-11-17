@@ -24,15 +24,16 @@ export function ChallengeBody({ v }: { v: ChallengeView }) {
         <div className="chh-when">
           <p className="chh-window">{v.window}</p>
           {v.closes && <p className="chh-closes">{v.closes}</p>}
+          {/* "Rules" and "Every entry" as outlined buttons side by side under the dates (the design pass, owner
+              2026-11-16). There's no "Yours" link on the challenge to add. */}
           <p className="ch-top-links chh-links">
-            <Link href="/challenge/rules" className="ch-rules-link">
+            <Link href="/challenge/rules" className="ch-rules-link chh-btn">
               {v.rulesLink}
             </Link>
-            {' · '}
-            <Link href="/challenge/entries" className="ch-entries-link">
+            <Link href="/challenge/entries" className="ch-entries-link chh-btn">
               {v.entriesLink}
             </Link>
-            {v.draftShort && <span className="as-draft ch-draft"> · {v.draftShort}</span>}
+            {v.draftShort && <span className="as-draft ch-draft">{v.draftShort}</span>}
           </p>
         </div>
       </header>

@@ -4,18 +4,19 @@ import type { Rendered } from '~/lib/challenge/learn-more-view';
 import type { CardTile } from './challenge-card';
 import { designByline } from '~/lib/images/byline';
 import { AiTag } from './ai-tag';
-import { CardLine, CharacterBases, RemixCharacter } from './challenge-card';
+import { CardLine, CharacterBases } from './challenge-card';
 
 /**
  * A character's page, /challenge/<slug>: the redesign's screen 2 (Claude Design's handoff; owner-approved 2026-11-11),
  * drawn from its data (src/lib/challenge/view.ts, characterView), which carries every word.
  *
- * - Desktop: a sticky left column (the name, its approved one line marked "This edition's summary", "Read more about
- *   {name}" (for now, the line that the look is this edition's: P9g), "Read where {name} first appears",
- *   "Remix {name}"); on the right "Starting pictures" (every base, a fresh random order per visit, P5g), the owner's
- *   first remixes under their heading, then "Every remix of {name}", newest first, whole at 16:9, with "Older remixes"
- *   to the rest. No count of remixes (P5i).
- * - Phone: the bases as a swipe row first, then the line, "Read more", and the remixes two across.
+ * Top to bottom (the design pass, owner 2026-11-16): the name, large; its approved one line with "This edition's
+ * summary"; "Learn more about {name}" as a button that opens the expander in place (a <details>, its summary styled as an
+ * outlined button, full width on a phone); then "Make your own {name}" and its line, and two choices, each with its head
+ * and line: "Start from a base" (every base, a fresh random order per visit, P5g; each with "Remix this") and "Start
+ * from someone's remix" (the owner's first remixes under their heading, then every remix of the character, newest
+ * first, whole at 16:9, each with its own "Remix this"; "Older remixes" to the rest). No count of bases or remixes
+ * (P5i). On a desktop the name, line and button are a sticky left column and "Make your own" is on the right.
  *
  * A remix's picture opens its page; "Remix this" opens its remix screen. No hooks here, so the public page draws it on
  * the server and the admins' view (challenge-admin.tsx) in the browser.
@@ -108,7 +109,9 @@ export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
         {/* "Learn more about {name}" (owner, 2026-11-12): one expander. The whole book only inside the nested fold,
             labelled exactly "Later in the book (spoilers)", closed by default (docs/principles.md P9g). */}
         <details className="chc-more chc-learn">
-          <summary>{P.learn.title}</summary>
+          {/* A button that opens the expander in place (the design pass, owner 2026-11-16): the <details>' own summary, so
+              it keeps its keyboard and screen-reader behaviour; only its look is a button's. */}
+          <summary className="chc-learn-btn">{P.learn.title}</summary>
           <div className="chc-more-body">
             {P.learn.draft && <p className="as-draft ch-draft">{P.learn.draft}</p>}
             {P.learn.text ? (
@@ -163,54 +166,59 @@ export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
             )}
           </div>
         </details>
-        {c.note && <p className="dz-muted cc-note">{c.note}</p>}
-        <p className="chc-remix-row">
-          <RemixCharacter c={c} text={P.remix} />
-        </p>
       </div>
-      {c.bases.length > 0 && (
-        <section aria-labelledby="ch-bases" className="ch-char-bases chc-section chc-start">
-          <div className="chc-head">
-            <h2 id="ch-bases" className="chc-h2">
-              {P.startHead}
-            </h2>
-            <span className="chc-meta">{P.basesCount}</span>
-          </div>
-          <CharacterBases c={c} alt={w.alt} remixThis={P.remixThis} />
-        </section>
-      )}
-      {P.picked.length > 0 && (
-        <section aria-labelledby="ch-picked" className="chc-section chc-picked">
-          <div className="chc-head">
-            <h2 id="ch-picked" className="chc-h2">
-              {P.pickedHead}
-            </h2>
-          </div>
-          <RemixGrid tiles={P.picked} alt={w.alt} remixThis={P.remixThis} label={P.pickedHead} />
-        </section>
-      )}
-      <section aria-labelledby="ch-remixes" className="ch-char-remixes chc-section chc-every">
-        <div className="chc-head">
-          <h2 id="ch-remixes" className="chc-h2">
-            <span className="chc-wide-only">{P.everyHead}</span>
-            <span className="chc-narrow-only">{P.everyShort}</span>
+      {/* "Make your own {name}" and its two choices (the design pass, owner 2026-11-16; DRAFT wording). */}
+      <section aria-labelledby="ch-make" className="chc-make">
+        <div className="chc-make-head">
+          <h2 id="ch-make" className="chc-h2 chc-make-h2">
+            {P.makeHead}
           </h2>
-          <span className="chc-meta">{P.newestFirst}</span>
+          <p className="chc-make-line">{P.makeLine}</p>
         </div>
-        {c.remixes.length ? (
-          <>
-            <RemixGrid tiles={c.remixes} alt={w.alt} remixThis={P.remixThis} label={P.everyHead} />
-            {P.older && (
-              <p className="chc-older">
-                <Link href={P.older.href} prefetch={false} data-slot="older">
-                  {P.older.text}
-                </Link>
-              </p>
-            )}
-          </>
-        ) : (
-          <p className="dz-muted ch-feed-none">{w.none}</p>
+        {c.note && <p className="dz-muted cc-note">{c.note}</p>}
+        {c.bases.length > 0 && (
+          <section aria-labelledby="ch-bases" className="ch-char-bases chc-section chc-choice chc-start" data-choice="base">
+            <div className="chc-choice-head">
+              <h3 id="ch-bases" className="chc-h3">
+                {P.fromBaseHead}
+              </h3>
+              <p className="chc-choice-line">{P.fromBaseLine}</p>
+            </div>
+            <CharacterBases c={c} alt={w.alt} remixThis={P.remixThis} />
+          </section>
         )}
+        <section aria-labelledby="ch-remixes" className="ch-char-remixes chc-section chc-choice chc-every" data-choice="remix">
+          <div className="chc-choice-head">
+            <h3 id="ch-remixes" className="chc-h3">
+              {P.fromRemixHead}
+            </h3>
+            <p className="chc-choice-line">{P.fromRemixLine}</p>
+          </div>
+          {P.picked.length > 0 && (
+            <div className="chc-picked">
+              <h4 className="chc-h4">{P.pickedHead}</h4>
+              <RemixGrid tiles={P.picked} alt={w.alt} remixThis={P.remixThis} label={P.pickedHead} />
+            </div>
+          )}
+          <div className="chc-sub-head">
+            {P.picked.length > 0 && <h4 className="chc-h4">{P.everyShort}</h4>}
+            <span className="chc-meta">{P.newestFirst}</span>
+          </div>
+          {c.remixes.length ? (
+            <>
+              <RemixGrid tiles={c.remixes} alt={w.alt} remixThis={P.remixThis} label={P.everyShort} />
+              {P.older && (
+                <p className="chc-older">
+                  <Link href={P.older.href} prefetch={false} data-slot="older">
+                    {P.older.text}
+                  </Link>
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="dz-muted ch-feed-none">{w.none}</p>
+          )}
+        </section>
       </section>
       <p className="dz-note ch-foot chc-foot">{v.notAffiliated}</p>
     </div>
