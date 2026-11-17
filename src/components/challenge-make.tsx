@@ -344,7 +344,9 @@ export function ChallengeMake() {
             </p>
           )
         ) : signedIn ? (
-          <button type="button" className="rl-remix mk-make" onClick={make} disabled={busy}>
+          // Pressing it keeps the focus where it is: while typing the bar sits in place under the fields, and moving the focus
+          // off the box would put the bar back at the bottom mid-press, so the press would miss it (390 wide, 2026-11-16).
+          <button type="button" className="rl-remix mk-make" onMouseDown={(e) => e.preventDefault()} onClick={make} disabled={busy}>
             {busy ? w.making : w.makeIt}
           </button>
         ) : (

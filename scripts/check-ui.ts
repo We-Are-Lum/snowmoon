@@ -2328,7 +2328,7 @@ async function checkChallengeLanding() {
           const got = ((await nf.textContent().catch(() => '')) ?? '').trim();
           if (!want || got !== want) fail(`/challenge/make ${tag}: an account without the free count (${key}) doesn't get its own line ("${got}")`);
           if (await page.locator('.mk-makebar [data-slot="none-left"], .mk-makebar .mk-make, [data-slot="model-too-few"]').count()) fail(`/challenge/make ${tag}: an account without the free count (${key}) is told to wait, or offered Make it`);
-          if (SHOTS && key === 'linkNeeded') await page.screenshot({ path: path.join(SHOTS, `challenge-make-not-free-${w}x${h}-${scheme}.png`) });
+          if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-make-not-free-${key}-${w}x${h}-${scheme}.png`) });
         }
         notFree = null;
         await page.unroute(madeUrl);
