@@ -165,3 +165,6 @@
 .as-book .as-book-words { margin: 4px 0 0; font-size: 14px; }
 .as-book .as-book-words > summary { cursor: pointer; color: var(--muted, inherit); }
 .as-book .as-book-words[open] > summary { margin-bottom: 6px; }
+.as-note-cite { margin: 4px 0 10px; font-size: 14px; }
+.as-note-cite > summary { cursor: pointer; color: var(--muted, inherit); font-family: var(--label); }
+.as-note-cite[open] > summary { margin-bottom: 6px; }

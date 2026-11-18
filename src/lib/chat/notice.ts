@@ -21,12 +21,16 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: '7606e86685e4316a',
+  reviewedFor: '67768fda6693f8e1',
   /** Who did that reread: the coding agent, or the owner. */
   by: 'agent',
   on: '2026-11-17',
   note:
-    'Reread again by the coding agent on 2026-11-17 after the owner\'s #185 decisions (temperature back to 0.4; "where was I" as one sentence per earlier chapter and a paragraph for the current one, 180 words; notice words left as they are): words unchanged, still true. ' +
+    'Reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-17 for branch chat-cites, words unchanged: ' +
+    'a claim from a reviewed note cites the note by its label and the reader is shown the passages the note rests on (chapter, ¶, the book\'s words), so item 1 holds; ' +
+    'block ids stay for claims from the passages, and the support check grades each claim only by what it cites; a quotation stays only if it matches a cited block word for word. ' +
+    'No new service receives questions and nothing new is kept. ' +
+    'Before that: reread again by the coding agent on 2026-11-17 after the owner\'s #185 decisions (temperature back to 0.4; "where was I" as one sentence per earlier chapter and a paragraph for the current one, 180 words; notice words left as they are): words unchanged, still true. ' +
     'Before that: reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-17 for branch chat-summaries-2, words unchanged: ' +
     '"what is the book about" is answered from the chapter summaries with no model and no message counted, each summary with ' +
     'the passages it rests on (chapter, ¶, the book\'s words), so item 1 holds; answers that use notes run at another temperature; ' +

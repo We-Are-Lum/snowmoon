@@ -33,7 +33,7 @@ import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { ask, AskError, NOTES_TEMPERATURE, type Complete } from '../src/lib/chat/ask';
 import { retrieve } from '../src/lib/chat/retrieve';
-import { sanitizeReply } from '../src/lib/chat/sanitize';
+import { sanitizeAnswer, sanitizeReply } from '../src/lib/chat/sanitize';
 import { glossaryWords } from '../src/lib/chat/glossary';
 import { chaptersNamed, charactersNamed, countWords, fitWords, NOTE_WORDING, routeQuestion } from '../src/lib/chat/notes';
 import { CHAT } from '../src/lib/config';
@@ -127,6 +127,22 @@ try {
     // gpt-oss sometimes writes ids with a non-breaking hyphen, in parentheses: (c1‑b20‑c1‑b21).
     const nb = sanitizeReply('A board game (c1\u2011b20\u2011c1\u2011b21). Later [c1\u2011b21].', allowed);
     check('an id written with another dash is still a citation', JSON.stringify(nb.cites) === JSON.stringify(['c1-b20', 'c1-b21']) && nb.dropped.length === 0, JSON.stringify(nb));
+    // Note citations (owner, 2026-11-17): a label the model was given is a citation of that note; others are dropped.
+    const notes = new Set(['summary c8 §2', 'learn-more bai who']);
+    const n = sanitizeAnswer('The vote is tied [summary c8 §2]; then [Summary c8 s2]. Bai [learn-more Bai who] [summary c9 §1] [c1-b20].', allowed, { notes });
+    check('a note label is a citation, in any spelling', JSON.stringify(n.notes) === JSON.stringify(['summary c8 §2', 'learn-more bai who']) && n.parts.filter((p) => p.type === 'note').length === 3, JSON.stringify(n.notes));
+    check('a label not given is dropped; block ids still work beside labels', JSON.stringify(n.dropped) === JSON.stringify(['summary c9 §1']) && JSON.stringify(n.cites) === JSON.stringify(['c1-b20']), JSON.stringify(n));
+    check('words in brackets that are not citations stay', sanitizeAnswer('He was (as ever) late [c1-b20].', allowed, { notes }).parts[0].type === 'text' && sanitizeAnswer('He was (as ever) late [c1-b20].', allowed, { notes }).parts.map((p) => (p.type === 'text' ? p.text : '')).join('').includes('(as ever)'));
+    // Quotations, word for word against the blocks the sentence cites (a note brings its sources); no "…".
+    const texts: Record<string, string> = { 'c1-b20': 'On a team, you have to be diplomatic, she said.', 'c1-b21': 'Mu raised a glass. "To our future!"', 'c8-b97': 'Ten to ten, exactly.' };
+    const qo = { notes, textOf: (id: string) => texts[id], sourcesOf: (l: string) => (l === 'summary c8 §2' ? ['c8-b97'] : []) };
+    const shown = (t: string) => sanitizeAnswer(t, allowed, qo).parts.map((p) => (p.type === 'text' ? p.text : p.type === 'cite' ? `[${p.id}]` : `[${p.label}]`)).join('');
+    check('a quotation that matches its cited block word for word stays', shown('She warns him, "on a team, you have to be diplomatic" [c1-b20].').includes('"on a team, you have to be diplomatic"'));
+    check('a quotation matching nothing cited, in a later clause: the clause goes', shown('She warns him that tact matters, saying "be kind to all your rivals" [c1-b20]. Then he plays [c1-b21].') === 'She warns him that tact matters. Then he plays [c1-b21].', shown('She warns him that tact matters, saying "be kind to all your rivals" [c1-b20]. Then he plays [c1-b21].'));
+    check('a quotation matching nothing cited, in the first clause: the sentence goes', shown('Mu toasts "Dzego will rise again" [c1-b21]. Zei wins [c1-b21].') === 'Zei wins [c1-b21].', shown('Mu toasts "Dzego will rise again" [c1-b21]. Zei wins [c1-b21].'));
+    check('a quotation is checked against the cited note\'s blocks', shown('The chairman says "ten to ten, exactly" [summary c8 §2].').includes('"ten to ten, exactly"') && shown('The chairman says "ten to eleven, sadly" [summary c8 §2].') === '');
+    check('one or two quoted words are a term and stay', shown('The "no head" rule [c1-b21].').includes('"no head"'));
+    check('dropping keeps paragraphs', shown('One [c1-b20].\n\nTwo says "not in any block at all" here. Three [c1-b21].') === 'One [c1-b20].\n\nThree [c1-b21].', JSON.stringify(shown('One [c1-b20].\n\nTwo says "not in any block at all" here. Three [c1-b21].')));
   }
 
   // --- Glossary words in the question ---------------------------------------
@@ -174,7 +190,10 @@ try {
     const res = await ask(deps(101), { question: 'Why is Gladias asked to rate a building?' });
     check('ask returns an answer', res.state === 'answer', res.state);
     if (res.state === 'answer') {
-      check('the nonexistent and not-given citations are dropped', res.dropped === 2, String(res.dropped));
+      // The quotation matches no block its sentence cites, and is in the sentence's first clause: the sentence goes, its
+      // citation with it. The other citation, not given, is dropped.
+      check('the not-given citation is dropped', res.dropped === 1, String(res.dropped));
+      check('a sentence whose quotation matches no cited block is dropped whole, with no "…"', !res.parts.some((p) => p.type === 'text' && (p.text.includes('…') || p.text.includes('citizen'))));
       check('an answer with no reviewed note carries no notes line', !res.notes);
       check('only real, allowed blocks are quoted', res.quotes.length === 1 && res.quotes[0].id === real, JSON.stringify(res.quotes.map((q) => q.id)));
       const [{ content }] = await sql`select content from studio.text_blocks where chapter = ${Number(real.slice(1, real.indexOf('-')))} and idx = ${Number(real.split('-b')[1])}`;
@@ -185,29 +204,33 @@ try {
     }
     const sent = calls.find((c) => c.model === CHAT.model && c.user !== 'Why is Gladias asked to rate a building?')!.user;
     check('no chapter limit is sent to the model', !/chapters 1[–-]\d/.test(sent) && sent.includes('Passages from the book:'), sent.slice(0, 60));
-    check('a Learn more character in any question brings their notes (Gladias)', sent.startsWith('Reviewed notes') && sent.includes('(learn-more gladias who)'));
+    check('a Learn more character in any question brings their notes (Gladias)', sent.startsWith('Reviewed notes') && sent.includes('[learn-more gladias who]'));
     check('every answer is checked by the guard', calls.some((c) => c.model === CHAT.guardModel));
   }
   {
     // A chapter named: its summary sections go to the model as reviewed notes; an answer citing their sources is kept.
     calls.length = 0;
     const src = routeQuestion('What happens in chapter 5?', null).notes[0].sources;
-    answerText = `Zei's class is moved and a bomb hits [${src[0]}]. Later he wonders why [${src[1]}].`;
+    answerText = `Zei's class is moved and a bomb hits [summary c5 §1]. Later he wonders why [Summary c5 s1].`;
     const res = await ask(deps(102), { question: 'What happens in chapter 5?' });
     const call = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Reviewed notes'));
-    check('a chapter summary is sent as a reviewed note', Boolean(call?.user.includes('(summary c5 §1)')), call?.user.slice(0, 120));
-    check('an answer citing a note\'s sources is kept', res.state === 'answer' && res.dropped === 0 && res.quotes.length === 2, JSON.stringify(res).slice(0, 200));
+    check('a chapter summary is sent as a reviewed note, by its label', Boolean(call?.user.includes('[summary c5 §1]')), call?.user.slice(0, 120));
+    const notesPart = call?.user.slice(0, call.user.indexOf('Passages from the book:')) ?? '';
+    check('notes are sent without block ids (owner, 2026-11-17: the model cites the note)', notesPart.length > 0 && !/c\d+-b\d+/.test(notesPart), notesPart.slice(0, 120));
+    check('an answer citing a note by its label is kept, the label in any spelling', res.state === 'answer' && res.dropped === 0 && res.parts.filter((p) => p.type === 'note').length === 2, JSON.stringify(res).slice(0, 200));
+    check('a note citation shows the blocks the note rests on', res.state === 'answer' && res.noteCites?.[0]?.label === 'summary c5 §1' && src.every((id) => res.quotes.some((q) => q.id === id)) && res.noteCites[0].sources.length === src.length, res.state === 'answer' ? JSON.stringify(res.noteCites) : '');
     check('it carries the summary notes line', res.state === 'answer' && JSON.stringify(res.notes) === JSON.stringify([NOTE_WORDING.summary]), res.state === 'answer' ? JSON.stringify(res.notes) : res.state);
-    check('the support check sees the note', (supportSeen[supportSeen.length - 1] ?? '').includes('(summary c5 §1)') && (supportSeen[supportSeen.length - 1] ?? '').includes('REVIEWED NOTES'));
+    const seen = supportSeen[supportSeen.length - 1] ?? '';
+    check('the support check sees the cited note, and no passage for it', seen.includes('CITED NOTES') && seen.includes('[summary c5 §1]') && /CITED PASSAGES:\n\(none\)/.test(seen), seen.slice(0, 200));
   }
   {
     // A Learn more character: the whole text goes, the later part included; the notes line names it.
     calls.length = 0;
     const later = routeQuestion('Who is Bai?', null).notes.find((n) => n.label === 'learn-more bai later')!;
-    answerText = `Later she leaves [${later.sources[0]}].`;
+    answerText = `Later she leaves [learn-more bai later].`;
     const res = await ask(deps(114), { question: 'Who is Bai?' });
     const call = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Reviewed notes'))!;
-    check('a Learn more character\'s later part is sent', call.user.includes('(learn-more bai later)'));
+    check('a Learn more character\'s later part is sent', call.user.includes('[learn-more bai later]') && later.sources.length > 0);
     check('the Learn more notes line names the character', res.state === 'answer' && res.notes?.[0] === NOTE_WORDING.learnMore('Bai', false), res.state === 'answer' ? JSON.stringify(res.notes) : res.state);
   }
   {
@@ -220,7 +243,7 @@ try {
     answerText = 'Commentary.';
     await ask(deps(115), { question: 'where was I?', position: 8 });
     const call = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Reviewed notes'))!;
-    check('"where was I" at chapter 8 sends chapters 6 to 8', ['c6', 'c7', 'c8'].every((c) => call.user.includes(`(summary ${c} §1)`)) && !call.user.includes('(summary c9'));
+    check('"where was I" at chapter 8 sends chapters 6 to 8', ['c6', 'c7', 'c8'].every((c) => call.user.includes(`[summary ${c} §1]`)) && !call.user.includes('[summary c9'));
   }
   {
     // The whole book (owner, 2026-11-17): each chapter's first summary section as written, no model, no message used.

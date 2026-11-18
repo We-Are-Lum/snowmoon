@@ -3,8 +3,8 @@ import { CHAT } from '../config';
 import { renderMarkdown } from '../render';
 import { blocksById, labels, retrieve, type Passage } from './retrieve';
 import { glossaryWords, type GlossaryLink } from './glossary';
-import { bookInBrief, fitWords, noteLines, routeQuestion, type BookInBrief, type Note } from './notes';
-import { blockIdOk, chapterOf, sanitizeReply, type Part } from './sanitize';
+import { bookInBrief, fitWords, noteLines, noteTitle, routeQuestion, type BookInBrief, type Note } from './notes';
+import { blockIdOk, chapterOf, sanitizeAnswer, type AnswerPart, type SanitizeOptions } from './sanitize';
 import { record, reserve, worstCaseUsd } from './limits';
 
 /**
@@ -39,7 +39,7 @@ type Glossary = { glossary?: GlossaryLink[] };
 
 export type AskResult =
   /** `notes`: one line per kind of reviewed note the answer cites (NOTE_WORDING), shown under it. Absent before 2026-11-17. */
-  | ({ state: 'answer'; parts: Part[]; quotes: Quote[]; notes?: string[]; left: number; guard: 'ok' | 'none'; dropped: number; regenerated: boolean } & Glossary)
+  | ({ state: 'answer'; parts: AnswerPart[]; quotes: Quote[]; notes?: string[]; noteCites?: NoteCite[]; left: number; guard: 'ok' | 'none'; dropped: number; regenerated: boolean } & Glossary)
   | { state: 'declined'; left: number }
   /** The answer's claims were not all supported by the passages it cited: shown as "the passages don't say". */
   | ({ state: 'unsupported'; left: number } & Glossary)
@@ -100,12 +100,19 @@ function passagesText(passages: Passage[]): string {
 }
 
 function notesText(notes: Note[]): string {
-  return notes.map((n) => `(${n.label}) ${n.text}`).join('\n');
+  return notes.map((n) => `[${n.label}] ${n.text}`).join('\n');
 }
 
 /** The question for the model: the reviewed notes (if any), the book's passages, and the question. */
+/** A reviewed note an answer cites, as the reader sees it: its name and the blocks it rests on (shown folded). */
+export interface NoteCite {
+  label: string;
+  title: string;
+  sources: string[];
+}
+
 export function userMessage(notes: Note[], passages: Passage[], question: string): string {
-  const head = notes.length ? `Reviewed notes (checked against the book by people; cite the block ids they give):\n${notesText(notes)}\n\n` : '';
+  const head = notes.length ? `Reviewed notes (checked against the book by people; cite a note by its label in square brackets, like [${notes[0].label}]):\n${notesText(notes)}\n\n` : '';
   return `${head}Passages from the book:\n${passagesText(passages)}\n\nQuestion: ${question}`;
 }
 
@@ -163,44 +170,56 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
     ...input.history!.map((h) => ({ role: h.role, content: h.text })),
     { role: 'user', content: userMessage(routed.notes, passages, question) },
   ];
-  const allowed = new Set([...passages.map((p) => p.id), ...routed.notes.flatMap((n) => n.sources)]);
+  // Block ids only for claims from the passage search; a claim from a note cites the note's label (owner, 2026-11-17).
+  const allowed = new Set(passages.map((p) => p.id));
+  const byLabel = new Map(routed.notes.map((n) => [n.label, n]));
+  // Quotations are checked word for word against the blocks their sentence cites, a note bringing its sources.
+  const texts = new Map<string, string>();
+  const plain = (p: Passage) => p.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  for (const p of passages) texts.set(p.id, plain(p));
+  const noteSources = [...new Set(routed.notes.flatMap((n) => n.sources))].filter((id) => !texts.has(id));
+  if (noteSources.length) for (const p of await blocksById(sql, noteSources)) texts.set(p.id, plain(p));
+  const cleaning: SanitizeOptions = { notes: new Set(byLabel.keys()), textOf: (id) => texts.get(id), sourcesOf: (l) => byLabel.get(l)?.sources ?? [] };
 
   // Answer, then the guard; on a flag, one retry with a reminder. The flagged answer is never shown or sent back.
   const answerTokens = ANSWER_TOKENS;
   const temperature = routed.notes.length ? (deps.notesTemperature ?? NOTES_TEMPERATURE) : TEMPERATURE;
   // "Where was I" is held to its words in code: the model alone runs long (owner, 2026-11-17, item 4).
   const fit = routed.shape === 'where' ? { words: routed.words, chapters: routed.chapters.length } : undefined;
-  let clean = await answerOnce(deps, messages, allowed, answerTokens, temperature, fit);
+  let clean = await answerOnce(deps, messages, allowed, cleaning, answerTokens, temperature, fit);
   let verdict = await guard(deps, question, clean.shown);
   let regenerated = false;
   if (verdict.verdict === 'flagged') {
     regenerated = true;
     const reminder = deps.reminder.replace('{{REASON}}', verdict.reason || 'it read as writing for them');
-    clean = await answerOnce(deps, [...messages, { role: 'user', content: reminder }], allowed, answerTokens, temperature, fit);
+    clean = await answerOnce(deps, [...messages, { role: 'user', content: reminder }], allowed, cleaning, answerTokens, temperature, fit);
     verdict = await guard(deps, question, clean.shown);
   }
   if (verdict.verdict === 'flagged') return { state: 'declined', left: slot.left };
 
   // Quotes come from the database, by id, never from the model's words.
+  // The reviewed notes the answer cites, by label; the reader is shown each one's own source blocks.
+  const used = clean.notes.map((l) => byLabel.get(l)!).filter(Boolean);
   const blocks = await blocksById(sql, clean.cites);
-  const quotes = await quotesFor(sql, clean.cites, blocks);
+  const quotes = await quotesFor(sql, [...new Set([...clean.cites, ...used.flatMap((n) => n.sources)])]);
   const found = new Set(quotes.map((q) => q.id));
-  // The reviewed notes the answer rests on: those that give a block it cites.
-  const used = routed.notes.filter((n) => n.sources.some((id) => found.has(id)));
+  const cited = blocks.filter((b) => found.has(b.id));
 
-  // The second guard question: every claim supported by the passages it cites (or the reviewed notes that give them)?
-  // If not, or no verdict, it isn't shown.
+  // The second guard question: is every claim supported by what it cites? A claim cited to a block, by that block's
+  // text (and the passage before it, for who is speaking) alone; a claim cited to a note, by that note. If not, or no
+  // verdict, it isn't shown.
   if (deps.supportPolicy) {
-    const supported = await supportCheck(deps, question, clean.shown, blocks, used);
+    const supported = await supportCheck(deps, question, clean.shown, cited, used);
     if (!supported) return { state: 'unsupported', left: slot.left, glossary };
   }
-  const parts = clean.parts.filter((p) => p.type === 'text' || found.has(p.id));
+  const parts = clean.parts.filter((p) => p.type !== 'cite' || found.has(p.id));
   const lines = noteLines(used);
+  const noteCites: NoteCite[] = used.map((n) => ({ label: n.label, title: noteTitle(n), sources: n.sources.filter((id) => found.has(id)) }));
   return {
     state: 'answer',
     parts,
     quotes,
-    ...(lines.length ? { notes: lines } : {}),
+    ...(lines.length ? { notes: lines, noteCites } : {}),
     left: slot.left,
     guard: verdict.verdict === 'ok' ? 'ok' : 'none',
     regenerated,
@@ -222,15 +241,15 @@ async function quotesFor(sql: postgres.Sql, ids: string[], found?: Passage[]): P
 }
 
 /** One answer from the model, cleaned: citations checked, the model's own quotations removed. Recorded with no text. */
-async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>, maxTokens = ANSWER_TOKENS, temperature = TEMPERATURE, fit?: { words: number; chapters: number }) {
+async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>, cleaning: SanitizeOptions, maxTokens = ANSWER_TOKENS, temperature = TEMPERATURE, fit?: { words: number; chapters: number }) {
   const answer = await deps.complete(CHAT.model, messages, { maxTokens, temperature });
   await record(deps.sql, {
     kind: 'answer', model: answer.model, provider: answer.provider,
     promptTokens: answer.promptTokens, completionTokens: answer.completionTokens, costUsd: answer.costUsd,
   });
-  const clean = sanitizeReply(fit ? fitWords(answer.text, fit.words, fit.chapters) : answer.text, allowed);
+  const clean = sanitizeAnswer(fit ? fitWords(answer.text, fit.words, fit.chapters) : answer.text, allowed, cleaning);
   // The guard reads the answer as the person would see it, citations and all.
-  return { ...clean, shown: clean.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('') };
+  return { ...clean, shown: clean.parts.map((p) => (p.type === 'text' ? p.text : p.type === 'cite' ? `[${p.id}]` : `[${p.label}]`)).join('') };
 }
 
 /** The guard's verdict on one answer; an empty verdict is asked again once. */
@@ -294,8 +313,7 @@ async function supportCheck(deps: AskDeps, question: string, shown: string, cite
       CHAT.guardModel,
       [
         { role: 'system', content: deps.supportPolicy! },
-        // With reviewed notes, the question is whether the answer adds anything the notes and passages don't say.
-        { role: 'user', content: `QUESTION:\n${question}\n\n${notes.length ? `REVIEWED NOTES (support, like passages):\n${notesText(notes)}\n\n` : ''}CITED PASSAGES:\n${passages || '(none)'}\n\nANSWER:\n${shown}` },
+        { role: 'user', content: `QUESTION:\n${question}\n\n${notes.length ? `CITED NOTES (support only the claims cited to them by label):\n${notesText(notes)}\n\n` : ''}CITED PASSAGES:\n${passages || '(none)'}\n\nANSWER:\n${shown}` },
       ],
       { maxTokens: SUPPORT_TOKENS, temperature: 0 },
     );
