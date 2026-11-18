@@ -88,7 +88,8 @@ export class AskError extends Error {
 const ANSWER_TOKENS = 2500;
 /** The answer's temperature; with reviewed notes, NOTES_TEMPERATURE (see the eval in docs/proposals/chat-eval/README.md). */
 const TEMPERATURE = 0.4;
-export const NOTES_TEMPERATURE = 0.2;
+// Owner, 2026-11-17: 0.2 was tried (38 of 48 against 41 of 48 at 0.4) and set back to 0.4.
+export const NOTES_TEMPERATURE = 0.4;
 const GUARD_TOKENS = 1500;
 const SEARCH_TOKENS = 600;
 /** The support check reads long summary answers and their notes: room to reason before its verdict (an empty verdict fails closed). */
@@ -166,10 +167,9 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
 
   // Answer, then the guard; on a flag, one retry with a reminder. The flagged answer is never shown or sent back.
   const answerTokens = ANSWER_TOKENS;
-  // Steadier summaries when the answer rests on reviewed notes (owner's trial, 2026-11-17).
   const temperature = routed.notes.length ? (deps.notesTemperature ?? NOTES_TEMPERATURE) : TEMPERATURE;
   // "Where was I" is held to its words in code: the model alone runs long (owner, 2026-11-17, item 4).
-  const fit = routed.shape === 'where' ? routed.words : undefined;
+  const fit = routed.shape === 'where' ? { words: routed.words, chapters: routed.chapters.length } : undefined;
   let clean = await answerOnce(deps, messages, allowed, answerTokens, temperature, fit);
   let verdict = await guard(deps, question, clean.shown);
   let regenerated = false;
@@ -222,13 +222,13 @@ async function quotesFor(sql: postgres.Sql, ids: string[], found?: Passage[]): P
 }
 
 /** One answer from the model, cleaned: citations checked, the model's own quotations removed. Recorded with no text. */
-async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>, maxTokens = ANSWER_TOKENS, temperature = TEMPERATURE, fit?: number) {
+async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>, maxTokens = ANSWER_TOKENS, temperature = TEMPERATURE, fit?: { words: number; chapters: number }) {
   const answer = await deps.complete(CHAT.model, messages, { maxTokens, temperature });
   await record(deps.sql, {
     kind: 'answer', model: answer.model, provider: answer.provider,
     promptTokens: answer.promptTokens, completionTokens: answer.completionTokens, costUsd: answer.costUsd,
   });
-  const clean = sanitizeReply(fit ? fitWords(answer.text, fit) : answer.text, allowed);
+  const clean = sanitizeReply(fit ? fitWords(answer.text, fit.words, fit.chapters) : answer.text, allowed);
   // The guard reads the answer as the person would see it, citations and all.
   return { ...clean, shown: clean.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('') };
 }

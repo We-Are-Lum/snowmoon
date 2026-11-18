@@ -133,7 +133,7 @@ export function routeQuestion(question: string, position: number | null): Routed
   const blocks = characters.flatMap(glossaryBlocks);
   const framing =
     shape === 'where' && chapters.length
-      ? ` (The reader is on chapter ${chapters[chapters.length - 1]} and wants a recap of ${chapters.length > 1 ? `chapters ${chapters[0]} to ${chapters[chapters.length - 1]}` : `chapter ${chapters[0]}`}: what happens, in story order, from the reviewed notes, in at most ${WORDS.where} words${chapters.length > 1 ? `, about ${Math.floor(WORDS.where / chapters.length)} per chapter` : ''}.)`
+      ? ` (The reader is on chapter ${chapters[chapters.length - 1]} and wants a recap of ${chapters.length > 1 ? `chapters ${chapters[0]} to ${chapters[chapters.length - 1]}` : `chapter ${chapters[0]}`}: what happens, in story order, from the reviewed notes, in at most ${WORDS.where} words${chapters.length > 1 ? `: one short sentence (about 25 words) for each of ${chapters.slice(0, -1).map((n) => `chapter ${n}`).join(' and ')}, each its own paragraph, then one paragraph for chapter ${chapters[chapters.length - 1]}` : ''}.)`
       : shape === 'book'
         ? ' (The reader wants the whole book in brief: its main story, in order, from the reviewed notes.)'
         : '';
@@ -238,34 +238,54 @@ export const NOTE_WORDING = {
 
 /** Words a reader sees: citations don't count. */
 export function countWords(text: string): number {
-  return text.replace(/\[[^\]]*\]|\bc\d+-b\d+\b/g, ' ').split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
+  return text.replace(/\[[^\]]*\]|【[^】]*】|\bc\d+[-‐‑‒–—]b\d+\b/g, ' ').split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
 }
 
 /** A sentence ends at . ! or ?, after any closing quote and the citations that follow it. */
-const SENTENCE_END = /(?<=[.!?][”’"')\]]*(?:\s*\[c\d+[-‐‑‒–—]b\d+(?:\s*,\s*c\d+[-‐‑‒–—]b\d+)*\])*)\s+/u;
+const SENTENCE_END = /(?<=[.!?][”’"')\]】]*(?:\s*[\[【]c\d+[-‐‑‒–—]b\d+(?:\s*,\s*c\d+[-‐‑‒–—]b\d+)*[\]】])*)\s+(?![\[【]c\d)/u;
 
 /**
- * "Where was I" within its words (owner, 2026-11-17, item 4): the model writes one paragraph per chapter and often runs
- * long, so each paragraph keeps whole sentences up to its share of the limit (always its first sentence).
+ * "Where was I" within its words (owner, 2026-11-17): one sentence for each earlier chapter, then one paragraph for the
+ * chapter the reader is on, 180 words in all. The model is asked for that shape; the code holds it: each earlier chapter's
+ * paragraph keeps its first sentence and the last keeps whole sentences, never past the limit: the current chapter's first
+ * sentence comes first, then the earlier chapters' (the latest first) while they fit, then more of the current chapter. An
+ * answer in another shape is cut paragraph by paragraph to an equal share.
  */
-export function fitWords(raw: string, limit: number): string {
+export function fitWords(raw: string, limit: number, chapters = 1): string {
   const paras = raw.trim().split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
-  if (!paras.length || countWords(raw) <= limit) return raw;
-  const share = Math.floor(limit / paras.length);
-  return paras
-    .map((p) => {
-      const sentences = p.split(SENTENCE_END);
-      const kept: string[] = [];
-      let n = 0;
-      for (const s of sentences) {
-        const w = countWords(s);
-        if (kept.length && n + w > share) break;
-        kept.push(s);
-        n += w;
+  if (!paras.length) return raw;
+  const sentences = (p: string) => p.split(SENTENCE_END);
+  const upTo = (p: string, budget: number) => {
+    const kept: string[] = [];
+    let n = 0;
+    for (const s of sentences(p)) {
+      const w = countWords(s);
+      if (kept.length && n + w > budget) break;
+      kept.push(s);
+      n += w;
+    }
+    return kept.join(' ');
+  };
+  if (chapters > 1 && paras.length === chapters) {
+    // Within the limit first: the current chapter's first sentence, then each earlier chapter's first sentence that still
+    // fits (the latest first), then more of the current chapter.
+    const current = sentences(paras[paras.length - 1]);
+    let used = countWords(current[0]);
+    const earlier: (string | null)[] = paras.slice(0, -1).map(() => null);
+    for (let i = earlier.length - 1; i >= 0; i--) {
+      const first = sentences(paras[i])[0];
+      if (used + countWords(first) <= limit) {
+        earlier[i] = first;
+        used += countWords(first);
       }
-      return kept.join(' ');
-    })
-    .join('\n\n');
+    }
+    const rest = upTo(current.slice(1).join(' '), limit - used);
+    const last = rest && countWords(rest) <= limit - used ? `${current[0]} ${rest}` : current[0];
+    return [...earlier.filter((e): e is string => e !== null), last].join('\n\n');
+  }
+  if (countWords(raw) <= limit) return raw;
+  const share = Math.floor(limit / paras.length);
+  return paras.map((p) => upTo(p, share)).join('\n\n');
 }
 
 /** The note lines for the notes an answer cited, in order: summaries first, then each character. */
