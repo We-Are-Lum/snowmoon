@@ -144,6 +144,9 @@ try {
     check('one or two quoted words are a term and stay', shown('The "no head" rule [c1-b21].').includes('"no head"'));
     check('citations after a narrow no-break space stay with their sentence', shown('Mu raised a glass and said "to our future" here.\u202f [c1-b21] Then [c1-b20].').includes('"to our future"'), shown('Mu raised a glass and said "to our future" here.\u202f [c1-b21] Then [c1-b20].'));
     check('the recap cut keeps citations after a narrow no-break space', fitWords('Chapter 6 – One.\u202f [c6-b1] Two two two.', 3, 1) === 'Chapter 6 – One.\u202f [c6-b1]', fitWords('Chapter 6 – One.\u202f [c6-b1] Two two two.', 3, 1));
+    check('a comma inside a list is not a clause boundary: the clause goes from its linking word', shown('Bai won thrice, while Zei’s quick, clever play made Den say he had "nearly reinvented all of cryptography" once [c1-b20]. Next [c1-b21].') === 'Bai won thrice. Next [c1-b21].', shown('Bai won thrice, while Zei’s quick, clever play made Den say he had "nearly reinvented all of cryptography" once [c1-b20]. Next [c1-b21].'));
+    check('a dash aside with an unmatched quotation goes', shown('He gave Bai the turn – he tells her "now is your chance to shine" – and won [c1-b21].') === 'He gave Bai the turn and won [c1-b21].', shown('He gave Bai the turn – he tells her "now is your chance to shine" – and won [c1-b21].'));
+    check('with no clause boundary before it, the sentence goes', shown('Zei’s quick, clever play made Den say "nearly reinvented all of cryptography" [c1-b20]. Next [c1-b21].') === 'Next [c1-b21].');
     check('dropping keeps paragraphs', shown('One [c1-b20].\n\nTwo says "not in any block at all" here. Three [c1-b21].') === 'One [c1-b20].\n\nThree [c1-b21].', JSON.stringify(shown('One [c1-b20].\n\nTwo says "not in any block at all" here. Three [c1-b21].')));
   }
 

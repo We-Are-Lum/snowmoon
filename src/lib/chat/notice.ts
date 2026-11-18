@@ -21,12 +21,12 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: '89d39d97063094dd',
+  reviewedFor: '59e458493a530a90',
   /** Who did that reread: the coding agent, or the owner. */
   by: 'agent',
   on: '2026-11-17',
   note:
-    'Reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-17 for branch chat-cites (and again after a fix to how sentences are split), words unchanged: ' +
+    'Reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-17 for branch chat-cites (and again after fixes to how sentences and clauses are split), words unchanged: ' +
     'a claim from a reviewed note cites the note by its label and the reader is shown the passages the note rests on (chapter, ¶, the book\'s words), so item 1 holds; ' +
     'block ids stay for claims from the passages, and the support check grades each claim only by what it cites; a quotation stays only if it matches a cited block word for word. ' +
     'No new service receives questions and nothing new is kept. ' +

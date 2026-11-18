@@ -135,8 +135,13 @@ export function sanitizeAnswer(raw: string, allowed: ReadonlySet<string>, opts: 
 
 /** A sentence ends at . ! or ?, after any closing quote and the citations that follow it. */
 const SENTENCE = new RegExp(String.raw`(?<=[.!?][”’"')\]】]*(?:\s*[[【(]\s*${ANY}(?:\s*[,;]\s*${ANY})*\s*[\]】)])*)\s+(?!\s)(?![[【(]\s*${ANY})`, 'iu');
-/** Where one clause ends and the next begins. */
-const CLAUSE = /\s*(?:[,;:]|\s[—–]\s|\s-\s)\s*/g;
+/**
+ * Where a clause that can go on its own begins: a dash aside, or after a comma, semicolon or colon a reporting or linking
+ * word ("…, saying …", "…, which …"). A bare comma can sit inside a list ("quick, clever play"), so it isn't one.
+ */
+const CLAUSE = /\s*(?:\s[—–]\s|\s-\s|[,;:]\s*(?=(?:saying|telling|noting|adding|declaring|calling|insisting|warning|asking|announcing|remarking|explaining|replying|shouting|whispering|joking|which|who|whom|whose|where|as|and|but|while|though|although|then)\b))\s*/gi;
+/** Where any clause ends (the end of what is dropped). */
+const CLAUSE_END = /\s*(?:[,;:]|\s[—–]\s|\s-\s)\s*/g;
 const words = (t: string) => t.toLowerCase().replace(/[’‘]/g, "'").replace(/[^\p{L}\p{N}']+/gu, ' ').trim();
 
 /**
@@ -165,7 +170,12 @@ function checkQuotes(text: string, allowed: ReadonlySet<string>, opts: SanitizeO
           const bounds = [...s.matchAll(CLAUSE)].map((m) => ({ at: m.index!, len: m[0].length }));
           const before = bounds.filter((b) => b.at + b.len <= start).pop();
           if (!before) return '';
-          const after = bounds.find((b) => b.at >= end);
+          const after = [...s.matchAll(CLAUSE_END)].map((m) => ({ at: m.index!, len: m[0].length, dash: /[—–-]/.test(m[0]) })).find((b) => b.at >= end);
+          // A dash aside goes with both its dashes.
+          if (after?.dash && /[—–-]/.test(s.slice(before.at, before.at + before.len))) {
+            s = `${s.slice(0, before.at)} ${s.slice(after.at + after.len)}`;
+            continue;
+          }
           // The sentence's end: its last . ! or ?, with what follows (closing quotes and citations).
           const tail = s.match(/[.!?][”’"')\]】]*(?:\s*[[【(][^\]】)]*[\]】)])*\s*$/);
           const stop = after ? after.at : tail ? tail.index! : s.length;
