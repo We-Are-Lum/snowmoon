@@ -12,11 +12,11 @@ import { PrivateTextField } from './private-text-field';
 import { ASSISTANT, CHAT } from '~/lib/config';
 import { ASK_WORDING, type AccountKind } from '~/lib/chat/who-can-ask';
 import { OWNER_WORDING } from '~/lib/wording';
-import type { AskResult, Quote } from '~/lib/chat/ask';
+import type { AskResult, NoteAsWritten, NoteCite, Quote } from '~/lib/chat/ask';
 import type { GlossaryLink } from '~/lib/chat/glossary';
 import { noticeItems, noticeKey } from '~/lib/chat/notice';
 import { NOTE_WORDING, SUMMARY_LABEL } from '~/lib/chat/notes';
-import type { Part } from '~/lib/chat/sanitize';
+import type { AnswerPart } from '~/lib/chat/sanitize';
 import {
   currentChapter, deleteThread, lastChapter, markNoticeSeen, newThread, noticeSeen, saveThread, thread as loadThread, threads as loadThreads,
   type AnsweredMessage, type Thread,
@@ -48,7 +48,7 @@ function untilUtcMidnight(): string {
 function answerText(m: AnsweredMessage): string {
   const r = m.result;
   if (r.state !== 'answer') return '';
-  return r.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('');
+  return r.parts.map((p) => (p.type === 'text' ? p.text : p.type === 'cite' ? `[${p.id}]` : `[${p.label}]`)).join('');
 }
 
 /** Owner (2026-10-07): shown until a fresh 50-question check has at most 2 wrong answers. */
@@ -172,12 +172,17 @@ function QuoteCard({ q }: { q: Quote }) {
   );
 }
 
-/** Commentary with its quote cards placed after the sentence that cites them. */
-function Answer({ parts, quotes }: { parts: Part[]; quotes: Quote[] }) {
+/**
+ * Commentary with its quote cards placed after the sentence that cites them. A reviewed note cited by its label shows its
+ * name, with the passages it rests on folded under it (owner, 2026-11-17).
+ */
+function Answer({ parts, quotes, noteCites }: { parts: AnswerPart[]; quotes: Quote[]; noteCites?: NoteCite[] }) {
   const byId = new Map(quotes.map((q) => [q.id, q]));
+  const byLabel = new Map((noteCites ?? []).map((n) => [n.label, n]));
   const out: React.ReactNode[] = [];
   let text = '';
   let pending: string[] = [];
+  let pendingNotes: string[] = [];
   const flush = (k: number) => {
     if (text.trim()) out.push(<p key={`t${k}`}>{text.trim()}</p>);
     text = '';
@@ -185,15 +190,24 @@ function Answer({ parts, quotes }: { parts: Part[]; quotes: Quote[] }) {
       const q = byId.get(id);
       if (q) out.push(<QuoteCard key={`q${k}-${id}`} q={q} />);
     }
+    for (const label of pendingNotes) {
+      const n = byLabel.get(label);
+      if (n) out.push(<NoteCard key={`n${k}-${label}`} note={n} quotes={n.sources.flatMap((id) => byId.get(id) ?? [])} />);
+    }
     pending = [];
+    pendingNotes = [];
   };
   parts.forEach((p, k) => {
     if (p.type === 'cite') {
       if (!pending.includes(p.id)) pending.push(p.id);
       return;
     }
+    if (p.type === 'note') {
+      if (!pendingNotes.includes(p.label)) pendingNotes.push(p.label);
+      return;
+    }
     // A citation belongs to the sentence before it: show its card once that sentence ends.
-    if (pending.length && /^\s*[.!?…]?\s/.test(p.text)) {
+    if ((pending.length || pendingNotes.length) && /^\s*[.!?…]?\s/.test(p.text)) {
       const m = p.text.match(/^\s*[.!?…]?/)![0];
       text += m;
       flush(k);
@@ -202,6 +216,21 @@ function Answer({ parts, quotes }: { parts: Part[]; quotes: Quote[] }) {
   });
   flush(parts.length);
   return <div className="as-answer">{out}</div>;
+}
+
+/** A reviewed note an answer cites: its name, and the passages it rests on, folded. */
+function NoteCard({ note, quotes }: { note: NoteCite; quotes: Quote[] }) {
+  return (
+    <details className="as-note-cite">
+      <summary>
+        {note.title}
+        {quotes.length ? ` · rests on ${quotes.map((q) => (q.label !== null ? `ch ${q.chapter} ¶ ${q.label}` : q.id)).join(', ')}` : ''}
+      </summary>
+      {quotes.map((q) => (
+        <QuoteCard key={q.id} q={q} />
+      ))}
+    </details>
+  );
 }
 
 /** The glossary entries the question names, before the answer (owner, 2026-10-14). */
@@ -289,6 +318,30 @@ function BookInBriefReply({ chapters, quotes }: { chapters: { n: number; text: s
   );
 }
 
+/**
+ * The fallback (owner, 2026-11-18): no answer passed the support check, even after its retry, so the reviewed notes the
+ * question was routed to are shown as written, each under its name with the passages it rests on folded, and the line
+ * saying who wrote it. No model text. The label wording is the coding agent's draft.
+ */
+function NotesAsWrittenReply({ notes, lines, quotes, glossary }: { notes: NoteAsWritten[]; lines: string[]; quotes: Quote[]; glossary?: GlossaryLink[] }) {
+  const byId = new Map((quotes ?? []).map((q) => [q.id, q]));
+  return (
+    <div className="as-reply as-book as-notes-written" data-wording="draft">
+      <GlossaryLinks links={glossary} />
+      <p className="as-label">From the reviewed notes · as written</p>
+      <p className="as-note">No answer passed the check against the book, so here are the notes it would have drawn on.</p>
+      {notes.map((n) => (
+        <section key={n.label} className="as-book-chapter">
+          <h3>{n.title}</h3>
+          <p>{n.text}</p>
+          <BookWords quotes={n.sources.flatMap((id) => byId.get(id) ?? [])} />
+        </section>
+      ))}
+      <NoteLines lines={lines} />
+    </div>
+  );
+}
+
 /** The passages a chapter's summary rests on, folded: chapter and ¶, and the book's own words. */
 function BookWords({ quotes }: { quotes: Quote[] }) {
   if (!quotes.length) return null;
@@ -307,12 +360,13 @@ function BookWords({ quotes }: { quotes: Quote[] }) {
 function Reply({ m, onAsk }: { m: AnsweredMessage; onAsk: (question: string) => void }) {
   const r = m.result;
   if (r.state === 'book') return <BookInBriefReply chapters={r.chapters} quotes={r.quotes} />;
+  if (r.state === 'notes') return <NotesAsWrittenReply notes={r.notes} lines={r.lines} quotes={r.quotes} glossary={r.glossary} />;
   if (r.state === 'answer')
     return (
       <div className="as-reply">
         <GlossaryLinks links={r.glossary} />
         <p className="as-label">Assistant · commentary</p>
-        <Answer parts={r.parts} quotes={r.quotes} />
+        <Answer parts={r.parts} quotes={r.quotes} noteCites={r.noteCites} />
         <NoteLines lines={r.notes} />
       </div>
     );
@@ -343,6 +397,17 @@ function Reply({ m, onAsk }: { m: AnsweredMessage; onAsk: (question: string) => 
         <GlossaryLinks links={r.glossary} />
         <p className="as-label">Assistant · the passages don’t say</p>
         <p>The passages found for this question don’t say. Try asking another way.</p>
+        {r.see?.length ? (
+          <p className="as-see" data-wording="draft">
+            <span className="as-label">Read more</span>{' '}
+            {r.see.map((l, i) => (
+              <span key={l.href}>
+                {i ? ' · ' : ''}
+                <Link href={l.href}>{l.label}</Link>
+              </span>
+            ))}
+          </p>
+        ) : null}
       </div>
     );
   if (r.state === 'limit')

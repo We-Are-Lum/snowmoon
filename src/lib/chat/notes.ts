@@ -29,9 +29,9 @@ export interface Note {
   /** The character's slug, for a Learn more note. */
   slug?: string;
   chapter?: number;
-  /** The note as the model reads it: plain text, with block ids in square brackets where the note cites them. */
+  /** The note as the model reads it: plain text, without block ids (owner, 2026-11-17: the model cites the note's label). */
   text: string;
-  /** Every block id the note rests on: the only ids an answer may cite for it. */
+  /** Every block id the note rests on: shown to the reader when an answer cites the note. */
   sources: string[];
 }
 
@@ -140,6 +140,36 @@ export function routeQuestion(question: string, position: number | null): Routed
   return { shape, chapters: shape === 'book' ? [] : chapters, characters, notes, blocks, words: WORDS[shape], needsChapter, framing };
 }
 
+const WHO_IS = /^\s*(?:who(?:'s|’s| is| was)|tell me (?:more )?about|what do (?:we|you) know about|what(?:'s|’s| is) (?:the )?(?:story|deal) (?:with|of)|describe|introduce)\b/i;
+const FILLER = /^(?:the|a|in|of|book|novel|story|character|again|please|pls|more|so|ok|snowmoon)$/i;
+
+/**
+ * Does the question ask for a reviewed note itself (owner, 2026-11-18)? A chapter summary question, "where was I", or a
+ * who-is / tell-me-about question on one Learn more character with little else ("Who is Bai?", "Tell me about Seila").
+ * Only then may a refused answer fall back to the notes as written.
+ */
+export function asksForNote(question: string, routed: Pick<Routed, 'shape' | 'characters' | 'notes'>): boolean {
+  if (!routed.notes.length) return false;
+  if (routed.shape === 'summary' || routed.shape === 'where') return true;
+  if (routed.characters.length !== 1 || chaptersNamed(question).length) return false;
+  const m = WHO_IS.exec(question);
+  if (!m) return false;
+  const slug = routed.characters[0];
+  const rest = question.slice(m[0].length).replace(/[^\p{L}\p{N}'’\s-]/gu, ' ').split(/\s+/).filter(Boolean);
+  return rest.filter((w) => !charactersNamed(w).includes(slug) && !FILLER.test(w)).length === 0;
+}
+
+/**
+ * Under "the passages don't say" (owner, 2026-11-18): where to read more about what the question names, each Learn more
+ * character's page and each chapter's summary.
+ */
+export function seeAlso(question: string, routed: Pick<Routed, 'characters'>): { href: string; label: string }[] {
+  return [
+    ...routed.characters.filter((slug) => LEARN_MORE[slug]).map((slug) => ({ href: `/challenge/${slug}`, label: `Learn more about ${LEARN_MORE[slug].name}` })),
+    ...chaptersNamed(question).map((n) => ({ href: `/chapter/${n}`, label: `Chapter ${n} in brief` })),
+  ];
+}
+
 /** "ch 7?", "chapter 5", "chapter 5 please": a chapter named with almost nothing else. */
 function bareChapter(question: string): boolean {
   const rest = question.replace(CHAPTER_REF, ' ').replace(/[^\p{L}\s]/gu, ' ').trim().split(/\s+/).filter(Boolean);
@@ -149,7 +179,7 @@ function bareChapter(question: string): boolean {
 function summaryNote(n: number, i: number): Note {
   const s = SUMMARIES[String(n)][i];
   const sources = s.sources.filter(blockIdOk);
-  return { label: `summary c${n} §${i + 1}`, kind: 'summary', chapter: n, text: `${s.text} (rests on ${sources.map((id) => `[${id}]`).join(' ')})`, sources };
+  return { label: `summary c${n} §${i + 1}`, kind: 'summary', chapter: n, text: s.text, sources };
 }
 
 /** "c5-b69–b70" is c5-b69 and c5-b70; "c4-b72" is itself. */
@@ -169,7 +199,7 @@ function segmentsText(segs: readonly Segment[]): { text: string; sources: string
       if ('cite' in s) {
         const ids = expandCite(s.cite);
         sources.push(...ids);
-        return ids.length ? ` [${ids.join('] [')}]` : '';
+        return '';
       }
       return 'term' in s ? s.term : s.text;
     })
@@ -242,7 +272,8 @@ export function countWords(text: string): number {
 }
 
 /** A sentence ends at . ! or ?, after any closing quote and the citations that follow it. */
-const SENTENCE_END = /(?<=[.!?][”’"')\]】]*(?:\s*[\[【]c\d+[-‐‑‒–—]b\d+(?:\s*,\s*c\d+[-‐‑‒–—]b\d+)*[\]】])*)\s+(?![\[【]c\d)/u;
+const CITE_ITEM = String.raw`(?:c\d+[-‐‑‒–—]b\d+|summary\s+c\d+\s*(?:§|s)\s*\d+|learn[- ]more\s+[a-z-]+\s+[a-z]+)`;
+const SENTENCE_END = new RegExp(String.raw`(?<=[.!?][”’"')\]】]*(?:\s*[\[【]${CITE_ITEM}(?:\s*[,;]\s*${CITE_ITEM})*[\]】])*)\s+(?!\s)(?![\[【]${CITE_ITEM})`, 'iu');
 
 /**
  * "Where was I" within its words (owner, 2026-11-17): one sentence for each earlier chapter, then one paragraph for the
@@ -289,6 +320,12 @@ export function fitWords(raw: string, limit: number, chapters = 1): string {
 }
 
 /** The note lines for the notes an answer cited, in order: summaries first, then each character. */
+/** How a note citation is named to the reader: "Chapter 8 summary, part 2", "Learn more about Bai". */
+export function noteTitle(n: Note): string {
+  if (n.kind === 'summary') return `Chapter ${n.chapter} summary, part ${n.label.match(/§(\d+)/)?.[1] ?? ''}`.trim();
+  return `Learn more about ${LEARN_MORE[n.slug!]?.name ?? n.slug}`;
+}
+
 export function noteLines(used: Note[]): string[] {
   const lines: string[] = [];
   if (used.some((n) => n.kind === 'summary')) lines.push(NOTE_WORDING.summary);
