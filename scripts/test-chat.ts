@@ -31,11 +31,11 @@ import { promisify } from 'node:util';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
-import { ask, AskError, type Complete } from '../src/lib/chat/ask';
+import { ask, AskError, NOTES_TEMPERATURE, type Complete } from '../src/lib/chat/ask';
 import { retrieve } from '../src/lib/chat/retrieve';
 import { sanitizeReply } from '../src/lib/chat/sanitize';
 import { glossaryWords } from '../src/lib/chat/glossary';
-import { chaptersNamed, charactersNamed, NOTE_WORDING, routeQuestion } from '../src/lib/chat/notes';
+import { chaptersNamed, charactersNamed, countWords, fitWords, NOTE_WORDING, routeQuestion } from '../src/lib/chat/notes';
 import { CHAT } from '../src/lib/config';
 import { providerOptions, servedBy, servingAllowed } from '../src/lib/chat/provider';
 
@@ -223,17 +223,49 @@ try {
     check('"where was I" at chapter 8 sends chapters 6 to 8', ['c6', 'c7', 'c8'].every((c) => call.user.includes(`(summary ${c} §1)`)) && !call.user.includes('(summary c9'));
   }
   {
-    // The whole book: every chapter's first section; 250 words.
+    // The whole book (owner, 2026-11-17): each chapter's first summary section as written, no model, no message used.
     calls.length = 0;
-    const seenSystem: string[] = [];
+    const before = (await sql`select count(*)::int as n from studio.chat_calls where fid = 116`)[0].n;
+    const res = await ask(deps(116), { question: 'What is the book about?' });
+    const after = (await sql`select count(*)::int as n from studio.chat_calls where fid = 116`)[0].n;
+    check('the whole book is answered with every chapter\'s first summary section', res.state === 'book' && res.chapters.length === 32 && res.chapters.every((c, i) => c.n === i + 1 && c.text.length > 40), res.state);
+    check('the whole book points to the passages each summary rests on', res.state === 'book' && res.chapters.every((c) => c.sources.slice(0, 2).some((id) => res.quotes.some((q) => q.id === id))), res.state === 'book' ? `${res.quotes.length} quotes` : '');
+    check('the whole book calls no model and uses no message', calls.length === 0 && before === after, `${calls.length} calls`);
+    const again = await ask(deps(116), { question: 'Summarize the whole book' });
+    check('"summarize the whole book" is the same answer', again.state === 'book');
+  }
+  {
+    // Answers with and without reviewed notes run at 0.4 (owner, 2026-11-17: back to 0.4 after the 0.2 trial).
+    const temps: number[] = [];
     const spy: Complete = async (model, messages, opts) => {
-      if (model === CHAT.model && messages[messages.length - 1].content.startsWith('Reviewed')) seenSystem.push(messages[0].content);
+      if (model === CHAT.model && messages[messages.length - 1].content.includes('Question:')) temps.push(opts.temperature);
       return complete(model, messages, opts);
     };
-    await ask({ ...deps(116), complete: spy }, { question: 'What is the book about?' });
-    const call = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Reviewed notes'))!;
-    check('the whole book sends the first section of all 32 chapters', (call.user.match(/\(summary c\d+ §1\)/g) ?? []).length === 32);
-    check('the whole book may use about 250 words', seenSystem[0] === 'SYSTEM about 250 words', seenSystem[0]);
+    answerText = 'Commentary.';
+    await ask({ ...deps(117), complete: spy }, { question: 'What happens in chapter 3?' });
+    await ask({ ...deps(117), complete: spy }, { question: 'How does voting on buildings work in Veridia?' });
+    check('answers run at 0.4, with notes or without', NOTES_TEMPERATURE === 0.4 && temps[0] === 0.4 && temps[1] === 0.4, JSON.stringify(temps));
+  }
+  {
+    // "Where was I" (owner, 2026-11-17): one sentence for each earlier chapter, a paragraph for the current one, 180 words.
+    const para = (n: number) => `Chapter ${n} – ${'word '.repeat(40)}first [c${n}-b1]. ${'more '.repeat(40)}second [c${n}-b2]. ${'last '.repeat(20)}third.`;
+    const raw = [6, 7, 8].map(para).join('\n\n');
+    const fit = fitWords(raw, 180, 3);
+    const ps = fit.split('\n\n');
+    check('a recap is held to 180 words', countWords(raw) > 180 && countWords(fit) <= 180, `${countWords(raw)} -> ${countWords(fit)}`);
+    check('each earlier chapter keeps one sentence, with its citation', ps.length === 3 && [0, 1].every((i) => ps[i].endsWith(`first [c${6 + i}-b1].`)), ps.slice(0, 2).join(' | ').slice(0, 120));
+    check('the current chapter keeps more than one sentence', ps[2]?.includes('first [c8-b1].') && ps[2].includes('second [c8-b2].'), ps[2]?.slice(0, 80));
+    check('a recap in another shape is cut to an equal share', countWords(fitWords(raw.replace(/\n\n/g, ' '), 180, 3)) <= 180);
+    const runOn = [6, 7].map((n) => `Chapter ${n} – ${'long '.repeat(75)}only [c${n}-b1].`).concat(`Chapter 8 – ${'now '.repeat(60)}here [c8-b1]. ${'then '.repeat(20)}after.`).join('\n\n');
+    const tight = fitWords(runOn, 180, 3);
+    check('long earlier sentences never push a recap past 180 words; the current chapter stays', countWords(tight) <= 180 && tight.includes('here [c8-b1].') && tight.includes('only [c7-b1].'), `${countWords(tight)} words`);
+    const wide = fitWords(`Chapter 6 – One. 【c6-b1】 ${'x '.repeat(80)}two.\n\nChapter 7 – Three. 【c7-b1】 ${'y '.repeat(80)}four.\n\nChapter 8 – Five [c8-b1]. Six.`, 180, 3);
+    check('a citation in 【】 after a full stop stays with its sentence', wide.includes('One. 【c6-b1】') && wide.includes('Three. 【c7-b1】') && !wide.includes('two.'), wide.slice(0, 60));
+    check('a short single paragraph is unchanged', fitWords('Chapter 1 – Short [c1-b1].', 180) === 'Chapter 1 – Short [c1-b1].');
+    answerText = raw;
+    const res = await ask(deps(118), { question: "Where was I? I'm on chapter 8." });
+    const shown = res.state === 'answer' ? res.parts.map((p) => (p.type === 'text' ? p.text : '')).join('') : '';
+    check('"where was I" answers are shown within 180 words', res.state === 'answer' && countWords(shown) <= 180, `${res.state} ${countWords(shown)}`);
   }
   {
     // An attached block from a later chapter is used, not refused.

@@ -3,7 +3,7 @@ import { CHAT } from '../config';
 import { renderMarkdown } from '../render';
 import { blocksById, labels, retrieve, type Passage } from './retrieve';
 import { glossaryWords, type GlossaryLink } from './glossary';
-import { noteLines, routeQuestion, type Note } from './notes';
+import { bookInBrief, fitWords, noteLines, routeQuestion, type BookInBrief, type Note } from './notes';
 import { blockIdOk, chapterOf, sanitizeReply, type Part } from './sanitize';
 import { record, reserve, worstCaseUsd } from './limits';
 
@@ -45,6 +45,11 @@ export type AskResult =
   | ({ state: 'unsupported'; left: number } & Glossary)
   /** "Where was I" with no reading position on this device: which chapter? No message is used. */
   | { state: 'which' }
+  /**
+   * "What is the book about": each chapter's first summary section as written, with the summaries' AI label; no model is
+   * called and no message is used (owner, 2026-11-17).
+   */
+  | ({ state: 'book'; quotes: Quote[] } & BookInBrief)
   | { state: 'limit' }
   | { state: 'spend' };
 
@@ -67,6 +72,8 @@ export interface AskDeps {
   searchPrompt?: string;
   /** The second guard question (chat-support.md): is every claim supported by its cited passages? */
   supportPolicy?: string;
+  /** The answer's temperature when it uses reviewed notes (default NOTES_TEMPERATURE); the eval compares values. */
+  notesTemperature?: number;
   /** Embedding search, for evaluation: block ids ranked for this question (see RetrieveOptions.dense). */
   dense?: (question: string, limit: number) => Promise<string[]>;
 }
@@ -79,8 +86,10 @@ export class AskError extends Error {
 
 /** Room for the model's reasoning and a summary of up to about 180 words. */
 const ANSWER_TOKENS = 2500;
-/** The whole book: 32 notes to read and about 250 words (an empty answer at 2500, 2026-11-17). */
-const BOOK_ANSWER_TOKENS = 5000;
+/** The answer's temperature; with reviewed notes, NOTES_TEMPERATURE (see the eval in docs/proposals/chat-eval/README.md). */
+const TEMPERATURE = 0.4;
+// Owner, 2026-11-17: 0.2 was tried (38 of 48 against 41 of 48 at 0.4) and set back to 0.4.
+export const NOTES_TEMPERATURE = 0.4;
 const GUARD_TOKENS = 1500;
 const SEARCH_TOKENS = 600;
 /** The support check reads long summary answers and their notes: room to reason before its verdict (an empty verdict fails closed). */
@@ -124,10 +133,16 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   // Reviewed notes (src/lib/chat/notes.ts): a chapter or a Learn more character named, "where was I", the whole book.
   const routed = routeQuestion(words.corrected, input.position ?? null);
   if (routed.needsChapter) return { state: 'which' };
+  if (routed.shape === 'book') {
+    // The whole book: each chapter's first summary section, with the book's words it rests on (its first two sources),
+    // so the reply points to passages like every answer (notice item 1). No model; no message used.
+    const brief = bookInBrief();
+    return { state: 'book', ...brief, quotes: await quotesFor(sql, brief.chapters.flatMap((c) => c.sources.slice(0, 2))) };
+  }
   const question = words.corrected + routed.framing;
 
   // Worst case: search words, two answers (the retry), four guard calls and two support checks (each may be retried once).
-  const slot = await reserve(sql, fid, worstCaseUsd(2 * BOOK_ANSWER_TOKENS + SEARCH_TOKENS, 4 * GUARD_TOKENS + 2 * SUPPORT_TOKENS, 32000));
+  const slot = await reserve(sql, fid, worstCaseUsd(2 * ANSWER_TOKENS + SEARCH_TOKENS, 4 * GUARD_TOKENS + 2 * SUPPORT_TOKENS, 32000));
   if (!slot.ok) return { state: slot.reason };
 
   let passages: Passage[];
@@ -151,27 +166,24 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   const allowed = new Set([...passages.map((p) => p.id), ...routed.notes.flatMap((n) => n.sources)]);
 
   // Answer, then the guard; on a flag, one retry with a reminder. The flagged answer is never shown or sent back.
-  const answerTokens = routed.shape === 'book' ? BOOK_ANSWER_TOKENS : ANSWER_TOKENS;
-  let clean = await answerOnce(deps, messages, allowed, answerTokens);
+  const answerTokens = ANSWER_TOKENS;
+  const temperature = routed.notes.length ? (deps.notesTemperature ?? NOTES_TEMPERATURE) : TEMPERATURE;
+  // "Where was I" is held to its words in code: the model alone runs long (owner, 2026-11-17, item 4).
+  const fit = routed.shape === 'where' ? { words: routed.words, chapters: routed.chapters.length } : undefined;
+  let clean = await answerOnce(deps, messages, allowed, answerTokens, temperature, fit);
   let verdict = await guard(deps, question, clean.shown);
   let regenerated = false;
   if (verdict.verdict === 'flagged') {
     regenerated = true;
     const reminder = deps.reminder.replace('{{REASON}}', verdict.reason || 'it read as writing for them');
-    clean = await answerOnce(deps, [...messages, { role: 'user', content: reminder }], allowed, answerTokens);
+    clean = await answerOnce(deps, [...messages, { role: 'user', content: reminder }], allowed, answerTokens, temperature, fit);
     verdict = await guard(deps, question, clean.shown);
   }
   if (verdict.verdict === 'flagged') return { state: 'declined', left: slot.left };
 
   // Quotes come from the database, by id, never from the model's words.
   const blocks = await blocksById(sql, clean.cites);
-  const label = await labels(sql, blocks.map((b) => b.chapter));
-  const quotes: Quote[] = blocks.map((b) => ({
-    id: b.id,
-    chapter: b.chapter,
-    label: label.get(b.id) ?? null,
-    html: b.kind === 'paragraph' || b.kind === 'quote' ? renderMarkdown(b) : b.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
-  }));
+  const quotes = await quotesFor(sql, clean.cites, blocks);
   const found = new Set(quotes.map((q) => q.id));
   // The reviewed notes the answer rests on: those that give a block it cites.
   const used = routed.notes.filter((n) => n.sources.some((id) => found.has(id)));
@@ -197,14 +209,26 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   };
 }
 
+/** The book's words for these ids, from the database by id, with their ¶ labels. */
+async function quotesFor(sql: postgres.Sql, ids: string[], found?: Passage[]): Promise<Quote[]> {
+  const blocks = found ?? (await blocksById(sql, ids));
+  const label = await labels(sql, blocks.map((b) => b.chapter));
+  return blocks.map((b) => ({
+    id: b.id,
+    chapter: b.chapter,
+    label: label.get(b.id) ?? null,
+    html: b.kind === 'paragraph' || b.kind === 'quote' ? renderMarkdown(b) : b.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+  }));
+}
+
 /** One answer from the model, cleaned: citations checked, the model's own quotations removed. Recorded with no text. */
-async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>, maxTokens = ANSWER_TOKENS) {
-  const answer = await deps.complete(CHAT.model, messages, { maxTokens, temperature: 0.4 });
+async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>, maxTokens = ANSWER_TOKENS, temperature = TEMPERATURE, fit?: { words: number; chapters: number }) {
+  const answer = await deps.complete(CHAT.model, messages, { maxTokens, temperature });
   await record(deps.sql, {
     kind: 'answer', model: answer.model, provider: answer.provider,
     promptTokens: answer.promptTokens, completionTokens: answer.completionTokens, costUsd: answer.costUsd,
   });
-  const clean = sanitizeReply(answer.text, allowed);
+  const clean = sanitizeReply(fit ? fitWords(answer.text, fit.words, fit.chapters) : answer.text, allowed);
   // The guard reads the answer as the person would see it, citations and all.
   return { ...clean, shown: clean.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('') };
 }

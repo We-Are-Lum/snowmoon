@@ -99,8 +99,10 @@ try {
     const reminder = await prompt('chat-reminder.md');
     const searchPrompt = await prompt('chat-search-terms.md');
     const supportPolicy = await prompt('chat-support.md');
+    // EVAL_NOTES_TEMPERATURE=0.4: compare against the answers' temperature with reviewed notes (default NOTES_TEMPERATURE).
+    const notesTemperature = process.env.EVAL_NOTES_TEMPERATURE ? Number(process.env.EVAL_NOTES_TEMPERATURE) : undefined;
     const deps = (fid: number) => ({
-      sql, fid, complete, systemPrompt, guardPolicy, reminder, searchPrompt, supportPolicy,
+      sql, fid, complete, systemPrompt, guardPolicy, reminder, searchPrompt, supportPolicy, notesTemperature,
       ...(DENSE ? { dense: async () => DENSE.ranks[current] } : {}),
     });
     const results = [];
