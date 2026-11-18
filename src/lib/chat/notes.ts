@@ -243,7 +243,7 @@ export function countWords(text: string): number {
 
 /** A sentence ends at . ! or ?, after any closing quote and the citations that follow it. */
 const CITE_ITEM = String.raw`(?:c\d+[-‐‑‒–—]b\d+|summary\s+c\d+\s*(?:§|s)\s*\d+|learn[- ]more\s+[a-z-]+\s+[a-z]+)`;
-const SENTENCE_END = new RegExp(String.raw`(?<=[.!?][”’"')\]】]*(?:\s*[\[【]${CITE_ITEM}(?:\s*[,;]\s*${CITE_ITEM})*[\]】])*)\s+(?![\[【]${CITE_ITEM})`, 'iu');
+const SENTENCE_END = new RegExp(String.raw`(?<=[.!?][”’"')\]】]*(?:\s*[\[【]${CITE_ITEM}(?:\s*[,;]\s*${CITE_ITEM})*[\]】])*)\s+(?!\s)(?![\[【]${CITE_ITEM})`, 'iu');
 
 /**
  * "Where was I" within its words (owner, 2026-11-17): one sentence for each earlier chapter, then one paragraph for the

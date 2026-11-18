@@ -134,7 +134,7 @@ export function sanitizeAnswer(raw: string, allowed: ReadonlySet<string>, opts: 
 }
 
 /** A sentence ends at . ! or ?, after any closing quote and the citations that follow it. */
-const SENTENCE = new RegExp(String.raw`(?<=[.!?][”’"')\]】]*(?:\s*[[【(]\s*${ANY}(?:\s*[,;]\s*${ANY})*\s*[\]】)])*)\s+(?![[【(]\s*${ANY})`, 'iu');
+const SENTENCE = new RegExp(String.raw`(?<=[.!?][”’"')\]】]*(?:\s*[[【(]\s*${ANY}(?:\s*[,;]\s*${ANY})*\s*[\]】)])*)\s+(?!\s)(?![[【(]\s*${ANY})`, 'iu');
 /** Where one clause ends and the next begins. */
 const CLAUSE = /\s*(?:[,;:]|\s[—–]\s|\s-\s)\s*/g;
 const words = (t: string) => t.toLowerCase().replace(/[’‘]/g, "'").replace(/[^\p{L}\p{N}']+/gu, ' ').trim();

@@ -142,6 +142,8 @@ try {
     check('a quotation matching nothing cited, in the first clause: the sentence goes', shown('Mu toasts "Dzego will rise again" [c1-b21]. Zei wins [c1-b21].') === 'Zei wins [c1-b21].', shown('Mu toasts "Dzego will rise again" [c1-b21]. Zei wins [c1-b21].'));
     check('a quotation is checked against the cited note\'s blocks', shown('The chairman says "ten to ten, exactly" [summary c8 §2].').includes('"ten to ten, exactly"') && shown('The chairman says "ten to eleven, sadly" [summary c8 §2].') === '');
     check('one or two quoted words are a term and stay', shown('The "no head" rule [c1-b21].').includes('"no head"'));
+    check('citations after a narrow no-break space stay with their sentence', shown('Mu raised a glass and said "to our future" here.\u202f [c1-b21] Then [c1-b20].').includes('"to our future"'), shown('Mu raised a glass and said "to our future" here.\u202f [c1-b21] Then [c1-b20].'));
+    check('the recap cut keeps citations after a narrow no-break space', fitWords('Chapter 6 – One.\u202f [c6-b1] Two two two.', 3, 1) === 'Chapter 6 – One.\u202f [c6-b1]', fitWords('Chapter 6 – One.\u202f [c6-b1] Two two two.', 3, 1));
     check('dropping keeps paragraphs', shown('One [c1-b20].\n\nTwo says "not in any block at all" here. Three [c1-b21].') === 'One [c1-b20].\n\nThree [c1-b21].', JSON.stringify(shown('One [c1-b20].\n\nTwo says "not in any block at all" here. Three [c1-b21].')));
   }
 

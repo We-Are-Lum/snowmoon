@@ -37,7 +37,7 @@ function blockText(id: string): string | null {
 }
 
 /** A sentence ends at . ! or ?, after any closing quote and the citations that follow it. */
-const SENTENCE_END = /(?<=[.!?][”’"')\]】]*(?:\s*\[(?:c\d+-b\d+|summary c\d+ §\d+|learn-more [a-z-]+ [a-z]+)\])*)\s+(?!\[(?:c\d|summary|learn-more))/u;
+const SENTENCE_END = /(?<=[.!?][”’"')\]】]*(?:\s*\[(?:c\d+-b\d+|summary c\d+ §\d+|learn-more [a-z-]+ [a-z]+)\])*)\s+(?!\s)(?!\[(?:c\d|summary|learn-more))/u;
 
 const LABEL = /\[(summary c\d+ §\d+|learn-more [a-z-]+ [a-z]+)\]/g;
 
