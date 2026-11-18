@@ -12,7 +12,7 @@ import { PrivateTextField } from './private-text-field';
 import { ASSISTANT, CHAT } from '~/lib/config';
 import { ASK_WORDING, type AccountKind } from '~/lib/chat/who-can-ask';
 import { OWNER_WORDING } from '~/lib/wording';
-import type { AskResult, NoteCite, Quote } from '~/lib/chat/ask';
+import type { AskResult, NoteAsWritten, NoteCite, Quote } from '~/lib/chat/ask';
 import type { GlossaryLink } from '~/lib/chat/glossary';
 import { noticeItems, noticeKey } from '~/lib/chat/notice';
 import { NOTE_WORDING, SUMMARY_LABEL } from '~/lib/chat/notes';
@@ -318,6 +318,30 @@ function BookInBriefReply({ chapters, quotes }: { chapters: { n: number; text: s
   );
 }
 
+/**
+ * The fallback (owner, 2026-11-18): no answer passed the support check, even after its retry, so the reviewed notes the
+ * question was routed to are shown as written, each under its name with the passages it rests on folded, and the line
+ * saying who wrote it. No model text. The label wording is the coding agent's draft.
+ */
+function NotesAsWrittenReply({ notes, lines, quotes, glossary }: { notes: NoteAsWritten[]; lines: string[]; quotes: Quote[]; glossary?: GlossaryLink[] }) {
+  const byId = new Map((quotes ?? []).map((q) => [q.id, q]));
+  return (
+    <div className="as-reply as-book as-notes-written" data-wording="draft">
+      <GlossaryLinks links={glossary} />
+      <p className="as-label">From the reviewed notes · as written</p>
+      <p className="as-note">No answer passed the check against the book, so here are the notes it would have drawn on.</p>
+      {notes.map((n) => (
+        <section key={n.label} className="as-book-chapter">
+          <h3>{n.title}</h3>
+          <p>{n.text}</p>
+          <BookWords quotes={n.sources.flatMap((id) => byId.get(id) ?? [])} />
+        </section>
+      ))}
+      <NoteLines lines={lines} />
+    </div>
+  );
+}
+
 /** The passages a chapter's summary rests on, folded: chapter and ¶, and the book's own words. */
 function BookWords({ quotes }: { quotes: Quote[] }) {
   if (!quotes.length) return null;
@@ -336,6 +360,7 @@ function BookWords({ quotes }: { quotes: Quote[] }) {
 function Reply({ m, onAsk }: { m: AnsweredMessage; onAsk: (question: string) => void }) {
   const r = m.result;
   if (r.state === 'book') return <BookInBriefReply chapters={r.chapters} quotes={r.quotes} />;
+  if (r.state === 'notes') return <NotesAsWrittenReply notes={r.notes} lines={r.lines} quotes={r.quotes} glossary={r.glossary} />;
   if (r.state === 'answer')
     return (
       <div className="as-reply">
@@ -372,6 +397,17 @@ function Reply({ m, onAsk }: { m: AnsweredMessage; onAsk: (question: string) => 
         <GlossaryLinks links={r.glossary} />
         <p className="as-label">Assistant · the passages don’t say</p>
         <p>The passages found for this question don’t say. Try asking another way.</p>
+        {r.see?.length ? (
+          <p className="as-see" data-wording="draft">
+            <span className="as-label">Read more</span>{' '}
+            {r.see.map((l, i) => (
+              <span key={l.href}>
+                {i ? ' · ' : ''}
+                <Link href={l.href}>{l.label}</Link>
+              </span>
+            ))}
+          </p>
+        ) : null}
       </div>
     );
   if (r.state === 'limit')

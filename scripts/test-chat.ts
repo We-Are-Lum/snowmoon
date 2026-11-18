@@ -35,7 +35,7 @@ import { ask, AskError, parseSupport, NOTES_TEMPERATURE, type Complete } from '.
 import { retrieve } from '../src/lib/chat/retrieve';
 import { sanitizeAnswer, sanitizeReply } from '../src/lib/chat/sanitize';
 import { glossaryWords } from '../src/lib/chat/glossary';
-import { chaptersNamed, charactersNamed, countWords, fitWords, NOTE_WORDING, routeQuestion } from '../src/lib/chat/notes';
+import { asksForNote, chaptersNamed, charactersNamed, countWords, fitWords, NOTE_WORDING, routeQuestion } from '../src/lib/chat/notes';
 import { CHAT } from '../src/lib/config';
 import { providerOptions, servedBy, servingAllowed } from '../src/lib/chat/provider';
 
@@ -369,13 +369,14 @@ try {
     answerText = `He is chosen because he is the emperor [${real}].`;
     supportQueue = ['UNSUPPORTED the emperor claim'];
     const res = await ask(deps(110), { question: 'Why is Gladias asked to rate a building?' });
-    check('an unsupported answer is not shown', res.state === 'unsupported', res.state);
+    // Gladias has Learn more notes, so a refused answer about him falls back to them (owner, 2026-11-18; no retry here).
+    check('an unsupported answer is not shown', res.state !== 'answer', res.state);
     const [{ content }] = await sql`select content from studio.text_blocks where chapter = ${Number(real.slice(1, real.indexOf('-')))} and idx = ${Number(real.split('-b')[1])}`;
     const seen = supportSeen[supportSeen.length - 1] ?? '';
     check('the support check sees the stored text of the cited block', seen.includes(String(content).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40)));
     supportQueue = ['', ''];
     const res2 = await ask(deps(111), { question: 'Why is Gladias asked to rate a building?' });
-    check('no verdict from the support check fails closed', res2.state === 'unsupported', res2.state);
+    check('no verdict from the support check fails closed', res2.state !== 'answer', res2.state);
     supportQueue = [];
     const res3 = await ask(deps(112), { question: 'Why is Gladias asked to rate a building?' });
     check('a supported answer is shown', res3.state === 'answer', res3.state);
@@ -391,11 +392,11 @@ try {
     check("the left-out sentence's citation goes with it", cut.state === 'answer' && !cut.parts.some((p) => p.type === 'cite' && p.id === other) && !cut.quotes.some((q) => q.id === other));
     check('the support check is shown the sentences numbered', /\n1\. He is chosen at random/.test(supportSeen[supportSeen.length - 1] ?? '') && /\n3\. He looks/.test(supportSeen[supportSeen.length - 1] ?? ''));
     supportQueue = ['1 UNSUPPORTED: x\n2 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: NO'];
-    check('the first sentence unsupported: not shown', (await ask(deps(115), { question: 'Why is Gladias asked to rate a building?' })).state === 'unsupported');
+    check('the first sentence unsupported: not shown', (await ask(deps(115), { question: 'Why is Gladias asked to rate a building?' })).state !== 'answer');
     supportQueue = ['1 SUPPORTED\n2 UNSUPPORTED: x\n3 UNSUPPORTED: y\nFIRST ANSWERS: YES'];
-    check('only one sentence left: not shown', (await ask(deps(116), { question: 'Why is Gladias asked to rate a building?' })).state === 'unsupported');
+    check('only one sentence left: not shown', (await ask(deps(116), { question: 'Why is Gladias asked to rate a building?' })).state !== 'answer');
     supportQueue = ['1 SUPPORTED\n2 UNSUPPORTED: x\n3 SUPPORTED\nFIRST ANSWERS: NO'];
-    check('the first sentence no longer answers the question: not shown', (await ask(deps(117), { question: 'Why is Gladias asked to rate a building?' })).state === 'unsupported');
+    check('the first sentence no longer answers the question: not shown', (await ask(deps(117), { question: 'Why is Gladias asked to rate a building?' })).state !== 'answer');
     supportQueue = ['1 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: YES'];
     const gap = await ask(deps(118), { question: 'Why is Gladias asked to rate a building?' });
     check('a sentence with no verdict line counts as unsupported', gap.state === 'answer' && gap.cut === 1);
@@ -403,6 +404,45 @@ try {
     const all = await ask(deps(119), { question: 'Why is Gladias asked to rate a building?' });
     check('every sentence supported: shown whole, nothing cut', all.state === 'answer' && !all.cut);
     check('reply forms: "2. **UNSUPPORTED**" and a bare SUPPORTED', parseSupport('1. SUPPORTED\n2. **UNSUPPORTED** — x\nFIRST ANSWERS: YES', 2)?.unsupported.has(1) === true && parseSupport('SUPPORTED', 3)?.unsupported.size === 0 && parseSupport('', 2) === null);
+    check("the check's reason is kept per sentence", parseSupport('1 SUPPORTED\n2 UNSUPPORTED: the emperor claim\nFIRST ANSWERS: YES', 2)?.reasons.get(1) === 'the emperor claim');
+    supportQueue = [];
+
+    // One retry, then the notes as written, then "the passages don't say" (owner, 2026-11-18).
+    const retrying = (fid: number) => ({ ...deps(fid), retryPrompt: 'RETRY\n{{REASONS}}' });
+    answerText = `He is chosen at random [${real}]. He is the emperor [${other}]. He looks at the building [${real}].`;
+    supportQueue = ['1 UNSUPPORTED: the random claim\n2 UNSUPPORTED: the emperor claim\n3 SUPPORTED\nFIRST ANSWERS: NO', '1 SUPPORTED\n2 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: YES'];
+    calls.length = 0;
+    const rescued = await ask(retrying(120), { question: 'Why is Gladias asked to rate a building?' });
+    check('a refused answer is asked for once more, and shown if the new one passes', rescued.state === 'answer' && rescued.retried === true, JSON.stringify(rescued).slice(0, 200));
+    const retryCall = calls.find((c) => c.model === CHAT.model && c.user.startsWith('RETRY'));
+    check("the retry carries each failed sentence and the check's reason", !!retryCall && retryCall.user.includes('Sentence 1 ("He is chosen at random') && retryCall.user.includes('the emperor claim'), retryCall?.user);
+    check('the retry is checked by the guard too', calls.filter((c) => c.model === CHAT.guardModel && !c.user.startsWith('QUESTION')).length === 2);
+    supportQueue = ['1 UNSUPPORTED: x\n2 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: YES', '1 UNSUPPORTED: x\n2 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: YES'];
+    calls.length = 0;
+    const fell = await ask(retrying(121), { question: 'Who is Gladias?' });
+    check('only one retry', calls.filter((c) => c.model === CHAT.model && c.user.startsWith('RETRY')).length === 1);
+    check('still refused, a who-is question on one character gets the notes as written', fell.state === 'notes' && fell.notes.some((n) => n.label === 'learn-more gladias who') && fell.notes.every((n) => n.text.length > 20 && n.sources.length > 0), JSON.stringify(fell).slice(0, 300));
+    check('the notes come with their passages, their names and who wrote them', fell.state === 'notes' && fell.quotes.length > 0 && fell.notes[0].title.startsWith('Learn more about') && fell.lines.length > 0);
+    check('no model text in the notes reply', fell.state === 'notes' && !JSON.stringify(fell).includes('He is chosen at random'));
+    // A question that names a character but asks something else: "the passages don't say", with a link (owner, 2026-11-18).
+    supportQueue = ['UNSUPPORTED', 'UNSUPPORTED'];
+    const named = await ask(retrying(125), { question: 'Why is Gladias asked to rate a building in chapter 1?' });
+    check('another question naming a character: no notes, links to its Learn more and the chapter named', named.state === 'unsupported' && JSON.stringify(named.see) === JSON.stringify([{ href: '/challenge/gladias', label: 'Learn more about Gladias' }, { href: '/chapter/1', label: 'Chapter 1 in brief' }]), JSON.stringify(named));
+    const scope = (q: string) => asksForNote(q, routeQuestion(q, 5));
+    check('notes are the reply only when asked for', scope('Who is Bai?') && scope('Tell me about Seila') && scope('What do we know about Deluin?') && scope('Summarize chapter 5') && scope('where was I?'));
+    check('never for two characters, or a question about something else', !scope('Tell me about Zei and Bai') && !scope('Who is the man Seila is with in Freetown?') && !scope('Why does Deluin invite Zei to Redshire?') && !scope('How did Gladias borrow money?'));
+    const plainQ = 'How is the look of a building rated in Veridia?';
+    const r2 = await retrieve(sql, plainQ);
+    answerText = `It is rated by a vote [${r2.passages[0].id}]. It is taxed [${r2.passages[0].id}].`;
+    supportQueue = ['1 UNSUPPORTED: x\n2 SUPPORTED\nFIRST ANSWERS: YES', '1 UNSUPPORTED: x\n2 SUPPORTED\nFIRST ANSWERS: YES'];
+    const none = await ask(retrying(122), { question: plainQ });
+    check('with no notes routed, both failing means "the passages don\'t say", with no links', none.state === 'unsupported' && !none.see, none.state);
+    supportQueue = [];
+    const where = await ask(retrying(123), { question: 'where was I', position: 8 });
+    check('"where was I" routes the current chapter and the two before (its fallback notes)', where.state === 'answer' || where.state === 'notes');
+    supportQueue = ['UNSUPPORTED', 'UNSUPPORTED'];
+    const whereNotes = await ask(retrying(124), { question: 'where was I', position: 8 });
+    check('"where was I" falls back to the summaries of chapters 6 to 8', whereNotes.state === 'notes' && [...new Set(whereNotes.notes.map((n) => n.label.match(/c(\d+)/)![1]))].join(',') === '6,7,8', JSON.stringify(whereNotes.state === 'notes' ? whereNotes.notes.map((n) => n.label) : whereNotes.state));
     supportQueue = [];
   }
 

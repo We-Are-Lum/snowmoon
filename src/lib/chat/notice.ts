@@ -21,12 +21,17 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: '700c2593e663f955',
+  reviewedFor: '625508bf63cde93a',
   /** Who did that reread: the coding agent, or the owner. */
   by: 'agent',
   on: '2026-11-18',
   note:
-    'Reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-18 for the owner\'s #186 decisions, words unchanged: ' +
+    'Reread again by the coding agent on 2026-11-18 for the owner\'s second #186 decisions (option A and the fallback), words unchanged: ' +
+    'a refused answer is asked for once more, with the check\'s reasons, from the same model and provider (items 3 and 4 hold: nothing new is sent elsewhere or kept); ' +
+    'still refused, a question that asks for a note itself (one character\'s who-is, a chapter summary, "where was I") gets that note as written, with its passages and who wrote it, ' +
+    'and any other gets "the passages don\'t say" with links to the Learn more texts and chapter summaries it names, so item 1 holds; the notes reply is no model text, so item 2 holds. ' +
+    'Before that: ' +
+    'reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-18 for the owner\'s #186 decisions, words unchanged: ' +
     'the support check grades each sentence and leaves out only those that fail (the answer is shown if at least two sentences remain and the first still answers the question); ' +
     'a statement that the book doesn\'t say something, and plain commentary, pass; quotations are checked from six words; the prompt asks for a citation at the end of every sentence. ' +
     'Answers still point to the passages they rest on (item 1); no new service receives questions and nothing new is kept. ' +

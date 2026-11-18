@@ -256,9 +256,12 @@ async function checkAssistant(page: Page, scheme: string) {
   let left = 30;
   const replies: { state: string; left?: number; [k: string]: unknown }[] = [
     LIVE.results[0].result,
-    { state: 'unsupported', left: 2 },
+    // Refused, with links to what the question names (owner, 2026-11-18).
+    { state: 'unsupported', left: 2, see: [{ href: '/challenge/gladias', label: 'Learn more about Gladias' }, { href: '/chapter/1', label: 'Chapter 1 in brief' }] },
     // A claim cited to a chapter summary by its label (branch chat-cites): the note's name, its passages folded under it.
     { state: 'answer', left: 1, parts: [{ type: 'text', text: 'Gladias is asked to rate a building ' }, { type: 'note', label: 'summary c1 §1' }, { type: 'text', text: '.' }], quotes: [NOTE_QUOTE], notes: [NOTE_WORDING.summary], noteCites: [{ label: 'summary c1 §1', title: 'Chapter 1 summary, part 1', sources: [NOTE_QUOTE.id] }], guard: 'ok', dropped: 0, regenerated: false },
+    // No answer passed the check, even after the retry (owner, 2026-11-18): the routed notes as written, no model text.
+    { state: 'notes', left: 1, notes: [{ label: 'summary c1 §1', title: 'Chapter 1 summary, part 1', text: 'Gladias is chosen at random to rate the look of a building.', sources: [NOTE_QUOTE.id] }], lines: [NOTE_WORDING.summary], quotes: [NOTE_QUOTE] },
     { state: 'which' },
     { state: 'limit', left: 0 },
   ];
@@ -333,6 +336,8 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.fill('#as-q', LIVE.results[1].question);
   await page.click('.as-send');
   await page.waitForSelector('text=the passages don’t say');
+  const see = await page.locator('.as-see a').evaluateAll((as) => as.map((a) => `${a.textContent}=${a.getAttribute('href')}`));
+  if (see.join(' | ') !== 'Learn more about Gladias=/challenge/gladias | Chapter 1 in brief=/chapter/1') fail(`/assistant (${scheme}): "the passages don't say" links read ${see.join(' | ') || 'nothing'}`);
   await checkFloors(page, '/assistant (unsupported)', scheme);
   await shot(page, '3b-unsupported', scheme);
 
@@ -355,6 +360,19 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.evaluate(() => document.querySelector('.as-notes')?.scrollIntoView({ block: 'center' }));
   await checkFloors(page, '/assistant (notes line)', scheme);
   await shot(page, '3c-notes-line', scheme);
+  await page.fill('#as-q', 'Who is Gladias?');
+  await page.click('.as-send');
+  await page.waitForSelector('.as-notes-written');
+  const written = page.locator('.as-notes-written');
+  if (!(await written.locator('.as-label').textContent())?.includes('From the reviewed notes')) fail(`/assistant (${scheme}): the notes reply has no "From the reviewed notes" label`);
+  if (!(await written.locator('h3').first().textContent())?.includes('Chapter 1 summary, part 1')) fail(`/assistant (${scheme}): the notes reply doesn't name its note`);
+  if ((await written.locator('.as-notes .as-note').first().textContent())?.trim() !== NOTE_WORDING.summary) fail(`/assistant (${scheme}): the notes reply doesn't say who wrote the note`);
+  if (await written.locator('.as-quote').first().isVisible()) fail(`/assistant (${scheme}): the notes reply's passages aren't folded`);
+  await written.locator('.as-book-words > summary').first().click();
+  if (!(await written.locator('.as-quote').first().isVisible())) fail(`/assistant (${scheme}): the notes reply's passages don't open`);
+  await page.evaluate(() => document.querySelector('.as-notes-written')?.scrollIntoView({ block: 'center' }));
+  await checkFloors(page, '/assistant (notes as written)', scheme);
+  await shot(page, '3d-notes-as-written', scheme);
   await page.fill('#as-q', 'where was I?');
   await page.click('.as-send');
   await page.waitForSelector('.as-which select');

@@ -68,10 +68,17 @@ try {
     if (!token) throw new Error('no gateway token');
     const prompt = async (f: string) => (await readFile(path.join(ROOT, 'config/prompts', f), 'utf8')).replace(/^<!--[\s\S]*?-->\s*/, '');
     // Every call is kept here in full for grading (this script only; the app keeps no text).
-    const log: { q: string; model: string; text: string; provider: string | null; support?: string }[] = [];
+    const log: { q: string; model: string; role: string; text: string; provider: string | null; support?: string }[] = [];
     let current = '';
     let busy = 0;
-    const complete: Complete = async (model, messages, opts) => {
+    // EVAL_ANSWER_MODEL (experiment, owner 2026-11-18): another model writes the answers (the first answer, the guard's
+    // regeneration and the support check's retry); search words and both checks stay as they are. Same pinned provider.
+    const answerModel = process.env.EVAL_ANSWER_MODEL;
+    const roleOf = (messages: { content: string }[]) =>
+      messages[0].content.startsWith(systemPrompt.slice(0, 200)) ? 'answer' : messages[0].content === supportPolicy ? 'support' : messages[0].content === searchPrompt ? 'search' : 'guard';
+    const complete: Complete = async (asked, messages, opts) => {
+      const role = roleOf(messages);
+      const model = answerModel && role === 'answer' ? answerModel : asked;
       const send = () =>
         fetch(CHAT.endpoint, {
           method: 'POST',
@@ -87,14 +94,14 @@ try {
       }
       const j = (await res.json()) as { id?: string; model?: string; provider?: string; choices?: { message?: { content?: string } }[]; usage?: { prompt_tokens?: number; completion_tokens?: number; cost?: number }; provider_metadata?: { gateway?: { routing?: { finalProvider?: string } } } };
       if (!res.ok) throw new Error(`gateway ${res.status} ${JSON.stringify(j).slice(0, 300)}`);
-      const p = CHAT.prices[model];
+      const p = CHAT.prices[model] ?? { input: 0, output: 0 };
       const pt = j.usage?.prompt_tokens ?? 0;
       const ct = j.usage?.completion_tokens ?? 0;
       const provider = servedBy(j);
       const text = j.choices?.[0]?.message?.content ?? '';
       // The support check's numbered sentences are kept too, to show what it left out (2026-11-18).
       const support = messages[0].content === supportPolicy ? messages[messages.length - 1].content.split('ANSWER, SENTENCE BY SENTENCE:\n')[1] : undefined;
-      log.push({ q: current, model, text, provider, ...(support ? { support } : {}) });
+      log.push({ q: current, model, role, text, provider, ...(support ? { support } : {}) });
       return { text, promptTokens: pt, completionTokens: ct, costUsd: typeof j.usage?.cost === 'number' ? j.usage.cost : pt * p.input + ct * p.output, requestId: j.id ?? null, provider, model: j.model ?? model };
     };
     
@@ -103,10 +110,11 @@ try {
     const reminder = await prompt('chat-reminder.md');
     const searchPrompt = await prompt('chat-search-terms.md');
     const supportPolicy = await prompt('chat-support.md');
+    const retryPrompt = await prompt('chat-retry.md');
     // EVAL_NOTES_TEMPERATURE=0.4: compare against the answers' temperature with reviewed notes (default NOTES_TEMPERATURE).
     const notesTemperature = process.env.EVAL_NOTES_TEMPERATURE ? Number(process.env.EVAL_NOTES_TEMPERATURE) : undefined;
     const deps = (fid: number) => ({
-      sql, fid, complete, systemPrompt, guardPolicy, reminder, searchPrompt, supportPolicy, notesTemperature,
+      sql, fid, complete, systemPrompt, guardPolicy, reminder, searchPrompt, supportPolicy, retryPrompt, notesTemperature,
       ...(DENSE ? { dense: async () => DENSE.ranks[current] } : {}),
     });
     const results = [];
@@ -118,7 +126,7 @@ try {
       const words = log.find((l) => l.q === q.id)?.text ?? '';
       const passages = (await retrieve(sql, `${q.question} ${(words.match(/[\p{L}\p{N}][\p{L}\p{N}'-]*/gu) ?? []).slice(0, 20).join(' ')}`, [], DENSE ? { dense: DENSE.ranks[q.id] } : {})).passages.map((p) => p.id);
       results.push({ ...q, passages, result, calls: log.filter((l) => l.q === q.id) });
-      console.log(`${q.id} ${result.state}${result.state === 'answer' && result.regenerated ? ' (regenerated)' : ''}`);
+      console.log(`${q.id} ${result.state}${result.state === 'answer' && result.regenerated ? ' (regenerated)' : ''}${result.state === 'answer' && result.retried ? ' (retried)' : ''}`);
       if (process.env.EVAL_SPEND_CAP && (await spent()) > Number(process.env.EVAL_SPEND_CAP)) { console.log('spend cap reached, stopping'); break; }
     }
     const usd = await spent();

@@ -140,6 +140,36 @@ export function routeQuestion(question: string, position: number | null): Routed
   return { shape, chapters: shape === 'book' ? [] : chapters, characters, notes, blocks, words: WORDS[shape], needsChapter, framing };
 }
 
+const WHO_IS = /^\s*(?:who(?:'s|’s| is| was)|tell me (?:more )?about|what do (?:we|you) know about|what(?:'s|’s| is) (?:the )?(?:story|deal) (?:with|of)|describe|introduce)\b/i;
+const FILLER = /^(?:the|a|in|of|book|novel|story|character|again|please|pls|more|so|ok|snowmoon)$/i;
+
+/**
+ * Does the question ask for a reviewed note itself (owner, 2026-11-18)? A chapter summary question, "where was I", or a
+ * who-is / tell-me-about question on one Learn more character with little else ("Who is Bai?", "Tell me about Seila").
+ * Only then may a refused answer fall back to the notes as written.
+ */
+export function asksForNote(question: string, routed: Pick<Routed, 'shape' | 'characters' | 'notes'>): boolean {
+  if (!routed.notes.length) return false;
+  if (routed.shape === 'summary' || routed.shape === 'where') return true;
+  if (routed.characters.length !== 1 || chaptersNamed(question).length) return false;
+  const m = WHO_IS.exec(question);
+  if (!m) return false;
+  const slug = routed.characters[0];
+  const rest = question.slice(m[0].length).replace(/[^\p{L}\p{N}'’\s-]/gu, ' ').split(/\s+/).filter(Boolean);
+  return rest.filter((w) => !charactersNamed(w).includes(slug) && !FILLER.test(w)).length === 0;
+}
+
+/**
+ * Under "the passages don't say" (owner, 2026-11-18): where to read more about what the question names, each Learn more
+ * character's page and each chapter's summary.
+ */
+export function seeAlso(question: string, routed: Pick<Routed, 'characters'>): { href: string; label: string }[] {
+  return [
+    ...routed.characters.filter((slug) => LEARN_MORE[slug]).map((slug) => ({ href: `/challenge/${slug}`, label: `Learn more about ${LEARN_MORE[slug].name}` })),
+    ...chaptersNamed(question).map((n) => ({ href: `/chapter/${n}`, label: `Chapter ${n} in brief` })),
+  ];
+}
+
 /** "ch 7?", "chapter 5", "chapter 5 please": a chapter named with almost nothing else. */
 function bareChapter(question: string): boolean {
   const rest = question.replace(CHAPTER_REF, ' ').replace(/[^\p{L}\s]/gu, ' ').trim().split(/\s+/).filter(Boolean);

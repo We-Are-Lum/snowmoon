@@ -3,7 +3,7 @@ import { CHAT } from '../config';
 import { renderMarkdown } from '../render';
 import { blocksById, labels, retrieve, type Passage } from './retrieve';
 import { glossaryWords, type GlossaryLink } from './glossary';
-import { bookInBrief, fitWords, noteLines, noteTitle, routeQuestion, type BookInBrief, type Note } from './notes';
+import { asksForNote, bookInBrief, fitWords, noteLines, noteTitle, routeQuestion, seeAlso, type BookInBrief, type Note } from './notes';
 import { answerSentences, blockIdOk, chapterOf, sanitizeAnswer, type AnswerPart, type SanitizeOptions } from './sanitize';
 import { record, reserve, worstCaseUsd } from './limits';
 
@@ -39,11 +39,17 @@ type Glossary = { glossary?: GlossaryLink[] };
 
 export type AskResult =
   /** `notes`: one line per kind of reviewed note the answer cites (NOTE_WORDING), shown under it. Absent before 2026-11-17. */
-  /** `cut`: sentences the support check left out (owner, 2026-11-18). Absent before 2026-11-18. */
-  | ({ state: 'answer'; parts: AnswerPart[]; quotes: Quote[]; notes?: string[]; noteCites?: NoteCite[]; left: number; guard: 'ok' | 'none'; dropped: number; cut?: number; regenerated: boolean } & Glossary)
+  /** `cut`: sentences the support check left out; `retried`: shown after the support check's one retry (owner, 2026-11-18). */
+  | ({ state: 'answer'; parts: AnswerPart[]; quotes: Quote[]; notes?: string[]; noteCites?: NoteCite[]; left: number; guard: 'ok' | 'none'; dropped: number; cut?: number; retried?: boolean; regenerated: boolean } & Glossary)
   | { state: 'declined'; left: number }
+  /**
+   * No answer passed the support check, even after the retry, and the question was routed to reviewed notes: those
+   * notes as written, each with its passages, and who wrote them (`lines`). No model text (owner, 2026-11-18).
+   */
+  | ({ state: 'notes'; notes: NoteAsWritten[]; lines: string[]; quotes: Quote[]; left: number } & Glossary)
   /** The answer's claims were not all supported by the passages it cited: shown as "the passages don't say". */
-  | ({ state: 'unsupported'; left: number } & Glossary)
+  /** `see`: links to the Learn more text or chapter summary for what the question names (owner, 2026-11-18). */
+  | ({ state: 'unsupported'; left: number; see?: { href: string; label: string }[] } & Glossary)
   /** "Where was I" with no reading position on this device: which chapter? No message is used. */
   | { state: 'which' }
   /**
@@ -73,6 +79,8 @@ export interface AskDeps {
   searchPrompt?: string;
   /** The second guard question (chat-support.md): is every claim supported by its cited passages? */
   supportPolicy?: string;
+  /** Sent once when the support check refuses an answer, with {{REASONS}} (chat-retry.md, owner 2026-11-18). */
+  retryPrompt?: string;
   /** The answer's temperature when it uses reviewed notes (default NOTES_TEMPERATURE); the eval compares values. */
   notesTemperature?: number;
   /** Embedding search, for evaluation: block ids ranked for this question (see RetrieveOptions.dense). */
@@ -95,6 +103,8 @@ const GUARD_TOKENS = 1500;
 const SEARCH_TOKENS = 600;
 /** The support check reads long summary answers and their notes: room to reason before its verdict (an empty verdict fails closed). */
 const SUPPORT_TOKENS = 4000;
+/** The tokens reserved for one question: see `ask` (before 2026-11-18: 5600 out, 14000 guard, 32000 in). */
+export const WORST = { answerTokens: 3 * ANSWER_TOKENS + SEARCH_TOKENS, guardTokens: 6 * GUARD_TOKENS + 4 * SUPPORT_TOKENS, inputTokens: 48000 };
 
 function passagesText(passages: Passage[]): string {
   return passages.map((p) => `[${p.id}] ${p.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()}`).join('\n');
@@ -105,6 +115,14 @@ function notesText(notes: Note[]): string {
 }
 
 /** The question for the model: the reviewed notes (if any), the book's passages, and the question. */
+/** A reviewed note shown as written (the fallback): its name, its text and the blocks it rests on. */
+export interface NoteAsWritten {
+  label: string;
+  title: string;
+  text: string;
+  sources: string[];
+}
+
 /** A reviewed note an answer cites, as the reader sees it: its name and the blocks it rests on (shown folded). */
 export interface NoteCite {
   label: string;
@@ -149,8 +167,10 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   }
   const question = words.corrected + routed.framing;
 
-  // Worst case: search words, two answers (the retry), four guard calls and two support checks (each may be retried once).
-  const slot = await reserve(sql, fid, worstCaseUsd(2 * ANSWER_TOKENS + SEARCH_TOKENS, 4 * GUARD_TOKENS + 2 * SUPPORT_TOKENS, 32000));
+  // Worst case (owner, 2026-11-18: one retry after the support check): search words; three answers (the first, the
+  // guard's regeneration, the support check's retry); three guard checks and two support checks, each of which may be
+  // asked again once for an empty verdict; the input of about three answer calls.
+  const slot = await reserve(sql, fid, worstCaseUsd(WORST.answerTokens, WORST.guardTokens, WORST.inputTokens));
   if (!slot.ok) return { state: slot.reason };
 
   let passages: Passage[];
@@ -198,35 +218,32 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   }
   if (verdict.verdict === 'flagged') return { state: 'declined', left: slot.left };
 
-  // Quotes come from the database, by id, never from the model's words.
-  // The reviewed notes the answer cites, by label; the reader is shown each one's own source blocks.
-  let used = clean.notes.map((l) => byLabel.get(l)!).filter(Boolean);
-  const blocks = await blocksById(sql, clean.cites);
-  let quotes = await quotesFor(sql, [...new Set([...clean.cites, ...used.flatMap((n) => n.sources)])]);
-  let found = new Set(quotes.map((q) => q.id));
-  const cited = blocks.filter((b) => found.has(b.id));
-
-  // The second guard question: is each sentence supported by what it cites? A claim cited to a block, by that block's
-  // text (and the passage before it, for who is speaking) alone; a claim cited to a note, by that note. A sentence that
-  // isn't is left out; the answer is shown only if at least two sentences remain and the first still answers the
-  // question, else (or with no verdict) not at all (owner, 2026-11-18).
-  let cut = 0;
-  if (deps.supportPolicy) {
-    const sentences = answerSentences(clean.shown);
-    const check = await supportCheck(deps, question, sentences, cited, used);
-    if (!check) return { state: 'unsupported', left: slot.left, glossary };
-    const keep = sentences.filter((_, i) => !check.unsupported.has(i));
-    cut = sentences.length - keep.length;
-    if (cut) {
-      if (keep.length < 2 || check.unsupported.has(0) || !check.firstAnswers) return { state: 'unsupported', left: slot.left, glossary };
-      const kept = sanitizeAnswer(keep.map((x, i) => (i ? x.sep : '') + x.text).join(''), allowed, cleaning);
-      clean = { ...kept, shown: '' };
-      used = clean.notes.map((l) => byLabel.get(l)!).filter(Boolean);
-      quotes = await quotesFor(sql, [...new Set([...clean.cites, ...used.flatMap((n) => n.sources)])]);
-      found = new Set(quotes.map((q) => q.id));
+  // The support check (owner, 2026-11-18): each sentence graded by what it cites; the failing ones are left out, and
+  // the answer is shown if at least two remain and the first still answers the question. Refused, the model is asked
+  // once more with the check's reasons, and the new answer is checked the same way (and by the guard). Still refused: a
+  // question routed to reviewed notes gets those notes as written, with no model text; otherwise "the passages don't say".
+  const ctx = { deps, question, allowed, cleaning, byLabel };
+  let checked = await checkAnswer(ctx, clean);
+  let retried = false;
+  if (!checked.ok && deps.retryPrompt) {
+    retried = true;
+    const reasons = checked.reasons.length ? checked.reasons.map((r) => `- ${r}`).join('\n') : '- (the check gave no reasons; the answer as a whole was not supported)';
+    const again = await answerOnce(deps, [...messages, { role: 'assistant', content: clean.shown }, { role: 'user', content: deps.retryPrompt.replace('{{REASONS}}', reasons) }], allowed, cleaning, answerTokens, temperature, fit);
+    const second = await guard(deps, question, again.shown);
+    if (second.verdict !== 'flagged') {
+      verdict = second;
+      checked = await checkAnswer(ctx, again);
     }
   }
-  const parts = clean.parts.filter((p) => p.type !== 'cite' || found.has(p.id));
+  if (!checked.ok) {
+    // Only when the question asks for the note itself (owner, 2026-11-18): one character's who-is, a chapter summary,
+    // "where was I". Never two characters' texts as one reply; otherwise links to what the question names.
+    if (asksForNote(words.corrected, routed)) return { state: 'notes', ...(await notesAsWritten(sql, routed.notes)), left: slot.left, glossary };
+    const see = seeAlso(words.corrected, routed);
+    return { state: 'unsupported', left: slot.left, glossary, ...(see.length ? { see } : {}) };
+  }
+  const { parts, quotes, used, found, cut } = checked;
+  const kept = checked.clean;
   const lines = noteLines(used);
   const noteCites: NoteCite[] = used.map((n) => ({ label: n.label, title: noteTitle(n), sources: n.sources.filter((id) => found.has(id)) }));
   return {
@@ -238,8 +255,66 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
     guard: verdict.verdict === 'ok' ? 'ok' : 'none',
     regenerated,
     glossary,
-    dropped: clean.dropped.length + clean.cites.filter((c) => !found.has(c)).length,
+    dropped: kept.dropped.length + kept.cites.filter((c) => !found.has(c)).length,
     ...(cut ? { cut } : {}),
+    ...(retried ? { retried } : {}),
+  };
+}
+
+type Cleaned = Awaited<ReturnType<typeof answerOnce>>;
+type CheckContext = { deps: AskDeps; question: string; allowed: Set<string>; cleaning: SanitizeOptions; byLabel: Map<string, Note> };
+type Checked =
+  | { ok: true; clean: Omit<Cleaned, 'shown'>; parts: AnswerPart[]; quotes: Quote[]; used: Note[]; found: Set<string>; cut: number }
+  /** `reasons`: one line per failed sentence, its words and the check's reason, for the retry. */
+  | { ok: false; reasons: string[] };
+
+/**
+ * One answer through the support check: each sentence graded by what it cites (a block by its text and the passage
+ * before it, a note by the note); the failing ones left out. Not ok if fewer than two remain, the first fails or no
+ * longer answers the question, or there is no verdict.
+ */
+async function checkAnswer({ deps, question, allowed, cleaning, byLabel }: CheckContext, answer: Cleaned): Promise<Checked> {
+  const { sql } = deps;
+  let clean: Omit<Cleaned, 'shown'> = answer;
+  // Quotes come from the database, by id, never from the model's words. The reviewed notes the answer cites, by label;
+  // the reader is shown each one's own source blocks.
+  let used = clean.notes.map((l) => byLabel.get(l)!).filter(Boolean);
+  const blocks = await blocksById(sql, clean.cites);
+  let quotes = await quotesFor(sql, [...new Set([...clean.cites, ...used.flatMap((n) => n.sources)])]);
+  let found = new Set(quotes.map((q) => q.id));
+  const cited = blocks.filter((b) => found.has(b.id));
+  let cut = 0;
+  if (deps.supportPolicy) {
+    const sentences = answerSentences(answer.shown);
+    const check = await supportCheck(deps, question, sentences, cited, used);
+    if (!check) return { ok: false, reasons: [] };
+    const reasons = [...check.unsupported].sort((a, b) => a - b).map((i) => `Sentence ${i + 1} ("${sentences[i]?.text ?? ''}"): ${check.reasons.get(i) || 'not stated by what it cites'}`);
+    const keep = sentences.filter((_, i) => !check.unsupported.has(i));
+    cut = sentences.length - keep.length;
+    if (cut) {
+      if (keep.length < 2 || check.unsupported.has(0)) return { ok: false, reasons };
+      if (!check.firstAnswers) return { ok: false, reasons: [...reasons, 'Sentence 1 no longer answers the question by itself.'] };
+      clean = sanitizeAnswer(keep.map((x, i) => (i ? x.sep : '') + x.text).join(''), allowed, cleaning);
+      used = clean.notes.map((l) => byLabel.get(l)!).filter(Boolean);
+      quotes = await quotesFor(sql, [...new Set([...clean.cites, ...used.flatMap((n) => n.sources)])]);
+      found = new Set(quotes.map((q) => q.id));
+    }
+  }
+  const parts = clean.parts.filter((p) => p.type !== 'cite' || found.has(p.id));
+  return { ok: true, clean, parts, quotes, used, found, cut };
+}
+
+/**
+ * The fallback (owner, 2026-11-18): the reviewed notes the question was routed to, as written, each with its name and
+ * the passages it rests on, and the line saying who wrote it. No model text.
+ */
+async function notesAsWritten(sql: postgres.Sql, notes: Note[]): Promise<{ notes: NoteAsWritten[]; lines: string[]; quotes: Quote[] }> {
+  const quotes = await quotesFor(sql, [...new Set(notes.flatMap((n) => n.sources))]);
+  const found = new Set(quotes.map((q) => q.id));
+  return {
+    notes: notes.map((n) => ({ label: n.label, title: noteTitle(n), text: n.text, sources: n.sources.filter((id) => found.has(id)) })),
+    lines: noteLines(notes),
+    quotes,
   };
 }
 
@@ -321,7 +396,7 @@ export async function supportCheck(
   sentences: { text: string }[],
   cited: Passage[],
   notes: Note[],
-): Promise<{ unsupported: Set<number>; firstAnswers: boolean } | null> {
+): Promise<{ unsupported: Set<number>; firstAnswers: boolean; reasons: Map<number, string> } | null> {
   const before = await blocksById(deps.sql, cited.map((b) => `c${b.chapter}-b${b.idx - 1}`));
   const byId = new Map(before.map((b) => [b.id, b]));
   const passages = cited
@@ -356,23 +431,28 @@ export async function supportCheck(
  * The support check's reply: a line per sentence ("2 UNSUPPORTED: …", "3. SUPPORTED"), then "FIRST ANSWERS: YES" or
  * "NO". A sentence with no line of its own is unsupported. Null when there is no verdict at all.
  */
-export function parseSupport(text: string, count: number): { unsupported: Set<number>; firstAnswers: boolean } | null {
+export function parseSupport(text: string, count: number): { unsupported: Set<number>; firstAnswers: boolean; reasons: Map<number, string> } | null {
   const t = text.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
   const lines = [...t.matchAll(/^\s*(?:sentence\s*)?\[?(\d+)\]?[.):]?\s*[-–:]?\s*\**\s*(UNSUPPORTED|SUPPORTED)\b/gim)];
   if (!lines.length) {
     const first = t.split(/\s+/)[0]?.toUpperCase().replace(/[^A-Z]/g, '') ?? '';
-    if (first === 'SUPPORTED') return { unsupported: new Set(), firstAnswers: true };
-    if (first === 'UNSUPPORTED') return { unsupported: new Set(Array.from({ length: count }, (_, i) => i)), firstAnswers: false };
+    if (first === 'SUPPORTED') return { unsupported: new Set(), firstAnswers: true, reasons: new Map() };
+    if (first === 'UNSUPPORTED') return { unsupported: new Set(Array.from({ length: count }, (_, i) => i)), firstAnswers: false, reasons: new Map() };
     return null;
   }
   const ok = new Set<number>();
   const bad = new Set<number>();
+  const reasons = new Map<number, string>();
   for (const m of lines) {
     const i = Number(m[1]) - 1;
     if (i < 0 || i >= count) continue;
     (m[2].toUpperCase() === 'SUPPORTED' ? ok : bad).add(i);
+    if (m[2].toUpperCase() === 'UNSUPPORTED') {
+      const rest = t.slice(m.index! + m[0].length).split('\n')[0].replace(/^[\s*:—–-]+/, '').trim();
+      if (rest) reasons.set(i, rest.slice(0, 300));
+    }
   }
   const unsupported = new Set(Array.from({ length: count }, (_, i) => i).filter((i) => bad.has(i) || !ok.has(i)));
   const firstAnswers = /FIRST\s+ANSWERS?\W*\s*YES/i.test(t);
-  return { unsupported, firstAnswers };
+  return { unsupported, firstAnswers, reasons };
 }

@@ -116,10 +116,12 @@ const cut: { file: string; id: string; question: string; cut: number; before: st
 const jobs: (() => Promise<void>)[] = [];
 let answers = 0;
 for (const f of files) {
-  const results = JSON.parse(readFileSync(f, 'utf8')).results as { id: string; question: string; position?: number; result: { state: string }; calls: { model: string; text: string }[] }[];
+  const results = JSON.parse(readFileSync(f, 'utf8')).results as { id: string; question: string; position?: number; result: { state: string }; calls: { model: string; role?: string; text: string }[] }[];
   for (const r of results) {
-    const answerCalls = r.calls.filter((c) => c.model === MODEL).slice(1);
-    if (!answerCalls.length || r.result.state === 'book') continue;
+    // Since 2026-11-18 the eval names each call's role; before, the first call of the answer model was the search words.
+    const answerCalls = r.calls.some((c) => c.role) ? r.calls.filter((c) => c.role === 'answer') : r.calls.filter((c) => c.model === MODEL).slice(1);
+    // A whole-book reply and a note shown as written (the fallback) have no model text to grade.
+    if (!answerCalls.length || r.result.state === 'book' || r.result.state === 'notes') continue;
     answers++;
     const raw = answerCalls[answerCalls.length - 1].text;
     const allowed = new Set(raw.match(/c\d+[-‐‑‒–—]b\d+/g)?.map((x) => x.replace(/[‐‑‒–—]/, '-')) ?? []);
@@ -129,7 +131,7 @@ for (const f of files) {
     // one not shown, as the model wrote it.
     const res = r.result as { state: string; cut?: number; parts?: { type: string; text?: string; id?: string; label?: string }[] };
     const asShown = res.state === 'answer' && res.parts ? res.parts.map((p) => (p.type === 'text' ? p.text : p.type === 'cite' ? ` [${p.id}]` : ` [${p.label}]`)).join('') : null;
-    if (res.cut) cut.push({ file: path.basename(f), id: r.id, question: r.question, cut: res.cut, before: (r.calls as { support?: string }[]).filter((c) => c.support).pop()?.support ?? shownText(raw, allowed, new Set(notes.keys())), after: asShown!, verdict: r.calls.filter((c) => c.model !== MODEL).pop()?.text ?? '' });
+    if (res.cut) cut.push({ file: path.basename(f), id: r.id, question: r.question, cut: res.cut, before: (r.calls as { support?: string }[]).filter((c) => c.support).pop()?.support ?? shownText(raw, allowed, new Set(notes.keys())), after: asShown!, verdict: r.calls.filter((c) => (c.role ? c.role === 'support' : c.model !== MODEL)).pop()?.text ?? '' });
     for (const s of sentences(asShown ?? raw, allowed, new Set(notes.keys()), asShown != null)) {
       for (const cite of s.cites) {
         const passage = blockText(cite);
