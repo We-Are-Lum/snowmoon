@@ -38,9 +38,11 @@ await pg.exec(`create role anon nologin; create role authenticated nologin; crea
 for (const f of ['0001_core.sql', '0002_v5.sql', '0003_likes.sql', '0004_private_ratings_and_likes.sql', '0005_public_prompts_and_consent.sql', '0006_chat.sql', '0007_chat_costs_without_person.sql'])
   await pg.exec(await readFile(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 await pg.exec(`insert into studio.works values ('snowmoon', 'Snowmoon', 'GPL-3.0', 'x'); set role studio_writer;`);
-const server = new PGLiteSocketServer({ db: pg, port: 54334, host: '127.0.0.1' });
+// EVAL_PORT: another port, so runs can go side by side.
+const PORT = Number(process.env.EVAL_PORT ?? 54334);
+const server = new PGLiteSocketServer({ db: pg, port: PORT, host: '127.0.0.1' });
 await server.start();
-const URL = 'postgres://studio_writer@127.0.0.1:54334/postgres';
+const URL = `postgres://studio_writer@127.0.0.1:${PORT}/postgres`;
 await promisify(execFile)('npx', ['tsx', 'scripts/seed-text.ts'], { cwd: ROOT, env: { ...process.env, STUDIO_DATABASE_URL: URL } });
 const sql = postgres(URL, { prepare: false, max: 1 });
 await sql`set role studio_writer`;
@@ -66,7 +68,7 @@ try {
     if (!token) throw new Error('no gateway token');
     const prompt = async (f: string) => (await readFile(path.join(ROOT, 'config/prompts', f), 'utf8')).replace(/^<!--[\s\S]*?-->\s*/, '');
     // Every call is kept here in full for grading (this script only; the app keeps no text).
-    const log: { q: string; model: string; text: string; provider: string | null }[] = [];
+    const log: { q: string; model: string; text: string; provider: string | null; support?: string }[] = [];
     let current = '';
     let busy = 0;
     const complete: Complete = async (model, messages, opts) => {
@@ -90,7 +92,9 @@ try {
       const ct = j.usage?.completion_tokens ?? 0;
       const provider = servedBy(j);
       const text = j.choices?.[0]?.message?.content ?? '';
-      log.push({ q: current, model, text, provider });
+      // The support check's numbered sentences are kept too, to show what it left out (2026-11-18).
+      const support = messages[0].content === supportPolicy ? messages[messages.length - 1].content.split('ANSWER, SENTENCE BY SENTENCE:\n')[1] : undefined;
+      log.push({ q: current, model, text, provider, ...(support ? { support } : {}) });
       return { text, promptTokens: pt, completionTokens: ct, costUsd: typeof j.usage?.cost === 'number' ? j.usage.cost : pt * p.input + ct * p.output, requestId: j.id ?? null, provider, model: j.model ?? model };
     };
     

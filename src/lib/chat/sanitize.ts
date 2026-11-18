@@ -9,7 +9,7 @@
  * - Note citations: with `notes`, a reviewed note's label in brackets ([summary c8 §2], [learn-more bai who]) is a
  *   citation of that note (owner, 2026-11-17); a label not among the notes given is dropped and counted.
  * - Quotes: by default any quoted span of six words or more is removed ("…"), because the book's words must come from
- *   the stored text. With `textOf` (the assistant, owner 2026-11-17): a quotation of three words or more stays only if it
+ *   the stored text. With `textOf` (the assistant, owner 2026-11-17): a quotation of six words or more (owner, 2026-11-18) stays only if it
  *   matches, word for word, a block its sentence cites (a note citation counts with its source blocks); otherwise its
  *   clause is dropped, or the whole sentence when the quotation is in its first clause. No "…" is left.
  * - Reasoning a model wraps in <think>…</think> is removed.
@@ -61,8 +61,11 @@ export function noteLabel(item: string): string {
 const MAX_RANGE = 6;
 const QUOTED = /["“”]([^"“”\n]{1,600})["“”]/g;
 const MIN_QUOTE_WORDS = 6;
-/** With `textOf`, a quotation this long or longer must match a cited block; one or two quoted words are a term or a name. */
-const CHECKED_QUOTE_WORDS = 3;
+/**
+ * With `textOf`, a quotation this long or longer must match a cited block; a shorter quoted term (a name, a phrase of
+ * up to five words) stays as written (owner, 2026-11-18: six words, was three).
+ */
+const CHECKED_QUOTE_WORDS = 6;
 
 /** "c15-b84–c15-b85" → ["c15-b84", "c15-b85"]; a single id stays as it is; a range across chapters or too long keeps only its ends. */
 function openRange(item: string): string[] {
@@ -187,6 +190,27 @@ function checkQuotes(text: string, allowed: ReadonlySet<string>, opts: SanitizeO
       .join(' ');
   });
   return { text: out.join('').replace(/[ \t]{2,}/g, ' ').trim(), dropped };
+}
+
+/**
+ * An answer as shown (citations written [c14-b97] or [summary c8 §2]) in its sentences, for the support check, which
+ * grades each one (owner, 2026-11-18). `sep` is what came before the sentence: '' for the first, ' ' within a paragraph,
+ * or the paragraph break. Joining sep + text for the sentences kept gives the answer without the others.
+ */
+export function answerSentences(shown: string): { sep: string; text: string }[] {
+  const out: { sep: string; text: string }[] = [];
+  let pending = '';
+  for (const chunk of shown.trim().split(/(\n\s*\n|\n)/)) {
+    if (/^\s*$/.test(chunk)) {
+      if (out.length) pending = chunk;
+      continue;
+    }
+    for (const sentence of chunk.split(SENTENCE).map((x) => x.trim()).filter(Boolean)) {
+      out.push({ sep: out.length ? pending || ' ' : '', text: sentence });
+      pending = '';
+    }
+  }
+  return out;
 }
 
 /** The plain text of every block a sentence cites; a note citation brings its source blocks. */

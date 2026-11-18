@@ -4,7 +4,7 @@ import { renderMarkdown } from '../render';
 import { blocksById, labels, retrieve, type Passage } from './retrieve';
 import { glossaryWords, type GlossaryLink } from './glossary';
 import { bookInBrief, fitWords, noteLines, noteTitle, routeQuestion, type BookInBrief, type Note } from './notes';
-import { blockIdOk, chapterOf, sanitizeAnswer, type AnswerPart, type SanitizeOptions } from './sanitize';
+import { answerSentences, blockIdOk, chapterOf, sanitizeAnswer, type AnswerPart, type SanitizeOptions } from './sanitize';
 import { record, reserve, worstCaseUsd } from './limits';
 
 /**
@@ -39,7 +39,8 @@ type Glossary = { glossary?: GlossaryLink[] };
 
 export type AskResult =
   /** `notes`: one line per kind of reviewed note the answer cites (NOTE_WORDING), shown under it. Absent before 2026-11-17. */
-  | ({ state: 'answer'; parts: AnswerPart[]; quotes: Quote[]; notes?: string[]; noteCites?: NoteCite[]; left: number; guard: 'ok' | 'none'; dropped: number; regenerated: boolean } & Glossary)
+  /** `cut`: sentences the support check left out (owner, 2026-11-18). Absent before 2026-11-18. */
+  | ({ state: 'answer'; parts: AnswerPart[]; quotes: Quote[]; notes?: string[]; noteCites?: NoteCite[]; left: number; guard: 'ok' | 'none'; dropped: number; cut?: number; regenerated: boolean } & Glossary)
   | { state: 'declined'; left: number }
   /** The answer's claims were not all supported by the passages it cited: shown as "the passages don't say". */
   | ({ state: 'unsupported'; left: number } & Glossary)
@@ -199,18 +200,31 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
 
   // Quotes come from the database, by id, never from the model's words.
   // The reviewed notes the answer cites, by label; the reader is shown each one's own source blocks.
-  const used = clean.notes.map((l) => byLabel.get(l)!).filter(Boolean);
+  let used = clean.notes.map((l) => byLabel.get(l)!).filter(Boolean);
   const blocks = await blocksById(sql, clean.cites);
-  const quotes = await quotesFor(sql, [...new Set([...clean.cites, ...used.flatMap((n) => n.sources)])]);
-  const found = new Set(quotes.map((q) => q.id));
+  let quotes = await quotesFor(sql, [...new Set([...clean.cites, ...used.flatMap((n) => n.sources)])]);
+  let found = new Set(quotes.map((q) => q.id));
   const cited = blocks.filter((b) => found.has(b.id));
 
-  // The second guard question: is every claim supported by what it cites? A claim cited to a block, by that block's
-  // text (and the passage before it, for who is speaking) alone; a claim cited to a note, by that note. If not, or no
-  // verdict, it isn't shown.
+  // The second guard question: is each sentence supported by what it cites? A claim cited to a block, by that block's
+  // text (and the passage before it, for who is speaking) alone; a claim cited to a note, by that note. A sentence that
+  // isn't is left out; the answer is shown only if at least two sentences remain and the first still answers the
+  // question, else (or with no verdict) not at all (owner, 2026-11-18).
+  let cut = 0;
   if (deps.supportPolicy) {
-    const supported = await supportCheck(deps, question, clean.shown, cited, used);
-    if (!supported) return { state: 'unsupported', left: slot.left, glossary };
+    const sentences = answerSentences(clean.shown);
+    const check = await supportCheck(deps, question, sentences, cited, used);
+    if (!check) return { state: 'unsupported', left: slot.left, glossary };
+    const keep = sentences.filter((_, i) => !check.unsupported.has(i));
+    cut = sentences.length - keep.length;
+    if (cut) {
+      if (keep.length < 2 || check.unsupported.has(0) || !check.firstAnswers) return { state: 'unsupported', left: slot.left, glossary };
+      const kept = sanitizeAnswer(keep.map((x, i) => (i ? x.sep : '') + x.text).join(''), allowed, cleaning);
+      clean = { ...kept, shown: '' };
+      used = clean.notes.map((l) => byLabel.get(l)!).filter(Boolean);
+      quotes = await quotesFor(sql, [...new Set([...clean.cites, ...used.flatMap((n) => n.sources)])]);
+      found = new Set(quotes.map((q) => q.id));
+    }
   }
   const parts = clean.parts.filter((p) => p.type !== 'cite' || found.has(p.id));
   const lines = noteLines(used);
@@ -225,6 +239,7 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
     regenerated,
     glossary,
     dropped: clean.dropped.length + clean.cites.filter((c) => !found.has(c)).length,
+    ...(cut ? { cut } : {}),
   };
 }
 
@@ -293,12 +308,20 @@ async function searchTerms(deps: AskDeps, question: string): Promise<string> {
 }
 
 /**
- * Is every claim in the answer supported by the passages it cites? The guard model reads the
- * answer and the stored text of each cited block, with the block before it as context, and the
- * reviewed notes that give those blocks (a summary sentence often rests on several). Fails
- * closed: no verdict after one retry counts as unsupported. Recorded as a guard call (no text).
+ * Which sentences of the answer are not supported by what they cite? The guard model reads the answer sentence by
+ * sentence, numbered, with the stored text of each cited block (and the block before it as context) and the reviewed
+ * notes it cites, and grades each sentence (owner, 2026-11-18). It also says whether the first sentence by itself
+ * answers the question. Fails closed: no usable verdict after one retry returns null (the answer isn't shown). A reply
+ * of a single SUPPORTED with no numbered lines means every sentence; a single UNSUPPORTED, the whole answer.
+ * Recorded as a guard call (no text).
  */
-async function supportCheck(deps: AskDeps, question: string, shown: string, cited: Passage[], notes: Note[]): Promise<boolean> {
+export async function supportCheck(
+  deps: AskDeps,
+  question: string,
+  sentences: { text: string }[],
+  cited: Passage[],
+  notes: Note[],
+): Promise<{ unsupported: Set<number>; firstAnswers: boolean } | null> {
   const before = await blocksById(deps.sql, cited.map((b) => `c${b.chapter}-b${b.idx - 1}`));
   const byId = new Map(before.map((b) => [b.id, b]));
   const passages = cited
@@ -308,22 +331,48 @@ async function supportCheck(deps: AskDeps, question: string, shown: string, cite
       return `${ctx ? `(context, the passage before) ${plain(ctx)}\n` : ''}[${b.id}] ${plain(b)}`;
     })
     .join('\n\n');
+  const answer = sentences.map((x, i) => `${i + 1}. ${x.text}`).join('\n');
   for (let attempt = 0; attempt < 2; attempt++) {
     const g = await deps.complete(
       CHAT.guardModel,
       [
         { role: 'system', content: deps.supportPolicy! },
-        { role: 'user', content: `QUESTION:\n${question}\n\n${notes.length ? `CITED NOTES (support only the claims cited to them by label):\n${notesText(notes)}\n\n` : ''}CITED PASSAGES:\n${passages || '(none)'}\n\nANSWER:\n${shown}` },
+        { role: 'user', content: `QUESTION:\n${question}\n\n${notes.length ? `CITED NOTES (support only the claims cited to them by label):\n${notesText(notes)}\n\n` : ''}CITED PASSAGES:\n${passages || '(none)'}\n\nANSWER, SENTENCE BY SENTENCE:\n${answer}` },
       ],
       { maxTokens: SUPPORT_TOKENS, temperature: 0 },
     );
-    const first = g.text.trim().split(/\s+/)[0]?.toUpperCase() ?? '';
-    const verdict = first.startsWith('UNSUPPORTED') ? 'flagged' : first.startsWith('SUPPORTED') ? 'ok' : 'none';
+    const parsed = parseSupport(g.text, sentences.length);
     await record(deps.sql, {
       kind: 'guard', model: g.model, provider: g.provider,
-      promptTokens: g.promptTokens, completionTokens: g.completionTokens, costUsd: g.costUsd, guard: verdict,
+      promptTokens: g.promptTokens, completionTokens: g.completionTokens, costUsd: g.costUsd,
+      guard: parsed ? (parsed.unsupported.size ? 'flagged' : 'ok') : 'none',
     });
-    if (verdict !== 'none') return verdict === 'ok';
+    if (parsed) return parsed;
   }
-  return false;
+  return null;
+}
+
+/**
+ * The support check's reply: a line per sentence ("2 UNSUPPORTED: …", "3. SUPPORTED"), then "FIRST ANSWERS: YES" or
+ * "NO". A sentence with no line of its own is unsupported. Null when there is no verdict at all.
+ */
+export function parseSupport(text: string, count: number): { unsupported: Set<number>; firstAnswers: boolean } | null {
+  const t = text.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+  const lines = [...t.matchAll(/^\s*(?:sentence\s*)?\[?(\d+)\]?[.):]?\s*[-–:]?\s*\**\s*(UNSUPPORTED|SUPPORTED)\b/gim)];
+  if (!lines.length) {
+    const first = t.split(/\s+/)[0]?.toUpperCase().replace(/[^A-Z]/g, '') ?? '';
+    if (first === 'SUPPORTED') return { unsupported: new Set(), firstAnswers: true };
+    if (first === 'UNSUPPORTED') return { unsupported: new Set(Array.from({ length: count }, (_, i) => i)), firstAnswers: false };
+    return null;
+  }
+  const ok = new Set<number>();
+  const bad = new Set<number>();
+  for (const m of lines) {
+    const i = Number(m[1]) - 1;
+    if (i < 0 || i >= count) continue;
+    (m[2].toUpperCase() === 'SUPPORTED' ? ok : bad).add(i);
+  }
+  const unsupported = new Set(Array.from({ length: count }, (_, i) => i).filter((i) => bad.has(i) || !ok.has(i)));
+  const firstAnswers = /FIRST\s+ANSWERS?\W*\s*YES/i.test(t);
+  return { unsupported, firstAnswers };
 }

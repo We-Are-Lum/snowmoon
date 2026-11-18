@@ -42,9 +42,12 @@ const SENTENCE_END = /(?<=[.!?][”’"')\]】]*(?:\s*\[(?:c\d+-b\d+|summary c\d
 const LABEL = /\[(summary c\d+ §\d+|learn-more [a-z-]+ [a-z]+)\]/g;
 
 /** The answer as shown, split into sentences, each with the block ids and the note labels cited in it. */
-function sentences(raw: string, allowed: Set<string>, notes: Set<string>) {
+function shownText(raw: string, allowed: Set<string>, notes: Set<string>) {
   const clean = sanitizeAnswer(raw, allowed, { notes });
-  const shown = clean.parts.map((p) => (p.type === 'text' ? p.text : p.type === 'cite' ? ` [${p.id}]` : ` [${p.label}]`)).join('');
+  return clean.parts.map((p) => (p.type === 'text' ? p.text : p.type === 'cite' ? ` [${p.id}]` : ` [${p.label}]`)).join('');
+}
+function sentences(raw: string, allowed: Set<string>, notes: Set<string>, already = false) {
+  const shown = already ? raw : shownText(raw, allowed, notes);
   return shown
     .split(/\n+/)
     .flatMap((para) => para.split(SENTENCE_END))
@@ -86,8 +89,12 @@ async function grade(sentence: string, passage: string): Promise<{ ok: boolean |
     providerOptions: providerOptions(),
   });
   for (let wait = 2000; ; wait *= 2) {
-    const res = await fetch(CHAT.endpoint, { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body });
-    if ([429, 498, 503].includes(res.status) && wait <= 32000) {
+    // A dropped connection is tried again like a busy provider.
+    const res = await fetch(CHAT.endpoint, { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body }).catch((e: Error) => {
+      if (wait > 32000) throw e;
+      return null;
+    });
+    if (!res || ([429, 498, 503].includes(res.status) && wait <= 32000)) {
       await new Promise((r) => setTimeout(r, wait));
       continue;
     }
@@ -104,6 +111,8 @@ async function grade(sentence: string, passage: string): Promise<{ ok: boolean |
 
 type Pair = { file: string; id: string; question: string; shown: boolean; sentence: string; cite: string; note?: boolean; ok: boolean | null; part?: boolean; why: string };
 const pairs: Pair[] = [];
+/** Shown answers the support check cut a sentence from: before (as the model wrote it, cleaned) and after (as shown). */
+const cut: { file: string; id: string; question: string; cut: number; before: string; after: string; verdict: string }[] = [];
 const jobs: (() => Promise<void>)[] = [];
 let answers = 0;
 for (const f of files) {
@@ -116,7 +125,12 @@ for (const f of files) {
     const allowed = new Set(raw.match(/c\d+[-‐‑‒–—]b\d+/g)?.map((x) => x.replace(/[‐‑‒–—]/, '-')) ?? []);
     const notes = new Map(routeQuestion(r.question, r.position ?? null).notes.map((n) => [n.label, n]));
     const base = { file: path.basename(f), id: r.id, question: r.question, shown: r.result.state === 'answer' };
-    for (const s of sentences(raw, allowed, new Set(notes.keys()))) {
+    // A shown answer is graded as shown, after the support check left out its failing sentences (owner, 2026-11-18);
+    // one not shown, as the model wrote it.
+    const res = r.result as { state: string; cut?: number; parts?: { type: string; text?: string; id?: string; label?: string }[] };
+    const asShown = res.state === 'answer' && res.parts ? res.parts.map((p) => (p.type === 'text' ? p.text : p.type === 'cite' ? ` [${p.id}]` : ` [${p.label}]`)).join('') : null;
+    if (res.cut) cut.push({ file: path.basename(f), id: r.id, question: r.question, cut: res.cut, before: (r.calls as { support?: string }[]).filter((c) => c.support).pop()?.support ?? shownText(raw, allowed, new Set(notes.keys())), after: asShown!, verdict: r.calls.filter((c) => c.model !== MODEL).pop()?.text ?? '' });
+    for (const s of sentences(asShown ?? raw, allowed, new Set(notes.keys()), asShown != null)) {
       for (const cite of s.cites) {
         const passage = blockText(cite);
         const pair: Pair = { ...base, sentence: s.text, cite, ok: null, why: '' };
@@ -154,5 +168,7 @@ console.log(`all answers: ${tally(pairs)}`);
 console.log(`shown answers: ${tally(pairs.filter((p) => p.shown))}`);
 console.log(`block ids the model picked: ${tally(pairs.filter((p) => !p.note))}`);
 if (pairs.some((p) => p.note)) console.log(`note citations (graded by the note's own blocks): ${tally(pairs.filter((p) => p.note))}`);
+const shownCount = new Set(pairs.filter((p) => p.shown).map((p) => `${p.file} ${p.id}`)).size;
+console.log(`shown answers with a sentence left out: ${cut.length} (${cut.reduce((n, c) => n + c.cut, 0)} sentences); shown answers graded: ${shownCount}`);
 console.log(`grading spend: $${spend.toFixed(4)}`);
-if (out) writeFileSync(out, JSON.stringify({ spend, pairs }, null, 1));
+if (out) writeFileSync(out, JSON.stringify({ spend, pairs, cut }, null, 1));

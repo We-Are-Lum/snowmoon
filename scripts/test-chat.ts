@@ -31,7 +31,7 @@ import { promisify } from 'node:util';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
-import { ask, AskError, NOTES_TEMPERATURE, type Complete } from '../src/lib/chat/ask';
+import { ask, AskError, parseSupport, NOTES_TEMPERATURE, type Complete } from '../src/lib/chat/ask';
 import { retrieve } from '../src/lib/chat/retrieve';
 import { sanitizeAnswer, sanitizeReply } from '../src/lib/chat/sanitize';
 import { glossaryWords } from '../src/lib/chat/glossary';
@@ -134,19 +134,21 @@ try {
     check('a label not given is dropped; block ids still work beside labels', JSON.stringify(n.dropped) === JSON.stringify(['summary c9 §1']) && JSON.stringify(n.cites) === JSON.stringify(['c1-b20']), JSON.stringify(n));
     check('words in brackets that are not citations stay', sanitizeAnswer('He was (as ever) late [c1-b20].', allowed, { notes }).parts[0].type === 'text' && sanitizeAnswer('He was (as ever) late [c1-b20].', allowed, { notes }).parts.map((p) => (p.type === 'text' ? p.text : '')).join('').includes('(as ever)'));
     // Quotations, word for word against the blocks the sentence cites (a note brings its sources); no "…".
-    const texts: Record<string, string> = { 'c1-b20': 'On a team, you have to be diplomatic, she said.', 'c1-b21': 'Mu raised a glass. "To our future!"', 'c8-b97': 'Ten to ten, exactly.' };
+    const texts: Record<string, string> = { 'c1-b20': 'On a team, you have to be diplomatic, she said.', 'c1-b21': 'Mu raised a glass. "To our future, and to the future of all!"', 'c8-b97': 'It was ten to ten, exactly, in the hall.' };
     const qo = { notes, textOf: (id: string) => texts[id], sourcesOf: (l: string) => (l === 'summary c8 §2' ? ['c8-b97'] : []) };
     const shown = (t: string) => sanitizeAnswer(t, allowed, qo).parts.map((p) => (p.type === 'text' ? p.text : p.type === 'cite' ? `[${p.id}]` : `[${p.label}]`)).join('');
     check('a quotation that matches its cited block word for word stays', shown('She warns him, "on a team, you have to be diplomatic" [c1-b20].').includes('"on a team, you have to be diplomatic"'));
-    check('a quotation matching nothing cited, in a later clause: the clause goes', shown('She warns him that tact matters, saying "be kind to all your rivals" [c1-b20]. Then he plays [c1-b21].') === 'She warns him that tact matters. Then he plays [c1-b21].', shown('She warns him that tact matters, saying "be kind to all your rivals" [c1-b20]. Then he plays [c1-b21].'));
-    check('a quotation matching nothing cited, in the first clause: the sentence goes', shown('Mu toasts "Dzego will rise again" [c1-b21]. Zei wins [c1-b21].') === 'Zei wins [c1-b21].', shown('Mu toasts "Dzego will rise again" [c1-b21]. Zei wins [c1-b21].'));
-    check('a quotation is checked against the cited note\'s blocks', shown('The chairman says "ten to ten, exactly" [summary c8 §2].').includes('"ten to ten, exactly"') && shown('The chairman says "ten to eleven, sadly" [summary c8 §2].') === '');
+    check('a quotation matching nothing cited, in a later clause: the clause goes', shown('She warns him that tact matters, saying "be kind to all of your rivals" [c1-b20]. Then he plays [c1-b21].') === 'She warns him that tact matters. Then he plays [c1-b21].', shown('She warns him that tact matters, saying "be kind to all of your rivals" [c1-b20]. Then he plays [c1-b21].'));
+    check('a quotation matching nothing cited, in the first clause: the sentence goes', shown('Mu toasts "Dzego will rise again and again" [c1-b21]. Zei wins [c1-b21].') === 'Zei wins [c1-b21].', shown('Mu toasts "Dzego will rise again and again" [c1-b21]. Zei wins [c1-b21].'));
+    check('a quotation is checked against the cited note\'s blocks', shown('The chairman says "it was ten to ten, exactly" [summary c8 §2].').includes('"it was ten to ten, exactly"') && shown('The chairman says "it was ten to eleven, sadly" [summary c8 §2].') === '');
     check('one or two quoted words are a term and stay', shown('The "no head" rule [c1-b21].').includes('"no head"'));
-    check('citations after a narrow no-break space stay with their sentence', shown('Mu raised a glass and said "to our future" here.\u202f [c1-b21] Then [c1-b20].').includes('"to our future"'), shown('Mu raised a glass and said "to our future" here.\u202f [c1-b21] Then [c1-b20].'));
+    check('a quoted phrase under six words stays unchecked (owner, 2026-11-18)', shown('Mu calls it "a test of the realm" [c1-b21].').includes('"a test of the realm"'));
+    check('a quotation of six words that matches nothing cited still goes', shown('Mu calls it "a test of the whole realm" [c1-b21]. Zei wins [c1-b21].') === 'Zei wins [c1-b21].');
+    check('citations after a narrow no-break space stay with their sentence', shown('Mu raised a glass and said "to our future, and to the future" here.\u202f [c1-b21] Then [c1-b20].').includes('"to our future, and to the future"'), shown('Mu raised a glass and said "to our future, and to the future" here.\u202f [c1-b21] Then [c1-b20].'));
     check('the recap cut keeps citations after a narrow no-break space', fitWords('Chapter 6 – One.\u202f [c6-b1] Two two two.', 3, 1) === 'Chapter 6 – One.\u202f [c6-b1]', fitWords('Chapter 6 – One.\u202f [c6-b1] Two two two.', 3, 1));
-    check('a comma inside a list is not a clause boundary: the clause goes from its linking word', shown('Bai won thrice, while Zei’s quick, clever play made Den say he had "nearly reinvented all of cryptography" once [c1-b20]. Next [c1-b21].') === 'Bai won thrice. Next [c1-b21].', shown('Bai won thrice, while Zei’s quick, clever play made Den say he had "nearly reinvented all of cryptography" once [c1-b20]. Next [c1-b21].'));
+    check('a comma inside a list is not a clause boundary: the clause goes from its linking word', shown('Bai won thrice, while Zei’s quick, clever play made Den say "he had nearly reinvented all of cryptography" once [c1-b20]. Next [c1-b21].') === 'Bai won thrice. Next [c1-b21].', shown('Bai won thrice, while Zei’s quick, clever play made Den say "he had nearly reinvented all of cryptography" once [c1-b20]. Next [c1-b21].'));
     check('a dash aside with an unmatched quotation goes', shown('He gave Bai the turn – he tells her "now is your chance to shine" – and won [c1-b21].') === 'He gave Bai the turn and won [c1-b21].', shown('He gave Bai the turn – he tells her "now is your chance to shine" – and won [c1-b21].'));
-    check('with no clause boundary before it, the sentence goes', shown('Zei’s quick, clever play made Den say "nearly reinvented all of cryptography" [c1-b20]. Next [c1-b21].') === 'Next [c1-b21].');
+    check('with no clause boundary before it, the sentence goes', shown('Zei’s quick, clever play made Den say "he had nearly reinvented all of cryptography" [c1-b20]. Next [c1-b21].') === 'Next [c1-b21].');
     check('dropping keeps paragraphs', shown('One [c1-b20].\n\nTwo says "not in any block at all" here. Three [c1-b21].') === 'One [c1-b20].\n\nThree [c1-b21].', JSON.stringify(shown('One [c1-b20].\n\nTwo says "not in any block at all" here. Three [c1-b21].')));
   }
 
@@ -377,6 +379,31 @@ try {
     supportQueue = [];
     const res3 = await ask(deps(112), { question: 'Why is Gladias asked to rate a building?' });
     check('a supported answer is shown', res3.state === 'answer', res3.state);
+
+    // Sentence by sentence (owner, 2026-11-18): only the sentences that fail are left out, if two remain and the first
+    // still answers the question.
+    const other = r1.passages[1].id;
+    answerText = `He is chosen at random [${real}]. He is the emperor [${other}]. He looks at the building [${real}].`;
+    supportQueue = ['1 SUPPORTED\n2 UNSUPPORTED: the emperor claim\n3 SUPPORTED\nFIRST ANSWERS: YES'];
+    const cut = await ask(deps(114), { question: 'Why is Gladias asked to rate a building?' });
+    const said = cut.state === 'answer' ? cut.parts.map((p) => (p.type === 'text' ? p.text : '')).join('') : '';
+    check('an unsupported sentence is left out and the rest shown', cut.state === 'answer' && cut.cut === 1 && !said.includes('emperor') && said.includes('at random') && said.includes('looks at'), JSON.stringify(cut).slice(0, 300));
+    check("the left-out sentence's citation goes with it", cut.state === 'answer' && !cut.parts.some((p) => p.type === 'cite' && p.id === other) && !cut.quotes.some((q) => q.id === other));
+    check('the support check is shown the sentences numbered', /\n1\. He is chosen at random/.test(supportSeen[supportSeen.length - 1] ?? '') && /\n3\. He looks/.test(supportSeen[supportSeen.length - 1] ?? ''));
+    supportQueue = ['1 UNSUPPORTED: x\n2 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: NO'];
+    check('the first sentence unsupported: not shown', (await ask(deps(115), { question: 'Why is Gladias asked to rate a building?' })).state === 'unsupported');
+    supportQueue = ['1 SUPPORTED\n2 UNSUPPORTED: x\n3 UNSUPPORTED: y\nFIRST ANSWERS: YES'];
+    check('only one sentence left: not shown', (await ask(deps(116), { question: 'Why is Gladias asked to rate a building?' })).state === 'unsupported');
+    supportQueue = ['1 SUPPORTED\n2 UNSUPPORTED: x\n3 SUPPORTED\nFIRST ANSWERS: NO'];
+    check('the first sentence no longer answers the question: not shown', (await ask(deps(117), { question: 'Why is Gladias asked to rate a building?' })).state === 'unsupported');
+    supportQueue = ['1 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: YES'];
+    const gap = await ask(deps(118), { question: 'Why is Gladias asked to rate a building?' });
+    check('a sentence with no verdict line counts as unsupported', gap.state === 'answer' && gap.cut === 1);
+    supportQueue = ['1 SUPPORTED\n2 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: YES'];
+    const all = await ask(deps(119), { question: 'Why is Gladias asked to rate a building?' });
+    check('every sentence supported: shown whole, nothing cut', all.state === 'answer' && !all.cut);
+    check('reply forms: "2. **UNSUPPORTED**" and a bare SUPPORTED', parseSupport('1. SUPPORTED\n2. **UNSUPPORTED** — x\nFIRST ANSWERS: YES', 2)?.unsupported.has(1) === true && parseSupport('SUPPORTED', 3)?.unsupported.size === 0 && parseSupport('', 2) === null);
+    supportQueue = [];
   }
 
   // --- No answer, safety-check or search cost can be joined to a person ------
