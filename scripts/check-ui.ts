@@ -2020,7 +2020,12 @@ async function checkChallengeLanding() {
             // stretched past their column: each base's width is one column's.
             const bases = await page.locator('.chc-bases').evaluate((ul) => { const cols = getComputedStyle(ul).gridTemplateColumns.split(' ').map(parseFloat); return { cols, widths: [...ul.querySelectorAll(':scope > li')].map((li) => Math.round(li.getBoundingClientRect().width)) }; }).catch(() => null);
             if (!bases || !bases.widths.length || bases.widths.some((x) => x < 200) || bases.cols.some((c) => c < 199.5) || bases.widths.some((x) => Math.abs(x - bases.cols[0]) > 1.5)) fail(`/challenge/zei ${t}: the bases aren't each at least 200px in an auto-filled grid (${JSON.stringify(bases)})`);
-            console.log(`note challenge/zei ${t}: bases ${bases?.cols.length ?? 0} across, ${bases?.widths.join(', ')}px; remix heading ${head.top}–${head.bottom} of ${head.h}`);
+            // The remixes (owner's 18 Nov call, from Garance): as many across as fit at 240px or more (auto-fill), so every
+            // remix at least 240px (the old page's were 235px), each one column wide. Measured: 261px two across at 1024;
+            // at 1440, 264px three across with the menu closed and 338px two across with it open.
+            const remixes = await page.locator('.ch-char-remixes > .chc-grid').evaluate((ul) => { const cols = getComputedStyle(ul).gridTemplateColumns.split(' ').map(parseFloat); return { cols, widths: [...ul.querySelectorAll(':scope > li')].map((li) => Math.round(li.getBoundingClientRect().width)) }; }).catch(() => null);
+            if (!remixes || !remixes.widths.length || remixes.widths.some((x) => x < 240) || remixes.cols.some((c) => c < 239.5) || remixes.widths.some((x) => Math.abs(x - remixes.cols[0]) > 1.5)) fail(`/challenge/zei ${t}: the remixes aren't each at least 240px in an auto-filled grid (${JSON.stringify(remixes)})`);
+            console.log(`note challenge/zei ${t}: bases ${bases?.cols.length ?? 0} across, ${bases?.widths.join(', ')}px; remixes ${remixes?.cols.length ?? 0} across, ${remixes?.cols.map((c) => Math.round(c)).join(', ')}px; remix heading ${head.top}–${head.bottom} of ${head.h}`);
             // On the first screen at 1440 only (owner, 2026-11-17): at 1024 it sits just below, and the link under "Make your own" points to it.
             if (vw === 1440 && !(head.top >= 0 && head.bottom <= head.h)) fail(`/challenge/zei ${t}: "Start from someone’s remix" isn't on the first screen (its heading at ${head.top}–${head.bottom} of ${head.h})`);
             if (menu === 'closed') {
@@ -2289,17 +2294,19 @@ async function checkChallengeLanding() {
       // row). Desktop: "about 1280px usable at 1440" (the handoff), a 400px column, then the remixes three across (about
       // 264px) and the bases as many across as fit at 200px or more (owner, 2026-11-16: one floor, every base at least
       // 200px, at 1024 and 1440 with the side menu open and closed, checked in checkCharacterDesktop; it replaces #177's
-      // 380px at 1440 and 240px at 1024, for two across). Phone: a 300px slide (80% at most); the remixes two across.
+      // 380px at 1440 and 240px at 1024, for two across). The remixes (owner's 18 Nov call): as many across as fit at
+      // 240px, so 264px three across at 1440 and 261px two across at 1024 (they were 264 and 169 three across); floors
+      // 260 and 255 (were 250 and 150). Phone: a 300px slide (80% at most); the remixes two across.
       {
         const widths = async (sel: string) => page.locator(sel).evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().width)));
         const B = '.ch-char-bases .chc-pic', R = '.ch-char-remixes .chc-pic';
         const bw = await widths(B), rw = await widths(R);
         if (!bw.length || bw.some((x) => x < (wide ? 200 : 270))) fail(`/challenge/zei ${tag}: the bases are ${bw.join(', ')}px wide, under ${wide ? 200 : 270}px`);
-        if (!rw.length || rw.some((x) => x < (wide ? 250 : 150))) fail(`/challenge/zei ${tag}: the remixes are ${rw.join(', ')}px wide, under ${wide ? 250 : 150}px`);
+        if (!rw.length || rw.some((x) => x < (wide ? 260 : 150))) fail(`/challenge/zei ${tag}: the remixes are ${rw.join(', ')}px wide, under ${wide ? 260 : 150}px`);
         if (wide) {
           await page.setViewportSize({ width: 1024, height: 768 });
           const nb = await widths(B), nr = await widths(R);
-          if (nb.some((x) => x < 200) || nr.some((x) => x < 150)) fail(`/challenge/zei @1024: the bases are ${nb.join(', ')}px and the remixes ${nr.join(', ')}px wide, under 200 and 150`);
+          if (nb.some((x) => x < 200) || nr.some((x) => x < 255)) fail(`/challenge/zei @1024: the bases are ${nb.join(', ')}px and the remixes ${nr.join(', ')}px wide, under 200 and 255`);
           await page.setViewportSize({ width: w, height: h });
         }
       }
