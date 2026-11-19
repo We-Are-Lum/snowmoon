@@ -43,12 +43,10 @@ export function LadderChart({ prices, sold }: { prices: string[]; sold: number }
             />
           );
         })}
-        {sold < size && (
-          <path
-            d={`M ${(sold + 0.5) * bw - 9} 4 L ${(sold + 0.5) * bw + 9} 4 L ${(sold + 0.5) * bw} 20 Z`}
-            className="ed-marker"
-          />
-        )}
+        {sold < size && (() => {
+          const x = Math.min(W - 9, Math.max(9, (sold + 0.5) * bw));
+          return <path d={`M ${x - 9} 4 L ${x + 9} 4 L ${x} 20 Z`} className="ed-marker" />;
+        })()}
       </svg>
       <ol className="ed-ticks" aria-label="Prices at some pieces">
         {ticks.map((n) => (

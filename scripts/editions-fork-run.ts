@@ -4,7 +4,7 @@
  * every request to this script (so the page itself still asks no outside service).
  *
  *   npx tsx scripts/editions-fork-run.ts --env          print the build's NEXT_PUBLIC_EDITIONS_* (fixed addresses)
- *   (build: env $(npx tsx scripts/editions-fork-run.ts --env) next build)
+ *   (build: export each of those variables, then next build; in zsh an unquoted $(…) is not split into words)
  *   npx tsx scripts/editions-fork-run.ts --shots=DIR     run every scenario, save screenshots to DIR
  *
  * Scenarios: mint 1; mint 10 (busy, with a returned cushion); a quiet exact mint that loses a race (clear message, the
@@ -76,7 +76,7 @@ async function main() {
   const pub = createPublicClient({ transport: http(RPC) });
   for (let i = 0; ; i++) {
     if (await pub.getChainId().then(() => true, () => false)) break;
-    if (i > 60) throw new Error('anvil did not start');
+    if (i > 240) throw new Error("anvil did not start");
     await wait(500);
   }
   const test = createTestClient({ mode: 'anvil', transport: http(RPC) });
@@ -120,7 +120,8 @@ async function main() {
   const port = await freePort();
   const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], {
     cwd: ROOT,
-    env: { ...process.env, STUDIO_DATABASE_URL: db.url, EDITIONS_RPC_URL: RPC },
+    // The server reads these at run time (the browser's copy was inlined at build).
+    env: { ...process.env, STUDIO_DATABASE_URL: db.url, EDITIONS_RPC_URL: RPC, NEXT_PUBLIC_EDITIONS_COLLECTION: COLLECTION, NEXT_PUBLIC_EDITIONS_SELLER: SELLER, NEXT_PUBLIC_EDITIONS_NEXT_OPENING: process.env.NEXT_PUBLIC_EDITIONS_NEXT_OPENING ?? NEXT_OPENING },
     stdio: 'ignore',
   });
   procs.push(server);
@@ -146,23 +147,24 @@ async function main() {
       await page.exposeFunction('__walletRpc', async (method: string, params: unknown[]) => {
         if (method === 'eth_requestAccounts') {
           state.connected = true;
-          return [state.account];
+          return { result: [state.account] };
         }
-        if (method === 'eth_accounts') return state.connected ? [state.account] : [];
-        if (method === 'eth_chainId') return `0x${state.chainId.toString(16)}`;
+        if (method === 'eth_accounts') return { result: state.connected ? [state.account] : [] };
+        if (method === 'eth_chainId') return { result: `0x${state.chainId.toString(16)}` };
         if (method === 'wallet_switchEthereumChain' || method === 'wallet_addEthereumChain') {
           state.chainId = 11155111;
           await page.evaluate(() => (window as unknown as { __emit: (e: string, v: unknown) => void }).__emit('chainChanged', '0xaa36a7'));
-          return null;
+          return { result: null };
         }
         if (method === 'eth_sendTransaction') {
-          if (state.reject) throw Object.assign(new Error('User rejected the request.'), { code: 4001 });
+          if (state.reject) return { error: { code: 4001, message: 'User rejected the request.' } };
           await state.beforeSend?.();
           if (state.holdBlocks) await test.setAutomine(false);
         }
         const res = await fetch(RPC, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jsonrpc: '2.0', id: 1, method, params }) }).then((r) => r.json());
-        if (res.error) throw Object.assign(new Error(res.error.message), { code: res.error.code, data: res.error.data });
-        return res.result;
+        // As a wallet answers: the JSON-RPC error with its code and revert data (an exposed function can't throw them).
+        if (res.error) return { error: res.error };
+        return { result: res.result };
       });
       await page.addInitScript(() => {
         const listeners: Record<string, ((v: unknown) => void)[]> = {};
@@ -171,13 +173,9 @@ async function main() {
         (window as unknown as { ethereum: unknown }).ethereum = {
           isStandIn: true,
           request: async ({ method, params }: { method: string; params?: unknown[] }) => {
-            try {
-              return await call(method, params ?? []);
-            } catch (e) {
-              const m = String((e as Error).message ?? e);
-              const code = /4001|rejected/i.test(m) ? 4001 : -32603;
-              throw Object.assign(new Error(m.replace(/^Error: /, '')), { code, data: (e as { data?: unknown }).data });
-            }
+            const out = (await call(method, params ?? [])) as { result?: unknown; error?: { code: number; message: string; data?: unknown } };
+            if (out.error) throw Object.assign(new Error(out.error.message), { code: out.error.code, data: out.error.data });
+            return out.result;
           },
           on: (e: string, f: (v: unknown) => void) => ((listeners[e] ??= []).push(f)),
           removeListener: (e: string, f: (v: unknown) => void) => (listeners[e] = (listeners[e] ?? []).filter((x) => x !== f)),
@@ -241,8 +239,11 @@ async function main() {
     await page.close();
   }
 
-  // Mint 10 right after: busy. The cushion is said before confirming, sent, and the difference shown as returned.
+  // Mint 10 right after a rival's: busy. The cushion is said before confirming, sent, and the difference shown as
+  // returned. The rival buys 50 first: the test ladder's first ~15 pieces all cost 0.000002 ETH (the 0.000001 step),
+  // where a cushion 3 pieces up costs the same and the page rightly says nothing.
   {
+    for (let i = 0; i < 5; i++) await rivalMint(1, 10);
     const { page } = await open('/editions/1', ready, phone);
     await page.waitForSelector('[data-mint]');
     for (let i = 1; i < 10; i++) await page.click('[aria-label="One more"]');
@@ -258,7 +259,7 @@ async function main() {
     const paid = BigInt((await page.getAttribute('[data-paid]', 'data-paid')) ?? '0');
     const back = BigInt((await page.getAttribute('[data-returned]', 'data-returned').catch(() => null)) ?? '0');
     record('mint 10 (busy): sent the cushion, paid the quote, the rest came back', cushion > quote && paid === quote && back === cushion - quote, `quote ${quote}, cushion ${cushion}, paid ${paid}, back ${back}`);
-    record('mint 10: "Pieces 2–11 are yours"', (await page.textContent('h1'))?.includes('Pieces 2–11 are yours') ?? false, (await page.textContent('h1')) ?? '');
+    record('mint 10: "Pieces 52–61 are yours"', (await page.textContent('h1'))?.includes('Pieces 52–61 are yours') ?? false, (await page.textContent('h1')) ?? '');
     await both(new URL(page.url()).pathname, 'after-mint-busy');
     await page.close();
   }
@@ -267,7 +268,7 @@ async function main() {
   {
     await quiet();
     let raced = false;
-    const w: W = { ...ready, beforeSend: async () => { if (!raced) { raced = true; await rivalMint(1, 1); } } };
+    const w: W = { ...ready, beforeSend: async () => { if (!raced) { raced = true; await rivalMint(1, 3); } } };
     const { page } = await open('/editions/1', w, phone);
     await page.waitForSelector('[data-mint]');
     record('quiet again after 4 minutes: no cushion note', (await page.$('.ed-busy')) === null);

@@ -1,7 +1,7 @@
 'use client';
 
 import sdk from '@farcaster/miniapp-sdk';
-import { BaseError, ContractFunctionRevertedError, createPublicClient, createWalletClient, custom, type EIP1193Provider, type Hash } from 'viem';
+import { BaseError, ContractFunctionRevertedError, createPublicClient, createWalletClient, custom, encodeFunctionData, parseAbi, type EIP1193Provider, type Hash, type PublicClient } from 'viem';
 import { SELLER_ABI } from './abi';
 import { EDITIONS_TEST as T } from './config';
 import { problemOf, type MintProblem } from './ladder';
@@ -104,6 +104,23 @@ export function problemFrom(e: unknown): MintProblem {
   });
 }
 
+const RECEIVER = parseAbi(['function onERC1155Received(address operator, address from, uint256 id, uint256 value, bytes data) returns (bytes4)']);
+const ACCEPTED = '0xf23a6e61';
+
+/**
+ * Whether `account` can hold an ERC-1155 piece: an ordinary address can; an address with code (a smart wallet, or an
+ * EIP-7702 delegated account) must answer onERC1155Received with its selector, asked here exactly as the collection
+ * asks it. A contract whose fallback answers nothing makes the mint revert with no reason, so the page asks this to name
+ * the problem.
+ */
+async function canReceive(reader: PublicClient, account: `0x${string}`, id: number): Promise<boolean> {
+  const code = await reader.getCode({ address: account }).catch(() => undefined);
+  if (!code || code === '0x') return true;
+  const data = encodeFunctionData({ abi: RECEIVER, functionName: 'onERC1155Received', args: [T.seller!, '0x0000000000000000000000000000000000000000', BigInt(id), 1n, '0x'] });
+  const out = await reader.call({ account: T.editions!, to: account, data }).catch(() => null);
+  return !!out?.data && out.data.slice(0, 10).toLowerCase() === ACCEPTED;
+}
+
 /**
  * Mint: simulate first (a wallet that can't hold the piece, a price that moved, or a sold-out edition is named before
  * anything is signed), then send exactly `value`, then wait for the receipt. Returns the transaction's hash.
@@ -116,7 +133,11 @@ export async function mint(opts: { id: number; quantity: number; value: bigint; 
   const [account] = await wallet.getAddresses();
   if (!account) throw new MintError('failed');
   const args = [BigInt(opts.id), BigInt(opts.quantity), account] as const;
-  const { request } = await reader.simulateContract({ account, address: T.seller!, abi: SELLER_ABI, functionName: 'mint', args, value: opts.value });
+  const { request } = await reader.simulateContract({ account, address: T.seller!, abi: SELLER_ABI, functionName: 'mint', args, value: opts.value }).catch(async (e: unknown) => {
+    // No reason given: check whether this wallet can hold the piece before calling it a failure.
+    if (problemFrom(e) === 'failed' && !(await canReceive(reader as PublicClient, account, opts.id))) throw new MintError('cannot-receive');
+    throw e;
+  });
   const hash = await wallet.writeContract(request);
   opts.onSent?.(hash);
   const receipt = await reader.waitForTransactionReceipt({ hash });

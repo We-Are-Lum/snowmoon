@@ -48,7 +48,7 @@ export const EW = {
   // Mint card
   pieceOf: (n: number, size: number) => `Piece ${n} of ${size}`,
   left: (n: number) => (n === 1 ? '1 left' : `${n} left`),
-  approx: (usd: string) => `about ${usd}, approximate`,
+  approx: (usd: string) => (String(usd).startsWith('under') ? `${usd}, approximate` : `about ${usd}, approximate`),
   quantity: 'How many',
   fewer: 'One fewer',
   more: 'One more',
@@ -67,6 +67,7 @@ export const EW = {
   checking: 'Checking the price…',
   rejected: 'You cancelled in your wallet. Nothing was sent.',
   priceMoved: (now: string) => `Someone else minted first, so the price moved to ${now} ETH. Nothing was minted.`,
+  feeSpent: 'The network fee for that attempt was spent.',
   tryAgain: (now: string) => `Try again at ${now} ETH`,
   cannotReceive: 'This wallet can’t hold this kind of collectible (an ERC-1155 piece). Try another wallet, such as a phone wallet or a browser extension.',
   failed: 'The mint didn’t go through. Nothing was minted; only the network fee may have been spent.',

@@ -48,7 +48,7 @@ check('E1 "at most" rounds up', formatEth(513000000000001n, { up: true }) === '0
 check('E1 zero', formatEth(0n) === '0');
 check('E1 dollars', formatUsd(500000000000000000n, 3000) === '$1500', String(formatUsd(500000000000000000n, 3000)));
 check('E1 dollars, small', formatUsd(513000000000000n, 3000) === '$1.54', String(formatUsd(513000000000000n, 3000)));
-check('E1 dollars, under a cent', formatUsd(1000000000000n, 3000) === 'under $0.01');
+check('E1 dollars, under a cent', formatUsd(1000000000000n, 3000) === 'under $0.01' && EW.approx('under $0.01') === 'under $0.01, approximate' && EW.approx('$1.54') === 'about $1.54, approximate');
 check('E1 no price, no dollars', formatUsd(1n, null) === null && formatUsd(1n, 0) === null);
 
 // E2
@@ -106,7 +106,7 @@ check('E7 one bar per piece', bars.length === 256);
 check('E7 true scale: the last bar is full height, the first 1/1000', bars[255].height === 1 && Math.abs(bars[0].height - 0.001) < 1e-9);
 check('E7 minted, next, waiting', bars[9].status === 'minted' && bars[10].status === 'next' && bars[11].status === 'waiting');
 check('E7 sold out: no next', ladderBars(five, 3).every((b) => b.status === 'minted'));
-check('E7 ticks for 256', JSON.stringify(ladderTicks(256)) === '[1,64,128,192,256]', JSON.stringify(ladderTicks(256)));
+check('E7 ticks for 256', JSON.stringify(ladderTicks(256)) === '[1,128,192,256]', JSON.stringify(ladderTicks(256)));
 check('E7 ticks for 5', JSON.stringify(ladderTicks(5)) === '[1,2,3,4,5]');
 check('E7 next opening from the contract first', nextOpening([at - 10, at + 500, at + 100], '2030-01-01T00:00:00Z', at) === at + 100);
 check('E7 then from config', nextOpening([at - 10], new Date((at + 900) * 1000).toISOString(), at) === at + 900);

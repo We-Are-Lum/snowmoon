@@ -129,10 +129,11 @@ export function ladderBars(prices: readonly bigint[], sold: number): Bar[] {
   }));
 }
 
-/** Piece numbers to mark with their price: the first, the last, and quarters between (no repeats). */
+/** Piece numbers to mark with their price: the first, the middle, three quarters and the last (no repeats). The first
+ *  quarter is left out: on a rising ladder its bars sit by the first, and the labels would collide at phone width. */
 export function ladderTicks(size: number): number[] {
   if (size <= 5) return Array.from({ length: size }, (_, i) => i + 1);
-  return [...new Set([1, Math.round(size / 4), Math.round(size / 2), Math.round((3 * size) / 4), size])];
+  return [...new Set([1, Math.round(size / 2), Math.round((3 * size) / 4), size])];
 }
 
 /** "Piece 12" or "Pieces 12–21". */

@@ -40,13 +40,14 @@ export default async function EditionPage({ params }: { params: Promise<{ id: st
   const others = [...all].filter((o) => o.id !== id).reverse();
   return (
     <main className="ed-page ed-edition" data-edition={id}>
+      <div className="ed-story">
       <figure className="ed-piece">
         <EditionMediaView media={c?.media ?? null} />
       </figure>
 
       <header className="ed-head">
         <p className="label ed-kicker">
-          {EW.edition(id)} · {c?.label ?? ''}
+          {[EW.edition(id), c?.label].filter(Boolean).join(' · ')}
         </p>
         <h1 className="ed-h1">{title}</h1>
         <Owner as="p" text={c?.story ?? null} placeholder={EW.storyPlaceholder} />
@@ -72,11 +73,13 @@ export default async function EditionPage({ params }: { params: Promise<{ id: st
           <p className="ed-placeholder">[{EW.howMade}: link to the recipe]</p>
         )}
       </header>
+      </div>
 
       <div className="ed-sale">
         <EditionSale id={id} size={e.size} prices={e.prices} startTime={e.startTime} initial={{ sold: live.sold, lastMintAt: live.lastMintAt, now: live.now }} />
       </div>
 
+      <div className="ed-more">
       <section className="ed-section" aria-labelledby="ed-came">
         <h2 id="ed-came" className="ed-h2">{EW.cameToBe}</h2>
         <ul className="ed-earlier-versions">
@@ -142,6 +145,7 @@ export default async function EditionPage({ params }: { params: Promise<{ id: st
           </p>
         </section>
       )}
+      </div>
     </main>
   );
 }

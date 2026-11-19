@@ -54,7 +54,7 @@ export default async function EditionsList() {
                   <EditionMediaView media={c?.media ?? null} compact />
                   <span className="ed-item-text">
                     <span className="label">
-                      {EW.edition(e.id)} · {c?.label ?? ''}
+                      {[EW.edition(e.id), c?.label].filter(Boolean).join(' · ')}
                     </span>
                     <span className="ed-item-title">{title}</span>
                     <span className={c?.line ? 'ed-item-line' : 'ed-item-line ed-placeholder'}>{c?.line ?? EW.linePlaceholder}</span>

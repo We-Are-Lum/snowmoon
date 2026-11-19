@@ -93,17 +93,19 @@ export function EditionSale(props: { id: number; size: number; prices: string[];
   const step = walletStep(wallet, { chainId: T.chainId, value: amount.send });
   const working = phase.kind === 'checking' || phase.kind === 'waiting';
 
-  // A new quantity or a new sale changes the amount: whatever was agreed no longer applies.
+  // A new quantity or a new sale changes the amount: a cushion the buyer agreed to no longer applies. A problem's
+  // message stays (a lost race is reported just as the count moves).
   useEffect(() => {
-    agreed.current = null;
-    setPhase((p) => (p.kind === 'confirm' || (p.kind === 'problem' && p.problem !== 'rejected') ? { kind: 'idle' } : p));
+    setPhase((p) => (p.kind === 'confirm' ? ((agreed.current = null), { kind: 'idle' }) : p));
   }, [q, sold]);
 
   const go = async () => {
     setPhase({ kind: 'checking' });
+    let soldAtQuote = sold;
     try {
       // Read the price and the busy signal again, right before sending.
       const [fresh, l] = await Promise.all([freshQuote(id, q), readLive()]);
+      soldAtQuote = l.sold;
       const nowBusy = isBusy(l.lastMintAt, Math.max(Math.floor(Date.now() / 1000), l.now), T.busyWindowSeconds);
       const a = amountToSend({ quote: fresh, prices, sold: l.sold, quantity: q, busy: nowBusy, cushionPieces: T.cushionPieces });
       // Anything the buyer hasn't seen yet (a cushion, or a higher price) is shown first; they tap again to send it. What
@@ -120,10 +122,12 @@ export function EditionSale(props: { id: number; size: number; prices: string[];
       const hash = await mint({ id, quantity: q, value: a.send, onSent: (h) => setPhase({ kind: 'waiting', hash: h }) });
       router.push(`/editions/${id}/minted/${hash}`);
     } catch (e) {
-      const problem = problemFrom(e);
+      let problem = problemFrom(e);
       const hash = (e as { hash?: Hash }).hash;
-      if (problem === 'price-moved') {
-        const l = await readLive();
+      // A wallet that doesn't pass the contract's error on: a sale since the quote means the price moved.
+      const l = problem === 'failed' || problem === 'price-moved' ? await readLive() : null;
+      if (problem === 'failed' && l && l.sold > soldAtQuote) problem = l.sold >= size ? 'sold-out' : 'price-moved';
+      if (problem === 'price-moved' && l) {
         const retry = l.sold < size ? quoteFrom(prices, l.sold, Math.min(q, size - l.sold)) : undefined;
         agreed.current = retry ?? null;
         return setPhase({ kind: 'problem', problem, retryAt: retry, hash });
@@ -197,6 +201,7 @@ export function EditionSale(props: { id: number; size: number; prices: string[];
       return (
         <p className="ed-note ed-problem" role="alert" data-problem={phase.problem}>
           {text[phase.problem]}
+          {phase.hash && phase.problem !== 'failed' && ` ${EW.feeSpent}`}
           {phase.hash && (
             <>
               {' '}
