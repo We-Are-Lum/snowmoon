@@ -34,6 +34,7 @@ export async function POST(request: Request) {
         reminder: promptFile('chat-reminder.md'),
         searchPrompt: promptFile('chat-search-terms.md'),
         supportPolicy: promptFile('chat-support.md'),
+        retryPrompt: promptFile('chat-retry.md'),
       },
       input,
     );

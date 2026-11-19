@@ -2,7 +2,7 @@
  * Searching the book's text: the part that runs anywhere. The page searches on the reader's own
  * device (owner, 2026-10-10: a query in a URL could end up in the host's request logs), over the
  * text served once by GET /api/book/text; the server uses the same code in tests.
- * Paragraphs and quotes only, case-insensitive, plain substring match on the words as readers see them.
+ * Over the corpus it is given (src/lib/book-search.ts), case-insensitive, plain substring match on the words as readers see them.
  */
 export const SEARCH = { minChars: 3, maxChars: 80, limit: 20, before: 60, after: 100 } as const;
 

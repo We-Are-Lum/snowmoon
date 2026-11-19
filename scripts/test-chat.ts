@@ -31,11 +31,11 @@ import { promisify } from 'node:util';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
-import { ask, AskError, NOTES_TEMPERATURE, type Complete } from '../src/lib/chat/ask';
+import { ask, AskError, parseSupport, NOTES_TEMPERATURE, type Complete } from '../src/lib/chat/ask';
 import { retrieve } from '../src/lib/chat/retrieve';
-import { sanitizeReply } from '../src/lib/chat/sanitize';
+import { sanitizeAnswer, sanitizeReply } from '../src/lib/chat/sanitize';
 import { glossaryWords } from '../src/lib/chat/glossary';
-import { chaptersNamed, charactersNamed, countWords, fitWords, NOTE_WORDING, routeQuestion } from '../src/lib/chat/notes';
+import { asksForNote, chaptersNamed, charactersNamed, countWords, fitWords, NOTE_WORDING, routeQuestion } from '../src/lib/chat/notes';
 import { CHAT } from '../src/lib/config';
 import { providerOptions, servedBy, servingAllowed } from '../src/lib/chat/provider';
 
@@ -127,6 +127,29 @@ try {
     // gpt-oss sometimes writes ids with a non-breaking hyphen, in parentheses: (c1‑b20‑c1‑b21).
     const nb = sanitizeReply('A board game (c1\u2011b20\u2011c1\u2011b21). Later [c1\u2011b21].', allowed);
     check('an id written with another dash is still a citation', JSON.stringify(nb.cites) === JSON.stringify(['c1-b20', 'c1-b21']) && nb.dropped.length === 0, JSON.stringify(nb));
+    // Note citations (owner, 2026-11-17): a label the model was given is a citation of that note; others are dropped.
+    const notes = new Set(['summary c8 §2', 'learn-more bai who']);
+    const n = sanitizeAnswer('The vote is tied [summary c8 §2]; then [Summary c8 s2]. Bai [learn-more Bai who] [summary c9 §1] [c1-b20].', allowed, { notes });
+    check('a note label is a citation, in any spelling', JSON.stringify(n.notes) === JSON.stringify(['summary c8 §2', 'learn-more bai who']) && n.parts.filter((p) => p.type === 'note').length === 3, JSON.stringify(n.notes));
+    check('a label not given is dropped; block ids still work beside labels', JSON.stringify(n.dropped) === JSON.stringify(['summary c9 §1']) && JSON.stringify(n.cites) === JSON.stringify(['c1-b20']), JSON.stringify(n));
+    check('words in brackets that are not citations stay', sanitizeAnswer('He was (as ever) late [c1-b20].', allowed, { notes }).parts[0].type === 'text' && sanitizeAnswer('He was (as ever) late [c1-b20].', allowed, { notes }).parts.map((p) => (p.type === 'text' ? p.text : '')).join('').includes('(as ever)'));
+    // Quotations, word for word against the blocks the sentence cites (a note brings its sources); no "…".
+    const texts: Record<string, string> = { 'c1-b20': 'On a team, you have to be diplomatic, she said.', 'c1-b21': 'Mu raised a glass. "To our future, and to the future of all!"', 'c8-b97': 'It was ten to ten, exactly, in the hall.' };
+    const qo = { notes, textOf: (id: string) => texts[id], sourcesOf: (l: string) => (l === 'summary c8 §2' ? ['c8-b97'] : []) };
+    const shown = (t: string) => sanitizeAnswer(t, allowed, qo).parts.map((p) => (p.type === 'text' ? p.text : p.type === 'cite' ? `[${p.id}]` : `[${p.label}]`)).join('');
+    check('a quotation that matches its cited block word for word stays', shown('She warns him, "on a team, you have to be diplomatic" [c1-b20].').includes('"on a team, you have to be diplomatic"'));
+    check('a quotation matching nothing cited, in a later clause: the clause goes', shown('She warns him that tact matters, saying "be kind to all of your rivals" [c1-b20]. Then he plays [c1-b21].') === 'She warns him that tact matters. Then he plays [c1-b21].', shown('She warns him that tact matters, saying "be kind to all of your rivals" [c1-b20]. Then he plays [c1-b21].'));
+    check('a quotation matching nothing cited, in the first clause: the sentence goes', shown('Mu toasts "Dzego will rise again and again" [c1-b21]. Zei wins [c1-b21].') === 'Zei wins [c1-b21].', shown('Mu toasts "Dzego will rise again and again" [c1-b21]. Zei wins [c1-b21].'));
+    check('a quotation is checked against the cited note\'s blocks', shown('The chairman says "it was ten to ten, exactly" [summary c8 §2].').includes('"it was ten to ten, exactly"') && shown('The chairman says "it was ten to eleven, sadly" [summary c8 §2].') === '');
+    check('one or two quoted words are a term and stay', shown('The "no head" rule [c1-b21].').includes('"no head"'));
+    check('a quoted phrase under six words stays unchecked (owner, 2026-11-18)', shown('Mu calls it "a test of the realm" [c1-b21].').includes('"a test of the realm"'));
+    check('a quotation of six words that matches nothing cited still goes', shown('Mu calls it "a test of the whole realm" [c1-b21]. Zei wins [c1-b21].') === 'Zei wins [c1-b21].');
+    check('citations after a narrow no-break space stay with their sentence', shown('Mu raised a glass and said "to our future, and to the future" here.\u202f [c1-b21] Then [c1-b20].').includes('"to our future, and to the future"'), shown('Mu raised a glass and said "to our future, and to the future" here.\u202f [c1-b21] Then [c1-b20].'));
+    check('the recap cut keeps citations after a narrow no-break space', fitWords('Chapter 6 – One.\u202f [c6-b1] Two two two.', 3, 1) === 'Chapter 6 – One.\u202f [c6-b1]', fitWords('Chapter 6 – One.\u202f [c6-b1] Two two two.', 3, 1));
+    check('a comma inside a list is not a clause boundary: the clause goes from its linking word', shown('Bai won thrice, while Zei’s quick, clever play made Den say "he had nearly reinvented all of cryptography" once [c1-b20]. Next [c1-b21].') === 'Bai won thrice. Next [c1-b21].', shown('Bai won thrice, while Zei’s quick, clever play made Den say "he had nearly reinvented all of cryptography" once [c1-b20]. Next [c1-b21].'));
+    check('a dash aside with an unmatched quotation goes', shown('He gave Bai the turn – he tells her "now is your chance to shine" – and won [c1-b21].') === 'He gave Bai the turn and won [c1-b21].', shown('He gave Bai the turn – he tells her "now is your chance to shine" – and won [c1-b21].'));
+    check('with no clause boundary before it, the sentence goes', shown('Zei’s quick, clever play made Den say "he had nearly reinvented all of cryptography" [c1-b20]. Next [c1-b21].') === 'Next [c1-b21].');
+    check('dropping keeps paragraphs', shown('One [c1-b20].\n\nTwo says "not in any block at all" here. Three [c1-b21].') === 'One [c1-b20].\n\nThree [c1-b21].', JSON.stringify(shown('One [c1-b20].\n\nTwo says "not in any block at all" here. Three [c1-b21].')));
   }
 
   // --- Glossary words in the question ---------------------------------------
@@ -174,7 +197,10 @@ try {
     const res = await ask(deps(101), { question: 'Why is Gladias asked to rate a building?' });
     check('ask returns an answer', res.state === 'answer', res.state);
     if (res.state === 'answer') {
-      check('the nonexistent and not-given citations are dropped', res.dropped === 2, String(res.dropped));
+      // The quotation matches no block its sentence cites, and is in the sentence's first clause: the sentence goes, its
+      // citation with it. The other citation, not given, is dropped.
+      check('the not-given citation is dropped', res.dropped === 1, String(res.dropped));
+      check('a sentence whose quotation matches no cited block is dropped whole, with no "…"', !res.parts.some((p) => p.type === 'text' && (p.text.includes('…') || p.text.includes('citizen'))));
       check('an answer with no reviewed note carries no notes line', !res.notes);
       check('only real, allowed blocks are quoted', res.quotes.length === 1 && res.quotes[0].id === real, JSON.stringify(res.quotes.map((q) => q.id)));
       const [{ content }] = await sql`select content from studio.text_blocks where chapter = ${Number(real.slice(1, real.indexOf('-')))} and idx = ${Number(real.split('-b')[1])}`;
@@ -185,29 +211,33 @@ try {
     }
     const sent = calls.find((c) => c.model === CHAT.model && c.user !== 'Why is Gladias asked to rate a building?')!.user;
     check('no chapter limit is sent to the model', !/chapters 1[–-]\d/.test(sent) && sent.includes('Passages from the book:'), sent.slice(0, 60));
-    check('a Learn more character in any question brings their notes (Gladias)', sent.startsWith('Reviewed notes') && sent.includes('(learn-more gladias who)'));
+    check('a Learn more character in any question brings their notes (Gladias)', sent.startsWith('Reviewed notes') && sent.includes('[learn-more gladias who]'));
     check('every answer is checked by the guard', calls.some((c) => c.model === CHAT.guardModel));
   }
   {
     // A chapter named: its summary sections go to the model as reviewed notes; an answer citing their sources is kept.
     calls.length = 0;
     const src = routeQuestion('What happens in chapter 5?', null).notes[0].sources;
-    answerText = `Zei's class is moved and a bomb hits [${src[0]}]. Later he wonders why [${src[1]}].`;
+    answerText = `Zei's class is moved and a bomb hits [summary c5 §1]. Later he wonders why [Summary c5 s1].`;
     const res = await ask(deps(102), { question: 'What happens in chapter 5?' });
     const call = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Reviewed notes'));
-    check('a chapter summary is sent as a reviewed note', Boolean(call?.user.includes('(summary c5 §1)')), call?.user.slice(0, 120));
-    check('an answer citing a note\'s sources is kept', res.state === 'answer' && res.dropped === 0 && res.quotes.length === 2, JSON.stringify(res).slice(0, 200));
+    check('a chapter summary is sent as a reviewed note, by its label', Boolean(call?.user.includes('[summary c5 §1]')), call?.user.slice(0, 120));
+    const notesPart = call?.user.slice(0, call.user.indexOf('Passages from the book:')) ?? '';
+    check('notes are sent without block ids (owner, 2026-11-17: the model cites the note)', notesPart.length > 0 && !/c\d+-b\d+/.test(notesPart), notesPart.slice(0, 120));
+    check('an answer citing a note by its label is kept, the label in any spelling', res.state === 'answer' && res.dropped === 0 && res.parts.filter((p) => p.type === 'note').length === 2, JSON.stringify(res).slice(0, 200));
+    check('a note citation shows the blocks the note rests on', res.state === 'answer' && res.noteCites?.[0]?.label === 'summary c5 §1' && src.every((id) => res.quotes.some((q) => q.id === id)) && res.noteCites[0].sources.length === src.length, res.state === 'answer' ? JSON.stringify(res.noteCites) : '');
     check('it carries the summary notes line', res.state === 'answer' && JSON.stringify(res.notes) === JSON.stringify([NOTE_WORDING.summary]), res.state === 'answer' ? JSON.stringify(res.notes) : res.state);
-    check('the support check sees the note', (supportSeen[supportSeen.length - 1] ?? '').includes('(summary c5 §1)') && (supportSeen[supportSeen.length - 1] ?? '').includes('REVIEWED NOTES'));
+    const seen = supportSeen[supportSeen.length - 1] ?? '';
+    check('the support check sees the cited note, and no passage for it', seen.includes('CITED NOTES') && seen.includes('[summary c5 §1]') && /CITED PASSAGES:\n\(none\)/.test(seen), seen.slice(0, 200));
   }
   {
     // A Learn more character: the whole text goes, the later part included; the notes line names it.
     calls.length = 0;
     const later = routeQuestion('Who is Bai?', null).notes.find((n) => n.label === 'learn-more bai later')!;
-    answerText = `Later she leaves [${later.sources[0]}].`;
+    answerText = `Later she leaves [learn-more bai later].`;
     const res = await ask(deps(114), { question: 'Who is Bai?' });
     const call = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Reviewed notes'))!;
-    check('a Learn more character\'s later part is sent', call.user.includes('(learn-more bai later)'));
+    check('a Learn more character\'s later part is sent', call.user.includes('[learn-more bai later]') && later.sources.length > 0);
     check('the Learn more notes line names the character', res.state === 'answer' && res.notes?.[0] === NOTE_WORDING.learnMore('Bai', false), res.state === 'answer' ? JSON.stringify(res.notes) : res.state);
   }
   {
@@ -220,7 +250,7 @@ try {
     answerText = 'Commentary.';
     await ask(deps(115), { question: 'where was I?', position: 8 });
     const call = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Reviewed notes'))!;
-    check('"where was I" at chapter 8 sends chapters 6 to 8', ['c6', 'c7', 'c8'].every((c) => call.user.includes(`(summary ${c} §1)`)) && !call.user.includes('(summary c9'));
+    check('"where was I" at chapter 8 sends chapters 6 to 8', ['c6', 'c7', 'c8'].every((c) => call.user.includes(`[summary ${c} §1]`)) && !call.user.includes('[summary c9'));
   }
   {
     // The whole book (owner, 2026-11-17): each chapter's first summary section as written, no model, no message used.
@@ -339,16 +369,81 @@ try {
     answerText = `He is chosen because he is the emperor [${real}].`;
     supportQueue = ['UNSUPPORTED the emperor claim'];
     const res = await ask(deps(110), { question: 'Why is Gladias asked to rate a building?' });
-    check('an unsupported answer is not shown', res.state === 'unsupported', res.state);
+    // Gladias has Learn more notes, so a refused answer about him falls back to them (owner, 2026-11-18; no retry here).
+    check('an unsupported answer is not shown', res.state !== 'answer', res.state);
     const [{ content }] = await sql`select content from studio.text_blocks where chapter = ${Number(real.slice(1, real.indexOf('-')))} and idx = ${Number(real.split('-b')[1])}`;
     const seen = supportSeen[supportSeen.length - 1] ?? '';
     check('the support check sees the stored text of the cited block', seen.includes(String(content).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40)));
     supportQueue = ['', ''];
     const res2 = await ask(deps(111), { question: 'Why is Gladias asked to rate a building?' });
-    check('no verdict from the support check fails closed', res2.state === 'unsupported', res2.state);
+    check('no verdict from the support check fails closed', res2.state !== 'answer', res2.state);
     supportQueue = [];
     const res3 = await ask(deps(112), { question: 'Why is Gladias asked to rate a building?' });
     check('a supported answer is shown', res3.state === 'answer', res3.state);
+
+    // Sentence by sentence (owner, 2026-11-18): only the sentences that fail are left out, if two remain and the first
+    // still answers the question.
+    const other = r1.passages[1].id;
+    answerText = `He is chosen at random [${real}]. He is the emperor [${other}]. He looks at the building [${real}].`;
+    supportQueue = ['1 SUPPORTED\n2 UNSUPPORTED: the emperor claim\n3 SUPPORTED\nFIRST ANSWERS: YES'];
+    const cut = await ask(deps(114), { question: 'Why is Gladias asked to rate a building?' });
+    const said = cut.state === 'answer' ? cut.parts.map((p) => (p.type === 'text' ? p.text : '')).join('') : '';
+    check('an unsupported sentence is left out and the rest shown', cut.state === 'answer' && cut.cut === 1 && !said.includes('emperor') && said.includes('at random') && said.includes('looks at'), JSON.stringify(cut).slice(0, 300));
+    check("the left-out sentence's citation goes with it", cut.state === 'answer' && !cut.parts.some((p) => p.type === 'cite' && p.id === other) && !cut.quotes.some((q) => q.id === other));
+    check('the support check is shown the sentences numbered', /\n1\. He is chosen at random/.test(supportSeen[supportSeen.length - 1] ?? '') && /\n3\. He looks/.test(supportSeen[supportSeen.length - 1] ?? ''));
+    supportQueue = ['1 UNSUPPORTED: x\n2 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: NO'];
+    check('the first sentence unsupported: not shown', (await ask(deps(115), { question: 'Why is Gladias asked to rate a building?' })).state !== 'answer');
+    supportQueue = ['1 SUPPORTED\n2 UNSUPPORTED: x\n3 UNSUPPORTED: y\nFIRST ANSWERS: YES'];
+    check('only one sentence left: not shown', (await ask(deps(116), { question: 'Why is Gladias asked to rate a building?' })).state !== 'answer');
+    supportQueue = ['1 SUPPORTED\n2 UNSUPPORTED: x\n3 SUPPORTED\nFIRST ANSWERS: NO'];
+    check('the first sentence no longer answers the question: not shown', (await ask(deps(117), { question: 'Why is Gladias asked to rate a building?' })).state !== 'answer');
+    supportQueue = ['1 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: YES'];
+    const gap = await ask(deps(118), { question: 'Why is Gladias asked to rate a building?' });
+    check('a sentence with no verdict line counts as unsupported', gap.state === 'answer' && gap.cut === 1);
+    supportQueue = ['1 SUPPORTED\n2 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: YES'];
+    const all = await ask(deps(119), { question: 'Why is Gladias asked to rate a building?' });
+    check('every sentence supported: shown whole, nothing cut', all.state === 'answer' && !all.cut);
+    check('reply forms: "2. **UNSUPPORTED**" and a bare SUPPORTED', parseSupport('1. SUPPORTED\n2. **UNSUPPORTED** — x\nFIRST ANSWERS: YES', 2)?.unsupported.has(1) === true && parseSupport('SUPPORTED', 3)?.unsupported.size === 0 && parseSupport('', 2) === null);
+    check("the check's reason is kept per sentence", parseSupport('1 SUPPORTED\n2 UNSUPPORTED: the emperor claim\nFIRST ANSWERS: YES', 2)?.reasons.get(1) === 'the emperor claim');
+    supportQueue = [];
+
+    // One retry, then the notes as written, then "the passages don't say" (owner, 2026-11-18).
+    const retrying = (fid: number) => ({ ...deps(fid), retryPrompt: 'RETRY\n{{REASONS}}' });
+    answerText = `He is chosen at random [${real}]. He is the emperor [${other}]. He looks at the building [${real}].`;
+    supportQueue = ['1 UNSUPPORTED: the random claim\n2 UNSUPPORTED: the emperor claim\n3 SUPPORTED\nFIRST ANSWERS: NO', '1 SUPPORTED\n2 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: YES'];
+    calls.length = 0;
+    const rescued = await ask(retrying(120), { question: 'Why is Gladias asked to rate a building?' });
+    check('a refused answer is asked for once more, and shown if the new one passes', rescued.state === 'answer' && rescued.retried === true, JSON.stringify(rescued).slice(0, 200));
+    const retryCall = calls.find((c) => c.model === CHAT.model && c.user.startsWith('RETRY'));
+    check("the retry carries each failed sentence and the check's reason", !!retryCall && retryCall.user.includes('Sentence 1 ("He is chosen at random') && retryCall.user.includes('the emperor claim'), retryCall?.user);
+    check('the retry is checked by the guard too', calls.filter((c) => c.model === CHAT.guardModel && !c.user.startsWith('QUESTION')).length === 2);
+    supportQueue = ['1 UNSUPPORTED: x\n2 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: YES', '1 UNSUPPORTED: x\n2 SUPPORTED\n3 SUPPORTED\nFIRST ANSWERS: YES'];
+    calls.length = 0;
+    const fell = await ask(retrying(121), { question: 'Who is Gladias?' });
+    check('only one retry', calls.filter((c) => c.model === CHAT.model && c.user.startsWith('RETRY')).length === 1);
+    check('still refused, a who-is question on one character gets the notes as written', fell.state === 'notes' && fell.notes.some((n) => n.label === 'learn-more gladias who') && fell.notes.every((n) => n.text.length > 20 && n.sources.length > 0), JSON.stringify(fell).slice(0, 300));
+    check('the notes come with their passages, their names and who wrote them', fell.state === 'notes' && fell.quotes.length > 0 && fell.notes[0].title.startsWith('Learn more about') && fell.lines.length > 0);
+    check('no model text in the notes reply', fell.state === 'notes' && !JSON.stringify(fell).includes('He is chosen at random'));
+    // A question that names a character but asks something else: "the passages don't say", with a link (owner, 2026-11-18).
+    supportQueue = ['UNSUPPORTED', 'UNSUPPORTED'];
+    const named = await ask(retrying(125), { question: 'Why is Gladias asked to rate a building in chapter 1?' });
+    check('another question naming a character: no notes, links to its Learn more and the chapter named', named.state === 'unsupported' && JSON.stringify(named.see) === JSON.stringify([{ href: '/challenge/gladias', label: 'Learn more about Gladias' }, { href: '/chapter/1', label: 'Chapter 1 in brief' }]), JSON.stringify(named));
+    const scope = (q: string) => asksForNote(q, routeQuestion(q, 5));
+    check('notes are the reply only when asked for', scope('Who is Bai?') && scope('Tell me about Seila') && scope('What do we know about Deluin?') && scope('Summarize chapter 5') && scope('where was I?'));
+    check('never for two characters, or a question about something else', !scope('Tell me about Zei and Bai') && !scope('Who is the man Seila is with in Freetown?') && !scope('Why does Deluin invite Zei to Redshire?') && !scope('How did Gladias borrow money?'));
+    const plainQ = 'How is the look of a building rated in Veridia?';
+    const r2 = await retrieve(sql, plainQ);
+    answerText = `It is rated by a vote [${r2.passages[0].id}]. It is taxed [${r2.passages[0].id}].`;
+    supportQueue = ['1 UNSUPPORTED: x\n2 SUPPORTED\nFIRST ANSWERS: YES', '1 UNSUPPORTED: x\n2 SUPPORTED\nFIRST ANSWERS: YES'];
+    const none = await ask(retrying(122), { question: plainQ });
+    check('with no notes routed, both failing means "the passages don\'t say", with no links', none.state === 'unsupported' && !none.see, none.state);
+    supportQueue = [];
+    const where = await ask(retrying(123), { question: 'where was I', position: 8 });
+    check('"where was I" routes the current chapter and the two before (its fallback notes)', where.state === 'answer' || where.state === 'notes');
+    supportQueue = ['UNSUPPORTED', 'UNSUPPORTED'];
+    const whereNotes = await ask(retrying(124), { question: 'where was I', position: 8 });
+    check('"where was I" falls back to the summaries of chapters 6 to 8', whereNotes.state === 'notes' && [...new Set(whereNotes.notes.map((n) => n.label.match(/c(\d+)/)![1]))].join(',') === '6,7,8', JSON.stringify(whereNotes.state === 'notes' ? whereNotes.notes.map((n) => n.label) : whereNotes.state));
+    supportQueue = [];
   }
 
   // --- No answer, safety-check or search cost can be joined to a person ------
