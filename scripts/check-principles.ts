@@ -2409,7 +2409,7 @@ add({
 add({
   id: 'P7b',
   principle: 7,
-  name: 'the first screen says "not affiliated"; no ERC-20, ERC-721 or airdrop code; the only contract is contracts/snowmoon-wip, with no royalties and no way to change a price',
+  name: 'the first screen says "not affiliated"; no ERC-20, ERC-721 or airdrop code; the only contracts are in contracts/snowmoon-editions, with no royalties and no way to change a price',
   load: async () => ({
     home: await page('/'),
     code: [...walk('src', /\.tsx?$/), ...walk('supabase/migrations', /\.sql$/), ...walk('scripts', /\.(ts|py)$/)]
@@ -2435,25 +2435,27 @@ add({
       if (royalty.test(text)) problems.push(`${file}: royalty code`);
     }
     for (const { file, text } of sol) {
-      if (!file.startsWith('contracts/snowmoon-wip/')) { problems.push(`${file}: a contract outside contracts/snowmoon-wip`); continue; }
-      if (!file.startsWith('contracts/snowmoon-wip/src/')) continue; // its tests and helpers
+      if (!file.startsWith('contracts/snowmoon-editions/')) { problems.push(`${file}: a contract outside contracts/snowmoon-editions`); continue; }
+      if (!file.startsWith('contracts/snowmoon-editions/src/')) continue; // its tests, scripts and helpers
       const body = text.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\/\/.*$/gm, ' ');
       if (coin.test(body)) problems.push(`${file}: ERC-20, ERC-721 or airdrop code`);
       if (royalty.test(body)) problems.push(`${file}: royalty code`);
-      // No way to change a price: no function named for setting one, and a price is written only in createToken.
+      // No way to change a price: no function named for setting one, and a stored price (price, startPrice,
+      // topPrice) is written only in a seller's configure, which the collection calls once per edition at creation.
       for (const m of body.matchAll(/function\s+(\w+)\s*\(/g)) if (/^_?set\w*price/i.test(m[1])) problems.push(`${file}: ${m[1]} changes a price`);
       const parts = body.split(/(?=\bfunction\s+\w+\s*\()/);
       for (const part of parts) {
         const name = /^function\s+(\w+)/.exec(part)?.[1] ?? '(outside any function)';
-        if (name !== 'createToken' && /\bprice\s*(\+|-|\*|\/)?=(?!=)/i.test(part)) problems.push(`${file}: ${name} writes a price`);
+        if (name !== 'configure' && /\.\s*(start|top)?price\s*(\+|-|\*|\/)?=(?!=)/i.test(part)) problems.push(`${file}: ${name} writes a price`);
       }
+      if (/\bfunction\s+configure\s*\([^)]*\)[^;{]*\{/.test(body) && !/AlreadyConfigured/.test(body)) problems.push(`${file}: configure can run more than once per edition`);
     }
     return problems;
   },
   plant: (c) => {
     c.home = c.home.replace(/not affiliated with the author/gi, 'a fan edition');
     c.sol.push({ file: 'contracts/other/Coin.sol', text: 'contract Coin is ERC20 {}' });
-    c.sol.push({ file: 'contracts/snowmoon-wip/src/Planted.sol', text: 'contract P is ERC2981 { function setPrice(uint256 id, uint256 p) external { tokens[id].price = p; } }' });
+    c.sol.push({ file: 'contracts/snowmoon-editions/src/Planted.sol', text: 'contract P is ERC2981 { function setPrice(uint256 id, uint256 p) external { tokens[id].price = p; } function bump(uint256 id) external { ladders[id].topPrice *= 2; } function configure() external { } }' });
   },
 });
 

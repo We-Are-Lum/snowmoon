@@ -654,8 +654,9 @@ owner: 2026-10-30, the site no longer says "no token"; 2026-10-31, this wording,
   owner-approved line "Independent adaptation · Not affiliated with the
   author", `config/intro.json`; the owner moved it from
   Design's footer into the hero, 2026-10-10). No ERC-20, ERC-721 or airdrop code exists in the site's
-  code; the only contract (outside its own libraries) is `contracts/snowmoon-wip`, with no royalty
-  (ERC-2981) code, no function that sets a price, and a price written only in `createToken`.
+  code; the only contracts (outside their own libraries) are in `contracts/snowmoon-editions`, with no royalty
+  (ERC-2981) code, no function that sets a price, and prices written only in a seller's `configure`, once per
+  edition, when the edition is created.
   `npm run check:ui` also checks the first screen at phone size.
 - `npm run check:intro`: the first-visit intro's disclaimer (`config/intro.json`),
   shown on card 1 and at the top of /about, keeps "not affiliated with the
