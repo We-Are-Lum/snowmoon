@@ -38,7 +38,7 @@ export const P = {
   historyLine: (d: PictureDecision) => `${day(d.at)} · ${adminName(d.byFid, d.byHandle)} · ${d.action === 'keep' ? 'kept a redo' : d.versionId ? 'showed a redo again' : 'showed the first picture again'}`,
   versionMeta: (v: PictureVersion, modelName: string) => `${modelLine(modelName, v.maker, v.open)} · ${lookName(v.look)} · by FID ${v.madeByFid} · ${day(v.madeAt)}`,
   lettered: 'This picture has lettering: it can be redone once the lettering work ships.',
-  notReady: 'Redoing pictures needs the chapter-picture migration first (NEXT_chapter_picture_versions).',
+  notReady: 'Redoing pictures needs the chapter-picture migration first (0042_chapter_picture_versions).',
   noStorage: 'Kept pictures can’t be stored on this copy of the site.',
   cap: (spent: number, cap: number, reset: string) => `Admins’ chapter pictures today: $${spent.toFixed(2)} of $${cap}. The day resets at ${reset}.`,
   capReached: (cap: number, reset: string) => `Today’s $${cap} for admins’ chapter pictures is used up. More at ${reset}.`,

@@ -4,7 +4,7 @@ import { isAdmin } from '../admins';
 import type { Look, PictureRecipe } from './shared';
 
 /**
- * The only code that changes what a chapter shows (owner's ruling for principle 5, 2026-11-18, pending his reread: "An
+ * The only code that changes what a chapter shows (owner's ruling for principle 5, 2026-11-18, reread by the owner 2026-11-19: "An
  * admin may replace a picture in the site's own edition of a chapter. The change is public at once, shows who made it
  * and when, and can be undone. This covers only the edition's own pictures, never the order or prominence of people's
  * published work."). It writes the three chapter-picture tables and nothing else (check:principles P5j,

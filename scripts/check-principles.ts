@@ -1381,7 +1381,7 @@ add({
 add({
   id: 'P5j',
   principle: 5,
-  name: 'admin publishing code (the owner\'s ruling of 2026-11-18, pending his reread) touches only the edition\'s chapter pictures: one file, gated by the admin check, new rows only',
+  name: 'admin publishing code (the owner\'s ruling of 2026-11-18, reread 2026-11-19) touches only the edition\'s chapter pictures: one file, gated by the admin check, new rows only',
   load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
   // The rule is in scripts/lib/p5b.ts (p5jProblems); test:chapter-pictures proves each of its planted faults.
   run: (files) => p5jProblems(files),

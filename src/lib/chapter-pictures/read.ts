@@ -5,7 +5,7 @@ import { db } from '../db';
 import type { Look, PictureDecision, PictureRecipe, PictureVersion, ShownReplacement } from './shared';
 
 /**
- * Reading the edition's chapter pictures as admins left them (owner, 2026-11-18, option B; NEXT_chapter_picture_versions):
+ * Reading the edition's chapter pictures as admins left them (owner, 2026-11-18, option B; 0042_chapter_picture_versions):
  * which version each chapter picture shows, every version and decision for the review page, the looks, and the public
  * recipe of a kept version. Reads only; the writes are in ./admin.ts. Until the migration is applied (the tables
  * missing, 42P01) every chapter shows its committed file, as before.

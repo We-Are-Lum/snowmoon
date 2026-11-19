@@ -399,14 +399,14 @@ starting view. Where no one has picked, the starting view is "Most liked", then 
 "starting point". Moderators (FIDs in `MODERATOR_FIDS`) who are not admins can hide and nothing else. Picks never
 order the feed, search, anyone's own pages, the agent tools or the read API.
 
-**Ruling: the edition's own chapter pictures (owner, 2026-11-18; pending the owner's reread of this exact wording;
+**Ruling: the edition's own chapter pictures (owner, 2026-11-18; reread by the owner 2026-11-19;
 branch chapter-pictures-admin).** "An admin may replace a picture in the site's own edition of a chapter. The change is
 public at once, shows who made it and when, and can be undone. This covers only the edition's own pictures, never the
 order or prominence of people's published work." In practice (DRAFT, coding agent): on /you/illustrations an admin
 redoes one of the edition's chapter pictures (a private draft) and keeps it; the chapter then shows it with "Redone by
 @handle · date" and the model with its maker, and its recipe names the admin, the model, the style and the note. Every
 earlier picture, the committed file included, stays stored and can be shown again in one step
-(`NEXT_chapter_picture_versions.sql`: new rows only, nothing updated or deleted).
+(`0042_chapter_picture_versions.sql`: new rows only, nothing updated or deleted).
 
 **Checked by.**
 - `P5a`: no migration adds a canon/official/featured/pinned field, and no UI
@@ -419,7 +419,7 @@ earlier picture, the committed file included, stays stored and can be shown agai
   checks `isAdmin` and sorts still fails (the planted fault: a public page sorting by likes). The rule is in
   `scripts/lib/p5b.ts`; `npm run test:admin-activity` proves each of its faults. A read that filters on
   `status = 'published'` is not publishing; a status set in SQL, given in a row, or assigned in code is.
-- `P5j` (the ruling above, pending the owner's reread): admin publishing code touches only the edition's chapter
+- `P5j` (the ruling above, reread by the owner 2026-11-19): admin publishing code touches only the edition's chapter
   pictures. Any file that writes a chapter-picture table (`studio.chapter_picture_versions`, `_decisions`, `_looks`)
   must be `src/lib/chapter-pictures/admin.ts`, hold the admin check itself, write no other table, and only insert
   (never update or delete). Planted faults: that file also writing `studio.elements`, writing without the admin check,

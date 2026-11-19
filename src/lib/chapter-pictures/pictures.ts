@@ -89,7 +89,7 @@ export async function adminView(sql: Sql, where: Where) {
 
 /** A redo: one draft, private, from the picture shown now, the admin's note, the chapter's look and the model chosen. */
 export async function redoPicture(sql: Sql, fid: number, request: Request, raw: unknown, where: Where, deps: Deps): Promise<Result> {
-  if (!(await picturesReady(sql))) return no(503, 'Redoing pictures needs the chapter-picture migration (NEXT_chapter_picture_versions) first.');
+  if (!(await picturesReady(sql))) return no(503, 'Redoing pictures needs the chapter-picture migration (0042_chapter_picture_versions) first.');
   const b = (raw ?? {}) as { jobId?: unknown; note?: unknown; model?: unknown; notice?: unknown };
   const job = typeof b.jobId === 'string' ? checkJob(b.jobId) : null;
   if (!job) return no(404, 'No such picture');
@@ -141,7 +141,7 @@ export async function redoPicture(sql: Sql, fid: number, request: Request, raw: 
  * public bucket first), a version kept before, or the committed file (versionId null). Returns the chapter to revalidate.
  */
 export async function showPicture(sql: Sql, fid: number, raw: unknown, deps: Deps): Promise<Result & { chapter?: number }> {
-  if (!(await picturesReady(sql))) return no(503, 'Keeping pictures needs the chapter-picture migration (NEXT_chapter_picture_versions) first.');
+  if (!(await picturesReady(sql))) return no(503, 'Keeping pictures needs the chapter-picture migration (0042_chapter_picture_versions) first.');
   const b = (raw ?? {}) as { jobId?: unknown; versionId?: unknown };
   const job = typeof b.jobId === 'string' ? checkJob(b.jobId) : null;
   if (!job) return no(404, 'No such picture');
@@ -172,7 +172,7 @@ export async function showPicture(sql: Sql, fid: number, raw: unknown, deps: Dep
 
 /** Set the look every redo uses (chapter null) or one chapter's (look null clears it): a published style, or a line. */
 export async function setLook(sql: Sql, fid: number, raw: unknown, consented: (fid: number) => Promise<boolean> = async () => false): Promise<Result> {
-  if (!(await picturesReady(sql))) return no(503, 'Looks need the chapter-picture migration (NEXT_chapter_picture_versions) first.');
+  if (!(await picturesReady(sql))) return no(503, 'Looks need the chapter-picture migration (0042_chapter_picture_versions) first.');
   const b = (raw ?? {}) as { chapter?: unknown; look?: unknown };
   const chapter = b.chapter === null || b.chapter === undefined ? null : Number(b.chapter);
   if (chapter !== null && !(Number.isInteger(chapter) && chapter >= 1 && chapter <= 32)) return no(400, 'No such chapter');

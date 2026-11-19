@@ -383,7 +383,7 @@ export const ILLUSTRATION_CHECK = {
 
 /**
  * The edition's chapter pictures, redone by an admin on /you/illustrations (owner, 2026-11-18, option B; principle 5's
- * ruling pending his reread). A redo is a draft, private (its bytes only in studio.chapter_picture_versions, served
+ * ruling reread by the owner 2026-11-19). A redo is a draft, private (its bytes only in studio.chapter_picture_versions, served
  * only to admins) until an admin presses Keep; then the chapter shows it at once, with who kept it and when, and any
  * earlier picture (the committed file included) can be shown again in one step. Nothing is deleted.
  * Models: those the challenge offers this admin where they are (src/lib/challenge/models.ts challengeModelsFor), the

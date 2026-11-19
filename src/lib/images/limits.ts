@@ -24,7 +24,7 @@ type Sql = postgres.Sql;
 const TODAY = `(now() at time zone 'utc')::date`;
 
 export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'no-free' | 'closed-limit' | 'closed-spend' | 'admin-spend' | RemixRefusal;
-/** 'admin': an admin's chapter pictures (CHAPTER_PICTURES.adminDailyCapUsd), counted apart from the free cap (NEXT_chapter_picture_versions.sql). */
+/** 'admin': an admin's chapter pictures (CHAPTER_PICTURES.adminDailyCapUsd), counted apart from the free cap (0042_chapter_picture_versions.sql). */
 export type Funded = 'free' | 'prepaid' | 'admin';
 /** Only a wallet account pays from a balance (not a Lens or Bluesky account, whose numbers are also below zero); Lens and Bluesky accounts use the free count when freeFor allows. */
 export const fundedBy = (fid: number): Funded => (isWalletNumber(fid) ? 'prepaid' : 'free');

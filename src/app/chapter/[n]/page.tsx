@@ -91,7 +91,7 @@ export default async function ChapterPage({ params }: Props) {
   // Seeded images an admin hid (owner, 2026-10-29) aren't shown.
   const hidden = await hiddenSeeded();
   // A picture an admin redid and kept (owner, 2026-11-18, option B) shows in place of the committed file, with who and
-  // when; without one (or before NEXT_chapter_picture_versions is applied) the committed file shows, as before.
+  // when; without one (or before 0042_chapter_picture_versions is applied) the committed file shows, as before.
   const replaced = await shownReplacements();
   const modelName = (id: string) => CHALLENGE_MODELS.find((m) => m.allowlistId === id)?.name ?? id;
   const images = withReplacements(loadIllustrations(n).filter((im) => !hidden.has(im.id)), replaced, modelName);

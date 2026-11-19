@@ -40,7 +40,7 @@ export const P5B_PLANTS: Record<string, SrcFile> = {
 };
 
 /**
- * P5j (owner's ruling for principle 5, 2026-11-18, pending his reread): "An admin may replace a picture in the site's own
+ * P5j (owner's ruling for principle 5, 2026-11-18, reread by the owner 2026-11-19): "An admin may replace a picture in the site's own
  * edition of a chapter. The change is public at once, shows who made it and when, and can be undone. This covers only
  * the edition's own pictures, never the order or prominence of people's published work." So the code that changes what
  * a chapter shows (any file that writes a chapter-picture table) must hold the admin check itself, may write nothing

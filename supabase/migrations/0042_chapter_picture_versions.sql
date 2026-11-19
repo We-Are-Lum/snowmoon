@@ -1,7 +1,7 @@
--- NEXT_chapter_picture_versions.sql: the edition's chapter pictures, replaced by an admin on the site (owner, 2026-11-18,
--- option B: "A keep goes live at once"; branch chapter-pictures-admin). NOT APPLIED. Unnumbered until merge: it takes
--- the next free number then, checked against origin/main and production. Drafted by the coding agent (Claude, a closed
--- model by Anthropic). DRAFT: the coordinator tests it first in PGlite or a local Postgres; the owner applies it.
+-- 0042_chapter_picture_versions.sql: the edition's chapter pictures, replaced by an admin on the site (owner, 2026-11-18,
+-- option B: "A keep goes live at once"; branch chapter-pictures-admin). APPLIED in production by the owner as
+-- NEXT_chapter_picture_versions (reported by the coordinator, 2026-11-19); numbered 0042 for the merge (main ended at
+-- 0041). Drafted by the coding agent (Claude, a closed model by Anthropic); tested in PGlite by the agent and the coordinator.
 -- Requires 0001_core (the studio schema, studio_writer), 0008_images and 0011_wallet_prepaid (studio.image_costs and its
 -- `funded` column).
 --

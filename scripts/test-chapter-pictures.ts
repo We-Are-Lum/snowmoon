@@ -14,7 +14,7 @@
  *
  *   npm run test:chapter-pictures
  *
- * In-memory Postgres (PGlite, every migration, NEXT_chapter_picture_versions included), through postgres.js as
+ * In-memory Postgres (PGlite, every migration, 0042_chapter_picture_versions included), through postgres.js as
  * studio_writer, as the site connects. No network, no model, no bucket: every such call is a stand-in.
  */
 import path from 'node:path';

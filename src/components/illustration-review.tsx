@@ -62,7 +62,7 @@ const W = {
   decisionWord: { keep: 'keep', regenerate: 'regenerate', drop: 'drop' } as Record<Decision, string>,
   inJobFile: 'Reviewed by a person (in the job file).',
   couldNot: 'Could not save it',
-  /** Where the redo flow isn't offered (before the migration, or a lettered picture), the old buttons say what they do. DRAFT (2026-11-18). */
+  /** Where the redo flow isn't offered (before the migration, or a lettered picture), the old buttons say what they do. Reread by the owner 2026-11-19 (no longer DRAFT). */
   recordOnly: 'These record your decision for the review only. They change nothing on the site.',
   problemType: { reference_copy_in_crowd: 'Copy of a cast member', contradicts_facts: 'Contradicts the book', stray_text: 'Stray text', other: 'Other' } as Record<string, string>,
 };
