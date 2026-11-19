@@ -202,6 +202,20 @@ contract InvariantTest is Test {
         assertEq(address(editions).balance, 0);
     }
 
+    /// lastMintAt is set exactly when something was sold, never in the future, and the summary agrees with the counts.
+    function invariant_lastMintAndSummary() public view {
+        for (uint256 i; i < handler.idsLength(); ++i) {
+            uint256 id = handler.ids(i);
+            if (editions.sellerOf(id) != address(seller)) continue;
+            uint256 t = seller.lastMintAt(id);
+            assertLe(t, block.timestamp);
+            assertEq(t > 0, seller.sold(id) > 0);
+            LadderSeller.Summary memory s = seller.summary(id);
+            assertEq(s.sold, editions.totalMinted(id));
+            assertEq(s.held, seller.held(id));
+        }
+    }
+
     /// Nothing about an edition changes after creation.
     function invariant_immutable() public view {
         for (uint256 i; i < handler.idsLength(); ++i) {

@@ -57,6 +57,8 @@ price(n) = startPrice * (topPrice / startPrice) ^ ((n - 1) / (N - 1))
 - **Rounding:** before rounding down, the price gets a relative allowance of 1e-15. Without it, prices that are exactly on a step come out a hair below and floor to the step under, so 0.005 and 0.05 ETH in the first ladder became 0.004999 and 0.049999. The allowance is far larger than the maths' error and far smaller than a step.
 - **Checked against** tables computed off-chain at 80 significant digits (`reference/ladder.py`, Python standard library only). There are 14 fixed ladders, covering sizes 1, 2, 3, 100 and 256, flat, steep, gentle, endpoints off the step, a start below one step, and up to `MAX_PRICE` from 1 wei, plus 60 random ladders: 5,820 prices in all (2,354 + 3,466). Every price matches exactly. `MAX_PRICE` keeps the allowance below one step: above about 1e27 wei it would round some prices up a step, which the independent review found.
 
+**`lastMintAt`** is the one stored value the read functions added (owner, 2026-11-18, for the site's quiet/busy rule): `mint` writes the block time into the same storage slot as the sold count, about 80 gas more per mint. Nothing in the contract reads it, and no price or payment changed.
+
 **Buying:** `mint(id, quantity, to)` is payable, with `quantity` from 1 to `MAX_PER_TX = 10`. `to` must be able to hold ERC-1155 tokens: an ordinary address, or a contract (including an EIP-7702 delegated account) that implements `onERC1155Received`. Others revert cleanly.
 - The cost is the sum of the next `quantity` prices, the same as `quote(id, quantity)`.
 - Send at least that. The actual cost is kept and any excess goes back to `msg.sender` in the same transaction, so a buyer who sends a margin still gets through if someone else mints first.
@@ -65,7 +67,7 @@ price(n) = startPrice * (topPrice / startPrice) ^ ((n - 1) / (N - 1))
 
 **Payout:** payments build up per edition (`ladder(id).paid` and `.released`; `held(id)` is the difference). `release(id)` can be called by anyone and sends that edition's whole balance to its payout address, and nowhere else. If the payout rejects ETH, the release reverts and the balance waits for a later one; other editions are unaffected. There is no other way for ETH to leave. ETH forced in by `selfdestruct` is never counted and stays.
 
-**Views:** `nextPrice(id)` (reverts when sold out), `priceOf(id, n)`, `quote(id, quantity)` (1 to 10, like `mint`; it doesn't check the opening time), `isOpen(id)`, `remaining(id)`, `sold(id)`, `held(id)`, `ladder(id)`, `collection`, `PRICE_STEP`, `MAX_PER_TX`, `MAX_PRICE`, `MAX_START_DELAY`.
+**Views:** `summary(id)` (everything an edition page needs in one call: size, sold, remaining, start and top price, next price (0 when sold out), opening time, last mint time, open or not, payout, held, and the collection's link), `pricesOf(id, first, count)` (a range of prices in one call; the whole ladder is `pricesOf(id, 1, maxSupply)`), `lastMintAt(id)` (when the edition was last minted, 0 if never), `nextPrice(id)` (reverts when sold out), `priceOf(id, n)`, `quote(id, quantity)` (1 to 10, like `mint`; it doesn't check the opening time), `isOpen(id)`, `remaining(id)`, `sold(id)`, `held(id)`, `ladder(id)`, `collection`, `PRICE_STEP`, `MAX_PER_TX`, `MAX_PRICE`, `MAX_START_DELAY`.
 
 **Events:** `EditionConfigured(id, payout, maxSupply, startPrice, topPrice, startTime)`, `Minted(id, buyer, to, firstPiece, quantity, cost)`, `Released(id, payout, amount)`.
 

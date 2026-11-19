@@ -29,7 +29,7 @@ The scripts below were also run end to end on a local anvil fork of Sepolia, wit
 
 ## Sepolia dry run (Nate)
 
-You need about 0.1 Sepolia ETH in the deployer/buyer wallet. The test ladder below costs 0.0766 ETH for both editions, plus gas.
+You need about 0.45 Sepolia ETH in the deployer/buyer wallet. The test ladders below cost 0.375842 ETH for both editions, plus gas. Faucets give a little each day, so start collecting early.
 
 **1. Test Safe.** On app.safe.global, on Sepolia, create a Safe with owners Nate, Garance and Luis, threshold 2. Note its address as `SAFE`.
 
@@ -45,10 +45,10 @@ forge script script/Deploy.s.sol --rpc-url sepolia --account <name> --broadcast 
 ```
 Note the two printed addresses as `EDITIONS` and `SELLER`. The deployer keeps no role.
 
-**5. Edition 1: 256 pieces**, on a cheap ladder with the same 1,000× shape (0.000002 to 0.002 ETH, 0.074636 ETH in all).
+**5. Edition 1: 256 pieces**, on a cheap ladder with the same 1,000× shape: 0.00001 to 0.01 ETH, 0.373687 ETH in all (owner, 2026-11-18). Prices round down to 0.000001 ETH, which is 10% of the first price. So 22 of the first 45 pieces cost the same as the piece before (pieces 1 to 4 all cost 0.00001), and from piece 46 every step rises. A cushion three pieces up costs more than the price from piece 3 on. The old 0.000002 start was flat for the first ~15 pieces.
 ```sh
 EDITIONS=$EDITIONS SELLER=$SELLER URI=ipfs://<edition 1 cid> SIZE=256 PAYOUT=$SPLIT \
-START_PRICE_WEI=2000000000000 TOP_PRICE_WEI=2000000000000000 START_TIME=0 \
+START_PRICE_WEI=10000000000000 TOP_PRICE_WEI=10000000000000000 START_TIME=0 \
 forge script script/EditionTx.s.sol --rpc-url sepolia
 ```
 It sends nothing. It prints the ladder and writes `safe-tx/create-edition-1-11155111.json`. In the Safe app: Apps → Transaction Builder → load that file → create. A second owner signs, then execute.

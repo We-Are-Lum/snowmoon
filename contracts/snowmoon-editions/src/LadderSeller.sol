@@ -7,6 +7,10 @@ import {FixedPointMathLib} from "solady/utils/FixedPointMathLib.sol";
 import {IEditionSeller} from "./IEditionSeller.sol";
 import {ISnowmoonEditionsMint} from "./ISnowmoonEditionsMint.sol";
 
+interface ISnowmoonEditionsUri {
+    function uri(uint256 id) external view returns (string memory);
+}
+
 /// @title LadderSeller (v1)
 /// @notice Sells Snowmoon Editions pieces one at a time along a rising ETH price ladder fixed when the edition is
 ///         created: piece 1 costs `startPrice`, the last piece costs `topPrice`, and the pieces in between rise
@@ -41,6 +45,7 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
         uint16 maxSupply; // the edition's size, from the collection
         uint16 sold; // pieces sold so far
         bool configured;
+        uint48 lastMintAt; // time of the latest mint (0: none yet); in the slot mint already writes
         // slot 3
         uint128 paid; // all payments kept for this edition (excess refunded is never counted)
         uint128 released; // all of it sent to payout so far
@@ -163,6 +168,9 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
         firstPiece = soldBefore + 1;
         // forge-lint: disable-next-line(unsafe-typecast) -- soldBefore + quantity <= maxSupply <= 256
         l.sold = uint16(soldBefore + quantity);
+        // For the site's quiet/busy rule only; nothing here reads it. 48 bits of seconds last for millions of years.
+        // forge-lint: disable-next-line(unsafe-typecast)
+        l.lastMintAt = uint48(block.timestamp);
         // forge-lint: disable-next-line(unsafe-typecast) -- cost <= 10 * 2^96
         l.paid += uint128(cost);
         emit Minted(id, msg.sender, to, firstPiece, quantity, cost);
@@ -207,6 +215,7 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
     function priceOf(uint256 id, uint256 n) public view returns (uint256) {
         Ladder storage l = _ladders[id];
         if (!l.configured) revert UnknownEdition(id);
+        // slither-disable-next-line incorrect-equality,timestamp -- slither taints the Ladder slot that also holds lastMintAt; no price reads the time
         if (n == 0 || n > l.maxSupply) revert BadPiece(n);
         return _price(l.startPrice, l.topPrice, l.lnRatio, n, l.maxSupply);
     }
@@ -257,6 +266,60 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
         return _ladders[id];
     }
 
+    /// @notice When edition `id` was last minted (block time), or 0 if never.
+    function lastMintAt(uint256 id) external view returns (uint256) {
+        return _ladders[id].lastMintAt;
+    }
+
+    /// @notice Prices of pieces `first` to `first + count - 1` of edition `id`, in one call (the whole ladder is
+    ///         `pricesOf(id, 1, maxSupply)`).
+    function pricesOf(uint256 id, uint256 first, uint256 count) external view returns (uint256[] memory prices) {
+        Ladder storage l = _ladders[id];
+        if (!l.configured) revert UnknownEdition(id);
+        if (first == 0 || count == 0 || first + count - 1 > l.maxSupply) revert BadPiece(first + count - 1);
+        prices = new uint256[](count);
+        (uint256 s, uint256 t, uint256 r, uint256 size) = (l.startPrice, l.topPrice, l.lnRatio, l.maxSupply);
+        for (uint256 i; i < count; ++i) {
+            prices[i] = _price(s, t, r, first + i, size);
+        }
+    }
+
+    /// @notice What an edition page needs, in one call. `nextPrice` is 0 when sold out; `uri` is the collection's.
+    struct Summary {
+        uint256 id;
+        uint256 maxSupply;
+        uint256 sold;
+        uint256 remaining;
+        uint256 startPrice;
+        uint256 topPrice;
+        uint256 nextPrice;
+        uint256 startTime;
+        uint256 lastMintAt;
+        bool open;
+        address payout;
+        uint256 held;
+        string uri;
+    }
+
+    function summary(uint256 id) external view returns (Summary memory s) {
+        Ladder storage l = _ladders[id];
+        if (!l.configured) revert UnknownEdition(id);
+        s.id = id;
+        s.maxSupply = l.maxSupply;
+        s.sold = l.sold;
+        s.remaining = uint256(l.maxSupply) - l.sold;
+        s.startPrice = l.startPrice;
+        s.topPrice = l.topPrice;
+        s.nextPrice = l.sold < l.maxSupply ? _price(l.startPrice, l.topPrice, l.lnRatio, uint256(l.sold) + 1, l.maxSupply) : 0;
+        s.startTime = l.startTime;
+        s.lastMintAt = l.lastMintAt;
+        // slither-disable-next-line timestamp -- an opening time; seconds of drift don't matter
+        s.open = block.timestamp >= l.startTime && l.sold < l.maxSupply;
+        s.payout = l.payout;
+        s.held = uint256(l.paid) - l.released;
+        s.uri = ISnowmoonEditionsUri(collection).uri(id);
+    }
+
     // ---------------------------------------------------------------------------------------------------------
     // Internal
     // ---------------------------------------------------------------------------------------------------------
@@ -273,7 +336,9 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
         pure
         returns (uint256 p)
     {
+        // slither-disable-next-line incorrect-equality,timestamp -- slither taints the Ladder slot that also holds lastMintAt; no price reads the time
         if (n == 1 || startPrice == topPrice) return startPrice;
+        // slither-disable-next-line incorrect-equality,timestamp -- slither taints the Ladder slot that also holds lastMintAt; no price reads the time
         if (n == size) return topPrice;
         // 1 < n < size, so size >= 3. x = ln(ratio) * (n-1)/(size-1) < ln(ratio) < 67e18, far below expWad's limit.
         uint256 x = lnRatio * (n - 1) / (size - 1);
@@ -282,8 +347,11 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
         // lnWad and expWad are accurate to about 1e-17; allow 1e-15 before rounding down, so a price that is
         // exactly on a step (0.005 ETH at piece 86 of the first ladder) isn't shown as 0.004999 ETH.
         p = (scaled + scaled / 1e15) / 1e18;
+        // slither-disable-next-line weak-prng -- rounding to the price step, not randomness (slither taints the Ladder slot that also holds lastMintAt; no price reads the time)
         p -= p % PRICE_STEP;
+        // slither-disable-next-line timestamp -- slither taints the Ladder slot that also holds lastMintAt; no price reads the time
         if (p < startPrice) p = startPrice;
+        // slither-disable-next-line timestamp -- slither taints the Ladder slot that also holds lastMintAt; no price reads the time
         if (p > topPrice) p = topPrice;
     }
 }
