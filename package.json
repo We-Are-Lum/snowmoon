@@ -78,6 +78,8 @@
     "test:adaptation-pages": "node scripts/editor-data.mjs && NEXT_PUBLIC_URL=https://snowmoon.party next build && tsx scripts/test-adaptation-pages.ts",
     "test:agents": "node scripts/editor-data.mjs && tsx --conditions=react-server scripts/test-agents.ts",
     "check:snap-live": "tsx scripts/check-snap-live.ts",
+    "usage": "tsx --env-file-if-exists=.env.local scripts/usage-report.ts",
+    "test:usage": "tsx scripts/test-usage-report.ts",
     "check:modal-vc": "tsx scripts/check-modal-vc.ts",
     "test:illustration-review": "tsx --conditions=react-server scripts/test-illustration-review.ts",
     "test:chapter-pictures": "tsx --conditions=react-server scripts/test-chapter-pictures.ts",
