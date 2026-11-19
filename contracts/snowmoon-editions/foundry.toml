@@ -1,0 +1,36 @@
+[profile.default]
+src = "src"
+test = "test"
+script = "script"
+out = "out"
+cache_path = "cache"
+libs = ["lib"]
+solc = "0.8.28"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+bytecode_hash = "ipfs"
+# Tests read the reference price tables and the compiled ABI.
+fs_permissions = [{ access = "read", path = "./test/reference" }, { access = "read", path = "./out" }]
+remappings = [
+  "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+  "forge-std/=lib/forge-std/src/",
+  "solady/=lib/solady/src/",
+]
+
+[fuzz]
+runs = 2000
+
+[invariant]
+runs = 256
+depth = 100
+fail_on_revert = true
+show_metrics = true
+
+[rpc_endpoints]
+sepolia = "${SEPOLIA_RPC_URL}"
+mainnet = "${MAINNET_RPC_URL}"
+
+[etherscan]
+sepolia = { key = "${ETHERSCAN_API_KEY}", chain = 11155111 }
+mainnet = { key = "${ETHERSCAN_API_KEY}", chain = 1 }

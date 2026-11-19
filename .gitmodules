@@ -4,3 +4,12 @@
 [submodule "contracts/snowmoon-wip/lib/forge-std"]
 	path = contracts/snowmoon-wip/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "contracts/snowmoon-editions/lib/openzeppelin-contracts"]
+	path = contracts/snowmoon-editions/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "contracts/snowmoon-editions/lib/forge-std"]
+	path = contracts/snowmoon-editions/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "contracts/snowmoon-editions/lib/solady"]
+	path = contracts/snowmoon-editions/lib/solady
+	url = https://github.com/Vectorized/solady
