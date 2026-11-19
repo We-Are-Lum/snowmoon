@@ -4,9 +4,9 @@ import '../../../styles/images.css';
 import '../you.css';
 
 /**
- * /you/illustrations: the owner's review of the seeded images (owner, 2026-10-23: "Review page under /you, owner only,
+ * /you/illustrations: the admins' review of the seeded images (owner, 2026-10-23: "Review page under /you, owner only,
  * worst first"). The page as served holds nothing: the jobs, the checks and the decisions are read in the browser from
- * /api/you/illustrations, which answers only for the owner (ILLUSTRATION_CHECK.owners).
+ * /api/you/illustrations, which answers only for admins (ADMINS; 404 for anyone else).
  */
 export const metadata: Metadata = { title: 'Image review', robots: { index: false, follow: false } };
 

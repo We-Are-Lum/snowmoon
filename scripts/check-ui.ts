@@ -922,7 +922,8 @@ async function checkMakeImage(page: Page, scheme: string) {
  * nothing about the check. Signed in as the owner, with the API replayed from scripts/fixtures/illustration-review.json
  * (real jobs, made-up answers, served out of order): worst first (wrong, partly, matches, not checked), each item has
  * the passage, its image with the AI label, the check labelled as AI with its model, and the three buttons; the
- * regenerate note box shows the publication line. Signed in as anyone else (403): only the owner-only line.
+ * regenerate note box shows the publication line. Signed in as anyone else (404 since 2026-11-18, and 403 as before):
+ * only the admins-only line ("owner" became "admins", owner 2026-11-18).
  */
 async function checkIllustrationReview(page: Page, scheme: string) {
   const where = `/you/illustrations @390 (${scheme})`;
@@ -958,8 +959,10 @@ async function checkIllustrationReview(page: Page, scheme: string) {
     if (v !== 'unchecked' && !/^AI check · by /.test((await item.locator('.ai-check-label').innerText().catch(() => '')) ?? '')) fail(`${where}: item ${i + 1}'s check is not labelled as AI with its model`);
     const buttons = (await item.locator('.illus-actions button').allTextContents()).map((t) => t.trim()).join('|');
     if (buttons !== 'Keep|Regenerate with my note|Drop') fail(`${where}: item ${i + 1}'s buttons are "${buttons}"`);
+    // Without the redo flow (the fixture has none), the three say they only record a decision (owner, 2026-11-18).
+    if (!/These record your decision for the review only\. They change nothing on the site\./.test(await item.locator('.illus-record-only').innerText().catch(() => ''))) fail(`${where}: item ${i + 1}'s buttons don't say they only record a decision`);
   }
-  if (!/Your decision: regenerate/.test(await page.locator('.illus-item').nth(2).innerText())) fail(`${where}: a saved decision is not shown with its item`);
+  if (!/Latest decision: regenerate/.test(await page.locator('.illus-item').nth(2).innerText())) fail(`${where}: a saved decision is not shown with its item`);
   await checkFloors(page, '/you/illustrations @390 (owner)', scheme);
   await shot(page, 'phone-390-you-illustrations', scheme);
   await page.locator('.illus-item').first().locator('.illus-actions button', { hasText: 'Regenerate with my note' }).click();
@@ -974,12 +977,14 @@ async function checkIllustrationReview(page: Page, scheme: string) {
   if (!/edited by you/i.test(await first.locator('.illus-drafted').innerText().catch(() => ''))) fail(`${where}: an edited note is not marked as edited`);
   await checkFloors(page, '/you/illustrations @390 (owner, note)', scheme);
   await page.unroute('**/api/you/illustrations');
-  await page.route('**/api/you/illustrations', (r) => r.fulfill({ status: 403, json: { error: 'Owner only' } }));
-  await as(1234);
-  await open(page, '/you/illustrations');
-  await page.getByText('This page is for the project’s owner.').waitFor({ timeout: 10000 }).catch(() => fail(`${where}: someone else signed in does not see the owner-only line`));
-  if (await page.locator('.illus-item').count()) fail(`${where}: someone else signed in sees review items`);
-  await page.unroute('**/api/you/illustrations');
+  for (const status of [404, 403]) {
+    await page.route('**/api/you/illustrations', (r) => r.fulfill({ status, json: { error: 'Not found' } }));
+    await as(1234);
+    await open(page, '/you/illustrations');
+    await page.getByText('This page is for the project’s admins.').waitFor({ timeout: 10000 }).catch(() => fail(`${where}: someone else signed in (${status}) does not see the admins-only line`));
+    if (await page.locator('.illus-item, .cp-panel, .cp-look').count()) fail(`${where}: someone else signed in (${status}) sees review items or the redo`);
+    await page.unroute('**/api/you/illustrations');
+  }
   await page.unroute('**/api/chat/status');
   await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
 }

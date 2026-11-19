@@ -12,6 +12,11 @@ import { REPO_URL, WORK } from '~/lib/config';
 import { loadNarration } from '~/lib/narration';
 import { loadIllustrations } from '~/lib/illustrations';
 import { hiddenSeeded } from '~/lib/admin-hidden';
+import { shownReplacements } from '~/lib/chapter-pictures/read';
+import { withReplacements } from '~/lib/chapter-pictures/view';
+import { recipePath } from '~/lib/chapter-pictures/shared';
+import { LocalDate } from '~/components/local-date';
+import { CHALLENGE_MODELS } from '~/lib/challenge/models';
 import { AdminHide } from '~/components/admin-hide';
 import { QuoteShare } from '~/components/quote-share';
 import { ChapterView } from '~/components/chapter-view';
@@ -85,7 +90,11 @@ export default async function ChapterPage({ params }: Props) {
   const narration = loadNarration(n);
   // Seeded images an admin hid (owner, 2026-10-29) aren't shown.
   const hidden = await hiddenSeeded();
-  const images = loadIllustrations(n).filter((im) => !hidden.has(im.id));
+  // A picture an admin redid and kept (owner, 2026-11-18, option B) shows in place of the committed file, with who and
+  // when; without one (or before 0042_chapter_picture_versions is applied) the committed file shows, as before.
+  const replaced = await shownReplacements();
+  const modelName = (id: string) => CHALLENGE_MODELS.find((m) => m.allowlistId === id)?.name ?? id;
+  const images = withReplacements(loadIllustrations(n).filter((im) => !hidden.has(im.id)), replaced, modelName);
   const imageAt = new Map(images.map((im) => [im.idx, im]));
   // The first picture on the page says "not by the author" where it can be seen (owner, 2026-10-15); readers' strips then don't.
   const firstImageIdx = displayOrder(chapter.blocks).map((i) => chapter.blocks[i]).find((b) => imageAt.has(b.idx))?.idx ?? null;
@@ -187,11 +196,18 @@ export default async function ChapterPage({ params }: Props) {
               </p>
             )}
             {image && (
-              <figure className="seed-image" data-for={id}>
+              <figure className="seed-image" data-for={id} {...(image.replaced ? { 'data-replaced': image.replaced.versionId, 'data-recipe-url': recipePath(image.replaced.versionId) } : {})}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={image.url} alt={image.alt} width={image.width} height={image.height} loading="lazy" data-zoom="" tabIndex={0} />
                 <figcaption className="block-caption">
-                  ¶ {f.label} · <AiLabel kind="image" text={AI_LABEL.image} file={image.recipe} item={image.id} />
+                  ¶ {f.label} · {image.replaced ? <AiLabel kind="image" text={AI_LABEL.image} view={image.replaced.view} /> : <AiLabel kind="image" text={AI_LABEL.image} file={image.recipe} item={image.id} />}
+                  {/* A redo an admin kept: who and when, and the model with its maker (principles 3 and 5). DRAFT wording. */}
+                  {image.replaced && (
+                    <span className="seed-replaced">
+                      {' · '}
+                      {image.replaced.by} · <LocalDate iso={image.replaced.at} /> · {image.replaced.model}
+                    </span>
+                  )}
                   {b.idx === firstImageIdx && <span className="ai-not-author"> · {NOT_AUTHOR_VISIBLE}</span>}
                   {/* The owner's image review (2026-10-23): shown only once the owner allows it (ILLUSTRATION_CHECK.reviewMarkPublic). */}
                   {image.reviewed && <span className="seed-reviewed"> · {REVIEWED_MARK}</span>}

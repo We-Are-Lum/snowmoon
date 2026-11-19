@@ -1,6 +1,6 @@
 import 'server-only';
 import type postgres from 'postgres';
-import { CHALLENGE, CLOSED_IMAGES, IMAGES, closedChoiceOn, imagesDailySpendCapUsd } from '../config';
+import { CHALLENGE, CHAPTER_PICTURES, CLOSED_IMAGES, IMAGES, closedChoiceOn, imagesDailySpendCapUsd } from '../config';
 import { CLOSED_MODEL_IDS } from './sheet-models';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
 import { paysFor } from './price';
@@ -23,8 +23,9 @@ import { freeFor } from '../social/free';
 type Sql = postgres.Sql;
 const TODAY = `(now() at time zone 'utc')::date`;
 
-export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'no-free' | 'closed-limit' | 'closed-spend' | RemixRefusal;
-export type Funded = 'free' | 'prepaid';
+export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'no-free' | 'closed-limit' | 'closed-spend' | 'admin-spend' | RemixRefusal;
+/** 'admin': an admin's chapter pictures (CHAPTER_PICTURES.adminDailyCapUsd), counted apart from the free cap (0042_chapter_picture_versions.sql). */
+export type Funded = 'free' | 'prepaid' | 'admin';
 /** Only a wallet account pays from a balance (not a Lens or Bluesky account, whose numbers are also below zero); Lens and Bluesky accounts use the free count when freeFor allows. */
 export const fundedBy = (fid: number): Funded => (isWalletNumber(fid) ? 'prepaid' : 'free');
 
@@ -81,6 +82,12 @@ export async function closedSpentToday(sql: Sql): Promise<number> {
   return r?.usd ?? 0;
 }
 
+/** Today's spend on admins' chapter pictures (funded 'admin'), reserved and real: what CHAPTER_PICTURES.adminDailyCapUsd caps. */
+export async function adminSpentToday(sql: Sql): Promise<number> {
+  const [r] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${sql.unsafe(TODAY)} and funded = 'admin'`;
+  return r?.usd ?? 0;
+}
+
 /** The closed site-wide cap now: its own, never above the free cap of the moment. */
 // (A destructured name: scripts/test-challenge.ts refuses the open cap read straight from its config in this file.)
 const { dailySpendCapUsd: closedDailyCapUsd } = CLOSED_IMAGES;
@@ -116,7 +123,12 @@ export interface Spend {
    */
   remix?: { id: string; units: number; starts: boolean; slot: 'front' | 'side' | 'back' };
   /** 'closed': a closed model's picture (model choice): counts as CLOSED_IMAGES.countsAs pictures, with its own count and cap, inside the free cap. */
-  pool?: 'open' | 'closed';
+  /**
+   * 'admin': an admin's chapter picture (owner, 2026-11-18), open or closed: its own daily cap
+   * (CHAPTER_PICTURES.adminDailyCapUsd), counted as funded 'admin', never in the free cap or the person's count. The
+   * caller has checked that the person is an admin (the chapter-picture routes answer admins only).
+   */
+  pool?: 'open' | 'closed' | 'admin';
 }
 
 /** The start of today (UTC), as the other daily counts read it. */
@@ -157,7 +169,15 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.spend'))`;
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.fid'), ${fid}::int)`;
     // Closed models are for the free path only, for now (a wallet account's prepaid Generate: a decision owed).
-    if (isWalletNumber(fid) && spend.pool === 'closed') return { ok: false as const, refusal: 'closed-limit' as const };
+    if (isWalletNumber(fid) && (spend.pool === 'closed' || spend.pool === 'admin')) return { ok: false as const, refusal: 'closed-limit' as const };
+    // An admin's chapter picture: its own cap, its own totals (owner, 2026-11-18). Nothing in the free cap.
+    if (spend.pool === 'admin') {
+      const t = tx as unknown as Sql;
+      const spent = await adminSpentToday(t);
+      if (spent + spend.reserveUsd > CHAPTER_PICTURES.adminDailyCapUsd) return { ok: false as const, refusal: 'admin-spend' as const };
+      await addCost(t, 'admin', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
+      return { ok: true as const, left: Math.max(0, Math.floor((CHAPTER_PICTURES.adminDailyCapUsd - spent - spend.reserveUsd) / spend.reserveUsd)) };
+    }
     if (isWalletNumber(fid)) {
       const t = tx as unknown as Sql;
       const price = priceUsd(spend.reserveUsd);

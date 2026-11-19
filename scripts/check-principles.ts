@@ -25,7 +25,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { AGENTS, ASSISTANT, CHALLENGE, CHAT, CLOSED_PROVIDERS, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, imagesDailySpendCapUsd } from '../src/lib/config';
+import { ADMINS, AGENTS, ASSISTANT, CHALLENGE, CHAT, CLOSED_PROVIDERS, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, imagesDailySpendCapUsd } from '../src/lib/config';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
 import { rehearsalOn } from '../src/lib/challenge/rehearsal-switch';
@@ -37,7 +37,8 @@ import { MENTIONS_FILE, byMentionsThenName, mentionsFile } from './lib/character
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 import { p4aProblems } from './lib/p4a';
 import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, P5I_FILES, p5gProblems, p5iProblems } from './lib/p5g';
-import { P5B_PLANTS, p5bProblems } from './lib/p5b';
+import { P5B_PLANTS, P5J_PLANTS, p5bProblems, p5jProblems } from './lib/p5b';
+import { recipeProblems } from '../src/lib/chapter-pictures/shared';
 import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
 import { p2mProblems, p6acProblems, p8iProblems } from './lib/challenge-moments';
@@ -107,10 +108,34 @@ add({
     for (const f of walk('content/snowmoon/recipes/images', /chapter-\d+\.json$/)) {
       recipes[f] = json(f).images.map((i: { sha256: string }) => i.sha256);
     }
-    return { published: json('content/snowmoon/illustrations/published.json').images, recipes, lettering: json('content/snowmoon/recipes/images/lettering.json').images };
+    // The edition's chapter pictures an admin redid and kept (owner, 2026-11-18, option B): their recipes are in the
+    // database, not the repository. Read-only, when STUDIO_DATABASE_URL is set; before the migration, there are none.
+    type Kept = { id: string; sha256: string; file_sha256: string; recipe_sha256: string | null; prompt: string; recipe_prompt: string | null };
+    let kept: Kept[] = [];
+    let keptNote: string | null = 'skipped (database): STUDIO_DATABASE_URL not set';
+    if (process.env.STUDIO_DATABASE_URL) {
+      const sql = postgres(process.env.STUDIO_DATABASE_URL, { prepare: false, max: 1 });
+      try {
+        const [t] = await sql`select to_regclass('studio.chapter_picture_decisions') is not null as ok`;
+        kept = t.ok
+          ? [...(await sql<Kept[]>`select v.id, v.sha256, encode(sha256(v.jpeg), 'hex') as file_sha256, v.recipe->>'sha256' as recipe_sha256, v.prompt, v.recipe->>'prompt' as recipe_prompt
+              from studio.chapter_picture_versions v where exists (select 1 from studio.chapter_picture_decisions d where d.version_id = v.id)`)]
+          : [];
+        keptNote = null;
+      } finally {
+        await sql.end();
+      }
+    }
+    return { published: json('content/snowmoon/illustrations/published.json').images, recipes, lettering: json('content/snowmoon/recipes/images/lettering.json').images, kept, keptNote };
   },
-  run: ({ published, recipes, lettering }) => {
+  run: ({ published, recipes, lettering, kept, keptNote }) => {
     const problems: string[] = [];
+    if (keptNote) console.log(`  note: P1a ${keptNote}; the committed pictures are checked`);
+    // A kept redo: its file is the one its recipe names, and the recipe holds the exact prompt.
+    for (const k of kept ?? []) {
+      if (k.file_sha256 !== k.sha256 || k.recipe_sha256 !== k.sha256) problems.push(`chapter picture ${k.id}: its file, its record and its recipe don't name the same sha256`);
+      if (!k.prompt?.trim() || k.recipe_prompt !== k.prompt) problems.push(`chapter picture ${k.id}: its recipe doesn't hold its exact prompt`);
+    }
     for (const im of published) {
       const clean = im.clean?.png_sha256 ?? im.png_sha256;
       if (!recipes[im.recipe]?.includes(clean)) problems.push(`${im.id}: no recipe in ${im.recipe} for the render ${clean.slice(0, 12)}`);
@@ -122,6 +147,7 @@ add({
     return problems;
   },
   plant: (c) => {
+    c.kept = [...(c.kept ?? []), { id: 'planted', sha256: 'a'.repeat(64), file_sha256: 'b'.repeat(64), recipe_sha256: 'a'.repeat(64), prompt: 'p', recipe_prompt: 'p' }];
     c.published[0].png_sha256 = '0'.repeat(64);
     if (c.published[0].clean) c.published[0].clean.png_sha256 = '0'.repeat(64);
   },
@@ -222,11 +248,29 @@ add({
     }
     const pages: Record<number, string> = {};
     for (const n of PAGE_CHAPTERS) pages[n] = await page(`/chapter/${n}`);
-    return { images, narration, files, pages };
+    // A chapter picture an admin redid and kept (owner, 2026-11-18): the page marks it (data-replaced) and links its
+    // recipe on the site (data-recipe-url, /api/chapter-pictures/<id>), which is fetched here signed out.
+    const replaced: Record<string, { chapter: number; href: string; recipe: any }> = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+    for (const n of PAGE_CHAPTERS) {
+      const $ = cheerio.load(pages[n]);
+      for (const el of $('figure.seed-image[data-replaced]').toArray()) {
+        const job = String($(el).attr('data-for') ?? '');
+        const href = String($(el).attr('data-recipe-url') ?? '');
+        const r = href.startsWith('/api/chapter-pictures/') ? await fetch(BASE + href).then((x) => (x.ok ? x.json() : { http: x.status }), () => ({ http: 0 })) : { http: 'no link' };
+        replaced[job] = { chapter: n, href, recipe: r };
+      }
+    }
+    return { images, narration, files, pages, replaced };
   },
-  run: ({ images, narration, files, pages }) => {
+  run: ({ images, narration, files, pages, replaced }) => {
     const problems: string[] = [];
     const href = (rel: string) => `${REPO_URL}/blob/main/${rel}`;
+    for (const [job, r] of Object.entries(replaced ?? {})) {
+      if (r.recipe?.http !== undefined) { problems.push(`${job}: chapter ${r.chapter} shows a redo whose recipe (${r.href || 'no link'}) isn't public (HTTP ${r.recipe.http})`); continue; }
+      const missing = recipeProblems({ recipe: r.recipe?.recipe, publishedBy: r.recipe?.published_by });
+      if (missing.length) problems.push(`${job}: the redo's public recipe is incomplete: ${missing.join(', ')}`);
+      if (!pages[r.chapter].includes(r.href)) problems.push(`${job}: chapter ${r.chapter} page does not link the redo's recipe`);
+    }
     for (const im of images) {
       const f = files[im.recipe];
       if (!f || f.http) { problems.push(`${im.id}: recipe ${im.recipe} not public (HTTP ${f?.http})`); continue; }
@@ -237,7 +281,7 @@ add({
         const l = files[im.lettered.record];
         if (!l || l.http || !(l.images ?? []).some((e: { id: string }) => e.id === im.id)) problems.push(`${im.id}: lettering record not public`);
       }
-      if (PAGE_CHAPTERS.includes(im.chapter)) {
+      if (PAGE_CHAPTERS.includes(im.chapter) && !(im.id in (replaced ?? {}))) {
         if (!pages[im.chapter].includes(href(im.recipe))) problems.push(`${im.id}: chapter ${im.chapter} page does not link its recipe`);
         if (im.lettered && !pages[im.chapter].includes(href(im.lettered.record))) problems.push(`${im.id}: chapter ${im.chapter} page does not link its lettering record`);
       }
@@ -256,6 +300,8 @@ add({
     const first = c.images[0];
     c.files[first.recipe].images.find((e: { id: string }) => e.id === first.id).prompt = '';
     c.pages[1] = c.pages[1].split(`${REPO_URL}/blob/main/${c.narration[0].recipe}`).join('');
+    // A redo shown with a recipe that names no model, style or note, and no admin.
+    c.replaced = { ...(c.replaced ?? {}), 'c1-b005-planted': { chapter: 1, href: '/api/chapter-pictures/planted', recipe: { recipe: { prompt: 'p' }, published_by: null } } };
   },
 });
 add({
@@ -1236,11 +1282,29 @@ add({
   id: 'P4b',
   principle: 4,
   name: 'published generated assets record whose action published them',
-  load: async () => ({
-    images: json('content/snowmoon/illustrations/published.json'),
-    narration: Array.from({ length: 32 }, (_, i) => json(`content/snowmoon/narration/kokoro-af_heart/chapter-${i + 1}.json`)),
-  }),
-  run: ({ images, narration }) => {
+  load: async () => {
+    // The edition's chapter pictures an admin kept (owner, 2026-11-18): each decision in the database names the admin
+    // (FID, handle as it was then) and the time; each version names the admin who made it. Read-only, when
+    // STUDIO_DATABASE_URL is set.
+    type Dec = { id: string; by_fid: string; decided_at: Date | null; action: string; made_by_fid: string | null };
+    let decisions: Dec[] = [];
+    if (process.env.STUDIO_DATABASE_URL) {
+      const sql = postgres(process.env.STUDIO_DATABASE_URL, { prepare: false, max: 1 });
+      try {
+        const [t] = await sql`select to_regclass('studio.chapter_picture_decisions') is not null as ok`;
+        if (t.ok) decisions = [...(await sql<Dec[]>`select d.id::text, d.by_fid::text, d.decided_at, d.action, v.made_by_fid::text from studio.chapter_picture_decisions d left join studio.chapter_picture_versions v on v.id = d.version_id`)];
+      } finally {
+        await sql.end();
+      }
+    }
+    return {
+      images: json('content/snowmoon/illustrations/published.json'),
+      narration: Array.from({ length: 32 }, (_, i) => json(`content/snowmoon/narration/kokoro-af_heart/chapter-${i + 1}.json`)),
+      decisions,
+      admins: ADMINS as readonly number[],
+    };
+  },
+  run: ({ images, narration, decisions, admins }) => {
     // Allowed paths: an in-app action by a signed-in FID, or the maintainer
     // publishing via a script, with the date and an evidence file in the repo.
     type By = { fid?: unknown; action?: string; role?: string; script?: string; date?: string; evidence?: string };
@@ -1254,9 +1318,14 @@ add({
     if (!ok(images.published_by)) problems.push(`illustrations/published.json: no valid published_by ${want}`);
     const missing = narration.filter((x: { published_by?: By }) => !ok(x.published_by)).length;
     if (missing) problems.push(`narration: ${missing} of 32 chapter indexes have no valid published_by ${want}`);
+    for (const d of decisions ?? []) {
+      if (!admins.includes(Number(d.by_fid)) || !d.decided_at || !d.action) problems.push(`chapter picture decision ${d.id}: doesn't name an admin and a time (FID ${d.by_fid})`);
+      if (d.made_by_fid !== null && !admins.includes(Number(d.made_by_fid))) problems.push(`chapter picture decision ${d.id}: shows a picture made by FID ${d.made_by_fid}, not an admin`);
+    }
     return problems;
   },
   plant: (c) => {
+    c.decisions = [...(c.decisions ?? []), { id: 'planted', by_fid: '4242', decided_at: new Date(), action: 'keep', made_by_fid: '4242' }];
     delete c.images.published_by;
     c.narration[0].published_by = { ...c.narration[0].published_by, evidence: 'docs/prompts/does-not-exist.md' };
   },
@@ -1307,6 +1376,18 @@ add({
   plant: (files) => {
     // A PUBLIC page that checks isAdmin and sorts by counts must still fail.
     files.push(P5B_PLANTS.publicSort);
+  },
+});
+add({
+  id: 'P5j',
+  principle: 5,
+  name: 'admin publishing code (the owner\'s ruling of 2026-11-18, reread 2026-11-19) touches only the edition\'s chapter pictures: one file, gated by the admin check, new rows only',
+  load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
+  // The rule is in scripts/lib/p5b.ts (p5jProblems); test:chapter-pictures proves each of its planted faults.
+  run: (files) => p5jProblems(files),
+  plant: (files) => {
+    // Admin publishing code that also writes another table (here, people's published work) must fail.
+    files.push(P5J_PLANTS.otherTable);
   },
 });
 // A pick is always labelled and switchable, and the reader's choice stays on their device (owner, reread 2026-10-29).

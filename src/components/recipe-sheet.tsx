@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { REPO_URL } from '~/lib/config';
 import { AI_DECLARED, AI_OPENS } from '~/lib/ai-declared';
 import type { RecipeView } from '~/lib/recipe-view';
+import { LocalDate } from './local-date';
 
 const githubHref = (file: string) => (file.startsWith('http') ? file : `${REPO_URL}/blob/main/${file}`);
 
@@ -196,7 +197,25 @@ function RecipeSheet({ file, item, view: given, onClose }: { file: string; item?
               </div>
             ))}
             <dt>Published</dt>
-            <dd>{view.published ? `By ${view.published.by}${view.published.when ? `, ${view.published.when}` : ''}.` : (view.notPublished ?? 'Not published in the reader by this recipe.')}</dd>
+            <dd>
+              {view.published ? (
+                <>
+                  By {view.published.by}
+                  {view.published.whenIso ? (
+                    <>
+                      , <LocalDate iso={view.published.whenIso} />
+                    </>
+                  ) : view.published.when ? (
+                    `, ${view.published.when}`
+                  ) : (
+                    ''
+                  )}
+                  .
+                </>
+              ) : (
+                (view.notPublished ?? 'Not published in the reader by this recipe.')
+              )}
+            </dd>
             {view.cost && (
               <>
                 <dt>Cost</dt>

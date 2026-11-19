@@ -30,7 +30,9 @@ coding agent and its helpers are in `docs/prompts/`.
 
 **Checked by.**
 - `P1a`: every published image's render hash is in a committed image recipe,
-  and every lettered image has a matching record in `lettering.json`.
+  and every lettered image has a matching record in `lettering.json`. A chapter picture an admin redid and kept
+  (owner, 2026-11-18; DRAFT, branch chapter-pictures-admin) has its recipe in the database instead: on the live
+  database, its file's sha256, its record's and its recipe's agree, and the recipe holds its exact prompt.
 - `P1b`: every published narration file (each block and each chapter) matches
   its committed narration recipe.
 - `P1c`: in the database, every version of a published element has a recipe; a style or character sheet keeps one inside its body for each of its pictures instead, and passes only when it has pictures and every one names its prompt and model (owner, 2026-10-14)
@@ -46,7 +48,10 @@ coding agent and its helpers are in `docs/prompts/`.
   image and narration: the chapter page links the recipe (and the lettering
   record for lettered images), and the file at that link, fetched anonymously
   from the public repository, holds the prompt or spoken text for that very
-  output.
+  output. A chapter picture an admin redid and kept is marked on the page (`data-replaced`) and links its recipe on the
+  site (`/api/chapter-pictures/<version>`, answered for kept versions only, signed out); that recipe must name the
+  prompt, the model and its maker (open or closed), the style, the note and the admin who kept it, with the time
+  (DRAFT, 2026-11-18).
 - `P1e`: through the public database API, with only the public key, the
   spoken text of the house narration is readable.
 - `P1f`: every text box whose contents may be published is a
@@ -302,6 +307,14 @@ before the first closed picture on a device. At `CHALLENGE.dates.closes` the def
 by itself (`challengeDefaultModel`, tied to the date; tested on both sides). Open-weight models stay preferred: this
 is the owner's choice for the challenge's pictures, reported here.
 
+**Admins' chapter pictures (owner, 2026-11-18; DRAFT, branch chapter-pictures-admin).** When an admin redoes one of
+the edition's chapter pictures, the Model row offers the challenge's models (`challengeModelsFor`: FLUX.2 [klein] 4B
+edit first and the default; GPT Image 2.5 Sunburst by OpenAI and Gemini 3.1 Flash Image by Google only where their
+makers serve, after the maker's notice and the 18+ box, as for the challenge). Admins only: everyone else sees no
+change. Every redo's recipe and the chapter's caption name the model and its maker, and say closed. The owner has
+decided to retire "open model first"; until that change is on main, this section stands, and these pictures are
+reported here.
+
 **Status.** Pass. Both generation models record `open_weights: true`, their
 license and their weights. The closed drafting model is listed under
 `drafting` in `config/models.json`.
@@ -358,7 +371,9 @@ repo (the prompt log of the request that asked for it).
   live site that save and like refuse anonymous requests.
 - `P4b`: the published image index and every narration index record
   `published_by` with an FID and the action; for the maintainer path, also
-  the script, the date, and an evidence file that exists.
+  the script, the date, and an evidence file that exists. On the live database (DRAFT, 2026-11-18): every keep or
+  restore of a chapter picture names an admin (FID in `ADMINS`) and its time, and every picture it shows was made by an
+  admin.
 - Review: does any script or job publish model output without a recorded human
   action?
 
@@ -384,6 +399,15 @@ starting view. Where no one has picked, the starting view is "Most liked", then 
 "starting point". Moderators (FIDs in `MODERATOR_FIDS`) who are not admins can hide and nothing else. Picks never
 order the feed, search, anyone's own pages, the agent tools or the read API.
 
+**Ruling: the edition's own chapter pictures (owner, 2026-11-18; reread by the owner 2026-11-19;
+branch chapter-pictures-admin).** "An admin may replace a picture in the site's own edition of a chapter. The change is
+public at once, shows who made it and when, and can be undone. This covers only the edition's own pictures, never the
+order or prominence of people's published work." In practice (DRAFT, coding agent): on /you/illustrations an admin
+redoes one of the edition's chapter pictures (a private draft) and keeps it; the chapter then shows it with "Redone by
+@handle · date" and the model with its maker, and its recipe names the admin, the model, the style and the note. Every
+earlier picture, the committed file included, stays stored and can be shown again in one step
+(`0042_chapter_picture_versions.sql`: new rows only, nothing updated or deleted).
+
 **Checked by.**
 - `P5a`: no migration adds a canon/official/featured/pinned field, and no UI
   string uses those words except to deny them. (The pick table is named for what it is, a pick.)
@@ -395,6 +419,12 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   checks `isAdmin` and sorts still fails (the planted fault: a public page sorting by likes). The rule is in
   `scripts/lib/p5b.ts`; `npm run test:admin-activity` proves each of its faults. A read that filters on
   `status = 'published'` is not publishing; a status set in SQL, given in a row, or assigned in code is.
+- `P5j` (the ruling above, reread by the owner 2026-11-19): admin publishing code touches only the edition's chapter
+  pictures. Any file that writes a chapter-picture table (`studio.chapter_picture_versions`, `_decisions`, `_looks`)
+  must be `src/lib/chapter-pictures/admin.ts`, hold the admin check itself, write no other table, and only insert
+  (never update or delete). Planted faults: that file also writing `studio.elements`, writing without the admin check,
+  updating a decision in place, and a second file writing the decisions; each must fail (`scripts/lib/p5b.ts`,
+  `npm run test:chapter-pictures`).
 - `P5c`: a hidden image's file leaves the public bucket.
 - `P5d`: every component that shows a pick shows its label ("Picked by @…") and the switch with "Most liked",
   "Newest" and "Liked by me"; the switch keeps the reader's choice on their device (localStorage) and never sends it.
