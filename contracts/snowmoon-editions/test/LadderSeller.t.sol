@@ -37,20 +37,58 @@ contract LadderSellerTest is Base {
         seller.configure(1, 1, address(0), _data(START, TOP, 0));
         vm.expectRevert(LadderSeller.BadSellerData.selector);
         seller.configure(1, 1, payoutA, abi.encode(START, TOP));
-        vm.expectRevert(LadderSeller.BadSellerData.selector);
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadStartTime.selector, uint256(type(uint64).max) + 1));
         seller.configure(1, 1, payoutA, abi.encode(START, TOP, uint256(type(uint64).max) + 1));
         vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPrices.selector, 0, 0));
         seller.configure(1, 1, payoutA, _data(0, 0, 0));
         vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPrices.selector, 2, 1));
         seller.configure(1, 1, payoutA, _data(2, 1, 0));
-        uint256 tooBig = uint256(type(uint96).max) + 1;
+        uint256 tooBig = seller.MAX_PRICE() + 1;
         vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPrices.selector, 1, tooBig));
         seller.configure(1, 1, payoutA, _data(1, tooBig, 0));
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPayout.selector, address(seller)));
+        seller.configure(1, 1, address(seller), _data(START, TOP, 0));
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPayout.selector, address(editions)));
+        seller.configure(1, 1, address(editions), _data(START, TOP, 0));
+        // an opening time in milliseconds is refused; a year ahead is the limit
+        uint64 ms = uint64(block.timestamp * 1000);
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadStartTime.selector, ms));
+        seller.configure(1, 1, payoutA, _data(START, TOP, ms));
+        uint64 late = uint64(block.timestamp + 365 days + 1);
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadStartTime.selector, late));
+        seller.configure(1, 1, payoutA, _data(START, TOP, late));
+        assertEq(seller.configure(2, 3, payoutA, _data(START, TOP, uint64(block.timestamp + 365 days))), LadderSeller.configure.selector);
         // the widest allowed ladder works
-        seller.configure(1, 256, payoutA, _data(1, type(uint96).max, 0));
+        seller.configure(1, 256, payoutA, _data(1, seller.MAX_PRICE(), 0));
         vm.stopPrank();
         assertEq(seller.priceOf(1, 1), 1);
-        assertEq(seller.priceOf(1, 256), type(uint96).max);
+        assertEq(seller.priceOf(1, 256), seller.MAX_PRICE());
+    }
+
+    function test_quote_agreesWithMint() public {
+        uint64 opens = uint64(block.timestamp + 1 days);
+        vm.prank(creator);
+        uint256 id = editions.createEdition("ipfs://x", 20, address(seller), payoutA, _data(START, TOP, opens));
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadQuantity.selector, 11));
+        seller.quote(id, 11);
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadQuantity.selector, 0));
+        seller.quote(id, 0);
+        assertFalse(seller.isOpen(id), "not open before startTime");
+        vm.warp(opens);
+        assertTrue(seller.isOpen(id));
+        _buyAll(id);
+        assertFalse(seller.isOpen(id), "not open when sold out");
+        assertFalse(seller.isOpen(99));
+    }
+
+    function test_forcedEthDoesNotBreakAccounting() public {
+        uint256 id = _create(10);
+        uint256 cost = _buy(id, 3);
+        vm.deal(address(seller), address(seller).balance + 5 ether); // as selfdestruct would
+        assertEq(seller.held(id), cost);
+        seller.release(id);
+        assertEq(payoutA.balance, cost, "only the edition's own payments go out");
+        assertEq(address(seller).balance, 5 ether, "forced ETH stays, counted nowhere");
     }
 
     function test_encodeSettings_matchesConfigureFormat() public {
@@ -142,6 +180,8 @@ contract LadderSellerTest is Base {
         _checkReference("tiny_start_100");
         _checkReference("third_3");
         _checkReference("big_256");
+        _checkReference("max_256");
+        _checkReference("widest_256");
     }
 
     /// 60 random ladders (sizes 1 to 256, start 1e12 to 1e18 wei, top up to a million times start).
@@ -168,8 +208,8 @@ contract LadderSellerTest is Base {
 
     /// Endpoints exact, never decreasing, within [start, top], interior on the step, for any settings.
     function testFuzz_ladder_shape(uint96 a, uint96 b, uint16 sizeSeed) public {
-        uint256 start = bound(a, 1, type(uint96).max);
-        uint256 top = bound(b, start, type(uint96).max);
+        uint256 start = bound(a, 1, seller.MAX_PRICE());
+        uint256 top = bound(b, start, seller.MAX_PRICE());
         uint256 size = bound(sizeSeed, 1, 256);
         uint256 id = _create(size, start, top, payoutA);
         uint256 step = seller.PRICE_STEP();

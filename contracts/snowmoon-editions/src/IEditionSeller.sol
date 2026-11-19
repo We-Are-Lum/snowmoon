@@ -14,5 +14,9 @@ interface IEditionSeller {
     /// @param maxSupply The edition's size (1 to 256), fixed for good.
     /// @param payout    The edition's payout address, fixed for good.
     /// @param data      The seller's own settings for this edition, fixed for good.
-    function configure(uint256 id, uint256 maxSupply, address payout, bytes calldata data) external;
+    /// @return magic    Must be `IEditionSeller.configure.selector`, so a contract that merely doesn't revert (a
+    ///                  permissive fallback, a wallet) can't be made a seller by mistake.
+    function configure(uint256 id, uint256 maxSupply, address payout, bytes calldata data)
+        external
+        returns (bytes4 magic);
 }

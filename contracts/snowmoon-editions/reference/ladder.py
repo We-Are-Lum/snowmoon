@@ -55,6 +55,8 @@ CASES = {
     "tiny_start_100": (1, 10**16, 100),          # start below one step
     "third_3": (3 * 10**14, 7 * 10**17, 3),
     "big_256": (ETH, 1000 * ETH, 256),
+    "max_256": (ETH, 10**24, 256),               # up to MAX_PRICE (1,000,000 ETH)
+    "widest_256": (1, 10**24, 256),              # 1 wei to MAX_PRICE
 }
 
 def random_cases(count=60, seed=20261118):

@@ -22,6 +22,11 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
     uint256 public constant PRICE_STEP = 1e12;
     /// @notice Most pieces one `mint` may buy.
     uint256 public constant MAX_PER_TX = 10;
+    /// @notice Highest top price: 1,000,000 ETH. Keeps the rounding allowance (1e-15 of a price) below one step.
+    uint256 public constant MAX_PRICE = 1e24;
+    /// @notice Latest opening time, counted from the edition's creation: 365 days. Catches a time given in
+    ///         milliseconds, which would leave the edition closed for good.
+    uint256 public constant MAX_START_DELAY = 365 days;
 
     /// @notice The collection this seller sells for. Fixed at deployment.
     address public immutable collection;
@@ -67,6 +72,8 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
     error NotCollection();
     error AlreadyConfigured(uint256 id);
     error BadSellerData();
+    error BadPayout(address payout);
+    error BadStartTime(uint256 startTime);
     error BadMaxSupply(uint256 maxSupply);
     error BadPrices(uint256 startPrice, uint256 topPrice);
     error UnknownEdition(uint256 id);
@@ -99,16 +106,21 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
 
     /// @inheritdoc IEditionSeller
     /// @dev `data` is abi.encode(uint256 startPrice, uint256 topPrice, uint64 startTime).
-    function configure(uint256 id, uint256 maxSupply, address payout, bytes calldata data) external {
+    function configure(uint256 id, uint256 maxSupply, address payout, bytes calldata data)
+        external
+        returns (bytes4)
+    {
         if (msg.sender != collection) revert NotCollection();
         Ladder storage l = _ladders[id];
         if (l.configured) revert AlreadyConfigured(id);
         if (maxSupply == 0 || maxSupply > 256) revert BadMaxSupply(maxSupply);
         if (payout == address(0)) revert ZeroAddress();
+        if (payout == address(this) || payout == collection) revert BadPayout(payout);
         if (data.length != 96) revert BadSellerData();
         (uint256 startPrice, uint256 topPrice, uint256 startTime) = abi.decode(data, (uint256, uint256, uint256));
-        if (startTime > type(uint64).max) revert BadSellerData();
-        if (startPrice == 0 || topPrice < startPrice || topPrice > type(uint96).max) {
+        // slither-disable-next-line timestamp -- a bound of a year; seconds of drift don't matter
+        if (startTime > block.timestamp + MAX_START_DELAY) revert BadStartTime(startTime);
+        if (startPrice == 0 || topPrice < startPrice || topPrice > MAX_PRICE) {
             revert BadPrices(startPrice, topPrice);
         }
 
@@ -118,10 +130,11 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
         l.payout = payout;
         l.maxSupply = uint16(maxSupply);
         l.configured = true;
-        // topPrice / startPrice <= 2^96, so the wad ratio fits and its ln is below 67e18.
+        // topPrice / startPrice <= 1e24, so the wad ratio fits and its ln is below 56e18.
         l.lnRatio = uint256(FixedPointMathLib.lnWad(int256(Math.mulDiv(topPrice, 1e18, startPrice))));
 
         emit EditionConfigured(id, payout, maxSupply, startPrice, topPrice, startTime);
+        return IEditionSeller.configure.selector;
     }
 
     // ---------------------------------------------------------------------------------------------------------
@@ -203,13 +216,22 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
         return priceOf(id, uint256(_ladders[id].sold) + 1);
     }
 
-    /// @notice Cost of the next `quantity` pieces, in wei: what `mint(id, quantity, to)` charges right now.
+    /// @notice Cost of the next `quantity` pieces (1 to 10), in wei: what `mint(id, quantity, to)` charges right
+    ///         now. It doesn't check the opening time: see `ladder(id).startTime` or `isOpen(id)`.
     function quote(uint256 id, uint256 quantity) external view returns (uint256) {
         Ladder storage l = _ladders[id];
         if (!l.configured) revert UnknownEdition(id);
+        if (quantity == 0 || quantity > MAX_PER_TX) revert BadQuantity(quantity);
         uint256 left = uint256(l.maxSupply) - l.sold;
-        if (quantity == 0 || quantity > left) revert NotEnoughLeft(left, quantity);
+        if (quantity > left) revert NotEnoughLeft(left, quantity);
         return _cost(l, l.sold, quantity);
+    }
+
+    /// @notice True when edition `id` exists, has opened, and has pieces left.
+    function isOpen(uint256 id) external view returns (bool) {
+        Ladder storage l = _ladders[id];
+        // slither-disable-next-line timestamp -- an opening time; seconds of drift don't matter
+        return l.configured && block.timestamp >= l.startTime && l.sold < l.maxSupply;
     }
 
     /// @notice Pieces of edition `id` not yet sold.
@@ -255,7 +277,7 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
         if (n == size) return topPrice;
         // 1 < n < size, so size >= 3. x = ln(ratio) * (n-1)/(size-1) < ln(ratio) < 67e18, far below expWad's limit.
         uint256 x = lnRatio * (n - 1) / (size - 1);
-        // The price times 1e18. startPrice < 2^96 and expWad(x) < 2^96 * 1e18 (x < ln(2^96)), so no overflow.
+        // The price times 1e18: at most topPrice * 1e18 <= 1e42 (plus the maths' error), far below 2^256.
         uint256 scaled = startPrice * uint256(FixedPointMathLib.expWad(int256(x)));
         // lnWad and expWad are accurate to about 1e-17; allow 1e-15 before rounding down, so a price that is
         // exactly on a step (0.005 ETH at piece 86 of the first ladder) isn't shown as 0.004999 ETH.

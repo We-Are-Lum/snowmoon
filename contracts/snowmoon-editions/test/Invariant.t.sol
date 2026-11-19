@@ -67,7 +67,7 @@ contract Handler is Test {
         calls++;
         if (block.timestamp < editions.nextEditionAllowedAt()) return; // would revert TooSoon
         uint256 size = bound(sizeSeed, 1, 256);
-        uint256 start = bound(startSeed, 1, 1e20);
+        uint256 start = bound(startSeed, 1, 1e18);
         uint256 top = start * bound(ratioSeed, 1, 1e6);
         address payout = payouts[payoutSeed % payouts.length];
         address s = useRogue ? address(rogue) : address(seller);

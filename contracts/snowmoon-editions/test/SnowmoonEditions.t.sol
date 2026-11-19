@@ -4,7 +4,7 @@ pragma solidity 0.8.28;
 import {IERC1155Errors} from "@openzeppelin/contracts/interfaces/draft-IERC6093.sol";
 import {SnowmoonEditions} from "../src/SnowmoonEditions.sol";
 import {LadderSeller} from "../src/LadderSeller.sol";
-import {Base, RogueSeller, NonReceiver, Holder} from "./utils/Helpers.sol";
+import {Base, RogueSeller, NonReceiver, Holder, PermissiveFallback} from "./utils/Helpers.sol";
 
 contract SnowmoonEditionsTest is Base {
     // ---------------------------------------------------------------- construction
@@ -96,6 +96,23 @@ contract SnowmoonEditionsTest is Base {
         editions.createEdition("ipfs://x", 1, address(0), payoutA, "");
         vm.expectRevert(abi.encodeWithSelector(SnowmoonEditions.SellerNotContract.selector, address(editions)));
         editions.createEdition("ipfs://x", 1, address(editions), payoutA, "");
+        vm.stopPrank();
+    }
+
+    function test_createEdition_refusesSellerWithoutMagicValue() public {
+        PermissiveFallback pf = new PermissiveFallback();
+        vm.prank(creator);
+        vm.expectRevert(); // configure returns no data, so decoding the magic value fails
+        editions.createEdition("ipfs://x", 256, address(pf), payoutA, "");
+        assertEq(editions.editionCount(), 0);
+    }
+
+    function test_createEdition_refusesPayoutThatCanNeverPassItOn() public {
+        vm.startPrank(creator);
+        vm.expectRevert(abi.encodeWithSelector(SnowmoonEditions.BadPayout.selector, address(editions)));
+        editions.createEdition("ipfs://x", 1, address(seller), address(editions), _data(START, TOP, 0));
+        vm.expectRevert(abi.encodeWithSelector(SnowmoonEditions.BadPayout.selector, address(seller)));
+        editions.createEdition("ipfs://x", 1, address(seller), address(seller), _data(START, TOP, 0));
         vm.stopPrank();
     }
 
@@ -424,7 +441,7 @@ contract SnowmoonEditionsTest is Base {
         assertTrue(_has(got, "balanceOfBatch(address[],uint256[])"));
         assertTrue(_has(got, "isApprovedForAll(address,address)"));
 
-        string[15] memory sel = [
+        string[18] memory sel = [
             // state-changing
             "configure(uint256,uint256,address,bytes)",
             "mint(uint256,uint256,address)",
@@ -441,11 +458,14 @@ contract SnowmoonEditionsTest is Base {
             "sold(uint256)",
             "held(uint256)",
             "ladder(uint256)",
+            "isOpen(uint256)",
+            "MAX_PRICE()",
+            "MAX_START_DELAY()",
             ""
         ];
         got = vm.parseJsonKeys(vm.readFile("out/LadderSeller.sol/LadderSeller.json"), ".methodIdentifiers");
-        assertEq(got.length, 14, "LadderSeller: unexpected number of functions");
-        for (uint256 i; i < 14; ++i) assertTrue(_has(got, sel[i]), sel[i]);
+        assertEq(got.length, 17, "LadderSeller: unexpected number of functions");
+        for (uint256 i; i < 17; ++i) assertTrue(_has(got, sel[i]), sel[i]);
     }
 
     function _has(string[] memory got, string memory sig) internal pure returns (bool) {

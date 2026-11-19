@@ -76,6 +76,8 @@ contract SnowmoonEditions is ERC1155, ISnowmoonEditionsMint {
     error EmptyURI();
     error BadMaxSupply(uint256 maxSupply);
     error SellerNotContract(address seller);
+    error BadPayout(address payout);
+    error SellerRefused(address seller);
     error TooSoon(uint256 nextAllowedAt);
     error UnknownEdition(uint256 id);
     error NotSeller(uint256 id, address caller);
@@ -142,6 +144,8 @@ contract SnowmoonEditions is ERC1155, ISnowmoonEditionsMint {
         if (maxSupply == 0 || maxSupply > MAX_EDITION_SIZE) revert BadMaxSupply(maxSupply);
         if (seller.code.length == 0 || seller == address(this)) revert SellerNotContract(seller);
         if (payout == address(0)) revert ZeroAddress();
+        // Neither can ever pass the payout on.
+        if (payout == address(this) || payout == seller) revert BadPayout(payout);
 
         uint256 next = nextEditionAllowedAt();
         // A 30-day window; a validator's few seconds of timestamp drift don't matter.
@@ -163,7 +167,9 @@ contract SnowmoonEditions is ERC1155, ISnowmoonEditionsMint {
 
         // The seller is chosen by the creator; whatever it does here, it can only mint this edition, and never
         // past maxSupply. A revert here undoes the whole creation.
-        IEditionSeller(seller).configure(id, maxSupply, payout, sellerData);
+        if (IEditionSeller(seller).configure(id, maxSupply, payout, sellerData) != IEditionSeller.configure.selector) {
+            revert SellerRefused(seller);
+        }
     }
 
     /// @notice The earliest time the next `createEdition` passes the rate limit: 30 days after the second most

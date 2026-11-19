@@ -54,8 +54,9 @@ contract RogueSeller is IEditionSeller {
         mintInConfigure = v;
     }
 
-    function configure(uint256 id, uint256 maxSupply, address, bytes calldata) external {
+    function configure(uint256 id, uint256 maxSupply, address, bytes calldata) external returns (bytes4) {
         if (mintInConfigure) collection.mint(address(this), id, maxSupply);
+        return IEditionSeller.configure.selector;
     }
 
     function mintAny(address to, uint256 id, uint256 quantity) external {
@@ -65,6 +66,11 @@ contract RogueSeller is IEditionSeller {
     function onERC1155Received(address, address, uint256, uint256, bytes calldata) external pure returns (bytes4) {
         return this.onERC1155Received.selector;
     }
+}
+
+/// @dev A contract whose fallback accepts any call: it must not be accepted as a seller.
+contract PermissiveFallback {
+    fallback() external payable {}
 }
 
 /// @dev A buyer that tries to reenter while it receives the token and while it receives its refund.
