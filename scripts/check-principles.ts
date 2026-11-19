@@ -2446,7 +2446,9 @@ add({
       const parts = body.split(/(?=\bfunction\s+\w+\s*\()/);
       for (const part of parts) {
         const name = /^function\s+(\w+)/.exec(part)?.[1] ?? '(outside any function)';
-        if (name !== 'configure' && /\.\s*(start|top)?price\s*(\+|-|\*|\/)?=(?!=)/i.test(part)) problems.push(`${file}: ${name} writes a price`);
+        // A view or pure function can't write storage (summary() copies prices into the struct it returns).
+        const readOnly = /^function\s+\w+\s*\([^)]*\)[^{;]*\b(view|pure)\b/.test(part);
+        if (name !== 'configure' && !readOnly && /\.\s*(start|top)?price\s*(\+|-|\*|\/)?=(?!=)/i.test(part)) problems.push(`${file}: ${name} writes a price`);
       }
       if (/\bfunction\s+configure\s*\([^)]*\)[^;{]*\{/.test(body) && !/AlreadyConfigured/.test(body)) problems.push(`${file}: configure can run more than once per edition`);
     }
@@ -2455,7 +2457,7 @@ add({
   plant: (c) => {
     c.home = c.home.replace(/not affiliated with the author/gi, 'a fan edition');
     c.sol.push({ file: 'contracts/other/Coin.sol', text: 'contract Coin is ERC20 {}' });
-    c.sol.push({ file: 'contracts/snowmoon-editions/src/Planted.sol', text: 'contract P is ERC2981 { function setPrice(uint256 id, uint256 p) external { tokens[id].price = p; } function bump(uint256 id) external { ladders[id].topPrice *= 2; } function configure() external { } }' });
+    c.sol.push({ file: 'contracts/snowmoon-editions/src/Planted.sol', text: 'contract P is ERC2981 { function setPrice(uint256 id, uint256 p) external { tokens[id].price = p; } function bump(uint256 id) external { ladders[id].topPrice *= 2; } function peek(uint256 id) external view returns (S memory s) { s.startPrice = 1; } function configure() external { } }' });
   },
 });
 
