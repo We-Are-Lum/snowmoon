@@ -441,7 +441,7 @@ contract SnowmoonEditionsTest is Base {
         assertTrue(_has(got, "balanceOfBatch(address[],uint256[])"));
         assertTrue(_has(got, "isApprovedForAll(address,address)"));
 
-        string[18] memory sel = [
+        string[21] memory sel = [
             // state-changing
             "configure(uint256,uint256,address,bytes)",
             "mint(uint256,uint256,address)",
@@ -461,11 +461,14 @@ contract SnowmoonEditionsTest is Base {
             "isOpen(uint256)",
             "MAX_PRICE()",
             "MAX_START_DELAY()",
+            "lastMintAt(uint256)",
+            "pricesOf(uint256,uint256,uint256)",
+            "summary(uint256)",
             ""
         ];
         got = vm.parseJsonKeys(vm.readFile("out/LadderSeller.sol/LadderSeller.json"), ".methodIdentifiers");
-        assertEq(got.length, 17, "LadderSeller: unexpected number of functions");
-        for (uint256 i; i < 17; ++i) assertTrue(_has(got, sel[i]), sel[i]);
+        assertEq(got.length, 20, "LadderSeller: unexpected number of functions");
+        for (uint256 i; i < 20; ++i) assertTrue(_has(got, sel[i]), sel[i]);
     }
 
     function _has(string[] memory got, string memory sig) internal pure returns (bool) {
