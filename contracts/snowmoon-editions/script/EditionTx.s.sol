@@ -95,7 +95,7 @@ contract EditionTx is Script {
         return string.concat(
             '{"version":"1.0","chainId":"', vm.toString(block.chainid),
             '","createdAt":', vm.toString(block.timestamp * 1000),
-            ',"meta":{"name":"Snowmoon WIP: create edition ', vm.toString(id),
+            ',"meta":{"name":"Snowmoon Editions: create edition ', vm.toString(id),
             '","description":"SnowmoonEditions.createEdition, built by script/EditionTx.s.sol"},',
             '"transactions":[{"to":"', vm.toString(to), '","value":"0","data":"', vm.toString(data),
             '","contractMethod":null,"contractInputsValues":null}]}'

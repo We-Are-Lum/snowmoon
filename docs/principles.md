@@ -641,8 +641,8 @@ wallet account buys images in advance with USDC or ETH on Base, at the
 estimated cost plus 30%. Paying buys images and nothing else: no place in any
 order, no score, no default. Payment is for the service (image generation) and
 is final: no refunds; nothing is held for anyone to withdraw. Apart from prepaid generations, anything sold (owner, 2026-10-31) is a fixed-price
-collectible, with no royalties and no promises: Snowmoon WIP, open editions on Ethereum mainnet from
-`contracts/snowmoon-wip`, whose price and terms are fixed when each token is created; buying one changes nothing on
+collectible, with no royalties and no promises: Snowmoon Editions (renamed from Snowmoon WIP, owner, 2026-11-18), editions on Ethereum mainnet from
+`contracts/snowmoon-editions`, whose price and terms are fixed when each token is created; buying one changes nothing on
 the site. The first screen says the edition is independent, "not affiliated with the author". (Reworded by the
 owner: 2026-10-30, the site no longer says "no token"; 2026-10-31, this wording, ahead of the Snowmoon WIP mint.)
 

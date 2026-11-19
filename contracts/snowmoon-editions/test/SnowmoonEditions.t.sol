@@ -12,8 +12,8 @@ contract SnowmoonEditionsTest is Base {
     function test_constructor() public view {
         assertEq(editions.creator(), creator);
         assertEq(editions.pendingCreator(), address(0));
-        assertEq(editions.name(), "Snowmoon WIP");
-        assertEq(editions.symbol(), "SMWIP");
+        assertEq(editions.name(), "Snowmoon Editions");
+        assertEq(editions.symbol(), "SNOWMOON");
         assertEq(editions.contractURI(), "ipfs://collection");
         assertEq(editions.editionCount(), 0);
         assertEq(editions.MAX_EDITION_SIZE(), 256);

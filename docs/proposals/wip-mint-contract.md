@@ -1,5 +1,7 @@
 # Snowmoon WIP mint contract: decisions and open questions
 
+> **Superseded (owner, 2026-11-18):** the collection is now "Snowmoon Editions", symbol `SNOWMOON`, built in `contracts/snowmoon-editions` (branch `editions-contracts`). This document keeps its original wording as a record.
+
 DRAFT, written by an AI agent (Claude, made by Anthropic) on 2026-10-31 for the owner's review. This is item 8 of the remix-challenge plan. The code is in `contracts/snowmoon-wip/`; its README has the deploy checklist. Nothing is deployed and nothing has been sent to any network.
 
 ## Merge order

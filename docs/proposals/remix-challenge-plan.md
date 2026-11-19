@@ -1,5 +1,7 @@
 # Snowmoon remix challenge, deep funding test and Snowmoon WIP mint
 
+> **Superseded (owner, 2026-11-18):** the collection is now "Snowmoon Editions", symbol `SNOWMOON`, built in `contracts/snowmoon-editions` (branch `editions-contracts`). This document keeps its original wording as a record.
+
 ## Corrections (owner, 2026-10-31), these override the text below
 
 - mint() does make one outside call: _mint calls onERC1155Received when `to` is a contract. Record the payment before minting, and test a receiver that re-enters mint and release.

@@ -686,7 +686,7 @@ function copyProblems(t: string): string[] {
 }
 check('the rules copy: the final version and any prize decided before entries close, remixes only, no bounty but the poidh line, no promises (mint, rewards, payouts), no wallet path', copyProblems(copy).length === 0 && !copy.includes(NO_PRIZE), copyProblems(copy).join('; '));
 check('the rules name the characters most named in the book first, Lord Ephelion by his title (owner, 2026-11-04 and 2026-11-11)', W.intro().includes('Zei, Gladias, Bai, Seila, Deluin, Mu or Lord Ephelion'));
-proof('a promised mint is caught', copyProblems(`${copy} Each version is then minted as an open edition in Snowmoon WIP.`).length > 0);
+proof('a promised mint is caught', copyProblems(`${copy} Each version is then minted as an edition in Snowmoon Editions.`).length > 0);
 proof('rules without "how any other rewards are chosen" are caught', copyProblems(copy.replaceAll(LATER, '')).length > 0);
 proof('a reward pot is caught', copyProblems(`${copy} Plus an extra reward pot.`).length > 0);
 proof('a wallet path back in the rules is caught', copyProblems(`${copy} Or a wallet linked to one.`).length > 0);

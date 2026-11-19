@@ -14,6 +14,8 @@ contract Check is Script {
         address expected = vm.envAddress("EXPECTED_CREATOR");
 
         require(seller.collection() == address(editions), "seller bound to another collection");
+        require(keccak256(bytes(editions.name())) == keccak256("Snowmoon Editions"), "name is not Snowmoon Editions");
+        require(keccak256(bytes(editions.symbol())) == keccak256("SNOWMOON"), "symbol is not SNOWMOON");
         require(editions.creator() == expected, "creator is not the expected Safe");
         require(editions.pendingCreator() == address(0), "a creator handover is pending");
         require(address(editions).balance == 0, "the collection holds ETH");

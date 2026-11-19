@@ -8,7 +8,7 @@ import {IEditionSeller} from "./IEditionSeller.sol";
 import {ISnowmoonEditionsMint} from "./ISnowmoonEditionsMint.sol";
 
 /// @title LadderSeller (v1)
-/// @notice Sells Snowmoon WIP pieces one at a time along a rising ETH price ladder fixed when the edition is
+/// @notice Sells Snowmoon Editions pieces one at a time along a rising ETH price ladder fixed when the edition is
 ///         created: piece 1 costs `startPrice`, the last piece costs `topPrice`, and the pieces in between rise
 ///         by the same ratio each step, each rounded down to 0.000001 ETH.
 /// @dev    price(n) = startPrice * (topPrice / startPrice) ^ ((n - 1) / (N - 1)), n = 1..N

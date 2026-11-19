@@ -5,8 +5,8 @@ import {ERC1155} from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import {IEditionSeller} from "./IEditionSeller.sol";
 import {ISnowmoonEditionsMint} from "./ISnowmoonEditionsMint.sol";
 
-/// @title SnowmoonEditions ("Snowmoon WIP")
-/// @notice The permanent collection of Snowmoon WIP editions: work-in-progress pieces from snowmoon.party, an
+/// @title SnowmoonEditions ("Snowmoon Editions")
+/// @notice The permanent collection of Snowmoon editions: work-in-progress pieces from snowmoon.party, an
 ///         independent, open adaptation of *Snowmoon* by Vitalik Buterin (GPL-3.0), not affiliated with him.
 ///         Each edition is one ERC-1155 id with at most 256 pieces. Selling is done by a separate seller contract
 ///         chosen per edition, so selling rules can change for future editions while this collection never does.
@@ -38,8 +38,8 @@ contract SnowmoonEditions is ERC1155, ISnowmoonEditionsMint {
     }
 
     /// @notice Collection name and symbol for marketplaces.
-    string public constant name = "Snowmoon WIP";
-    string public constant symbol = "SMWIP";
+    string public constant name = "Snowmoon Editions";
+    string public constant symbol = "SNOWMOON";
 
     /// @notice The one address that may create editions, hand over the role, and update `contractURI`.
     address public creator;

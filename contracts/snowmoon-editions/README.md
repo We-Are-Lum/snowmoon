@@ -4,9 +4,11 @@ DRAFT, written by an AI agent (Claude, made by Anthropic) for the owner's review
 
 Work-in-progress pieces from snowmoon.party, an independent, open adaptation of *Snowmoon* by Vitalik Buterin (GPL-3.0), not affiliated with him, released as collectible editions on Ethereum mainnet. Licence: GPL-3.0-or-later. Built from the handoff of 18 Nov 2026 ("Snowmoon editions: contract handoff"), which replaces the fixed-price `contracts/snowmoon-wip` (merged in #85, never deployed; removed on this branch).
 
+The collection is named "Snowmoon Editions", symbol `SNOWMOON` (owner, 2026-11-18; it was "Snowmoon WIP" / `SMWIP`). Wallets, marketplaces and Etherscan show these; they are fixed in the bytecode. Each edition can still call itself a work in progress in its own metadata.
+
 Two contracts:
 
-| | `SnowmoonEditions` ("Snowmoon WIP", SMWIP) | `LadderSeller` (v1) |
+| | `SnowmoonEditions` ("Snowmoon Editions", SNOWMOON) | `LadderSeller` (v1) |
 |---|---|---|
 | Role | Permanent ERC-1155 collection. Holds every edition and enforces the hard limits. | Replaceable seller. Prices, takes payment, pays out. |
 | Upgradable | No. No proxy, pause, royalties, burn, funds or payable function. | No. No owner, no admin, no withdrawal. |

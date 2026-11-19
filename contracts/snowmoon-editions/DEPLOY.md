@@ -36,7 +36,7 @@ You need about 0.1 Sepolia ETH in the deployer/buyer wallet. The test ladder bel
 **2. Test split.** On app.splits.org, on Sepolia, create a **Pull** split, immutable (no controller), with a distribution incentive of 0. Use the test recipients, for example your own three addresses with 10% to a stand-in collab pot and 5% to a stand-in treasury. Note it as `SPLIT`.
 - Or: copy `splits/sepolia-test.example.json` to `splits/sepolia-test.json` with real recipients, sorted ascending, shares adding up to 1,000,000. Then run `SPLIT_JSON=splits/sepolia-test.json forge script script/CreateSplit.s.sol --rpc-url sepolia --account <name> --broadcast`.
 
-**3. Test metadata.** Pin a collection JSON (`name`, `description`, `image`, `external_link`) and one JSON per edition (see the handoff's Metadata section) on IPFS. Test pins are fine.
+**3. Test metadata.** Pin a collection JSON (`name`: "Snowmoon Editions", plus `description`, `image`, `external_link`) and one JSON per edition (see the handoff's Metadata section) on IPFS. An edition's own `name` or `description` can say it's a work in progress. Test pins are fine.
 
 **4. Deploy and verify.**
 ```sh
@@ -77,7 +77,7 @@ It reverts with `TooSoon` (selector `0xe86f59ea`). Optionally propose it in the 
 ```sh
 EDITIONS=$EDITIONS SELLER=$SELLER EXPECTED_CREATOR=$SAFE forge script script/Check.s.sol --rpc-url sepolia
 ```
-It reads only and ends with "all checks passed". Send me the addresses and the transaction links; I re-run the checks read-only and write them up.
+It reads only, checks the name "Snowmoon Editions" and the symbol `SNOWMOON`, and ends with "all checks passed". Send me the addresses and the transaction links; I re-run the checks read-only and write them up.
 
 `forge script` keeps a record of each broadcast in `broadcast/` (public data only). Commit the Sepolia and mainnet records. Don't commit runs against a local fork: those show chain id 11155111 too.
 
