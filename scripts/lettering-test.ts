@@ -195,7 +195,7 @@ for (const p of prepared) {
       save();
       continue;
     }
-    book('image', p.n, 'gpt-image-2.5-sunburst', 'openai', made.costUsd, made.meta?.providerMetadata?.gateway?.cost !== undefined, made.requestId);
+    book('image', p.n, 'gpt-image-2.5-sunburst', 'openai', made.costUsd, (made.meta as { providerMetadata?: { gateway?: { cost?: unknown } } } | undefined)?.providerMetadata?.gateway?.cost !== undefined, made.requestId);
     writeFileSync(origFile, made.bytes);
     const w = await toWide(made.bytes, IMAGES.size);
     writeFileSync(cropFile, w.bytes);
