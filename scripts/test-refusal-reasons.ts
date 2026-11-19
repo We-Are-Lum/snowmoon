@@ -49,12 +49,12 @@ const policyCats = [...policy.matchAll(/^- \*\*([a-z_]+)\*\*:/gm)].map((m) => m[
 type Fn = (c: string | null | undefined) => string;
 const mapping = (f: Fn, cats: readonly string[], plain: Record<string, string>) => [
   ...need(cats.length === policyCats.length && policyCats.every((c) => cats.includes(c)), `the wording's categories (${cats.join(', ')}) aren't the policy's (${policyCats.join(', ')})`),
-  ...need(f('words') === 'The image model here doesn’t draw words. Take them out of your change and try again.', `words: "${f('words')}"`),
+  ...need(f('words') === 'The image model here doesn’t draw words. Take them out and try again.', `words: "${f('words')}"`),
   ...policyCats.filter((c) => c !== 'words').flatMap((c) =>
     need(typeof plain[c] === 'string' && plain[c].length > 0 && f(c) === `This prompt asks for something the rules don’t allow (${plain[c]}). Change the words and try again.`, `${c}: "${f(c)}"`),
   ),
   ...[null, undefined, '', 'unclear', 'bogus', 'WORDS', 'words ', 'real person', 'constructor', '__proto__'].flatMap((c) => need(f(c as string | null | undefined) === GENERIC, `${JSON.stringify(c)}: "${f(c as string | null | undefined)}", not the generic line`)),
-  ...need(f('real_person').includes('(a real person)') && f('someone_elses_work').includes('(someone else’s work)'), 'the owner\'s two example phrases aren\'t used'),
+  ...need(f('real_person').includes('(a real person)') && f('someone_elses_work').includes('(a character, brand or film from another work, or a named artist’s style)'), 'the owner\'s two example phrases aren\'t used'),
 ];
 proven(
   'R1 each category gets its line; none, unclear or unknown gets the generic line',
@@ -135,7 +135,7 @@ const err = (r: Awaited<ReturnType<typeof refuse>>) => (r.ok ? 'ok' : r.error);
 const r3 = [
   ...need(!w.ok && w.status === 422 && w.error === REFUSAL_WORDING.words && w.extra.reason === 'blocked' && w.extra.category === 'words', `words: ${JSON.stringify(w)}`),
   ...need(err(rp) === 'This prompt asks for something the rules don’t allow (a real person). Change the words and try again.', `real_person: ${err(rp)}`),
-  ...need(err(sw) === 'This prompt asks for something the rules don’t allow (someone else’s work). Change the words and try again.', `someone_elses_work: ${err(sw)}`),
+  ...need(err(sw) === 'This prompt asks for something the rules don’t allow (a character, brand or film from another work, or a named artist’s style). Change the words and try again.', `someone_elses_work: ${err(sw)}`),
   ...need(err(unknown) === GENERIC && err(none) === GENERIC && err(garbled) === GENERIC, `unknown / none / garbled: ${err(unknown)} / ${err(none)} / ${err(garbled)}`),
   ...need(made === 0, `a refused prompt made ${made} pictures`),
   ...need(anyOther === 0, `${anyOther} calls went somewhere other than the stand-in check`),

@@ -19,7 +19,7 @@ export const REFUSAL_WORDING = {
   /** No category, or one this file doesn't know: today's line, word for word. */
   generic: 'This prompt asks for something the rules don’t allow.',
   /** The owner's words (2026-11-18). */
-  words: 'The image model here doesn’t draw words. Take them out of your change and try again.',
+  words: 'The image model here doesn’t draw words. Take them out and try again.',
   /** The owner's words (2026-11-18), with the rule in plain words. */
   rule: (plain: string) => `This prompt asks for something the rules don’t allow (${plain}). Change the words and try again.`,
   /** Each rule but "words", in plain words (DRAFT: the agent's phrases). */
@@ -29,7 +29,7 @@ export const REFUSAL_WORDING = {
     real_person: 'a real person',
     violence: 'gore or graphic injury',
     hateful: 'hate symbols or slurs',
-    someone_elses_work: 'someone else’s work',
+    someone_elses_work: 'a character, brand or film from another work, or a named artist’s style',
     self_harm: 'self-harm shown as something to copy',
     extremism: 'support for violent extremism',
     campaign: 'election campaign material',
