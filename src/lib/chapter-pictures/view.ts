@@ -1,0 +1,52 @@
+import 'server-only';
+import type { Illustration } from '../illustrations';
+import type { RecipeView } from '../recipe-view';
+import { adminName, day, lookName, modelLine, recipePath, replacedLine, type ShownReplacement } from './shared';
+
+/**
+ * A chapter picture as the chapter shows it once an admin has kept a redo (owner, 2026-11-18, option B): the kept
+ * file in place of the committed one, and its recipe sheet filled from the database's record (principle 1): the
+ * model and its maker, open or closed, the look, the admin's note, the exact prompt, and who kept it and when. The
+ * sheet's full recipe is the public JSON at /api/chapter-pictures/<version> (check:principles P1d reads it signed out).
+ * Wording DRAFT (coding agent, 2026-11-18).
+ */
+export type ShownIllustration = Illustration & { replaced?: { versionId: string; line: string; model: string; view: RecipeView } };
+
+export function replacementView(r: ShownReplacement, modelName: string): RecipeView {
+  return {
+    file: recipePath(r.versionId),
+    github: recipePath(r.versionId),
+    whose: `${adminName(r.byFid, r.byHandle)}, an admin of Snowmoon Party, redid the project's picture with an image model. AI-generated, not by the author.`,
+    full: { href: recipePath(r.versionId), text: 'Full recipe →' },
+    what: `A picture for Chapter ${r.chapter}, redone by an admin in place of the edition's first picture (which stays in the repository and can be shown again). A starting point, not canon.`,
+    model: { name: modelLine(modelName, r.maker, r.open), licence: r.open ? 'open weights' : 'closed: its weights aren’t published, so the recipe can’t be re-run exactly', where: 'through a hosted service named in the full recipe' },
+    prompt: { label: 'The exact prompt', text: r.prompt },
+    inputs: [
+      { label: 'Style', value: r.look ? `${lookName(r.look)}: ${r.look.text}` : 'none' },
+      { label: 'Note', value: `${r.note} (by ${adminName(r.byFid, r.byHandle)})` },
+      { label: 'Reference', value: 'the picture the chapter showed before (its sha256 is in the full recipe)' },
+    ],
+    published: { by: `${adminName(r.byFid, r.byHandle)} (admin)`, when: day(r.at) },
+    resultLicence: 'GPL-3.0',
+  };
+}
+
+/** The chapter's pictures with every kept redo in place of its committed file; the rest unchanged. */
+export function withReplacements(images: Illustration[], shown: Map<string, ShownReplacement>, nameOf: (model: string) => string): ShownIllustration[] {
+  return images.map((im) => {
+    const r = shown.get(im.id);
+    if (!r) return im;
+    const name = nameOf(r.model);
+    const { lettering: _lettering, reviewed: _reviewed, ...rest } = im;
+    void _lettering;
+    void _reviewed;
+    return {
+      ...rest,
+      url: r.url,
+      width: r.width,
+      height: r.height,
+      recipe: recipePath(r.versionId),
+      replaced: { versionId: r.versionId, line: replacedLine(r), model: modelLine(name, r.maker, r.open), view: replacementView(r, name) },
+    };
+  });
+}

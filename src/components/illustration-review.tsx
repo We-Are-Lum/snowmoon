@@ -10,24 +10,28 @@ import { GROUP_NAMES, MODEL_NAMES, noteCredit, reviewGroup, worstFirst } from '~
 import { AiLabel } from './recipe-sheet';
 import { PublishedTextField } from './publish-words';
 import { SignInButton } from './sign-in';
+import { CapLine, LookPanel, PicturePanel, type PictureItem, type PicturesState } from './chapter-pictures';
 
 /**
- * The owner's review of the seeded images (/you/illustrations; owner, 2026-10-23: "Does each image show its scene?").
+ * The admins' review of the seeded images (/you/illustrations; owner, 2026-10-23: "Does each image show its scene?"; admins since
+ * 2026-10-29).
  * Worst first: wrong, then partly, then matches, then not checked. Each job shows the passage, the image, the vision
  * check's fields and verdict, and three buttons: keep, regenerate with my note, drop. A decision is saved with who
- * decided and when (studio.illustration_reviews); nothing on the site changes until the owner runs the redo.
- * Owner only: the page as served holds nothing, and /api/you/illustrations answers only for the owner.
+ * decided and when (studio.illustration_reviews); those three change nothing on the site. Since 2026-11-18 (owner,
+ * option B) each picture can also be redone here and kept, which shows it in the chapter at once
+ * (src/components/chapter-pictures.tsx). Admins only: the page as served holds nothing, and /api/you/illustrations
+ * answers only for admins (404 for anyone else).
  *
  * Every sentence here is DRAFT wording for the owner (coding agent, 2026-10-23), kept in W.
  */
 const W = {
   title: 'Does each image show its scene?',
-  signedOut: 'Sign in to review the images. Only the project’s owner can open this page.',
-  notOwner: 'This page is for the project’s owner.',
+  signedOut: 'Sign in to review the images. Only the project’s admins can open this page.',
+  notOwner: 'This page is for the project’s admins.',
   loading: 'Loading…',
   failed: 'The review didn’t load. Try again in a moment.',
   lede: (n: number, checked: number) => `${n} images, ${checked} checked. Worst first: wrong, then partly, then matches, then not checked yet.`,
-  checker: `Each check is written by an AI model, ${ILLUSTRATION_CHECK.modelName} (closed, by Google), through the Vercel AI Gateway: it can be wrong. Only you see it.`,
+  checker: `Each check is written by an AI model, ${ILLUSTRATION_CHECK.modelName} (closed, by Google), through the Vercel AI Gateway: it can be wrong. Only admins see it.`,
   cantSave: 'Decisions can’t be saved on this copy of the site yet (the review tables aren’t there).',
   passage: (ch: number, dateline: string | null) => `The book, chapter ${ch}${dateline ? ` · ${dateline}` : ''}`,
   noImage: (why: string | null) => `No published image${why ? `: ${why}` : ''}.`,
@@ -53,7 +57,7 @@ const W = {
   saveNote: 'Save the note',
   cancel: 'Cancel',
   noteNeeded: 'Write what should change first.',
-  decided: (d: string, at: string, fid: number) => `Your decision: ${d} · ${new Date(at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} · FID ${fid}`,
+  decided: (d: string, at: string, fid: number) => `Latest decision: ${d} · ${new Date(at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} · FID ${fid}`,
   noteBy: (credit: string) => `Note ${credit}`,
   decisionWord: { keep: 'keep', regenerate: 'regenerate', drop: 'drop' } as Record<Decision, string>,
   inJobFile: 'Reviewed by a person (in the job file).',
@@ -62,8 +66,10 @@ const W = {
 };
 
 interface Data {
-  items: ReviewItem[];
+  items: (ReviewItem & Partial<PictureItem>)[];
   canSave: boolean;
+  /** The chapter pictures' state (owner, 2026-11-18); null without a database. */
+  pictures: PicturesState | null;
 }
 
 function Frame({ children }: { children: React.ReactNode }) {
@@ -85,7 +91,7 @@ export function IllustrationReview() {
   const load = useCallback(async () => {
     const res = await authFetch('/api/you/illustrations').catch(() => null);
     if (res?.ok) setData((await res.json()) as Data);
-    else if (res?.status === 403) setState('forbidden');
+    else if (res?.status === 403 || res?.status === 404) setState('forbidden');
     else if (res?.status !== 401) setState('failed');
   }, []);
   useEffect(() => {
@@ -117,16 +123,22 @@ export function IllustrationReview() {
       <p className="you-lede">{W.lede(data.items.length, data.items.filter((i) => i.check).length)}</p>
       <p className="you-note">{W.checker}</p>
       {!data.canSave && <p className="you-note">{W.cantSave}</p>}
+      {data.pictures?.ready && (
+        <>
+          <CapLine cap={data.pictures.cap} />
+          <LookPanel state={data.pictures} reload={load} />
+        </>
+      )}
       <ol className="illus-list">
         {[...data.items].sort(worstFirst).map((item) => (
-          <Item key={item.id} item={item} canSave={data.canSave} reload={load} />
+          <Item key={item.id} item={item} canSave={data.canSave} pictures={data.pictures} reload={load} />
         ))}
       </ol>
     </Frame>
   );
 }
 
-function Item({ item, canSave, reload }: { item: ReviewItem; canSave: boolean; reload: () => Promise<void> }) {
+function Item({ item, canSave, pictures, reload }: { item: Data['items'][number]; canSave: boolean; pictures: PicturesState | null; reload: () => Promise<void> }) {
   const [noting, setNoting] = useState(false);
   const [note, setNote] = useState(item.decision?.note ?? '');
   // The note the check drafted (owner, 2026-10-24): its one-line finding, offered when Regenerate opens an empty box.
@@ -247,6 +259,13 @@ function Item({ item, canSave, reload }: { item: ReviewItem; canSave: boolean; r
         )}
         {item.decision && <p className="you-meta illus-decided">{W.decided(W.decisionWord[item.decision.decision], item.decision.at, item.decision.byFid)}{item.decision.note ? ` · “${item.decision.note}” · ${W.noteBy(noteCredit(item.decision))}` : ''}</p>}
         {item.inJobFile && <p className="you-meta">{W.inJobFile}</p>}
+        {pictures && (
+          <PicturePanel
+            item={{ id: item.id, chapter: item.chapter, redoable: Boolean(item.redoable), shown: item.shown ?? null, versions: item.versions ?? [], decisions: item.decisions ?? [], image: item.image }}
+            state={pictures}
+            reload={reload}
+          />
+        )}
         {canSave && (
           <div className="you-actions illus-actions">
             <button type="button" className="ic-secondary" disabled={busy} aria-pressed={item.decision?.decision === 'keep'} onClick={() => void decide('keep')}>

@@ -38,3 +38,38 @@ export const P5B_PLANTS: Record<string, SrcFile> = {
   assignPublish: { file: 'src/lib/planted-assign.ts', text: "if (MODERATOR_FIDS.includes(fid)) {\n  item.status = 'published';\n}" },
   gatedPublish: { file: 'src/lib/planted-admin.ts', text: "if (!isAdmin(fid)) return { status: 404 };\nawait sql`update studio.elements set status = 'published'`;" },
 };
+
+/**
+ * P5j (owner's ruling for principle 5, 2026-11-18, pending his reread): "An admin may replace a picture in the site's own
+ * edition of a chapter. The change is public at once, shows who made it and when, and can be undone. This covers only
+ * the edition's own pictures, never the order or prominence of people's published work." So the code that changes what
+ * a chapter shows (any file that writes a chapter-picture table) must hold the admin check itself, may write nothing
+ * but the chapter-picture tables, never updates or deletes them (every change is a new row, so it can be undone), and is
+ * one file (src/lib/chapter-pictures/admin.ts).
+ */
+export const CHAPTER_PICTURE_TABLE = /^chapter_picture_(versions|decisions|looks)$/;
+export const CHAPTER_PICTURE_WRITER = 'src/lib/chapter-pictures/admin.ts';
+const WRITES = /\b(insert\s+into|update|delete\s+from|truncate(?:\s+table)?)\s+studio\.([a-z_]+)/gi;
+export function p5jProblems(files: SrcFile[]): string[] {
+  const p: string[] = [];
+  const writers: string[] = [];
+  for (const f of files) {
+    const writes = [...f.text.matchAll(WRITES)].map((m) => ({ verb: m[1].toLowerCase().split(/\s+/)[0], table: m[2] }));
+    if (!writes.some((w) => CHAPTER_PICTURE_TABLE.test(w.table))) continue;
+    writers.push(f.file);
+    if (!/\bisAdmin\(/.test(f.text)) p.push(`${f.file}: writes the chapter pictures without the admin check in the same file`);
+    const other = [...new Set(writes.filter((w) => !CHAPTER_PICTURE_TABLE.test(w.table)).map((w) => w.table))];
+    if (other.length) p.push(`${f.file}: admin publishing code also writes ${other.map((t) => `studio.${t}`).join(', ')}; it may write only the edition's chapter pictures`);
+    if (writes.some((w) => CHAPTER_PICTURE_TABLE.test(w.table) && w.verb !== 'insert')) p.push(`${f.file}: updates or deletes a chapter-picture row; every change must be a new row, so it can be undone`);
+    if (PUBLISHES.test(f.text)) p.push(`${f.file}: admin publishing code sets a published status on something`);
+  }
+  for (const w of writers) if (w !== CHAPTER_PICTURE_WRITER) p.push(`${w}: only ${CHAPTER_PICTURE_WRITER} may write the chapter pictures`);
+  return p;
+}
+/** The planted faults for P5j: each must be caught. */
+export const P5J_PLANTS: Record<string, SrcFile> = {
+  otherTable: { file: CHAPTER_PICTURE_WRITER, text: "if (!isAdmin(fid)) throw 0;\nawait sql`insert into studio.chapter_picture_decisions ${sql(d)}`;\nawait sql`update studio.elements set entity_id = ${e}`;" },
+  noGate: { file: CHAPTER_PICTURE_WRITER, text: 'await sql`insert into studio.chapter_picture_decisions ${sql(d)}`;' },
+  inPlace: { file: CHAPTER_PICTURE_WRITER, text: "if (!isAdmin(fid)) throw 0;\nawait sql`update studio.chapter_picture_decisions set version_id = ${v}`;" },
+  elsewhere: { file: 'src/app/api/planted/route.ts', text: "if (!isAdmin(fid)) return 404;\nawait sql`insert into studio.chapter_picture_decisions ${sql(d)}`;" },
+};

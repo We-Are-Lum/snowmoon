@@ -363,8 +363,10 @@ export function adaptationPagesShown(): boolean {
 
 /**
  * The illustration check (owner, 2026-10-23: "Does each image show its scene?"; branch illustration-check). A vision
- * model checks each seeded key-moment image against its passage (scripts/check-illustrations.ts); the owner decides
- * keep, regenerate with a note, or drop on /you/illustrations. "Owner-only: nothing public until I've read it."
+ * model checks each seeded key-moment image against its passage (scripts/check-illustrations.ts); an admin decides
+ * keep, regenerate with a note, or drop on /you/illustrations (admins since 2026-10-29). Since 2026-11-18 (owner,
+ * option B) an admin can also redo a picture there and keep it, which shows it in the chapter at once
+ * (CHAPTER_PICTURES).
  */
 export const ILLUSTRATION_CHECK = {
   /** Who may open the review page and decide: the admins (owner, 2026-10-29). */
@@ -377,6 +379,27 @@ export const ILLUSTRATION_CHECK = {
   /** The recommended checker on the Vercel AI Gateway (a closed model, Google's; named first wherever it is shown). */
   model: 'google/gemini-4-argon',
   modelName: 'Google Gemini 4 Argon',
+} as const;
+
+/**
+ * The edition's chapter pictures, redone by an admin on /you/illustrations (owner, 2026-11-18, option B; principle 5's
+ * ruling pending his reread). A redo is a draft, private (its bytes only in studio.chapter_picture_versions, served
+ * only to admins) until an admin presses Keep; then the chapter shows it at once, with who kept it and when, and any
+ * earlier picture (the committed file included) can be shown again in one step. Nothing is deleted.
+ * Models: those the challenge offers this admin where they are (src/lib/challenge/models.ts challengeModelsFor), the
+ * open one first and the default; closed ones only for admins (the page and its routes answer admins only).
+ */
+export const CHAPTER_PICTURES = {
+  /**
+   * Admins' chapter pictures, open and closed, per UTC day (owner, 2026-11-18: "$20 a day, separate from the entrants'
+   * cap, starting now and continuing after 30 Nov"). Counted as funded 'admin' in studio.image_costs, so it never
+   * touches the free cap entrants use (imagesDailySpendCapUsd, closedCapUsd), and theirs never touches it.
+   */
+  adminDailyCapUsd: 20,
+  /** An admin's note for a redo, at most this many characters (as the review's note). */
+  noteMaxChars: 1000,
+  /** A written look line, at most this many characters (the challenge's own-style limit is 120; a look is longer). */
+  lookMaxChars: 400,
 } as const;
 
 /** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). Every admin is one; a moderator who isn't an admin would be added here. */

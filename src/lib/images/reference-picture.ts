@@ -14,3 +14,20 @@ export async function referencePicture(url: string, sha256: string): Promise<Buf
   const bytes = Buffer.from(await res.arrayBuffer());
   return createHash('sha256').update(bytes).digest('hex') === sha256 ? bytes : null;
 }
+
+/** Where the edition's committed chapter pictures are served (content/snowmoon/illustrations/published.json). */
+export const SEED_PICTURES = 'https://media.snowmoon.party/images/seed/';
+
+/**
+ * The picture a chapter shows now, sent as the reference for an admin's redo (owner, 2026-11-18): the committed file
+ * from the book's own media address (SEED_PICTURES), or a kept redo from the readers' bucket, each checked against
+ * its sha256. Nothing is fetched from anywhere else.
+ */
+export async function chapterReference(url: string, sha256: string, send: typeof fetch = fetch): Promise<Buffer | null> {
+  const base = process.env.R2_IMAGES_PUBLIC_URL?.replace(/\/$/, '');
+  if (!url.startsWith(SEED_PICTURES) && !(base && url.startsWith(`${base}/`))) return null;
+  const res = await send(url).catch(() => null);
+  if (!res?.ok) return null;
+  const bytes = Buffer.from(await res.arrayBuffer());
+  return createHash('sha256').update(bytes).digest('hex') === sha256 ? bytes : null;
+}
