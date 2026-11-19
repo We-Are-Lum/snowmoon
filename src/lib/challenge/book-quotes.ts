@@ -4,8 +4,11 @@
  * its emphasis marks and speaker-colour spans removed; whitespace and curly quote marks normalized, as quote cards
  * compare), at whole words. Used by scripts/test-challenge-moments.ts and check:principles P9g on the moments
  * (src/lib/challenge/moments.ts) and the cards (src/lib/challenge/cards.ts). Pure: the caller hands it the book's
- * blocks (scripts/lib/glossary.ts, loadBlocks), so it runs anywhere.
+ * blocks (scripts/lib/glossary.ts, loadBlocks), so it runs anywhere. A screen block is read as its screen shows it
+ * (src/lib/screen-text.ts): table cells, list items and lines apart, never run together.
  */
+import { screenText } from '../screen-text';
+
 export interface Cited {
   /** Where it is used, for the report: "moment c4-b129-symbol", "card bai fact 2". */
   where: string;
@@ -28,6 +31,9 @@ export function readerText(content: string): string {
 }
 
 const norm = (s: string) => s.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();
+
+/** A block's text as a reader sees it, by kind: a screen's cells and lines apart; anything else as readerText. */
+export const quotedText = (b: { kind: string; content: string }): string => (b.kind === 'screen' ? norm(screenText(b.content)) : readerText(b.content));
 const wordChar = /[\p{L}\p{N}]/u;
 /** The quote is in the text and doesn't start or end in the middle of a word. */
 function atWholeWords(text: string, q: string): boolean {
@@ -45,7 +51,7 @@ export function quoteProblems(quotes: readonly Cited[], blocks: ReadonlyMap<stri
     const b = blocks.get(q.block);
     if (!b) out.push(`${q.where}: ${q.block} is not a block of the book`);
     else if (!q.text.trim()) out.push(`${q.where}: an empty quote of ${q.block}`);
-    else if (!atWholeWords(readerText(b.content), norm(q.text))) out.push(`${q.where}: "${q.text.slice(0, 60)}" is not word for word in ${q.block}`);
+    else if (!atWholeWords(quotedText(b), norm(q.text))) out.push(`${q.where}: "${q.text.slice(0, 60)}" is not word for word in ${q.block}`);
   }
   return out;
 }

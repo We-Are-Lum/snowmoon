@@ -611,6 +611,17 @@ try {
   try { filter.checkLines([{ source: 'agent', text: 'A line.' }], -5); } catch { refusedAll = true; }
   check('S5 with the switch back at "refused", agent lines are refused for everyone', refusedAll);
 
+  // Screen blocks (search-screen-blocks follow-up, owner 2026-11-18): a book line from a screen is checked against the
+  // screen's words as shown, cells, items and lines apart; paragraphs and quotes exactly as before.
+  const { blockText, plainText: bookPlain } = await import('../src/lib/book-search');
+  const { loadChapter, chapterNumbers } = await import('../src/lib/book');
+  check('S6 a book line from a screen\'s table (c1-b55, two cells) is accepted word for word', filter.bookLineOk('c1-b55', 'civic duty Does not meet any Tier 4-5 criteria') && filter.bookLineOk('c1-b55', 'Tier Criteria Tax rate'));
+  check('S6b the same cells run together ("civic dutyDoes") are refused', !filter.bookLineOk('c1-b55', 'civic dutyDoes not meet any Tier 4-5 criteria') && bookPlain(loadChapter(1)!.blocks.find((b) => b.idx === 55)!.content).includes('dutyDoes'));
+  check('S6c a line of a screen (c13-b64) is accepted, with a cut', filter.bookLineOk('c13-b64', 'Embrace the competition') && filter.bookLineOk('c13-b64', 'Life is not fair … Embrace the competition. Today, you may be weak.'));
+  check('S6d a changed word on a screen is refused', !filter.bookLineOk('c13-b64', 'Embrace the struggle'));
+  const textBlocks = chapterNumbers().flatMap((n) => loadChapter(n)!.blocks.filter((b) => b.kind !== 'screen'));
+  check('S6e every other block is read exactly as before (blockText = plainText)', textBlocks.length > 1000 && textBlocks.every((b) => blockText(b) === bookPlain(b.content)), String(textBlocks.length));
+
   console.log('G  P4a: an agent\'s route passes only if it creates drafts (owner, 2026-10-20), in-process');
   const { p4aProblems, agentToolProblems } = await import('./lib/p4a');
   const readReal = (rel: string) => readFileSync(path.join(ROOT, rel), 'utf8');

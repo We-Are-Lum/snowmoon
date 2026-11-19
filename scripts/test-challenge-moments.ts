@@ -35,12 +35,23 @@ const clone = <T>(v: T): T => structuredClone(v);
 
 const { CARDS, cardQuotes, cardShapeProblems, firstLayerFacts } = await import('../src/lib/challenge/cards');
 const { MOMENTS, momentShapeProblems, inBookOrder, chapterChip, momentsWith } = await import('../src/lib/challenge/moments');
-const { quoteProblems } = await import('../src/lib/challenge/book-quotes');
+const { quoteProblems, quotedText, readerText } = await import('../src/lib/challenge/book-quotes');
 const { loadBlocks } = await import('./lib/glossary');
 const { p8iProblems, p2mProblems, p6acProblems } = await import('./lib/challenge-moments');
 const { TERMS, PRIVACY } = await import('../src/lib/legal');
 const blocks = loadBlocks(ROOT);
 const momentQuotes = (ms: typeof MOMENTS) => ms.flatMap((m) => m.quotes.map((q) => ({ where: `moment ${m.id}`, block: q.block, text: q.text })));
+
+// --- Screen blocks (owner, 2026-11-18): read as the screen shows them, cells and lines apart ---------------------------
+{
+  const q = (block: string, text: string) => quoteProblems([{ where: 'screen test', block, text }], blocks).length === 0;
+  check('screens: a quote of two cells of c1-b55\'s table is word for word', q('c1-b55', 'civic duty Does not meet any Tier 4-5 criteria'));
+  proof('the same cells run together ("civic dutyDoes") fail', !q('c1-b55', 'civic dutyDoes not meet any Tier 4-5 criteria'));
+  check('screens: a line of c13-b64 is word for word', q('c13-b64', 'Embrace the competition'));
+  proof('a changed word on a screen fails', !q('c13-b64', 'Embrace the struggle'));
+  const others = [...blocks.values()].filter((b) => b.kind !== 'screen');
+  check('screens: every other block is read exactly as before (quotedText = readerText)', others.length > 1000 && others.every((b) => quotedText(b) === readerText(b.content)), String(others.length));
+}
 
 // --- The cards (owner, 2026-11-05, answer 2) ------------------------------------------------------------------------
 {

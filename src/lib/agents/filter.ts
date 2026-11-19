@@ -1,7 +1,7 @@
 import 'server-only';
 import { AGENTS } from '../config';
 import { loadChapter } from '../book';
-import { plainText } from '../book-search';
+import { blockText } from '../book-search';
 import { checkNoWriting } from '../make/no-writing';
 import { ToolInputError } from '../agent/tools';
 
@@ -27,13 +27,17 @@ export interface Line {
 
 const norm = (s: string) => s.replace(/[“”]/g, '"').replace(/[‘’]/g, "'").replace(/\s+/g, ' ').trim();
 
-/** A book line is in its block, word for word (cuts marked "…" or "..."), in order. */
+/**
+ * A book line is in its block, word for word (cuts marked "…" or "..."), in order. The block's words are read the
+ * way its kind is shown (blockText): a paragraph or quote without its markup, as before; a screen with its table
+ * cells, list items and lines apart, so a quote of c1-b55's table passes and a run-together "civic dutyDoes" doesn't.
+ */
 export function bookLineOk(block: string, text: string): boolean {
   const m = block.match(/^c(\d{1,2})-b(\d{1,4})$/);
   if (!m) return false;
   const b = loadChapter(Number(m[1]))?.blocks.find((x) => x.idx === Number(m[2]));
   if (!b) return false;
-  const source = norm(plainText(b.content));
+  const source = norm(blockText(b));
   let from = 0;
   for (const part of norm(text).split(/\s*(?:…|\.\.\.)\s*/).filter(Boolean)) {
     const at = source.indexOf(part, from);
