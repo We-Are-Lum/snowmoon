@@ -1,0 +1,41 @@
+{
+  "_note": "Snowmoon Editions test pages on Sepolia: what each edition page shows that the contract doesn't hold. SAMPLE DATA for the test until Nate picks the two pieces (open question 6). Null fields show as [bracketed] placeholders for the owner's words; never fill them with invented story text. Media must be first-party (media.snowmoon.party). Split recipients come from the edition's metadata (the deep-funding result plus the standing shares); the split's address is read from the contract.",
+  "editions": {
+    "1": {
+      "label": "Character · Work in progress",
+      "title": null,
+      "test": true,
+      "media": { "type": "image", "url": "https://media.snowmoon.party/images/seed/c1/c1-b013-sky-bridge-64be33275e53.jpg", "alt": "Sample picture for the test: the sky bridge, from chapter 1's illustrations", "width": 1024, "height": 576 },
+      "line": null,
+      "story": null,
+      "madeBy": null,
+      "builtOn": null,
+      "recipeUrl": null,
+      "storyUrl": null,
+      "earlier": [null, null, null],
+      "split": [
+        { "name": null, "share": null },
+        { "name": "Snowmoon collab pot (proposed)", "share": 10 },
+        { "name": "Lum treasury (proposed)", "share": 5 }
+      ]
+    },
+    "2": {
+      "label": "Scene",
+      "title": null,
+      "test": true,
+      "media": { "type": "video", "url": "https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-phone-3f91cf56859f.mp4", "alt": "Sample video for the test: the Fifteen Days scene", "width": 1280, "height": 720 },
+      "line": null,
+      "story": null,
+      "madeBy": null,
+      "builtOn": null,
+      "recipeUrl": null,
+      "storyUrl": null,
+      "earlier": [null, null],
+      "split": [
+        { "name": null, "share": null },
+        { "name": "Snowmoon collab pot (proposed)", "share": 10 },
+        { "name": "Lum treasury (proposed)", "share": 5 }
+      ]
+    }
+  }
+}

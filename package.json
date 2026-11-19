@@ -30,6 +30,7 @@
     "test:recipe-lines": "tsx --env-file-if-exists=.env.local scripts/test-recipe-lines.tsx",
     "check:real-payment": "tsx --conditions=react-server scripts/check-real-payment.ts",
     "test:db-swaps": "tsx --conditions=react-server scripts/test-db-swaps.ts",
+    "test:editions": "tsx scripts/test-editions.ts",
     "test:support": "tsx scripts/test-support.ts",
     "test:db-limits": "tsx --conditions=react-server scripts/test-db-limits.ts",
     "probe:pooler-echo": "tsx --env-file-if-exists=.env.local scripts/probe-pooler-echo.ts",
