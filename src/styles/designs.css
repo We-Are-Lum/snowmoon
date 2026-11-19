@@ -828,12 +828,17 @@ a.chc-cite { color: var(--link); }
   .chc-wide-only { display: inline; }
   .chc-narrow-only { display: none; }
   /* Bigger pictures, fewer to a row (owner, 2026-11-16, after Garance saw them shrink): the remixes three across (the
-     handoff's four were 168px). The bases (owner, 2026-11-16, later; they were a fixed two): as many across as fit at
+     handoff's four were 168px; since 18 Nov, as many as fit at 240px, below). The bases (owner, 2026-11-16, later; they were a fixed two): as many across as fit at
      200px or more, so three at 1440 (and on a ~1290px window with the side menu open) and two where three won't fit.
      auto-fill, not auto-fit, so two bases don't stretch to fill the row. */
   .chc-bases { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; overflow: visible; }
   .chc-dots { display: none; }
-  .chc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 16px; }
+  /* The remixes (owner's 18 Nov call, from Garance: still smaller than before the design pass): as many across as fit
+     at 240px or more, not a fixed three. Three across in the right column made them 169px at 1024, 183px at 1280 with
+     the side menu open and 220px at 1440 with it open, under the old page's 235px. Now two across there (261, 283 and
+     338px) and three where three fit at 240px (264px at 1440 with the menu closed, 267px at 1680). The bases above are
+     unchanged. auto-fill, as for the bases, so a few remixes don't stretch. */
+  .chc-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px 16px; }
 }
 /* A challenge picture's page (the redesign's screen 4; owner-approved plan 2026-11-11): on a desktop the picture at the
    column's full width and a 440px column beside it; on a phone the picture full-bleed under the bar. The order inside
