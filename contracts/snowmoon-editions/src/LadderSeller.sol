@@ -276,7 +276,8 @@ contract LadderSeller is IEditionSeller, ReentrancyGuardTransient {
     function pricesOf(uint256 id, uint256 first, uint256 count) external view returns (uint256[] memory prices) {
         Ladder storage l = _ladders[id];
         if (!l.configured) revert UnknownEdition(id);
-        if (first == 0 || count == 0 || first + count - 1 > l.maxSupply) revert BadPiece(first + count - 1);
+        // Written so no out-of-range input can overflow: every bad range reverts with BadPiece(first).
+        if (first == 0 || count == 0 || count > l.maxSupply || first > uint256(l.maxSupply) - count + 1) revert BadPiece(first);
         prices = new uint256[](count);
         (uint256 s, uint256 t, uint256 r, uint256 size) = (l.startPrice, l.topPrice, l.lnRatio, l.maxSupply);
         for (uint256 i; i < count; ++i) {

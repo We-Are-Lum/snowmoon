@@ -213,6 +213,10 @@ contract InvariantTest is Test {
             LadderSeller.Summary memory s = seller.summary(id);
             assertEq(s.sold, editions.totalMinted(id));
             assertEq(s.held, seller.held(id));
+            assertEq(s.remaining, seller.remaining(id));
+            assertEq(s.open, seller.isOpen(id));
+            if (s.remaining > 0) assertEq(s.nextPrice, seller.quote(id, 1));
+            else assertEq(s.nextPrice, 0);
         }
     }
 

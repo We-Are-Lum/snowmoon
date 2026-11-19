@@ -6,6 +6,14 @@ import {Base} from "./utils/Helpers.sol";
 
 /// @dev The read functions for the site (owner, 2026-11-18): lastMintAt, pricesOf, summary. They change no price and no
 ///      payment: every other test runs unchanged, and these check each view against the ones it summarises.
+contract NonReceiverForViews {}
+
+contract RejecterForViews {
+    receive() external payable {
+        revert();
+    }
+}
+
 contract ViewsTest is Base {
     function test_lastMintAt() public {
         uint256 a = _create(20);
@@ -33,6 +41,44 @@ contract ViewsTest is Base {
         assertEq(seller.lastMintAt(a), 0);
     }
 
+    function test_lastMintAt_notSetWhenTheCollectionOrRefundFails() public {
+        uint256 a = _create(5);
+        NonReceiverForViews nr = new NonReceiverForViews();
+        uint256 cost = seller.quote(a, 1);
+        vm.prank(buyer);
+        vm.expectRevert();
+        seller.mint{value: cost}(a, 1, address(nr)); // the collection refuses a non-receiver
+        RejecterForViews r = new RejecterForViews();
+        vm.deal(address(r), 1 ether);
+        vm.prank(address(r));
+        vm.expectRevert(LadderSeller.RefundFailed.selector);
+        seller.mint{value: cost + 1}(a, 1, buyer); // the refund fails
+        assertEq(seller.lastMintAt(a), 0);
+        assertEq(seller.sold(a), 0);
+    }
+
+    function test_ladder_fieldOrder() public {
+        uint256 id = _create(7);
+        _buy(id, 2);
+        LadderSeller.Ladder memory l = seller.ladder(id);
+        assertEq(l.sold, 2);
+        assertTrue(l.configured);
+        assertEq(l.lastMintAt, block.timestamp);
+        assertEq(l.paid, seller.held(id));
+        assertEq(l.payout, payoutA);
+        // The ABI order the site decodes: (startPrice, topPrice, startTime, payout, maxSupply, sold, configured,
+        // lastMintAt, paid, released, lnRatio).
+        (bool ok, bytes memory raw) = address(seller).staticcall(abi.encodeCall(LadderSeller.ladder, (id)));
+        assertTrue(ok);
+        (,,,, uint256 size, uint256 soldRaw, bool conf, uint256 lastRaw, uint256 paidRaw,,) =
+            abi.decode(raw, (uint256, uint256, uint256, address, uint256, uint256, bool, uint256, uint256, uint256, uint256));
+        assertEq(size, 7);
+        assertEq(soldRaw, 2);
+        assertTrue(conf);
+        assertEq(lastRaw, block.timestamp);
+        assertEq(paidRaw, l.paid);
+    }
+
     function test_pricesOf_wholeLadderMatchesPriceOf() public {
         uint256 id = _create(256);
         uint256[] memory p = seller.pricesOf(id, 1, 256);
@@ -54,12 +100,19 @@ contract ViewsTest is Base {
 
     function test_pricesOf_badRanges() public {
         uint256 id = _create(10);
-        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPiece.selector, 0));
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPiece.selector, 1));
         seller.pricesOf(id, 1, 0);
-        vm.expectRevert();
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPiece.selector, 0));
         seller.pricesOf(id, 0, 1);
-        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPiece.selector, 11));
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPiece.selector, 0));
+        seller.pricesOf(id, 0, 0);
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPiece.selector, 2));
         seller.pricesOf(id, 2, 10);
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPiece.selector, type(uint256).max));
+        seller.pricesOf(id, type(uint256).max, 1);
+        vm.expectRevert(abi.encodeWithSelector(LadderSeller.BadPiece.selector, 1));
+        seller.pricesOf(id, 1, type(uint256).max);
+        assertEq(seller.pricesOf(id, 10, 1)[0], seller.priceOf(id, 10));
         vm.expectRevert(abi.encodeWithSelector(LadderSeller.UnknownEdition.selector, 7));
         seller.pricesOf(7, 1, 1);
     }
@@ -104,6 +157,7 @@ contract ViewsTest is Base {
         assertEq(s.startPrice, l.startPrice);
         assertEq(s.topPrice, l.topPrice);
         if (s.remaining > 0) assertEq(s.nextPrice, seller.nextPrice(id));
+        if (s.remaining > 0) assertEq(s.nextPrice, seller.quote(id, 1));
         assertEq(s.startTime, l.startTime);
         assertEq(s.lastMintAt, seller.lastMintAt(id));
         assertEq(s.open, seller.isOpen(id));
