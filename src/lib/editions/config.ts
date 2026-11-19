@@ -37,8 +37,6 @@ export const EDITIONS_TEST = {
   busyWindowSeconds: 180,
   /** Busy: the page sends enough for the same number of pieces this many places further up the ladder. */
   cushionPieces: 3,
-  /** How far back the server looks for recent mints, in blocks (Sepolia makes one every 12 s: 30 blocks = 6 minutes). */
-  recentBlocks: 30,
   /** The next edition's opening when it isn't on the contract yet (ISO time). Null: no countdown. */
   nextOpening: env(process.env.NEXT_PUBLIC_EDITIONS_NEXT_OPENING),
   /** The feedback form (Nate supplies the link). Null: the after-mint screen says it's coming. */
@@ -48,3 +46,11 @@ export const EDITIONS_TEST = {
 } as const;
 
 export const editionsDeployed = () => EDITIONS_TEST.editions !== null && EDITIONS_TEST.seller !== null;
+
+/**
+ * The switch for production (proposal, docs/editions-test-pages.md, "On production behind a switch"; waits for the
+ * owner's go). Off: on production the pages and their API answer 404, as if they didn't exist. Locally and on previews
+ * they're always on. Turning it on is a one-line, reviewed change here, like the site's other switches.
+ */
+export const EDITIONS_PAGES = { onProduction: false };
+export const editionsPagesOn = () => EDITIONS_PAGES.onProduction || process.env.VERCEL_ENV !== 'production';

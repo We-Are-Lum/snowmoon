@@ -12,9 +12,9 @@
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
-import { EDITIONS_TEST } from '../src/lib/editions/config';
+import { EDITIONS_PAGES, EDITIONS_TEST, editionsPagesOn } from '../src/lib/editions/config';
 import {
-  amountToSend, countdown, countdownText, cushionFrom, editionState, formatEth, formatUsd, isBusy, ladderBars, ladderTicks,
+  amountToSend, countdown, countdownText, cushionFrom, editionState, formatEth, formatUsd, isBusy, ladderBars, ladderGroups, ladderTicks,
   nextOpening, piecesText, problemOf, quoteFrom, returned, walletStep,
 } from '../src/lib/editions/ladder';
 import { EW } from '../src/lib/editions/wording';
@@ -48,7 +48,7 @@ check('E1 "at most" rounds up', formatEth(513000000000001n, { up: true }) === '0
 check('E1 zero', formatEth(0n) === '0');
 check('E1 dollars', formatUsd(500000000000000000n, 3000) === '$1500', String(formatUsd(500000000000000000n, 3000)));
 check('E1 dollars, small', formatUsd(513000000000000n, 3000) === '$1.54', String(formatUsd(513000000000000n, 3000)));
-check('E1 dollars, under a cent', formatUsd(1000000000000n, 3000) === 'under $0.01' && EW.approx('under $0.01') === 'under $0.01, approximate' && EW.approx('$1.54') === 'about $1.54, approximate');
+check('E1 dollars, under a cent', formatUsd(1000000000000n, 3000) === 'under $0.01' && EW.about('under $0.01') === 'under $0.01' && EW.about('$1.54') === 'about $1.54');
 check('E1 no price, no dollars', formatUsd(1n, null) === null && formatUsd(1n, 0) === null);
 
 // E2
@@ -106,12 +106,17 @@ check('E7 one bar per piece', bars.length === 256);
 check('E7 true scale: the last bar is full height, the first 1/1000', bars[255].height === 1 && Math.abs(bars[0].height - 0.001) < 1e-9);
 check('E7 minted, next, waiting', bars[9].status === 'minted' && bars[10].status === 'next' && bars[11].status === 'waiting');
 check('E7 sold out: no next', ladderBars(five, 3).every((b) => b.status === 'minted'));
-check('E7 ticks for 256', JSON.stringify(ladderTicks(256)) === '[1,128,192,256]', JSON.stringify(ladderTicks(256)));
+check('E7 ticks for 256, as the mockups mark them (1, 128, 200, 256; desktop adds 64)', JSON.stringify(ladderTicks(256)) === '[1,128,200,256]' && JSON.stringify(ladderTicks(256, true)) === '[1,64,128,200,256]', `${JSON.stringify(ladderTicks(256))} ${JSON.stringify(ladderTicks(256, true))}`);
+const groups = ladderGroups(first, 10, 64);
+check('E7 64 bars of 4 pieces on a phone, 128 of 2 on desktop', groups.length === 64 && groups[0].first === 1 && groups[0].last === 4 && ladderGroups(first, 0, 128).length === 128 && ladderGroups(first, 0, 128)[127].last === 256);
+check('E7 grouped: minted, next, waiting', groups[1].status === 'minted' && groups[2].status === 'next' && groups[3].status === 'waiting', JSON.stringify(groups.slice(0, 4).map((g) => g.status)));
+check('E7 grouped: the last bar is full height', ladderGroups(first, 0, 64)[63].height === 1);
+check('E7 small editions: one bar per piece', ladderGroups(five, 1, 64).length === 3);
 check('E7 ticks for 5', JSON.stringify(ladderTicks(5)) === '[1,2,3,4,5]');
 check('E7 next opening from the contract first', nextOpening([at - 10, at + 500, at + 100], '2030-01-01T00:00:00Z', at) === at + 100);
 check('E7 then from config', nextOpening([at - 10], new Date((at + 900) * 1000).toISOString(), at) === at + 900);
 check('E7 else none', nextOpening([], null, at) === null && nextOpening([], new Date((at - 1) * 1000).toISOString(), at) === null);
-check('E7 countdown', countdownText(countdown(at + 90061, at)) === '1d 1h 1m' && countdownText(countdown(at + 65, at)) === '1m 05s' && countdown(at, at + 5).done);
+check('E7 countdown, the mockups\' format', countdownText(countdown(at + 6 * 86400 + 14 * 3600 + 22 * 60 + 8, at)) === '6d 14h 22m 08s' && countdownText(countdown(at + 65, at)) === '0d 00h 01m 05s' && countdown(at, at + 5).done, countdownText(countdown(at + 65, at)));
 check('E7 pieces text', piecesText(12, 1) === 'Piece 12' && piecesText(12, 10) === 'Pieces 12–21');
 
 // E8
@@ -128,14 +133,16 @@ check('E8 no investment talk', !banned.test(words.replace(/Snowmoon/g, '')), wor
 check('E8 no Terms or Privacy lines', !/\b(terms|privacy|refund polic)/i.test(words), words.match(/\b(terms|privacy)/i)?.[0]);
 check('E8 the banner says it is a test on a test network', /test/i.test(EW.banner) && /Sepolia/.test(EW.banner) && /not real|nothing here is real/i.test(EW.banner));
 check('E8 "Editions", "Earlier editions", "All editions"', EW.title === 'Editions' && EW.earlier === 'Earlier editions' && EW.allEditions === 'All editions');
+check('E8 the can\'t-hold message names no token standard (owner, 2026-11-18)', !/ERC|1155|token/i.test(EW.cannotReceive), EW.cannotReceive);
+check('E8 edition numbers as the mockups write them', EW.edition(4) === 'Edition 04');
 check('E8 not "the making so far" or "the work so far"', !/(making|work) so far/i.test(words));
 const editionsFiles = [...walk('src/app/editions'), ...walk('src/components/editions'), ...walk('src/lib/editions'), 'config/editions-sepolia.json'];
 const oldName = editionsFiles.filter((f) => /Snowmoon WIP|SMWIP/.test(read(f)));
 check('E8 the old name is gone from the pages', oldName.length === 0, oldName.join(', '));
 check('E8 the collection is named "Snowmoon Editions"', EDITIONS_TEST.collectionName === 'Snowmoon Editions');
 const entries = Object.values((catalog as { editions: Record<string, Record<string, unknown>> }).editions);
-check('E8 no invented story text: the owner\'s fields are empty until he writes them', entries.every((e) => e.story === null && e.line === null && e.title === null && e.madeBy === null && e.builtOn === null));
-check('E8 placeholders are bracketed', [EW.storyPlaceholder, EW.linePlaceholder, EW.titlePlaceholder, EW.madeByPlaceholder, EW.builtOnPlaceholder, EW.earlierPlaceholder, EW.recipientPlaceholder].every((p) => /^\[.*\]$/.test(p)));
+check('E8 no invented story text: the owner\'s fields are empty until he writes them', entries.every((e) => e.story === null && e.line === null && e.title === null && e.madeBy === null && e.builtOn === null && e.storyName === null));
+check('E8 placeholders are bracketed', [EW.storyPlaceholder, EW.linePlaceholder, EW.titlePlaceholder, EW.madeByPlaceholder, EW.builtOnPlaceholder, EW.nextPiecePlaceholder, EW.recipientPlaceholder].every((p) => /^\[.*\]$/.test(p)));
 check('E8 test editions are marked TEST', entries.every((e) => e.test === true));
 check('E8 media is first-party', entries.every((e) => !e.media || String((e.media as { url: string }).url).startsWith('https://media.snowmoon.party/')));
 
@@ -154,6 +161,20 @@ check('E9 the server reads Sepolia, the wallet adds it only if asked', /ethereum
 check('E9 pages are noindex', /robots:\s*\{\s*index:\s*false/.test(read('src/app/editions/layout.tsx')));
 const linked = walk('src').filter((f) => !f.includes('/editions') && /href=["'{`]\/editions/.test(read(f)));
 check('E9 unlisted: nothing else links to /editions', linked.length === 0, linked.join(', '));
+
+// E10 the production switch (proposal): off on production until the owner's go; on locally and on previews.
+check('E10 off on production by default', EDITIONS_PAGES.onProduction === false);
+{
+  const was = process.env.VERCEL_ENV;
+  process.env.VERCEL_ENV = 'production';
+  const prod = editionsPagesOn();
+  process.env.VERCEL_ENV = 'preview';
+  const preview = editionsPagesOn();
+  if (was === undefined) delete process.env.VERCEL_ENV;
+  else process.env.VERCEL_ENV = was;
+  check('E10 production: the pages answer 404; previews and local: on', prod === false && preview === true && editionsPagesOn() === true);
+}
+check('E10 the layout and the API both obey the switch', /editionsPagesOn\(\)/.test(read('src/app/editions/layout.tsx')) && /editionsPagesOn\(\)/.test(read('src/app/api/editions/[id]/live/route.ts')));
 
 console.log(`\ntest:editions: ${passed} passed, ${failed.length} failed`);
 if (failed.length) process.exit(1);

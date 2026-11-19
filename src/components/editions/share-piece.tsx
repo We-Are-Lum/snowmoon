@@ -21,7 +21,7 @@ export function SharePiece({ path, title }: { path: string; title: string }) {
     await navigator.clipboard?.writeText(url).then(() => (setCopied(true), setTimeout(() => setCopied(false), 2000)), () => {});
   };
   return (
-    <button type="button" className="ic-secondary" onClick={() => void share()}>
+    <button type="button" className="ed-button ed-button-outline" onClick={() => void share()}>
       {copied ? EW.copied : EW.share}
     </button>
   );

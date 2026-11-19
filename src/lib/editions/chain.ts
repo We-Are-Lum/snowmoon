@@ -35,23 +35,28 @@ export type EditionView = {
   uri: string;
   /** Pieces 1..size, wei as strings. */
   prices: string[];
-  /** The ladder belongs to this seller (an edition sold by another seller isn't shown by these test pages). */
+  /** Sold by this seller (an edition sold by another seller isn't shown by these test pages). */
   ours: boolean;
 };
 
 export type EditionLive = { id: number; sold: number; size: number; lastMintAt: number | null; now: number };
 
-/** Prices never change after creation, so each ladder is read once per server process. */
+/** Prices never change after creation, so each ladder is read once per server process (one pricesOf call). */
 const LADDERS = new Map<number, string[]>();
+
+type Summary = { id: bigint; maxSupply: bigint; sold: bigint; remaining: bigint; startPrice: bigint; topPrice: bigint; nextPrice: bigint; startTime: bigint; lastMintAt: bigint; open: boolean; payout: `0x${string}`; held: bigint; uri: string };
+
+async function summaryOf(id: number): Promise<Summary | null> {
+  return (await reader()
+    .readContract({ ...S(), functionName: 'summary', args: [BigInt(id)] })
+    .catch(() => null)) as Summary | null;
+}
 
 async function ladderPrices(id: number, size: number): Promise<string[]> {
   const known = LADDERS.get(id);
   if (known) return known;
-  const results = await reader().multicall({
-    allowFailure: false,
-    contracts: Array.from({ length: size }, (_, i) => ({ ...S(), functionName: 'priceOf' as const, args: [BigInt(id), BigInt(i + 1)] as const })),
-  });
-  const prices = (results as bigint[]).map((p) => p.toString());
+  const p = (await reader().readContract({ ...S(), functionName: 'pricesOf', args: [BigInt(id), 1n, BigInt(size)] })) as readonly bigint[];
+  const prices = p.map((x) => x.toString());
   LADDERS.set(id, prices);
   return prices;
 }
@@ -68,58 +73,25 @@ export async function readEditions(): Promise<EditionView[]> {
   return out;
 }
 
+/** One edition: the seller's summary (one call) and its ladder (one call, then cached). An edition this seller
+ *  doesn't sell has no summary and isn't shown. */
 export async function readEdition(id: number): Promise<EditionView | null> {
   if (!editionsDeployed() || !Number.isInteger(id) || id < 1) return null;
-  const big = BigInt(id);
-  const count = Number(await reader().readContract({ ...E(), functionName: 'editionCount' }));
-  if (id > count) return null;
-  const [uri, payout, size, minted, createdAt, l] = await reader().multicall({
-    allowFailure: false,
-    contracts: [
-      { ...E(), functionName: 'uri', args: [big] },
-      { ...E(), functionName: 'payoutOf', args: [big] },
-      { ...E(), functionName: 'maxSupplyOf', args: [big] },
-      { ...E(), functionName: 'totalMinted', args: [big] },
-      { ...E(), functionName: 'createdAt', args: [big] },
-      { ...S(), functionName: 'ladder', args: [big] },
-    ],
-  });
-  const ladder = l as { startTime: bigint; configured: boolean };
-  const ours = ladder.configured;
-  return {
-    id,
-    size: Number(size),
-    sold: Number(minted),
-    startTime: Number(ladder.startTime),
-    createdAt: Number(createdAt),
-    payout: payout as `0x${string}`,
-    uri: uri as string,
-    prices: ours ? await ladderPrices(id, Number(size)) : [],
-    ours,
-  };
+  const s = await summaryOf(id);
+  if (!s) return null;
+  const size = Number(s.maxSupply);
+  const createdAt = Number(await reader().readContract({ ...E(), functionName: 'createdAt', args: [BigInt(id)] }));
+  return { id, size, sold: Number(s.sold), startTime: Number(s.startTime), createdAt, payout: s.payout, uri: s.uri, prices: await ladderPrices(id, size), ours: true };
 }
 
-/**
- * How many are sold, and when this edition's last mint landed (for the busy rule), from its Minted events in the last
- * EDITIONS_TEST.recentBlocks blocks. `now` is the latest block's time, so a fork's clock and the busy window agree.
- */
+/** How many are sold and when this edition was last minted (the busy rule), from the seller's summary. `now` is the
+ *  latest block's time, so a fork's clock and the busy window agree. */
 export async function readLive(id: number): Promise<EditionLive | null> {
   if (!editionsDeployed()) return null;
-  const r = reader();
-  const latest = await r.getBlock();
-  const [sold, size] = await r.multicall({
-    allowFailure: false,
-    contracts: [
-      { ...E(), functionName: 'totalMinted', args: [BigInt(id)] },
-      { ...E(), functionName: 'maxSupplyOf', args: [BigInt(id)] },
-    ],
-  });
-  const from = latest.number > BigInt(T.recentBlocks) ? latest.number - BigInt(T.recentBlocks) : 0n;
-  const logs = await r.getContractEvents({ ...S(), eventName: 'Minted', args: { id: BigInt(id) }, fromBlock: from, toBlock: latest.number }).catch(() => []);
-  const last = logs.at(-1);
-  const lastMintAt = last?.blockNumber != null ? Number((await r.getBlock({ blockNumber: last.blockNumber })).timestamp) : null;
-  const now = Math.max(Number(latest.timestamp), Math.floor(Date.now() / 1000));
-  return { id, sold: Number(sold), size: Number(size), lastMintAt, now };
+  const [s, latest] = await Promise.all([summaryOf(id), reader().getBlock()]);
+  if (!s) return null;
+  const last = Number(s.lastMintAt);
+  return { id, sold: Number(s.sold), size: Number(s.maxSupply), lastMintAt: last > 0 ? last : null, now: Math.max(Number(latest.timestamp), Math.floor(Date.now() / 1000)) };
 }
 
 export type MintView =

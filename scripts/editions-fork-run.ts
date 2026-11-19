@@ -101,7 +101,7 @@ async function main() {
   const data = (start: bigint, top: bigint, startTime = 0n) => `0x${[start, top, startTime].map((v) => v.toString(16).padStart(64, '0')).join('')}` as Hex;
   const create = (uri: string, size: number, start: bigint, top: bigint, startTime = 0n) =>
     send(wallet.writeContract({ account: CREATOR, chain: null, address: COLLECTION, abi: ed.abi, functionName: 'createEdition', args: [uri, BigInt(size), SELLER, PAYOUT, data(start, top, startTime)] }));
-  await create('ipfs://test-edition-1', 256, 2_000_000_000_000n, 2_000_000_000_000_000n);
+  await create('ipfs://test-edition-1', 256, 10_000_000_000_000n, 10_000_000_000_000_000n); // the Sepolia test ladder (DEPLOY.md): 0.00001 to 0.01 ETH
   await create('ipfs://test-edition-2', 5, 100_000_000_000_000n, 1_000_000_000_000_000n);
   const name = await pub.readContract({ address: COLLECTION, abi: ed.abi, functionName: 'name' });
   const symbol = await pub.readContract({ address: COLLECTION, abi: ed.abi, functionName: 'symbol' });
@@ -243,11 +243,8 @@ async function main() {
     await page.close();
   }
 
-  // Mint 10 right after a rival's: busy. The cushion is said before confirming, sent, and the difference shown as
-  // returned. The rival buys 50 first: the test ladder's first ~15 pieces all cost 0.000002 ETH (the 0.000001 step),
-  // where a cushion 3 pieces up costs the same and the page rightly says nothing.
+  // Mint 10 right after: busy. The cushion is said before confirming, sent, and the difference shown as returned.
   {
-    for (let i = 0; i < 5; i++) await rivalMint(1, 10);
     const { page } = await open('/editions/1', ready, phone);
     await page.waitForSelector('[data-mint]');
     for (let i = 1; i < 10; i++) await page.click('[aria-label="One more"]');
@@ -263,7 +260,7 @@ async function main() {
     const paid = BigInt((await page.getAttribute('[data-paid]', 'data-paid')) ?? '0');
     const back = BigInt((await page.getAttribute('[data-returned]', 'data-returned').catch(() => null)) ?? '0');
     record('mint 10 (busy): sent the cushion, paid the quote, the rest came back', cushion > quote && paid === quote && back === cushion - quote, `quote ${quote}, cushion ${cushion}, paid ${paid}, back ${back}`);
-    record('mint 10: "Pieces 52–61 are yours"', (await page.textContent('h1'))?.includes('Pieces 52–61 are yours') ?? false, (await page.textContent('h1')) ?? '');
+    record('mint 10: "Pieces 2–11 are yours"', (await page.textContent('h1'))?.includes('Pieces 2–11 are yours') ?? false, (await page.textContent('h1')) ?? '');
     await both(new URL(page.url()).pathname, 'after-mint-busy');
     await page.close();
   }

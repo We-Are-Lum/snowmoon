@@ -18,6 +18,8 @@ export type CatalogEntry = {
   builtOn: string | null;
   recipeUrl: string | null;
   storyUrl: string | null;
+  /** Who or what to see in the story ("Bai"), for the after-mint button. Null: "See it in the story". */
+  storyName: string | null;
   earlier: EarlierVersion[];
   split: SplitShare[];
 };
@@ -33,3 +35,6 @@ export function displayTitle(e: CatalogEntry | null, placeholder: string): strin
   const t = e?.title ?? placeholder;
   return e?.test === false ? t : `TEST · ${t}`;
 }
+
+/** The kind of piece, from the label's first part: "Character · Work in progress" → "Character". */
+export const kindOf = (e: CatalogEntry | null) => (e?.label ?? '').split('·')[0].trim();

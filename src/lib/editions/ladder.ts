@@ -129,11 +129,36 @@ export function ladderBars(prices: readonly bigint[], sold: number): Bar[] {
   }));
 }
 
-/** Piece numbers to mark with their price: the first, the middle, three quarters and the last (no repeats). The first
- *  quarter is left out: on a rising ladder its bars sit by the first, and the labels would collide at phone width. */
-export function ladderTicks(size: number): number[] {
+/**
+ * The mockups' ladder: pieces grouped into `groups` bars (64 on a phone, 128 on desktop, one per piece for small
+ * editions). A bar is minted when all its pieces are, next when it holds the next piece, waiting otherwise. Height is
+ * the true scale of the group's highest price against the top price, so the last bar is full height.
+ */
+export type GroupBar = { first: number; last: number; height: number; status: 'minted' | 'next' | 'waiting' };
+export function ladderGroups(prices: readonly bigint[], sold: number, groups: number): GroupBar[] {
+  const size = prices.length;
+  if (!size) return [];
+  const g = Math.max(1, Math.min(groups, size));
+  const per = size / g;
+  const top = prices[size - 1];
+  const out: GroupBar[] = [];
+  for (let i = 0; i < g; i++) {
+    const first = Math.floor(i * per) + 1;
+    const last = Math.floor((i + 1) * per);
+    const high = prices[last - 1];
+    const height = top > 0n ? Number((high * 1_000_000n) / top) / 1_000_000 : 0;
+    const status = last <= sold ? 'minted' : sold + 1 >= first && sold + 1 <= last ? 'next' : 'waiting';
+    out.push({ first, last, height, status });
+  }
+  return out;
+}
+
+/** Pieces marked with their price under the ladder (the mockups: 1, 128, 200, 256 on a phone; 64 too on desktop),
+ *  scaled to the edition's size. Small editions mark every piece. */
+export function ladderTicks(size: number, wide = false): number[] {
   if (size <= 5) return Array.from({ length: size }, (_, i) => i + 1);
-  return [...new Set([1, Math.round(size / 2), Math.round((3 * size) / 4), size])];
+  const at = (f: number) => Math.min(size, Math.max(1, Math.round(size * f)));
+  return [...new Set([1, ...(wide ? [at(0.25)] : []), at(0.5), at(200 / 256), size])];
 }
 
 /** "Piece 12" or "Pieces 12–21". */
@@ -155,5 +180,8 @@ export function countdown(target: number, now: number): { d: number; h: number; 
   return { d: Math.floor(left / 86400), h: Math.floor((left % 86400) / 3600), m: Math.floor((left % 3600) / 60), s: left % 60, done: left === 0 };
 }
 
-export const countdownText = (c: ReturnType<typeof countdown>) =>
-  c.done ? 'now' : c.d > 0 ? `${c.d}d ${c.h}h ${c.m}m` : c.h > 0 ? `${c.h}h ${c.m}m` : `${c.m}m ${String(c.s).padStart(2, '0')}s`;
+/** The mockups' countdown: "6d 14h 22m 08s". */
+export const countdownText = (c: ReturnType<typeof countdown>) => {
+  const p = (v: number) => String(v).padStart(2, '0');
+  return c.done ? 'now' : `${c.d}d ${p(c.h)}h ${p(c.m)}m ${p(c.s)}s`;
+};

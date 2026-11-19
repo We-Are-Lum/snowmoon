@@ -1,13 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Hash } from 'viem';
 import { EDITIONS_TEST as T } from '~/lib/editions/config';
 import { amountToSend, editionState, formatEth, formatUsd, isBusy, quoteFrom, walletStep, type Amount, type MintProblem } from '~/lib/editions/ladder';
 import { connect, freshQuote, mint, onWalletChange, problemFrom, switchToSepolia, walletNow, type WalletNow } from '~/lib/editions/wallet';
 import { EW } from '~/lib/editions/wording';
-import { LadderChart } from './ladder-chart';
 import { Countdown } from './countdown';
 
 type Live = { sold: number; lastMintAt: number | null; now: number };
@@ -52,16 +51,29 @@ function useEthUsd(): number | null {
   return usd;
 }
 
-/**
- * The mint card and the ladder for one edition, sharing what's sold. Quiet and busy (owner, 2026-11-18): the page sends
- * exactly the quoted price, unless someone minted this edition in the last EDITIONS_TEST.busyWindowSeconds; then it sends
- * the cushion and says so, with "at most", before the buyer confirms. The price is read again just before sending.
- */
-export function EditionSale(props: { id: number; size: number; prices: string[]; startTime: number; initial: Live }) {
-  const { id, size } = props;
+type Ctx = { id: number; size: number; prices: bigint[]; startTime: number; live: Live; readLive: () => Promise<Live> };
+const LiveContext = createContext<Ctx | null>(null);
+export const useEditionLive = () => {
+  const c = useContext(LiveContext);
+  if (!c) throw new Error('EditionLive missing');
+  return c;
+};
+
+/** What's sold and whether it's busy, shared by the mint card and the ladder (polled from our API, never the RPC). */
+export function EditionLive(props: { id: number; size: number; prices: string[]; startTime: number; initial: Live; children: React.ReactNode }) {
   const prices = useMemo(() => props.prices.map((p) => BigInt(p)), [props.prices]);
+  const [live, readLive] = useLive(props.id, props.initial);
+  return <LiveContext.Provider value={{ id: props.id, size: props.size, prices, startTime: props.startTime, live, readLive }}>{props.children}</LiveContext.Provider>;
+}
+
+/**
+ * The mint card. Quiet and busy (owner, 2026-11-18): the page sends exactly the quoted price, unless someone minted
+ * this edition in the last EDITIONS_TEST.busyWindowSeconds; then it sends the cushion and says so, with "at most",
+ * before the buyer confirms. The price is read again just before sending.
+ */
+export function MintCard() {
+  const { id, size, prices, startTime, live, readLive } = useEditionLive();
   const router = useRouter();
-  const [live, readLive] = useLive(id, props.initial);
   const ethUsd = useEthUsd();
   const [wallet, setWallet] = useState<WalletNow>({ found: true, account: null, chainId: null, balance: null });
   const [quantity, setQuantity] = useState(1);
@@ -85,7 +97,7 @@ export function EditionSale(props: { id: number; size: number; prices: string[];
   const sold = live.sold;
   const left = size - sold;
   const now = Math.max(clock, live.now);
-  const state = editionState({ deployed: true, startTime: props.startTime, sold, size }, now);
+  const state = editionState({ deployed: true, startTime, sold, size }, now);
   const q = Math.max(1, Math.min(quantity, Math.min(10, Math.max(left, 1))));
   const busy = isBusy(live.lastMintAt, now, T.busyWindowSeconds);
   const total = left > 0 ? quoteFrom(prices, sold, Math.min(q, left)) : 0n;
@@ -140,7 +152,7 @@ export function EditionSale(props: { id: number; size: number; prices: string[];
 
   const usd = (wei: bigint) => {
     const u = formatUsd(wei, ethUsd);
-    return u ? <span className="ed-usd">{EW.approx(u)}</span> : null;
+    return u ? <span className="ed-usd label">{EW.about(u)}</span> : null;
   };
 
   const action = () => {
@@ -217,57 +229,53 @@ export function EditionSale(props: { id: number; size: number; prices: string[];
   };
 
   return (
-    <>
-      <section className="ed-card" aria-labelledby="ed-card-title" data-state={state} data-busy={busy ? '1' : '0'}>
-        {state === 'sold-out' ? (
-          <>
-            <h2 id="ed-card-title" className="ed-card-title">{EW.soldOut}</h2>
-            <p className="ed-card-line">{EW.soldOutLine(size)}</p>
-          </>
-        ) : (
-          <>
-            <p className="label ed-card-pieces">
-              <span id="ed-card-title">{EW.pieceOf(sold + 1, size)}</span>
-              <span aria-hidden="true"> · </span>
-              <span>{EW.left(left)}</span>
+    <section className="ed-card" aria-labelledby="ed-card-title" data-state={state} data-busy={busy ? '1' : '0'}>
+      {state === 'sold-out' ? (
+        <>
+          <h2 id="ed-card-title" className="ed-card-title">{EW.soldOut}</h2>
+          <p className="ed-card-line">{EW.soldOutLine(size)}</p>
+        </>
+      ) : (
+        <>
+          <p className="label ed-card-pieces">
+            <span id="ed-card-title">{EW.pieceOf(sold + 1, size)}</span>
+            <span>{EW.left(left)}</span>
+          </p>
+          {state === 'not-open' && (
+            <p className="ed-card-line" data-state="not-open">
+              {EW.notOpen} <Countdown target={startTime} />
             </p>
-            {state === 'not-open' && (
-              <p className="ed-card-line" data-state="not-open">
-                {EW.notOpen} · <Countdown target={props.startTime} />
-              </p>
-            )}
-            <p className="ed-price">
-              <span className="label">{EW.nextPrice}</span>
-              <span className="ed-price-eth">{formatEth(prices[sold])} ETH</span>
-              {usd(prices[sold])}
-            </p>
-            <div className="ed-qty" role="group" aria-label={EW.quantity}>
-              <span className="label">{EW.quantity}</span>
-              <button type="button" className="ic-secondary" aria-label={EW.fewer} disabled={q <= 1 || working} onClick={() => setQuantity(q - 1)}>
+          )}
+          <p className="ed-price">
+            <span className="ed-price-eth">{formatEth(prices[sold])}</span>
+            <span className="ed-price-unit">ETH</span>
+            {usd(prices[sold])}
+          </p>
+          <div className="ed-qty" role="group" aria-label={EW.quantity}>
+            <span>{EW.quantity}</span>
+            <span className="ed-qty-controls">
+              <button type="button" className="ed-step" aria-label={EW.fewer} disabled={q <= 1 || working} onClick={() => setQuantity(q - 1)}>
                 −
               </button>
               <output aria-live="polite" data-quantity={q}>{q}</output>
-              <button type="button" className="ic-secondary" aria-label={EW.more} disabled={q >= Math.min(10, left) || working} onClick={() => setQuantity(q + 1)}>
+              <button type="button" className="ed-step" aria-label={EW.more} disabled={q >= Math.min(10, left) || working} onClick={() => setQuantity(q + 1)}>
                 +
               </button>
-            </div>
-            <p className="ed-total">
-              <span className="label">{EW.total}</span>
-              <span data-total={total.toString()}>{formatEth(total)} ETH</span>
-              {usd(total)}
+            </span>
+          </div>
+          <p className="ed-total">
+            <span>{EW.totalFor(q)}</span>
+            <span className="ed-total-eth" data-total={total.toString()}>{formatEth(total)} ETH</span>
+          </p>
+          <div className="ed-go">{action()}</div>
+          {(phase.kind === 'confirm' || amount.cushion) && (
+            <p className="ed-busy" role="note" data-cushion={(phase.kind === 'confirm' ? phase.send : amount.send).toString()}>
+              {EW.busy(formatEth(phase.kind === 'confirm' ? phase.send : amount.send, { up: true }))}
             </p>
-            {(phase.kind === 'confirm' || amount.cushion) && (
-              <p className="ed-note ed-busy" role="note" data-cushion={(phase.kind === 'confirm' ? phase.send : amount.send).toString()}>
-                {EW.busy(formatEth(phase.kind === 'confirm' ? phase.send : amount.send, { up: true }))}
-              </p>
-            )}
-            <div className="ed-go">{action()}</div>
-            {status()}
-          </>
-        )}
-        <p className="ed-buy-line">{EW.whatYouBuy}</p>
-      </section>
-      <LadderChart prices={props.prices} sold={sold} />
-    </>
+          )}
+          {status()}
+        </>
+      )}
+    </section>
   );
 }

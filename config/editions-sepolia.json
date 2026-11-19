@@ -12,6 +12,7 @@
       "builtOn": null,
       "recipeUrl": null,
       "storyUrl": null,
+      "storyName": null,
       "earlier": [null, null, null],
       "split": [
         { "name": null, "share": null },
@@ -30,6 +31,7 @@
       "builtOn": null,
       "recipeUrl": null,
       "storyUrl": null,
+      "storyName": null,
       "earlier": [null, null],
       "split": [
         { "name": null, "share": null },
