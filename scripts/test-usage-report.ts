@@ -7,6 +7,7 @@
  * - Every count's category names only category columns, and its number is an aggregate; planted faults are caught.
  * - One read-only transaction; UTC days; distinct people are distinct over the span, not a sum of days.
  * - Pictures by model, open or closed; remixes and entries per character; claims and posts once their tables exist.
+ * - Chapter pictures (0042): rows, kept and draft only, size on disk and JPEG bytes; a database without the table says so.
  * - No private value (a FID, a name, an address, a DID, a handle, a question, a prompt or a backstory) is in the answer.
  */
 import path from 'node:path';
@@ -15,7 +16,7 @@ import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { CHALLENGE } from '../src/lib/config';
-import { DEFS, checkDefs, checkRows, report, type Report } from './usage-report';
+import { DEFS, MB, checkDefs, checkRows, chapterPicturesText, report, type Report } from './usage-report';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -45,6 +46,9 @@ proof('an answer holding an address is refused', throws(() => checkRows('p', ['0
 proof('an answer holding a DID is refused', throws(() => checkRows('p', ['did:plc:abc'])));
 proof('an answer holding free text is refused', throws(() => checkRows('p', ['what is "the snow moon"?'])));
 check('plain labels pass', !throws(() => checkRows('p', ['Pictures made: gpt-image-2.5-sunburst (closed)', 'Entries submitted: zei'])));
+
+check('sizes in MB with one decimal', MB(0) === '0.0 MB' && MB(503_000) === '0.5 MB' && MB(12_345_678) === '12.3 MB', MB(503_000));
+check('no chapter-picture tables: one plain line', chapterPicturesText(null).join('\n').includes('chapter pictures: table not there yet'));
 
 // --- The database ---------------------------------------------------------------------------------------------------
 const pg = new PGlite();
@@ -101,6 +105,20 @@ await pg.exec(`
   insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values
     ('${id(34)}', 'bluesky', 'abc123', 'someone.bsky.social', now(), 'https://bsky.app/profile/${DID}/post/abc123', ${MAKER});
 `);
+// Chapter pictures (0042): three redos of 1,000, 2,000 and 500,000 JPEG bytes (md5 bytes, which don't compress, as a JPEG doesn't); the first kept and later restored (one
+// version, counted once), the second kept, the third a draft.
+const CP_JPEG = [1_000, 2_000, 500_000];
+const cpRow = (n: number, bytes: number) => `('${id(40 + n)}', 'c1-b005-toy-drone', 1, ${MAKER}, 'gpt-image-2.5-sunburst', 'OpenAI', false, null,
+  'SECRET NOTE', 'SECRET PROMPT', '{"v":1}', '${String(n).repeat(64)}', 1024, 576, (select substring(decode(string_agg(md5(i::text || '-${n}'), ''), 'hex') from 1 for ${bytes}) from generate_series(1, ${Math.ceil(bytes / 16)}) i), 0.0478)`;
+await pg.exec(`
+  insert into studio.chapter_picture_versions (id, job_id, chapter, made_by_fid, model, maker, open_weights, look, note, prompt, recipe, sha256, width, height, jpeg, cost_usd) values
+    ${CP_JPEG.map((b, i) => cpRow(i + 1, b)).join(', ')};
+  insert into studio.chapter_picture_decisions (job_id, chapter, version_id, action, public_url, by_fid, by_handle) values
+    ('c1-b005-toy-drone', 1, '${id(41)}', 'keep', 'https://pictures.snowmoon.party/images/readers/a.jpg', ${MAKER}, 'zeimaker'),
+    ('c1-b005-toy-drone', 1, null, 'restore', null, ${MAKER}, 'zeimaker'),
+    ('c1-b005-toy-drone', 1, '${id(41)}', 'restore', 'https://pictures.snowmoon.party/images/readers/a.jpg', ${MAKER}, 'zeimaker'),
+    ('c1-b005-toy-drone', 1, '${id(42)}', 'keep', 'https://pictures.snowmoon.party/images/readers/b.jpg', ${MAKER}, 'zeimaker');
+`);
 const PORT = 54393;
 const server = new PGLiteSocketServer({ db: pg, port: PORT, host: '127.0.0.1' });
 await server.start();
@@ -142,6 +160,14 @@ try {
 
   for (const [what, value] of [['an asker\'s FID', String(ASKER)], ['a maker\'s FID', String(MAKER)], ['a wallet address', WALLET], ['a DID', DID], ['a handle', 'someone.bsky.social'], ['a Farcaster name', 'askername'], ['a name', 'zeimaker'], ['a prompt', 'SECRET'], ['a title', 'Zei in snow']] as const)
     check(`no private value in the answer: ${what}`, !json.includes(value));
+  const cp = r.chapterPictures;
+  const jpeg = CP_JPEG.reduce((a, b) => a + b, 0);
+  check('chapter pictures: 3 rows, 2 kept (one kept then restored counts once), 1 draft only', cp?.rows === 3 && cp.kept === 2 && cp.draftOnly === 1, JSON.stringify(cp));
+  check('chapter pictures: JPEG bytes are the sum of octet_length', cp?.jpegBytes === jpeg, JSON.stringify(cp));
+  check('chapter pictures: size on disk counts TOAST (at least the JPEG bytes)', (cp?.diskBytes ?? 0) >= jpeg, JSON.stringify(cp));
+  const cpText = chapterPicturesText(cp).join('\n');
+  check('chapter pictures: printed in MB with one decimal', /Versions made \(rows, never deleted\)\s+3$/m.test(cpText) && /JPEG bytes \(sum of octet_length\)\s+0\.5 MB$/m.test(cpText) && /Size on disk[^\n]*\d+\.\d MB$/m.test(cpText), cpText);
+  check('chapter pictures: no note, prompt, job or handle in the answer', !/SECRET|toy-drone|readers\//.test(JSON.stringify(cp)));
   proof('the value scan finds a planted FID', JSON.stringify({ ...r, planted: ASKER }).includes(String(ASKER)));
 
   // A write inside the report's own transaction kind is refused.
@@ -168,6 +194,14 @@ try {
     line(r2, 'Backstory claims confirmed')?.window === 1 && line(r2, 'Backstory claims reverted')?.window === 1 && line(r2, 'Backstories added after publish')?.window === 1 && r2.missing.length === 0,
     JSON.stringify(r2.lines.filter((l) => /claim|Backstor/.test(l.key))) + r2.missing.join('; '));
   check('no claim text, hash or wallet in the answer', !/SECRET|0x1111|0x2222/.test(JSON.stringify(r2)) && !JSON.stringify(r2).includes(WALLET));
+
+  // An older database without 0042: the section says so and the rest of the report still runs.
+  await pg.exec(`reset role;
+    alter table studio.chapter_picture_decisions rename to chapter_picture_decisions_away;
+    alter table studio.chapter_picture_versions rename to chapter_picture_versions_away;
+    set role studio_writer;`);
+  const r3 = await report(sql);
+  check('no chapter-picture table: null, the line printed, the rest still counted', r3.chapterPictures === null && chapterPicturesText(r3.chapterPictures).join('\n').includes('chapter pictures: table not there yet') && line(r3, 'Questions asked')?.window === 4, JSON.stringify(r3.chapterPictures));
 } finally {
   await sql.end({ timeout: 2 });
   await server.stop();

@@ -160,7 +160,47 @@ export function checkRows(id: string, keys: string[]) {
   }
 }
 
-export interface Report { meta: { today: string; first: string; role: string; ro: string }; days: string[]; lines: Line[]; missing: string[] }
+/**
+ * Chapter pictures (owner, 2026-11-18): the admin redos in studio.chapter_picture_versions (0042), draft or kept, with
+ * their JPEG bytes in the row; rows are never deleted, so this is the draft storage. All time, totals only: no job,
+ * admin, prompt or picture leaves the database. Null when the tables aren't on this database (an older one).
+ */
+export interface ChapterPictures { rows: number; kept: number; draftOnly: number; diskBytes: number; jpegBytes: number }
+
+const CHAPTER_PICTURES_SQL = `select
+    (select count(*) from studio.chapter_picture_versions)::float8 as rows,
+    (select count(*) from studio.chapter_picture_versions v
+      where exists (select 1 from studio.chapter_picture_decisions d where d.version_id = v.id))::float8 as kept,
+    pg_total_relation_size('studio.chapter_picture_versions')::float8 as disk_bytes,
+    (select coalesce(sum(octet_length(jpeg)), 0) from studio.chapter_picture_versions)::float8 as jpeg_bytes`;
+
+async function chapterPictures(tx: postgres.TransactionSql): Promise<ChapterPictures | null> {
+  const [t] = await tx<{ here: boolean }[]>`
+    select to_regclass('studio.chapter_picture_versions') is not null and to_regclass('studio.chapter_picture_decisions') is not null as here`;
+  if (!t.here) return null;
+  const [r] = await tx.unsafe<{ rows: number; kept: number; disk_bytes: number; jpeg_bytes: number }[]>(CHAPTER_PICTURES_SQL);
+  const rows = Number(r.rows);
+  const kept = Number(r.kept);
+  return { rows, kept, draftOnly: rows - kept, diskBytes: Number(r.disk_bytes), jpegBytes: Number(r.jpeg_bytes) };
+}
+
+export const MB = (bytes: number) => `${(bytes / 1_000_000).toFixed(1)} MB`;
+
+/** The chapter-pictures section, as printed. */
+export function chapterPicturesText(c: ChapterPictures | null): string[] {
+  if (!c) return ['== Chapter pictures (admin redos, all time)', '  chapter pictures: table not there yet'];
+  const rows: [string, string][] = [
+    ['Versions made (rows, never deleted)', String(c.rows)],
+    ['Kept (shown on a chapter at least once)', String(c.kept)],
+    ['Draft only (never kept)', String(c.draftOnly)],
+    ['Size on disk (table, indexes and TOAST)', MB(c.diskBytes)],
+    ['JPEG bytes (sum of octet_length)', MB(c.jpegBytes)],
+  ];
+  const W = Math.max(...rows.map(([k]) => k.length)) + 2;
+  return ['== Chapter pictures (admin redos, all time)', ...rows.map(([k, v]) => `  ${k.padEnd(W)}${v.padStart(10)}`)];
+}
+
+export interface Report { meta: { today: string; first: string; role: string; ro: string }; days: string[]; lines: Line[]; missing: string[]; chapterPictures: ChapterPictures | null }
 
 /** The whole report, in one read-only transaction. */
 export async function report(sql: postgres.Sql): Promise<Report> {
@@ -221,7 +261,7 @@ export async function report(sql: postgres.Sql): Promise<Report> {
       if (!ls.length) ls.push({ section: d.section, key: d.none ?? d.key.slice(1, -1), unit: d.unit, distinct, byDay: {}, window: 0, allTime: 0 });
       lines.push(...ls);
     }
-    return { meta, lines, missing };
+    return { meta, lines, missing, chapterPictures: await chapterPictures(tx) };
   });
   const days = Array.from({ length: DAYS }, (_, i) => new Date(Date.parse(`${out.meta.first}T00:00:00Z`) + i * 86_400_000).toISOString().slice(0, 10));
   return { ...out, days };
@@ -237,13 +277,13 @@ async function main() {
   try {
     const r = await report(sql);
     if (JSON_OUT) console.log(JSON.stringify({ generatedAt: new Date().toISOString(), challenge: ch, ...r }, null, 2));
-    else print(r.meta, r.days, r.lines, r.missing);
+    else print(r.meta, r.days, r.lines, r.missing, r.chapterPictures);
   } finally {
     await sql.end({ timeout: 5 });
   }
 }
 
-function print(meta: { today: string; role: string }, days: string[], lines: Line[], missing: string[]) {
+function print(meta: { today: string; role: string }, days: string[], lines: Line[], missing: string[], cp: ChapterPictures | null) {
   const fmt = (n: number, unit: Unit) => (unit === 'usd' ? (n === 0 ? '-' : n.toFixed(2)) : n === 0 ? '-' : String(Math.round(n)));
   const W = Math.min(78, Math.max(...lines.map((l) => l.key.length + (l.distinct ? 2 : 0)), 20));
   const C = 7;
@@ -259,6 +299,7 @@ function print(meta: { today: string; role: string }, days: string[], lines: Lin
     }
     console.log('');
   }
+  console.log(chapterPicturesText(cp).join('\n') + '\n');
   console.log('== Not on this database (left out)');
   console.log(missing.length ? missing.map((m) => `  ${m}`).join('\n') : '  none');
 }
