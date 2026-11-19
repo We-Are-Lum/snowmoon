@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import type { Intro, IntroCard } from '~/lib/intro';
 import { AiLabel } from './recipe-sheet';
 import { AI_LABEL } from '~/lib/ai-declared';
+import { RedoneCredit } from './redone-credit';
 
 /**
  * The first-visit intro (config/intro.json), built from
@@ -35,6 +36,11 @@ function markSeen(version: string) {
 
 const money = (usd: number) => `$${usd.toFixed(2)}`;
 
+/** The picture's AI label: its committed recipe, or, once an admin's redo is kept, the redo's recipe sheet. */
+function ImageLabel({ im }: { im: NonNullable<IntroCard['image']> }) {
+  return im.redone ? <AiLabel kind="image" text={AI_LABEL.image} view={im.redone.view} /> : <AiLabel kind="image" text={AI_LABEL.image} file={im.recipeFile} item={im.id} />;
+}
+
 /** What each card shows above its line. Real content only. */
 function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
   const live = intro.features.filter((f) => f.status === 'live');
@@ -62,7 +68,7 @@ function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
           <div className="iv-pic">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={im.url} alt={im.alt} width={im.width} height={im.height} />
-            <span className="iv-ai"><AiLabel kind="image" text={AI_LABEL.image} file={im.recipeFile} item={im.id} /></span>
+            <span className="iv-ai"><ImageLabel im={im} /></span>
           </div>
           <div className="iv-recipe-box">
             <span className="iv-row iv-strong">
@@ -71,11 +77,23 @@ function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
                 ch {im.block.chapter} · ¶ {im.block.label}
               </span>
             </span>
-            <span>“{im.recipe.prompt}”</span>
-            <span>
-              {im.recipe.model} · {im.recipe.runsOn} · {money(im.recipe.costUsd)}
-            </span>
-            <span>AI-generated · seeded by the project{im.recipe.publishedBy ? ` · FID ${im.recipe.publishedBy}` : ''}</span>
+            {im.redone ? (
+              <>
+                {/* A redo an admin kept (owner, 2026-11-18/19): its own prompt, and who, when and the model, as on the chapter page. */}
+                <span>“{im.redone.prompt}”</span>
+                <span>
+                  AI-generated · <RedoneCredit redone={im.redone} lead={false} />
+                </span>
+              </>
+            ) : (
+              <>
+                <span>“{im.recipe.prompt}”</span>
+                <span>
+                  {im.recipe.model} · {im.recipe.runsOn} · {money(im.recipe.costUsd)}
+                </span>
+                <span>AI-generated · seeded by the project{im.recipe.publishedBy ? ` · FID ${im.recipe.publishedBy}` : ''}</span>
+              </>
+            )}
           </div>
         </div>
       ) : null;
@@ -96,8 +114,11 @@ function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
             <img className="iv-step-mark" src={im.url} alt="" width={96} height={54} />
             <span className="iv-step-body">
               <span className="iv-step-who">An image of it</span>
-              <span className="iv-step-what">AI-generated, anchored to ¶ {im.block.label}</span>
-              <AiLabel kind="image" text={AI_LABEL.image} file={im.recipeFile} item={im.id} />
+              <span className="iv-step-what">
+                AI-generated, anchored to ¶ {im.block.label}
+                {im.redone && <RedoneCredit redone={im.redone} />}
+              </span>
+              <ImageLabel im={im} />
             </span>
           </div>
           <div className="iv-step iv-indent-2">
@@ -105,7 +126,7 @@ function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
             <span className="iv-step-body">
               <span className="iv-step-who">Its recipe</span>
               <span className="iv-step-what">
-                prompt, {im.recipe.model}, settings, {money(im.recipe.costUsd)}
+                {im.redone ? `prompt, ${im.redone.model}, the admin’s note and style` : <>prompt, {im.recipe.model}, settings, {money(im.recipe.costUsd)}</>}
               </span>
             </span>
           </div>

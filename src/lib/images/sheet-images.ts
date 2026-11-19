@@ -3,6 +3,8 @@ import { hasPassage } from './no-passage';
 import { db } from '../db';
 import { loadIllustrations } from '../illustrations';
 import { hiddenSeeded } from '../admin-hidden';
+import { replacementsEverywhere } from '../chapter-pictures/read';
+import { shownPicture } from '../chapter-pictures/view';
 import { imagesWithSheet } from './data';
 import { byline } from './byline';
 import { passageLabel } from './passage';
@@ -25,17 +27,22 @@ export async function sheetImages(kind: 'character' | 'place', slug: string, nam
       reader: { versionId: im.versionId, by, prompt: im.userPrompt, date: im.createdAt.slice(0, 10) }, recipe: null,
     };
   });
-  // Seeded images an admin hid (owner, 2026-10-29) aren't shown here either.
-  const hidden = await hiddenSeeded();
+  // Seeded images an admin hid (owner, 2026-10-29) aren't shown here either; one an admin redid and kept shows the
+  // kept redo, with who, when and the model, as the chapter does (owner, 2026-11-18/19).
+  const [hidden, shown] = await Promise.all([hiddenSeeded(), replacementsEverywhere()]);
   const seeded = seededImages()
     .filter((s) => !hidden.has(s.id))
     .filter((s) => (kind === 'place' ? slugOfLocation(s.location) === slug : (s.characters ?? []).includes(slug)))
     .sort((a, b) => a.chapter - b.chapter || a.idx - b.idx)
-    .map((s): SheetImage => ({
-      key: s.id, href: `/chapter/${s.chapter}#c${s.chapter}-b${s.idx}`, url: s.url,
-      alt: loadIllustrations(s.chapter).find((i) => i.id === s.id)?.alt ?? 'AI-generated image',
-      chapter: s.chapter, where: passageLabel(s.chapter, s.idx, s.idx), reader: null, recipe: { file: s.recipe, item: s.id },
-    }));
+    .map((s): SheetImage => {
+      const alt = loadIllustrations(s.chapter).find((i) => i.id === s.id)?.alt ?? 'AI-generated image';
+      const p = shownPicture({ id: s.id, idx: s.idx, url: s.url, width: 1024, height: 576, recipe: s.recipe, alt }, shown);
+      return {
+        key: s.id, href: `/chapter/${s.chapter}#c${s.chapter}-b${s.idx}`, url: p.url, alt,
+        chapter: s.chapter, where: passageLabel(s.chapter, s.idx, s.idx), reader: null, recipe: { file: s.recipe, item: s.id },
+        ...(p.replaced ? { redone: p.replaced } : {}),
+      };
+    });
   return [...fromReaders, ...seeded];
 }
 

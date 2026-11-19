@@ -5,6 +5,7 @@ import { loadIllustrations } from './illustrations';
 import { blockId, loadChapter } from './book';
 import { blockFacts } from './reading';
 import { REPO_URL, WORK } from './config';
+import type { Redone } from './chapter-pictures/view';
 
 /**
  * The first-visit intro (config/intro.json, built from
@@ -27,6 +28,11 @@ export interface IntroImage {
   /** The image's id and its recipe file, for the AI label's recipe sheet (as on the chapter page). */
   id: string;
   recipeFile: string;
+  /**
+   * A redo an admin kept for this picture (src/lib/seeded-shown.ts): the card shows it, with who kept it, when and the
+   * model, and its recipe sheet from the database's record, as the chapter page does. Its prompt is the redo's own.
+   */
+  redone?: Redone & { prompt: string };
 }
 
 export interface IntroCard {
@@ -79,7 +85,7 @@ export function rawIntro(): RawIntro {
 }
 
 /** The first words of a text, cut at a word boundary. */
-function excerpt(text: string, max: number): string {
+export function excerpt(text: string, max: number): string {
   const plain = text.replace(/\*/g, '').replace(/\s+/g, ' ').trim();
   if (plain.length <= max) return plain;
   return plain.slice(0, max).replace(/\s+\S*$/, '') + '…';

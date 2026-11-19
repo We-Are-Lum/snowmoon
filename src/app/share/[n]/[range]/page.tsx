@@ -5,6 +5,8 @@ import { APP_NAME, appUrl } from '~/lib/config';
 import { quoteQuery, resolveQuote } from '~/lib/quote';
 import { quoteShown } from '~/lib/seeded-shown';
 import { PAPER } from '~/lib/tokens';
+import { RedoneCredit } from '~/components/redone-credit';
+import { recipePath } from '~/lib/chapter-pictures/shared';
 
 /**
  * The page a quote card links to. Its metadata makes the card the cast's
@@ -69,6 +71,13 @@ export default async function SharePage(props: Props) {
       <p className="provenance">
         Snowmoon by Vitalik Buterin, GPL v3. Quote cards are drawn from the book&apos;s own text. Images are AI-generated, seeded as starting points.
       </p>
+      {/* The card's picture, redone by an admin and kept (owner, 2026-11-18/19): who, when and the model, and its recipe, as on the chapter page. */}
+      {quote.image?.replaced && (
+        <p className="provenance share-redone" data-replaced={quote.image.replaced.versionId}>
+          This card&apos;s picture: AI-generated · <RedoneCredit redone={quote.image.replaced} lead={false} /> ·{' '}
+          <a href={recipePath(quote.image.replaced.versionId)}>Recipe</a>
+        </p>
+      )}
     </article>
   );
 }
