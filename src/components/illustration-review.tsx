@@ -62,6 +62,8 @@ const W = {
   decisionWord: { keep: 'keep', regenerate: 'regenerate', drop: 'drop' } as Record<Decision, string>,
   inJobFile: 'Reviewed by a person (in the job file).',
   couldNot: 'Could not save it',
+  /** Where the redo flow isn't offered (before the migration, or a lettered picture), the old buttons say what they do. DRAFT (2026-11-18). */
+  recordOnly: 'These record your decision for the review only. They change nothing on the site.',
   problemType: { reference_copy_in_crowd: 'Copy of a cast member', contradicts_facts: 'Contradicts the book', stray_text: 'Stray text', other: 'Other' } as Record<string, string>,
 };
 
@@ -166,6 +168,8 @@ function Item({ item, canSave, pictures, reload }: { item: Data['items'][number]
   }
 
   const headingId = `illus-${item.id}`;
+  // The redo flow (src/components/chapter-pictures.tsx) is offered for this picture: the migration applied and a picture it can redo.
+  const redoHere = Boolean(pictures?.ready && item.redoable);
   return (
     <li className="illus-item" data-verdict={item.verdict ?? 'unchecked'} data-group={GROUP_NAMES[reviewGroup(item.verdict, item.double)]} data-job={item.id}>
       <article aria-labelledby={headingId}>
@@ -266,7 +270,9 @@ function Item({ item, canSave, pictures, reload }: { item: Data['items'][number]
             reload={reload}
           />
         )}
-        {canSave && (
+        {/* Nate, 2026-11-18: where the redo is offered, its Redo and Keep replace these three (hidden); elsewhere they say they only record. */}
+        {canSave && !redoHere && <p className="you-meta illus-record-only">{W.recordOnly}</p>}
+        {canSave && !redoHere && (
           <div className="you-actions illus-actions">
             <button type="button" className="ic-secondary" disabled={busy} aria-pressed={item.decision?.decision === 'keep'} onClick={() => void decide('keep')}>
               {W.keep}
@@ -287,7 +293,7 @@ function Item({ item, canSave, pictures, reload }: { item: Data['items'][number]
             </button>
           </div>
         )}
-        {canSave && noting && (
+        {canSave && !redoHere && noting && (
           <div className="illus-note">
             {fromCheck && a && (
               <p className="you-meta illus-drafted" data-edited={note.trim() !== draft ? 'yes' : 'no'}>

@@ -30,7 +30,8 @@ export interface RecipeView {
   prompt: { label: string; text: string } | null;
   /** Other exact inputs worth showing (reference images, an encoder command). */
   inputs: { label: string; value: string }[];
-  published: { by: string; when: string } | null;
+  /** `whenIso`: the instant, so the sheet writes it in the reader's own time (owner, 2026-11-18); `when` is the fallback. */
+  published: { by: string; when: string; whenIso?: string } | null;
   /** Said in place of "Published" when it is not (a draft). */
   notPublished?: string;
   cost?: string;

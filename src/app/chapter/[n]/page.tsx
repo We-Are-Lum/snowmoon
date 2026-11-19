@@ -15,6 +15,7 @@ import { hiddenSeeded } from '~/lib/admin-hidden';
 import { shownReplacements } from '~/lib/chapter-pictures/read';
 import { withReplacements } from '~/lib/chapter-pictures/view';
 import { recipePath } from '~/lib/chapter-pictures/shared';
+import { LocalDate } from '~/components/local-date';
 import { CHALLENGE_MODELS } from '~/lib/challenge/models';
 import { AdminHide } from '~/components/admin-hide';
 import { QuoteShare } from '~/components/quote-share';
@@ -201,7 +202,12 @@ export default async function ChapterPage({ params }: Props) {
                 <figcaption className="block-caption">
                   ¶ {f.label} · {image.replaced ? <AiLabel kind="image" text={AI_LABEL.image} view={image.replaced.view} /> : <AiLabel kind="image" text={AI_LABEL.image} file={image.recipe} item={image.id} />}
                   {/* A redo an admin kept: who and when, and the model with its maker (principles 3 and 5). DRAFT wording. */}
-                  {image.replaced && <span className="seed-replaced"> · {image.replaced.line} · {image.replaced.model}</span>}
+                  {image.replaced && (
+                    <span className="seed-replaced">
+                      {' · '}
+                      {image.replaced.by} · <LocalDate iso={image.replaced.at} /> · {image.replaced.model}
+                    </span>
+                  )}
                   {b.idx === firstImageIdx && <span className="ai-not-author"> · {NOT_AUTHOR_VISIBLE}</span>}
                   {/* The owner's image review (2026-10-23): shown only once the owner allows it (ILLUSTRATION_CHECK.reviewMarkPublic). */}
                   {image.reviewed && <span className="seed-reviewed"> · {REVIEWED_MARK}</span>}

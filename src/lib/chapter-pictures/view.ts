@@ -1,7 +1,7 @@
 import 'server-only';
 import type { Illustration } from '../illustrations';
 import type { RecipeView } from '../recipe-view';
-import { adminName, day, lookName, modelLine, recipePath, replacedLine, type ShownReplacement } from './shared';
+import { adminName, day, lookName, modelLine, recipePath, replacedBy, type ShownReplacement } from './shared';
 
 /**
  * A chapter picture as the chapter shows it once an admin has kept a redo (owner, 2026-11-18, option B): the kept
@@ -10,7 +10,7 @@ import { adminName, day, lookName, modelLine, recipePath, replacedLine, type Sho
  * sheet's full recipe is the public JSON at /api/chapter-pictures/<version> (check:principles P1d reads it signed out).
  * Wording DRAFT (coding agent, 2026-11-18).
  */
-export type ShownIllustration = Illustration & { replaced?: { versionId: string; line: string; model: string; view: RecipeView } };
+export type ShownIllustration = Illustration & { replaced?: { versionId: string; by: string; at: string; model: string; view: RecipeView } };
 
 export function replacementView(r: ShownReplacement, modelName: string): RecipeView {
   return {
@@ -26,7 +26,7 @@ export function replacementView(r: ShownReplacement, modelName: string): RecipeV
       { label: 'Note', value: `${r.note} (by ${adminName(r.byFid, r.byHandle)})` },
       { label: 'Reference', value: 'the picture the chapter showed before (its sha256 is in the full recipe)' },
     ],
-    published: { by: `${adminName(r.byFid, r.byHandle)} (admin)`, when: day(r.at) },
+    published: { by: `${adminName(r.byFid, r.byHandle)} (admin)`, when: day(r.at), whenIso: r.at },
     resultLicence: 'GPL-3.0',
   };
 }
@@ -46,7 +46,7 @@ export function withReplacements(images: Illustration[], shown: Map<string, Show
       width: r.width,
       height: r.height,
       recipe: recipePath(r.versionId),
-      replaced: { versionId: r.versionId, line: replacedLine(r), model: modelLine(name, r.maker, r.open), view: replacementView(r, name) },
+      replaced: { versionId: r.versionId, by: replacedBy(r), at: r.at, model: modelLine(name, r.maker, r.open), view: replacementView(r, name) },
     };
   });
 }

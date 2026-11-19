@@ -5,7 +5,7 @@ import { authFetch } from '~/lib/client-auth';
 import { CHAPTER_PICTURES } from '~/lib/config';
 import { resetLocal } from '~/lib/challenge/model-wording';
 import type { ModelRowEntry } from '~/lib/challenge/models';
-import { adminName, day, lookName, modelLine, type Look, type PictureDecision, type PictureVersion } from '~/lib/chapter-pictures/shared';
+import { adminName, localDay as day, lookName, modelLine, type Look, type PictureDecision, type PictureVersion } from '~/lib/chapter-pictures/shared';
 import { useChallengeModel } from './challenge-model-row';
 import { PublishedTextField } from './publish-words';
 

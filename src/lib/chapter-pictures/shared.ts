@@ -115,11 +115,16 @@ export const lookName = (l: Look | null) => (!l ? 'none' : l.kind === 'style' ? 
 /** "@garance" when the handle is known, "FID 193912" otherwise. */
 export const adminName = (fid: number, handle: string | null) => (handle ? `@${handle}` : `FID ${fid}`);
 
-/** A date as the pages write it ("18 Nov 2026"), in UTC so the server and the browser agree. */
+/**
+ * A date as the pages write it ("18 Nov 2026"). day(): in UTC, the stable form the server writes and the browser's
+ * first render repeats. localDay(): in the reader's own time zone (or the one given, for tests), which the browser
+ * writes once it has mounted (src/components/local-date.tsx; owner, 2026-11-18).
+ */
 export const day = (iso: string) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+export const localDay = (iso: string, timeZone?: string) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', ...(timeZone ? { timeZone } : {}) });
 
-/** The caption's line under a replaced picture. DRAFT wording. */
-export const replacedLine = (r: Pick<ShownReplacement, 'byFid' | 'byHandle' | 'at'>) => `Redone by ${adminName(r.byFid, r.byHandle)} · ${day(r.at)}`;
+/** The caption's words under a replaced picture, before its date ("Redone by @garance"). DRAFT wording. */
+export const replacedBy = (r: Pick<ShownReplacement, 'byFid' | 'byHandle'>) => `Redone by ${adminName(r.byFid, r.byHandle)}`;
 
 /** The model as a caption names it: "GPT Image 2.5 Sunburst, a closed model by OpenAI". */
 export const modelLine = (name: string, maker: string, open: boolean) => `${name}, ${open ? 'an open-weight model' : 'a closed model'} by ${maker}`;

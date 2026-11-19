@@ -959,6 +959,8 @@ async function checkIllustrationReview(page: Page, scheme: string) {
     if (v !== 'unchecked' && !/^AI check · by /.test((await item.locator('.ai-check-label').innerText().catch(() => '')) ?? '')) fail(`${where}: item ${i + 1}'s check is not labelled as AI with its model`);
     const buttons = (await item.locator('.illus-actions button').allTextContents()).map((t) => t.trim()).join('|');
     if (buttons !== 'Keep|Regenerate with my note|Drop') fail(`${where}: item ${i + 1}'s buttons are "${buttons}"`);
+    // Without the redo flow (the fixture has none), the three say they only record a decision (owner, 2026-11-18).
+    if (!/These record your decision for the review only\. They change nothing on the site\./.test(await item.locator('.illus-record-only').innerText().catch(() => ''))) fail(`${where}: item ${i + 1}'s buttons don't say they only record a decision`);
   }
   if (!/Latest decision: regenerate/.test(await page.locator('.illus-item').nth(2).innerText())) fail(`${where}: a saved decision is not shown with its item`);
   await checkFloors(page, '/you/illustrations @390 (owner)', scheme);
