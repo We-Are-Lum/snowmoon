@@ -187,7 +187,11 @@ async function main() {
   };
   const phone = { width: 390, height: 844 };
   const desk = { width: 1440, height: 900 };
-  const shot = async (page: Page, name: string, full = true) => page.screenshot({ path: path.join(shots, `${name}.png`), fullPage: full });
+  const shot = async (page: Page, name: string, full = true) => {
+    // A state's screenshot shows the mint card, where the state is said.
+    if (!full) await page.evaluate(() => document.querySelector('.ed-card')?.scrollIntoView({ block: 'start' }));
+    return page.screenshot({ path: path.join(shots, `${name}.png`), fullPage: full });
+  };
   const both = async (url: string, name: string, w: W | null = null) => {
     for (const [v, tag] of [[phone, 'phone'], [desk, 'desktop']] as const)
       for (const dark of [false, true]) {
