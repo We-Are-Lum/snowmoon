@@ -11,15 +11,13 @@ import { blockFacts } from './reading';
  * tapped there as a passage's first or last block.
  */
 import { searchCorpus, SEARCH, type CorpusEntry, type SearchResult } from './book-search-core';
+import { screenText } from './screen-text';
 
-export { SEARCH };
+export { SEARCH, screenText };
 export type { CorpusEntry, SearchHit, SearchResult } from './book-search-core';
 
 let corpus: CorpusEntry[] | null = null;
 let withScreens: CorpusEntry[] | null = null;
-
-/** Tags that sit inside a word or line on a screen (CO<sub>2</sub>, <em>all</em>): removed with no space. */
-const INLINE_TAG = /<\/?(?:b|i|em|strong|span|sub|sup|code|u|s|small|mark)\b[^>]*>/gi;
 
 /** A paragraph's or quote's words without markup: speaker spans, emphasis, quote marks at line starts. */
 export function plainText(content: string): string {
@@ -28,25 +26,6 @@ export function plainText(content: string): string {
     .replace(/^>\s?/gm, '')
     .replace(/[*`]/g, '')
     .replace(/\\(.)/g, '$1')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-/**
- * A screen block's words as its screen shows them: table cells, list items, lines and buttons
- * apart (each block-level tag or line break is a space), inline tags removed, &nbsp; and the
- * other entities read.
- */
-export function screenText(content: string): string {
-  return content
-    .replace(INLINE_TAG, '')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&amp;/g, '&')
     .replace(/\s+/g, ' ')
     .trim();
 }
