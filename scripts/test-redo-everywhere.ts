@@ -183,8 +183,8 @@ check('W. a picture on no sheet: its chapter only', JSON.stringify(pathsFor('c1-
 const SEEDED_READ = /\b(loadIllustrations|seededImages|loadIntro|resolveQuote|loadIllustrationById|resolveIntroImage)\(/;
 const THROUGH_REDO = /\b(withReplacements|shownPicture|introShown|quoteShown|introPicture)\(/;
 const SOURCES = new Set(['src/lib/illustrations.ts', 'src/lib/intro.ts', 'src/lib/quote.ts', 'src/lib/images/sheets.ts', 'src/lib/seeded-shown.ts']);
-// Not a picture shown to readers: the admin Hide looks the image up; where.ts names the pages; the review jobs are the admins' own page.
-const EXEMPT = new Set(['src/app/api/admin/hide/route.ts', 'src/lib/chapter-pictures/where.ts']);
+// Not a picture shown to readers: the admin Hide looks the image up (as P5f's exemption).
+const EXEMPT = new Set(['src/app/api/admin/hide/route.ts']);
 const files = readdirSync(path.join(ROOT, 'src'), { recursive: true }).map(String).filter((f) => /\.tsx?$/.test(f)).map((f) => ({ file: path.join('src', f), text: readFileSync(path.join(ROOT, 'src', f), 'utf8') }));
 const problems = (fs: { file: string; text: string }[]) => fs.filter((f) => SEEDED_READ.test(f.text) && !SOURCES.has(f.file) && !EXEMPT.has(f.file) && !THROUGH_REDO.test(f.text)).map((f) => f.file);
 check('S. every reader of seeded pictures shows the kept redo', problems(files).length === 0, problems(files).join(', '));

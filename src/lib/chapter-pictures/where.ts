@@ -1,6 +1,6 @@
 import 'server-only';
 import { rawIntro } from '../intro';
-import { seededImages, slugOfLocation } from '../images/sheets';
+import { seededOnSheet } from '../images/sheets';
 
 /**
  * Every page a chapter picture shows on, for revalidating after a Keep or a Restore (owner, 2026-11-18/19: a kept redo
@@ -18,7 +18,6 @@ export function pathsFor(jobId: string, chapter: number): Revalidation[] {
   const out: Revalidation[] = [{ path: `/chapter/${chapter}` }];
   const inIntro = rawIntro().cards.some((c) => c.image === `published:${jobId}`);
   if (inIntro) return [{ path: '/', type: 'layout' }];
-  const s = seededImages().find((x) => x.id === jobId);
-  if (s && ((s.characters ?? []).length > 0 || slugOfLocation(s.location))) out.push({ path: '/references', type: 'layout' });
+  if (seededOnSheet(jobId)) out.push({ path: '/references', type: 'layout' });
   return out;
 }
