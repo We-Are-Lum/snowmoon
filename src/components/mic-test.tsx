@@ -110,6 +110,9 @@ export function MicTest({ fallback }: { fallback: React.ReactNode }) {
     }
   }
 
+  // Farcaster's own docs: "Camera and microphone access is not supported in web mini apps. The action will always reject
+  // on web platforms." (miniapps.farcaster.xyz, request-camera-and-microphone-access). Say so plainly, before Record.
+  const webClient = Boolean(env?.inApp && env.platform === 'web');
   const where = !env ? '' : env.inApp ? `Farcaster app (${env.platform || 'unknown platform'}${env.client ? `, ${env.client}` : ''})` : 'browser';
   const verdict =
     state === 'done' && take && peak.current > 4 ? 'PASS' : state === 'done' ? 'RECORDED BUT SILENT' : state === 'failed' ? 'FAIL' : '';
@@ -126,9 +129,15 @@ export function MicTest({ fallback }: { fallback: React.ReactNode }) {
           <li style={{ wordBreak: 'break-all', opacity: 0.7 }}>{env.ua}</li>
         </ul>
       )}
+      {webClient && (
+        <p role="note" style={{ padding: 12, border: '2px solid #c60', borderRadius: 8 }}>
+          Recording doesn&rsquo;t work in Farcaster on the web. Open this page in the Farcaster app on your phone, or in a
+          browser at snowmoon.party/admin/mic-test.
+        </p>
+      )}
       <div style={{ display: 'flex', gap: 12, margin: '16px 0' }}>
         <button type="button" onClick={start} disabled={!env || state === 'asking' || state === 'recording'} style={{ padding: '12px 20px', fontSize: 16 }}>
-          {state === 'idle' ? 'Record' : 'Record again'}
+          {webClient ? 'Try anyway' : state === 'idle' ? 'Record' : 'Record again'}
         </button>
         <button type="button" onClick={() => rec.current?.state === 'recording' && rec.current.stop()} disabled={state !== 'recording'} style={{ padding: '12px 20px', fontSize: 16 }}>
           Stop
