@@ -276,11 +276,11 @@ async function showAdded(sql: Sql, fid: number, jobId: string, rawVersion: unkno
 /**
  * Add a picture at a passage, while reading (owner, 2026-11-19): a private draft from the admin's note, the chapter's
  * look and, if chosen, characters' sheet pictures (only of characters the passage names). A first draft records where
- * the picture sits (NEXT_chapter_picture_additions); { jobId } makes another draft for the same added picture. Paid from
+ * the picture sits (0043_chapter_picture_additions); { jobId } makes another draft for the same added picture. Paid from
  * the admins' daily cap, through the site's prompt check, with the no-words line, as a redo is.
  */
 export async function addPicture(sql: Sql, fid: number, request: Request, raw: unknown, where: Where, deps: Deps): Promise<Result> {
-  if (!(await picturesReady(sql)) || !(await additionsReady(sql))) return no(503, 'Adding pictures needs the migration NEXT_chapter_picture_additions first.', { reason: 'not-ready' });
+  if (!(await picturesReady(sql)) || !(await additionsReady(sql))) return no(503, 'Adding pictures needs the migration 0043_chapter_picture_additions first.', { reason: 'not-ready' });
   const b = (raw ?? {}) as { jobId?: unknown; chapter?: unknown; after?: unknown; start?: unknown; end?: unknown; note?: unknown; model?: unknown; notice?: unknown; characters?: unknown };
   let place: Omit<Addition, 'byFid' | 'at'> | null = null;
   let isNew = false;

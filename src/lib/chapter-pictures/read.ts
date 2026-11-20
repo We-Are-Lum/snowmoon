@@ -219,7 +219,7 @@ export async function latestLooks(sql: Sql): Promise<Looks> {
 export const lookFor = (looks: Looks, chapter: number): Look | null => (looks.chapters[chapter] ? looks.chapters[chapter].look : null) ?? looks.all?.look ?? null;
 
 /**
- * Pictures an admin added to the edition's chapters (owner, 2026-11-19; NEXT_chapter_picture_additions): where each sits.
+ * Pictures an admin added to the edition's chapters (owner, 2026-11-19; 0043_chapter_picture_additions): where each sits.
  * Whether one shows, and which picture, is the latest decision for its id, read with the replacements above. Until the
  * migration is applied (the table missing) there are none, and the chapter pages show what they showed before.
  */
