@@ -62,22 +62,17 @@ coding agent and its helpers are in `docs/prompts/`.
   the reader's device over the text served whole by `/api/book/text`; the
   query is never sent anywhere, kept or published, and the page may fetch
   only that text).
-- `P1h` (raw voice takes exception, owner 2026-10-23): our Modal conversion
-  code (`modal/chatterbox_vc.py`) keeps no recording. A static read finds no
-  volume write or `.commit()`, no Dict or Queue, no Web Function (Modal keeps
-  their inputs up to 7 days), no network client, no log of the audio, and
-  every temporary folder removed in a `finally`. A local run with a stub
-  model and a stub `modal` (`scripts/modal_vc_proof.py`, no Modal, no
-  spending) leaves no new file under the temp root, the weights path, the
-  working folder or HOME, including when the model raises, times out or is
-  cancelled; no log line or reply holds the input, its base64 or hex; and no
-  live object holds it afterwards. `npm run check:modal-vc` also proves ten
-  planted violations are each caught. Not covered: what Modal's platform
-  keeps outside our code (`docs/proposals/own-voice-v1.md`).
-- `P1i`: the own-voice-v1 consent (`config/consent-own-voice.json`) is used
-  by no page or code under `src/` until `src/app/record` exists, and once it
-  does, only while the `P1h` proof passes (owner, 2026-10-23: "Ship
-  own-voice-v1 only after that passes").
+- `P1h` (raw voice takes; DRAFT for Nate's reread, 2026-11-19, replacing the Modal proof of 2026-10-23): the
+  ElevenLabs conversion route keeps no recording. A static read of the route and its ElevenLabs client finds the
+  request body passed only to ElevenLabs' speech-to-speech call and to sha256, and no database write, storage put, file
+  write, log or error report that can hold it. A local run against a stub ElevenLabs (no spending) leaves no new file
+  under the temp root, the working folder or HOME, no database row, and no log line or reply holding the take, its
+  base64 or hex, including when the call fails, times out or is cancelled; the route then asks the stub to delete the
+  history item; transcription receives the converted audio, never the take. Planted violations (a log of the body, a
+  storage put, a transcription of the take, a skipped history delete) are each caught. Not covered: what ElevenLabs
+  keeps on its side (`docs/proposals/ephelion-voice.md`). The Modal proof (`check:modal-vc`) still runs on its own.
+- `P1i` (DRAFT, 2026-11-19): the own-voice consent shown is `own-voice-v2`, and only by the voice pages and routes,
+  only while `P1h` passes; `own-voice-v1` is used by nothing under `src/`.
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
   drafts, hidden work and abandoned attempts stay private.
@@ -98,16 +93,21 @@ are never published. The reason is privacy: a raw recording of a person's
 voice is enough to clone it. The converted line is the published source of
 that line, and its recipe gives the model and revision, the settings, the
 character's reference clip and the sha256 of the raw take, but not the take.
-**The rule, in the owner's words (2026-10-22; reread by the owner 2026-10-23):** "Raw recordings are never published and never sent to any service that processes them; they
-stay on my devices and my own encrypted storage." **Temporary exception** (owner, 2026-10-22: "Let's allow a hosted
-service with performers opt in until we get an app for it live", and "hosted means our Modal setup only").
-It ends when the recording app is live. Until then, a recording may be converted on the project's own Modal
-deployment of the allowlisted conversion model, and nowhere else, only if its performer opts in for that
-recording (`own-voice-v1`); it is never published or kept there. No other hosted service, such as fal, is used
-for a recording (`config/models.json`, `chatterbox-vc`). In practice: conversion runs on the performer's own device
-(their computer, or their browser), and takes are kept in a private folder outside the repository and
-outside R2, or in the performer's own end-to-end encrypted storage (iCloud with Advanced Data Protection).
-The performer agrees to `own-voice-v1` (`config/consent.json`) first. Every
+**The rule (DRAFT for Nate's reread, 2026-11-19, branch `ephelion-voice`; drafted by the coding agent, Claude, a
+closed model by Anthropic, from Nate's words, adjusted to what ElevenLabs' own pages say: `docs/proposals/ephelion-voice.md`):**
+"Raw recordings are never published or kept by the site. A performer's recording may be sent to ElevenLabs, only if
+they agree for that recording, to convert it into a character's voice. ElevenLabs may keep it under its own privacy
+policy, in the United States, and the performer is told so before recording. The site asks ElevenLabs to delete each
+conversion from its history right after, and only the converted audio, never the recording, is sent to be transcribed."
+In practice: the take is a Blob in the performer's tab until it is sent once for conversion; the site's server passes
+it to ElevenLabs without writing it to the database, storage, disk or a log, and keeps only its sha256. This replaces
+the earlier rule (owner, 2026-10-22: "Raw recordings are never published and never sent to any service that processes
+them; they stay on my devices and my own encrypted storage") and its temporary Modal exception (owner, 2026-10-22).
+The Modal conversion code (`modal/chatterbox_vc.py`) stays in the repository and its proof (`check:modal-vc`) still
+runs, but no page uses it. Open point for Nate: ElevenLabs trains on inputs unless the account's "Improve the models
+for everyone" is off (Enterprise accounts only are off by default); the consent's bracketed line is true only once he
+turns it off.
+The performer agrees to `own-voice-v2` (`config/consent-own-voice.json`; DRAFT) first, for each recording sent. Every
 performer gets the same terms. Anyone can still re-run the conversion with
 their own voice or another reference clip; they cannot reproduce the exact
 converted line from the recipe alone, which is why the converted line itself

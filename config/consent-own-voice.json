@@ -16,6 +16,25 @@
         "Record only your own voice, never someone else's recording.",
         "You must be at least 18 years old."
       ]
+    },
+    "own-voice-v2": {
+      "line": "Your converted voice is public and GPL-3.0. We never publish or keep your recording.",
+      "title": "Your performance, in a character's voice",
+      "text": [
+        "You record a speech from the book. Your recording is converted into a character's voice, and only the converted speech can be published.",
+        "We never publish or keep your recording. It stays in this tab until it is sent to be converted, once, and is gone when you leave or record again.",
+        "To convert it, we send your recording to ElevenLabs, only if you agree for that recording. ElevenLabs stores what it receives in the United States and may keep it under its own privacy policy (elevenlabs.io/privacy-policy). We ask it to delete each conversion from its history right away, though its own logs may still keep it. [Our account is set so it doesn't use them to train its models.]",
+        "The converted speech is then sent to ElevenLabs to be transcribed, so it can be checked word for word against the book.",
+        "If you accept it, we keep the converted speech as your draft. Once you publish it, it is public and permanent, licensed GPL-3.0 like everything in this edition. Anyone may copy, edit and adapt it, including converting it again into another voice.",
+        "Each converted speech's public recipe names the voice, the model, its settings, and a fingerprint (sha256) of your recording. The fingerprint shows which recording was used; your voice can't be recovered from it.",
+        "A converted speech can keep your timing, phrasing and delivery, though not your voice. You're credited as its performer by your name here, unless you ask not to be named.",
+        "You can hide a speech you published, like any other contribution. Copies others have already made may remain.",
+        "You must not perform a voice that imitates a real person.",
+        "Record only your own voice, never someone else's recording.",
+        "You must be at least 18 years old."
+      ]
     }
-  }
+  },
+  "draft": "own-voice-v2",
+  "aboutV2": "own-voice-v2 (Nate, 2026-11-19, branch ephelion-voice): DRAFT for Nate's reread, drafted by the coding agent (Claude, a closed model by Anthropic). It replaces Modal with ElevenLabs (Nate's choice) for the Ephelion storyboard. `current` stays own-voice-v1 until Nate says \"reread\"; then v2 becomes current and v1 is retired (it was never shown). Facts and their sources: docs/proposals/ephelion-voice.md. Point 3's bracketed sentence is true only once Nate has turned off ElevenLabs' \"Improve the models for everyone\" on the account; drop it if he doesn't."
 }
