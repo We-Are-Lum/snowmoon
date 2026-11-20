@@ -1,0 +1,73 @@
+{
+  "about": "Voice presets for the Ephelion storyboard (Nate, 2026-11-19; branch ephelion-voice). Each is an ElevenLabs voice and its recipe: how it was made. DRAFT: Nate picks the voices; until he does, every entry is a candidate with no voice id, and nothing here is shown on the site. The book says almost nothing of Ephelion's voice: he is 'Lord Ephelion, Arctic ambassador to Veridia' (c8-b17) and signs 'Arctic Empire consul to Veridia' (c13-b64). Every description below is this edition's invention, written by the coding agent (Claude, a closed model by Anthropic) for Nate's reread. None is American-accented, and none names or imitates a real person. The preview line is the opening of c13-b64, word for word.",
+  "character": "ephelion",
+  "previewBlock": "c13-b64",
+  "previewText": "All humans are equal, the schools, the posters, the songs, and everything else in Veridia is telling you. Maybe not Dreadknot - but that's exactly why Dreadknot's taxes were bumped up to tier 4 in the audit last year. Nobody is better than anyone else, and if you even dare claim that one human being is better than another, then you are immediately cast out as evil in Veridia.",
+  "language": "en",
+  "presets": [
+    {
+      "id": "ephelion-cold-baritone",
+      "status": "candidate",
+      "name": "Cold baritone",
+      "invented": true,
+      "voiceId": null,
+      "recipe": {
+        "provider": "ElevenLabs",
+        "made": "Voice Design",
+        "model": "eleven_ttv_v3",
+        "description": "A man in his fifties with a low, smooth baritone and a crisp, educated British accent. A career diplomat addressing a crowd: unhurried, every word placed, quietly certain he is right. Cool rather than angry; the contempt is in the pauses. Clean studio recording, no music.",
+        "guidanceScale": 5,
+        "seed": null,
+        "generatedVoiceId": null
+      }
+    },
+    {
+      "id": "ephelion-arctic-precise",
+      "status": "candidate",
+      "name": "Arctic, precise",
+      "invented": true,
+      "voiceId": null,
+      "recipe": {
+        "provider": "ElevenLabs",
+        "made": "Voice Design",
+        "model": "eleven_ttv_v3",
+        "description": "A man in his forties speaking English with a light Scandinavian accent, from a cold northern empire. Precise consonants, flat and even pitch, controlled breathing, the calm of someone who never needs to raise his voice. Persuasive and slightly chilling. Clean studio recording, no music.",
+        "guidanceScale": 5,
+        "seed": null,
+        "generatedVoiceId": null
+      }
+    },
+    {
+      "id": "ephelion-rally-orator",
+      "status": "candidate",
+      "name": "Rally orator",
+      "invented": true,
+      "voiceId": null,
+      "recipe": {
+        "provider": "ElevenLabs",
+        "made": "Voice Design",
+        "model": "eleven_ttv_v3",
+        "description": "A man in his sixties with a rich, slightly gravelly voice and a Scottish accent. A seasoned orator who builds each sentence towards its end, rising with conviction, then dropping to a near-whisper to make a point land. Commanding, theatrical, never shouting. Clean studio recording, no music.",
+        "guidanceScale": 5,
+        "seed": null,
+        "generatedVoiceId": null
+      }
+    },
+    {
+      "id": "ephelion-bright-coach",
+      "status": "candidate",
+      "name": "Bright coach",
+      "invented": true,
+      "voiceId": null,
+      "recipe": {
+        "provider": "ElevenLabs",
+        "made": "Voice Design",
+        "model": "eleven_ttv_v3",
+        "description": "A man in his late thirties with a clear, bright tenor and an Australian accent. Energetic and warm on the surface, like a motivational coach who believes every word, with a hard edge underneath when he talks about weakness. Quick pace, confident smile in the voice. Clean studio recording, no music.",
+        "guidanceScale": 5,
+        "seed": null,
+        "generatedVoiceId": null
+      }
+    }
+  ]
+}
