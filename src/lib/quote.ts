@@ -3,6 +3,7 @@ import { blockFacts, labelRange } from './reading';
 import { renderMarkdown } from './render';
 import { loadChapter } from './book';
 import { loadIllustrations, type Illustration } from './illustrations';
+import type { Redone } from './chapter-pictures/view';
 
 /**
  * Quote cards (stateless): a share link names a chapter, a run of blocks, an
@@ -20,7 +21,8 @@ export interface Quote {
   text: string; // what the card shows
   label: string; // "¶ 4" or "¶ 4–6"
   setting: string | null;
-  image: Illustration | null;
+  /** The seeded picture; `replaced` once quoteShown has put its job's kept redo in place (src/lib/seeded-shown.ts). */
+  image: (Illustration & { replaced?: Redone }) | null;
   truncated: boolean;
 }
 

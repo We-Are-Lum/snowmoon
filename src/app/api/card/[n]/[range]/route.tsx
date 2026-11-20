@@ -3,13 +3,18 @@ import sharp from 'sharp';
 import { resolveQuote } from '~/lib/quote';
 import { quoteShown } from '~/lib/seeded-shown';
 import { loadFonts, typeset } from '~/lib/card-type';
+import { day } from '~/lib/chapter-pictures/shared';
 
 /**
  * A quote card: 1200×800 (3:2, the shape Farcaster uses for embeds). The image,
  * if any, fills the card; the quote and its place in the book sit over a fade.
  * Lettering is drawn here in code, never by an image model (brief Milestone 5).
- * The URL fully determines the card, so it is cached for a year. Served as
- * JPEG: as PNG, a card with an illustration is about 2 MB.
+ * A card without a picture is fully determined by its URL, so it is cached for a
+ * year. A card with one of the edition's pictures can change: an admin may redo
+ * that picture and keep the redo, or restore the committed file (owner,
+ * 2026-11-18/19), and a hide takes it off; so it is cached for 10 minutes, then
+ * served while it is drawn again in the background. Served as JPEG: as PNG, a
+ * card with an illustration is about 2 MB.
  */
 export const runtime = 'nodejs';
 
@@ -52,6 +57,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ n: s
   const label = `SNOWMOON · CHAPTER ${quote.chapter} · ${quote.label} · GPL-3.0`;
   // Whose is what: the words are the author's; an image is AI-generated (principle 2).
   const credit = withImage ? 'WORDS: VITALIK BUTERIN · IMAGE: AI-GENERATED' : 'WORDS: VITALIK BUTERIN';
+  // A redo an admin kept: who, when (the card is one picture for every reader, so the date is UTC's) and the model.
+  const redone = quote.image?.replaced;
+  const redoneLine = redone ? `IMAGE ${redone.by.toUpperCase()} · ${day(redone.at).toUpperCase()} · ${redone.model.toUpperCase()}` : null;
 
   const words = (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
@@ -63,6 +71,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ n: s
         <div style={{ display: 'flex' }}>{label}</div>
         <div style={{ display: 'flex' }}>{credit}</div>
       </div>
+      {redoneLine && (
+        <div style={{ display: 'flex', marginTop: 8, fontFamily: 'DM Mono', fontSize: 17, color: muted, letterSpacing: 1 }}>{redoneLine}</div>
+      )}
     </div>
   );
 
@@ -84,6 +95,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ n: s
   );
   const jpeg = await sharp(Buffer.from(await png.arrayBuffer())).jpeg({ quality: 86, mozjpeg: true }).toBuffer();
   return new Response(new Uint8Array(jpeg), {
-    headers: { 'Content-Type': 'image/jpeg', 'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, immutable' },
+    headers: {
+      'Content-Type': 'image/jpeg',
+      'Cache-Control': withImage ? 'public, max-age=600, s-maxage=600, stale-while-revalidate=86400' : 'public, max-age=31536000, s-maxage=31536000, immutable',
+    },
   });
 }

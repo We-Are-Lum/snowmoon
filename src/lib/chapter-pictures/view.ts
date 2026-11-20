@@ -1,6 +1,7 @@
 import 'server-only';
 import type { Illustration } from '../illustrations';
 import type { RecipeView } from '../recipe-view';
+import { CHALLENGE_MODELS } from '../challenge/models';
 import { adminName, day, lookName, modelLine, recipePath, replacedBy, type ShownReplacement } from './shared';
 
 /**
@@ -10,7 +11,21 @@ import { adminName, day, lookName, modelLine, recipePath, replacedBy, type Shown
  * sheet's full recipe is the public JSON at /api/chapter-pictures/<version> (check:principles P1d reads it signed out).
  * Wording DRAFT (coding agent, 2026-11-18).
  */
-export type ShownIllustration = Illustration & { replaced?: { versionId: string; by: string; at: string; model: string; view: RecipeView } };
+export interface Redone {
+  versionId: string;
+  /** "Redone by @garance" */
+  by: string;
+  /** When it was kept (ISO); pages write it in the reader's own time (src/components/local-date.tsx). */
+  at: string;
+  /** "GPT Image 2.5 Sunburst, a closed model by OpenAI" */
+  model: string;
+  /** The recipe sheet, from the database's record. */
+  view: RecipeView;
+}
+export type ShownIllustration = Illustration & { replaced?: Redone };
+
+/** A model's name as captions give it (the challenge's list names every model a redo can use); its id otherwise. */
+export const modelNameOf = (id: string) => CHALLENGE_MODELS.find((m) => m.allowlistId === id)?.name ?? id;
 
 export function replacementView(r: ShownReplacement, modelName: string): RecipeView {
   return {
@@ -49,4 +64,19 @@ export function withReplacements(images: Illustration[], shown: Map<string, Show
       replaced: { versionId: r.versionId, by: replacedBy(r), at: r.at, model: modelLine(name, r.maker, r.open), view: replacementView(r, name) },
     };
   });
+}
+
+/**
+ * One seeded picture as every page shows it now: the kept redo for its job (the latest decision wins), or the
+ * committed file when there is none or the latest decision restored it. The same rule as the chapter page, for the
+ * introduction's cards, quote cards, References, the sheets and the pick switch.
+ */
+export function shownPicture<T extends Illustration>(im: T, shown: Map<string, ShownReplacement>, nameOf: (model: string) => string = modelNameOf): T & { replaced?: Redone } {
+  if (!shown.has(im.id)) return im;
+  const [r] = withReplacements([im], shown, nameOf);
+  // The committed file's lettering and review mark belong to that file, not to the redo (as on the chapter page).
+  const { lettering: _lettering, reviewed: _reviewed, ...rest } = im;
+  void _lettering;
+  void _reviewed;
+  return { ...rest, url: r.url, width: r.width, height: r.height, recipe: r.recipe, replaced: r.replaced } as T & { replaced?: Redone };
 }
