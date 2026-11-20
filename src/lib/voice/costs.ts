@@ -33,8 +33,22 @@ export async function today(sql: postgres.Sql, funded: Funded, fid: number): Pro
   return { credits: r.credits, usd: r.usd, estimated: r.estimated, measured: r.measured, conversionsByPerson: a.n };
 }
 
+/**
+ * voice_asks are kept for the day only (Privacy §4, DRAFT): rows from before today (UTC) are deleted, at most once an
+ * hour per server instance, as Minpentai's daily counts are. studio_writer may delete only those rows (the table's
+ * writer_purge policy).
+ */
+let lastPurge = -Infinity;
+export async function purgeOldAsks(sql: postgres.Sql, now = Date.now()): Promise<number> {
+  if (now - lastPurge < 3_600_000) return 0;
+  lastPurge = now;
+  return (await sql`delete from studio.voice_asks where at < ${sql.unsafe(TODAY)}`).count;
+}
+export const resetPurgeClock = () => void (lastPurge = -Infinity);
+
 /** Why a call can't run now, or null. `whole`: a whole-take conversion, which counts against the person's daily number. */
 export async function refusal(sql: postgres.Sql, fid: number, estimatedCredits: number, whole: boolean): Promise<string | null> {
+  await purgeOldAsks(sql).catch(() => 0);
   const funded = fundedFor(fid);
   const t = await today(sql, funded, fid);
   if (t.estimated > 0 && t.measured > VOICE.caps.overEstimate * t.estimated)
@@ -60,11 +74,13 @@ export async function reserve(sql: postgres.Sql, fid: number, model: string, est
   await upsert(sql, { kind: 'reserved', model, funded, verdict: '', calls: 1, seconds: 0, characters: 0, credits: 0, estimated: estimatedCredits, usd: usdFor(estimatedCredits) });
   if (whole) await sql`insert into studio.voice_asks (fid) values (${fid})`;
   let settled = false;
-  return async (e: { kind: CostKind; ok: boolean; seconds: number; characters?: number; estimatedCredits: number; credits: number | null; usd?: number }) => {
+  /** Settle with the call's outcome, or with null when no call was made (refused before it): the hold is given back, nothing counted. */
+  return async (e: { kind: CostKind; ok: boolean; seconds: number; characters?: number; estimatedCredits: number; credits: number | null; usd?: number } | null) => {
     if (!settled) {
       settled = true;
       await upsert(sql, { kind: 'reserved', model, funded, verdict: '', calls: -1, seconds: 0, characters: 0, credits: 0, estimated: -estimatedCredits, usd: -usdFor(estimatedCredits) });
     }
+    if (!e) return;
     // An unknown real cost is counted at the estimate, and left out of the over-estimate rule (it has no measurement).
     const credits = e.credits ?? 0;
     const usd = e.usd ?? usdFor(e.credits ?? e.estimatedCredits);

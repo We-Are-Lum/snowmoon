@@ -26,7 +26,14 @@
 --    each raw take and of each converted file, the word check). Private: it is a draft until its person publishes it
 --    (a later slice). Never a raw take: the table has no place for one, and the recipe holds only its sha256.
 -- 4. studio.voice_draft_audio: a draft's audio files, in order: the whole converted take, then any redone sentence
---    (each with the sentence it replaces and where), or the reading. MP3 bytes, sha256, size and length.
+--    (each with the sentence it replaces and where), or the reading: where the MP3 is in private storage (the private
+--    R2 bucket, under voice-drafts/, never public; served only through the signed-in route), its sha256, size and
+--    length. No audio bytes in the database (Nate, 2026-11-20 morning).
+-- 5. Removing a draft (Nate, 2026-11-20 morning): studio.delete_voice_draft(id, fid) deletes one draft and its audio
+--    rows, only if that person made it and it is unpublished (published_at is null; the publish slice sets it), and
+--    returns the storage keys, so the site deletes the files too. studio_writer can't delete voice rows any other way.
+-- 6. voice_asks are kept for the day only: studio_writer may delete rows from before today (UTC), and nothing else; the
+--    site does it at most once an hour (src/lib/voice/costs.ts), as Minpentai's daily counts.
 
 -- A. DRY RUN: the migration below, ending in rollback; nothing is kept. Expect no error.
 begin;
@@ -68,9 +75,11 @@ drop policy if exists writer_insert on studio.voice_asks;
 drop policy if exists writer_read on studio.voice_asks;
 create policy writer_insert on studio.voice_asks for insert to studio_writer with check (true);
 create policy writer_read on studio.voice_asks for select to studio_writer using (true);
+drop policy if exists writer_purge on studio.voice_asks;
+create policy writer_purge on studio.voice_asks for delete to studio_writer using (at < ((now() at time zone 'utc')::date));
 revoke all on studio.voice_asks from anon, authenticated;
-grant select, insert on studio.voice_asks to studio_writer;
-revoke update, delete, truncate on studio.voice_asks from studio_writer;
+grant select, insert, delete on studio.voice_asks to studio_writer;
+revoke update, truncate on studio.voice_asks from studio_writer;
 
 create table if not exists studio.voice_drafts (
   id uuid primary key default gen_random_uuid(),
@@ -79,6 +88,8 @@ create table if not exists studio.voice_drafts (
   speech_id text not null check (speech_id ~ '^[a-z0-9-]{1,80}$'),
   preset_id text not null check (preset_id ~ '^[a-z0-9-]{1,80}$'),
   made_at timestamptz not null default now(),
+  -- Set by the publish slice; until then every draft is unpublished, and its person may remove it.
+  published_at timestamptz,
   recipe jsonb not null check (jsonb_typeof(recipe) = 'object' and recipe ? 'provider' and recipe ? 'model'),
   -- A performance's recipe names every raw take by its sha256 only.
   check (kind = 'reading' or (recipe ? 'takes' and jsonb_typeof(recipe->'takes') = 'array' and jsonb_array_length(recipe->'takes') >= 1))
@@ -101,10 +112,12 @@ create table if not exists studio.voice_draft_audio (
   sentence int check (sentence between 0 and 999),
   replaces_start numeric(8, 3),
   replaces_end numeric(8, 3),
-  mp3 bytea not null check (octet_length(mp3) between 1 and 4500000),
+  storage_key text not null unique check (storage_key ~ '^voice-drafts/[0-9a-f-]{36}/[0-9]{1,2}-[0-9a-f]{64}\.mp3$'),
+  bytes int not null check (bytes between 1 and 4500000),
   sha256 text not null check (sha256 ~ '^[0-9a-f]{64}$'),
   seconds numeric(8, 2) check (seconds between 0 and 600),
   primary key (draft_id, n),
+  check (storage_key like 'voice-drafts/' || draft_id::text || '/%'),
   check ((role = 'redo') = (sentence is not null)),
   check (role <> 'redo' or (replaces_start is not null and replaces_end is not null and replaces_end >= replaces_start))
 );
@@ -116,6 +129,17 @@ create policy writer_read on studio.voice_draft_audio for select to studio_write
 revoke all on studio.voice_draft_audio from anon, authenticated;
 grant select, insert on studio.voice_draft_audio to studio_writer;
 revoke update, delete, truncate on studio.voice_draft_audio from studio_writer;
+
+-- Removing one's own unpublished draft: the only way a draft row is deleted.
+create or replace function studio.delete_voice_draft(p_id uuid, p_fid bigint) returns setof text
+language plpgsql security definer set search_path = studio, pg_temp as $fn$
+begin
+  if not exists (select 1 from studio.voice_drafts where id = p_id and fid = p_fid and published_at is null) then return; end if;
+  return query delete from studio.voice_draft_audio where draft_id = p_id returning storage_key;
+  delete from studio.voice_drafts where id = p_id and fid = p_fid and published_at is null;
+end $fn$;
+revoke all on function studio.delete_voice_draft(uuid, bigint) from public, anon, authenticated;
+grant execute on function studio.delete_voice_draft(uuid, bigint) to studio_writer;
 rollback;
 
 -- B. MIGRATION: the same SQL, ending in commit.
@@ -158,9 +182,11 @@ drop policy if exists writer_insert on studio.voice_asks;
 drop policy if exists writer_read on studio.voice_asks;
 create policy writer_insert on studio.voice_asks for insert to studio_writer with check (true);
 create policy writer_read on studio.voice_asks for select to studio_writer using (true);
+drop policy if exists writer_purge on studio.voice_asks;
+create policy writer_purge on studio.voice_asks for delete to studio_writer using (at < ((now() at time zone 'utc')::date));
 revoke all on studio.voice_asks from anon, authenticated;
-grant select, insert on studio.voice_asks to studio_writer;
-revoke update, delete, truncate on studio.voice_asks from studio_writer;
+grant select, insert, delete on studio.voice_asks to studio_writer;
+revoke update, truncate on studio.voice_asks from studio_writer;
 
 create table if not exists studio.voice_drafts (
   id uuid primary key default gen_random_uuid(),
@@ -169,6 +195,8 @@ create table if not exists studio.voice_drafts (
   speech_id text not null check (speech_id ~ '^[a-z0-9-]{1,80}$'),
   preset_id text not null check (preset_id ~ '^[a-z0-9-]{1,80}$'),
   made_at timestamptz not null default now(),
+  -- Set by the publish slice; until then every draft is unpublished, and its person may remove it.
+  published_at timestamptz,
   recipe jsonb not null check (jsonb_typeof(recipe) = 'object' and recipe ? 'provider' and recipe ? 'model'),
   -- A performance's recipe names every raw take by its sha256 only.
   check (kind = 'reading' or (recipe ? 'takes' and jsonb_typeof(recipe->'takes') = 'array' and jsonb_array_length(recipe->'takes') >= 1))
@@ -191,10 +219,12 @@ create table if not exists studio.voice_draft_audio (
   sentence int check (sentence between 0 and 999),
   replaces_start numeric(8, 3),
   replaces_end numeric(8, 3),
-  mp3 bytea not null check (octet_length(mp3) between 1 and 4500000),
+  storage_key text not null unique check (storage_key ~ '^voice-drafts/[0-9a-f-]{36}/[0-9]{1,2}-[0-9a-f]{64}\.mp3$'),
+  bytes int not null check (bytes between 1 and 4500000),
   sha256 text not null check (sha256 ~ '^[0-9a-f]{64}$'),
   seconds numeric(8, 2) check (seconds between 0 and 600),
   primary key (draft_id, n),
+  check (storage_key like 'voice-drafts/' || draft_id::text || '/%'),
   check ((role = 'redo') = (sentence is not null)),
   check (role <> 'redo' or (replaces_start is not null and replaces_end is not null and replaces_end >= replaces_start))
 );
@@ -206,12 +236,23 @@ create policy writer_read on studio.voice_draft_audio for select to studio_write
 revoke all on studio.voice_draft_audio from anon, authenticated;
 grant select, insert on studio.voice_draft_audio to studio_writer;
 revoke update, delete, truncate on studio.voice_draft_audio from studio_writer;
+
+-- Removing one's own unpublished draft: the only way a draft row is deleted.
+create or replace function studio.delete_voice_draft(p_id uuid, p_fid bigint) returns setof text
+language plpgsql security definer set search_path = studio, pg_temp as $fn$
+begin
+  if not exists (select 1 from studio.voice_drafts where id = p_id and fid = p_fid and published_at is null) then return; end if;
+  return query delete from studio.voice_draft_audio where draft_id = p_id returning storage_key;
+  delete from studio.voice_drafts where id = p_id and fid = p_fid and published_at is null;
+end $fn$;
+revoke all on function studio.delete_voice_draft(uuid, bigint) from public, anon, authenticated;
+grant execute on function studio.delete_voice_draft(uuid, bigint) to studio_writer;
 commit;
 
 -- C. READ-BACK (after B). Changes nothing: it ends in rollback. Expect "READ-BACK PASSED".
 begin;
 do $$
-declare n int; usd numeric; d uuid;
+declare n int; usd numeric; d uuid; d2 uuid; k text;
 begin
   -- The tables and their privileges.
   if to_regclass('studio.voice_costs') is null or to_regclass('studio.voice_asks') is null or to_regclass('studio.voice_drafts') is null or to_regclass('studio.voice_draft_audio') is null then
@@ -248,9 +289,9 @@ begin
     jsonb_build_object('provider', 'ElevenLabs', 'model', 'eleven_multilingual_sts_v2', 'settings', jsonb_build_object('stability', 0.5),
       'takes', jsonb_build_array(jsonb_build_object('role', 'take', 'takeSha256', repeat('a', 64), 'convertedSha256', repeat('b', 64)))))
     returning id into d;
-  insert into studio.voice_draft_audio (draft_id, n, role, mp3, sha256, seconds) values (d, 0, 'take', decode(repeat('ff', 2000), 'hex'), repeat('b', 64), 152.4);
-  insert into studio.voice_draft_audio (draft_id, n, role, sentence, replaces_start, replaces_end, mp3, sha256, seconds)
-    values (d, 1, 'redo', 7, 41.2, 47.9, decode(repeat('ff', 200), 'hex'), repeat('c', 64), 6.6);
+  insert into studio.voice_draft_audio (draft_id, n, role, storage_key, bytes, sha256, seconds) values (d, 0, 'take', 'voice-drafts/' || d || '/0-' || repeat('b', 64) || '.mp3', 2438400, repeat('b', 64), 152.4);
+  insert into studio.voice_draft_audio (draft_id, n, role, sentence, replaces_start, replaces_end, storage_key, bytes, sha256, seconds)
+    values (d, 1, 'redo', 7, 41.2, 47.9, 'voice-drafts/' || d || '/1-' || repeat('c', 64) || '.mp3', 105600, repeat('c', 64), 6.6);
   insert into studio.voice_drafts (fid, kind, speech_id, preset_id, recipe) values (193912, 'reading', 'ephelion-c13-b64', 'ephelion-cold-baritone',
     jsonb_build_object('provider', 'ElevenLabs', 'model', 'eleven_multilingual_v2', 'textSha256', repeat('d', 64)));
 
@@ -264,9 +305,13 @@ begin
   exception when check_violation then null; end;
   begin insert into studio.voice_drafts (fid, kind, speech_id, preset_id, recipe) values (6786, 'performance', 'x', 'y', '{"provider":"ElevenLabs","model":"m"}'); raise exception 'a performance with no take accepted';
   exception when check_violation then null; end;
-  begin insert into studio.voice_draft_audio (draft_id, n, role, mp3, sha256) values (d, 2, 'redo', '\xff', repeat('e', 64)); raise exception 'a redo with no sentence accepted';
+  begin insert into studio.voice_draft_audio (draft_id, n, role, storage_key, bytes, sha256) values (d, 2, 'redo', 'voice-drafts/' || d || '/2-' || repeat('e', 64) || '.mp3', 10, repeat('e', 64)); raise exception 'a redo with no sentence accepted';
   exception when check_violation then null; end;
-  begin insert into studio.voice_draft_audio (draft_id, n, role, mp3, sha256) values (d, 3, 'raw', '\xff', repeat('e', 64)); raise exception 'a raw role accepted';
+  begin insert into studio.voice_draft_audio (draft_id, n, role, storage_key, bytes, sha256) values (d, 3, 'raw', 'voice-drafts/' || d || '/3-' || repeat('e', 64) || '.mp3', 10, repeat('e', 64)); raise exception 'a raw role accepted';
+  exception when check_violation then null; end;
+  begin insert into studio.voice_draft_audio (draft_id, n, role, storage_key, bytes, sha256) values (d, 4, 'take', 'images/readers/x.mp3', 10, repeat('e', 64)); raise exception 'a key outside voice-drafts/ accepted';
+  exception when check_violation then null; end;
+  begin insert into studio.voice_draft_audio (draft_id, n, role, storage_key, bytes, sha256) values (d, 5, 'take', 'voice-drafts/00000000-0000-4000-8000-000000000000/5-' || repeat('e', 64) || '.mp3', 10, repeat('e', 64)); raise exception 'a key under another draft accepted';
   exception when check_violation then null; end;
 
   select count(*), sum(cost_usd) into n, usd from studio.voice_costs where day = (now() at time zone 'utc')::date and funded = 'free';
@@ -274,17 +319,35 @@ begin
   select count(*) into n from studio.voice_draft_audio where draft_id = d;
   if n <> 2 then raise exception 'expected 2 audio rows, got %', n; end if;
 
-  -- And deleted again (as postgres; studio_writer can't).
-  delete from studio.voice_draft_audio where draft_id = d;
-  delete from studio.voice_drafts where speech_id = 'ephelion-c13-b64' and recipe->'takes'->0->>'takeSha256' = repeat('a', 64);
+  -- Removing a draft, as studio_writer: not by someone else, not once published, and then fully (its audio keys back).
+  insert into studio.voice_drafts (fid, kind, speech_id, preset_id, recipe, published_at) values (6786, 'reading', 'ephelion-c13-b64', 'ephelion-cold-baritone',
+    jsonb_build_object('provider', 'ElevenLabs', 'model', 'eleven_multilingual_v2', 'textSha256', repeat('9', 64)), now()) returning id into d2;
+  insert into studio.voice_asks (fid, at) values (6786, now() - interval '2 days');
+  execute 'set local role studio_writer';
+  select count(*) into n from studio.delete_voice_draft(d, 193912);
+  if n <> 0 or not exists (select 1 from studio.voice_drafts where id = d) then raise exception 'someone else removed a draft'; end if;
+  select count(*) into n from studio.delete_voice_draft(d2, 6786);
+  if n <> 0 or not exists (select 1 from studio.voice_drafts where id = d2) then raise exception 'a published draft was removed'; end if;
+  select count(*) into n from studio.delete_voice_draft(d, 6786);
+  if n <> 2 or exists (select 1 from studio.voice_drafts where id = d) or exists (select 1 from studio.voice_draft_audio where draft_id = d) then raise exception 'the draft was not fully removed (% keys)', n; end if;
+  begin delete from studio.voice_drafts where id = d2; raise exception 'studio_writer deleted a draft directly';
+  exception when insufficient_privilege then null; end;
+  -- The daily counts: yesterday's rows go, today's stay.
+  delete from studio.voice_asks where fid = 6786;
+  select count(*) into n from studio.voice_asks where fid = 6786;
+  if n <> 1 then raise exception 'the purge took today''s count, or left an old one (% left)', n; end if;
+  execute 'reset role';
+  -- And deleted again (as postgres).
+  delete from studio.voice_drafts where id = d2;
   delete from studio.voice_drafts where fid = 193912 and recipe->>'textSha256' = repeat('d', 64);
-  if exists (select 1 from studio.voice_drafts where id = d) then raise exception 'the draft was not deleted'; end if;
   raise notice 'READ-BACK PASSED (free total today in this transaction was % USD)', usd;
 end $$;
 rollback;
 
--- D. UNDO, only if the release is withdrawn (it drops the day totals and every voice draft).
+-- D. UNDO, only if the release is withdrawn (it drops the day totals and every voice draft; the files under
+--    voice-drafts/ in the private bucket are then deleted by hand).
 -- begin;
+-- drop function if exists studio.delete_voice_draft(uuid, bigint);
 -- drop table if exists studio.voice_draft_audio;
 -- drop table if exists studio.voice_drafts;
 -- drop table if exists studio.voice_asks;

@@ -14,8 +14,8 @@ Review page for branch `ephelion-voice`, 2026-11-19, from Nate's brief of the sa
 | A3 Consent own-voice-v2, P1h, P1i | Drafted: `config/consent-own-voice.json` (`draft`; `current` stays v1), `docs/principles.md`. |
 | A4 Privacy and Terms | Drafted: `docs/legal/ephelion-voice-draft.md`. Not in `src/lib/legal.ts`. |
 | B1 Voice presets | Four briefs, three previews each, made 2026-11-20 (2,878 credits). **Nate to listen and pick.** |
-| B2–B7 Build | Built overnight 2026-11-20 against a stub ElevenLabs, switch off (see "Overnight build"). `npm run test:voice`: 89 checks pass. |
-| Migration | `supabase/migrations/NEXT_ephelion_voice.sql` (was NEXT_voice_costs.sql): costs, asks, drafts, draft audio. Tested in PGlite, twice, plus planted faults. **Not applied; Nate applies.** |
+| B2–B7 Build | Built overnight 2026-11-20 against a stub ElevenLabs, switch off; morning changes (remove a draft, private storage, the purge). `npm run test:voice`: 101 checks pass. |
+| Migration | `supabase/migrations/NEXT_ephelion_voice.sql`: costs, asks (purged daily), drafts, draft audio keys (audio in private storage), the remove function. Tested in PGlite on top of every migration, twice, plus planted faults. **Ready for the coordinator to test; not applied (Nate applies).** |
 
 ## Go/no-go: the microphone
 
@@ -238,10 +238,10 @@ before any merge. The voice page itself isn't in check:ui (a 404 everywhere whil
 |---|---|---|
 | 1 | The page is `/storyboard/record`, not `/record` | It is the storyboard challenge's first step; `/record` was the old Modal plan. |
 | 2 | Two switches, both off: `adminTrial` and `open` | "Off in production, admins only until Nate opens it": the admin trial is its own reviewed commit, so not even admins reach it before Nate's word; `open` waits for the legal texts. |
-| 3 | Nothing stored before Accept: each step hands the tab a signed record (HMAC) | Matches "discard is the default if they leave", and Accept can't be handed a recipe we didn't make. It uses `VOICE_TICKET_SECRET`, or `IMAGES_TICKET_SECRET` under its own label, so Nate needn't add another key. |
-| 4 | Accepted audio is stored in the database (private), like the admins' chapter-picture drafts | No new bucket or public path; publishing is a later slice. |
+| 3 | Nothing stored before Accept: each step hands the tab a signed record (HMAC) | Matches "discard is the default if they leave", and Accept can't be handed a recipe we didn't make. It uses `VOICE_TICKET_SECRET`, or `IMAGES_TICKET_SECRET` under its own label, so Nate needn't add another key. **OK'd by Nate, 2026-11-20.** |
+| 4 | ~~Accepted audio is stored in the database~~ Moved to private storage on Nate's word (2026-11-20 morning): see "Morning, 2026-11-20" | |
 | 5 | A redone sentence is kept as its own file, with the time range it replaces; the browser joins them to play | No audio editing on the server (no encoder on Vercel); the recipe stays exact: each take's sha256, each converted file's. |
-| 6 | Accept is allowed with sentences still not matching; they are listed in the recipe (`check.unmatched`) and the page warns | A transcription can mishear a correct reading; the person judges, and the recipe says so. Nate may want Accept refused instead: one line. |
+| 6 | Accept is allowed with sentences still not matching; they are listed in the recipe (`check.unmatched`) and the page warns | A transcription can mishear a correct reading; the person judges, and the recipe says so. **Kept, Nate 2026-11-20** (for the private draft; the publish rule is below). |
 | 7 | The words scroll at a pace the performer sets, not by listening | Following the voice live would mean sending the take somewhere while recording. |
 | 8 | Consent: the screen once per wording (`contributor_consents`, kind `voice_recording`); the per-recording tick is kept only in an accepted draft's recipe | "Only if they agree for that recording" without storing anything about a discarded attempt. |
 | 9 | The speech is the whole block: title, letter and sign-off | Word for word means the whole text; the team's speeches replace it. |
@@ -279,20 +279,84 @@ again" added); the stub's audio was larger than a real MP3 and hit the 4.5 MB re
 - **P1h's text in docs/principles.md** matches the new checks; both wait for Nate's reread.
 - Publishing a draft, the timeline and shots: later slices.
 
+## Morning, 2026-11-20: Nate's notes, and what changed
+
+**1. The publish rule (plan for the publish slice; nothing publishes yet).** A private draft may keep sentences that
+don't match. A published entry must either match the speech word for word, or show plainly, on the entry itself, which
+sentences differ (from its recipe's `check.unmatched`, with the speech's words beside what was heard). The publish
+slice builds this; the recipe already records what it needs.
+
+**2. The ticket secret under its own label:** OK (choice 3).
+
+**3a. Removing a draft: proposed and built as a delete limited to the person's own unpublished draft, not a tombstone.**
+- Why a delete: a draft is a recording of someone's voice performance that was never published. A tombstone would keep
+  the audio after they asked for it gone; nothing needs the rows once it's removed (the day's cost totals have no person
+  in them and stay).
+- How: "Remove this draft" on the page (with a confirm) calls `DELETE /api/voice/drafts/<id>`. The server deletes the
+  draft's audio files from private storage first, then the rows, through one database function,
+  `studio.delete_voice_draft(id, fid)`, that removes a draft only if that person made it and it is unpublished
+  (`published_at` is null; the publish slice sets it). studio_writer still can't delete voice rows any other way.
+- What happens to the audio: deleted from the private bucket (every file under `voice-drafts/<draft id>/`). If a file
+  delete fails, the rows stay and the page says to try again, so a retry finishes it; nothing is left half-removed.
+- Tested: someone else's draft and a published draft can't be removed (404, nothing deleted); its person's removal
+  leaves no row and no file; its audio route then reads as missing; a second removal reads as missing. The migration's
+  read-back checks the same as studio_writer.
+
+**3b. Draft audio moved out of the database into private storage.** The private R2 bucket (`R2_PRIVATE_BUCKET`, the one
+hidden images already use, which has no public address), under `voice-drafts/<draft id>/<n>-<sha256>.mp3`. The
+database keeps only the key, size and sha256 (no audio column at all). Served only through the signed-in route, to the
+draft's own person (readings: to anyone the switch lets in). In the local tests a folder stands in.
+Size per take, at the MP3 we ask for (128 kb/s, 16 KB a second): **1 minute ≈ 0.96 MB, 2 minutes ≈ 1.9 MB** (3 minutes
+≈ 2.9 MB); a redone 10-second sentence adds ≈ 160 KB; a 2-minute reading ≈ 1.9 MB.
+Assumption to confirm: production's `R2_PRIVATE_BUCKET` and its key are the ones hidden images use (names only; I
+didn't look at Vercel's settings).
+
+**3c. Privacy §4 (DRAFT, for reread):** the daily-counts line adds voice conversions, and says the count is deleted the
+next day; the drafts item says a draft can be removed. Wording in `docs/legal/ephelion-voice-draft.md`. Built:
+`voice_asks` rows from before today (UTC) are purged at most once an hour, when the voice page or a voice request is
+next used, as Minpentai's daily counts are; studio_writer may delete only those rows (a row policy). Gap, as with
+Minpentai: if nobody uses the voice pages for days, old rows wait for the next use.
+
+**4. Migration:** `NEXT_ephelion_voice.sql` now has the storage keys (no audio bytes), `published_at`, the remove
+function and the purge policy. Run locally on top of every migration, twice, cleanly; its read-back passes and catches
+two planted faults (a remove without the owner check; a purge that takes today's rows). `npm run test:voice`: 101
+checks pass. **Ready for the coordinator to test.**
+
+**5. check:ui with the real database (planned, not run until Nate says).** A preview won't do: previews have no
+database or session settings at all (found 2026-11-01), and check:ui has no way past Vercel's preview sign-in. So the
+options are local, on this branch's production build, one run at load under 8, holding the heavy lock:
+- **(a) Recommended: the production database through a read-only role.** A role that can only select (say
+  `studio_ui_reader`: usage on `studio`, select on its tables, nothing else), made by Nate with a short SQL I'd draft
+  (dry run, migration, read-back as usual), and its address put by Nate in a separate env file only this run reads (no
+  other production setting). Read-only by the database itself: a session setting isn't enough, because the transaction
+  pooler ignores settings sent at connect (src/lib/db.ts). Pages that write (consent, a like) fail there, which
+  check:ui's signed-out run doesn't do.
+- (b) The local rehearsal database (it holds Nate's own data and is never reset): no production access at all, but it
+  may be out of date with production.
+Either way, the voice page stays a 404 (switch off): the run checks that nothing else broke. It also breaks a house
+rule ("no server on .env.local"), which is why (a) uses its own file with only the read-only address. Nate picks (a)
+or (b) and says when.
+
+**6. First real calls (when the key appears in `.env.local`):** one of each kind, with the shortest test clip, from a
+local script (not the site), each measured against its estimate before the next:
+- convert: a 3-second clip of my own making (a generated tone or a text-to-speech line of the book's words, never a
+  person's voice), into a saved preset voice once Nate has picked; estimate 50 credits (1,000 a minute);
+- transcribe: that call's converted audio; estimate: unknown in credits ($0.20 an hour, so ≈ 0 to 1 credit);
+- reading: the shortest sentence of c13-b64 ("With regards,": 13 characters); estimate 13 credits.
+Credits read from ElevenLabs' header when sent, else from the account's count before and after. If any call costs more
+than 20% over its estimate, I stop before the next and report. Total ≈ 65 credits.
+
 ## What Nate needs to do (one at a time)
 
-1. Give the merge word for PR #195 (the microphone test only). Then test the iPhone (Farcaster app, Safari) and the
-   desktop (Safari, Chrome); Android goes to Garance or Luis. Send the result lines.
-2. Listen to the twelve previews and pick one per brief, or none (link under B1).
-3. In ElevenLabs: Terms and Privacy → Data use → turn off "Improve the models for everyone", and say it's done. The
-   bracketed line stays until then.
-4. Put the key in `.env.local` and in Vercel as `ELEVENLABS_API_KEY` (never in chat). **Missing from `.env.local` on
-   2026-11-20.**
+1. (Nate, this morning) The merge word for PR #195, then the iPhone and desktop tests; Android goes to Garance or Luis.
+2. (Nate, this morning) Pick one preview per brief, or none (link under B1).
+3. (Nate, this morning) ElevenLabs training off; say when it's done (the bracketed line stays until then).
+4. (Nate, this morning) The key in `.env.local` and Vercel as `ELEVENLABS_API_KEY`; then I make the three test calls (6).
 5. Reread: the rule, own-voice-v2, P1h/P1i, the Privacy and Terms lines.
 6. Speech length and plan size, then the caps in credits (B7; the build has placeholders).
 7. Apply `NEXT_ephelion_voice.sql` when the branch is ready to merge (the coordinator tests it first; it takes its number
    at merge).
-8. Choices 6 (Accept with unmatched sentences) and 3 (the ticket secret): say if either should change.
+8. Say when to run check:ui with the real database (5).
 
 ## Principles
 

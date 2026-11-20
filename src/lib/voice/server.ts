@@ -6,6 +6,7 @@ import { VOICE } from '../config';
 import { voiceAllowed, voiceTestPerson } from './flag';
 import { deleteHistoryItem, elevenLabsReady, speechToSpeech, speechToText } from './elevenlabs';
 import { sha256Hex, signTicket, ticketsReady, verifyTicket } from './ticket';
+import { voiceStoreReady } from './store';
 import type { CostEntry, FlowDeps } from './take-flow';
 
 /**
@@ -19,7 +20,7 @@ export async function voicePerson(request: Request): Promise<{ fid: number } | N
   return { fid };
 }
 
-export const voiceReady = () => Boolean(db() && elevenLabsReady() && ticketsReady());
+export const voiceReady = () => Boolean(db() && elevenLabsReady() && ticketsReady() && voiceStoreReady());
 
 /** The take flow's real dependencies: ElevenLabs, our tickets, and a cost recorder that settles this request's hold. */
 export function flowDeps(cost: (e: CostEntry) => Promise<void>): FlowDeps {

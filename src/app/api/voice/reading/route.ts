@@ -7,7 +7,7 @@ import { presetRecipe, voiceIdFor } from '~/lib/voice/presets';
 import { elevenLabsBase } from '~/lib/voice/flag';
 import { deleteHistoryItem, textToSpeech } from '~/lib/voice/elevenlabs';
 import { refusal, reserve } from '~/lib/voice/costs';
-import { latestReading, saveDraft } from '~/lib/voice/drafts';
+import { latestReading, readingAudio, saveDraft } from '~/lib/voice/drafts';
 import { sha256Hex } from '~/lib/voice/ticket';
 
 export const maxDuration = 300;
@@ -21,8 +21,9 @@ export async function GET(request: Request) {
   const q = new URL(request.url).searchParams;
   const r = await latestReading(sql, String(q.get('speech') ?? ''), String(q.get('preset') ?? ''));
   if (!r) return NextResponse.json({ error: 'No reading yet' }, { status: 404 });
-  const [a] = await sql`select mp3 from studio.voice_draft_audio where draft_id = ${r.id} and n = 0`;
-  return new Response(Buffer.from(a.mp3), { headers: { 'content-type': 'audio/mpeg', ...noStore } });
+  const mp3 = await readingAudio(sql, r.id);
+  if (!mp3) return NextResponse.json({ error: 'No reading yet' }, { status: 404 });
+  return new Response(Buffer.from(mp3), { headers: { 'content-type': 'audio/mpeg', ...noStore } });
 }
 
 /**

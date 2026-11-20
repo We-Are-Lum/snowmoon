@@ -14,10 +14,23 @@ the account). Drop it if he doesn't.
 
 > , a speech you record, until it is sent once to be converted (it is gone when you leave the page or record again)
 
-**Section 4 (Kept by us when you sign in), a new list item after "Storyboards you save…":**
+**Section 4 (Kept by us when you sign in), a new list item after "Storyboards you save…"** (v2, 2026-11-20 morning:
+removing a draft added):
 
 > Speeches you record and accept: the converted speech, in the character's voice, as your draft until you publish it,
-> with its recipe (the voice, the model, its settings and a fingerprint of your recording). Never your recording.
+> with its recipe (the voice, the model, its settings and a fingerprint of your recording). Never your recording. You
+> can remove a draft you haven't published; it is deleted, audio and all.
+
+**Section 4, the daily-counts item** (Nate, 2026-11-20 morning). Today it reads: "How many images, sheet remixes and
+Remix frames you make each day, to count the daily limits, and the reports you make." Proposed:
+
+> How many images, sheet remixes, Remix frames and voice conversions you make each day, to count the daily limits, and
+> the reports you make. The count of voice conversions is deleted the next day.
+
+(True as built: studio.voice_asks rows from before today, UTC, are deleted when the voice page or a voice request is
+next used after the day ends, at most once an hour, as Minpentai's daily counts are. If nobody uses the voice pages for
+days, they wait for the next use. Section 4's last line already says "Deletions happen at the next routine clean-up, so they
+can come a little later than stated." The other counts are not changed by this branch.)
 
 **Section 6 (What you publish):** no change. A published converted speech is published work like any other.
 

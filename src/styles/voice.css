@@ -51,3 +51,4 @@
 .vr-draft-audio { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin: var(--space-1) 0; }
 .vr-drafts pre { font-size: 12px; overflow-x: auto; background: var(--paper); padding: var(--space-2); border-radius: 6px; }
 .vr-drafts summary { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); cursor: pointer; }
+.vr-remove { margin-top: var(--space-2); }

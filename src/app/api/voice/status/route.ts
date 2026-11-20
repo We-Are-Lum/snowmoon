@@ -5,7 +5,7 @@ import { noStore, voicePerson, voiceReady } from '~/lib/voice/server';
 import { speeches } from '~/lib/voice/speech';
 import { presetChoices } from '~/lib/voice/presets';
 import { hasVoiceConsent, voiceConsentWording } from '~/lib/voice/consent';
-import { fundedFor, today } from '~/lib/voice/costs';
+import { fundedFor, purgeOldAsks, today } from '~/lib/voice/costs';
 import { latestReading, myDrafts } from '~/lib/voice/drafts';
 
 export const dynamic = 'force-dynamic';
@@ -19,6 +19,7 @@ export async function GET(request: Request) {
   const { previewText, previewBlock, choices } = presetChoices();
   const wording = voiceConsentWording();
   const funded = fundedFor(who.fid);
+  if (sql) await purgeOldAsks(sql).catch(() => 0);
   const t = sql ? await today(sql, funded, who.fid) : null;
   const readings = sql
     ? (await Promise.all([...new Set(choices.map((c) => c.presetId))].map(async (p) => [p, await latestReading(sql, speech.id, p)] as const))).filter(([, r]) => r).map(([p, r]) => ({ presetId: p, id: r!.id, candidate: (r!.recipe as { preset?: { candidate?: number } }).preset?.candidate ?? null, madeAt: r!.made_at }))
@@ -38,7 +39,7 @@ export async function GET(request: Request) {
         capCredits: funded === 'admin' ? VOICE.caps.adminDailyCredits : VOICE.caps.dailyCredits,
         conversionsLeft: Math.max(0, VOICE.caps.perPersonConversions - t.conversionsByPerson),
       },
-      drafts: sql ? (await myDrafts(sql, who.fid)).map((d) => ({ id: d.id, kind: d.kind, speechId: d.speech_id, presetId: d.preset_id, madeAt: d.made_at, recipe: d.recipe, audio: d.audio })) : [],
+      drafts: sql ? (await myDrafts(sql, who.fid)).map((d) => ({ id: d.id, kind: d.kind, speechId: d.speech_id, presetId: d.preset_id, madeAt: d.made_at, publishedAt: d.published_at, recipe: d.recipe, audio: d.audio })) : [],
       readings,
     },
     { headers: noStore },

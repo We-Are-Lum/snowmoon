@@ -72,7 +72,7 @@ export async function POST(request: Request) {
     });
     return new Response(Buffer.from(audio), { headers: { 'content-type': 'audio/mpeg', 'x-voice-ticket': ticket, ...noStore } });
   } catch (e) {
-    if (!costed) await settle({ kind: 'convert', ok: false, seconds, estimatedCredits, credits: null }).catch(() => {});
+    if (!costed) await settle(null).catch(() => {});
     if (e instanceof FlowError) return NextResponse.json({ error: e.message }, { status: e.status });
     return NextResponse.json({ error: 'Something went wrong. Your recording was not kept.' }, { status: 500 });
   }

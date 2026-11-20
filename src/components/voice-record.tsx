@@ -25,7 +25,7 @@ interface Status {
   models: { convert: string; transcribe: string; reading: string; design: string; provider: string };
   limits: { maxTakeSeconds: number; maxSentenceSeconds: number; maxTakeBytes: number; creditsPerMinute: number };
   today: { funded: string; credits: number; capCredits: number; conversionsLeft: number } | null;
-  drafts: { id: string; kind: string; speechId: string; presetId: string; madeAt: string; recipe: Record<string, unknown>; audio: { n: number; role: string; sentence: number | null }[] }[];
+  drafts: { id: string; kind: string; speechId: string; presetId: string; madeAt: string; publishedAt: string | null; recipe: Record<string, unknown>; audio: { n: number; role: string; sentence: number | null }[] }[];
   readings: { presetId: string; id: string; candidate: number | null; madeAt: string }[];
 }
 interface Converted { blob: Blob; url: string; ticket: string; check?: string; checks?: Check[]; seconds: number }
@@ -387,6 +387,15 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     setAccepted(null);
   }
 
+  async function removeDraft(id: string) {
+    if (!window.confirm('Remove this draft? Its audio is deleted and it can\'t be brought back.')) return;
+    setBusy('remove');
+    const r = await authFetch(`/api/voice/drafts/${id}`, { method: 'DELETE' });
+    setBusy(null);
+    if (r.ok) void load();
+    else setMessage(((await r.json().catch(() => ({}))) as { error?: string }).error ?? 'It could not be removed');
+  }
+
   async function makeReading() {
     if (!picked) return;
     setBusy('reading');
@@ -628,6 +637,9 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                       <summary>Recipe</summary>
                       <pre>{JSON.stringify(d.recipe, null, 2)}</pre>
                     </details>
+                    <button type="button" className="vr-btn vr-quiet vr-small-btn vr-remove" onClick={() => removeDraft(d.id)} disabled={busy !== null}>
+                      Remove this draft
+                    </button>
                   </li>
                 ))}
               </ul>

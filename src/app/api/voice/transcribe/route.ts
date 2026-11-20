@@ -42,7 +42,8 @@ export async function POST(request: Request) {
     const sentences = scope.kind === 'whole' ? speech.sentences : speech.sentences.filter((s) => s.n === scope.n);
     return NextResponse.json({ scope, words, checks: checkSpeech(sentences, words), check }, { headers: noStore });
   } catch (e) {
-    if (!costed) await settle({ kind: 'transcribe', ok: false, seconds: 0, estimatedCredits: 0, credits: null }).catch(() => {});
+    // Refused before any call (not converted audio, not this person's): the hold is given back, nothing is counted.
+    if (!costed) await settle(null).catch(() => {});
     if (e instanceof FlowError) return NextResponse.json({ error: e.message }, { status: e.status });
     return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });
   }

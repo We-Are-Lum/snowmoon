@@ -20,7 +20,8 @@
  */
 import path from 'node:path';
 import { createHash, randomBytes } from 'node:crypto';
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
+import os from 'node:os';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { startStub } from './lib/elevenlabs-stub';
@@ -46,7 +47,15 @@ const pgServer = new PGLiteSocketServer({ db: pg, port: PG_PORT, host: '127.0.0.
 await pgServer.start();
 const stub = await startStub(STUB_PORT);
 
+const STORE = mkdtempSync(path.join(os.tmpdir(), 'voice-store-'));
+const storeFiles = (): string[] => {
+  const out: string[] = [];
+  const walk = (d: string) => { for (const n of readdirSync(d, { withFileTypes: true })) n.isDirectory() ? walk(path.join(d, n.name)) : out.push(path.relative(STORE, path.join(d, n.name))); };
+  if (existsSync(STORE)) walk(STORE);
+  return out;
+};
 Object.assign(process.env, {
+  VOICE_TEST_STORE: STORE,
   STUDIO_DATABASE_URL: `postgres://studio_writer@127.0.0.1:${PG_PORT}/postgres`,
   VOICE_TEST_ON: '1',
   VOICE_TEST_FID: `${NATE},${GARANCE},${STRANGER}`,
@@ -73,6 +82,7 @@ const transcribe = await route('transcribe');
 const accept = await route('accept');
 const reading = await route('reading');
 const draftAudioRoute = await route('drafts/[id]/[n]');
+const draftRoute = await route('drafts/[id]');
 const as = (fid: number | null, init: RequestInit = {}, url = 'http://localhost/api/voice/x') =>
   new Request(url, { ...init, headers: { ...(init.headers ?? {}), ...(fid ? { authorization: `Bearer voice-test-${fid}` } : {}) } });
 const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
@@ -86,13 +96,14 @@ for (const [k, v] of [['VERCEL', '1'], ['VERCEL_ENV', 'production'], ['VERCEL_EN
   delete process.env[k];
 }
 check('S. a non-admin is not let in during the admin trial', !voiceAllowed(STRANGER) && voiceAllowed(NATE) && voiceAllowed(GARANCE));
-const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]'];
+const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]'];
 for (const r of routeFiles) {
   const mod = await route(r);
-  const h = mod.POST ?? mod.GET;
+  const h = mod.POST ?? mod.GET ?? mod.DELETE;
+  const method = mod.POST ? 'POST' : mod.GET ? 'GET' : 'DELETE';
   const ctx = { params: Promise.resolve({ id: '00000000-0000-4000-8000-000000000000', n: '0' }) };
-  const out = await h(as(null, { method: mod.POST ? 'POST' : 'GET' }), ctx);
-  const stranger = await h(as(STRANGER, { method: mod.POST ? 'POST' : 'GET' }), ctx);
+  const out = await h(as(null, { method }), ctx);
+  const stranger = await h(as(STRANGER, { method }), ctx);
   check(`S. ${r}: 401 signed out, 404 to a non-admin`, out.status === 401 && stranger.status === 404, `${out.status} ${stranger.status}`);
   if (mod.GET && mod.POST) {
     const g = await mod.GET(as(STRANGER), ctx);
@@ -182,8 +193,14 @@ r = await transcribe.POST(as(NATE, { method: 'POST', body: tForm(new Uint8Array(
 check('T. the raw take is refused by transcription (400), and never sent', r.status === 400 && stub.calls.filter((c) => c.path === '/v1/speech-to-text').length === sttBefore);
 r = await transcribe.POST(as(GARANCE, { method: 'POST', body: tForm(converted, ticket) }));
 check('T. another person\'s conversion is refused', r.status === 400);
-r = await transcribe.POST(as(NATE, { method: 'POST', body: tForm(converted, ticket.replace(/.$/, (c) => (c === 'A' ? 'B' : 'A'))) }));
-check('T. a tampered record is refused', r.status === 400);
+{
+  // Tamper with the record itself (its signed body): change the seconds it claims.
+  const [body, mac] = ticket.split('.');
+  const t = JSON.parse(Buffer.from(body, 'base64url').toString());
+  t.seconds = 1;
+  r = await transcribe.POST(as(NATE, { method: 'POST', body: tForm(converted, `${Buffer.from(JSON.stringify(t)).toString('base64url')}.${mac}`) }));
+  check('T. a tampered record is refused', r.status === 400);
+}
 r = await transcribe.POST(as(NATE, { method: 'POST', body: tForm(converted, ticket) }));
 const t1 = (await r.json()) as { checks: { n: number; ok: boolean; missing: string[]; extra: string[] }[]; check: string };
 const stt = stub.calls.filter((c) => c.path === '/v1/speech-to-text');
@@ -236,19 +253,23 @@ check('A. ... the sha256 of each raw take, and of each converted file', rec.take
 check('A. ... the word check: every sentence matches once sentence 4 is redone', rec.check.unmatched.length === 0 && rec.check.matched === rec.check.sentences);
 check('A. ... the consent\'s wording and that it was given for each recording', rec.consent.sha256 === wording.sha256 && rec.consent.perRecording);
 check('A. ... and the speech\'s source', rec.speech.source.block === 'c13-b64');
-const audioRows = await sql`select n, role, sentence, replaces_start::float8 s, replaces_end::float8 e, sha256 from studio.voice_draft_audio where draft_id = ${acc.id} order by n`;
+const audioRows = await sql`select n, role, sentence, replaces_start::float8 s, replaces_end::float8 e, sha256, storage_key, bytes from studio.voice_draft_audio where draft_id = ${acc.id} order by n`;
 check('A. the audio kept: the converted take, then the redone sentence with where it goes', audioRows.length === 2 && audioRows[0].role === 'take' && audioRows[0].sha256 === sha(converted) && audioRows[1].role === 'redo' && audioRows[1].sentence === 3 && audioRows[1].e > audioRows[1].s);
+check('A. the audio is in private storage under voice-drafts/<draft>/, not in the database', audioRows.every((a) => a.storage_key === `voice-drafts/${acc.id}/${a.n}-${a.sha256}.mp3` && existsSync(path.join(STORE, a.storage_key))) && audioRows[0].bytes === converted.length && !(await sql`select column_name from information_schema.columns where table_schema = 'studio' and table_name = 'voice_draft_audio' and data_type = 'bytea'`).length);
+check('A. the stored files are the converted audio, byte for byte', sha(new Uint8Array(readFileSync(path.join(STORE, audioRows[0].storage_key)))) === sha(converted) && sha(new Uint8Array(readFileSync(path.join(STORE, audioRows[1].storage_key)))) === sha(redoAudio));
+check('A. the store is the private one: the R2 code uses R2_PRIVATE_BUCKET only, and never a public address', (() => { const t = readFileSync(path.join(ROOT, 'src/lib/voice/store.ts'), 'utf8'); return /R2_PRIVATE_BUCKET/.test(t) && !/process\.env\.R2_BUCKET\b|R2_PUBLIC_URL|R2_IMAGES_PUBLIC_URL|media\.snowmoon|pictures\.snowmoon/.test(t); })());
 {
-  const dump = JSON.stringify(await sql`select * from studio.voice_drafts`) + (await sql`select encode(mp3, 'hex') h from studio.voice_draft_audio`).map((x) => x.h).join('');
+  const dump = JSON.stringify(await sql`select * from studio.voice_drafts`) + JSON.stringify(await sql`select * from studio.voice_draft_audio`) + storeFiles().map((f) => readFileSync(path.join(STORE, f)).toString('hex')).join('');
   const costs = JSON.stringify(await sql`select * from studio.voice_costs`);
   const takeHex = take.subarray(0, 32).toString('hex');
   const redoHex = redoTake.subarray(0, 32).toString('hex');
-  check('A. no raw take is anywhere in the drafts, their audio or the costs (bytes, hex or base64)', [dump, costs].every((s) => !s.includes(takeHex) && !s.includes(redoHex) && !s.includes(take.subarray(0, 30).toString('base64'))));
+  check('A. no raw take is anywhere in the drafts, the stored audio or the costs (bytes, hex or base64)', [dump, costs].every((s) => !s.includes(takeHex) && !s.includes(redoHex) && !s.includes(take.subarray(0, 30).toString('base64'))));
 }
 r = await accept.POST(as(GARANCE, { method: 'POST', body: acceptForm(converted, ticket, t1.check) }));
 check('A. another person can\'t accept someone\'s conversion', r.status === 400);
 
 // D. Drafts are their own person's.
+const { resetPurgeClock } = await import('../src/lib/voice/costs');
 const ctx = { params: Promise.resolve({ id: acc.id, n: '0' }) };
 r = await draftAudioRoute.GET(as(NATE), ctx);
 check('D. a draft\'s audio plays for its person', r.status === 200 && sha(new Uint8Array(await r.arrayBuffer())) === sha(converted));
@@ -257,6 +278,28 @@ check('D. ... and reads as missing for anyone else, even an admin', r.status ===
 const st = (await (await status.GET(as(NATE))).json()) as { drafts: { id: string }[] };
 const stG = (await (await status.GET(as(GARANCE))).json()) as { drafts: { id: string }[] };
 check('D. the status lists the draft for its person only', st.drafts.some((x) => x.id === acc.id) && !stG.drafts.some((x) => x.id === acc.id));
+
+// X. Removing a draft (Nate, 2026-11-20 morning).
+{
+  const before = storeFiles().length;
+  let r2 = await draftRoute.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: acc.id }) });
+  check('X. someone else can\'t remove a draft (404), and nothing is deleted', r2.status === 404 && storeFiles().length === before && (await sql`select count(*)::int n from studio.voice_draft_audio where draft_id = ${acc.id}`)[0].n === 2);
+  // A second draft, published by hand (the publish slice will set published_at), can't be removed.
+  r2 = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '2', seconds: '5' }) }));
+  check('X. (setup) a sentence conversion for a second draft', r2.status === 200);
+  const pubId = (await sql`insert into studio.voice_drafts (fid, kind, speech_id, preset_id, recipe, published_at) values (${NATE}, 'reading', ${speech.id}, 'ephelion-bright-coach', ${sql.json({ provider: 'ElevenLabs', model: 'm' })}, now()) returning id`)[0].id;
+  r2 = await draftRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: pubId }) });
+  check('X. a published draft can\'t be removed (404)', r2.status === 404 && (await sql`select count(*)::int n from studio.voice_drafts where id = ${pubId}`)[0].n === 1);
+  await sql`delete from studio.voice_drafts where id = ${pubId}`;
+  r2 = await draftRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: acc.id }) });
+  const left = storeFiles().filter((f) => f.startsWith(`voice-drafts/${acc.id}/`));
+  check('X. its person removes it: the rows and both audio files are gone', r2.status === 200 && left.length === 0 && (await sql`select count(*)::int n from studio.voice_drafts where id = ${acc.id}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_draft_audio where draft_id = ${acc.id}`)[0].n === 0);
+  r2 = await draftAudioRoute.GET(as(NATE), { params: Promise.resolve({ id: acc.id, n: '0' }) });
+  check('X. ... and its audio route reads as missing', r2.status === 404);
+  check('X. the day\'s cost totals stay (they name no one)', (await sql`select count(*)::int n from studio.voice_costs where kind = 'convert'`)[0].n > 0);
+  r2 = await draftRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: acc.id }) });
+  check('X. removing it again reads as missing', r2.status === 404);
+}
 
 // R. The ready-made reading.
 const readingBody = (extra: Record<string, unknown> = {}) => JSON.stringify({ speechId: speech.id, presetId: 'ephelion-cold-baritone', candidate: 1, ...extra });
@@ -273,9 +316,9 @@ check('R. anyone let in can play it', r.status === 200 && (await r.arrayBuffer()
 // $. Costs and caps.
 const rows = await sql`select kind, funded, verdict, calls, credits, estimated_credits, cost_usd::float8 usd from studio.voice_costs order by kind, verdict`;
 const by = (k: string, v = 'ok') => rows.filter((x) => x.kind === k && x.verdict === v);
-check('$. each call is counted: 2 conversions, 2 transcriptions, 1 reading (admins: funded admin)', by('convert')[0]?.calls === 2 && by('transcribe')[0]?.calls === 2 && by('reading')[0]?.calls === 1 && rows.every((x) => x.funded === 'admin'), JSON.stringify(rows));
+check('$. each call is counted: 3 conversions, 2 transcriptions, 1 reading, no failed ones (refusals count nothing; admins: funded admin)', by('convert')[0]?.calls === 3 && by('transcribe')[0]?.calls === 2 && !by('transcribe', 'failed').length && by('reading')[0]?.calls === 1 && rows.every((x) => x.funded === 'admin'), JSON.stringify(rows));
 check('$. the holds were all given back', rows.filter((x) => x.kind === 'reserved').every((x) => x.calls === 0 && x.estimated_credits === 0 && Math.abs(x.usd) < 1e-6));
-check('$. credits are the stub\'s own (header), estimated beside them', by('convert')[0].credits === 667 + 84 && by('convert')[0].estimated_credits > 0, JSON.stringify(by('convert')));
+check('$. credits are the stub\'s own (header), estimated beside them', by('convert')[0].credits === 667 + 84 + 34 && by('convert')[0].estimated_credits > 0, JSON.stringify(by('convert')));
 check('$. the cost table has no person, request or time of day', !rows.some((x) => 'fid' in x || 'request_id' in x || 'at' in x));
 // The per-person limit: 3 whole takes a day (two used now: the refused 'nope' never counted).
 const asks = (await sql`select count(*)::int n from studio.voice_asks where fid = ${NATE}`)[0].n;
@@ -303,6 +346,12 @@ const failText = await r.text();
 stub.setFail(false);
 check('$. a failed conversion answers plainly, without the provider\'s text', r.status === 502 && !/quotes the input/.test(failText) && /not kept/.test(failText));
 check('$. ... and is counted as failed, with its hold given back', (await sql`select calls from studio.voice_costs where kind = 'convert' and verdict = 'failed'`)[0]?.calls === 1 && (await sql`select coalesce(sum(calls),0)::int n from studio.voice_costs where kind = 'reserved'`)[0].n === 0);
+// The daily counts are kept for the day: older rows are purged (at most hourly), today's stay.
+await sql`insert into studio.voice_asks (fid, at) values (${NATE}, now() - interval '2 days'), (${GARANCE}, now() - interval '1 day')`;
+const todayAsks = (await sql`select count(*)::int n from studio.voice_asks where at >= ((now() at time zone 'utc')::date)`)[0].n;
+resetPurgeClock();
+await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
+check('$. voice_asks from before today are purged; today\'s stay', (await sql`select count(*)::int n from studio.voice_asks where at < ((now() at time zone 'utc')::date)`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_asks`)[0].n === todayAsks);
 check('$. the caps are placeholders in config, in credits and dollars', VOICE.caps.dailyCredits > 0 && VOICE.caps.dailyUsd > 0 && VOICE.caps.adminDailyCredits > 0 && VOICE.caps.perPersonConversions === 3 && VOICE.caps.overEstimate === 1.2);
 
 // M. The allowlist.
@@ -317,6 +366,7 @@ const proof = await voiceProof(ROOT);
 check('P. P1h: the real take flow and convert route keep no recording', proof.real.length === 0, proof.real.join('; '));
 check(`P. P1h: all ${VOICE_PLANTS.length} planted violations are caught`, proof.missed.length === 0, proof.missed.join('; '));
 
+rmSync(STORE, { recursive: true, force: true });
 await sql.end();
 await stub.close();
 await pgServer.stop();
