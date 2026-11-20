@@ -118,7 +118,9 @@ function ChangeSheet({ jobId, onClose }: { chapter: number; jobId: string; onClo
 
 /** The chapter's blocks that can bound a passage, read from the page as served (their ids and paragraph labels). */
 function pageBlocks(): { idx: number; label: number | null }[] {
-  return [...document.querySelectorAll<HTMLElement>('article.chapter [id^="c"][data-label]')]
+  // Every block, in the page's order; those without a paragraph number have label null (2026-11-20: a passage set from a
+  // selection or the player may end on one).
+  return [...document.querySelectorAll<HTMLElement>('article.chapter .block[id]')]
     .map((el) => ({ idx: Number(/-b(\d+)$/.exec(el.id)?.[1]), label: el.dataset.label ? Number(el.dataset.label) : null }))
     .filter((b) => Number.isInteger(b.idx));
 }
@@ -157,7 +159,11 @@ function AddSheet({ chapter, after, label: given, start: from = after, end: to =
   // The chooser lists the paragraphs (blocks with a number). A passage set from elsewhere may start or end on a block
   // without one (a screen, a figure): it is kept, listed by its block number, and the sheet says so.
   const unlabelled = blocks.length ? [...new Set([from, to])].filter((i) => !blocks.some((b) => b.idx === i && b.label !== null)) : [];
-  const options = [...blocks.filter((b) => b.label !== null), ...unlabelled.map((idx) => ({ idx, label: null }))].sort((a, b) => a.idx - b.idx);
+  // In the page's order (no sorting here: P5b); a block not on the page at all is listed last.
+  const options = [
+    ...blocks.filter((b) => b.label !== null || unlabelled.includes(b.idx)),
+    ...unlabelled.filter((i) => !blocks.some((b) => b.idx === i)).map((idx) => ({ idx, label: null })),
+  ];
   const label = given ?? blocks.find((b) => b.idx === after)?.label ?? null;
   const [note, setNote] = useState('');
   const [chosen, setChosen] = useState<string[]>([]);
