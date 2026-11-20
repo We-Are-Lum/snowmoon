@@ -182,12 +182,13 @@ no request id.
 
 ## What Nate needs to do (one at a time)
 
-1. Say how to reach the microphone test from a phone (merge the test-page PR, or a preview link), then run it on the
-   six setups and send the six lines.
+1. Give the merge word for PR #195 (the microphone test only). Then test the iPhone (Farcaster app, Safari) and the
+   desktop (Safari, Chrome); Android goes to Garance or Luis. Send the result lines.
 2. Listen to the twelve previews and pick one per brief, or none (link under B1).
-3. In ElevenLabs: Terms and Privacy → Data use → turn off "Improve the models for everyone" (or tell me to keep the
-   consent saying it may be trained on).
-4. Put the key in `.env.local` and in Vercel as `ELEVENLABS_API_KEY` (never in chat).
+3. In ElevenLabs: Terms and Privacy → Data use → turn off "Improve the models for everyone", and say it's done. The
+   bracketed line stays until then.
+4. Put the key in `.env.local` and in Vercel as `ELEVENLABS_API_KEY` (never in chat). **Missing from `.env.local` on
+   2026-11-20.**
 5. Reread: the rule, own-voice-v2, P1h/P1i, the Privacy and Terms lines.
 6. Speech length and plan size, then the daily pool in credits (B7).
 
