@@ -14,8 +14,8 @@ Review page for branch `ephelion-voice`, 2026-11-19, from Nate's brief of the sa
 | A3 Consent own-voice-v2, P1h, P1i | Drafted: `config/consent-own-voice.json` (`draft`; `current` stays v1), `docs/principles.md`. |
 | A4 Privacy and Terms | Drafted: `docs/legal/ephelion-voice-draft.md`. Not in `src/lib/legal.ts`. |
 | B1 Voice presets | Four briefs, three previews each, made 2026-11-20 (2,878 credits). **Nate to listen and pick.** |
-| B2–B6 Build | Not started: waiting for the go/no-go. |
-| B7 Costs | Migration drafted: `supabase/migrations/NEXT_voice_costs.sql` (tested in PGlite, twice, plus a planted fault). Cap proposed below. |
+| B2–B7 Build | Built overnight 2026-11-20 against a stub ElevenLabs, switch off (see "Overnight build"). `npm run test:voice`: 89 checks pass. |
+| Migration | `supabase/migrations/NEXT_ephelion_voice.sql` (was NEXT_voice_costs.sql): costs, asks, drafts, draft audio. Tested in PGlite, twice, plus planted faults. **Not applied; Nate applies.** |
 
 ## Go/no-go: the microphone
 
@@ -180,6 +180,89 @@ counted apart (`funded = 'admin'`) under their own pool. Every call adds its wor
 speech's length at 1,000 a minute). `studio.voice_costs` records credits and dollars as daily totals, with no person and
 no request id.
 
+## Overnight build (2026-11-20, unattended)
+
+Built on `ephelion-voice`, against a stub ElevenLabs (`scripts/lib/elevenlabs-stub.ts`). No ElevenLabs call was made and
+nothing was spent: the key isn't there, and in the local tests a real call is refused by the code.
+
+**Where it is:** `/storyboard/record`. It is the site's usual "not found" for everyone, admins included, until
+`VOICE.adminTrial` (src/lib/config.ts) is turned on in a reviewed commit; `VOICE.open` (everyone) waits for the reread
+Terms and Privacy. Locally, `VOICE_TEST_ON=1` turns the admin trial on, never on Vercel.
+
+**What it does:**
+1. **Consent:** the own-voice-v2 screen (DRAFT wording, with Nate's fixes), agreed once per wording; then a tick for each
+   recording ("Send this recording to ElevenLabs, once…"), unticked by default.
+2. **Pick a voice:** the twelve previews stand in, grouped by brief, each playing the letter's opening from our media
+   host.
+3. **Record:** the whole speech (c13-b64, title to sign-off), the words scrolling at a pace you set (90–190 words a
+   minute), a level meter, up to 5 minutes. The recording is a Blob in the tab; it can be played back or deleted there.
+4. **Convert, then check:** sent once (the tab drops it as it is sent), converted with speech-to-speech, the history
+   item deleted at ElevenLabs, then the converted audio is transcribed with word timings and checked word for word.
+   Mismatched sentences show what wasn't heard and what was heard instead.
+5. **Redo one sentence:** record just that sentence, convert, check it alone; the player joins it into the take.
+6. **Accept:** keeps a private draft (the converted take plus any redone sentences, with where each goes) and its
+   recipe: provider, closed model, model, settings, output format, the preset and its Voice Design recipe, the sha256 of
+   each raw take and each converted file, whether each history item was deleted, the word check, the consent's
+   sha256. **Discard** is the default: leaving the page before Accept keeps nothing (the browser asks first).
+7. **Ready-made reading:** text-to-speech of the speech's written words in the chosen preset, made once per speech and
+   preset by an admin, then playable by anyone let in.
+8. **Farcaster on the web:** the record step says "Recording doesn't work in Farcaster on the web. Open this page in
+   the Farcaster app on your phone, or in a browser at snowmoon.party/storyboard/record." (as in #195).
+9. **Costs:** every call reserves its worst case, then settles, in `studio.voice_costs` (daily totals, no person), in
+   credits and dollars; the caps are placeholders in `VOICE.caps`. Nate's standing rule is enforced by the code too:
+   once a day's measured credits are over 1.2× their estimates, every call is refused until the next UTC day.
+10. **Models:** `config/models.json` lists speech-to-speech (`eleven_multilingual_sts_v2`), transcription
+    (`scribe_v1`), text-to-speech (`eleven_multilingual_v2`) and Voice Design (`eleven_ttv_v3`): closed, by ElevenLabs,
+    each with what ElevenLabs keeps. P3b now counts them as in use.
+
+**Tests:** `npm run test:voice` (89 checks: the switch, the speech and word check, the consent, convert, transcribe,
+redo, accept, forged and tampered files refused, no raw take anywhere in the database, drafts private to their person,
+the reading, costs, caps, the per-person limit, the 20% stop, a failed call, the allowlist, P1h).
+`npm run check:voice-proof`: P1h on its own: the real flow passes and all 8 planted violations are caught, each by the
+run as well as statically (a log of the take, a storage write, a transcription of the take, a skipped history delete,
+the take not zeroed, transcription without the converted-audio check, the take in the signed record, the take in a cost
+entry). `check:principles --only=P1`: P1h and P1i pass, and their planted faults fail (P1c, P1e, P1g need a database;
+P1d needs a running server).
+
+### Choices made overnight, and why
+
+| # | Choice | Why |
+|---|---|---|
+| 1 | The page is `/storyboard/record`, not `/record` | It is the storyboard challenge's first step; `/record` was the old Modal plan. |
+| 2 | Two switches, both off: `adminTrial` and `open` | "Off in production, admins only until Nate opens it": the admin trial is its own reviewed commit, so not even admins reach it before Nate's word; `open` waits for the legal texts. |
+| 3 | Nothing stored before Accept: each step hands the tab a signed record (HMAC) | Matches "discard is the default if they leave", and Accept can't be handed a recipe we didn't make. It uses `VOICE_TICKET_SECRET`, or `IMAGES_TICKET_SECRET` under its own label, so Nate needn't add another key. |
+| 4 | Accepted audio is stored in the database (private), like the admins' chapter-picture drafts | No new bucket or public path; publishing is a later slice. |
+| 5 | A redone sentence is kept as its own file, with the time range it replaces; the browser joins them to play | No audio editing on the server (no encoder on Vercel); the recipe stays exact: each take's sha256, each converted file's. |
+| 6 | Accept is allowed with sentences still not matching; they are listed in the recipe (`check.unmatched`) and the page warns | A transcription can mishear a correct reading; the person judges, and the recipe says so. Nate may want Accept refused instead: one line. |
+| 7 | The words scroll at a pace the performer sets, not by listening | Following the voice live would mean sending the take somewhere while recording. |
+| 8 | Consent: the screen once per wording (`contributor_consents`, kind `voice_recording`); the per-recording tick is kept only in an accepted draft's recipe | "Only if they agree for that recording" without storing anything about a discarded attempt. |
+| 9 | The speech is the whole block: title, letter and sign-off | Word for word means the whole text; the team's speeches replace it. |
+| 10 | The reading is made by an admin, once per speech and preset | It is project content and costs credits; a remake needs `again`. |
+| 11 | Credits measured from ElevenLabs' header when sent, else from the account's usage before and after (that read is free) | The 20% rule needs measured numbers; the header's name is unconfirmed until a real call. |
+| 12 | A take's length for the estimate is never less than its size could hold at 320 kb/s | So a short claim can't slip past the cap. |
+| 13 | The twelve previews play from the review page's R2 copies | No new public files tonight. When Nate has listened and the review page is deleted, the pick list goes quiet until his picks get their own files. |
+| 14 | With the real API, a preview that isn't a saved voice can't be used | ElevenLabs converts into saved voices only; the stub takes the preview's id. |
+| 15 | Transcription model `scribe_v1` | The price list names v2/v3; the id is confirmed at the first real call (one line in config). |
+| 16 | Funding: admins' calls count as `admin`, apart from `free` | As the chapter pictures do. |
+
+### Screenshots
+
+See "Screenshots" below (phone 390 px and desktop 1280 px, light and dark), made against a local build with the
+stub, a throwaway local database and Chromium's fake microphone (a tone; the stub says one word of sentence 4 wrong,
+so the check and the redo show).
+
+### What's left
+
+- **First real call** (after the key, the reread and Nate's word on spending): confirm the transcription model id, that
+  speech-to-speech takes the browsers' WebM/Opus and MP4 audio, the `history-item-id` and credit headers, and
+  measured credits against the estimates (the 20% rule).
+- **Saving the picked voices** (after Nate picks): their `voiceId`s into `config/voice-presets.json`, and the picked
+  previews' own files on the media host.
+- **Deleting an accepted draft**: not possible yet (studio_writer can't delete, by design); a "remove" that hides it is
+  the next small step if wanted.
+- **P1h's text in docs/principles.md** matches the new checks; both wait for Nate's reread.
+- Publishing a draft, the timeline and shots: later slices.
+
 ## What Nate needs to do (one at a time)
 
 1. Give the merge word for PR #195 (the microphone test only). Then test the iPhone (Farcaster app, Safari) and the
@@ -190,23 +273,26 @@ no request id.
 4. Put the key in `.env.local` and in Vercel as `ELEVENLABS_API_KEY` (never in chat). **Missing from `.env.local` on
    2026-11-20.**
 5. Reread: the rule, own-voice-v2, P1h/P1i, the Privacy and Terms lines.
-6. Speech length and plan size, then the daily pool in credits (B7).
+6. Speech length and plan size, then the caps in credits (B7; the build has placeholders).
+7. Apply `NEXT_ephelion_voice.sql` when the branch is ready to merge (the coordinator tests it first; it takes its number
+   at merge).
+8. Choices 6 (Accept with unmatched sentences) and 3 (the ticket secret): say if either should change.
 
 ## Principles
 
-- **P1 (recipes; the raw voice takes exception lives here):** touched. Pass so far: the drafted rule keeps the raw take
-  out of everything published and kept; the recipe names preset, model, settings and the take's sha256. Tension, raised:
-  P1h moves from a proof on our own code (Modal) to a proof on our route plus ElevenLabs' word about its side, which we
-  can't check; and ElevenLabs trains on recordings by default unless Nate turns it off. Both are stated in the drafts.
-- **P2 (AI declared; book text unaltered):** touched. The converted voice and the ready-made readings are AI-made and
-  will be labelled so; the speeches are the team's (c13-b64 stands in until they arrive), each take checked word for
-  word against its speech; the presets and performing written texts aloud are this edition's inventions, marked so in `config/voice-presets.json`.
-- **P3 (allowlist; closed models reported):** concern. ElevenLabs' models are closed. Nate chose them (2026-11-19).
-  Before the build, `config/models.json` gets each model used (speech-to-speech, Scribe, text-to-speech, Voice Design),
-  marked closed, by ElevenLabs; every recipe and label names it ("closed model"), and the switch opens only in the
-  release whose Terms/Privacy name ElevenLabs (owner, 2026-10-18).
-- **P4 (nothing published without a person's action):** pass by design: Accept keeps a private draft; publishing is a
-  later step, the person's.
-- **P6 (no third-party requests from pages):** to keep: every ElevenLabs call is from our server; preset previews and
-  readings are served from our own media host, never from ElevenLabs' addresses.
-- `check:principles` not run against a target: nothing live changed on this branch. New tension: none beyond the above.
+- **P1 (recipes; raw voice takes):** pass on the build, with one concern raised. Every accepted draft's recipe names the
+  provider, closed model, model, settings, preset (with its Voice Design recipe), and each raw take's sha256, never the
+  take. P1h (DRAFT) passes on the real code, and its 8 planted violations are each caught; P1i passes. Concern,
+  unchanged: the proof covers our server, not what ElevenLabs keeps; training stays on until Nate turns it off.
+- **P2 (AI declared; text unaltered):** pass. Every voice on the page is labelled AI, with the model and "a closed model
+  by ElevenLabs"; the speech is c13-b64 word for word (test W), marked Book, Stand-in and Invented (performing it).
+- **P3 (allowlist; closed reported):** pass, reported. The four ElevenLabs models are on `config/models.json`, closed, by
+  ElevenLabs, with what each keeps; P3b counts them as in use.
+- **P4 (nothing published without a person's action):** pass. Accept keeps a private draft; nothing publishes.
+- **P6 (no third-party requests from pages):** pass by design. The page calls only our API and our media host; every
+  ElevenLabs call is from our server. (check:ui's request count on this page isn't run: the page is a 404 on any real
+  server while the switch is off.)
+- **P5, P7, P8:** not touched.
+- New tension: the stand-in previews live on the review page's R2 copies; deleting that page (after Nate listens) silences
+  the pick list until his picks get their own files.
+
