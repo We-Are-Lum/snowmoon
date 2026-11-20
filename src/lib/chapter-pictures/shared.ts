@@ -76,7 +76,12 @@ export interface PictureRecipe {
   prompt: string;
   /** The prompt's parts, as they were joined (every one is in `prompt`). */
   parts: { redo: string; scene: string; note: string; look: Look | null; suffix: string };
-  reference: { what: string; url: string; sha256: string };
+  /** The one picture a redo starts from (the picture shown before); null for a picture an admin added. */
+  reference: { what: string; url: string; sha256: string } | null;
+  /** An added picture (owner, 2026-11-19): where it sits and the passage it shows. */
+  added?: { after: number; start: number; end: number };
+  /** The characters' sheet pictures sent with an added picture, in the order sent. */
+  references?: { sheet: string; name: string; versionId: string; url: string; sha256: string }[];
   settings: Record<string, unknown>;
   seed: number | null;
   requestId: string | null;
@@ -109,6 +114,34 @@ export function redoPrompt(jobPrompt: string, note: string, look: Look | null, s
   return { prompt: [`${REDO_LINE} ${scene}`, parts.note, look?.text.trim() || null, suffix].filter(Boolean).join('\n\n'), parts };
 }
 
+/**
+ * A picture an admin added to a chapter (owner, 2026-11-19; NEXT_chapter_picture_additions): an id of its own in the
+ * job ids' pattern, c<chapter>-b<block>-added-<8 hex>, so 0042's versions and decisions hold its pictures as they hold
+ * the committed ones'. It sits after block `after` and shows the passage start..end.
+ */
+export interface Addition {
+  jobId: string;
+  chapter: number;
+  after: number;
+  start: number;
+  end: number;
+  byFid: number;
+  at: string;
+}
+export const ADDED_ID = /^c(\d{1,2})-b(\d{1,4})-added-[0-9a-f]{8}$/;
+export const isAddedId = (id: string) => ADDED_ID.test(id);
+export const addedJobId = (chapter: number, after: number, hex8: string) => `c${chapter}-b${String(after).padStart(3, '0')}-added-${hex8}`;
+
+/** The line naming the sheet pictures sent with an added picture. DRAFT wording (coding agent, 2026-11-19). */
+export const sheetsLine = (names: string[]) =>
+  names.length ? `The reference ${names.length === 1 ? 'picture is the character sheet' : 'pictures are the character sheets'} of ${names.join(', ')}, in that order: draw ${names.length === 1 ? 'them' : 'each'} as the sheet shows.` : '';
+
+/** The exact prompt of an added picture: the admin's note (what it shows), the sheets line, the look, the no-words line. */
+export function addPrompt(note: string, sheetNames: string[], look: Look | null, suffix: string): { prompt: string; parts: PictureRecipe['parts'] } {
+  const parts = { redo: '', scene: sheetsLine(sheetNames), note: note.trim(), look, suffix };
+  return { prompt: [parts.note, parts.scene || null, look?.text.trim() || null, suffix].filter(Boolean).join('\n\n'), parts };
+}
+
 /** The look as a recipe or a page says it: the style's name, or "a written line". */
 export const lookName = (l: Look | null) => (!l ? 'none' : l.kind === 'style' ? l.label : 'a line written by an admin');
 
@@ -125,6 +158,8 @@ export const localDay = (iso: string, timeZone?: string) => new Date(iso).toLoca
 
 /** The caption's words under a replaced picture, before its date ("Redone by @garance"). DRAFT wording. */
 export const replacedBy = (r: Pick<ShownReplacement, 'byFid' | 'byHandle'>) => `Redone by ${adminName(r.byFid, r.byHandle)}`;
+/** The same for a picture an admin added ("Added by @garance"). DRAFT wording (2026-11-19). */
+export const addedBy = (r: Pick<ShownReplacement, 'byFid' | 'byHandle'>) => `Added by ${adminName(r.byFid, r.byHandle)}`;
 
 /** The model as a caption names it: "GPT Image 2.5 Sunburst, a closed model by OpenAI". */
 export const modelLine = (name: string, maker: string, open: boolean) => `${name}, ${open ? 'an open-weight model' : 'a closed model'} by ${maker}`;

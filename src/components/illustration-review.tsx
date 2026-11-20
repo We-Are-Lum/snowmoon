@@ -10,7 +10,9 @@ import { GROUP_NAMES, MODEL_NAMES, noteCredit, reviewGroup, worstFirst } from '~
 import { AiLabel } from './recipe-sheet';
 import { PublishedTextField } from './publish-words';
 import { SignInButton } from './sign-in';
-import { CapLine, LookPanel, PicturePanel, type PictureItem, type PicturesState } from './chapter-pictures';
+import { CapLine, DraftImage, LookPanel, PicturePanel, errorOf, post, type PictureItem, type PicturesState } from './chapter-pictures';
+import type { WaitingDraft } from '~/lib/chapter-pictures/waiting';
+import { localDay } from '~/lib/chapter-pictures/shared';
 
 /**
  * The admins' review of the seeded images (/you/illustrations; owner, 2026-10-23: "Does each image show its scene?"; admins since
@@ -72,6 +74,72 @@ interface Data {
   canSave: boolean;
   /** The chapter pictures' state (owner, 2026-11-18); null without a database. */
   pictures: PicturesState | null;
+  /** Pictures admins added while reading (owner, 2026-11-19), and every draft not kept yet. */
+  added?: PictureItem[];
+  waiting?: WaitingDraft[];
+}
+
+/** DRAFT wording (coding agent, 2026-11-19) for the drafts waiting and the added pictures. */
+const WW = {
+  waitingTitle: (n: number) => `Drafts waiting (${n})`,
+  waitingNone: 'No drafts waiting.',
+  waitingLede: 'Every draft no admin has kept yet, newest first, with where it would go. Nothing here is public.',
+  where: (d: WaitingDraft) =>
+    d.where.kind === 'replace' ? `Would replace the picture at chapter ${d.chapter}, block ${d.where.block}` : d.where.kind === 'added' ? `A new picture for chapter ${d.chapter}, after block ${d.where.after} (it shows blocks ${d.where.start}–${d.where.end})` : `A new picture for chapter ${d.chapter}`,
+  meta: (d: WaitingDraft) => `${d.model} · by FID ${d.madeByFid} · ${localDay(d.madeAt)}`,
+  open: 'Open in the chapter',
+  keep: 'Keep: show it in the chapter now',
+  addedTitle: (n: number) => `Pictures added while reading (${n})`,
+};
+
+function Waiting({ waiting, reload }: { waiting: WaitingDraft[]; reload: () => Promise<void> }) {
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const keep = async (d: WaitingDraft) => {
+    setBusy(true);
+    const r = await post('/api/you/illustrations/show', { jobId: d.jobId, versionId: d.versionId });
+    setBusy(false);
+    if (!r.ok) return setError(errorOf(r.json));
+    await reload();
+  };
+  return (
+    <section className="cp-waiting" aria-labelledby="cp-waiting-title">
+      <h2 id="cp-waiting-title" className="cp-look-title">
+        {WW.waitingTitle(waiting.length)}
+      </h2>
+      <p className="you-note">{waiting.length ? WW.waitingLede : WW.waitingNone}</p>
+      {waiting.length > 0 && (
+        <ol className="cp-versions">
+          {waiting.map((d) => (
+            <li key={d.versionId} className="cp-version" data-waiting={d.versionId} data-job={d.jobId}>
+              <figure className="you-fig">
+                <DraftImage id={d.versionId} alt={`AI-generated image: a draft for chapter ${d.chapter}`} />
+                <figcaption className="you-meta">
+                  {WW.where(d)}
+                  <br />
+                  {WW.meta(d)}
+                  <br />“{d.note}”
+                </figcaption>
+              </figure>
+              <div className="you-actions">
+                <Link className="ic-secondary" href={d.href}>
+                  {WW.open}
+                </Link>
+                <button type="button" className="ic-secondary" disabled={busy} onClick={() => void keep(d)}>
+                  {WW.keep}
+                </button>
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+      {error && (
+        <p className="you-note" role="alert">
+          {error}
+        </p>
+      )}
+    </section>
+  );
 }
 
 function Frame({ children }: { children: React.ReactNode }) {
@@ -128,7 +196,22 @@ export function IllustrationReview() {
       {data.pictures?.ready && (
         <>
           <CapLine cap={data.pictures.cap} />
+          <Waiting waiting={data.waiting ?? []} reload={load} />
           <LookPanel state={data.pictures} reload={load} />
+          {(data.added ?? []).length > 0 && (
+            <section className="cp-added" aria-labelledby="cp-added-title">
+              <h2 id="cp-added-title" className="cp-look-title">
+                {WW.addedTitle(data.added!.length)}
+              </h2>
+              <ol className="illus-list">
+                {data.added!.map((a) => (
+                  <li key={a.id} className="illus-item" data-job={a.id}>
+                    <PicturePanel item={a} state={data.pictures!} reload={load} />
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
         </>
       )}
       <ol className="illus-list">

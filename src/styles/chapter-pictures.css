@@ -1,0 +1,34 @@
+/* The admins' redo of the edition's chapter pictures (owner, 2026-11-18; src/components/chapter-pictures.tsx). */
+.cp-look { display: flex; flex-direction: column; gap: 8px; padding: 16px 0 20px; margin-bottom: 20px; border-bottom: 1px solid var(--rule); }
+.cp-look-title { margin: 0; font-weight: 400; font-size: 18px; color: var(--ink); }
+.cp-look-form { display: flex; flex-direction: column; gap: 10px; max-width: 640px; }
+.cp-field { display: flex; flex-direction: column; gap: 4px; }
+.cp-field select, .cp-choice select { font: inherit; padding: 6px 8px; max-width: 100%; color: var(--ink); background: var(--paper, transparent); border: 1px solid var(--rule); border-radius: 2px; }
+.cp-choice { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.cp-choice label { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; overflow-wrap: anywhere; }
+.cp-panel { display: flex; flex-direction: column; gap: 10px; padding: 12px 0 0; border-top: 1px dashed var(--rule); min-width: 0; }
+.cp-redo { display: flex; flex-direction: column; gap: 10px; }
+.cp-model-line { flex-basis: 100%; padding-left: 22px; }
+.cp-versions { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.cp-version { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.cp-version img { width: 100%; height: auto; display: block; }
+.cp-version[data-state='shown'] figure { outline: 2px solid var(--ink); outline-offset: 2px; }
+.cp-thumb-wait { aspect-ratio: 16 / 9; background: var(--rule); }
+.cp-state { margin: 0; }
+.cp-cap.is-reached { font-weight: 600; }
+.cp-history ul { margin: 6px 0 0; padding-left: 18px; }
+.seed-replaced { color: var(--muted); }
+
+/* The reader's sheet (owner, 2026-11-19; src/components/reader-picture-admin.tsx): full screen on a phone, beside the
+   picture (a panel on the right) on a wide screen, so the chapter stays in view. Admins only. */
+.rpa-add { margin: 4px 0 12px; font-size: var(--text-label, 13px); }
+.rpa-sheet { position: fixed; z-index: 60; inset: 0; background: var(--paper, #f4f2ed); color: var(--ink); display: flex; flex-direction: column; overflow: hidden; }
+@media (min-width: 1024px) { .rpa-sheet { inset: 0 0 0 auto; width: min(480px, 42vw); border-left: 1px solid var(--rule); box-shadow: -8px 0 24px rgba(0, 0, 0, 0.12); } }
+.rpa-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--rule); }
+.rpa-title { margin: 0; font-family: var(--label); font-size: var(--text-label, 13px); letter-spacing: var(--ls-label); text-transform: uppercase; }
+.rpa-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.rpa-body .cp-versions { grid-template-columns: minmax(0, 1fr); }
+.rpa-passage { display: flex; gap: 12px; flex-wrap: wrap; }
+.rpa-draft img { width: 100%; height: auto; display: block; }
+.cp-sheet-thumb { width: 36px; height: 48px; object-fit: cover; vertical-align: middle; border: 1px solid var(--rule); }
+.cp-where { margin: 0; }
