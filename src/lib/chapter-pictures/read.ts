@@ -1,5 +1,6 @@
 import 'server-only';
 import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 import type postgres from 'postgres';
 import { db } from '../db';
 import type { Look, PictureDecision, PictureRecipe, PictureVersion, ShownReplacement } from './shared';
@@ -80,7 +81,48 @@ export const shownReplacements = cache(async (): Promise<Map<string, ShownReplac
 /** After a Keep or a Restore: a missing-table note (before the migration) is forgotten, so the next render reads again. */
 export const forgetReplacements = () => {
   missingUntil = 0;
+  failedUntil = 0;
 };
+
+/**
+ * The same answer for every other place a chapter picture shows (owner, 2026-11-18/19: a kept redo reaches the
+ * introduction's cards, quote cards and their share pages, References and the design sheets, and the pick switch).
+ * Those are read on almost every request (the introduction is in every page's shell), so at run time the answer is
+ * kept in Next's data cache under one tag, shared by every server instance, until a Keep or a Restore revalidates the
+ * tag (src/app/api/you/illustrations/show/route.ts). There is no time limit on it: nothing changes the answer except
+ * those two. A failed read is never kept: it throws inside the cached function, the page shows the committed files,
+ * and the database isn't asked again for 30 seconds on this instance. During a build it is the chapter pages' own
+ * read (once per build worker). Outside Next (the tests) it is read directly.
+ */
+export const PICTURES_TAG = 'chapter-pictures';
+let failedUntil = 0;
+async function readOrThrow(): Promise<[string, ShownReplacement][]> {
+  const sql = db();
+  if (!sql) return [];
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const slow = new Promise<never>((_, no) => (timer = setTimeout(() => no(new Error('chapter pictures: the read took over 5 s')), 5000)));
+  try {
+    return [...(await Promise.race([readReplacements(sql), slow]))];
+  } catch (e) {
+    if (missing(e)) return [];
+    throw e;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+const keptRead = unstable_cache(readOrThrow, ['chapter-pictures-shown-v1'], { tags: [PICTURES_TAG] });
+
+export const replacementsEverywhere = cache(async (): Promise<Map<string, ShownReplacement>> => {
+  if (BUILDING) return shownReplacements();
+  if (Date.now() < failedUntil) return new Map();
+  try {
+    return new Map(await keptRead().catch((e) => (/incrementalCache missing/.test(String((e as Error)?.message ?? e)) ? readOrThrow() : Promise.reject(e))));
+  } catch (e) {
+    failedUntil = Date.now() + 30_000;
+    console.error('chapter pictures: not read', (e as Error).message);
+    return new Map();
+  }
+});
 
 type VersionRow = {
   id: string; job_id: string; chapter: number; made_by_fid: string; made_at: Date; model: string; maker: string; open_weights: boolean;
