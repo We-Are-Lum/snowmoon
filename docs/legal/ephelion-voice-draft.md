@@ -6,7 +6,7 @@ voice pages on for anyone beyond admins (owner, 2026-10-18: legal texts describe
 these lines stay in this file. The facts behind each line, with links: `docs/proposals/ephelion-voice.md`.
 
 Square brackets mark a sentence that is true only after something Nate does (turning off ElevenLabs' training toggle on
-the account). Drop it if he doesn't.
+the account). It stays until he says it's done (Nate, 2026-11-20).
 
 ## Privacy
 
