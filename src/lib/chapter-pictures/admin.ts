@@ -54,7 +54,7 @@ export async function saveDecision(sql: Sql, fid: number, d: { jobId: string; ch
   await sql`insert into studio.chapter_picture_decisions ${sql({ job_id: d.jobId, chapter: d.chapter, version_id: d.versionId, action: d.action, public_url: d.publicUrl, by_fid: fid, by_handle: d.byHandle })}`;
 }
 
-/** Where an added picture sits (owner, 2026-11-19; NEXT_chapter_picture_additions): written once, at its first draft. */
+/** Where an added picture sits (owner, 2026-11-19; 0043_chapter_picture_additions): written once, at its first draft. */
 export async function saveAddition(sql: Sql, fid: number, a: { jobId: string; chapter: number; after: number; start: number; end: number }) {
   admin(fid);
   await sql`insert into studio.chapter_picture_additions ${sql({ job_id: a.jobId, chapter: a.chapter, after_idx: a.after, start_idx: a.start, end_idx: a.end, by_fid: fid })}`;

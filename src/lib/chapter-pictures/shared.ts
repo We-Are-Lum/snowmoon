@@ -115,7 +115,7 @@ export function redoPrompt(jobPrompt: string, note: string, look: Look | null, s
 }
 
 /**
- * A picture an admin added to a chapter (owner, 2026-11-19; NEXT_chapter_picture_additions): an id of its own in the
+ * A picture an admin added to a chapter (owner, 2026-11-19; 0043_chapter_picture_additions): an id of its own in the
  * job ids' pattern, c<chapter>-b<block>-added-<8 hex>, so 0042's versions and decisions hold its pictures as they hold
  * the committed ones'. It sits after block `after` and shows the passage start..end.
  */

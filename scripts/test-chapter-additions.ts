@@ -1,7 +1,7 @@
 /**
  * Pictures an admin adds while reading (owner, 2026-11-19; branch chapter-pictures-in-reader). One check per point:
  *  A. admins only: the new routes answer 401 signed out and hold the 404 gate; the writer refuses a non-admin;
- *  B. before NEXT_chapter_picture_additions, Add answers that it isn't ready and writes nothing;
+ *  B. before 0043_chapter_picture_additions, Add answers that it isn't ready and writes nothing;
  *  N. a new picture: the passage checked (blocks of this chapter, in order), the note needed, the model offered, its
  *     notice and 18+, only characters the passage names with a sheet go along, as references in the order chosen;
  *     GPT Image 2.5 Sunburst is the admins' default where OpenAI serves, FLUX elsewhere (P3, DRAFT);
@@ -16,7 +16,7 @@
  *
  *   npm run test:chapter-additions
  *
- * In-memory Postgres (PGlite, every migration, NEXT_chapter_picture_additions included), through postgres.js as
+ * In-memory Postgres (PGlite, every migration, 0043_chapter_picture_additions included), through postgres.js as
  * studio_writer. No network, no model, no bucket: every such call is a stand-in.
  */
 import path from 'node:path';
@@ -37,7 +37,7 @@ async function database(withAdditions: boolean) {
   const pg = new PGlite();
   await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
   for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) {
-    if (!withAdditions && f === 'NEXT_chapter_picture_additions.sql') continue;
+    if (!withAdditions && f === '0043_chapter_picture_additions.sql') continue;
     await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
   }
   return pg;

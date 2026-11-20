@@ -76,7 +76,7 @@ export interface PicturesState {
   cap: { spentUsd: number; capUsd: number; resetAt: string };
   /** The model the row starts on: GPT Image 2.5 Sunburst where OpenAI serves (owner, 2026-11-18; P3 DRAFT pending his reread). */
   defaultModel?: string;
-  /** Whether pictures can be added (NEXT_chapter_picture_additions applied). */
+  /** Whether pictures can be added (0043_chapter_picture_additions applied). */
   adding?: boolean;
 }
 export interface PictureItem {
