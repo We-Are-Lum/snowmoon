@@ -8,12 +8,12 @@ Review page for branch `ephelion-voice`, 2026-11-19, from Nate's brief of the sa
 
 | Step | State |
 |---|---|
-| Go/no-go: microphone test page | Built: `/admin/mic-test` (admins only; records into the tab, sends nothing). **Needs Nate's phone**, see below. |
+| Go/no-go: microphone test page | PR #195 (only the test page). **Waiting for Nate's merge word**, then his phone. |
 | A1 ElevenLabs facts | Done, below, with links (read 2026-11-19). |
 | A2 The rule | Drafted in `docs/principles.md` ("Recorded exception: raw voice takes"). |
 | A3 Consent own-voice-v2, P1h, P1i | Drafted: `config/consent-own-voice.json` (`draft`; `current` stays v1), `docs/principles.md`. |
 | A4 Privacy and Terms | Drafted: `docs/legal/ephelion-voice-draft.md`. Not in `src/lib/legal.ts`. |
-| B1 Voice presets | Four briefs written (`config/voice-presets.json`). **No voice made: waiting for Nate's word on the cost.** |
+| B1 Voice presets | Four briefs, three previews each, made 2026-11-20 (2,878 credits). **Nate to listen and pick.** |
 | B2–B6 Build | Not started: waiting for the go/no-go. |
 | B7 Costs | Migration drafted: `supabase/migrations/NEXT_voice_costs.sql` (tested in PGlite, twice, plus a planted fault). Cap proposed below. |
 
@@ -35,10 +35,11 @@ every real device. That needs Nate (or Garance), on:
 1. Farcaster app on iPhone, 2. Farcaster app on Android, 3. Safari on iPhone, 4. Chrome on Android, 5. Safari on Mac,
 6. Chrome on desktop.
 
-Each run ends in one line to screenshot: `PASS`, `RECORDED BUT SILENT` or `FAIL`, with where, the length and the format.
+On Farcaster's web client the page says plainly that recording doesn't work there, and to open it in the Farcaster
+phone app or a browser. Each run ends in one line to screenshot: `PASS`, `RECORDED BUT SILENT` or `FAIL`, with where, the length and the format.
 
 The page is on the branch only. To reach it from a phone, one of:
-- **(Recommended)** merge a small PR with only the test page (`/admin/mic-test`: a "not found" for everyone but a
+- **(Chosen by Nate, 2026-11-20: PR #195)** merge a small PR with only the test page (`/admin/mic-test`: a "not found" for everyone but a
   signed-in admin; it sends and keeps nothing); or
 - a preview with a Vercel shareable link Nate makes in the dashboard (the Farcaster app can't pass Vercel's sign-in).
 
@@ -79,7 +80,7 @@ its proof running, but unused.
 
 Line: "Your converted voice is public and GPL-3.0. We never publish or keep your recording."
 
-1. You record a speech from the book. Your recording is converted into a character's voice, and only the converted
+1. You record a speech. Your recording is converted into a character's voice, and only the converted
    speech can be published.
 2. We never publish or keep your recording. It stays in this tab until it is sent to be converted, once, and is gone
    when you leave or record again.
@@ -88,7 +89,7 @@ Line: "Your converted voice is public and GPL-3.0. We never publish or keep your
    to delete each conversion from its history right away, though its own logs may still keep it. [Our account is set
    so it doesn't use them to train its models.]
 4. The converted speech is then sent to ElevenLabs to be transcribed, so it can be checked word for word against the
-   book.
+   speech.
 5. If you accept it, we keep the converted speech as your draft. Once you publish it, it is public and permanent,
    licensed GPL-3.0 like everything in this edition. Anyone may copy, edit and adapt it, including converting it again
    into another voice.
@@ -128,40 +129,67 @@ Veridia", c8-b17, and "Arctic Empire consul to Veridia", c13-b64). None American
 
 Preview line: the first three paragraphs of c13-b64, word for word (378 characters).
 
-**Cost to make them:** Voice Design is charged by the preview text's characters, and each call returns three
-previews. Four calls × 378 characters ≈ **1,500 credits**, about 1% of the account's ~130,000 credits left this month
-(153,004 limit, 23,019 used; resets 26 Nov). Saving the four picks uses 4 of the 11 free voice slots. In money, at
-Creator's $22 for 121,000 credits, that is about **$0.27**. **Not spent: waiting for Nate's word.**
+**Made on 2026-11-20** (Nate's word: up to about 1,500 credits): one Voice Design call per brief, `eleven_ttv_v3`,
+seed 1119, guidance 5, three previews each. **Listen and pick:**
+https://media.snowmoon.party/review/e069b1fde988a10b4eaf26c984b6dac9/index.html (a review page on R2, deleted once Nate
+has listened). Each preview's id and the sha256 of its mp3 are in `config/voice-presets.json`. Nothing is saved as a
+voice until Nate picks: pick one per brief, or none.
 
-## B7. Costs and the daily cap (proposal)
+**What it cost: more than estimated.** The account's credit count went from 23,019 (19 Nov) to 25,897 (20 Nov, right
+after): **2,878 credits, about $0.52**, against the ≈1,500 (≈$0.27) I estimated and Nate allowed. That is about 720 a
+call, nearly two credits per character of the 378-character line. If nothing else used the account between the two
+readings, Voice Design on `eleven_ttv_v3` costs about twice what I assumed. I stopped there; no other call was made.
 
-Per call, on the Creator plan's credits (ElevenLabs' pages: speech-to-speech "1,000 characters per minute of processed
-audio"; text-to-speech one credit per character on Multilingual v2; Scribe $0.20 an hour on the API):
+## B7. Costs and the daily cap, in credits (proposal)
 
-| Call | For c13-b64 (≈2.5 min, ≈2,000 characters) | ≈ $ at $22 / 121k credits |
+ElevenLabs' own rates: speech-to-speech "1,000 characters per minute of processed audio" (credits, on our plan);
+text-to-speech one credit per character (Multilingual v2). Scribe's cost in credits isn't on its pages ($0.20 an hour on
+the API price list, so a few credits at most): it is measured on the first real call. Dollars below use Creator's $22
+for 121,000 credits ($0.18 per 1,000).
+
+**Per full take (convert the whole speech, then transcribe the converted audio):**
+
+| Speech length | Credits (convert) | ≈ $ |
 |---|---|---|
-| Convert the whole take | ≈ 2,500 credits | $0.45 |
-| Transcribe the converted take | ≈ 0.04 h | $0.01 |
-| Redo one sentence (≈10 s) | ≈ 170 credits | $0.03 |
-| Ready-made reading, per preset (made once, then kept) | ≈ 2,000 credits | $0.36 |
+| 1 minute (≈ 150 words) | 1,000 | $0.18 |
+| 2 minutes (≈ 300 words) | 2,000 | $0.36 |
+| 3 minutes (≈ 450 words) | 3,000 | $0.55 |
 
-So one full try costs about $0.50, and the monthly allowance covers about 45 full takes after the presets and four
-readings (≈ 9,500 credits). The overage price is not on ElevenLabs' pages.
+**A redone sentence:** about 17 credits a second of the sentence: a 10-second sentence ≈ 170 credits ($0.03), plus its
+transcription. Whether ElevenLabs rounds a short clip up (to a second, or more) is to be measured on the first call.
 
-**Proposed cap:** `VOICE.dailyCapUsd = 5` for everyone together (about ten full takes a day), plus 3 full conversions
-per person per day; admins counted apart (`funded = 'admin'`) under their own `adminDailyCapUsd = 5`. Every call adds
-its worst case to `reserved` first. Costs go in `studio.voice_costs` (no person, no request id, daily totals only).
+**Ready-made reading** (text-to-speech of a speech in a preset, made once per speech and preset, then kept): one credit
+per character: a 1-, 2- or 3-minute speech is about 900, 1,800 or 2,700 credits per preset.
+
+**How many full takes the credits cover:**
+
+| Credits | 1-min takes | 2-min takes | 3-min takes |
+|---|---|---|---|
+| Rest of this month: 127,107 (153,004 − 25,897; resets 26 Nov) | 127 | 63 | 42 |
+| A normal Creator month: 121,000 (pricing page; this month's 153,004 likely includes credits rolled over) | 121 | 60 | 40 |
+| A Pro month: 600,000 ($99) | 600 | 300 | 200 |
+| A Scale month: 1,800,000 ($299) | 1,800 | 900 | 600 |
+
+Before the takes, subtract the readings: three speeches in four presets at 2 minutes ≈ 21,600 credits once.
+Redone sentences and failed tries come out of the same pool. The overage price per 1,000 credits isn't on ElevenLabs'
+pages.
+
+**Proposed cap, in credits** (Nate decides after choosing speech length and plan): a daily pool for everyone
+(`VOICE.dailyCapCredits`, for example 20,000 = ten 2-minute takes), 3 full conversions per person per day, admins
+counted apart (`funded = 'admin'`) under their own pool. Every call adds its worst case to `reserved` first (the full
+speech's length at 1,000 a minute). `studio.voice_costs` records credits and dollars as daily totals, with no person and
+no request id.
 
 ## What Nate needs to do (one at a time)
 
 1. Say how to reach the microphone test from a phone (merge the test-page PR, or a preview link), then run it on the
    six setups and send the six lines.
-2. Say yes or no to spending ≈ 1,500 credits (≈ $0.27) on the four Voice Design candidates.
+2. Listen to the twelve previews and pick one per brief, or none (link under B1).
 3. In ElevenLabs: Terms and Privacy → Data use → turn off "Improve the models for everyone" (or tell me to keep the
    consent saying it may be trained on).
 4. Put the key in `.env.local` and in Vercel as `ELEVENLABS_API_KEY` (never in chat).
 5. Reread: the rule, own-voice-v2, P1h/P1i, the Privacy and Terms lines.
-6. The cap: $5 a day, 3 takes a person, or other numbers.
+6. Speech length and plan size, then the daily pool in credits (B7).
 
 ## Principles
 
@@ -170,8 +198,8 @@ its worst case to `reserved` first. Costs go in `studio.voice_costs` (no person,
   P1h moves from a proof on our own code (Modal) to a proof on our route plus ElevenLabs' word about its side, which we
   can't check; and ElevenLabs trains on recordings by default unless Nate turns it off. Both are stated in the drafts.
 - **P2 (AI declared; book text unaltered):** touched. The converted voice and the ready-made readings are AI-made and
-  will be labelled so; the speech is the book's words, checked word for word; the presets and performing written texts
-  aloud are this edition's inventions, marked so in `config/voice-presets.json`.
+  will be labelled so; the speeches are the team's (c13-b64 stands in until they arrive), each take checked word for
+  word against its speech; the presets and performing written texts aloud are this edition's inventions, marked so in `config/voice-presets.json`.
 - **P3 (allowlist; closed models reported):** concern. ElevenLabs' models are closed. Nate chose them (2026-11-19).
   Before the build, `config/models.json` gets each model used (speech-to-speech, Scribe, text-to-speech, Voice Design),
   marked closed, by ElevenLabs; every recipe and label names it ("closed model"), and the switch opens only in the

@@ -26,8 +26,8 @@ the account). Drop it if he doesn't.
 > If you record a speech and agree to send it: ElevenLabs receives your recording and converts it into a character's
 > voice, then receives the converted speech to transcribe it. It receives nothing else about you. It stores what it
 > receives in the United States and may keep it under its own privacy policy; we ask it to delete each conversion from
-> its history. [It doesn't use them to train its models.] ElevenLabs also reads the book's speeches aloud in the
-> characters' voices, from the book's words only.
+> its history. [It doesn't use them to train its models.] ElevenLabs also reads this edition's speeches aloud in
+> the characters' voices, from their written words.
 
 ## Terms
 
