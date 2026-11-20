@@ -285,7 +285,7 @@ Hosted open-weight models may be listed too (`runs_on: hosted`): for a hosted re
   model and what it drafted, or null.
 - `P3d`: on the live database, every recipe of the house narration (chapter 1
   sampled) has `assist` in the column or in `studio.recipe_assist`.
-- `P3e` also checks (DRAFT, owner 2026-11-18, pending his reread) the admins' chapter pictures: in every kind of place
+- `P3e` also checks (owner 2026-11-18; reread by the owner 2026-11-20) the admins' chapter pictures: in every kind of place
   (OpenAI's countries and others, an embargoed region, no country; closed models on and off), the Model row starts on
   GPT Image 2.5 Sunburst exactly where it is offered and on FLUX everywhere else, and FLUX is always offered. Planted:
   GPT where OpenAI doesn't serve, and Gemini where GPT is offered; each must fail. No other P3 check is loosened.
@@ -311,7 +311,8 @@ before the first closed picture on a device. At `CHALLENGE.dates.closes` the def
 by itself (`challengeDefaultModel`, tied to the date; tested on both sides). Open-weight models stay preferred: this
 is the owner's choice for the challenge's pictures, reported here.
 
-**Admins' chapter pictures (owner, 2026-11-18; DRAFT, branch chapter-pictures-admin).** When an admin redoes one of
+**Admins' chapter pictures (owner, 2026-11-18; DRAFT, branch chapter-pictures-admin; its default, FLUX first, is
+replaced by the paragraph below, reread 2026-11-20).** When an admin redoes one of
 the edition's chapter pictures, the Model row offers the challenge's models (`challengeModelsFor`: FLUX.2 [klein] 4B
 edit first and the default; GPT Image 2.5 Sunburst by OpenAI and Gemini 3.1 Flash Image by Google only where their
 makers serve, after the maker's notice and the 18+ box, as for the challenge). Admins only: everyone else sees no
@@ -319,9 +320,8 @@ change. Every redo's recipe and the chapter's caption name the model and its mak
 decided to retire "open model first"; until that change is on main, this section stands, and these pictures are
 reported here.
 
-**DRAFT, pending the owner's reread: "open model first" dropped for the admins' chapter pictures (owner, 2026-11-18,
-"GPT Image 2.5 Sunburst is the default for admins, with FLUX and Gemini still offered"; branch
-chapter-pictures-in-reader).** When an admin redoes, changes or adds one of the edition's chapter pictures (on
+**"Open model first" dropped for the admins' chapter pictures (owner, 2026-11-18, "GPT Image 2.5 Sunburst is the
+default for admins, with FLUX and Gemini still offered"; reread by the owner 2026-11-20, PR #196).** When an admin redoes, changes or adds one of the edition's chapter pictures (on
 /you/illustrations, or in the chapter reader), the Model row starts on GPT Image 2.5 Sunburst (a closed model by OpenAI)
 where OpenAI serves the admin, and on FLUX.2 [klein] 4B edit elsewhere. FLUX and Gemini 3.1 Flash Image stay offered;
 the maker's notice and the 18+ box are still asked; every recipe and caption still names the model and its maker and
@@ -413,7 +413,7 @@ starting view. Where no one has picked, the starting view is "Most liked", then 
 order the feed, search, anyone's own pages, the agent tools or the read API.
 
 **Ruling: the edition's own chapter pictures (owner, 2026-11-18; reread by the owner 2026-11-19;
-branch chapter-pictures-admin).** "An admin may replace a picture in the site's own edition of a chapter. The change is
+branch chapter-pictures-admin; widened by the ruling below, reread 2026-11-20).** "An admin may replace a picture in the site's own edition of a chapter. The change is
 public at once, shows who made it and when, and can be undone. This covers only the edition's own pictures, never the
 order or prominence of people's published work." In practice (DRAFT, coding agent): on /you/illustrations an admin
 redoes one of the edition's chapter pictures (a private draft) and keeps it; the chapter then shows it with "Redone by
@@ -421,14 +421,14 @@ redoes one of the edition's chapter pictures (a private draft) and keeps it; the
 earlier picture, the committed file included, stays stored and can be shown again in one step
 (`0042_chapter_picture_versions.sql`: new rows only, nothing updated or deleted).
 
-**Ruling, wider wording, pending the owner's reread (owner, 2026-11-19; branch chapter-pictures-in-reader).** "An admin
+**Ruling, wider wording (owner, 2026-11-19; reread by the owner 2026-11-20, PR #196).** "An admin
 may add or replace a picture in the site's own edition of a chapter. The change is public at once, shows who made it and
 when, and can be undone. This covers only the edition's own pictures, never the order or prominence of people's
-published work." In practice (DRAFT, coding agent): in the chapter reader an admin can also add a picture at a passage
+published work." In practice: in the chapter reader an admin can also add a picture at a passage
 (a private draft until kept); the chapter then shows it after its block with "Added by @handle · date" and the model
 with its maker, and its recipe names the admin, the model, the style, the note and any characters' sheet pictures sent.
 Undo is "take it off the chapter": the picture stays stored and can be shown again
-(`NEXT_chapter_picture_additions.sql`: where each added picture sits; new rows only).
+(`0043_chapter_picture_additions.sql`: where each added picture sits; new rows only).
 
 **Checked by.**
 - `P5a`: no migration adds a canon/official/featured/pinned field, and no UI
@@ -443,7 +443,7 @@ Undo is "take it off the chapter": the picture stays stored and can be shown aga
   `status = 'published'` is not publishing; a status set in SQL, given in a row, or assigned in code is.
 - `P5j` (the ruling above, reread by the owner 2026-11-19): admin publishing code touches only the edition's chapter
   pictures. Any file that writes a chapter-picture table (`studio.chapter_picture_versions`, `_decisions`, `_looks`,
-  and, pending the owner's reread of the wider ruling, `_additions`) must be `src/lib/chapter-pictures/admin.ts`, hold
+  and `_additions`) must be `src/lib/chapter-pictures/admin.ts`, hold
   the admin check itself, write no other table, and only insert (never update or delete). Planted faults: that file also
   writing `studio.elements`, writing without the admin check, updating a decision in place, a second file writing the
   decisions; and for the additions, a second file writing them and an addition moved in place; each must fail
