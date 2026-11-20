@@ -1,7 +1,7 @@
--- NEXT_chapter_picture_additions.sql: pictures an admin adds to the edition's chapters while reading (owner, 2026-11-19;
--- branch chapter-pictures-in-reader). NOT APPLIED. Unnumbered until merge: it takes the next free number then, checked
--- against origin/main and production. Drafted by the coding agent (Claude, a closed model by Anthropic). DRAFT: the
--- coordinator tests it first in PGlite; the owner applies it. Additive only: it changes nothing 0042 made.
+-- 0043_chapter_picture_additions.sql: pictures an admin adds to the edition's chapters while reading (owner, 2026-11-19;
+-- branch chapter-pictures-in-reader). APPLIED in production by the owner as NEXT_chapter_picture_additions (owner,
+-- 2026-11-20: "A, B, C(a) all true, C(b) READ-BACK PASSED"); numbered 0043 for the merge (main ended at 0042). Drafted
+-- by the coding agent (Claude, a closed model by Anthropic). Additive only: it changes nothing 0042 made.
 -- Requires 0001_core (the studio schema, studio_writer) and 0042_chapter_picture_versions (which this table works with;
 -- it adds no foreign key to it).
 --

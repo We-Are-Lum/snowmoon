@@ -29,7 +29,7 @@ export const R = {
   from: 'The passage it shows: from',
   to: 'to',
   note: 'What the picture shows (your note is the prompt; it is shown in the picture’s recipe, credited to you)',
-  notReady: 'Adding pictures needs the migration NEXT_chapter_picture_additions first. Nothing was made.',
+  notReady: 'Adding pictures needs the migration 0043_chapter_picture_additions first. Nothing was made.',
   make: 'Make the draft',
   making: 'Making…',
   draftLine: 'Your draft. Only admins see it until one of you keeps it.',
