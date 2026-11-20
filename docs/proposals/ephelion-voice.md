@@ -224,6 +224,14 @@ the take not zeroed, transcription without the converted-audio check, the take i
 entry). `check:principles --only=P1`: P1h and P1i pass, and their planted faults fail (P1c, P1e, P1g need a database;
 P1d needs a running server).
 
+**check:ui** (run once at the end, as asked, load 2.4, on this branch's local build with an empty throwaway database,
+no sign-in): **did not pass.** It broke on `/references/designs?tab=characters` ("didn't go quiet": a prefetch of
+/references/glossary still open after 30 s), and before that reported two problems: `/challenge/make` at 390 light and
+1440 dark show no "Make it" button, and the build was one commit behind the checkout (the later commit changed only the
+voice page and the stub). None of those pages is touched by this branch; an empty database with no challenge data and
+no sign-in is the likely cause, but I haven't proven it. It needs a re-run against a preview with the real database
+before any merge. The voice page itself isn't in check:ui (a 404 everywhere while the switch is off).
+
 ### Choices made overnight, and why
 
 | # | Choice | Why |
