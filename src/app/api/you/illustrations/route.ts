@@ -5,7 +5,8 @@ import { isAdmin } from '~/lib/admins';
 import { decide, reviewItems } from '~/lib/illustration-check/review';
 import { whereFrom } from '~/lib/images/countries';
 import { adminView, redoable } from '~/lib/chapter-pictures/pictures';
-import { pictureHistory, readReplacements } from '~/lib/chapter-pictures/read';
+import { pictureHistory, readAdditions, readReplacements } from '~/lib/chapter-pictures/read';
+import { waitingDrafts } from '~/lib/chapter-pictures/waiting';
 import { checkJob } from '~/lib/illustration-check/jobs';
 
 /**
@@ -33,7 +34,11 @@ export async function GET(request: Request) {
     const job = checkJob(i.id);
     return { ...i, redoable: job ? redoable(job) : false, shown: shown.get(i.id)?.versionId ?? null, versions: history.versions.get(i.id) ?? [], decisions: history.decisions.get(i.id) ?? [] };
   });
-  return NextResponse.json({ items: withPictures, canSave, pictures }, { headers: noStore });
+  // Pictures admins added while reading (owner, 2026-11-19), and every draft not kept yet, with where each sits.
+  const additions = pictures.adding ? await readAdditions(sql) : [];
+  const added = additions.map((a) => ({ id: a.jobId, chapter: a.chapter, added: { after: a.after, start: a.start, end: a.end }, byFid: a.byFid, at: a.at, redoable: true, shown: shown.get(a.jobId)?.versionId ?? null, versions: history.versions.get(a.jobId) ?? [], decisions: history.decisions.get(a.jobId) ?? [], image: null }));
+  const waiting = waitingDrafts(history, additions);
+  return NextResponse.json({ items: withPictures, canSave, pictures, added, waiting }, { headers: noStore });
 }
 
 export async function POST(request: Request) {

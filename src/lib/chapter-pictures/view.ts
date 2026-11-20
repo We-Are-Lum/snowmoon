@@ -2,7 +2,7 @@ import 'server-only';
 import type { Illustration } from '../illustrations';
 import type { RecipeView } from '../recipe-view';
 import { CHALLENGE_MODELS } from '../challenge/models';
-import { adminName, day, lookName, modelLine, recipePath, replacedBy, type ShownReplacement } from './shared';
+import { addedBy, adminName, day, lookName, modelLine, recipePath, replacedBy, type Addition, type ShownReplacement } from './shared';
 
 /**
  * A chapter picture as the chapter shows it once an admin has kept a redo (owner, 2026-11-18, option B): the kept
@@ -80,3 +80,41 @@ export function shownPicture<T extends Illustration>(im: T, shown: Map<string, S
   void _reviewed;
   return { ...rest, url: r.url, width: r.width, height: r.height, recipe: r.recipe, replaced: r.replaced } as T & { replaced?: Redone };
 }
+
+/**
+ * The pictures admins added to one chapter (owner, 2026-11-19), as the chapter and its player show them: each kept one
+ * after its block, with "Added by @handle · date · model" and its recipe sheet. A draft never kept, one taken off the
+ * chapter, or one an admin hid (studio.seeded_hidden, as for the committed pictures) isn't shown. Wording DRAFT.
+ */
+export function addedPictures(chapter: number, additions: Addition[], shown: Map<string, ShownReplacement>, hidden: Set<string>, nameOf: (model: string) => string = modelNameOf): AddedIllustration[] {
+  return additions
+    .filter((a) => a.chapter === chapter && shown.has(a.jobId) && !hidden.has(a.jobId))
+    .map((a) => {
+      const r = shown.get(a.jobId)!;
+      const name = nameOf(r.model);
+      const view = replacementView(r, name);
+      return {
+        id: a.jobId,
+        idx: a.after,
+        url: r.url,
+        width: r.width,
+        height: r.height,
+        recipe: recipePath(r.versionId),
+        alt: `AI-generated image: ${r.note.length > 200 ? `${r.note.slice(0, 197)}…` : r.note}`,
+        passage: { start: a.start, end: a.end },
+        replaced: {
+          versionId: r.versionId,
+          by: addedBy(r),
+          at: r.at,
+          model: modelLine(name, r.maker, r.open),
+          view: {
+            ...view,
+            whose: `${adminName(r.byFid, r.byHandle)}, an admin of Snowmoon Party, added this picture to the chapter with an image model. AI-generated, not by the author.`,
+            what: `A picture an admin added to Chapter ${r.chapter}, for blocks ${a.start}–${a.end}. A starting point, not canon.`,
+            inputs: view.inputs.map((i) => (i.label === 'Reference' ? { label: 'References', value: 'any characters’ sheet pictures sent with it are named in the full recipe' } : i)),
+          },
+        },
+      };
+    });
+}
+export type AddedIllustration = Omit<Illustration, 'lettering' | 'reviewed'> & { passage: { start: number; end: number }; replaced: Redone };
