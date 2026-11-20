@@ -148,6 +148,11 @@ export function seededImages(): SeededImage[] {
   return seededCache;
 }
 export const slugOfLocation = (p: string | null | undefined) => (p ? (p.match(/locations\/([a-z0-9-]+)\.json$/)?.[1] ?? null) : null);
+/** Whether a seeded image is of a character or a place, so it shows on a sheet and on References (src/lib/chapter-pictures/where.ts). */
+export function seededOnSheet(id: string): boolean {
+  const s = seededImages().find((x) => x.id === id);
+  return !!s && ((s.characters ?? []).length > 0 || !!slugOfLocation(s.location));
+}
 
 export const SCENE_RULE =
   'Each scene (the text between two breaks) takes the place its evidence gives. Evidence is a seeded image with a location (people chose those) from its own block on, and before a scene’s first seeded image, a block quoted as one of a location’s facts. Where a scene’s evidence changes place, the scene is split at that evidence block; the part before the first evidence takes the first place. A seeded image marked with no location starts a part with no place. A scene with no evidence has no place.';

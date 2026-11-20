@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { authFetch } from '~/lib/client-auth';
 import { AI_DECLARED, AI_LABEL, NOT_AUTHOR_VISIBLE } from '~/lib/ai-declared';
 import type { PickOption } from '~/lib/pick-options';
+import { RedoneCredit } from './redone-credit';
 
 /**
  * The pick switch (principle 5 as reread by the owner, 2026-10-29): wherever an admin's pick is shown, the reader can
@@ -69,6 +70,8 @@ export function PickSwitch({ pick, options, notAuthor = false }: { pick: { image
           <figcaption className="block-caption">
             {shown.by ? AI_LABEL.imageBy(shown.by) : AI_LABEL.image}
             <span className="sr-only"> ({AI_DECLARED.image})</span>
+            {/* The edition's picture, redone by an admin and kept: who, when and the model, as on the chapter page. */}
+            {shown.redone && <RedoneCredit redone={shown.redone} />}
             {notAuthor && <span className="ai-not-author"> · {NOT_AUTHOR_VISIBLE}</span>}
           </figcaption>
         </figure>
