@@ -180,7 +180,7 @@ try {
   // one taken off (kept, then a decision with no version), one a draft never kept, one with only a no-version decision.
   const ADD = (n: number) => `c2-b0${10 + n}-added-0000000${n}`;
   const addVersion = (n: number, v: number) => `('${id(60 + v)}', '${ADD(n)}', 2, ${MAKER}, 'gpt-image-2.5-sunburst', 'OpenAI', false, null,
-    'SECRET NOTE', 'SECRET PROMPT', '{"v":1}', '${String(v % 10).repeat(64)}', 1024, 576, decode('ffd8ff', 'hex'), 0.0478)`;
+    'SECRET NOTE', 'SECRET PROMPT', '{"v":1}', '${'abcdef'[v].repeat(64)}', 1024, 576, decode('ffd8ff' || repeat('00', 997), 'hex'), 0.0478)`;
   const at = (m: number) => `now() - interval '${60 - m} minutes'`;
   await pg.exec(`reset role;
     insert into studio.chapter_picture_additions (job_id, chapter, after_idx, start_idx, end_idx, by_fid) values
