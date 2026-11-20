@@ -3,7 +3,7 @@
  * the site calls (src/lib/voice/elevenlabs.ts), and a record of everything each one received, so a test can see where
  * each recording went.
  * - POST /v1/speech-to-speech/:voice: answers a WAV tone (not the input), as long as the input "sounds" (bytes / 4000
- *   seconds, 1 to 300), with a history-item-id and a character-cost (1,000 a minute).
+ *   seconds by default, 1 to 300; 8 kHz, so a long take stays under the 4.5 MB request limit), with a history-item-id and a character-cost (1,000 a minute).
  * - DELETE /v1/history/:id
  * - POST /v1/speech-to-text: reads its WAV's length. 30 s or more: the whole speech's words with even timings, with one
  *   sentence (mismatch, default 3) said wrong; shorter: that sentence, right. (The stub's own convention: the real
@@ -31,7 +31,7 @@ function speechSentences() {
   return sentencesOf([title, ...[...html.matchAll(/<p>([\s\S]*?)<\/p>/g)].map((m) => strip(m[1]))]);
 }
 
-export function tone(seconds: number, hz = 220, rate = 22050): Buffer {
+export function tone(seconds: number, hz = 220, rate = 8000): Buffer {
   const n = Math.max(1, Math.round(seconds * rate));
   const b = Buffer.alloc(44 + n * 2);
   b.write('RIFF', 0); b.writeUInt32LE(36 + n * 2, 4); b.write('WAVE', 8); b.write('fmt ', 12);
@@ -64,7 +64,7 @@ function multipart(body: Buffer, type: string) {
   return { fields, files };
 }
 
-export async function startStub(port: number, opts: { mismatch?: number | null; failConvert?: boolean } = {}) {
+export async function startStub(port: number, opts: { mismatch?: number | null; failConvert?: boolean; bytesPerSecond?: number } = {}) {
   const calls: StubCall[] = [];
   const deleted: string[] = [];
   let used = 25_897;
@@ -93,7 +93,7 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
     if (req.method === 'POST' && url.pathname.startsWith('/v1/speech-to-speech/')) {
       if (opts.failConvert) return send(500, 'stub: failed, and this text quotes the input');
       const input = call.files[0]?.bytes ?? Buffer.alloc(0);
-      const seconds = Math.min(300, Math.max(1, input.length / 4000));
+      const seconds = Math.min(300, Math.max(1, input.length / (opts.bytesPerSecond ?? 4000)));
       const cost = Math.ceil((seconds / 60) * 1000);
       used += cost;
       return send(200, tone(seconds, 180), { 'content-type': 'audio/mpeg', 'history-item-id': `stubhist${++seq}`, 'character-cost': String(cost) });
@@ -119,6 +119,7 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
 
 if (process.argv[1] && /elevenlabs-stub\.ts$/.test(process.argv[1])) {
   const port = Number(process.argv.find((a) => a.startsWith('--port='))?.split('=')[1] ?? 54390);
-  await startStub(port);
+  // Chromium's fake microphone, as WebM/Opus, makes about 12 kB a second.
+  await startStub(port, { bytesPerSecond: Number(process.argv.find((a) => a.startsWith('--bytes-per-second='))?.split('=')[1] ?? 12000) });
   console.log(`ElevenLabs stub on http://127.0.0.1:${port}`);
 }

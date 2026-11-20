@@ -305,6 +305,22 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     return c;
   }
 
+  /** Ask for the word check again (the conversion is kept in the tab; only the converted audio is sent). */
+  async function recheck() {
+    if (!converted) return;
+    setBusy('check');
+    setMessage(null);
+    const tf = new FormData();
+    tf.set('audio', converted.blob, 'converted.mp3');
+    tf.set('ticket', converted.ticket);
+    const t = await authFetch('/api/voice/transcribe', { method: 'POST', body: tf }).catch(() => null);
+    setBusy(null);
+    if (t?.ok) {
+      const j = (await t.json()) as { checks: Check[]; check: string };
+      setConverted({ ...converted, checks: j.checks, check: j.check });
+    } else setMessage(((await t?.json().catch(() => ({}))) as { error?: string } | undefined)?.error ?? 'The word check failed again.');
+  }
+
   async function convertWhole() {
     const blob = takeBlob.current;
     if (!blob || !take || !picked) return;
@@ -574,8 +590,10 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                     })}
                   </ol>
                 </>
-              ) : (
+              ) : busy === 'convert' || busy === 'check' ? (
                 <p className="vr-note">Checking the words…</p>
+              ) : (
+                <button type="button" className="vr-btn vr-quiet" onClick={recheck}>Check the words again</button>
               )}
               {!accepted ? (
                 <div className="vr-row">

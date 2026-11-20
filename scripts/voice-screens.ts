@@ -21,6 +21,9 @@ await ctx.addInitScript(() => {
   localStorage.setItem('snowmoon.signin', JSON.stringify({ token: 'voice-test-6786', fid: 6786, username: 'naaate', exp: Math.floor(Date.now() / 1000) + 86400 }));
   localStorage.setItem('snowmoon.intro-seen', 'v2');
 });
+// The test sign-in is honoured by /api/voice only; any other route answering 401 would make the client sign it out
+// (src/lib/client-auth.ts). The assistant's status is the one the page asks: answered here, never by the server.
+await ctx.route('**/api/chat/status', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '{"ready":false}' }));
 const page = await ctx.newPage();
 const errors: string[] = [];
 page.on('pageerror', (e) => errors.push(String(e)));
@@ -40,7 +43,18 @@ async function shoot(name: string, focus?: string) {
   await page.setViewportSize(sizes.phone);
   console.log(`shot ${name}`);
 }
-const wait = (p: Page, sel: string, ms = 30_000) => p.locator(sel).first().waitFor({ timeout: ms });
+const wait = async (p: Page, sel: string, ms = 30_000) => {
+  try {
+    await p.locator(sel).first().waitFor({ timeout: ms });
+  } catch (e) {
+    console.log(`waited for ${sel}; the page says:`, await p.locator('.vr-warn, [role="alert"]').allInnerTexts());
+    await p.screenshot({ path: path.join(out!, `failed-${sel.replace(/\W+/g, '')}.png`), fullPage: true });
+    throw e;
+  }
+};
+page.on('response', async (r) => {
+  if (r.url().includes('/api/voice/') && r.status() >= 400) console.log('api', r.status(), r.url(), (await r.text().catch(() => '')).slice(0, 200));
+});
 
 await page.goto(`${url}/storyboard/record`);
 await wait(page, '#vr-consent-h');

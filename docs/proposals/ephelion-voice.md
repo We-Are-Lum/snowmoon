@@ -247,9 +247,17 @@ P1d needs a running server).
 
 ### Screenshots
 
-See "Screenshots" below (phone 390 px and desktop 1280 px, light and dark), made against a local build with the
-stub, a throwaway local database and Chromium's fake microphone (a tone; the stub says one word of sentence 4 wrong,
-so the check and the redo show).
+**https://media.snowmoon.party/review/c3d18998cf958415bb32976341fb20b6/index.html**: 36 screenshots, nine steps, each
+on phone (390 px) and desktop (1280 px), light and dark (a review page on R2, deleted once Nate has looked). Made
+against this branch's local production build with the stub, a throwaway local database and Chromium's fake
+microphone (a tone; the stub says one word of sentence 4 wrong, so the check and the redo show). Steps: consent; pick a
+voice; the ready-made reading and Record; recording with the words scrolling; the take in the tab with its tick;
+converted and checked; redo one sentence; redone, all matching; accepted, with the Recipe. Not shown: the Farcaster web
+client's message (it needs the Farcaster web host to appear; its words are in #195 and in the page).
+
+Found while taking them, and fixed: after a failed word check the page had no way to ask again ("Check the words
+again" added); the stub's audio was larger than a real MP3 and hit the 4.5 MB request limit (the stub now answers
+8 kHz audio).
 
 ### What's left
 
