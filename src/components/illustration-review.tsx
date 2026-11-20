@@ -11,7 +11,7 @@ import { AiLabel } from './recipe-sheet';
 import { PublishedTextField } from './publish-words';
 import { SignInButton } from './sign-in';
 import { CapLine, DraftImage, LookPanel, PicturePanel, errorOf, post, type PictureItem, type PicturesState } from './chapter-pictures';
-import type { WaitingDraft } from '~/lib/chapter-pictures/waiting';
+import { waitingWhere, type WaitingDraft } from '~/lib/chapter-pictures/waiting';
 import { localDay } from '~/lib/chapter-pictures/shared';
 
 /**
@@ -84,8 +84,7 @@ const WW = {
   waitingTitle: (n: number) => `Drafts waiting (${n})`,
   waitingNone: 'No drafts waiting.',
   waitingLede: 'Every draft no admin has kept yet, newest first, with where it would go. Nothing here is public.',
-  where: (d: WaitingDraft) =>
-    d.where.kind === 'replace' ? `Would replace the picture at chapter ${d.chapter}, block ${d.where.block}` : d.where.kind === 'added' ? `A new picture for chapter ${d.chapter}, after block ${d.where.after} (it shows blocks ${d.where.start}–${d.where.end})` : `A new picture for chapter ${d.chapter}`,
+  where: waitingWhere,
   meta: (d: WaitingDraft) => `${d.model} · by FID ${d.madeByFid} · ${localDay(d.madeAt)}`,
   open: 'Open in the chapter',
   keep: 'Keep: show it in the chapter now',
