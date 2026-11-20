@@ -784,6 +784,130 @@
       "open_weights": false,
       "offered": false,
       "runs_on": "outside the site (the owner's own account)"
+    },
+    {
+      "id": "elevenlabs-sts-multilingual-v2",
+      "kind": "voice-conversion",
+      "name": "ElevenLabs Voice Changer (speech-to-speech), Multilingual v2",
+      "maker": "ElevenLabs",
+      "repo": "elevenlabs/eleven_multilingual_sts_v2",
+      "revision": null,
+      "license_line": "proprietary: ElevenLabs' terms; weights not published",
+      "license_checked": {
+        "by": "coding agent (Claude, a closed model by Anthropic), branch ephelion-voice; DRAFT, for Nate's review",
+        "on": "2026-11-20",
+        "source": "https://elevenlabs.io/terms-of-use (last updated 9 Oct 2026): \"as between you and ElevenLabs, you retain all rights in and to your Output\"; https://elevenlabs.io/docs/help-center/legal/can-i-publish-the-content-i-generate-on-the-platform: \"All paid plans include a commercial license\""
+      },
+      "notes": "A closed model (principle 3: reported). Nate's choice for the Ephelion voice slice (2026-11-19). Converts a performer's take into a preset's voice; at most 5 minutes and 50 MB a request.",
+      "added": "2026-11-20",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "ElevenLabs API (api.elevenlabs.io), called only from our server",
+        "endpoints": {
+          "eleven_multilingual_sts_v2": null
+        },
+        "price_unit": "credits per minute of audio",
+        "price_seen": "2026-11-19: \"1,000 characters per minute of processed audio\" (https://elevenlabs.io/docs/overview/capabilities/voice-changer); $0.12 a minute on the API price list (https://elevenlabs.io/pricing/api)"
+      },
+      "keeps": "Without Zero Retention Mode (Enterprise only, which we don't have), ElevenLabs keeps inputs and outputs under its privacy policy (https://elevenlabs.io/privacy-policy, 9 Oct 2026: \"as long as necessary to provide you with our Services\"; voice data at most 3 years after the last interaction), stored in the United States, and trains on them unless the account's \"Improve the models for everyone\" is off (Nate turns it off himself; not confirmed on 2026-11-20). The take goes into the account's history as a speech-to-speech generation (https://elevenlabs.io/docs/api-reference/history/list); our server deletes that history item right after (DELETE /v1/history/{id}), but \"debugging and moderation logs may still retain data related to the generation\" (https://elevenlabs.io/docs/resources/zero-retention-mode). Our server keeps no take (P1h).",
+      "model_record": "model id, the settings sent, the date, and the credits the call used (ElevenLabs exposes no weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "proprietary (ElevenLabs)",
+      "open_weights": false,
+      "weights": null
+    },
+    {
+      "id": "elevenlabs-scribe-v1",
+      "kind": "transcription",
+      "name": "ElevenLabs Scribe (speech-to-text)",
+      "maker": "ElevenLabs",
+      "repo": "elevenlabs/scribe_v1",
+      "revision": null,
+      "license_line": "proprietary: ElevenLabs' terms; weights not published",
+      "license_checked": {
+        "by": "coding agent (Claude, a closed model by Anthropic), branch ephelion-voice; DRAFT, for Nate's review",
+        "on": "2026-11-20",
+        "source": "https://elevenlabs.io/terms-of-use (last updated 9 Oct 2026): \"as between you and ElevenLabs, you retain all rights in and to your Output\"; https://elevenlabs.io/docs/help-center/legal/can-i-publish-the-content-i-generate-on-the-platform: \"All paid plans include a commercial license\""
+      },
+      "notes": "A closed model (principle 3: reported). Nate's choice for the Ephelion voice slice (2026-11-19). Word timings (timestamps_granularity 'word') for the word-for-word check. The model id (scribe_v1, or v2/v3 on the price list) is to be confirmed on the first real call.",
+      "added": "2026-11-20",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "ElevenLabs API (api.elevenlabs.io), called only from our server",
+        "endpoints": {
+          "scribe_v1": null
+        },
+        "price_unit": "USD per hour of audio",
+        "price_seen": "2026-11-19: $0.20 an hour (https://elevenlabs.io/pricing/api); its cost in credits isn't published: measured on the first real call"
+      },
+      "keeps": "Without Zero Retention Mode (Enterprise only, which we don't have), ElevenLabs keeps inputs and outputs under its privacy policy (https://elevenlabs.io/privacy-policy, 9 Oct 2026: \"as long as necessary to provide you with our Services\"; voice data at most 3 years after the last interaction), stored in the United States, and trains on them unless the account's \"Improve the models for everyone\" is off (Nate turns it off himself; not confirmed on 2026-11-20). Receives only converted audio (never a take). Not a generation, so not in the history list; kept under the privacy policy as above.",
+      "model_record": "model id, the settings sent, the date, and the credits the call used (ElevenLabs exposes no weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "proprietary (ElevenLabs)",
+      "open_weights": false,
+      "weights": null
+    },
+    {
+      "id": "elevenlabs-tts-multilingual-v2",
+      "kind": "speech",
+      "name": "ElevenLabs text-to-speech, Multilingual v2",
+      "maker": "ElevenLabs",
+      "repo": "elevenlabs/eleven_multilingual_v2",
+      "revision": null,
+      "license_line": "proprietary: ElevenLabs' terms; weights not published",
+      "license_checked": {
+        "by": "coding agent (Claude, a closed model by Anthropic), branch ephelion-voice; DRAFT, for Nate's review",
+        "on": "2026-11-20",
+        "source": "https://elevenlabs.io/terms-of-use (last updated 9 Oct 2026): \"as between you and ElevenLabs, you retain all rights in and to your Output\"; https://elevenlabs.io/docs/help-center/legal/can-i-publish-the-content-i-generate-on-the-platform: \"All paid plans include a commercial license\""
+      },
+      "notes": "A closed model (principle 3: reported). Nate's choice for the Ephelion voice slice (2026-11-19). The ready-made reading of a speech in a preset, for people who don't record.",
+      "added": "2026-11-20",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "ElevenLabs API (api.elevenlabs.io), called only from our server",
+        "endpoints": {
+          "eleven_multilingual_v2": null
+        },
+        "price_unit": "credits per character",
+        "price_seen": "2026-11-19: one credit per character; $0.08 per 1,000 characters on the API price list (https://elevenlabs.io/pricing/api)"
+      },
+      "keeps": "Without Zero Retention Mode (Enterprise only, which we don't have), ElevenLabs keeps inputs and outputs under its privacy policy (https://elevenlabs.io/privacy-policy, 9 Oct 2026: \"as long as necessary to provide you with our Services\"; voice data at most 3 years after the last interaction), stored in the United States, and trains on them unless the account's \"Improve the models for everyone\" is off (Nate turns it off himself; not confirmed on 2026-11-20). Receives the speech's written words only (no person's data). The generation goes into the history; our server deletes it after.",
+      "model_record": "model id, the settings sent, the date, and the credits the call used (ElevenLabs exposes no weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "proprietary (ElevenLabs)",
+      "open_weights": false,
+      "weights": null
+    },
+    {
+      "id": "elevenlabs-ttv-v3",
+      "kind": "voice-design",
+      "name": "ElevenLabs Voice Design v3",
+      "maker": "ElevenLabs",
+      "repo": "elevenlabs/eleven_ttv_v3",
+      "revision": null,
+      "license_line": "proprietary: ElevenLabs' terms; weights not published",
+      "license_checked": {
+        "by": "coding agent (Claude, a closed model by Anthropic), branch ephelion-voice; DRAFT, for Nate's review",
+        "on": "2026-11-20",
+        "source": "https://elevenlabs.io/terms-of-use (last updated 9 Oct 2026): \"as between you and ElevenLabs, you retain all rights in and to your Output\"; https://elevenlabs.io/docs/help-center/legal/can-i-publish-the-content-i-generate-on-the-platform: \"All paid plans include a commercial license\""
+      },
+      "notes": "A closed model (principle 3: reported). Nate's choice for the Ephelion voice slice (2026-11-19). Made the four Ephelion preset candidates once, by the coding agent through the ElevenLabs connector, on Nate's word (2026-11-20); the site doesn't call it.",
+      "added": "2026-11-20",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "ElevenLabs API (api.elevenlabs.io), called only from our server",
+        "endpoints": {
+          "eleven_ttv_v3": null
+        },
+        "price_unit": "credits per call",
+        "price_seen": "2026-11-20, measured: 2,878 credits for four calls with a 378-character line (about 720 a call), against about 1,500 estimated"
+      },
+      "keeps": "Without Zero Retention Mode (Enterprise only, which we don't have), ElevenLabs keeps inputs and outputs under its privacy policy (https://elevenlabs.io/privacy-policy, 9 Oct 2026: \"as long as necessary to provide you with our Services\"; voice data at most 3 years after the last interaction), stored in the United States, and trains on them unless the account's \"Improve the models for everyone\" is off (Nate turns it off himself; not confirmed on 2026-11-20). Received the four descriptions and the preview line (the opening of c13-b64), no person's data; its previews stay in the account until saved or discarded.",
+      "model_record": "model id, the settings sent, the date, and the credits the call used (ElevenLabs exposes no weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "proprietary (ElevenLabs)",
+      "open_weights": false,
+      "weights": null
     }
   ],
   "candidates": [

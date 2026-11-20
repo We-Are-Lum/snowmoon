@@ -1118,3 +1118,69 @@ export const MINPENTAI_PLAY = {
 export function appUrl(): string {
   return process.env.NEXT_PUBLIC_URL?.replace(/\/$/, '') || 'http://localhost:3000';
 }
+
+/**
+ * The Ephelion storyboard's voice, slice 1 (Nate, 2026-11-19; branch ephelion-voice; docs/proposals/ephelion-voice.md):
+ * pick a voice, record a speech, convert it with ElevenLabs (closed models, by ElevenLabs), check it word for word,
+ * redo one sentence, accept a private draft; and a ready-made reading for people who don't record.
+ *
+ * The switch: `adminTrial` lets admins use it; `open` lets everyone signed in. Both are false: every page and route
+ * answers "not found". Turning one on is a reviewed commit, never an environment variable, and `open` waits for the
+ * reread Terms and Privacy that name ElevenLabs (owner, 2026-10-18). The local tests turn it on with VOICE_TEST_ON=1,
+ * never on Vercel (src/lib/voice/flag.ts).
+ *
+ * Caps and rates: PLACEHOLDERS (overnight build, 2026-11-20), for Nate to set once he picks the speech length and the
+ * plan (review page, B7). Credits are ElevenLabs' units on our plan; dollars use Creator's $22 for 121,000 credits.
+ */
+export const VOICE = {
+  adminTrial: false,
+  open: false,
+  provider: 'ElevenLabs',
+  models: {
+    /** Speech-to-speech ("Voice Changer"). */
+    convert: 'eleven_multilingual_sts_v2',
+    /** Speech-to-text, word timings: the converted audio only, never the take. Model id to confirm on the first real call. */
+    transcribe: 'scribe_v1',
+    /** Text-to-speech, the ready-made reading. */
+    reading: 'eleven_multilingual_v2',
+    /** Voice Design, the presets' recipe (made once by an admin, 2026-11-20; not called by the site). */
+    design: 'eleven_ttv_v3',
+  },
+  /** What we ask for back: MP3, 44.1 kHz, 128 kb/s (a 3-minute speech is about 2.9 MB, under Vercel's 4.5 MB reply limit). */
+  outputFormat: 'mp3_44100_128',
+  /** Speech-to-speech settings, sent as given and kept in every recipe. */
+  convertSettings: { stability: 0.5, similarity_boost: 0.75, style: 0, use_speaker_boost: true, remove_background_noise: false },
+  readingSettings: { stability: 0.5, similarity_boost: 0.75, style: 0, use_speaker_boost: true },
+  /** A whole take: at most 5 minutes (ElevenLabs' limit per request) and 4 MB (under Vercel's 4.5 MB request limit). */
+  maxTakeSeconds: 300,
+  maxTakeBytes: 4_000_000,
+  /** One redone sentence: at most 30 seconds. */
+  maxSentenceSeconds: 30,
+  /** A conversion's signed record is good for this long; the person accepts within it or it is gone. */
+  ticketMinutes: 120,
+  rates: {
+    usdPer1000Credits: 22 / 121,
+    /** ElevenLabs: "1,000 characters per minute of processed audio". */
+    convertCreditsPerMinute: 1000,
+    /** One credit per character (Multilingual v2). */
+    readingCreditsPerChar: 1,
+    /** Not on ElevenLabs' pages in credits; $0.20 an hour on its API price list. Measured on the first real call. */
+    transcribeUsdPerHour: 0.2,
+  },
+  caps: {
+    /** Everyone's calls together, per UTC day ('free'). PLACEHOLDER: ten 2-minute takes. */
+    dailyCredits: 20_000,
+    dailyUsd: 4,
+    /** Admins' own trials, counted apart ('admin'). PLACEHOLDER. */
+    adminDailyCredits: 20_000,
+    adminDailyUsd: 4,
+    /** Whole-take conversions per person per UTC day (redone sentences don't count). PLACEHOLDER. */
+    perPersonConversions: 3,
+    /**
+     * Owner's standing rule (2026-11-20): if a real call costs more than 20% over its estimate, stop before the next
+     * one. When today's measured credits exceed 1.2 times today's estimates, every call is refused until the next UTC
+     * day, and an admin is told why.
+     */
+    overEstimate: 1.2,
+  },
+} as const;

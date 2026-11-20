@@ -1,0 +1,53 @@
+/* /storyboard/record (src/components/voice-record.tsx): the site's tokens only, so light and dark follow the theme. */
+.vr { max-width: 720px; margin: 0 auto; padding: var(--space-5) var(--gutter) var(--space-6); color: var(--ink); font-family: var(--reading); }
+.vr h1 { font-size: 32px; line-height: 1.15; font-weight: 400; margin: var(--space-2) 0 var(--space-3); }
+.vr h2 { font-size: var(--text-h2); font-weight: 400; margin: 0 0 var(--space-3); }
+.vr-kicker { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); margin: 0; }
+.vr-labels, .vr-note, .vr-desc { font-size: var(--text-small); color: var(--body); line-height: 1.5; }
+.vr-small { font-size: 15px; color: var(--muted); }
+.vr-tag { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; border: 1px solid var(--rule); border-radius: 3px; padding: 1px 5px; color: var(--muted); white-space: nowrap; }
+.vr-card { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: var(--space-4); margin: var(--space-4) 0; }
+.vr-consent ol { padding-left: 1.3em; font-size: var(--text-small); line-height: 1.5; color: var(--body); }
+.vr-consent li { margin: 0 0 var(--space-2); }
+.vr-line { font-weight: 600; }
+.vr-btn { font: inherit; font-size: 17px; background: var(--btn); color: var(--btn-ink); border: 1px solid var(--btn); border-radius: 8px; padding: 10px 18px; min-height: 44px; cursor: pointer; }
+.vr-btn:disabled { opacity: 0.45; cursor: default; }
+.vr-quiet { background: transparent; color: var(--ink); border-color: var(--rule); }
+.vr-stop { background: var(--warn); border-color: var(--warn); color: var(--paper); }
+.vr-small-btn { font-size: 15px; padding: 6px 12px; min-height: 36px; }
+.vr-row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: var(--space-3) 0; }
+.vr-warn { color: var(--warn); background: var(--flag-bg); border-radius: 8px; padding: var(--space-3); font-size: var(--text-small); }
+.vr-ok { color: var(--veridia); font-size: var(--text-small); }
+.vr-group { border: 0; border-top: 1px solid var(--rule); padding: var(--space-3) 0 0; margin: var(--space-3) 0 0; }
+.vr-group legend { font-size: 19px; padding: 0; }
+.vr-desc { margin: var(--space-1) 0 var(--space-2); }
+.vr-choice { display: grid; grid-template-columns: auto 1fr; gap: var(--space-2) var(--space-3); align-items: center; padding: var(--space-2); border-radius: 8px; border: 1px solid transparent; }
+.vr-choice.vr-on { border-color: var(--ink); background: var(--soft); }
+.vr-choice audio { grid-column: 1 / -1; width: 100%; height: 36px; }
+.vr-audio { width: 100%; margin: var(--space-2) 0; }
+.vr-pace { display: flex; flex-direction: column; gap: var(--space-1); font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); max-width: 320px; }
+.vr-prompter { list-style: none; padding: var(--space-3); margin: var(--space-3) 0; max-height: 46vh; overflow-y: auto; background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; font-size: var(--text-read); line-height: var(--lh-read); scroll-behavior: smooth; }
+.vr-prompter li { padding: var(--space-1) 0; color: var(--body); transition: color 0.2s; }
+.vr-live li { color: var(--muted); }
+.vr-live li.vr-now { color: var(--ink); font-size: 1.15em; }
+.vr-live li.vr-past { color: var(--faint); }
+.vr-level { flex: 1; min-width: 120px; height: 8px; background: var(--soft); border-radius: 4px; overflow: hidden; }
+.vr-level span { display: block; height: 100%; background: var(--veridia); }
+.vr-take { border-top: 1px solid var(--rule); margin-top: var(--space-3); padding-top: var(--space-3); }
+.vr-tick { display: grid; grid-template-columns: auto 1fr; gap: var(--space-2); align-items: start; font-size: var(--text-small); color: var(--body); margin: var(--space-3) 0; }
+.vr-tick input { width: 22px; height: 22px; margin-top: 2px; }
+.vr-checks { list-style: none; padding: 0; margin: var(--space-3) 0; }
+.vr-checks li { display: grid; grid-template-columns: 24px 1fr; gap: var(--space-1) var(--space-2); padding: var(--space-2) 0; border-bottom: 1px solid var(--rule); font-size: var(--text-small); line-height: 1.45; }
+.vr-checks li > button, .vr-checks li > .vr-redo { grid-column: 2; justify-self: start; }
+.vr-mark { font-family: var(--label); }
+.vr-pass .vr-mark { color: var(--veridia); }
+.vr-fail .vr-mark { color: var(--warn); }
+.vr-diff { display: block; color: var(--warn); font-size: 15px; }
+.vr-redo { width: 100%; background: var(--soft); border-radius: 8px; padding: var(--space-3); }
+.vr-prompt-one { font-size: var(--text-read); line-height: var(--lh-read); margin: 0; }
+.vr-drafts { list-style: none; padding: 0; margin: 0; }
+.vr-drafts li { border-top: 1px solid var(--rule); padding: var(--space-3) 0; }
+.vr-drafts p { margin: 0 0 var(--space-2); font-size: var(--text-small); }
+.vr-draft-audio { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin: var(--space-1) 0; }
+.vr-drafts pre { font-size: 12px; overflow-x: auto; background: var(--paper); padding: var(--space-2); border-radius: 6px; }
+.vr-drafts summary { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); cursor: pointer; }
