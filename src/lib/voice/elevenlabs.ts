@@ -74,17 +74,36 @@ export function speechToSpeech(take: Uint8Array, mime: string, voiceId: string) 
   });
 }
 
-/** Delete one generation from the account's history (ElevenLabs: DELETE /v1/history/{id}). */
-export async function deleteHistoryItem(id: string): Promise<void> {
-  await call(`/v1/history/${encodeURIComponent(id)}`, { method: 'DELETE' });
+/**
+ * Delete one generation from the account's history (ElevenLabs: DELETE /v1/history/{id}), then read it back. 'not-yet'
+ * when ElevenLabs hasn't written it yet (a 404 on delete; it writes history after answering), so the caller tries again.
+ */
+export async function deleteHistoryItem(id: string): Promise<'gone' | 'not-yet'> {
+  const path = `/v1/history/${encodeURIComponent(id)}`;
+  const res = await fetch(`${base()}${path}`, { method: 'DELETE', headers: { 'xi-api-key': key() }, signal: AbortSignal.timeout(TIMEOUT_MS) });
+  await res.body?.cancel().catch(() => {});
+  if (res.status === 404) return 'not-yet';
+  if (!res.ok) throw new Error(`ElevenLabs answered ${res.status} on a history delete`);
+  return 'gone';
+}
+
+/** Every history item made with these voices in the last `hours` (a backstop sweep, scripts/voice-history-sweep.ts). */
+export async function recentHistory(voiceIds: string[], hours: number): Promise<{ id: string; source: string; at: number }[]> {
+  const res = await call('/v1/history?page_size=100', { method: 'GET' });
+  const j = (await res.json()) as { history: { history_item_id: string; source?: string; voice_id?: string | null; date_unix: number }[] };
+  return j.history
+    .filter((h) => h.voice_id && voiceIds.includes(h.voice_id) && h.date_unix * 1000 > Date.now() - hours * 3600_000)
+    .map((h) => ({ id: h.history_item_id, source: h.source ?? '', at: h.date_unix * 1000 }));
 }
 
 /** Speech-to-text with word timings. Called with converted audio only (take-flow.ts). */
-export function speechToText(audio: Uint8Array) {
+export function speechToText(audio: Uint8Array, keyterms: string[] = []) {
   return measured(async () => {
     const form = new FormData();
     form.set('file', new Blob([audio], { type: 'audio/mpeg' }), 'converted.mp3');
     form.set('model_id', VOICE.models.transcribe);
+    // The speech's names, so they come back spelled as the speech spells them (ElevenLabs: at most 1,000, 50 characters each).
+    for (const k of keyterms.slice(0, 100)) form.append('keyterms', k.slice(0, 50));
     form.set('timestamps_granularity', 'word');
     form.set('tag_audio_events', 'false');
     const res = await call('/v1/speech-to-text', { method: 'POST', body: form });

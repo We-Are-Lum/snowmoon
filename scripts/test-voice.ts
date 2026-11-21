@@ -145,6 +145,18 @@ check('W. numbers, case, punctuation and apostrophes compare as words', norm('4'
   const one = speech.sentences[7];
   const c7 = checkSpeech([one], one.words.map((w, i) => ({ text: w, start: i, end: i + 0.5 })));
   check('W. one sentence on its own (a redo) is checked by its own number', c7.length === 1 && c7[0].n === 7 && c7[0].ok);
+  // Names by sound (2026-11-21): what scribe heard without key terms.
+  const sign = speech.sentences.filter((x) => /Lord Ephelion|Dreadknot's taxes/.test(x.text));
+  const heardAs = (txt: string) => txt.split(' ').map((w, i) => ({ text: w, start: i, end: i + 0.5 }));
+  const lord = sign.find((x) => x.text === 'Lord Ephelion')!;
+  const cA = checkSpeech([lord], heardAs('Lord Aphelion'), speech.names);
+  const cM = checkSpeech([lord], heardAs('Mortifelian'), speech.names);
+  const dread = sign.find((x) => /Dreadknot's taxes/.test(x.text))!;
+  const cD = checkSpeech([dread], heardAs(dread.text.replace(/Dreadknot/g, 'Dreadnought').replace(' 4 ', ' four ')), speech.names);
+  const cX = checkSpeech([lord], heardAs('Lord Venice'), speech.names);
+  check('W. names heard by sound pass, and are listed: "Lord Aphelion", "Mortifelian", "Dreadnought"', cA[0].ok && cA[0].bySound[0]?.heard === 'Aphelion' && cM[0].ok && cM[0].bySound[0]?.heard === 'Mortifelian' && cD[0].ok && cD[0].bySound.length >= 1, JSON.stringify([cA, cM, cD].map((c) => c[0])));
+  check('W. ... a different word still fails ("Lord Venice")', !cX[0].ok);
+  check('W. ... and only listed names are matched by sound (an ordinary word needs its spelling)', !checkSpeech([dread], heardAs(dread.text.replace('taxes', 'Texas')), speech.names)[0].ok);
 }
 
 // C. The consent.
@@ -210,6 +222,7 @@ r = await transcribe.POST(as(NATE, { method: 'POST', body: tForm(converted, tick
 const t1 = (await r.json()) as { checks: { n: number; ok: boolean; missing: string[]; extra: string[] }[]; check: string };
 const stt = stub.calls.filter((c) => c.path === '/v1/speech-to-text');
 check('T. the converted speech is transcribed with word timings', r.status === 200 && stt.length === sttBefore + 1 && stt.at(-1)!.files[0].sha256 === sha(converted) && stt.at(-1)!.fields.timestamps_granularity === 'word');
+check('T. ... by scribe_v3, with the speech\'s names as key terms', stt.at(-1)!.fields.model_id === 'scribe_v3' && (stt.at(-1)!.fields.keyterms ?? '').length > 0);
 check('T. the stub\'s one wrong word shows in sentence 4 only', t1.checks.filter((c) => !c.ok).map((c) => c.n).join() === '3' && t1.checks[3].extra.includes('weakness'), JSON.stringify(t1.checks.filter((c) => !c.ok)));
 {
   const stsAt = stub.calls.findIndex((c, i) => i >= before && c.path.startsWith('/v1/speech-to-speech/'));

@@ -1139,8 +1139,12 @@ export const VOICE = {
   models: {
     /** Speech-to-speech ("Voice Changer"). */
     convert: 'eleven_multilingual_sts_v2',
-    /** Speech-to-text, word timings: the converted audio only, never the take. Model id to confirm on the first real call. */
-    transcribe: 'scribe_v1',
+    /**
+     * Speech-to-text, word timings: the converted audio only, never the take. scribe_v3 with the speech's names as
+     * keyterms (2026-11-21: scribe_v1 and v2 heard "Lord Aphelion" and "Dreadnought"; v2 and v3 with keyterms heard
+     * them right).
+     */
+    transcribe: 'scribe_v3',
     /** Text-to-speech, the ready-made reading. */
     reading: 'eleven_multilingual_v2',
     /** Voice Design, the presets' recipe (made once by an admin, 2026-11-20; not called by the site). */
@@ -1168,8 +1172,13 @@ export const VOICE = {
     usdPer1000Credits: 22 / 121,
     convertCreditsPerMinute: 665,
     readingCreditsPerChar: 0.46,
-    /** Transcription measured 0 credits; ElevenLabs' API price list says $0.20 an hour, counted in dollars only. */
+    /**
+     * Transcription, measured 2026-11-21 on a 10.3 s clip: 3 credits (4 with keyterms, which ElevenLabs prices about
+     * 20–25% higher), with the same in dollars in a fiat-cost header ($0.00055, $0.00073). So about 0.4 credits a second
+     * with keyterms (a 1.6 s clip rounded to 0).
+     */
     transcribeUsdPerHour: 0.2,
+    transcribeCreditsPerSecond: 0.4,
   },
   caps: {
     /** Everyone's calls together, per UTC day ('free'). PLACEHOLDER: about fifteen 2-minute takes at the measured rate. */

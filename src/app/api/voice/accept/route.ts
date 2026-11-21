@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     const speech = speechById(t.speechId);
     const preset = presetRecipe(t.presetId, t.candidate ?? 0);
     if (!speech || !preset) throw new FlowError(400, 'No such speech or voice');
-    const checks = checkSpeech(speech.sentences, c.words);
+    const checks = checkSpeech(speech.sentences, c.words, speech.names);
 
     const files = form.getAll('redo');
     const tickets = form.getAll('redoTicket').map(String);
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       const n = rt.scope.n;
       if (redone.has(n)) throw new FlowError(400, `Sentence ${n + 1} is redone twice: keep one`);
       const sentence = speech.sentences.find((s) => s.n === n)!;
-      redone.set(n, checkSpeech([sentence], rc.words)[0].ok);
+      redone.set(n, checkSpeech([sentence], rc.words, speech.names)[0].ok);
       // Where the sentence is in the whole take: from its words' times, or between its neighbours' if none were heard.
       const at = checks[n];
       const before = checks.slice(0, n).reverse().find((x) => x.end !== null)?.end ?? 0;
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
       preset,
       speech: { id: speech.id, title: speech.title, source: speech.source, standIn: speech.standIn, textSha256: sha256Hex(new TextEncoder().encode(speech.paragraphs.join('\n'))) },
       takes,
-      check: { sentences: speech.sentences.length, matched: speech.sentences.length - unmatched.length, unmatched },
+      check: { sentences: speech.sentences.length, matched: speech.sentences.length - unmatched.length, unmatched, bySound: checks.flatMap((x) => x.bySound.map((b) => ({ sentence: x.n, ...b }))), names: speech.names },
       consent: { kind: 'voice_recording', sha256: t.consentSha256, perRecording: true },
       madeWith: 'snowmoon.party voice slice 1 (DRAFT)',
     };

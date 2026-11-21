@@ -23,12 +23,13 @@ export async function voicePerson(request: Request): Promise<{ fid: number } | N
 export const voiceReady = () => Boolean(db() && elevenLabsReady() && ticketsReady() && voiceStoreReady());
 
 /** The take flow's real dependencies: ElevenLabs, our tickets, and a cost recorder that settles this request's hold. */
-export function flowDeps(cost: (e: CostEntry) => Promise<void>): FlowDeps {
+export function flowDeps(cost: (e: CostEntry) => Promise<void>, keyterms: string[] = []): FlowDeps {
   return {
     sha256: sha256Hex,
     convert: speechToSpeech,
     deleteHistory: deleteHistoryItem,
-    transcribe: speechToText,
+    sleep: (ms) => new Promise((r) => setTimeout(r, ms)),
+    transcribe: (audio) => speechToText(audio, keyterms),
     sign: signTicket,
     verify: (s) => verifyTicket(s),
     cost,

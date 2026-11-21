@@ -67,6 +67,7 @@ function multipart(body: Buffer, type: string) {
 export async function startStub(port: number, opts: { mismatch?: number | null; failConvert?: boolean; bytesPerSecond?: number } = {}) {
   const calls: StubCall[] = [];
   const deleted: string[] = [];
+  const tried = new Set<string>();
   let used = 25_897;
   let seq = 0;
   const sentences = speechSentences();
@@ -87,7 +88,13 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
     if (req.headers['xi-api-key'] === undefined) return send(401, 'no key');
     if (req.method === 'GET' && url.pathname === '/v1/user/subscription') return send(200, JSON.stringify({ character_count: used }), { 'content-type': 'application/json' });
     if (req.method === 'DELETE' && url.pathname.startsWith('/v1/history/')) {
-      deleted.push(decodeURIComponent(url.pathname.split('/').pop()!));
+      // Like ElevenLabs (2026-11-21): the item is written a moment after the answer, so the first delete finds nothing.
+      const id = decodeURIComponent(url.pathname.split('/').pop()!);
+      if (!tried.has(id)) {
+        tried.add(id);
+        return send(404, '{"detail":"not found"}', { 'content-type': 'application/json' });
+      }
+      deleted.push(id);
       return send(200, '{}', { 'content-type': 'application/json' });
     }
     if (req.method === 'POST' && url.pathname.startsWith('/v1/speech-to-speech/')) {
@@ -105,7 +112,8 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
       const all = pick.flatMap((s) => s.words.map((w, k) => (seconds >= 30 && s.n === mismatch && k === 1 ? 'weakness' : w)));
       const step = (seconds || 1) / Math.max(1, all.length);
       const words = all.flatMap((w, k) => [{ text: w, start: k * step, end: k * step + step * 0.8, type: 'word' }, { text: ' ', start: k * step + step * 0.8, end: (k + 1) * step, type: 'spacing' }]);
-      return send(200, JSON.stringify({ text: all.join(' '), words }), { 'content-type': 'application/json' });
+      // As measured 2026-11-21: about 0.4 credits a second with keyterms.
+      return send(200, JSON.stringify({ text: all.join(' '), words }), { 'content-type': 'application/json', 'character-cost': String(Math.ceil(seconds * 0.4)) });
     }
     if (req.method === 'POST' && url.pathname.startsWith('/v1/text-to-speech/')) {
       const text = String((call.json as { text?: string })?.text ?? '');

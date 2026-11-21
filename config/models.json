@@ -819,7 +819,7 @@
     {
       "id": "elevenlabs-scribe-v1",
       "kind": "transcription",
-      "name": "ElevenLabs Scribe (speech-to-text)",
+      "name": "ElevenLabs Scribe (speech-to-text): scribe_v3, with v1 and v2 tried",
       "maker": "ElevenLabs",
       "repo": "elevenlabs/scribe_v1",
       "revision": null,
@@ -829,16 +829,18 @@
         "on": "2026-11-20",
         "source": "https://elevenlabs.io/terms-of-use (last updated 9 Oct 2026): \"as between you and ElevenLabs, you retain all rights in and to your Output\"; https://elevenlabs.io/docs/help-center/legal/can-i-publish-the-content-i-generate-on-the-platform: \"All paid plans include a commercial license\""
       },
-      "notes": "A closed model (principle 3: reported). Nate's choice for the Ephelion voice slice (2026-11-19). Word timings (timestamps_granularity 'word') for the word-for-word check. The model id (scribe_v1, or v2/v3 on the price list) is to be confirmed on the first real call.",
+      "notes": "A closed model (principle 3: reported). Nate's choice for the Ephelion voice slice (2026-11-19). Word timings (timestamps_granularity 'word') for the word-for-word check. The model id (scribe_v1, or v2/v3 on the price list) is to be confirmed on the first real call. 2026-11-21: the site uses scribe_v3 with the speech's names as keyterms (on a converted synthetic clip, scribe_v1 and v2 heard \"Lord Aphelion\" and \"Dreadnought\"; v2 and v3 with keyterms heard \"Lord Ephelion\" and \"Dreadknot\"). Keyterms cost about 20–25% more.",
       "added": "2026-11-20",
       "runs_on": "hosted",
       "hosted": {
         "host": "ElevenLabs API (api.elevenlabs.io), called only from our server",
         "endpoints": {
-          "scribe_v1": null
+          "scribe_v1": null,
+          "scribe_v3": null,
+          "scribe_v2": null
         },
         "price_unit": "USD per hour of audio",
-        "price_seen": "2026-11-19: $0.20 an hour (https://elevenlabs.io/pricing/api); its cost in credits isn't published: measured on the first real call; measured 2026-11-20: 0 credits (character-cost header) for a 1.6 s clip; model id scribe_v1 accepted"
+        "price_seen": "2026-11-19: $0.20 an hour (https://elevenlabs.io/pricing/api); its cost in credits isn't published: measured on the first real call; measured 2026-11-20: 0 credits (character-cost header) for a 1.6 s clip; model id scribe_v1 accepted; 2026-11-21 on a 10.3 s converted clip: 3 credits (scribe_v1, v2), 4 with keyterms (v2, v3), with the same in dollars in a fiat-cost header ($0.00055 and $0.00073)"
       },
       "keeps": "Without Zero Retention Mode (Enterprise only, which we don't have), ElevenLabs keeps inputs and outputs under its privacy policy (https://elevenlabs.io/privacy-policy, 9 Oct 2026: \"as long as necessary to provide you with our Services\"; voice data at most 3 years after the last interaction), stored in the United States, and trains on them unless the account's \"Improve the models for everyone\" is off (Nate turns it off himself; not confirmed on 2026-11-20). Receives only converted audio (never a take). Not a generation, so not in the history list; kept under the privacy policy as above.",
       "model_record": "model id, the settings sent, the date, and the credits the call used (ElevenLabs exposes no weights revision)",

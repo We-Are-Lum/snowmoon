@@ -55,7 +55,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'The reading failed. Try again.' }, { status: 502 });
   }
   await settle({ kind: 'reading', ok: true, seconds: 0, characters: text.length, estimatedCredits, credits: out.credits });
-  if (out.historyItemId) await deleteHistoryItem(out.historyItemId).catch(() => {});
+  // As for conversions: ElevenLabs writes the history item after answering, so try again while it isn't there yet.
+  let historyDeleted = false;
+  if (out.historyItemId) {
+    for (const wait of [0, 1000, 3000, 6000]) {
+      if (wait) await new Promise((r) => setTimeout(r, wait));
+      if ((await deleteHistoryItem(out.historyItemId).catch(() => 'not-yet' as const)) === 'gone') {
+        historyDeleted = true;
+        break;
+      }
+    }
+  }
   const sha256 = sha256Hex(out.audio);
   const recipe = {
     provider: VOICE.provider,
@@ -68,6 +78,7 @@ export async function POST(request: Request) {
     textSha256: sha256Hex(new TextEncoder().encode(text)),
     audioSha256: sha256,
     credits: out.credits,
+    historyDeleted,
     madeWith: 'snowmoon.party voice slice 1 (DRAFT)',
   };
   const id = await saveDraft(sql, { fid: who.fid, kind: 'reading', speechId: speech.id, presetId: preset.id, recipe, audio: [{ role: 'reading', sentence: null, replacesStart: null, replacesEnd: null, mp3: out.audio, sha256, seconds: null }] });

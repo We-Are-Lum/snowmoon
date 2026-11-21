@@ -16,7 +16,7 @@ import '../styles/voice.css';
  */
 
 interface Choice { presetId: string; name: string; description: string; candidate: number; generatedVoiceId: string; previewUrl: string; saved: boolean }
-interface Check { n: number; ok: boolean; missing: string[]; extra: string[]; start: number | null; end: number | null }
+interface Check { n: number; ok: boolean; bySound?: { expected: string; heard: string }[]; missing: string[]; extra: string[]; start: number | null; end: number | null }
 interface Status {
   ready: boolean;
   speech: { id: string; title: string; character: string; source: { kind: string; block?: string }; standIn: boolean; paragraphs: string[]; sentences: { n: number; text: string }[]; characters: number };
@@ -574,6 +574,9 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                               </span>
                             )}
                             {redo && <span className="vr-diff">{ok ? ' Redone.' : ' Redone, still not matching.'}</span>}
+                            {!redo && (c.bySound?.length ?? 0) > 0 && (
+                              <span className="vr-sound">Names heard by sound: {c.bySound!.map((b) => `${b.heard} as ${b.expected}`).join(', ')}.</span>
+                            )}
                           </span>
                           {(!c.ok || redo) && redoing !== c.n && (
                             <button type="button" className="vr-btn vr-quiet vr-small-btn" onClick={() => redoSentence(c.n)} disabled={busy !== null || recording}>

@@ -31,7 +31,7 @@ export function voiceStatic(flow: string, route: string): string[] {
   const takeCalls = [...code.matchAll(/(\w[\w.]*)\(([^()]*\btake\b[^()]*)\)/g)].map((m) => `${m[1]}(${m[2]})`).filter((c) => !/^take\.fill\(0\)$/.test(c) && !/\btake:\s*Uint8Array/.test(c));
   for (const c of takeCalls) if (!/^deps\.(convert|sha256)\(take\b/.test(c)) p.push(`take-flow passes the take to ${c}`);
   if (!/finally\s*\{\s*take\.fill\(0\);\s*\}/.test(code)) p.push('take-flow does not zero the take in a finally');
-  if (!/await deps\.deleteHistory\(out\.historyItemId\)/.test(code)) p.push('take-flow does not delete the history item');
+  if (!/\(await deps\.deleteHistory\(out\.historyItemId\)\) === 'gone'/.test(code)) p.push('take-flow does not delete the history item');
   if (!/if \(sha !== convert\.convertedSha256 \|\| sha === convert\.takeSha256\) throw/.test(code)) p.push('take-flow transcribes without checking it is converted audio');
   if ((code.match(/deps\.transcribe\(/g) ?? []).length !== 1 || !/deps\.transcribe\(input\.audio\)/.test(code)) p.push('take-flow calls transcribe with something other than the checked converted audio');
   const r = route.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -91,6 +91,7 @@ export async function voiceRun(root: string, flowSrc?: string): Promise<string[]
   for (const k of Object.keys(orig) as (keyof typeof orig)[]) console[k] = (...a: unknown[]) => void logged.push(a.map((x) => (x instanceof Uint8Array ? Buffer.from(x).toString('base64') : typeof x === 'string' ? x : JSON.stringify(x))).join(' '));
   const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
   const signed: unknown[] = [];
+  let deletes = 0;
   const converted = randomBytes(3000);
   const make = (convert: Deps['convert']): Deps => {
     const rec = (dep: string, f: (...a: never[]) => unknown) => (...args: never[]) => {
@@ -101,7 +102,9 @@ export async function voiceRun(root: string, flowSrc?: string): Promise<string[]
     return {
       sha256: rec('sha256', sha),
       convert: rec('convert', convert as never),
-      deleteHistory: rec('deleteHistory', async () => {}),
+      // Like ElevenLabs on 2026-11-21: the item isn't written yet at the first delete, and is there at the next.
+      deleteHistory: rec('deleteHistory', async () => (++deletes === 1 ? 'not-yet' : 'gone')),
+      sleep: async () => {},
       transcribe: rec('transcribe', async () => ({ words: [{ text: 'all', start: 0, end: 0.3 }], credits: 1 })),
       sign: rec('sign', (t: unknown) => (signed.push(structuredClone(t)), `signed.${signed.length}`)),
       verify: rec('verify', (s: string) => (signed[Number(s.split('.')[1]) - 1] ?? null) as never),
@@ -124,6 +127,7 @@ export async function voiceRun(root: string, flowSrc?: string): Promise<string[]
   try {
     for (const [name, convert] of scenarios) {
       seen.length = 0;
+      deletes = 0;
       const t = new Uint8Array(take);
       let out: { audio: Uint8Array; ticket: string } | null = null;
       try {
@@ -137,6 +141,8 @@ export async function voiceRun(root: string, flowSrc?: string): Promise<string[]
       if (name === 'success') {
         if (!out) problems.push('success: no conversion came back');
         if (!seen.some((s) => s.dep === 'deleteHistory' && s.args[0] === 'hist1')) problems.push('success: the history item was not deleted');
+        if (seen.filter((s) => s.dep === 'deleteHistory').length < 2 || !(signed.at(-1) as { historyDeleted?: boolean } | undefined)?.historyDeleted)
+          problems.push('success: the delete was not tried again once the history item was written (ElevenLabs writes it after answering)');
         if (holds(signed)) problems.push('success: the signed record holds the take');
         // Transcription: the converted audio passes; the take is refused and never reaches transcribe.
         if (out) {
@@ -171,7 +177,8 @@ export const VOICE_PLANTS: { name: string; plant: (s: string) => string }[] = [
   { name: 'a log of the take', plant: (s) => s.replace('const takeSha256 = deps.sha256(take);', "const takeSha256 = deps.sha256(take);\n    console.log('take', Buffer.from(take).toString('base64'));") },
   { name: 'a storage put of the take', plant: (s) => s.replace('const takeSha256 = deps.sha256(take);', "const takeSha256 = deps.sha256(take);\n    (await import('node:fs')).writeFileSync((await import('node:os')).tmpdir() + '/voice-planted-take.bin', take);") },
   { name: 'a transcription of the take', plant: (s) => s.replace('let historyDeleted = false;', 'await deps.transcribe(take);\n    let historyDeleted = false;') },
-  { name: 'a skipped history delete', plant: (s) => s.replace('await deps.deleteHistory(out.historyItemId);', '') },
+  { name: 'a skipped history delete', plant: (s) => s.replace("(await deps.deleteHistory(out.historyItemId)) === 'gone'", 'true') },
+  { name: 'no retry while the history item is not written yet', plant: (s) => s.replace('for (const wait of [0, 1000, 3000, 6000])', 'for (const wait of [0])') },
   { name: 'the take not zeroed', plant: (s) => s.replace('take.fill(0);', '') },
   { name: 'transcription without the converted-audio check', plant: (s) => s.replace('if (sha !== convert.convertedSha256 || sha === convert.takeSha256) throw', 'if (false) throw') },
   { name: 'the take in the signed record', plant: (s) => s.replace('takeSha256,\n      convertedSha256,', "takeSha256,\n      takeCopy: Array.from(take).join(','),\n      convertedSha256,") },

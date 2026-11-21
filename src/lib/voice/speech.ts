@@ -16,6 +16,8 @@ export interface Speech {
   standIn: boolean;
   paragraphs: string[];
   sentences: Sentence[];
+  /** The speech's names, sent to transcription as key terms and matched by sound in the word check (Nate, 2026-11-21). */
+  names: string[];
   /** Characters in the text read aloud, for the reading's cost. */
   characters: number;
 }
@@ -29,7 +31,7 @@ const strip = (html: string) =>
     .replace(/\s+/g, ' ')
     .trim();
 
-function fromBlock(id: string, chapter: number, idx: number): Speech {
+function fromBlock(id: string, chapter: number, idx: number, names: string[]): Speech {
   const ch = loadChapter(chapter);
   const b = ch?.blocks.find((x) => x.idx === idx);
   if (!b) throw new Error(`no block c${chapter}-b${idx}`);
@@ -44,12 +46,13 @@ function fromBlock(id: string, chapter: number, idx: number): Speech {
     standIn: true,
     paragraphs,
     sentences: sentencesOf(paragraphs),
+    names,
     characters: paragraphs.join('\n').length,
   };
 }
 
 let cache: Speech[] | null = null;
 export function speeches(): Speech[] {
-  return (cache ??= [fromBlock('ephelion-c13-b64', 13, 64)]);
+  return (cache ??= [fromBlock('ephelion-c13-b64', 13, 64, ['Lord Ephelion', 'Ephelion', 'Dreadknot', 'Veridia', 'Arctic Empire'])]);
 }
 export const speechById = (id: string) => speeches().find((s) => s.id === id) ?? null;

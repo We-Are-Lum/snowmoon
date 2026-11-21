@@ -57,7 +57,9 @@ export interface CostEntry {
 export interface FlowDeps {
   sha256(bytes: Uint8Array): string;
   convert(take: Uint8Array, mime: string, voiceId: string): Promise<{ audio: Uint8Array; historyItemId: string | null; credits: number | null }>;
-  deleteHistory(id: string): Promise<void>;
+  /** 'gone' once deleted; 'not-yet' while ElevenLabs hasn't written the item (it writes history after answering). */
+  deleteHistory(id: string): Promise<'gone' | 'not-yet'>;
+  sleep(ms: number): Promise<void>;
   transcribe(audio: Uint8Array): Promise<{ words: HeardWord[]; credits: number | null }>;
   sign(t: ConvertTicket | CheckTicket): string;
   verify(s: string): ConvertTicket | CheckTicket | null;
@@ -108,12 +110,17 @@ export async function convertTake(deps: FlowDeps, input: ConvertInput): Promise<
     }
     let historyDeleted = false;
     if (out.historyItemId) {
-      for (let attempt = 0; attempt < 2 && !historyDeleted; attempt++) {
+      // ElevenLabs writes the history item after it answers (seen 2026-11-21: a delete right away found nothing, and the
+      // item appeared a moment later). So: try, and while it isn't there yet, wait 1, 3 and 6 seconds and try again.
+      for (const wait of [0, 1000, 3000, 6000]) {
+        if (wait) await deps.sleep(wait);
         try {
-          await deps.deleteHistory(out.historyItemId);
-          historyDeleted = true;
+          if ((await deps.deleteHistory(out.historyItemId)) === 'gone') {
+            historyDeleted = true;
+            break;
+          }
         } catch {
-          // Tried twice; the recipe says whether it was deleted.
+          // An error: tried again after the next wait; the recipe says whether it was deleted.
         }
       }
     }
