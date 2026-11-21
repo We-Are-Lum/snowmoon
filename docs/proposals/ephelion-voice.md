@@ -593,6 +593,45 @@ the real database, (a) or (b); whether a picture model should replace the stand-
 6. **Each speech carries its own label:** the stand-in c13-b64 is "Book" (with its block); the team's speeches will be
    "Invented, not from the book" with their writers. Shown with the speech and kept in every recipe.
 
+## Plan: merging slices 1 and 2 behind the switch (not done; for Nate)
+
+What would ship: everything on this branch, with `VOICE.adminTrial` **on** (admins only: Nate and Garance), `VOICE.open`
+off, and `VOICE.realPictures` **off** (storyboard pictures refused). Nothing changes for anyone else: every voice page and
+route stays a 404 to them. The legal texts describe what ships, so the reread lines go into `src/lib/legal.ts` in the same
+merge.
+
+**Order** (each step waits for the one before):
+1. **Reread (Nate):** the rule in `docs/principles.md`, own-voice-v2 (with or without the bracketed training line, as
+   Nate says), P1h and P1i, the Privacy §3, §4 and §7 and Terms §5 and §8 lines, the picker names. Nate says "reread".
+2. **Wording into the branch:** the reread lines into `src/lib/legal.ts` (with the `ownerReread` keys recorded under his
+   words and `LEGAL.effective` set to the merge day), `own-voice-v2` made `current` in `config/consent-own-voice.json`,
+   the principles' DRAFT marks taken off where he reread, `VOICE.adminTrial: true` in one commit. Then the commit's file
+   list and a clean tree are checked.
+3. **Checks on the merge result** (main merged into the branch, clean tree): `npm run build`, `test:voice` (146),
+   `check:voice-proof` (P1h, 9 plants), `check:principles` P1, P3, P6 locally; `check:ui` against a local build on a
+   copy of the rehearsal database in rehearsal mode (once the check:ui branch is on main).
+4. **Migration (Nate):** `NEXT_ephelion_voice.sql` numbered at merge (the next free number on main and production;
+   0044 if nothing else lands first), applied by Nate: dry run, migration, read-back ("READ-BACK PASSED"). The
+   coordinator has tested this version. The PR waits for "applied".
+5. **Production settings (Nate):** `ELEVENLABS_API_KEY` is in Vercel already; `R2_PRIVATE_BUCKET` and its key are the
+   ones hidden images use (to confirm by name). Training off in ElevenLabs (or the bracketed line dropped).
+6. **Merge (Nate's word):** a merge commit, then wait for /api/version to show it.
+7. **Live checks** from the merge commit: check:shipped, check:principles, check:ui (load under 8), check:miniapp; and
+   by hand: every voice route answers 404 signed out and to a non-admin.
+
+**What admins could try on production afterwards** (each real call measured; the 20% rule and the daily pool apply):
+- /storyboard/record: the consent screen, pick one of the three voices, listen to the ready-made reading (made once,
+  ≈ 985 credits), record the whole speech (c13-b64 stands in), convert (≈ 665 credits a minute), the word check with names
+  by sound, redo a sentence, accept, remove a draft.
+- /storyboard/board/<draft>: cuts, shots, descriptions, camera, sheets, notes, play-through. Pictures stay off
+  (`VOICE.realPictures`) until Nate's word; with it, each picture is a challenge picture's cost.
+- The Farcaster app: the microphone through the app's prompt (the time limits planned for the recording page should land
+  first; see "Rule for /storyboard/record").
+- The history sweep afterwards (`scripts/voice-history-sweep.ts`), to see nothing of ours is left at ElevenLabs.
+
+**Before the switch opens to everyone** (later, separate): the Privacy/Terms lines for everyone, the open caps, the
+publish slice and its rule for unmatched sentences, a check:ui on production data.
+
 ## What Nate needs to do (one at a time)
 
 1. #195 is merged and live: the iPhone and desktop tests on /admin/mic-test; Android goes to Garance or Luis.
