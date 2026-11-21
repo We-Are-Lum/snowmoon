@@ -406,10 +406,34 @@ reports the permission's state (before and after asking).
 the mic-test PR is on main and this branch merges main), shown under Record, with the same "prompt shown" detail kept
 out of the page (it's a test aid) but logged nowhere.
 
+## The picks (Nate, 2026-11-20) and the first full reading
+
+**Picked:** Warm lecturer 1 (first choice, the default), Warm lecturer 3, Russian 1. Saved as voices in the account on
+2026-11-21: **saving cost 0 credits** (the count didn't move) and took one voice slot each: **22 of 30 used, 8 left**.
+The site's key can read all three. Their voice ids are their preview ids (GJNXe6evoJS9rblaWDwx, oO59DHjG1nW3K9foHiWR,
+fdoGbz5eU4VUde5iMQYV).
+
+**Presets** (`config/voice-presets.json`): only the three picks are offered now, in Nate's order, each with its recipe
+(brief, model eleven_ttv_v3, seed 2020, the preview chosen, the saved voice). Rounds 1 and 2's unpicked previews stay in
+the file for the record and are refused. Proposed names in the picker (no real people's names; Nate to change):
+1. **Warm lecturer** (the default)
+2. **Warm lecturer, second voice**
+3. **Light Russian accent**
+
+**The stand-in reading:** c13-b64 in Warm lecturer 1 only, all 2,141 characters, 2:24. Estimate 985 credits; measured
+**942** (header); the history item was deleted and is confirmed gone. On the listening page:
+https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a/index.html (its recipe in
+`reading-warm-lecturer.recipe.json` beside the audio, kept privately). No readings in the other two until the team's
+speeches exist. Made outside the site with `scripts/voice-reading-once.ts` (the site's reading route needs the
+migration, not applied yet).
+
+**The listening page** stays until Nate says Garance has heard the three; then the unpicked previews are deleted from
+it.
+
 ## What Nate needs to do (one at a time)
 
 1. #195 is merged and live: the iPhone and desktop tests on /admin/mic-test; Android goes to Garance or Luis.
-2. Round 2: pick one preview per brief, or none (link above).
+2. ~~Picks~~ done; the picker's names (above): keep or change.
 3. (Nate, this morning) ElevenLabs training off; say when it's done (the bracketed line stays until then).
 4. ~~The key~~ done; the three test calls are done and measured (above).
 5. Reread: the rule, own-voice-v2, P1h/P1i, the Privacy and Terms lines.

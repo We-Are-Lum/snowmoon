@@ -1,5 +1,5 @@
 {
-  "about": "Voice presets for the Ephelion storyboard (Nate, 2026-11-19; branch ephelion-voice). Each is an ElevenLabs voice and its recipe: how it was made. DRAFT: Nate picks the voices; until he does, every entry is a candidate with no voice id, and nothing here is shown on the site. The book says almost nothing of Ephelion's voice: he is 'Lord Ephelion, Arctic ambassador to Veridia' (c8-b17) and signs 'Arctic Empire consul to Veridia' (c13-b64). Every description below is this edition's invention, written by the coding agent (Claude, a closed model by Anthropic) for Nate's reread. None is American-accented, and none names or imitates a real person. The preview line is the opening of c13-b64, word for word. Voice Design was run once per brief on 2026-11-20 (Nate's word of 2026-11-20: spend up to about 1,500 credits), three previews each, listed under recipe.previews with the sha256 of each preview's mp3; `picked` and `voiceId` are set only when Nate picks one and it is saved. Round 2 (2026-11-20): Nate's own four briefs (not British: American, or a light Russian accent; warm, professional, persuasive because he sounds reasonable), seed 2020, measured at 378 credits a call (one per character of the line). Round 1 is kept for the record, marked not-chosen, and is no longer offered.",
+  "about": "Voice presets for the Ephelion storyboard (Nate, 2026-11-19; branch ephelion-voice). Each is an ElevenLabs voice and its recipe: how it was made. DRAFT: Nate picks the voices; until he does, every entry is a candidate with no voice id, and nothing here is shown on the site. The book says almost nothing of Ephelion's voice: he is 'Lord Ephelion, Arctic ambassador to Veridia' (c8-b17) and signs 'Arctic Empire consul to Veridia' (c13-b64). Every description below is this edition's invention, written by the coding agent (Claude, a closed model by Anthropic) for Nate's reread. None is American-accented, and none names or imitates a real person. The preview line is the opening of c13-b64, word for word. Voice Design was run once per brief on 2026-11-20 (Nate's word of 2026-11-20: spend up to about 1,500 credits), three previews each, listed under recipe.previews with the sha256 of each preview's mp3; `picked` and `voiceId` are set only when Nate picks one and it is saved. Round 2 (2026-11-20): Nate's own four briefs (not British: American, or a light Russian accent; warm, professional, persuasive because he sounds reasonable), seed 2020, measured at 378 credits a call (one per character of the line). Round 1 is kept for the record, marked not-chosen, and is no longer offered. Picked (Nate, 2026-11-20): Warm lecturer 1 (the default), Warm lecturer 3, then Russian 1; saved as voices on 2026-11-21 (no credits; three voice slots). Only picked presets are offered; the names people see are proposed, for Nate.",
   "character": "ephelion",
   "previewBlock": "c13-b64",
   "previewText": "All humans are equal, the schools, the posters, the songs, and everything else in Veridia is telling you. Maybe not Dreadknot - but that's exactly why Dreadknot's taxes were bumped up to tier 4 in the audit last year. Nobody is better than anyone else, and if you even dare claim that one human being is better than another, then you are immediately cast out as evil in Veridia.",
@@ -151,7 +151,7 @@
     },
     {
       "id": "ephelion-lecturer",
-      "status": "candidate",
+      "status": "auditioned",
       "round": 2,
       "name": "Warm lecturer",
       "invented": true,
@@ -185,11 +185,12 @@
         ],
         "picked": null,
         "creditsMeasured": 378
-      }
+      },
+      "note": "Round 2's brief; its picked previews are presets of their own below (Nate, 2026-11-20)."
     },
     {
       "id": "ephelion-baritone",
-      "status": "candidate",
+      "status": "auditioned",
       "round": 2,
       "name": "Deep baritone",
       "invented": true,
@@ -223,11 +224,12 @@
         ],
         "picked": null,
         "creditsMeasured": 378
-      }
+      },
+      "note": "Round 2's brief; its picked previews are presets of their own below (Nate, 2026-11-20)."
     },
     {
       "id": "ephelion-russian",
-      "status": "candidate",
+      "status": "auditioned",
       "round": 2,
       "name": "Light Russian accent",
       "invented": true,
@@ -261,11 +263,12 @@
         ],
         "picked": null,
         "creditsMeasured": 378
-      }
+      },
+      "note": "Round 2's brief; its picked previews are presets of their own below (Nate, 2026-11-20)."
     },
     {
       "id": "ephelion-sincere",
-      "status": "candidate",
+      "status": "auditioned",
       "round": 2,
       "name": "Sincere, rising",
       "invented": true,
@@ -299,6 +302,112 @@
         ],
         "picked": null,
         "creditsMeasured": 378
+      },
+      "note": "Round 2's brief; its picked previews are presets of their own below (Nate, 2026-11-20)."
+    },
+    {
+      "id": "ephelion-warm-lecturer",
+      "status": "picked",
+      "order": 1,
+      "default": true,
+      "name": "Warm lecturer",
+      "nameProposed": true,
+      "invented": true,
+      "voiceId": "GJNXe6evoJS9rblaWDwx",
+      "previewBase": "https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a",
+      "previewFile": "lecturer-1.mp3",
+      "recipe": {
+        "provider": "ElevenLabs",
+        "made": "Voice Design",
+        "model": "eleven_ttv_v3",
+        "description": "A man in his fifties with a warm, clear American voice. Professional and friendly, like a well-liked university lecturer explaining something he believes is obviously true. Conversational pace, a smile in the voice, never shouting. Studio quality.",
+        "briefBy": "Nate (2026-11-20)",
+        "guidanceScale": 5,
+        "seed": 2020,
+        "madeOn": "2026-11-20",
+        "previews": [
+          {
+            "n": 1,
+            "generatedVoiceId": "GJNXe6evoJS9rblaWDwx",
+            "sha256": "0fd4d4ac47e6566048a51d40840427ead00727112788a499628f8cd0f5187e5f"
+          }
+        ],
+        "picked": 1,
+        "creditsMeasured": 378,
+        "pickedBy": "Nate (2026-11-20)",
+        "savedOn": "2026-11-21",
+        "savedAs": "Snowmoon Ephelion: warm lecturer 1",
+        "fromBrief": "ephelion-lecturer"
+      }
+    },
+    {
+      "id": "ephelion-warm-lecturer-2",
+      "status": "picked",
+      "order": 2,
+      "default": false,
+      "name": "Warm lecturer, second voice",
+      "nameProposed": true,
+      "invented": true,
+      "voiceId": "oO59DHjG1nW3K9foHiWR",
+      "previewBase": "https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a",
+      "previewFile": "lecturer-3.mp3",
+      "recipe": {
+        "provider": "ElevenLabs",
+        "made": "Voice Design",
+        "model": "eleven_ttv_v3",
+        "description": "A man in his fifties with a warm, clear American voice. Professional and friendly, like a well-liked university lecturer explaining something he believes is obviously true. Conversational pace, a smile in the voice, never shouting. Studio quality.",
+        "briefBy": "Nate (2026-11-20)",
+        "guidanceScale": 5,
+        "seed": 2020,
+        "madeOn": "2026-11-20",
+        "previews": [
+          {
+            "n": 3,
+            "generatedVoiceId": "oO59DHjG1nW3K9foHiWR",
+            "sha256": "2f12f0e65b589d737c0b5d202deef857b6ffb00a7e1af4a8150dc7dd1de703a1"
+          }
+        ],
+        "picked": 3,
+        "creditsMeasured": 378,
+        "pickedBy": "Nate (2026-11-20)",
+        "savedOn": "2026-11-21",
+        "savedAs": "Snowmoon Ephelion: warm lecturer 3",
+        "fromBrief": "ephelion-lecturer"
+      }
+    },
+    {
+      "id": "ephelion-light-russian",
+      "status": "picked",
+      "order": 3,
+      "default": false,
+      "name": "Light Russian accent",
+      "nameProposed": true,
+      "invented": true,
+      "voiceId": "fdoGbz5eU4VUde5iMQYV",
+      "previewBase": "https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a",
+      "previewFile": "russian-1.mp3",
+      "recipe": {
+        "provider": "ElevenLabs",
+        "made": "Voice Design",
+        "model": "eleven_ttv_v3",
+        "description": "A man in his late forties speaking fluent, precise English with a light Russian accent. Cultured and composed, quiet confidence, persuasive rather than menacing. Measured pace. Studio quality.",
+        "briefBy": "Nate (2026-11-20)",
+        "guidanceScale": 5,
+        "seed": 2020,
+        "madeOn": "2026-11-20",
+        "previews": [
+          {
+            "n": 1,
+            "generatedVoiceId": "fdoGbz5eU4VUde5iMQYV",
+            "sha256": "d61ae63da3c498795ccfb23ba5cfcf6481aaa214e469b3181eb69d2cbf3997c8"
+          }
+        ],
+        "picked": 1,
+        "creditsMeasured": 378,
+        "pickedBy": "Nate (2026-11-20)",
+        "savedOn": "2026-11-21",
+        "savedAs": "Snowmoon Ephelion: light Russian accent 1",
+        "fromBrief": "ephelion-russian"
       }
     }
   ]

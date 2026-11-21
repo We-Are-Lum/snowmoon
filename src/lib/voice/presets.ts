@@ -28,6 +28,8 @@ interface PresetFile {
     status: string;
     voiceId: string | null;
     previewBase: string | null;
+    previewFile?: string;
+    order?: number;
     recipe: { model: string; description: string; seed: number | null; guidanceScale: number; previews: { n: number; generatedVoiceId: string; sha256: string }[]; picked: number | null };
   }[];
 }
@@ -35,7 +37,10 @@ const file = (): PresetFile => JSON.parse(readFileSync(path.join(process.cwd(), 
 
 export function presetChoices(): { previewText: string; previewBlock: string; choices: PresetChoice[] } {
   const f = file();
-  const choices = f.presets.filter((p) => p.status !== 'not-chosen' && p.previewBase).flatMap((p) =>
+  // Once Nate has picked, only the picked presets are offered, in his order (the first is the default).
+  const picked = f.presets.filter((p) => p.status === 'picked').sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+  const offered = picked.length ? picked : f.presets.filter((p) => p.status === 'candidate' && p.previewBase);
+  const choices = offered.flatMap((p) =>
     p.recipe.previews
       .filter((v) => p.recipe.picked === null || p.recipe.picked === v.n)
       .map((v) => ({
@@ -44,7 +49,7 @@ export function presetChoices(): { previewText: string; previewBlock: string; ch
         description: p.recipe.description,
         candidate: v.n,
         generatedVoiceId: v.generatedVoiceId,
-        previewUrl: `${p.previewBase}/${p.id.replace(/^ephelion-/, '')}-${v.n}.mp3`,
+        previewUrl: `${p.previewBase}/${p.previewFile ?? `${p.id.replace(/^ephelion-/, '')}-${v.n}.mp3`}`,
         saved: Boolean(p.voiceId && p.recipe.picked === v.n),
       })),
   );
@@ -53,7 +58,7 @@ export function presetChoices(): { previewText: string; previewBlock: string; ch
 
 /** The preset's recipe as an accepted draft records it. */
 export function presetRecipe(presetId: string, candidate: number) {
-  const p = file().presets.find((x) => x.id === presetId && x.status !== 'not-chosen');
+  const p = file().presets.find((x) => x.id === presetId && (x.status === 'picked' || x.status === 'candidate'));
   const v = p?.recipe.previews.find((x) => x.n === candidate);
   if (!p || !v) return null;
   return {

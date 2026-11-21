@@ -214,6 +214,11 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     })();
   }, [admin, load]);
 
+  // The default voice (Nate's first pick) starts selected.
+  useEffect(() => {
+    if (status && status !== 'none' && !choice && status.choices[0]?.saved) setChoice(`${status.choices[0].presetId}#${status.choices[0].candidate}`);
+  }, [status, choice]);
+
   // Leaving before Accept discards: say so if there is something to lose.
   useEffect(() => {
     if (!converted || accepted) return;
@@ -443,7 +448,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
           <section className="vr-card" aria-labelledby="vr-pick-h">
             <h2 id="vr-pick-h">1. Pick a voice</h2>
             <p className="vr-note">
-              Each plays the opening of the letter. <span className="vr-tag">AI</span> Made with ElevenLabs Voice Design ({s.models.design}, a closed model by ElevenLabs) from a description this edition wrote. Until Nate picks, the twelve previews stand in.
+              Each plays the opening of the letter. <span className="vr-tag">AI</span> Made with ElevenLabs Voice Design ({s.models.design}, a closed model by ElevenLabs) from a description this edition wrote.
             </p>
             {groups.map((g) => (
               <fieldset key={g.id} className="vr-group">

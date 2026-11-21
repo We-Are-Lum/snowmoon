@@ -159,7 +159,7 @@ const form = (fields: Record<string, string | Blob>) => {
   for (const [k, v] of Object.entries(fields)) f.set(k, v);
   return f;
 };
-const takeForm = (t: Uint8Array, extra: Record<string, string> = {}) => form({ take: new Blob([t], { type: 'audio/webm' }), speechId: speech.id, presetId: 'ephelion-russian', candidate: '2', seconds: '40', agree: wording.sha256, ...extra });
+const takeForm = (t: Uint8Array, extra: Record<string, string> = {}) => form({ take: new Blob([t], { type: 'audio/webm' }), speechId: speech.id, presetId: 'ephelion-light-russian', candidate: '1', seconds: '40', agree: wording.sha256, ...extra });
 let r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(take) }));
 check('C. before agreeing to the screen, convert is refused (403)', r.status === 403);
 r = await consent.POST(as(NATE, { method: 'POST', body: JSON.stringify({ sha256: 'f'.repeat(64) }) }));
@@ -177,13 +177,15 @@ const ticket = r.headers.get('x-voice-ticket') ?? '';
 const converted = new Uint8Array(await r.arrayBuffer());
 check('V. the whole take is converted: MP3 back, with its signed record', r.status === 200 && r.headers.get('content-type') === 'audio/mpeg' && ticket.includes('.') && converted.length > 1000, String(r.status));
 const sts = stub.calls.slice(before).filter((c) => c.path.startsWith('/v1/speech-to-speech/'));
-check('V. ElevenLabs got the take once, into the preview\'s voice, with the model and settings', sts.length === 1 && sts[0].files[0]?.sha256 === sha(take) && /nbS9HiIHgbkUOPcxwyWW/.test(sts[0].path) && sts[0].fields.model_id === VOICE.models.convert && JSON.parse(sts[0].fields.voice_settings).stability === 0.5);
+check('V. ElevenLabs got the take once, into the preview\'s voice, with the model and settings', sts.length === 1 && sts[0].files[0]?.sha256 === sha(take) && /fdoGbz5eU4VUde5iMQYV/.test(sts[0].path) && sts[0].fields.model_id === VOICE.models.convert && JSON.parse(sts[0].fields.voice_settings).stability === 0.5);
 check('V. the conversion\'s history item was deleted at ElevenLabs right after', stub.deleted.length === 1 && stub.deleted[0] === 'stubhist1');
 check('V. the reply is not the take', sha(converted) !== sha(take));
 check('V. the reply\'s cache is off', r.headers.get('cache-control') === 'no-store');
-const preset = (await (await status.GET(as(NATE))).json()) as { choices: { presetId: string; candidate: number; previewUrl: string }[]; today: { credits: number } };
-check('V. twelve stand-in voices (round 2), played from our media host', preset.choices.length === 12 && preset.choices.every((c) => c.previewUrl.startsWith('https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a/')));
-check('V. round 1 (not chosen) is not offered, and can\'t be converted into', !preset.choices.some((c) => /rally-orator|cold-baritone|arctic|bright-coach/.test(c.presetId)));
+const preset = (await (await status.GET(as(NATE))).json()) as { choices: { presetId: string; candidate: number; previewUrl: string; saved?: boolean }[]; today: { credits: number } };
+check('V. the three picked voices, in Nate\'s order (the default first), saved, played from our media host', preset.choices.map((c) => c.presetId).join() === 'ephelion-warm-lecturer,ephelion-warm-lecturer-2,ephelion-light-russian' && preset.choices.every((c) => (c as { saved?: boolean }).saved && c.previewUrl.startsWith('https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a/')));
+check('V. rounds 1 and 2\'s unpicked voices are not offered', !preset.choices.some((c) => /rally-orator|cold-baritone|arctic|bright-coach|baritone$|sincere|^ephelion-lecturer$|^ephelion-russian$/.test(c.presetId)));
+r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(10), { presetId: 'ephelion-russian', candidate: '2' }) }));
+check('V. ... an unpicked round-2 preview is refused before any call', r.status === 400);
 r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(10), { presetId: 'ephelion-rally-orator' }) }));
 check('V. ... a round-1 voice is refused before any call', r.status === 400);
 r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(10), { presetId: 'nope' }) }));
@@ -249,9 +251,9 @@ const acc = (await r.json()) as { id: string; recipe: Record<string, unknown>; e
 if (!acc.id) console.log('  accept said:', r.status, acc.error);
 check('A. accept keeps a private draft', r.status === 200 && /^[0-9a-f-]{36}$/.test(acc.id));
 const [d] = await sql`select * from studio.voice_drafts where id = ${acc.id}`;
-const rec = d.recipe as { provider: string; closedModel: boolean; model: string; settings: { stability: number }; transcribeModel: string; preset: { id: string; candidate: number; generatedVoiceId: string; designModel: string; invented: boolean; standIn: boolean }; takes: { role: string; takeSha256: string; convertedSha256: string; historyDeleted: boolean; sentence?: number }[]; check: { unmatched: number[]; matched: number; sentences: number }; consent: { sha256: string; perRecording: boolean }; speech: { source: { block: string } } };
+const rec = d.recipe as { provider: string; closedModel: boolean; model: string; settings: { stability: number }; transcribeModel: string; preset: { id: string; candidate: number; generatedVoiceId: string; voiceId: string | null; designModel: string; invented: boolean; standIn: boolean }; takes: { role: string; takeSha256: string; convertedSha256: string; historyDeleted: boolean; sentence?: number }[]; check: { unmatched: number[]; matched: number; sentences: number }; consent: { sha256: string; perRecording: boolean }; speech: { source: { block: string } } };
 check('A. the recipe names ElevenLabs, a closed model, the model and its settings', rec.provider === 'ElevenLabs' && rec.closedModel && rec.model === 'eleven_multilingual_sts_v2' && rec.settings.stability === 0.5 && rec.transcribeModel === VOICE.models.transcribe);
-check('A. ... the voice: preset, candidate, its Voice Design recipe, marked invented and a stand-in', rec.preset.id === 'ephelion-russian' && rec.preset.candidate === 2 && rec.preset.generatedVoiceId === 'nbS9HiIHgbkUOPcxwyWW' && rec.preset.designModel === 'eleven_ttv_v3' && rec.preset.invented && rec.preset.standIn);
+check('A. ... the voice: the picked preset, its saved voice and Voice Design recipe, marked invented', rec.preset.id === 'ephelion-light-russian' && rec.preset.candidate === 1 && rec.preset.generatedVoiceId === 'fdoGbz5eU4VUde5iMQYV' && rec.preset.voiceId === 'fdoGbz5eU4VUde5iMQYV' && rec.preset.designModel === 'eleven_ttv_v3' && rec.preset.invented && !rec.preset.standIn);
 check('A. ... the sha256 of each raw take, and of each converted file', rec.takes.length === 2 && rec.takes[0].takeSha256 === sha(take) && rec.takes[0].convertedSha256 === sha(converted) && rec.takes[1].takeSha256 === sha(redoTake) && rec.takes[1].sentence === 3 && rec.takes.every((t) => t.historyDeleted));
 check('A. ... the word check: every sentence matches once sentence 4 is redone', rec.check.unmatched.length === 0 && rec.check.matched === rec.check.sentences);
 check('A. ... the consent\'s wording and that it was given for each recording', rec.consent.sha256 === wording.sha256 && rec.consent.perRecording);
@@ -305,15 +307,15 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
 }
 
 // R. The ready-made reading.
-const readingBody = (extra: Record<string, unknown> = {}) => JSON.stringify({ speechId: speech.id, presetId: 'ephelion-lecturer', candidate: 1, ...extra });
+const readingBody = (extra: Record<string, unknown> = {}) => JSON.stringify({ speechId: speech.id, presetId: 'ephelion-warm-lecturer', candidate: 1, ...extra });
 r = await reading.POST(as(GARANCE, { method: 'POST', body: readingBody() }));
 const rd = (await r.json()) as { id: string; recipe: { model: string; textSha256: string; preset: { id: string } } };
 const tts = stub.calls.filter((c) => c.path.startsWith('/v1/text-to-speech/'));
 check('R. the reading is made from the speech\'s written words, in the preset, with the reading model', r.status === 200 && tts.length === 1 && (tts[0].json as { text: string; model_id: string }).text === speech.paragraphs.join('\n\n') && (tts[0].json as { model_id: string }).model_id === VOICE.models.reading && /GJNXe6evoJS9rblaWDwx/.test(tts[0].path));
-check('R. ... kept with its recipe', rd.recipe.model === 'eleven_multilingual_v2' && rd.recipe.preset.id === 'ephelion-lecturer' && rd.recipe.textSha256 === sha(new TextEncoder().encode(speech.paragraphs.join('\n\n'))));
+check('R. ... kept with its recipe', rd.recipe.model === 'eleven_multilingual_v2' && rd.recipe.preset.id === 'ephelion-warm-lecturer' && rd.recipe.textSha256 === sha(new TextEncoder().encode(speech.paragraphs.join('\n\n'))));
 r = await reading.POST(as(NATE, { method: 'POST', body: readingBody() }));
 check('R. made once per speech and voice (a second is refused unless asked)', r.status === 409);
-r = await reading.GET(as(NATE, {}, `http://localhost/api/voice/reading?speech=${speech.id}&preset=ephelion-lecturer`));
+r = await reading.GET(as(NATE, {}, `http://localhost/api/voice/reading?speech=${speech.id}&preset=ephelion-warm-lecturer`));
 check('R. anyone let in can play it', r.status === 200 && (await r.arrayBuffer()).byteLength > 1000);
 
 // $. Costs and caps.
