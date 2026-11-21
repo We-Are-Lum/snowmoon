@@ -665,7 +665,10 @@ tested stay as they are. Nothing spent, nothing merged.
   `voice_publications`, the publish and take-down functions, and `delete_voice_draft` replaced so removing a draft
   also removes its taken-down publications' rows (a live one still blocks it; the undo restores the old one); dry run, migration, read-back (a realistic publication
   made, refused for someone else, for a stray file key, twice, then taken down), undo (refuses once anything was
-  published). For the coordinator to test.
+  published). **Tested by the coordinator** on Postgres 16 after `NEXT_ephelion_voice.sql` (2026-11-21): dry run
+  clean, applies twice, read-back passes, `voice_publications` select-only to studio_writer and closed to anon and
+  authenticated, publish and take-down only through their functions, the undo refuses once anything was published and
+  restores `delete_voice_draft` exactly. Applied after slices 1 and 2 are merged.
 - **Legal (DRAFT):** Privacy §3, §4, §6 and Terms §8 lines in `docs/legal/ephelion-voice-draft.md`, under "Slice 4".
   own-voice-v2 already says publishing makes it public and that it can be hidden; nothing new there.
 

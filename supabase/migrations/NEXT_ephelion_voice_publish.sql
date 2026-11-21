@@ -3,6 +3,10 @@
 -- free number at merge, after NEXT_ephelion_voice.sql's. Drafted by the coding agent (Claude, a closed model by
 -- Anthropic), DRAFT until Nate approves it; tested in PGlite by the agent (npm run test:voice).
 -- Requires NEXT_ephelion_voice.sql (studio.voice_drafts, voice_boards, voice_board_pictures) applied first.
+-- Tested by the coordinator on Postgres 16 after NEXT_ephelion_voice.sql (2026-11-21): dry run clean, applies twice,
+-- read-back passes, voice_publications select-only to studio_writer and closed to anon and authenticated, publish and
+-- take-down only through their functions, the undo refuses once anything was published and restores delete_voice_draft
+-- exactly. To be applied after slices 1 and 2 are merged.
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:
 -- A. the dry run (ending in `rollback;`), B. the migration (ending in `commit;`), C. the read-back (realistic rows
