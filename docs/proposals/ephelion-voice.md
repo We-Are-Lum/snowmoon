@@ -430,6 +430,19 @@ migration, not applied yet).
 **The listening page** stays until Nate says Garance has heard the three; then the unpicked previews are deleted from
 it.
 
+## Rule for /storyboard/record: never block Record on a host check (Nate, 2026-11-21)
+
+In one Farcaster host, `sdk.context` or `sdk.getCapabilities()` never answered, and the microphone test's Record stayed
+disabled (fixed in #202: every host check gets 2 seconds; no answer is logged and treated as unknown). The recording page
+has the same risk today: its recorder waits for `inMiniApp()` and `sdk.getCapabilities()` before getUserMedia, and the
+Farcaster-web check waits for `sdk.context`. **Plan** (when this branch takes main in, to get `src/lib/host-timeout.ts`):
+- every host call through `withTimeout` (2 s for checks; 10 s for the app's own microphone prompt);
+- Record is never disabled by a host check: an unknown host is treated as "maybe the app";
+- with the capability unknown inside the app, ask `requestCameraAndMicrophoneAccess()` if the SDK has it, then
+  getUserMedia either way;
+- on NotAllowedError, the line from `src/lib/mic-help.ts` (as planned above);
+- the Farcaster-web message only when the host does answer `platformType: 'web'`.
+
 ## What Nate needs to do (one at a time)
 
 1. #195 is merged and live: the iPhone and desktop tests on /admin/mic-test; Android goes to Garance or Luis.
