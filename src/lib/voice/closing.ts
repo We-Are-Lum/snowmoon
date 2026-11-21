@@ -66,7 +66,7 @@ export function closingCredits(c: CreditsInput): CreditLine[] {
   ];
   if (real.size) lines.push({ who: 'ai', text: `Pictures made by ${[...real.values()].map(modelLabel).join(', ')}, from the storyboard’s own words.` });
   if (standIns) lines.push({ who: 'site', text: `${standIns} stand-in card${standIns === 1 ? '' : 's'} in place of pictures (no model).` });
-  lines.push({ who: 'site', text: `People did the performance and the words for each picture. AI did the voice conversion, the word check${real.size ? ' and the pictures' : ''}. No AI video.` });
+  lines.push({ who: 'site', text: `People did the performance and the words for each picture. AI did ${real.size ? 'the voice conversion, the word check and the pictures' : 'the voice conversion and the word check'}. No AI video.` });
   lines.push({ who: 'site', text: CLOSING.notAffiliated });
   return lines;
 }

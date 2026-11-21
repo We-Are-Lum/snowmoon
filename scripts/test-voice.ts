@@ -409,9 +409,9 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
     const text = credits.map((c) => c.text).join('\n');
     check('K. the credits name the book\'s block, the performer, the voice, and say which are people and which are AI', /c13-b64/.test(text) && /@naaate/.test(text) && /Warm, measured/.test(text) && credits.some((c) => c.who === 'people') && credits.some((c) => c.who === 'ai') && credits.some((c) => c.who === 'book'));
     check('K. ... every model by name and maker, closed or open, and the stand-ins counted', /ElevenLabs Voice Changer by ElevenLabs \(closed model\)/.test(text) && /GPT Image 2.5 Sunburst by OpenAI \(closed model\)/.test(text) && /FLUX\.2 by Black Forest Labs \(open model\)/.test(text) && /1 stand-in card in place/.test(text));
-    check('K. ... and always the not-affiliated line and "No AI video"', credits.at(-1)!.text === closingLib.CLOSING.notAffiliated && /not affiliated with or endorsed by the author/i.test(credits.at(-1)!.text) && /No AI video/.test(text));
+    check('K. ... and always the not-affiliated line and "No AI video"', credits.at(-1)!.text === closingLib.CLOSING.notAffiliated && /not affiliated with or endorsed by the author/i.test(credits.at(-1)!.text) && /AI did the voice conversion, the word check and the pictures\. No AI video/.test(text));
     const anon = closingLib.closingCredits({ speech: { title: 'T', block: null }, performer: null, preset: 'p', voiceModel: { name: 'v', maker: 'm' }, transcribeModel: { name: 't', maker: 'm' }, pictures: [], shots: 1 });
-    check('K. with stand-ins only, the card doesn\'t say AI made the pictures, and the stand-in line isn\'t tagged AI', /word check\. No AI video/.test(anon.map((c) => c.text).join(' ')) && credits.find((c) => /stand-in card/.test(c.text))?.who === 'site');
+    check('K. with stand-ins only, the card doesn\'t say AI made the pictures, and the stand-in line isn\'t tagged AI', /AI did the voice conversion and the word check\. No AI video/.test(anon.map((c) => c.text).join(' ')) && credits.find((c) => /stand-in card/.test(c.text))?.who === 'site');
     check('K. not named: "a reader", and no name anywhere', anon.every((c) => !/@/.test(c.text)) && anon.some((c) => /a reader/.test(c.text)));
     const svg = closingSvg('The letter', credits);
     const flat = svg.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');

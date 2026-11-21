@@ -662,7 +662,8 @@ tested stay as they are. Nothing spent, nothing merged.
 - **The switch:** `VOICE.publish: false`. While off the publish route refuses and every spoken page is "not found";
   the local tests turn it on (`VOICE_TEST_ON`), stand-ins only.
 - **Schema:** `NEXT_ephelion_voice_publish.sql` (after `NEXT_ephelion_voice.sql`): `voice_boards.closing`,
-  `voice_publications`, the publish and take-down functions; dry run, migration, read-back (a realistic publication
+  `voice_publications`, the publish and take-down functions, and `delete_voice_draft` replaced so removing a draft
+  also removes its taken-down publications' rows (a live one still blocks it; the undo restores the old one); dry run, migration, read-back (a realistic publication
   made, refused for someone else, for a stray file key, twice, then taken down), undo (refuses once anything was
   published). For the coordinator to test.
 - **Legal (DRAFT):** Privacy §3, §4, §6 and Terms §8 lines in `docs/legal/ephelion-voice-draft.md`, under "Slice 4".
@@ -679,6 +680,14 @@ tested stay as they are. Nothing spent, nothing merged.
 | 29 | Public files copied at publish (not served from private) | The private bucket has no public address; a take-down deletes the copies. |
 | 30 | Video made in the browser, in real time | No server video work, no upload, no AI video; works in current browsers. |
 | 31 | `/storyboard/spoken/<id>` | `/storyboard/<id>` is already Remix's storyboards. |
+
+**Screenshots and a saved video:** https://media.snowmoon.party/review/97b99d7a1096735ef24af1843d5ccd65/index.html
+(22 steps, phone and desktop, light and dark, on a local build of this branch with the stub ElevenLabs, a throwaway
+database, a fake microphone and stand-in cards; and the MP4 that "Save as a video" made in Chromium: 1280×720, H.264 and
+AAC, 67 s, made in 70 s). Found from them and fixed: the closing background's own text showed through the credits (it
+is now blurred and darkened, which also keeps any lettering a model draws from competing), the long title ran to the
+edge, and with stand-ins only the card said AI made the pictures. The last fix's wording ("AI did the voice conversion
+and the word check") came after the screenshots. Supersedes 608b… for slices 1–2.
 
 **For Nate before `VOICE.publish`:** the reread of slice 4's lines; which public bucket holds `storyboards/` (the code
 uses the readers' bucket, R2_BUCKET, at R2_IMAGES_PUBLIC_URL) and whether its key may write there; CORS on that host
