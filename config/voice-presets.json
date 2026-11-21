@@ -310,8 +310,8 @@
       "status": "picked",
       "order": 1,
       "default": true,
-      "name": "Warm lecturer",
-      "nameProposed": true,
+      "name": "Warm, measured (American)",
+      "nameProposed": false,
       "invented": true,
       "voiceId": "GJNXe6evoJS9rblaWDwx",
       "previewBase": "https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a",
@@ -338,15 +338,16 @@
         "savedOn": "2026-11-21",
         "savedAs": "Snowmoon Ephelion: warm lecturer 1",
         "fromBrief": "ephelion-lecturer"
-      }
+      },
+      "nameNote": "Nate's names (2026-11-21), DRAFT for his look"
     },
     {
       "id": "ephelion-warm-lecturer-2",
       "status": "picked",
       "order": 2,
       "default": false,
-      "name": "Warm lecturer, second voice",
-      "nameProposed": true,
+      "name": "Warm, brighter (American)",
+      "nameProposed": false,
       "invented": true,
       "voiceId": "oO59DHjG1nW3K9foHiWR",
       "previewBase": "https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a",
@@ -373,7 +374,8 @@
         "savedOn": "2026-11-21",
         "savedAs": "Snowmoon Ephelion: warm lecturer 3",
         "fromBrief": "ephelion-lecturer"
-      }
+      },
+      "nameNote": "Nate's names (2026-11-21), DRAFT for his look"
     },
     {
       "id": "ephelion-light-russian",
@@ -381,7 +383,7 @@
       "order": 3,
       "default": false,
       "name": "Light Russian accent",
-      "nameProposed": true,
+      "nameProposed": false,
       "invented": true,
       "voiceId": "fdoGbz5eU4VUde5iMQYV",
       "previewBase": "https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a",
@@ -408,7 +410,8 @@
         "savedOn": "2026-11-21",
         "savedAs": "Snowmoon Ephelion: light Russian accent 1",
         "fromBrief": "ephelion-russian"
-      }
+      },
+      "nameNote": "Nate's names (2026-11-21), DRAFT for his look"
     }
   ]
 }

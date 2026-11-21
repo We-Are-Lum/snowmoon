@@ -13,6 +13,11 @@ export interface Speech {
   character: string;
   /** Where the words come from: a book block, or (later) the team's speech. */
   source: { kind: 'book'; block: string } | { kind: 'edition'; by: string };
+  /**
+   * The speech's own label (Nate, 2026-11-21): the stand-in c13-b64 is "Book"; the team's speeches will be "Invented,
+   * not from the book", with their writers credited. Shown with the speech, and kept in every recipe.
+   */
+  label: { kind: 'book'; text: 'Book'; block: string } | { kind: 'invented'; text: 'Invented, not from the book'; writers: string[] };
   standIn: boolean;
   paragraphs: string[];
   sentences: Sentence[];
@@ -43,6 +48,7 @@ function fromBlock(id: string, chapter: number, idx: number, names: string[]): S
     title,
     character: 'ephelion',
     source: { kind: 'book', block: `c${chapter}-b${idx}` },
+    label: { kind: 'book', text: 'Book', block: `c${chapter}-b${idx}` },
     standIn: true,
     paragraphs,
     sentences: sentencesOf(paragraphs),

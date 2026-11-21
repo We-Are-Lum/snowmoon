@@ -1181,13 +1181,13 @@ export const VOICE = {
     transcribeCreditsPerSecond: 0.4,
   },
   caps: {
-    /** Everyone's calls together, per UTC day ('free'). PLACEHOLDER: about fifteen 2-minute takes at the measured rate. */
+    /** Everyone's calls together, per UTC day ('free'). Nate's number for now (2026-11-21); real numbers once the speeches' length is known. */
     dailyCredits: 20_000,
     dailyUsd: 4,
     /** Admins' own trials, counted apart ('admin'). PLACEHOLDER. */
     adminDailyCredits: 20_000,
     adminDailyUsd: 4,
-    /** Whole-take conversions per person per UTC day (redone sentences don't count). PLACEHOLDER. */
+    /** Whole-take conversions per person per UTC day (redone sentences don't count). Nate's number for now (2026-11-21). */
     perPersonConversions: 3,
     /**
      * Owner's standing rule (2026-11-20): if a real call costs more than 20% over its estimate, stop before the next

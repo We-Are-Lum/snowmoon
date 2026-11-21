@@ -19,7 +19,7 @@ interface Choice { presetId: string; name: string; description: string; candidat
 interface Check { n: number; ok: boolean; bySound?: { expected: string; heard: string }[]; missing: string[]; extra: string[]; start: number | null; end: number | null }
 interface Status {
   ready: boolean;
-  speech: { id: string; title: string; character: string; source: { kind: string; block?: string }; standIn: boolean; paragraphs: string[]; sentences: { n: number; text: string }[]; characters: number };
+  speech: { id: string; title: string; character: string; source: { kind: string; block?: string }; label: { kind: 'book'; text: string; block: string } | { kind: 'invented'; text: string; writers: string[] }; standIn: boolean; paragraphs: string[]; sentences: { n: number; text: string }[]; characters: number };
   choices: Choice[];
   consent: { version: string; line: string; title: string; text: string[]; sha256: string; agreed: boolean };
   models: { convert: string; transcribe: string; reading: string; design: string; provider: string };
@@ -421,7 +421,11 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
       <p className="vr-kicker">Admin trial · Draft</p>
       <h1>{s.speech.title}</h1>
       <p className="vr-labels">
-        <span className="vr-tag">Book</span> Lord Ephelion&rsquo;s letter, {s.speech.source.block}, word for word
+        {s.speech.label.kind === 'book' ? (
+          <><span className="vr-tag">{s.speech.label.text}</span> Lord Ephelion&rsquo;s letter, {s.speech.label.block}, word for word</>
+        ) : (
+          <><span className="vr-tag">{s.speech.label.text}</span> Written by {s.speech.label.writers.join(', ')}</>
+        )}
         {s.speech.standIn && <> · <span className="vr-tag">Stand-in</span> until the team&rsquo;s speeches arrive</>} · <span className="vr-tag">Invented</span> performing it aloud is this edition&rsquo;s
       </p>
       {!s.ready && <p className="vr-warn" role="status">Not ready: the voice service isn&rsquo;t set up on this server.</p>}

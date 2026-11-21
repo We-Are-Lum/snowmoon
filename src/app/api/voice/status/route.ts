@@ -27,7 +27,7 @@ export async function GET(request: Request) {
   return NextResponse.json(
     {
       ready: voiceReady(),
-      speech: { id: speech.id, title: speech.title, character: speech.character, source: speech.source, standIn: speech.standIn, paragraphs: speech.paragraphs, sentences: speech.sentences.map(({ n, text }) => ({ n, text })), characters: speech.characters },
+      speech: { id: speech.id, title: speech.title, character: speech.character, source: speech.source, label: speech.label, standIn: speech.standIn, paragraphs: speech.paragraphs, sentences: speech.sentences.map(({ n, text }) => ({ n, text })), characters: speech.characters },
       preview: { text: previewText, block: previewBlock },
       choices,
       consent: { version: wording.version, line: wording.line, title: wording.title, text: wording.text, sha256: wording.sha256, agreed: sql ? await hasVoiceConsent(sql, who.fid) : false },

@@ -450,9 +450,18 @@ begin
 end $$;
 rollback;
 
--- D. UNDO, only if the release is withdrawn (it drops the day totals and every voice draft; the files under
---    voice-drafts/ in the private bucket are then deleted by hand).
+-- D. UNDO (only if the release is withdrawn), as postgres. Paste the lines below without their "-- ". It removes the
+--    voice tables only while there is no voice draft: once anyone has kept a draft (a performance or a reading), it
+--    refuses, and nothing is deleted (export the rows and the files under voice-drafts/ and voice-boards/ first, and ask
+--    the owner). The day totals and counts go with it.
 -- begin;
+-- do $$
+-- begin
+--   if to_regclass('studio.voice_drafts') is not null and exists (select 1 from studio.voice_drafts) then
+--     raise exception 'UNDO REFUSED: voice drafts exist; nothing is deleted';
+--   end if;
+-- end;
+-- $$;
 -- drop function if exists studio.delete_voice_draft(uuid, bigint);
 -- drop table if exists studio.voice_board_pictures;
 -- drop table if exists studio.voice_boards;
