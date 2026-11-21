@@ -269,8 +269,8 @@ export async function redoPicture(sql: Sql, fid: number, request: Request, raw: 
  */
 export async function showPicture(sql: Sql, fid: number, raw: unknown, deps: Deps): Promise<Result & { chapter?: number }> {
   if (!(await picturesReady(sql))) return no(503, 'Keeping pictures needs the chapter-picture migration (0042_chapter_picture_versions) first.');
-  const b = (raw ?? {}) as { jobId?: unknown; versionId?: unknown; keepHidden?: unknown };
-  if (typeof b.jobId === 'string' && isAddedId(b.jobId)) return showAdded(sql, fid, b.jobId, b.versionId, deps, b.keepHidden === true);
+  const b = (raw ?? {}) as { jobId?: unknown; versionId?: unknown };
+  if (typeof b.jobId === 'string' && isAddedId(b.jobId)) return showAdded(sql, fid, b.jobId, b.versionId, deps);
   const job = typeof b.jobId === 'string' ? checkJob(b.jobId) : null;
   if (!job) return no(404, 'No such picture');
   const versionId = b.versionId === null || b.versionId === undefined || b.versionId === 'original' ? null : String(b.versionId);
@@ -286,7 +286,8 @@ export async function showPicture(sql: Sql, fid: number, raw: unknown, deps: Dep
   const v = await pictureVersion(sql, versionId);
   if (!v || v.jobId !== job.id) return no(404, 'No such version of this picture');
   const gone = await hiddenSince(sql, v);
-  if (gone.length && b.keepHidden !== true) return no(409, REF_WORDING.keepHidden(gone), { reason: 'reference-hidden', hidden: gone });
+  // A reference hidden since the draft was made (P5f at Keep; owner, 2026-11-21: refused, never kept anyway).
+  if (gone.length) return no(409, REF_WORDING.keepHidden(gone), { reason: 'reference-hidden', hidden: gone });
   const before = await firstKeep(sql, v.id);
   let url = before?.publicUrl ?? null;
   if (!url) {
@@ -344,7 +345,7 @@ async function publicUrlOf(sql: Sql, v: { id: string; sha256: string }, deps: De
  * Keep, show again, or take off a picture an admin added (owner, 2026-11-19: "Undo for a new picture is 'take it off the
  * chapter'; it stays stored and can be shown again. Nothing is deleted."). versionId null takes it off.
  */
-async function showAdded(sql: Sql, fid: number, jobId: string, rawVersion: unknown, deps: Deps, keepHidden = false): Promise<Result & { chapter?: number }> {
+async function showAdded(sql: Sql, fid: number, jobId: string, rawVersion: unknown, deps: Deps): Promise<Result & { chapter?: number }> {
   const a = await readAddition(sql, jobId);
   if (!a) return no(404, 'No such picture');
   const versionId = rawVersion === null || rawVersion === undefined || rawVersion === 'off' ? null : String(rawVersion);
@@ -357,9 +358,9 @@ async function showAdded(sql: Sql, fid: number, jobId: string, rawVersion: unkno
   }
   const v = await pictureVersion(sql, versionId);
   if (!v || v.jobId !== jobId) return no(404, 'No such version of this picture');
-  // A reference hidden since the draft was made (P5f at Keep): said, and kept only if the admin says so.
+  // A reference hidden since the draft was made (P5f at Keep; owner, 2026-11-21): refused; the draft stays a draft.
   const gone = await hiddenSince(sql, v);
-  if (gone.length && !keepHidden) return no(409, REF_WORDING.keepHidden(gone), { reason: 'reference-hidden', hidden: gone });
+  if (gone.length) return no(409, REF_WORDING.keepHidden(gone), { reason: 'reference-hidden', hidden: gone });
   const pub = await publicUrlOf(sql, v, deps);
   if ('status' in pub) return pub;
   await saveDecision(sql, fid, { jobId, chapter: a.chapter, versionId: v.id, action: pub.before ? 'restore' : 'keep', publicUrl: pub.url, byHandle });

@@ -7,7 +7,7 @@ import { CHAPTER_PICTURES } from '~/lib/config';
 import { lookName } from '~/lib/chapter-pictures/shared';
 import { paragraphOrBlock } from '~/lib/reading';
 import { useChallengeModel } from './challenge-model-row';
-import { CapLine, DraftImage, KeepHidden, ModelRow, PicturePanel, ReferencePicker, SheetPicker, errorOf, post, type PictureItem, type PicturesState, type RefChoice } from './chapter-pictures';
+import { CapLine, DraftImage, ModelRow, PicturePanel, ReferencePicker, SheetPicker, errorOf, post, type PictureItem, type PicturesState, type RefChoice } from './chapter-pictures';
 import { PublishedTextField } from './publish-words';
 
 /**
@@ -169,7 +169,6 @@ function AddSheet({ chapter, after, label: given, start: from = after, end: to =
   const [note, setNote] = useState('');
   const [chosen, setChosen] = useState<string[]>([]);
   const [picked, setPicked] = useState<RefChoice[]>([]);
-  const [hiddenAsk, setHiddenAsk] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [draft, setDraft] = useState<{ jobId: string; versionId: string } | null>(null);
@@ -193,14 +192,12 @@ function AddSheet({ chapter, after, label: given, start: from = after, end: to =
     if (m.askFirst(() => void send())) return;
     await send();
   }
-  async function keep(keepHidden = false) {
+  async function keep() {
     if (!draft) return;
     setBusy(true);
-    const r = await post('/api/you/illustrations/show', { jobId: draft.jobId, versionId: draft.versionId, ...(keepHidden ? { keepHidden: true } : {}) });
+    const r = await post('/api/you/illustrations/show', { jobId: draft.jobId, versionId: draft.versionId });
     setBusy(false);
-    // A reference hidden since the draft was made (P5f): the admin decides; nothing is kept until they say so.
-    if (!r.ok && r.json.reason === 'reference-hidden') return setHiddenAsk(errorOf(r.json));
-    setHiddenAsk(null);
+    // A reference hidden since the draft was made (P5f) is refused with its plain message; the draft stays a draft.
     if (!r.ok) return setError(errorOf(r.json));
     setKept(true);
   }
@@ -266,7 +263,6 @@ function AddSheet({ chapter, after, label: given, start: from = after, end: to =
                   </button>
                 </div>
               )}
-              {hiddenAsk && <KeepHidden message={hiddenAsk} busy={busy} onKeep={() => void keep(true)} onDrop={() => { setHiddenAsk(null); setLater(true); }} />}
               {later && <p className="you-note" role="status">{R.laterLine}</p>}
             </div>
           )}

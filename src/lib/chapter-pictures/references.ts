@@ -39,8 +39,10 @@ export const REF_WORDING = {
   tooMany: (n: number) => `Up to ${n} ${n === 1 ? 'picture' : 'pictures'} here: three references in all, counting the character sheets (a redo’s picture shown now counts as one).`,
   twice: 'That picture is already picked.',
   shortQuery: 'Type at least two letters.',
+  // Owner, 2026-11-21: "If a reference was hidden in the meantime, Keep is refused with a plain message and the admin can
+  // try again with other references." The draft stays a draft.
   keepHidden: (whats: string[]) =>
-    `${whats.length === 1 ? 'A reference this draft was made after' : 'References this draft was made after'} (${whats.join(', ')}) ${whats.length === 1 ? 'has' : 'have'} been hidden since it was made. Keep it anyway? Its caption and recipe would then say only “a picture since hidden”, with no name or link.`,
+    `This draft can’t be kept: ${whats.length === 1 ? 'a picture it was made after' : 'pictures it was made after'} (${whats.join(', ')}) ${whats.length === 1 ? 'has' : 'have'} been hidden since. Make another draft with other references.`,
   lookHidden: (label: string) => `The saved look, “${label}”, has been hidden since it was saved. Choose another look first.`,
 } as const;
 

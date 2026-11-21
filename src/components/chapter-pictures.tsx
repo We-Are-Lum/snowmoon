@@ -5,7 +5,7 @@ import { authFetch } from '~/lib/client-auth';
 import { CHAPTER_PICTURES } from '~/lib/config';
 import { resetLocal } from '~/lib/challenge/model-wording';
 import type { ModelRowEntry } from '~/lib/challenge/models';
-import { adminName, creditLine, localDay as day, lookName, modelLine, type Look, type PictureDecision, type PictureVersion, type RefKind } from '~/lib/chapter-pictures/shared';
+import { adminName, creditLine, noClosedOffered, localDay as day, lookName, modelLine, type Look, type PictureDecision, type PictureVersion, type RefKind } from '~/lib/chapter-pictures/shared';
 import { useChallengeModel } from './challenge-model-row';
 import { PublishedTextField } from './publish-words';
 import { RefSearchField } from './ref-search-field';
@@ -88,8 +88,8 @@ export const P = {
   refsItem: (r: { what: string; by: string }) => `${r.what} by ${r.by}`,
   refsKind: { remix: 'remix', picture: 'picture', base: 'base', sheet: 'sheet' } as Record<RefKind, string>,
   refsCaption: (line: string) => `The caption will add: “${line}”, and the recipe each one’s version, maker and sha256.`,
-  keepAnyway: 'Keep it anyway',
-  dontKeep: 'Don’t keep it',
+  // Owner, 2026-11-21: one line under the Model row when neither closed model is offered here. DRAFT.
+  closedNotOffered: 'GPT Image and Gemini aren’t offered where you are.',
 } as const;
 
 /** A style as the look picker lists it (GET /api/you/illustrations: any published, visible style). */
@@ -277,23 +277,6 @@ export function ReferencePicker({ id, max, picked, setPicked, redo }: { id: stri
   );
 }
 
-/** A Keep refused because a reference was hidden since the draft was made: say so, and let the admin keep it or not. */
-export function KeepHidden({ message, busy, onKeep, onDrop }: { message: string; busy: boolean; onKeep: () => void; onDrop: () => void }) {
-  return (
-    <div className="cp-keep-hidden" role="alert" data-keep-hidden="">
-      <p className="you-note">{message}</p>
-      <div className="you-actions">
-        <button type="button" className="ic-secondary" disabled={busy} onClick={onKeep}>
-          {P.keepAnyway}
-        </button>
-        <button type="button" className="ic-secondary" disabled={busy} onClick={onDrop}>
-          {P.dontKeep}
-        </button>
-      </div>
-    </div>
-  );
-}
-
 /** The Model row, as on /you/illustrations: each offered model, with its maker, open or closed, and a closed one's line. */
 export function ModelRow({ m, name }: { m: ReturnType<typeof useChallengeModel>; name: string }) {
   return (
@@ -307,6 +290,11 @@ export function ModelRow({ m, name }: { m: ReturnType<typeof useChallengeModel>;
           </label>
         ))}
       </fieldset>
+      {noClosedOffered(m.list) && (
+        <p className="you-meta cp-closed-none" data-closed-none="">
+          {P.closedNotOffered}
+        </p>
+      )}
       {m.notice}
     </>
   );
@@ -453,7 +441,6 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
   const [note, setNote] = useState('');
   const [chosen, setChosen] = useState<string[]>([]);
   const [picked, setPicked] = useState<RefChoice[]>([]);
-  const [hiddenAsk, setHiddenAsk] = useState<{ versionId: string; message: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const m = useChallengeModel(state.models, null, state.defaultModel ?? null);
@@ -482,14 +469,12 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
     if (m.askFirst(() => void send())) return;
     await send();
   }
-  async function show(versionId: string | null, keepHidden = false) {
+  async function show(versionId: string | null) {
     setBusy(true);
     setError(null);
-    const r = await post('/api/you/illustrations/show', { jobId: item.id, versionId, ...(keepHidden ? { keepHidden: true } : {}) });
+    const r = await post('/api/you/illustrations/show', { jobId: item.id, versionId });
     setBusy(false);
-    // A reference hidden since the draft was made (P5f): the admin decides; nothing is kept until they say so.
-    if (!r.ok && r.json.reason === 'reference-hidden' && versionId) return setHiddenAsk({ versionId, message: errorOf(r.json) });
-    setHiddenAsk(null);
+    // A reference hidden since the draft was made (P5f) is refused with its plain message; the draft stays a draft.
     if (!r.ok) return setError(errorOf(r.json));
     onShown?.();
     await reload();
@@ -578,7 +563,6 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
           </ul>
         </details>
       )}
-      {hiddenAsk && <KeepHidden message={hiddenAsk.message} busy={busy} onKeep={() => void show(hiddenAsk.versionId, true)} onDrop={() => setHiddenAsk(null)} />}
       {error && (
         <p className="you-note" role="alert">
           {error}

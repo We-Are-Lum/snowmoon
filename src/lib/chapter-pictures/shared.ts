@@ -221,6 +221,12 @@ export function addPrompt(note: string, sheetNames: string[], look: Look | null,
  */
 export const pickLimit = (max: number, mode: 'add' | 'redo', sheets: number) => Math.max(0, mode === 'redo' ? max - 1 : max - sheets);
 
+/**
+ * Neither closed model is offered here (the country rule, src/lib/images/countries.ts): the sheets' Model row then says
+ * so in one line, "GPT Image and Gemini aren’t offered where you are." (owner, 2026-11-21; DRAFT).
+ */
+export const noClosedOffered = (list: readonly { open: boolean }[] | null | undefined) => Boolean(list?.length) && !list!.some((x) => !x.open);
+
 /** "@garance's Zei remix and Bai sheet": a maker's possessive (a wallet's short address and "FID 12" too). */
 const possessive = (by: string) => `${by}’s`;
 const joinAnd = (xs: string[]) => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);

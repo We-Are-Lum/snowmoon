@@ -13,8 +13,9 @@
  *     checked by sha256; the prompt names what each is and no maker; the recipe lists each with its version id, kind,
  *     maker and sha256; a picture hidden between pick and Make is refused;
  *  K. Keep: the caption credits each maker ("Added by @garance, after @…’s Zei remix …"); a reference hidden since the
- *     draft stops Keep with the reason, and Keep anyway keeps it, its credit then "a picture since hidden" and its name,
- *     page and address gone from the public recipe;
+ *     draft stops Keep with a plain message, with no way round it (owner, 2026-11-21); one hidden after Keep reads "a
+ *     picture since hidden" and its name, page and address are gone from the public recipe;
+ *  M. also: the Model row's one line where neither closed model is offered;
  *  F. the caption's wording for one, several, the same maker twice, and hidden ones;
  *  P. P5j still holds (writes only in admin.ts) and P5b; and planted faults (a resolver that ignores hides, a cap that
  *     ignores the sheets, a credit that names a hidden picture's maker, a recipe that keeps a hidden picture's address,
@@ -43,7 +44,7 @@ const { addPicture, redoPicture, showPicture, setLook, adminView } = await impor
 const { resolveReference, referenceFromLink, searchReferences, styleChoices, REF_WORDING } = await import('../src/lib/chapter-pictures/references');
 const { readReplacements, publicRecipe, latestLooks } = await import('../src/lib/chapter-pictures/read');
 const shared = await import('../src/lib/chapter-pictures/shared');
-const { parseRefLink, creditLine, pickLimit, withoutHidden, addedBy, lookName, LOOK_NAMES, namesAWork } = shared;
+const { parseRefLink, creditLine, pickLimit, withoutHidden, addedBy, lookName, LOOK_NAMES, namesAWork, noClosedOffered } = shared;
 const { CHALLENGE, CLOSED_PROVIDERS, IMAGES } = await import('../src/lib/config');
 const { checkJob } = await import('../src/lib/illustration-check/jobs');
 const { NAMES } = await import('./lib/publish-style');
@@ -250,10 +251,17 @@ r = await addPicture(S, GARANCE, req, { jobId: addedJob, note: 'Bai by the door.
 const second = String(r.json.versionId);
 await pg.query(`update studio.elements set status = 'hidden' where id = $1`, [laterEl]);
 r = await showPicture(S, GARANCE, { jobId: addedJob, versionId: second }, deps);
-check('K. a reference hidden since the draft stops Keep (409), naming it, and nothing changes', r.status === 409 && r.json.reason === 'reference-hidden' && String(r.json.error).includes('@fixture505’s Bai remix') && (await readReplacements(S)).get(addedJob)?.versionId === addedVersion, JSON.stringify(r.json));
+check('K. a reference hidden since the draft stops Keep (409) with the plain message naming it, and nothing changes', r.status === 409 && r.json.reason === 'reference-hidden' && r.json.error === REF_WORDING.keepHidden(['@fixture505’s Bai remix']) && (await readReplacements(S)).get(addedJob)?.versionId === addedVersion, JSON.stringify(r.json));
 r = await showPicture(S, GARANCE, { jobId: addedJob, versionId: second, keepHidden: true }, deps);
+check('K. there is no "keep it anyway": asking again, with any flag, is refused the same way; the draft stays a draft', r.status === 409 && r.json.reason === 'reference-hidden' && (await readReplacements(S)).get(addedJob)?.versionId === addedVersion && !(await publicRecipe(S, second)), JSON.stringify(r.json));
+check('K. the message says to try again with other references', /Make another draft with other references\./.test(REF_WORDING.keepHidden(['x'])));
+// A reference hidden after Keep: the caption says "a picture since hidden", and the public recipe names it nowhere.
+await pg.query(`update studio.elements set status = 'published' where id = $1`, [laterEl]);
+r = await showPicture(S, GARANCE, { jobId: addedJob, versionId: second }, deps);
+check('K. once its reference is published again, the draft can be kept', r.status === 200, JSON.stringify(r.json));
+await pg.query(`update studio.elements set status = 'hidden' where id = $1`, [laterEl]);
 shown = (await readReplacements(S)).get(addedJob);
-check('K. "Keep it anyway" keeps it; its caption says "a picture since hidden", with no name', r.status === 200 && shown?.versionId === second && addedBy(shown) === 'Added by @garance, after a picture since hidden', shown ? addedBy(shown) : '');
+check('K. a reference hidden after Keep: its caption says "a picture since hidden", with no name', shown?.versionId === second && addedBy(shown) === 'Added by @garance, after a picture since hidden', shown ? addedBy(shown) : '');
 const pub = await publicRecipe(S, second);
 const pubText = JSON.stringify(pub);
 check('K. the public recipe keeps the hidden picture\'s kind and sha256 but not its maker, page, id or address', Boolean(pub) && pubText.includes(sha(25)) && !pubText.includes('fixture505') && !pubText.includes(ID.hiddenLater) && !pubText.includes(sha(25).slice(0, 16) + '.jpg'), pubText.slice(0, 300));
@@ -305,10 +313,21 @@ const sample = { ...rec, picked: [{ versionId: ID.hiddenLater, kind: 'remix', wh
 const redactProblems = (f: typeof withoutHidden) => (/fixture505|x\.jpg/.test(JSON.stringify(f(sample, () => false))) ? ['a hidden picture stays named'] : []);
 check('P. the public recipe drops a hidden picture\'s maker and address', redactProblems(withoutHidden).length === 0);
 check('P. planted: a recipe that keeps a hidden picture\'s address is caught', redactProblems((x) => x).length > 0);
-const keepProblems = (text: string) => ((text.match(/const gone = await hiddenSince\(sql, v\);/g) ?? []).length === 2 ? [] : ['a Keep path without the hidden-since check']);
+// Keep must refuse whenever a reference was hidden since, with no way round it (owner, 2026-11-21: no "keep it anyway").
+const keepProblems = (text: string) => ((text.match(/if \(gone\.length\) return no\(409, REF_WORDING\.keepHidden\(gone\)/g) ?? []).length === 2 && !/keepHidden\s*[!=]==|keepHidden ===|b\.keepHidden|keepHidden = false/.test(text) ? [] : ['a Keep path that can keep a draft made after a hidden picture']);
 const picturesText = readFileSync(path.join(ROOT, 'src/lib/chapter-pictures/pictures.ts'), 'utf8');
-check('P. both Keep paths (a redo, an added picture) check the references again', keepProblems(picturesText).length === 0);
-check('P. planted: a Keep without the check is caught', keepProblems(picturesText.replace('const gone = await hiddenSince(sql, v);', '')).length > 0);
+check('P. both Keep paths (a redo, an added picture) refuse a draft made after a picture hidden since, with no way round', keepProblems(picturesText).length === 0);
+check('P. planted: a Keep without the check is caught', keepProblems(picturesText.replace('if (gone.length) return no(409, REF_WORDING.keepHidden(gone)', 'if (false) return no(409, REF_WORDING.keepHidden(gone)')).length > 0);
+check('P. planted: a Keep that succeeds despite a hidden reference when asked ("keep it anyway") is caught', keepProblems(picturesText.replace('if (gone.length) return no(409, REF_WORDING.keepHidden(gone)', 'if (gone.length && b.keepHidden !== true) return no(409, REF_WORDING.keepHidden(gone)')).length > 0);
+const ui = ['src/components/chapter-pictures.tsx', 'src/components/reader-picture-admin.tsx'].map((f) => readFileSync(path.join(ROOT, f), 'utf8')).join('\n');
+check('P. the sheets offer no "Keep it anyway"', !/Keep it anyway|keepHidden/.test(ui));
+// The not-offered line (owner, 2026-11-21): only when neither closed model is offered.
+const { modelRow } = await import('../src/lib/challenge/models');
+check('M. where neither closed model is offered (no country, or an embargoed one), the line shows', noClosedOffered(modelRow({ country: null, region: null })) && noClosedOffered(modelRow({ country: 'IR', region: null })));
+check('M. where GPT and Gemini are offered (US), the line does not show', !noClosedOffered(modelRow({ country: 'US', region: null })));
+check('M. with one closed model offered, the line does not show', !noClosedOffered([{ open: true }, { open: false }]));
+check('M. the line\'s words, and the Model row shows it only on that rule', /closedNotOffered: 'GPT Image and Gemini aren’t offered where you are\.'/.test(ui) && /\{noClosedOffered\(m\.list\) && \(/.test(ui));
+check('P. planted: a line shown whenever FLUX is offered is caught', ((f: typeof noClosedOffered) => f(modelRow({ country: 'US', region: null })))((l) => Boolean(l?.some((x) => x.open))));
 check('P. the looks\' names list is the published styles\' own (scripts/lib/publish-style.ts NAMES)', LOOK_NAMES.source === NAMES.source && LOOK_NAMES.flags === NAMES.flags);
 check('P. planted: a looser names list is caught', /^\\b\(studio ghibli\|ghibli\)\\b$/.source !== NAMES.source);
 check('P. the names rule catches "in the style of" and a studio', namesAWork('in the style of somebody') !== null && namesAWork('soft Pixar look') !== null && namesAWork('loose ink and wash') === null);
