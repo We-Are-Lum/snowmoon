@@ -40,6 +40,7 @@ import { p4aProblems } from './lib/p4a';
 import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, P5I_FILES, p5gProblems, p5iProblems } from './lib/p5g';
 import { P5B_PLANTS, P5J_PLANTS, p5bProblems, p5jProblems } from './lib/p5b';
 import { recipeProblems } from '../src/lib/chapter-pictures/shared';
+import { chapterDefaultModel, chapterDefaultProblems } from '../src/lib/chapter-pictures/default-model';
 import { requireTarget } from './lib/target';
 import { p2mProblems, p6acProblems, p8iProblems } from './lib/challenge-moments';
 import { CARDS } from '../src/lib/challenge/cards';
@@ -1216,7 +1217,7 @@ add({
 add({
   id: 'P3e',
   principle: 3,
-  name: 'the default is open: the remix form\'s and the challenge\'s model choice list the open models first, as the default (one exception: GPT Image 2.5 Sunburst for the challenge, for those who can use it, until entries close); closed ones name their maker and are allowlisted',
+  name: 'the default is open: the remix form\'s and the challenge\'s model choice list the open models first, as the default (one exception: GPT Image 2.5 Sunburst for the challenge, for those who can use it, until entries close); the admins\' chapter pictures start on GPT Image 2.5 Sunburst where it is offered (DRAFT, owner 2026-11-18, pending his reread), with FLUX still offered; closed ones name their maker and are allowlisted',
   load: async () => ({
     all: clone(SHEET_MODELS) as unknown as (typeof SHEET_MODELS)[number][],
     offeredOn: sheetModelsOffered(true, true).map((m) => m.id) as string[],
@@ -1229,11 +1230,16 @@ add({
     challengeOff: challengeModelsFor({ country: 'FR', region: null }, false).map((m) => m.id) as string[],
     // The row's starting model for every kind of visitor (owner, 2026-11-09: P3's one exception, the challenge only).
     defaults: defaultCases().map((c) => ({ c, id: challengeDefaultModel(c) as string })),
+    // The admins' chapter pictures (owner, 2026-11-18, DRAFT pending his reread): GPT where offered, else FLUX; FLUX offered.
+    chapter: ([{ country: 'US', region: null }, { country: 'FR', region: null }, { country: 'CN', region: null }, { country: 'UA', region: '43' }, { country: null, region: null }] as const).flatMap((where) =>
+      [true, false].map((on) => ({ where, on, id: chapterDefaultModel(where, on), offered: challengeModelsFor(where, on).map((m) => m.id as string) })),
+    ),
   }),
   run: (c) => {
     const p = sheetModelProblems(c.all);
     p.push(...challengeModelProblems(c.challenge).map((x) => `challenge: ${x}`));
     p.push(...challengeDefaultProblems(c.defaults).slice(0, 5).map((x) => `challenge: ${x}`));
+    p.push(...chapterDefaultProblems(c.chapter));
     if (!c.challengeOn.length || c.challengeOn[0].id !== DEFAULT_CHALLENGE_MODEL || !c.challengeOn[0].open) p.push('challenge: the Model row does not offer the open default first');
     if (c.challengeOff.length !== 1 || c.challengeOff[0] !== DEFAULT_CHALLENGE_MODEL) p.push(`challenge: with CHALLENGE.modelChoice off, more than the open default is offered: ${c.challengeOff.join(', ')}`);
     for (const m of c.challenge) {
@@ -1261,6 +1267,8 @@ add({
     c.challenge = [...c.challenge].reverse();
     // A wider default: GPT for a wallet account too.
     c.defaults = c.defaults.map((d) => (d.c.wallet ? { ...d, id: 'gpt-image-2.5-sunburst' } : d));
+    // The admins' chapter pictures starting on GPT where OpenAI doesn't serve, and on Gemini elsewhere.
+    c.chapter = c.chapter.map((x) => ({ ...x, id: x.offered.includes('gpt-image-2.5-sunburst') ? 'gemini-3.1-flash-image' : 'gpt-image-2.5-sunburst' }));
   },
 });
 

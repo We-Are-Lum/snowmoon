@@ -12,8 +12,9 @@ import { REPO_URL, WORK } from '~/lib/config';
 import { loadNarration } from '~/lib/narration';
 import { loadIllustrations } from '~/lib/illustrations';
 import { hiddenSeeded } from '~/lib/admin-hidden';
-import { shownReplacements } from '~/lib/chapter-pictures/read';
-import { withReplacements } from '~/lib/chapter-pictures/view';
+import { shownAdditions, shownReplacements } from '~/lib/chapter-pictures/read';
+import { AdminAddHere, AdminChangePicture } from '~/components/reader-picture-admin';
+import { addedPictures, withReplacements, type AddedIllustration } from '~/lib/chapter-pictures/view';
 import { recipePath } from '~/lib/chapter-pictures/shared';
 import { LocalDate } from '~/components/local-date';
 import { CHALLENGE_MODELS } from '~/lib/challenge/models';
@@ -96,6 +97,10 @@ export default async function ChapterPage({ params }: Props) {
   const modelName = (id: string) => CHALLENGE_MODELS.find((m) => m.allowlistId === id)?.name ?? id;
   const images = withReplacements(loadIllustrations(n).filter((im) => !hidden.has(im.id)), replaced, modelName);
   const imageAt = new Map(images.map((im) => [im.idx, im]));
+  // Pictures admins added while reading (owner, 2026-11-19), each after its block; before the additions migration, none.
+  const added = addedPictures(n, await shownAdditions(), replaced, hidden, modelName);
+  const addedAt = new Map<number, AddedIllustration[]>();
+  for (const a of added) addedAt.set(a.idx, [...(addedAt.get(a.idx) ?? []), a]);
   // The first picture on the page says "not by the author" where it can be seen (owner, 2026-10-15); readers' strips then don't.
   const firstImageIdx = displayOrder(chapter.blocks).map((i) => chapter.blocks[i]).find((b) => imageAt.has(b.idx))?.idx ?? null;
   // Figures the site can play: the c4-b5 board runs the rule recovered from it on /minpentai/rule.
@@ -116,7 +121,7 @@ export default async function ChapterPage({ params }: Props) {
           ? { label: narration.label, recipe: narration.recipe, url: narration.url, duration: narration.duration, cues: narration.cues }
           : null
       }
-      images={images.map(({ id, idx, url, alt, recipe, reviewed }) => ({ id, idx, url, alt, recipe, ...(reviewed ? { reviewed } : {}) }))}
+      images={[...images.map(({ id, idx, url, alt, recipe, reviewed }) => ({ id, idx, url, alt, recipe, ...(reviewed ? { reviewed } : {}) })), ...added.map(({ id, idx, url, alt, recipe }) => ({ id, idx, url, alt, recipe }))].sort((a, b) => a.idx - b.idx)}
       labels={Object.fromEntries(chapter.blocks.map((b, i) => [b.idx, facts[i].label]).filter(([, l]) => l !== null))}
     >
     <article className="page chapter" data-chapter={n} data-setting={facts.find((f) => f.setting)?.setting ?? undefined}>
@@ -212,6 +217,7 @@ export default async function ChapterPage({ params }: Props) {
                   {/* The owner's image review (2026-10-23): shown only once the owner allows it (ILLUSTRATION_CHECK.reviewMarkPublic). */}
                   {image.reviewed && <span className="seed-reviewed"> · {REVIEWED_MARK}</span>}
                   <AdminHide kind="seeded" id={image.id} />
+                  <AdminChangePicture chapter={n} jobId={image.id} />
                   {image.lettering && (
                     <>
                       {' · '}
@@ -239,6 +245,24 @@ export default async function ChapterPage({ params }: Props) {
                 </figcaption>
               </figure>
             )}
+            {(addedAt.get(b.idx) ?? []).map((a) => (
+              <figure key={a.id} className="seed-image added-image" data-for={id} data-added={a.id} data-replaced={a.replaced.versionId} data-recipe-url={recipePath(a.replaced.versionId)}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={a.url} alt={a.alt} width={a.width} height={a.height} loading="lazy" data-zoom="" tabIndex={0} />
+                <figcaption className="block-caption">
+                  ¶ {f.label} · <AiLabel kind="image" text={AI_LABEL.image} view={a.replaced.view} />
+                  {/* A picture an admin added: who and when, and the model with its maker. DRAFT wording. */}
+                  <span className="seed-replaced">
+                    {' · '}
+                    {a.replaced.by} · <LocalDate iso={a.replaced.at} /> · {a.replaced.model}
+                  </span>
+                  <AdminHide kind="seeded" id={a.id} />
+                  <AdminChangePicture chapter={n} jobId={a.id} />
+                </figcaption>
+              </figure>
+            ))}
+            {/* Admins only: add a picture after this block (owner, 2026-11-19). Nothing for anyone else. */}
+            {(b.kind === 'paragraph' || b.kind === 'quote') && <AdminAddHere chapter={n} after={b.idx} label={f.label} />}
             {/* Scene lines are hidden (owner, 2026-10-09); only the add-image button stays, where it shows. */}
             {scene && (
               <div className="scene-label" data-scene={scene.label}>

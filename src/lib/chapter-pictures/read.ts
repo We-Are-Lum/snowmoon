@@ -3,7 +3,7 @@ import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import type postgres from 'postgres';
 import { db } from '../db';
-import type { Look, PictureDecision, PictureRecipe, PictureVersion, ShownReplacement } from './shared';
+import type { Addition, Look, PictureDecision, PictureRecipe, PictureVersion, ShownReplacement } from './shared';
 
 /**
  * Reading the edition's chapter pictures as admins left them (owner, 2026-11-18, option B; 0042_chapter_picture_versions):
@@ -217,3 +217,44 @@ export async function latestLooks(sql: Sql): Promise<Looks> {
 
 /** The look a redo in this chapter uses: the chapter's own, else every chapter's, else none. */
 export const lookFor = (looks: Looks, chapter: number): Look | null => (looks.chapters[chapter] ? looks.chapters[chapter].look : null) ?? looks.all?.look ?? null;
+
+/**
+ * Pictures an admin added to the edition's chapters (owner, 2026-11-19; 0043_chapter_picture_additions): where each sits.
+ * Whether one shows, and which picture, is the latest decision for its id, read with the replacements above. Until the
+ * migration is applied (the table missing) there are none, and the chapter pages show what they showed before.
+ */
+export async function additionsReady(sql: Sql): Promise<boolean> {
+  const [r] = await sql<{ ok: boolean }[]>`select to_regclass('studio.chapter_picture_additions') is not null as ok`;
+  return Boolean(r?.ok);
+}
+
+type AdditionRow = { job_id: string; chapter: number; after_idx: number; start_idx: number; end_idx: number; by_fid: string; added_at: Date };
+export async function readAdditions(sql: Sql, chapter?: number): Promise<Addition[]> {
+  if (!(await additionsReady(sql))) return [];
+  const rows = chapter === undefined
+    ? await sql<AdditionRow[]>`select job_id, chapter, after_idx, start_idx, end_idx, by_fid, added_at from studio.chapter_picture_additions order by chapter, after_idx, added_at`
+    : await sql<AdditionRow[]>`select job_id, chapter, after_idx, start_idx, end_idx, by_fid, added_at from studio.chapter_picture_additions where chapter = ${chapter} order by after_idx, added_at`;
+  return rows.map((r) => ({ jobId: r.job_id, chapter: r.chapter, after: r.after_idx, start: r.start_idx, end: r.end_idx, byFid: Number(r.by_fid), at: new Date(r.added_at).toISOString() }));
+}
+
+export async function readAddition(sql: Sql, jobId: string): Promise<Addition | null> {
+  if (!(await additionsReady(sql))) return null;
+  const [r] = await sql<AdditionRow[]>`select job_id, chapter, after_idx, start_idx, end_idx, by_fid, added_at from studio.chapter_picture_additions where job_id = ${jobId}`;
+  return r ? { jobId: r.job_id, chapter: r.chapter, after: r.after_idx, start: r.start_idx, end: r.end_idx, byFid: Number(r.by_fid), at: new Date(r.added_at).toISOString() } : null;
+}
+
+let additionsDuringBuild: Promise<Addition[]> | null = null;
+async function additionsOrNone(): Promise<Addition[]> {
+  const sql = db();
+  if (!sql) return [];
+  try {
+    return await readAdditions(sql);
+  } catch (e) {
+    if (missing(e)) return [];
+    if (BUILDING) throw e;
+    console.error('chapter pictures: additions not read', (e as Error).message);
+    return [];
+  }
+}
+/** Every added picture's place, for the chapter pages: once per build worker at build, fresh on each render after. */
+export const shownAdditions = cache(async (): Promise<Addition[]> => (BUILDING ? (additionsDuringBuild ??= additionsOrNone()) : additionsOrNone()));
