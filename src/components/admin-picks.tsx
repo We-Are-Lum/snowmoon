@@ -33,9 +33,10 @@ function useAdminPicks(url: string) {
           if (adminPick.pick.targetKind === 'moment') {
             const block = document.getElementById(adminPick.target);
             if (!block) continue;
-            const seed = document.querySelector<HTMLElement>(`figure.seed-image[data-for="${adminPick.target}"]`);
-            if (seed) seed.hidden = true;
-            (seed ?? block).after(host);
+            // Every edition picture at this block, an admin's added one included (owner, 2026-11-21): each is in the switch.
+            const seeds = [...document.querySelectorAll<HTMLElement>(`figure.seed-image[data-for="${adminPick.target}"]`)];
+            for (const seed of seeds) seed.hidden = true;
+            (seeds[0] ?? block).after(host);
           } else {
             const card = document.querySelector<HTMLElement>(`li.ref-card[data-term="${adminPick.target}"]`);
             if (!card) continue;

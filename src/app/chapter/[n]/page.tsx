@@ -19,7 +19,7 @@ import { recipePath } from '~/lib/chapter-pictures/shared';
 import { LocalDate } from '~/components/local-date';
 import { CHALLENGE_MODELS } from '~/lib/challenge/models';
 import { AdminHide } from '~/components/admin-hide';
-import { QuoteShare } from '~/components/quote-share';
+import { QuoteShare, type ShareImage } from '~/components/quote-share';
 import { ChapterView } from '~/components/chapter-view';
 import { AiLabel, RecipeLink } from '~/components/recipe-sheet';
 import { AI_LABEL, NOT_AUTHOR_VISIBLE, REVIEWED_MARK } from '~/lib/ai-declared';
@@ -80,6 +80,12 @@ function sceneLabels(blocks: Block[], facts: BlockFacts[]): Map<number, { label:
   });
   close(facts[facts.length - 1]?.scene ?? 1);
   return out;
+}
+
+/** The share sheet's pictures: the edition's, then any added after the same block, in the chapter's order. */
+function shareImages(images: { id: string; idx: number; url: string; alt: string }[], added: AddedIllustration[]): ShareImage[] {
+  const all: ShareImage[] = [...images.map(({ id, idx, url, alt }) => ({ id, idx, url, alt })), ...added.map(({ id, idx, url, alt }) => ({ id, idx, url, alt, added: true as const }))];
+  return all.sort((a, b) => a.idx - b.idx || Number(!!a.added) - Number(!!b.added));
 }
 
 export default async function ChapterPage({ params }: Props) {
@@ -293,7 +299,8 @@ export default async function ChapterPage({ params }: Props) {
           <AiLabel kind="voice" text={AI_LABEL.voice} file={narration.recipe} />
         </p>
       )}
-      <QuoteShare chapter={n} images={images.map(({ id, idx, url, alt }) => ({ id, idx, url, alt }))} />
+      {/* The share sheet offers the chapter's pictures, the ones admins added included (owner, 2026-11-21), in the chapter's order. */}
+      <QuoteShare chapter={n} images={shareImages(images, added)} />
     </article>
     </ChapterView>
   );
