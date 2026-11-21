@@ -589,6 +589,16 @@ for (const id of Object.values(VOICE.models)) {
   check(`M. ${id} is on the allowlist: closed, by ElevenLabs, with what it keeps`, Boolean(m) && m!.open_weights === false && m!.maker === 'ElevenLabs' && (m!.keeps?.length ?? 0) > 50);
 }
 
+// H. The recording page never blocks Record on a host check (Nate, 2026-11-21).
+{
+  const page = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  const code = page.replace(/\/\/.*$/gm, '');
+  check('H. every host call on the recording page is raced (withTimeout): inMiniApp, context, capabilities, the app\'s prompt', /withTimeout\(inMiniApp\(\), HOST_CHECK_MS\)/.test(code) && /withTimeout\(sdk\.context, HOST_CHECK_MS\)/.test(code) && /withTimeout\(\(\) => sdk\.getCapabilities\(\), HOST_CHECK_MS\)/.test(code) && /withTimeout\(\(\) => sdk\.actions\.requestCameraAndMicrophoneAccess\(\), HOST_PROMPT_MS\)/.test(code));
+  check('H. ... and none is awaited bare', !/await\s+(inMiniApp\(\)|sdk\.(context|getCapabilities|actions))/.test(code));
+  check('H. an unknown host is "maybe the app", and a refusal shows the browser\'s own line (mic-help)', /inApp\.current !== false/.test(code) && /MIC_HELP\[micPlace\(navigator\.userAgent, inApp\.current === true\)\]/.test(code));
+  check('H. Record\'s button waits on no host check', !/disabled=\{[^}]*(inApp|webClient|caps)/.test(page));
+}
+
 // P. P1h.
 const proof = await voiceProof(ROOT);
 check('P. P1h: the real take flow and convert route keep no recording', proof.real.length === 0, proof.real.join('; '));

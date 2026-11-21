@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, inMiniApp, useAuth } from '~/lib/client-auth';
 import { isAdmin } from '~/lib/admins';
+import { HOST_CHECK_MS, HOST_PROMPT_MS, withTimeout } from '~/lib/host-timeout';
+import { MIC_HELP, micPlace } from '~/lib/mic-help';
 import '../styles/voice.css';
 
 /**
@@ -56,13 +58,20 @@ function useRecorder() {
   };
   useEffect(() => stopAll, []);
 
+  const inApp = useRef<boolean | null>(null);
   const start = async (limitSeconds: number): Promise<{ blob: Blob; seconds: number } | null> => {
     setError(null);
     setState('asking');
     try {
-      if (await inMiniApp()) {
-        const caps = await sdk.getCapabilities().catch(() => [] as string[]);
-        if (caps.includes('actions.requestCameraAndMicrophoneAccess')) await sdk.actions.requestCameraAndMicrophoneAccess();
+      // Never block Record on a host check (Nate, 2026-11-21): each is raced (2 s), and no answer is "unknown", treated
+      // as maybe the Farcaster app. There, the app is asked for the microphone when it says it can, or when that's
+      // unknown and the SDK has the action (10 s for its prompt); then getUserMedia either way.
+      const app = await withTimeout(inMiniApp(), HOST_CHECK_MS);
+      inApp.current = app.ok ? app.value : null;
+      if (inApp.current !== false) {
+        const caps = await withTimeout(() => sdk.getCapabilities(), HOST_CHECK_MS);
+        const has = caps.ok ? caps.value.includes('actions.requestCameraAndMicrophoneAccess') : null;
+        if (has === true || (has === null && typeof sdk.actions?.requestCameraAndMicrophoneAccess === 'function')) await withTimeout(() => sdk.actions.requestCameraAndMicrophoneAccess(), HOST_PROMPT_MS);
       }
       if (!navigator.mediaDevices?.getUserMedia) throw new Error('This browser has no microphone access.');
       const s = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: true } });
@@ -107,7 +116,8 @@ function useRecorder() {
     } catch (e) {
       stopAll();
       setState('idle');
-      setError(e instanceof Error && /denied|NotAllowed/i.test(`${e.name} ${e.message}`) ? 'The microphone was refused. Allow it for this site, then try again.' : 'The microphone could not be opened here.');
+      // Refused: the line for this browser or the app (src/lib/mic-help.ts, DRAFT wording).
+      setError(e instanceof Error && /denied|NotAllowed/i.test(`${e.name} ${e.message}`) ? MIC_HELP[micPlace(navigator.userAgent, inApp.current === true)] : 'The microphone could not be opened here.');
       return null;
     }
   };
@@ -207,10 +217,11 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     if (!admin) return;
     void load();
     void (async () => {
-      if (await inMiniApp()) {
-        const ctx = await sdk.context.catch(() => null);
-        setWebClient(ctx?.client?.platformType === 'web');
-      }
+      // The Farcaster-web message only when the host does answer platformType 'web' (each check raced, 2 s).
+      const app = await withTimeout(inMiniApp(), HOST_CHECK_MS);
+      if (app.ok && !app.value) return;
+      const ctx = await withTimeout(sdk.context, HOST_CHECK_MS);
+      setWebClient(ctx.ok && ctx.value?.client?.platformType === 'web');
     })();
   }, [admin, load]);
 
