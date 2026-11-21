@@ -807,7 +807,7 @@
           "eleven_multilingual_sts_v2": null
         },
         "price_unit": "credits per minute of audio",
-        "price_seen": "2026-11-19: \"1,000 characters per minute of processed audio\" (https://elevenlabs.io/docs/overview/capabilities/voice-changer); $0.12 a minute on the API price list (https://elevenlabs.io/pricing/api)"
+        "price_seen": "2026-11-19: \"1,000 characters per minute of processed audio\" (https://elevenlabs.io/docs/overview/capabilities/voice-changer); $0.12 a minute on the API price list (https://elevenlabs.io/pricing/api); measured 2026-11-20 on the first real call: 18 credits for a 1.625 s clip (character-cost header), about 11.1 a second (665 a minute)"
       },
       "keeps": "Without Zero Retention Mode (Enterprise only, which we don't have), ElevenLabs keeps inputs and outputs under its privacy policy (https://elevenlabs.io/privacy-policy, 9 Oct 2026: \"as long as necessary to provide you with our Services\"; voice data at most 3 years after the last interaction), stored in the United States, and trains on them unless the account's \"Improve the models for everyone\" is off (Nate turns it off himself; not confirmed on 2026-11-20). The take goes into the account's history as a speech-to-speech generation (https://elevenlabs.io/docs/api-reference/history/list); our server deletes that history item right after (DELETE /v1/history/{id}), but \"debugging and moderation logs may still retain data related to the generation\" (https://elevenlabs.io/docs/resources/zero-retention-mode). Our server keeps no take (P1h).",
       "model_record": "model id, the settings sent, the date, and the credits the call used (ElevenLabs exposes no weights revision)",
@@ -838,7 +838,7 @@
           "scribe_v1": null
         },
         "price_unit": "USD per hour of audio",
-        "price_seen": "2026-11-19: $0.20 an hour (https://elevenlabs.io/pricing/api); its cost in credits isn't published: measured on the first real call"
+        "price_seen": "2026-11-19: $0.20 an hour (https://elevenlabs.io/pricing/api); its cost in credits isn't published: measured on the first real call; measured 2026-11-20: 0 credits (character-cost header) for a 1.6 s clip; model id scribe_v1 accepted"
       },
       "keeps": "Without Zero Retention Mode (Enterprise only, which we don't have), ElevenLabs keeps inputs and outputs under its privacy policy (https://elevenlabs.io/privacy-policy, 9 Oct 2026: \"as long as necessary to provide you with our Services\"; voice data at most 3 years after the last interaction), stored in the United States, and trains on them unless the account's \"Improve the models for everyone\" is off (Nate turns it off himself; not confirmed on 2026-11-20). Receives only converted audio (never a take). Not a generation, so not in the history list; kept under the privacy policy as above.",
       "model_record": "model id, the settings sent, the date, and the credits the call used (ElevenLabs exposes no weights revision)",
@@ -869,7 +869,7 @@
           "eleven_multilingual_v2": null
         },
         "price_unit": "credits per character",
-        "price_seen": "2026-11-19: one credit per character; $0.08 per 1,000 characters on the API price list (https://elevenlabs.io/pricing/api)"
+        "price_seen": "2026-11-19: one credit per character; $0.08 per 1,000 characters on the API price list (https://elevenlabs.io/pricing/api); measured 2026-11-20: 6 credits for 13 characters (character-cost header), 0.46 a character"
       },
       "keeps": "Without Zero Retention Mode (Enterprise only, which we don't have), ElevenLabs keeps inputs and outputs under its privacy policy (https://elevenlabs.io/privacy-policy, 9 Oct 2026: \"as long as necessary to provide you with our Services\"; voice data at most 3 years after the last interaction), stored in the United States, and trains on them unless the account's \"Improve the models for everyone\" is off (Nate turns it off himself; not confirmed on 2026-11-20). Receives the speech's written words only (no person's data). The generation goes into the history; our server deletes it after.",
       "model_record": "model id, the settings sent, the date, and the credits the call used (ElevenLabs exposes no weights revision)",
@@ -900,7 +900,7 @@
           "eleven_ttv_v3": null
         },
         "price_unit": "credits per call",
-        "price_seen": "2026-11-20, measured: 2,878 credits for four calls with a 378-character line (about 720 a call), against about 1,500 estimated"
+        "price_seen": "2026-11-20, measured: round 2 cost 1,512 credits for four calls, 378 a call, one per character of the 378-character line (the account's count, read before and after; it lags by minutes). Round 1's 2,878 included other use or lag."
       },
       "keeps": "Without Zero Retention Mode (Enterprise only, which we don't have), ElevenLabs keeps inputs and outputs under its privacy policy (https://elevenlabs.io/privacy-policy, 9 Oct 2026: \"as long as necessary to provide you with our Services\"; voice data at most 3 years after the last interaction), stored in the United States, and trains on them unless the account's \"Improve the models for everyone\" is off (Nate turns it off himself; not confirmed on 2026-11-20). Received the four descriptions and the preview line (the opening of c13-b64), no person's data; its previews stay in the account until saved or discarded.",
       "model_record": "model id, the settings sent, the date, and the credits the call used (ElevenLabs exposes no weights revision)",

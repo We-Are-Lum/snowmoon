@@ -43,7 +43,7 @@ export async function POST(request: Request) {
   if (!voiceId) return NextResponse.json({ error: 'That voice is a preview only: it can be used once Nate picks it and it is saved' }, { status: 400 });
   if (!body.again && (await latestReading(sql, speech.id, preset.id))) return NextResponse.json({ error: 'There is already a reading in this voice' }, { status: 409 });
   const text = speech.paragraphs.join('\n\n');
-  const estimatedCredits = text.length * VOICE.rates.readingCreditsPerChar;
+  const estimatedCredits = Math.ceil(text.length * VOICE.rates.readingCreditsPerChar);
   const no = await refusal(sql, who.fid, estimatedCredits, false);
   if (no) return NextResponse.json({ error: no }, { status: 429 });
   const settle = await reserve(sql, who.fid, VOICE.models.reading, estimatedCredits, false);

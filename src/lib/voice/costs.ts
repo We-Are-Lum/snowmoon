@@ -13,6 +13,8 @@ export type Funded = 'free' | 'admin';
 export type CostKind = 'convert' | 'transcribe' | 'reading';
 export const fundedFor = (fid: number): Funded => (isAdmin(fid) ? 'admin' : 'free');
 export const usdFor = (credits: number) => (credits * VOICE.rates.usdPer1000Credits) / 1000;
+// Today as a UTC date. Timestamps are compared as UTC dates too ((at at time zone 'utc')::date): a bare date compared
+// with a timestamptz is read in the session's time zone, which made today's rows "yesterday's" west of UTC.
 const TODAY = "((now() at time zone 'utc')::date)";
 
 export interface Today {
@@ -29,7 +31,7 @@ export async function today(sql: postgres.Sql, funded: Funded, fid: number): Pro
       coalesce(sum(estimated_credits) filter (where kind <> 'reserved' and credits > 0), 0)::float8 as estimated,
       coalesce(sum(credits) filter (where kind <> 'reserved' and estimated_credits > 0), 0)::float8 as measured
     from studio.voice_costs where day = ${sql.unsafe(TODAY)} and funded = ${funded}`;
-  const [a] = await sql`select count(*)::int as n from studio.voice_asks where fid = ${fid} and at >= ${sql.unsafe(TODAY)}`;
+  const [a] = await sql`select count(*)::int as n from studio.voice_asks where fid = ${fid} and (at at time zone 'utc')::date >= ${sql.unsafe(TODAY)}`;
   return { credits: r.credits, usd: r.usd, estimated: r.estimated, measured: r.measured, conversionsByPerson: a.n };
 }
 
@@ -42,7 +44,7 @@ let lastPurge = -Infinity;
 export async function purgeOldAsks(sql: postgres.Sql, now = Date.now()): Promise<number> {
   if (now - lastPurge < 3_600_000) return 0;
   lastPurge = now;
-  return (await sql`delete from studio.voice_asks where at < ${sql.unsafe(TODAY)}`).count;
+  return (await sql`delete from studio.voice_asks where (at at time zone 'utc')::date < ${sql.unsafe(TODAY)}`).count;
 }
 export const resetPurgeClock = () => void (lastPurge = -Infinity);
 

@@ -35,8 +35,12 @@ async function measure(name: string, estimate: number, run: () => Promise<Respon
   const body = res.ok ? new Uint8Array(await res.arrayBuffer()) : null;
   const status = res.status;
   const errorText = res.ok ? null : new TextDecoder().decode(new Uint8Array(await res.arrayBuffer()).slice(0, 300));
-  await new Promise((r) => setTimeout(r, 3000));
-  const after = await used();
+  // The account's count can lag behind a call: with no header, wait up to 90 s for it to move.
+  let after = await used();
+  for (let i = 0; header === null && after === before && i < 9; i++) {
+    await new Promise((r) => setTimeout(r, 10_000));
+    after = await used();
+  }
   const credits = header !== null ? Number(header) : after - before;
   const row = { call: name, status, estimate, credits, fromHeader: header !== null, accountDelta: after - before, historyItemId: res.headers.get('history-item-id'), requestId: res.headers.get('request-id'), headers: [...res.headers.keys()].filter((k) => !/cookie|key/i.test(k)), errorText, overEstimate: credits > RULE * estimate };
   report.push(row);
@@ -47,7 +51,10 @@ async function measure(name: string, estimate: number, run: () => Promise<Respon
 async function deleteHistory(id: string | null) {
   if (!id) return 'no history id';
   const r = await fetch(`${API}/v1/history/${id}`, { method: 'DELETE', headers: H });
-  return r.ok ? 'deleted' : `delete answered ${r.status}`;
+  if (!r.ok) return `delete answered ${r.status}: ${(await r.text()).slice(0, 200)}`;
+  // Confirm: the item reads as missing now (needs history read; a 401/403 says the key lacks it).
+  const g = await fetch(`${API}/v1/history/${id}`, { headers: H });
+  return `deleted; reading it back answered ${g.status}${g.status === 404 ? ' (gone)' : g.ok ? ' (STILL THERE)' : ''}`;
 }
 const stop = (why: string) => {
   report.push({ stopped: why });

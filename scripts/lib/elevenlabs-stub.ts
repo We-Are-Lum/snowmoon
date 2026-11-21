@@ -94,7 +94,8 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
       if (opts.failConvert) return send(500, 'stub: failed, and this text quotes the input');
       const input = call.files[0]?.bytes ?? Buffer.alloc(0);
       const seconds = Math.min(300, Math.max(1, input.length / (opts.bytesPerSecond ?? 4000)));
-      const cost = Math.ceil((seconds / 60) * 1000);
+      // As measured on the first real calls (2026-11-20): about 665 credits a minute.
+      const cost = Math.ceil((seconds / 60) * 665);
       used += cost;
       return send(200, tone(seconds, 180), { 'content-type': 'audio/mpeg', 'history-item-id': `stubhist${++seq}`, 'character-cost': String(cost) });
     }
@@ -108,8 +109,10 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
     }
     if (req.method === 'POST' && url.pathname.startsWith('/v1/text-to-speech/')) {
       const text = String((call.json as { text?: string })?.text ?? '');
-      used += text.length;
-      return send(200, tone(5, 140), { 'content-type': 'audio/mpeg', 'history-item-id': `stubtts${++seq}`, 'character-cost': String(text.length) });
+      // As measured: 0.46 credits a character.
+      const cost = Math.ceil(text.length * 0.46);
+      used += cost;
+      return send(200, tone(5, 140), { 'content-type': 'audio/mpeg', 'history-item-id': `stubtts${++seq}`, 'character-cost': String(cost) });
     }
     send(404, 'stub: no such path');
   });

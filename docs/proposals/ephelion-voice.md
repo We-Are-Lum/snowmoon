@@ -346,12 +346,54 @@ local script (not the site), each measured against its estimate before the next:
 Credits read from ElevenLabs' header when sent, else from the account's count before and after. If any call costs more
 than 20% over its estimate, I stop before the next and report. Total ≈ 65 credits.
 
+## Afternoon, 2026-11-20: the key, the first real calls, round 2 of the voices
+
+**The key** is in `.env.local` and Vercel (restricted: Text to Speech, Speech to Speech, Speech to Text, Voices read,
+History write, User; 100,000 credits per refresh period). Nothing the slice calls was refused: no permission missing.
+
+**The first real calls** (`scripts/voice-first-calls.ts`, one each, measured before the next; a ready-made library
+voice, "Roger" (premade), for testing only, never a preset, never published; the input a 1.6-second clip made on this
+Mac with macOS's own text-to-speech reading "With regards, Lord Ephelion.", no one's voice):
+
+| Call | Estimate | Measured (ElevenLabs' character-cost header) | Rate |
+|---|---|---|---|
+| Convert (`eleven_multilingual_sts_v2`), WebM/Opus in, MP3 out | 28 | **18 credits** for 1.625 s | **≈ 11.1 credits a second (≈ 665 a minute)** |
+| Transcribe (`scribe_v1`), the converted MP3 | 1 | **0 credits** | 0 in credits; it sends a dollar-cost header instead |
+| Reading (`eleven_multilingual_v2`), "With regards," | 13 | **6 credits** for 13 characters | **≈ 0.46 credits a character** |
+
+None was over its estimate. History: each generation was deleted right after, and reading it back answered "A history
+item with ID … was not found on the server", and it isn't in the account's recent history. Confirmed too: speech-to-speech
+takes WebM/Opus as Chrome records it; the transcription model id `scribe_v1` works, with word timings (it heard "With
+regards, Mortifelian": a name can be misheard, which is what the word check and "Redo this sentence" are for).
+Caveat: one short sample each; convert may round per second or per clip. The code's estimates now use these rates
+(`VOICE.rates`), and the 20% rule re-checks every call.
+
+**Caps at the measured rates** (placeholders still, for Nate): a full take is about 665 credits a minute, so 1, 2 and 3
+minutes cost ≈ 665, 1,330 and 1,995 credits (≈ $0.12, $0.24, $0.36). The placeholder daily pool of 20,000 credits is
+about fifteen 2-minute takes; the key's 100,000 a period is about 75. A reading of c13-b64 (2,141 characters) ≈ 985
+credits.
+
+**Voices, round 2** (Nate's own four briefs; not British: American, or a light Russian accent; warm, professional,
+persuasive because he sounds reasonable): made once each, `eleven_ttv_v3`, seed 2020, three previews each. Measured:
+**1,512 credits, 378 a call** (one per character of the line; under the ≈ 720 estimate). **Listen:**
+https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a/index.html. Round 1's page is deleted (Nate:
+none chosen); its presets stay in `config/voice-presets.json` for the record, marked not-chosen, and are no longer
+offered. Waiting for Nate's picks.
+
+**#195** merged (f04cece1) after its build passed on the merge result; `/admin/mic-test` is live (a 404 to everyone but a
+signed-in admin). Live checks: check:shipped, check:miniapp pass; check:principles 73 pass, only P6d (accepted).
+
+**Fixed today:** the daily-count purge compared a timestamp with a bare date, which Postgres reads in the session's time
+zone: west of UTC, between midnight UTC and local midnight, today's counts were purged as yesterday's. Production's
+database runs in UTC, so it wouldn't have shown there, but it was wrong; dates are now compared as UTC dates on both
+sides (migration, code, tests), and the migration passes in UTC and in Pacific time.
+
 ## What Nate needs to do (one at a time)
 
-1. (Nate, this morning) The merge word for PR #195, then the iPhone and desktop tests; Android goes to Garance or Luis.
-2. (Nate, this morning) Pick one preview per brief, or none (link under B1).
+1. #195 is merged and live: the iPhone and desktop tests on /admin/mic-test; Android goes to Garance or Luis.
+2. Round 2: pick one preview per brief, or none (link above).
 3. (Nate, this morning) ElevenLabs training off; say when it's done (the bracketed line stays until then).
-4. (Nate, this morning) The key in `.env.local` and Vercel as `ELEVENLABS_API_KEY`; then I make the three test calls (6).
+4. ~~The key~~ done; the three test calls are done and measured (above).
 5. Reread: the rule, own-voice-v2, P1h/P1i, the Privacy and Terms lines.
 6. Speech length and plan size, then the caps in credits (B7; the build has placeholders).
 7. Apply `NEXT_ephelion_voice.sql` when the branch is ready to merge (the coordinator tests it first; it takes its number

@@ -23,7 +23,7 @@ interface Status {
   choices: Choice[];
   consent: { version: string; line: string; title: string; text: string[]; sha256: string; agreed: boolean };
   models: { convert: string; transcribe: string; reading: string; design: string; provider: string };
-  limits: { maxTakeSeconds: number; maxSentenceSeconds: number; maxTakeBytes: number; creditsPerMinute: number };
+  limits: { maxTakeSeconds: number; maxSentenceSeconds: number; maxTakeBytes: number; creditsPerMinute: number; readingCreditsPerChar: number };
   today: { funded: string; credits: number; capCredits: number; conversionsLeft: number } | null;
   drafts: { id: string; kind: string; speechId: string; presetId: string; madeAt: string; publishedAt: string | null; recipe: Record<string, unknown>; audio: { n: number; role: string; sentence: number | null }[] }[];
   readings: { presetId: string; id: string; candidate: number | null; madeAt: string }[];
@@ -473,7 +473,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                 <SignedAudio key={picked.presetId} path={`/api/voice/reading?speech=${s.speech.id}&preset=${picked.presetId}`} label="Play the reading" />
               ) : (
                 <button type="button" className="vr-btn vr-quiet" onClick={makeReading} disabled={!s.ready || busy !== null}>
-                  Make the reading (≈ {s.speech.characters.toLocaleString()} credits)
+                  Make the reading (≈ {Math.ceil(s.speech.characters * s.limits.readingCreditsPerChar).toLocaleString()} credits)
                 </button>
               )}
             </section>

@@ -1158,17 +1158,21 @@ export const VOICE = {
   maxSentenceSeconds: 30,
   /** A conversion's signed record is good for this long; the person accepts within it or it is gone. */
   ticketMinutes: 120,
+  /**
+   * Measured on the first real calls (2026-11-20, one each, from ElevenLabs' own character-cost header; the account's
+   * count agreed): convert 18 credits for a 1.625 s clip (11.1 a second, about 665 a minute; ElevenLabs' page says
+   * 1,000 a minute); transcribe 0 credits; reading 6 credits for 13 characters (0.46 a character); Voice Design 378
+   * credits a call (one a character of the preview line). One short sample each: the 20% rule re-checks every call.
+   */
   rates: {
     usdPer1000Credits: 22 / 121,
-    /** ElevenLabs: "1,000 characters per minute of processed audio". */
-    convertCreditsPerMinute: 1000,
-    /** One credit per character (Multilingual v2). */
-    readingCreditsPerChar: 1,
-    /** Not on ElevenLabs' pages in credits; $0.20 an hour on its API price list. Measured on the first real call. */
+    convertCreditsPerMinute: 665,
+    readingCreditsPerChar: 0.46,
+    /** Transcription measured 0 credits; ElevenLabs' API price list says $0.20 an hour, counted in dollars only. */
     transcribeUsdPerHour: 0.2,
   },
   caps: {
-    /** Everyone's calls together, per UTC day ('free'). PLACEHOLDER: ten 2-minute takes. */
+    /** Everyone's calls together, per UTC day ('free'). PLACEHOLDER: about fifteen 2-minute takes at the measured rate. */
     dailyCredits: 20_000,
     dailyUsd: 4,
     /** Admins' own trials, counted apart ('admin'). PLACEHOLDER. */

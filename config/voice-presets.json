@@ -1,5 +1,5 @@
 {
-  "about": "Voice presets for the Ephelion storyboard (Nate, 2026-11-19; branch ephelion-voice). Each is an ElevenLabs voice and its recipe: how it was made. DRAFT: Nate picks the voices; until he does, every entry is a candidate with no voice id, and nothing here is shown on the site. The book says almost nothing of Ephelion's voice: he is 'Lord Ephelion, Arctic ambassador to Veridia' (c8-b17) and signs 'Arctic Empire consul to Veridia' (c13-b64). Every description below is this edition's invention, written by the coding agent (Claude, a closed model by Anthropic) for Nate's reread. None is American-accented, and none names or imitates a real person. The preview line is the opening of c13-b64, word for word. Voice Design was run once per brief on 2026-11-20 (Nate's word of 2026-11-20: spend up to about 1,500 credits), three previews each, listed under recipe.previews with the sha256 of each preview's mp3; `picked` and `voiceId` are set only when Nate picks one and it is saved.",
+  "about": "Voice presets for the Ephelion storyboard (Nate, 2026-11-19; branch ephelion-voice). Each is an ElevenLabs voice and its recipe: how it was made. DRAFT: Nate picks the voices; until he does, every entry is a candidate with no voice id, and nothing here is shown on the site. The book says almost nothing of Ephelion's voice: he is 'Lord Ephelion, Arctic ambassador to Veridia' (c8-b17) and signs 'Arctic Empire consul to Veridia' (c13-b64). Every description below is this edition's invention, written by the coding agent (Claude, a closed model by Anthropic) for Nate's reread. None is American-accented, and none names or imitates a real person. The preview line is the opening of c13-b64, word for word. Voice Design was run once per brief on 2026-11-20 (Nate's word of 2026-11-20: spend up to about 1,500 credits), three previews each, listed under recipe.previews with the sha256 of each preview's mp3; `picked` and `voiceId` are set only when Nate picks one and it is saved. Round 2 (2026-11-20): Nate's own four briefs (not British: American, or a light Russian accent; warm, professional, persuasive because he sounds reasonable), seed 2020, measured at 378 credits a call (one per character of the line). Round 1 is kept for the record, marked not-chosen, and is no longer offered.",
   "character": "ephelion",
   "previewBlock": "c13-b64",
   "previewText": "All humans are equal, the schools, the posters, the songs, and everything else in Veridia is telling you. Maybe not Dreadknot - but that's exactly why Dreadknot's taxes were bumped up to tier 4 in the audit last year. Nobody is better than anyone else, and if you even dare claim that one human being is better than another, then you are immediately cast out as evil in Veridia.",
@@ -7,7 +7,7 @@
   "presets": [
     {
       "id": "ephelion-cold-baritone",
-      "status": "candidate",
+      "status": "not-chosen",
       "name": "Cold baritone",
       "invented": true,
       "voiceId": null,
@@ -37,11 +37,13 @@
           }
         ],
         "picked": null
-      }
+      },
+      "previewBase": null,
+      "note": "Round 1. Nate didn't like any of the twelve (2026-11-20); its listening page is deleted."
     },
     {
       "id": "ephelion-arctic-precise",
-      "status": "candidate",
+      "status": "not-chosen",
       "name": "Arctic, precise",
       "invented": true,
       "voiceId": null,
@@ -71,11 +73,13 @@
           }
         ],
         "picked": null
-      }
+      },
+      "previewBase": null,
+      "note": "Round 1. Nate didn't like any of the twelve (2026-11-20); its listening page is deleted."
     },
     {
       "id": "ephelion-rally-orator",
-      "status": "candidate",
+      "status": "not-chosen",
       "name": "Rally orator",
       "invented": true,
       "voiceId": null,
@@ -105,11 +109,13 @@
           }
         ],
         "picked": null
-      }
+      },
+      "previewBase": null,
+      "note": "Round 1. Nate didn't like any of the twelve (2026-11-20); its listening page is deleted."
     },
     {
       "id": "ephelion-bright-coach",
-      "status": "candidate",
+      "status": "not-chosen",
       "name": "Bright coach",
       "invented": true,
       "voiceId": null,
@@ -139,6 +145,160 @@
           }
         ],
         "picked": null
+      },
+      "previewBase": null,
+      "note": "Round 1. Nate didn't like any of the twelve (2026-11-20); its listening page is deleted."
+    },
+    {
+      "id": "ephelion-lecturer",
+      "status": "candidate",
+      "round": 2,
+      "name": "Warm lecturer",
+      "invented": true,
+      "voiceId": null,
+      "previewBase": "https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a",
+      "recipe": {
+        "provider": "ElevenLabs",
+        "made": "Voice Design",
+        "model": "eleven_ttv_v3",
+        "description": "A man in his fifties with a warm, clear American voice. Professional and friendly, like a well-liked university lecturer explaining something he believes is obviously true. Conversational pace, a smile in the voice, never shouting. Studio quality.",
+        "briefBy": "Nate (2026-11-20)",
+        "guidanceScale": 5,
+        "seed": 2020,
+        "madeOn": "2026-11-20",
+        "previews": [
+          {
+            "n": 1,
+            "generatedVoiceId": "GJNXe6evoJS9rblaWDwx",
+            "sha256": "0fd4d4ac47e6566048a51d40840427ead00727112788a499628f8cd0f5187e5f"
+          },
+          {
+            "n": 2,
+            "generatedVoiceId": "vQx3A6G3lNII518zKhcu",
+            "sha256": "2b12d00a01c575112dd0b5fa3d8e699dee1a85e279d60e202274706e19fcbffc"
+          },
+          {
+            "n": 3,
+            "generatedVoiceId": "oO59DHjG1nW3K9foHiWR",
+            "sha256": "2f12f0e65b589d737c0b5d202deef857b6ffb00a7e1af4a8150dc7dd1de703a1"
+          }
+        ],
+        "picked": null,
+        "creditsMeasured": 378
+      }
+    },
+    {
+      "id": "ephelion-baritone",
+      "status": "candidate",
+      "round": 2,
+      "name": "Deep baritone",
+      "invented": true,
+      "voiceId": null,
+      "previewBase": "https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a",
+      "recipe": {
+        "provider": "ElevenLabs",
+        "made": "Voice Design",
+        "model": "eleven_ttv_v3",
+        "description": "A man in his early forties with a deep, resonant baritone and a slow, unhurried American delivery. Calm authority, quiet warmth, each sentence landing with weight. Close-mic, studio quality.",
+        "briefBy": "Nate (2026-11-20)",
+        "guidanceScale": 5,
+        "seed": 2020,
+        "madeOn": "2026-11-20",
+        "previews": [
+          {
+            "n": 1,
+            "generatedVoiceId": "MTXevvJXEFlFaS9lQ2Kl",
+            "sha256": "bcd5da5aae2c77ec996d9018cee7c57f3f34dac0bcbcace7c919680dd71803f7"
+          },
+          {
+            "n": 2,
+            "generatedVoiceId": "Q3P2i0r58TWhvnmdfBLN",
+            "sha256": "8209b533867221b977b02752d7c015e1097e12c4dea8d8614e354ffaae3d391c"
+          },
+          {
+            "n": 3,
+            "generatedVoiceId": "gMookiOlUsLZPqKVUvmj",
+            "sha256": "3cf1a0049a581fd2c6809c35ca1cdf1b4eb860ec3753549a5480fa550bb3b9e9"
+          }
+        ],
+        "picked": null,
+        "creditsMeasured": 378
+      }
+    },
+    {
+      "id": "ephelion-russian",
+      "status": "candidate",
+      "round": 2,
+      "name": "Light Russian accent",
+      "invented": true,
+      "voiceId": null,
+      "previewBase": "https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a",
+      "recipe": {
+        "provider": "ElevenLabs",
+        "made": "Voice Design",
+        "model": "eleven_ttv_v3",
+        "description": "A man in his late forties speaking fluent, precise English with a light Russian accent. Cultured and composed, quiet confidence, persuasive rather than menacing. Measured pace. Studio quality.",
+        "briefBy": "Nate (2026-11-20)",
+        "guidanceScale": 5,
+        "seed": 2020,
+        "madeOn": "2026-11-20",
+        "previews": [
+          {
+            "n": 1,
+            "generatedVoiceId": "fdoGbz5eU4VUde5iMQYV",
+            "sha256": "d61ae63da3c498795ccfb23ba5cfcf6481aaa214e469b3181eb69d2cbf3997c8"
+          },
+          {
+            "n": 2,
+            "generatedVoiceId": "nbS9HiIHgbkUOPcxwyWW",
+            "sha256": "47b2c604a7972c30b1b91ce045d433c09ab3bc76ae7f109bd1489da9c61832a8"
+          },
+          {
+            "n": 3,
+            "generatedVoiceId": "26qY3RB7PBzlg41ocba5",
+            "sha256": "307ea7fc642752457c6d6336bcb6524a45ed579a254530ae8f2b29b203f8233b"
+          }
+        ],
+        "picked": null,
+        "creditsMeasured": 378
+      }
+    },
+    {
+      "id": "ephelion-sincere",
+      "status": "candidate",
+      "round": 2,
+      "name": "Sincere, rising",
+      "invented": true,
+      "voiceId": null,
+      "previewBase": "https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a",
+      "recipe": {
+        "provider": "ElevenLabs",
+        "made": "Voice Design",
+        "model": "eleven_ttv_v3",
+        "description": "A man in his late thirties with a bright, confident American voice. Sincere, as if he means every word; energy rises toward the end of the speech. Studio quality.",
+        "briefBy": "Nate (2026-11-20)",
+        "guidanceScale": 5,
+        "seed": 2020,
+        "madeOn": "2026-11-20",
+        "previews": [
+          {
+            "n": 1,
+            "generatedVoiceId": "zScIRk6DmNjgr53p2j1U",
+            "sha256": "e150e0d147ac353f7f01d8a7ca492b21a06646e62eaddd07d81122343104f1a2"
+          },
+          {
+            "n": 2,
+            "generatedVoiceId": "S3wFpyTOI0FFqb0HDOCs",
+            "sha256": "0dd1a04c617eca3e833bc8e793ba6b77190824a18e229b7d24b3cc06d2f872a0"
+          },
+          {
+            "n": 3,
+            "generatedVoiceId": "h2n9W69MOZ8jeQHaCA9R",
+            "sha256": "3262708d1174f1797744c8c6b15af87e12341d64a6b3dab70188a48d2e6538fe"
+          }
+        ],
+        "picked": null,
+        "creditsMeasured": 378
       }
     }
   ]
