@@ -25,9 +25,12 @@ import { namesAWork, parseRefLink, type Look, type PickedRef } from './shared';
  * character sheets are sent. Nothing about its maker goes to the model; their handle goes only into the recipe and the
  * caption, as their own page already shows it. No country is kept for anyone, makers included, so there is no maker's
  * country rule to apply; the closed models' country rule is the admin's own, for the request (src/lib/images/countries.ts).
- * Every sentence in REF_WORDING is DRAFT wording (coding agent, 2026-11-21).
+ * Every sentence in REF_WORDING was drafted by the coding agent (2026-11-21) and reread by the owner 2026-11-21 (the
+ * review page of #204), with the Keep refusal in his own words.
  */
 type Sql = postgres.Sql;
+
+const COUNT: Record<number, string> = { 1: 'one', 2: 'two', 3: 'three' };
 
 export const REF_WORDING = {
   notALink: 'That isn’t a link to a picture on snowmoon.party. Paste the address of a remix (/challenge/p/…), a picture (/image/…), or a sheet or base (/references/designs/…).',
@@ -40,9 +43,11 @@ export const REF_WORDING = {
   twice: 'That picture is already picked.',
   shortQuery: 'Type at least two letters.',
   // Owner, 2026-11-21: "If a reference was hidden in the meantime, Keep is refused with a plain message and the admin can
-  // try again with other references." The draft stays a draft.
+  // try again with other references." The draft stays a draft. The owner's own words (2026-11-21): "This draft can't be
+  // kept: one of its references (@name's Bai remix) has been hidden since. Make another draft with other references."
+  // For several, the same pattern: "two of its references (…, …) have been hidden since" (at most three can be sent).
   keepHidden: (whats: string[]) =>
-    `This draft can’t be kept: ${whats.length === 1 ? 'a picture it was made after' : 'pictures it was made after'} (${whats.join(', ')}) ${whats.length === 1 ? 'has' : 'have'} been hidden since. Make another draft with other references.`,
+    `This draft can’t be kept: ${COUNT[whats.length] ?? String(whats.length)} of its references (${whats.join(', ')}) ${whats.length === 1 ? 'has' : 'have'} been hidden since. Make another draft with other references.`,
   lookHidden: (label: string) => `The saved look, “${label}”, has been hidden since it was saved. Choose another look first.`,
 } as const;
 

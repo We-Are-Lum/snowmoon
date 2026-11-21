@@ -149,7 +149,7 @@ export function sceneOf(jobPrompt: string): string {
   return jobPrompt.replace(/\s+from reference image \d+/gi, '').replace(/\s+\(reference image \d+\)/gi, '').trim();
 }
 
-/** A redo's first line when picked references go with it: the picture shown before is reference picture 1. DRAFT wording (2026-11-21). */
+/** A redo's first line when picked references go with it: the picture shown before is reference picture 1. Reread by the owner 2026-11-21. */
 export const REDO_LINE_WITH = 'Redraw reference picture 1 as this scene, changing what the note asks and keeping the rest.';
 
 /**
@@ -192,8 +192,8 @@ const aOrAn = (what: string) => `${/^[aeiou]/i.test(what) ? 'an' : 'a'} ${what}`
 
 /**
  * The line naming the published pictures an admin picked as references, numbered after the pictures before them
- * (`before`: the sheets of an added picture, or the picture shown before in a redo). DRAFT wording (coding agent,
- * 2026-11-21): "Reference picture 2 is a Zei remix; reference picture 3 is a Bai base: use them as the note says."
+ * (`before`: the sheets of an added picture, or the picture shown before in a redo). Drafted by the coding agent,
+ * reread by the owner 2026-11-21: "Reference picture 2 is a Zei remix; reference picture 3 is a Bai base: use them as the note says."
  */
 export const pickedLine = (before: number, whats: string[]) =>
   whats.length ? `${whats.map((w, i) => `${i ? 'reference' : 'Reference'} picture ${before + i + 1} is ${aOrAn(w)}`).join('; ')}: use ${whats.length === 1 ? 'it' : 'them'} as the note says.` : '';
@@ -223,7 +223,7 @@ export const pickLimit = (max: number, mode: 'add' | 'redo', sheets: number) => 
 
 /**
  * Neither closed model is offered here (the country rule, src/lib/images/countries.ts): the sheets' Model row then says
- * so in one line, "GPT Image and Gemini aren’t offered where you are." (owner, 2026-11-21; DRAFT).
+ * so in one line, "GPT Image and Gemini aren’t offered where you are." (owner, 2026-11-21; reread by the owner 2026-11-21).
  */
 export const noClosedOffered = (list: readonly { open: boolean }[] | null | undefined) => Boolean(list?.length) && !list!.some((x) => !x.open);
 
@@ -233,7 +233,7 @@ const joinAnd = (xs: string[]) => (xs.length <= 1 ? xs.join('') : `${xs.slice(0,
 
 /**
  * The caption's credit for the pictures a chapter picture was made after (owner's request via Garance, 2026-11-21:
- * "after @name's …"). DRAFT wording (coding agent): each maker once, in the order their pictures were sent, with what
+ * "after @name's …"). Drafted by the coding agent, reread by the owner 2026-11-21: each maker once, in the order their pictures were sent, with what
  * of theirs went in: "after @garance’s Zei remix", "after @garance’s Zei remix and Bai sheet", "after @garance’s Zei
  * remix, @naaate’s Bai base and FID 12’s picture"; with a group of two before the last, ", and" keeps the groups
  * apart ("after @garance’s Zei remix and Bai sheet, and @naaate’s Zei base"). A picture hidden since says only that:

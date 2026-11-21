@@ -251,10 +251,10 @@ r = await addPicture(S, GARANCE, req, { jobId: addedJob, note: 'Bai by the door.
 const second = String(r.json.versionId);
 await pg.query(`update studio.elements set status = 'hidden' where id = $1`, [laterEl]);
 r = await showPicture(S, GARANCE, { jobId: addedJob, versionId: second }, deps);
-check('K. a reference hidden since the draft stops Keep (409) with the plain message naming it, and nothing changes', r.status === 409 && r.json.reason === 'reference-hidden' && r.json.error === REF_WORDING.keepHidden(['@fixture505’s Bai remix']) && (await readReplacements(S)).get(addedJob)?.versionId === addedVersion, JSON.stringify(r.json));
+check('K. a reference hidden since the draft stops Keep (409) with the plain message naming it, and nothing changes', r.status === 409 && r.json.reason === 'reference-hidden' && r.json.error === 'This draft can’t be kept: one of its references (@fixture505’s Bai remix) has been hidden since. Make another draft with other references.' && (await readReplacements(S)).get(addedJob)?.versionId === addedVersion, JSON.stringify(r.json));
 r = await showPicture(S, GARANCE, { jobId: addedJob, versionId: second, keepHidden: true }, deps);
 check('K. there is no "keep it anyway": asking again, with any flag, is refused the same way; the draft stays a draft', r.status === 409 && r.json.reason === 'reference-hidden' && (await readReplacements(S)).get(addedJob)?.versionId === addedVersion && !(await publicRecipe(S, second)), JSON.stringify(r.json));
-check('K. the message says to try again with other references', /Make another draft with other references\./.test(REF_WORDING.keepHidden(['x'])));
+check('K. the owner\'s words for one reference, and the same pattern for two and three', REF_WORDING.keepHidden(['@a’s Zei remix']) === 'This draft can’t be kept: one of its references (@a’s Zei remix) has been hidden since. Make another draft with other references.' && REF_WORDING.keepHidden(['@a’s Zei remix', '@b’s Bai base']) === 'This draft can’t be kept: two of its references (@a’s Zei remix, @b’s Bai base) have been hidden since. Make another draft with other references.' && /^This draft can’t be kept: three of its references \(/.test(REF_WORDING.keepHidden(['x', 'y', 'z'])));
 // A reference hidden after Keep: the caption says "a picture since hidden", and the public recipe names it nowhere.
 await pg.query(`update studio.elements set status = 'published' where id = $1`, [laterEl]);
 r = await showPicture(S, GARANCE, { jobId: addedJob, versionId: second }, deps);

@@ -6,7 +6,7 @@ import type { KeyboardEvent } from 'react';
  * The reference picker's two boxes (owner's request via Garance, 2026-11-21; src/components/chapter-pictures.tsx): a
  * search (maker, character or words) and a pasted snowmoon.party link. Admins only. What is typed is sent to our server
  * to find a published picture and is never published or kept; only the picture picked is (its version id goes with
- * Make). It says so under each box, as the other text boxes do (check:principles P1f). DRAFT wording.
+ * Make). It says so under each box, as the other text boxes do (check:principles P1f). Reread by the owner 2026-11-21.
  */
 export const REF_FIELD_LINE = 'Sent to us to find a published picture. Never published or kept.';
 

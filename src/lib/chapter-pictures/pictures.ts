@@ -311,6 +311,7 @@ export async function setLook(sql: Sql, fid: number, raw: unknown, consented: (f
   let look: Look | null = null;
   if (l?.kind === 'style') {
     // Any published, visible style (2026-11-21); one hidden, unpublished, or whose words break the looks' rule isn't listed.
+    // Its refusals' words: drafted by the coding agent, reread by the owner 2026-11-21 (#204's review page).
     const s = (await styleChoices(sql)).find((x) => x.id === l.id);
     if (!s) {
       const status = typeof l.id === 'string' ? (await referenceStatuses(sql, [l.id])).get(l.id.toLowerCase()) : undefined;

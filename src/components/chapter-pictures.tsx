@@ -67,7 +67,7 @@ export const P = {
   sheetsNone: 'No character this passage names has a published sheet picture.',
   addedAt: (ch: number, after: number, start: number, end: number) => `Added to chapter ${ch}, after block ${after}; it shows blocks ${start}–${end}.`,
   // Any published style as the look, and others' published pictures as references (owner's request via Garance,
-  // 2026-11-21). DRAFT wording (coding agent).
+  // 2026-11-21). Drafted by the coding agent; reread by the owner 2026-11-21 (#204's review page).
   styleOptionLabel: (s: StyleOptionState) => `${s.label} · version ${s.versionNo} · by ${s.by}${s.challenge ? ' · remix challenge' : ''}`,
   styleWords: (text: string) => `Its words: ${text}`,
   refsLegend: 'Other published pictures to send along (optional)',
@@ -88,7 +88,7 @@ export const P = {
   refsItem: (r: { what: string; by: string }) => `${r.what} by ${r.by}`,
   refsKind: { remix: 'remix', picture: 'picture', base: 'base', sheet: 'sheet' } as Record<RefKind, string>,
   refsCaption: (line: string) => `The caption will add: “${line}”, and the recipe each one’s version, maker and sha256.`,
-  // Owner, 2026-11-21: one line under the Model row when neither closed model is offered here. DRAFT.
+  // Owner, 2026-11-21: one line under the Model row when neither closed model is offered here; reread by the owner 2026-11-21.
   closedNotOffered: 'GPT Image and Gemini aren’t offered where you are.',
 } as const;
 
