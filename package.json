@@ -105,6 +105,7 @@
     "characters:mentions": "tsx scripts/characters-by-mentions.ts",
     "test:character-order": "tsx --conditions=react-server scripts/test-character-order.ts",
     "test:check-targets": "tsx scripts/test-check-targets.ts",
+    "test:refusal-reasons": "tsx --conditions=react-server scripts/test-refusal-reasons.ts",
     "check:minpentai-agent-live": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/check-minpentai-agent-live.ts"
   },
   "license": "AGPL-3.0-only",

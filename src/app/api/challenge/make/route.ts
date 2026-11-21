@@ -170,6 +170,8 @@ export async function POST(request: Request) {
     // someone who can use one here, and it uses none of today's pictures (its spend still counts against the caps).
     // fal's checker stays on. A closed model's refusal, and the prompt check's, count as before.
     ...(chosen.id === DEFAULT_CHALLENGE_MODEL ? { blocked: { error: MODEL_WORDING.openBlocked(closedUsableBy(where, isWalletNumber(fid))), giveBack: true } } : {}),
+    // A closed model's maker (OpenAI, Google): a refusal by its own check names it (owner, 2026-11-18, DRAFT wording).
+    ...(chosen.open ? {} : { maker: chosen.maker }),
   });
   if (!paid.ok) return no(paid.error, paid.status, paid.extra);
   const made = paid.made;

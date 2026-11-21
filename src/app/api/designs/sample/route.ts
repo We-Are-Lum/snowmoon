@@ -146,6 +146,8 @@ export async function POST(request: Request) {
     spend: remix ? { ...spend, remix } : edit || closed ? spend : undefined,
     // A sheet's view prompt is long (view line, style text, sheet text): the larger budget, as Remix's (owner, 2026-11-03).
     guardMaxTokens: slot === 'sample' ? undefined : IMAGES.designs.guardMaxTokens,
+    // A closed model's maker (OpenAI, Google): a refusal by its own check names it (owner, 2026-11-18, DRAFT wording).
+    maker: closed?.maker ?? null,
     // The source's front is sent at its own size (a view: upright, IMAGES.viewSize), as a front is to its side and back.
     make: () =>
       closed
