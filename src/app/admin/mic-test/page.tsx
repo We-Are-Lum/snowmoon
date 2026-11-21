@@ -9,7 +9,9 @@ import { notFound } from 'next/navigation';
  * Its Farcaster embed is on ./layout.tsx (a not-found render's <head> comes from the layouts). The page is still a 404
  * to everyone who isn't a signed-in admin.
  */
-export const dynamic = 'force-dynamic';
+// Static: the server's answer is the same 404 for everyone (an admin's browser draws the test), and a static render puts the
+// layout's embed in the <head> for every user agent (a dynamic one streams it to all but known bots).
+export const dynamic = 'force-static';
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default function MicTestPage() {
