@@ -429,8 +429,8 @@ published work." In practice: in the chapter reader an admin can also add a pict
 with its maker, and its recipe names the admin, the model, the style, the note and any characters' sheet pictures sent.
 Undo is "take it off the chapter": the picture stays stored and can be shown again
 (`0043_chapter_picture_additions.sql`: where each added picture sits; new rows only).
-Where a kept added picture also shows (owner's request, 2026-11-21; DRAFT, coding agent, branch added-everywhere,
-for the owner to confirm): a quote card that names it (the share page, the card image, saved cards), and the card sheet
+Where a kept added picture also shows (owner's request, 2026-11-21; drafted by the coding agent, branch added-everywhere;
+reread by the owner 2026-11-21): a quote card that names it (the share page, the card image, saved cards), and the card sheet
 starts with it for a passage that includes its block; a character's sheet when that character's sheet picture was sent
 with it, and a place's sheet when its passage sits in a scene of that place; References' cards for those sheets' terms;
 and the pick switch, at its block and for those terms. Never the introduction (its cards are fixed edition pictures).
