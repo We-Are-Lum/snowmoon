@@ -100,7 +100,8 @@ for (const r of ['src/app/api/you/illustrations/add/route.ts', 'src/app/api/you/
   check(`A. ${r} signed out: 401`, res.status === 401, String(res.status));
 }
 const reader = readFileSync(path.join(ROOT, 'src/components/reader-picture-admin.tsx'), 'utf8');
-check('A. the reader\'s controls render nothing for anyone not an admin', (reader.match(/if \(auth\.kind !== 'signed-in' \|\| !isAdmin\(auth\.fid\)\) return null;/g) ?? []).length === 2);
+// Three: Change this picture, Add a picture here, and the sheet opened from a selection or the player (2026-11-20).
+check('A. the reader\'s controls render nothing for anyone not an admin', (reader.match(/if \(auth\.kind !== 'signed-in' \|\| !isAdmin\(auth\.fid\)\) return null;/g) ?? []).length === 3);
 
 // B. Before the additions migration.
 {

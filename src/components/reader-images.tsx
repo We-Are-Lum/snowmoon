@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import { openComposer } from '~/lib/images/client';
 import { byline } from '~/lib/images/byline';
 import { useCanAddImage } from '~/lib/images/can-add';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { AI_LABEL, NOT_AUTHOR_VISIBLE, readerImageView } from '~/lib/ai-declared';
 import { AiLabel } from './recipe-sheet';
 import { AdminHide } from './admin-hide';
+import { useAddImageEntry } from './add-image-entry';
 
 /**
  * Readers' images in the chapter (decision 4, during the trial): after the last block of their
@@ -72,6 +72,8 @@ export function ReaderImages({ chapter }: { chapter: number }) {
 function Group({ chapter, images, draftLine, notAuthor, onToggle }: { chapter: number; images: Img[]; draftLine: boolean; notAuthor: boolean; onToggle: (open: boolean) => void }) {
   const [open, setOpen] = useState(false);
   const can = useCanAddImage();
+  // An admin's button opens the edition's "Add a picture here" sheet for this passage (owner, 2026-11-20); readers' the composer.
+  const add = useAddImageEntry(chapter);
   const n = images.length;
   // The passage's paragraph numbers, as the reader shows them; the images in a group can start on different blocks.
   const labels = images.flatMap((im) => [im.start, im.end]).map((i) => Number(document.getElementById(`c${chapter}-b${i}`)?.getAttribute('data-label'))).filter((l) => l > 0);
@@ -118,10 +120,11 @@ function Group({ chapter, images, draftLine, notAuthor, onToggle }: { chapter: n
             ))}
           </ul>
           {can && top && (
-            <button type="button" className="add-image ri-add" onClick={() => openComposer({ chapter, start: top.start, end: top.end })}>
-              + Add an image
+            <button type="button" className="add-image ri-add" data-add-entry={add.admin ? 'admin' : 'composer'} onClick={() => add.open(top.start, top.end)}>
+              {add.admin ? `+ ${add.label('')}` : '+ Add an image'}
             </button>
           )}
+          {add.sheet}
           {draftLine && <p className="as-draft ic-draftline">{W.draftLine}</p>}
         </>
       )}
@@ -131,11 +134,17 @@ function Group({ chapter, images, draftLine, notAuthor, onToggle }: { chapter: n
 
 /** "+ Add an image" on a scene label (L8): opens the composer on the scene's blocks, up to the first 8. Invited FIDs only. */
 export function AddImageButton({ chapter, start, end, children = '+ Add an image' }: { chapter: number; start: number; end: number; children?: React.ReactNode }) {
-  if (!useCanAddImage()) return null;
+  const can = useCanAddImage();
+  // An admin's button opens the edition's "Add a picture here" sheet for the scene's passage (owner, 2026-11-20).
+  const add = useAddImageEntry(chapter);
+  if (!can) return null;
   return (
-    // No separator: the scene line it followed is hidden (owner, 2026-10-09), so a lone "·" was left (2026-10-10).
-    <button type="button" className="add-image" onClick={() => openComposer({ chapter, start, end })}>
-      {children}
-    </button>
+    <>
+      {/* No separator: the scene line it followed is hidden (owner, 2026-10-09), so a lone "·" was left (2026-10-10). */}
+      <button type="button" className="add-image" data-add-entry={add.admin ? 'admin' : 'composer'} onClick={() => add.open(start, end)}>
+        {add.admin ? `+ ${add.label('')}` : children}
+      </button>
+      {add.sheet}
+    </>
   );
 }
