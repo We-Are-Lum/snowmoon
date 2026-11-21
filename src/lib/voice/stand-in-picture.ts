@@ -32,7 +32,7 @@ export async function standInPicture(o: { shotNo: number; attempt: number; descr
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${STAND_IN.width}" height="${STAND_IN.height}">
   <rect width="100%" height="100%" fill="hsl(${hue % 360} 25% 22%)"/>
   <rect x="48" y="48" width="${STAND_IN.width - 96}" height="${STAND_IN.height - 96}" fill="none" stroke="hsl(${hue % 360} 30% 70%)" stroke-width="3" stroke-dasharray="18 12"/>
-  <text x="96" y="140" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#f4f2ed" letter-spacing="4">STAND-IN · SHOT ${o.shotNo} · TRY ${o.attempt}</text>
+  <text x="96" y="140" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#f4f2ed" letter-spacing="4">STAND-IN · ${o.angleLabel === 'Closing card background' ? 'CLOSING CARD' : `SHOT ${o.shotNo}`} · TRY ${o.attempt}</text>
   <text x="96" y="210" font-family="Helvetica, Arial, sans-serif" font-size="44" fill="#f4f2ed" font-weight="bold">${esc(o.angleLabel)}</text>
   ${lines.map((l, i) => `<text x="96" y="${300 + i * 62}" font-family="Georgia, serif" font-size="46" fill="#ece9e2">${esc(l)}</text>`).join('\n  ')}
   <text x="96" y="${STAND_IN.height - 110}" font-family="Helvetica, Arial, sans-serif" font-size="30" fill="#cfccc4">${esc([o.style ? `Style: ${o.style}` : 'No style', o.characters.length ? `With: ${o.characters.join(', ')}` : ''].filter(Boolean).join('   ·   '))}</text>

@@ -12,6 +12,7 @@ import type { paidPicture } from '../images/paid';
 import { angleById, shotPrompt, type Shot } from './board';
 import { latestBoard, ownPerformance } from './board-store';
 import { signTicket } from './ticket';
+import { CLOSING } from './closing';
 
 /**
  * A picture for one shot of a storyboard (Nate, 2026-11-21): the challenge's picture code, as the admins' chapter
@@ -54,14 +55,18 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   if (!draft) return no(404, 'Not found');
   const board = await latestBoard(sql, draft.id);
   const shots: Shot[] = board?.shots ?? [];
-  const shotNo = shots.findIndex((s) => s.key === b.shotKey) + 1;
+  // The closing card's background (slice 4) goes through the same flow under the key 'end': the person's own words for
+  // its look, a style, no camera; the site draws the card's text over it.
+  const closing = b.shotKey === CLOSING.key;
+  if (closing && !board) return no(400, 'Save the storyboard first.');
+  const shotNo = closing ? shots.length + 1 : shots.findIndex((s) => s.key === b.shotKey) + 1;
   if (!shotNo) return no(400, 'Save the cuts first: this shot is not on the saved storyboard.');
   if (shots.length > VOICE.board.maxShots) return no(400, `A storyboard has at most ${VOICE.board.maxShots} shots: remove a cut first.`);
   const description = typeof b.description === 'string' ? b.description.trim() : '';
   if (!description) return no(400, 'Write what the shot shows first: your words are the prompt.');
   if (description.length > VOICE.board.descriptionMaxChars) return no(400, `At most ${VOICE.board.descriptionMaxChars} characters.`);
-  const angle = angleById(String(b.angle ?? ''));
-  if (!angle) return no(400, 'Pick a camera angle');
+  const angle = closing ? null : angleById(String(b.angle ?? ''));
+  if (!closing && !angle) return no(400, 'Pick a camera angle');
   const tries = (await triesMade(sql, draft.id))[String(b.shotKey)] ?? 0;
   if (tries >= VOICE.board.maxTriesPerShot) return no(429, `${VOICE.board.maxTriesPerShot} pictures for this shot already: keep one of them.`, { reason: 'tries' });
   if (!(await deps.consented(fid))) return no(403, 'Agree to how your words are published first', { reason: 'consent' });
@@ -72,7 +77,7 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   const [styles, characters] = await Promise.all([listDesigns(sql, 'style').catch(() => []), listDesigns(sql, 'character').catch(() => [])]);
   const style = typeof b.styleId === 'string' && b.styleId ? (styles.find((s) => s.versionId === b.styleId) ?? null) : null;
   if (typeof b.styleId === 'string' && b.styleId && !style) return no(400, 'That style is not a published sheet');
-  const wanted = Array.isArray(b.characterIds) ? b.characterIds.filter((x): x is string => typeof x === 'string') : [];
+  const wanted = closing ? [] : Array.isArray(b.characterIds) ? b.characterIds.filter((x): x is string => typeof x === 'string') : [];
   if (wanted.length > IMAGES.maxReferences) return no(400, `Up to ${IMAGES.maxReferences} characters’ sheets`);
   const chosen = wanted.map((id) => characters.find((c) => c.versionId === id));
   if (chosen.some((c) => !c)) return no(400, 'A character is not a published sheet');
@@ -87,12 +92,12 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
     refs.push(bytes);
     references.push({ name: c!.title, versionId: c!.versionId, url: front.url, sha256: front.sha256 });
   }
-  const prompt = `${shotPrompt({ description, angle: angle.id }, style, chosen as { title: string; text: string }[])}\n\n${IMAGES.suffix}`;
+  const prompt = `${shotPrompt({ description, angle: angle?.id ?? '' }, style, chosen as { title: string; text: string }[])}\n\n${IMAGES.suffix}`;
   const worst = reserveUsd(m, { width: IMAGES.viewSize.width, height: IMAGES.viewSize.height * Math.max(1, refs.length) });
   const paid = await deps.paid(sql, fid, request, {
     checkText: prompt,
     spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, ...(isAdmin(fid) ? { pool: 'admin' as const } : {}) },
-    make: () => deps.make(m, prompt, refs, request, worst, { no: shotNo, attempt: tries + 1, description, angle: angle.label, style: style?.title ?? null, characters: chosen.map((c) => c!.title) }),
+    make: () => deps.make(m, prompt, refs, request, worst, { no: shotNo, attempt: tries + 1, description, angle: angle?.label ?? 'Closing card background', style: style?.title ?? null, characters: chosen.map((c) => c!.title) }),
   });
   if (!paid.ok) return { status: paid.status, json: { error: paid.error, ...paid.extra } };
   const made = paid.made;
@@ -102,12 +107,12 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   const { mime, ext } = kindOf(bytes);
   const recipe = {
     v: 1,
-    kind: 'storyboard-shot',
+    kind: closing ? 'storyboard-closing' : 'storyboard-shot',
     model: deps.real ? { id: m.allowlistId, name: m.name, maker: m.maker, open: m.open, terms: m.terms, host: m.call.host, endpoint: m.call.endpoint } : { id: 'stand-in', name: 'Stand-in card', maker: 'this edition (no model)', open: true },
     standIn: !deps.real,
     prompt,
     description,
-    angle: angle.id,
+    angle: angle?.id ?? null,
     style: style ? { versionId: style.versionId, title: style.title } : null,
     characters: chosen.map((c) => ({ versionId: c!.versionId, title: c!.title })),
     references,
@@ -121,7 +126,9 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
     ext,
     madeBy: { fid },
     madeAt: new Date().toISOString(),
-    assist: { description: `written by FID ${fid}`, cuts: 'proposed by a rule at sentence ends, moved by the person' },
+    assist: closing
+      ? { description: `written by FID ${fid}`, text: 'the card’s text is set by the site from the recipe and drawn over the picture; no model writes it' }
+      : { description: `written by FID ${fid}`, cuts: 'proposed by a rule at sentence ends, moved by the person' },
   };
   const now = Date.now();
   const ticket = signTicket({ v: 1, kind: 'picture', fid, draftId: draft.id, shotKey: String(b.shotKey), sha256, ext, recipe, issuedAt: now, expiresAt: now + VOICE.ticketMinutes * 60_000 });

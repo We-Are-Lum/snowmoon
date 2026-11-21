@@ -632,6 +632,59 @@ merge.
 **Before the switch opens to everyone** (later, separate): the Privacy/Terms lines for everyone, the open caps, the
 publish slice and its rule for unmatched sentences, a check:ui on production data.
 
+## Slice 4 (2026-11-21, stand-ins only; branch ephelion-publish, stacked on ephelion-voice)
+
+Kept on its own branch, on top of this one, so the plan above for slices 1 and 2 and the migration the coordinator
+tested stay as they are. Nothing spent, nothing merged.
+
+- **Closing card** (section 4 of the board). Its words are set by the site from the recipe, never typed by the person or
+  written by a model: the speech and its block (Book), who performed and storyboarded it (People), the voice conversion,
+  the word check and each picture model by name and maker, "closed model" or "open model" (AI), "People did … AI did …
+  No AI video.", and the not-affiliated line, with the snowmoon.party mark. Only the look is the person's: their own
+  words prompt a background through the same picture flow as the shots (key `end`, no camera, 3 tries), and our server
+  draws the text over it (sharp), so no model can change a word. "Name me" (on by default) or "a reader".
+- **Publish** (section 5). The check lists what stands in the way, by rule: every sentence matching the speech word for
+  word (the rule for unmatched sentences: accepting a mismatch is allowed, publishing it isn't; names heard by sound
+  count, as the word check lists them), every shot with a description and a kept picture, the closing background kept,
+  the board saved, and no stand-in cards outside a local test copy. Publishing copies the audio pieces, the shots'
+  pictures, the background and the composed card to public storage under `storyboards/<id>/`, byte for byte, and stores
+  the full recipe: the voice's (each raw take by sha256 only), every shot's words, camera and picture recipe, the
+  closing card's words and credits, who did what. Not named: no FID or name in the public recipe. One function
+  (`studio.publish_voice_board`) does it in one transaction; a published draft can't be removed or published twice.
+- **Take down:** from the draft's page. Every public file is deleted, the page is gone, and it is a draft again.
+- **The page:** `/storyboard/spoken/<id>` (`/storyboard/<id>` is Remix's). The play-through, the closing card at the end,
+  the credits as text, "Recipe", "Save as a video".
+- **Save as a video:** in the browser only: a canvas holds each shot's picture for its span, then the closing card for
+  6 seconds, recorded with the joined audio by the browser's MediaRecorder (MP4 where the browser can, else WebM). In
+  real time (a 3-minute speech takes 3 minutes), saved on the device, nothing uploaded, no AI video. Every frame has a
+  corner label ("snowmoon.party · AI pictures · AI voice conversion", "stand-in cards" when they are, "draft" from the
+  board), so a clip cut from it still says so. Also on the draft's board, so admins can try it before publishing exists.
+- **The switch:** `VOICE.publish: false`. While off the publish route refuses and every spoken page is "not found";
+  the local tests turn it on (`VOICE_TEST_ON`), stand-ins only.
+- **Schema:** `NEXT_ephelion_voice_publish.sql` (after `NEXT_ephelion_voice.sql`): `voice_boards.closing`,
+  `voice_publications`, the publish and take-down functions; dry run, migration, read-back (a realistic publication
+  made, refused for someone else, for a stray file key, twice, then taken down), undo (refuses once anything was
+  published). For the coordinator to test.
+- **Legal (DRAFT):** Privacy §3, §4, §6 and Terms §8 lines in `docs/legal/ephelion-voice-draft.md`, under "Slice 4".
+  own-voice-v2 already says publishing makes it public and that it can be hidden; nothing new there.
+
+**Choices, and why**
+
+| # | Choice | Why |
+|---|---|---|
+| 25 | A separate stacked branch and migration | The slices 1–2 merge plan and the tested migration don't move. |
+| 26 | Unmatched sentences block publishing, not accepting | Story words stay the book's, checked word for word (P2); a draft can still be kept and redone. |
+| 27 | The card's text drawn by our server over the picture | A model can't misspell or change a credit; the person still sets the look. |
+| 28 | Stand-ins can't be published on Vercel | A placeholder card must never be public. |
+| 29 | Public files copied at publish (not served from private) | The private bucket has no public address; a take-down deletes the copies. |
+| 30 | Video made in the browser, in real time | No server video work, no upload, no AI video; works in current browsers. |
+| 31 | `/storyboard/spoken/<id>` | `/storyboard/<id>` is already Remix's storyboards. |
+
+**For Nate before `VOICE.publish`:** the reread of slice 4's lines; which public bucket holds `storyboards/` (the code
+uses the readers' bucket, R2_BUCKET, at R2_IMAGES_PUBLIC_URL) and whether its key may write there; CORS on that host
+for GET from snowmoon.party (the video draws the pictures and reads the audio from it); the migration applied; real
+pictures switched on first (stand-ins can't be published).
+
 ## What Nate needs to do (one at a time)
 
 1. #195 is merged and live: the iPhone and desktop tests on /admin/mic-test; Android goes to Garance or Luis.

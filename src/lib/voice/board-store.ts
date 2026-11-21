@@ -2,6 +2,7 @@ import 'server-only';
 import type postgres from 'postgres';
 import { getAudio, putAudio, deleteAudio, pictureKeyFor } from './store';
 import type { Shot, Timeline } from './board';
+import type { Closing } from './closing';
 
 /**
  * Storyboards (studio.voice_boards: versions, new rows only) and kept pictures (studio.voice_board_pictures; files in
@@ -17,15 +18,15 @@ export async function ownPerformance(sql: postgres.Sql, fid: number, draftId: st
 }
 
 export async function latestBoard(sql: postgres.Sql, draftId: string) {
-  const [b] = await sql`select version, cuts, shots, made_at from studio.voice_boards where draft_id = ${draftId} order by version desc limit 1`;
-  return b ? { version: b.version as number, cuts: b.cuts as number[], shots: b.shots as Shot[], madeAt: b.made_at } : null;
+  const [b] = await sql`select version, cuts, shots, closing, made_at from studio.voice_boards where draft_id = ${draftId} order by version desc limit 1`;
+  return b ? { version: b.version as number, cuts: b.cuts as number[], shots: b.shots as Shot[], closing: (b.closing as Closing | null) ?? null, madeAt: b.made_at } : null;
 }
 
-export async function saveBoard(sql: postgres.Sql, fid: number, draftId: string, cuts: number[], shots: Shot[]): Promise<number> {
+export async function saveBoard(sql: postgres.Sql, fid: number, draftId: string, cuts: number[], shots: Shot[], closing: Closing | null = null): Promise<number> {
   return sql.begin(async (tx) => {
     const [m] = await tx`select coalesce(max(version), 0)::int as v from studio.voice_boards where draft_id = ${draftId}`;
     const version = m.v + 1;
-    await tx`insert into studio.voice_boards (draft_id, fid, version, cuts, shots) values (${draftId}, ${fid}, ${version}, ${tx.json(cuts)}, ${tx.json(shots as unknown as postgres.JSONValue)})`;
+    await tx`insert into studio.voice_boards (draft_id, fid, version, cuts, shots, closing) values (${draftId}, ${fid}, ${version}, ${tx.json(cuts)}, ${tx.json(shots as unknown as postgres.JSONValue)}, ${closing ? tx.json(closing as unknown as postgres.JSONValue) : null})`;
     return version;
   }) as Promise<number>;
 }

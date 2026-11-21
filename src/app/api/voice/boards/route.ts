@@ -8,6 +8,7 @@ import { shotModels, triesMade } from '~/lib/voice/shot-picture';
 import { whereFrom } from '~/lib/images/countries';
 import { VOICE } from '~/lib/config';
 import { voiceTestOn } from '~/lib/voice/flag';
+import { CLOSING, emptyClosing, type Closing } from '~/lib/voice/closing';
 
 /**
  * A performance's storyboard (slice 2, DRAFT). GET ?draft=<id>: the strip (timeline), the latest saved board (or the
@@ -31,7 +32,7 @@ export async function GET(request: Request) {
   return NextResponse.json(
     {
       draft: { id: draft.id, preset: draft.recipe.preset?.name ?? null, speech: draft.recipe.speech ?? null, audio: draft.audio, timeline: draft.timeline },
-      board: { version: saved?.version ?? 0, cuts, shots, proposed: proposeCuts(draft.timeline), fromProposal: !saved },
+      board: { version: saved?.version ?? 0, cuts, shots, closing: saved?.closing ?? emptyClosing(), proposed: proposeCuts(draft.timeline), fromProposal: !saved },
       pictures,
       notes: boardNotes(shots),
       sheets: { styles: styles.map(sheet), characters: characters.map(sheet) },
@@ -49,7 +50,7 @@ export async function POST(request: Request) {
   if (who instanceof NextResponse) return who;
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Not available right now' }, { status: 503 });
-  const body = (await request.json().catch(() => ({}))) as { draftId?: string; cuts?: unknown; shots?: unknown };
+  const body = (await request.json().catch(() => ({}))) as { draftId?: string; cuts?: unknown; shots?: unknown; closing?: Partial<Closing> };
   const draft = await ownPerformance(sql, who.fid, String(body.draftId ?? ''));
   if (!draft?.timeline) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   const cuts = Array.isArray(body.cuts) ? body.cuts.filter((c): c is number => typeof c === 'number' && c > 0 && c < draft.timeline!.seconds).slice(0, 200) : null;
@@ -69,6 +70,13 @@ export async function POST(request: Request) {
     characterIds: Array.isArray(s.characterIds) ? s.characterIds.filter((c): c is string => typeof c === 'string').slice(0, 6) : [],
     kept: typeof s.kept === 'string' && kept.has(`${s.key}:${s.kept}`) ? s.kept : null,
   })));
-  const version = await saveBoard(sql, who.fid, draft.id, cuts, shots);
-  return NextResponse.json({ version, cuts, shots, notes: boardNotes(shots) }, { headers: noStore });
+  // The closing card's choices (slice 4): the person's own words for its look, a style, the kept background.
+  const c = body.closing ?? {};
+  const closing: Closing = {
+    description: String(c.description ?? '').slice(0, VOICE.board.descriptionMaxChars),
+    styleId: typeof c.styleId === 'string' ? c.styleId : null,
+    kept: typeof c.kept === 'string' && kept.has(`${CLOSING.key}:${c.kept}`) ? c.kept : null,
+  };
+  const version = await saveBoard(sql, who.fid, draft.id, cuts, shots, closing);
+  return NextResponse.json({ version, cuts, shots, closing, notes: boardNotes(shots) }, { headers: noStore });
 }

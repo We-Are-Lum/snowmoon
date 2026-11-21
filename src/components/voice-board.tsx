@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { authFetch, useAuth } from '~/lib/client-auth';
+import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
 import { isAdmin } from '~/lib/admins';
 import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
 import { useChallengeModel } from '~/components/challenge-model-row';
@@ -11,6 +11,8 @@ import { ModelRow } from '~/components/chapter-pictures';
 import type { ModelRowEntry } from '~/lib/challenge/models';
 import { boardNotes, shotAt, shotsFromCuts, snapToWordEnd, wordsIn, type Note, type Shot, type Timeline } from '~/lib/voice/board';
 import { joinAudio } from '~/lib/voice/join-audio';
+import { CLOSING, emptyClosing, type Closing, type CreditLine } from '~/lib/voice/closing';
+import { saveVideo, videoType } from '~/lib/voice/video';
 import '../styles/voice.css';
 
 /**
@@ -23,7 +25,7 @@ import '../styles/voice.css';
 interface Sheet { id: string; title: string; entity: string; text: string; thumb: string | null }
 interface Data {
   draft: { id: string; preset: string | null; speech: { id: string; title: string } | null; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
-  board: { version: number; cuts: number[]; shots: Shot[]; proposed: number[]; fromProposal: boolean };
+  board: { version: number; cuts: number[]; shots: Shot[]; closing: Closing; proposed: number[]; fromProposal: boolean };
   pictures: { shotKey: string; sha256: string; recipe: Record<string, unknown> }[];
   sheets: { styles: Sheet[]; characters: Sheet[] };
   angles: readonly { id: string; label: string }[];
@@ -74,6 +76,16 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const drag = useRef<number | null>(null);
   const [triesMade, setTriesMade] = useState<Record<string, number>>({});
   const [consent, setConsent] = useState<Wording | null>(null);
+  // Slice 4: the closing card's choices, the publish check, the published link, the video.
+  const [closing, setClosing] = useState<Closing>(emptyClosing());
+  const [named, setNamed] = useState(true);
+  const [card, setCard] = useState<string | null>(null);
+  const [cardTick, setCardTick] = useState(0);
+  const [check, setCheck] = useState<{ on: boolean; problems: string[]; credits: CreditLine[]; version: number } | null>(null);
+  const [published, setPublished] = useState<{ id: string; url: string } | null>(null);
+  const [saving, setSaving] = useState<number | null>(null);
+  const stopVideo = useRef<AbortController | null>(null);
+  const target = useRef<'shot' | 'closing'>('shot');
   const dataOk = data && data !== 'none' && !('error' in data) ? data : null;
   // The challenge's Model row: GPT Image 2.5 Sunburst first where OpenAI serves, FLUX and Gemini offered; a closed model's notice and the 18+ box.
   const m = useChallengeModel(dataOk?.making.models, null, dataOk?.making.defaultModel ?? null);
@@ -81,12 +93,19 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const load = useCallback(async () => {
     const r = await authFetch(`/api/voice/boards?draft=${draftId}`, { cache: 'no-store' }).catch(() => null);
     if (!r) return setData('none');
-    if (r.status === 404) return setData('none');
+    if (r.status === 404) {
+      // A published storyboard isn't a draft any more: say where it is, and offer the take-down.
+      const pr = await authFetch(`/api/voice/publish?draft=${draftId}`, { cache: 'no-store' }).catch(() => null);
+      const pj = pr?.ok ? ((await pr.json()) as { published?: { id: string; url: string } }) : null;
+      if (pj?.published) return setPublished(pj.published), setData({ error: 'published' });
+      return setData('none');
+    }
     const j = (await r.json()) as Data & { error?: string };
     if (!r.ok) return setData({ error: j.error ?? 'Not available' });
     setData(j);
     setCuts(j.board.cuts);
     setShots(j.board.shots);
+    setClosing(j.board.closing ?? emptyClosing());
     setKept(j.pictures.map((p) => ({ shotKey: p.shotKey, sha256: p.sha256 })));
     setSaved(j.board.version);
     setTriesMade(j.making.tries ?? {});
@@ -124,6 +143,52 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
 
   const notes: Note[] = useMemo(() => boardNotes(shots.map((s) => ({ ...s, kept: s.kept && kept.some((k) => k.shotKey === s.key && k.sha256 === s.kept) ? s.kept : null }))), [shots, kept]);
 
+  // The publish check and the closing card's preview follow the saved board (and the "name me" choice).
+  useEffect(() => {
+    if (!dataOk || dirty) return;
+    let alive = true;
+    const headers: Record<string, string> = {};
+    const proof = webNameProof();
+    if (proof) headers['x-name-proof'] = proof;
+    const q = `draft=${dataOk.draft.id}${named ? '' : '&named=no'}`;
+    void authFetch(`/api/voice/publish?${q}`, { cache: 'no-store', headers }).then(async (r) => {
+      if (alive && r.ok) setCheck(await r.json());
+    });
+    let made: string | null = null;
+    void authFetch(`/api/voice/boards/closing?${q}`, { cache: 'no-store', headers }).then(async (r) => {
+      if (!alive || !r.ok) return;
+      made = URL.createObjectURL(await r.blob());
+      setCard(made);
+    });
+    return () => {
+      alive = false;
+      if (made) URL.revokeObjectURL(made);
+    };
+  }, [dataOk, dirty, named, saved, cardTick]);
+
+  if (published)
+    return (
+      <main className="vr vb">
+        <p className="vr-kicker">Admin trial · Storyboard</p>
+        <h1>Published</h1>
+        <p className="vr-note">This storyboard is public at <Link href={published.url}>{published.url}</Link>. Taking it down deletes its public files and makes it your draft again.</p>
+        {message && <p className="vr-warn" role="alert">{message}</p>}
+        <button
+          type="button"
+          className="vr-btn vr-quiet"
+          onClick={async () => {
+            const r = await authFetch(`/api/voice/publish/${published.id}`, { method: 'DELETE' });
+            if (r.ok) {
+              setPublished(null);
+              setData(null);
+              void load();
+            } else setMessage('It could not be taken down. Try again.');
+          }}
+        >
+          Take it down
+        </button>
+      </main>
+    );
   if (!admin || data === 'none') return <>{fallback}</>;
   if (data && 'error' in data) return <main className="vr"><p className="vr-warn">{data.error}</p></main>;
   if (!d || !t) return <main className="vr"><p className="vr-note">Loading…</p></main>;
@@ -170,12 +235,13 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   async function save(): Promise<boolean> {
     setBusy('save');
     setMessage(null);
-    const r = await authFetch('/api/voice/boards', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ draftId: d!.draft.id, cuts, shots }) });
+    const r = await authFetch('/api/voice/boards', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ draftId: d!.draft.id, cuts, shots, closing }) });
     setBusy(null);
-    const j = (await r.json().catch(() => ({}))) as { version?: number; shots?: Shot[]; error?: string };
+    const j = (await r.json().catch(() => ({}))) as { version?: number; shots?: Shot[]; closing?: Closing; error?: string };
     if (r.ok && j.version) {
       setSaved(j.version);
       if (j.shots) setShots(j.shots);
+      if (j.closing) setClosing(j.closing);
       setDirty(false);
       return true;
     }
@@ -183,21 +249,25 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
     return false;
   }
   async function makePicture() {
-    if (!shot) return;
+    const forClosing = target.current === 'closing';
+    if (!forClosing && !shot) return;
     // A picture is made only for a shot on the saved storyboard: save first if anything changed.
     if (dirty && !(await save())) return;
-    setBusy('picture');
+    setBusy(forClosing ? 'closing' : 'picture');
     setMessage(null);
+    const what = forClosing
+      ? { shotKey: CLOSING.key, description: closing.description, styleId: closing.styleId }
+      : { shotKey: shot.key, description: shot.description, angle: shot.angle, styleId: shot.styleId, characterIds: shot.characterIds };
     const r = await authFetch('/api/voice/boards/picture', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ draftId: d!.draft.id, shotKey: shot.key, description: shot.description, angle: shot.angle, styleId: shot.styleId, characterIds: shot.characterIds, ...m.body() }),
+      body: JSON.stringify({ draftId: d!.draft.id, ...what, ...m.body() }),
     });
     setBusy(null);
     const j = (await r.json().catch(() => ({}))) as Try & { error?: string; reason?: string; triesLeft?: number };
     if (r.ok) {
-      setTries({ ...tries, [shot.key]: [...(tries[shot.key] ?? []), j] });
-      setTriesMade({ ...triesMade, [shot.key]: (triesMade[shot.key] ?? 0) + 1 });
+      setTries({ ...tries, [what.shotKey]: [...(tries[what.shotKey] ?? []), j] });
+      setTriesMade({ ...triesMade, [what.shotKey]: (triesMade[what.shotKey] ?? 0) + 1 });
     } else if (r.status === 403 && j.reason === 'consent') {
       const c = await authFetch('/api/consent').catch(() => null);
       if (c?.ok) setConsent(((await c.json()) as { wording: Wording }).wording);
@@ -210,19 +280,75 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       void makePicture();
     } else setMessage('Your agreement could not be recorded. Try again.');
   }
-  const pictureNow = () => {
+  const pictureNow = (which: 'shot' | 'closing' = 'shot') => {
+    target.current = which;
     // A closed model's notice (and the 18+ box) comes first; the picture is made once it is answered.
     if (m.askFirst(() => void makePicture())) return;
     void makePicture();
   };
-  async function keep(tr: Try) {
+  async function keep(tr: Try, forClosing = false) {
     setBusy('keep');
     const r = await authFetch('/api/voice/boards/keep', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ticket: tr.ticket, image: tr.image }) });
     setBusy(null);
     if (r.ok) {
-      setKept([...kept, { shotKey: shot.key, sha256: tr.sha256 }]);
-      edit({ kept: tr.sha256 });
+      setKept([...kept, { shotKey: forClosing ? CLOSING.key : shot.key, sha256: tr.sha256 }]);
+      if (forClosing) {
+        setClosing({ ...closing, kept: tr.sha256 });
+        setDirty(true);
+      } else edit({ kept: tr.sha256 });
     } else setMessage(((await r.json().catch(() => ({}))) as { error?: string }).error ?? 'It could not be kept');
+  }
+
+  async function saveAsVideo() {
+    if (!audioUrl || !card) return;
+    setMessage(null);
+    stopVideo.current = new AbortController();
+    setSaving(0);
+    const urls: string[] = [];
+    try {
+      // The kept pictures, fetched with the sign-in, as this device's own copies.
+      const images = await Promise.all(
+        shots.map(async (s) => {
+          if (!s.kept) return null;
+          const r = await authFetch(`/api/voice/boards/picture?draft=${d!.draft.id}&shot=${s.key}&sha=${s.kept}`);
+          if (!r.ok) return null;
+          const u = URL.createObjectURL(await r.blob());
+          urls.push(u);
+          return u;
+        }),
+      );
+      const standIn = d!.making.standIn || !d!.making.real;
+      const out = await saveVideo({
+        audio: audioUrl,
+        seconds: t!.seconds,
+        shots: shots.map((s, i) => ({ start: s.start, end: s.end, image: images[i], words: wordsIn(t!, s) })),
+        closing: card,
+        closingSeconds: CLOSING.seconds,
+        label: `snowmoon.party · ${standIn ? 'stand-in cards' : 'AI pictures'} · AI voice conversion · draft`,
+        onProgress: setSaving,
+        signal: stopVideo.current.signal,
+      });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(out.blob);
+      a.download = `snowmoon-storyboard-draft-${d!.draft.id.slice(0, 8)}.${out.ext}`;
+      a.click();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : 'The video could not be made.');
+    } finally {
+      urls.forEach((u) => URL.revokeObjectURL(u));
+      setSaving(null);
+      stopVideo.current = null;
+    }
+  }
+  async function publish() {
+    if (!check) return;
+    setBusy('publish');
+    setMessage(null);
+    const r = await authFetch('/api/voice/publish', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ draftId: d!.draft.id, version: check.version, named, nameProof: webNameProof() }) });
+    setBusy(null);
+    const j = (await r.json().catch(() => ({}))) as { id?: string; url?: string; error?: string; problems?: string[] };
+    if (r.ok && j.id && j.url) setPublished({ id: j.id, url: j.url });
+    else setMessage([j.error ?? 'It could not be published', ...(j.problems ?? [])].join(' '));
   }
 
   const playing = audioUrl ? shotAt(shots, now) : null;
@@ -350,7 +476,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             <button
               type="button"
               className="vr-btn"
-              onClick={pictureNow}
+              onClick={() => pictureNow('shot')}
               disabled={busy !== null || !shot.description.trim() || !shot.angle || (triesMade[shot.key] ?? 0) >= d.making.limits.maxTriesPerShot || (!d.making.real && !d.making.standIn)}
             >
               {busy === 'picture' ? 'Making…' : (triesMade[shot.key] ?? 0) ? 'Try again' : 'Make the picture'}
@@ -403,6 +529,109 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
           {playing && <span className="vb-shotno">Shot {playingNo}</span>}
         </div>
         {audioUrl ? <audio controls src={audioUrl} className="vr-audio" onTimeUpdate={(e) => setNow(e.currentTarget.currentTime)} /> : <p className="vr-small">Loading the audio…</p>}
+        <div className="vr-row">
+          {saving === null ? (
+            <button type="button" className="vr-btn vr-quiet" onClick={saveAsVideo} disabled={!audioUrl || !card || busy !== null || !videoType()}>Save as a video</button>
+          ) : (
+            <>
+              <span className="vr-small" role="status">Making the video on this device… {Math.round(saving * 100)}%</span>
+              <button type="button" className="vr-btn vr-quiet vr-small-btn" onClick={() => stopVideo.current?.abort()}>Cancel</button>
+            </>
+          )}
+        </div>
+        <p className="vr-small">The kept pictures held for each shot over your performance, then the closing card: stitched in this browser in real time and saved on this device, labelled a draft. No AI video, nothing uploaded.</p>
+      </section>
+
+      <section className="vr-card" aria-labelledby="vb-closing-h">
+        <h2 id="vb-closing-h">4. Closing card</h2>
+        <p className="vr-note">
+          <span className="vr-tag">Set by the site</span> The card&rsquo;s words are fixed: who did what (people and AI apart), the snowmoon.party mark and that this edition isn&rsquo;t affiliated with the author. Only its look is yours: describe the picture behind the words.
+        </p>
+        <PublishedTextField id="vb-closing-desc" label="The picture behind the closing card (your words)" value={closing.description} onChange={(v) => { setClosing({ ...closing, description: v }); setDirty(true); }} rows={2} maxLength={600} />
+        <label className="vb-sheets">
+          <span className="vb-label">Style (a published sheet)</span>
+          <select value={closing.styleId ?? ''} onChange={(e) => { setClosing({ ...closing, styleId: e.target.value || null }); setDirty(true); }}>
+            <option value="">None</option>
+            {d.sheets.styles.map((s) => (
+              <option key={s.id} value={s.id}>{s.title}</option>
+            ))}
+          </select>
+        </label>
+        <div className="vr-row">
+          <button
+            type="button"
+            className="vr-btn"
+            onClick={() => pictureNow('closing')}
+            disabled={busy !== null || !closing.description.trim() || (triesMade[CLOSING.key] ?? 0) >= d.making.limits.maxTriesPerShot || (!d.making.real && !d.making.standIn)}
+          >
+            {busy === 'closing' ? 'Making…' : (triesMade[CLOSING.key] ?? 0) ? 'Try again' : 'Make the background'}
+          </button>
+          <span className="vr-small">
+            {Math.min(triesMade[CLOSING.key] ?? 0, d.making.limits.maxTriesPerShot)} of {d.making.limits.maxTriesPerShot} backgrounds
+            {d.making.standIn && <> · <span className="vr-tag">Stand-in</span> a placeholder card, free</>}
+          </span>
+        </div>
+        {(tries[CLOSING.key]?.length ?? 0) > 0 && (
+          <div className="vb-tries">
+            {tries[CLOSING.key].map((tr, i) => (
+              <figure key={tr.sha256} className={`vb-try${closing.kept === tr.sha256 ? ' vb-on' : ''}`}>
+                <img src={tr.image} alt={`Background try ${i + 1}`} />
+                <figcaption>
+                  Try {i + 1}
+                  {closing.kept === tr.sha256 ? <span className="vr-ok"> · Kept</span> : <button type="button" className="vr-btn vr-quiet vr-small-btn" onClick={() => keep(tr, true)} disabled={busy !== null}>Keep this one</button>}
+                  <details>
+                    <summary>Recipe</summary>
+                    <pre>{JSON.stringify(tr.recipe, null, 2)}</pre>
+                  </details>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        )}
+        <label className="vr-check">
+          <input type="checkbox" checked={named} onChange={(e) => setNamed(e.target.checked)} /> Name me on the card and the page (otherwise &ldquo;a reader&rdquo;)
+        </label>
+        {dirty ? (
+          <p className="vr-small">Save to see the card as it will be published.</p>
+        ) : card ? (
+          <figure className="vb-card-preview">
+            <img src={card} alt="The closing card, as it would be published" className="vb-picture" />
+            <figcaption className="vr-small">As it would be published. {closing.kept ? '' : 'No background kept yet: a plain card stands in.'}</figcaption>
+          </figure>
+        ) : (
+          <p className="vr-small">Loading the card…</p>
+        )}
+        <div className="vr-row">
+          <button type="button" className="vr-btn vr-small-btn" onClick={async () => { if (await save()) setCardTick((x) => x + 1); }} disabled={busy !== null || !dirty}>{busy === 'save' ? 'Saving…' : dirty ? 'Save' : 'Saved'}</button>
+        </div>
+      </section>
+
+      <section className="vr-card" aria-labelledby="vb-publish-h">
+        <h2 id="vb-publish-h">5. Publish</h2>
+        {check && !check.on && <p className="vr-note">Publishing isn&rsquo;t switched on yet. What it would check:</p>}
+        {check && check.problems.length > 0 ? (
+          <ul className="vb-notes">
+            {check.problems.map((pr, i) => <li key={i}>{pr}</li>)}
+          </ul>
+        ) : check ? (
+          <p className="vr-ok">Ready: every sentence matches the speech, every shot has its picture, and the closing card has its background.</p>
+        ) : null}
+        {check && (
+          <details>
+            <summary>The credits, as published</summary>
+            <ul className="vs-credits">
+              {check.credits.map((c, i) => (
+                <li key={i}>{c.who !== 'site' && <span className="vr-tag">{c.who === 'ai' ? 'AI' : c.who === 'book' ? 'Book' : 'People'}</span>} {c.text}</li>
+              ))}
+            </ul>
+          </details>
+        )}
+        <p className="vr-small">
+          Publishing makes public, with the full recipe: your converted performance (never your recording), your words for each shot and the closing card, the kept pictures and the card. You can take it down later; copies others have made may remain.
+        </p>
+        <button type="button" className="vr-btn" onClick={publish} disabled={busy !== null || dirty || !check?.on || (check?.problems.length ?? 1) > 0}>
+          {busy === 'publish' ? 'Publishing…' : 'Publish'}
+        </button>
       </section>
     </main>
   );

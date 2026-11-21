@@ -20,7 +20,7 @@ const valid = (key: string) =>
 export const pictureKeyFor = (draftId: string, shotKey: string, sha256: string, ext: 'png' | 'jpg' = 'png') => `voice-boards/${draftId}/${shotKey}-${sha256}.${ext}`;
 
 const NEED = ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_PRIVATE_BUCKET'];
-const local = () => (voiceTestOn() ? process.env.VOICE_TEST_STORE || path.join(os.tmpdir(), 'voice-test-store') : null);
+export const local = () => (voiceTestOn() ? process.env.VOICE_TEST_STORE || path.join(os.tmpdir(), 'voice-test-store') : null);
 export const voiceStoreReady = () => Boolean(local()) || NEED.every((k) => process.env[k]);
 
 let client: S3Client | null = null;
@@ -72,3 +72,4 @@ export async function deleteAudio(key: string): Promise<void> {
   const { client, bucket } = r2();
   await client.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }));
 }
+

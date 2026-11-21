@@ -86,3 +86,10 @@
 .vb-empty { display: flex; align-items: center; justify-content: center; text-align: center; padding: var(--space-4); background: var(--night); color: var(--night-body); font-size: var(--text-small); }
 .vb-screen { position: relative; margin: var(--space-3) 0; }
 .vb-shotno { position: absolute; top: 10px; left: 10px; font-family: var(--label); font-size: var(--text-label); background: rgba(0, 0, 0, 0.55); color: #fff; padding: 2px 8px; border-radius: 4px; }
+
+/* Slice 4: the closing card, publishing, the published page (DRAFT). */
+.vr-check { display: flex; gap: var(--space-2); align-items: center; margin: var(--space-3) 0; font-size: var(--text-small); }
+.vb-card-preview { margin: var(--space-3) 0; }
+.vs-credits { list-style: none; padding: 0; margin: var(--space-2) 0; }
+.vs-credits li { padding: var(--space-1) 0; border-bottom: 1px solid var(--rule); font-size: var(--text-small); line-height: 1.5; }
+.vs-recipe { max-height: 420px; overflow: auto; font-size: 12px; white-space: pre-wrap; word-break: break-word; }

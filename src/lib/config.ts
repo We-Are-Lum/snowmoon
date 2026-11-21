@@ -1141,6 +1141,12 @@ export const VOICE = {
    * Nate's word: until this is true, the route refuses to call a model. The tests use stand-in cards.
    */
   realPictures: false,
+  /**
+   * Publishing a storyboard (slice 4, 2026-11-21; DRAFT): off until Nate's word, the reread Privacy and Terms lines
+   * for it, and a confirmed public bucket for storyboards/. While off, the publish route refuses and every
+   * /storyboard/spoken/<id> page is "not found" (the local tests turn it on with VOICE_TEST_ON, stand-ins only).
+   */
+  publish: false,
   board: { maxShots: 12, maxTriesPerShot: 3, descriptionMaxChars: 600 },
   provider: 'ElevenLabs',
   models: {
