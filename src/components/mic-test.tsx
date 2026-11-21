@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { inMiniApp, useAuth } from '~/lib/client-auth';
 import { isAdmin } from '~/lib/admins';
+import { MIC_HELP, micPermission, micPlace, promptShown } from '~/lib/mic-help';
 
 /**
  * The microphone go/no-go (Nate, 2026-11-19). Asks for the microphone (inside a Farcaster app through
@@ -24,6 +25,8 @@ export function MicTest({ fallback }: { fallback: React.ReactNode }) {
   const [state, setState] = useState<'idle' | 'asking' | 'recording' | 'done' | 'failed'>('idle');
   const [take, setTake] = useState<{ url: string; type: string; bytes: number; seconds: number } | null>(null);
   const [level, setLevel] = useState(0);
+  const [help, setHelp] = useState<string | null>(null);
+  const [prompt, setPrompt] = useState<{ before: string | null; after: string | null } | null>(null);
   const rec = useRef<MediaRecorder | null>(null);
   const stream = useRef<MediaStream | null>(null);
   const started = useRef(0);
@@ -56,7 +59,10 @@ export function MicTest({ fallback }: { fallback: React.ReactNode }) {
   async function start() {
     setState('asking');
     setTake(null);
+    setHelp(null);
     peak.current = 0;
+    // Started, not awaited: nothing should come between the tap and the microphone request.
+    const beforeP = micPermission();
     try {
       if (env?.inApp && env.hasAction) {
         note('asking the Farcaster app for the microphone');
@@ -66,6 +72,7 @@ export function MicTest({ fallback }: { fallback: React.ReactNode }) {
       if (!navigator.mediaDevices?.getUserMedia) throw new Error('navigator.mediaDevices.getUserMedia is missing');
       const s = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: true } });
       stream.current = s;
+      setPrompt({ before: await beforeP, after: await micPermission() });
       note(`microphone open: ${s.getAudioTracks()[0]?.label || 'unnamed'}`);
       // A level meter, so a silent stream (permission given but no sound) shows up.
       const ac = new AudioContext();
@@ -104,6 +111,8 @@ export function MicTest({ fallback }: { fallback: React.ReactNode }) {
       setTimeout(() => { if (r.state === 'recording') r.stop(); }, LIMIT_S * 1000);
     } catch (e) {
       note(`failed: ${e instanceof Error ? `${e.name}: ${e.message}` : String(e)}`);
+      setPrompt({ before: await beforeP, after: await micPermission() });
+      if (e instanceof Error && e.name === 'NotAllowedError') setHelp(MIC_HELP[micPlace(navigator.userAgent, Boolean(env?.inApp))]);
       stream.current?.getTracks().forEach((t) => t.stop());
       stream.current = null;
       setState('failed');
@@ -114,6 +123,8 @@ export function MicTest({ fallback }: { fallback: React.ReactNode }) {
   // on web platforms." (miniapps.farcaster.xyz, request-camera-and-microphone-access). Say so plainly, before Record.
   const webClient = Boolean(env?.inApp && env.platform === 'web');
   const where = !env ? '' : env.inApp ? `Farcaster app (${env.platform || 'unknown platform'}${env.client ? `, ${env.client}` : ''})` : 'browser';
+  const shown = prompt ? promptShown(prompt.before, prompt.after) : null;
+  const promptNote = prompt ? `; prompt shown: ${shown}${prompt.before ? ` (permission ${prompt.before} → ${prompt.after ?? 'unknown'})` : ' (the browser doesn\'t report it)'}` : '';
   const verdict =
     state === 'done' && take && peak.current > 4 ? 'PASS' : state === 'done' ? 'RECORDED BUT SILENT' : state === 'failed' ? 'FAIL' : '';
   return (
@@ -157,6 +168,12 @@ export function MicTest({ fallback }: { fallback: React.ReactNode }) {
         <p style={{ fontWeight: 700, fontSize: 18 }}>
           {verdict}: {where}
           {take ? `, ${take.seconds.toFixed(1)} s, ${take.type || 'no type'}, ${(take.bytes / 1024).toFixed(0)} KB` : ''}
+          {promptNote}
+        </p>
+      )}
+      {help && (
+        <p role="alert" style={{ padding: 12, border: '2px solid #c60', borderRadius: 8 }}>
+          {help}
         </p>
       )}
       <pre style={{ whiteSpace: 'pre-wrap', fontSize: 12, background: '#f4f4f4', padding: 8 }}>{log.join('\n')}</pre>

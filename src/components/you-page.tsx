@@ -3,6 +3,7 @@
 import { chapterLabel } from '~/lib/images/no-passage';
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import { isAdmin } from '~/lib/admins';
 import { ILLUSTRATION_CHECK, IMAGES } from '~/lib/config';
 import { authFetch, refreshWalletLink, signOut, signOutSocial, signOutWallet, useAuth, useSocialDevice, useSocialSession, useWalletAlongside, walletFetch } from '~/lib/client-auth';
 import { signInOpen } from '~/lib/config';
@@ -32,6 +33,7 @@ const W = {
   account: 'Your account',
   // Admins (owner, 2026-11-19: "The You page links to it for admins"). DRAFT wording.
   illustrations: 'Chapter pictures: drafts waiting and the image review (admins)',
+  micTest: 'Microphone test (admins)',
   farcaster: 'Farcaster',
   kindFarcaster: 'Farcaster',
   kindWallet: 'Wallet',
@@ -226,6 +228,12 @@ export function YouPage() {
       {who.kind === 'farcaster' && who.fid !== undefined && ILLUSTRATION_CHECK.owners.includes(who.fid) && (
         <p className="you-note">
           <Link href="/you/illustrations">{W.illustrations}</Link>
+        </p>
+      )}
+      {/* The microphone test (Nate, 2026-11-20): admins only; the page itself is a 404 to everyone else. */}
+      {who.kind === 'farcaster' && isAdmin(who.fid) && (
+        <p className="you-note">
+          <Link href="/admin/mic-test">{W.micTest}</Link>
         </p>
       )}
       <section className="you-section" aria-labelledby="you-account">
