@@ -13,9 +13,13 @@ const TAG: Record<CreditLine['who'], string> = { book: 'BOOK', people: 'PEOPLE',
 
 export function closingSvg(title: string, lines: CreditLine[]): string {
   const { width: W, height: H } = CARD;
-  let y = 150;
-  const rows: string[] = [`<text x="96" y="${y}" font-family="Georgia, serif" font-size="52" fill="#f4f2ed">${esc(title)}</text>`];
-  y += 40;
+  let y = 96;
+  const rows: string[] = [];
+  for (const t of wrapLines(title, 46)) {
+    y += 58;
+    rows.push(`<text x="96" y="${y}" font-family="Georgia, serif" font-size="52" fill="#f4f2ed">${esc(t)}</text>`);
+  }
+  y += 36;
   for (const l of lines) {
     const wrapped = wrapLines(l.text, l.who === 'site' ? 92 : 78);
     y += l.who === 'site' ? 34 : 48;
@@ -25,7 +29,7 @@ export function closingSvg(title: string, lines: CreditLine[]): string {
     y += (wrapped.length - 1) * (l.who === 'site' ? 32 : 38);
   }
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
-  <rect width="100%" height="100%" fill="rgba(10,12,18,0.72)"/>
+  <rect width="100%" height="100%" fill="rgba(10,12,18,0.8)"/>
   ${rows.join('\n  ')}
   <text x="${W - 96}" y="${H - 80}" text-anchor="end" font-family="Georgia, serif" font-size="56" fill="#ffffff">${CLOSING.mark}</text>
 </svg>`;
@@ -33,7 +37,8 @@ export function closingSvg(title: string, lines: CreditLine[]): string {
 
 export async function closingCard(background: Uint8Array | null, title: string, lines: CreditLine[]): Promise<Buffer> {
   const base = background
-    ? sharp(Buffer.from(background)).resize(CARD.width, CARD.height, { fit: 'cover' })
+    ? // Blurred, so nothing written in the picture competes with the site's text (only its colours and shapes show).
+      sharp(await sharp(Buffer.from(background)).resize(CARD.width, CARD.height, { fit: 'cover' }).blur(18).toBuffer())
     : sharp({ create: { width: CARD.width, height: CARD.height, channels: 3, background: '#1c2230' } });
   return base.composite([{ input: Buffer.from(closingSvg(title, lines)), top: 0, left: 0 }]).png({ compressionLevel: 9 }).toBuffer();
 }
