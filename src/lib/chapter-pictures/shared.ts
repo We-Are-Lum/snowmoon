@@ -63,6 +63,11 @@ export interface ShownReplacement {
   byFid: number;
   byHandle: string | null;
   at: string;
+  /**
+   * For a picture an admin added: the character sheets whose pictures were sent with it (its recipe's `references`, by
+   * slug, in the order sent). Which character sheets it shows on (src/lib/images/sheet-images.ts). Empty for a redo.
+   */
+  sheets?: string[];
 }
 
 /** The recipe stored with each version and served at /api/chapter-pictures/<id> once it has been kept. */
@@ -160,6 +165,13 @@ export const localDay = (iso: string, timeZone?: string) => new Date(iso).toLoca
 export const replacedBy = (r: Pick<ShownReplacement, 'byFid' | 'byHandle'>) => `Redone by ${adminName(r.byFid, r.byHandle)}`;
 /** The same for a picture an admin added ("Added by @garance"). DRAFT wording (2026-11-19). */
 export const addedBy = (r: Pick<ShownReplacement, 'byFid' | 'byHandle'>) => `Added by ${adminName(r.byFid, r.byHandle)}`;
+
+/**
+ * The line a quote card's image carries under a redone or added picture: "IMAGE ADDED BY @GARANCE · 21 NOV 2026 · GPT
+ * IMAGE 2.5 SUNBURST, A CLOSED MODEL BY OPENAI". The card is one picture for every reader, so the date is UTC's
+ * (src/app/api/card/[n]/[range]/route.tsx). DRAFT wording (coding agent, 2026-11-19/21).
+ */
+export const cardPictureLine = (r: { by: string; at: string; model: string }) => `IMAGE ${r.by.toUpperCase()} · ${day(r.at).toUpperCase()} · ${r.model.toUpperCase()}`;
 
 /** The model as a caption names it: "GPT Image 2.5 Sunburst, a closed model by OpenAI". */
 export const modelLine = (name: string, maker: string, open: boolean) => `${name}, ${open ? 'an open-weight model' : 'a closed model'} by ${maker}`;

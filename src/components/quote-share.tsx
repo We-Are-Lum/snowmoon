@@ -6,6 +6,7 @@ import { authFetch, useAuth } from '~/lib/client-auth';
 import { SignInButton } from './sign-in';
 import { openComposer } from '~/lib/images/client';
 import { useCanAddImage } from '~/lib/images/can-add';
+import { startingImage, type ShareImage } from '~/lib/share-image';
 
 /**
  * Share a quote as a card. Select text in the chapter (up to four paragraphs),
@@ -14,12 +15,7 @@ import { useCanAddImage } from '~/lib/images/can-add';
  * casts it (inside Farcaster) or copies the link. The server checks every
  * quote against the book before drawing a card.
  */
-export interface ShareImage {
-  id: string;
-  idx: number;
-  url: string;
-  alt: string;
-}
+export type { ShareImage } from '~/lib/share-image';
 interface Props {
   chapter: number;
   images: ShareImage[];
@@ -76,9 +72,7 @@ export function QuoteShare({ chapter, images }: Props) {
 
   const openSheet = useCallback(
     (p: Pick) => {
-      let near: ShareImage | null = null;
-      for (const im of images) if (im.idx <= p.from) near = im;
-      setImg(near?.id ?? null);
+      setImg(startingImage(images, p.from, p.to)?.id ?? null);
       setCopied(false);
       setSaved(null);
       setNote(null);

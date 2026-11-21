@@ -5,6 +5,8 @@ import { APP_NAME, appUrl } from '~/lib/config';
 import { getCard } from '~/lib/cards';
 import { CastCardButton, LikeButton } from '~/components/card-actions';
 import { PAPER } from '~/lib/tokens';
+import { RedoneCredit } from '~/components/redone-credit';
+import { recipePath } from '~/lib/chapter-pictures/shared';
 
 export const dynamic = 'force-dynamic';
 
@@ -54,6 +56,13 @@ export default async function CardPage({ params }: Props) {
         <Link href="/cards">More quote cards</Link>
       </nav>
       <p className="provenance">Snowmoon by Vitalik Buterin, GPL v3. The words are the author&apos;s; card images are AI-generated. Saved cards are published under GPL-3.0.</p>
+      {/* The card's picture, redone or added by an admin (owner, 2026-11-18/19/21): who, when and the model, and its recipe, as on the share page. DRAFT wording. */}
+      {card.quote.image?.replaced && (
+        <p className="provenance share-redone" data-replaced={card.quote.image.replaced.versionId}>
+          This card&apos;s picture: AI-generated · <RedoneCredit redone={card.quote.image.replaced} lead={false} /> ·{' '}
+          <a href={recipePath(card.quote.image.replaced.versionId)}>Recipe</a>
+        </p>
+      )}
     </article>
   );
 }

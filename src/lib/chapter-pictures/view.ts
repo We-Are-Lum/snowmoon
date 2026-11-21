@@ -87,8 +87,18 @@ export function shownPicture<T extends Illustration>(im: T, shown: Map<string, S
  * chapter, or one an admin hid (studio.seeded_hidden, as for the committed pictures) isn't shown. Wording DRAFT.
  */
 export function addedPictures(chapter: number, additions: Addition[], shown: Map<string, ShownReplacement>, hidden: Set<string>, nameOf: (model: string) => string = modelNameOf): AddedIllustration[] {
+  return keptAddedPictures(additions.filter((a) => a.chapter === chapter), shown, hidden, nameOf);
+}
+
+/**
+ * Every added picture that shows now, in any chapter, in book order (chapter, then its block, then when it was added):
+ * the same rule as the chapter (kept, not taken off, not hidden), for the other places an added picture reaches (owner,
+ * 2026-11-21: quote cards, References and the sheets, the pick switch).
+ */
+export function keptAddedPictures(additions: Addition[], shown: Map<string, ShownReplacement>, hidden: Set<string>, nameOf: (model: string) => string = modelNameOf): AddedIllustration[] {
   return additions
-    .filter((a) => a.chapter === chapter && shown.has(a.jobId) && !hidden.has(a.jobId))
+    .filter((a) => shown.has(a.jobId) && !hidden.has(a.jobId))
+    .sort((a, b) => a.chapter - b.chapter || a.after - b.after || a.at.localeCompare(b.at))
     .map((a) => {
       const r = shown.get(a.jobId)!;
       const name = nameOf(r.model);
@@ -96,12 +106,14 @@ export function addedPictures(chapter: number, additions: Addition[], shown: Map
       return {
         id: a.jobId,
         idx: a.after,
+        chapter: a.chapter,
         url: r.url,
         width: r.width,
         height: r.height,
         recipe: recipePath(r.versionId),
         alt: `AI-generated image: ${r.note.length > 200 ? `${r.note.slice(0, 197)}…` : r.note}`,
         passage: { start: a.start, end: a.end },
+        sheets: r.sheets ?? [],
         replaced: {
           versionId: r.versionId,
           by: addedBy(r),
@@ -117,4 +129,10 @@ export function addedPictures(chapter: number, additions: Addition[], shown: Map
       };
     });
 }
-export type AddedIllustration = Omit<Illustration, 'lettering' | 'reviewed'> & { passage: { start: number; end: number }; replaced: Redone };
+export type AddedIllustration = Omit<Illustration, 'lettering' | 'reviewed'> & {
+  chapter: number;
+  passage: { start: number; end: number };
+  /** The character sheets whose pictures were sent with it (by slug). */
+  sheets: string[];
+  replaced: Redone;
+};

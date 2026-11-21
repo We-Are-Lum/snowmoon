@@ -31,14 +31,14 @@ export async function picturesReady(sql: Sql): Promise<boolean> {
 
 type ShownRow = {
   job_id: string; chapter: number; version_id: string | null; public_url: string | null; by_fid: string; by_handle: string | null; decided_at: Date;
-  sha256: string | null; width: number | null; height: number | null; model: string | null; maker: string | null; open_weights: boolean | null; look: Look | null; note: string | null; prompt: string | null;
+  sha256: string | null; width: number | null; height: number | null; model: string | null; maker: string | null; open_weights: boolean | null; look: Look | null; note: string | null; prompt: string | null; refs: unknown;
 };
 
 /** The latest decision per job, joined to its version: a version shown in place of the committed file, or nothing. */
 export async function readReplacements(sql: Sql): Promise<Map<string, ShownReplacement>> {
   const rows = await sql<ShownRow[]>`
     select distinct on (d.job_id) d.job_id, d.chapter, d.version_id, d.public_url, d.by_fid, d.by_handle, d.decided_at,
-      v.sha256, v.width, v.height, v.model, v.maker, v.open_weights, v.look, v.note, v.prompt
+      v.sha256, v.width, v.height, v.model, v.maker, v.open_weights, v.look, v.note, v.prompt, v.recipe->'references' as refs
     from studio.chapter_picture_decisions d left join studio.chapter_picture_versions v on v.id = d.version_id
     order by d.job_id, d.decided_at desc, d.id desc`;
   const out = new Map<string, ShownReplacement>();
@@ -48,6 +48,7 @@ export async function readReplacements(sql: Sql): Promise<Map<string, ShownRepla
       versionId: r.version_id, jobId: r.job_id, chapter: r.chapter, url: r.public_url, sha256: r.sha256, width: r.width ?? 1024, height: r.height ?? 576,
       model: r.model ?? '', maker: r.maker ?? '', open: Boolean(r.open_weights), look: r.look, note: r.note ?? '', prompt: r.prompt ?? '',
       byFid: Number(r.by_fid), byHandle: r.by_handle, at: new Date(r.decided_at).toISOString(),
+      ...(Array.isArray(r.refs) ? { sheets: r.refs.map((x) => String((x as { sheet?: unknown })?.sheet ?? '')).filter(Boolean) } : {}),
     });
   }
   return out;
@@ -82,6 +83,7 @@ export const shownReplacements = cache(async (): Promise<Map<string, ShownReplac
 export const forgetReplacements = () => {
   missingUntil = 0;
   failedUntil = 0;
+  additionsFailedUntil = 0;
 };
 
 /**
@@ -258,3 +260,40 @@ async function additionsOrNone(): Promise<Addition[]> {
 }
 /** Every added picture's place, for the chapter pages: once per build worker at build, fresh on each render after. */
 export const shownAdditions = cache(async (): Promise<Addition[]> => (BUILDING ? (additionsDuringBuild ??= additionsOrNone()) : additionsOrNone()));
+
+/**
+ * Every added picture's place, for the other places a kept one now shows (owner, 2026-11-21: quote cards, References and
+ * the sheets, the pick switch): read through the same tag as replacementsEverywhere, so a Keep, a take-off or a
+ * show-again (all decisions, src/app/api/you/illustrations/show/route.ts) reaches them at once. Where an addition sits
+ * never changes once written (0043 is insert-only, written at the first draft, which shows nowhere), so the decisions'
+ * revalidation is the only one these need. A failed read is never kept: the pages show no added picture for 30 seconds
+ * on this instance, and the edition's committed pictures as before. During a build it is the chapter pages' own read.
+ */
+let additionsFailedUntil = 0;
+async function additionsOrThrow(): Promise<Addition[]> {
+  const sql = db();
+  if (!sql) return [];
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const slow = new Promise<never>((_, no) => (timer = setTimeout(() => no(new Error('chapter pictures: the additions read took over 5 s')), 5000)));
+  try {
+    return await Promise.race([readAdditions(sql), slow]);
+  } catch (e) {
+    if (missing(e)) return [];
+    throw e;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+const keptAdditions = unstable_cache(additionsOrThrow, ['chapter-pictures-additions-v1'], { tags: [PICTURES_TAG] });
+
+export const additionsEverywhere = cache(async (): Promise<Addition[]> => {
+  if (BUILDING) return shownAdditions();
+  if (Date.now() < additionsFailedUntil) return [];
+  try {
+    return await keptAdditions().catch((e) => (/incrementalCache missing/.test(String((e as Error)?.message ?? e)) ? additionsOrThrow() : Promise.reject(e)));
+  } catch (e) {
+    additionsFailedUntil = Date.now() + 30_000;
+    console.error('chapter pictures: additions not read', (e as Error).message);
+    return [];
+  }
+});
