@@ -18,9 +18,9 @@ const embed = () =>
     },
   });
 
-export function generateMetadata(): Metadata {
-  return { robots: { index: false, follow: false }, other: { 'fc:miniapp': embed(), 'fc:frame': embed() } };
-}
+// A plain object, not generateMetadata: on a dynamic route Next 15 streams a function's metadata after the <head> for
+// anything it doesn't take for a bot (its HTML_LIMITED_BOT_UA_RE), and a link preview reads the <head>.
+export const metadata: Metadata = { robots: { index: false, follow: false }, other: { 'fc:miniapp': embed(), 'fc:frame': embed() } };
 
 export default function MicTestLayout({ children }: { children: React.ReactNode }) {
   return children;
