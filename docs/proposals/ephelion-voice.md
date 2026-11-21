@@ -388,6 +388,24 @@ zone: west of UTC, between midnight UTC and local midnight, today's counts were 
 database runs in UTC, so it wouldn't have shown there, but it was wrong; dates are now compared as UTC dates on both
 sides (migration, code, tests), and the migration passes in UTC and in Pacific time.
 
+## Nate's iPhone Safari test (2026-11-20), and the plan for the recording page
+
+Result: "FAIL: browser. NotAllowedError: The request is not allowed by the user agent or the platform in the current
+context, possibly because the user denied permission." Production sends no Permissions-Policy or Feature-Policy header
+for /admin/mic-test or the home page, none is set in next.config.ts, src/middleware.ts or vercel.json, and a header
+set in Vercel's dashboard would show in the response: nothing of ours blocks the microphone. NotAllowedError on iPhone
+Safari usually means the site's (or Safari's) microphone setting is Deny, or an earlier "Don't Allow".
+
+The mic-test PR (branch mic-test-link) adds, DRAFT wording in `src/lib/mic-help.ts`: on NotAllowedError, one plain line
+for the browser in use (iPhone Safari: "Tap aA in the address bar, then Website Settings, set Microphone to Allow, and
+reload the page. If it's already set to Allow, check Settings › Apps › Safari › Microphone."; Mac Safari; Chrome; the
+Farcaster app; any other browser), and the summary line says whether a permission prompt was shown, where the browser
+reports the permission's state (before and after asking).
+
+**Plan for /storyboard/record:** the recorder's refusal message becomes the same line from `src/lib/mic-help.ts` (once
+the mic-test PR is on main and this branch merges main), shown under Record, with the same "prompt shown" detail kept
+out of the page (it's a test aid) but logged nowhere.
+
 ## What Nate needs to do (one at a time)
 
 1. #195 is merged and live: the iPhone and desktop tests on /admin/mic-test; Android goes to Garance or Luis.
