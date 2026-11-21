@@ -8,6 +8,7 @@ import { workOf } from '~/lib/images/designs';
 import { REASONS } from '~/lib/images/reasons';
 import { moveToPrivate } from '~/lib/images/store';
 import { recheckMaker } from '~/lib/checks/decisions';
+import { hideReachesChapterPictures } from '~/lib/chapter-pictures/after-hide';
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -48,6 +49,7 @@ export async function POST(request: Request, { params }: Ctx) {
     for (const sha of el.files) await moveToPrivate(sha).catch((e) => console.error('report: moving the hidden file failed', (e as Error).name));
     revalidatePath('/images');
     revalidatePath(el.type === 'image' ? `/image/${id}` : '/images/designs', el.type === 'image' ? undefined : 'layout');
+    await hideReachesChapterPictures(sql, el.elementId);
   }
   // The moderator's push ("Snowmoon: N reports waiting", nothing else), after the answer; never fails the report.
   after(() => alertReports(sql).then(() => undefined, () => undefined));

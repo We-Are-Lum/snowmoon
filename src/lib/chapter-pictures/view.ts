@@ -2,7 +2,7 @@ import 'server-only';
 import type { Illustration } from '../illustrations';
 import type { RecipeView } from '../recipe-view';
 import { CHALLENGE_MODELS } from '../challenge/models';
-import { addedBy, adminName, day, lookName, modelLine, recipePath, replacedBy, type Addition, type ShownReplacement } from './shared';
+import { addedBy, adminName, creditLine, day, lookName, modelLine, recipePath, replacedBy, type Addition, type ShownReplacement } from './shared';
 
 /**
  * A chapter picture as the chapter shows it once an admin has kept a redo (owner, 2026-11-18, option B): the kept
@@ -40,6 +40,8 @@ export function replacementView(r: ShownReplacement, modelName: string): RecipeV
       { label: 'Style', value: r.look ? `${lookName(r.look)}: ${r.look.text}` : 'none' },
       { label: 'Note', value: `${r.note} (by ${adminName(r.byFid, r.byHandle)})` },
       { label: 'Reference', value: 'the picture the chapter showed before (its sha256 is in the full recipe)' },
+      // Others' published pictures it was made after (2026-11-21), credited as the caption credits them. DRAFT wording.
+      ...(r.credits?.length ? [{ label: 'Made after', value: `${creditLine(r.credits).replace(/^after /, '')} (each one’s version and sha256 are in the full recipe)` }] : []),
     ],
     published: { by: `${adminName(r.byFid, r.byHandle)} (admin)`, when: day(r.at), whenIso: r.at },
     resultLicence: 'GPL-3.0',

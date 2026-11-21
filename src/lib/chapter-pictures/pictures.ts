@@ -9,7 +9,8 @@ import { challengeModel, modelRow, noticeProblem, reserveUsd, type ChallengeMode
 import { loadChapter } from '../book';
 import { inPassage } from '../images/sheets';
 import { designByVersion, listDesigns } from '../images/designs';
-import { challengeStyles } from '../challenge/make';
+import { byline } from '../images/byline';
+import sharp from 'sharp';
 import type { Where } from '../images/countries';
 import { paidPicture } from '../images/paid';
 import { makeEdit, makeImage, type Made } from '../images/fal';
@@ -22,7 +23,8 @@ import { nextUtcMidnight } from '../images/paid';
 import { randomBytes } from 'node:crypto';
 import { saveAddition, saveDecision, saveLook, saveVersion } from './admin';
 import { additionsReady, firstKeep, latestLooks, lookFor, pictureBytes, pictureVersion, picturesReady, readAddition, readReplacements } from './read';
-import { addPrompt, addedJobId, isAddedId, redoPrompt, type Addition, type Look, type PictureRecipe } from './shared';
+import { addPrompt, addedJobId, isAddedId, namesAWork, pickLimit, redoPrompt, type Addition, type Look, type PickedRef, type PictureRecipe, type PictureVersion } from './shared';
+import { REF_WORDING, lookUsable, referenceStatuses, resolveReference, styleChoices } from './references';
 
 /**
  * What /you/illustrations does with the edition's chapter pictures (owner, 2026-11-18, option B): an admin redoes a
@@ -58,6 +60,9 @@ export interface SheetRef {
   versionId: string;
   url: string;
   sha256: string;
+  /** Its maker as the sheet's page credits them (2026-11-21: the caption credits the sheet's maker too). */
+  by?: string;
+  byFid?: number;
 }
 
 /** The passage's characters with a published sheet front view, in the book's order (src/lib/images/sheets.ts inPassage). */
@@ -71,7 +76,7 @@ export async function passageSheets(sql: Sql, chapter: number, start: number, en
       const page = await designByVersion(sql, r.versionId).catch(() => null);
       const front = page?.shown.body.views.front;
       if (front?.url && front.sha256) {
-        out.push({ slug: c.slug, name: c.name, versionId: r.versionId, url: front.url, sha256: front.sha256 });
+        out.push({ slug: c.slug, name: c.name, versionId: r.versionId, url: front.url, sha256: front.sha256, by: byline(r.byName, r.byFid), byFid: r.byFid });
         break;
       }
     }
@@ -87,8 +92,16 @@ export const realDeps = async (): Promise<Deps> => ({
   handleFor: async (fid) => (await import('../adaptation-pages')).handleFor(fid),
   paid: paidPicture,
   consented: async (fid) => (await import('../consent')).hasConsented(fid),
-  makeAdded: (m, prompt, refs, request, worst) =>
-    m.open ? (refs.length ? makeEdit(prompt, refs.map((bytes) => ({ bytes, contentType: 'image/jpeg', width: IMAGES.viewSize.width, height: IMAGES.viewSize.height }))) : makeImage(prompt)) : makeChapterClosed(m, prompt, refs, request, worst),
+  // Each reference at its own size (sheets are tall, remixes and the picture shown now wide), for the open model's price.
+  makeAdded: async (m, prompt, refs, request, worst) =>
+    m.open
+      ? refs.length
+        ? makeEdit(prompt, await Promise.all(refs.map(async (bytes) => {
+            const meta = await sharp(bytes).metadata();
+            return { bytes, contentType: 'image/jpeg', width: meta.width ?? IMAGES.viewSize.width, height: meta.height ?? IMAGES.viewSize.height };
+          })))
+        : makeImage(prompt)
+      : makeChapterClosed(m, prompt, refs, request, worst),
   sheets: passageSheets,
 });
 
@@ -118,7 +131,8 @@ export async function capState(sql: Sql) {
 /** What the review page adds to each job, and the page's own state. */
 export async function adminView(sql: Sql, where: Where) {
   const ready = await picturesReady(sql).catch(() => false);
-  const styles = ready ? (await challengeStyles(sql)).map((s) => ({ id: s.versionId, label: s.label, text: s.text })) : [];
+  // Every published, visible style (the remix challenge's marked), with its version and maker (2026-11-21).
+  const styles = ready ? await styleChoices(sql).catch(() => []) : [];
   return {
     ready,
     storage: storageReady(),
@@ -131,10 +145,66 @@ export async function adminView(sql: Sql, where: Where) {
   };
 }
 
+/**
+ * The published pictures an admin picked as references (owner's request via Garance, 2026-11-21), looked up again on
+ * the server now, whatever the sheet showed (hides win at Make, P5f): in the order picked, each once, at most `limit`.
+ */
+async function pickedFrom(sql: Sql, raw: unknown, limit: number): Promise<{ refs: PickedRef[] } | Result> {
+  if (raw !== undefined && raw !== null && !Array.isArray(raw)) return no(400, 'Pick references from the list or by their link.');
+  const ids = Array.isArray(raw) ? raw.filter((x): x is string => typeof x === 'string').map((x) => x.toLowerCase()) : [];
+  if (new Set(ids).size !== ids.length) return no(400, REF_WORDING.twice, { reason: 'twice' });
+  if (ids.length > limit) return no(400, REF_WORDING.tooMany(limit), { reason: 'too-many' });
+  const refs: PickedRef[] = [];
+  for (const id of ids) {
+    const r = await resolveReference(sql, id);
+    if (!r.ok) return no(r.reason === 'hidden' || r.reason === 'unpublished' ? 409 : 400, r.error, { reason: r.reason, versionId: id });
+    refs.push(r.ref);
+  }
+  return { refs };
+}
+
+/** Each picked reference's file, checked against its sha256 as the sheet pictures are (null names the one that failed). */
+async function pickedBytes(deps: Deps, refs: PickedRef[]): Promise<{ bytes: Buffer[] } | Result> {
+  const bytes: Buffer[] = [];
+  for (const r of refs) {
+    const b = await deps.reference(r.url, r.sha256);
+    if (!b) return no(503, `${r.by}’s ${r.what} could not be read. Try again in a moment.`);
+    bytes.push(b);
+  }
+  return { bytes };
+}
+
+/** The worst case's reference box: every picture at most 1024 x 768 (a sheet's view is 576 x 768, a wide picture 1024 x 576). */
+const refBox = (pictures: { width: number; height: number }[]) => {
+  const px = pictures.reduce((n, p) => n + p.width * p.height, 0);
+  return { width: 1024, height: Math.max(1, Math.ceil(px / 1024)) };
+};
+const WIDE_MAX = { width: 1024, height: 768 };
+
+/** What the recipe's `assist.look` says of the look: whose style, which version (P2). */
+const lookAssist = (look: Look | null) =>
+  look?.kind === 'style' ? `the published style “${look.label}”${look.versionNo ? `, version ${look.versionNo}` : ''}${look.by ? `, by ${look.by}` : ''}` : look ? 'written by an admin' : 'none';
+
+/**
+ * The references a version was made after that are no longer published (P5f at Keep, 2026-11-21): its picked pictures
+ * and its sheet pictures, as the admin's sheet names them.
+ */
+export async function hiddenSince(sql: Sql, v: Pick<PictureVersion, 'recipe'>): Promise<string[]> {
+  const picked = v.recipe?.picked ?? [];
+  const sheets = v.recipe?.references ?? [];
+  const status = await referenceStatuses(sql, [...picked.map((x) => x.versionId), ...sheets.map((x) => x.versionId)]);
+  // Hidden or unpublished now; a version with no row is only ever a test's stand-in (elements are never deleted).
+  const gone = (id: string) => !['published', 'missing'].includes(status.get(id.toLowerCase()) ?? 'missing');
+  return [
+    ...sheets.filter((x) => gone(x.versionId)).map((x) => (x.by ? `${x.by}’s ${x.name} sheet` : `${x.name}’s sheet`)),
+    ...picked.filter((x) => gone(x.versionId)).map((x) => `${x.by}’s ${x.what}`),
+  ];
+}
+
 /** A redo: one draft, private, from the picture shown now, the admin's note, the chapter's look and the model chosen. */
 export async function redoPicture(sql: Sql, fid: number, request: Request, raw: unknown, where: Where, deps: Deps): Promise<Result> {
   if (!(await picturesReady(sql))) return no(503, 'Redoing pictures needs the chapter-picture migration (0042_chapter_picture_versions) first.');
-  const b = (raw ?? {}) as { jobId?: unknown; note?: unknown; model?: unknown; notice?: unknown };
+  const b = (raw ?? {}) as { jobId?: unknown; note?: unknown; model?: unknown; notice?: unknown; picked?: unknown };
   const job = typeof b.jobId === 'string' ? checkJob(b.jobId) : null;
   if (!job) return no(404, 'No such picture');
   if (!redoable(job)) return no(400, job.lettering.length ? 'This picture has lettering; it can be redone once the lettering work ships.' : 'This job has no picture to redo.');
@@ -147,16 +217,28 @@ export async function redoPicture(sql: Sql, fid: number, request: Request, raw: 
   const problem = noticeProblem(m, b.notice);
   if (problem) return no(400, problem === 'notice' ? 'Read the model’s notice first.' : 'Confirm you’re 18 or older first.', { reason: problem });
   const look = lookFor(await latestLooks(sql), job.chapter);
+  if (look?.kind === 'style' && !(await lookUsable(sql, look))) return no(409, REF_WORDING.lookHidden(look.label), { reason: 'look-hidden' });
+  // Picked references (2026-11-21): the picture shown now is the first of the model's three, so up to two more.
+  const picks = await pickedFrom(sql, b.picked, pickLimit(IMAGES.maxReferences, 'redo', 0));
+  if ('status' in picks) return picks;
   const shown = await shownNow(sql, job);
   if (!shown) return no(400, 'This job has no picture to redo.');
   const ref = await deps.reference(shown.url, shown.sha256);
   if (!ref) return no(503, 'The picture shown now could not be read. Try again in a moment.');
-  const { prompt, parts } = redoPrompt(job.prompt, note, look, IMAGES.suffix);
-  const worst = reserveUsd(m, { width: shown.width, height: shown.height });
+  const extra = await pickedBytes(deps, picks.refs);
+  if ('status' in extra) return extra;
+  const { prompt, parts } = redoPrompt(job.prompt, note, look, IMAGES.suffix, picks.refs);
+  const worst = picks.refs.length ? reserveUsd(m, refBox([shown, ...picks.refs.map(() => WIDE_MAX)])) : reserveUsd(m, { width: shown.width, height: shown.height });
   const paid = await deps.paid(sql, fid, request, {
     checkText: prompt,
     spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, pool: 'admin' },
-    make: () => (m.open ? deps.makeOpen(prompt, { bytes: ref, contentType: 'image/jpeg', width: shown.width, height: shown.height }) : deps.makeClosed(m, prompt, ref, request, worst)),
+    // With picked references, every picture goes as the sheets do (chapterClosedRequest's multi-picture path; FLUX's edit with each).
+    make: () =>
+      picks.refs.length
+        ? deps.makeAdded(m, prompt, [ref, ...extra.bytes], request, worst)
+        : m.open
+          ? deps.makeOpen(prompt, { bytes: ref, contentType: 'image/jpeg', width: shown.width, height: shown.height })
+          : deps.makeClosed(m, prompt, ref, request, worst),
   });
   if (!paid.ok) return { status: paid.status, json: { error: paid.error, ...paid.extra } };
   const made = paid.made;
@@ -167,9 +249,10 @@ export async function redoPicture(sql: Sql, fid: number, request: Request, raw: 
     model: { id: m.allowlistId, name: m.name, maker: m.maker, open: m.open, terms: m.terms, host: m.call.host, endpoint: m.call.endpoint, ...(m.call.only ? { only: m.call.only } : {}) },
     prompt, parts,
     reference: { what: shown.versionId ? `the picture shown before (version ${shown.versionId})` : 'the picture shown before (the committed file)', url: shown.url, sha256: shown.sha256 },
+    ...(picks.refs.length ? { picked: picks.refs } : {}),
     settings: made.settings, seed: made.seed, requestId: made.requestId, sha256, width: IMAGES.size.width, height: IMAGES.size.height,
     costUsd: made.costUsd, guard: { model: IMAGES.guardModel, verdict: 'ok' }, madeBy: { fid, role: 'admin' }, madeAt,
-    assist: { scene: 'the edition’s job prompt, drafted by the coding agent (Claude, by Anthropic)', note: `written by FID ${fid}`, look: look?.kind === 'style' ? `the published style “${look.label}”` : look ? `written by an admin` : 'none' },
+    assist: { scene: 'the edition’s job prompt, drafted by the coding agent (Claude, by Anthropic)', note: `written by FID ${fid}`, look: lookAssist(look) },
   };
   const id = await saveVersion(sql, fid, {
     jobId: job.id, chapter: job.chapter, model: m.allowlistId, maker: m.maker, open: m.open, look, note, prompt, recipe,
@@ -186,8 +269,8 @@ export async function redoPicture(sql: Sql, fid: number, request: Request, raw: 
  */
 export async function showPicture(sql: Sql, fid: number, raw: unknown, deps: Deps): Promise<Result & { chapter?: number }> {
   if (!(await picturesReady(sql))) return no(503, 'Keeping pictures needs the chapter-picture migration (0042_chapter_picture_versions) first.');
-  const b = (raw ?? {}) as { jobId?: unknown; versionId?: unknown };
-  if (typeof b.jobId === 'string' && isAddedId(b.jobId)) return showAdded(sql, fid, b.jobId, b.versionId, deps);
+  const b = (raw ?? {}) as { jobId?: unknown; versionId?: unknown; keepHidden?: unknown };
+  if (typeof b.jobId === 'string' && isAddedId(b.jobId)) return showAdded(sql, fid, b.jobId, b.versionId, deps, b.keepHidden === true);
   const job = typeof b.jobId === 'string' ? checkJob(b.jobId) : null;
   if (!job) return no(404, 'No such picture');
   const versionId = b.versionId === null || b.versionId === undefined || b.versionId === 'original' ? null : String(b.versionId);
@@ -202,6 +285,8 @@ export async function showPicture(sql: Sql, fid: number, raw: unknown, deps: Dep
   }
   const v = await pictureVersion(sql, versionId);
   if (!v || v.jobId !== job.id) return no(404, 'No such version of this picture');
+  const gone = await hiddenSince(sql, v);
+  if (gone.length && b.keepHidden !== true) return no(409, REF_WORDING.keepHidden(gone), { reason: 'reference-hidden', hidden: gone });
   const before = await firstKeep(sql, v.id);
   let url = before?.publicUrl ?? null;
   if (!url) {
@@ -224,14 +309,19 @@ export async function setLook(sql: Sql, fid: number, raw: unknown, consented: (f
   const l = (b.look ?? null) as { kind?: unknown; id?: unknown; text?: unknown } | null;
   let look: Look | null = null;
   if (l?.kind === 'style') {
-    const s = (await challengeStyles(sql)).find((x) => x.versionId === l.id);
-    if (!s) return no(400, 'That style isn’t one of the site’s offered styles.');
-    look = { kind: 'style', label: s.label, text: s.text, versionId: s.versionId };
+    // Any published, visible style (2026-11-21); one hidden, unpublished, or whose words break the looks' rule isn't listed.
+    const s = (await styleChoices(sql)).find((x) => x.id === l.id);
+    if (!s) {
+      const status = typeof l.id === 'string' ? (await referenceStatuses(sql, [l.id])).get(l.id.toLowerCase()) : undefined;
+      return no(400, status === 'hidden' ? 'That style has been hidden by its maker or a moderator, so it can’t be the look.' : 'That style isn’t published, or its words name someone or something the looks don’t allow.');
+    }
+    look = { kind: 'style', label: s.label, text: s.text, versionId: s.id, versionNo: s.versionNo, by: s.by, byFid: s.byFid };
   } else if (l?.kind === 'line') {
     const text = typeof l.text === 'string' ? l.text.trim() : '';
     if (!text) return no(400, 'Write the look first.');
     if (text.length > CHAPTER_PICTURES.lookMaxChars) return no(400, `A look is at most ${CHAPTER_PICTURES.lookMaxChars} characters.`);
     if (blockedName(text)) return no(400, 'No real people: the look names someone on the blocked list.');
+    if (namesAWork(text)) return no(400, 'No artist, studio or film names: describe the look by how it looks.');
     if (!(await consented(fid))) return no(403, 'Agree to how your words are published first', { reason: 'consent' });
     look = { kind: 'line', text };
   } else if (l !== null) return no(400, 'Choose a style or write a line');
@@ -254,7 +344,7 @@ async function publicUrlOf(sql: Sql, v: { id: string; sha256: string }, deps: De
  * Keep, show again, or take off a picture an admin added (owner, 2026-11-19: "Undo for a new picture is 'take it off the
  * chapter'; it stays stored and can be shown again. Nothing is deleted."). versionId null takes it off.
  */
-async function showAdded(sql: Sql, fid: number, jobId: string, rawVersion: unknown, deps: Deps): Promise<Result & { chapter?: number }> {
+async function showAdded(sql: Sql, fid: number, jobId: string, rawVersion: unknown, deps: Deps, keepHidden = false): Promise<Result & { chapter?: number }> {
   const a = await readAddition(sql, jobId);
   if (!a) return no(404, 'No such picture');
   const versionId = rawVersion === null || rawVersion === undefined || rawVersion === 'off' ? null : String(rawVersion);
@@ -267,6 +357,9 @@ async function showAdded(sql: Sql, fid: number, jobId: string, rawVersion: unkno
   }
   const v = await pictureVersion(sql, versionId);
   if (!v || v.jobId !== jobId) return no(404, 'No such version of this picture');
+  // A reference hidden since the draft was made (P5f at Keep): said, and kept only if the admin says so.
+  const gone = await hiddenSince(sql, v);
+  if (gone.length && !keepHidden) return no(409, REF_WORDING.keepHidden(gone), { reason: 'reference-hidden', hidden: gone });
   const pub = await publicUrlOf(sql, v, deps);
   if ('status' in pub) return pub;
   await saveDecision(sql, fid, { jobId, chapter: a.chapter, versionId: v.id, action: pub.before ? 'restore' : 'keep', publicUrl: pub.url, byHandle });
@@ -281,7 +374,7 @@ async function showAdded(sql: Sql, fid: number, jobId: string, rawVersion: unkno
  */
 export async function addPicture(sql: Sql, fid: number, request: Request, raw: unknown, where: Where, deps: Deps): Promise<Result> {
   if (!(await picturesReady(sql)) || !(await additionsReady(sql))) return no(503, 'Adding pictures needs the migration 0043_chapter_picture_additions first.', { reason: 'not-ready' });
-  const b = (raw ?? {}) as { jobId?: unknown; chapter?: unknown; after?: unknown; start?: unknown; end?: unknown; note?: unknown; model?: unknown; notice?: unknown; characters?: unknown };
+  const b = (raw ?? {}) as { jobId?: unknown; chapter?: unknown; after?: unknown; start?: unknown; end?: unknown; note?: unknown; model?: unknown; notice?: unknown; characters?: unknown; picked?: unknown };
   let place: Omit<Addition, 'byFid' | 'at'> | null = null;
   let isNew = false;
   if (typeof b.jobId === 'string') {
@@ -312,15 +405,24 @@ export async function addPicture(sql: Sql, fid: number, request: Request, raw: u
   const offered = wanted.length ? await deps.sheets(sql, place.chapter, place.start, place.end) : [];
   const chosen = wanted.map((slug) => offered.find((o) => o.slug === slug));
   if (chosen.some((c) => !c)) return no(400, 'Only characters this passage names, with a published sheet, can go along.');
+  // Picked references (2026-11-21): three pictures in all, counting the sheets.
+  const picks = await pickedFrom(sql, b.picked, pickLimit(IMAGES.maxReferences, 'add', wanted.length));
+  if ('status' in picks) return picks;
+  const look = lookFor(await latestLooks(sql), place.chapter);
+  if (look?.kind === 'style' && !(await lookUsable(sql, look))) return no(409, REF_WORDING.lookHidden(look.label), { reason: 'look-hidden' });
   const refs: Buffer[] = [];
   for (const c of chosen as SheetRef[]) {
     const bytes = await deps.reference(c.url, c.sha256);
     if (!bytes) return no(503, `${c.name}’s sheet picture could not be read. Try again in a moment.`);
     refs.push(bytes);
   }
-  const look = lookFor(await latestLooks(sql), place.chapter);
-  const { prompt, parts } = addPrompt(note, (chosen as SheetRef[]).map((c) => c.name), look, IMAGES.suffix);
-  const worst = reserveUsd(m, { width: IMAGES.viewSize.width, height: IMAGES.viewSize.height * Math.max(1, refs.length) });
+  const extra = await pickedBytes(deps, picks.refs);
+  if ('status' in extra) return extra;
+  refs.push(...extra.bytes);
+  const { prompt, parts } = addPrompt(note, (chosen as SheetRef[]).map((c) => c.name), look, IMAGES.suffix, picks.refs);
+  const worst = picks.refs.length
+    ? reserveUsd(m, refBox([...(chosen as SheetRef[]).map(() => IMAGES.viewSize), ...picks.refs.map(() => WIDE_MAX)]))
+    : reserveUsd(m, { width: IMAGES.viewSize.width, height: IMAGES.viewSize.height * Math.max(1, refs.length) });
   const paid = await deps.paid(sql, fid, request, {
     checkText: prompt,
     spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, pool: 'admin' },
@@ -334,10 +436,11 @@ export async function addPicture(sql: Sql, fid: number, request: Request, raw: u
     model: { id: m.allowlistId, name: m.name, maker: m.maker, open: m.open, terms: m.terms, host: m.call.host, endpoint: m.call.endpoint, ...(m.call.only ? { only: m.call.only } : {}) },
     prompt, parts, reference: null,
     added: { after: place.after, start: place.start, end: place.end },
-    references: (chosen as SheetRef[]).map((c) => ({ sheet: c.slug, name: c.name, versionId: c.versionId, url: c.url, sha256: c.sha256 })),
+    references: (chosen as SheetRef[]).map((c) => ({ sheet: c.slug, name: c.name, versionId: c.versionId, url: c.url, sha256: c.sha256, kind: 'sheet' as const, ...(c.by ? { by: c.by, byFid: c.byFid } : {}) })),
+    ...(picks.refs.length ? { picked: picks.refs } : {}),
     settings: made.settings, seed: made.seed, requestId: made.requestId, sha256, width: IMAGES.size.width, height: IMAGES.size.height,
     costUsd: made.costUsd, guard: { model: IMAGES.guardModel, verdict: 'ok' }, madeBy: { fid, role: 'admin' }, madeAt: new Date().toISOString(),
-    assist: { scene: 'none: the admin’s note is the picture’s description', note: `written by FID ${fid}`, look: look?.kind === 'style' ? `the published style “${look.label}”` : look ? 'written by an admin' : 'none' },
+    assist: { scene: 'none: the admin’s note is the picture’s description', note: `written by FID ${fid}`, look: lookAssist(look) },
   };
   if (isNew) await saveAddition(sql, fid, { jobId: place.jobId, chapter: place.chapter, after: place.after, start: place.start, end: place.end });
   const id = await saveVersion(sql, fid, {
