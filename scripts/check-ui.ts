@@ -109,7 +109,8 @@ import path from 'node:path';
 import { chromium, devices, webkit, type Browser, type Page, type Route } from 'playwright-core';
 import QRCode from 'qrcode';
 import { BOOK_MENTIONS } from '../src/lib/character-order';
-import { ASSISTANT, CHALLENGE, SIGN_IN_METHODS, SUPPORT } from '../src/lib/config';
+import { ASSISTANT, CHALLENGE, REHEARSAL, SIGN_IN_METHODS, SUPPORT } from '../src/lib/config';
+import { REHEARSAL_BASE_IDS } from '../src/lib/challenge/rehearsal-switch';
 import { SIGN_IN_CHOICES } from '../src/lib/sign-in-text';
 import { CHALLENGE_LINKS } from '../src/lib/challenge/landing-wording';
 import { ASK_WORDING, type AccountKind } from '../src/lib/chat/who-can-ask';
@@ -1832,6 +1833,21 @@ async function checkMarkdownPages() {
  * owner 2026-11-08: the relaxed wait in checkChallengeLanding is for its one-connection fixture only. Each page must
  * load and settle, show its own elements, and not scroll sideways, at 390 light and 1440 dark.
  */
+/**
+ * The base /challenge/make opens (Nate, 2026-11-21): on a live run, production's first base; in rehearsal mode
+ * (CHALLENGE_REHEARSAL=on for this run, against a server on this machine), the rehearsal database's own first base,
+ * which the rehearsal seeds (scripts/rehearsal-db.ts) and production's ids aren't in. Rehearsal mode against anything
+ * but this machine is refused, so a live run can never use the rehearsal's ids.
+ */
+function makeBase(): string | null {
+  const local = /^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(BASE);
+  if (REHEARSAL.on && !local) throw new Error('check:ui: rehearsal mode (CHALLENGE_REHEARSAL=on) is for a server on this machine only, never a live run');
+  const ids = REHEARSAL.on ? REHEARSAL_BASE_IDS : (CHALLENGE.bases as Record<string, readonly string[]>);
+  const first = Object.values(ids).flat()[0] ?? null;
+  console.log(`note /challenge/make opens ${REHEARSAL.on ? "the rehearsal's own" : "production's"} first base (${first})`);
+  return first;
+}
+
 async function checkChallengeLive() {
   for (const [w, h, touch, scheme] of [[390, 844, true, 'light'], [1440, 900, false, 'dark']] as const) {
     const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
@@ -1864,7 +1880,7 @@ async function checkChallengeLive() {
     // back to its place while a field has focus (the keyboard is up); at 1440 it never sticks. Redesign D (2026-11-12):
     // the button sits in the MakeBar (.mk-makebar, with the line under it), so the bar is what sticks; at 1440 the bar is
     // the foot of the right-hand panel, in its place.
-    const base = (Object.values(CHALLENGE.bases as Record<string, string[]>).flat()[0]) ?? null;
+    const base = makeBase();
     if (base) {
       await open(page, `/challenge/make?from=${base}`);
       // Live reads production: until redesign D is deployed there, the button is still the page's own child (.mk-make);
