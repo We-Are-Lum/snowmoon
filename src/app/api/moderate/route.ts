@@ -6,6 +6,7 @@ import { MODERATOR_FIDS } from '~/lib/config';
 import { fullQueue, workOf } from '~/lib/images/designs';
 import { moveToPrivate } from '~/lib/images/store';
 import { recheckMaker } from '~/lib/checks/decisions';
+import { hideReachesChapterPictures } from '~/lib/chapter-pictures/after-hide';
 
 /**
  * The moderator queue (section 6; P5b: moderators only hide). For each reported image: the image,
@@ -41,6 +42,7 @@ export async function POST(request: Request) {
     for (const sha of el.files) await moveToPrivate(sha).catch((e) => console.error('moderate: moving the hidden file failed', (e as Error).name));
     // The maker is checked again at their next Generate or publish (owner, 2026-11-04).
     await recheckMaker(sql, el.byFid);
+    await hideReachesChapterPictures(sql, el.elementId);
   } else if (action === 'dismiss') {
     await sql`insert into studio.removal_log ${sql({ element_id: el.elementId, step: 'dismissed', by_fid: fid, role: 'moderator' })}`;
   } else return NextResponse.json({ error: 'Hide or dismiss only' }, { status: 400 });

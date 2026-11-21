@@ -9,6 +9,7 @@ import { workOf } from '~/lib/images/designs';
 import { moveToPrivate, restorePublic } from '~/lib/images/store';
 import { recheckMaker } from '~/lib/checks/decisions';
 import { CHECKS } from '~/lib/config';
+import { hideReachesChapterPictures } from '~/lib/chapter-pictures/after-hide';
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -58,6 +59,8 @@ export async function POST(request: Request, { params }: Ctx) {
     if (hide !== false) after(() => alertReports(sql).then(() => undefined, () => undefined));
     revalidatePath('/images');
     revalidatePath(el.type === 'image' ? `/image/${id}` : '/images/designs', el.type === 'image' ? undefined : 'layout');
+    // A chapter picture made after it credits it, or says "a picture since hidden" (2026-11-21).
+    await hideReachesChapterPictures(sql, el.elementId);
     return NextResponse.json({ hidden: hide !== false });
   } catch (e) {
     return tryAgain('image hide', e);

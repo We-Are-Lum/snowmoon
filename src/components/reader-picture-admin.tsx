@@ -7,7 +7,7 @@ import { CHAPTER_PICTURES } from '~/lib/config';
 import { lookName } from '~/lib/chapter-pictures/shared';
 import { paragraphOrBlock } from '~/lib/reading';
 import { useChallengeModel } from './challenge-model-row';
-import { CapLine, DraftImage, ModelRow, PicturePanel, SheetPicker, errorOf, post, type PictureItem, type PicturesState } from './chapter-pictures';
+import { CapLine, DraftImage, ModelRow, PicturePanel, ReferencePicker, SheetPicker, errorOf, post, type PictureItem, type PicturesState, type RefChoice } from './chapter-pictures';
 import { PublishedTextField } from './publish-words';
 
 /**
@@ -168,6 +168,7 @@ function AddSheet({ chapter, after, label: given, start: from = after, end: to =
   const label = given ?? blocks.find((b) => b.idx === after)?.label ?? null;
   const [note, setNote] = useState('');
   const [chosen, setChosen] = useState<string[]>([]);
+  const [picked, setPicked] = useState<RefChoice[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [draft, setDraft] = useState<{ jobId: string; versionId: string } | null>(null);
@@ -183,7 +184,7 @@ function AddSheet({ chapter, after, label: given, start: from = after, end: to =
       setBusy(true);
       setError(null);
       const body = draft ? { jobId: draft.jobId } : { chapter, after, start: Math.min(start, end), end: Math.max(start, end) };
-      const r = await post('/api/you/illustrations/add', { ...body, note, characters: chosen, ...m.body() });
+      const r = await post('/api/you/illustrations/add', { ...body, note, characters: chosen, picked: picked.map((x) => x.versionId), ...m.body() });
       setBusy(false);
       if (!r.ok) return setError(errorOf(r.json));
       setDraft({ jobId: String(r.json.jobId), versionId: String(r.json.versionId) });
@@ -196,6 +197,7 @@ function AddSheet({ chapter, after, label: given, start: from = after, end: to =
     setBusy(true);
     const r = await post('/api/you/illustrations/show', { jobId: draft.jobId, versionId: draft.versionId });
     setBusy(false);
+    // A reference hidden since the draft was made (P5f) is refused with its plain message; the draft stays a draft.
     if (!r.ok) return setError(errorOf(r.json));
     setKept(true);
   }
@@ -232,7 +234,8 @@ function AddSheet({ chapter, after, label: given, start: from = after, end: to =
             </label>
           </div>
           <PublishedTextField id={`rpa-note-${after}`} label={R.note} value={note} onChange={setNote} rows={3} maxLength={CHAPTER_PICTURES.noteMaxChars} />
-          <SheetPicker chapter={chapter} start={Math.min(start, end)} end={Math.max(start, end)} chosen={chosen} setChosen={setChosen} />
+          <SheetPicker chapter={chapter} start={Math.min(start, end)} end={Math.max(start, end)} chosen={chosen} setChosen={setChosen} max={3 - picked.length} />
+          <ReferencePicker id={`add-${after}`} max={3 - chosen.length} picked={picked} setPicked={setPicked} redo={false} />
           <ModelRow m={m} name={`rpa-model-${after}`} />
           <p className="you-meta" data-look="">
             {R.look(look ? lookName(look) : 'none set yet')}
@@ -252,7 +255,7 @@ function AddSheet({ chapter, after, label: given, start: from = after, end: to =
               </figure>
               {!kept && !later && (
                 <div className="you-actions">
-                  <button type="button" className="ic-secondary" disabled={busy} onClick={() => void keep()}>
+                  <button type="button" className="ic-secondary" disabled={busy} onClick={() => void keep()} data-keep="">
                     {R.keep}
                   </button>
                   <button type="button" className="ic-secondary" disabled={busy} onClick={() => setLater(true)}>
