@@ -43,6 +43,15 @@ const STUB_PORT = 54391;
 const pg = new PGlite();
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
+// Published sheets to choose from (slice 2): one style, one character.
+await pg.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
+const SHEET_BODY = (title: string, text: string) => JSON.stringify({ title, text, samples: [], views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null });
+await pg.query(`insert into studio.entities (id, work_id, kind, name) values ('00000001-0000-4000-8000-000000000101','snowmoon','style','Ink and wash'), ('00000001-0000-4000-8000-000000000102','snowmoon','character','Ephelion')`);
+await pg.query(`insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id, status) values ('00000008-0000-4000-8000-000000000101','snowmoon','design',6786,'00000001-0000-4000-8000-000000000101','published'), ('00000008-0000-4000-8000-000000000102','snowmoon','design',6786,'00000001-0000-4000-8000-000000000102','published')`);
+await pg.query(`insert into studio.element_versions (id, element_id, version_no, body) values ('00000009-0000-4000-8000-000000000101','00000008-0000-4000-8000-000000000101',1,$1), ('00000009-0000-4000-8000-000000000102','00000008-0000-4000-8000-000000000102',1,$2)`, [
+  SHEET_BODY('Ink and wash', 'Ink and wash: loose black ink lines, grey washes, paper texture.'),
+  SHEET_BODY('Ephelion', 'Lord Ephelion: a tall man in a dark coat with a high collar.'),
+]);
 const pgServer = new PGLiteSocketServer({ db: pg, port: PG_PORT, host: '127.0.0.1' });
 await pgServer.start();
 const stub = await startStub(STUB_PORT);
@@ -68,6 +77,7 @@ delete process.env.ELEVENLABS_API_KEY;
 
 const { VOICE } = await import('../src/lib/config');
 const { voiceAllowed, voiceTestOn, elevenLabsBase } = await import('../src/lib/voice/flag');
+type Shot = import('../src/lib/voice/board').Shot;
 const { speeches } = await import('../src/lib/voice/speech');
 const { checkSpeech, norm, wordsOf } = await import('../src/lib/voice/match');
 const { voiceConsentWording } = await import('../src/lib/voice/consent');
@@ -83,6 +93,10 @@ const accept = await route('accept');
 const reading = await route('reading');
 const draftAudioRoute = await route('drafts/[id]/[n]');
 const draftRoute = await route('drafts/[id]');
+const boards = await route('boards');
+const boardPicture = await route('boards/picture');
+const boardKeep = await route('boards/keep');
+const board = await import('../src/lib/voice/board');
 const as = (fid: number | null, init: RequestInit = {}, url = 'http://localhost/api/voice/x') =>
   new Request(url, { ...init, headers: { ...(init.headers ?? {}), ...(fid ? { authorization: `Bearer voice-test-${fid}` } : {}) } });
 const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
@@ -96,7 +110,7 @@ for (const [k, v] of [['VERCEL', '1'], ['VERCEL_ENV', 'production'], ['VERCEL_EN
   delete process.env[k];
 }
 check('S. a non-admin is not let in during the admin trial', !voiceAllowed(STRANGER) && voiceAllowed(NATE) && voiceAllowed(GARANCE));
-const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]'];
+const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]', 'boards', 'boards/picture', 'boards/keep'];
 for (const r of routeFiles) {
   const mod = await route(r);
   const h = mod.POST ?? mod.GET ?? mod.DELETE;
@@ -297,6 +311,69 @@ const st = (await (await status.GET(as(NATE))).json()) as { drafts: { id: string
 const stG = (await (await status.GET(as(GARANCE))).json()) as { drafts: { id: string }[] };
 check('D. the status lists the draft for its person only', st.drafts.some((x) => x.id === acc.id) && !stG.drafts.some((x) => x.id === acc.id));
 
+// B. Slice 2: the storyboard (2026-11-21).
+{
+  const [dr] = await sql`select recipe from studio.voice_drafts where id = ${acc.id}`;
+  const tl = (dr.recipe as { timeline: { seconds: number; words: { text: string; start: number; end: number }[]; sentences: { n: number; start: number; end: number }[] } }).timeline;
+  check('B. Accept keeps the strip: the joined take\'s word timings and each sentence\'s span', tl && tl.words.length > 300 && tl.sentences.length === speech.sentences.length && tl.seconds > 30 && tl.sentences.every((x, i) => x.end >= x.start && (i === 0 || x.start >= tl.sentences[i - 1].start - 0.01)));
+  const j = board.joinTimeline({ words: [{ text: 'a', start: 0, end: 1 }, { text: 'b', start: 2, end: 3 }, { text: 'c', start: 4, end: 5 }], seconds: 6 }, [{ start: 2, end: 3.5, seconds: 3, words: [{ text: 'B', start: 0.2, end: 2.8 }] }]);
+  check('B. a redone sentence moves everything after it by the difference in length', j.seconds === 7.5 && j.words.map((w) => w.text).join('') === 'aBc' && j.words[2].start === 5.5, JSON.stringify(j));
+  const get = (fid: number) => boards.GET(as(fid, {}, `http://localhost/api/voice/boards?draft=${acc.id}`));
+  check('B. someone else\'s storyboard reads as missing, even for an admin', (await get(GARANCE)).status === 404);
+  r = await get(NATE);
+  const b0 = (await r.json()) as { board: { cuts: number[]; shots: Shot[]; proposed: number[]; fromProposal: boolean }; notes: { kind: string; text: string }[]; sheets: { styles: { id: string; title: string }[]; characters: { id: string; title: string }[] } };
+  const ends = tl.sentences.map((x) => Math.round(x.end * 100) / 100);
+  check('B. the first board is the automatic cuts, every one at a sentence end', r.status === 200 && b0.board.fromProposal && b0.board.cuts.length > 1 && b0.board.cuts.every((c) => ends.includes(c)) && b0.board.shots.length === b0.board.cuts.length + 1);
+  check('B. ... and no shot has words written for it (P2): every description is empty', b0.board.shots.every((x) => x.description === '' && x.angle === '' && x.kept === null));
+  check('B. the notes are rule checks that name no content (P2)', b0.notes.length > 0 && b0.notes.every((n) => /^Shot|^Shots/.test(n.text) && !/should show|try showing|describe/i.test(n.text)));
+  check('B. the published sheets are offered', b0.sheets.styles.some((x) => x.title === 'Ink and wash') && b0.sheets.characters.some((x) => x.title === 'Ephelion'));
+  // The person moves a cut, adds one, removes one, writes shot 1, picks a camera and the sheets, saves.
+  const cuts = [...b0.board.cuts];
+  cuts.splice(1, 1);
+  cuts.push(board.snapToWordEnd(tl as never, 5));
+  const mine = 'Ephelion\'s letter glows on a cracked screen in a dim tunnel; a commuter stops to read it.';
+  const style = b0.sheets.styles[0].id;
+  const eph = b0.sheets.characters[0].id;
+  const shots0 = board.shotsFromCuts(tl as never, cuts.sort((a, b) => a - b), b0.board.shots).map((x, i) => (i === 0 ? { ...x, description: mine, angle: 'low' as const, styleId: style, characterIds: [eph] } : x));
+  const save = (c: number[], sh: Shot[]) => boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, cuts: c, shots: sh }) }));
+  r = await save(cuts, shots0);
+  const s1 = (await r.json()) as { version: number; shots: Shot[] };
+  check('B. a save is version 1; the description is kept word for word; the shots follow the cuts', r.status === 200 && s1.version === 1 && s1.shots[0].description === mine && s1.shots.length === cuts.length + 1);
+  r = await save(cuts, s1.shots.map((x, i) => (i === 0 ? { ...x, kept: 'f'.repeat(64) } : x)));
+  const s2 = (await r.json()) as { version: number; shots: Shot[] };
+  check('B. the next save is version 2 (earlier ones stay), and a picture that was never kept can\'t be claimed', s2.version === 2 && s2.shots[0].kept === null && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${acc.id}`)[0].n === 2);
+  // A picture for shot 1 (a stand-in card: no model, no cost).
+  const callsBefore = stub.calls.length;
+  const pic = (body: Record<string, unknown>, fid = NATE) => boardPicture.POST(as(fid, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: s2.shots[0].key, shotNo: 1, attempt: 1, ...body }) }));
+  check('B. no picture without the person\'s own description (400)', (await pic({ description: '  ', angle: 'low' })).status === 400);
+  check('B. ... or without a camera angle (400)', (await pic({ description: mine, angle: '' })).status === 400);
+  check('B. ... or with a sheet that isn\'t published (400)', (await pic({ description: mine, angle: 'low', styleId: '00000009-0000-4000-8000-999999999999' })).status === 400);
+  r = await pic({ description: mine, angle: 'low', styleId: style, characterIds: [eph] });
+  const p1 = (await r.json()) as { image: string; sha256: string; ticket: string; recipe: { model: string; prompt: string; costUsd: number; standIn: boolean; description: string } };
+  const png = Buffer.from(p1.image.split(',')[1], 'base64');
+  check('B. a stand-in picture comes back in the picture flow\'s shape: PNG, sha256, signed record, recipe', r.status === 200 && png.subarray(1, 4).toString() === 'PNG' && sha(png) === p1.sha256 && p1.ticket.includes('.') && p1.recipe.model === 'stand-in' && p1.recipe.standIn && p1.recipe.costUsd === 0);
+  check('B. its prompt is the person\'s words first, word for word, then the camera and the sheets\' own texts', p1.recipe.prompt.startsWith(mine) && /Camera: a low-angle shot/.test(p1.recipe.prompt) && /Lord Ephelion: a tall man/.test(p1.recipe.prompt) && /Style: Ink and wash: loose/.test(p1.recipe.prompt) && p1.recipe.description === mine);
+  check('B. no model was called and nothing was spent (no ElevenLabs or image host call)', stub.calls.length === callsBefore);
+  check('B. nothing is stored before Keep', (await sql`select count(*)::int n from studio.voice_board_pictures`)[0].n === 0);
+  const keep = (ticket: string, image: string, fid = NATE) => boardKeep.POST(as(fid, { method: 'POST', body: JSON.stringify({ ticket, image }) }));
+  const p2 = (await (await pic({ description: mine, angle: 'low', attempt: 2 })).json()) as { image: string; sha256: string; ticket: string };
+  check('B. a retry makes a different picture', p2.sha256 !== p1.sha256);
+  check('B. Keep refuses another picture\'s bytes, and another person', (await keep(p1.ticket, p2.image)).status === 400 && (await keep(p1.ticket, p1.image, GARANCE)).status === 400);
+  r = await keep(p1.ticket, p1.image);
+  const keyP = `voice-boards/${acc.id}/${s2.shots[0].key}-${p1.sha256}.png`;
+  check('B. Keep stores it privately, under voice-boards/<draft>/, with its recipe', r.status === 200 && existsSync(path.join(STORE, keyP)) && (await sql`select recipe from studio.voice_board_pictures where storage_key = ${keyP}`)[0]?.recipe.prompt === p1.recipe.prompt);
+  r = await save(cuts, s2.shots.map((x, i) => (i === 0 ? { ...x, kept: p1.sha256 } : x)));
+  const s3 = (await r.json()) as { version: number; shots: Shot[]; notes: { kind: string; shot: string }[] };
+  check('B. the kept picture is on the board now (version 3), and its note is gone', s3.version === 3 && s3.shots[0].kept === p1.sha256 && !s3.notes.some((n) => n.kind === 'no-picture' && n.shot === s3.shots[0].key));
+  const pget = (fid: number) => boardPicture.GET(as(fid, {}, `http://localhost/api/voice/boards/picture?draft=${acc.id}&shot=${s2.shots[0].key}&sha=${p1.sha256}`));
+  r = await pget(NATE);
+  check('B. the kept picture plays for its person', r.status === 200 && sha(new Uint8Array(await r.arrayBuffer())) === p1.sha256);
+  check('B. ... and reads as missing for anyone else', (await pget(GARANCE)).status === 404);
+  const same = board.boardNotes(s3.shots.map((x) => ({ ...x, angle: 'wide' as const })));
+  check('B. notes: three shots in a row from the same angle are flagged', same.some((n) => n.kind === 'same-angle'));
+  check('B. P2, by reading the code: nothing in the board fills a description', !/description:\s*['"`][^'"`]/.test(readFileSync(path.join(ROOT, 'src/lib/voice/board.ts'), 'utf8').replace(/description: ''/g, '')) && !/description\s*=\s*['"`]/.test(readFileSync(path.join(ROOT, 'src/app/api/voice/boards/route.ts'), 'utf8')));
+}
+
 // X. Removing a draft (Nate, 2026-11-20 morning).
 {
   const before = storeFiles().length;
@@ -312,6 +389,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   r2 = await draftRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: acc.id }) });
   const left = storeFiles().filter((f) => f.startsWith(`voice-drafts/${acc.id}/`));
   check('X. its person removes it: the rows and both audio files are gone', r2.status === 200 && left.length === 0 && (await sql`select count(*)::int n from studio.voice_drafts where id = ${acc.id}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_draft_audio where draft_id = ${acc.id}`)[0].n === 0);
+  check('X. ... and so are its storyboard\'s versions, its kept picture and that file', storeFiles().every((f) => !f.startsWith(`voice-boards/${acc.id}/`)) && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${acc.id}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_board_pictures where draft_id = ${acc.id}`)[0].n === 0);
   r2 = await draftAudioRoute.GET(as(NATE), { params: Promise.resolve({ id: acc.id, n: '0' }) });
   check('X. ... and its audio route reads as missing', r2.status === 404);
   check('X. the day\'s cost totals stay (they name no one)', (await sql`select count(*)::int n from studio.voice_costs where kind = 'convert'`)[0].n > 0);

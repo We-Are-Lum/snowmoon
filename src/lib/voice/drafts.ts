@@ -66,7 +66,10 @@ export async function readingAudio(sql: postgres.Sql, id: string): Promise<Uint8
  */
 export async function removeDraft(sql: postgres.Sql, fid: number, id: string): Promise<boolean> {
   if (!/^[0-9a-f-]{36}$/.test(id)) return false;
-  const files = await sql`select a.storage_key from studio.voice_draft_audio a join studio.voice_drafts d on d.id = a.draft_id where d.id = ${id} and d.fid = ${fid} and d.published_at is null`;
+  const files = await sql`
+    select a.storage_key from studio.voice_draft_audio a join studio.voice_drafts d on d.id = a.draft_id where d.id = ${id} and d.fid = ${fid} and d.published_at is null
+    union all
+    select p.storage_key from studio.voice_board_pictures p join studio.voice_drafts d on d.id = p.draft_id where d.id = ${id} and d.fid = ${fid} and d.published_at is null`;
   const [own] = await sql`select 1 from studio.voice_drafts where id = ${id} and fid = ${fid} and published_at is null`;
   if (!own) return false;
   for (const f of files) await deleteAudio(f.storage_key);

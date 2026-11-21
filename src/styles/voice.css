@@ -53,3 +53,36 @@
 .vr-drafts summary { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); cursor: pointer; }
 .vr-remove { margin-top: var(--space-2); }
 .vr-sound { display: block; color: var(--muted); font-size: 15px; }
+/* /storyboard/board/<draft> (src/components/voice-board.tsx), slice 2. */
+.vb-strip-wrap { overflow-x: auto; padding: var(--space-2) 0 var(--space-1); }
+.vb-strip { position: relative; height: 72px; min-width: 640px; background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; cursor: copy; touch-action: none; }
+.vb-sentence { position: absolute; top: 0; height: 18px; background: var(--soft); border-right: 1px solid var(--rule); }
+.vb-sentence.vb-alt { background: var(--chrome); }
+.vb-shotband { position: absolute; top: 22px; height: 46px; border: 0; border-radius: 4px; background: transparent; color: var(--muted); font-family: var(--label); font-size: var(--text-label); cursor: pointer; }
+.vb-shotband.vb-has { background: color-mix(in srgb, var(--veridia) 14%, transparent); color: var(--ink); }
+.vb-shotband.vb-on { outline: 2px solid var(--ink); outline-offset: -2px; color: var(--ink); }
+.vb-cut { position: absolute; top: -4px; bottom: -4px; width: 4px; margin-left: -2px; background: var(--ink); border-radius: 2px; cursor: ew-resize; }
+.vb-cut-x { position: absolute; top: -20px; left: -10px; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--rule); background: var(--card); color: var(--ink); font-size: 14px; line-height: 1; cursor: pointer; padding: 0; }
+.vb-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--warn); pointer-events: none; }
+.vb-ruler { position: relative; height: 18px; min-width: 640px; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.vb-ruler span { position: absolute; transform: translateX(-50%); }
+.vb-ruler span:first-child { transform: none; }
+.vb-notes { margin: 0; padding-left: 1.2em; font-size: var(--text-small); color: var(--body); }
+.vb-link { font: inherit; background: none; border: 0; padding: 0; color: var(--link); text-align: left; cursor: pointer; text-decoration: underline; }
+.vb-shot-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-2); }
+.vb-words { margin: 0 0 var(--space-3); font-size: var(--text-small); color: var(--body); border-left: 3px solid var(--rule); padding-left: var(--space-3); }
+.vb-angles, .vb-sheets fieldset { border: 0; padding: 0; margin: var(--space-3) 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.vb-angles legend, .vb-label { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); display: block; margin-bottom: var(--space-1); width: 100%; }
+.vb-chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--rule); border-radius: 999px; padding: 6px 12px; font-size: 15px; cursor: pointer; }
+.vb-chip input { margin: 0; }
+.vb-chip.vb-on { border-color: var(--ink); background: var(--soft); }
+.vb-sheets select { font: inherit; font-size: 16px; padding: 8px; border-radius: 6px; border: 1px solid var(--rule); background: var(--card); color: var(--ink); min-width: 220px; }
+.vb-tries { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-3); margin: var(--space-3) 0; }
+.vb-try { margin: 0; border: 1px solid var(--rule); border-radius: 8px; padding: var(--space-2); }
+.vb-try.vb-on { border-color: var(--veridia); }
+.vb-try img, .vb-picture { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; display: block; }
+.vb-try figcaption { font-size: 15px; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-2); }
+.vb-try pre { font-size: 12px; white-space: pre-wrap; background: var(--paper); padding: var(--space-2); border-radius: 6px; }
+.vb-empty { display: flex; align-items: center; justify-content: center; text-align: center; padding: var(--space-4); background: var(--night); color: var(--night-body); font-size: var(--text-small); }
+.vb-screen { position: relative; margin: var(--space-3) 0; }
+.vb-shotno { position: absolute; top: 10px; left: 10px; font-family: var(--label); font-size: var(--text-label); background: rgba(0, 0, 0, 0.55); color: #fff; padding: 2px 8px; border-radius: 4px; }

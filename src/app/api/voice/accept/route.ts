@@ -5,6 +5,7 @@ import { noStore, voicePerson, voiceReady } from '~/lib/voice/server';
 import { speechById } from '~/lib/voice/speech';
 import { presetRecipe } from '~/lib/voice/presets';
 import { checkSpeech } from '~/lib/voice/match';
+import { joinTimeline, type TimedWord } from '~/lib/voice/board';
 import { saveDraft, type DraftAudio } from '~/lib/voice/drafts';
 import { sha256Hex, verifyTicket } from '~/lib/voice/ticket';
 import { FlowError, readCheckTicket, readConvertTicket } from '~/lib/voice/take-flow';
@@ -51,6 +52,7 @@ export async function POST(request: Request) {
     const audio: DraftAudio[] = [{ role: 'take', sentence: null, replacesStart: null, replacesEnd: null, mp3: mainBytes, sha256: t.convertedSha256, seconds: t.seconds }];
     const takes: Record<string, unknown>[] = [{ role: 'take', takeSha256: t.takeSha256, convertedSha256: t.convertedSha256, historyDeleted: t.historyDeleted, seconds: t.seconds }];
     const redone = new Map<number, boolean>();
+    const spliced: { start: number; end: number; seconds: number; words: TimedWord[] }[] = [];
     for (const [i, f] of files.entries()) {
       if (!(f instanceof Blob)) throw new FlowError(400, 'A redone sentence is missing its file');
       const rt = readConvertTicket(deps, tickets[i], who.fid);
@@ -69,12 +71,25 @@ export async function POST(request: Request) {
       const after = checks.slice(n + 1).find((x) => x.start !== null)?.start ?? t.seconds;
       const start = at.start ?? before;
       const end = at.end ?? after;
+      spliced.push({ start, end: Math.max(start, end), seconds: rt.seconds, words: rc.words });
       total += bytes.length;
       audio.push({ role: 'redo', sentence: n, replacesStart: start, replacesEnd: Math.max(start, end), mp3: bytes, sha256: rt.convertedSha256, seconds: rt.seconds });
       takes.push({ role: 'redo', sentence: n, takeSha256: rt.takeSha256, convertedSha256: rt.convertedSha256, historyDeleted: rt.historyDeleted, seconds: rt.seconds, replaces: [start, Math.max(start, end)] });
     }
     if (total > 4_400_000) throw new FlowError(413, 'Too large to keep in one go');
     const unmatched = checks.filter((x) => !(redone.get(x.n) ?? x.ok)).map((x) => x.n);
+    // The storyboard's strip (slice 2): the joined take's word timings, and each sentence's span in it.
+    const joined = joinTimeline({ words: c.words, seconds: t.seconds }, spliced);
+    const spans = checkSpeech(speech.sentences, joined.words, speech.names);
+    const timeline = {
+      seconds: Math.round(joined.seconds * 100) / 100,
+      words: joined.words.map((w) => ({ text: w.text, start: Math.round(w.start * 100) / 100, end: Math.round(w.end * 100) / 100 })),
+      sentences: spans.map((x, i) => ({
+        n: x.n,
+        start: x.start ?? spans.slice(0, i).reverse().find((y) => y.end !== null)?.end ?? 0,
+        end: x.end ?? spans.slice(i + 1).find((y) => y.start !== null)?.start ?? joined.seconds,
+      })),
+    };
     const recipe = {
       provider: VOICE.provider,
       closedModel: true,
@@ -87,6 +102,7 @@ export async function POST(request: Request) {
       takes,
       check: { sentences: speech.sentences.length, matched: speech.sentences.length - unmatched.length, unmatched, bySound: checks.flatMap((x) => x.bySound.map((b) => ({ sentence: x.n, ...b }))), names: speech.names },
       consent: { kind: 'voice_recording', sha256: t.consentSha256, perRecording: true },
+      timeline,
       madeWith: 'snowmoon.party voice slice 1 (DRAFT)',
     };
     const id = await saveDraft(sql, { fid: who.fid, kind: 'performance', speechId: speech.id, presetId: t.presetId, recipe, audio });

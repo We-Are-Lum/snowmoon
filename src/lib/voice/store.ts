@@ -14,7 +14,10 @@ import { voiceTestOn } from './flag';
  */
 export const PREFIX = 'voice-drafts/';
 export const keyFor = (draftId: string, n: number, sha256: string) => `${PREFIX}${draftId}/${n}-${sha256}.mp3`;
-const valid = (key: string) => /^voice-drafts\/[0-9a-f-]{36}\/[0-9]{1,2}-[0-9a-f]{64}\.mp3$/.test(key);
+const valid = (key: string) =>
+  /^voice-drafts\/[0-9a-f-]{36}\/[0-9]{1,2}-[0-9a-f]{64}\.mp3$/.test(key) || /^voice-boards\/[0-9a-f-]{36}\/[a-z0-9]{1,16}-[0-9a-f]{64}\.(png|jpg)$/.test(key);
+/** A kept storyboard picture's key (slice 2): voice-boards/<draft id>/<shot key>-<sha256>.png, in the same private bucket. */
+export const pictureKeyFor = (draftId: string, shotKey: string, sha256: string, ext: 'png' | 'jpg' = 'png') => `voice-boards/${draftId}/${shotKey}-${sha256}.${ext}`;
 
 const NEED = ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_PRIVATE_BUCKET'];
 const local = () => (voiceTestOn() ? process.env.VOICE_TEST_STORE || path.join(os.tmpdir(), 'voice-test-store') : null);
@@ -40,7 +43,7 @@ export async function putAudio(key: string, bytes: Uint8Array): Promise<void> {
     return;
   }
   const { client, bucket } = r2();
-  await client.send(new PutObjectCommand({ Bucket: bucket, Key: key, Body: bytes, ContentType: 'audio/mpeg' }));
+  await client.send(new PutObjectCommand({ Bucket: bucket, Key: key, Body: bytes, ContentType: key.endsWith('.mp3') ? 'audio/mpeg' : key.endsWith('.png') ? 'image/png' : 'image/jpeg' }));
 }
 
 export async function getAudio(key: string): Promise<Uint8Array | null> {

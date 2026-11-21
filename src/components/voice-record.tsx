@@ -645,6 +645,9 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                       <summary>Recipe</summary>
                       <pre>{JSON.stringify(d.recipe, null, 2)}</pre>
                     </details>
+                    {d.kind === 'performance' && (
+                      <a className="vr-btn vr-small-btn vr-remove" href={`/storyboard/board/${d.id}`}>Make the storyboard</a>
+                    )}{' '}
                     <button type="button" className="vr-btn vr-quiet vr-small-btn vr-remove" onClick={() => removeDraft(d.id)} disabled={busy !== null}>
                       Remove this draft
                     </button>
