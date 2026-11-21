@@ -99,6 +99,8 @@ const deps: Deps = {
   handleFor: async (fid) => (fid === GARANCE ? 'garance' : fid === NATE ? 'naaate' : null),
   paid: stubPaid,
   consented: async (fid) => fid === GARANCE || fid === NATE,
+  makeAdded: async () => { throw new Error('not used here'); },
+  sheets: async () => [],
 };
 const consentedAdmins = deps.consented;
 const req = new Request('http://localhost/api/you/illustrations/redo', { method: 'POST' });

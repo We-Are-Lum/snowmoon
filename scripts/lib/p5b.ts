@@ -47,7 +47,7 @@ export const P5B_PLANTS: Record<string, SrcFile> = {
  * but the chapter-picture tables, never updates or deletes them (every change is a new row, so it can be undone), and is
  * one file (src/lib/chapter-pictures/admin.ts).
  */
-export const CHAPTER_PICTURE_TABLE = /^chapter_picture_(versions|decisions|looks)$/;
+export const CHAPTER_PICTURE_TABLE = /^chapter_picture_(versions|decisions|looks|additions)$/;
 export const CHAPTER_PICTURE_WRITER = 'src/lib/chapter-pictures/admin.ts';
 const WRITES = /\b(insert\s+into|update|delete\s+from|truncate(?:\s+table)?)\s+studio\.([a-z_]+)/gi;
 export function p5jProblems(files: SrcFile[]): string[] {

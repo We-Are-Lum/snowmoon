@@ -217,3 +217,58 @@ export async function makeChallengeClosed(m: ChallengeModel, prompt: string, ref
     },
   };
 }
+
+/**
+ * A closed model's picture for a chapter picture an admin adds (owner, 2026-11-19): from the admin's words alone, or
+ * with characters' sheet pictures as references (at most IMAGES.maxReferences). The challenge's gateway settings, pin
+ * and provider (challengeClosedRequest above): GPT Image 2.5 Sunburst at /v1/images/generations with no reference and
+ * /v1/images/edits with them (1536 x 1024), Gemini 3.1 Flash Image at /v1/chat/completions (16:9). The maker receives
+ * the prompt and the sheet pictures, nothing else (no user field, no FID, no IP, no country).
+ */
+export function chapterClosedRequest(m: ChallengeModel, prompt: string, refs: Buffer[]): ClosedRequest {
+  if (m.open) throw new Error('not a closed model');
+  if (refs.length > IMAGES.maxReferences) throw new Error('too many reference pictures');
+  const data = gatewayDataFor(m.maker);
+  if (!data) throw new Error(`no gateway settings for ${m.maker}`);
+  if (!m.call.only || m.call.only.length !== 1) throw new Error(`no provider chosen for ${m.call.endpoint}`);
+  if (m.id === 'gemini-3.1-flash-image' && m.call.only[0] !== 'vertex') throw new Error('Gemini goes only through vertex');
+  const gateway = { ...data, only: m.call.only };
+  const urls = refs.map((r) => `data:image/jpeg;base64,${r.toString('base64')}`);
+  if (m.id === 'gpt-image-2.5-sunburst') {
+    const settings = { size: '1536x1024', quality: 'high', n: 1, output_format: 'png' };
+    const body = { model: m.call.endpoint, prompt, ...settings, providerOptions: { gateway }, ...(urls.length ? { images: urls.map((u) => ({ image_url: u })) } : {}) };
+    return { url: `${GATEWAY_URL}/images/${urls.length ? 'edits' : 'generations'}`, body, settings: { ...settings, gateway } };
+  }
+  if (m.id === 'gemini-3.1-flash-image') {
+    const settings = { modalities: ['text', 'image'], aspect_ratio: '16:9' };
+    const content = [...urls.map((u) => ({ type: 'image_url', image_url: { url: u } })), { type: 'text', text: prompt }];
+    const body = { model: m.call.endpoint, modalities: settings.modalities, messages: [{ role: 'user', content }], providerOptions: { gateway, google: { imageConfig: { aspectRatio: '16:9' } } } };
+    return { url: `${GATEWAY_URL}/chat/completions`, body, settings: { ...settings, gateway } };
+  }
+  throw new Error(`no request for ${m.id}`);
+}
+
+/** One closed picture an admin adds: the call, the picture cropped to 16:9 and saved as the site's JPEG, its cost. */
+export async function makeChapterClosed(m: ChallengeModel, prompt: string, refs: Buffer[], request: Request, worstUsd: number, send: typeof fetch = fetch): Promise<Made> {
+  const token = gatewayToken(request);
+  if (!token) throw new ImageUnavailable('no gateway credential');
+  const r = chapterClosedRequest(m, prompt, refs);
+  const res = await send(r.url, { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(r.body) }).catch(() => null);
+  if (!res) throw new ImageUnavailable('the gateway did not answer');
+  const pic = parseClosed({ id: m.id } as SheetModel, res.status, await res.json().catch(() => ({})));
+  const wide = await toWide(pic.bytes, IMAGES.size);
+  const from = pic.contentType.split('/')[1] ?? 'png';
+  return {
+    bytes: wide.bytes,
+    contentType: 'image/jpeg',
+    seed: null,
+    requestId: pic.requestId,
+    nsfw: false,
+    costUsd: pic.costUsd ?? worstUsd,
+    settings: {
+      ...r.settings,
+      converted: { from, sha256: createHash('sha256').update(pic.bytes).digest('hex'), to: 'jpeg', resized_to: IMAGES.size, crop: wide.words, cropped: wide.crop },
+      content_credentials: hasC2pa(pic.bytes) ? 'the original had a C2PA manifest from its maker; the JPEG does not keep it' : 'none found in the original',
+    },
+  };
+}

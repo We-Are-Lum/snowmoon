@@ -4,20 +4,25 @@ import type postgres from 'postgres';
 import { CHAPTER_PICTURES, IMAGES } from '../config';
 import { checkJob, type CheckJob } from '../illustration-check/jobs';
 import { saveDecision as saveReview } from '../illustration-check/review';
+import { chapterDefaultModel } from './default-model';
 import { challengeModel, modelRow, noticeProblem, reserveUsd, type ChallengeModel } from '../challenge/models';
+import { loadChapter } from '../book';
+import { inPassage } from '../images/sheets';
+import { designByVersion, listDesigns } from '../images/designs';
 import { challengeStyles } from '../challenge/make';
 import type { Where } from '../images/countries';
 import { paidPicture } from '../images/paid';
-import { makeEdit, type Made } from '../images/fal';
-import { makeChallengeClosed } from '../images/closed';
+import { makeEdit, makeImage, type Made } from '../images/fal';
+import { makeChallengeClosed, makeChapterClosed } from '../images/closed';
 import { chapterReference } from '../images/reference-picture';
 import { putPublic, storageReady } from '../images/store';
 import { blockedName } from '../images/rules';
 import { adminSpentToday } from '../images/limits';
 import { nextUtcMidnight } from '../images/paid';
-import { saveDecision, saveLook, saveVersion } from './admin';
-import { firstKeep, latestLooks, lookFor, pictureBytes, pictureVersion, picturesReady, readReplacements } from './read';
-import { redoPrompt, type Look, type PictureRecipe } from './shared';
+import { randomBytes } from 'node:crypto';
+import { saveAddition, saveDecision, saveLook, saveVersion } from './admin';
+import { additionsReady, firstKeep, latestLooks, lookFor, pictureBytes, pictureVersion, picturesReady, readAddition, readReplacements } from './read';
+import { addPrompt, addedJobId, isAddedId, redoPrompt, type Addition, type Look, type PictureRecipe } from './shared';
 
 /**
  * What /you/illustrations does with the edition's chapter pictures (owner, 2026-11-18, option B): an admin redoes a
@@ -40,6 +45,38 @@ export interface Deps {
   paid: typeof paidPicture;
   /** The own-words consent (principle 1): a redo's note and a written look are published with the picture once it is kept. */
   consented: (fid: number) => Promise<boolean>;
+  /** An added picture (owner, 2026-11-19): from the note alone, or with sheet pictures as references. */
+  makeAdded: (m: ChallengeModel, prompt: string, refs: Buffer[], request: Request, worstUsd: number) => Promise<Made>;
+  /** The characters a passage names that have a published sheet with a front view (the references an admin may send). */
+  sheets: (sql: Sql, chapter: number, start: number, end: number) => Promise<SheetRef[]>;
+}
+
+/** A character's sheet picture an added picture may take as a reference: the newest published sheet's front view. */
+export interface SheetRef {
+  slug: string;
+  name: string;
+  versionId: string;
+  url: string;
+  sha256: string;
+}
+
+/** The passage's characters with a published sheet front view, in the book's order (src/lib/images/sheets.ts inPassage). */
+export async function passageSheets(sql: Sql, chapter: number, start: number, end: number): Promise<SheetRef[]> {
+  const found = inPassage(chapter, start, end).characters;
+  if (!found.length) return [];
+  const rows = await listDesigns(sql, 'character').catch(() => []);
+  const out: SheetRef[] = [];
+  for (const c of found) {
+    for (const r of rows.filter((x) => x.entity === c.name)) {
+      const page = await designByVersion(sql, r.versionId).catch(() => null);
+      const front = page?.shown.body.views.front;
+      if (front?.url && front.sha256) {
+        out.push({ slug: c.slug, name: c.name, versionId: r.versionId, url: front.url, sha256: front.sha256 });
+        break;
+      }
+    }
+  }
+  return out;
 }
 export const realDeps = async (): Promise<Deps> => ({
   reference: (url, sha) => chapterReference(url, sha),
@@ -50,7 +87,12 @@ export const realDeps = async (): Promise<Deps> => ({
   handleFor: async (fid) => (await import('../adaptation-pages')).handleFor(fid),
   paid: paidPicture,
   consented: async (fid) => (await import('../consent')).hasConsented(fid),
+  makeAdded: (m, prompt, refs, request, worst) =>
+    m.open ? (refs.length ? makeEdit(prompt, refs.map((bytes) => ({ bytes, contentType: 'image/jpeg', width: IMAGES.viewSize.width, height: IMAGES.viewSize.height }))) : makeImage(prompt)) : makeChapterClosed(m, prompt, refs, request, worst),
+  sheets: passageSheets,
 });
+
+export { chapterDefaultModel } from './default-model';
 
 /** Lettered pictures wait for the lettering work (owner, 2026-11-18: "no words in pictures until the lettering work ships"). */
 export const redoable = (job: CheckJob) => Boolean(job.image) && !job.lettering.length;
@@ -81,6 +123,8 @@ export async function adminView(sql: Sql, where: Where) {
     ready,
     storage: storageReady(),
     models: modelRow(where),
+    defaultModel: chapterDefaultModel(where),
+    adding: ready && (await additionsReady(sql).catch(() => false)),
     styles,
     looks: ready ? await latestLooks(sql) : { all: null, chapters: {} },
     cap: ready ? await capState(sql) : { spentUsd: 0, capUsd: CHAPTER_PICTURES.adminDailyCapUsd, resetAt: nextUtcMidnight() },
@@ -143,6 +187,7 @@ export async function redoPicture(sql: Sql, fid: number, request: Request, raw: 
 export async function showPicture(sql: Sql, fid: number, raw: unknown, deps: Deps): Promise<Result & { chapter?: number }> {
   if (!(await picturesReady(sql))) return no(503, 'Keeping pictures needs the chapter-picture migration (0042_chapter_picture_versions) first.');
   const b = (raw ?? {}) as { jobId?: unknown; versionId?: unknown };
+  if (typeof b.jobId === 'string' && isAddedId(b.jobId)) return showAdded(sql, fid, b.jobId, b.versionId, deps);
   const job = typeof b.jobId === 'string' ? checkJob(b.jobId) : null;
   if (!job) return no(404, 'No such picture');
   const versionId = b.versionId === null || b.versionId === undefined || b.versionId === 'original' ? null : String(b.versionId);
@@ -193,4 +238,111 @@ export async function setLook(sql: Sql, fid: number, raw: unknown, consented: (f
   if (chapter === null && !look) return no(400, 'Every chapter needs a look; choose a style or write a line.');
   await saveLook(sql, fid, chapter, look);
   return { status: 200, json: { saved: true } };
+}
+
+/** The public file of a version, put on the public bucket the first time it is kept. */
+async function publicUrlOf(sql: Sql, v: { id: string; sha256: string }, deps: Deps): Promise<{ url: string; before: boolean } | Result> {
+  const before = await firstKeep(sql, v.id);
+  if (before?.publicUrl) return { url: before.publicUrl, before: true };
+  if (!deps.storageReady()) return no(503, 'Pictures can’t be stored on this copy of the site.');
+  const bytes = await pictureBytes(sql, v.id);
+  if (!bytes || createHash('sha256').update(bytes).digest('hex') !== v.sha256) return no(500, 'The draft’s file doesn’t match its record.');
+  return { url: await deps.putPublic(v.sha256, bytes, 'image/jpeg'), before: false };
+}
+
+/**
+ * Keep, show again, or take off a picture an admin added (owner, 2026-11-19: "Undo for a new picture is 'take it off the
+ * chapter'; it stays stored and can be shown again. Nothing is deleted."). versionId null takes it off.
+ */
+async function showAdded(sql: Sql, fid: number, jobId: string, rawVersion: unknown, deps: Deps): Promise<Result & { chapter?: number }> {
+  const a = await readAddition(sql, jobId);
+  if (!a) return no(404, 'No such picture');
+  const versionId = rawVersion === null || rawVersion === undefined || rawVersion === 'off' ? null : String(rawVersion);
+  const shown = (await readReplacements(sql)).get(jobId)?.versionId ?? null;
+  if (shown === versionId) return no(409, versionId ? 'That picture is already the one shown.' : 'This picture isn’t in the chapter now.');
+  const byHandle = await handleOf(deps, fid);
+  if (versionId === null) {
+    await saveDecision(sql, fid, { jobId, chapter: a.chapter, versionId: null, action: 'restore', publicUrl: null, byHandle });
+    return { status: 200, json: { shown: 'off' }, chapter: a.chapter };
+  }
+  const v = await pictureVersion(sql, versionId);
+  if (!v || v.jobId !== jobId) return no(404, 'No such version of this picture');
+  const pub = await publicUrlOf(sql, v, deps);
+  if ('status' in pub) return pub;
+  await saveDecision(sql, fid, { jobId, chapter: a.chapter, versionId: v.id, action: pub.before ? 'restore' : 'keep', publicUrl: pub.url, byHandle });
+  return { status: 200, json: { shown: v.id, url: pub.url }, chapter: a.chapter };
+}
+
+/**
+ * Add a picture at a passage, while reading (owner, 2026-11-19): a private draft from the admin's note, the chapter's
+ * look and, if chosen, characters' sheet pictures (only of characters the passage names). A first draft records where
+ * the picture sits (0043_chapter_picture_additions); { jobId } makes another draft for the same added picture. Paid from
+ * the admins' daily cap, through the site's prompt check, with the no-words line, as a redo is.
+ */
+export async function addPicture(sql: Sql, fid: number, request: Request, raw: unknown, where: Where, deps: Deps): Promise<Result> {
+  if (!(await picturesReady(sql)) || !(await additionsReady(sql))) return no(503, 'Adding pictures needs the migration 0043_chapter_picture_additions first.', { reason: 'not-ready' });
+  const b = (raw ?? {}) as { jobId?: unknown; chapter?: unknown; after?: unknown; start?: unknown; end?: unknown; note?: unknown; model?: unknown; notice?: unknown; characters?: unknown };
+  let place: Omit<Addition, 'byFid' | 'at'> | null = null;
+  let isNew = false;
+  if (typeof b.jobId === 'string') {
+    const a = isAddedId(b.jobId) ? await readAddition(sql, b.jobId) : null;
+    if (!a) return no(404, 'No such added picture');
+    place = a;
+  } else {
+    const chapter = Number(b.chapter), after = Number(b.after), start = Number(b.start), end = Number(b.end);
+    const ch = Number.isInteger(chapter) ? loadChapter(chapter) : null;
+    if (!ch) return no(400, 'No such chapter');
+    const idx = new Set(ch.blocks.map((x) => x.idx));
+    if (![after, start, end].every((i) => Number.isInteger(i) && idx.has(i))) return no(400, 'Choose blocks in this chapter');
+    if (start > end) return no(400, 'The passage starts after it ends');
+    if (ch.blocks.filter((x) => x.idx >= start && x.idx <= end).length > IMAGES.admin.maxBlocks) return no(400, `A passage can be up to ${IMAGES.admin.maxBlocks} blocks`);
+    place = { jobId: addedJobId(chapter, after, randomBytes(4).toString('hex')), chapter, after, start, end };
+    isNew = true;
+  }
+  const note = typeof b.note === 'string' ? b.note.trim() : '';
+  if (!note) return no(400, 'Write what the picture shows: your note is the prompt.');
+  if (note.length > CHAPTER_PICTURES.noteMaxChars) return no(400, `A note is at most ${CHAPTER_PICTURES.noteMaxChars} characters.`);
+  if (!(await deps.consented(fid))) return no(403, 'Agree to how your words are published first', { reason: 'consent' });
+  const m = challengeModel(b.model ?? chapterDefaultModel(where), where);
+  if (!m) return no(400, 'That model isn’t offered here.');
+  const problem = noticeProblem(m, b.notice);
+  if (problem) return no(400, problem === 'notice' ? 'Read the model’s notice first.' : 'Confirm you’re 18 or older first.', { reason: problem });
+  const wanted = Array.isArray(b.characters) ? b.characters.filter((x): x is string => typeof x === 'string') : [];
+  if (wanted.length > IMAGES.maxReferences) return no(400, `Up to ${IMAGES.maxReferences} characters’ sheets`);
+  const offered = wanted.length ? await deps.sheets(sql, place.chapter, place.start, place.end) : [];
+  const chosen = wanted.map((slug) => offered.find((o) => o.slug === slug));
+  if (chosen.some((c) => !c)) return no(400, 'Only characters this passage names, with a published sheet, can go along.');
+  const refs: Buffer[] = [];
+  for (const c of chosen as SheetRef[]) {
+    const bytes = await deps.reference(c.url, c.sha256);
+    if (!bytes) return no(503, `${c.name}’s sheet picture could not be read. Try again in a moment.`);
+    refs.push(bytes);
+  }
+  const look = lookFor(await latestLooks(sql), place.chapter);
+  const { prompt, parts } = addPrompt(note, (chosen as SheetRef[]).map((c) => c.name), look, IMAGES.suffix);
+  const worst = reserveUsd(m, { width: IMAGES.viewSize.width, height: IMAGES.viewSize.height * Math.max(1, refs.length) });
+  const paid = await deps.paid(sql, fid, request, {
+    checkText: prompt,
+    spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, pool: 'admin' },
+    make: () => deps.makeAdded(m, prompt, refs, request, worst),
+  });
+  if (!paid.ok) return { status: paid.status, json: { error: paid.error, ...paid.extra } };
+  const made = paid.made;
+  const sha256 = createHash('sha256').update(made.bytes).digest('hex');
+  const recipe: PictureRecipe = {
+    v: 1, kind: 'chapter-picture', job: place.jobId, chapter: place.chapter, block: place.after,
+    model: { id: m.allowlistId, name: m.name, maker: m.maker, open: m.open, terms: m.terms, host: m.call.host, endpoint: m.call.endpoint, ...(m.call.only ? { only: m.call.only } : {}) },
+    prompt, parts, reference: null,
+    added: { after: place.after, start: place.start, end: place.end },
+    references: (chosen as SheetRef[]).map((c) => ({ sheet: c.slug, name: c.name, versionId: c.versionId, url: c.url, sha256: c.sha256 })),
+    settings: made.settings, seed: made.seed, requestId: made.requestId, sha256, width: IMAGES.size.width, height: IMAGES.size.height,
+    costUsd: made.costUsd, guard: { model: IMAGES.guardModel, verdict: 'ok' }, madeBy: { fid, role: 'admin' }, madeAt: new Date().toISOString(),
+    assist: { scene: 'none: the admin’s note is the picture’s description', note: `written by FID ${fid}`, look: look?.kind === 'style' ? `the published style “${look.label}”` : look ? 'written by an admin' : 'none' },
+  };
+  if (isNew) await saveAddition(sql, fid, { jobId: place.jobId, chapter: place.chapter, after: place.after, start: place.start, end: place.end });
+  const id = await saveVersion(sql, fid, {
+    jobId: place.jobId, chapter: place.chapter, model: m.allowlistId, maker: m.maker, open: m.open, look, note, prompt, recipe,
+    sha256, width: IMAGES.size.width, height: IMAGES.size.height, jpeg: made.bytes, costUsd: made.costUsd,
+  });
+  return { status: 200, json: { jobId: place.jobId, versionId: id, draft: `/api/you/illustrations/draft/${id}`, left: paid.left, cap: await capState(sql) } };
 }

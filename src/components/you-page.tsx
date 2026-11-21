@@ -30,7 +30,8 @@ const W = {
   loading: 'Loading…',
   failed: 'Your page didn’t load. Try again in a moment.',
   account: 'Your account',
-  illustrations: 'Review the seeded images (owner only)',
+  // Admins (owner, 2026-11-19: "The You page links to it for admins"). DRAFT wording.
+  illustrations: 'Chapter pictures: drafts waiting and the image review (admins)',
   farcaster: 'Farcaster',
   kindFarcaster: 'Farcaster',
   kindWallet: 'Wallet',

@@ -8,6 +8,7 @@ import type { ModelRowEntry } from '~/lib/challenge/models';
 import { adminName, localDay as day, lookName, modelLine, type Look, type PictureDecision, type PictureVersion } from '~/lib/chapter-pictures/shared';
 import { useChallengeModel } from './challenge-model-row';
 import { PublishedTextField } from './publish-words';
+import '../styles/chapter-pictures.css';
 
 /**
  * The admins' redo of the edition's chapter pictures on /you/illustrations (owner, 2026-11-18, option B). Each picture:
@@ -54,6 +55,16 @@ export const P = {
   saveLook: 'Save the look',
   lookNow: (l: Look | null) => (l ? `${lookName(l)}: ${l.text}` : 'None yet.'),
   couldNot: 'Could not do it',
+  // Added pictures (owner, 2026-11-19). DRAFT wording (coding agent).
+  addedShown: (d: PictureDecision | undefined) => `The chapter shows this added picture${d ? `, kept by ${adminName(d.byFid, d.byHandle)} on ${day(d.at)}` : ''}.`,
+  addedOff: 'Not in the chapter now. A draft waits here until an admin keeps it; a picture taken off stays stored and can be shown again.',
+  againAdded: 'Make another draft',
+  noteAdded: 'What the picture shows (your note is the prompt; it is shown in the picture’s recipe, credited to you)',
+  takeOff: 'Take it off the chapter',
+  sheets: 'Characters’ sheet pictures to send along (optional)',
+  sheetsLoading: 'Looking for the characters’ sheets…',
+  sheetsNone: 'No character this passage names has a published sheet picture.',
+  addedAt: (ch: number, after: number, start: number, end: number) => `Added to chapter ${ch}, after block ${after}; it shows blocks ${start}–${end}.`,
 } as const;
 
 export interface PicturesState {
@@ -63,6 +74,10 @@ export interface PicturesState {
   styles: { id: string; label: string; text: string }[];
   looks: { all: { look: Look; byFid: number; at: string } | null; chapters: Record<number, { look: Look | null; byFid: number; at: string }> };
   cap: { spentUsd: number; capUsd: number; resetAt: string };
+  /** The model the row starts on: GPT Image 2.5 Sunburst where OpenAI serves (owner, 2026-11-18; P3 DRAFT pending his reread). */
+  defaultModel?: string;
+  /** Whether pictures can be added (0043_chapter_picture_additions applied). */
+  adding?: boolean;
 }
 export interface PictureItem {
   id: string;
@@ -72,21 +87,86 @@ export interface PictureItem {
   versions: PictureVersion[];
   decisions: PictureDecision[];
   image: { url: string; width: number; height: number } | null;
+  /** A picture an admin added (owner, 2026-11-19): the block it sits after and the passage it shows. */
+  added?: { after: number; start: number; end: number } | null;
+}
+
+/** A character's sheet picture an added picture may take along (GET /api/you/illustrations/passage). */
+export interface SheetChoice {
+  slug: string;
+  name: string;
+  url: string;
+}
+
+/**
+ * The characters this passage names that have a published sheet, as checkboxes: whose front view goes along as a
+ * reference (owner, 2026-11-19: "optionally which characters' sheet pictures go along as references"). At most three.
+ */
+export function SheetPicker({ chapter, start, end, chosen, setChosen }: { chapter: number; start: number; end: number; chosen: string[]; setChosen: (v: string[]) => void }) {
+  const [sheets, setSheets] = useState<SheetChoice[] | null>(null);
+  useEffect(() => {
+    let live = true;
+    setSheets(null);
+    void authFetch(`/api/you/illustrations/passage?chapter=${chapter}&start=${start}&end=${end}`)
+      .then((r) => (r.ok ? r.json() : { sheets: [] }))
+      .then((j: { sheets?: SheetChoice[] }) => live && setSheets(j.sheets ?? []))
+      .catch(() => live && setSheets([]));
+    return () => {
+      live = false;
+    };
+  }, [chapter, start, end]);
+  if (sheets === null) return <p className="you-meta">{P.sheetsLoading}</p>;
+  if (!sheets.length) return <p className="you-meta">{P.sheetsNone}</p>;
+  return (
+    <fieldset className="cp-choice cp-sheets">
+      <legend className="you-meta">{P.sheets}</legend>
+      {sheets.map((x) => (
+        <label key={x.slug} data-sheet={x.slug}>
+          <input
+            type="checkbox"
+            checked={chosen.includes(x.slug)}
+            disabled={!chosen.includes(x.slug) && chosen.length >= 3}
+            onChange={(e) => setChosen(e.target.checked ? [...chosen, x.slug] : chosen.filter((c) => c !== x.slug))}
+          />{' '}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={x.url} alt="" width={36} height={48} className="cp-sheet-thumb" /> {x.name}
+        </label>
+      ))}
+    </fieldset>
+  );
+}
+
+/** The Model row, as on /you/illustrations: each offered model, with its maker, open or closed, and a closed one's line. */
+export function ModelRow({ m, name }: { m: ReturnType<typeof useChallengeModel>; name: string }) {
+  return (
+    <>
+      <fieldset className="cp-choice cp-models">
+        <legend className="you-meta">{P.model}</legend>
+        {(m.list ?? []).map((x) => (
+          <label key={x.id} data-model={x.id}>
+            <input type="radio" name={name} checked={m.chosen?.id === x.id} onChange={() => m.pick(x)} /> {x.label} · {x.maker} · {x.open ? 'open' : 'closed'}
+            {!x.open && m.meta(x) && <span className="you-meta cp-model-line"> {m.meta(x)!.replace(/ · uses 3 of today's pictures$/, '')}</span>}
+          </label>
+        ))}
+      </fieldset>
+      {m.notice}
+    </>
+  );
 }
 
 const lookOf = (s: PicturesState, chapter: number) => (s.looks.chapters[chapter] ? s.looks.chapters[chapter].look : null) ?? s.looks.all?.look ?? null;
 
-async function post(url: string, body: unknown): Promise<{ ok: boolean; json: Record<string, unknown> }> {
+export async function post(url: string, body: unknown): Promise<{ ok: boolean; json: Record<string, unknown> }> {
   const res = await authFetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
   return { ok: Boolean(res?.ok), json: ((await res?.json().catch(() => null)) ?? {}) as Record<string, unknown> };
 }
-const errorOf = (j: Record<string, unknown>) => {
+export const errorOf = (j: Record<string, unknown>) => {
   const e = typeof j.error === 'string' ? j.error : P.couldNot;
   return e.includes('{reset}') ? e.replace('{reset}', resetLocal(new Date(Date.parse(String(j.resetAt ?? '')) - 1 || Date.now()))) : e;
 };
 
 /** A draft's picture: fetched with the admin's sign-in, shown from memory (it has no public address). */
-function DraftImage({ id, alt }: { id: string; alt: string }) {
+export function DraftImage({ id, alt }: { id: string; alt: string }) {
   const [src, setSrc] = useState<string | null>(null);
   useEffect(() => {
     let url: string | null = null;
@@ -205,12 +285,14 @@ export function CapLine({ cap }: { cap: PicturesState['cap'] }) {
 }
 
 /** One picture's redo, versions and history. */
-export function PicturePanel({ item, state, reload }: { item: PictureItem; state: PicturesState; reload: () => Promise<void> }) {
+export function PicturePanel({ item, state, reload, onShown }: { item: PictureItem; state: PicturesState; reload: () => Promise<void>; onShown?: () => void }) {
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState('');
+  const [chosen, setChosen] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const m = useChallengeModel(state.models);
+  const m = useChallengeModel(state.models, null, state.defaultModel ?? null);
+  const added = item.added ?? null;
   const ownLook = Boolean(state.looks.chapters[item.chapter]?.look);
   const look = lookOf(state, item.chapter);
   const keptIds = new Set(item.decisions.filter((d) => d.versionId).map((d) => d.versionId));
@@ -221,7 +303,9 @@ export function PicturePanel({ item, state, reload }: { item: PictureItem; state
     const send = async () => {
       setBusy(true);
       setError(null);
-      const r = await post('/api/you/illustrations/redo', { jobId: item.id, note, ...m.body() });
+      const r = added
+        ? await post('/api/you/illustrations/add', { jobId: item.id, note, characters: chosen, ...m.body() })
+        : await post('/api/you/illustrations/redo', { jobId: item.id, note, ...m.body() });
       setBusy(false);
       if (!r.ok) return setError(errorOf(r.json));
       setOpen(false);
@@ -237,6 +321,7 @@ export function PicturePanel({ item, state, reload }: { item: PictureItem; state
     const r = await post('/api/you/illustrations/show', { jobId: item.id, versionId });
     setBusy(false);
     if (!r.ok) return setError(errorOf(r.json));
+    onShown?.();
     await reload();
   }
 
@@ -245,30 +330,23 @@ export function PicturePanel({ item, state, reload }: { item: PictureItem; state
   const shown = item.versions.find((v) => v.id === item.shown);
   return (
     <section className="cp-panel" aria-label={P.versions} data-shown={item.shown ?? 'original'}>
-      <p className="you-meta cp-shown">{shown ? P.shownVersion(shown, shownDecision) : P.shownCommitted}</p>
+      {added && <p className="you-meta cp-where">{P.addedAt(item.chapter, added.after, added.start, added.end)}</p>}
+      <p className="you-meta cp-shown">{added ? (shown ? P.addedShown(shownDecision) : P.addedOff) : shown ? P.shownVersion(shown, shownDecision) : P.shownCommitted}</p>
       <div className="you-actions">
         <button type="button" className="ic-secondary" disabled={busy} aria-expanded={open} onClick={() => setOpen((v) => !v)}>
-          {P.redo}
+          {added ? P.againAdded : P.redo}
         </button>
         {item.shown && (
           <button type="button" className="ic-secondary" disabled={busy} onClick={() => void show(null)}>
-            {P.original}
+            {added ? P.takeOff : P.original}
           </button>
         )}
       </div>
       {open && (
         <div className="cp-redo">
-          <PublishedTextField id={`cp-note-${item.id}`} label={P.noteLabel} value={note} onChange={setNote} rows={3} maxLength={CHAPTER_PICTURES.noteMaxChars} />
-          <fieldset className="cp-choice cp-models">
-            <legend className="you-meta">{P.model}</legend>
-            {(m.list ?? []).map((x) => (
-              <label key={x.id} data-model={x.id}>
-                <input type="radio" name={`cp-model-${item.id}`} checked={m.chosen?.id === x.id} onChange={() => m.pick(x)} /> {x.label} · {x.maker} · {x.open ? 'open' : 'closed'}
-                {!x.open && m.meta(x) && <span className="you-meta cp-model-line"> {m.meta(x)!.replace(/ · uses 3 of today's pictures$/, '')}</span>}
-              </label>
-            ))}
-          </fieldset>
-          {m.notice}
+          <PublishedTextField id={`cp-note-${item.id}`} label={added ? P.noteAdded : P.noteLabel} value={note} onChange={setNote} rows={3} maxLength={CHAPTER_PICTURES.noteMaxChars} />
+          {added && <SheetPicker chapter={item.chapter} start={added.start} end={added.end} chosen={chosen} setChosen={setChosen} />}
+          <ModelRow m={m} name={`cp-model-${item.id}`} />
           <p className="you-meta" data-look="">
             {P.look(look, ownLook)}
           </p>
