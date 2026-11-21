@@ -316,6 +316,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   const [dr] = await sql`select recipe from studio.voice_drafts where id = ${acc.id}`;
   const tl = (dr.recipe as { timeline: { seconds: number; words: { text: string; start: number; end: number }[]; sentences: { n: number; start: number; end: number }[] } }).timeline;
   check('B. Accept keeps the strip: the joined take\'s word timings and each sentence\'s span', tl && tl.words.length > 300 && tl.sentences.length === speech.sentences.length && tl.seconds > 30 && tl.sentences.every((x, i) => x.end >= x.start && (i === 0 || x.start >= tl.sentences[i - 1].start - 0.01)));
+  check('B. ... and the strip is never shorter than its last word', tl.seconds >= tl.words.at(-1)!.end);
   const j = board.joinTimeline({ words: [{ text: 'a', start: 0, end: 1 }, { text: 'b', start: 2, end: 3 }, { text: 'c', start: 4, end: 5 }], seconds: 6 }, [{ start: 2, end: 3.5, seconds: 3, words: [{ text: 'B', start: 0.2, end: 2.8 }] }]);
   check('B. a redone sentence moves everything after it by the difference in length', j.seconds === 7.5 && j.words.map((w) => w.text).join('') === 'aBc' && j.words[2].start === 5.5, JSON.stringify(j));
   const get = (fid: number) => boards.GET(as(fid, {}, `http://localhost/api/voice/boards?draft=${acc.id}`));

@@ -81,13 +81,15 @@ export async function POST(request: Request) {
     // The storyboard's strip (slice 2): the joined take's word timings, and each sentence's span in it.
     const joined = joinTimeline({ words: c.words, seconds: t.seconds }, spliced);
     const spans = checkSpeech(speech.sentences, joined.words, speech.names);
+    // At least as long as its last heard word (the converted audio can run a little longer than the recording).
+    const length = Math.max(joined.seconds, (joined.words.at(-1)?.end ?? 0) + 0.3);
     const timeline = {
-      seconds: Math.round(joined.seconds * 100) / 100,
+      seconds: Math.round(length * 100) / 100,
       words: joined.words.map((w) => ({ text: w.text, start: Math.round(w.start * 100) / 100, end: Math.round(w.end * 100) / 100 })),
       sentences: spans.map((x, i) => ({
         n: x.n,
         start: x.start ?? spans.slice(0, i).reverse().find((y) => y.end !== null)?.end ?? 0,
-        end: x.end ?? spans.slice(i + 1).find((y) => y.start !== null)?.start ?? joined.seconds,
+        end: x.end ?? spans.slice(i + 1).find((y) => y.start !== null)?.start ?? length,
       })),
     };
     const recipe = {

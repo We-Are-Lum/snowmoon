@@ -443,6 +443,81 @@ Farcaster-web check waits for `sdk.context`. **Plan** (when this branch takes ma
 - on NotAllowedError, the line from `src/lib/mic-help.ts` (as planned above);
 - the Farcaster-web message only when the host does answer `platformType: 'web'`.
 
+## Overnight 2026-11-21 (unattended)
+
+Spent: **127 of the 300 credits** (one conversion of a 10.3 s synthetic clip, 113; four transcriptions, 14). Synthetic
+clips only (macOS's own text-to-speech reading the book's words), no one's voice. Nothing over its estimate.
+
+### 1. Names in transcription
+
+| Transcription of the same converted clip | Heard | Credits | Dollars (fiat header) |
+|---|---|---|---|
+| `scribe_v1` | "Dreadnought", "Lord Aphelion" | 3 | $0.00055 |
+| `scribe_v2` | "Dreadnought", "Lord Aphelion" | 3 | $0.00055 |
+| `scribe_v2` + keyterms | "Dreadknot", "Lord Ephelion" | 4 | $0.00073 |
+| `scribe_v3` + keyterms | "Dreadknot", "Lord Ephelion" | 4 | $0.00073 |
+
+- **Key terms are enough.** The site now uses `scribe_v3` (ElevenLabs' recommended model) with each speech's names as
+  `keyterms` (c13-b64: Lord Ephelion, Ephelion, Dreadknot, Veridia, Arctic Empire). ElevenLabs prices key terms 20–25%
+  higher (its two pages disagree: "an additional 20% surcharge" and $0.05 an hour on $0.20).
+- **And a backstop in the word check:** the speech's listed names are matched by sound (a rough sound key, 1–2 sounds
+  of difference allowed by length), so "Lord Aphelion", "Mortifelian" and "Dreadnought" count as the names, and each
+  is listed on the page ("Names heard by sound: Aphelion as Ephelion") and in the recipe (`check.bySound`). Only listed
+  names: an ordinary word still needs its spelling ("taxes" heard "Texas" fails), and a different word fails ("Lord
+  Venice").
+- **Forced Alignment** (not needed, not used): POST /v1/forced-alignment takes the audio and the text and returns each
+  word's start and end; "Same rate as the Speech to Text API" ($0.20 an hour); up to 10 hours of audio. ElevenLabs' docs
+  don't name the key permission it needs; the key's permission list (Text to Speech, Speech to Speech, Speech to Text,
+  Voices read, History write, User) has no entry for it, so Nate would add whatever the dashboard calls it.
+- **Transcription is billed in credits too**, on a longer clip: 3 credits for 10.3 s (the 1.6 s clip rounded to 0),
+  with the same amount in dollars in a `fiat-cost-before-overages` header. Rate in config: 0.4 credits a second with
+  key terms.
+
+**Found and fixed: ElevenLabs writes a conversion's history item after it answers.** Tonight's immediate delete got
+"not found"; the item, which also holds a transcript of the input, appeared a moment later in the account's history.
+I deleted it (confirmed gone). The site now retries the delete while it isn't there yet (after 1, 3 and 6 seconds;
+P1h has a new planted fault for dropping the retries, caught), and `scripts/voice-history-sweep.ts` lists and deletes
+any of our conversions or readings left in the account's history (run tonight: none in 48 hours).
+
+### 2. This morning's notes
+
+Already built on 2026-11-20 (morning) and re-verified tonight: removing one's own unpublished draft (now with its
+storyboard and kept pictures too, files included), draft audio in the private bucket served only through the signed-in
+route, and the voice_asks purge with the DRAFT Privacy §4 line. The schema is in `NEXT_ephelion_voice.sql`; its local
+tests pass on top of every migration, twice, in UTC and Pacific time, with planted faults caught.
+
+### 3. Slice 2: the storyboard, against stand-ins
+
+`/storyboard/board/<draft>`, from "Make the storyboard" on a performance draft. Admins only, behind the same switch.
+- **Cuts:** the accepted take's word timings (the take with redone sentences spliced in) are a strip of sentences.
+  Cuts are proposed at sentence ends about every 8 seconds, by a rule (no AI model). The person drags a cut, taps the
+  strip to add one at the nearest word's end, or taps × to remove one; "Use the automatic cuts again" resets.
+- **Shots, one at a time:** the speech's words in it (labelled Book), the person's own description (a
+  PublishedTextField), a camera angle (8), a style and characters from the published sheets. "Make the picture", "Try
+  again", "Keep this one", next.
+- **Pictures:** stand-in cards tonight (no model, no cost), drawn on our server, in the picture flow's shape: bytes,
+  sha256, a signed record, a recipe whose prompt is the person's words word for word, then the camera and the sheets'
+  own texts. Nothing is stored until Keep; a kept picture goes to the private bucket under `voice-boards/<draft>/`.
+- **Notes:** rule checks only: three shots in a row from one angle, a shot over 15 s or under 2 s, no description, no
+  camera, no picture kept. They never say what a shot should show.
+- **Play-through:** the kept pictures over the joined audio; a shot with no picture shows its words.
+- **Saves** are versions (new rows only). Removing the draft removes them.
+- **P2:** nothing writes a description or story words: there is no route or function that produces one, the tests
+  check that every proposed shot starts empty and that a picture can't be made without the person's own words.
+
+**Choices tonight, and why**
+
+| # | Choice | Why |
+|---|---|---|
+| 17 | Cuts and notes by rule, not by an AI model | "The assistant proposes cuts and notes only"; rules can't write story words, cost nothing, and are predictable. A model can propose later, labelled. |
+| 18 | Transcription `scribe_v3` with keyterms | v1 and v2 misheard the names; v2 and v3 with keyterms heard them; v3 is ElevenLabs' recommended model. |
+| 19 | By-sound matching only for each speech's listed names | Broad sound matching would let real misreadings pass. |
+| 20 | Stand-in pictures are cards that say what was asked | No spending, and nobody can mistake one for a picture. |
+| 21 | A shot's description is kept up to 600 characters | Long enough for a shot, short enough for a prompt. |
+| 22 | Storyboards are versions, never edited in place | As the rest of the edition: every choice can be traced. |
+| 23 | Drafts kept before tonight can't get a storyboard ("record and accept again") | Their recipe has no word timings; tonight's Accept stores them. |
+| 24 | History deletes retried for about 10 seconds in the request | The take's conversion is the one thing that must not linger; a sweep script backs it up. |
+
 ## What Nate needs to do (one at a time)
 
 1. #195 is merged and live: the iPhone and desktop tests on /admin/mic-test; Android goes to Garance or Luis.
