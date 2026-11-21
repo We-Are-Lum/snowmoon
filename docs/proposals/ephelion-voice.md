@@ -520,7 +520,9 @@ tests pass on top of every migration, twice, in UTC and Pacific time, with plant
 
 ### Screenshots (slices 1 and 2)
 
-**https://media.snowmoon.party/review/608b48afbdf45515475a5530de061866/index.html**: 60 screenshots, fifteen steps,
+**Newest (21 Nov, afternoon: the Model row, 3 pictures a shot, 12 shots, the picker's names):
+https://media.snowmoon.party/review/2b2ed084c77266b4478bb508c7300744/index.html**. Before it,
+https://media.snowmoon.party/review/608b48afbdf45515475a5530de061866/index.html: 60 screenshots, fifteen steps,
 phone and desktop, light and dark, on a local build of this branch with the stand-in ElevenLabs, a throwaway database
 and a fake microphone. Slice 2's steps: the strip with the automatic cuts; a shot being written (the description typed
 by the test script, marked so); two stand-in pictures; one kept and the board saved; the notes; the play-through. Found
@@ -552,6 +554,44 @@ page's host time limits and microphone help (planned above; this branch now has 
 **Needs Nate:** the reread (rule, own-voice-v2, P1h/P1i, Privacy and Terms lines, including tonight's nothing new);
 picker names; caps; the migration (now with the board tables) for the coordinator to test, then to apply; check:ui with
 the real database, (a) or (b); whether a picture model should replace the stand-in, and which.
+
+## 2026-11-21, Nate's answers
+
+1. **Migration:** the coordinator tested `NEXT_ephelion_voice.sql` on Postgres 16 with all 41 migrations (dry run clean,
+   applies twice, read-back passes, privileges right, the Pacific-time purge right). Part D now refuses while any row
+   exists in `studio.voice_drafts`, as 0043's undo does ("UNDO REFUSED: voice drafts exist; nothing is deleted"), and
+   removes every voice table only when there are none. Tested both ways locally; the migration still applies twice
+   cleanly in UTC and Pacific time. Since then it also has `studio.voice_board_asks` (item 5), tested the same way:
+   **the coordinator should test this version again.**
+2. **Picker names** (DRAFT for Nate's look): "Warm, measured (American)", "Warm, brighter (American)", "Light Russian
+   accent".
+3. **Caps for now:** a daily pool of 20,000 credits, 3 full takes per person per day (already the values; now noted as
+   Nate's). Real numbers once the speeches' length is known.
+4. **check:ui with the rehearsal database:** run on a **copy** of `~/snowmoon-rehearsal-db` (the original isn't touched:
+   starting it from this branch would have applied 0040–0042 to Nate's rehearsal data, and check:ui might write), on
+   this branch (07d8dcbe, load 2.2) and on main (f84252f5). **Both fail the same 2 checks and nothing else:**
+   `/challenge/make` at 390 light and 1440 dark shows no "Make it" button. (Last night's "Invalid URL" break on the
+   Minpentai live page is gone with real data: it was the empty database.) **Why:** the check opens
+   `/challenge/make?from=<the first base in CHALLENGE.bases>`, production's base ids (e.g. bffc7b6a… for Zei); the
+   rehearsal database seeds its own stand-in bases under other ids (`REHEARSAL_BASE_IDS`, used only with
+   `CHALLENGE_REHEARSAL=on`), so the page finds no base and draws no button. Not a bug in the site or this branch: the
+   check needs production's data, or a run in rehearsal mode. (Main's run started at load 17, over 8: my script printed
+   the load but didn't wait. Its result matches the branch's, run at load 2.)
+5. **Shot pictures through the challenge's picture code** (`src/lib/voice/shot-picture.ts`):
+   - the Model row starts on GPT Image 2.5 Sunburst where OpenAI serves the person, FLUX elsewhere; FLUX and Gemini are
+     offered; a closed model needs its maker's notice and the 18+ box (the challenge's own row and notice);
+   - the person's description is the prompt's first part, word for word, so it needs the own-words consent (the site's
+     consent screen shows when the server asks); then the camera, the sheets' texts and the site's picture rules;
+     characters' sheet front views go as references;
+   - the prompt check, the daily limits and the costs are `paidPicture`'s, as for the challenge (admins on the admins'
+     pool);
+   - at most **12 shots** (the automatic cuts stop at 12; a 13th is refused on save and on the strip) and **3 pictures a
+     shot** (counted in `studio.voice_board_asks`; a 4th is refused);
+   - **no real picture before Nate's word:** `VOICE.realPictures` is false, and while it is, the route refuses a real
+     model before any call (tested). The tests and the screenshot run use stand-in cards through the same code;
+   - nothing is stored until Keep; a kept picture (JPEG from a model, PNG for a stand-in) goes to the private bucket.
+6. **Each speech carries its own label:** the stand-in c13-b64 is "Book" (with its block); the team's speeches will be
+   "Invented, not from the book" with their writers. Shown with the speech and kept in every recipe.
 
 ## What Nate needs to do (one at a time)
 
