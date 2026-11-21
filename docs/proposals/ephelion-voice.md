@@ -518,6 +518,41 @@ tests pass on top of every migration, twice, in UTC and Pacific time, with plant
 | 23 | Drafts kept before tonight can't get a storyboard ("record and accept again") | Their recipe has no word timings; tonight's Accept stores them. |
 | 24 | History deletes retried for about 10 seconds in the request | The take's conversion is the one thing that must not linger; a sweep script backs it up. |
 
+### Screenshots (slices 1 and 2)
+
+**https://media.snowmoon.party/review/608b48afbdf45515475a5530de061866/index.html**: 60 screenshots, fifteen steps,
+phone and desktop, light and dark, on a local build of this branch with the stand-in ElevenLabs, a throwaway database
+and a fake microphone. Slice 2's steps: the strip with the automatic cuts; a shot being written (the description typed
+by the test script, marked so); two stand-in pictures; one kept and the board saved; the notes; the play-through. Found
+while taking them and fixed: the strip was sized by the recording's length, not the converted audio's, so the last
+shot fell off the end. The earlier screenshot page (c3d1…) is superseded; it goes when Nate says he has looked.
+
+The disk was full during the first run tonight (118 MB free of 460 GB): I deleted the `.next` build folders in three of
+my own worktrees (live197, mic-link, mic-test; all merged or throwaway), leaving 3 GB. Not touched: #196's worktree,
+anyone else's. The Mac needs a cleanup soon.
+
+**check:ui** (run once, at the end, load under 8, on this branch's local build with the throwaway database): **did not
+pass**, 3 problems: `/challenge/make` at 390 light and 1440 dark shows no "Make it" button (as on 20 Nov's local run),
+and the Minpentai live page's layout check broke ("Invalid URL"). This branch touches neither page; the empty database
+and local settings are the likely cause, not proven. ("See examples" in WebKit didn't run: WebKit isn't installed.)
+Production's check:ui passed on 20 Nov at #195's merge. Before any merge of this branch: check:ui with the real
+database, (a) or (b) above.
+
+### Tonight: done, left, needs Nate
+
+**Done:** names (key terms with scribe_v3; by-sound matching for listed names; measured), the history race fixed and a
+sweep script, this morning's notes re-verified, slice 2 (strip, cuts, shots, stand-in pictures, keep, notes,
+play-through, saves as versions, removal with the draft), tests (`test:voice`: 139 checks; `check:voice-proof`: 9 plants
+caught), screenshots.
+
+**Left:** a real picture model for shots (the stand-in has the same shape; that's a spending decision); the recording
+page's host time limits and microphone help (planned above; this branch now has main's helpers); publishing a storyboard
+(and the publish rule for unmatched sentences); deleting the superseded screenshot page.
+
+**Needs Nate:** the reread (rule, own-voice-v2, P1h/P1i, Privacy and Terms lines, including tonight's nothing new);
+picker names; caps; the migration (now with the board tables) for the coordinator to test, then to apply; check:ui with
+the real database, (a) or (b); whether a picture model should replace the stand-in, and which.
+
 ## What Nate needs to do (one at a time)
 
 1. #195 is merged and live: the iPhone and desktop tests on /admin/mic-test; Android goes to Garance or Luis.
