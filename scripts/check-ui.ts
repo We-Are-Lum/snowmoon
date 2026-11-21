@@ -3243,9 +3243,11 @@ try {
         sentSheets = (r.request().postDataJSON() as { sheets?: unknown }).sheets ?? null;
         return r.fulfill({ status: 400, json: { error: 'check:ui stops here' } });
       });
+      // An invited reader who isn't an admin (6852): an admin's "add an image" opens the edition's sheet instead (owner,
+      // 2026-11-20; checked below), so the readers' composer is checked as a reader sees it.
       await page.evaluate(() => {
         const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
-        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
+        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6852, exp: 4102444800 })}.y`, fid: 6852, username: 'check', exp: 4102444800 }));
       });
       await open(page, '/chapter/1');
       // Signed in, all three options: still inside the screen at 390px.
@@ -3293,6 +3295,32 @@ try {
       if (!/sent to Groq to be checked \(through Vercel AI Gateway when Groq is busy\) and to fal\.ai/.test(text)) fail('/chapter/1: the composer does not name the hosts that receive the prompt');
       await page.keyboard.press('Escape');
       if (await page.locator('.image-composer').count()) fail('/chapter/1: Escape does not close the composer');
+      // An admin (owner, 2026-11-20): the same selection's button says "Add a picture here" and opens the edition's
+      // "Add a picture here" sheet on the selected blocks, never the readers' composer.
+      await ctx.route('**/api/you/illustrations/picture**', (r) => r.fulfill({ json: { item: null, pictures: { ready: true, adding: false, storage: true, models: [], styles: [], looks: { all: null, chapters: {} }, cap: { spentUsd: 0, capUsd: 20, resetAt: new Date().toISOString() } } } }));
+      await page.evaluate(() => {
+        const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
+        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
+      });
+      await open(page, '/chapter/1');
+      await page.evaluate(() => {
+        const p = document.querySelector('#c1-b19')!;
+        p.scrollIntoView({ block: 'center' });
+        const r = document.createRange();
+        r.selectNodeContents(p);
+        getSelection()!.removeAllRanges();
+        getSelection()!.addRange(r);
+      });
+      await page.waitForSelector('.selection-actions button:has-text("Add a picture here")', { timeout: 10000 }).catch(() => fail(`/chapter/1 (${scheme}): an admin's selection doesn't offer "Add a picture here"`));
+      await page.locator('.selection-actions button:has-text("Add a picture here")').click().catch(() => {});
+      await page.waitForSelector('.rpa-sheet', { timeout: 10000 }).catch(() => fail(`/chapter/1 (${scheme}): an admin's "Add a picture here" doesn't open the edition's sheet`));
+      if (await page.locator('.image-composer').count()) fail(`/chapter/1 (${scheme}): an admin's "Add a picture here" opens the readers' composer`);
+      await page.locator('.rpa-sheet .sheet-x').click().catch(() => {});
+      await ctx.unroute('**/api/you/illustrations/picture**');
+      await page.evaluate(() => {
+        const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
+        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6852, exp: 4102444800 })}.y`, fid: 6852, username: 'check', exp: 4102444800 }));
+      });
       // Step 4, signed in and invited (mocked): My picks (private) and the new-style form.
       await ctx.route('**/api/designs/picks', (r) => r.fulfill({ json: { picks: [] } }));
       await ctx.route('**/api/consent', (r) => r.fulfill({ json: { wording: { version: 'v', line: 'l', title: 't', text: ['a'], sha256: 'x' }, signedIn: true, agreed: true } }));

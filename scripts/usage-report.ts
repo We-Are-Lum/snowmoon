@@ -164,8 +164,12 @@ export function checkRows(id: string, keys: string[]) {
  * Chapter pictures (owner, 2026-11-18): the admin redos in studio.chapter_picture_versions (0042), draft or kept, with
  * their JPEG bytes in the row; rows are never deleted, so this is the draft storage. All time, totals only: no job,
  * admin, prompt or picture leaves the database. Null when the tables aren't on this database (an older one).
+ * Since 2026-11-20 also the pictures admins added while reading (studio.chapter_picture_additions, 0043), by where the
+ * latest decision in studio.chapter_picture_decisions leaves each: shown (it has a version), taken off (no version, but
+ * one was shown before), or never kept (no decision ever had a version). `added` is null when 0043 isn't there.
  */
-export interface ChapterPictures { rows: number; kept: number; draftOnly: number; diskBytes: number; jpegBytes: number }
+export interface AddedPictures { total: number; shown: number; takenOff: number; neverKept: number }
+export interface ChapterPictures { rows: number; kept: number; draftOnly: number; diskBytes: number; jpegBytes: number; added: AddedPictures | null }
 
 const CHAPTER_PICTURES_SQL = `select
     (select count(*) from studio.chapter_picture_versions)::float8 as rows,
@@ -174,14 +178,35 @@ const CHAPTER_PICTURES_SQL = `select
     pg_total_relation_size('studio.chapter_picture_versions')::float8 as disk_bytes,
     (select coalesce(sum(octet_length(jpeg)), 0) from studio.chapter_picture_versions)::float8 as jpeg_bytes`;
 
+/** Each added picture once, by its latest decision (the order the chapter reads it in: decided_at, then id). */
+const ADDED_PICTURES_SQL = `with latest as (
+    select distinct on (d.job_id) d.job_id, d.version_id from studio.chapter_picture_decisions d
+    order by d.job_id, d.decided_at desc, d.id desc
+  ), ever as (
+    select distinct d.job_id from studio.chapter_picture_decisions d where d.version_id is not null
+  )
+  select count(*)::float8 as total,
+    count(*) filter (where l.version_id is not null)::float8 as shown,
+    count(*) filter (where l.version_id is null and e.job_id is not null)::float8 as taken_off,
+    count(*) filter (where e.job_id is null)::float8 as never_kept
+  from studio.chapter_picture_additions a
+  left join latest l on l.job_id = a.job_id
+  left join ever e on e.job_id = a.job_id`;
+
 async function chapterPictures(tx: postgres.TransactionSql): Promise<ChapterPictures | null> {
-  const [t] = await tx<{ here: boolean }[]>`
-    select to_regclass('studio.chapter_picture_versions') is not null and to_regclass('studio.chapter_picture_decisions') is not null as here`;
+  const [t] = await tx<{ here: boolean; adding: boolean }[]>`
+    select to_regclass('studio.chapter_picture_versions') is not null and to_regclass('studio.chapter_picture_decisions') is not null as here,
+           to_regclass('studio.chapter_picture_additions') is not null as adding`;
   if (!t.here) return null;
   const [r] = await tx.unsafe<{ rows: number; kept: number; disk_bytes: number; jpeg_bytes: number }[]>(CHAPTER_PICTURES_SQL);
   const rows = Number(r.rows);
   const kept = Number(r.kept);
-  return { rows, kept, draftOnly: rows - kept, diskBytes: Number(r.disk_bytes), jpegBytes: Number(r.jpeg_bytes) };
+  let added: AddedPictures | null = null;
+  if (t.adding) {
+    const [a] = await tx.unsafe<{ total: number; shown: number; taken_off: number; never_kept: number }[]>(ADDED_PICTURES_SQL);
+    added = { total: Number(a.total), shown: Number(a.shown), takenOff: Number(a.taken_off), neverKept: Number(a.never_kept) };
+  }
+  return { rows, kept, draftOnly: rows - kept, diskBytes: Number(r.disk_bytes), jpegBytes: Number(r.jpeg_bytes), added };
 }
 
 export const MB = (bytes: number) => `${(bytes / 1_000_000).toFixed(1)} MB`;
@@ -196,8 +221,17 @@ export function chapterPicturesText(c: ChapterPictures | null): string[] {
     ['Size on disk (table, indexes and TOAST)', MB(c.diskBytes)],
     ['JPEG bytes (sum of octet_length)', MB(c.jpegBytes)],
   ];
+  const a = c.added;
+  if (a)
+    rows.push(
+      ['Added while reading (pictures, all)', String(a.total)],
+      ['  shown now (latest decision has a version)', String(a.shown)],
+      ['  taken off (shown before, not now)', String(a.takenOff)],
+      ['  never kept (drafts only)', String(a.neverKept)],
+    );
   const W = Math.max(...rows.map(([k]) => k.length)) + 2;
-  return ['== Chapter pictures (admin redos, all time)', ...rows.map(([k, v]) => `  ${k.padEnd(W)}${v.padStart(10)}`)];
+  const out = ['== Chapter pictures (admin redos, all time)', ...rows.map(([k, v]) => `  ${k.padEnd(W)}${v.padStart(10)}`)];
+  return a ? out : [...out, '  added pictures: not there yet'];
 }
 
 export interface Report { meta: { today: string; first: string; role: string; ro: string }; days: string[]; lines: Line[]; missing: string[]; chapterPictures: ChapterPictures | null }
