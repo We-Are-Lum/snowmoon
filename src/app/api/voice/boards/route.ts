@@ -4,6 +4,10 @@ import { noStore, voicePerson } from '~/lib/voice/server';
 import { listDesigns } from '~/lib/images/designs';
 import { CAMERA_ANGLES, SHOT, boardNotes, proposeCuts, shotsFromCuts, type Shot } from '~/lib/voice/board';
 import { keptPictures, latestBoard, ownPerformance, saveBoard } from '~/lib/voice/board-store';
+import { shotModels, triesMade } from '~/lib/voice/shot-picture';
+import { whereFrom } from '~/lib/images/countries';
+import { VOICE } from '~/lib/config';
+import { voiceTestOn } from '~/lib/voice/flag';
 
 /**
  * A performance's storyboard (slice 2, DRAFT). GET ?draft=<id>: the strip (timeline), the latest saved board (or the
@@ -33,6 +37,8 @@ export async function GET(request: Request) {
       sheets: { styles: styles.map(sheet), characters: characters.map(sheet) },
       angles: CAMERA_ANGLES,
       limits: SHOT,
+      // The challenge's models for this visitor (the country decides; it isn't kept), the default, and the limits.
+      making: { ...shotModels(whereFrom(request.headers)), standIn: voiceTestOn(), tries: await triesMade(sql, draft.id) },
     },
     { headers: noStore },
   );
@@ -48,6 +54,7 @@ export async function POST(request: Request) {
   if (!draft?.timeline) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   const cuts = Array.isArray(body.cuts) ? body.cuts.filter((c): c is number => typeof c === 'number' && c > 0 && c < draft.timeline!.seconds).slice(0, 200) : null;
   if (!cuts || !Array.isArray(body.shots) || body.shots.length > 201) return NextResponse.json({ error: 'Send the cuts and the shots' }, { status: 400 });
+  if (new Set(cuts).size + 1 > VOICE.board.maxShots) return NextResponse.json({ error: `A storyboard has at most ${VOICE.board.maxShots} shots: remove a cut.` }, { status: 400 });
   const kept = new Set((await keptPictures(sql, draft.id)).map((p) => `${p.shotKey}:${p.sha256}`));
   const angles = new Set<string>(CAMERA_ANGLES.map((a) => a.id));
   const given = body.shots as Partial<Shot>[];
@@ -56,7 +63,7 @@ export async function POST(request: Request) {
     key: s.key!,
     start: Number(s.start) || 0,
     end: Number(s.end) || 0,
-    description: String(s.description ?? '').slice(0, 600),
+    description: String(s.description ?? '').slice(0, VOICE.board.descriptionMaxChars),
     angle: (angles.has(String(s.angle)) ? s.angle : '') as Shot['angle'],
     styleId: typeof s.styleId === 'string' ? s.styleId : null,
     characterIds: Array.isArray(s.characterIds) ? s.characterIds.filter((c): c is string => typeof c === 'string').slice(0, 6) : [],

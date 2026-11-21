@@ -1135,6 +1135,13 @@ export function appUrl(): string {
 export const VOICE = {
   adminTrial: false,
   open: false,
+  /**
+   * Storyboard pictures (Nate, 2026-11-21): made with the challenge's picture code (GPT Image 2.5 Sunburst the default
+   * where OpenAI serves, FLUX and Gemini offered; the same notices and daily limits). No real picture is made before
+   * Nate's word: until this is true, the route refuses to call a model. The tests use stand-in cards.
+   */
+  realPictures: false,
+  board: { maxShots: 12, maxTriesPerShot: 3, descriptionMaxChars: 600 },
   provider: 'ElevenLabs',
   models: {
     /** Speech-to-speech ("Voice Changer"). */

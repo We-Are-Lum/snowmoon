@@ -62,18 +62,18 @@ export const CAMERA_ANGLES = [
 export type AngleId = (typeof CAMERA_ANGLES)[number]['id'];
 export const angleById = (id: string) => CAMERA_ANGLES.find((a) => a.id === id) ?? null;
 
-/** Shot lengths the automatic cuts aim for, and the notes' limits (seconds). */
-export const SHOT = { target: 8, min: 2, max: 15 } as const;
+/** Shot lengths the automatic cuts aim for, the notes' limits (seconds), and at most 12 shots (Nate, 2026-11-21). */
+export const SHOT = { target: 8, min: 2, max: 15, maxShots: 12 } as const;
 
 /**
  * Proposed cuts, at sentence ends only: walk the sentences and cut once a shot has reached the target length, never
  * leaving a shot shorter than the minimum at the end. The person moves, adds or removes them.
  */
-export function proposeCuts(t: Timeline, target: number = SHOT.target): number[] {
+export function proposeCuts(t: Timeline, target: number = Math.max(SHOT.target, t.seconds / SHOT.maxShots)): number[] {
   const cuts: number[] = [];
   let from = 0;
   for (const s of t.sentences) {
-    if (s.end - from >= target && t.seconds - s.end >= SHOT.min) {
+    if (cuts.length < SHOT.maxShots - 1 && s.end - from >= target && t.seconds - s.end >= SHOT.min) {
       cuts.push(round(s.end));
       from = s.end;
     }

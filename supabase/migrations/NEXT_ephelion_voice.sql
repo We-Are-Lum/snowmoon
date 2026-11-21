@@ -34,7 +34,8 @@
 --    returns the storage keys, so the site deletes the files too. studio_writer can't delete voice rows any other way.
 -- 7. Slice 2 (2026-11-21): studio.voice_boards, a performance's storyboard as versions (cut times; each shot's own
 --    words, camera and sheets), and studio.voice_board_pictures, the picture kept for a shot (its recipe; the file in
---    private storage under voice-boards/). New rows only; removing the draft removes them, files included.
+--    private storage under voice-boards/), and studio.voice_board_asks, one row per picture made for a shot (the limit of
+--    3 tries a shot). New rows only; removing the draft removes them, files included.
 -- 6. voice_asks are kept for the day only: studio_writer may delete rows from before today (UTC), and nothing else; the
 --    site does it at most once an hour (src/lib/voice/costs.ts), as Minpentai's daily counts.
 
@@ -175,6 +176,23 @@ revoke all on studio.voice_board_pictures from anon, authenticated;
 grant select, insert on studio.voice_board_pictures to studio_writer;
 revoke update, delete, truncate on studio.voice_board_pictures from studio_writer;
 
+-- Pictures made for a storyboard's shots (2026-11-21): one row per picture made, for the 3-tries-per-shot limit.
+create table if not exists studio.voice_board_asks (
+  draft_id uuid not null references studio.voice_drafts(id),
+  shot_key text not null check (shot_key ~ '^[a-z0-9]{1,16}$'),
+  fid bigint not null check (fid > 0),
+  at timestamptz not null default now()
+);
+create index if not exists voice_board_asks_shot on studio.voice_board_asks (draft_id, shot_key);
+alter table studio.voice_board_asks enable row level security;
+drop policy if exists writer_insert on studio.voice_board_asks;
+drop policy if exists writer_read on studio.voice_board_asks;
+create policy writer_insert on studio.voice_board_asks for insert to studio_writer with check (true);
+create policy writer_read on studio.voice_board_asks for select to studio_writer using (true);
+revoke all on studio.voice_board_asks from anon, authenticated;
+grant select, insert on studio.voice_board_asks to studio_writer;
+revoke update, delete, truncate on studio.voice_board_asks from studio_writer;
+
 -- Removing one's own unpublished draft: the only way a draft row is deleted. Its storyboards and kept pictures go with it;
 -- it returns every storage key (audio and pictures), so the site deletes the files too.
 create or replace function studio.delete_voice_draft(p_id uuid, p_fid bigint) returns setof text
@@ -182,6 +200,7 @@ language plpgsql security definer set search_path = studio, pg_temp as $fn$
 begin
   if not exists (select 1 from studio.voice_drafts where id = p_id and fid = p_fid and published_at is null) then return; end if;
   return query delete from studio.voice_board_pictures where draft_id = p_id returning storage_key;
+  delete from studio.voice_board_asks where draft_id = p_id;
   delete from studio.voice_boards where draft_id = p_id;
   return query delete from studio.voice_draft_audio where draft_id = p_id returning storage_key;
   delete from studio.voice_drafts where id = p_id and fid = p_fid and published_at is null;
@@ -327,6 +346,23 @@ revoke all on studio.voice_board_pictures from anon, authenticated;
 grant select, insert on studio.voice_board_pictures to studio_writer;
 revoke update, delete, truncate on studio.voice_board_pictures from studio_writer;
 
+-- Pictures made for a storyboard's shots (2026-11-21): one row per picture made, for the 3-tries-per-shot limit.
+create table if not exists studio.voice_board_asks (
+  draft_id uuid not null references studio.voice_drafts(id),
+  shot_key text not null check (shot_key ~ '^[a-z0-9]{1,16}$'),
+  fid bigint not null check (fid > 0),
+  at timestamptz not null default now()
+);
+create index if not exists voice_board_asks_shot on studio.voice_board_asks (draft_id, shot_key);
+alter table studio.voice_board_asks enable row level security;
+drop policy if exists writer_insert on studio.voice_board_asks;
+drop policy if exists writer_read on studio.voice_board_asks;
+create policy writer_insert on studio.voice_board_asks for insert to studio_writer with check (true);
+create policy writer_read on studio.voice_board_asks for select to studio_writer using (true);
+revoke all on studio.voice_board_asks from anon, authenticated;
+grant select, insert on studio.voice_board_asks to studio_writer;
+revoke update, delete, truncate on studio.voice_board_asks from studio_writer;
+
 -- Removing one's own unpublished draft: the only way a draft row is deleted. Its storyboards and kept pictures go with it;
 -- it returns every storage key (audio and pictures), so the site deletes the files too.
 create or replace function studio.delete_voice_draft(p_id uuid, p_fid bigint) returns setof text
@@ -334,6 +370,7 @@ language plpgsql security definer set search_path = studio, pg_temp as $fn$
 begin
   if not exists (select 1 from studio.voice_drafts where id = p_id and fid = p_fid and published_at is null) then return; end if;
   return query delete from studio.voice_board_pictures where draft_id = p_id returning storage_key;
+  delete from studio.voice_board_asks where draft_id = p_id;
   delete from studio.voice_boards where draft_id = p_id;
   return query delete from studio.voice_draft_audio where draft_id = p_id returning storage_key;
   delete from studio.voice_drafts where id = p_id and fid = p_fid and published_at is null;
@@ -349,7 +386,7 @@ declare n int; usd numeric; d uuid; d2 uuid; k text;
 begin
   -- The tables and their privileges.
   if to_regclass('studio.voice_costs') is null or to_regclass('studio.voice_asks') is null or to_regclass('studio.voice_drafts') is null or to_regclass('studio.voice_draft_audio') is null
-     or to_regclass('studio.voice_boards') is null or to_regclass('studio.voice_board_pictures') is null then
+     or to_regclass('studio.voice_boards') is null or to_regclass('studio.voice_board_pictures') is null or to_regclass('studio.voice_board_asks') is null then
     raise exception 'a voice table is missing'; end if;
   if has_table_privilege('anon', 'studio.voice_costs', 'select') or has_table_privilege('anon', 'studio.voice_drafts', 'select') or has_table_privilege('anon', 'studio.voice_draft_audio', 'select') or has_table_privilege('anon', 'studio.voice_asks', 'select') then
     raise exception 'anon can read a voice table'; end if;
@@ -416,7 +453,8 @@ begin
   -- A storyboard for it, two versions, and a kept picture.
   insert into studio.voice_boards (draft_id, fid, version, cuts, shots) values (d, 6786, 1, '[8.4, 17.9]', '[{"key":"s1","description":"the poster in the tunnel","angle":"wide"}]');
   insert into studio.voice_boards (draft_id, fid, version, cuts, shots) values (d, 6786, 2, '[8.4, 16.2]', '[{"key":"s1","description":"the poster in the tunnel","angle":"low"}]');
-  insert into studio.voice_board_pictures (draft_id, shot_key, sha256, storage_key, bytes, recipe) values (d, 's1', repeat('f', 64), 'voice-boards/' || d || '/s1-' || repeat('f', 64) || '.png', 123456, '{"model":"stand-in","prompt":"p"}');
+  insert into studio.voice_board_pictures (draft_id, shot_key, sha256, storage_key, bytes, recipe) values (d, 's1', repeat('f', 64), 'voice-boards/' || d || '/s1-' || repeat('f', 64) || '.jpg', 412345, '{"model":"gpt-image-2.5-sunburst","prompt":"p"}');
+  insert into studio.voice_board_asks (draft_id, shot_key, fid) values (d, 's1', 6786), (d, 's1', 6786);
   begin insert into studio.voice_boards (draft_id, fid, version, cuts, shots) values (d, 6786, 2, '[]', '[]'); raise exception 'a second version 2 accepted';
   exception when unique_violation then null; end;
   begin insert into studio.voice_board_pictures (draft_id, shot_key, sha256, storage_key, bytes, recipe) values (d, 's2', repeat('e', 64), 'images/readers/x.png', 10, '{"model":"m","prompt":"p"}'); raise exception 'a picture key outside voice-boards/ accepted';
@@ -432,7 +470,8 @@ begin
   if n <> 0 or not exists (select 1 from studio.voice_drafts where id = d2) then raise exception 'a published draft was removed'; end if;
   select count(*) into n from studio.delete_voice_draft(d, 6786);
   if n <> 3 or exists (select 1 from studio.voice_drafts where id = d) or exists (select 1 from studio.voice_draft_audio where draft_id = d)
-     or exists (select 1 from studio.voice_boards where draft_id = d) or exists (select 1 from studio.voice_board_pictures where draft_id = d) then
+     or exists (select 1 from studio.voice_boards where draft_id = d) or exists (select 1 from studio.voice_board_pictures where draft_id = d)
+     or exists (select 1 from studio.voice_board_asks where draft_id = d) then
     raise exception 'the draft was not fully removed (% keys)', n; end if;
   begin update studio.voice_boards set cuts = '[]' where draft_id = d2; raise exception 'studio_writer changed a board in place';
   exception when insufficient_privilege then null; end;
@@ -463,6 +502,7 @@ rollback;
 -- end;
 -- $$;
 -- drop function if exists studio.delete_voice_draft(uuid, bigint);
+-- drop table if exists studio.voice_board_asks;
 -- drop table if exists studio.voice_board_pictures;
 -- drop table if exists studio.voice_boards;
 -- drop table if exists studio.voice_draft_audio;

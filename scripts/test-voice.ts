@@ -327,6 +327,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   check('B. the first board is the automatic cuts, every one at a sentence end', r.status === 200 && b0.board.fromProposal && b0.board.cuts.length > 1 && b0.board.cuts.every((c) => ends.includes(c)) && b0.board.shots.length === b0.board.cuts.length + 1);
   check('B. ... and no shot has words written for it (P2): every description is empty', b0.board.shots.every((x) => x.description === '' && x.angle === '' && x.kept === null));
   check('B. the notes are rule checks that name no content (P2)', b0.notes.length > 0 && b0.notes.every((n) => /^Shot|^Shots/.test(n.text) && !/should show|try showing|describe/i.test(n.text)));
+  check('B. the kept pictures and the picture-making settings are separate fields (neither hides the other)', Array.isArray((b0 as unknown as { pictures: unknown }).pictures) && typeof (b0 as unknown as { making: unknown }).making === 'object');
   check('B. the published sheets are offered', b0.sheets.styles.some((x) => x.title === 'Ink and wash') && b0.sheets.characters.some((x) => x.title === 'Ephelion'));
   // The person moves a cut, adds one, removes one, writes shot 1, picks a camera and the sheets, saves.
   const cuts = [...b0.board.cuts];
@@ -345,20 +346,39 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   check('B. the next save is version 2 (earlier ones stay), and a picture that was never kept can\'t be claimed', s2.version === 2 && s2.shots[0].kept === null && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${acc.id}`)[0].n === 2);
   // A picture for shot 1 (a stand-in card: no model, no cost).
   const callsBefore = stub.calls.length;
-  const pic = (body: Record<string, unknown>, fid = NATE) => boardPicture.POST(as(fid, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: s2.shots[0].key, shotNo: 1, attempt: 1, ...body }) }));
+  const pic = (body: Record<string, unknown>, fid = NATE) => boardPicture.POST(as(fid, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: s2.shots[0].key, ...body }) }));
+  check('B. the board offers the challenge\'s models, with its default, and says these are stand-ins here', (b0 as unknown as { making: { models: { id: string }[]; standIn: boolean; real: boolean } }).making.models.length >= 1 && (b0 as unknown as { making: { standIn: boolean } }).making.standIn && !(b0 as unknown as { making: { real: boolean } }).making.real);
+  check('B. a shot that isn\'t on the saved storyboard gets no picture (400)', (await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: 'zz9', description: mine, angle: 'low' }) }))).status === 400);
   check('B. no picture without the person\'s own description (400)', (await pic({ description: '  ', angle: 'low' })).status === 400);
   check('B. ... or without a camera angle (400)', (await pic({ description: mine, angle: '' })).status === 400);
   check('B. ... or with a sheet that isn\'t published (400)', (await pic({ description: mine, angle: 'low', styleId: '00000009-0000-4000-8000-999999999999' })).status === 400);
   r = await pic({ description: mine, angle: 'low', styleId: style, characterIds: [eph] });
-  const p1 = (await r.json()) as { image: string; sha256: string; ticket: string; recipe: { model: string; prompt: string; costUsd: number; standIn: boolean; description: string } };
+  const p1 = (await r.json()) as { image: string; sha256: string; ticket: string; triesLeft: number; recipe: { model: { id: string }; prompt: string; costUsd: number; standIn: boolean; description: string } };
   const png = Buffer.from(p1.image.split(',')[1], 'base64');
-  check('B. a stand-in picture comes back in the picture flow\'s shape: PNG, sha256, signed record, recipe', r.status === 200 && png.subarray(1, 4).toString() === 'PNG' && sha(png) === p1.sha256 && p1.ticket.includes('.') && p1.recipe.model === 'stand-in' && p1.recipe.standIn && p1.recipe.costUsd === 0);
-  check('B. its prompt is the person\'s words first, word for word, then the camera and the sheets\' own texts', p1.recipe.prompt.startsWith(mine) && /Camera: a low-angle shot/.test(p1.recipe.prompt) && /Lord Ephelion: a tall man/.test(p1.recipe.prompt) && /Style: Ink and wash: loose/.test(p1.recipe.prompt) && p1.recipe.description === mine);
+  check('B. a stand-in picture comes back in the picture flow\'s shape: PNG, sha256, signed record, recipe', r.status === 200 && png.subarray(1, 4).toString() === 'PNG' && sha(png) === p1.sha256 && p1.ticket.includes('.') && p1.recipe.model.id === 'stand-in' && p1.recipe.standIn && p1.recipe.costUsd === 0 && p1.triesLeft === 2);
+  check('B. its prompt is the person\'s words first, word for word, then the camera, the sheets\' own texts and the site\'s rules', p1.recipe.prompt.startsWith(mine) && /Camera: a low-angle shot/.test(p1.recipe.prompt) && /Lord Ephelion: a tall man/.test(p1.recipe.prompt) && /Style: Ink and wash: loose/.test(p1.recipe.prompt) && p1.recipe.description === mine);
   check('B. no model was called and nothing was spent (no ElevenLabs or image host call)', stub.calls.length === callsBefore);
-  check('B. nothing is stored before Keep', (await sql`select count(*)::int n from studio.voice_board_pictures`)[0].n === 0);
+  check('B. nothing is stored before Keep (only the try is counted)', (await sql`select count(*)::int n from studio.voice_board_pictures`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_board_asks where draft_id = ${acc.id}`)[0].n === 1);
   const keep = (ticket: string, image: string, fid = NATE) => boardKeep.POST(as(fid, { method: 'POST', body: JSON.stringify({ ticket, image }) }));
-  const p2 = (await (await pic({ description: mine, angle: 'low', attempt: 2 })).json()) as { image: string; sha256: string; ticket: string };
+  const p2 = (await (await pic({ description: mine, angle: 'low' })).json()) as { image: string; sha256: string; ticket: string };
   check('B. a retry makes a different picture', p2.sha256 !== p1.sha256);
+  await pic({ description: mine, angle: 'low' });
+  r = await pic({ description: mine, angle: 'low' });
+  check('B. at most 3 pictures a shot: the fourth is refused (429)', r.status === 429 && ((await r.json()) as { reason?: string }).reason === 'tries');
+  {
+    const { makeShotPicture } = await import('../src/lib/voice/shot-picture');
+    let made = false;
+    const real = await makeShotPicture(sql, NATE, new Request('http://localhost/x'), { draftId: acc.id, shotKey: s2.shots[1].key, description: mine, angle: 'low' }, { country: null, region: null } as never, {
+      real: true, consented: async () => true, reference: async () => null, paid: (async () => { made = true; return { ok: false, status: 500, error: 'x', extra: {} }; }) as never, make: async () => { made = true; throw new Error('no'); },
+    });
+    check('B. no real picture before Nate\'s word: VOICE.realPictures is off, and a real model is refused before any call', real.status === 403 && !made);
+  }
+  {
+    const many = Array.from({ length: 12 }, (_, i) => Math.round((tl.seconds / 13) * (i + 1) * 100) / 100);
+    r = await save(many, s2.shots);
+    check('B. at most 12 shots: a 13th is refused when saving', r.status === 400);
+  }
+  check('B. the automatic cuts never make more than 12 shots, even for a long speech', board.proposeCuts({ seconds: 600, words: [], sentences: Array.from({ length: 200 }, (_, i) => ({ n: i, start: i * 3, end: i * 3 + 3 })) }).length <= 11);
   check('B. Keep refuses another picture\'s bytes, and another person', (await keep(p1.ticket, p2.image)).status === 400 && (await keep(p1.ticket, p1.image, GARANCE)).status === 400);
   r = await keep(p1.ticket, p1.image);
   const keyP = `voice-boards/${acc.id}/${s2.shots[0].key}-${p1.sha256}.png`;

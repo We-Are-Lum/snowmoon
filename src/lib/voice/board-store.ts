@@ -34,8 +34,8 @@ export async function keptPictures(sql: postgres.Sql, draftId: string) {
   return sql`select shot_key as "shotKey", sha256, recipe, kept_at as "keptAt" from studio.voice_board_pictures where draft_id = ${draftId} order by kept_at`;
 }
 
-export async function keepPicture(sql: postgres.Sql, draftId: string, shotKey: string, png: Uint8Array, sha256: string, recipe: Record<string, unknown>) {
-  const key = pictureKeyFor(draftId, shotKey, sha256);
+export async function keepPicture(sql: postgres.Sql, draftId: string, shotKey: string, png: Uint8Array, sha256: string, recipe: Record<string, unknown>, ext: 'png' | 'jpg' = 'png') {
+  const key = pictureKeyFor(draftId, shotKey, sha256, ext);
   await putAudio(key, png);
   try {
     await sql`insert into studio.voice_board_pictures (draft_id, shot_key, sha256, storage_key, bytes, recipe) values (${draftId}, ${shotKey}, ${sha256}, ${key}, ${png.length}, ${sql.json(recipe as postgres.JSONValue)})

@@ -5,7 +5,10 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { authFetch, useAuth } from '~/lib/client-auth';
 import { isAdmin } from '~/lib/admins';
-import { PublishedTextField } from '~/components/publish-words';
+import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
+import { useChallengeModel } from '~/components/challenge-model-row';
+import { ModelRow } from '~/components/chapter-pictures';
+import type { ModelRowEntry } from '~/lib/challenge/models';
 import { boardNotes, shotAt, shotsFromCuts, snapToWordEnd, wordsIn, type Note, type Shot, type Timeline } from '~/lib/voice/board';
 import { joinAudio } from '~/lib/voice/join-audio';
 import '../styles/voice.css';
@@ -24,8 +27,10 @@ interface Data {
   pictures: { shotKey: string; sha256: string; recipe: Record<string, unknown> }[];
   sheets: { styles: Sheet[]; characters: Sheet[] };
   angles: readonly { id: string; label: string }[];
-  limits: { target: number; min: number; max: number };
+  limits: { target: number; min: number; max: number; maxShots: number };
+  making: { models: ModelRowEntry[]; defaultModel: string | null; real: boolean; standIn: boolean; limits: { maxShots: number; maxTriesPerShot: number }; tries: Record<string, number> };
 }
+type Wording = Parameters<typeof ConsentScreen>[0]['wording'];
 interface Try { image: string; sha256: string; ticket: string; recipe: Record<string, unknown> }
 const fmt = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, '0')}`;
 
@@ -67,6 +72,11 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const [now, setNow] = useState(0);
   const strip = useRef<HTMLDivElement | null>(null);
   const drag = useRef<number | null>(null);
+  const [triesMade, setTriesMade] = useState<Record<string, number>>({});
+  const [consent, setConsent] = useState<Wording | null>(null);
+  const dataOk = data && data !== 'none' && !('error' in data) ? data : null;
+  // The challenge's Model row: GPT Image 2.5 Sunburst first where OpenAI serves, FLUX and Gemini offered; a closed model's notice and the 18+ box.
+  const m = useChallengeModel(dataOk?.making.models, null, dataOk?.making.defaultModel ?? null);
 
   const load = useCallback(async () => {
     const r = await authFetch(`/api/voice/boards?draft=${draftId}`, { cache: 'no-store' }).catch(() => null);
@@ -79,12 +89,13 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
     setShots(j.board.shots);
     setKept(j.pictures.map((p) => ({ shotKey: p.shotKey, sha256: p.sha256 })));
     setSaved(j.board.version);
+    setTriesMade(j.making.tries ?? {});
   }, [draftId]);
   useEffect(() => {
     if (admin && draftId) void load();
   }, [admin, draftId, load]);
 
-  const d = data && data !== 'none' && !('error' in data) ? data : null;
+  const d = dataOk;
   const t = d?.draft.timeline ?? null;
 
   // The audio for the play-through: the take with any redone sentences, joined in the browser.
@@ -132,6 +143,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
     if (drag.current !== null) return;
     const at = snapToWordEnd(t, xToTime(e.clientX));
     if (at <= 0.2 || at >= t.seconds - 0.2 || cuts.some((c) => Math.abs(c - at) < 0.3)) return;
+    if (shots.length >= d!.making.limits.maxShots) return setMessage(`A storyboard has at most ${d!.making.limits.maxShots} shots: remove a cut first.`);
     setAll([...cuts, at]);
   };
   const startDrag = (i: number) => (e: React.PointerEvent) => {
@@ -155,7 +167,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
     setDirty(true);
   };
 
-  async function save() {
+  async function save(): Promise<boolean> {
     setBusy('save');
     setMessage(null);
     const r = await authFetch('/api/voice/boards', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ draftId: d!.draft.id, cuts, shots }) });
@@ -165,23 +177,44 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       setSaved(j.version);
       if (j.shots) setShots(j.shots);
       setDirty(false);
-    } else setMessage(j.error ?? 'It could not be saved');
+      return true;
+    }
+    setMessage(j.error ?? 'It could not be saved');
+    return false;
   }
   async function makePicture() {
     if (!shot) return;
+    // A picture is made only for a shot on the saved storyboard: save first if anything changed.
+    if (dirty && !(await save())) return;
     setBusy('picture');
     setMessage(null);
-    const attempt = (tries[shot.key]?.length ?? 0) + 1;
     const r = await authFetch('/api/voice/boards/picture', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ draftId: d!.draft.id, shotKey: shot.key, shotNo: current + 1, description: shot.description, angle: shot.angle, styleId: shot.styleId, characterIds: shot.characterIds, attempt }),
+      body: JSON.stringify({ draftId: d!.draft.id, shotKey: shot.key, description: shot.description, angle: shot.angle, styleId: shot.styleId, characterIds: shot.characterIds, ...m.body() }),
     });
     setBusy(null);
-    const j = (await r.json().catch(() => ({}))) as Try & { error?: string };
-    if (r.ok) setTries({ ...tries, [shot.key]: [...(tries[shot.key] ?? []), j] });
-    else setMessage(j.error ?? 'The picture could not be made');
+    const j = (await r.json().catch(() => ({}))) as Try & { error?: string; reason?: string; triesLeft?: number };
+    if (r.ok) {
+      setTries({ ...tries, [shot.key]: [...(tries[shot.key] ?? []), j] });
+      setTriesMade({ ...triesMade, [shot.key]: (triesMade[shot.key] ?? 0) + 1 });
+    } else if (r.status === 403 && j.reason === 'consent') {
+      const c = await authFetch('/api/consent').catch(() => null);
+      if (c?.ok) setConsent(((await c.json()) as { wording: Wording }).wording);
+    } else setMessage(j.error ?? 'The picture could not be made');
   }
+  async function agreeConsent() {
+    const r = await authFetch('/api/consent', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sha256: consent?.sha256 }) });
+    if (r.ok) {
+      setConsent(null);
+      void makePicture();
+    } else setMessage('Your agreement could not be recorded. Try again.');
+  }
+  const pictureNow = () => {
+    // A closed model's notice (and the 18+ box) comes first; the picture is made once it is answered.
+    if (m.askFirst(() => void makePicture())) return;
+    void makePicture();
+  };
   async function keep(tr: Try) {
     setBusy('keep');
     const r = await authFetch('/api/voice/boards/keep', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ticket: tr.ticket, image: tr.image }) });
@@ -201,7 +234,12 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       <p className="vr-kicker">Admin trial · Draft · Storyboard</p>
       <h1>{d.draft.speech?.title ?? 'Storyboard'}</h1>
       <p className="vr-labels">
-        Your performance in {d.draft.preset ?? 'a preset voice'} · {fmt(t.seconds)} · <span className="vr-tag">Stand-in</span> pictures are placeholder cards tonight: no model, no cost ·{' '}
+        Your performance in {d.draft.preset ?? 'a preset voice'} · {fmt(t.seconds)} ·{' '}
+        {d.making.standIn ? (
+          <><span className="vr-tag">Stand-in</span> pictures are placeholder cards on this copy: no model, no cost ·{' '}</>
+        ) : !d.making.real ? (
+          <>Pictures aren&rsquo;t switched on yet ·{' '}</>
+        ) : null}
         <Link href="/storyboard/record">Back to recording</Link>
       </p>
       {message && <p className="vr-warn" role="alert">{message}</p>}
@@ -249,7 +287,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
         <div className="vr-row">
           <button type="button" className="vr-btn vr-quiet vr-small-btn" onClick={() => setAll(d.board.proposed, [])}>Use the automatic cuts again</button>
           <button type="button" className="vr-btn vr-small-btn" onClick={save} disabled={busy !== null || !dirty}>{busy === 'save' ? 'Saving…' : dirty ? 'Save' : saved ? `Saved (version ${saved})` : 'Saved'}</button>
-          <span className="vr-small">{shots.length} shots</span>
+          <span className="vr-small">{shots.length} of at most {d.making.limits.maxShots} shots</span>
         </div>
       </section>
 
@@ -307,11 +345,20 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             </fieldset>
           </div>
           {styleOf(shot.styleId) && <p className="vr-small">Style text, as sent: {styleOf(shot.styleId)!.text}</p>}
+          <ModelRow m={m} name={`model-${shot.key}`} />
           <div className="vr-row">
-            <button type="button" className="vr-btn" onClick={makePicture} disabled={busy !== null || !shot.description.trim() || !shot.angle}>
-              {busy === 'picture' ? 'Making…' : (tries[shot.key]?.length ?? 0) ? 'Try again' : 'Make the picture'}
+            <button
+              type="button"
+              className="vr-btn"
+              onClick={pictureNow}
+              disabled={busy !== null || !shot.description.trim() || !shot.angle || (triesMade[shot.key] ?? 0) >= d.making.limits.maxTriesPerShot || (!d.making.real && !d.making.standIn)}
+            >
+              {busy === 'picture' ? 'Making…' : (triesMade[shot.key] ?? 0) ? 'Try again' : 'Make the picture'}
             </button>
-            <span className="vr-small"><span className="vr-tag">Stand-in</span> a placeholder card, free</span>
+            <span className="vr-small">
+              {Math.min(triesMade[shot.key] ?? 0, d.making.limits.maxTriesPerShot)} of {d.making.limits.maxTriesPerShot} pictures for this shot
+              {d.making.standIn && <> · <span className="vr-tag">Stand-in</span> a placeholder card, free</>}
+            </span>
           </div>
           {(tries[shot.key]?.length ?? 0) > 0 && (
             <div className="vb-tries">
@@ -341,6 +388,8 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
           </div>
         </section>
       )}
+
+      {consent && <ConsentScreen wording={consent} name={auth.kind === 'signed-in' ? (auth.username ?? null) : null} onAgree={agreeConsent} onCancel={() => setConsent(null)} error={null} />}
 
       <section className="vr-card" aria-labelledby="vb-play-h">
         <h2 id="vb-play-h">3. Play it through</h2>
