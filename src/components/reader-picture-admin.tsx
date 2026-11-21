@@ -37,6 +37,9 @@ export const R = {
   later: 'Leave it for later',
   laterLine: 'It waits on /you/illustrations until an admin keeps it.',
   look: (l: string) => `Style: ${l}`,
+  // A passage chosen by highlighting text (owner, 2026-11-20). DRAFT wording (coding agent).
+  unlabelled: (blocks: number[]) =>
+    `Your selection ${blocks.length > 1 ? 'starts or ends on blocks' : 'starts or ends on a block'} without a paragraph number (block ${blocks.join(', block ')}), such as a screen or a figure. ${blocks.length > 1 ? 'They are' : 'It is'} kept as the passage’s end${blocks.length > 1 ? 's' : ''} and listed below by block number; choose a paragraph instead if you prefer.`,
   noteFirst: 'Write what the picture shows first.',
 } as const;
 
@@ -115,7 +118,9 @@ function ChangeSheet({ jobId, onClose }: { chapter: number; jobId: string; onClo
 
 /** The chapter's blocks that can bound a passage, read from the page as served (their ids and paragraph labels). */
 function pageBlocks(): { idx: number; label: number | null }[] {
-  return [...document.querySelectorAll<HTMLElement>('article.chapter [id^="c"][data-label]')]
+  // Every block, in the page's order; those without a paragraph number have label null (2026-11-20: a passage set from a
+  // selection or the player may end on one).
+  return [...document.querySelectorAll<HTMLElement>('article.chapter .block[id]')]
     .map((el) => ({ idx: Number(/-b(\d+)$/.exec(el.id)?.[1]), label: el.dataset.label ? Number(el.dataset.label) : null }))
     .filter((b) => Number.isInteger(b.idx));
 }
@@ -135,11 +140,31 @@ export function AdminAddHere({ chapter, after, label }: { chapter: number; after
   );
 }
 
-function AddSheet({ chapter, after, label, onClose }: { chapter: number; after: number; label: number | null; onClose: () => void }) {
+/**
+ * The "Add a picture here" sheet opened from elsewhere in the reader (owner, 2026-11-20: highlighting text, the player's
+ * image button and "+ Add an image", for admins): the same sheet, with the passage already set. Admins only: for anyone
+ * else it renders nothing (src/components/add-image-entry.tsx sends them to the readers' composer, as before).
+ */
+export function AdminAddSheet({ chapter, after, start, end, onClose }: { chapter: number; after: number; start: number; end: number; onClose: () => void }) {
+  const auth = useAuth();
+  if (auth.kind !== 'signed-in' || !isAdmin(auth.fid)) return null;
+  return <AddSheet chapter={chapter} after={after} label={null} start={start} end={end} onClose={onClose} />;
+}
+
+function AddSheet({ chapter, after, label: given, start: from = after, end: to = after, onClose }: { chapter: number; after: number; label: number | null; start?: number; end?: number; onClose: () => void }) {
   const { data, failed } = usePictureState(null);
   const [blocks, setBlocks] = useState<{ idx: number; label: number | null }[]>([]);
-  const [start, setStart] = useState(after);
-  const [end, setEnd] = useState(after);
+  const [start, setStart] = useState(from);
+  const [end, setEnd] = useState(to);
+  // The chooser lists the paragraphs (blocks with a number). A passage set from elsewhere may start or end on a block
+  // without one (a screen, a figure): it is kept, listed by its block number, and the sheet says so.
+  const unlabelled = blocks.length ? [...new Set([from, to])].filter((i) => !blocks.some((b) => b.idx === i && b.label !== null)) : [];
+  // In the page's order (no sorting here: P5b); a block not on the page at all is listed last.
+  const options = [
+    ...blocks.filter((b) => b.label !== null || unlabelled.includes(b.idx)),
+    ...unlabelled.filter((i) => !blocks.some((b) => b.idx === i)).map((idx) => ({ idx, label: null })),
+  ];
+  const label = given ?? blocks.find((b) => b.idx === after)?.label ?? null;
   const [note, setNote] = useState('');
   const [chosen, setChosen] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
@@ -186,17 +211,22 @@ function AddSheet({ chapter, after, label, onClose }: { chapter: number; after: 
       {data?.pictures.adding && (
         <div className="cp-redo rpa-add-form">
           <CapLine cap={data.pictures.cap} />
-          <div className="rpa-passage">
+          {unlabelled.length > 0 && (
+            <p className="you-note" data-unlabelled={unlabelled.join(',')}>
+              {R.unlabelled(unlabelled)}
+            </p>
+          )}
+          <div className="rpa-passage" data-passage={`${Math.min(start, end)}-${Math.max(start, end)}`} data-after={after}>
             <label className="cp-field">
               <span className="you-meta">{R.from}</span>
               <select value={start} disabled={Boolean(draft)} onChange={(e) => setStart(Number(e.target.value))}>
-                {blocks.map(opt)}
+                {options.map(opt)}
               </select>
             </label>
             <label className="cp-field">
               <span className="you-meta">{R.to}</span>
               <select value={end} disabled={Boolean(draft)} onChange={(e) => setEnd(Number(e.target.value))}>
-                {blocks.map(opt)}
+                {options.map(opt)}
               </select>
             </label>
           </div>

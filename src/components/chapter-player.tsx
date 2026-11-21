@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { ReportPronunciation } from './report-pronunciation';
 import { AiLabel } from './recipe-sheet';
 import { AI_DECLARED, AI_LABEL, REVIEWED_MARK } from '~/lib/ai-declared';
-import { openComposer } from '~/lib/images/client';
+import { useAddImageEntry } from './add-image-entry';
 import { useCanAddImage } from '~/lib/images/can-add';
 
 /**
@@ -76,6 +76,8 @@ function cueAt(cues: PlayerCue[], t: number): number {
 export function ChapterPlayer({ chapter, chapters, recipeUrl, url, duration, cues, images, labels = {}, view = 'read', onView }: Props) {
   const audio = useRef<HTMLAudioElement | null>(null);
   const canAddImage = useCanAddImage();
+  // An admin's image button opens the edition's "Add a picture here" sheet for this paragraph (owner, 2026-11-20).
+  const add = useAddImageEntry(chapter);
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
@@ -381,14 +383,16 @@ export function ChapterPlayer({ chapter, chapters, recipeUrl, url, duration, cue
         <button
           type="button"
           className="add-image listen-add-image"
+          data-add-entry={add.admin ? 'admin' : 'composer'}
           onClick={() => {
             audio.current?.pause();
-            openComposer({ chapter, start: current.idx, end: current.idx });
+            add.open(current.idx, current.idx);
           }}
         >
-          + Add an image to this moment
+          {add.admin ? `+ ${add.label('')}` : '+ Add an image to this moment'}
         </button>
       )}
+      {add.sheet}
       </div>
       {ended && chapter < chapters && (
         <Link className="player-next" href={`/chapter/${chapter + 1}?view=listen`}>
