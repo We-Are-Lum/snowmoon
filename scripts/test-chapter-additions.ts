@@ -6,6 +6,7 @@
  *     notice and 18+, only characters the passage names with a sheet go along, as references in the order chosen;
  *     GPT Image 2.5 Sunburst is the admins' default where OpenAI serves, FLUX elsewhere (P3, DRAFT);
  *  D. the draft is private: no decision, nothing on the chapter, no public recipe; it waits on /you/illustrations;
+ *  W. there it is named by ¶ as the reader names it ("after ¶ 39"), "block N" for a block with no ¶;
  *  K. Keep: shown in the chapter at once, after its block, "Added by @garance", the model with its maker; the recipe
  *     names the model, maker, style, note, references and the admin;
  *  T. take it off the chapter, show it again, another draft for the same picture; nothing is deleted;
@@ -47,7 +48,9 @@ const { addPicture, showPicture, adminView } = await import('../src/lib/chapter-
 const { readAdditions, readReplacements, publicRecipe, pictureHistory } = await import('../src/lib/chapter-pictures/read');
 const { saveAddition } = await import('../src/lib/chapter-pictures/admin');
 const { addedPictures } = await import('../src/lib/chapter-pictures/view');
-const { waitingDrafts } = await import('../src/lib/chapter-pictures/waiting');
+const { waitingDrafts, waitingWhere } = await import('../src/lib/chapter-pictures/waiting');
+const { blockFacts } = await import('../src/lib/reading');
+const { loadChapter } = await import('../src/lib/book');
 const { chapterDefaultModel, chapterDefaultProblems } = await import('../src/lib/chapter-pictures/default-model');
 const { CHAPTER_PICTURES, CLOSED_PROVIDERS, IMAGES } = await import('../src/lib/config');
 const { challengeModelsFor } = await import('../src/lib/challenge/models');
@@ -161,6 +164,18 @@ check('D. a draft is not shown in the chapter', !(await readReplacements(S)).has
 check('D. a draft has no public recipe', (await publicRecipe(S, v1)) === null && puts.length === 0);
 const waiting = waitingDrafts(await pictureHistory(S), await readAdditions(S));
 check('D. it waits on /you/illustrations, with where it sits', waiting.length === 1 && waiting[0].versionId === v1 && waiting[0].where.kind === 'added' && waiting[0].href === '/chapter/3#c3-b42', JSON.stringify(waiting[0]));
+// W. Named by ¶ as the reader names it (owner, 2026-11-20): the reader's own blockFacts, a block without a ¶ by its number.
+const readerLabel = (chapter: number, idx: number) => {
+  const ch = loadChapter(chapter)!;
+  return blockFacts(ch.blocks)[ch.blocks.findIndex((b) => b.idx === idx)]?.label ?? null;
+};
+const named = waitingDrafts(await pictureHistory(S), await readAdditions(S), readerLabel);
+const wording = waitingWhere(named[0]);
+check('W. a waiting draft is named by the reader\'s ¶: after ¶ 39, showing ¶ 37–39 (blocks 42, 40–42 of chapter 3)', readerLabel(3, 42) === 39 && readerLabel(3, 40) === 37 && wording === 'A new picture for chapter 3, after ¶ 39 (it shows ¶ 37–39)', wording);
+check('W. no block numbers in it when every place has a ¶', !/block/.test(wording), wording);
+check('W. a block with no ¶ (a heading, a break) falls back to the reader\'s "block N"', readerLabel(3, 33) === null && waitingWhere({ chapter: 3, where: { kind: 'added', after: 33, start: 33, end: 33, labels: { after: null, start: null, end: null } } }) === 'A new picture for chapter 3, after block 33 (it shows block 33)' && waitingWhere({ chapter: 3, where: { kind: 'added', after: 42, start: 33, end: 42, labels: { after: 39, start: null, end: 39 } } }) === 'A new picture for chapter 3, after ¶ 39 (it shows block 33 to ¶ 39)');
+check('W. a draft replacing an edition picture names its ¶ too', waitingWhere({ chapter: 3, where: { kind: 'replace', block: 42, label: 39 } }) === 'Would replace the picture at chapter 3, ¶ 39' && waitingWhere({ chapter: 3, where: { kind: 'replace', block: 9, label: null } }) === 'Would replace the picture at chapter 3, block 9');
+check('W. without labels (no chapter text) it still names the block, never a wrong ¶', waitingWhere(waiting[0]) === 'A new picture for chapter 3, after block 42 (it shows block 40 to block 42)', waitingWhere(waiting[0]));
 
 // K. Keep.
 r = await showPicture(S, GARANCE, { jobId, versionId: v1 }, deps);

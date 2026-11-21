@@ -5,6 +5,7 @@ import { authFetch, useAuth } from '~/lib/client-auth';
 import { isAdmin } from '~/lib/admins';
 import { CHAPTER_PICTURES } from '~/lib/config';
 import { lookName } from '~/lib/chapter-pictures/shared';
+import { paragraphOrBlock } from '~/lib/reading';
 import { useChallengeModel } from './challenge-model-row';
 import { CapLine, DraftImage, ModelRow, PicturePanel, SheetPicker, errorOf, post, type PictureItem, type PicturesState } from './chapter-pictures';
 import { PublishedTextField } from './publish-words';
@@ -200,7 +201,7 @@ function AddSheet({ chapter, after, label: given, start: from = after, end: to =
   }
   const opt = (b: { idx: number; label: number | null }) => (
     <option key={b.idx} value={b.idx}>
-      {b.label !== null ? `¶ ${b.label}` : `block ${b.idx}`}
+      {paragraphOrBlock(b.label, b.idx)}
     </option>
   );
   return (
