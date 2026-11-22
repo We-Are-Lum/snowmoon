@@ -175,6 +175,27 @@ check('W. numbers, case, punctuation and apostrophes compare as words', norm('4'
   check('W. ... and only listed names are matched by sound (an ordinary word needs its spelling)', !checkSpeech([dread], heardAs(dread.text.replace('taxes', 'Texas')), speech.names)[0].ok);
 }
 
+// I. The team's three invented speeches (Nate, 2026-11-22), beside c13-b64.
+{
+  const all = speeches();
+  const inv = all.filter((x) => x.label.kind === 'invented');
+  const file = JSON.parse(readFileSync(path.join(ROOT, 'config/voice-speeches.json'), 'utf8')) as { source: { googleDocId: string }; speeches: { id: string; title: string; paragraphs: string[] }[] };
+  check('I. c13-b64 stays first and unchanged; the three invented speeches follow', all[0].id === 'ephelion-c13-b64' && all[0].label.kind === 'book' && inv.map((x) => x.id).join() === 'doing-fine-v2,natural-way-v2,last-five-years-v2');
+  check('I. each is labelled "Invented, not from the book", versioned (v2), from its source doc, writers a DRAFT placeholder', inv.every((x) => x.label.text === 'Invented, not from the book' && x.version === 2 && x.source.kind === 'edition' && x.source.doc === file.source.googleDocId && x.label.kind === 'invented' && /^DRAFT/.test(x.label.writers[0])));
+  check('I. the spoken text is the paragraphs only: ending "With regards.", no title, no notes', inv.every((x) => x.paragraphs.at(-1) === 'With regards.' && x.sentences.at(-1)!.text === 'With regards.' && !x.paragraphs.some((p) => p === x.title || /Still open|\(worth\)|\(death\)|\(stagnation\)/.test(p))));
+  check('I. the speeches are word for word the file\'s (sentence by sentence)', inv.every((x) => x.sentences.map((y) => y.text).join(' ') === file.speeches.find((f) => f.id === x.id)!.paragraphs.join(' ')));
+  check('I. each has its own names: "Veridia" for the last five years, none for the other two', inv.find((x) => x.id === 'last-five-years-v2')!.names.join() === 'Veridia' && inv.filter((x) => x.id !== 'last-five-years-v2').every((x) => x.names.length === 0));
+  const five = inv.find((x) => x.id === 'last-five-years-v2')!;
+  const s3 = five.sentences.find((x) => x.text.startsWith('Veridia'))!;
+  const heard = (text: string) => text.split(' ').map((w, i) => ({ text: w, start: i * 0.3, end: i * 0.3 + 0.25 }));
+  const byS = checkSpeech([s3], heard(s3.text.replace('Veridia', 'Varidia')), five.names);
+  check('I. the word check, sentence by sentence: "Veridia" heard as "Varidia" passes by sound, and is listed', byS[0].ok && byS[0].bySound.length === 1, JSON.stringify(byS[0]));
+  check('I. ... a different word still fails ("Venice"), and the numbers compare as words', !checkSpeech([s3], heard(s3.text.replace('Veridia', 'Venice')), five.names)[0].ok && checkSpeech([s3], heard(s3.text.replace('twenty', '20').replace('forty', '40')), five.names)[0].ok);
+  const st = (await (await status.GET(as(NATE))).json()) as { speeches: { id: string; label: { text: string }; version: number }[]; readings: { speechId: string }[] };
+  check('I. the status lists every speech, with its label and version, and readings by speech', st.speeches.length === 4 && st.speeches[1].label.text === 'Invented, not from the book' && st.speeches[1].version === 2 && st.readings.every((x) => typeof x.speechId === 'string'));
+  check('I. publishing the invented speeches is off until Nate says', VOICE.publishInvented === false);
+}
+
 // C. The consent.
 const wording = voiceConsentWording();
 const own = JSON.parse(readFileSync(path.join(ROOT, 'config/consent-own-voice.json'), 'utf8'));

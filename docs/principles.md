@@ -182,6 +182,14 @@ open-weight models only"):** Published scene assets may use closed models when
 every recipe and label names the model, its maker, the date and that it is
 closed (owner, 2026-10-18).
 
+**Invented speeches (owner, 2026-11-22; DRAFT, for the owner's reread).** A storyboard's spoken words are either the
+book's, word for word at their block, or a speech written by people for this edition, placed word for word from its
+source document at a recorded version. An invented speech is labelled "Invented, not from the book" everywhere it is
+named, its writers are credited [credit wording: DRAFT placeholder, Nate to give], and no agent or model writes or edits
+its words. A recording is checked against, and tied to, the exact version it was made from. (The three speeches of
+2026-11-22: `config/voice-speeches.json`, from the Google Doc "Lord Ephelion: three speeches v2 (DRAFT)"; checked by
+`test:voice`, section I.)
+
 **Recorded exception.** The house narration keeps 148 model-drafted spoken
 descriptions of screens, figures and lyric cards. Each is preceded by a tone
 and shown in Listen with the label "AI description ⓘ", which opens the details

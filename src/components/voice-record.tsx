@@ -20,15 +20,17 @@ interface Choice { presetId: string; name: string; description: string; candidat
 interface Check { n: number; ok: boolean; bySound?: { expected: string; heard: string }[]; missing: string[]; extra: string[]; start: number | null; end: number | null }
 interface Status {
   ready: boolean;
-  speech: { id: string; title: string; character: string; source: { kind: string; block?: string }; label: { kind: 'book'; text: string; block: string } | { kind: 'invented'; text: string; writers: string[] }; standIn: boolean; paragraphs: string[]; sentences: { n: number; text: string }[]; characters: number };
+  speech: Speech;
+  speeches: Speech[];
   choices: Choice[];
   consent: { version: string; line: string; title: string; text: string[]; sha256: string; agreed: boolean };
   models: { convert: string; transcribe: string; reading: string; design: string; provider: string };
   limits: { maxTakeSeconds: number; maxSentenceSeconds: number; maxTakeBytes: number; creditsPerMinute: number; readingCreditsPerChar: number };
   today: { funded: string; credits: number; capCredits: number; conversionsLeft: number } | null;
   drafts: { id: string; kind: string; speechId: string; presetId: string; madeAt: string; publishedAt: string | null; recipe: Record<string, unknown>; audio: { n: number; role: string; sentence: number | null }[] }[];
-  readings: { presetId: string; id: string; candidate: number | null; madeAt: string }[];
+  readings: { speechId: string; presetId: string; id: string; candidate: number | null; madeAt: string }[];
 }
+interface Speech { id: string; title: string; character: string; source: { kind: string; block?: string }; label: { kind: 'book'; text: string; block: string } | { kind: 'invented'; text: string; writers: string[] }; version: number; standIn: boolean; paragraphs: string[]; sentences: { n: number; text: string }[]; characters: number; names: string[] }
 interface Converted { blob: Blob; url: string; ticket: string; check?: string; checks?: Check[]; seconds: number }
 interface Redo extends Converted { n: number }
 
@@ -274,7 +276,14 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     return () => window.removeEventListener('beforeunload', h);
   }, [converted, accepted]);
 
-  const s = status && status !== 'none' ? status : null;
+  // The chosen speech (Nate, 2026-11-22: "a 'pick a speech' step before the voice picker"): the page reads it as s.speech,
+  // and the readings shown are that speech's.
+  const [speechId, setSpeechId] = useState<string | null>(null);
+  const s = useMemo(() => {
+    if (!status || status === 'none') return null;
+    const sp = status.speeches.find((x) => x.id === speechId) ?? status.speech;
+    return { ...status, speech: sp, readings: status.readings.filter((r) => r.speechId === sp.id) };
+  }, [status, speechId]);
   const picked = useMemo(() => s?.choices.find((c) => `${c.presetId}#${c.candidate}` === choice) ?? null, [s, choice]);
   const words = useMemo(() => (s ? s.speech.sentences.map((x) => wordCount(x.text)) : []), [s]);
   const totalWords = words.reduce((a, b) => a + b, 0);
@@ -481,7 +490,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
         {s.speech.label.kind === 'book' ? (
           <><span className="vr-tag">{s.speech.label.text}</span> Lord Ephelion&rsquo;s letter, {s.speech.label.block}, word for word</>
         ) : (
-          <><span className="vr-tag">{s.speech.label.text}</span> Written by {s.speech.label.writers.join(', ')}</>
+          <><span className="vr-tag">{s.speech.label.text}</span> Written for this edition, version {s.speech.version} · <span className="vr-tag">Draft</span> {s.speech.label.writers.join(', ')}</>
         )}
         {s.speech.standIn && <> · <span className="vr-tag">Stand-in</span> until the team&rsquo;s speeches arrive</>} · <span className="vr-tag">Invented</span> performing it aloud is this edition&rsquo;s
       </p>
@@ -506,6 +515,22 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
 
       {s.consent.agreed && (
         <>
+          <section className="vr-card" aria-labelledby="vr-speech-h">
+            <h2 id="vr-speech-h">Pick a speech</h2>
+            <fieldset className="vr-speeches" disabled={busy !== null || recording || Boolean(take) || Boolean(converted)}>
+              <legend className="vr-small">Lord Ephelion&rsquo;s words to perform. Changing it starts again.</legend>
+              {s.speeches.map((x) => (
+                <label key={x.id} className={`vr-speech${x.id === s.speech.id ? ' vr-on' : ''}`}>
+                  <input type="radio" name="speech" checked={x.id === s.speech.id} onChange={() => setSpeechId(x.id)} />
+                  <span>
+                    <strong>{x.title}</strong>{' '}
+                    <span className="vr-tag">{x.label.text}</span>
+                    <span className="vr-small"> {x.label.kind === 'book' ? `${x.label.block}, word for word` : `version ${x.version}`} · {x.sentences.length} sentences</span>
+                  </span>
+                </label>
+              ))}
+            </fieldset>
+          </section>
           <section className="vr-card" aria-labelledby="vr-pick-h">
             <h2 id="vr-pick-h">1. Pick a voice</h2>
             <p className="vr-note">

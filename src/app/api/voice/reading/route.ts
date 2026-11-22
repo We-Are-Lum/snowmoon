@@ -74,7 +74,7 @@ export async function POST(request: Request) {
     settings: VOICE.readingSettings,
     outputFormat: VOICE.outputFormat,
     preset,
-    speech: { id: speech.id, title: speech.title, source: speech.source, label: speech.label, standIn: speech.standIn },
+    speech: { id: speech.id, version: speech.version, title: speech.title, source: speech.source, label: speech.label, standIn: speech.standIn },
     textSha256: sha256Hex(new TextEncoder().encode(text)),
     audioSha256: sha256,
     credits: out.credits,

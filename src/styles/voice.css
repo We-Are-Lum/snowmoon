@@ -110,3 +110,9 @@
 .vb-playing { margin: var(--space-2) 0 4px; font-size: var(--text-small); font-weight: bold; }
 .vb-caption { margin: var(--space-2) 0; line-height: 1.5; }
 @media (max-width: 767px) { .vb-strip-wrap { display: none; } }
+
+/* The speech picker (Nate, 2026-11-22). */
+.vr-speeches { border: 0; padding: 0; margin: 0; display: grid; gap: var(--space-2); }
+.vr-speech { display: flex; gap: var(--space-2); align-items: flex-start; padding: var(--space-2); border: 1px solid var(--rule); border-radius: 8px; cursor: pointer; }
+.vr-speech.vr-on { border-color: currentColor; }
+.vr-speech input { margin-top: 4px; }

@@ -100,7 +100,8 @@ export async function POST(request: Request) {
       outputFormat: t.outputFormat,
       transcribeModel: c.model,
       preset,
-      speech: { id: speech.id, title: speech.title, source: speech.source, label: speech.label, standIn: speech.standIn, textSha256: sha256Hex(new TextEncoder().encode(speech.paragraphs.join('\n'))) },
+      // The exact text it was checked against: the speech's id and version, and its sha256 (Nate, 2026-11-22).
+      speech: { id: speech.id, version: speech.version, title: speech.title, source: speech.source, label: speech.label, standIn: speech.standIn, textSha256: sha256Hex(new TextEncoder().encode(speech.paragraphs.join('\n'))) },
       takes,
       check: { sentences: speech.sentences.length, matched: speech.sentences.length - unmatched.length, unmatched, bySound: checks.flatMap((x) => x.bySound.map((b) => ({ sentence: x.n, ...b }))), names: speech.names },
       consent: { kind: 'voice_recording', sha256: t.consentSha256, perRecording: true },
