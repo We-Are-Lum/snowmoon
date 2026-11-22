@@ -25,7 +25,8 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { ADMINS, AGENTS, ASSISTANT, CHALLENGE, CHAT, CLOSED_PROVIDERS, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, imagesDailySpendCapUsd } from '../src/lib/config';
+import { ADMINS, AGENTS, ASSISTANT, CHALLENGE, CHAT, CLOSED_PROVIDERS, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, VOICE, imagesDailySpendCapUsd } from '../src/lib/config';
+import { FLOW_FILE as VOICE_FLOW_FILE, ROUTE_FILE as VOICE_ROUTE_FILE, VOICE_PLANTS, voiceRun, voiceStatic } from './lib/voice-proof';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
 import { rehearsalOn } from '../src/lib/challenge/rehearsal-switch';
@@ -40,7 +41,6 @@ import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, P5I_FILES, p5gProblems, p5i
 import { P5B_PLANTS, P5J_PLANTS, p5bProblems, p5jProblems } from './lib/p5b';
 import { recipeProblems } from '../src/lib/chapter-pictures/shared';
 import { chapterDefaultModel, chapterDefaultProblems } from '../src/lib/chapter-pictures/default-model';
-import { MODAL_VC_FILE, MODAL_VC_PLANTS, modalVcRun, modalVcStatic } from './lib/modal-vc';
 import { requireTarget } from './lib/target';
 import { p2mProblems, p6acProblems, p8iProblems } from './lib/challenge-moments';
 import { CARDS } from '../src/lib/challenge/cards';
@@ -517,39 +517,40 @@ add({
 add({
   id: 'P1h',
   principle: 1,
-  name: 'our Modal conversion code keeps no recording: no file, volume, Dict, Queue or log line holds it after the call (raw voice takes exception)',
-  load: async () => ({ src: read(MODAL_VC_FILE) }),
-  run: ({ src }) => {
-    // scripts/check-modal-vc.ts (npm run check:modal-vc) also proves each violation in MODAL_VC_PLANTS is caught.
-    const run = modalVcRun(src);
-    const skipped = run.problems.length === 1 && run.problems[0].startsWith('skipped');
-    const problems = [...modalVcStatic(src), ...(skipped ? [] : run.problems)];
-    return problems.length || !skipped ? problems : run.problems;
+  name: 'the voice slice keeps no recording: the take goes only to ElevenLabs and sha256, is zeroed, its history item deleted, never transcribed, logged or written (raw voice takes, DRAFT 2026-11-20)',
+  load: async () => ({ flow: read(VOICE_FLOW_FILE), route: read(VOICE_ROUTE_FILE) }),
+  run: async ({ flow, route }) => {
+    // npm run check:voice-proof also proves each violation in VOICE_PLANTS is caught (8, by the run and statically).
+    // The Modal proof of 2026-10-23 still runs on its own (npm run check:modal-vc); no page uses Modal.
+    return [...voiceStatic(flow, route), ...(await voiceRun(ROOT, flow))];
   },
   plant: (c) => {
-    c.src = MODAL_VC_PLANTS.reduce((s, p) => (/base64|not removed/.test(p.name) ? p.plant(s) : s), c.src);
+    c.flow = VOICE_PLANTS.find((p) => p.name === 'a transcription of the take')!.plant(c.flow);
   },
 });
 
 add({
   id: 'P1i',
   principle: 1,
-  name: 'the own-voice-v1 consent (config/consent-own-voice.json) shows nowhere until /record exists, and then only with P1h passing',
+  name: 'the own-voice consent shown is own-voice-v2 (current; reread 2026-11-21), only by the voice slice, only while P1h passes; own-voice-v1 is used by nothing',
   load: async () => ({
-    record: existsSync(path.join(ROOT, 'src/app/record')),
     users: walk('src', /\.(ts|tsx)$/).filter((f) => /consent-own-voice/.test(read(f))),
+    file: json('config/consent-own-voice.json') as { draft?: string; current: string; versions: Record<string, unknown> },
+    v1Users: walk('src', /\.(ts|tsx)$/).filter((f) => /own-voice-v1/.test(read(f))),
     proof: [] as string[],
   }),
-  run: ({ record, users, proof }) => {
-    // Owner, 2026-10-23: "Ship own-voice-v1 only after that passes" (the proof in P1h).
-    if (!record) return (users as string[]).map((f) => `${f} uses the own-voice-v1 consent, but /record does not exist yet`);
-    const src = read(MODAL_VC_FILE);
-    const p = (proof as string[]).length ? proof : [...modalVcStatic(src), ...modalVcRun(src).problems];
-    return (p as string[]).map((x) => `/record shows own-voice-v1 while the Modal proof fails: ${x}`);
+  run: async ({ users, file, v1Users, proof }) => {
+    const p: string[] = [];
+    for (const f of users as string[]) if (f !== 'src/lib/voice/consent.ts') p.push(`${f} reads the own-voice consent; only src/lib/voice/consent.ts may`);
+    if ((file.draft ?? file.current) !== 'own-voice-v2' || !file.versions['own-voice-v2']) p.push('the voice pages would not show own-voice-v2');
+    for (const f of v1Users as string[]) p.push(`${f} uses own-voice-v1`);
+    const fails = (proof as string[]).length ? (proof as string[]) : [...voiceStatic(read(VOICE_FLOW_FILE), read(VOICE_ROUTE_FILE)), ...(await voiceRun(ROOT))];
+    if ((VOICE.adminTrial || VOICE.open) && fails.length) p.push(...fails.map((x) => `the voice slice is switched on while P1h fails: ${x}`));
+    return p;
   },
   plant: (c) => {
     c.users.push('src/app/planted/page.tsx');
-    c.proof.push('planted: the per-call folder is not removed');
+    c.v1Users.push('src/app/planted/old.tsx');
   },
 });
 
@@ -1142,6 +1143,7 @@ add({
     endpoints.set(IMAGES.editModel.endpoint, 'src/lib/config.ts IMAGES.editModel');
     // Model choice (IMAGES.designs.modelChoice): every model a sheet's views can be made with, offered or not.
     for (const m of SHEET_MODELS) for (const c of [m.front, m.views]) endpoints.set(c.endpoint, `src/lib/images/sheet-models.ts ${m.id}`);
+    for (const [k, id] of Object.entries(VOICE.models)) endpoints.set(id, `src/lib/config.ts VOICE.models.${k}`);
     return { models: json('config/models.json').models, used: [...used.entries()], endpoints: [...endpoints.entries()] };
   },
   run: ({ models, used, endpoints }) => {
@@ -2007,6 +2009,8 @@ const SERVICES: [string, RegExp][] = [
   ['OpenAI', /\bOpenAI\b/g],
   ['Google', /\bGoogle\b(?! Fonts)/g],
   ['Spotify', /\bSpotify\b/g],
+  // The Ephelion voice (branch ephelion-voice, 2026-11-21): ElevenLabs converts and transcribes a recorded speech.
+  ['ElevenLabs', /\bElevenLabs\b/g],
 ];
 /** Makers named for provenance only: some pictures the owner made with them outside the site are brought in with the
  *  recipe the owner reports, and nothing is sent to them. They are not services, so P6g and P6h never ask the Privacy

@@ -1118,3 +1118,90 @@ export const MINPENTAI_PLAY = {
 export function appUrl(): string {
   return process.env.NEXT_PUBLIC_URL?.replace(/\/$/, '') || 'http://localhost:3000';
 }
+
+/**
+ * The Ephelion storyboard's voice, slice 1 (Nate, 2026-11-19; branch ephelion-voice; docs/proposals/ephelion-voice.md):
+ * pick a voice, record a speech, convert it with ElevenLabs (closed models, by ElevenLabs), check it word for word,
+ * redo one sentence, accept a private draft; and a ready-made reading for people who don't record.
+ *
+ * The switch: `adminTrial` lets admins use it; `open` lets everyone signed in. `adminTrial` is on (Nate's merge plan,
+ * 2026-11-21, after his reread): admins only; `open` is off, so to everyone else every page and route answers "not
+ * found". Turning one on is a reviewed commit, never an environment variable, and `open` waits for the
+ * reread Terms and Privacy that name ElevenLabs (owner, 2026-10-18). The local tests turn it on with VOICE_TEST_ON=1,
+ * never on Vercel (src/lib/voice/flag.ts).
+ *
+ * Caps and rates: PLACEHOLDERS (overnight build, 2026-11-20), for Nate to set once he picks the speech length and the
+ * plan (review page, B7). Credits are ElevenLabs' units on our plan; dollars use Creator's $22 for 121,000 credits.
+ */
+export const VOICE = {
+  adminTrial: true,
+  open: false,
+  /**
+   * Storyboard pictures (Nate, 2026-11-21): made with the challenge's picture code (GPT Image 2.5 Sunburst the default
+   * where OpenAI serves, FLUX and Gemini offered; the same notices and daily limits). No real picture is made before
+   * Nate's word: until this is true, the route refuses to call a model. The tests use stand-in cards.
+   */
+  realPictures: false,
+  board: { maxShots: 12, maxTriesPerShot: 3, descriptionMaxChars: 600 },
+  provider: 'ElevenLabs',
+  models: {
+    /** Speech-to-speech ("Voice Changer"). */
+    convert: 'eleven_multilingual_sts_v2',
+    /**
+     * Speech-to-text, word timings: the converted audio only, never the take. scribe_v3 with the speech's names as
+     * keyterms (2026-11-21: scribe_v1 and v2 heard "Lord Aphelion" and "Dreadnought"; v2 and v3 with keyterms heard
+     * them right).
+     */
+    transcribe: 'scribe_v3',
+    /** Text-to-speech, the ready-made reading. */
+    reading: 'eleven_multilingual_v2',
+    /** Voice Design, the presets' recipe (made once by an admin, 2026-11-20; not called by the site). */
+    design: 'eleven_ttv_v3',
+  },
+  /** What we ask for back: MP3, 44.1 kHz, 128 kb/s (a 3-minute speech is about 2.9 MB, under Vercel's 4.5 MB reply limit). */
+  outputFormat: 'mp3_44100_128',
+  /** Speech-to-speech settings, sent as given and kept in every recipe. */
+  convertSettings: { stability: 0.5, similarity_boost: 0.75, style: 0, use_speaker_boost: true, remove_background_noise: false },
+  readingSettings: { stability: 0.5, similarity_boost: 0.75, style: 0, use_speaker_boost: true },
+  /** A whole take: at most 5 minutes (ElevenLabs' limit per request) and 4 MB (under Vercel's 4.5 MB request limit). */
+  maxTakeSeconds: 300,
+  maxTakeBytes: 4_000_000,
+  /** One redone sentence: at most 30 seconds. */
+  maxSentenceSeconds: 30,
+  /** A conversion's signed record is good for this long; the person accepts within it or it is gone. */
+  ticketMinutes: 120,
+  /**
+   * Measured on the first real calls (2026-11-20, one each, from ElevenLabs' own character-cost header; the account's
+   * count agreed): convert 18 credits for a 1.625 s clip (11.1 a second, about 665 a minute; ElevenLabs' page says
+   * 1,000 a minute); transcribe 0 credits; reading 6 credits for 13 characters (0.46 a character); Voice Design 378
+   * credits a call (one a character of the preview line). One short sample each: the 20% rule re-checks every call.
+   */
+  rates: {
+    usdPer1000Credits: 22 / 121,
+    convertCreditsPerMinute: 665,
+    readingCreditsPerChar: 0.46,
+    /**
+     * Transcription, measured 2026-11-21 on a 10.3 s clip: 3 credits (4 with keyterms, which ElevenLabs prices about
+     * 20–25% higher), with the same in dollars in a fiat-cost header ($0.00055, $0.00073). So about 0.4 credits a second
+     * with keyterms (a 1.6 s clip rounded to 0).
+     */
+    transcribeUsdPerHour: 0.2,
+    transcribeCreditsPerSecond: 0.4,
+  },
+  caps: {
+    /** Everyone's calls together, per UTC day ('free'). Nate's number for now (2026-11-21); real numbers once the speeches' length is known. */
+    dailyCredits: 20_000,
+    dailyUsd: 4,
+    /** Admins' own trials, counted apart ('admin'). PLACEHOLDER. */
+    adminDailyCredits: 20_000,
+    adminDailyUsd: 4,
+    /** Whole-take conversions per person per UTC day (redone sentences don't count). Nate's number for now (2026-11-21). */
+    perPersonConversions: 3,
+    /**
+     * Owner's standing rule (2026-11-20): if a real call costs more than 20% over its estimate, stop before the next
+     * one. When today's measured credits exceed 1.2 times today's estimates, every call is refused until the next UTC
+     * day, and an admin is told why.
+     */
+    overEstimate: 1.2,
+  },
+} as const;

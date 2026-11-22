@@ -1,0 +1,74 @@
+import { NextResponse } from 'next/server';
+import { db } from '~/lib/db';
+import { noStore, voicePerson } from '~/lib/voice/server';
+import { listDesigns } from '~/lib/images/designs';
+import { CAMERA_ANGLES, SHOT, boardNotes, proposeCuts, shotsFromCuts, type Shot } from '~/lib/voice/board';
+import { keptPictures, latestBoard, ownPerformance, saveBoard } from '~/lib/voice/board-store';
+import { shotModels, triesMade } from '~/lib/voice/shot-picture';
+import { whereFrom } from '~/lib/images/countries';
+import { VOICE } from '~/lib/config';
+import { voiceTestOn } from '~/lib/voice/flag';
+
+/**
+ * A performance's storyboard (slice 2, DRAFT). GET ?draft=<id>: the strip (timeline), the latest saved board (or the
+ * automatic cuts at sentence ends), kept pictures, the sheets to choose from, the camera angles and the notes. POST:
+ * save a new version (cuts and shots; each shot's description is the person's own words, stored as given).
+ */
+const sheet = (d: { versionId: string; title: string; text: string; entity: string; thumb: string | null }) => ({ id: d.versionId, title: d.title, entity: d.entity, text: d.text, thumb: d.thumb });
+
+export async function GET(request: Request) {
+  const who = await voicePerson(request);
+  if (who instanceof NextResponse) return who;
+  const sql = db();
+  if (!sql) return NextResponse.json({ error: 'Not available right now' }, { status: 503 });
+  const draft = await ownPerformance(sql, who.fid, String(new URL(request.url).searchParams.get('draft') ?? ''));
+  if (!draft) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  if (!draft.timeline) return NextResponse.json({ error: 'This draft was kept before storyboards: record and accept it again to make one.' }, { status: 409 });
+  const saved = await latestBoard(sql, draft.id);
+  const cuts = saved?.cuts ?? proposeCuts(draft.timeline);
+  const shots = saved?.shots ?? shotsFromCuts(draft.timeline, cuts);
+  const [styles, characters, pictures] = await Promise.all([listDesigns(sql, 'style').catch(() => []), listDesigns(sql, 'character').catch(() => []), keptPictures(sql, draft.id)]);
+  return NextResponse.json(
+    {
+      draft: { id: draft.id, preset: draft.recipe.preset?.name ?? null, speech: draft.recipe.speech ?? null, audio: draft.audio, timeline: draft.timeline },
+      board: { version: saved?.version ?? 0, cuts, shots, proposed: proposeCuts(draft.timeline), fromProposal: !saved },
+      pictures,
+      notes: boardNotes(shots),
+      sheets: { styles: styles.map(sheet), characters: characters.map(sheet) },
+      angles: CAMERA_ANGLES,
+      limits: SHOT,
+      // The challenge's models for this visitor (the country decides; it isn't kept), the default, and the limits.
+      making: { ...shotModels(whereFrom(request.headers)), standIn: voiceTestOn(), tries: await triesMade(sql, draft.id) },
+    },
+    { headers: noStore },
+  );
+}
+
+export async function POST(request: Request) {
+  const who = await voicePerson(request);
+  if (who instanceof NextResponse) return who;
+  const sql = db();
+  if (!sql) return NextResponse.json({ error: 'Not available right now' }, { status: 503 });
+  const body = (await request.json().catch(() => ({}))) as { draftId?: string; cuts?: unknown; shots?: unknown };
+  const draft = await ownPerformance(sql, who.fid, String(body.draftId ?? ''));
+  if (!draft?.timeline) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  const cuts = Array.isArray(body.cuts) ? body.cuts.filter((c): c is number => typeof c === 'number' && c > 0 && c < draft.timeline!.seconds).slice(0, 200) : null;
+  if (!cuts || !Array.isArray(body.shots) || body.shots.length > 201) return NextResponse.json({ error: 'Send the cuts and the shots' }, { status: 400 });
+  if (new Set(cuts).size + 1 > VOICE.board.maxShots) return NextResponse.json({ error: `A storyboard has at most ${VOICE.board.maxShots} shots: remove a cut.` }, { status: 400 });
+  const kept = new Set((await keptPictures(sql, draft.id)).map((p) => `${p.shotKey}:${p.sha256}`));
+  const angles = new Set<string>(CAMERA_ANGLES.map((a) => a.id));
+  const given = body.shots as Partial<Shot>[];
+  // The shots are rebuilt from the cuts (so their spans always match), carrying what the person set for each key.
+  const shots = shotsFromCuts(draft.timeline, cuts, given.filter((s) => typeof s?.key === 'string' && /^[a-z0-9]{1,16}$/.test(s.key)).map((s) => ({
+    key: s.key!,
+    start: Number(s.start) || 0,
+    end: Number(s.end) || 0,
+    description: String(s.description ?? '').slice(0, VOICE.board.descriptionMaxChars),
+    angle: (angles.has(String(s.angle)) ? s.angle : '') as Shot['angle'],
+    styleId: typeof s.styleId === 'string' ? s.styleId : null,
+    characterIds: Array.isArray(s.characterIds) ? s.characterIds.filter((c): c is string => typeof c === 'string').slice(0, 6) : [],
+    kept: typeof s.kept === 'string' && kept.has(`${s.key}:${s.kept}`) ? s.kept : null,
+  })));
+  const version = await saveBoard(sql, who.fid, draft.id, cuts, shots);
+  return NextResponse.json({ version, cuts, shots, notes: boardNotes(shots) }, { headers: noStore });
+}
