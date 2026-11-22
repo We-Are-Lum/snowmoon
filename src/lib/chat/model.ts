@@ -24,6 +24,8 @@ export interface ModelReply {
   model: string;
   /** Which route answered: the provider directly, or the gateway. */
   route: 'direct' | 'gateway';
+  /** Why the model stopped ("stop", or "length" at the token budget), when the reply says. */
+  finishReason?: string | null;
 }
 
 /** The project's own key for the provider, if set. */
@@ -81,9 +83,10 @@ async function completeDirect(key: string, model: string, messages: Messages, op
     });
   const res = retry ? await withBusyRetries(send) : await send();
   if (!res.ok) return null;
-  const j = (await res.json().catch(() => ({}))) as { id?: string; model?: string; choices?: { message?: { content?: string } }[]; usage?: { prompt_tokens?: number; completion_tokens?: number } };
+  const j = (await res.json().catch(() => ({}))) as { id?: string; model?: string; choices?: { message?: { content?: string }; finish_reason?: string }[]; usage?: { prompt_tokens?: number; completion_tokens?: number } };
   return {
     text: j.choices?.[0]?.message?.content ?? '',
+    finishReason: j.choices?.[0]?.finish_reason ?? null,
     ...priced(model, j),
     requestId: j.id ?? res.headers.get('x-request-id'),
     provider: CHAT.provider,
@@ -119,7 +122,7 @@ async function completeGateway(token: string, model: string, messages: Messages,
     id?: string;
     model?: string;
     provider?: string;
-    choices?: { message?: { content?: string } }[];
+    choices?: { message?: { content?: string }; finish_reason?: string }[];
     usage?: { prompt_tokens?: number; completion_tokens?: number; cost?: number };
   };
   if (!res.ok) throw new ModelUnavailable(`gateway ${res.status}`);
@@ -127,6 +130,7 @@ async function completeGateway(token: string, model: string, messages: Messages,
   if (!servedByPinned(provider)) throw new ModelUnavailable(`served by ${provider}, not the chosen provider`);
   return {
     text: j.choices?.[0]?.message?.content ?? '',
+    finishReason: j.choices?.[0]?.finish_reason ?? null,
     ...priced(model, j),
     requestId: j.id ?? res.headers.get('x-vercel-id'),
     provider,

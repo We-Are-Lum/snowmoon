@@ -37,7 +37,7 @@ export interface ChallengeModel {
   retention: string | null;
 }
 
-const GUARD_SHARE = IMAGES.reserveUsd - IMAGES.pricePerMp; // 0.0015, the prompt check's share, as every Generate reserves
+const GUARD_SHARE = IMAGES.reserveUsd - IMAGES.pricePerMp; // PROMPT_CHECK_SHARE_USD (0.0025), the prompt check's share, as every Generate reserves
 const mp = (s: { width: number; height: number }) => (s.width * s.height) / 1e6;
 
 

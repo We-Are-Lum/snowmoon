@@ -340,13 +340,18 @@ process.env.APP_LEGAL_PAGES = 'terms+privacy';
   const plain = finalPrompt(long(IMAGES.promptMaxChars), long(T), []);
   const guardPrice = CHAT.prices[IMAGES.guardModel];
   const system = Buffer.byteLength(readFileSync(path.join(ROOT, 'config/prompts/image-guard.md'), 'utf8'));
-  const guardWorst = (prompt: string) => (system + Buffer.byteLength(prompt)) * guardPrice.input + 400 * guardPrice.output;
+  // Every prompt check gets PROMPT_CHECK_MAX_TOKENS (2,000, owner 2026-11-22), and one that gives no answer is asked
+  // once more: the reserve covers two checks at the full budget, with the whole policy file (its comment too).
+  const { PROMPT_CHECK_MAX_TOKENS } = await import('../src/lib/config');
+  const { GUARD_ATTEMPTS } = await import('../src/lib/images/guard');
+  const guardWorst = (prompt: string, tokens = PROMPT_CHECK_MAX_TOKENS) => GUARD_ATTEMPTS * ((system + Buffer.byteLength(prompt) + 100) * guardPrice.input + tokens * guardPrice.output);
   const imageWorst = 1 * IMAGES.pricePerMp; // fal may round up to 1 MP
   const guardSrc = readFileSync(path.join(ROOT, 'src/lib/images/guard.ts'), 'utf8');
-  // A sheet's views get their own budget (IMAGES.designs.guardMaxTokens, owner 2026-11-03; test:designs checks its reserve); Pictures keeps 400.
   const generateSrc = readFileSync(path.join(ROOT, 'src/app/api/images/generate/route.ts'), 'utf8');
-  check('the Pictures prompt check answers in at most 400 tokens', /maxTokens = 400\)/.test(guardSrc) && /checkPrompt\(job\.checkText, request, job\.guardMaxTokens\)/.test(readFileSync(path.join(ROOT, 'src/lib/images/paid.ts'), 'utf8')) && !/guardMaxTokens/.test(generateSrc));
-  check('with every pick at its longest, the prompt check still fits the reserve, so picks as text leave the price as it is', imageWorst + guardWorst(worstPrompt) <= IMAGES.reserveUsd, `${imageWorst} + ${guardWorst(worstPrompt).toFixed(6)} vs ${IMAGES.reserveUsd} (no picks: ${guardWorst(plain).toFixed(6)})`);
+  check('the Pictures prompt check gets every check\'s budget, 2,000 tokens (the default), with one retry', PROMPT_CHECK_MAX_TOKENS === 2000 && IMAGES.guardMaxTokens === 2000 && GUARD_ATTEMPTS === 2 && /maxTokens: number = PROMPT_CHECK_MAX_TOKENS\)/.test(guardSrc) && /checkPrompt\(job\.checkText, request, job\.guardMaxTokens\)/.test(readFileSync(path.join(ROOT, 'src/lib/images/paid.ts'), 'utf8')) && !/guardMaxTokens/.test(generateSrc));
+  check('with every pick at its longest, two prompt checks at 2,000 tokens still fit the reserve', imageWorst + guardWorst(worstPrompt) <= IMAGES.reserveUsd, `${imageWorst} + ${guardWorst(worstPrompt).toFixed(6)} vs ${IMAGES.reserveUsd} (no picks: ${guardWorst(plain).toFixed(6)})`);
+  check('proof: the old reserve ($0.0065) can\'t cover two checks at 2,000 tokens (caught)', imageWorst + guardWorst(worstPrompt) > 0.0065);
+  check('proof: a budget the reserve can\'t cover is caught', imageWorst + guardWorst(worstPrompt, 10_000) > IMAGES.reserveUsd);
 }
 
 // --- The caps -------------------------------------------------------------------------

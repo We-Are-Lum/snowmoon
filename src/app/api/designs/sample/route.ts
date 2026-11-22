@@ -144,7 +144,8 @@ export async function POST(request: Request) {
   const paid = await paidPicture(sql, fid, request, {
     checkText: prompt,
     spend: remix ? { ...spend, remix } : edit || closed ? spend : undefined,
-    // A sheet's view prompt is long (view line, style text, sheet text): the larger budget, as Remix's (owner, 2026-11-03).
+    // A sheet's view prompt is long (view line, style text, sheet text): its budget, as Remix's (owner, 2026-11-03). A
+    // style sample takes checkPrompt's default; both are PROMPT_CHECK_MAX_TOKENS (2,000) since 2026-11-22.
     guardMaxTokens: slot === 'sample' ? undefined : IMAGES.designs.guardMaxTokens,
     // A closed model's maker (OpenAI, Google): a refusal by its own check names it (owner, 2026-11-18; wording reread by the owner 2026-11-22).
     maker: closed?.maker ?? null,

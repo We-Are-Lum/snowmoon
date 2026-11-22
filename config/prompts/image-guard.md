@@ -15,7 +15,8 @@ Not allowed:
 - **violence**: gore, graphic injury or torture.
 - **hateful**: hate symbols, slurs, or content that demeans people for who they are.
 - **someone_elses_work**: a named character, logo, brand, film or franchise from another work, or the
-  style of a named artist or studio.
+  style of a named artist or studio. Snowmoon's own characters, places and things, and the pictures,
+  remixes, bases and sheets published on this site, are not someone else's work.
 - **words**: asking for words, letters, captions, signs or speech bubbles in the image.
 - **self_harm**: self-harm, suicide or disordered eating, shown approvingly or as something to copy.
 - **extremism**: praise, symbols or propaganda for terrorist or violent extremist groups, or incitement to violence.

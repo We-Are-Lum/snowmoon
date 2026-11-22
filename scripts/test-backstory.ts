@@ -12,7 +12,7 @@
  *     lets the maker publish without it, and it goes into the version's body with the tick and when.
  *  B4 new pictures only (owner, 2026-11-09): no "Add backstory", no route, no table, no migration; a backstory is read
  *     from its version's body alone, and a picture without one shows none.
- *  B5 the check is the image prompt check with 1,200 tokens (mocked), after the blocked names.
+ *  B5 the check is the image prompt check with 2,000 tokens (mocked), after the blocked names.
  *  B6 the page shows it under the picture, "Invented by @maker, not from the book", with no spoiler tick or mark
  *     (owner, 2026-11-09: none on the challenge's pages).
  *  L1 each challenge character has exactly one look line, starting "Unless the change says otherwise: ";
@@ -235,7 +235,7 @@ proven('L3 the prompt order: change words, reference line, look line, scene line
   const sql = postgres(`postgres://postgres@127.0.0.1:${PORT}/postgres`, { prepare: false, max: 1, onnotice: () => {} });
   type Sql = postgres.Sql;
   const S = sql as unknown as Sql;
-  // B5: the check, with the guard mocked: 1,200 tokens, after the blocked names; its refusal words.
+  // B5: the check, with the guard mocked: 2,000 tokens (every check's budget since 2026-11-22), after the blocked names; its refusal words.
   const { checkBackstory } = await import('../src/lib/challenge/backstories');
   const realFetch = globalThis.fetch;
   const groq = process.env.GROQ_API_KEY;
@@ -256,10 +256,10 @@ proven('L3 the prompt order: change words, reference line, look line, scene line
   process.env.GROQ_API_KEY = groq;
   const b5 = (s: typeof sent) => [
     ...need(a.ok && !r.ok && r.error === BACKSTORY_WORDING.refused && !blocked.ok, 'allowed, refused or blocked answers'),
-    ...need(s.length === 2 && s.every((x) => x.max === IMAGES.designs.guardMaxTokens && IMAGES.designs.guardMaxTokens === 1200), `the check's budget: ${s.map((x) => x.max).join(', ')}`),
+    ...need(s.length === 2 && s.every((x) => x.max === IMAGES.designs.guardMaxTokens && IMAGES.designs.guardMaxTokens === 2000), `the check's budget: ${s.map((x) => x.max).join(', ')}`),
     ...need(!s.some((x) => /Trump/.test(x.user)), 'a blocked name reached the check'),
   ];
-  proven('B5 the check is the prompt check with 1,200 tokens (mocked), after the blocked names; a refusal says "Change it, or publish without it."', b5(sent), b5(sent.map((x) => ({ ...x, max: 400 }))));
+  proven('B5 the check is the prompt check with 2,000 tokens (mocked), after the blocked names; a refusal says "Change it, or publish without it."', b5(sent), b5(sent.map((x) => ({ ...x, max: 400 }))));
   await sql.end();
   await server.stop();
   await db.close();

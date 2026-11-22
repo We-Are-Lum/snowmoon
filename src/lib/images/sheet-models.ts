@@ -12,7 +12,7 @@ import { CLOSED_IMAGES, IMAGES } from '../config';
  *
  * Prices are today's published ones (docs/legal/remix-model-choice-draft.md, "Cost per remix", with sources):
  * - `estimateUsd`: what one picture usually costs, from the price lists and the bases run of 2026-11-03;
- * - `reserveUsd`: the worst case reserved before a picture (the picture plus the prompt check's share, 0.0015), then
+ * - `reserveUsd`: the worst case reserved before a picture (the picture plus the prompt check's share, PROMPT_CHECK_SHARE_USD: 0.0025 since 2026-11-22, 0.0015 before), then
  *   replaced by the real cost (reserve-then-settle, src/lib/images/limits.ts).
  */
 export type SheetModelId = 'open' | 'gemini-3.1-flash-image' | 'gpt-image-2.5-sunburst';
@@ -43,7 +43,7 @@ export interface SheetModel {
   reserveUsd: { front: number; view: number };
 }
 
-const GUARD_SHARE = IMAGES.reserveUsd - IMAGES.pricePerMp; // 0.0015, as every Generate reserves for the prompt check
+const GUARD_SHARE = IMAGES.reserveUsd - IMAGES.pricePerMp; // PROMPT_CHECK_SHARE_USD (0.0025), as every Generate reserves for the prompt check
 
 export const SHEET_MODELS: readonly SheetModel[] = [
   {

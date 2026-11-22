@@ -893,9 +893,9 @@ proven(
     () => spendRules((m, refs) => ({ ...challengeSpend(m, refs), pool: undefined })),
   );
 
-  // C15: the challenge's prompt check gets the larger budget (1,200), as a sheet's views do.
-  const budget = (src: string) => need(/paidPicture\(sql, fid, request, \{[\s\S]{0,400}guardMaxTokens: IMAGES\.designs\.guardMaxTokens/.test(src) && IMAGES.designs.guardMaxTokens === 1200, 'the make route checks prompts with the default 400 tokens');
-  proven('C15 the make route\'s prompt check gets 1,200 tokens (at 400, 62 of 90 style prompts came back "unclear")', () => budget(makeSrc), () => budget(makeSrc.replace(/guardMaxTokens: IMAGES\.designs\.guardMaxTokens,/, '')));
+  // C15: the challenge's prompt check gets every check's budget, 2,000 (owner, 2026-11-22; 1,200 before), as a sheet's views do.
+  const budget = (src: string) => need(/paidPicture\(sql, fid, request, \{[\s\S]{0,400}guardMaxTokens: IMAGES\.designs\.guardMaxTokens,/.test(src) && IMAGES.designs.guardMaxTokens === 2000, 'the make route doesn\'t check prompts with 2,000 tokens');
+  proven('C15 the make route\'s prompt check gets 2,000 tokens (at 400, 62 of 90 style prompts came back "unclear")', () => budget(makeSrc), () => budget(makeSrc.replace(/guardMaxTokens: IMAGES\.designs\.guardMaxTokens,/, 'guardMaxTokens: 1200,')));
 
   // C16: a gateway moderation block is a refusal, not an outage.
   {

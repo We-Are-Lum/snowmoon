@@ -4,7 +4,7 @@ import { CHAPTER_PICTURES, IMAGES } from '../config';
 import { checkPrompt } from './guard';
 import { ImageRefused, ImageUnavailable, type Made } from './fal';
 import { countRefusal, fundedBy, giveBack, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
-import { guardRefusal, REFUSAL_WORDING } from './refusal-wording';
+import { guardRefusal, NO_ANSWER_CATEGORY, REFUSAL_WORDING } from './refusal-wording';
 import { blockedName } from './rules';
 import { FREE_WORDING } from '../social/free';
 import { IMAGE_WORDING } from './wording';
@@ -98,6 +98,7 @@ export async function paidPicture(
   if (!guard.allow) {
     await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'blocked' } }, spend, funded);
     // The day's count of refusals by category (no person: studio.image_refusals); skipped until that table exists.
+    // A check that gave no answer, twice, is counted as 'no_answer' and says so (refusal-wording.ts noAnswer).
     await countRefusal(sql, guard.category);
     const back = await creditBack(sql, r.debitId, 'refused');
     // The rule it was refused under, in plain words ("words" in its own); no category, or one we don't know: the generic line.
@@ -141,7 +142,7 @@ export async function checkWords(
   sql: Sql,
   request: Request,
   text: string,
-  /** A backstory (branch challenge-models): the larger check budget, and its own refusal words. */
+  /** A backstory (branch challenge-models): its own refusal words (the budget: PROMPT_CHECK_MAX_TOKENS, as every check). */
   opts: { maxTokens?: number; refused?: string } = {},
 ): Promise<{ ok: true } | { ok: false; status: number; error: string }> {
   if (!text.trim()) return { ok: true };
@@ -155,6 +156,12 @@ export async function checkWords(
     return { ok: false, status: 503, error: 'The prompt check did not answer. Try again in a moment.' };
   }
   await recordGuard(sql, { costUsd: guard.costUsd, provider: guard.provider, verdict: guard.allow ? 'ok' : 'blocked' });
-  return guard.allow ? { ok: true } : { ok: false, status: 422, error: opts.refused ?? NAME_REFUSED };
+  if (guard.allow) return { ok: true };
+  // No answer, twice (owner, 2026-11-22): its own words and its own count, never the refusal words.
+  if (guard.category === NO_ANSWER_CATEGORY) {
+    await countRefusal(sql, guard.category);
+    return { ok: false, status: 422, error: REFUSAL_WORDING.noAnswer };
+  }
+  return { ok: false, status: 422, error: opts.refused ?? NAME_REFUSED };
 }
 export const NAME_REFUSED = IMAGE_WORDING.designs.form.nameRefused;

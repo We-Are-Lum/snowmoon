@@ -53,17 +53,20 @@ check('an image with no picks keeps the same prompt as before', finalPrompt('A p
   const { REMIX } = await import('../src/lib/config');
   const sampleRoute = read('src/app/api/designs/sample/route.ts');
   const budgetPassed = (src: string) => /guardMaxTokens: slot === 'sample' \? undefined : IMAGES\.designs\.guardMaxTokens,/.test(src);
-  check('a sheet view\'s prompt check gets the larger budget (1,200 tokens, as Remix), a style sample keeps the default', IMAGES.designs.guardMaxTokens === 1200 && IMAGES.designs.guardMaxTokens === REMIX.guardMaxTokens && budgetPassed(sampleRoute));
+  const { PROMPT_CHECK_MAX_TOKENS } = await import('../src/lib/config');
+  check('a sheet view\'s prompt check and a style sample\'s both get 2,000 tokens (every check\'s budget, owner 2026-11-22)', PROMPT_CHECK_MAX_TOKENS === 2000 && IMAGES.designs.guardMaxTokens === 2000 && REMIX.guardMaxTokens === 2000 && budgetPassed(sampleRoute));
   check('paidPicture hands the budget to the prompt check', /checkPrompt\(job\.checkText, request, job\.guardMaxTokens\)/.test(read('src/lib/images/paid.ts')));
-  check('the prompt check\'s default stays 400 for everything else', /maxTokens = 400\)/.test(read('src/lib/images/guard.ts')));
+  check('the prompt check\'s default is 2,000 (PROMPT_CHECK_MAX_TOKENS), for a style sample and everything else', /maxTokens: number = PROMPT_CHECK_MAX_TOKENS\)/.test(read('src/lib/images/guard.ts')));
   check('proof: a route that drops the sheet budget is caught', !budgetPassed(sampleRoute.replace("guardMaxTokens: slot === 'sample' ? undefined : IMAGES.designs.guardMaxTokens,", '')));
   // The longest view prompt a sheet can send: the longest view line, a style's and a sheet's text at their limits.
   const longest = Math.max(...Object.values(VIEW_LINES).map((l) => viewPrompt(l, 'x'.repeat(IMAGES.designs.textMaxChars), 'y'.repeat(IMAGES.designs.textMaxChars)).length));
   const share = IMAGES.reserveUsd - IMAGES.pricePerMp; // the reservation's share for the prompt check
   const editShare = IMAGES.editReserveUsd(1) - 2 * IMAGES.editPricePerMp; // a side or back view: front in, one picture out
-  const worst = guardWorstUsd(longest, IMAGES.designs.guardMaxTokens);
-  check('the worst-case prompt check at the sheet budget fits the reservation (a front view, and a side or back from it)', worst > 0 && worst <= share + 1e-12 && worst <= editShare + 1e-12, `worst $${worst.toFixed(6)}, share $${share.toFixed(6)}, edit share $${editShare.toFixed(6)}`);
-  check('proof: a budget the reservation can\'t cover is caught', guardWorstUsd(longest, 10_000) > share);
+  const { guardWorstWithRetryUsd } = await import('../src/lib/images/guard');
+  const worst = guardWorstWithRetryUsd(longest, IMAGES.designs.guardMaxTokens);
+  check('two worst-case prompt checks (the retry) at 2,000 tokens fit the reservation (a front view, and a side or back from it)', worst > 0 && worst === 2 * guardWorstUsd(longest, 2000) && worst <= share + 1e-12 && worst <= editShare + 1e-12, `worst $${worst.toFixed(6)}, share $${share.toFixed(6)}, edit share $${editShare.toFixed(6)}`);
+  check('proof: a budget the reservation can\'t cover is caught', guardWorstWithRetryUsd(longest, 10_000) > share);
+  check('proof: the old share ($0.0015) can\'t cover two checks at 2,000 tokens (caught)', worst > 0.0015);
 }
 
 // --- Signed records: a sample's is not an image's ----------------------------------
@@ -246,7 +249,7 @@ const r1 = await reserve(S, 7000, edit);
 check('an edit call is counted', r1.ok && (await generationsLeft(S, 7000)) === IMAGES.generationsPerDay - 1);
 const [res] = await sql`select calls, cost_usd::float8 as usd from studio.image_costs where kind = 'reserved' and model = ${IMAGES.editModel.id}`;
 check('its worst case is reserved under the edit model', res?.calls === 1 && Math.abs(res.usd - IMAGES.editReserveUsd(3)) < 1e-9, JSON.stringify(res));
-check('the edit worst case counts every input picture', Math.abs(IMAGES.editReserveUsd(3) - (4 * IMAGES.editPricePerMp + 0.0015)) < 1e-9);
+check('the edit worst case counts every input picture', Math.abs(IMAGES.editReserveUsd(3) - (4 * IMAGES.editPricePerMp + 0.0025)) < 1e-9); // the prompt check's share, PROMPT_CHECK_SHARE_USD (0.0015 before 2026-11-22)
 await settle(S, { guard: { costUsd: 0.0002, provider: 'groq', verdict: 'ok' }, image: { costUsd: 0.0118, verdict: 'ok' } }, edit);
 const [after] = await sql`select (select cost_usd::float8 from studio.image_costs where kind = 'reserved' and model = ${IMAGES.editModel.id}) as reserved,
   (select cost_usd::float8 from studio.image_costs where kind = 'image' and model = ${IMAGES.editModel.id}) as spent`;
