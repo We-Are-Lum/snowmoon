@@ -109,7 +109,8 @@ import path from 'node:path';
 import { chromium, devices, webkit, type Browser, type Page, type Route } from 'playwright-core';
 import QRCode from 'qrcode';
 import { BOOK_MENTIONS } from '../src/lib/character-order';
-import { ASSISTANT, CHALLENGE, SIGN_IN_METHODS, SUPPORT } from '../src/lib/config';
+import { ASSISTANT, CHALLENGE, REHEARSAL, SIGN_IN_METHODS, SUPPORT } from '../src/lib/config';
+import { REHEARSAL_BASE_IDS } from '../src/lib/challenge/rehearsal-switch';
 import { SIGN_IN_CHOICES } from '../src/lib/sign-in-text';
 import { CHALLENGE_LINKS } from '../src/lib/challenge/landing-wording';
 import { ASK_WORDING, type AccountKind } from '../src/lib/chat/who-can-ask';
@@ -1832,6 +1833,21 @@ async function checkMarkdownPages() {
  * owner 2026-11-08: the relaxed wait in checkChallengeLanding is for its one-connection fixture only. Each page must
  * load and settle, show its own elements, and not scroll sideways, at 390 light and 1440 dark.
  */
+/**
+ * The base /challenge/make opens (Nate, 2026-11-21): on a live run, production's first base; in rehearsal mode
+ * (CHALLENGE_REHEARSAL=on for this run, against a server on this machine), the rehearsal database's own first base,
+ * which the rehearsal seeds (scripts/rehearsal-db.ts) and production's ids aren't in. Rehearsal mode against anything
+ * but this machine is refused, so a live run can never use the rehearsal's ids.
+ */
+function makeBase(): string | null {
+  const local = /^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(BASE);
+  if (REHEARSAL.on && !local) throw new Error('check:ui: rehearsal mode (CHALLENGE_REHEARSAL=on) is for a server on this machine only, never a live run');
+  const ids = REHEARSAL.on ? REHEARSAL_BASE_IDS : (CHALLENGE.bases as Record<string, readonly string[]>);
+  const first = Object.values(ids).flat()[0] ?? null;
+  console.log(`note /challenge/make opens ${REHEARSAL.on ? "the rehearsal's own" : "production's"} first base (${first})`);
+  return first;
+}
+
 async function checkChallengeLive() {
   for (const [w, h, touch, scheme] of [[390, 844, true, 'light'], [1440, 900, false, 'dark']] as const) {
     const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
@@ -1864,7 +1880,7 @@ async function checkChallengeLive() {
     // back to its place while a field has focus (the keyboard is up); at 1440 it never sticks. Redesign D (2026-11-12):
     // the button sits in the MakeBar (.mk-makebar, with the line under it), so the bar is what sticks; at 1440 the bar is
     // the foot of the right-hand panel, in its place.
-    const base = (Object.values(CHALLENGE.bases as Record<string, string[]>).flat()[0]) ?? null;
+    const base = makeBase();
     if (base) {
       await open(page, `/challenge/make?from=${base}`);
       // Live reads production: until redesign D is deployed there, the button is still the page's own child (.mk-make);
@@ -3243,9 +3259,11 @@ try {
         sentSheets = (r.request().postDataJSON() as { sheets?: unknown }).sheets ?? null;
         return r.fulfill({ status: 400, json: { error: 'check:ui stops here' } });
       });
+      // An invited reader who isn't an admin (6852): an admin's "add an image" opens the edition's sheet instead (owner,
+      // 2026-11-20; checked below), so the readers' composer is checked as a reader sees it.
       await page.evaluate(() => {
         const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
-        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
+        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6852, exp: 4102444800 })}.y`, fid: 6852, username: 'check', exp: 4102444800 }));
       });
       await open(page, '/chapter/1');
       // Signed in, all three options: still inside the screen at 390px.
@@ -3293,6 +3311,32 @@ try {
       if (!/sent to Groq to be checked \(through Vercel AI Gateway when Groq is busy\) and to fal\.ai/.test(text)) fail('/chapter/1: the composer does not name the hosts that receive the prompt');
       await page.keyboard.press('Escape');
       if (await page.locator('.image-composer').count()) fail('/chapter/1: Escape does not close the composer');
+      // An admin (owner, 2026-11-20): the same selection's button says "Add a picture here" and opens the edition's
+      // "Add a picture here" sheet on the selected blocks, never the readers' composer.
+      await ctx.route('**/api/you/illustrations/picture**', (r) => r.fulfill({ json: { item: null, pictures: { ready: true, adding: false, storage: true, models: [], styles: [], looks: { all: null, chapters: {} }, cap: { spentUsd: 0, capUsd: 20, resetAt: new Date().toISOString() } } } }));
+      await page.evaluate(() => {
+        const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
+        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
+      });
+      await open(page, '/chapter/1');
+      await page.evaluate(() => {
+        const p = document.querySelector('#c1-b19')!;
+        p.scrollIntoView({ block: 'center' });
+        const r = document.createRange();
+        r.selectNodeContents(p);
+        getSelection()!.removeAllRanges();
+        getSelection()!.addRange(r);
+      });
+      await page.waitForSelector('.selection-actions button:has-text("Add a picture here")', { timeout: 10000 }).catch(() => fail(`/chapter/1 (${scheme}): an admin's selection doesn't offer "Add a picture here"`));
+      await page.locator('.selection-actions button:has-text("Add a picture here")').click().catch(() => {});
+      await page.waitForSelector('.rpa-sheet', { timeout: 10000 }).catch(() => fail(`/chapter/1 (${scheme}): an admin's "Add a picture here" doesn't open the edition's sheet`));
+      if (await page.locator('.image-composer').count()) fail(`/chapter/1 (${scheme}): an admin's "Add a picture here" opens the readers' composer`);
+      await page.locator('.rpa-sheet .sheet-x').click().catch(() => {});
+      await ctx.unroute('**/api/you/illustrations/picture**');
+      await page.evaluate(() => {
+        const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
+        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6852, exp: 4102444800 })}.y`, fid: 6852, username: 'check', exp: 4102444800 }));
+      });
       // Step 4, signed in and invited (mocked): My picks (private) and the new-style form.
       await ctx.route('**/api/designs/picks', (r) => r.fulfill({ json: { picks: [] } }));
       await ctx.route('**/api/consent', (r) => r.fulfill({ json: { wording: { version: 'v', line: 'l', title: 't', text: ['a'], sha256: 'x' }, signedIn: true, agreed: true } }));

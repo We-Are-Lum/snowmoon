@@ -11,6 +11,7 @@ import { recheckMaker } from '~/lib/checks/decisions';
 import { readAddition } from '~/lib/chapter-pictures/read';
 import { isAddedId } from '~/lib/chapter-pictures/shared';
 import { pathsFor } from '~/lib/chapter-pictures/where';
+import { hideReachesChapterPictures } from '~/lib/chapter-pictures/after-hide';
 
 /**
  * An admin's Hide in the reader (owner, 2026-10-29: "an admin Hide in the reader for seeded and readers' images").
@@ -53,6 +54,7 @@ export async function POST(request: Request) {
     for (const sha of el.files) await moveToPrivate(sha).catch((e) => console.error('admin hide: moving the hidden file failed', (e as Error).name));
     // The maker is checked again at their next Generate or publish (owner, 2026-11-04).
     await recheckMaker(sql, el.byFid);
+    await hideReachesChapterPictures(sql, el.elementId);
     revalidatePath('/references', 'layout');
     revalidatePath(`/image/${b.id}`);
     return NextResponse.json({ done: 'hidden' });

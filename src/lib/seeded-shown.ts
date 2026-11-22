@@ -2,9 +2,9 @@ import 'server-only';
 import { hiddenSeeded } from './admin-hidden';
 import { excerpt, loadIntro, type Intro, type IntroImage } from './intro';
 import type { Quote } from './quote';
-import { replacementsEverywhere } from './chapter-pictures/read';
+import { additionsEverywhere, replacementsEverywhere } from './chapter-pictures/read';
 import type { ShownReplacement } from './chapter-pictures/shared';
-import { modelNameOf, shownPicture } from './chapter-pictures/view';
+import { keptAddedPictures, modelNameOf, shownPicture } from './chapter-pictures/view';
 
 /**
  * A seeded image an admin hid is gone wherever it shows (owner, 2026-10-30: "A hide on a seeded image reaches
@@ -40,8 +40,23 @@ export function introPicture(im: IntroImage, shown: Map<string, ShownReplacement
 /**
  * A quote card without its picture when the picture is a hidden seeded image (the card is drawn as one with none), and
  * with its job's kept redo in place of the committed file when there is one.
+ *
+ * A card that names a picture an admin added (owner, 2026-11-21) shows it while it shows in the chapter: kept, not
+ * taken off, not hidden, with "Added by @handle", the time and the model, and its recipe. Otherwise (a draft, taken off,
+ * hidden, or no database) the card is drawn with no picture, as for a hidden one. The intro's cards never read additions:
+ * they show the edition's fixed pictures (content/snowmoon/intro.json).
  */
 export async function quoteShown(quote: Quote | null): Promise<Quote | null> {
+  if (quote?.added) {
+    const [hidden, shown, additions] = await Promise.all([hiddenSeeded(), replacementsEverywhere(), additionsEverywhere()]);
+    const [a] = keptAddedPictures(additions.filter((x) => x.jobId === quote.added && x.chapter === quote.chapter), shown, hidden);
+    if (!a) return { ...quote, image: null };
+    const { chapter: _chapter, passage: _passage, sheets: _sheets, ...image } = a;
+    void _chapter;
+    void _passage;
+    void _sheets;
+    return { ...quote, image };
+  }
   if (!quote?.image) return quote;
   if ((await hiddenSeeded()).has(quote.image.id)) return { ...quote, image: null };
   const shown = await replacementsEverywhere();

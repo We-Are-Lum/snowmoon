@@ -445,6 +445,15 @@ add({
         if (/<textarea\b/.test(text)) problems.push(`${file}: the post address box must be a single-line input`);
         continue;
       }
+      if (file.endsWith('components/ref-search-field.tsx')) {
+        // The chapter-picture reference picker's search and link boxes (admins only; 2026-11-21): sent to our server to
+        // find a published picture, never published or kept.
+        for (const [what, re] of [['sent to us to find a published picture', /Sent to us to find a published picture/], ['never published or kept', /Never published or kept/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the reference search box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the reference search box must not send its text anywhere itself`);
+        if (/<textarea\b/.test(text)) problems.push(`${file}: the reference search box must be a single-line input`);
+        continue;
+      }
       if (file.endsWith('components/tx-hash-field.tsx')) {
         // The balance screen's payment hash (owner, 2026-10-15): sent to our server to look up on Base, never published by us.
         for (const [what, re] of [['sent to us to look up on Base', /Sent to us to look up on Base/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
