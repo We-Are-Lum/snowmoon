@@ -6,13 +6,15 @@
  * R1  every category of the prompt check's policy (config/prompts/image-guard.md) has its line, and the wording file
  *     has no category the policy doesn't; "words" gets the owner's words; every other known category the rule line
  *     with its plain phrase; no category, the check's "unclear" or an unknown word: the generic line, unchanged.
- * R2  the wording is marked DRAFT with the owner, the date and who drafted it; curly apostrophes only.
- * R3  paidPicture (on an in-memory Postgres with every migration, NEXT_refusal_categories.sql included; the prompt
+ * R2  the wording is marked reread by the owner 2026-11-22 (no DRAFT left), with the owner, the date and who drafted
+ *     it; curly apostrophes only.
+ * R3  paidPicture (on an in-memory Postgres with every migration, 0045_refusal_categories.sql included; the prompt
  *     check mocked) answers the category's line, keeps the category in the answer, and counts it by category in
  *     studio.image_refusals (no person); before that table exists it answers the same and counts nothing.
  * R4  a closed model's maker refusing (ImageRefused) names the maker; the open model's own words stay; with neither,
- *     the old "flagged" line. The challenge and sheet routes pass the closed model's maker.
- * R5  NEXT_refusal_categories.sql: who runs it, four parts in order, the dry run is the migration word for word, the
+ *     the old "flagged" line. The challenge and sheet routes, chapter pictures' redo and add, and the voice boards'
+ *     shot picture pass the closed model's maker.
+ * R5  0045_refusal_categories.sql: who runs it, four parts in order, the dry run is the migration word for word, the
  *     read-back inserts and deletes a realistic row; A changes nothing, B applies twice, C (a) all true, C (b) passes
  *     and leaves nothing; studio_writer writes as the site does and can't delete; anon and authenticated read nothing;
  *     planted faults are caught.
@@ -73,15 +75,16 @@ const counted = (f: Fn) => [
 ];
 proven('R1 the count stores only the policy\'s categories, unclear or other', () => counted(countedCategory), () => counted((c) => c ?? 'unclear'));
 
-// --- R2: DRAFT, who, curly apostrophes ---------------------------------------------------------------------------
+// --- R2: reread, who, curly apostrophes --------------------------------------------------------------------------
 const wordingSrc = read('src/lib/images/refusal-wording.ts');
 const lines = [REFUSAL_WORDING.generic, REFUSAL_WORDING.words, REFUSAL_WORDING.maker('OpenAI'), ...Object.values(REFUSAL_WORDING.plain).map((p) => REFUSAL_WORDING.rule(p))];
 const r2 = (src: string, ls: string[]) => [
-  ...need(/DRAFT/.test(src) && /Owner Nate, 2026-11-18/.test(src) && /Drafted by the coding agent \(Claude, a closed model by\s*(\* )?Anthropic\)/.test(src), 'the wording file isn\'t marked DRAFT with the owner, the date and its drafter'),
+  ...need(/reread by the owner 2026-11-22/.test(src) && !/DRAFT/.test(src) && /Owner Nate, 2026-11-18/.test(src) && /Drafted by the coding agent \(Claude, a closed model by\s*(\* )?Anthropic\)/.test(src), 'the wording file isn\'t marked reread by the owner 2026-11-22 (with no DRAFT left), with the owner, the date and its drafter'),
   ...ls.flatMap((l) => need(!/'/.test(l), `a straight apostrophe in "${l}"`)),
   ...need(REFUSAL_WORDING.generic === GENERIC, 'the generic line changed'),
 ];
-proven('R2 the wording is DRAFT, says who and when, and uses curly apostrophes', () => r2(wordingSrc, lines), () => r2(wordingSrc.replace('DRAFT', 'Final'), [...lines, "The image model here doesn't draw words."]));
+proven('R2 the wording is marked reread (2026-11-22), says who and when, and uses curly apostrophes', () => r2(wordingSrc, lines), () => r2(wordingSrc.replace('reread by the owner 2026-11-22', 'DRAFT'), [...lines, "The image model here doesn't draw words."]));
+check('proof: R2 a DRAFT mark left beside the reread mark is caught', r2(`${wordingSrc}\n// DRAFT`, lines).length > 0);
 
 // --- R3, R4: paidPicture on an in-memory Postgres ----------------------------------------------------------------
 const db = new PGlite();
@@ -153,7 +156,7 @@ check('R3 an allowed prompt adds no refusal', JSON.stringify(await countsNow()) 
 await su('alter table studio.image_refusals rename to image_refusals_hidden');
 const before = await refuse(5009, no('words'));
 await su('alter table studio.image_refusals_hidden rename to image_refusals');
-check('R3 before NEXT_refusal_categories.sql is applied: the same answer, nothing counted', !before.ok && before.error === REFUSAL_WORDING.words && JSON.stringify(await countsNow()) === JSON.stringify(c1), JSON.stringify(before));
+check('R3 before 0045_refusal_categories.sql is applied: the same answer, nothing counted', !before.ok && before.error === REFUSAL_WORDING.words && JSON.stringify(await countsNow()) === JSON.stringify(c1), JSON.stringify(before));
 // And if writing the count fails (here: studio_writer may not insert), the answer is the same.
 await su('revoke insert on studio.image_refusals from studio_writer');
 const failing = await refuse(5010, no('words'));
@@ -185,11 +188,18 @@ const passesMaker = (c: string, s: string) => [
   ...need(/maker: closed\?\.maker \?\? null,/.test(s), 'the sheet route doesn\'t pass a closed model\'s maker'),
 ];
 proven('R4 the challenge and sheet routes pass a closed model\'s maker', () => passesMaker(challengeSrc, sampleSrc), () => passesMaker(challengeSrc.replace('maker: chosen.maker', 'maker: null'), sampleSrc));
+// Main's newer callers (chapter pictures' redo and add, the voice boards' shot picture): the same, each paidPicture call.
+const laterCallers = ['src/lib/chapter-pictures/pictures.ts', 'src/lib/voice/shot-picture.ts'].map((f) => ({ f, src: read(f) }));
+const passMakerEach = (cs: { f: string; src: string }[]) => cs.flatMap(({ f, src }) => {
+  const calls = src.split('await deps.paid(sql, fid, request, {').slice(1).map((c) => c.slice(0, c.indexOf('\n  });')));
+  return [...need(calls.length > 0, `${f} has no paidPicture call`), ...calls.flatMap((c, i) => need(/\.\.\.\(m\.open \? \{\} : \{ maker: m\.maker \}\),/.test(c), `${f}: paidPicture call ${i + 1} doesn't pass a closed model's maker`))];
+});
+proven('R4 chapter pictures (redo, add) and the voice boards\' shot picture pass a closed model\'s maker', () => passMakerEach(laterCallers), () => passMakerEach(laterCallers.map(({ f, src }) => ({ f, src: src.replace('...(m.open ? {} : { maker: m.maker }),', '') }))));
 await sql.end();
 await server.stop();
 
 // --- R5: the migration file -------------------------------------------------------------------------------------
-const FILE = 'supabase/migrations/NEXT_refusal_categories.sql';
+const FILE = 'supabase/migrations/0045_refusal_categories.sql';
 const text = read(FILE);
 const part = (t: string, k: 'A' | 'B' | 'C' | 'D') => {
   const order = ['A', 'B', 'C', 'D'];
@@ -227,7 +237,8 @@ proven('R5 the file: who runs it, four parts, dry run = migration, read-back ins
 
 const pg = new PGlite();
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
-for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort()) await pg.exec(read(`supabase/migrations/${f}`));
+// Every numbered migration but this one: its own parts (A, B, C, D) are run on that below.
+for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f) && `supabase/migrations/${f}` !== FILE).sort()) await pg.exec(read(`supabase/migrations/${f}`));
 const p = parts(text);
 const snap = async () => JSON.stringify((await pg.query(`select table_name, column_name from information_schema.columns where table_schema = 'studio' order by 1, 2`)).rows);
 const s0 = await snap();

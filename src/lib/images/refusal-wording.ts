@@ -1,5 +1,6 @@
 /**
- * What a person is told when a picture is refused (branch refusal-reasons). DRAFT wording, for the owner's reread.
+ * What a person is told when a picture is refused (branch refusal-reasons). Wording reread by the owner 2026-11-22
+ * (#188's review page).
  * Owner Nate, 2026-11-18: say which rule the prompt check refused it under, "words" in its own words, and name the
  * closed model's maker when the maker's own check refused it. Drafted by the coding agent (Claude, a closed model by
  * Anthropic).
@@ -22,7 +23,7 @@ export const REFUSAL_WORDING = {
   words: 'The image model here doesn’t draw words. Take them out and try again.',
   /** The owner's words (2026-11-18), with the rule in plain words. */
   rule: (plain: string) => `This prompt asks for something the rules don’t allow (${plain}). Change the words and try again.`,
-  /** Each rule but "words", in plain words (DRAFT: the agent's phrases). */
+  /** Each rule but "words", in plain words (the agent's phrases, someone_elses_work the owner's; reread by the owner 2026-11-22). */
   plain: {
     minor: 'anything sexual involving someone under 18',
     sexual: 'nudity or sexual content',

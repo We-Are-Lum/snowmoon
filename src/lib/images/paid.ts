@@ -69,8 +69,8 @@ export async function paidPicture(
     blocked?: { error: string; giveBack: boolean };
     /**
      * A closed model's maker (OpenAI, Google: the model's `maker` field), when the picture is made by one. A refusal by
-     * the maker's own check (ImageRefused) then says so by name (src/lib/images/refusal-wording.ts, DRAFT, owner
-     * 2026-11-18); it counts, as before. Unset for an open model: its own check's words stay as they are.
+     * the maker's own check (ImageRefused) then says so by name (src/lib/images/refusal-wording.ts, owner
+     * 2026-11-18, reread by the owner 2026-11-22); it counts, as before. Unset for an open model: its own check's words stay as they are.
      */
     maker?: string | null;
   },

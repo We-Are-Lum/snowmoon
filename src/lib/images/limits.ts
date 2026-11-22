@@ -233,7 +233,7 @@ export async function wordsCheckFits(sql: Sql): Promise<boolean> {
 
 /**
  * Counts one prompt-check refusal under its category in the day's totals (owner, 2026-11-18): studio.image_refusals,
- * the day, the category and how many, nothing about the person or the prompt (NEXT_refusal_categories.sql). The category
+ * the day, the category and how many, nothing about the person or the prompt (0045_refusal_categories.sql). The category
  * is one the policy names, 'unclear' or 'other' (countedCategory), never the model's own word. Until that table exists,
  * or if writing it fails, nothing is counted and the refusal is answered as before.
  */

@@ -1,6 +1,6 @@
--- NEXT_refusal_categories.sql: the day's count of prompt-check refusals, by category (branch refusal-reasons, owner
--- Nate, 2026-11-18). NOT YET APPLIED. Unnumbered until merge: it takes the next free number then, checked against
--- origin/main and production. Requires 0001 (the studio schema and studio_writer). Drafted by the coding agent (Claude,
+-- 0045_refusal_categories.sql: the day's count of prompt-check refusals, by category (branch refusal-reasons, owner
+-- Nate, 2026-11-18). NOT YET APPLIED. Numbered 0045 for the merge (2026-11-22; main's highest was 0044); it was
+-- NEXT_refusal_categories.sql. Requires 0001 (the studio schema and studio_writer). Drafted by the coding agent (Claude,
 -- a closed model by Anthropic). Tested by `npm run test:refusal-reasons` (in-memory Postgres, the parts read from this
 -- file).
 --
