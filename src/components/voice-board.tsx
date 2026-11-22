@@ -312,7 +312,8 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             const b = boundaries[i];
             const cut = b ? cutNear(cuts, b.at) : null;
             const startsShot = i === 0 || (boundaries[i - 1] && cutNear(cuts, boundaries[i - 1].at) !== null);
-            const shotNo = shots.findIndex((sh) => sentencesIn(t, sh).includes(x.n)) + 1;
+            // Counted from the toggles themselves, so the label always agrees with what is ticked.
+            const shotNo = 1 + boundaries.slice(0, i).filter((bb) => cutNear(cuts, bb.at) !== null).length;
             return (
               <li key={x.n}>
                 {startsShot && shotNo > 0 && <span className="vb-cutlist-shot">Shot {shotNo}</span>}

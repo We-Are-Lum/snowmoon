@@ -184,13 +184,14 @@ export const shotAt = (shots: Shot[], at: number) => shots.find((s) => at >= s.s
 
 /**
  * The speech's own sentences a shot covers (Nate, 2026-11-21: "the play-through shows the speech's own words, timed,
- * never the transcription's"): each sentence by the strip's timing (from the word check), placed in the shot holding
- * its middle. The words shown are the speech's text, never what was heard.
+ * never the transcription's"). A sentence begins where the one before it ends (where "New shot starts here" puts a cut,
+ * sentenceBoundaries), so it belongs to the shot that holds that point; its own heard start isn't used, as heard spans
+ * can overlap. The words shown are the speech's text, never what was heard.
  */
 export function sentencesIn(t: Timeline, s: { start: number; end: number }): number[] {
-  return t.sentences.filter((x) => {
-    const mid = (x.start + x.end) / 2;
-    return mid >= s.start && mid < s.end;
+  return t.sentences.filter((x, i) => {
+    const begins = i === 0 ? 0 : round(t.sentences[i - 1].end);
+    return begins >= s.start - 0.35 && begins < s.end - 0.35;
   }).map((x) => x.n);
 }
 /** The sentence being spoken at a time (or the last one before it). */
