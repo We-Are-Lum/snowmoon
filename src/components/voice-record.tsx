@@ -687,7 +687,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                     <p className="vr-small">What each step answered on this device. Text only; no audio. Copy it to send it along.</p>
                     <pre>{log.lines.join('\n') || 'Nothing yet.'}</pre>
                   </details>
-                  {take && (
+                  {take && take.speechId === s.speech.id && (
                     <div className="vr-take">
                       <p className="vr-note">
                         Your recording, {mmss(take.seconds)}.{' '}

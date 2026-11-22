@@ -115,7 +115,7 @@ try {
     check('L1. the conversion went on, and was kept as its person\'s draft after the client had gone', kept.length === 1 && d.recipe.kept === 'automatically, when the conversion came back' && d.recipe.takes[0].takeSha256 === sha(take), JSON.stringify(kept).slice(0, 300));
     const files = storeFiles();
     check('L1. ... its stored audio is the converted speech, never the take', files.length === 1 && files.every((p) => sha(new Uint8Array(readFileSync(p))) === d?.recipe.takes[0].convertedSha256) && files.every((p) => !readFileSync(p).includes(take.subarray(0, 64))));
-    check('L1. ... and its history item and transcript were deleted at ElevenLabs all the same', stub.deleted.length === 1 && stub.kept().length === 0 && stub.deletedTranscripts.length === 1);
+    check('L1. ... and its history item and transcript were deleted at ElevenLabs all the same', stub.deleted.length === 1 && stub.kept().length === 0 && stub.deletedTranscripts.length === 1, JSON.stringify({ deleted: stub.deleted, kept: stub.kept(), transcripts: stub.deletedTranscripts }));
     await pg.query(`delete from studio.voice_draft_audio`);
     await pg.query(`delete from studio.voice_drafts`);
     for (const p of storeFiles()) rmSync(p);
@@ -205,13 +205,16 @@ try {
   const freshDay = () => pg.query('delete from studio.voice_asks');
   await freshDay();
   const filesBefore = storeFiles().length;
-  chmodSync(STORE, 0o500);
+  // Every folder of the store read-only (the drafts folder too, which earlier steps made).
+  const dirs = (d: string): string[] => [d, ...readdirSync(d, { withFileTypes: true }).filter((n) => n.isDirectory()).flatMap((n) => dirs(path.join(d, n.name)))];
+  const storeDirs = dirs(STORE);
+  for (const d of storeDirs) chmodSync(d, 0o500);
   await page.locator('.vr-take input[type="checkbox"]').check();
   await page.getByRole('button', { name: /^Convert/ }).click();
   const said = page.locator('text=/couldn.t be kept as your draft/');
   await said.first().waitFor({ timeout: 60_000 }).catch(() => {});
   check('L5. keeping failed after the conversion: the page says so, and that the recording is still on this device', (await said.count()) > 0 && (await page.locator('text=/still on this device/').count()) > 0);
-  chmodSync(STORE, 0o700);
+  for (const d of storeDirs) chmodSync(d, 0o700);
   check('L5. ... nothing was half-kept (no new draft, no new file)', (await drafts(NATE)).length === 1 && storeFiles().length === filesBefore);
   check('L5. ... the take is still there, with Convert', (await page.locator('.vr-take', { hasText: 'Saved on this device' }).count()) === 1 && (await page.getByRole('button', { name: /^Convert/ }).count()) === 1);
   await page.locator('.vr-take input[type="checkbox"]').check();
@@ -224,7 +227,7 @@ try {
   const takeShaOnPage = () => page.locator('.vr-take audio').first().evaluate(async (a: HTMLAudioElement) => {
     const b = await (await fetch(a.src)).arrayBuffer();
     return [...new Uint8Array(await crypto.subtle.digest('SHA-256', b))].map((x) => x.toString(16).padStart(2, '0')).join('');
-  });
+  }, undefined, { timeout: 2000 });
   const firstSha = await takeShaOnPage();
   await page.locator('label.vr-speech', { hasText: second.title }).locator('input').check();
   await sleep(1000);
@@ -235,12 +238,23 @@ try {
   await page.locator('.vr-take').waitFor({ timeout: 30_000 });
   const secondSha = await takeShaOnPage();
   check('L4. ... its own take is recorded and kept beside the first, under its own key', secondSha !== firstSha && (await keys()).sort().join() === [`${NATE}:${first.id}`, `${NATE}:${second.id}`].sort().join(), (await keys()).join());
+  // Every take shown while switching, read every 50 ms: never the other speech's.
+  const watchTakes = async (want: string, other: string) => {
+    const seen = new Set<string>();
+    for (let i = 0; i < 60; i++) {
+      const v = await takeShaOnPage().catch(() => 'none');
+      seen.add(v);
+      if (v === want) break;
+      await sleep(50);
+    }
+    return { ok: seen.has(want) && !seen.has(other), seen: [...seen].map((x) => x.slice(0, 8)).join() };
+  };
   await page.locator('label.vr-speech', { hasText: first.title }).locator('input').check();
-  await page.locator('.vr-take').waitFor({ timeout: 15_000 });
-  check(`L4. back on "${first.title}": its own take is shown, not the other's`, (await takeShaOnPage()) === firstSha);
+  let w = await watchTakes(firstSha, secondSha);
+  check(`L4. back on "${first.title}": its own take is shown, and the other's never`, w.ok, w.seen);
   await page.locator('label.vr-speech', { hasText: second.title }).locator('input').check();
-  await page.locator('.vr-take').waitFor({ timeout: 15_000 });
-  check(`L4. on "${second.title}" again: its own take`, (await takeShaOnPage()) === secondSha);
+  w = await watchTakes(secondSha, firstSha);
+  check(`L4. on "${second.title}" again: its own take, and the other's never`, w.ok, w.seen);
   await freshDay();
   const sent: string[] = [];
   const onReq = (r: import('playwright-core').Request) => {
