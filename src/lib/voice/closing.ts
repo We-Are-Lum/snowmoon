@@ -42,6 +42,8 @@ export interface CreditsInput {
   /** One per kept picture (the shots' and the closing background's), in order; stand-ins included. */
   pictures: PictureModel[];
   shots: number;
+  /** A person's converted performance, or the ready-made reading (ElevenLabs' text-to-speech; no performer). */
+  voice?: 'performance' | 'reading';
 }
 
 export interface CreditLine {
@@ -58,15 +60,22 @@ export function closingCredits(c: CreditsInput): CreditLine[] {
   const standIns = c.pictures.filter((p) => p.id === 'stand-in').length;
   const real = new Map<string, PictureModel>();
   for (const p of c.pictures) if (p.id !== 'stand-in') real.set(p.id, p);
+  const reading = c.voice === 'reading';
   const lines: CreditLine[] = [
     { who: 'book', text: `Words: ${c.speech.title}, from Snowmoon by Vitalik Buterin${c.speech.block ? ` (${c.speech.block})` : ''}, word for word.` },
-    { who: 'people', text: `Performed by ${by}, in the voice “${c.preset}”.` },
+    ...(reading ? [] : [{ who: 'people' as const, text: `Performed by ${by}, in the voice “${c.preset}”.` }]),
     { who: 'people', text: `Storyboard by ${by}: the cuts, the ${c.shots} shots’ descriptions and cameras, the pictures kept.` },
-    { who: 'ai', text: `Voice converted by ${modelLabel(c.voiceModel)}; checked word for word with ${modelLabel(c.transcribeModel)}.` },
+    reading
+      ? { who: 'ai', text: `Voice: a ready-made reading by ${modelLabel(c.voiceModel)}, in the voice “${c.preset}”. No performer. Word timings by ${modelLabel(c.transcribeModel)}.` }
+      : { who: 'ai', text: `Voice converted by ${modelLabel(c.voiceModel)}; checked word for word with ${modelLabel(c.transcribeModel)}.` },
   ];
   if (real.size) lines.push({ who: 'ai', text: `Pictures made by ${[...real.values()].map(modelLabel).join(', ')}, from the storyboard’s own words.` });
   if (standIns) lines.push({ who: 'site', text: `${standIns} stand-in card${standIns === 1 ? '' : 's'} in place of pictures (no model).` });
-  lines.push({ who: 'site', text: `People did the performance and the words for each picture. AI did ${real.size ? 'the voice conversion, the word check and the pictures' : 'the voice conversion and the word check'}. No AI video.` });
+  lines.push(
+    reading
+      ? { who: 'site', text: `People did the storyboard and the words for each picture. AI did ${real.size ? 'the reading, the word timings and the pictures' : 'the reading and the word timings'}. No AI video.` }
+      : { who: 'site', text: `People did the performance and the words for each picture. AI did ${real.size ? 'the voice conversion, the word check and the pictures' : 'the voice conversion and the word check'}. No AI video.` },
+  );
   lines.push({ who: 'site', text: CLOSING.notAffiliated });
   return lines;
 }

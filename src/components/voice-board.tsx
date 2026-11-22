@@ -22,7 +22,7 @@ import '../styles/voice.css';
  */
 interface Sheet { id: string; title: string; entity: string; text: string; thumb: string | null }
 interface Data {
-  draft: { id: string; preset: string | null; speech: { id: string; title: string } | null; sentences: { n: number; text: string }[]; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
+  draft: { id: string; kind: 'performance' | 'reading'; preset: string | null; speech: { id: string; title: string } | null; sentences: { n: number; text: string }[]; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
   board: { version: number; cuts: number[]; shots: Shot[]; closing: Closing; proposed: number[]; fromProposal: boolean };
   pictures: { shotKey: string; sha256: string; recipe: Record<string, unknown> }[];
   sheets: { styles: Sheet[]; characters: Sheet[] };
@@ -61,6 +61,8 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const params = useParams<{ draft: string }>();
   const draftId = String(params?.draft ?? '');
   const [data, setData] = useState<Data | null | 'none' | { error: string }>(null);
+  // A ready-made reading with no word timings yet: what one transcription of it is estimated at (2026-11-21).
+  const [needsTiming, setNeedsTiming] = useState<{ estimateCredits: number; seconds: number } | null>(null);
   const [cuts, setCuts] = useState<number[]>([]);
   const [shots, setShots] = useState<Shot[]>([]);
   const [current, setCurrent] = useState(0);
@@ -102,8 +104,10 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       if (pj?.published) return setPublished(pj.published), setData({ error: 'published' });
       return setData('none');
     }
-    const j = (await r.json()) as Data & { error?: string };
+    const j = (await r.json()) as Data & { error?: string; reason?: string; estimateCredits?: number; seconds?: number };
+    if (r.status === 409 && j.reason === 'needs-timing') return setNeedsTiming({ estimateCredits: j.estimateCredits ?? 0, seconds: j.seconds ?? 0 }), setData({ error: 'needs-timing' });
     if (!r.ok) return setData({ error: j.error ?? 'Not available' });
+    setNeedsTiming(null);
     setData(j);
     setCuts(j.board.cuts);
     // Every shot starts on Medium shot (Nate, 2026-11-21), boards saved before then included.
@@ -194,6 +198,35 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       </main>
     );
   if (!admin || data === 'none') return <>{fallback}</>;
+  if (needsTiming)
+    return (
+      <main className="vr vb">
+        <p className="vr-kicker">Admin trial · Draft · Storyboard</p>
+        <h1>Time this reading first</h1>
+        <p className="vr-note">
+          This ready-made reading has no word timings yet, so its sentences can&rsquo;t be placed on a strip. One transcription of it ({needsTiming.seconds.toFixed(0)} s, about {needsTiming.estimateCredits} credits) times it once, for everyone who storyboards it. The transcript is deleted at ElevenLabs right after.
+        </p>
+        {message && <p className="vr-warn" role="alert">{message}</p>}
+        <button
+          type="button"
+          className="vr-btn"
+          disabled={busy !== null}
+          onClick={async () => {
+            setBusy('timing');
+            setMessage(null);
+            const r = await authFetch(`/api/voice/readings/${draftId}/timing`, { method: 'POST' }).catch(() => null);
+            setBusy(null);
+            if (r?.ok) {
+              setNeedsTiming(null);
+              setData(null);
+              void load();
+            } else setMessage(((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error ?? 'The timing failed. Try again.');
+          }}
+        >
+          {busy === 'timing' ? 'Timing…' : 'Time this reading'}
+        </button>
+      </main>
+    );
   if (data && 'error' in data) return <main className="vr"><p className="vr-warn">{data.error}</p></main>;
   if (!d || !t) return <main className="vr"><p className="vr-note">Loading…</p></main>;
 
@@ -377,7 +410,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       <p className="vr-kicker">Admin trial · Draft · Storyboard</p>
       <h1>{d.draft.speech?.title ?? 'Storyboard'}</h1>
       <p className="vr-labels">
-        Your performance in {d.draft.preset ?? 'a preset voice'} · {fmt(t.seconds)} ·{' '}
+        {d.draft.kind === 'reading' ? <>The ready-made reading in {d.draft.preset ?? 'a preset voice'} (ElevenLabs, no performer)</> : <>Your performance in {d.draft.preset ?? 'a preset voice'}</>} · {fmt(t.seconds)} ·{' '}
         {d.making.standIn ? (
           <><span className="vr-tag">Stand-in</span> pictures are placeholder cards on this copy: no model, no cost ·{' '}</>
         ) : !d.making.real ? (

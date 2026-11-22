@@ -536,7 +536,13 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                 <span className="vr-tag">AI</span> The letter&rsquo;s words read aloud in {picked.name} by ElevenLabs text-to-speech ({s.models.reading}, a closed model by ElevenLabs).
               </p>
               {reading ? (
-                <SignedAudio key={picked.presetId} path={`/api/voice/reading?speech=${s.speech.id}&preset=${picked.presetId}`} label="Play the reading" />
+                <>
+                  <SignedAudio key={picked.presetId} path={`/api/voice/reading?speech=${s.speech.id}&preset=${picked.presetId}`} label="Play the reading" />
+                  <p className="vr-row">
+                    <a className="vr-btn vr-small-btn" href={`/storyboard/board/${reading.id}`}>Make the storyboard</a>
+                    <span className="vr-small">Your own storyboard on this reading: others can make theirs on it too.</span>
+                  </p>
+                </>
               ) : (
                 <button type="button" className="vr-btn vr-quiet" onClick={makeReading} disabled={!s.ready || busy !== null}>
                   Make the reading (≈ {Math.ceil(s.speech.characters * s.limits.readingCreditsPerChar).toLocaleString()} credits)

@@ -3,7 +3,7 @@ import { db } from '~/lib/db';
 import { noStore, voicePerson } from '~/lib/voice/server';
 import { draftAudio } from '~/lib/voice/drafts';
 
-/** One audio file of one of this person's own drafts (anyone else's reads as missing). */
+/** One audio file of one of this person's own drafts, or of a shared ready-made reading (anyone else's reads as missing). */
 export async function GET(request: Request, ctx: { params: Promise<{ id: string; n: string }> }) {
   const who = await voicePerson(request);
   if (who instanceof NextResponse) return who;

@@ -716,6 +716,38 @@ uses the readers' bucket, R2_BUCKET, at R2_IMAGES_PUBLIC_URL) and whether its ke
 for GET from snowmoon.party (the video draws the pictures and reads the audio from it); the migration applied; real
 pictures switched on first (stand-ins can't be published).
 
+## Storyboards on the ready-made reading (2026-11-21 night; branch ephelion-publish, not merged)
+
+Nate: "The ready-made reading offers no 'Make the storyboard'", then "a storyboard on a shared reading belongs to the
+person making it, not to whoever made the reading."
+
+- **Word timings for a reading:** one transcription of the reading's own audio, made once, the first time anyone
+  storyboards it ("Time this reading", with its estimate), through the same allowance as every voice call (the daily
+  cap, and the stop once today's calls run more than 20% over their estimates), the transcript deleted at ElevenLabs
+  right after, kept in `voice_reading_timings`. Measured on 2026-11-21 on the 20 Nov reading (144 s, the same voice and
+  speech): **55 credits ($0.01)** against an estimate of 58, all 28 sentences matched and timed, transcript deleted.
+  ElevenLabs' with-timestamps text-to-speech (timings with a new reading) wasn't priced or tried: not needed for the three
+  readings already made.
+- **Production's three readings** (one per voice, made 22 Nov 03:16–03:18 UTC) can't be timed by an agent: their audio
+  is in the private bucket, which only the site's own production key reads (agents never read production secrets), and
+  the timings need this branch's table. Once its SQL is applied and the branch merged, the first person to open a
+  reading's storyboard times it (about 55 credits each; Nate's word of 2026-11-21 covers the three).
+- **A board has its own owner:** versions per (draft, person); kept pictures under `voice-boards/<draft>/<fid>/`; tries
+  per person; a reading is shared (its audio plays for anyone let in), a performance stays its person's alone. The
+  reading's maker can't remove it while anyone else has a board on it; each person removes their own board
+  (`DELETE /api/voice/boards?draft=`). Found and fixed on the way: removing a draft deleted its files before the
+  database decided, which on a shared reading would have deleted others' pictures.
+- **Publishing from a reading:** the card says "Voice: a ready-made reading by ElevenLabs text-to-speech (Multilingual
+  v2) by ElevenLabs (closed model), in the voice “…”. No performer. Word timings by ElevenLabs Scribe v3 …", with no
+  "Performed by" line, and "Storyboard by" its maker (or "a reader"). A reading isn't held to the performance's
+  word-for-word rule (it reads the written words); its timings' word check is in the recipe. Many people can publish
+  boards on one reading (one live publication per person).
+- **Challenge note:** entries made on the ready-made reading count (Nate, 2026-11-21: "as the proposal says"). Nothing in
+  the challenge code changes here: a storyboard isn't an entry type yet.
+- **SQL:** `NEXT_ephelion_voice_publish.sql` version 2 (requires 0044): adds the owner, the timings table and reading
+  publications to version 1, and its read-back no longer uses SET ROLE. Tested in PGlite: applies twice, read-back
+  passes, the undo restores 0044's exact shape, and refuses once anything was published. For the coordinator to test.
+
 ## What Nate needs to do (one at a time)
 
 1. #195 is merged and live: the iPhone and desktop tests on /admin/mic-test; Android goes to Garance or Luis.

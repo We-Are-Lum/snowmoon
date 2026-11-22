@@ -394,8 +394,8 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   check('B. the automatic cuts never make more than 12 shots, even for a long speech', board.proposeCuts({ seconds: 600, words: [], sentences: Array.from({ length: 200 }, (_, i) => ({ n: i, start: i * 3, end: i * 3 + 3 })) }).length <= 11);
   check('B. Keep refuses another picture\'s bytes, and another person', (await keep(p1.ticket, p2.image)).status === 400 && (await keep(p1.ticket, p1.image, GARANCE)).status === 400);
   r = await keep(p1.ticket, p1.image);
-  const keyP = `voice-boards/${acc.id}/${s2.shots[0].key}-${p1.sha256}.png`;
-  check('B. Keep stores it privately, under voice-boards/<draft>/, with its recipe', r.status === 200 && existsSync(path.join(STORE, keyP)) && (await sql`select recipe from studio.voice_board_pictures where storage_key = ${keyP}`)[0]?.recipe.prompt === p1.recipe.prompt);
+  const keyP = `voice-boards/${acc.id}/${NATE}/${s2.shots[0].key}-${p1.sha256}.png`;
+  check('B. Keep stores it privately, under voice-boards/<draft>/<owner>/, with its recipe', r.status === 200 && existsSync(path.join(STORE, keyP)) && (await sql`select recipe from studio.voice_board_pictures where storage_key = ${keyP}`)[0]?.recipe.prompt === p1.recipe.prompt);
   r = await save(cuts, s2.shots.map((x, i) => (i === 0 ? { ...x, kept: p1.sha256 } : x)));
   const s3 = (await r.json()) as { version: number; shots: Shot[]; notes: { kind: string; shot: string }[] };
   check('B. the kept picture is on the board now (version 3), and its note is gone', s3.version === 3 && s3.shots[0].kept === p1.sha256 && !s3.notes.some((n) => n.kind === 'no-picture' && n.shot === s3.shots[0].key));
@@ -462,7 +462,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
     const bg = (await r.json()) as { ticket: string; image: string; sha256: string; recipe: { kind: string; prompt: string; angle: unknown; assist: { text: string } } };
     check('K. the closing background goes through the picture flow, with no camera: the person\'s words first', r.status === 200 && bg.recipe.kind === 'storyboard-closing' && bg.recipe.prompt.startsWith(look) && bg.recipe.angle === null && /set by the site/.test(bg.recipe.assist.text));
     check('K. ... it is a stand-in here, labelled as the closing card', Buffer.from(bg.image.split(',')[1], 'base64').length > 1000);
-    check('K. ... and keeping it stores it privately like a shot\'s', (await keep(bg.ticket, bg.image)).status === 200 && existsSync(path.join(STORE, `voice-boards/${acc.id}/end-${bg.sha256}.png`)));
+    check('K. ... and keeping it stores it privately like a shot\'s', (await keep(bg.ticket, bg.image)).status === 200 && existsSync(path.join(STORE, `voice-boards/${acc.id}/${NATE}/end-${bg.sha256}.png`)));
     r = await boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, cuts, shots: cur, closing: { description: look, styleId: null, kept: bg.sha256 } }) }));
     const sv2 = (await r.json()) as { version: number; closing: { description: string; kept: string | null } };
     check('K. the board keeps the closing card\'s choices on its version (the words as given)', r.status === 200 && sv2.closing.description === look && sv2.closing.kept === bg.sha256);
@@ -511,7 +511,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
     check('K. someone else can\'t take it down', (await takeDownRoute.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: pub.id }) })).status === 404 && existsSync(path.join(STORE, 'public', one.key)));
     r = await takeDownRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: pub.id }) });
     check('K. its person takes it down: every public file is deleted, the page is gone, it is a draft again', r.status === 200 && storeFiles().every((f) => !f.startsWith(`public/storyboards/${pub.id}/`)) && (await publication(sql, pub.id)) === null && (await boards.GET(as(NATE, {}, `http://localhost/api/voice/boards?draft=${acc.id}`))).status === 200);
-    check('K. ... the private draft files are untouched', existsSync(path.join(STORE, `voice-boards/${acc.id}/end-${bg.sha256}.png`)) && storeFiles().filter((f) => f.startsWith(`voice-drafts/${acc.id}/`)).length === 2);
+    check('K. ... the private draft files are untouched', existsSync(path.join(STORE, `voice-boards/${acc.id}/${NATE}/end-${bg.sha256}.png`)) && storeFiles().filter((f) => f.startsWith(`voice-drafts/${acc.id}/`)).length === 2);
     await pg.query(`update studio.voice_drafts set recipe = jsonb_set(recipe, '{check,unmatched}', $2::jsonb) where id = $1`, [acc.id, JSON.stringify(realUnmatched)]);
     check('K. P2, by reading the code: no closing text comes from the request, and nothing writes a description', !/description\s*[:=]\s*['"`][^'"`]/.test(readFileSync(path.join(ROOT, 'src/lib/voice/closing.ts'), 'utf8')) && !/body\.|request\./.test(readFileSync(path.join(ROOT, 'src/lib/voice/closing-card.ts'), 'utf8')));
     check('K. public copies have their own store file, under storyboards/ only; the draft store stays private', /R2_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && /\^storyboards/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && !/R2_PRIVATE_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')));
@@ -623,6 +623,62 @@ resetPurgeClock();
 await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
 check('$. voice_asks from before today are purged; today\'s stay', (await sql`select count(*)::int n from studio.voice_asks where (at at time zone 'utc')::date < (now() at time zone 'utc')::date`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_asks`)[0].n === todayAsks);
 check('$. the caps are placeholders in config, in credits and dollars', VOICE.caps.dailyCredits > 0 && VOICE.caps.dailyUsd > 0 && VOICE.caps.adminDailyCredits > 0 && VOICE.caps.perPersonConversions === 3 && VOICE.caps.overEstimate === 1.2);
+
+// G. Storyboards on the ready-made reading (Nate, 2026-11-21): timed once, then everyone's own boards on it.
+{
+  const timingRoute = await route('readings/[id]/timing');
+  const publishRoute = await route('publish');
+  const rdId = rd.id;
+  const boardGet = (fid: number) => boards.GET(as(fid, {}, `http://localhost/api/voice/boards?draft=${rdId}`));
+  let g = await boardGet(NATE);
+  const gj = (await g.json()) as { reason?: string; estimateCredits?: number; seconds?: number };
+  check('G. a reading with no timings asks to be timed first, with its estimate', g.status === 409 && gj.reason === 'needs-timing' && (gj.estimateCredits ?? 0) > 0 && (gj.seconds ?? 0) > 30, JSON.stringify(gj));
+  check('G. timing is for people let in only (401 signed out, 404 to anyone else)', (await timingRoute.POST(as(null, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) })).status === 401 && (await timingRoute.POST(as(STRANGER, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) })).status === 404);
+  const sttBefore = stub.calls.filter((c) => c.path === '/v1/speech-to-text').length;
+  const deletedBefore = stub.deletedTranscripts.length;
+  // Timed by someone who didn't make the reading (it is shared): Nate times Garance's reading.
+  g = await timingRoute.POST(as(NATE, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) });
+  const tj = (await g.json()) as { ok?: boolean; credits?: number; estimateCredits?: number; matched?: number; sentences?: number; transcriptDeleted?: boolean };
+  const stt = stub.calls.filter((c) => c.path === '/v1/speech-to-text');
+  check('G. one transcription of the reading\'s own audio, with the speech\'s names as key terms', g.status === 200 && stt.length === sttBefore + 1 && (stt.at(-1)!.fields.keyterms ?? '').length > 0 && stt.at(-1)!.files[0].sha256 === (await sql`select sha256 from studio.voice_draft_audio where draft_id = ${rdId} and n = 0`)[0].sha256, JSON.stringify(tj));
+  check('G. ... measured against its estimate, and the transcript deleted at ElevenLabs', typeof tj.credits === 'number' && (tj.estimateCredits ?? 0) > 0 && tj.transcriptDeleted === true && stub.deletedTranscripts.length === deletedBefore + 1 && stub.kept().length === 0);
+  const [trow] = await sql`select made_by, model, credits, transcript_deleted, timeline from studio.voice_reading_timings where draft_id = ${rdId}`;
+  check('G. ... kept once, with who asked, the model and the credits', Number(trow?.made_by) === NATE && trow.model === VOICE.models.transcribe && trow.transcript_deleted === true && (trow.timeline as { sentences: unknown[] }).sentences.length === speech.sentences.length);
+  g = await timingRoute.POST(as(GARANCE, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) });
+  check('G. timing again makes no second call', g.status === 200 && ((await g.json()) as { already?: boolean }).already === true && stub.calls.filter((c) => c.path === '/v1/speech-to-text').length === sttBefore + 1);
+  // Two people's boards on the one reading: each their own versions, pictures and tries.
+  const gb = (await (await boardGet(GARANCE)).json()) as { draft: { kind: string }; board: { version: number; cuts: number[]; shots: Shot[] } };
+  const nb = (await (await boardGet(NATE)).json()) as { board: { version: number; cuts: number[]; shots: Shot[] } };
+  check('G. anyone let in can make a board on the reading (it says it is the reading)', gb.draft.kind === 'reading' && gb.board.version === 0 && nb.board.version === 0);
+  const saveOn = async (fid: number, shots: Shot[], cuts: number[]) => (await (await boards.POST(as(fid, { method: 'POST', body: JSON.stringify({ draftId: rdId, cuts, shots }) }))).json()) as { version: number; shots: Shot[] };
+  const gWords = "(test script's words) Garance's board: the letter on a wall.";
+  const gs = await saveOn(GARANCE, gb.board.shots.map((x, i) => (i === 0 ? { ...x, description: gWords } : x)), gb.board.cuts);
+  const ns = await saveOn(NATE, nb.board.shots, nb.board.cuts.slice(0, 1));
+  check('G. each person\'s board is their own: both start at version 1', gs.version === 1 && ns.version === 1);
+  const nb2 = (await (await boardGet(NATE)).json()) as { board: { shots: Shot[]; cuts: number[] } };
+  check('G. ... and one person never sees another\'s words or cuts', nb2.board.shots.every((x) => x.description !== gWords) && nb2.board.cuts.length === 1);
+  const gPic = (await (await boardPicture.POST(as(GARANCE, { method: 'POST', body: JSON.stringify({ draftId: rdId, shotKey: gs.shots[0].key, description: gWords, angle: 'wide' }) }))).json()) as { ticket: string; image: string; sha256: string };
+  r = await boardKeep.POST(as(GARANCE, { method: 'POST', body: JSON.stringify({ ticket: gPic.ticket, image: gPic.image }) }));
+  check('G. a picture kept on a reading goes under its owner\'s folder', r.status === 200 && existsSync(path.join(STORE, `voice-boards/${rdId}/${GARANCE}/${gs.shots[0].key}-${gPic.sha256}.png`)));
+  const pg2 = (fid: number) => boardPicture.GET(as(fid, {}, `http://localhost/api/voice/boards/picture?draft=${rdId}&shot=${gs.shots[0].key}&sha=${gPic.sha256}`));
+  check('G. ... and plays for its owner only', (await pg2(GARANCE)).status === 200 && (await pg2(NATE)).status === 404);
+  check('G. tries are counted per person', ((await (await boardGet(NATE)).json()) as { making: { tries: Record<string, number> } }).making.tries[gs.shots[0].key] === undefined);
+  check('G. the reading\'s audio plays for anyone let in, a performance\'s only for its person', (await draftAudioRoute.GET(as(NATE), { params: Promise.resolve({ id: rdId, n: '0' }) })).status === 200);
+  // The card for a board on the reading: no performer; the reading by ElevenLabs.
+  const pv = (await (await publishRoute.GET(as(GARANCE, {}, `http://localhost/api/voice/publish?draft=${rdId}&named=no`))).json()) as { credits: { who: string; text: string }[]; problems: string[] };
+  const text = pv.credits.map((c) => c.text).join('\n');
+  check('G. the card on a reading: a ready-made reading by ElevenLabs, no performer, and who made the storyboard', /ready-made reading by ElevenLabs text-to-speech \(Multilingual v2\) by ElevenLabs \(closed model\)/.test(text) && /No performer/.test(text) && !/Performed by/.test(text) && /Storyboard by/.test(text) && /AI did the reading( and|,) the word timings/.test(text), text);
+  check('G. ... and a reading isn\'t held to the performance\'s word-for-word rule (it reads the written words)', !pv.problems.some((x) => /match the speech word for word/.test(x)));
+  // Removing: the reading's maker can't while someone else has a board on it; each person removes their own board.
+  r = await draftRoute.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: rdId }) });
+  check('G. the reading can\'t be removed while someone else has a board on it, and none of its files is touched', r.status === 404 && (await sql`select count(*)::int n from studio.voice_drafts where id = ${rdId}`)[0].n === 1 && storeFiles().some((f) => f.startsWith(`voice-drafts/${rdId}/`)) && storeFiles().some((f) => f.startsWith(`voice-boards/${rdId}/${GARANCE}/`)));
+  r = await boards.DELETE(as(NATE, { method: 'DELETE' }, `http://localhost/api/voice/boards?draft=${rdId}`));
+  check('G. a person removes their own board on it, and only theirs', r.status === 200 && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${rdId} and fid = ${NATE}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${rdId} and fid = ${GARANCE}`)[0].n === 1);
+  r = await boards.DELETE(as(GARANCE, { method: 'DELETE' }, `http://localhost/api/voice/boards?draft=${rdId}`));
+  check('G. ... its kept pictures\' files go too', r.status === 200 && storeFiles().every((f) => !f.startsWith(`voice-boards/${rdId}/${GARANCE}/`)));
+  r = await draftRoute.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: rdId }) });
+  check('G. with no one else\'s board on it, its maker can remove the reading, timings and all', r.status === 200 && (await sql`select count(*)::int n from studio.voice_reading_timings where draft_id = ${rdId}`)[0].n === 0);
+}
 
 // M. The allowlist.
 const models = JSON.parse(readFileSync(path.join(ROOT, 'config/models.json'), 'utf8')).models as { id: string; maker?: string; open_weights: boolean; keeps?: string; hosted?: { endpoints: Record<string, null> } }[];

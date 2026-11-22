@@ -2,7 +2,7 @@ import 'server-only';
 import { createHash, randomUUID } from 'node:crypto';
 import type postgres from 'postgres';
 import { VOICE } from '../config';
-import { keptPictures, latestBoard, ownPerformance } from './board-store';
+import { boardSource, keptPictures, latestBoard } from './board-store';
 import { CLOSING, closingCredits, publishProblems, type Closing, type PictureModel } from './closing';
 import { closingCard } from './closing-card';
 import { publicUrl } from './public-store';
@@ -32,6 +32,7 @@ export interface PublishDeps {
 
 const MODEL_NAMES: Record<string, string> = {
   eleven_multilingual_sts_v2: 'Voice Changer (Multilingual v2)',
+  eleven_multilingual_v2: 'text-to-speech (Multilingual v2)',
   scribe_v3: 'Scribe v3',
   scribe_v2: 'Scribe v2',
   scribe_v1: 'Scribe v1',
@@ -54,10 +55,11 @@ const pictureModel = (recipe: Record<string, unknown>): PictureModel => {
 
 /** What the draft page shows before publishing: the problems, and the credits as the card would show them. */
 export async function publishPreview(sql: Sql, fid: number, draftId: string, deps: Pick<PublishDeps, 'standInsAllowed'>, performer: string | null) {
-  const draft = await ownPerformance(sql, fid, draftId);
+  const draft = await boardSource(sql, fid, draftId);
   if (!draft) return null;
-  const board = await latestBoard(sql, draft.id);
-  const pictures = await keptPictures(sql, draft.id);
+  const board = await latestBoard(sql, draft.id, fid);
+  const pictures = await keptPictures(sql, draft.id, fid);
+  const reading = draft.kind === 'reading';
   const r = draft.recipe as unknown as DraftRecipe;
   const shots: Shot[] = board?.shots ?? [];
   const closing: Closing | null = board?.closing ?? null;
@@ -68,8 +70,10 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
   const models = used.map((p) => pictureModel(p.recipe as Record<string, unknown>));
   const standIns = models.filter((m) => m.id === 'stand-in').length;
   const problems = publishProblems({
-    unmatched: r.check?.unmatched ?? [],
-    sentences: r.check?.sentences ?? 0,
+    // A reading is ElevenLabs reading the speech's own written words, so the word-for-word rule is a performance's; a
+    // reading's word check (its timings) is kept in the recipe instead.
+    unmatched: reading ? [] : (r.check?.unmatched ?? []),
+    sentences: reading ? (draft.timing?.check.sentences ?? 0) : (r.check?.sentences ?? 0),
     shots,
     keptShots: kept,
     closing,
@@ -83,9 +87,10 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
     performer,
     preset: r.preset?.name ?? 'a preset voice',
     voiceModel: elevenLabs(r.model),
-    transcribeModel: elevenLabs(r.transcribeModel ?? VOICE.models.transcribe),
+    transcribeModel: elevenLabs(reading ? (draft.timing?.model ?? VOICE.models.transcribe) : (r.transcribeModel ?? VOICE.models.transcribe)),
     pictures: models,
     shots: shots.length,
+    voice: reading ? 'reading' : 'performance',
   });
   return { draft, board, pictures, used, background, problems, credits, recipe: r };
 }
@@ -112,7 +117,7 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
   };
   try {
     for (const a of audioRows) await copy(a.key, `storyboards/${id}/audio-${a.n}-${a.sha256}.mp3`, 'audio', { n: a.n, part: a.role, sentence: a.sentence, replaces: a.role === 'redo' ? [a.replacesStart, a.replacesEnd] : null, seconds: a.seconds }, a.sha256);
-    const pictureRows = await sql`select shot_key as "shotKey", sha256, storage_key as key from studio.voice_board_pictures where draft_id = ${p.draft.id}`;
+    const pictureRows = await sql`select shot_key as "shotKey", sha256, storage_key as key from studio.voice_board_pictures where draft_id = ${p.draft.id} and fid = ${fid}`;
     const keyOf = (shotKey: string, sha256: string) => pictureRows.find((x) => x.shotKey === shotKey && x.sha256 === sha256)!.key as string;
     for (const s of p.board.shots) {
       const from = keyOf(s.key, s.kept!);
@@ -135,26 +140,41 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
       v: 1,
       kind: 'storyboard',
       publishedAt: new Date().toISOString(),
+      // Who made the storyboard (and, for a performance, performed it); a reading has no performer.
       performer: named ? { fid, name: performer } : { named: false },
+      storyboardBy: named ? { fid, name: performer } : { named: false },
       speech: p.recipe.speech,
-      voice: {
-        provider: VOICE.provider,
-        closedModel: true,
-        model: p.recipe.model,
-        settings: p.recipe.settings,
-        transcribeModel: p.recipe.transcribeModel,
-        preset: p.recipe.preset,
-        // Each raw take by its sha256 only: the take itself is never kept or published.
-        takes: p.recipe.takes,
-        check: p.recipe.check,
-      },
+      voice:
+        p.draft.kind === 'reading'
+          ? {
+              // The ready-made reading: ElevenLabs' text-to-speech of the speech's written words; no performer.
+              kind: 'reading',
+              provider: VOICE.provider,
+              closedModel: true,
+              model: p.recipe.model,
+              preset: p.recipe.preset,
+              textSha256: (p.recipe as unknown as { textSha256?: string }).textSha256 ?? null,
+              timings: p.draft.timing && { model: p.draft.timing.model, check: p.draft.timing.check, credits: p.draft.timing.credits, transcriptDeleted: p.draft.timing.transcriptDeleted },
+            }
+          : {
+              kind: 'performance',
+              provider: VOICE.provider,
+              closedModel: true,
+              model: p.recipe.model,
+              settings: p.recipe.settings,
+              transcribeModel: p.recipe.transcribeModel,
+              preset: p.recipe.preset,
+              // Each raw take by its sha256 only: the take itself is never kept or published.
+              takes: p.recipe.takes,
+              check: p.recipe.check,
+            },
       timeline: p.draft.timeline,
       cuts: p.board.cuts,
       boardVersion: p.board.version,
       shots: p.board.shots.map((s, i) => ({ n: i + 1, key: s.key, start: s.start, end: s.end, description: s.description, angle: s.angle, styleId: s.styleId, characterIds: s.characterIds, picture: strip(pictureRecipe(s.key, s.kept!)) })),
       closing: { description: p.board.closing!.description, styleId: p.board.closing!.styleId, background: strip(pictureRecipe(CLOSING.key, bg.sha256)), credits: p.credits, cardSha256: cardSha, seconds: CLOSING.seconds, text: 'set by the site from this recipe and drawn over the picture' },
-      people: ['the performance', 'each shot’s description and camera', 'the cuts (moved from a rule’s proposal)', 'the closing card’s look', 'which pictures were kept'],
-      ai: ['the voice conversion', 'the word check (transcription)', 'the pictures'],
+      people: [...(p.draft.kind === 'reading' ? [] : ['the performance']), 'each shot’s description and camera', 'the cuts (moved from a rule’s proposal)', 'the closing card’s look', 'which pictures were kept'],
+      ai: p.draft.kind === 'reading' ? ['the reading (text-to-speech)', 'the word timings (transcription)', 'the pictures'] : ['the voice conversion', 'the word check (transcription)', 'the pictures'],
       noAiVideo: true,
     };
     await sql`select studio.publish_voice_board(${id}::uuid, ${p.draft.id}::uuid, ${fid}::bigint, ${p.board.version}::int, ${named}, ${sql.json(recipe as unknown as postgres.JSONValue)}, ${sql.json(files as unknown as postgres.JSONValue)})`;

@@ -10,7 +10,7 @@ import type { Where } from '../images/countries';
 import type { Made } from '../images/fal';
 import type { paidPicture } from '../images/paid';
 import { angleById, shotPrompt, type Shot } from './board';
-import { latestBoard, ownPerformance } from './board-store';
+import { boardSource, latestBoard } from './board-store';
 import { signTicket } from './ticket';
 import { CLOSING } from './closing';
 
@@ -44,8 +44,8 @@ export interface ShotDeps {
 export const realPicturesFor = (fid: number) => VOICE.realPictures === true || (VOICE.realPictures === 'admins' && isAdmin(fid));
 export const shotModels = (where: Where, fid: number) => ({ models: modelRow(where), defaultModel: chapterDefaultModel(where), real: realPicturesFor(fid), limits: VOICE.board });
 
-export async function triesMade(sql: Sql, draftId: string): Promise<Record<string, number>> {
-  const rows = await sql`select shot_key, count(*)::int as n from studio.voice_board_asks where draft_id = ${draftId} group by shot_key`;
+export async function triesMade(sql: Sql, draftId: string, fid: number): Promise<Record<string, number>> {
+  const rows = await sql`select shot_key, count(*)::int as n from studio.voice_board_asks where draft_id = ${draftId} and fid = ${fid} group by shot_key`;
   return Object.fromEntries(rows.map((r) => [r.shot_key as string, r.n as number]));
 }
 
@@ -54,9 +54,9 @@ const kindOf = (b: Buffer) => (b[0] === 0x89 && b.subarray(1, 4).toString() === 
 export async function makeShotPicture(sql: Sql, fid: number, request: Request, raw: unknown, where: Where, deps: ShotDeps): Promise<Result> {
   if (deps.real && !realPicturesFor(fid)) return no(403, 'Pictures for storyboards are not switched on yet.', { reason: 'not-yet' });
   const b = (raw ?? {}) as { draftId?: unknown; shotKey?: unknown; description?: unknown; angle?: unknown; styleId?: unknown; characterIds?: unknown; model?: unknown; notice?: unknown };
-  const draft = await ownPerformance(sql, fid, String(b.draftId ?? ''));
+  const draft = await boardSource(sql, fid, String(b.draftId ?? ''));
   if (!draft) return no(404, 'Not found');
-  const board = await latestBoard(sql, draft.id);
+  const board = await latestBoard(sql, draft.id, fid);
   const shots: Shot[] = board?.shots ?? [];
   // The closing card's background (slice 4) goes through the same flow under the key 'end': the person's own words for
   // its look, a style, no camera; the site draws the card's text over it.
@@ -70,7 +70,7 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   if (description.length > VOICE.board.descriptionMaxChars) return no(400, `At most ${VOICE.board.descriptionMaxChars} characters.`);
   const angle = closing ? null : angleById(String(b.angle ?? ''));
   if (!closing && !angle) return no(400, 'Pick a camera angle');
-  const tries = (await triesMade(sql, draft.id))[String(b.shotKey)] ?? 0;
+  const tries = (await triesMade(sql, draft.id, fid))[String(b.shotKey)] ?? 0;
   if (tries >= VOICE.board.maxTriesPerShot) return no(429, `${VOICE.board.maxTriesPerShot} pictures for this shot already: keep one of them.`, { reason: 'tries' });
   if (!(await deps.consented(fid))) return no(403, 'Agree to how your words are published first', { reason: 'consent' });
   const m = challengeModel(b.model ?? chapterDefaultModel(where), where);

@@ -3,7 +3,7 @@ import { db } from '~/lib/db';
 import { noStore, voicePerson } from '~/lib/voice/server';
 import { voiceTestOn } from '~/lib/voice/flag';
 import { whereFrom } from '~/lib/images/countries';
-import { ownPerformance, pictureBytes } from '~/lib/voice/board-store';
+import { boardSource, pictureBytes } from '~/lib/voice/board-store';
 import { makeShotPicture, type ShotDeps } from '~/lib/voice/shot-picture';
 import { standInPicture } from '~/lib/voice/stand-in-picture';
 
@@ -55,9 +55,9 @@ export async function GET(request: Request) {
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Not available right now' }, { status: 503 });
   const q = new URL(request.url).searchParams;
-  const draft = await ownPerformance(sql, who.fid, String(q.get('draft') ?? ''));
+  const draft = await boardSource(sql, who.fid, String(q.get('draft') ?? ''));
   if (!draft) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-  const bytes = await pictureBytes(sql, draft.id, String(q.get('shot') ?? ''), String(q.get('sha') ?? ''));
+  const bytes = await pictureBytes(sql, draft.id, who.fid, String(q.get('shot') ?? ''), String(q.get('sha') ?? ''));
   if (!bytes) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   const png = bytes[0] === 0x89;
   return new Response(Buffer.from(bytes), { headers: { 'content-type': png ? 'image/png' : 'image/jpeg', ...noStore } });

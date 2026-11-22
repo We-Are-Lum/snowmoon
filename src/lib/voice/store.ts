@@ -15,9 +15,13 @@ import { voiceTestOn } from './flag';
 export const PREFIX = 'voice-drafts/';
 export const keyFor = (draftId: string, n: number, sha256: string) => `${PREFIX}${draftId}/${n}-${sha256}.mp3`;
 const valid = (key: string) =>
-  /^voice-drafts\/[0-9a-f-]{36}\/[0-9]{1,2}-[0-9a-f]{64}\.mp3$/.test(key) || /^voice-boards\/[0-9a-f-]{36}\/[a-z0-9]{1,16}-[0-9a-f]{64}\.(png|jpg)$/.test(key);
-/** A kept storyboard picture's key (slice 2): voice-boards/<draft id>/<shot key>-<sha256>.png, in the same private bucket. */
-export const pictureKeyFor = (draftId: string, shotKey: string, sha256: string, ext: 'png' | 'jpg' = 'png') => `voice-boards/${draftId}/${shotKey}-${sha256}.${ext}`;
+  /^voice-drafts\/[0-9a-f-]{36}\/[0-9]{1,2}-[0-9a-f]{64}\.mp3$/.test(key) || /^voice-boards\/[0-9a-f-]{36}\/([0-9]{1,20}\/)?[a-z0-9]{1,16}-[0-9a-f]{64}\.(png|jpg)$/.test(key);
+/**
+ * A kept storyboard picture's key, in the same private bucket: voice-boards/<draft id>/<board owner's FID>/<shot key>-
+ * <sha256>.png (a board has its own owner: a shared reading carries many people's boards, 2026-11-21). Pictures kept
+ * before then are under voice-boards/<draft id>/<shot key>-<sha256>.png and still read.
+ */
+export const pictureKeyFor = (draftId: string, fid: number, shotKey: string, sha256: string, ext: 'png' | 'jpg' = 'png') => `voice-boards/${draftId}/${fid}/${shotKey}-${sha256}.${ext}`;
 
 const NEED = ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_PRIVATE_BUCKET'];
 export const local = () => (voiceTestOn() ? process.env.VOICE_TEST_STORE || path.join(os.tmpdir(), 'voice-test-store') : null);

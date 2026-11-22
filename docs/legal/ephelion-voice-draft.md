@@ -49,8 +49,9 @@ can come a little later than stated." The other counts are not changed by this b
 
 **Section 4, a new list item after the speeches item:**
 
-> Storyboards for a speech you accepted: the cuts, your words for each shot and for the closing card, and the pictures
-> you keep, as your draft until you publish it. They are removed with the draft.
+> Storyboards for a speech you accepted, or on a ready-made reading: the cuts, your words for each shot and for the
+> closing card, and the pictures you keep, as your draft until you publish it. A storyboard is yours alone, even on a
+> reading others use too. You can remove it; a draft's own storyboards are removed with the draft.
 
 **Section 6 (What you publish), add:**
 

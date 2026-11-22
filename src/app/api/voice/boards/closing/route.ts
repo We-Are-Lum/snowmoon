@@ -21,7 +21,7 @@ export async function GET(request: Request) {
   const performer = q.get('named') === 'no' ? null : await deps.name(who.fid, request.headers.get('x-name-proof'));
   const p = await publishPreview(sql, who.fid, String(q.get('draft') ?? ''), deps, performer);
   if (!p) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-  const bg = p.background ? await pictureBytes(sql, p.draft.id, CLOSING.key, p.background.sha256) : null;
+  const bg = p.background ? await pictureBytes(sql, p.draft.id, who.fid, CLOSING.key, p.background.sha256) : null;
   const png = await closingCard(bg, p.recipe.speech?.title ?? 'A speech', p.credits);
   return new Response(new Uint8Array(png), { headers: { 'content-type': 'image/png', ...noStore } });
 }
