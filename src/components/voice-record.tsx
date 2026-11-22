@@ -30,7 +30,7 @@ interface Status {
   drafts: { id: string; kind: string; speechId: string; presetId: string; madeAt: string; publishedAt: string | null; recipe: Record<string, unknown>; audio: { n: number; role: string; sentence: number | null }[] }[];
   readings: { speechId: string; presetId: string; id: string; candidate: number | null; madeAt: string }[];
 }
-interface Speech { id: string; title: string; character: string; source: { kind: string; block?: string }; label: { kind: 'book'; text: string; block: string } | { kind: 'invented'; text: string; writers: string[] }; version: number; standIn: boolean; paragraphs: string[]; sentences: { n: number; text: string }[]; characters: number; names: string[] }
+interface Speech { id: string; title: string; character: string; source: { kind: string; block?: string }; label: { kind: 'book'; text: string; block: string } | { kind: 'invented'; text: string; writers: string[] }; version: number; standIn: boolean; paragraphs: string[]; sentences: { n: number; text: string }[]; characters: number; names: string[]; aiHelp: boolean | null; credit: string | null }
 interface Converted { blob: Blob; url: string; ticket: string; check?: string; checks?: Check[]; seconds: number }
 interface Redo extends Converted { n: number }
 
@@ -490,7 +490,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
         {s.speech.label.kind === 'book' ? (
           <><span className="vr-tag">{s.speech.label.text}</span> Lord Ephelion&rsquo;s letter, {s.speech.label.block}, word for word</>
         ) : (
-          <><span className="vr-tag">{s.speech.label.text}</span> Written for this edition, version {s.speech.version} · <span className="vr-tag">Draft</span> {s.speech.label.writers.join(', ')}</>
+          <><span className="vr-tag">{s.speech.label.text}</span> {s.speech.credit} · version {s.speech.version}</>
         )}
         {s.speech.standIn && <> · <span className="vr-tag">Stand-in</span> until the team&rsquo;s speeches arrive</>} · <span className="vr-tag">Invented</span> performing it aloud is this edition&rsquo;s
       </p>
@@ -525,7 +525,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                   <span>
                     <strong>{x.title}</strong>{' '}
                     <span className="vr-tag">{x.label.text}</span>
-                    <span className="vr-small"> {x.label.kind === 'book' ? `${x.label.block}, word for word` : `version ${x.version}`} · {x.sentences.length} sentences</span>
+                    <span className="vr-small"> {x.label.kind === 'book' ? `${x.label.block}, word for word` : `${x.credit} · version ${x.version}`} · {x.sentences.length} sentences</span>
                   </span>
                 </label>
               ))}

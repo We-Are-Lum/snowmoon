@@ -29,7 +29,7 @@ export async function GET(request: Request) {
         .filter(([, , r]) => r)
         .map(([sid, p, r]) => ({ speechId: sid, presetId: p, id: r!.id, candidate: (r!.recipe as { preset?: { candidate?: number } }).preset?.candidate ?? null, madeAt: r!.made_at }))
     : [];
-  const view = (sp: (typeof all)[number]) => ({ id: sp.id, title: sp.title, character: sp.character, source: sp.source, label: sp.label, version: sp.version, standIn: sp.standIn, paragraphs: sp.paragraphs, sentences: sp.sentences.map(({ n, text }) => ({ n, text })), characters: sp.characters, names: sp.names });
+  const view = (sp: (typeof all)[number]) => ({ id: sp.id, title: sp.title, character: sp.character, source: sp.source, label: sp.label, version: sp.version, aiHelp: sp.aiHelp, credit: sp.credit, standIn: sp.standIn, paragraphs: sp.paragraphs, sentences: sp.sentences.map(({ n, text }) => ({ n, text })), characters: sp.characters, names: sp.names });
   return NextResponse.json(
     {
       ready: voiceReady(),

@@ -18,6 +18,9 @@ export interface Speech {
   source: { kind: 'book'; block: string } | { kind: 'edition'; by: string; doc: string; version: number };
   /** The text's version: a recording is tied to the exact text it was checked against (Nate, 2026-11-22). */
   version: number;
+  /** Whether AI helped write this version (set by Nate, never by an agent or the site), and the credit that follows from it. */
+  aiHelp: boolean | null;
+  credit: string | null;
   /**
    * The speech's own label (Nate, 2026-11-21): the stand-in c13-b64 is "Book"; the team's speeches will be "Invented,
    * not from the book", with their writers credited. Shown with the speech, and kept in every recipe.
@@ -55,6 +58,8 @@ function fromBlock(id: string, chapter: number, idx: number, names: string[]): S
     source: { kind: 'book', block: `c${chapter}-b${idx}` },
     label: { kind: 'book', text: 'Book', block: `c${chapter}-b${idx}` },
     version: 1,
+    aiHelp: null,
+    credit: null,
     standIn: true,
     paragraphs,
     sentences: sentencesOf(paragraphs),
@@ -65,25 +70,32 @@ function fromBlock(id: string, chapter: number, idx: number, names: string[]): S
 
 interface InventedFile {
   source: { title: string; googleDocId: string; version: number };
-  writersCredit: string;
-  speeches: { id: string; version: number; title: string; names: string[]; paragraphs: string[] }[];
+  credits: { aiHelp: string; noAiHelp: string };
+  speeches: { id: string; version: number; aiHelp: boolean; title: string; names: string[]; paragraphs: string[] }[];
 }
 /** The team's speeches, as written (titles and notes are not spoken: only the paragraphs). */
 function invented(): Speech[] {
   const f = JSON.parse(readFileSync(path.join(process.cwd(), 'config', 'voice-speeches.json'), 'utf8')) as InventedFile;
-  return f.speeches.map((x) => ({
+  return f.speeches.map((x) => {
+    // The credit follows the version's aiHelp, which only Nate sets (2026-11-22).
+    if (typeof x.aiHelp !== 'boolean') throw new Error(`${x.id}: aiHelp must be set (true or false) by Nate`);
+    const credit = x.aiHelp ? f.credits.aiHelp : f.credits.noAiHelp;
+    return {
     id: x.id,
     title: x.title,
     character: 'ephelion',
-    source: { kind: 'edition', by: f.writersCredit, doc: f.source.googleDocId, version: x.version },
-    label: { kind: 'invented', text: 'Invented, not from the book', writers: [f.writersCredit] },
+    source: { kind: 'edition', by: credit, doc: f.source.googleDocId, version: x.version },
+    label: { kind: 'invented', text: 'Invented, not from the book', writers: [credit] },
     version: x.version,
+    aiHelp: x.aiHelp,
+    credit,
     standIn: false,
     paragraphs: x.paragraphs,
     sentences: sentencesOf(x.paragraphs),
     names: x.names,
     characters: x.paragraphs.join('\n').length,
-  }));
+    } satisfies Speech;
+  });
 }
 
 let cache: Speech[] | null = null;
