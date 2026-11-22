@@ -21,13 +21,20 @@ export async function GET(request: Request) {
   const funded = fundedFor(who.fid);
   if (sql) await purgeOldAsks(sql).catch(() => 0);
   const t = sql ? await today(sql, funded, who.fid) : null;
+  // The ready-made readings, per speech and voice (Nate, 2026-11-22: the team's three speeches beside c13-b64).
+  const all = speeches();
+  const presets = [...new Set(choices.map((c) => c.presetId))];
   const readings = sql
-    ? (await Promise.all([...new Set(choices.map((c) => c.presetId))].map(async (p) => [p, await latestReading(sql, speech.id, p)] as const))).filter(([, r]) => r).map(([p, r]) => ({ presetId: p, id: r!.id, candidate: (r!.recipe as { preset?: { candidate?: number } }).preset?.candidate ?? null, madeAt: r!.made_at }))
+    ? (await Promise.all(all.flatMap((sp) => presets.map(async (p) => [sp.id, p, await latestReading(sql, sp.id, p)] as const))))
+        .filter(([, , r]) => r)
+        .map(([sid, p, r]) => ({ speechId: sid, presetId: p, id: r!.id, candidate: (r!.recipe as { preset?: { candidate?: number } }).preset?.candidate ?? null, madeAt: r!.made_at }))
     : [];
+  const view = (sp: (typeof all)[number]) => ({ id: sp.id, title: sp.title, character: sp.character, source: sp.source, label: sp.label, version: sp.version, aiHelp: sp.aiHelp, credit: sp.credit, standIn: sp.standIn, paragraphs: sp.paragraphs, sentences: sp.sentences.map(({ n, text }) => ({ n, text })), characters: sp.characters, names: sp.names });
   return NextResponse.json(
     {
       ready: voiceReady(),
-      speech: { id: speech.id, title: speech.title, character: speech.character, source: speech.source, label: speech.label, standIn: speech.standIn, paragraphs: speech.paragraphs, sentences: speech.sentences.map(({ n, text }) => ({ n, text })), characters: speech.characters },
+      speech: view(speech),
+      speeches: all.map(view),
       preview: { text: previewText, block: previewBlock },
       choices,
       consent: { version: wording.version, line: wording.line, title: wording.title, text: wording.text, sha256: wording.sha256, agreed: sql ? await hasVoiceConsent(sql, who.fid) : false },

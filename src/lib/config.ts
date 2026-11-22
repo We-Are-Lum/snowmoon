@@ -1150,7 +1150,7 @@ export const VOICE = {
    * /storyboard/spoken/<id> page is "not found" (the local tests turn it on with VOICE_TEST_ON, stand-ins only).
    */
   publish: false,
-  /** The team's invented speeches (Nate, 2026-11-22): not to be published until Nate says. */
+  /** The team's invented speeches (Nate, 2026-11-22): admins only, and not to be published until Nate says. */
   publishInvented: false,
   board: { maxShots: 12, maxTriesPerShot: 3, descriptionMaxChars: 600 },
   provider: 'ElevenLabs',

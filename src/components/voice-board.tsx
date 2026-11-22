@@ -22,7 +22,7 @@ import '../styles/voice.css';
  */
 interface Sheet { id: string; title: string; entity: string; text: string; thumb: string | null }
 interface Data {
-  draft: { id: string; kind: 'performance' | 'reading'; preset: string | null; speech: { id: string; title: string } | null; sentences: { n: number; text: string }[]; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
+  draft: { id: string; kind: 'performance' | 'reading'; preset: string | null; speech: { id: string; title: string; label?: { text: string } } | null; sentences: { n: number; text: string }[]; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
   board: { version: number; cuts: number[]; shots: Shot[]; closing: Closing; proposed: number[]; fromProposal: boolean };
   pictures: { shotKey: string; sha256: string; recipe: Record<string, unknown> }[];
   sheets: { styles: Sheet[]; characters: Sheet[] };
@@ -551,7 +551,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             <h2 id="vb-shot-h">2. Shot {current + 1} of {shots.length}</h2>
             <span className="vr-small">{fmt(shot.start)} – {fmt(shot.end)} · {(shot.end - shot.start).toFixed(1)} s</span>
           </div>
-          <blockquote className="vb-words"><span className="vr-tag">Book</span> {sentencesIn(t, shot).map(sentenceText).join(' ')}</blockquote>
+          <blockquote className="vb-words"><span className="vr-tag">{d.draft.speech?.label?.text ?? 'Book'}</span> {sentencesIn(t, shot).map(sentenceText).join(' ')}</blockquote>
           <PublishedTextField id={`vb-desc-${shot.key}`} label="What the shot shows (your words)" value={shot.description} onChange={(v) => edit({ description: v })} rows={3} maxLength={600} />
           <label className="vb-field">
             <span className="vb-label">Camera</span>
@@ -618,7 +618,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             <div className="vb-picture vb-empty">{playing ? `Shot ${playingNo}: no picture kept yet.` : 'Press play.'}</div>
           )}
         </div>
-        <p className="vb-caption"><span className="vr-tag">Book</span> {audioUrl && now > 0 ? sentenceText(sentenceAt(t, now)) : sentenceText(t.sentences[0]?.n ?? null)}</p>
+        <p className="vb-caption"><span className="vr-tag">{d.draft.speech?.label?.text ?? 'Book'}</span> {audioUrl && now > 0 ? sentenceText(sentenceAt(t, now)) : sentenceText(t.sentences[0]?.n ?? null)}</p>
         {audioUrl ? <audio controls src={audioUrl} className="vr-audio" onTimeUpdate={(e) => setNow(e.currentTarget.currentTime)} /> : <p className="vr-small">Loading the audio…</p>}
         <div className="vr-row">
           {saving === null ? (
