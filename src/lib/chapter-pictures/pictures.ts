@@ -232,6 +232,9 @@ export async function redoPicture(sql: Sql, fid: number, request: Request, raw: 
   const paid = await deps.paid(sql, fid, request, {
     checkText: prompt,
     spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, pool: 'admin' },
+    // A closed model's maker (OpenAI, Google): a refusal by its own check names it (branch refusal-reasons, owner
+    // 2026-11-18; wording reread by the owner 2026-11-22).
+    ...(m.open ? {} : { maker: m.maker }),
     // With picked references, every picture goes as the sheets do (chapterClosedRequest's multi-picture path; FLUX's edit with each).
     make: () =>
       picks.refs.length
@@ -428,6 +431,9 @@ export async function addPicture(sql: Sql, fid: number, request: Request, raw: u
   const paid = await deps.paid(sql, fid, request, {
     checkText: prompt,
     spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, pool: 'admin' },
+    // A closed model's maker (OpenAI, Google): a refusal by its own check names it (branch refusal-reasons, owner
+    // 2026-11-18; wording reread by the owner 2026-11-22).
+    ...(m.open ? {} : { maker: m.maker }),
     make: () => deps.makeAdded(m, prompt, refs, request, worst),
   });
   if (!paid.ok) return { status: paid.status, json: { error: paid.error, ...paid.extra } };

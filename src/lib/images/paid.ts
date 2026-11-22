@@ -3,7 +3,8 @@ import type postgres from 'postgres';
 import { CHAPTER_PICTURES, IMAGES } from '../config';
 import { checkPrompt } from './guard';
 import { ImageRefused, ImageUnavailable, type Made } from './fal';
-import { fundedBy, giveBack, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
+import { countRefusal, fundedBy, giveBack, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
+import { guardRefusal, REFUSAL_WORDING } from './refusal-wording';
 import { blockedName } from './rules';
 import { FREE_WORDING } from '../social/free';
 import { IMAGE_WORDING } from './wording';
@@ -66,6 +67,12 @@ export async function paidPicture(
      * Without it, a blocked picture counts and says "flagged by the safety checker and dropped", as everywhere else.
      */
     blocked?: { error: string; giveBack: boolean };
+    /**
+     * A closed model's maker (OpenAI, Google: the model's `maker` field), when the picture is made by one. A refusal by
+     * the maker's own check (ImageRefused) then says so by name (src/lib/images/refusal-wording.ts, owner
+     * 2026-11-18, reread by the owner 2026-11-22); it counts, as before. Unset for an open model: its own check's words stay as they are.
+     */
+    maker?: string | null;
   },
 ): Promise<Paid> {
   const spend = job.spend;
@@ -90,8 +97,11 @@ export async function paidPicture(
   }
   if (!guard.allow) {
     await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'blocked' } }, spend, funded);
+    // The day's count of refusals by category (no person: studio.image_refusals); skipped until that table exists.
+    await countRefusal(sql, guard.category);
     const back = await creditBack(sql, r.debitId, 'refused');
-    return { ok: false, status: 422, error: failed('This prompt asks for something the rules don’t allow.', back), extra: { reason: 'blocked', category: guard.category, left: r.left, ...(back ? { creditedBack: true } : {}) } };
+    // The rule it was refused under, in plain words ("words" in its own); no category, or one we don't know: the generic line.
+    return { ok: false, status: 422, error: failed(guardRefusal(guard.category), back), extra: { reason: 'blocked', category: guard.category, left: r.left, ...(back ? { creditedBack: true } : {}) } };
   }
   let made: Made;
   try {
@@ -100,7 +110,8 @@ export async function paidPicture(
     // The model's own safety check refused it (branch challenge-models): counted and answered as a dropped picture.
     if (e instanceof ImageRefused) {
       await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' }, image: { costUsd: 0, verdict: 'nsfw' } }, spend, funded);
-      return dropped(sql, fid, r, job.blocked);
+      // A closed model's maker refused it: named (owner, 2026-11-18). An open model's refusal keeps its own words.
+      return dropped(sql, fid, r, job.maker ? { error: REFUSAL_WORDING.maker(job.maker), giveBack: false } : job.blocked);
     }
     await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' } }, spend, funded);
     console.error('image generation failed', e instanceof ImageUnavailable ? e.message : (e as Error).name);

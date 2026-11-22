@@ -95,6 +95,9 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   const paid = await deps.paid(sql, fid, request, {
     checkText: prompt,
     spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, ...(isAdmin(fid) ? { pool: 'admin' as const } : {}) },
+    // A closed model's maker (OpenAI, Google): a refusal by its own check names it (branch refusal-reasons, owner
+    // 2026-11-18; wording reread by the owner 2026-11-22).
+    ...(m.open ? {} : { maker: m.maker }),
     make: () => deps.make(m, prompt, refs, request, worst, { no: shotNo, attempt: tries + 1, description, angle: angle.label, style: style?.title ?? null, characters: chosen.map((c) => c!.title) }),
   });
   if (!paid.ok) return { status: paid.status, json: { error: paid.error, ...paid.extra } };
