@@ -44,7 +44,7 @@ interface DraftRecipe {
   settings?: unknown;
   transcribeModel?: string;
   preset?: { id: string; name: string };
-  speech?: { id: string; title: string; source?: { kind: string; block?: string }; label?: unknown };
+  speech?: { id: string; title: string; version?: number; source?: { kind: string; block?: string; by?: string }; label?: { kind?: string } };
   takes?: unknown[];
   check?: { sentences: number; matched: number; unmatched: number[]; bySound?: unknown[] };
 }
@@ -60,6 +60,7 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
   const board = await latestBoard(sql, draft.id, fid);
   const pictures = await keptPictures(sql, draft.id, fid);
   const reading = draft.kind === 'reading';
+  const invented = (draft.recipe as { speech?: { source?: { kind?: string }; label?: { kind?: string } } }).speech?.label?.kind === 'invented' || (draft.recipe as { speech?: { source?: { kind?: string } } }).speech?.source?.kind === 'edition';
   const r = draft.recipe as unknown as DraftRecipe;
   const shots: Shot[] = board?.shots ?? [];
   const closing: Closing | null = board?.closing ?? null;
@@ -80,10 +81,16 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
     closingKept: Boolean(background),
     standIns,
     standInsAllowed: deps.standInsAllowed,
+    inventedHeld: invented && !VOICE.publishInvented,
   });
   if (!board) problems.unshift('Save the storyboard first.');
   const credits = closingCredits({
-    speech: { title: r.speech?.title ?? 'A speech', block: r.speech?.source?.kind === 'book' ? (r.speech.source.block ?? null) : null },
+    speech: {
+      title: r.speech?.title ?? 'A speech',
+      block: r.speech?.source?.kind === 'book' ? (r.speech.source.block ?? null) : null,
+      // The team's invented speech: its version; the credit stays a DRAFT placeholder until Nate gives it (2026-11-22).
+      ...(invented ? { invented: { version: r.speech?.version ?? null, credit: null } } : {}),
+    },
     performer,
     preset: r.preset?.name ?? 'a preset voice',
     voiceModel: elevenLabs(r.model),

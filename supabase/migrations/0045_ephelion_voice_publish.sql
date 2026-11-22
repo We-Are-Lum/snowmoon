@@ -1,8 +1,12 @@
--- NEXT_ephelion_voice_publish.sql: the Ephelion storyboard, slice 4 and storyboards from the ready-made reading (Nate,
--- 2026-11-21, branch ephelion-publish). NOT APPLIED. Unnumbered while the branch is unmerged: it takes the next free number
--- at merge. Drafted by the coding agent (Claude, a closed model by Anthropic), DRAFT until Nate approves it; tested in PGlite
--- by the agent (npm run test:voice). Version 2 (2026-11-21 night): the coordinator tested version 1; this one adds a board's
--- own owner, reading timings and publishing from a reading, and a read-back without SET ROLE, so it needs testing again.
+-- 0045_ephelion_voice_publish.sql: the Ephelion storyboard, slice 4 and storyboards from the ready-made reading (Nate,
+-- 2026-11-21, branch ephelion-publish). Numbered 0045 at merge (2026-11-22; main's highest was 0044); it was
+-- NEXT_ephelion_voice_publish.sql. NOT APPLIED until Nate applies it; the branch merges only after he says "applied".
+-- Drafted by the coding agent (Claude, a closed model by Anthropic); tested in PGlite by the agent (npm run test:voice).
+-- Version 2 tested by the coordinator on Postgres 16 on top of 0044 (2026-11-22): the dry run leaves the shape unchanged,
+-- applies twice, the read-back passes and leaves nothing, the undo restores 0044's exact shape, privileges right (inserts
+-- only; publications only through the functions; nothing for anon or authenticated), and the shared-reading rules hold
+-- (one live publication per person per reading; a reading isn't marked published; its maker can't remove it while others
+-- have boards or live publications).
 -- Requires 0044_ephelion_voice.sql (applied on production 2026-11-21).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:

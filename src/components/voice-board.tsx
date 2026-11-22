@@ -712,7 +712,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             <summary>The credits, as published</summary>
             <ul className="vs-credits">
               {check.credits.map((c, i) => (
-                <li key={i}>{c.who !== 'site' && <span className="vr-tag">{c.who === 'ai' ? 'AI' : c.who === 'book' ? 'Book' : 'People'}</span>} {c.text}</li>
+                <li key={i}>{c.who !== 'site' && <span className="vr-tag">{c.who === 'ai' ? 'AI' : c.who === 'book' ? 'Book' : c.who === 'invented' ? 'Invented' : 'People'}</span>} {c.text}</li>
               ))}
             </ul>
           </details>

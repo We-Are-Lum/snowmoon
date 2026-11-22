@@ -145,7 +145,7 @@ export function VoiceSpoken(p: SpokenProps) {
         <ul className="vs-credits">
           {p.credits.map((c, i) => (
             <li key={i}>
-              {c.who !== 'site' && <span className={`vr-tag vs-${c.who}`}>{c.who === 'ai' ? 'AI' : c.who === 'book' ? 'Book' : 'People'}</span>} {c.text}
+              {c.who !== 'site' && <span className={`vr-tag vs-${c.who}`}>{c.who === 'ai' ? 'AI' : c.who === 'book' ? 'Book' : c.who === 'invented' ? 'Invented' : 'People'}</span>} {c.text}
             </li>
           ))}
         </ul>

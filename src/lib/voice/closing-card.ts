@@ -9,7 +9,7 @@ import { CLOSING, wrapLines, type CreditLine } from './closing';
  */
 export const CARD = { width: 1536, height: 864 } as const;
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-const TAG: Record<CreditLine['who'], string> = { book: 'BOOK', people: 'PEOPLE', ai: 'AI', site: '' };
+const TAG: Record<CreditLine['who'], string> = { book: 'BOOK', invented: 'INVENTED', people: 'PEOPLE', ai: 'AI', site: '' };
 
 export function closingSvg(title: string, lines: CreditLine[]): string {
   const { width: W, height: H } = CARD;
@@ -23,7 +23,7 @@ export function closingSvg(title: string, lines: CreditLine[]): string {
   for (const l of lines) {
     const wrapped = wrapLines(l.text, l.who === 'site' ? 92 : 78);
     y += l.who === 'site' ? 34 : 48;
-    if (TAG[l.who]) rows.push(`<rect x="96" y="${y - 24}" width="${TAG[l.who].length * 13 + 22}" height="32" rx="6" fill="${l.who === 'ai' ? '#3d5a80' : l.who === 'book' ? '#6b4f2a' : '#2f5d50'}"/><text x="107" y="${y - 1}" font-family="Helvetica, Arial, sans-serif" font-size="19" font-weight="bold" fill="#fff" letter-spacing="1">${TAG[l.who]}</text>`);
+    if (TAG[l.who]) rows.push(`<rect x="96" y="${y - 24}" width="${TAG[l.who].length * 13 + 22}" height="32" rx="6" fill="${l.who === 'ai' ? '#3d5a80' : l.who === 'book' ? '#6b4f2a' : l.who === 'invented' ? '#6a3d6b' : '#2f5d50'}"/><text x="107" y="${y - 1}" font-family="Helvetica, Arial, sans-serif" font-size="19" font-weight="bold" fill="#fff" letter-spacing="1">${TAG[l.who]}</text>`);
     const x = TAG[l.who] ? 96 + TAG[l.who].length * 13 + 38 : 96;
     wrapped.forEach((w, i) => rows.push(`<text x="${x}" y="${y + i * (l.who === 'site' ? 32 : 38)}" font-family="Helvetica, Arial, sans-serif" font-size="${l.who === 'site' ? 24 : 30}" fill="${l.who === 'site' ? '#d8d5cd' : '#f4f2ed'}">${esc(w)}</text>`));
     y += (wrapped.length - 1) * (l.who === 'site' ? 32 : 38);

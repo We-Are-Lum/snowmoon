@@ -33,7 +33,8 @@ export interface PictureModel {
   open: boolean;
 }
 export interface CreditsInput {
-  speech: { title: string; block: string | null };
+  /** The speech: a book block, or the team's invented speech (its version; the writers' credit, DRAFT until Nate gives it). */
+  speech: { title: string; block: string | null; invented?: { version: number | null; credit: string | null } };
   /** The performer's name here, or null when they asked not to be named. */
   performer: string | null;
   preset: string;
@@ -48,7 +49,7 @@ export interface CreditsInput {
 
 export interface CreditLine {
   /** 'people' lines are what people did; 'ai' lines are what models did; 'book' is the source; 'site' is fixed. */
-  who: 'book' | 'people' | 'ai' | 'site';
+  who: 'book' | 'invented' | 'people' | 'ai' | 'site';
   text: string;
 }
 
@@ -62,7 +63,9 @@ export function closingCredits(c: CreditsInput): CreditLine[] {
   for (const p of c.pictures) if (p.id !== 'stand-in') real.set(p.id, p);
   const reading = c.voice === 'reading';
   const lines: CreditLine[] = [
-    { who: 'book', text: `Words: ${c.speech.title}, from Snowmoon by Vitalik Buterin${c.speech.block ? ` (${c.speech.block})` : ''}, word for word.` },
+    c.speech.invented
+      ? { who: 'invented', text: `Words: “${c.speech.title}”, written for this edition${c.speech.invented.version ? ` (version ${c.speech.invented.version})` : ''}; invented, not from the book. ${c.speech.invented.credit ?? 'DRAFT: the writers’ credit, wording to come'}` }
+      : { who: 'book', text: `Words: ${c.speech.title}, from Snowmoon by Vitalik Buterin${c.speech.block ? ` (${c.speech.block})` : ''}, word for word.` },
     ...(reading ? [] : [{ who: 'people' as const, text: `Performed by ${by}, in the voice “${c.preset}”.` }]),
     { who: 'people', text: `Storyboard by ${by}: the cuts, the ${c.shots} shots’ descriptions and cameras, the pictures kept.` },
     reading
@@ -91,6 +94,8 @@ export interface PublishFacts {
   /** Stand-in pictures may be published only on a local test copy (never on Vercel). */
   standInsAllowed: boolean;
   dirty?: boolean;
+  /** An invented speech, while its publishing waits for Nate's word (VOICE.publishInvented). */
+  inventedHeld?: boolean;
 }
 
 /**
@@ -108,6 +113,7 @@ export function publishProblems(f: PublishFacts): string[] {
   if (!f.closing || !f.closing.description.trim() || !f.closing.kept || !f.closingKept) out.push('The closing card has no background kept yet.');
   if (f.standIns && !f.standInsAllowed) out.push('Stand-in cards can’t be published: make real pictures first.');
   if (f.dirty) out.push('Save the storyboard first.');
+  if (f.inventedHeld) out.push('Storyboards of the invented speeches can’t be published yet: that waits for Nate’s word.');
   return out;
 }
 

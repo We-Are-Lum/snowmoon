@@ -680,7 +680,7 @@ tested stay as they are. Nothing spent, nothing merged.
   board), so a clip cut from it still says so. Also on the draft's board, so admins can try it before publishing exists.
 - **The switch:** `VOICE.publish: false`. While off the publish route refuses and every spoken page is "not found";
   the local tests turn it on (`VOICE_TEST_ON`), stand-ins only.
-- **Schema:** `NEXT_ephelion_voice_publish.sql` (after `NEXT_ephelion_voice.sql`): `voice_boards.closing`,
+- **Schema:** `0045_ephelion_voice_publish.sql` (after `NEXT_ephelion_voice.sql`): `voice_boards.closing`,
   `voice_publications`, the publish and take-down functions, and `delete_voice_draft` replaced so removing a draft
   also removes its taken-down publications' rows (a live one still blocks it; the undo restores the old one); dry run, migration, read-back (a realistic publication
   made, refused for someone else, for a stray file key, twice, then taken down), undo (refuses once anything was
@@ -744,9 +744,33 @@ person making it, not to whoever made the reading."
   boards on one reading (one live publication per person).
 - **Challenge note:** entries made on the ready-made reading count (Nate, 2026-11-21: "as the proposal says"). Nothing in
   the challenge code changes here: a storyboard isn't an entry type yet.
-- **SQL:** `NEXT_ephelion_voice_publish.sql` version 2 (requires 0044): adds the owner, the timings table and reading
+- **SQL:** `0045_ephelion_voice_publish.sql` version 2 (requires 0044): adds the owner, the timings table and reading
   publications to version 1, and its read-back no longer uses SET ROLE. Tested in PGlite: applies twice, read-back
   passes, the undo restores 0044's exact shape, and refuses once anything was published. For the coordinator to test.
+
+## Plan: merging ephelion-publish (2026-11-22; not done; for Nate)
+
+What would ship: slice 4 and storyboards on the ready-made reading, with **`VOICE.publish` off** (the publish route refuses
+and every `/storyboard/spoken/<id>` is "not found"), `VOICE.publishInvented` off, admins only as today. Admins get: the
+closing card (its look, the site's credits; an invented speech shows "Invented, not from the book" and a DRAFT credit),
+"Save as a video" on the board, a reading's "Time this reading" (one measured transcription, about 55 credits a reading),
+everyone's own boards on a shared reading, and removing one's own board. No legal text changes in this merge: slice 4's
+Privacy and Terms lines (docs/legal) ship with `VOICE.publish`, not before; Privacy §7's line for admins' storyboard
+pictures waits until storyboards open to everyone (coordinator, 2026-11-22).
+
+**Order** (each waits for the one before):
+1. **#209** (the three invented speeches) first, if Nate merges it: then main is merged into this branch again and the
+   checks below re-run. The two are independent; this branch shows an invented speech on the card either way.
+2. **Checks on the merge result** (main merged in, clean tree): typecheck, `npm run build`, `test:voice`,
+   `check:voice-proof`, `check:principles` locally, `check:ui` locally (only the known local-only results may fail).
+3. **Migration (Nate):** `0045_ephelion_voice_publish.sql` (numbered at merge; main's highest is 0044), tested by the
+   coordinator. Nate runs it as postgres in the SQL Editor (dry run, migration, read-back ending "READ-BACK PASSED") and
+   says "applied". Nothing in production uses its tables before the merge.
+4. **Merge (Nate's word):** a merge commit; wait for /api/version.
+5. **Live checks:** check:shipped, check:principles, check:ui (load under 8), check:miniapp; by hand: every voice route
+   401 signed out, and `/storyboard/spoken/<any id>` "not found".
+6. **Then:** the three production readings can be timed from their storyboards (Nate's yes of 2026-11-21: about 55
+   credits each, measured, stopping past 20% over).
 
 ## What Nate needs to do (one at a time)
 
