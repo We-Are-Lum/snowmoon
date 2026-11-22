@@ -4,8 +4,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, useAuth } from '~/lib/client-auth';
 import { SignInButton } from './sign-in';
-import { openComposer } from '~/lib/images/client';
+import { useAddImageEntry } from './add-image-entry';
 import { useCanAddImage } from '~/lib/images/can-add';
+import { startingImage, type ShareImage } from '~/lib/share-image';
 
 /**
  * Share a quote as a card. Select text in the chapter (up to four paragraphs),
@@ -14,12 +15,7 @@ import { useCanAddImage } from '~/lib/images/can-add';
  * casts it (inside Farcaster) or copies the link. The server checks every
  * quote against the book before drawing a card.
  */
-export interface ShareImage {
-  id: string;
-  idx: number;
-  url: string;
-  alt: string;
-}
+export type { ShareImage } from '~/lib/share-image';
 interface Props {
   chapter: number;
   images: ShareImage[];
@@ -45,6 +41,8 @@ export function QuoteShare({ chapter, images }: Props) {
   const [inMiniApp, setInMiniApp] = useState(false);
   const auth = useAuth();
   const canAddImage = useCanAddImage();
+  // An admin's button opens the edition's "Add a picture here" sheet for the selection (owner, 2026-11-20); readers' the composer.
+  const add = useAddImageEntry(chapter);
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -76,9 +74,7 @@ export function QuoteShare({ chapter, images }: Props) {
 
   const openSheet = useCallback(
     (p: Pick) => {
-      let near: ShareImage | null = null;
-      for (const im of images) if (im.idx <= p.from) near = im;
-      setImg(near?.id ?? null);
+      setImg(startingImage(images, p.from, p.to)?.id ?? null);
       setCopied(false);
       setSaved(null);
       setNote(null);
@@ -178,12 +174,13 @@ export function QuoteShare({ chapter, images }: Props) {
             type="button"
             className="share-selection"
             onMouseDown={(e) => e.preventDefault()}
+            data-add-entry={add.admin ? 'admin' : 'composer'}
             onClick={() => {
-              openComposer({ chapter, start: selection.from, end: selection.to });
+              add.open(selection.from, selection.to);
               setSelection(null);
             }}
           >
-            Add an image
+            {add.label('Add an image')}
           </button>
           )}
           {/* Board 1a: ask the assistant about this passage, in a new private thread. */}
@@ -192,6 +189,7 @@ export function QuoteShare({ chapter, images }: Props) {
           </a>
         </div>
       )}
+      {add.sheet}
       {open && links && (
         <div className="share-sheet" role="dialog" aria-modal="true" aria-label="Share a quote card">
           <div className="share-sheet-inner">

@@ -1,0 +1,118 @@
+/* /storyboard/record (src/components/voice-record.tsx): the site's tokens only, so light and dark follow the theme. */
+.vr { max-width: 720px; margin: 0 auto; padding: var(--space-5) var(--gutter) var(--space-6); color: var(--ink); font-family: var(--reading); }
+.vr h1 { font-size: 32px; line-height: 1.15; font-weight: 400; margin: var(--space-2) 0 var(--space-3); }
+.vr h2 { font-size: var(--text-h2); font-weight: 400; margin: 0 0 var(--space-3); }
+.vr-kicker { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); margin: 0; }
+.vr-labels, .vr-note, .vr-desc { font-size: var(--text-small); color: var(--body); line-height: 1.5; }
+.vr-small { font-size: 15px; color: var(--muted); }
+.vr-tag { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; border: 1px solid var(--rule); border-radius: 3px; padding: 1px 5px; color: var(--muted); white-space: nowrap; }
+.vr-card { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: var(--space-4); margin: var(--space-4) 0; }
+.vr-consent ol { padding-left: 1.3em; font-size: var(--text-small); line-height: 1.5; color: var(--body); }
+.vr-consent li { margin: 0 0 var(--space-2); }
+.vr-line { font-weight: 600; }
+.vr-btn { font: inherit; font-size: 17px; background: var(--btn); color: var(--btn-ink); border: 1px solid var(--btn); border-radius: 8px; padding: 10px 18px; min-height: 44px; cursor: pointer; }
+.vr-btn:disabled { opacity: 0.45; cursor: default; }
+.vr-quiet { background: transparent; color: var(--ink); border-color: var(--rule); }
+.vr-stop { background: var(--warn); border-color: var(--warn); color: var(--paper); }
+.vr-small-btn { font-size: 15px; padding: 6px 12px; min-height: 36px; }
+.vr-row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; margin: var(--space-3) 0; }
+.vr-warn { color: var(--warn); background: var(--flag-bg); border-radius: 8px; padding: var(--space-3); font-size: var(--text-small); }
+.vr-ok { color: var(--veridia); font-size: var(--text-small); }
+.vr-group { border: 0; border-top: 1px solid var(--rule); padding: var(--space-3) 0 0; margin: var(--space-3) 0 0; }
+.vr-group legend { font-size: 19px; padding: 0; }
+.vr-desc { margin: var(--space-1) 0 var(--space-2); }
+.vr-choice { display: grid; grid-template-columns: auto 1fr; gap: var(--space-2) var(--space-3); align-items: center; padding: var(--space-2); border-radius: 8px; border: 1px solid transparent; }
+.vr-choice.vr-on { border-color: var(--ink); background: var(--soft); }
+.vr-choice audio { grid-column: 1 / -1; width: 100%; height: 36px; }
+.vr-audio { width: 100%; margin: var(--space-2) 0; }
+.vr-pace { display: flex; flex-direction: column; gap: var(--space-1); font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); max-width: 320px; }
+.vr-prompter { list-style: none; padding: var(--space-3); margin: var(--space-3) 0; max-height: 46vh; overflow-y: auto; background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; font-size: var(--text-read); line-height: var(--lh-read); scroll-behavior: smooth; }
+.vr-prompter li { padding: var(--space-1) 0; color: var(--body); transition: color 0.2s; }
+.vr-live li { color: var(--muted); }
+.vr-live li.vr-now { color: var(--ink); font-size: 1.15em; }
+.vr-live li.vr-past { color: var(--faint); }
+.vr-level { flex: 1; min-width: 120px; height: 8px; background: var(--soft); border-radius: 4px; overflow: hidden; }
+.vr-level span { display: block; height: 100%; background: var(--veridia); }
+.vr-take { border-top: 1px solid var(--rule); margin-top: var(--space-3); padding-top: var(--space-3); }
+.vr-tick { display: grid; grid-template-columns: auto 1fr; gap: var(--space-2); align-items: start; font-size: var(--text-small); color: var(--body); margin: var(--space-3) 0; }
+.vr-tick input { width: 22px; height: 22px; margin-top: 2px; }
+.vr-checks { list-style: none; padding: 0; margin: var(--space-3) 0; }
+.vr-checks li { display: grid; grid-template-columns: 24px 1fr; gap: var(--space-1) var(--space-2); padding: var(--space-2) 0; border-bottom: 1px solid var(--rule); font-size: var(--text-small); line-height: 1.45; }
+.vr-checks li > button, .vr-checks li > .vr-redo { grid-column: 2; justify-self: start; }
+.vr-mark { font-family: var(--label); }
+.vr-pass .vr-mark { color: var(--veridia); }
+.vr-fail .vr-mark { color: var(--warn); }
+.vr-diff { display: block; color: var(--warn); font-size: 15px; }
+.vr-redo { width: 100%; background: var(--soft); border-radius: 8px; padding: var(--space-3); }
+.vr-prompt-one { font-size: var(--text-read); line-height: var(--lh-read); margin: 0; }
+.vr-drafts { list-style: none; padding: 0; margin: 0; }
+.vr-drafts li { border-top: 1px solid var(--rule); padding: var(--space-3) 0; }
+.vr-drafts p { margin: 0 0 var(--space-2); font-size: var(--text-small); }
+.vr-draft-audio { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin: var(--space-1) 0; }
+.vr-drafts pre { font-size: 12px; overflow-x: auto; background: var(--paper); padding: var(--space-2); border-radius: 6px; }
+.vr-drafts summary { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); cursor: pointer; }
+.vr-remove { margin-top: var(--space-2); }
+.vr-sound { display: block; color: var(--muted); font-size: 15px; }
+/* /storyboard/board/<draft> (src/components/voice-board.tsx), slice 2. */
+.vb-strip-wrap { overflow-x: auto; padding: var(--space-2) 0 var(--space-1); }
+.vb-strip { position: relative; height: 72px; min-width: 640px; background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; cursor: copy; touch-action: none; }
+.vb-sentence { position: absolute; top: 0; height: 18px; background: var(--soft); border-right: 1px solid var(--rule); }
+.vb-sentence.vb-alt { background: var(--chrome); }
+.vb-shotband { position: absolute; top: 22px; height: 46px; border: 0; border-radius: 4px; background: transparent; color: var(--muted); font-family: var(--label); font-size: var(--text-label); cursor: pointer; }
+.vb-shotband.vb-has { background: color-mix(in srgb, var(--veridia) 14%, transparent); color: var(--ink); }
+.vb-shotband.vb-on { outline: 2px solid var(--ink); outline-offset: -2px; color: var(--ink); }
+.vb-cut { position: absolute; top: -4px; bottom: -4px; width: 4px; margin-left: -2px; background: var(--ink); border-radius: 2px; cursor: ew-resize; }
+.vb-cut-x { position: absolute; top: -20px; left: -10px; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--rule); background: var(--card); color: var(--ink); font-size: 14px; line-height: 1; cursor: pointer; padding: 0; }
+.vb-playhead { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--warn); pointer-events: none; }
+.vb-ruler { position: relative; height: 18px; min-width: 640px; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.vb-ruler span { position: absolute; transform: translateX(-50%); }
+.vb-ruler span:first-child { transform: none; }
+.vb-notes { margin: 0; padding-left: 1.2em; font-size: var(--text-small); color: var(--body); }
+.vb-link { font: inherit; background: none; border: 0; padding: 0; color: var(--link); text-align: left; cursor: pointer; text-decoration: underline; }
+.vb-shot-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-2); }
+.vb-words { margin: 0 0 var(--space-3); font-size: var(--text-small); color: var(--body); border-left: 3px solid var(--rule); padding-left: var(--space-3); }
+.vb-angles, .vb-sheets fieldset { border: 0; padding: 0; margin: var(--space-3) 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.vb-angles legend, .vb-label { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted); display: block; margin-bottom: var(--space-1); width: 100%; }
+.vb-chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--rule); border-radius: 999px; padding: 6px 12px; font-size: 15px; cursor: pointer; }
+.vb-chip input { margin: 0; }
+.vb-chip.vb-on { border-color: var(--ink); background: var(--soft); }
+.vb-sheets select { font: inherit; font-size: 16px; padding: 8px; border-radius: 6px; border: 1px solid var(--rule); background: var(--card); color: var(--ink); min-width: 220px; }
+.vb-tries { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-3); margin: var(--space-3) 0; }
+.vb-try { margin: 0; border: 1px solid var(--rule); border-radius: 8px; padding: var(--space-2); }
+.vb-try.vb-on { border-color: var(--veridia); }
+.vb-try img, .vb-picture { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; display: block; }
+.vb-try figcaption { font-size: 15px; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-2); }
+.vb-try pre { font-size: 12px; white-space: pre-wrap; background: var(--paper); padding: var(--space-2); border-radius: 6px; }
+.vb-empty { display: flex; align-items: center; justify-content: center; text-align: center; padding: var(--space-4); background: var(--night); color: var(--night-body); font-size: var(--text-small); }
+.vb-screen { position: relative; margin: var(--space-3) 0; }
+.vb-shotno { position: absolute; top: 10px; left: 10px; font-family: var(--label); font-size: var(--text-label); background: rgba(0, 0, 0, 0.55); color: #fff; padding: 2px 8px; border-radius: 4px; }
+
+/* The step log under the recorder (troubleshooting, 2026-11-21). */
+.vr-steps { margin: var(--space-3) 0; }
+.vr-steps pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; max-height: 320px; overflow: auto; background: var(--surface-2, rgba(127, 127, 127, 0.08)); padding: var(--space-2); }
+
+/* The storyboard on a phone (Nate, 2026-11-21): settings once at the top, a camera dropdown, cuts as a sentence list. */
+.vb-field { display: flex; flex-direction: column; gap: var(--space-1); margin: var(--space-3) 0; }
+.vb-field select { max-width: 100%; min-height: 44px; font: inherit; }
+.vb-looks { border: 0; padding: 0; margin: var(--space-3) 0; }
+.vb-look-row { display: flex; gap: var(--space-2); overflow-x: auto; padding-bottom: var(--space-1); }
+.vb-look { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 104px; padding: 4px; border: 2px solid var(--rule); border-radius: 8px; background: none; font: inherit; color: inherit; cursor: pointer; }
+.vb-look img { width: 92px; height: 92px; object-fit: cover; border-radius: 4px; }
+.vb-look.vb-on { border-color: currentColor; }
+.vb-look-none { display: flex; align-items: center; justify-content: center; width: 92px; height: 92px; font-size: var(--text-small); }
+.vb-cutlist { list-style: none; padding: 0; margin: var(--space-3) 0; }
+.vb-cutlist li { padding: var(--space-2) 0; border-bottom: 1px solid var(--rule); }
+.vb-cutlist-shot { display: block; font-size: var(--text-small); font-weight: bold; letter-spacing: 0.04em; margin-bottom: 4px; }
+.vb-cutlist-text { display: block; line-height: 1.5; }
+.vb-toggle { display: flex; align-items: center; gap: var(--space-2); margin-top: var(--space-2); min-height: 44px; font-size: var(--text-small); }
+.vb-toggle input { width: 22px; height: 22px; }
+.vb-why { margin-top: var(--space-1); }
+.vb-playing { margin: var(--space-2) 0 4px; font-size: var(--text-small); font-weight: bold; }
+.vb-caption { margin: var(--space-2) 0; line-height: 1.5; }
+@media (max-width: 767px) { .vb-strip-wrap { display: none; } }
+
+/* The speech picker (Nate, 2026-11-22). */
+.vr-speeches { border: 0; padding: 0; margin: 0; display: grid; gap: var(--space-2); }
+.vr-speech { display: flex; gap: var(--space-2); align-items: flex-start; padding: var(--space-2); border: 1px solid var(--rule); border-radius: 8px; cursor: pointer; }
+.vr-speech.vr-on { border-color: currentColor; }
+.vr-speech input { margin-top: 4px; }

@@ -3,6 +3,8 @@ import { blockFacts, labelRange } from './reading';
 import { renderMarkdown } from './render';
 import { loadChapter } from './book';
 import { loadIllustrations, type Illustration } from './illustrations';
+import type { Redone } from './chapter-pictures/view';
+import { ADDED_ID } from './chapter-pictures/shared';
 
 /**
  * Quote cards (stateless): a share link names a chapter, a run of blocks, an
@@ -20,7 +22,14 @@ export interface Quote {
   text: string; // what the card shows
   label: string; // "¶ 4" or "¶ 4–6"
   setting: string | null;
-  image: Illustration | null;
+  /** The seeded picture; `replaced` once quoteShown has put its job's kept redo in place (src/lib/seeded-shown.ts). */
+  image: (Illustration & { replaced?: Redone }) | null;
+  /**
+   * A picture an admin added to this chapter (owner, 2026-11-21), named by the link: its id, until quoteShown looks it
+   * up (src/lib/seeded-shown.ts). Whether it shows is in the database, so here the card has no picture yet; a card read
+   * without quoteShown shows none, never a draft's.
+   */
+  added?: string;
   truncated: boolean;
 }
 
@@ -84,8 +93,11 @@ export function resolveQuote(n: number, range: string, q?: string | null, img?: 
     text = want;
   }
   const labels = picked.map(({ f }) => f.label!).filter((l) => l !== null);
-  const image = img ? loadIllustrations(n).find((i) => i.id === img) ?? null : null;
-  if (img && !image) return null;
+  // An added picture's id (c<chapter>-b<block>-added-<hex8>) is accepted for its own chapter only; quoteShown decides
+  // whether it shows (kept, not taken off, not hidden).
+  const added = img && ADDED_ID.exec(img)?.[1] === String(n) ? img : null;
+  const image = img && !added ? loadIllustrations(n).find((i) => i.id === img) ?? null : null;
+  if (img && !image && !added) return null;
   const clipped = clip(text);
   return {
     chapter: n,
@@ -96,6 +108,7 @@ export function resolveQuote(n: number, range: string, q?: string | null, img?: 
     label: labelRange(labels[0], labels[labels.length - 1]),
     setting: picked[0].f.setting,
     image,
+    ...(added ? { added } : {}),
   };
 }
 

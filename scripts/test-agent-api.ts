@@ -72,6 +72,18 @@ check('tools/list: the seven read tools, each with a schema, all read only', nam
 
 const sb = await call('search_book', { query: 'Minpentai', limit: 3 });
 check('search_book: hits with block ids and links, the book and its licence', !sb.isError && sb.structuredContent.hits.length === 3 && /^c\d+-b\d+$/.test(sb.structuredContent.hits[0].block_id) && sb.structuredContent.book.licence === 'GPL-3.0', JSON.stringify(sb).slice(0, 200));
+// The in-world screens are searched too (owner, 2026-11-18): Lord Ephelion's letter is the screen block c13-b64.
+// From their own caller, so caller 1 stays under its 20 a minute for the checks after.
+ip = 5;
+for (const q of ['Embrace the competition', 'Path of Strength']) {
+  const r = await call('search_book', { query: q });
+  check(`search_book: "${q}" finds the screen c13-b64`, !r.isError && r.structuredContent.hits.some((h: any) => h.block_id === 'c13-b64' && h.match.toLowerCase() === q.toLowerCase()), JSON.stringify(r.structuredContent?.hits?.map((h: any) => h.block_id)));
+}
+// A screen's table cells and list items stay apart (c1-b55: "…civic duty</li><li>Does not meet…").
+check("search_book: a screen's list items are words apart, not run together", (await call('search_book', { query: 'civic duty Does not' })).structuredContent.hits.some((h: any) => h.block_id === 'c1-b55') && !(await call('search_book', { query: 'dutyDoes' })).structuredContent.hits.length);
+const ep = await call('get_passage', { chapter: 13, from: 64, to: 64 });
+check("get_passage: a screen's text is its words, without markup", !ep.isError && ep.structuredContent.blocks[0].kind === 'screen' && ep.structuredContent.blocks[0].text.includes('Embrace the competition.') && !/[<>]/.test(ep.structuredContent.blocks[0].text));
+ip = 1;
 const gp = await call('get_passage', { chapter: 14, from: 1, to: 5 });
 check('get_passage: the blocks asked for, plain text with ids', !gp.isError && gp.structuredContent.blocks.length >= 1 && gp.structuredContent.blocks.every((b: any) => /^c14-b[1-5]$/.test(b.id) && typeof b.text === 'string'));
 check('get_passage: more than 40 blocks is refused as the tool\'s own error', (await call('get_passage', { chapter: 14, from: 0, to: 500 })).isError === true);

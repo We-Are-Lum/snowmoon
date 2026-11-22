@@ -67,3 +67,5 @@
 .illus-who-notes { display: block; margin-top: 4px; color: var(--muted); }
 .illus-note { display: flex; flex-direction: column; gap: 8px; }
 .illus-note textarea { width: 100%; font: inherit; font-size: 16px; }
+
+/* The chapter pictures' styles moved to src/styles/chapter-pictures.css (owner, 2026-11-19: they are used in the reader too). */

@@ -21,7 +21,12 @@
 export type Src = { file: string; src: string };
 
 /** Shared sign-in wrappers routes may call instead of checking getFid themselves (P4a reads each one). */
-export const P4A_WRAPPERS = [{ module: '~/lib/minpentai/play-server/route', file: 'src/lib/minpentai/play-server/route.ts', call: 'play' }];
+export const P4A_WRAPPERS = [
+  { module: '~/lib/minpentai/play-server/route', file: 'src/lib/minpentai/play-server/route.ts', call: 'play' },
+  // The Ephelion voice routes (branch ephelion-voice, 2026-11-21): voicePerson answers 401 signed out (getPerson), then
+  // 404 to anyone the switch doesn't let in; each route returns its answer before doing anything else.
+  { module: '~/lib/voice/server', file: 'src/lib/voice/server.ts', call: 'voicePerson' },
+];
 // Named exemption (owner instruction, 2026-10-08: website sign-in): the route that starts a sign-in
 // cannot require one. It writes nothing of ours; it opens a channel on Farcaster's relay.
 // Named exemption (owner, 2026-10-13: wallet sign-in): the wallet sign-in route is the sign-in; it
@@ -192,6 +197,9 @@ export function p4aProblems(routes: Src[], read: (rel: string) => string): strin
     if (agentReachable(r.src)) { problems.push(...agentRouteProblems(r, read)); continue; }
     if (/(getFid|getPerson|getWallet)\(/.test(r.src) && /status: 401/.test(r.src)) continue;
     if (P4A_WRAPPERS.some((w) => r.src.includes(`from '${w.module}'`) && new RegExp(`\\b${w.call}\\(request,`).test(r.src) && /getFid\(/.test(read(w.file)) && /\b401\)/.test(read(w.file)))) continue;
+    // A wrapper that hands back its 401/404 answer: the route must return it before anything else (`if (x instanceof
+    // NextResponse) return x;` right after the call), and the wrapper must answer 401 when getPerson finds nobody.
+    if (P4A_WRAPPERS.some((w) => r.src.includes(`from '${w.module}'`) && new RegExp(`const (\\w+) = await ${w.call}\\(request\\);\\s*if \\(\\1 instanceof NextResponse\\) return \\1;`).test(stripComments(r.src)) && /if \(fid === null\) return NextResponse\.json\([^)]*\{ status: 401 \}\)/.test(stripComments(read(w.file))) && /getPerson\(/.test(read(w.file)))) continue;
     problems.push(`${r.file}: writes without requiring sign-in`);
   }
   return [...new Set(problems)];

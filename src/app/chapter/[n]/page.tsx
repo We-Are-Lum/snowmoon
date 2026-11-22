@@ -12,8 +12,14 @@ import { REPO_URL, WORK } from '~/lib/config';
 import { loadNarration } from '~/lib/narration';
 import { loadIllustrations } from '~/lib/illustrations';
 import { hiddenSeeded } from '~/lib/admin-hidden';
+import { shownAdditions, shownReplacements } from '~/lib/chapter-pictures/read';
+import { AdminAddHere, AdminChangePicture } from '~/components/reader-picture-admin';
+import { addedPictures, withReplacements, type AddedIllustration } from '~/lib/chapter-pictures/view';
+import { recipePath } from '~/lib/chapter-pictures/shared';
+import { LocalDate } from '~/components/local-date';
+import { CHALLENGE_MODELS } from '~/lib/challenge/models';
 import { AdminHide } from '~/components/admin-hide';
-import { QuoteShare } from '~/components/quote-share';
+import { QuoteShare, type ShareImage } from '~/components/quote-share';
 import { ChapterView } from '~/components/chapter-view';
 import { AiLabel, RecipeLink } from '~/components/recipe-sheet';
 import { AI_LABEL, NOT_AUTHOR_VISIBLE, REVIEWED_MARK } from '~/lib/ai-declared';
@@ -76,6 +82,12 @@ function sceneLabels(blocks: Block[], facts: BlockFacts[]): Map<number, { label:
   return out;
 }
 
+/** The share sheet's pictures: the edition's, then any added after the same block, in the chapter's order. */
+function shareImages(images: { id: string; idx: number; url: string; alt: string }[], added: AddedIllustration[]): ShareImage[] {
+  const all: ShareImage[] = [...images.map(({ id, idx, url, alt }) => ({ id, idx, url, alt })), ...added.map(({ id, idx, url, alt }) => ({ id, idx, url, alt, added: true as const }))];
+  return all.sort((a, b) => a.idx - b.idx || Number(!!a.added) - Number(!!b.added));
+}
+
 export default async function ChapterPage({ params }: Props) {
   const n = Number((await params).n);
   const chapter = loadChapter(n);
@@ -85,8 +97,16 @@ export default async function ChapterPage({ params }: Props) {
   const narration = loadNarration(n);
   // Seeded images an admin hid (owner, 2026-10-29) aren't shown.
   const hidden = await hiddenSeeded();
-  const images = loadIllustrations(n).filter((im) => !hidden.has(im.id));
+  // A picture an admin redid and kept (owner, 2026-11-18, option B) shows in place of the committed file, with who and
+  // when; without one (or before 0042_chapter_picture_versions is applied) the committed file shows, as before.
+  const replaced = await shownReplacements();
+  const modelName = (id: string) => CHALLENGE_MODELS.find((m) => m.allowlistId === id)?.name ?? id;
+  const images = withReplacements(loadIllustrations(n).filter((im) => !hidden.has(im.id)), replaced, modelName);
   const imageAt = new Map(images.map((im) => [im.idx, im]));
+  // Pictures admins added while reading (owner, 2026-11-19), each after its block; before the additions migration, none.
+  const added = addedPictures(n, await shownAdditions(), replaced, hidden, modelName);
+  const addedAt = new Map<number, AddedIllustration[]>();
+  for (const a of added) addedAt.set(a.idx, [...(addedAt.get(a.idx) ?? []), a]);
   // The first picture on the page says "not by the author" where it can be seen (owner, 2026-10-15); readers' strips then don't.
   const firstImageIdx = displayOrder(chapter.blocks).map((i) => chapter.blocks[i]).find((b) => imageAt.has(b.idx))?.idx ?? null;
   // Figures the site can play: the c4-b5 board runs the rule recovered from it on /minpentai/rule.
@@ -107,7 +127,7 @@ export default async function ChapterPage({ params }: Props) {
           ? { label: narration.label, recipe: narration.recipe, url: narration.url, duration: narration.duration, cues: narration.cues }
           : null
       }
-      images={images.map(({ id, idx, url, alt, recipe, reviewed }) => ({ id, idx, url, alt, recipe, ...(reviewed ? { reviewed } : {}) }))}
+      images={[...images.map(({ id, idx, url, alt, recipe, reviewed }) => ({ id, idx, url, alt, recipe, ...(reviewed ? { reviewed } : {}) })), ...added.map(({ id, idx, url, alt, recipe }) => ({ id, idx, url, alt, recipe }))].sort((a, b) => a.idx - b.idx)}
       labels={Object.fromEntries(chapter.blocks.map((b, i) => [b.idx, facts[i].label]).filter(([, l]) => l !== null))}
     >
     <article className="page chapter" data-chapter={n} data-setting={facts.find((f) => f.setting)?.setting ?? undefined}>
@@ -187,15 +207,23 @@ export default async function ChapterPage({ params }: Props) {
               </p>
             )}
             {image && (
-              <figure className="seed-image" data-for={id}>
+              <figure className="seed-image" data-for={id} {...(image.replaced ? { 'data-replaced': image.replaced.versionId, 'data-recipe-url': recipePath(image.replaced.versionId) } : {})}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={image.url} alt={image.alt} width={image.width} height={image.height} loading="lazy" data-zoom="" tabIndex={0} />
                 <figcaption className="block-caption">
-                  ¶ {f.label} · <AiLabel kind="image" text={AI_LABEL.image} file={image.recipe} item={image.id} />
+                  ¶ {f.label} · {image.replaced ? <AiLabel kind="image" text={AI_LABEL.image} view={image.replaced.view} /> : <AiLabel kind="image" text={AI_LABEL.image} file={image.recipe} item={image.id} />}
+                  {/* A redo an admin kept: who and when, and the model with its maker (principles 3 and 5). DRAFT wording. */}
+                  {image.replaced && (
+                    <span className="seed-replaced">
+                      {' · '}
+                      {image.replaced.by} · <LocalDate iso={image.replaced.at} /> · {image.replaced.model}
+                    </span>
+                  )}
                   {b.idx === firstImageIdx && <span className="ai-not-author"> · {NOT_AUTHOR_VISIBLE}</span>}
                   {/* The owner's image review (2026-10-23): shown only once the owner allows it (ILLUSTRATION_CHECK.reviewMarkPublic). */}
                   {image.reviewed && <span className="seed-reviewed"> · {REVIEWED_MARK}</span>}
                   <AdminHide kind="seeded" id={image.id} />
+                  <AdminChangePicture chapter={n} jobId={image.id} />
                   {image.lettering && (
                     <>
                       {' · '}
@@ -223,6 +251,24 @@ export default async function ChapterPage({ params }: Props) {
                 </figcaption>
               </figure>
             )}
+            {(addedAt.get(b.idx) ?? []).map((a) => (
+              <figure key={a.id} className="seed-image added-image" data-for={id} data-added={a.id} data-replaced={a.replaced.versionId} data-recipe-url={recipePath(a.replaced.versionId)}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={a.url} alt={a.alt} width={a.width} height={a.height} loading="lazy" data-zoom="" tabIndex={0} />
+                <figcaption className="block-caption">
+                  ¶ {f.label} · <AiLabel kind="image" text={AI_LABEL.image} view={a.replaced.view} />
+                  {/* A picture an admin added: who and when, and the model with its maker. DRAFT wording. */}
+                  <span className="seed-replaced">
+                    {' · '}
+                    {a.replaced.by} · <LocalDate iso={a.replaced.at} /> · {a.replaced.model}
+                  </span>
+                  <AdminHide kind="seeded" id={a.id} />
+                  <AdminChangePicture chapter={n} jobId={a.id} />
+                </figcaption>
+              </figure>
+            ))}
+            {/* Admins only: add a picture after this block (owner, 2026-11-19). Nothing for anyone else. */}
+            {(b.kind === 'paragraph' || b.kind === 'quote') && <AdminAddHere chapter={n} after={b.idx} label={f.label} />}
             {/* Scene lines are hidden (owner, 2026-10-09); only the add-image button stays, where it shows. */}
             {scene && (
               <div className="scene-label" data-scene={scene.label}>
@@ -253,7 +299,8 @@ export default async function ChapterPage({ params }: Props) {
           <AiLabel kind="voice" text={AI_LABEL.voice} file={narration.recipe} />
         </p>
       )}
-      <QuoteShare chapter={n} images={images.map(({ id, idx, url, alt }) => ({ id, idx, url, alt }))} />
+      {/* The share sheet offers the chapter's pictures, the ones admins added included (owner, 2026-11-21), in the chapter's order. */}
+      <QuoteShare chapter={n} images={shareImages(images, added)} />
     </article>
     </ChapterView>
   );

@@ -30,7 +30,9 @@ coding agent and its helpers are in `docs/prompts/`.
 
 **Checked by.**
 - `P1a`: every published image's render hash is in a committed image recipe,
-  and every lettered image has a matching record in `lettering.json`.
+  and every lettered image has a matching record in `lettering.json`. A chapter picture an admin redid and kept
+  (owner, 2026-11-18; DRAFT, branch chapter-pictures-admin) has its recipe in the database instead: on the live
+  database, its file's sha256, its record's and its recipe's agree, and the recipe holds its exact prompt.
 - `P1b`: every published narration file (each block and each chapter) matches
   its committed narration recipe.
 - `P1c`: in the database, every version of a published element has a recipe; a style or character sheet keeps one inside its body for each of its pictures instead, and passes only when it has pictures and every one names its prompt and model (owner, 2026-10-14)
@@ -46,7 +48,10 @@ coding agent and its helpers are in `docs/prompts/`.
   image and narration: the chapter page links the recipe (and the lettering
   record for lettered images), and the file at that link, fetched anonymously
   from the public repository, holds the prompt or spoken text for that very
-  output.
+  output. A chapter picture an admin redid and kept is marked on the page (`data-replaced`) and links its recipe on the
+  site (`/api/chapter-pictures/<version>`, answered for kept versions only, signed out); that recipe must name the
+  prompt, the model and its maker (open or closed), the style, the note and the admin who kept it, with the time
+  (DRAFT, 2026-11-18).
 - `P1e`: through the public database API, with only the public key, the
   spoken text of the house narration is readable.
 - `P1f`: every text box whose contents may be published is a
@@ -57,22 +62,20 @@ coding agent and its helpers are in `docs/prompts/`.
   the reader's device over the text served whole by `/api/book/text`; the
   query is never sent anywhere, kept or published, and the page may fetch
   only that text).
-- `P1h` (raw voice takes exception, owner 2026-10-23): our Modal conversion
-  code (`modal/chatterbox_vc.py`) keeps no recording. A static read finds no
-  volume write or `.commit()`, no Dict or Queue, no Web Function (Modal keeps
-  their inputs up to 7 days), no network client, no log of the audio, and
-  every temporary folder removed in a `finally`. A local run with a stub
-  model and a stub `modal` (`scripts/modal_vc_proof.py`, no Modal, no
-  spending) leaves no new file under the temp root, the weights path, the
-  working folder or HOME, including when the model raises, times out or is
-  cancelled; no log line or reply holds the input, its base64 or hex; and no
-  live object holds it afterwards. `npm run check:modal-vc` also proves ten
-  planted violations are each caught. Not covered: what Modal's platform
-  keeps outside our code (`docs/proposals/own-voice-v1.md`).
-- `P1i`: the own-voice-v1 consent (`config/consent-own-voice.json`) is used
-  by no page or code under `src/` until `src/app/record` exists, and once it
-  does, only while the `P1h` proof passes (owner, 2026-10-23: "Ship
-  own-voice-v1 only after that passes").
+- `P1h` (raw voice takes; reread by Nate 2026-11-21, replacing the Modal proof of 2026-10-23): the
+  ElevenLabs conversion route keeps no recording. A static read of the route and its ElevenLabs client finds the
+  request body passed only to ElevenLabs' speech-to-speech call and to sha256, and no database write, storage put, file
+  write, log or error report that can hold it. A local run against a stub ElevenLabs (no spending) leaves no new file
+  under the temp root, the working folder or HOME, no database row, and no log line or reply holding the take, its
+  base64 or hex, including when the call fails, times out or is cancelled; the route then asks the stub to delete the
+  history item; transcription receives the converted audio, never the take. Planted violations (a log of the body, a
+  storage put, a transcription of the take, a skipped history delete) are each caught. Not covered: what ElevenLabs
+  keeps on its side (`docs/proposals/ephelion-voice.md`). The Modal proof (`check:modal-vc`) still runs on its own.
+  And (Nate, 2026-11-21: "confirm whether transcription requests leave a history item … If they do, delete those too";
+  this sentence reread by him the same day): ElevenLabs keeps each transcript by its id (not in history), so the flow
+  deletes it with the same retries, and a planted skipped transcript delete is caught too.
+- `P1i` (reread by Nate 2026-11-21): the own-voice consent shown is `own-voice-v2`, and only by the voice pages and routes,
+  only while `P1h` passes; `own-voice-v1` is used by nothing under `src/`.
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
   drafts, hidden work and abandoned attempts stay private.
@@ -93,16 +96,20 @@ are never published. The reason is privacy: a raw recording of a person's
 voice is enough to clone it. The converted line is the published source of
 that line, and its recipe gives the model and revision, the settings, the
 character's reference clip and the sha256 of the raw take, but not the take.
-**The rule, in the owner's words (2026-10-22; reread by the owner 2026-10-23):** "Raw recordings are never published and never sent to any service that processes them; they
-stay on my devices and my own encrypted storage." **Temporary exception** (owner, 2026-10-22: "Let's allow a hosted
-service with performers opt in until we get an app for it live", and "hosted means our Modal setup only").
-It ends when the recording app is live. Until then, a recording may be converted on the project's own Modal
-deployment of the allowlisted conversion model, and nowhere else, only if its performer opts in for that
-recording (`own-voice-v1`); it is never published or kept there. No other hosted service, such as fal, is used
-for a recording (`config/models.json`, `chatterbox-vc`). In practice: conversion runs on the performer's own device
-(their computer, or their browser), and takes are kept in a private folder outside the repository and
-outside R2, or in the performer's own end-to-end encrypted storage (iCloud with Advanced Data Protection).
-The performer agrees to `own-voice-v1` (`config/consent.json`) first. Every
+**The rule (reread by Nate 2026-11-21, branch `ephelion-voice`; drafted by the coding agent, Claude, a
+closed model by Anthropic, from Nate's words, adjusted to what ElevenLabs' own pages say: `docs/proposals/ephelion-voice.md`):**
+"Raw recordings are never published or kept by the site. A performer's recording may be sent to ElevenLabs, only if
+they agree for that recording, to convert it into a character's voice. ElevenLabs may keep it under its own privacy
+policy, in the United States, and the performer is told so before recording. The site asks ElevenLabs to delete each
+conversion from its history right after, and only the converted audio, never the recording, is sent to be transcribed."
+In practice: the take is a Blob in the performer's tab until it is sent once for conversion; the site's server passes
+it to ElevenLabs without writing it to the database, storage, disk or a log, and keeps only its sha256. This replaces
+the earlier rule (owner, 2026-10-22: "Raw recordings are never published and never sent to any service that processes
+them; they stay on my devices and my own encrypted storage") and its temporary Modal exception (owner, 2026-10-22).
+The Modal conversion code (`modal/chatterbox_vc.py`) stays in the repository and its proof (`check:modal-vc`) still
+runs, but no page uses it. Training: Nate turned off the account's "Improve the models for everyone" (2026-11-21), so
+the consent's line that ElevenLabs doesn't train on them stands without brackets.
+The performer agrees to `own-voice-v2` (`config/consent-own-voice.json`; reread 2026-11-21) first, for each recording sent. Every
 performer gets the same terms. Anyone can still re-run the conversion with
 their own voice or another reference clip; they cannot reproduce the exact
 converted line from the recipe alone, which is why the converted line itself
@@ -174,6 +181,14 @@ prompts are. **DRAFT, for the owner (replaces "Published scene assets use
 open-weight models only"):** Published scene assets may use closed models when
 every recipe and label names the model, its maker, the date and that it is
 closed (owner, 2026-10-18).
+
+**Invented speeches (owner, 2026-11-22; reread by the owner 2026-11-22, with two changes).** A storyboard's spoken words
+are either the book's, word for word at their block, or a speech written by people for this edition, placed word for word
+from its source document at a recorded version. An invented speech is labelled "Invented, not from the book" everywhere
+it is named, its writers are credited, and no agent or model on this site writes or edits its words. If AI helped write
+a version, its credit says so; each version records that, set by Nate. A recording is checked against, and tied to, the
+exact version it was made from. (The three speeches of 2026-11-22: `config/voice-speeches.json`, from the Google Doc
+"Lord Ephelion: three speeches v2 (DRAFT)", each version's `aiHelp` set by Nate; checked by `test:voice`, section I.)
 
 **Recorded exception.** The house narration keeps 148 model-drafted spoken
 descriptions of screens, figures and lyric cards. Each is preceded by a tone
@@ -280,6 +295,10 @@ Hosted open-weight models may be listed too (`runs_on: hosted`): for a hosted re
   model and what it drafted, or null.
 - `P3d`: on the live database, every recipe of the house narration (chapter 1
   sampled) has `assist` in the column or in `studio.recipe_assist`.
+- `P3e` also checks (owner 2026-11-18; reread by the owner 2026-11-20) the admins' chapter pictures: in every kind of place
+  (OpenAI's countries and others, an embargoed region, no country; closed models on and off), the Model row starts on
+  GPT Image 2.5 Sunburst exactly where it is offered and on FLUX everywhere else, and FLUX is always offered. Planted:
+  GPT where OpenAI doesn't serve, and Gemini where GPT is offered; each must fail. No other P3 check is loosened.
 - `P3e` (branch remix-model-choice, 2026-11-04, DRAFT): the default is open. The remix form's model choice
   (`IMAGES.designs.modelChoice`, `src/lib/images/sheet-models.ts`) lists the site's open models first, as the default,
   with the switch on or off; every closed choice names its maker; every model a choice calls is on `config/models.json`
@@ -301,6 +320,23 @@ OpenAI line shows under the row whenever GPT is selected, the default included, 
 before the first closed picture on a device. At `CHALLENGE.dates.closes` the default goes back to FLUX for everyone
 by itself (`challengeDefaultModel`, tied to the date; tested on both sides). Open-weight models stay preferred: this
 is the owner's choice for the challenge's pictures, reported here.
+
+**Admins' chapter pictures (owner, 2026-11-18; DRAFT, branch chapter-pictures-admin; its default, FLUX first, is
+replaced by the paragraph below, reread 2026-11-20).** When an admin redoes one of
+the edition's chapter pictures, the Model row offers the challenge's models (`challengeModelsFor`: FLUX.2 [klein] 4B
+edit first and the default; GPT Image 2.5 Sunburst by OpenAI and Gemini 3.1 Flash Image by Google only where their
+makers serve, after the maker's notice and the 18+ box, as for the challenge). Admins only: everyone else sees no
+change. Every redo's recipe and the chapter's caption name the model and its maker, and say closed. The owner has
+decided to retire "open model first"; until that change is on main, this section stands, and these pictures are
+reported here.
+
+**"Open model first" dropped for the admins' chapter pictures (owner, 2026-11-18, "GPT Image 2.5 Sunburst is the
+default for admins, with FLUX and Gemini still offered"; reread by the owner 2026-11-20, PR #196).** When an admin redoes, changes or adds one of the edition's chapter pictures (on
+/you/illustrations, or in the chapter reader), the Model row starts on GPT Image 2.5 Sunburst (a closed model by OpenAI)
+where OpenAI serves the admin, and on FLUX.2 [klein] 4B edit elsewhere. FLUX and Gemini 3.1 Flash Image stay offered;
+the maker's notice and the 18+ box are still asked; every recipe and caption still names the model and its maker and
+says closed. The rest of this principle (the allowlist, its records, reporting every closed model) is unchanged, and so
+are the remix form's and the challenge's defaults. `P3e` checks it (`src/lib/chapter-pictures/default-model.ts`).
 
 **Status.** Pass. Both generation models record `open_weights: true`, their
 license and their weights. The closed drafting model is listed under
@@ -358,7 +394,9 @@ repo (the prompt log of the request that asked for it).
   live site that save and like refuse anonymous requests.
 - `P4b`: the published image index and every narration index record
   `published_by` with an FID and the action; for the maintainer path, also
-  the script, the date, and an evidence file that exists.
+  the script, the date, and an evidence file that exists. On the live database (DRAFT, 2026-11-18): every keep or
+  restore of a chapter picture names an admin (FID in `ADMINS`) and its time, and every picture it shows was made by an
+  admin.
 - Review: does any script or job publish model output without a recorded human
   action?
 
@@ -384,6 +422,30 @@ starting view. Where no one has picked, the starting view is "Most liked", then 
 "starting point". Moderators (FIDs in `MODERATOR_FIDS`) who are not admins can hide and nothing else. Picks never
 order the feed, search, anyone's own pages, the agent tools or the read API.
 
+**Ruling: the edition's own chapter pictures (owner, 2026-11-18; reread by the owner 2026-11-19;
+branch chapter-pictures-admin; widened by the ruling below, reread 2026-11-20).** "An admin may replace a picture in the site's own edition of a chapter. The change is
+public at once, shows who made it and when, and can be undone. This covers only the edition's own pictures, never the
+order or prominence of people's published work." In practice (DRAFT, coding agent): on /you/illustrations an admin
+redoes one of the edition's chapter pictures (a private draft) and keeps it; the chapter then shows it with "Redone by
+@handle · date" and the model with its maker, and its recipe names the admin, the model, the style and the note. Every
+earlier picture, the committed file included, stays stored and can be shown again in one step
+(`0042_chapter_picture_versions.sql`: new rows only, nothing updated or deleted).
+
+**Ruling, wider wording (owner, 2026-11-19; reread by the owner 2026-11-20, PR #196).** "An admin
+may add or replace a picture in the site's own edition of a chapter. The change is public at once, shows who made it and
+when, and can be undone. This covers only the edition's own pictures, never the order or prominence of people's
+published work." In practice: in the chapter reader an admin can also add a picture at a passage
+(a private draft until kept); the chapter then shows it after its block with "Added by @handle · date" and the model
+with its maker, and its recipe names the admin, the model, the style, the note and any characters' sheet pictures sent.
+Undo is "take it off the chapter": the picture stays stored and can be shown again
+(`0043_chapter_picture_additions.sql`: where each added picture sits; new rows only).
+Where a kept added picture also shows (owner's request, 2026-11-21; drafted by the coding agent, branch added-everywhere;
+reread by the owner 2026-11-21): a quote card that names it (the share page, the card image, saved cards), and the card sheet
+starts with it for a passage that includes its block; a character's sheet when that character's sheet picture was sent
+with it, and a place's sheet when its passage sits in a scene of that place; References' cards for those sheets' terms;
+and the pick switch, at its block and for those terms. Never the introduction (its cards are fixed edition pictures).
+A hide still wins everywhere, and with no database none shows (`npm run test:added-everywhere`).
+
 **Checked by.**
 - `P5a`: no migration adds a canon/official/featured/pinned field, and no UI
   string uses those words except to deny them. (The pick table is named for what it is, a pick.)
@@ -395,6 +457,13 @@ order the feed, search, anyone's own pages, the agent tools or the read API.
   checks `isAdmin` and sorts still fails (the planted fault: a public page sorting by likes). The rule is in
   `scripts/lib/p5b.ts`; `npm run test:admin-activity` proves each of its faults. A read that filters on
   `status = 'published'` is not publishing; a status set in SQL, given in a row, or assigned in code is.
+- `P5j` (the ruling above, reread by the owner 2026-11-19): admin publishing code touches only the edition's chapter
+  pictures. Any file that writes a chapter-picture table (`studio.chapter_picture_versions`, `_decisions`, `_looks`,
+  and `_additions`) must be `src/lib/chapter-pictures/admin.ts`, hold
+  the admin check itself, write no other table, and only insert (never update or delete). Planted faults: that file also
+  writing `studio.elements`, writing without the admin check, updating a decision in place, a second file writing the
+  decisions; and for the additions, a second file writing them and an addition moved in place; each must fail
+  (`scripts/lib/p5b.ts`, `npm run test:chapter-pictures`, `npm run test:chapter-additions`).
 - `P5c`: a hidden image's file leaves the public bucket.
 - `P5d`: every component that shows a pick shows its label ("Picked by @…") and the switch with "Most liked",
   "Newest" and "Liked by me"; the switch keeps the reader's choice on their device (localStorage) and never sends it.

@@ -5,6 +5,8 @@ import { IMAGE_WORDING } from '~/lib/images/wording';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 import { AiLabel } from './recipe-sheet';
 import { InfoLabel } from './info-label';
+import { RedoneCredit } from './redone-credit';
+import type { Redone } from '~/lib/chapter-pictures/view';
 
 /**
  * Character and place sheets as text (owner, 2026-10-10): this edition's shorthand, labelled
@@ -42,6 +44,8 @@ export type SheetImage = {
   /** A reader's: their byline and prompt. The edition's: its recipe file and item. */
   reader: { versionId: string; by: string; prompt: string; date: string } | null;
   recipe: { file: string; item: string } | null;
+  /** This edition's picture, redone by an admin and kept: the redo shows, with who, when and the model. */
+  redone?: Redone;
 };
 
 /** Not covered by chapter (owner, 2026-10-14: "stop hiding images from parts in the book you haven't read yet"). */
@@ -57,6 +61,11 @@ export function SheetImageCaption({ im }: { im: SheetImage }) {
           text={AI_LABEL.imageBy(im.reader.by)}
           view={readerImageView({ versionId: im.reader.versionId, by: im.reader.by, prompt: im.reader.prompt, chapter: im.chapter, where: im.where, date: im.reader.date })}
         />
+      ) : im.redone ? (
+        <>
+          <AiLabel kind="image" text={AI_LABEL.image} view={im.redone.view} />
+          <RedoneCredit redone={im.redone} />
+        </>
       ) : (
         <AiLabel kind="image" text={AI_LABEL.image} file={im.recipe!.file} item={im.recipe!.item} />
       )}

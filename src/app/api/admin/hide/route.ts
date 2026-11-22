@@ -8,6 +8,10 @@ import { moveToPrivate } from '~/lib/images/store';
 import { loadIllustrationById } from '~/lib/illustrations';
 import { forgetHidden } from '~/lib/admin-hidden';
 import { recheckMaker } from '~/lib/checks/decisions';
+import { readAddition } from '~/lib/chapter-pictures/read';
+import { isAddedId } from '~/lib/chapter-pictures/shared';
+import { pathsFor } from '~/lib/chapter-pictures/where';
+import { hideReachesChapterPictures } from '~/lib/chapter-pictures/after-hide';
 
 /**
  * An admin's Hide in the reader (owner, 2026-10-29: "an admin Hide in the reader for seeded and readers' images").
@@ -23,7 +27,9 @@ export async function POST(request: Request) {
   if (!sql) return NextResponse.json({ error: 'Not available here' }, { status: 503 });
   const b = (await request.json().catch(() => ({}))) as { kind?: unknown; id?: unknown };
   if (b.kind === 'seeded' && typeof b.id === 'string') {
-    const im = loadIllustrationById(b.id);
+    // A picture an admin added (owner, 2026-11-19) is hidden the same way: a row in studio.seeded_hidden by its id.
+    const added = isAddedId(b.id) ? await readAddition(sql, b.id).catch(() => null) : null;
+    const im = added ? { id: added.jobId } : loadIllustrationById(b.id);
     if (!im) return NextResponse.json({ error: 'No such image' }, { status: 404 });
     try {
       await sql`insert into studio.seeded_hidden ${sql({ image_id: im.id, by_fid: fid })} on conflict (image_id) do nothing`;
@@ -34,7 +40,8 @@ export async function POST(request: Request) {
     // Everywhere a seeded image can show (owner, 2026-10-30): the chapter and its player, References and the sheets,
     // the introduction (home, About and every page's "What is this?"), and quote cards and their share pages.
     forgetHidden();
-    revalidatePath('/', 'layout');
+    if (added) for (const p of pathsFor(added.jobId, added.chapter)) revalidatePath(p.path, p.type);
+    else revalidatePath('/', 'layout');
     return NextResponse.json({ done: 'hidden' });
   }
   if (b.kind === 'reader' && typeof b.id === 'string') {
@@ -47,6 +54,7 @@ export async function POST(request: Request) {
     for (const sha of el.files) await moveToPrivate(sha).catch((e) => console.error('admin hide: moving the hidden file failed', (e as Error).name));
     // The maker is checked again at their next Generate or publish (owner, 2026-11-04).
     await recheckMaker(sql, el.byFid);
+    await hideReachesChapterPictures(sql, el.elementId);
     revalidatePath('/references', 'layout');
     revalidatePath(`/image/${b.id}`);
     return NextResponse.json({ done: 'hidden' });

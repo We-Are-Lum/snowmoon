@@ -109,7 +109,8 @@ import path from 'node:path';
 import { chromium, devices, webkit, type Browser, type Page, type Route } from 'playwright-core';
 import QRCode from 'qrcode';
 import { BOOK_MENTIONS } from '../src/lib/character-order';
-import { ASSISTANT, CHALLENGE, SIGN_IN_METHODS, SUPPORT } from '../src/lib/config';
+import { ASSISTANT, CHALLENGE, REHEARSAL, SIGN_IN_METHODS, SUPPORT } from '../src/lib/config';
+import { REHEARSAL_BASE_IDS } from '../src/lib/challenge/rehearsal-switch';
 import { SIGN_IN_CHOICES } from '../src/lib/sign-in-text';
 import { CHALLENGE_LINKS } from '../src/lib/challenge/landing-wording';
 import { ASK_WORDING, type AccountKind } from '../src/lib/chat/who-can-ask';
@@ -922,7 +923,8 @@ async function checkMakeImage(page: Page, scheme: string) {
  * nothing about the check. Signed in as the owner, with the API replayed from scripts/fixtures/illustration-review.json
  * (real jobs, made-up answers, served out of order): worst first (wrong, partly, matches, not checked), each item has
  * the passage, its image with the AI label, the check labelled as AI with its model, and the three buttons; the
- * regenerate note box shows the publication line. Signed in as anyone else (403): only the owner-only line.
+ * regenerate note box shows the publication line. Signed in as anyone else (404 since 2026-11-18, and 403 as before):
+ * only the admins-only line ("owner" became "admins", owner 2026-11-18).
  */
 async function checkIllustrationReview(page: Page, scheme: string) {
   const where = `/you/illustrations @390 (${scheme})`;
@@ -958,8 +960,10 @@ async function checkIllustrationReview(page: Page, scheme: string) {
     if (v !== 'unchecked' && !/^AI check · by /.test((await item.locator('.ai-check-label').innerText().catch(() => '')) ?? '')) fail(`${where}: item ${i + 1}'s check is not labelled as AI with its model`);
     const buttons = (await item.locator('.illus-actions button').allTextContents()).map((t) => t.trim()).join('|');
     if (buttons !== 'Keep|Regenerate with my note|Drop') fail(`${where}: item ${i + 1}'s buttons are "${buttons}"`);
+    // Without the redo flow (the fixture has none), the three say they only record a decision (owner, 2026-11-18).
+    if (!/These record your decision for the review only\. They change nothing on the site\./.test(await item.locator('.illus-record-only').innerText().catch(() => ''))) fail(`${where}: item ${i + 1}'s buttons don't say they only record a decision`);
   }
-  if (!/Your decision: regenerate/.test(await page.locator('.illus-item').nth(2).innerText())) fail(`${where}: a saved decision is not shown with its item`);
+  if (!/Latest decision: regenerate/.test(await page.locator('.illus-item').nth(2).innerText())) fail(`${where}: a saved decision is not shown with its item`);
   await checkFloors(page, '/you/illustrations @390 (owner)', scheme);
   await shot(page, 'phone-390-you-illustrations', scheme);
   await page.locator('.illus-item').first().locator('.illus-actions button', { hasText: 'Regenerate with my note' }).click();
@@ -974,12 +978,14 @@ async function checkIllustrationReview(page: Page, scheme: string) {
   if (!/edited by you/i.test(await first.locator('.illus-drafted').innerText().catch(() => ''))) fail(`${where}: an edited note is not marked as edited`);
   await checkFloors(page, '/you/illustrations @390 (owner, note)', scheme);
   await page.unroute('**/api/you/illustrations');
-  await page.route('**/api/you/illustrations', (r) => r.fulfill({ status: 403, json: { error: 'Owner only' } }));
-  await as(1234);
-  await open(page, '/you/illustrations');
-  await page.getByText('This page is for the project’s owner.').waitFor({ timeout: 10000 }).catch(() => fail(`${where}: someone else signed in does not see the owner-only line`));
-  if (await page.locator('.illus-item').count()) fail(`${where}: someone else signed in sees review items`);
-  await page.unroute('**/api/you/illustrations');
+  for (const status of [404, 403]) {
+    await page.route('**/api/you/illustrations', (r) => r.fulfill({ status, json: { error: 'Not found' } }));
+    await as(1234);
+    await open(page, '/you/illustrations');
+    await page.getByText('This page is for the project’s admins.').waitFor({ timeout: 10000 }).catch(() => fail(`${where}: someone else signed in (${status}) does not see the admins-only line`));
+    if (await page.locator('.illus-item, .cp-panel, .cp-look').count()) fail(`${where}: someone else signed in (${status}) sees review items or the redo`);
+    await page.unroute('**/api/you/illustrations');
+  }
   await page.unroute('**/api/chat/status');
   await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
 }
@@ -1827,6 +1833,21 @@ async function checkMarkdownPages() {
  * owner 2026-11-08: the relaxed wait in checkChallengeLanding is for its one-connection fixture only. Each page must
  * load and settle, show its own elements, and not scroll sideways, at 390 light and 1440 dark.
  */
+/**
+ * The base /challenge/make opens (Nate, 2026-11-21): on a live run, production's first base; in rehearsal mode
+ * (CHALLENGE_REHEARSAL=on for this run, against a server on this machine), the rehearsal database's own first base,
+ * which the rehearsal seeds (scripts/rehearsal-db.ts) and production's ids aren't in. Rehearsal mode against anything
+ * but this machine is refused, so a live run can never use the rehearsal's ids.
+ */
+function makeBase(): string | null {
+  const local = /^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(BASE);
+  if (REHEARSAL.on && !local) throw new Error('check:ui: rehearsal mode (CHALLENGE_REHEARSAL=on) is for a server on this machine only, never a live run');
+  const ids = REHEARSAL.on ? REHEARSAL_BASE_IDS : (CHALLENGE.bases as Record<string, readonly string[]>);
+  const first = Object.values(ids).flat()[0] ?? null;
+  console.log(`note /challenge/make opens ${REHEARSAL.on ? "the rehearsal's own" : "production's"} first base (${first})`);
+  return first;
+}
+
 async function checkChallengeLive() {
   for (const [w, h, touch, scheme] of [[390, 844, true, 'light'], [1440, 900, false, 'dark']] as const) {
     const page = await newPage({ viewport: { width: w, height: h }, colorScheme: scheme, hasTouch: touch });
@@ -1859,7 +1880,7 @@ async function checkChallengeLive() {
     // back to its place while a field has focus (the keyboard is up); at 1440 it never sticks. Redesign D (2026-11-12):
     // the button sits in the MakeBar (.mk-makebar, with the line under it), so the bar is what sticks; at 1440 the bar is
     // the foot of the right-hand panel, in its place.
-    const base = (Object.values(CHALLENGE.bases as Record<string, string[]>).flat()[0]) ?? null;
+    const base = makeBase();
     if (base) {
       await open(page, `/challenge/make?from=${base}`);
       // Live reads production: until redesign D is deployed there, the button is still the page's own child (.mk-make);
@@ -2048,7 +2069,12 @@ async function checkChallengeLanding() {
             // stretched past their column: each base's width is one column's.
             const bases = await page.locator('.chc-bases').evaluate((ul) => { const cols = getComputedStyle(ul).gridTemplateColumns.split(' ').map(parseFloat); return { cols, widths: [...ul.querySelectorAll(':scope > li')].map((li) => Math.round(li.getBoundingClientRect().width)) }; }).catch(() => null);
             if (!bases || !bases.widths.length || bases.widths.some((x) => x < 200) || bases.cols.some((c) => c < 199.5) || bases.widths.some((x) => Math.abs(x - bases.cols[0]) > 1.5)) fail(`/challenge/zei ${t}: the bases aren't each at least 200px in an auto-filled grid (${JSON.stringify(bases)})`);
-            console.log(`note challenge/zei ${t}: bases ${bases?.cols.length ?? 0} across, ${bases?.widths.join(', ')}px; remix heading ${head.top}–${head.bottom} of ${head.h}`);
+            // The remixes (owner's 18 Nov call, from Garance): as many across as fit at 240px or more (auto-fill), so every
+            // remix at least 240px (the old page's were 235px), each one column wide. Measured: 261px two across at 1024;
+            // at 1440, 264px three across with the menu closed and 338px two across with it open.
+            const remixes = await page.locator('.ch-char-remixes > .chc-grid').evaluate((ul) => { const cols = getComputedStyle(ul).gridTemplateColumns.split(' ').map(parseFloat); return { cols, widths: [...ul.querySelectorAll(':scope > li')].map((li) => Math.round(li.getBoundingClientRect().width)) }; }).catch(() => null);
+            if (!remixes || !remixes.widths.length || remixes.widths.some((x) => x < 240) || remixes.cols.some((c) => c < 239.5) || remixes.widths.some((x) => Math.abs(x - remixes.cols[0]) > 1.5)) fail(`/challenge/zei ${t}: the remixes aren't each at least 240px in an auto-filled grid (${JSON.stringify(remixes)})`);
+            console.log(`note challenge/zei ${t}: bases ${bases?.cols.length ?? 0} across, ${bases?.widths.join(', ')}px; remixes ${remixes?.cols.length ?? 0} across, ${remixes?.cols.map((c) => Math.round(c)).join(', ')}px; remix heading ${head.top}–${head.bottom} of ${head.h}`);
             // On the first screen at 1440 only (owner, 2026-11-17): at 1024 it sits just below, and the link under "Make your own" points to it.
             if (vw === 1440 && !(head.top >= 0 && head.bottom <= head.h)) fail(`/challenge/zei ${t}: "Start from someone’s remix" isn't on the first screen (its heading at ${head.top}–${head.bottom} of ${head.h})`);
             if (menu === 'closed') {
@@ -2317,17 +2343,19 @@ async function checkChallengeLanding() {
       // row). Desktop: "about 1280px usable at 1440" (the handoff), a 400px column, then the remixes three across (about
       // 264px) and the bases as many across as fit at 200px or more (owner, 2026-11-16: one floor, every base at least
       // 200px, at 1024 and 1440 with the side menu open and closed, checked in checkCharacterDesktop; it replaces #177's
-      // 380px at 1440 and 240px at 1024, for two across). Phone: a 300px slide (80% at most); the remixes two across.
+      // 380px at 1440 and 240px at 1024, for two across). The remixes (owner's 18 Nov call): as many across as fit at
+      // 240px, so 264px three across at 1440 and 261px two across at 1024 (they were 264 and 169 three across); floors
+      // 260 and 255 (were 250 and 150). Phone: a 300px slide (80% at most); the remixes two across.
       {
         const widths = async (sel: string) => page.locator(sel).evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().width)));
         const B = '.ch-char-bases .chc-pic', R = '.ch-char-remixes .chc-pic';
         const bw = await widths(B), rw = await widths(R);
         if (!bw.length || bw.some((x) => x < (wide ? 200 : 270))) fail(`/challenge/zei ${tag}: the bases are ${bw.join(', ')}px wide, under ${wide ? 200 : 270}px`);
-        if (!rw.length || rw.some((x) => x < (wide ? 250 : 150))) fail(`/challenge/zei ${tag}: the remixes are ${rw.join(', ')}px wide, under ${wide ? 250 : 150}px`);
+        if (!rw.length || rw.some((x) => x < (wide ? 260 : 150))) fail(`/challenge/zei ${tag}: the remixes are ${rw.join(', ')}px wide, under ${wide ? 260 : 150}px`);
         if (wide) {
           await page.setViewportSize({ width: 1024, height: 768 });
           const nb = await widths(B), nr = await widths(R);
-          if (nb.some((x) => x < 200) || nr.some((x) => x < 150)) fail(`/challenge/zei @1024: the bases are ${nb.join(', ')}px and the remixes ${nr.join(', ')}px wide, under 200 and 150`);
+          if (nb.some((x) => x < 200) || nr.some((x) => x < 255)) fail(`/challenge/zei @1024: the bases are ${nb.join(', ')}px and the remixes ${nr.join(', ')}px wide, under 200 and 255`);
           await page.setViewportSize({ width: w, height: h });
         }
       }
@@ -3253,9 +3281,11 @@ try {
         sentSheets = (r.request().postDataJSON() as { sheets?: unknown }).sheets ?? null;
         return r.fulfill({ status: 400, json: { error: 'check:ui stops here' } });
       });
+      // An invited reader who isn't an admin (6852): an admin's "add an image" opens the edition's sheet instead (owner,
+      // 2026-11-20; checked below), so the readers' composer is checked as a reader sees it.
       await page.evaluate(() => {
         const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
-        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
+        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6852, exp: 4102444800 })}.y`, fid: 6852, username: 'check', exp: 4102444800 }));
       });
       await open(page, '/chapter/1');
       // Signed in, all three options: still inside the screen at 390px.
@@ -3303,6 +3333,32 @@ try {
       if (!/sent to Groq to be checked \(through Vercel AI Gateway when Groq is busy\) and to fal\.ai/.test(text)) fail('/chapter/1: the composer does not name the hosts that receive the prompt');
       await page.keyboard.press('Escape');
       if (await page.locator('.image-composer').count()) fail('/chapter/1: Escape does not close the composer');
+      // An admin (owner, 2026-11-20): the same selection's button says "Add a picture here" and opens the edition's
+      // "Add a picture here" sheet on the selected blocks, never the readers' composer.
+      await ctx.route('**/api/you/illustrations/picture**', (r) => r.fulfill({ json: { item: null, pictures: { ready: true, adding: false, storage: true, models: [], styles: [], looks: { all: null, chapters: {} }, cap: { spentUsd: 0, capUsd: 20, resetAt: new Date().toISOString() } } } }));
+      await page.evaluate(() => {
+        const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
+        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
+      });
+      await open(page, '/chapter/1');
+      await page.evaluate(() => {
+        const p = document.querySelector('#c1-b19')!;
+        p.scrollIntoView({ block: 'center' });
+        const r = document.createRange();
+        r.selectNodeContents(p);
+        getSelection()!.removeAllRanges();
+        getSelection()!.addRange(r);
+      });
+      await page.waitForSelector('.selection-actions button:has-text("Add a picture here")', { timeout: 10000 }).catch(() => fail(`/chapter/1 (${scheme}): an admin's selection doesn't offer "Add a picture here"`));
+      await page.locator('.selection-actions button:has-text("Add a picture here")').click().catch(() => {});
+      await page.waitForSelector('.rpa-sheet', { timeout: 10000 }).catch(() => fail(`/chapter/1 (${scheme}): an admin's "Add a picture here" doesn't open the edition's sheet`));
+      if (await page.locator('.image-composer').count()) fail(`/chapter/1 (${scheme}): an admin's "Add a picture here" opens the readers' composer`);
+      await page.locator('.rpa-sheet .sheet-x').click().catch(() => {});
+      await ctx.unroute('**/api/you/illustrations/picture**');
+      await page.evaluate(() => {
+        const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
+        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6852, exp: 4102444800 })}.y`, fid: 6852, username: 'check', exp: 4102444800 }));
+      });
       // Step 4, signed in and invited (mocked): My picks (private) and the new-style form.
       await ctx.route('**/api/designs/picks', (r) => r.fulfill({ json: { picks: [] } }));
       await ctx.route('**/api/consent', (r) => r.fulfill({ json: { wording: { version: 'v', line: 'l', title: 't', text: ['a'], sha256: 'x' }, signedIn: true, agreed: true } }));

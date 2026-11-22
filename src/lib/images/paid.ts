@@ -1,6 +1,6 @@
 import 'server-only';
 import type postgres from 'postgres';
-import { IMAGES } from '../config';
+import { CHAPTER_PICTURES, IMAGES } from '../config';
 import { checkPrompt } from './guard';
 import { ImageRefused, ImageUnavailable, type Made } from './fal';
 import { countRefusal, fundedBy, giveBack, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
@@ -45,6 +45,8 @@ export const LIMIT_SAY = {
   // Model choice (branch remix-model-choice, DRAFT wording).
   'closed-limit': IMAGE_WORDING.designs.models.closedLimit,
   'closed-spend': IMAGE_WORDING.designs.models.closedSpend,
+  // Admins' chapter pictures (owner, 2026-11-18). DRAFT wording; the page writes {reset} in the admin's own time.
+  'admin-spend': `Admins’ chapter pictures have reached today’s $${CHAPTER_PICTURES.adminDailyCapUsd} limit. More at {reset}.`,
 } as const;
 const say = (refusal: keyof typeof LIMIT_SAY, fid: number) => (refusal === 'limit' ? LIMIT_SAY.limit(perDay(fid)) : LIMIT_SAY[refusal]);
 /** A failure's words, and, when a wallet account's Generate was credited back, that it was. */
@@ -74,10 +76,10 @@ export async function paidPicture(
   },
 ): Promise<Paid> {
   const spend = job.spend;
-  const funded = fundedBy(fid);
+  const funded = spend?.pool === 'admin' ? ('admin' as const) : fundedBy(fid);
   const r = await reserve(sql, fid, spend);
   // A closed-cap refusal carries the instant the cap resets (00:00 UTC); the browser writes it in the visitor's own time.
-  if (!r.ok) return { ok: false, status: 429, error: say(r.refusal, fid), extra: { reason: r.refusal, ...(r.refusal === 'closed-spend' ? { resetAt: nextUtcMidnight() } : {}) } };
+  if (!r.ok) return { ok: false, status: 429, error: say(r.refusal, fid), extra: { reason: r.refusal, ...(r.refusal === 'closed-spend' || r.refusal === 'admin-spend' ? { resetAt: nextUtcMidnight() } : {}) } };
   const name = blockedName(job.checkText);
   if (name) {
     await settle(sql, {}, spend, funded);

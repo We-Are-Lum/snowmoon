@@ -1,7 +1,7 @@
 import 'server-only';
 import { AGENT_API, appUrl } from '../config';
 import { blockId, chapterNumbers, loadChapter } from '../book';
-import { plainText, searchBook } from '../book-search';
+import { blockText, searchBook } from '../book-search';
 import { authorVersions, editorVersion, getAdaptation, getVersion, ownMedia, publicCatalogue, sceneHandleFor, sceneOwner, type Version } from '../adaptation-pages';
 import { editorData, type DataShot } from './data';
 
@@ -97,13 +97,13 @@ export const TOOLS: Tool[] = [
   {
     name: 'search_book',
     title: 'Search the book',
-    description: "Find words in Snowmoon (Vitalik Buterin, GPL-3.0). Returns passages with their chapter and block id (c<chapter>-b<block>), the site's citation form. 3 to 80 characters.",
+    description: "Find words in Snowmoon (Vitalik Buterin, GPL-3.0): its paragraphs, quotes and in-world screens. Returns passages with their chapter and block id (c<chapter>-b<block>), the site's citation form. 3 to 80 characters.",
     inputSchema: { type: 'object', properties: { query: { type: 'string', minLength: 3, maxLength: 80 }, limit: { type: 'integer', minimum: 1, maximum: AGENT_API.maxHits } }, required: ['query'], additionalProperties: false },
     run: async (args) => {
       only(args, ['query', 'limit']);
       const q = str(args, 'query', /^[\s\S]{3,80}$/, '3 to 80 characters');
       const limit = int(args, 'limit', { min: 1, max: AGENT_API.maxHits, optional: true }) ?? 10;
-      const r = searchBook(q, limit);
+      const r = searchBook(q, limit, { screens: true });
       if (!r.ok) throw new ToolInputError(r.error);
       return { book: BOOK, query: r.q, more: r.more, hits: r.hits.map((h) => ({ ...h, block_id: blockId(h.chapter, h.idx), url: `${appUrl()}/chapter/${h.chapter}#${blockId(h.chapter, h.idx)}` })) };
     },
@@ -122,7 +122,7 @@ export const TOOLS: Tool[] = [
       if (!ch) throw new ToolInputError(`no chapter ${chapter}; chapters are ${chapterNumbers()[0]} to ${chapterNumbers().at(-1)}`);
       const blocks = ch.blocks.filter((b) => b.idx >= from && b.idx <= to);
       if (blocks.length > AGENT_API.maxBlocks) throw new ToolInputError(`at most ${AGENT_API.maxBlocks} blocks at once`);
-      return { book: BOOK, chapter, url: `${appUrl()}/chapter/${chapter}`, blocks: blocks.map((b) => ({ id: blockId(chapter, b.idx), kind: b.kind, text: plainText(b.content) })) };
+      return { book: BOOK, chapter, url: `${appUrl()}/chapter/${chapter}`, blocks: blocks.map((b) => ({ id: blockId(chapter, b.idx), kind: b.kind, text: blockText(b) })) };
     },
   },
   {
