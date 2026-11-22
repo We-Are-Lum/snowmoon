@@ -26,7 +26,7 @@ interface Status {
   choices: Choice[];
   consent: { version: string; line: string; title: string; text: string[]; sha256: string; agreed: boolean };
   models: { convert: string; transcribe: string; reading: string; design: string; provider: string };
-  limits: { maxTakeSeconds: number; maxSentenceSeconds: number; maxTakeBytes: number; creditsPerMinute: number; readingCreditsPerChar: number };
+  limits: { maxTakeSeconds: number; maxSentenceSeconds: number; maxTakeBytes: number; creditsPerMinute: number; readingCreditsPerChar: number; transcribeCreditsPerSecond: number };
   today: { funded: string; credits: number; capCredits: number; conversionsLeft: number } | null;
   drafts: { id: string; kind: string; speechId: string; presetId: string; madeAt: string; publishedAt: string | null; recipe: Record<string, unknown>; audio: { n: number; role: string; sentence: number | null }[] }[];
   readings: { speechId: string; presetId: string; id: string; candidate: number | null; madeAt: string }[];
@@ -439,9 +439,33 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     return c;
   }
 
+  /**
+   * Check the words again on a draft kept without its check (Nate, 2026-11-22): its own converted audio is transcribed
+   * once, and it is kept again with the check, under a new id (the old one is removed). Shown on the draft, and used by
+   * the check below when the take open here is that draft.
+   */
+  async function checkDraft(id: string) {
+    setBusy('check');
+    setMessage(null);
+    const r = await authFetch(`/api/voice/drafts/${id}/check`, { method: 'POST' }).catch((e) => (log.note(`check draft: the request failed (${errText(e)})`), null));
+    setBusy(null);
+    const j = ((await r?.json().catch(() => ({}))) ?? {}) as { id?: string; checks?: Check[]; check?: string; matched?: number; sentences?: number; error?: string };
+    if (r) log.note(`check draft: HTTP ${r.status}${j.error ? `: ${j.error}` : ''}`);
+    if (!r?.ok || !j.id) return setMessage(j.error ?? 'The word check failed. Try again.');
+    setMessage(`Checked: ${j.matched} of ${j.sentences} sentences match. It is kept as a new draft with its check; the one without it is removed.`);
+    if (converted?.draftId === id) {
+      setConverted({ ...converted, draftId: j.id, checks: j.checks, check: j.check });
+      setAccepted(j.id);
+    }
+    void load();
+  }
+
   /** Ask for the word check again (the conversion is kept in the tab; only the converted audio is sent). */
   async function recheck() {
     if (!converted) return;
+    // The take open here was kept without its check: check that draft, so the kept one gets it too.
+    const kept = converted.draftId ? s!.drafts.find((d) => d.id === converted.draftId) : undefined;
+    if (kept && (kept.recipe as { check?: unknown }).check === null) return checkDraft(kept.id);
     setBusy('check');
     setMessage(null);
     const tf = new FormData();
@@ -822,9 +846,16 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                       <summary>Recipe</summary>
                       <pre>{JSON.stringify(d.recipe, null, 2)}</pre>
                     </details>
-                    {d.kind === 'performance' && (
+                    {d.kind === 'performance' && (d.recipe as { check?: unknown }).check === null ? (
+                      <span className="vr-draft-nocheck">
+                        <span className="vr-warn">No word check yet: it was kept without one, so it can&rsquo;t be storyboarded until its words are checked.</span>{' '}
+                        <button type="button" className="vr-btn vr-small-btn" onClick={() => checkDraft(d.id)} disabled={busy !== null}>
+                          {busy === 'check' ? 'Checking…' : `Check the words (≈ ${Math.ceil(Number(((d.recipe as { takes?: { seconds?: number }[] }).takes ?? [])[0]?.seconds ?? 0) * s.limits.transcribeCreditsPerSecond)} credits)`}
+                        </button>
+                      </span>
+                    ) : d.kind === 'performance' ? (
                       <a className="vr-btn vr-small-btn vr-remove" href={`/storyboard/board/${d.id}`}>Make the storyboard</a>
-                    )}{' '}
+                    ) : null}{' '}
                     <button type="button" className="vr-btn vr-quiet vr-small-btn vr-remove" onClick={() => removeDraft(d.id)} disabled={busy !== null}>
                       Remove this draft
                     </button>

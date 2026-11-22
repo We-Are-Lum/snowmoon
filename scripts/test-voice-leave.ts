@@ -11,7 +11,9 @@
  *      is kept all the same, and coming back shows the take and the draft it became;
  *  L5. keeping fails after the conversion (the store refuses the write): the page says so, nothing is half-kept, and
  *      Convert again from the take on the device keeps it;
- *  L4. switching speeches with a take in the tab: each speech shows and sends only its own take.
+ *  L4. switching speeches with a take in the tab: each speech shows and sends only its own take;
+ *  L6. a take kept without its word check (the transcription failed): the draft says so, and "Check the words" checks
+ *      its own converted audio and keeps it again with the check, the one without it removed.
  *
  *   npm run build, then:   tsx scripts/test-voice-leave.ts --url=http://127.0.0.1:3417
  * The script starts `next start` itself on that port. Run it with the worktree's .env.local moved aside (it points at
@@ -271,6 +273,26 @@ try {
   check(`L4. Convert sends "${second.title}"'s take with "${second.title}" only, and its draft is of that speech`, sent.length === 1 && sent[0].includes(`\r\n\r\n${second.id}\r\n`) && !sent[0].includes(`\r\n\r\n${first.id}\r\n`) && last?.recipe.takes[0].takeSha256 === secondSha && lastSpeech === second.id, `${lastSpeech} ${sent.length}`);
   await page.locator('label.vr-speech', { hasText: first.title }).locator('input').check();
   await page.locator('.vr-take').waitFor({ timeout: 15_000 });
+
+  // L6. Kept without its word check, then "Check the words" on the draft (Nate, 2026-11-22).
+  await freshDay();
+  stub.setFailTranscribe(true);
+  const before6 = (await drafts(NATE)).length;
+  await page.locator('.vr-take input[type="checkbox"]').check();
+  await page.getByRole('button', { name: /^Convert/ }).click();
+  await page.locator('text=/word check could not be made/').first().waitFor({ timeout: 60_000 }).catch(() => {});
+  stub.setFailTranscribe(false);
+  const noCheck = (await pg.query<{ id: string; recipe: { check: unknown } }>(`select id, recipe from studio.voice_drafts where fid = $1 order by made_at desc limit 1`, [NATE])).rows[0];
+  check('L6. a take whose transcription failed is kept, without its word check, and the page says so', (await drafts(NATE)).length === before6 + 1 && noCheck?.recipe.check === null && (await page.locator('text=/word check could not be made/').count()) > 0);
+  const row = page.locator('.vr-drafts li', { hasText: 'No word check yet' });
+  check('L6. ... its draft says it has no word check, with "Check the words" and its estimate, and no "Make the storyboard"', (await row.count()) === 1 && (await row.getByRole('button', { name: /^Check the words \(≈ \d+ credits\)$/ }).count()) === 1 && (await row.locator('a', { hasText: 'Make the storyboard' }).count()) === 0);
+  await row.getByRole('button', { name: /^Check the words/ }).click();
+  await page.locator('text=/^Checked: \d+ of \d+ sentences match/').first().waitFor({ timeout: 60_000 }).catch(() => {});
+  const after6 = (await pg.query<{ id: string; recipe: { check: unknown; checkedAgain?: { from: string } } }>(`select id, recipe from studio.voice_drafts where fid = $1 order by made_at desc limit 1`, [NATE])).rows[0];
+  check('L6. "Check the words": the page says how many sentences match', (await page.locator('text=/^Checked: \d+ of \d+ sentences match/').count()) > 0);
+  check('L6. ... the draft is kept again with its check, and the one without it is gone', after6?.recipe.check !== null && after6?.recipe.checkedAgain?.from === noCheck?.id && (await pg.query(`select 1 from studio.voice_drafts where id = $1`, [noCheck?.id])).rows.length === 0);
+  await page.waitForTimeout(1000);
+  check('L6. ... and its draft now offers "Make the storyboard", with no "No word check yet" left', (await page.locator('.vr-drafts li', { hasText: 'No word check yet' }).count()) === 0 && (await page.locator(`a[href="/storyboard/board/${after6?.id}"]`).count()) === 1);
 
   // Remove: the take leaves the device.
   await page.locator('.vr-take').getByRole('button', { name: 'Remove' }).click();
