@@ -332,6 +332,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   const b0 = (await r.json()) as { board: { cuts: number[]; shots: Shot[]; proposed: number[]; fromProposal: boolean }; notes: { kind: string; text: string }[]; sheets: { styles: { id: string; title: string }[]; characters: { id: string; title: string }[] } };
   const ends = tl.sentences.map((x) => Math.round(x.end * 100) / 100);
   check('B. the first board is the automatic cuts, every one at a sentence end', r.status === 200 && b0.board.fromProposal && b0.board.cuts.length > 1 && b0.board.cuts.every((c) => ends.includes(c)) && b0.board.shots.length === b0.board.cuts.length + 1);
+  check('B. the board sends the speech\'s own sentences (its text, not the transcription) for the shots and the play-through', JSON.stringify((b0 as unknown as { draft: { sentences: { n: number; text: string }[] } }).draft.sentences) === JSON.stringify(speech.sentences.map((x) => ({ n: x.n, text: x.text }))));
   check('B. ... and no shot has words written for it (P2): every description is empty', b0.board.shots.every((x) => x.description === '' && x.angle === '' && x.kept === null));
   check('B. the notes are rule checks that name no content (P2)', b0.notes.length > 0 && b0.notes.every((n) => /^Shot|^Shots/.test(n.text) && !/should show|try showing|describe/i.test(n.text)));
   check('B. the kept pictures and the picture-making settings are separate fields (neither hides the other)', Array.isArray((b0 as unknown as { pictures: unknown }).pictures) && typeof (b0 as unknown as { making: unknown }).making === 'object');
@@ -400,6 +401,35 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   const same = board.boardNotes(s3.shots.map((x) => ({ ...x, angle: 'wide' as const })));
   check('B. notes: three shots in a row from the same angle are flagged', same.some((n) => n.kind === 'same-angle'));
   check('B. P2, by reading the code: nothing in the board fills a description', !/description:\s*['"`][^'"`]/.test(readFileSync(path.join(ROOT, 'src/lib/voice/board.ts'), 'utf8').replace(/description: ''/g, '')) && !/description\s*=\s*['"`]/.test(readFileSync(path.join(ROOT, 'src/app/api/voice/boards/route.ts'), 'utf8')));
+}
+
+// B2. The storyboard on a phone (Nate, 2026-11-21, after his iPhone test).
+{
+  const tl = { seconds: 30, words: [], sentences: [{ n: 0, start: 0, end: 9 }, { n: 1, start: 9, end: 17 }, { n: 2, start: 17, end: 30 }] };
+  check('B2. the speech\'s sentences in a shot are placed by their middle, by number (the text is the speech\'s)', board.sentencesIn(tl, { start: 0, end: 17 }).join() === '0,1' && board.sentencesIn(tl, { start: 17, end: 30 }).join() === '2');
+  {
+    // Heard spans that overlap (a sentence heard starting before the last one ended): still placed by where it begins.
+    const ov = { seconds: 40, words: [], sentences: [{ n: 0, start: 0, end: 10 }, { n: 1, start: 4, end: 30 }, { n: 2, start: 28, end: 40 }] };
+    const sh = board.shotsFromCuts(ov, [10, 30]);
+    check('B2. each sentence is in the shot that starts where it begins, even when heard spans overlap', sh.map((x) => board.sentencesIn(ov, x).join('|')).join(',') === '0,1,2', sh.map((x) => board.sentencesIn(ov, x).join('|')).join(','));
+    const lens = [3, 6, 7, 8, 2, 9, 11, 5, 4, 6];
+    let at0 = 0;
+    const tl2 = { seconds: 61, words: [], sentences: lens.map((l, n) => { const x = { n, start: at0, end: at0 + l }; at0 += l; return x; }) };
+    const cuts2 = [...board.proposeCuts(tl2), board.sentenceBoundaries(tl2)[1].at];
+    const sh2 = board.shotsFromCuts(tl2, cuts2);
+    const byList = tl2.sentences.map((_, i) => 1 + board.sentenceBoundaries(tl2).slice(0, i).filter((bb) => board.cutNear(cuts2, bb.at) !== null).length);
+    const byShots = tl2.sentences.map((x) => sh2.findIndex((y) => board.sentencesIn(tl2, y).includes(x.n)) + 1);
+    check('B2. the sentence list\'s shot numbers agree with the shots built from the cuts', byList.join() === byShots.join(), `${byList.join()} | ${byShots.join()}`);
+  }
+  check('B2. the sentence spoken at a time', board.sentenceAt(tl, 10) === 1 && board.sentenceAt(tl, 0) === 0 && board.sentenceAt(tl, 29) === 2);
+  check('B2. "New shot starts here" sits between each pair of sentences, at the first one\'s end', board.sentenceBoundaries(tl).map((b) => `${b.after}-${b.before}@${b.at}`).join() === '0-1@9,1-2@17');
+  check('B2. a cut moved on the strip still counts at its boundary (within a third of a second)', board.cutNear([9.2, 20], 9) === 9.2 && board.cutNear([9.5], 9) === null);
+  const why = (o: Partial<Parameters<typeof board.pictureBlocked>[0]>) => board.pictureBlocked({ real: false, standIn: false, description: 'x', angle: 'wide', tries: 0, maxTries: 3, ...o });
+  check('B2. why "Make the picture" is off, in one line: real pictures off, no tries left, no description, no camera', why({}) === 'Real pictures are off for now.' && /No tries left/.test(why({ standIn: true, tries: 3 }) ?? '') && /No description yet/.test(why({ standIn: true, description: ' ' }) ?? '') && why({ standIn: true, angle: '' }) === 'Choose a camera first.' && why({ standIn: true }) === null);
+  const page = readFileSync(path.join(ROOT, 'src/components/voice-board.tsx'), 'utf8');
+  check('B2. the page: one Style, Ephelion\'s look and Model for every picture; no per-shot style, characters list or model list', /Settings for every picture/.test(page) && /Ephelion&rsquo;s look/.test(page) && !/<ModelRow\b/.test(page) && !/Characters \(published sheets\)/.test(page) && !/name=\{`angle-/.test(page));
+  check('B2. ... each shot keeps its own words and a camera dropdown; the cuts are a sentence list with "New shot starts here"', /What the shot shows \(your words\)/.test(page) && /Choose a camera/.test(page) && /New shot starts here/.test(page));
+  check('B2. the play-through and the shot show the speech\'s own words (never wordsIn, the transcription\'s)', !/wordsIn\(/.test(page) && /sentenceText\(sentenceAt\(t, now\)\)/.test(page));
 }
 
 // X. Removing a draft (Nate, 2026-11-20 morning).

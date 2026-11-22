@@ -86,3 +86,27 @@
 .vb-empty { display: flex; align-items: center; justify-content: center; text-align: center; padding: var(--space-4); background: var(--night); color: var(--night-body); font-size: var(--text-small); }
 .vb-screen { position: relative; margin: var(--space-3) 0; }
 .vb-shotno { position: absolute; top: 10px; left: 10px; font-family: var(--label); font-size: var(--text-label); background: rgba(0, 0, 0, 0.55); color: #fff; padding: 2px 8px; border-radius: 4px; }
+
+/* The step log under the recorder (troubleshooting, 2026-11-21). */
+.vr-steps { margin: var(--space-3) 0; }
+.vr-steps pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; max-height: 320px; overflow: auto; background: var(--surface-2, rgba(127, 127, 127, 0.08)); padding: var(--space-2); }
+
+/* The storyboard on a phone (Nate, 2026-11-21): settings once at the top, a camera dropdown, cuts as a sentence list. */
+.vb-field { display: flex; flex-direction: column; gap: var(--space-1); margin: var(--space-3) 0; }
+.vb-field select { max-width: 100%; min-height: 44px; font: inherit; }
+.vb-looks { border: 0; padding: 0; margin: var(--space-3) 0; }
+.vb-look-row { display: flex; gap: var(--space-2); overflow-x: auto; padding-bottom: var(--space-1); }
+.vb-look { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 104px; padding: 4px; border: 2px solid var(--rule); border-radius: 8px; background: none; font: inherit; color: inherit; cursor: pointer; }
+.vb-look img { width: 92px; height: 92px; object-fit: cover; border-radius: 4px; }
+.vb-look.vb-on { border-color: currentColor; }
+.vb-look-none { display: flex; align-items: center; justify-content: center; width: 92px; height: 92px; font-size: var(--text-small); }
+.vb-cutlist { list-style: none; padding: 0; margin: var(--space-3) 0; }
+.vb-cutlist li { padding: var(--space-2) 0; border-bottom: 1px solid var(--rule); }
+.vb-cutlist-shot { display: block; font-size: var(--text-small); font-weight: bold; letter-spacing: 0.04em; margin-bottom: 4px; }
+.vb-cutlist-text { display: block; line-height: 1.5; }
+.vb-toggle { display: flex; align-items: center; gap: var(--space-2); margin-top: var(--space-2); min-height: 44px; font-size: var(--text-small); }
+.vb-toggle input { width: 22px; height: 22px; }
+.vb-why { margin-top: var(--space-1); }
+.vb-playing { margin: var(--space-2) 0 4px; font-size: var(--text-small); font-weight: bold; }
+.vb-caption { margin: var(--space-2) 0; line-height: 1.5; }
+@media (max-width: 767px) { .vb-strip-wrap { display: none; } }
