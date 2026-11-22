@@ -16,6 +16,7 @@ import { shortAddress } from '~/lib/wallet/session';
 import { recordEligibility } from '~/lib/challenge/record';
 import { readBackstory } from '~/lib/challenge/backstory';
 import { checkBackstory } from '~/lib/challenge/backstories';
+import { bodyItems } from '~/lib/images/lettering';
 
 /**
  * Publish a draft (section 5): the device sends back the image and its signed record. The
@@ -48,6 +49,8 @@ export async function POST(request: Request) {
   if (!m) return no('Bad image', 400);
   const bytes = Buffer.from(m[2], 'base64');
   if (createHash('sha256').update(bytes).digest('hex') !== t.sha256) return no('The image is not the one this draft describes', 400);
+  // A lettered draft: its read-back read this very file and matched (it is signed; checked again here, as P8j does).
+  if (t.lettering && (t.lettering.readback?.verdict !== 'match' || t.lettering.readback.sha256 !== t.sha256)) return no('This draft’s words weren’t read back. Make it again.', 400);
   // 'uses': the picked styles and sheets the signed record says were added (step 4), and any sent.
   const uses = [...new Set([...(t.designs ?? []).map((d) => d.versionId), ...(Array.isArray(body.uses) ? body.uses.filter(isId) : [])])].slice(0, 8);
   // A remix challenge picture (branch challenge-moments): what it was remixed from is the signed record's, not the body's.
@@ -112,6 +115,8 @@ export async function POST(request: Request) {
         // A remix challenge picture: the character remixed, the moment and its scene line, and what it started from.
         // (never a moment or its scene: owner, 2026-11-10)
         ...(t.challenge ? { challenge: challengeRecord(t.challenge) } : {}),
+        // Words a closed model drew (lettering, part C): the whole record, the read-back's verdict included (P8j).
+        ...(t.lettering ? { lettering: t.lettering } : {}),
       } as never),
       seed: t.seed,
       // The style text was drafted by the coding agent (content/snowmoon/designs/styles), so it says so.
@@ -122,7 +127,7 @@ export async function POST(request: Request) {
       created_by_fid: fid,
     })}`;
     await tx`insert into studio.elements ${tx({ id: elementId, work_id: WORK_ID, element_type: 'image', created_by_fid: fid })}`;
-    await tx`insert into studio.element_versions ${tx({ id: versionId, element_id: elementId, version_no: 1, body: tx.json({ lettering: [], ...(bs.backstory ? { backstory: { ...bs.backstory, at: new Date().toISOString() } } : {}) } as never), asset_url: url, asset_sha256: t.sha256, recipe_id: recipeId })}`;
+    await tx`insert into studio.element_versions ${tx({ id: versionId, element_id: elementId, version_no: 1, body: tx.json({ lettering: t.lettering ? bodyItems(t.lettering) : [], ...(bs.backstory ? { backstory: { ...bs.backstory, at: new Date().toISOString() } } : {}) } as never), asset_url: url, asset_sha256: t.sha256, recipe_id: recipeId })}`;
     if (anchor) await tx`insert into studio.anchors ${tx({ version_id: versionId, work_id: WORK_ID, chapter: anchor.chapter, start_idx: anchor.start, end_idx: anchor.end })}`;
     for (const to of uses) await tx`insert into studio.links ${tx({ from_version_id: versionId, to_version_id: to, kind: 'uses' })}`;
     for (const to of remixedFrom) await tx`insert into studio.links ${tx({ from_version_id: versionId, to_version_id: to, kind: 'remixed_from' })}`;

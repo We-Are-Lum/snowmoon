@@ -93,8 +93,20 @@ export interface LetteringItem {
   rotate?: number;
 }
 
+/**
+ * Words a closed model drew in a challenge picture (lettering, part C; owner, 2026-11-22), as the publish route writes
+ * them: no position (the model placed them), `drawn_by` 'model', and whose words they are. Such a picture never stands
+ * in for the book's text (NEXT_challenge_lettering.sql: the take_items trigger ignores drawn_by 'model').
+ */
+export interface ModelLetteringItem {
+  kind: 'sign';
+  text: string;
+  drawn_by: 'model';
+  source: { kind: 'book'; block: string } | { kind: 'own'; by_fid: number };
+}
+
 export interface ImageBody {
-  lettering: LetteringItem[];
+  lettering: (LetteringItem | ModelLetteringItem)[];
 }
 
 /** A set piece rendered in code from a template in this repo (screens, boards, maps). */

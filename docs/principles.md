@@ -816,6 +816,18 @@ once the owner picks a version.)
   three first-layer facts, "Where they appear" in book order. This is the part of the
   retired `P9g` that wasn't about spoilers. The proof changes one word in a moment's
   quote and gives a card's fact words its block doesn't hold.
+- `P8j` (owner, 2026-11-22; lettering, part C, DRAFT until the owner's reread): words a closed model
+  draws in a picture. Only words in double quotation marks are drawn (at most 3 phrases, 8 words, 48
+  characters), only by a closed model, and the picture is padded to 16:9, never cropped. Each lettered
+  picture (a challenge picture with `body.lettering` items `drawn_by: 'model'`, or a chapter picture's
+  version) has a lettering record in its recipe: each phrase the book's, word for word at its block,
+  or the person's own, with `by_fid`; the read-back by the picture's own maker, blind, on the file as
+  published, with the verdict "match" (rule v1; a mismatch is never kept, option a); and a prompt that
+  ends with the lettering line and never carries the no-text line. The proof plants one fault for
+  each: no record, a book phrase not in its block, own words without `by_fid`, a "mismatch" verdict,
+  a read-back of another file, a prompt without the lettering line, a prompt with the no-text line,
+  a crop, and a body naming other words than the record (`scripts/lib/p8j.ts`; each alone in
+  `npm run test:lettering`).
 - `npm run check:ingest`: the committed text, screens and figures re-parse
   byte-identical from the fetched source. `npm run test:render`: template cases.
 - Review: do generated images that depict boards, maps or screens (for example

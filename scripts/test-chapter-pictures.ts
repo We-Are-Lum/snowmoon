@@ -150,9 +150,11 @@ check('L. a look naming a blocked real person is refused', r.status === 400 && /
 r = await setLook(S, GARANCE, { chapter: null, look: { kind: 'style', id: STYLE_VERSION } });
 check('L. "Comic book" saved as every chapter\'s look', r.status === 200, JSON.stringify(r.json));
 const lettered = checkJobs().find((j) => j.lettering.length)!;
-check('L. a lettered picture can\'t be redone (no words until the lettering work ships)', !redoable(lettered) && redoable(job));
-r = await redoPicture(S, GARANCE, req, { jobId: lettered.id, note: 'x', model: 'flux2-klein-4b-edit' }, US, deps);
-check('L. ... and the redo route says so', r.status === 400 && /lettering/.test(String(r.json.error)));
+// Lettering, part C (owner, 2026-11-22): lettered pictures can be redone now; quoted words need a closed model
+// (scripts/test-lettering.ts checks the lettered redo itself).
+check('L. a lettered picture can be redone now (lettering, part C)', redoable(lettered) && redoable(job));
+r = await redoPicture(S, GARANCE, req, { jobId: lettered.id, note: 'Keep the sign: "DOG"', model: 'flux2-klein-4b-edit' }, US, deps);
+check('L. ... but quoted words with the open model are refused before anything is spent', r.status === 400 && r.json.reason === 'lettering-open' && !calls.some((c) => c.kind === 'open'));
 
 // M. The model choice.
 const view = await adminView(S, US);

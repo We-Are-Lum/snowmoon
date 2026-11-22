@@ -4,7 +4,8 @@ import { makeEdit, type Made } from '../images/fal';
 import type { Spend } from '../images/limits';
 import { generateReserveUsd } from '../images/price';
 import { reserveUsd, type ChallengeModel } from './models';
-import { makeChallengeClosed } from '../images/closed';
+import { makeChallengeClosed, type Fit } from '../images/closed';
+import { readerFor, readWorstUsd } from '../images/lettering';
 
 /**
  * One challenge picture with the chosen model (branch challenge-models): what paidPicture reserves (spend), what the
@@ -14,10 +15,19 @@ import { makeChallengeClosed } from '../images/closed';
 export type Reference = { bytes: Buffer; contentType: string; width: number; height: number };
 
 /** The open default reserves as today (generateReserveUsd, per reference picture); the others per models.ts. */
-export function challengeSpend(m: ChallengeModel, refs: { width: number; height: number }[]): Spend {
+export function challengeSpend(m: ChallengeModel, refs: { width: number; height: number }[], lettered = false): Spend {
   const reserve = m.id === 'flux2-klein-4b-edit' ? generateReserveUsd(refs.length) : reserveUsd(m, refs[0]);
-  return { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: reserve, ...(m.open ? {} : { pool: 'closed' as const }) };
+  return { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: reserve + (lettered ? readReserveUsd(m) : 0), ...(m.open ? {} : { pool: 'closed' as const }) };
 }
+
+/**
+ * A lettered picture's read-back, reserved with it (owner, 2026-11-22: "the reserve includes the read-back"): the worst
+ * case of one read by the picture's maker's reader. Zero for a model with no reader (the open model never letters).
+ */
+export const readReserveUsd = (m: { open: boolean; maker: string }) => {
+  const r = m.open ? null : readerFor(m.maker);
+  return r ? readWorstUsd(r) : 0;
+};
 
 /** What the recipe records as the model: its allowlist id, its name, the endpoint called and its host. */
 export const recipeModel = (m: ChallengeModel) => ({ id: m.allowlistId, name: m.name, endpoint: m.call.endpoint, host: m.call.host });
@@ -26,8 +36,9 @@ export const recipeModel = (m: ChallengeModel) => ({ id: m.allowlistId, name: m.
  * Makes the picture. `refs` is the tapped picture first; only the open default takes more (today's other characters'
  * looks), every other model takes the tapped picture alone.
  */
-export function makeWith(m: ChallengeModel, prompt: string, refs: Reference[], request: Request, worstUsd: number): Promise<Made> {
+export function makeWith(m: ChallengeModel, prompt: string, refs: Reference[], request: Request, worstUsd: number, fit: Fit = 'crop'): Promise<Made> {
   if (m.id === 'flux2-klein-4b-edit') return makeEdit(prompt, refs);
   const ref = refs[0];
-  return makeChallengeClosed(m, prompt, ref.bytes, request, worstUsd - (IMAGES.reserveUsd - IMAGES.pricePerMp));
+  // The picture's own worst case: the reservation less the prompt check's share and, with lettering, the read-back's.
+  return makeChallengeClosed(m, prompt, ref.bytes, request, worstUsd - (IMAGES.reserveUsd - IMAGES.pricePerMp) - (fit === 'pad' ? readReserveUsd(m) : 0), fetch, fit);
 }

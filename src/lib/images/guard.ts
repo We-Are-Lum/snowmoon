@@ -62,16 +62,23 @@ export function readVerdict(text: string, finishReason?: string | null): Verdict
 }
 
 /**
+ * `policy` is image-guard.md, except for a closed model's picture with words in quotation marks: the lettering variant
+ * with those phrases in it (src/lib/images/readback.ts letteringPolicy; owner, 2026-11-22).
  * maxTokens covers the model's reasoning and its one-line answer (PROMPT_CHECK_MAX_TOKENS, owner 2026-11-22). A check
  * that gives no answer (readVerdict null) is asked once more with the same budget; still none, and it is refused under
  * NO_ANSWER, which says so (refusal-wording.ts) and never "the rules don't allow". Both checks' costs are counted.
  */
 export async function checkPrompt(prompt: string, request: Request, maxTokens: number = PROMPT_CHECK_MAX_TOKENS): Promise<GuardResult> {
+  return checkPromptWith(promptFile('image-guard.md'), prompt, request, maxTokens);
+}
+
+/** The same check against another policy: only the lettering variant, for a closed model's quoted words (owner, 2026-11-22). */
+export async function checkPromptWith(policy: string, prompt: string, request: Request, maxTokens: number = PROMPT_CHECK_MAX_TOKENS): Promise<GuardResult> {
   let costUsd = 0;
   let provider: string | null = null;
   for (let attempt = 0; attempt < GUARD_ATTEMPTS; attempt++) {
     const reply = await complete(gatewayToken(request), IMAGES.guardModel, [
-      { role: 'system', content: promptFile('image-guard.md') },
+      { role: 'system', content: policy },
       { role: 'user', content: prompt },
     ], { maxTokens, temperature: 0 });
     costUsd += reply.costUsd;

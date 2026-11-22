@@ -29,6 +29,9 @@ import { baseFrontOf, defaultLook, sourceOf } from '~/lib/challenge/pictures';
 import { phase } from '~/lib/challenge/rules';
 import { challengeVisibleTo } from '~/lib/challenge/visibility';
 import { callNameOf } from '~/lib/challenge/names';
+import { letteringWords } from '~/lib/challenge/make';
+import { closingLine, LETTERING_WORDING, parseQuotes } from '~/lib/images/lettering';
+import { letteringPolicy, letteringReady, readBack, sourcesOf } from '~/lib/images/readback';
 
 /**
  * The remix screen's API (branch challenge-moments, 2026-11-05; docs/proposals/challenge-moments.md §1.3 S2).
@@ -129,9 +132,18 @@ export async function POST(request: Request) {
   const chosen = challengeModel(r.model, where);
   if (!chosen) return no(MAKE_WORDING.noModel, 400, { reason: 'model' });
   if (!chosen.open && isWalletNumber(fid)) return no(MODEL_WORDING.walletOnly, 403, { reason: 'model' });
+  // Lettering (part C; owner, 2026-11-22): only words in double quotation marks are drawn, up to the cap, and only by a
+  // closed model. Quoted words with the open model are refused here, before anything is counted or spent, naming the
+  // closed models offered to this visitor (or only the line, when none is).
+  const quoted = parseQuotes(r.words);
+  if (!quoted.ok) return no(quoted.error, 400, { reason: 'lettering' });
+  const phrases = quoted.phrases;
+  if (phrases.length && chosen.open) return no(letteringWords(modelView(where, { wallet: isWalletNumber(fid) }).models).openRefused, 400, { reason: 'lettering-open' });
   const notice = noticeProblem(chosen, (body as { notice?: unknown }).notice);
   if (notice) return no(notice === 'adult' ? MODEL_WORDING.adultFirst : MODEL_WORDING.noticeFirst, 403, { reason: notice });
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403, { reason: 'consent' });
+  // The read-back's costs need NEXT_challenge_lettering.sql (image_costs kind 'readback'); until then, no lettered picture.
+  if (phrases.length && !(await letteringReady(sql))) return no(LETTERING_WORDING.notReady, 503, { reason: 'lettering-not-ready' });
   const gate = await mayGenerate(sql, fid);
   if (!gate.ok) return no(gate.error, gate.status, { reason: gate.reason });
 
@@ -146,7 +158,9 @@ export async function POST(request: Request) {
   const others = moment && chosen.id === DEFAULT_CHALLENGE_MODEL ? (await Promise.all(othersIn(moment, src.character).map(async (slug) => ({ slug, look: await defaultLook(sql, slug) })))).filter((o): o is { slug: string; look: NonNullable<typeof o.look> } => o.look !== null) : [];
   // A closed model (GPT, Gemini; never FLUX): one of the five settings, drawn evenly here, at make time (owner, 2026-11-09).
   const setting = !moment && !chosen.open ? drawSetting() : null;
-  const prompt = moment ? momentPrompt({ words: r.words, name, scene: moment.scene, others: others.map((o) => callName(o.slug)) }) : remixPrompt({ words: r.words, name, look: lookForBase(src.character, await baseFrontOf(sql, src)), style: style!.text, ...(setting ? { setting: settingLine(setting) } : {}) });
+  // The last line: the no-text line, or, for quoted words, the lettering line in its place (never both).
+  const closing = closingLine(phrases, IMAGES.suffix);
+  const prompt = moment ? momentPrompt({ words: r.words, name, scene: moment.scene, others: others.map((o) => callName(o.slug)), closing }) : remixPrompt({ words: r.words, name, look: lookForBase(src.character, await baseFrontOf(sql, src)), style: style!.text, ...(setting ? { setting: settingLine(setting) } : {}), closing });
   const looks = [src, ...others.map((o) => o.look)];
   const pictures: { bytes: Buffer; contentType: string; width: number; height: number }[] = [];
   for (const l of looks) {
@@ -158,14 +172,24 @@ export async function POST(request: Request) {
   // Counted from here, whatever happens next (blocked attempts count), as every picture is.
   // The prompt check reads the whole prompt: the change words and the style's words (a person's own style too, even
   // with no other words), so a named artist, studio, film or real person in either is refused before anything is made.
-  const spend = challengeSpend(chosen, pictures);
+  // A lettered picture reserves its read-back too, and is padded, not cropped, so the read-back reads the file as published.
+  const lettered = phrases.length > 0;
+  const spend = challengeSpend(chosen, pictures, lettered);
   const paid = await paidPicture(sql, fid, request, {
     checkText: prompt,
     // The whole prompt (words, the style's text, the keep line) is long. Every check's budget is 2,000 since 2026-11-22
     // (PROMPT_CHECK_MAX_TOKENS; 1,200 here before). At 400 the style test of 2026-11-08 had 62 of 90 prompts answered "unclear".
     guardMaxTokens: IMAGES.designs.guardMaxTokens,
     spend,
-    make: () => makeWith(chosen, prompt, pictures, request, spend.reserveUsd),
+    make: () => makeWith(chosen, prompt, pictures, request, spend.reserveUsd, lettered ? 'pad' : 'crop'),
+    // Quoted words: the prompt check reads them against the lettering policy, and the picture is read back, blind, by its
+    // maker; a mismatch keeps nothing (option a) and its cost counts against the closed cap.
+    ...(lettered
+      ? {
+          guardPolicy: letteringPolicy(phrases),
+          after: (m) => readBack({ ...m, sha256: createHash('sha256').update(m.bytes).digest('hex') }, chosen.maker, sourcesOf(phrases, fid), request),
+        }
+      : {}),
     // A FLUX picture fal's safety checker blocks (owner, 2026-11-09): its own words, the closed-model clause only for
     // someone who can use one here, and it uses none of today's pictures (its spend still counts against the caps).
     // fal's checker stays on. A closed model's refusal, and the prompt check's, count as before.
@@ -198,9 +222,11 @@ export async function POST(request: Request) {
       ...(style ? { style: { choice: style.choice, id: style.id, elementId: style.design?.elementId ?? null, label: style.label, text: style.text } } : {}),
       ...(setting ? { setting: settingRecord(setting) } : {}),
     },
+    // The lettering record (its phrases, book or own, the line, the pad, the read-back's "match"): published with it.
+    ...(paid.lettering ? { lettering: paid.lettering } : {}),
   });
   return NextResponse.json(
-    { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, prompt, left: paid.left, style: style ? (style.choice === 'random' ? MAKE_WORDING.randomDrew(styleLabel(style.label ?? '')) : style.label === null ? null : styleLabel(style.label)) : null, setting: setting ? settingRecord(setting) : null },
+    { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, prompt, left: paid.left, style: style ? (style.choice === 'random' ? MAKE_WORDING.randomDrew(styleLabel(style.label ?? '')) : style.label === null ? null : styleLabel(style.label)) : null, setting: setting ? settingRecord(setting) : null, lettering: paid.lettering ?? null },
     { headers: { 'Cache-Control': 'no-store' } },
   );
 }

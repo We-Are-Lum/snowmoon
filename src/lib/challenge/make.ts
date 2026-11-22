@@ -12,6 +12,7 @@ import { EXAMPLE_SAMPLES, KEEP_LINE, SAME_STYLE, OWN_STYLE_MAX, presetOptions, r
 import { SCENE_LINE } from './looks';
 import { firstAppearsBlock } from './first-appears';
 import { callNameOf } from './names';
+import { LETTERING_CAP, LETTERING_WORDING as LW } from '../images/lettering';
 
 /**
  * The remix screen's server half (branch challenge-moments, 2026-11-05; simplified on branch challenge-simple,
@@ -27,13 +28,13 @@ import { callNameOf } from './names';
  * ledger): with the others' looks written out, the model drew them and dropped or blended the person in the reference
  * picture; with each person as their own reference image, the remixed character stayed the main figure.
  */
-export function momentPrompt(p: { words: string; name: string; scene: string; others: string[] }): string {
+export function momentPrompt(p: { words: string; name: string; scene: string; others: string[]; closing?: string }): string {
   return [
     p.words.trim(),
     `${p.name} is the person in reference image 1, the main figure, in the foreground: keep their face, hair and clothes exactly as in reference image 1.`,
     ...p.others.map((n, i) => `${n} is the person in reference image ${i + 2}, behind ${p.name} and smaller: keep their face, hair and clothes as in that image.`),
     `The setting: ${p.scene}`,
-    IMAGES.suffix,
+    p.closing ?? IMAGES.suffix,
   ].join('\n\n');
 }
 
@@ -42,11 +43,11 @@ export function momentPrompt(p: { words: string; name: string; scene: string; ot
  * in "How it was made"): it names reference image 1 and leaves keeping the character to KEEP_LINE, the owner's words,
  * so a change of clothes isn't fought by "keep their clothes exactly". The style's text is always followed by KEEP_LINE.
  */
-export function remixPrompt(p: { words: string; name: string; style: string; look?: string; setting?: string }): string {
+export function remixPrompt(p: { words: string; name: string; style: string; look?: string; setting?: string; /** The last line: IMAGES.suffix, or the lettering line for a closed model's quoted words (src/lib/images/lettering.ts closingLine). */ closing?: string }): string {
   // The character's look line, then the scene line, always (src/lib/challenge/looks.ts; owner-approved 2026-11-09), right
   // after the reference line; then, for a closed model only, the setting line (src/lib/challenge/settings.ts; owner,
   // 2026-11-09); then the style (none for "Same as this picture"), the closing line and the suffix.
-  return [p.words.trim(), `${p.name} is the person in reference image 1, the main figure.`, (p.look ?? '').trim(), SCENE_LINE, (p.setting ?? '').trim(), p.style.trim(), KEEP_LINE, IMAGES.suffix].filter(Boolean).join('\n\n');
+  return [p.words.trim(), `${p.name} is the person in reference image 1, the main figure.`, (p.look ?? '').trim(), SCENE_LINE, (p.setting ?? '').trim(), p.style.trim(), KEEP_LINE, p.closing ?? IMAGES.suffix].filter(Boolean).join('\n\n');
 }
 
 /** The other challenge characters in the moment (slugs), at most two (the edit model takes three pictures in all). */
@@ -179,7 +180,38 @@ export function makeView(src: Source, opts: { styles: readonly PublishedStyle[];
     defaultStyle,
     ownStyleMax: OWN_STYLE_MAX,
     models: models.map((m) => ({ ...m, chip: modelChipText(m) })),
+    lettering: letteringWords(models),
     w: { ...M, remixing: M.remixing(name), picture: M.picture(name), pictureAlt: LANDING_WORDING.pictureAltMoment(name), ownStyleLabel: M.ownStyleLabel, wordsLabel: momentsOn ? M.wordsLabel : M.changeLabel(name), wordsPlaceholder: momentsOn ? M.wordsPlaceholder : '' },
   };
 }
 export type MakeView = ReturnType<typeof makeView>;
+
+/**
+ * The lettering words the remix screen shows (lettering, part C; DRAFT wording, src/lib/images/lettering.ts): the
+ * "Words to draw" preview, the line before Make it, the open model's refusal (naming the closed models offered to this
+ * visitor, or only the line when none is), and the mismatch screen. Plain strings: the screen fills {block}, {reader}.
+ */
+export function letteringWords(models: readonly { open: boolean; label: string; name?: string }[]) {
+  const open = models.find((m) => m.open);
+  const closed = models.filter((m) => !m.open).map((m) => m.label);
+  return {
+    cap: LETTERING_CAP,
+    previewHead: LW.previewHead,
+    previewNote: LW.previewNote,
+    warning: LW.warning,
+    openRefused: LW.openRefused(open?.label ?? 'The open model', closed),
+    mismatchHead: LW.mismatchHead,
+    mismatchAsked: LW.mismatchAsked,
+    mismatchRead: LW.mismatchRead('{reader}'),
+    mismatchNothing: LW.mismatchNothing,
+    mismatchKept: LW.mismatchKept,
+    tryAgain: LW.tryAgain,
+    unread: LW.unread,
+    recordHead: LW.recordHead,
+    book: LW.book('{block}'),
+    own: LW.own,
+    recordRead: LW.recordRead('{reader}', '{maker}'),
+    recordPad: LW.recordPad,
+  };
+}
+export type LetteringWords = ReturnType<typeof letteringWords>;

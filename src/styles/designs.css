@@ -905,3 +905,18 @@ a.chp-btn:hover, .chp-btn:hover { background: var(--soft); text-decoration: none
 .chp-side .sf-submit { border-top: 1px solid var(--rule); padding-top: 14px; }
 /* Anyone but its maker: Submit renders nothing, so its empty section takes no room and draws no rule. */
 .chp-side .sf-submit:empty { display: none; }
+/* Lettering (part C, 2026-11-22): the "Words to draw" preview under the change box, the line before Make it, the
+   mismatch screen (try again only) and a lettered picture's record. Drawn with the page's own tokens. */
+.lt-preview, .lt-record { margin: 8px 0 0; padding: 10px 12px; border: 1px solid var(--rule); border-radius: var(--radius); }
+.lt-head { margin: 0 0 4px; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.lt-phrases { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.lt-phrase { overflow-wrap: anywhere; font-size: 17px; line-height: 1.4; color: var(--ink); }
+.lt-note { margin: 4px 0 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; text-wrap: pretty; }
+.lt-warning { margin: 0 0 6px; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--body); text-wrap: pretty; }
+.lt-draft { display: inline-block; padding: 0 5px; border: 1px solid var(--muted); border-radius: 3px; font-size: 11px; letter-spacing: 0.06em; color: var(--muted); }
+.lt-mismatch { display: flex; flex-direction: column; gap: 6px; padding: 12px; border: 1.5px solid var(--warn); border-radius: var(--radius); }
+.lt-mismatch-head { margin: 0; font-weight: 600; color: var(--warn); }
+.lt-mismatch p { margin: 0; text-wrap: pretty; }
+.lt-dl { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 2px 10px; font-size: 15px; }
+.lt-dl dt { color: var(--muted); font-family: var(--label); font-size: var(--text-label); align-self: baseline; }
+.lt-dl dd { margin: 0; overflow-wrap: anywhere; }

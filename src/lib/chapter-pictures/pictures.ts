@@ -25,6 +25,11 @@ import { saveAddition, saveDecision, saveLook, saveVersion } from './admin';
 import { additionsReady, firstKeep, latestLooks, lookFor, pictureBytes, pictureVersion, picturesReady, readAddition, readReplacements } from './read';
 import { addPrompt, addedJobId, isAddedId, namesAWork, pickLimit, redoPrompt, type Addition, type Look, type PickedRef, type PictureRecipe, type PictureVersion } from './shared';
 import { REF_WORDING, lookUsable, referenceStatuses, resolveReference, styleChoices } from './references';
+import { closingLine, LETTERING_WORDING, parseQuotes } from '../images/lettering';
+import { letteringPolicy, letteringReady, readBack, readText, sourcesOf, type ReadText } from '../images/readback';
+import { letteringWords } from '../challenge/make';
+import { readReserveUsd } from '../challenge/make-model';
+import type { Fit } from '../images/closed';
 
 /**
  * What /you/illustrations does with the edition's chapter pictures (owner, 2026-11-18, option B): an admin redoes a
@@ -40,7 +45,7 @@ const no = (status: number, error: string, extra: Record<string, unknown> = {}):
 export interface Deps {
   reference: (url: string, sha256: string) => Promise<Buffer | null>;
   makeOpen: (prompt: string, ref: { bytes: Buffer; contentType: string; width: number; height: number }) => Promise<Made>;
-  makeClosed: (m: ChallengeModel, prompt: string, ref: Buffer, request: Request, worstUsd: number) => Promise<Made>;
+  makeClosed: (m: ChallengeModel, prompt: string, ref: Buffer, request: Request, worstUsd: number, fit?: Fit) => Promise<Made>;
   putPublic: (sha256: string, bytes: Buffer, contentType: string) => Promise<string>;
   storageReady: () => boolean;
   handleFor: (fid: number) => Promise<string | null>;
@@ -48,9 +53,13 @@ export interface Deps {
   /** The own-words consent (principle 1): a redo's note and a written look are published with the picture once it is kept. */
   consented: (fid: number) => Promise<boolean>;
   /** An added picture (owner, 2026-11-19): from the note alone, or with sheet pictures as references. */
-  makeAdded: (m: ChallengeModel, prompt: string, refs: Buffer[], request: Request, worstUsd: number) => Promise<Made>;
+  makeAdded: (m: ChallengeModel, prompt: string, refs: Buffer[], request: Request, worstUsd: number, fit?: Fit) => Promise<Made>;
   /** The characters a passage names that have a published sheet with a front view (the references an admin may send). */
   sheets: (sql: Sql, chapter: number, start: number, end: number) => Promise<SheetRef[]>;
+  /** The lettering read-back's reader (lettering, part C): the picture's maker's, through the gateway; a stand-in in tests. */
+  read?: ReadText;
+  /** Whether read-back costs can be counted yet (NEXT_challenge_lettering.sql); tests may stand in. */
+  letteringReady?: (sql: Sql) => Promise<boolean>;
 }
 
 /** A character's sheet picture an added picture may take as a reference: the newest published sheet's front view. */
@@ -86,14 +95,14 @@ export async function passageSheets(sql: Sql, chapter: number, start: number, en
 export const realDeps = async (): Promise<Deps> => ({
   reference: (url, sha) => chapterReference(url, sha),
   makeOpen: (prompt, ref) => makeEdit(prompt, [ref]),
-  makeClosed: (m, prompt, ref, request, worst) => makeChallengeClosed(m, prompt, ref, request, worst),
+  makeClosed: (m, prompt, ref, request, worst, fit) => makeChallengeClosed(m, prompt, ref, request, worst, fetch, fit),
   putPublic,
   storageReady,
   handleFor: async (fid) => (await import('../adaptation-pages')).handleFor(fid),
   paid: paidPicture,
   consented: async (fid) => (await import('../consent')).hasConsented(fid),
   // Each reference at its own size (sheets are tall, remixes and the picture shown now wide), for the open model's price.
-  makeAdded: async (m, prompt, refs, request, worst) =>
+  makeAdded: async (m, prompt, refs, request, worst, fit) =>
     m.open
       ? refs.length
         ? makeEdit(prompt, await Promise.all(refs.map(async (bytes) => {
@@ -101,14 +110,46 @@ export const realDeps = async (): Promise<Deps> => ({
             return { bytes, contentType: 'image/jpeg', width: meta.width ?? IMAGES.viewSize.width, height: meta.height ?? IMAGES.viewSize.height };
           })))
         : makeImage(prompt)
-      : makeChapterClosed(m, prompt, refs, request, worst),
+      : makeChapterClosed(m, prompt, refs, request, worst, fetch, fit),
   sheets: passageSheets,
+  read: readText,
+  letteringReady,
 });
 
 export { chapterDefaultModel } from './default-model';
 
-/** Lettered pictures wait for the lettering work (owner, 2026-11-18: "no words in pictures until the lettering work ships"). */
-export const redoable = (job: CheckJob) => Boolean(job.image) && !job.lettering.length;
+/**
+ * Every job with a picture can be redone (lettering, part C, owner 2026-11-22: the lettered edition pictures too). A
+ * lettered one's redo starts from its clean render (its words were drawn in code); to keep words, the admin puts them
+ * in quotation marks in the note and chooses a closed model, which draws them and is read back.
+ */
+export const redoable = (job: CheckJob) => Boolean(job.image);
+
+/**
+ * The words in a note's quotation marks, checked for a redo or an added picture (lettering, part C): within the cap;
+ * never with the open model (refused before anything is spent, naming the closed models offered here); and only once
+ * read-back costs can be counted. Null phrases: none quoted.
+ */
+async function quotedIn(sql: Sql, note: string, m: ChallengeModel, where: Where, deps: Deps): Promise<{ phrases: string[] } | Result> {
+  const q = parseQuotes(note);
+  if (!q.ok) return no(400, q.error, { reason: 'lettering' });
+  if (!q.phrases.length) return { phrases: [] };
+  if (m.open) return no(400, letteringWords(modelRow(where)).openRefused, { reason: 'lettering-open' });
+  if (!(await (deps.letteringReady ?? letteringReady)(sql))) return no(503, LETTERING_WORDING.notReady, { reason: 'lettering-not-ready' });
+  return { phrases: q.phrases };
+}
+
+/** The lettering half of a chapter picture's paid job: the policy, the read-back by the maker, the admins' pool. */
+function letteringJob(phrases: string[], m: ChallengeModel, fid: number, request: Request, deps: Deps) {
+  if (!phrases.length) return {};
+  return {
+    guardPolicy: letteringPolicy(phrases),
+    after: (made: Made) => readBack({ ...made, sha256: createHash('sha256').update(made.bytes).digest('hex') }, m.maker, sourcesOf(phrases, fid), request, deps.read ?? readText),
+  };
+}
+
+/** The prompt's parts for a lettered picture: no no-text line; the lettering line recorded on its own (P8j). */
+const letteredParts = (parts: PictureRecipe['parts'], phrases: string[], closing: string): PictureRecipe['parts'] => (phrases.length ? { ...parts, suffix: '', lettering: closing } : parts);
 
 /** The picture a job shows now: a kept version, or the committed file. */
 async function shownNow(sql: Sql, job: CheckJob): Promise<{ versionId: string | null; url: string; sha256: string; width: number; height: number } | null> {
@@ -142,6 +183,8 @@ export async function adminView(sql: Sql, where: Where) {
     styles,
     looks: ready ? await latestLooks(sql) : { all: null, chapters: {} },
     cap: ready ? await capState(sql) : { spentUsd: 0, capUsd: CHAPTER_PICTURES.adminDailyCapUsd, resetAt: nextUtcMidnight() },
+    // Lettering (part C): the words the redo and add boxes show (paid from the admins' cap, so their own two lines).
+    lettering: { ...letteringWords(modelRow(where)), warning: LETTERING_WORDING.warningAdmin, mismatchKept: LETTERING_WORDING.mismatchKeptAdmin },
   };
 }
 
@@ -207,13 +250,16 @@ export async function redoPicture(sql: Sql, fid: number, request: Request, raw: 
   const b = (raw ?? {}) as { jobId?: unknown; note?: unknown; model?: unknown; notice?: unknown; picked?: unknown };
   const job = typeof b.jobId === 'string' ? checkJob(b.jobId) : null;
   if (!job) return no(404, 'No such picture');
-  if (!redoable(job)) return no(400, job.lettering.length ? 'This picture has lettering; it can be redone once the lettering work ships.' : 'This job has no picture to redo.');
+  if (!redoable(job)) return no(400, 'This job has no picture to redo.');
   const note = typeof b.note === 'string' ? b.note.trim() : '';
   if (!note) return no(400, 'A redo needs your note: it goes into the prompt.');
   if (!(await deps.consented(fid))) return no(403, 'Agree to how your words are published first', { reason: 'consent' });
   if (note.length > CHAPTER_PICTURES.noteMaxChars) return no(400, `A note is at most ${CHAPTER_PICTURES.noteMaxChars} characters.`);
   const m = challengeModel(b.model, where);
   if (!m) return no(400, 'That model isn’t offered here.');
+  const quoted = await quotedIn(sql, note, m, where, deps);
+  if ('status' in quoted) return quoted;
+  const phrases = quoted.phrases;
   const problem = noticeProblem(m, b.notice);
   if (problem) return no(400, problem === 'notice' ? 'Read the model’s notice first.' : 'Confirm you’re 18 or older first.', { reason: problem });
   const look = lookFor(await latestLooks(sql), job.chapter);
@@ -227,21 +273,29 @@ export async function redoPicture(sql: Sql, fid: number, request: Request, raw: 
   if (!ref) return no(503, 'The picture shown now could not be read. Try again in a moment.');
   const extra = await pickedBytes(deps, picks.refs);
   if ('status' in extra) return extra;
-  const { prompt, parts } = redoPrompt(job.prompt, note, look, IMAGES.suffix, picks.refs);
-  const worst = picks.refs.length ? reserveUsd(m, refBox([shown, ...picks.refs.map(() => WIDE_MAX)])) : reserveUsd(m, { width: shown.width, height: shown.height });
+  // The last line: the no-text line, or the lettering line in its place for quoted words.
+  const closing = closingLine(phrases, IMAGES.suffix);
+  const redo = redoPrompt(job.prompt, note, look, closing, picks.refs);
+  const prompt = redo.prompt, parts = letteredParts(redo.parts, phrases, closing);
+  const lettered = phrases.length > 0;
+  const fit: Fit = lettered ? 'pad' : 'crop';
+  const imageWorst = picks.refs.length ? reserveUsd(m, refBox([shown, ...picks.refs.map(() => WIDE_MAX)])) : reserveUsd(m, { width: shown.width, height: shown.height });
+  // The reserve includes the read-back (owner, 2026-11-22), from the admins' own daily cap.
+  const worst = imageWorst + (lettered ? readReserveUsd(m) : 0);
   const paid = await deps.paid(sql, fid, request, {
     checkText: prompt,
     spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, pool: 'admin' },
+    ...letteringJob(phrases, m, fid, request, deps),
     // A closed model's maker (OpenAI, Google): a refusal by its own check names it (branch refusal-reasons, owner
     // 2026-11-18; wording reread by the owner 2026-11-22).
     ...(m.open ? {} : { maker: m.maker }),
     // With picked references, every picture goes as the sheets do (chapterClosedRequest's multi-picture path; FLUX's edit with each).
     make: () =>
       picks.refs.length
-        ? deps.makeAdded(m, prompt, [ref, ...extra.bytes], request, worst)
+        ? deps.makeAdded(m, prompt, [ref, ...extra.bytes], request, imageWorst, fit)
         : m.open
           ? deps.makeOpen(prompt, { bytes: ref, contentType: 'image/jpeg', width: shown.width, height: shown.height })
-          : deps.makeClosed(m, prompt, ref, request, worst),
+          : deps.makeClosed(m, prompt, ref, request, imageWorst, fit),
   });
   if (!paid.ok) return { status: paid.status, json: { error: paid.error, ...paid.extra } };
   const made = paid.made;
@@ -256,6 +310,8 @@ export async function redoPicture(sql: Sql, fid: number, request: Request, raw: 
     settings: made.settings, seed: made.seed, requestId: made.requestId, sha256, width: IMAGES.size.width, height: IMAGES.size.height,
     costUsd: made.costUsd, guard: { model: IMAGES.guardModel, verdict: 'ok' }, madeBy: { fid, role: 'admin' }, madeAt,
     assist: { scene: 'the edition’s job prompt, drafted by the coding agent (Claude, by Anthropic)', note: `written by FID ${fid}`, look: lookAssist(look) },
+    // Words the model drew (lettering, part C): only a picture whose read-back matched gets here.
+    ...(paid.lettering ? { lettering: paid.lettering } : {}),
   };
   const id = await saveVersion(sql, fid, {
     jobId: job.id, chapter: job.chapter, model: m.allowlistId, maker: m.maker, open: m.open, look, note, prompt, recipe,
@@ -403,6 +459,9 @@ export async function addPicture(sql: Sql, fid: number, request: Request, raw: u
   if (!(await deps.consented(fid))) return no(403, 'Agree to how your words are published first', { reason: 'consent' });
   const m = challengeModel(b.model ?? chapterDefaultModel(where), where);
   if (!m) return no(400, 'That model isn’t offered here.');
+  const quoted = await quotedIn(sql, note, m, where, deps);
+  if ('status' in quoted) return quoted;
+  const phrases = quoted.phrases;
   const problem = noticeProblem(m, b.notice);
   if (problem) return no(400, problem === 'notice' ? 'Read the model’s notice first.' : 'Confirm you’re 18 or older first.', { reason: problem });
   const wanted = Array.isArray(b.characters) ? b.characters.filter((x): x is string => typeof x === 'string') : [];
@@ -424,17 +483,22 @@ export async function addPicture(sql: Sql, fid: number, request: Request, raw: u
   const extra = await pickedBytes(deps, picks.refs);
   if ('status' in extra) return extra;
   refs.push(...extra.bytes);
-  const { prompt, parts } = addPrompt(note, (chosen as SheetRef[]).map((c) => c.name), look, IMAGES.suffix, picks.refs);
-  const worst = picks.refs.length
+  const closing = closingLine(phrases, IMAGES.suffix);
+  const added = addPrompt(note, (chosen as SheetRef[]).map((c) => c.name), look, closing, picks.refs);
+  const prompt = added.prompt, parts = letteredParts(added.parts, phrases, closing);
+  const lettered = phrases.length > 0;
+  const imageWorst = picks.refs.length
     ? reserveUsd(m, refBox([...(chosen as SheetRef[]).map(() => IMAGES.viewSize), ...picks.refs.map(() => WIDE_MAX)]))
     : reserveUsd(m, { width: IMAGES.viewSize.width, height: IMAGES.viewSize.height * Math.max(1, refs.length) });
+  const worst = imageWorst + (lettered ? readReserveUsd(m) : 0);
   const paid = await deps.paid(sql, fid, request, {
     checkText: prompt,
     spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, pool: 'admin' },
+    ...letteringJob(phrases, m, fid, request, deps),
     // A closed model's maker (OpenAI, Google): a refusal by its own check names it (branch refusal-reasons, owner
     // 2026-11-18; wording reread by the owner 2026-11-22).
     ...(m.open ? {} : { maker: m.maker }),
-    make: () => deps.makeAdded(m, prompt, refs, request, worst),
+    make: () => deps.makeAdded(m, prompt, refs, request, imageWorst, lettered ? 'pad' : 'crop'),
   });
   if (!paid.ok) return { status: paid.status, json: { error: paid.error, ...paid.extra } };
   const made = paid.made;
@@ -449,6 +513,7 @@ export async function addPicture(sql: Sql, fid: number, request: Request, raw: u
     settings: made.settings, seed: made.seed, requestId: made.requestId, sha256, width: IMAGES.size.width, height: IMAGES.size.height,
     costUsd: made.costUsd, guard: { model: IMAGES.guardModel, verdict: 'ok' }, madeBy: { fid, role: 'admin' }, madeAt: new Date().toISOString(),
     assist: { scene: 'none: the admin’s note is the picture’s description', note: `written by FID ${fid}`, look: lookAssist(look) },
+    ...(paid.lettering ? { lettering: paid.lettering } : {}),
   };
   if (isNew) await saveAddition(sql, fid, { jobId: place.jobId, chapter: place.chapter, after: place.after, start: place.start, end: place.end });
   const id = await saveVersion(sql, fid, {
