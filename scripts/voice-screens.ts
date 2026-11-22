@@ -28,7 +28,7 @@ const page = await ctx.newPage();
 const errors: string[] = [];
 page.on('pageerror', (e) => errors.push(String(e)));
 
-const sizes = { phone: { width: 390, height: 844 }, desktop: { width: 1280, height: 900 } };
+const sizes = { phone: { width: 390, height: 844 }, desktop: { width: 1440, height: 900 } };
 async function shoot(name: string, focus?: string) {
   for (const theme of ['light', 'dark'] as const) {
     await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), theme);
@@ -74,6 +74,8 @@ await page.waitForTimeout(32_000);
 await page.getByRole('button', { name: /^Stop/ }).click();
 await wait(page, '.vr-take');
 await shoot('5-take-in-tab-tick', '.vr-tick');
+await page.locator('.vr-steps summary').click();
+await shoot('5b-step-log', '.vr-steps');
 await page.locator('.vr-take input[type="checkbox"]').check();
 await page.getByRole('button', { name: /^Convert/ }).click();
 await wait(page, '.vr-checks', 60_000);
@@ -94,28 +96,26 @@ await shoot('9-accepted-draft-recipe', '#vr-drafts-h');
 await page.locator('a', { hasText: 'Make the storyboard' }).first().click();
 await wait(page, '#vb-strip-h', 30_000);
 await page.waitForTimeout(1500);
-await shoot('10-board-cuts-strip', '#vb-strip-h');
-// Move nothing, add one cut by tapping the strip near its middle, then go to shot 1.
-const box = await page.locator('.vb-strip').boundingBox();
-if (box) await page.mouse.click(box.x + box.width * 0.42, box.y + 10);
-await page.locator('.vb-shotband').first().click();
-const shotSection = page.locator('section:has(#vb-shot-h)');
-await shotSection.locator('textarea').fill('(Screenshot test, typed by the script) A poster on a tunnel wall, lit from below.');
-await shotSection.locator('label.vb-chip', { hasText: 'Low angle' }).click();
-await shotSection.locator('.vb-sheets select').selectOption({ label: 'Ink and wash' });
-await shotSection.locator('label.vb-chip', { hasText: 'Ephelion' }).click();
-await shoot('11-shot-editor', '#vb-shot-h');
-await shotSection.getByRole('button', { name: 'Make the picture' }).click();
-await wait(page, '.vb-try');
-await shotSection.getByRole('button', { name: 'Try again' }).click();
-await shotSection.locator('.vb-try').nth(1).waitFor();
-await shoot('12-stand-in-tries', '.vb-tries');
-await shotSection.getByRole('button', { name: 'Keep this one' }).first().click();
-await wait(page, '.vb-try.vb-on');
+// The storyboard on a phone (Nate, 2026-11-21): settings once at the top, cuts as a sentence list, a camera dropdown.
+const settings = page.locator('section:has(#vb-set-h)');
+await settings.locator('select').first().selectOption({ label: 'Ink and wash' });
+await settings.locator('button.vb-look', { hasText: 'Ephelion' }).first().click();
+await shoot('10-settings-once', '#vb-set-h');
+await page.locator('.vb-toggle input').nth(1).click();
+await shoot('11-cuts-as-sentences', '.vb-cutlist');
+const shotBox = page.locator('section:has(#vb-shot-h)');
+await page.locator('.vb-shotband').first().click().catch(() => {});
+await shotBox.locator('select').selectOption('low');
+await shoot('12-why-not-yet', '.vb-why');
+await shotBox.locator('textarea').fill('(Screenshot test, typed by the script) A poster on a tunnel wall, lit from below.');
+await shoot('13-shot-words-and-camera', '#vb-shot-h');
+await shotBox.getByRole('button', { name: 'Make the picture' }).click();
+await shotBox.locator('.vb-try').first().waitFor({ timeout: 30_000 });
+await shotBox.getByRole('button', { name: 'Keep this one' }).first().click();
+await shotBox.locator('.vb-try.vb-on').waitFor();
 await page.locator('section:has(#vb-strip-h)').getByRole('button', { name: /^Save$/ }).click();
 await wait(page, 'text=/Saved \\(version/');
-await shoot('13-kept-and-saved', '.vb-try.vb-on');
-await shoot('14-notes', '#vb-notes-h');
+await shoot('14-kept-and-notes', '#vb-notes-h');
 const audio = page.locator('#vb-play-h ~ audio, .vb-screen + audio').first();
 await audio.waitFor({ timeout: 30_000 });
 await audio.evaluate((a: HTMLAudioElement) => { a.muted = true; return a.play(); });
@@ -130,7 +130,7 @@ for (let i = 0; i < bands; i++) {
   const shotBox = page.locator('section:has(#vb-shot-h)');
   if (i > 0) {
     await shotBox.locator('textarea').fill(`(Screenshot test, typed by the script) Shot ${i + 1}: the tunnel, then the street above it.`);
-    await shotBox.locator('label.vb-chip', { hasText: i % 2 ? 'Medium shot' : 'Wide shot' }).click();
+    await shotBox.locator('select').selectOption(i % 2 ? 'medium' : 'wide');
   }
   if (await shotBox.locator('.vb-try.vb-on, img[alt^="The picture kept"]').count()) continue;
   await shotBox.getByRole('button', { name: /^(Make the picture|Try again)$/ }).click();

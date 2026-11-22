@@ -7,6 +7,7 @@ import { keptPictures, latestBoard, ownPerformance, saveBoard } from '~/lib/voic
 import { shotModels, triesMade } from '~/lib/voice/shot-picture';
 import { whereFrom } from '~/lib/images/countries';
 import { VOICE } from '~/lib/config';
+import { speechById } from '~/lib/voice/speech';
 import { voiceTestOn } from '~/lib/voice/flag';
 import { CLOSING, emptyClosing, type Closing } from '~/lib/voice/closing';
 
@@ -31,7 +32,15 @@ export async function GET(request: Request) {
   const [styles, characters, pictures] = await Promise.all([listDesigns(sql, 'style').catch(() => []), listDesigns(sql, 'character').catch(() => []), keptPictures(sql, draft.id)]);
   return NextResponse.json(
     {
-      draft: { id: draft.id, preset: draft.recipe.preset?.name ?? null, speech: draft.recipe.speech ?? null, audio: draft.audio, timeline: draft.timeline },
+      draft: {
+        id: draft.id,
+        preset: draft.recipe.preset?.name ?? null,
+        speech: draft.recipe.speech ?? null,
+        // The speech's own sentences (its text, never the transcription): shown under each shot and in the play-through.
+        sentences: (draft.recipe.speech ? (speechById(draft.recipe.speech.id)?.sentences ?? []) : []).map((x) => ({ n: x.n, text: x.text })),
+        audio: draft.audio,
+        timeline: draft.timeline,
+      },
       board: { version: saved?.version ?? 0, cuts, shots, closing: saved?.closing ?? emptyClosing(), proposed: proposeCuts(draft.timeline), fromProposal: !saved },
       pictures,
       notes: boardNotes(shots),
@@ -39,7 +48,7 @@ export async function GET(request: Request) {
       angles: CAMERA_ANGLES,
       limits: SHOT,
       // The challenge's models for this visitor (the country decides; it isn't kept), the default, and the limits.
-      making: { ...shotModels(whereFrom(request.headers)), standIn: voiceTestOn(), tries: await triesMade(sql, draft.id) },
+      making: { ...shotModels(whereFrom(request.headers), who.fid), standIn: voiceTestOn(), tries: await triesMade(sql, draft.id) },
     },
     { headers: noStore },
   );

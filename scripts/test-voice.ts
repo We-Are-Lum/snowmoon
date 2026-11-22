@@ -3,7 +3,7 @@
  *  S. the switch: off in the committed config; every route 401 signed out, 404 to anyone not let in; on Vercel the
  *     local test switch and the stub address are ignored; a real ElevenLabs call is refused in the local tests;
  *  W. the speech: c13-b64 word for word, cut into sentences; the word check (case, punctuation, dashes, numbers);
- *  C. the consent: own-voice-v2 (the draft), agreed once, and a tick for each recording;
+ *  C. the consent: own-voice-v2 (current), agreed once, and a tick for each recording;
  *  V. convert: the take goes to ElevenLabs once, its history item is deleted, nothing of it is stored;
  *  T. transcribe: only converted audio; the mismatch shows; a redone sentence passes;
  *  A. accept: a private draft with its recipe (voice, model, settings, each take's sha256); forged files and records
@@ -15,7 +15,7 @@
  *
  *   npm run test:voice
  *
- * In-memory Postgres (PGlite, every migration, NEXT_ephelion_voice included); ElevenLabs is the local stub
+ * In-memory Postgres (PGlite, every migration, 0044_ephelion_voice included); ElevenLabs is the local stub
  * (scripts/lib/elevenlabs-stub.ts). No network, no spending.
  */
 import path from 'node:path';
@@ -102,11 +102,11 @@ const as = (fid: number | null, init: RequestInit = {}, url = 'http://localhost/
 const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
 
 // S. The switch.
-check('S. committed: the admin trial and the open switch are both off', VOICE.adminTrial === false && VOICE.open === false);
+check('S. committed: the admins\' trial on, the open switch off, real pictures for admins only (Nate, 2026-11-21)', VOICE.adminTrial === true && VOICE.open === false && VOICE.realPictures === 'admins');
 check('S. the local test switch is on here', voiceTestOn());
 for (const [k, v] of [['VERCEL', '1'], ['VERCEL_ENV', 'production'], ['VERCEL_ENV', 'preview']] as const) {
   process.env[k] = v;
-  check(`S. with ${k}=${v} the test switch is off, nobody is let in, and the stub address is ignored`, !voiceTestOn() && !voiceAllowed(NATE) && elevenLabsBase() === 'https://api.elevenlabs.io');
+  check(`S. with ${k}=${v} the test switch is off, only admins are let in (the trial), and the stub address is ignored`, !voiceTestOn() && voiceAllowed(NATE) && voiceAllowed(GARANCE) && !voiceAllowed(STRANGER) && elevenLabsBase() === 'https://api.elevenlabs.io');
   delete process.env[k];
 }
 check('S. a non-admin is not let in during the admin trial', !voiceAllowed(STRANGER) && voiceAllowed(NATE) && voiceAllowed(GARANCE));
@@ -125,8 +125,10 @@ for (const r of routeFiles) {
   }
 }
 process.env.VOICE_TEST_ON = '';
-// Off, the test sign-in isn't honoured either (401); a real admin sign-in is let in by nothing (404, voiceAllowed).
+// With the trial switched off again (as before this merge), the test sign-in isn't honoured (401) and no admin is let in.
+(VOICE as { adminTrial: boolean }).adminTrial = false;
 check('S. with the switch off, an admin isn\'t let in either', !voiceAllowed(NATE) && [401, 404].includes((await status.GET(as(NATE))).status));
+(VOICE as { adminTrial: boolean }).adminTrial = true;
 process.env.VOICE_TEST_ON = '1';
 for (const f of ['src/app/storyboard/record/page.tsx']) check(`S. ${f} is the site's usual not-found for everyone`, /notFound\(\);/.test(readFileSync(path.join(ROOT, f), 'utf8')));
 {
@@ -176,9 +178,9 @@ check('W. numbers, case, punctuation and apostrophes compare as words', norm('4'
 // C. The consent.
 const wording = voiceConsentWording();
 const own = JSON.parse(readFileSync(path.join(ROOT, 'config/consent-own-voice.json'), 'utf8'));
-check('C. the page shows own-voice-v2, the draft, with Nate\'s fixes', wording.version === 'own-voice-v2' && wording.text[0] === 'You record a speech. Your recording is converted into a character\'s voice, and only the converted speech can be published.' && /against the speech\.$/.test(wording.text[3]));
-check('C. own-voice-v1 is still the file\'s current, untouched', own.current === 'own-voice-v1' && Boolean(own.versions['own-voice-v1']));
-check('C. the bracketed training line is still there (Nate hasn\'t said it\'s done)', wording.text.some((t) => /\[Our account is set so it doesn't use them to train its models\.\]/.test(t)));
+check('C. the page shows own-voice-v2, current, with Nate\'s fixes', wording.version === 'own-voice-v2' && wording.text[0] === 'You record a speech. Your recording is converted into a character\'s voice, and only the converted speech can be published.' && /against the speech\.$/.test(wording.text[3]));
+check('C. own-voice-v2 is the file\'s current (reread 2026-11-21), with no draft left; v1 stays on file, retired', own.current === 'own-voice-v2' && !('draft' in own) && Boolean(own.versions['own-voice-v1']));
+check('C. the training line stands without brackets (Nate turned training off, 2026-11-21)', wording.text.some((t) => t.includes('Our account is set so it doesn\'t use them to train its models.')) && !wording.text.join(' ').includes('['));
 const take = randomBytes(160_000); // the stub hears it as 40 s
 const form = (fields: Record<string, string | Blob>) => {
   const f = new FormData();
@@ -237,6 +239,7 @@ const t1 = (await r.json()) as { checks: { n: number; ok: boolean; missing: stri
 const stt = stub.calls.filter((c) => c.path === '/v1/speech-to-text');
 check('T. the converted speech is transcribed with word timings', r.status === 200 && stt.length === sttBefore + 1 && stt.at(-1)!.files[0].sha256 === sha(converted) && stt.at(-1)!.fields.timestamps_granularity === 'word');
 check('T. ... by scribe_v3, with the speech\'s names as key terms', stt.at(-1)!.fields.model_id === 'scribe_v3' && (stt.at(-1)!.fields.keyterms ?? '').length > 0);
+check('T. the transcript ElevenLabs keeps is deleted right after (ElevenLabs keeps one per transcription, 2026-11-21)', stub.deletedTranscripts.length >= 1 && stub.kept().length === 0, `deleted ${stub.deletedTranscripts.length}, still kept ${stub.kept().length}`);
 check('T. the stub\'s one wrong word shows in sentence 4 only', t1.checks.filter((c) => !c.ok).map((c) => c.n).join() === '3' && t1.checks[3].extra.includes('weakness'), JSON.stringify(t1.checks.filter((c) => !c.ok)));
 {
   const stsAt = stub.calls.findIndex((c, i) => i >= before && c.path.startsWith('/v1/speech-to-speech/'));
@@ -275,6 +278,10 @@ check('A. a sentence record can\'t be accepted as a whole take', r.status === 40
 check('A. nothing is stored before Accept', (await sql`select count(*)::int n from studio.voice_drafts`)[0].n === 0);
 r = await accept.POST(as(NATE, { method: 'POST', body: acceptForm(converted, ticket, t1.check, { audio: redoAudio, ticket: redoTicket, check: t2.check }) }));
 const acc = (await r.json()) as { id: string; recipe: Record<string, unknown>; error?: string };
+{
+  const takes = ((acc.recipe?.takes ?? []) as { transcriptDeleted?: boolean }[]);
+  check('A. the accepted recipe says each take\'s and redo\'s transcript was deleted at ElevenLabs', takes.length >= 2 && takes.every((t) => t.transcriptDeleted === true), JSON.stringify(takes));
+}
 if (!acc.id) console.log('  accept said:', r.status, acc.error);
 check('A. accept keeps a private draft', r.status === 200 && /^[0-9a-f-]{36}$/.test(acc.id));
 const [d] = await sql`select * from studio.voice_drafts where id = ${acc.id}`;
@@ -325,7 +332,8 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   const b0 = (await r.json()) as { board: { cuts: number[]; shots: Shot[]; proposed: number[]; fromProposal: boolean }; notes: { kind: string; text: string }[]; sheets: { styles: { id: string; title: string }[]; characters: { id: string; title: string }[] } };
   const ends = tl.sentences.map((x) => Math.round(x.end * 100) / 100);
   check('B. the first board is the automatic cuts, every one at a sentence end', r.status === 200 && b0.board.fromProposal && b0.board.cuts.length > 1 && b0.board.cuts.every((c) => ends.includes(c)) && b0.board.shots.length === b0.board.cuts.length + 1);
-  check('B. ... and no shot has words written for it (P2): every description is empty', b0.board.shots.every((x) => x.description === '' && x.angle === '' && x.kept === null));
+  check('B. the board sends the speech\'s own sentences (its text, not the transcription) for the shots and the play-through', JSON.stringify((b0 as unknown as { draft: { sentences: { n: number; text: string }[] } }).draft.sentences) === JSON.stringify(speech.sentences.map((x) => ({ n: x.n, text: x.text }))));
+  check('B. ... and no shot has words written for it (P2): every description is empty, and every camera starts on Medium shot (Nate, 2026-11-21)', b0.board.shots.every((x) => x.description === '' && x.angle === 'medium' && x.kept === null));
   check('B. the notes are rule checks that name no content (P2)', b0.notes.length > 0 && b0.notes.every((n) => /^Shot|^Shots/.test(n.text) && !/should show|try showing|describe/i.test(n.text)));
   check('B. the kept pictures and the picture-making settings are separate fields (neither hides the other)', Array.isArray((b0 as unknown as { pictures: unknown }).pictures) && typeof (b0 as unknown as { making: unknown }).making === 'object');
   check('B. the published sheets are offered', b0.sheets.styles.some((x) => x.title === 'Ink and wash') && b0.sheets.characters.some((x) => x.title === 'Ephelion'));
@@ -347,7 +355,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   // A picture for shot 1 (a stand-in card: no model, no cost).
   const callsBefore = stub.calls.length;
   const pic = (body: Record<string, unknown>, fid = NATE) => boardPicture.POST(as(fid, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: s2.shots[0].key, ...body }) }));
-  check('B. the board offers the challenge\'s models, with its default, and says these are stand-ins here', (b0 as unknown as { making: { models: { id: string }[]; standIn: boolean; real: boolean } }).making.models.length >= 1 && (b0 as unknown as { making: { standIn: boolean } }).making.standIn && !(b0 as unknown as { making: { real: boolean } }).making.real);
+  check('B. the board offers the challenge\'s models, with its default, says these are stand-ins here, and that real pictures are on for this admin', (b0 as unknown as { making: { models: { id: string }[]; standIn: boolean; real: boolean } }).making.models.length >= 1 && (b0 as unknown as { making: { standIn: boolean } }).making.standIn && (b0 as unknown as { making: { real: boolean } }).making.real === true);
   check('B. a shot that isn\'t on the saved storyboard gets no picture (400)', (await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: 'zz9', description: mine, angle: 'low' }) }))).status === 400);
   check('B. no picture without the person\'s own description (400)', (await pic({ description: '  ', angle: 'low' })).status === 400);
   check('B. ... or without a camera angle (400)', (await pic({ description: mine, angle: '' })).status === 400);
@@ -366,12 +374,17 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   r = await pic({ description: mine, angle: 'low' });
   check('B. at most 3 pictures a shot: the fourth is refused (429)', r.status === 429 && ((await r.json()) as { reason?: string }).reason === 'tries');
   {
-    const { makeShotPicture } = await import('../src/lib/voice/shot-picture');
+    const { makeShotPicture, realPicturesFor } = await import('../src/lib/voice/shot-picture');
     let made = false;
-    const real = await makeShotPicture(sql, NATE, new Request('http://localhost/x'), { draftId: acc.id, shotKey: s2.shots[1].key, description: mine, angle: 'low' }, { country: null, region: null } as never, {
-      real: true, consented: async () => true, reference: async () => null, paid: (async () => { made = true; return { ok: false, status: 500, error: 'x', extra: {} }; }) as never, make: async () => { made = true; throw new Error('no'); },
-    });
-    check('B. no real picture before Nate\'s word: VOICE.realPictures is off, and a real model is refused before any call', real.status === 403 && !made);
+    let pool: string | undefined;
+    const realDeps = {
+      real: true, consented: async () => true, reference: async () => null, paid: (async (_s: unknown, _f: unknown, _r: unknown, job: { spend: { pool?: string } }) => { made = true; pool = job.spend.pool; return { ok: false, status: 429, error: 'stopped by the test', extra: {} }; }) as never, make: async () => { throw new Error('no'); },
+    };
+    const body = { draftId: acc.id, shotKey: s2.shots[1].key, description: mine, angle: 'low' };
+    const stranger = await makeShotPicture(sql, STRANGER, new Request('http://localhost/x'), body, { country: null, region: null } as never, realDeps);
+    check('B. real pictures for admins only: anyone else is refused before any call (403)', stranger.status === 403 && !made && !realPicturesFor(STRANGER) && realPicturesFor(NATE) && realPicturesFor(GARANCE));
+    const admin = await makeShotPicture(sql, NATE, new Request('http://localhost/x'), body, { country: null, region: null } as never, realDeps);
+    check('B. ... an admin reaches the paid step, on the admins\' pool (its daily cap)', made && pool === 'admin' && admin.status === 429, `${admin.status} ${pool}`);
   }
   {
     const many = Array.from({ length: 12 }, (_, i) => Math.round((tl.seconds / 13) * (i + 1) * 100) / 100);
@@ -506,6 +519,35 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   }
 }
 
+// B2. The storyboard on a phone (Nate, 2026-11-21, after his iPhone test).
+{
+  const tl = { seconds: 30, words: [], sentences: [{ n: 0, start: 0, end: 9 }, { n: 1, start: 9, end: 17 }, { n: 2, start: 17, end: 30 }] };
+  check('B2. the speech\'s sentences in a shot are placed by their middle, by number (the text is the speech\'s)', board.sentencesIn(tl, { start: 0, end: 17 }).join() === '0,1' && board.sentencesIn(tl, { start: 17, end: 30 }).join() === '2');
+  {
+    // Heard spans that overlap (a sentence heard starting before the last one ended): still placed by where it begins.
+    const ov = { seconds: 40, words: [], sentences: [{ n: 0, start: 0, end: 10 }, { n: 1, start: 4, end: 30 }, { n: 2, start: 28, end: 40 }] };
+    const sh = board.shotsFromCuts(ov, [10, 30]);
+    check('B2. each sentence is in the shot that starts where it begins, even when heard spans overlap', sh.map((x) => board.sentencesIn(ov, x).join('|')).join(',') === '0,1,2', sh.map((x) => board.sentencesIn(ov, x).join('|')).join(','));
+    const lens = [3, 6, 7, 8, 2, 9, 11, 5, 4, 6];
+    let at0 = 0;
+    const tl2 = { seconds: 61, words: [], sentences: lens.map((l, n) => { const x = { n, start: at0, end: at0 + l }; at0 += l; return x; }) };
+    const cuts2 = [...board.proposeCuts(tl2), board.sentenceBoundaries(tl2)[1].at];
+    const sh2 = board.shotsFromCuts(tl2, cuts2);
+    const byList = tl2.sentences.map((_, i) => 1 + board.sentenceBoundaries(tl2).slice(0, i).filter((bb) => board.cutNear(cuts2, bb.at) !== null).length);
+    const byShots = tl2.sentences.map((x) => sh2.findIndex((y) => board.sentencesIn(tl2, y).includes(x.n)) + 1);
+    check('B2. the sentence list\'s shot numbers agree with the shots built from the cuts', byList.join() === byShots.join(), `${byList.join()} | ${byShots.join()}`);
+  }
+  check('B2. the sentence spoken at a time', board.sentenceAt(tl, 10) === 1 && board.sentenceAt(tl, 0) === 0 && board.sentenceAt(tl, 29) === 2);
+  check('B2. "New shot starts here" sits between each pair of sentences, at the first one\'s end', board.sentenceBoundaries(tl).map((b) => `${b.after}-${b.before}@${b.at}`).join() === '0-1@9,1-2@17');
+  check('B2. a cut moved on the strip still counts at its boundary (within a third of a second)', board.cutNear([9.2, 20], 9) === 9.2 && board.cutNear([9.5], 9) === null);
+  const why = (o: Partial<Parameters<typeof board.pictureBlocked>[0]>) => board.pictureBlocked({ real: false, standIn: false, description: 'x', angle: 'wide', tries: 0, maxTries: 3, ...o });
+  check('B2. why "Make the picture" is off, in one line: real pictures off, no tries left, no description (no camera line: every shot has one)', why({}) === 'Real pictures are off for now.' && /No tries left/.test(why({ standIn: true, tries: 3 }) ?? '') && /No description yet/.test(why({ standIn: true, description: ' ' }) ?? '') && why({ standIn: true }) === null && why({ standIn: true, angle: '' }) === null);
+  const page = readFileSync(path.join(ROOT, 'src/components/voice-board.tsx'), 'utf8');
+  check('B2. the page: one Style, Ephelion\'s look and Model for every picture; no per-shot style, characters list or model list', /Settings for every picture/.test(page) && /Ephelion&rsquo;s look/.test(page) && !/<ModelRow\b/.test(page) && !/Characters \(published sheets\)/.test(page) && !/name=\{`angle-/.test(page));
+  check('B2. ... each shot keeps its own words and a camera dropdown; the cuts are a sentence list with "New shot starts here"', /What the shot shows \(your words\)/.test(page) && /<span className="vb-label">Camera<\/span>/.test(page) && !/Choose a camera/.test(page) && /New shot starts here/.test(page));
+  check('B2. the play-through and the shot show the speech\'s own words (never wordsIn, the transcription\'s)', !/wordsIn\(/.test(page) && /sentenceText\(sentenceAt\(t, now\)\)/.test(page));
+}
+
 // X. Removing a draft (Nate, 2026-11-20 morning).
 {
   const before = storeFiles().length;
@@ -599,6 +641,7 @@ for (const id of Object.values(VOICE.models)) {
   check('H. Record\'s button waits on no host check', !/disabled=\{[^}]*(inApp|webClient|caps)/.test(page));
 }
 
+check('T. every transcript made in this run was deleted at ElevenLabs (none left)', stub.kept().length === 0 && stub.deletedTranscripts.length >= 2, `kept ${stub.kept().length}`);
 // P. P1h.
 const proof = await voiceProof(ROOT);
 check('P. P1h: the real take flow and convert route keep no recording', proof.real.length === 0, proof.real.join('; '));

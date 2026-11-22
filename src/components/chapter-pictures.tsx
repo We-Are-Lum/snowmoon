@@ -5,9 +5,10 @@ import { authFetch } from '~/lib/client-auth';
 import { CHAPTER_PICTURES } from '~/lib/config';
 import { resetLocal } from '~/lib/challenge/model-wording';
 import type { ModelRowEntry } from '~/lib/challenge/models';
-import { adminName, localDay as day, lookName, modelLine, type Look, type PictureDecision, type PictureVersion } from '~/lib/chapter-pictures/shared';
+import { adminName, creditLine, noClosedOffered, localDay as day, lookName, modelLine, type Look, type PictureDecision, type PictureVersion, type RefKind } from '~/lib/chapter-pictures/shared';
 import { useChallengeModel } from './challenge-model-row';
 import { PublishedTextField } from './publish-words';
+import { RefSearchField } from './ref-search-field';
 import '../styles/chapter-pictures.css';
 
 /**
@@ -48,7 +49,7 @@ export const P = {
   lookFor: 'For',
   every: 'Every chapter',
   chapter: (n: number) => `Chapter ${n}`,
-  styleOption: 'One of the site’s styles',
+  styleOption: 'A published style (any maker’s, the remix challenge’s included)',
   lineOption: 'A line you write',
   lineLabel: 'The look, in your words (shown in every redo’s recipe)',
   clear: 'Use every chapter’s look',
@@ -65,13 +66,57 @@ export const P = {
   sheetsLoading: 'Looking for the characters’ sheets…',
   sheetsNone: 'No character this passage names has a published sheet picture.',
   addedAt: (ch: number, after: number, start: number, end: number) => `Added to chapter ${ch}, after block ${after}; it shows blocks ${start}–${end}.`,
+  // Any published style as the look, and others' published pictures as references (owner's request via Garance,
+  // 2026-11-21). Drafted by the coding agent; reread by the owner 2026-11-21 (#204's review page).
+  styleOptionLabel: (s: StyleOptionState) => `${s.label} · version ${s.versionNo} · by ${s.by}${s.challenge ? ' · remix challenge' : ''}`,
+  styleWords: (text: string) => `Its words: ${text}`,
+  refsLegend: 'Other published pictures to send along (optional)',
+  refsLede: (max: number, redo: boolean) =>
+    max > 0
+      ? `Up to ${max} more: three pictures in all${redo ? ', the picture shown now first' : ', counting the character sheets'}. Remixes, readers’ pictures, bases and sheets; never a hidden one. Each maker is credited in the caption and the recipe.`
+      : `That’s three pictures in all${redo ? ', the picture shown now first' : ', counting the character sheets'}.`,
+  refsSearch: 'Search by maker, character or words',
+  refsSearchButton: 'Search',
+  refsSearching: 'Searching…',
+  refsLink: 'Or paste a link to its page on snowmoon.party',
+  refsLinkButton: 'Use this link',
+  refsNone: 'No published picture matches.',
+  refsPick: 'Pick',
+  refsPicked: 'Picked',
+  refsRemove: 'Remove',
+  refsChosen: 'Picked references, in the order they go',
+  refsItem: (r: { what: string; by: string }) => `${r.what} by ${r.by}`,
+  refsKind: { remix: 'remix', picture: 'picture', base: 'base', sheet: 'sheet' } as Record<RefKind, string>,
+  refsCaption: (line: string) => `The caption will add: “${line}”, and the recipe each one’s version, maker and sha256.`,
+  // Owner, 2026-11-21: one line under the Model row when neither closed model is offered here; reread by the owner 2026-11-21.
+  closedNotOffered: 'GPT Image and Gemini aren’t offered where you are.',
 } as const;
+
+/** A style as the look picker lists it (GET /api/you/illustrations: any published, visible style). */
+export interface StyleOptionState {
+  id: string;
+  label: string;
+  text: string;
+  versionNo: number;
+  by: string;
+  challenge: boolean;
+}
+
+/** A published picture picked as a reference, as the picker shows it (GET /api/you/illustrations/references). */
+export interface RefChoice {
+  versionId: string;
+  kind: RefKind;
+  what: string;
+  by: string;
+  href: string;
+  thumb: string;
+}
 
 export interface PicturesState {
   ready: boolean;
   storage: boolean;
   models: ModelRowEntry[];
-  styles: { id: string; label: string; text: string }[];
+  styles: StyleOptionState[];
   looks: { all: { look: Look; byFid: number; at: string } | null; chapters: Record<number, { look: Look | null; byFid: number; at: string }> };
   cap: { spentUsd: number; capUsd: number; resetAt: string };
   /** The model the row starts on: GPT Image 2.5 Sunburst where OpenAI serves (owner, 2026-11-18; P3 DRAFT pending his reread). */
@@ -102,7 +147,7 @@ export interface SheetChoice {
  * The characters this passage names that have a published sheet, as checkboxes: whose front view goes along as a
  * reference (owner, 2026-11-19: "optionally which characters' sheet pictures go along as references"). At most three.
  */
-export function SheetPicker({ chapter, start, end, chosen, setChosen }: { chapter: number; start: number; end: number; chosen: string[]; setChosen: (v: string[]) => void }) {
+export function SheetPicker({ chapter, start, end, chosen, setChosen, max = 3 }: { chapter: number; start: number; end: number; chosen: string[]; setChosen: (v: string[]) => void; max?: number }) {
   const [sheets, setSheets] = useState<SheetChoice[] | null>(null);
   useEffect(() => {
     let live = true;
@@ -125,13 +170,109 @@ export function SheetPicker({ chapter, start, end, chosen, setChosen }: { chapte
           <input
             type="checkbox"
             checked={chosen.includes(x.slug)}
-            disabled={!chosen.includes(x.slug) && chosen.length >= 3}
+            disabled={!chosen.includes(x.slug) && chosen.length >= max}
             onChange={(e) => setChosen(e.target.checked ? [...chosen, x.slug] : chosen.filter((c) => c !== x.slug))}
           />{' '}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={x.url} alt="" width={36} height={48} className="cp-sheet-thumb" /> {x.name}
         </label>
       ))}
+    </fieldset>
+  );
+}
+
+/**
+ * Others' published pictures as references (owner's request via Garance, 2026-11-21): search (maker, character, words)
+ * or paste a snowmoon.party link; the server resolves either to a version and refuses anything hidden, not published or
+ * not found, with the reason. At most `max` (three pictures in all, counting the sheets, or the picture shown now in a
+ * redo). Only the version ids are sent with Make, where the server checks each again.
+ */
+export function ReferencePicker({ id, max, picked, setPicked, redo }: { id: string; max: number; picked: RefChoice[]; setPicked: (v: RefChoice[]) => void; redo: boolean }) {
+  const [q, setQ] = useState('');
+  const [link, setLink] = useState('');
+  const [results, setResults] = useState<RefChoice[] | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const room = Math.max(0, max - picked.length);
+  const add = (r: RefChoice) => {
+    if (picked.some((x) => x.versionId === r.versionId) || room <= 0) return;
+    setPicked([...picked, r]);
+  };
+  async function ask(params: string, pickOne: boolean) {
+    setBusy(true);
+    setError(null);
+    const res = await authFetch(`/api/you/illustrations/references?${params}`).catch(() => null);
+    const j = ((await res?.json().catch(() => null)) ?? {}) as { error?: string; results?: RefChoice[]; ref?: RefChoice };
+    setBusy(false);
+    if (!res?.ok) return setError(j.error ?? P.couldNot);
+    if (pickOne && j.ref) {
+      add(j.ref);
+      setLink('');
+    } else setResults(j.results ?? []);
+  }
+  const line = picked.length ? creditLine(picked.map((r) => ({ what: r.what, by: r.by, hidden: false }))) : '';
+  return (
+    <fieldset className="cp-choice cp-refs" data-refs={id} data-room={room}>
+      <legend className="you-meta">{P.refsLegend}</legend>
+      <p className="you-meta">{P.refsLede(room, redo)}</p>
+      {picked.length > 0 && (
+        <ol className="cp-refs-chosen" aria-label={P.refsChosen}>
+          {picked.map((r) => (
+            <li key={r.versionId} data-picked={r.versionId}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={r.thumb} alt="" width={48} height={36} className="cp-ref-thumb" /> <a href={r.href}>{P.refsItem(r)}</a>{' '}
+              <button type="button" className="ic-secondary cp-ref-btn" onClick={() => setPicked(picked.filter((x) => x.versionId !== r.versionId))}>
+                {P.refsRemove}
+              </button>
+            </li>
+          ))}
+        </ol>
+      )}
+      {line && <p className="you-meta" data-ref-caption="">{P.refsCaption(line)}</p>}
+      {room > 0 && (
+        <>
+          <div className="cp-ref-row">
+            <RefSearchField id={`cp-ref-q-${id}`} label={P.refsSearch} kind="search" value={q} onChange={setQ} onEnter={() => q.trim().length >= 2 && void ask(`q=${encodeURIComponent(q)}`, false)} />
+            <button type="button" className="ic-secondary" disabled={busy || q.trim().length < 2} onClick={() => void ask(`q=${encodeURIComponent(q)}`, false)}>
+              {busy ? P.refsSearching : P.refsSearchButton}
+            </button>
+          </div>
+          <div className="cp-ref-row">
+            <RefSearchField id={`cp-ref-link-${id}`} label={P.refsLink} kind="url" value={link} placeholder="https://snowmoon.party/challenge/p/…" onChange={setLink} />
+            <button type="button" className="ic-secondary" disabled={busy || !link.trim()} onClick={() => void ask(`link=${encodeURIComponent(link.trim())}`, true)}>
+              {P.refsLinkButton}
+            </button>
+          </div>
+        </>
+      )}
+      {error && (
+        <p className="you-note" role="alert" data-ref-error="">
+          {error}
+        </p>
+      )}
+      {room > 0 && results !== null && (
+        results.length === 0 ? (
+          <p className="you-meta">{P.refsNone}</p>
+        ) : (
+          <ul className="cp-refs-results">
+            {results.map((r) => {
+              const isPicked = picked.some((x) => x.versionId === r.versionId);
+              return (
+                <li key={r.versionId} data-result={r.versionId} data-kind={r.kind}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={r.thumb} alt="" width={64} height={48} className="cp-ref-thumb" loading="lazy" />
+                  <span className="you-meta">
+                    {P.refsItem(r)} <span className="cp-ref-kind">· {P.refsKind[r.kind]}</span>
+                  </span>
+                  <button type="button" className="ic-secondary cp-ref-btn" disabled={isPicked} onClick={() => add(r)}>
+                    {isPicked ? P.refsPicked : P.refsPick}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )
+      )}
     </fieldset>
   );
 }
@@ -149,6 +290,11 @@ export function ModelRow({ m, name }: { m: ReturnType<typeof useChallengeModel>;
           </label>
         ))}
       </fieldset>
+      {noClosedOffered(m.list) && (
+        <p className="you-meta cp-closed-none" data-closed-none="">
+          {P.closedNotOffered}
+        </p>
+      )}
       {m.notice}
     </>
   );
@@ -238,10 +384,15 @@ export function LookPanel({ state, reload }: { state: PicturesState; reload: () 
             <select aria-label={P.styleOption} value={styleId} onChange={(e) => setStyleId(e.target.value)}>
               {state.styles.map((s) => (
                 <option key={s.id} value={s.id}>
-                  {s.label}
+                  {P.styleOptionLabel(s)}
                 </option>
               ))}
             </select>
+          )}
+          {kind === 'style' && state.styles.find((s) => s.id === styleId) && (
+            <p className="you-meta cp-style-words" data-style-words={styleId}>
+              {P.styleWords(state.styles.find((s) => s.id === styleId)!.text)}
+            </p>
           )}
           <label>
             <input type="radio" name="cp-look-kind" checked={kind === 'line'} onChange={() => setKind('line')} /> {P.lineOption}
@@ -289,10 +440,12 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
   const [open, setOpen] = useState(false);
   const [note, setNote] = useState('');
   const [chosen, setChosen] = useState<string[]>([]);
+  const [picked, setPicked] = useState<RefChoice[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const m = useChallengeModel(state.models, null, state.defaultModel ?? null);
   const added = item.added ?? null;
+  const pickedIds = picked.map((r) => r.versionId);
   const ownLook = Boolean(state.looks.chapters[item.chapter]?.look);
   const look = lookOf(state, item.chapter);
   const keptIds = new Set(item.decisions.filter((d) => d.versionId).map((d) => d.versionId));
@@ -304,12 +457,13 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
       setBusy(true);
       setError(null);
       const r = added
-        ? await post('/api/you/illustrations/add', { jobId: item.id, note, characters: chosen, ...m.body() })
-        : await post('/api/you/illustrations/redo', { jobId: item.id, note, ...m.body() });
+        ? await post('/api/you/illustrations/add', { jobId: item.id, note, characters: chosen, picked: pickedIds, ...m.body() })
+        : await post('/api/you/illustrations/redo', { jobId: item.id, note, picked: pickedIds, ...m.body() });
       setBusy(false);
       if (!r.ok) return setError(errorOf(r.json));
       setOpen(false);
       setNote('');
+      setPicked([]);
       await reload();
     };
     if (m.askFirst(() => void send())) return;
@@ -320,6 +474,7 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
     setError(null);
     const r = await post('/api/you/illustrations/show', { jobId: item.id, versionId });
     setBusy(false);
+    // A reference hidden since the draft was made (P5f) is refused with its plain message; the draft stays a draft.
     if (!r.ok) return setError(errorOf(r.json));
     onShown?.();
     await reload();
@@ -345,7 +500,8 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
       {open && (
         <div className="cp-redo">
           <PublishedTextField id={`cp-note-${item.id}`} label={added ? P.noteAdded : P.noteLabel} value={note} onChange={setNote} rows={3} maxLength={CHAPTER_PICTURES.noteMaxChars} />
-          {added && <SheetPicker chapter={item.chapter} start={added.start} end={added.end} chosen={chosen} setChosen={setChosen} />}
+          {added && <SheetPicker chapter={item.chapter} start={added.start} end={added.end} chosen={chosen} setChosen={setChosen} max={3 - picked.length} />}
+          <ReferencePicker id={item.id} max={added ? 3 - chosen.length : 2} picked={picked} setPicked={setPicked} redo={!added} />
           <ModelRow m={m} name={`cp-model-${item.id}`} />
           <p className="you-meta" data-look="">
             {P.look(look, ownLook)}
@@ -374,6 +530,7 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
                   {kept && url ? <img src={url} alt={alt} width={v.width} height={v.height} loading="lazy" /> : <DraftImage id={v.id} alt={alt} />}
                   <figcaption className="you-meta">
                     {P.versionMeta(v, v.recipe?.model?.name ?? v.model)}
+                    {v.recipe?.picked?.length ? <> · {creditLine(v.recipe.picked.map((x) => ({ what: x.what, by: x.by, hidden: false })))}</> : null}
                     <br />“{v.note}”
                   </figcaption>
                 </figure>

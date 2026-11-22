@@ -4,12 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
-import { isAdmin } from '~/lib/admins';
 import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
 import { useChallengeModel } from '~/components/challenge-model-row';
-import { ModelRow } from '~/components/chapter-pictures';
 import type { ModelRowEntry } from '~/lib/challenge/models';
-import { boardNotes, shotAt, shotsFromCuts, snapToWordEnd, wordsIn, type Note, type Shot, type Timeline } from '~/lib/voice/board';
+import { boardNotes, cutNear, pictureBlocked, sentenceAt, sentenceBoundaries, sentencesIn, shotAt, shotsFromCuts, snapToWordEnd, type Note, type Shot, type Timeline } from '~/lib/voice/board';
 import { joinAudio } from '~/lib/voice/join-audio';
 import { CLOSING, emptyClosing, type Closing, type CreditLine } from '~/lib/voice/closing';
 import { saveVideo, videoType } from '~/lib/voice/video';
@@ -24,7 +22,7 @@ import '../styles/voice.css';
  */
 interface Sheet { id: string; title: string; entity: string; text: string; thumb: string | null }
 interface Data {
-  draft: { id: string; preset: string | null; speech: { id: string; title: string } | null; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
+  draft: { id: string; preset: string | null; speech: { id: string; title: string } | null; sentences: { n: number; text: string }[]; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
   board: { version: number; cuts: number[]; shots: Shot[]; closing: Closing; proposed: number[]; fromProposal: boolean };
   pictures: { shotKey: string; sha256: string; recipe: Record<string, unknown> }[];
   sheets: { styles: Sheet[]; characters: Sheet[] };
@@ -57,7 +55,9 @@ function KeptPicture({ draftId, shot, sha, alt }: { draftId: string; shot: strin
 
 export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const auth = useAuth();
-  const admin = auth.kind === 'signed-in' && isAdmin(auth.fid);
+  // Who may use it is the server's to say (src/lib/voice/flag.ts): its routes answer 404 to anyone the switch doesn't
+  // let in, and the page then shows the site's usual not-found. So no admin list is checked here (P5b).
+  const admin = auth.kind === 'signed-in';
   const params = useParams<{ draft: string }>();
   const draftId = String(params?.draft ?? '');
   const [data, setData] = useState<Data | null | 'none' | { error: string }>(null);
@@ -86,6 +86,8 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const [saving, setSaving] = useState<number | null>(null);
   const stopVideo = useRef<AbortController | null>(null);
   const target = useRef<'shot' | 'closing'>('shot');
+  // The storyboard's settings, chosen once and used for every picture (Nate, 2026-11-21): a style and Ephelion's look.
+  const [settings, setSettings] = useState<{ styleId: string | null; lookId: string | null }>({ styleId: null, lookId: null });
   const dataOk = data && data !== 'none' && !('error' in data) ? data : null;
   // The challenge's Model row: GPT Image 2.5 Sunburst first where OpenAI serves, FLUX and Gemini offered; a closed model's notice and the 18+ box.
   const m = useChallengeModel(dataOk?.making.models, null, dataOk?.making.defaultModel ?? null);
@@ -104,7 +106,9 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
     if (!r.ok) return setData({ error: j.error ?? 'Not available' });
     setData(j);
     setCuts(j.board.cuts);
-    setShots(j.board.shots);
+    // Every shot starts on Medium shot (Nate, 2026-11-21), boards saved before then included.
+    setShots(j.board.shots.map((x) => (x.angle ? x : { ...x, angle: 'medium' as const })));
+    setSettings({ styleId: j.board.shots[0]?.styleId ?? null, lookId: j.board.shots[0]?.characterIds[0] ?? null });
     setClosing(j.board.closing ?? emptyClosing());
     setKept(j.pictures.map((p) => ({ shotKey: p.shotKey, sha256: p.sha256 })));
     setSaved(j.board.version);
@@ -193,8 +197,15 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   if (data && 'error' in data) return <main className="vr"><p className="vr-warn">{data.error}</p></main>;
   if (!d || !t) return <main className="vr"><p className="vr-note">Loading…</p></main>;
 
+  const apply = (list: Shot[], st = settings) => list.map((x) => ({ ...x, styleId: st.styleId, characterIds: st.lookId ? [st.lookId] : [] }));
+  const choose = (patch: Partial<typeof settings>) => {
+    const st = { ...settings, ...patch };
+    setSettings(st);
+    setShots(apply(shots, st));
+    setDirty(true);
+  };
   const setAll = (c: number[], keep = shots) => {
-    const next = shotsFromCuts(t, c, keep);
+    const next = apply(shotsFromCuts(t, c, keep));
     setCuts([...c].sort((a, b) => a - b));
     setShots(next);
     setCurrent((i) => Math.min(i, next.length - 1));
@@ -257,7 +268,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
     setMessage(null);
     const what = forClosing
       ? { shotKey: CLOSING.key, description: closing.description, styleId: closing.styleId }
-      : { shotKey: shot.key, description: shot.description, angle: shot.angle, styleId: shot.styleId, characterIds: shot.characterIds };
+      : { shotKey: shot.key, description: shot.description, angle: shot.angle, styleId: settings.styleId, characterIds: settings.lookId ? [settings.lookId] : [] };
     const r = await authFetch('/api/voice/boards/picture', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -321,7 +332,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       const out = await saveVideo({
         audio: audioUrl,
         seconds: t!.seconds,
-        shots: shots.map((s, i) => ({ start: s.start, end: s.end, image: images[i], words: wordsIn(t!, s) })),
+        shots: shots.map((s, i) => ({ start: s.start, end: s.end, image: images[i], words: sentencesIn(t!, s).map(sentenceText).join(' ') })),
         closing: card,
         closingSeconds: CLOSING.seconds,
         label: `snowmoon.party · ${standIn ? 'stand-in cards' : 'AI pictures'} · AI voice conversion · draft`,
@@ -354,6 +365,12 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const playing = audioUrl ? shotAt(shots, now) : null;
   const playingNo = playing ? shots.indexOf(playing) + 1 : 0;
   const styleOf = (id: string | null) => d.sheets.styles.find((s) => s.id === id) ?? null;
+  // The speech's own words (never the transcription's), by sentence.
+  const sentenceText = (n: number | null) => (n === null ? '' : (d.draft.sentences.find((x) => x.n === n)?.text ?? ''));
+  const boundaries = sentenceBoundaries(t);
+  // Ephelion's look: his published sheets (Nate, 2026-11-21: "one published Ephelion picture or sheet").
+  const looks = d.sheets.characters.filter((c) => /ephelion/i.test(`${c.title} ${c.entity}`));
+  const blocked = shot ? pictureBlocked({ real: d.making.real, standIn: d.making.standIn, description: shot.description, angle: shot.angle, tries: triesMade[shot.key] ?? 0, maxTries: d.making.limits.maxTriesPerShot }) : null;
 
   return (
     <main className="vr vb">
@@ -370,11 +387,74 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       </p>
       {message && <p className="vr-warn" role="alert">{message}</p>}
 
+      <section className="vr-card" aria-labelledby="vb-set-h">
+        <h2 id="vb-set-h">Settings for every picture</h2>
+        <label className="vb-field">
+          <span className="vb-label">Style</span>
+          <select value={settings.styleId ?? ''} onChange={(e) => choose({ styleId: e.target.value || null })}>
+            <option value="">None</option>
+            {d.sheets.styles.map((x) => (
+              <option key={x.id} value={x.id}>{x.title}</option>
+            ))}
+          </select>
+        </label>
+        {styleOf(settings.styleId) && <p className="vr-small">Style text, as sent: {styleOf(settings.styleId)!.text}</p>}
+        <fieldset className="vb-looks">
+          <legend className="vb-label">Ephelion&rsquo;s look</legend>
+          {looks.length === 0 ? (
+            <p className="vr-small">No published Ephelion picture or sheet yet.</p>
+          ) : (
+            <div className="vb-look-row">
+              <button type="button" className={`vb-look${settings.lookId === null ? ' vb-on' : ''}`} aria-pressed={settings.lookId === null} onClick={() => choose({ lookId: null })}>
+                <span className="vb-look-none">None</span>
+              </button>
+              {looks.map((c, i) => (
+                <button key={c.id} type="button" className={`vb-look${settings.lookId === c.id ? ' vb-on' : ''}`} aria-pressed={settings.lookId === c.id} onClick={() => choose({ lookId: c.id })}>
+                  {c.thumb ? <img src={c.thumb} alt="" /> : <span className="vb-look-none">No picture</span>}
+                  <span className="vr-small">{c.title}{looks.length > 1 ? ` (${i + 1})` : ''}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </fieldset>
+        <label className="vb-field">
+          <span className="vb-label">Model</span>
+          <select value={m.chosen?.id ?? ''} onChange={(e) => { const x = m.list?.find((y) => y.id === e.target.value); if (x) m.pick(x); }} disabled={!m.list?.length}>
+            {(m.list ?? []).map((x) => (
+              <option key={x.id} value={x.id}>{x.label} · {x.maker} · {x.open ? 'open' : 'closed'}</option>
+            ))}
+          </select>
+        </label>
+        {m.chosen && m.meta(m.chosen) && <p className="vr-small">{m.meta(m.chosen)}</p>}
+        {m.notice}
+      </section>
+
       <section className="vr-card" aria-labelledby="vb-strip-h">
         <h2 id="vb-strip-h">1. Cuts</h2>
         <p className="vr-note">
-          The speech&rsquo;s sentences, in time. <span className="vr-tag">Automatic</span> Cuts were first placed at sentence ends about every {d.limits.target} seconds, by a rule (no AI model). Drag a cut to move it, tap the strip to add one at the nearest word&rsquo;s end, or tap × to remove it.
+          The speech&rsquo;s sentences, in time. <span className="vr-tag">Automatic</span> Cuts were first placed at sentence ends about every {d.limits.target} seconds, by a rule (no AI model). Turn &ldquo;New shot starts here&rdquo; on or off between any two sentences, up to {d.making.limits.maxShots} shots. On a wide screen you can also drag a cut on the strip, tap the strip to add one at the nearest word&rsquo;s end, or tap × to remove it.
         </p>
+        <ol className="vb-cutlist" aria-label="The speech's sentences, and where each shot starts">
+          {t.sentences.map((x, i) => {
+            const b = boundaries[i];
+            const cut = b ? cutNear(cuts, b.at) : null;
+            const startsShot = i === 0 || (boundaries[i - 1] && cutNear(cuts, boundaries[i - 1].at) !== null);
+            // Counted from the toggles themselves, so the label always agrees with what is ticked.
+            const shotNo = 1 + boundaries.slice(0, i).filter((bb) => cutNear(cuts, bb.at) !== null).length;
+            return (
+              <li key={x.n}>
+                {startsShot && shotNo > 0 && <span className="vb-cutlist-shot">Shot {shotNo}</span>}
+                <span className="vb-cutlist-text">{sentenceText(x.n)}</span>
+                {b && (
+                  <label className="vb-toggle">
+                    <input type="checkbox" checked={cut !== null} disabled={cut === null && shots.length >= d.making.limits.maxShots} onChange={() => setAll(cut !== null ? cuts.filter((c) => c !== cut) : [...cuts, b.at])} />
+                    New shot starts here
+                  </label>
+                )}
+              </li>
+            );
+          })}
+        </ol>
         <div className="vb-strip-wrap">
           <div className="vb-strip" ref={strip} onClick={onStripClick} onPointerMove={onDrag} onPointerUp={endDrag} role="group" aria-label="Timeline">
             {t.sentences.map((s) => (
@@ -438,46 +518,22 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             <h2 id="vb-shot-h">2. Shot {current + 1} of {shots.length}</h2>
             <span className="vr-small">{fmt(shot.start)} – {fmt(shot.end)} · {(shot.end - shot.start).toFixed(1)} s</span>
           </div>
-          <blockquote className="vb-words"><span className="vr-tag">Book</span> {wordsIn(t, shot)}</blockquote>
+          <blockquote className="vb-words"><span className="vr-tag">Book</span> {sentencesIn(t, shot).map(sentenceText).join(' ')}</blockquote>
           <PublishedTextField id={`vb-desc-${shot.key}`} label="What the shot shows (your words)" value={shot.description} onChange={(v) => edit({ description: v })} rows={3} maxLength={600} />
-          <fieldset className="vb-angles">
-            <legend>Camera</legend>
-            {d.angles.map((a) => (
-              <label key={a.id} className={`vb-chip${shot.angle === a.id ? ' vb-on' : ''}`}>
-                <input type="radio" name={`angle-${shot.key}`} checked={shot.angle === a.id} onChange={() => edit({ angle: a.id as Shot['angle'] })} />
-                {a.label}
-              </label>
-            ))}
-          </fieldset>
-          <div className="vb-sheets">
-            <label>
-              <span className="vb-label">Style (a published sheet)</span>
-              <select value={shot.styleId ?? ''} onChange={(e) => edit({ styleId: e.target.value || null })}>
-                <option value="">None</option>
-                {d.sheets.styles.map((s) => (
-                  <option key={s.id} value={s.id}>{s.title}</option>
-                ))}
-              </select>
-            </label>
-            <fieldset>
-              <legend className="vb-label">Characters (published sheets)</legend>
-              {d.sheets.characters.length === 0 && <span className="vr-small">No character sheets published yet.</span>}
-              {d.sheets.characters.map((c) => (
-                <label key={c.id} className={`vb-chip${shot.characterIds.includes(c.id) ? ' vb-on' : ''}`}>
-                  <input type="checkbox" checked={shot.characterIds.includes(c.id)} onChange={(e) => edit({ characterIds: e.target.checked ? [...shot.characterIds, c.id] : shot.characterIds.filter((x) => x !== c.id) })} />
-                  {c.title}
-                </label>
+          <label className="vb-field">
+            <span className="vb-label">Camera</span>
+            <select value={shot.angle} onChange={(e) => edit({ angle: e.target.value as Shot['angle'] })}>
+              {d.angles.map((x) => (
+                <option key={x.id} value={x.id}>{x.label}</option>
               ))}
-            </fieldset>
-          </div>
-          {styleOf(shot.styleId) && <p className="vr-small">Style text, as sent: {styleOf(shot.styleId)!.text}</p>}
-          <ModelRow m={m} name={`model-${shot.key}`} />
+            </select>
+          </label>
           <div className="vr-row">
             <button
               type="button"
               className="vr-btn"
               onClick={() => pictureNow('shot')}
-              disabled={busy !== null || !shot.description.trim() || !shot.angle || (triesMade[shot.key] ?? 0) >= d.making.limits.maxTriesPerShot || (!d.making.real && !d.making.standIn)}
+              disabled={busy !== null || blocked !== null}
             >
               {busy === 'picture' ? 'Making…' : (triesMade[shot.key] ?? 0) ? 'Try again' : 'Make the picture'}
             </button>
@@ -486,6 +542,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
               {d.making.standIn && <> · <span className="vr-tag">Stand-in</span> a placeholder card, free</>}
             </span>
           </div>
+          {blocked && <p className="vr-small vb-why">{blocked}</p>}
           {(tries[shot.key]?.length ?? 0) > 0 && (
             <div className="vb-tries">
               {tries[shot.key].map((tr, i) => (
@@ -519,15 +576,16 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
 
       <section className="vr-card" aria-labelledby="vb-play-h">
         <h2 id="vb-play-h">3. Play it through</h2>
-        <p className="vr-note">The kept pictures over your performance. A shot with no picture shows its words.</p>
+        <p className="vr-note">The kept pictures over your performance, with the speech&rsquo;s own words as they are spoken.</p>
+        <p className="vb-playing" aria-live="polite">{playing ? `Shot ${playingNo}` : '\u00a0'}</p>
         <div className="vb-screen">
           {playing?.kept ? (
             <KeptPicture key={`${playing.key}-${playing.kept}`} draftId={d.draft.id} shot={playing.key} sha={playing.kept} alt={`Shot ${playingNo}`} />
           ) : (
-            <div className="vb-picture vb-empty">{playing ? `Shot ${playingNo}: no picture kept yet. ${wordsIn(t, playing)}` : 'Press play.'}</div>
+            <div className="vb-picture vb-empty">{playing ? `Shot ${playingNo}: no picture kept yet.` : 'Press play.'}</div>
           )}
-          {playing && <span className="vb-shotno">Shot {playingNo}</span>}
         </div>
+        <p className="vb-caption"><span className="vr-tag">Book</span> {audioUrl && now > 0 ? sentenceText(sentenceAt(t, now)) : sentenceText(t.sentences[0]?.n ?? null)}</p>
         {audioUrl ? <audio controls src={audioUrl} className="vr-audio" onTimeUpdate={(e) => setNow(e.currentTarget.currentTime)} /> : <p className="vr-small">Loading the audio…</p>}
         <div className="vr-row">
           {saving === null ? (

@@ -49,7 +49,7 @@ export function cardSpec(input: { chapter: number; range: string; q?: string | n
     from: quote.from,
     to: quote.to,
     q: input.q ? input.q : null,
-    img: quote.image?.id ?? null,
+    img: quote.image?.id ?? quote.added ?? null,
   };
   return { spec, quote };
 }
@@ -58,6 +58,8 @@ export function cardSpec(input: { chapter: number; range: string; q?: string | n
 export async function saveCard(fid: number, spec: QuoteCardSpec, quote: Quote): Promise<{ versionId: string; created: boolean }> {
   const sql = db();
   if (!sql) throw new CardError('Saving is not available here', 503);
+  // A picture an admin added is saved on a card only while it shows in the chapter (never a draft's id, or one taken off).
+  if (quote.added && !(await quoteShown(quote))?.image) throw new CardError('That picture isn’t in the chapter now', 400);
 
   const [existing] = await sql<{ id: string }[]>`
     select v.id from studio.element_versions v

@@ -4,7 +4,7 @@ import type postgres from 'postgres';
 import { deleteAudio, getAudio, keyFor, putAudio } from './store';
 
 /**
- * Accepted drafts (studio.voice_drafts, studio.voice_draft_audio; NEXT_ephelion_voice.sql). The audio is in private
+ * Accepted drafts (studio.voice_drafts, studio.voice_draft_audio; 0044_ephelion_voice.sql). The audio is in private
  * storage (src/lib/voice/store.ts), the rows say where. Read back only by their own person. Never a raw take: the recipe
  * holds each take's sha256, and only converted audio is stored. A person may remove their own unpublished draft: its
  * files, then its rows (studio.delete_voice_draft).

@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, inMiniApp, useAuth } from '~/lib/client-auth';
-import { isAdmin } from '~/lib/admins';
 import { HOST_CHECK_MS, HOST_PROMPT_MS, withTimeout } from '~/lib/host-timeout';
 import { MIC_HELP, micPlace } from '~/lib/mic-help';
 import '../styles/voice.css';
@@ -39,7 +38,22 @@ const wordCount = (s: string) => s.split(/\s+/).filter(Boolean).length;
 const mmss = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
 /** A small recorder: the microphone (asked of the Farcaster app first when it offers it), MediaRecorder, a level. */
-function useRecorder() {
+/**
+ * A plain step log for troubleshooting (Nate, 2026-11-21: Chrome and the Farcaster app fail where Safari works), shown
+ * under the recorder as /admin/mic-test shows its own. Text only: what each step answered, never any audio.
+ */
+type Note = (s: string) => void;
+function useStepLog() {
+  const [lines, setLines] = useState<string[]>([]);
+  const t0 = useRef(typeof performance === 'undefined' ? 0 : performance.now());
+  const note: Note = useCallback((s: string) => setLines((l) => [...l.slice(-80), `${((performance.now() - t0.current) / 1000).toFixed(1)}s ${s}`]), []);
+  return { lines, note };
+}
+const errText = (e: unknown) => (e instanceof Error ? `${e.name}: ${e.message}` : String(e));
+const raced = (what: string, r: { ok: boolean; why?: string; error?: string }, ok: string) =>
+  r.ok ? `${what}: ${ok}` : `${what}: ${r.why === 'timeout' ? 'no answer in time (timed out), treated as unknown' : `error (${r.error}), treated as unknown`}`;
+
+function useRecorder(note: Note) {
   const [state, setState] = useState<'idle' | 'asking' | 'recording'>('idle');
   const [level, setLevel] = useState(0);
   const [elapsed, setElapsed] = useState(0);
@@ -66,15 +80,24 @@ function useRecorder() {
       // Never block Record on a host check (Nate, 2026-11-21): each is raced (2 s), and no answer is "unknown", treated
       // as maybe the Farcaster app. There, the app is asked for the microphone when it says it can, or when that's
       // unknown and the SDK has the action (10 s for its prompt); then getUserMedia either way.
+      note('Record pressed');
       const app = await withTimeout(inMiniApp(), HOST_CHECK_MS);
       inApp.current = app.ok ? app.value : null;
+      note(raced('host check: in the Farcaster app?', app, app.ok ? (app.value ? 'yes' : 'no') : ''));
       if (inApp.current !== false) {
         const caps = await withTimeout(() => sdk.getCapabilities(), HOST_CHECK_MS);
         const has = caps.ok ? caps.value.includes('actions.requestCameraAndMicrophoneAccess') : null;
-        if (has === true || (has === null && typeof sdk.actions?.requestCameraAndMicrophoneAccess === 'function')) await withTimeout(() => sdk.actions.requestCameraAndMicrophoneAccess(), HOST_PROMPT_MS);
+        note(raced('host check: capabilities', caps, caps.ok ? `answered; microphone action ${has ? 'offered' : 'not offered'}` : ''));
+        if (has === true || (has === null && typeof sdk.actions?.requestCameraAndMicrophoneAccess === 'function')) {
+          note("asking the Farcaster app for the microphone");
+          const asked = await withTimeout(() => sdk.actions.requestCameraAndMicrophoneAccess(), HOST_PROMPT_MS);
+          note(raced("the app's microphone prompt", asked, 'answered'));
+        }
       }
-      if (!navigator.mediaDevices?.getUserMedia) throw new Error('This browser has no microphone access.');
+      if (!navigator.mediaDevices?.getUserMedia) throw new Error('This browser has no microphone access (no getUserMedia).');
+      note('asking the browser for the microphone (getUserMedia)');
       const s = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: true } });
+      note(`microphone granted: ${s.getAudioTracks().length} audio track(s)`);
       stream.current = s;
       const ac = new AudioContext();
       const an = ac.createAnalyser();
@@ -90,7 +113,10 @@ function useRecorder() {
       };
       tick();
       const type = pickType();
+      const supported = typeof MediaRecorder === 'undefined' ? 'none (no MediaRecorder)' : TYPES.filter((t) => MediaRecorder.isTypeSupported(t)).join(', ') || 'none of ours';
+      note(`recording format: asked ${type || '(browser default)'}; supported: ${supported}`);
       const r = new MediaRecorder(s, type ? { mimeType: type } : undefined);
+      r.onerror = (e) => note(`recorder error: ${errText((e as unknown as { error?: unknown }).error ?? e)}`);
       const parts: Blob[] = [];
       r.ondataavailable = (e) => e.data.size && parts.push(e.data);
       const result = new Promise<{ blob: Blob; seconds: number } | null>((res) => (done.current = res));
@@ -100,6 +126,7 @@ function useRecorder() {
         setState('idle');
         const blob = new Blob(parts, { type: r.mimeType || type || 'audio/webm' });
         parts.length = 0;
+        note(`recording stopped: ${seconds.toFixed(1)} s, ${blob.size} bytes, ${blob.type || 'no type'}`);
         done.current?.(blob.size ? { blob, seconds } : null);
       };
       rec.current = r;
@@ -111,12 +138,14 @@ function useRecorder() {
         if (t >= limitSeconds && r.state === 'recording') r.stop();
       }, 200);
       r.start(1000);
+      note(`recording started (${r.mimeType || 'no type reported'})`);
       setState('recording');
       return result;
     } catch (e) {
       stopAll();
       setState('idle');
-      // Refused: the line for this browser or the app (src/lib/mic-help.ts, DRAFT wording).
+      note(`microphone or recorder failed: ${errText(e)}`);
+      // Refused: the line for this browser or the app (src/lib/mic-help.ts, reread 2026-11-21).
       setError(e instanceof Error && /denied|NotAllowed/i.test(`${e.name} ${e.message}`) ? MIC_HELP[micPlace(navigator.userAgent, inApp.current === true)] : 'The microphone could not be opened here.');
       return null;
     }
@@ -190,7 +219,9 @@ function SignedAudio({ path, label }: { path: string; label: string }) {
 
 export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
   const auth = useAuth();
-  const admin = auth.kind === 'signed-in' && isAdmin(auth.fid);
+  // Who may use it is the server's to say (src/lib/voice/flag.ts): its routes answer 404 to anyone the switch doesn't
+  // let in, and the page then shows the site's usual not-found. So no admin list is checked here (P5b).
+  const admin = auth.kind === 'signed-in';
   const [status, setStatus] = useState<Status | null | 'none'>(null);
   const [webClient, setWebClient] = useState(false);
   const [choice, setChoice] = useState<string>('');
@@ -206,11 +237,13 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
   const [playUrl, setPlayUrl] = useState<string | null>(null);
   const [accepted, setAccepted] = useState<string | null>(null);
   const [wpm, setWpm] = useState(140);
-  const rec = useRecorder();
+  const log = useStepLog();
+  const rec = useRecorder(log.note);
   const prompter = useRef<HTMLOListElement | null>(null);
 
   const load = useCallback(async () => {
-    const r = await authFetch('/api/voice/status', { cache: 'no-store' }).catch(() => null);
+    const r = await authFetch('/api/voice/status', { cache: 'no-store' }).catch((e) => (log.note(`status: the request failed (${errText(e)})`), null));
+    if (r) log.note(`status: HTTP ${r.status}${r.ok ? ', loaded' : ''}`);
     setStatus(r?.ok ? ((await r.json()) as Status) : 'none');
   }, []);
   useEffect(() => {
@@ -218,9 +251,12 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     void load();
     void (async () => {
       // The Farcaster-web message only when the host does answer platformType 'web' (each check raced, 2 s).
+      log.note(`browser: ${navigator.userAgent}`);
       const app = await withTimeout(inMiniApp(), HOST_CHECK_MS);
+      log.note(raced('host check at load: in the Farcaster app?', app, app.ok ? (app.value ? 'yes' : 'no') : ''));
       if (app.ok && !app.value) return;
       const ctx = await withTimeout(sdk.context, HOST_CHECK_MS);
+      log.note(raced('host check at load: context', ctx, ctx.ok ? `platform ${ctx.value?.client?.platformType ?? 'not given'}` : ''));
       setWebClient(ctx.ok && ctx.value?.client?.platformType === 'web');
     })();
   }, [admin, load]);
@@ -302,22 +338,31 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     form.set('seconds', String(seconds));
     form.set('agree', s!.consent.sha256);
     if (sentence !== null) form.set('sentence', String(sentence));
-    const r = await authFetch('/api/voice/convert', { method: 'POST', body: form }).catch(() => null);
+    log.note(`convert: sending ${blob.size} bytes (${blob.type || 'no type'}), ${seconds.toFixed(1)} s${sentence !== null ? `, sentence ${sentence + 1}` : ''}`);
+    const r = await authFetch('/api/voice/convert', { method: 'POST', body: form }).catch((e) => (log.note(`convert: the request failed (${errText(e)})`), null));
     if (!r?.ok) {
-      setMessage(((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error ?? 'The conversion failed. Your recording was not kept.');
+      const err = ((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error;
+      if (r) log.note(`convert: HTTP ${r.status}${err ? `: ${err}` : ''}`);
+      setMessage(err ?? 'The conversion failed. Your recording was not kept.');
       return null;
     }
     const out = await r.blob();
+    log.note(`convert: HTTP ${r.status}, ${out.size} bytes back`);
     const c: Converted = { blob: out, url: URL.createObjectURL(out), ticket: r.headers.get('x-voice-ticket') ?? '', seconds };
     const tf = new FormData();
     tf.set('audio', out, 'converted.mp3');
     tf.set('ticket', c.ticket);
-    const t = await authFetch('/api/voice/transcribe', { method: 'POST', body: tf }).catch(() => null);
+    const t = await authFetch('/api/voice/transcribe', { method: 'POST', body: tf }).catch((e) => (log.note(`transcribe: the request failed (${errText(e)})`), null));
     if (t?.ok) {
       const j = (await t.json()) as { checks: Check[]; check: string };
       c.checks = j.checks;
       c.check = j.check;
-    } else setMessage('Converted, but the word check failed. Try the check again later.');
+      log.note(`transcribe: HTTP ${t.status}, ${j.checks.filter((x) => x.ok).length} of ${j.checks.length} sentences match`);
+    } else {
+      const err = ((await t?.json().catch(() => ({}))) as { error?: string } | undefined)?.error;
+      if (t) log.note(`transcribe: HTTP ${t.status}${err ? `: ${err}` : ''}`);
+      setMessage('Converted, but the word check failed. Try the check again later.');
+    }
     return c;
   }
 
@@ -329,8 +374,9 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     const tf = new FormData();
     tf.set('audio', converted.blob, 'converted.mp3');
     tf.set('ticket', converted.ticket);
-    const t = await authFetch('/api/voice/transcribe', { method: 'POST', body: tf }).catch(() => null);
+    const t = await authFetch('/api/voice/transcribe', { method: 'POST', body: tf }).catch((e) => (log.note(`transcribe again: the request failed (${errText(e)})`), null));
     setBusy(null);
+    if (t) log.note(`transcribe again: HTTP ${t.status}`);
     if (t?.ok) {
       const j = (await t.json()) as { checks: Check[]; check: string };
       setConverted({ ...converted, checks: j.checks, check: j.check });
@@ -535,6 +581,11 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                     {recording && redoing === null && <span className="vr-level" aria-hidden><span style={{ width: `${Math.min(100, rec.level * 300)}%` }} /></span>}
                   </div>
                   {rec.error && <p className="vr-warn">{rec.error}</p>}
+                  <details className="vr-steps">
+                    <summary>Steps (for troubleshooting)</summary>
+                    <p className="vr-small">What each step answered on this device. Text only; no audio. Copy it to send it along.</p>
+                    <pre>{log.lines.join('\n') || 'Nothing yet.'}</pre>
+                  </details>
                   {take && (
                     <div className="vr-take">
                       <p className="vr-note">Your recording, {mmss(take.seconds)}. Only in this tab.</p>

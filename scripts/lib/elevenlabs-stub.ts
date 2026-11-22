@@ -5,6 +5,7 @@
  * - POST /v1/speech-to-speech/:voice: answers a WAV tone (not the input), as long as the input "sounds" (bytes / 4000
  *   seconds by default, 1 to 300; 8 kHz, so a long take stays under the 4.5 MB request limit), with a history-item-id and a character-cost (1,000 a minute).
  * - DELETE /v1/history/:id
+ * - DELETE /v1/speech-to-text/transcripts/:id (each transcription's stored transcript, as ElevenLabs keeps one)
  * - POST /v1/speech-to-text: reads its WAV's length. 30 s or more: the whole speech's words with even timings, with one
  *   sentence (mismatch, default 3) said wrong; shorter: that sentence, right. (The stub's own convention: the real
  *   service hears the audio.)
@@ -68,6 +69,8 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
   const calls: StubCall[] = [];
   const deleted: string[] = [];
   const tried = new Set<string>();
+  const transcripts = new Set<string>();
+  const deletedTranscripts: string[] = [];
   let used = 25_897;
   let seq = 0;
   const sentences = speechSentences();
@@ -97,6 +100,13 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
       deleted.push(id);
       return send(200, '{}', { 'content-type': 'application/json' });
     }
+    if (req.method === 'DELETE' && url.pathname.startsWith('/v1/speech-to-text/transcripts/')) {
+      const id = decodeURIComponent(url.pathname.split('/').pop()!);
+      if (!transcripts.has(id)) return send(404, '{"detail":{"code":"transcript_not_found"}}', { 'content-type': 'application/json' });
+      transcripts.delete(id);
+      deletedTranscripts.push(id);
+      return send(200, '{}', { 'content-type': 'application/json' });
+    }
     if (req.method === 'POST' && url.pathname.startsWith('/v1/speech-to-speech/')) {
       if (opts.failConvert) return send(500, 'stub: failed, and this text quotes the input');
       const input = call.files[0]?.bytes ?? Buffer.alloc(0);
@@ -113,7 +123,9 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
       const step = (seconds || 1) / Math.max(1, all.length);
       const words = all.flatMap((w, k) => [{ text: w, start: k * step, end: k * step + step * 0.8, type: 'word' }, { text: ' ', start: k * step + step * 0.8, end: (k + 1) * step, type: 'spacing' }]);
       // As measured 2026-11-21: about 0.4 credits a second with keyterms.
-      return send(200, JSON.stringify({ text: all.join(' '), words }), { 'content-type': 'application/json', 'character-cost': String(Math.ceil(seconds * 0.4)) });
+      const transcriptionId = `stubstt${++seq}`;
+      transcripts.add(transcriptionId);
+      return send(200, JSON.stringify({ text: all.join(' '), words, transcription_id: transcriptionId }), { 'content-type': 'application/json', 'character-cost': String(Math.ceil(seconds * 0.4)) });
     }
     if (req.method === 'POST' && url.pathname.startsWith('/v1/text-to-speech/')) {
       const text = String((call.json as { text?: string })?.text ?? '');
@@ -125,7 +137,7 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
     send(404, 'stub: no such path');
   });
   await new Promise<void>((r) => server.listen(port, '127.0.0.1', r));
-  return { calls, deleted, close: () => new Promise<void>((r) => server.close(() => r())), setFail: (v: boolean) => (opts.failConvert = v) };
+  return { calls, deleted, deletedTranscripts, kept: () => [...transcripts], close: () => new Promise<void>((r) => server.close(() => r())), setFail: (v: boolean) => (opts.failConvert = v) };
 }
 
 if (process.argv[1] && /elevenlabs-stub\.ts$/.test(process.argv[1])) {

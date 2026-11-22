@@ -1,5 +1,5 @@
 /**
- * A throwaway local database for the voice slice's screenshots (PGlite, every migration, NEXT_ephelion_voice
+ * A throwaway local database for the voice slice's screenshots (PGlite, every migration, 0044_ephelion_voice
  * included), on 127.0.0.1. Nothing in it is real; it is gone when this stops.   tsx scripts/voice-demo-db.ts --port=54382
  */
 import path from 'node:path';

@@ -44,6 +44,14 @@ export function blockFacts(blocks: readonly BlockLike[]): BlockFacts[] {
   });
 }
 
+/**
+ * Where a block is, as the chapter reader names it: "¶ 4" for a block with a ¶ number, "block 12" (its id's number)
+ * for one without (a heading, a dateline, a break). The reader's passage picker and /you/illustrations both use it.
+ */
+export function paragraphOrBlock(label: number | null, idx: number): string {
+  return label !== null ? `¶ ${label}` : `block ${idx}`;
+}
+
 /** "¶ 4" or "¶ 4–9". */
 export function labelRange(from: number, to: number): string {
   return from === to ? `¶ ${from}` : `¶ ${from}–${to}`;

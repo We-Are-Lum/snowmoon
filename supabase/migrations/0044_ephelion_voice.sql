@@ -1,8 +1,12 @@
--- NEXT_ephelion_voice.sql: the Ephelion voice slice 1 (Nate, 2026-11-19, branch ephelion-voice): what its ElevenLabs
--- calls cost, as daily totals, and the drafts a person accepts. NOT APPLIED. Unnumbered while the branch is unmerged: it
--- takes the next free number at merge, checked against origin/main and production. Drafted by the coding agent (Claude,
--- a closed model by Anthropic), DRAFT until Nate approves it; tested in PGlite by the agent (npm run test:voice). Was
--- NEXT_voice_costs.sql (2026-11-19); the draft tables were added on 2026-11-20.
+-- 0044_ephelion_voice.sql: the Ephelion voice slice 1 (Nate, 2026-11-19, branch ephelion-voice): what its ElevenLabs
+-- calls cost, as daily totals, and the drafts a person accepts. Numbered 0044 at merge (2026-11-21; main's highest was
+-- 0043); it was NEXT_ephelion_voice.sql, and before that NEXT_voice_costs.sql (2026-11-19); the draft tables were added
+-- on 2026-11-20, the storyboard tables on 2026-11-21. Drafted by the coding agent (Claude, a closed model by Anthropic);
+-- tested in PGlite by the agent (npm run test:voice) and by the coordinator on Postgres (2026-11-21: dry run clean,
+-- applies twice, read-back passes, the undo refuses while drafts exist and otherwise removes only the voice tables).
+-- APPLIED on production by Nate on 2026-11-21: parts A and B ran; part C as first drafted stopped at "permission denied
+-- to set role studio_writer" (the SQL Editor can't SET ROLE, as 0030 and 0040 note) after its earlier checks passed. Part
+-- C below checks studio_writer's rights without SET ROLE and is what ran next.
 -- Requires 0001_core (the studio schema, studio_writer).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:
@@ -463,7 +467,9 @@ begin
   insert into studio.voice_drafts (fid, kind, speech_id, preset_id, recipe, published_at) values (6786, 'reading', 'ephelion-c13-b64', 'ephelion-cold-baritone',
     jsonb_build_object('provider', 'ElevenLabs', 'model', 'eleven_multilingual_v2', 'textSha256', repeat('9', 64)), now()) returning id into d2;
   insert into studio.voice_asks (fid, at) values (6786, now() - interval '2 days');
-  execute 'set local role studio_writer';
+  -- As postgres: the Supabase SQL Editor can't SET ROLE studio_writer (0030, 0040; it failed here on 2026-11-21), so
+  -- studio_writer's rights are read with has_*_privilege and the policy's own definition, and removal runs as postgres
+  -- through the same security-definer function the site calls.
   select count(*) into n from studio.delete_voice_draft(d, 193912);
   if n <> 0 or not exists (select 1 from studio.voice_drafts where id = d) then raise exception 'someone else removed a draft'; end if;
   select count(*) into n from studio.delete_voice_draft(d2, 6786);
@@ -473,15 +479,21 @@ begin
      or exists (select 1 from studio.voice_boards where draft_id = d) or exists (select 1 from studio.voice_board_pictures where draft_id = d)
      or exists (select 1 from studio.voice_board_asks where draft_id = d) then
     raise exception 'the draft was not fully removed (% keys)', n; end if;
-  begin update studio.voice_boards set cuts = '[]' where draft_id = d2; raise exception 'studio_writer changed a board in place';
-  exception when insufficient_privilege then null; end;
-  begin delete from studio.voice_drafts where id = d2; raise exception 'studio_writer deleted a draft directly';
-  exception when insufficient_privilege then null; end;
-  -- The daily counts: yesterday's rows go, today's stay.
-  delete from studio.voice_asks where fid = 6786;
-  select count(*) into n from studio.voice_asks where fid = 6786;
-  if n <> 1 then raise exception 'the purge took today''s count, or left an old one (% left)', n; end if;
-  execute 'reset role';
+  foreach k in array array['voice_drafts', 'voice_draft_audio', 'voice_boards', 'voice_board_pictures', 'voice_board_asks'] loop
+    if has_table_privilege('studio_writer', 'studio.' || k, 'update') or has_table_privilege('studio_writer', 'studio.' || k, 'delete') or has_table_privilege('studio_writer', 'studio.' || k, 'truncate') then
+      raise exception 'studio_writer can change or delete rows of %', k; end if;
+  end loop;
+  if has_table_privilege('studio_writer', 'studio.voice_costs', 'delete') or has_table_privilege('studio_writer', 'studio.voice_asks', 'update') then
+    raise exception 'studio_writer can delete a cost or change a count'; end if;
+  if not has_function_privilege('studio_writer', 'studio.delete_voice_draft(uuid, bigint)', 'execute')
+     or has_function_privilege('anon', 'studio.delete_voice_draft(uuid, bigint)', 'execute') or has_function_privilege('authenticated', 'studio.delete_voice_draft(uuid, bigint)', 'execute') then
+    raise exception 'delete_voice_draft is not studio_writer''s alone'; end if;
+  -- The daily counts: studio_writer may delete only rows from before today (UTC): the purge policy's own condition.
+  if not has_table_privilege('studio_writer', 'studio.voice_asks', 'delete') or not exists (select 1 from pg_policies where schemaname = 'studio' and tablename = 'voice_asks'
+     and policyname = 'writer_purge' and cmd = 'DELETE' and 'studio_writer' = any(roles) and qual ilike '%now()%utc%' and qual like '%<%') then
+    raise exception 'the purge policy is not the before-today one'; end if;
+  select count(*) into n from studio.voice_asks where fid = 6786 and (at at time zone 'utc')::date < (now() at time zone 'utc')::date;
+  if n <> 1 then raise exception 'the purge condition would take today''s count, or miss the old one (% rows)', n; end if;
   -- And deleted again (as postgres).
   delete from studio.voice_drafts where id = d2;
   delete from studio.voice_drafts where fid = 193912 and recipe->>'textSha256' = repeat('d', 64);

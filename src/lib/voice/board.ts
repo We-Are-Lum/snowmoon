@@ -130,7 +130,7 @@ export function shotsFromCuts(t: Timeline, cuts: number[], previous: Shot[] = []
     if (best && bestOverlap >= (end - start) / 2) {
       used.add(best.key);
       out.push({ ...best, start, end });
-    } else out.push({ key: newKey(out.map((s) => s.key).concat(previous.map((p) => p.key))), start, end, description: '', angle: '', styleId: null, characterIds: [], kept: null });
+    } else out.push({ key: newKey(out.map((s) => s.key).concat(previous.map((p) => p.key))), start, end, description: '', angle: 'medium', styleId: null, characterIds: [], kept: null });
   }
   return out;
 }
@@ -181,3 +181,35 @@ export function shotPrompt(s: Pick<Shot, 'description' | 'angle'>, style: { titl
 
 /** The shot showing at a time (the play-through). */
 export const shotAt = (shots: Shot[], at: number) => shots.find((s) => at >= s.start && at < s.end) ?? shots[shots.length - 1] ?? null;
+
+/**
+ * The speech's own sentences a shot covers (Nate, 2026-11-21: "the play-through shows the speech's own words, timed,
+ * never the transcription's"). A sentence begins where the one before it ends (where "New shot starts here" puts a cut,
+ * sentenceBoundaries), so it belongs to the shot that holds that point; its own heard start isn't used, as heard spans
+ * can overlap. The words shown are the speech's text, never what was heard.
+ */
+export function sentencesIn(t: Timeline, s: { start: number; end: number }): number[] {
+  return t.sentences.filter((x, i) => {
+    const begins = i === 0 ? 0 : round(t.sentences[i - 1].end);
+    return begins >= s.start - 0.35 && begins < s.end - 0.35;
+  }).map((x) => x.n);
+}
+/** The sentence being spoken at a time (or the last one before it). */
+export function sentenceAt(t: Timeline, at: number): number | null {
+  let best: number | null = null;
+  for (const x of t.sentences) if (x.start <= at + 0.01) best = x.n;
+  return best;
+}
+
+/** Where a new shot can start on a phone: between each pair of sentences, at the first one's end. */
+export const sentenceBoundaries = (t: Timeline) => t.sentences.slice(0, -1).map((x, i) => ({ after: x.n, before: t.sentences[i + 1].n, at: round(x.end) }));
+/** The cut at a boundary, if there is one (a cut moved on the desktop strip counts when it is within a third of a second). */
+export const cutNear = (cuts: number[], at: number) => cuts.find((c) => Math.abs(c - at) < 0.35) ?? null;
+
+/** Why "Make the picture" can't be pressed, in one line (Nate, 2026-11-21), or null when it can. */
+export function pictureBlocked(o: { real: boolean; standIn: boolean; description: string; angle: string; tries: number; maxTries: number }): string | null {
+  if (!o.real && !o.standIn) return 'Real pictures are off for now.';
+  if (o.tries >= o.maxTries) return `No tries left for this shot (${o.maxTries} of ${o.maxTries} made): keep one of them.`;
+  if (!o.description.trim()) return 'No description yet: write what the shot shows first.';
+  return null;
+}

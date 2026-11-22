@@ -8,6 +8,8 @@ import { adminView, redoable } from '~/lib/chapter-pictures/pictures';
 import { pictureHistory, readAdditions, readReplacements } from '~/lib/chapter-pictures/read';
 import { waitingDrafts } from '~/lib/chapter-pictures/waiting';
 import { checkJob } from '~/lib/illustration-check/jobs';
+import { loadChapter } from '~/lib/book';
+import { blockFacts } from '~/lib/reading';
 
 /**
  * The admins' review of the edition's chapter pictures (owner, 2026-10-23; admins since 2026-10-29), behind
@@ -37,7 +39,17 @@ export async function GET(request: Request) {
   // Pictures admins added while reading (owner, 2026-11-19), and every draft not kept yet, with where each sits.
   const additions = pictures.adding ? await readAdditions(sql) : [];
   const added = additions.map((a) => ({ id: a.jobId, chapter: a.chapter, added: { after: a.after, start: a.start, end: a.end }, byFid: a.byFid, at: a.at, redoable: true, shown: shown.get(a.jobId)?.versionId ?? null, versions: history.versions.get(a.jobId) ?? [], decisions: history.decisions.get(a.jobId) ?? [], image: null }));
-  const waiting = waitingDrafts(history, additions);
+  // Named by ¶ as the chapter reader names it (the same blockFacts the reader's data-label comes from).
+  const labels = new Map<number, Map<number, number | null>>();
+  const labelOf = (chapter: number, idx: number) => {
+    if (!labels.has(chapter)) {
+      const ch = loadChapter(chapter);
+      const facts = ch ? blockFacts(ch.blocks) : [];
+      labels.set(chapter, new Map((ch?.blocks ?? []).map((b, i) => [b.idx, facts[i].label])));
+    }
+    return labels.get(chapter)!.get(idx) ?? null;
+  };
+  const waiting = waitingDrafts(history, additions, labelOf);
   return NextResponse.json({ items: withPictures, canSave, pictures, added, waiting }, { headers: noStore });
 }
 

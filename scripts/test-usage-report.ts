@@ -8,6 +8,7 @@
  * - One read-only transaction; UTC days; distinct people are distinct over the span, not a sum of days.
  * - Pictures by model, open or closed; remixes and entries per character; claims and posts once their tables exist.
  * - Chapter pictures (0042): rows, kept and draft only, size on disk and JPEG bytes; a database without the table says so.
+ * - Added pictures (0043): all, shown now, taken off and never kept, by the latest decision; without 0043 it says so.
  * - No private value (a FID, a name, an address, a DID, a handle, a question, a prompt or a backstory) is in the answer.
  */
 import path from 'node:path';
@@ -175,6 +176,35 @@ try {
   await sql.begin('read only', async (tx) => tx`insert into studio.image_asks (fid) values (1)`).catch((e) => (refused = (e as { code?: string }).code ?? 'error'));
   check('a write inside a read-only transaction is refused (25006)', refused === '25006', refused);
 
+  // Pictures added while reading (0043): four. One shown now (kept, taken off, kept again: the latest decision counts),
+  // one taken off (kept, then a decision with no version), one a draft never kept, one with only a no-version decision.
+  const ADD = (n: number) => `c2-b0${10 + n}-added-0000000${n}`;
+  const addVersion = (n: number, v: number) => `('${id(60 + v)}', '${ADD(n)}', 2, ${MAKER}, 'gpt-image-2.5-sunburst', 'OpenAI', false, null,
+    'SECRET NOTE', 'SECRET PROMPT', '{"v":1}', '${'abcdef'[v].repeat(64)}', 1024, 576, decode('ffd8ff' || repeat('00', 997), 'hex'), 0.0478)`;
+  const at = (m: number) => `now() - interval '${60 - m} minutes'`;
+  await pg.exec(`reset role;
+    insert into studio.chapter_picture_additions (job_id, chapter, after_idx, start_idx, end_idx, by_fid) values
+      ${[1, 2, 3, 4].map((n) => `('${ADD(n)}', 2, ${10 + n}, ${8 + n}, ${10 + n}, ${MAKER})`).join(', ')};
+    insert into studio.chapter_picture_versions (id, job_id, chapter, made_by_fid, model, maker, open_weights, look, note, prompt, recipe, sha256, width, height, jpeg, cost_usd) values
+      ${addVersion(1, 1)}, ${addVersion(2, 2)}, ${addVersion(3, 3)};
+    insert into studio.chapter_picture_decisions (job_id, chapter, version_id, action, public_url, by_fid, by_handle, decided_at) values
+      ('${ADD(1)}', 2, '${id(61)}', 'keep', 'https://pictures.snowmoon.party/images/readers/c.jpg', ${MAKER}, 'zeimaker', ${at(1)}),
+      ('${ADD(1)}', 2, null, 'restore', null, ${MAKER}, 'zeimaker', ${at(2)}),
+      ('${ADD(1)}', 2, '${id(61)}', 'restore', 'https://pictures.snowmoon.party/images/readers/c.jpg', ${MAKER}, 'zeimaker', ${at(3)}),
+      ('${ADD(2)}', 2, '${id(62)}', 'keep', 'https://pictures.snowmoon.party/images/readers/d.jpg', ${MAKER}, 'zeimaker', ${at(1)}),
+      ('${ADD(2)}', 2, null, 'restore', null, ${MAKER}, 'zeimaker', ${at(2)}),
+      ('${ADD(4)}', 2, null, 'restore', null, ${MAKER}, 'zeimaker', ${at(1)});
+    set role studio_writer;`);
+  const r4 = await report(sql);
+  const ad = r4.chapterPictures?.added;
+  check('added pictures: 4 in all, 1 shown now, 1 taken off, 2 never kept (the latest decision decides)', ad?.total === 4 && ad.shown === 1 && ad.takenOff === 1 && ad.neverKept === 2, JSON.stringify(ad));
+  check('added pictures: the parts add up to the whole', ad !== null && ad !== undefined && ad.shown + ad.takenOff + ad.neverKept === ad.total);
+  check('added pictures: their versions are counted with the other redos', r4.chapterPictures?.rows === 6 && r4.chapterPictures.kept === 4, JSON.stringify(r4.chapterPictures));
+  const adText = chapterPicturesText(r4.chapterPictures).join('\n');
+  check('added pictures: printed as totals', /Added while reading \(pictures, all\)\s+4$/m.test(adText) && /shown now[^\n]*\s1$/m.test(adText) && /taken off[^\n]*\s1$/m.test(adText) && /never kept[^\n]*\s2$/m.test(adText) && !adText.includes('not there yet'), adText);
+  check('added pictures: no job id, FID, handle, note or address in the answer', !/added-0|SECRET|zeimaker|readers\//.test(JSON.stringify(r4.chapterPictures) + adText) && !(JSON.stringify(r4.chapterPictures) + adText).includes(String(MAKER)));
+  check('added pictures: the report still reads as studio_writer, read-only', r4.meta.role === 'studio_writer' && r4.meta.ro === 'on');
+
   // The claim tables, once there (shape as branch challenge-backstory-bounty's NEXT_challenge_bounty_claims.sql).
   await pg.exec(`reset role;
     create table studio.challenge_backstories (id bigint generated always as identity primary key, version_id uuid not null, fid bigint not null, text text not null, added_at timestamptz not null default now());
@@ -194,6 +224,12 @@ try {
     line(r2, 'Backstory claims confirmed')?.window === 1 && line(r2, 'Backstory claims reverted')?.window === 1 && line(r2, 'Backstories added after publish')?.window === 1 && r2.missing.length === 0,
     JSON.stringify(r2.lines.filter((l) => /claim|Backstor/.test(l.key))) + r2.missing.join('; '));
   check('no claim text, hash or wallet in the answer', !/SECRET|0x1111|0x2222/.test(JSON.stringify(r2)) && !JSON.stringify(r2).includes(WALLET));
+
+  // A database with 0042 but without 0043: the added line says so and the rest still counts.
+  await pg.exec(`reset role; alter table studio.chapter_picture_additions rename to chapter_picture_additions_away; set role studio_writer;`);
+  const r5 = await report(sql);
+  const r5Text = chapterPicturesText(r5.chapterPictures).join('\n');
+  check('no additions table: added is null, "added pictures: not there yet", the redos still counted', r5.chapterPictures?.added === null && r5.chapterPictures.rows === 6 && r5Text.includes('added pictures: not there yet') && line(r5, 'Questions asked')?.window === 4, r5Text);
 
   // An older database without 0042: the section says so and the rest of the report still runs.
   await pg.exec(`reset role;

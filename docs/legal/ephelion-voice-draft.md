@@ -1,12 +1,11 @@
-# Ephelion voice (record, convert, accept): Privacy and Terms lines (DRAFT, for Nate's reread)
+# Ephelion voice (record, convert, accept): Privacy and Terms lines (reread by Nate, 2026-11-21)
 
-Branch `ephelion-voice`, 2026-11-19. Drafted by the coding agent (Claude, a closed model by Anthropic). Nothing here is
-in `src/lib/legal.ts` yet. It goes there only after Nate says "reread", and ships in the same release that turns the
-voice pages on for anyone beyond admins (owner, 2026-10-18: legal texts describe today). While the switch is admins-only,
-these lines stay in this file. The facts behind each line, with links: `docs/proposals/ephelion-voice.md`.
+Branch `ephelion-voice`, 2026-11-19. Drafted by the coding agent (Claude, a closed model by Anthropic). Reread by Nate on
+2026-11-21 ("reread: … the Privacy §3, §4 and §7 lines, the Terms §5 and §8 lines …") and now in `src/lib/legal.ts`, in
+the release that turns the voice pages on for admins (the merge plan on the review page). The facts behind each line,
+with links: `docs/proposals/ephelion-voice.md`.
 
-Square brackets mark a sentence that is true only after something Nate does (turning off ElevenLabs' training toggle on
-the account). It stays until he says it's done (Nate, 2026-11-20).
+The training sentence's square brackets are removed: Nate turned off ElevenLabs' training for the account (2026-11-21).
 
 ## Privacy
 
@@ -38,8 +37,8 @@ can come a little later than stated." The other counts are not changed by this b
 
 > If you record a speech and agree to send it: ElevenLabs receives your recording and converts it into a character's
 > voice, then receives the converted speech to transcribe it. It receives nothing else about you. It stores what it
-> receives in the United States and may keep it under its own privacy policy; we ask it to delete each conversion from
-> its history. [It doesn't use them to train its models.] ElevenLabs also reads this edition's speeches aloud in
+> receives in the United States and may keep it under its own privacy policy; we ask it to delete each conversion and its transcript
+> right after. It doesn't use them to train its models. ElevenLabs also reads this edition's speeches aloud in
 > the characters' voices, from their written words.
 
 ### Slice 4: publishing a storyboard (DRAFT, 2026-11-21; these ship only with VOICE.publish, never before)

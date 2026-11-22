@@ -3,7 +3,7 @@ import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import type postgres from 'postgres';
 import { db } from '../db';
-import type { Addition, Look, PictureDecision, PictureRecipe, PictureVersion, ShownReplacement } from './shared';
+import { withoutHidden, type Addition, type Look, type PickedRef, type PictureDecision, type PictureRecipe, type PictureVersion, type RefCredit, type ShownReplacement } from './shared';
 
 /**
  * Reading the edition's chapter pictures as admins left them (owner, 2026-11-18, option B; 0042_chapter_picture_versions):
@@ -31,23 +31,68 @@ export async function picturesReady(sql: Sql): Promise<boolean> {
 
 type ShownRow = {
   job_id: string; chapter: number; version_id: string | null; public_url: string | null; by_fid: string; by_handle: string | null; decided_at: Date;
-  sha256: string | null; width: number | null; height: number | null; model: string | null; maker: string | null; open_weights: boolean | null; look: Look | null; note: string | null; prompt: string | null;
+  sha256: string | null; width: number | null; height: number | null; model: string | null; maker: string | null; open_weights: boolean | null; look: Look | null; note: string | null; prompt: string | null; refs: unknown; picked: unknown; hidden_refs: string[] | null;
 };
+
+type SheetEntry = { sheet?: unknown; name?: unknown; versionId?: unknown; by?: unknown };
+/**
+ * Whose pictures a kept version was made after, for its caption (2026-11-21): its sheet pictures that record their
+ * maker, then its picked references, in the order sent; `hidden` for any whose design or picture is no longer published
+ * (hides win, P5f). Sheets sent before 2026-11-21 record no maker and are not credited by name here (their recipe
+ * still names the sheet).
+ */
+function creditsOf(refs: unknown, picked: unknown, published: (id: string) => boolean): RefCredit[] {
+  const sheets = (Array.isArray(refs) ? refs : []) as SheetEntry[];
+  const picks = (Array.isArray(picked) ? picked : []) as Partial<PickedRef>[];
+  return [
+    ...sheets.filter((x) => typeof x.by === 'string' && typeof x.versionId === 'string').map((x) => ({ what: `${String(x.name)} sheet`, by: String(x.by), hidden: !published(String(x.versionId)) })),
+    ...picks.filter((x) => typeof x.by === 'string' && typeof x.versionId === 'string' && typeof x.what === 'string').map((x) => ({ what: String(x.what), by: String(x.by), hidden: !published(String(x.versionId)) })),
+  ];
+}
+
+/**
+ * Which of these element versions are hidden or unpublished now (one read for every kept picture's references). A
+ * version with no row is not counted as hidden: elements are never deleted (a removal hides), so that is only ever a
+ * test's stand-in id.
+ */
+async function hiddenAmong(sql: Sql, ids: string[]): Promise<Set<string>> {
+  const want = [...new Set(ids.filter((x) => /^[0-9a-f-]{36}$/i.test(x)).map((x) => x.toLowerCase()))];
+  if (!want.length) return new Set();
+  const rows = await sql<{ id: string }[]>`select v.id::text as id from studio.element_versions v join studio.elements e on e.id = v.element_id where v.id in ${sql(want)} and e.status <> 'published'`;
+  return new Set(rows.map((r) => r.id));
+}
+/**
+ * In the same read (no second query): the ids among a version's sheet references and picked references whose picture
+ * or sheet is hidden or unpublished now. A version with no row is not counted (only ever a test's stand-in id).
+ */
+const HIDDEN_REFS = (sql: Sql) => sql`(
+  select coalesce(array_agg(x->>'versionId'), '{}') from (
+    select jsonb_array_elements(case when jsonb_typeof(v.recipe->'references') = 'array' then v.recipe->'references' else '[]'::jsonb end) x
+    union all select jsonb_array_elements(case when jsonb_typeof(v.recipe->'picked') = 'array' then v.recipe->'picked' else '[]'::jsonb end)
+  ) r(x)
+  join studio.element_versions ev on ev.id::text = lower(x->>'versionId') join studio.elements e on e.id = ev.element_id
+  where e.status <> 'published')`;
+const idsIn = (...lists: unknown[]) => lists.flatMap((l) => (Array.isArray(l) ? l : [])).map((x) => String((x as { versionId?: unknown })?.versionId ?? '')).filter(Boolean);
 
 /** The latest decision per job, joined to its version: a version shown in place of the committed file, or nothing. */
 export async function readReplacements(sql: Sql): Promise<Map<string, ShownReplacement>> {
   const rows = await sql<ShownRow[]>`
     select distinct on (d.job_id) d.job_id, d.chapter, d.version_id, d.public_url, d.by_fid, d.by_handle, d.decided_at,
-      v.sha256, v.width, v.height, v.model, v.maker, v.open_weights, v.look, v.note, v.prompt
+      v.sha256, v.width, v.height, v.model, v.maker, v.open_weights, v.look, v.note, v.prompt, v.recipe->'references' as refs, v.recipe->'picked' as picked,
+      ${HIDDEN_REFS(sql)} as hidden_refs
     from studio.chapter_picture_decisions d left join studio.chapter_picture_versions v on v.id = d.version_id
     order by d.job_id, d.decided_at desc, d.id desc`;
   const out = new Map<string, ShownReplacement>();
   for (const r of rows) {
     if (!r.version_id || !r.public_url || !r.sha256) continue;
+    const hidden = new Set((r.hidden_refs ?? []).map((x) => x.toLowerCase()));
+    const credits = creditsOf(r.refs, r.picked, (id) => !hidden.has(id.toLowerCase()));
     out.set(r.job_id, {
       versionId: r.version_id, jobId: r.job_id, chapter: r.chapter, url: r.public_url, sha256: r.sha256, width: r.width ?? 1024, height: r.height ?? 576,
       model: r.model ?? '', maker: r.maker ?? '', open: Boolean(r.open_weights), look: r.look, note: r.note ?? '', prompt: r.prompt ?? '',
       byFid: Number(r.by_fid), byHandle: r.by_handle, at: new Date(r.decided_at).toISOString(),
+      ...(Array.isArray(r.refs) ? { sheets: r.refs.map((x) => String((x as { sheet?: unknown })?.sheet ?? '')).filter(Boolean) } : {}),
+      ...(credits.length ? { credits } : {}),
     });
   }
   return out;
@@ -82,6 +127,7 @@ export const shownReplacements = cache(async (): Promise<Map<string, ShownReplac
 export const forgetReplacements = () => {
   missingUntil = 0;
   failedUntil = 0;
+  additionsFailedUntil = 0;
 };
 
 /**
@@ -182,12 +228,14 @@ export async function publicRecipe(sql: Sql, versionId: string) {
   if (!first) return null;
   const ds = await sql<DecisionRow[]>`select id, job_id, chapter, version_id, action, public_url, by_fid, by_handle, decided_at from studio.chapter_picture_decisions
     where job_id = ${v.jobId} order by decided_at, id`;
+  // A reference hidden since is named nowhere public (P5f; decision 16): only its kind and sha256 stay.
+  const hidden = await hiddenAmong(sql, idsIn(v.recipe?.references, v.recipe?.picked));
   return {
     id: v.id,
     job: v.jobId,
     chapter: v.chapter,
     url: first.publicUrl,
-    recipe: v.recipe,
+    recipe: withoutHidden(v.recipe, (id) => !hidden.has(id.toLowerCase())),
     model: { id: v.model, maker: v.maker, open: v.open },
     look: v.look,
     note: v.note,
@@ -258,3 +306,40 @@ async function additionsOrNone(): Promise<Addition[]> {
 }
 /** Every added picture's place, for the chapter pages: once per build worker at build, fresh on each render after. */
 export const shownAdditions = cache(async (): Promise<Addition[]> => (BUILDING ? (additionsDuringBuild ??= additionsOrNone()) : additionsOrNone()));
+
+/**
+ * Every added picture's place, for the other places a kept one now shows (owner, 2026-11-21: quote cards, References and
+ * the sheets, the pick switch): read through the same tag as replacementsEverywhere, so a Keep, a take-off or a
+ * show-again (all decisions, src/app/api/you/illustrations/show/route.ts) reaches them at once. Where an addition sits
+ * never changes once written (0043 is insert-only, written at the first draft, which shows nowhere), so the decisions'
+ * revalidation is the only one these need. A failed read is never kept: the pages show no added picture for 30 seconds
+ * on this instance, and the edition's committed pictures as before. During a build it is the chapter pages' own read.
+ */
+let additionsFailedUntil = 0;
+async function additionsOrThrow(): Promise<Addition[]> {
+  const sql = db();
+  if (!sql) return [];
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const slow = new Promise<never>((_, no) => (timer = setTimeout(() => no(new Error('chapter pictures: the additions read took over 5 s')), 5000)));
+  try {
+    return await Promise.race([readAdditions(sql), slow]);
+  } catch (e) {
+    if (missing(e)) return [];
+    throw e;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+const keptAdditions = unstable_cache(additionsOrThrow, ['chapter-pictures-additions-v1'], { tags: [PICTURES_TAG] });
+
+export const additionsEverywhere = cache(async (): Promise<Addition[]> => {
+  if (BUILDING) return shownAdditions();
+  if (Date.now() < additionsFailedUntil) return [];
+  try {
+    return await keptAdditions().catch((e) => (/incrementalCache missing/.test(String((e as Error)?.message ?? e)) ? additionsOrThrow() : Promise.reject(e)));
+  } catch (e) {
+    additionsFailedUntil = Date.now() + 30_000;
+    console.error('chapter pictures: additions not read', (e as Error).message);
+    return [];
+  }
+});
