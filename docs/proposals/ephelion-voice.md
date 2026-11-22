@@ -680,7 +680,7 @@ tested stay as they are. Nothing spent, nothing merged.
   board), so a clip cut from it still says so. Also on the draft's board, so admins can try it before publishing exists.
 - **The switch:** `VOICE.publish: false`. While off the publish route refuses and every spoken page is "not found";
   the local tests turn it on (`VOICE_TEST_ON`), stand-ins only.
-- **Schema:** `0045_ephelion_voice_publish.sql` (after `NEXT_ephelion_voice.sql`): `voice_boards.closing`,
+- **Schema:** `0046_ephelion_voice_publish.sql` (after `NEXT_ephelion_voice.sql`): `voice_boards.closing`,
   `voice_publications`, the publish and take-down functions, and `delete_voice_draft` replaced so removing a draft
   also removes its taken-down publications' rows (a live one still blocks it; the undo restores the old one); dry run, migration, read-back (a realistic publication
   made, refused for someone else, for a stray file key, twice, then taken down), undo (refuses once anything was
@@ -744,7 +744,7 @@ person making it, not to whoever made the reading."
   boards on one reading (one live publication per person).
 - **Challenge note:** entries made on the ready-made reading count (Nate, 2026-11-21: "as the proposal says"). Nothing in
   the challenge code changes here: a storyboard isn't an entry type yet.
-- **SQL:** `0045_ephelion_voice_publish.sql` version 2 (requires 0044): adds the owner, the timings table and reading
+- **SQL:** `0046_ephelion_voice_publish.sql` version 2 (requires 0044): adds the owner, the timings table and reading
   publications to version 1, and its read-back no longer uses SET ROLE. Tested in PGlite: applies twice, read-back
   passes, the undo restores 0044's exact shape, and refuses once anything was published. For the coordinator to test.
 
@@ -763,7 +763,7 @@ pictures waits until storyboards open to everyone (coordinator, 2026-11-22).
    checks below re-run. The two are independent; this branch shows an invented speech on the card either way.
 2. **Checks on the merge result** (main merged in, clean tree): typecheck, `npm run build`, `test:voice`,
    `check:voice-proof`, `check:principles` locally, `check:ui` locally (only the known local-only results may fail).
-3. **Migration (Nate):** `0045_ephelion_voice_publish.sql` (numbered at merge; main's highest is 0044), tested by the
+3. **Migration (Nate):** `0046_ephelion_voice_publish.sql` (numbered at merge; main's highest is 0045, #188), tested by the
    coordinator. Nate runs it as postgres in the SQL Editor (dry run, migration, read-back ending "READ-BACK PASSED") and
    says "applied". Nothing in production uses its tables before the merge.
 4. **Merge (Nate's word):** a merge commit; wait for /api/version.

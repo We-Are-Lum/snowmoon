@@ -1,5 +1,5 @@
--- 0045_ephelion_voice_publish.sql: the Ephelion storyboard, slice 4 and storyboards from the ready-made reading (Nate,
--- 2026-11-21, branch ephelion-publish). Numbered 0045 at merge (2026-11-22; main's highest was 0044); it was
+-- 0046_ephelion_voice_publish.sql: the Ephelion storyboard, slice 4 and storyboards from the ready-made reading (Nate,
+-- 2026-11-21, branch ephelion-publish). Numbered 0046 at merge (2026-11-22; main's highest was 0045); it was
 -- NEXT_ephelion_voice_publish.sql. NOT APPLIED until Nate applies it; the branch merges only after he says "applied".
 -- Drafted by the coding agent (Claude, a closed model by Anthropic); tested in PGlite by the agent (npm run test:voice).
 -- Version 2 tested by the coordinator on Postgres 16 on top of 0044 (2026-11-22): the dry run leaves the shape unchanged,
