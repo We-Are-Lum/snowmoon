@@ -86,6 +86,32 @@ For example, 6 cuts read A, B, C, D, C, A, and 12 cuts read A, B, C, D, C, E, B,
 Every shot's camera stays a dropdown, so the person can change any of them. The rule only fills in shots whose camera
 hasn't been chosen. A shot's own words are always the person's.
 
+## 3b. Inserts: shots outside the scene
+
+The person may make any shot an **insert**: a picture outside the scene, about what the speech is saying, while his
+voice goes on (Nate's examples: a family at dinner, a ship going to space).
+
+- **Only the person makes an insert.** A shot's card has a switch, "In the scene / Insert", which starts on In the
+  scene. The coverage rule never makes a shot an insert, and an insert has no default camera.
+- **What an insert sends:**
+  - its words, the person's own, as every shot's;
+  - the style, as text;
+  - a look only if the person picks a character for it. That look's front view is then the one reference. With no
+    character, there is no reference picture at all, so it is text to image.
+  - It never sends the scene picture or a previous shot, and it has no "same place, light, clothes and person" line.
+- **Continuity skips inserts.** The next shot in the scene takes the last kept shot *in the scene* as its third
+  reference, never an insert. For example, with shot 4 an insert, shot 5 is sent with the scene, the look and shot 3.
+- **The camera rule skips inserts too:** the coverage cycle continues over the shots in the scene as if the inserts
+  weren't there. That keeps the master, close-up rhythm intact around them.
+- **On the page**, an insert's card is marked "Insert · outside the scene", and its "Sent with" line names only what is
+  sent ("the style · no reference picture", or "the style · Bai's look").
+- **The recipe:**
+  - `insert: true`, with its references: none, or `anchor-look` for the chosen character;
+  - each shot in the scene records `continuity: <shot key>`, the in-scene shot it followed.
+  - The card's credits list inserts as "Insert: <the person's words> (outside the scene)".
+- **Cost:** an insert costs no more than a shot in the scene. With no reference, FLUX runs text to image (about
+  $0.005), GPT Image is about $0.04 and Gemini $0.067; with a look, it costs the same as today's one-reference prices.
+
 ## 4. The cost per shot with three reference pictures
 
 | Model | One picture today | With 3 references (estimate) | Measured? |
@@ -110,11 +136,14 @@ wouldn't now: each picture adds cost, and the anchors matter more.
   - The camera defaults are fixed angle texts from the site's list (as today's "Medium shot"). They are camera
     directions, not story words, placed by a rule and labelled Automatic.
   - No shot description and no setting is written by an AI model. The agents' tools can't fill them either.
+- An insert is never made by default: the switch starts on In the scene, and only the person turns it. It holds only
+  the person's words.
 - **What each shot's recipe adds:**
   - `scene`: its kept picture's sha256, its setting text, and who wrote it ("the person").
   - `references`: in order, each with its role (anchor-scene, anchor-look, continuity), version id or shot key, and sha256.
   - `camera`: the angle, and whether the rule placed it or the person chose it (`by: 'rule' | 'person'`).
   - `coverage`: the rule's name and version.
+  - `insert`: true or false. For a shot in the scene, `continuity` names the in-scene shot it followed.
 - **The published card** says "Scene: the person's words; pictures by <model> (closed/open), each with the scene and
   his look as references".
 
