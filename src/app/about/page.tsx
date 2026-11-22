@@ -137,8 +137,7 @@ export default async function About() {
       <p>
         If you record a speech and agree to send it: ElevenLabs receives your recording and converts it into a character&apos;s
         voice, then receives the converted speech to transcribe it. It receives nothing else about you. It stores what it
-        receives in the United States and may keep it under its own privacy policy; we ask it to delete each conversion from
-        its history. It doesn&apos;t use them to train its models. ElevenLabs also reads this edition&apos;s speeches aloud in
+        receives in the United States and may keep it under its own privacy policy; we ask it to delete each conversion and its transcript right after. It doesn&apos;t use them to train its models. ElevenLabs also reads this edition&apos;s speeches aloud in
         the characters&apos; voices, from their written words.
       </p>
       <h2>Theme</h2>

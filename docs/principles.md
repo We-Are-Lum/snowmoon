@@ -71,9 +71,9 @@ coding agent and its helpers are in `docs/prompts/`.
   history item; transcription receives the converted audio, never the take. Planted violations (a log of the body, a
   storage put, a transcription of the take, a skipped history delete) are each caught. Not covered: what ElevenLabs
   keeps on its side (`docs/proposals/ephelion-voice.md`). The Modal proof (`check:modal-vc`) still runs on its own.
-  Added after the reread (2026-11-21, Nate: "confirm whether transcription requests leave a history item … If they do,
-  delete those too"): ElevenLabs keeps each transcript by its id (not in history), so the flow deletes it with the
-  same retries, and a planted skipped transcript delete is caught too.
+  And (Nate, 2026-11-21: "confirm whether transcription requests leave a history item … If they do, delete those too";
+  this sentence reread by him the same day): ElevenLabs keeps each transcript by its id (not in history), so the flow
+  deletes it with the same retries, and a planted skipped transcript delete is caught too.
 - `P1i` (reread by Nate 2026-11-21): the own-voice consent shown is `own-voice-v2`, and only by the voice pages and routes,
   only while `P1h` passes; `own-voice-v1` is used by nothing under `src/`.
 - `npm run test:db`: after 0005, a recipe is public only if it made a
