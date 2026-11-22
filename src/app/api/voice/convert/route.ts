@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
 import { db } from '~/lib/db';
 import { VOICE } from '~/lib/config';
 import { flowDeps, noStore, voicePerson, voiceReady } from '~/lib/voice/server';
@@ -8,13 +8,15 @@ import { elevenLabsBase } from '~/lib/voice/flag';
 import { hasVoiceConsent, voiceConsentWording } from '~/lib/voice/consent';
 import { refusal, reserve } from '~/lib/voice/costs';
 import { convertTake, estimateConvertCredits, FlowError, type CostEntry, type Scope } from '~/lib/voice/take-flow';
+import { keepConvertedTake } from '~/lib/voice/keep-converted';
 
 export const maxDuration = 300;
 
 /**
  * Convert one take (the whole speech, or one sentence) into a preset's voice. The take is read into memory, handed to
  * convertTake (take-flow.ts: ElevenLabs and sha256, nothing else) and never written, logged or returned (P1h). The
- * reply is the converted MP3, with its signed record in the X-Voice-Ticket header.
+ * reply for a sentence is the converted MP3, with its signed record in the X-Voice-Ticket header; a whole take is
+ * transcribed and kept as the person's private draft before the reply (keep-converted.ts), which gives its id.
  */
 export async function POST(request: Request) {
   const who = await voicePerson(request);
@@ -57,7 +59,9 @@ export async function POST(request: Request) {
     costed = true;
     await settle({ ...e, kind: 'convert' });
   };
-  try {
+  // The conversion and the keeping run as one job the platform keeps alive past the reply (after), so a person who
+  // leaves mid-conversion still has the draft (Nate, 2026-11-22). Nothing here listens to the request's abort.
+  const job = (async () => {
     const { audio, ticket } = await convertTake(flowDeps(cost), {
       take: new Uint8Array(await file.arrayBuffer()),
       mime: file.type || 'audio/webm',
@@ -70,7 +74,19 @@ export async function POST(request: Request) {
       scope,
       consentSha256: wording.sha256,
     });
-    return new Response(Buffer.from(audio), { headers: { 'content-type': 'audio/mpeg', 'x-voice-ticket': ticket, ...noStore } });
+    if (scope.kind === 'sentence') return new Response(Buffer.from(audio), { headers: { 'content-type': 'audio/mpeg', 'x-voice-ticket': ticket, ...noStore } });
+    // A whole take is kept as the person's private draft before the reply (Nate, 2026-11-22), so leaving the page
+    // mid-conversion loses nothing. Only the converted audio is kept: the take is never handed on (P1h).
+    const kept = await keepConvertedTake(sql, who.fid, { audio, ticket });
+    return NextResponse.json({ draftId: kept.draftId, ticket, check: kept.check, checks: kept.checks }, { headers: { 'x-voice-ticket': ticket, ...noStore } });
+  })();
+  try {
+    after(job.then(() => undefined, () => undefined));
+  } catch {
+    // Outside a request (the route tests call POST directly): the job is awaited below all the same.
+  }
+  try {
+    return await job;
   } catch (e) {
     if (!costed) await settle(null).catch(() => {});
     if (e instanceof FlowError) return NextResponse.json({ error: e.message }, { status: e.status });
