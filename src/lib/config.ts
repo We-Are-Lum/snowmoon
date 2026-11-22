@@ -1144,6 +1144,8 @@ export const VOICE = {
   // 'admins' (Nate, 2026-11-21): real pictures for admins only, on the admins' pool and its daily cap (paidPicture's
   // pool 'admin', CHAPTER_PICTURES.adminDailyCapUsd); everyone else stays off.
   realPictures: 'admins' as false | 'admins' | true,
+  /** The team's invented speeches (Nate, 2026-11-22): admins only, and not to be published until Nate says. */
+  publishInvented: false,
   board: { maxShots: 12, maxTriesPerShot: 3, descriptionMaxChars: 600 },
   provider: 'ElevenLabs',
   models: {

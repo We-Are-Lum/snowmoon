@@ -1,0 +1,73 @@
+{
+  "about": "Lord Ephelion's three invented speeches for the storyboard (Nate, 2026-11-22). Source of truth: the Google Doc \"Lord Ephelion: three speeches v2 (DRAFT)\" (id 1tYOTNzyttS6Q61pVSIY4FCIsyGIxFVHi4ehkHA1z8Nk), word for word: each paragraph as written there, the last sentence of each \"With regards.\"; not the titles, nor the \"Still open\" section. Invented, not from the book. Versioned: a recording keeps the id (and the text's sha256) it was checked against; when the team edits a speech it gets a new id (-v3) and the old one stays. Credit (Nate, 2026-11-22), from each version's aiHelp, which Nate sets (never an agent or the site): true gives \"Words by the Snowmoon team, drafted with AI help (Claude, by Anthropic)\", false gives \"Words by the Snowmoon team\"; always with \"Invented, not from the book\". The v2 speeches were drafted with AI help (Claude, by Anthropic). Admins only, behind VOICE's switch; not publishable until Nate says (VOICE.publishInvented).",
+  "source": {
+    "title": "Lord Ephelion: three speeches v2 (DRAFT)",
+    "googleDocId": "1tYOTNzyttS6Q61pVSIY4FCIsyGIxFVHi4ehkHA1z8Nk",
+    "version": 2
+  },
+  "speeches": [
+    {
+      "id": "doing-fine-v2",
+      "version": 2,
+      "aiHelp": true,
+      "title": "Doing fine",
+      "theme": "worth",
+      "names": [],
+      "paragraphs": [
+        "Somebody told you this week, whether with words or actions, that you're doing just fine the way you are.",
+        "They meant it kindly.",
+        "But deep inside, you know what you could have done. You know you are capable of so much more.",
+        "No one asks you to bring it up another level. No one asks you to dig deeper.",
+        "And that's what stings. Not that they were hard on you, but that they didn't ask more of you.",
+        "Telling you you're enough is not kind. They want to be comfortable, and they want you to be comfortable.",
+        "Love that asks nothing of you is not love. It's indifference.",
+        "Find the ones who are proud of you when you win.",
+        "You are capable of more than anyone has dared to ask.",
+        "With regards."
+      ]
+    },
+    {
+      "id": "natural-way-v2",
+      "version": 2,
+      "aiHelp": true,
+      "title": "The natural way of things",
+      "theme": "death",
+      "names": [],
+      "paragraphs": [
+        "When a loved one dies, people bring you food. They sit with you and say things like: it was their time. They lived a good life. It's the natural way of things.",
+        "They say it because they care, and they don't know what to say.",
+        "But you notice it didn't help. It lands hollow.",
+        "Nobody cries out: this is not right. This is not good. It's a problem. And problems can be solved.",
+        "In the north, lives are being extended. Come and see for yourself.",
+        "And stop making excuses about the natural way of things.",
+        "With regards."
+      ]
+    },
+    {
+      "id": "last-five-years-v2",
+      "version": 2,
+      "aiHelp": true,
+      "title": "The last five years",
+      "theme": "stagnation",
+      "names": [
+        "Veridia"
+      ],
+      "paragraphs": [
+        "What is one thing your city has built in the last five years that you're proud of?",
+        "Take your time.",
+        "Veridia last went to space twenty years ago. Its tallest building is forty years old.",
+        "And it is a lovely country. The gardens, the quiet streets.",
+        "But a country can be so careful with what it has that it stops making anything new. You have felt it.",
+        "There was something you were excited about once. An idea, a plan. And it never happened.",
+        "It never happened because somebody didn't have the courage to take a risk.",
+        "The future has never been built by everyone. It is built by the few who can. The rest still receive the benefits.",
+        "Come and build with us.",
+        "With regards."
+      ]
+    }
+  ],
+  "credits": {
+    "aiHelp": "Words by the Snowmoon team, drafted with AI help (Claude, by Anthropic)",
+    "noAiHelp": "Words by the Snowmoon team"
+  }
+}
