@@ -44,7 +44,7 @@ interface DraftRecipe {
   settings?: unknown;
   transcribeModel?: string;
   preset?: { id: string; name: string };
-  speech?: { id: string; title: string; version?: number; source?: { kind: string; block?: string; by?: string }; label?: { kind?: string } };
+  speech?: { id: string; title: string; version?: number; credit?: string | null; aiHelp?: boolean | null; source?: { kind: string; block?: string; by?: string }; label?: { kind?: string; writers?: string[] } };
   takes?: unknown[];
   check?: { sentences: number; matched: number; unmatched: number[]; bySound?: unknown[] };
 }
@@ -89,7 +89,8 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
       title: r.speech?.title ?? 'A speech',
       block: r.speech?.source?.kind === 'book' ? (r.speech.source.block ?? null) : null,
       // The team's invented speech: its version; the credit stays a DRAFT placeholder until Nate gives it (2026-11-22).
-      ...(invented ? { invented: { version: r.speech?.version ?? null, credit: null } } : {}),
+      // The credit the recording's recipe carries (from its version's aiHelp, which Nate sets).
+      ...(invented ? { invented: { version: r.speech?.version ?? null, credit: r.speech?.credit ?? r.speech?.label?.writers?.[0] ?? null } } : {}),
     },
     performer,
     preset: r.preset?.name ?? 'a preset voice',
