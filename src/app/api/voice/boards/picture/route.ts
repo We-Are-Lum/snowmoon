@@ -9,7 +9,7 @@ import { standInPicture } from '~/lib/voice/stand-in-picture';
 
 /**
  * POST: a picture for one shot (src/lib/voice/shot-picture.ts): the challenge's picture code, the person's own words,
- * a camera, the sheets. Nothing is stored until Keep. Real models only once VOICE.realPictures is on (Nate's word);
+ * a camera, the sheets. Nothing is stored until Keep. Real models for whom VOICE.realPictures lets (admins, 2026-11-21);
  * the local tests (VOICE_TEST_ON) use stand-in cards, never a model.
  * GET ?draft=&shot=&sha=: a kept picture, to its draft's own person only.
  */

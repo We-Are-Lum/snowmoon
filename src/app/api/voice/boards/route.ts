@@ -47,7 +47,7 @@ export async function GET(request: Request) {
       angles: CAMERA_ANGLES,
       limits: SHOT,
       // The challenge's models for this visitor (the country decides; it isn't kept), the default, and the limits.
-      making: { ...shotModels(whereFrom(request.headers)), standIn: voiceTestOn(), tries: await triesMade(sql, draft.id) },
+      making: { ...shotModels(whereFrom(request.headers), who.fid), standIn: voiceTestOn(), tries: await triesMade(sql, draft.id) },
     },
     { headers: noStore },
   );
