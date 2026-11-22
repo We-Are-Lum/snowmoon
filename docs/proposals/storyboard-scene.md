@@ -94,8 +94,8 @@ hasn't been chosen. A shot's own words are always the person's.
 | GPT Image 2.5 Sunburst (closed, OpenAI) | $0.047 (1 reference, measured) | about $0.05 to $0.06 (each input picture adds image-input tokens) | **no**: one shot measured before any count is relied on (20% rule) |
 | Gemini 3.1 Flash Image (closed, Google) | $0.068 (measured on the bases) | about $0.07 (input pictures are tokens, small beside $0.067 an image) | **no**: measured the same way |
 
-A 12-shot board on FLUX is about $0.31 at one kept try a shot, $0.87 at the most (3 tries a shot, plus the scene). On
-GPT Image that is about $0.70 to $2.30.
+A 12-shot board on FLUX is about $0.31 at one try a shot, plus the scene, and $0.90 at the most (3 tries for every shot
+and the scene). On GPT Image the same board is about $0.65 to $2.20.
 
 **Is IMAGES.maxReferences (3) enough?** Yes, for this design: it is exactly the scene, the look and the previous shot.
 The style stays text, as today. A fourth reference would be needed only for a second character in shot, or for a style
