@@ -110,7 +110,7 @@ for (const [k, v] of [['VERCEL', '1'], ['VERCEL_ENV', 'production'], ['VERCEL_EN
   delete process.env[k];
 }
 check('S. a non-admin is not let in during the admin trial', !voiceAllowed(STRANGER) && voiceAllowed(NATE) && voiceAllowed(GARANCE));
-const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]', 'boards', 'boards/picture', 'boards/keep'];
+const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]', 'boards', 'boards/picture', 'boards/keep', 'boards/closing', 'publish', 'publish/[id]'];
 for (const r of routeFiles) {
   const mod = await route(r);
   const h = mod.POST ?? mod.GET ?? mod.DELETE;
@@ -418,8 +418,8 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   check('B. the automatic cuts never make more than 12 shots, even for a long speech', board.proposeCuts({ seconds: 600, words: [], sentences: Array.from({ length: 200 }, (_, i) => ({ n: i, start: i * 3, end: i * 3 + 3 })) }).length <= 11);
   check('B. Keep refuses another picture\'s bytes, and another person', (await keep(p1.ticket, p2.image)).status === 400 && (await keep(p1.ticket, p1.image, GARANCE)).status === 400);
   r = await keep(p1.ticket, p1.image);
-  const keyP = `voice-boards/${acc.id}/${s2.shots[0].key}-${p1.sha256}.png`;
-  check('B. Keep stores it privately, under voice-boards/<draft>/, with its recipe', r.status === 200 && existsSync(path.join(STORE, keyP)) && (await sql`select recipe from studio.voice_board_pictures where storage_key = ${keyP}`)[0]?.recipe.prompt === p1.recipe.prompt);
+  const keyP = `voice-boards/${acc.id}/${NATE}/${s2.shots[0].key}-${p1.sha256}.png`;
+  check('B. Keep stores it privately, under voice-boards/<draft>/<owner>/, with its recipe', r.status === 200 && existsSync(path.join(STORE, keyP)) && (await sql`select recipe from studio.voice_board_pictures where storage_key = ${keyP}`)[0]?.recipe.prompt === p1.recipe.prompt);
   r = await save(cuts, s2.shots.map((x, i) => (i === 0 ? { ...x, kept: p1.sha256 } : x)));
   const s3 = (await r.json()) as { version: number; shots: Shot[]; notes: { kind: string; shot: string }[] };
   check('B. the kept picture is on the board now (version 3), and its note is gone', s3.version === 3 && s3.shots[0].kept === p1.sha256 && !s3.notes.some((n) => n.kind === 'no-picture' && n.shot === s3.shots[0].key));
@@ -430,6 +430,122 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   const same = board.boardNotes(s3.shots.map((x) => ({ ...x, angle: 'wide' as const })));
   check('B. notes: three shots in a row from the same angle are flagged', same.some((n) => n.kind === 'same-angle'));
   check('B. P2, by reading the code: nothing in the board fills a description', !/description:\s*['"`][^'"`]/.test(readFileSync(path.join(ROOT, 'src/lib/voice/board.ts'), 'utf8').replace(/description: ''/g, '')) && !/description\s*=\s*['"`]/.test(readFileSync(path.join(ROOT, 'src/app/api/voice/boards/route.ts'), 'utf8')));
+
+  // K. Slice 4: the closing card, publishing, the take-down (2026-11-21; stand-ins only).
+  const closingLib = await import('../src/lib/voice/closing');
+  const { closingCard, closingSvg, CARD } = await import('../src/lib/voice/closing-card');
+  const { publication, publishPreview } = await import('../src/lib/voice/publish');
+  const { publishOn } = await import('../src/lib/voice/publish-deps');
+  const sharp = (await import('sharp')).default;
+  const publishRoute = await route('publish');
+  const takeDownRoute = await route('publish/[id]');
+  const closingRoute = await route('boards/closing');
+  const publicRoute = await route('public/[...key]');
+  {
+    const credits = closingLib.closingCredits({ speech: { title: 'The letter', block: 'c13-b64' }, performer: 'naaate', preset: 'Warm, measured (American)', voiceModel: { name: 'ElevenLabs Voice Changer', maker: 'ElevenLabs' }, transcribeModel: { name: 'ElevenLabs Scribe v3', maker: 'ElevenLabs' }, pictures: [{ id: 'gpt-image-2.5-sunburst', name: 'GPT Image 2.5 Sunburst', maker: 'OpenAI', open: false }, { id: 'flux', name: 'FLUX.2', maker: 'Black Forest Labs', open: true }, { id: 'stand-in', name: 'Stand-in', maker: 'x', open: true }], shots: 7 });
+    const text = credits.map((c) => c.text).join('\n');
+    check('K. the credits name the book\'s block, the performer, the voice, and say which are people and which are AI', /c13-b64/.test(text) && /@naaate/.test(text) && /Warm, measured/.test(text) && credits.some((c) => c.who === 'people') && credits.some((c) => c.who === 'ai') && credits.some((c) => c.who === 'book'));
+    check('K. ... every model by name and maker, closed or open, and the stand-ins counted', /ElevenLabs Voice Changer by ElevenLabs \(closed model\)/.test(text) && /GPT Image 2.5 Sunburst by OpenAI \(closed model\)/.test(text) && /FLUX\.2 by Black Forest Labs \(open model\)/.test(text) && /1 stand-in card in place/.test(text));
+    check('K. ... and always the not-affiliated line and "No AI video"', credits.at(-1)!.text === closingLib.CLOSING.notAffiliated && /not affiliated with or endorsed by the author/i.test(credits.at(-1)!.text) && /AI did the voice conversion, the word check and the pictures\. No AI video/.test(text));
+    const anon = closingLib.closingCredits({ speech: { title: 'T', block: null }, performer: null, preset: 'p', voiceModel: { name: 'v', maker: 'm' }, transcribeModel: { name: 't', maker: 'm' }, pictures: [], shots: 1 });
+    check('K. with stand-ins only, the card doesn\'t say AI made the pictures, and the stand-in line isn\'t tagged AI', /AI did the voice conversion and the word check\. No AI video/.test(anon.map((c) => c.text).join(' ')) && credits.find((c) => /stand-in card/.test(c.text))?.who === 'site');
+    const credit = 'Words by the Snowmoon team, drafted with AI help (Claude, by Anthropic)';
+    const inv = closingLib.closingCredits({ speech: { title: 'Doing fine', block: null, invented: { version: 2, credit } }, performer: null, preset: 'p', voiceModel: { name: 'v', maker: 'm' }, transcribeModel: { name: 't', maker: 'm' }, pictures: [], shots: 1 });
+    check('K. an invented speech on the card: "Invented, not from the book", its version and its credit, no book block', inv[0].who === 'invented' && inv[0].text === `Speech: “Doing fine” (version 2). Invented, not from the book. ${credit}.` && !/c13-b|from Snowmoon by/.test(inv[0].text), inv[0].text);
+    check('K. ... and the not-affiliated line wherever Vitalik is named (the card names him in it)', inv.at(-1)!.text === closingLib.CLOSING.notAffiliated && /Vitalik Buterin/.test(inv.at(-1)!.text));
+    check('K. ... and publishing one waits for Nate\'s word', closingLib.publishProblems({ unmatched: [], sentences: 1, shots: [], keptShots: new Set(), closing: { description: 'x', styleId: null, kept: 'b'.repeat(64) }, closingKept: true, standIns: 0, standInsAllowed: true, inventedHeld: true }).some((x) => /invented speeches can’t be published yet/.test(x)) && VOICE.publishInvented === false);
+    check('K. not named: "a reader", and no name anywhere', anon.every((c) => !/@/.test(c.text)) && anon.some((c) => /a reader/.test(c.text)));
+    const svg = closingSvg('The letter', credits);
+    const flat = svg.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+    check('K. the card draws the site\'s own text: every credit\'s words and the snowmoon.party mark', credits.every((c) => closingLib.wrapLines(c.text, 200).join(' ').split(' ').every((w) => flat.includes(w.replace(/&/g, '&amp;').replace(/</g, '&lt;')))) && flat.includes('snowmoon.party'));
+    const meta = await sharp(await closingCard(null, 'The letter', credits)).metadata();
+    check('K. the card is a 1536 × 864 PNG, even with no background', meta.format === 'png' && meta.width === CARD.width && meta.height === CARD.height);
+    const facts = { unmatched: [3], sentences: 20, shots: [{ key: 's1', start: 0, end: 5, description: 'x', angle: 'wide' as const, styleId: null, characterIds: [], kept: 'a'.repeat(64) }], keptShots: new Set([`s1:${'a'.repeat(64)}`]), closing: { description: 'snow', styleId: null, kept: 'b'.repeat(64) }, closingKept: true, standIns: 2, standInsAllowed: false };
+    const probs = closingLib.publishProblems(facts);
+    check('K. the publish rule: an unmatched sentence stops publishing (accepting it was allowed)', probs.some((x) => /Sentence 4 doesn’t match/.test(x)));
+    check('K. ... and stand-in cards can\'t be published off a local test copy', probs.some((x) => /Stand-in cards can’t be published/.test(x)) && !closingLib.publishProblems({ ...facts, unmatched: [], standInsAllowed: true }).length);
+    check('K. publishing is off in the committed config, and off on Vercel even with the test switch', VOICE.publish === false && (() => { process.env.VERCEL = '1'; const on = publishOn(); delete process.env.VERCEL; return !on; })() && publishOn());
+  }
+  {
+    const named = 'named=no';
+    const preview = async (fid = NATE) => publishRoute.GET(as(fid, {}, `http://localhost/api/voice/publish?draft=${acc.id}&${named}`));
+    let pv = (await (await preview()).json()) as { on: boolean; problems: string[]; version: number };
+    check('K. before the shots have pictures, the check lists what is missing', pv.on && pv.problems.some((x) => /has no picture kept/.test(x)) && pv.problems.some((x) => /closing card has no background/.test(x)));
+    check('K. someone else\'s draft reads as missing (404)', (await preview(GARANCE)).status === 404);
+    // Every shot: the person's words (the test script's, marked so), a camera, a stand-in picture, kept.
+    let cur = s3.shots;
+    for (const [i, sh] of cur.entries()) {
+      if (i === 0) continue;
+      const words = `(test script's words) shot ${i + 1}: the tunnel, then the street.`;
+      cur = cur.map((x) => (x.key === sh.key ? { ...x, description: words, angle: 'medium' as const } : x));
+    }
+    let sv = (await (await save(cuts, cur)).json()) as { version: number; shots: Shot[] };
+    for (const sh of sv.shots.slice(1)) {
+      const made = (await (await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: sh.key, description: sh.description, angle: sh.angle }) }))).json()) as { ticket: string; image: string; sha256: string };
+      await keep(made.ticket, made.image);
+      cur = sv.shots.map((x) => (x.key === sh.key ? { ...x, kept: made.sha256 } : x));
+      sv = { ...sv, shots: cur };
+    }
+    const look = "(test script's words) Snow falling over a dark harbour, the lamps out.";
+    r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: 'end', description: look }) }));
+    const bg = (await r.json()) as { ticket: string; image: string; sha256: string; recipe: { kind: string; prompt: string; angle: unknown; assist: { text: string } } };
+    check('K. the closing background goes through the picture flow, with no camera: the person\'s words first', r.status === 200 && bg.recipe.kind === 'storyboard-closing' && bg.recipe.prompt.startsWith(look) && bg.recipe.angle === null && /set by the site/.test(bg.recipe.assist.text));
+    check('K. ... it is a stand-in here, labelled as the closing card', Buffer.from(bg.image.split(',')[1], 'base64').length > 1000);
+    check('K. ... and keeping it stores it privately like a shot\'s', (await keep(bg.ticket, bg.image)).status === 200 && existsSync(path.join(STORE, `voice-boards/${acc.id}/${NATE}/end-${bg.sha256}.png`)));
+    r = await boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, cuts, shots: cur, closing: { description: look, styleId: null, kept: bg.sha256 } }) }));
+    const sv2 = (await r.json()) as { version: number; closing: { description: string; kept: string | null } };
+    check('K. the board keeps the closing card\'s choices on its version (the words as given)', r.status === 200 && sv2.closing.description === look && sv2.closing.kept === bg.sha256);
+    r = await boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, cuts, shots: cur, closing: { description: look, kept: 'c'.repeat(64) } }) }));
+    check('K. ... and a background that was never kept can\'t be claimed', ((await r.json()) as { closing: { kept: string | null } }).closing.kept === null);
+    r = await boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, cuts, shots: cur, closing: { description: look, styleId: null, kept: bg.sha256 } }) }));
+    const version = ((await r.json()) as { version: number }).version;
+    r = await closingRoute.GET(as(NATE, {}, `http://localhost/api/voice/boards/closing?draft=${acc.id}&${named}`));
+    const cardMeta = await sharp(Buffer.from(await r.arrayBuffer())).metadata();
+    check('K. the closing card preview, for its person: the background with the site\'s text', r.status === 200 && cardMeta.width === CARD.width);
+    check('K. ... and missing for anyone else', (await closingRoute.GET(as(GARANCE, {}, `http://localhost/api/voice/boards/closing?draft=${acc.id}&${named}`))).status === 404);
+    // The word check: with an unmatched sentence the draft can't be published; with none, it can.
+    const [{ recipe: rec0 }] = await sql`select recipe from studio.voice_drafts where id = ${acc.id}`;
+    const realUnmatched = (rec0 as { check: { unmatched: number[] } }).check.unmatched;
+    await pg.query(`update studio.voice_drafts set recipe = jsonb_set(recipe, '{check,unmatched}', '[2]') where id = $1`, [acc.id]);
+    pv = (await (await preview()).json()) as typeof pv;
+    check('K. an unmatched sentence is the one thing left, and it stops publishing', pv.problems.length === 1 && /Sentence 3 doesn’t match/.test(pv.problems[0]), JSON.stringify(pv.problems));
+    r = await publishRoute.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, version, named: false }) }));
+    check('K. ... the publish route refuses it (400) and makes nothing public', r.status === 400 && !existsSync(path.join(STORE, 'public')));
+    await pg.query(`update studio.voice_drafts set recipe = jsonb_set(recipe, '{check,unmatched}', '[]') where id = $1`, [acc.id]);
+    pv = (await (await preview()).json()) as typeof pv;
+    check('K. every sentence matching, every shot kept, the card\'s background kept: ready', pv.problems.length === 0, JSON.stringify(pv.problems));
+    check('K. publishing someone else\'s draft: 404; a stale version: 409', (await publishRoute.POST(as(GARANCE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, version, named: false }) }))).status === 404 && (await publishRoute.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, version: version - 1, named: false }) }))).status === 409);
+    check('K. a stand-in can\'t be published where stand-ins aren\'t allowed', ((await publishPreview(sql, NATE, acc.id, { standInsAllowed: false }, null))?.problems ?? []).some((x) => /Stand-in/.test(x)));
+    const callsBefore = stub.calls.length;
+    r = await publishRoute.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, version, named: false }) }));
+    const pub = (await r.json()) as { id: string; url: string };
+    check('K. published: its page is /storyboard/spoken/<id>, and no model was called', r.status === 200 && pub.url === `/storyboard/spoken/${pub.id}` && stub.calls.length === callsBefore);
+    const files = storeFiles().filter((f) => f.startsWith(`public/storyboards/${pub.id}/`));
+    const [row] = await sql`select recipe, files, named from studio.voice_publications where id = ${pub.id}`;
+    const pf = row.files as { role: string; key: string; sha256: string }[];
+    check('K. public copies: every audio piece, every shot\'s picture, the background and the composed card', files.length === pf.length && pf.filter((f) => f.role === 'audio').length === 2 && pf.filter((f) => f.role === 'shot').length === cur.length && pf.some((f) => f.role === 'background') && pf.some((f) => f.role === 'closing'));
+    check('K. ... byte for byte (each public file\'s sha256 is its record\'s)', pf.every((f) => sha(readFileSync(path.join(STORE, 'public', f.key))) === f.sha256));
+    const takes = ((row.recipe as { voice: { takes: { takeSha256: string }[] } }).voice.takes ?? []).map((t) => t.takeSha256);
+    check('K. the raw take is never published: the recipe has only its sha256, and no public file is it', takes.length >= 1 && takes.every((h) => /^[0-9a-f]{64}$/.test(h)) && pf.every((f) => !takes.includes(f.sha256)));
+    const pr = row.recipe as { performer: { named: boolean; fid?: number }; shots: { description: string; picture: { madeBy: unknown } }[]; closing: { credits: { text: string }[]; description: string }; noAiVideo: boolean; ai: string[]; people: string[] };
+    check('K. the full recipe: each shot\'s words and picture recipe, the closing card\'s words and credits, who did what', pr.shots.length === cur.length && pr.shots[0].description === mine && pr.closing.description === look && pr.closing.credits.length >= 5 && pr.noAiVideo && pr.ai.length > 0 && pr.people.length > 0);
+    check('K. not named: no FID or name in the public recipe', row.named === false && !('fid' in pr.performer) && !JSON.stringify(row.recipe).includes(`"fid":${NATE}`));
+    const live = await publication(sql, pub.id);
+    check('K. the public page\'s data: the live publication with its files\' addresses', Boolean(live) && live!.fid === null && live!.files.every((f) => f.url === `/api/voice/public/${f.key}`));
+    const one = pf.find((f) => f.role === 'closing')!;
+    r = await publicRoute.GET(new Request(`http://localhost${live!.files.find((f) => f.key === one.key)!.url}`), { params: Promise.resolve({ key: one.key.split('/') }) });
+    check('K. the local public route serves its files (test copy only)', r.status === 200 && sha(new Uint8Array(await r.arrayBuffer())) === one.sha256);
+    check('K. a published draft is no longer a draft: its board reads as missing, and the check gives the link', (await boards.GET(as(NATE, {}, `http://localhost/api/voice/boards?draft=${acc.id}`))).status === 404 && ((await (await preview()).json()) as { published?: { url: string } }).published?.url === pub.url);
+    check('K. ... it can\'t be removed while published, nor published twice', (await draftRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: acc.id }) })).status === 404 && (await publishRoute.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, version, named: false }) }))).status === 404);
+    check('K. someone else can\'t take it down', (await takeDownRoute.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: pub.id }) })).status === 404 && existsSync(path.join(STORE, 'public', one.key)));
+    r = await takeDownRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: pub.id }) });
+    check('K. its person takes it down: every public file is deleted, the page is gone, it is a draft again', r.status === 200 && storeFiles().every((f) => !f.startsWith(`public/storyboards/${pub.id}/`)) && (await publication(sql, pub.id)) === null && (await boards.GET(as(NATE, {}, `http://localhost/api/voice/boards?draft=${acc.id}`))).status === 200);
+    check('K. ... the private draft files are untouched', existsSync(path.join(STORE, `voice-boards/${acc.id}/${NATE}/end-${bg.sha256}.png`)) && storeFiles().filter((f) => f.startsWith(`voice-drafts/${acc.id}/`)).length === 2);
+    await pg.query(`update studio.voice_drafts set recipe = jsonb_set(recipe, '{check,unmatched}', $2::jsonb) where id = $1`, [acc.id, JSON.stringify(realUnmatched)]);
+    check('K. P2, by reading the code: no closing text comes from the request, and nothing writes a description', !/description\s*[:=]\s*['"`][^'"`]/.test(readFileSync(path.join(ROOT, 'src/lib/voice/closing.ts'), 'utf8')) && !/body\.|request\./.test(readFileSync(path.join(ROOT, 'src/lib/voice/closing-card.ts'), 'utf8')));
+    check('K. public copies have their own store file, under storyboards/ only; the draft store stays private', /R2_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && /\^storyboards/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && !/R2_PRIVATE_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')));
+  check('K. "Save as a video" is in the browser only: no server route records, uploads or calls a video model', !existsSync(path.join(ROOT, 'src/app/api/voice/video')) && !/fetch\([^)]*(upload|api\/)/.test(readFileSync(path.join(ROOT, 'src/lib/voice/video.ts'), 'utf8')) && /MediaRecorder/.test(readFileSync(path.join(ROOT, 'src/lib/voice/video.ts'), 'utf8')));
+  }
 }
 
 // B2. The storyboard on a phone (Nate, 2026-11-21, after his iPhone test).
@@ -536,6 +652,62 @@ resetPurgeClock();
 await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
 check('$. voice_asks from before today are purged; today\'s stay', (await sql`select count(*)::int n from studio.voice_asks where (at at time zone 'utc')::date < (now() at time zone 'utc')::date`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_asks`)[0].n === todayAsks);
 check('$. the caps are placeholders in config, in credits and dollars', VOICE.caps.dailyCredits > 0 && VOICE.caps.dailyUsd > 0 && VOICE.caps.adminDailyCredits > 0 && VOICE.caps.perPersonConversions === 3 && VOICE.caps.overEstimate === 1.2);
+
+// G. Storyboards on the ready-made reading (Nate, 2026-11-21): timed once, then everyone's own boards on it.
+{
+  const timingRoute = await route('readings/[id]/timing');
+  const publishRoute = await route('publish');
+  const rdId = rd.id;
+  const boardGet = (fid: number) => boards.GET(as(fid, {}, `http://localhost/api/voice/boards?draft=${rdId}`));
+  let g = await boardGet(NATE);
+  const gj = (await g.json()) as { reason?: string; estimateCredits?: number; seconds?: number };
+  check('G. a reading with no timings asks to be timed first, with its estimate', g.status === 409 && gj.reason === 'needs-timing' && (gj.estimateCredits ?? 0) > 0 && (gj.seconds ?? 0) > 30, JSON.stringify(gj));
+  check('G. timing is for people let in only (401 signed out, 404 to anyone else)', (await timingRoute.POST(as(null, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) })).status === 401 && (await timingRoute.POST(as(STRANGER, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) })).status === 404);
+  const sttBefore = stub.calls.filter((c) => c.path === '/v1/speech-to-text').length;
+  const deletedBefore = stub.deletedTranscripts.length;
+  // Timed by someone who didn't make the reading (it is shared): Nate times Garance's reading.
+  g = await timingRoute.POST(as(NATE, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) });
+  const tj = (await g.json()) as { ok?: boolean; credits?: number; estimateCredits?: number; matched?: number; sentences?: number; transcriptDeleted?: boolean };
+  const stt = stub.calls.filter((c) => c.path === '/v1/speech-to-text');
+  check('G. one transcription of the reading\'s own audio, with the speech\'s names as key terms', g.status === 200 && stt.length === sttBefore + 1 && (stt.at(-1)!.fields.keyterms ?? '').length > 0 && stt.at(-1)!.files[0].sha256 === (await sql`select sha256 from studio.voice_draft_audio where draft_id = ${rdId} and n = 0`)[0].sha256, JSON.stringify(tj));
+  check('G. ... measured against its estimate, and the transcript deleted at ElevenLabs', typeof tj.credits === 'number' && (tj.estimateCredits ?? 0) > 0 && tj.transcriptDeleted === true && stub.deletedTranscripts.length === deletedBefore + 1 && stub.kept().length === 0);
+  const [trow] = await sql`select made_by, model, credits, transcript_deleted, timeline from studio.voice_reading_timings where draft_id = ${rdId}`;
+  check('G. ... kept once, with who asked, the model and the credits', Number(trow?.made_by) === NATE && trow.model === VOICE.models.transcribe && trow.transcript_deleted === true && (trow.timeline as { sentences: unknown[] }).sentences.length === speech.sentences.length);
+  g = await timingRoute.POST(as(GARANCE, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) });
+  check('G. timing again makes no second call', g.status === 200 && ((await g.json()) as { already?: boolean }).already === true && stub.calls.filter((c) => c.path === '/v1/speech-to-text').length === sttBefore + 1);
+  // Two people's boards on the one reading: each their own versions, pictures and tries.
+  const gb = (await (await boardGet(GARANCE)).json()) as { draft: { kind: string }; board: { version: number; cuts: number[]; shots: Shot[] } };
+  const nb = (await (await boardGet(NATE)).json()) as { board: { version: number; cuts: number[]; shots: Shot[] } };
+  check('G. anyone let in can make a board on the reading (it says it is the reading)', gb.draft.kind === 'reading' && gb.board.version === 0 && nb.board.version === 0);
+  const saveOn = async (fid: number, shots: Shot[], cuts: number[]) => (await (await boards.POST(as(fid, { method: 'POST', body: JSON.stringify({ draftId: rdId, cuts, shots }) }))).json()) as { version: number; shots: Shot[] };
+  const gWords = "(test script's words) Garance's board: the letter on a wall.";
+  const gs = await saveOn(GARANCE, gb.board.shots.map((x, i) => (i === 0 ? { ...x, description: gWords } : x)), gb.board.cuts);
+  const ns = await saveOn(NATE, nb.board.shots, nb.board.cuts.slice(0, 1));
+  check('G. each person\'s board is their own: both start at version 1', gs.version === 1 && ns.version === 1);
+  const nb2 = (await (await boardGet(NATE)).json()) as { board: { shots: Shot[]; cuts: number[] } };
+  check('G. ... and one person never sees another\'s words or cuts', nb2.board.shots.every((x) => x.description !== gWords) && nb2.board.cuts.length === 1);
+  const gPic = (await (await boardPicture.POST(as(GARANCE, { method: 'POST', body: JSON.stringify({ draftId: rdId, shotKey: gs.shots[0].key, description: gWords, angle: 'wide' }) }))).json()) as { ticket: string; image: string; sha256: string };
+  r = await boardKeep.POST(as(GARANCE, { method: 'POST', body: JSON.stringify({ ticket: gPic.ticket, image: gPic.image }) }));
+  check('G. a picture kept on a reading goes under its owner\'s folder', r.status === 200 && existsSync(path.join(STORE, `voice-boards/${rdId}/${GARANCE}/${gs.shots[0].key}-${gPic.sha256}.png`)));
+  const pg2 = (fid: number) => boardPicture.GET(as(fid, {}, `http://localhost/api/voice/boards/picture?draft=${rdId}&shot=${gs.shots[0].key}&sha=${gPic.sha256}`));
+  check('G. ... and plays for its owner only', (await pg2(GARANCE)).status === 200 && (await pg2(NATE)).status === 404);
+  check('G. tries are counted per person', ((await (await boardGet(NATE)).json()) as { making: { tries: Record<string, number> } }).making.tries[gs.shots[0].key] === undefined);
+  check('G. the reading\'s audio plays for anyone let in, a performance\'s only for its person', (await draftAudioRoute.GET(as(NATE), { params: Promise.resolve({ id: rdId, n: '0' }) })).status === 200);
+  // The card for a board on the reading: no performer; the reading by ElevenLabs.
+  const pv = (await (await publishRoute.GET(as(GARANCE, {}, `http://localhost/api/voice/publish?draft=${rdId}&named=no`))).json()) as { credits: { who: string; text: string }[]; problems: string[] };
+  const text = pv.credits.map((c) => c.text).join('\n');
+  check('G. the card on a reading: a ready-made reading by ElevenLabs, no performer, and who made the storyboard', /ready-made reading by ElevenLabs text-to-speech \(Multilingual v2\) by ElevenLabs \(closed model\)/.test(text) && /No performer/.test(text) && !/Performed by/.test(text) && /Storyboard by/.test(text) && /AI did the reading( and|,) the word timings/.test(text), text);
+  check('G. ... and a reading isn\'t held to the performance\'s word-for-word rule (it reads the written words)', !pv.problems.some((x) => /match the speech word for word/.test(x)));
+  // Removing: the reading's maker can't while someone else has a board on it; each person removes their own board.
+  r = await draftRoute.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: rdId }) });
+  check('G. the reading can\'t be removed while someone else has a board on it, and none of its files is touched', r.status === 404 && (await sql`select count(*)::int n from studio.voice_drafts where id = ${rdId}`)[0].n === 1 && storeFiles().some((f) => f.startsWith(`voice-drafts/${rdId}/`)) && storeFiles().some((f) => f.startsWith(`voice-boards/${rdId}/${GARANCE}/`)));
+  r = await boards.DELETE(as(NATE, { method: 'DELETE' }, `http://localhost/api/voice/boards?draft=${rdId}`));
+  check('G. a person removes their own board on it, and only theirs', r.status === 200 && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${rdId} and fid = ${NATE}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${rdId} and fid = ${GARANCE}`)[0].n === 1);
+  r = await boards.DELETE(as(GARANCE, { method: 'DELETE' }, `http://localhost/api/voice/boards?draft=${rdId}`));
+  check('G. ... its kept pictures\' files go too', r.status === 200 && storeFiles().every((f) => !f.startsWith(`voice-boards/${rdId}/${GARANCE}/`)));
+  r = await draftRoute.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: rdId }) });
+  check('G. with no one else\'s board on it, its maker can remove the reading, timings and all', r.status === 200 && (await sql`select count(*)::int n from studio.voice_reading_timings where draft_id = ${rdId}`)[0].n === 0);
+}
 
 // M. The allowlist.
 const models = JSON.parse(readFileSync(path.join(ROOT, 'config/models.json'), 'utf8')).models as { id: string; maker?: string; open_weights: boolean; keeps?: string; hosted?: { endpoints: Record<string, null> } }[];

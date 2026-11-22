@@ -87,6 +87,13 @@
 .vb-screen { position: relative; margin: var(--space-3) 0; }
 .vb-shotno { position: absolute; top: 10px; left: 10px; font-family: var(--label); font-size: var(--text-label); background: rgba(0, 0, 0, 0.55); color: #fff; padding: 2px 8px; border-radius: 4px; }
 
+/* Slice 4: the closing card, publishing, the published page (DRAFT). */
+.vr-check { display: flex; gap: var(--space-2); align-items: center; margin: var(--space-3) 0; font-size: var(--text-small); }
+.vb-card-preview { margin: var(--space-3) 0; }
+.vs-credits { list-style: none; padding: 0; margin: var(--space-2) 0; }
+.vs-credits li { padding: var(--space-1) 0; border-bottom: 1px solid var(--rule); font-size: var(--text-small); line-height: 1.5; }
+.vs-recipe { max-height: 420px; overflow: auto; font-size: 12px; white-space: pre-wrap; word-break: break-word; }
+
 /* The step log under the recorder (troubleshooting, 2026-11-21). */
 .vr-steps { margin: var(--space-3) 0; }
 .vr-steps pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; max-height: 320px; overflow: auto; background: var(--surface-2, rgba(127, 127, 127, 0.08)); padding: var(--space-2); }

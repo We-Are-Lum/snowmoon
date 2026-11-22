@@ -121,5 +121,59 @@ await audio.waitFor({ timeout: 30_000 });
 await audio.evaluate((a: HTMLAudioElement) => { a.muted = true; return a.play(); });
 await page.waitForTimeout(3000);
 await shoot('15-play-through', '#vb-play-h');
+await audio.evaluate((a: HTMLAudioElement) => a.pause());
+
+// Slice 4: every shot gets words, a camera and a kept stand-in; then the closing card, publish, the page, the video.
+const bands = await page.locator('.vb-shotband').count();
+for (let i = 0; i < bands; i++) {
+  await page.locator('.vb-shotband').nth(i).click();
+  const shotBox = page.locator('section:has(#vb-shot-h)');
+  if (i > 0) {
+    await shotBox.locator('textarea').fill(`(Screenshot test, typed by the script) Shot ${i + 1}: the tunnel, then the street above it.`);
+    await shotBox.locator('select').selectOption(i % 2 ? 'medium' : 'wide');
+  }
+  if (await shotBox.locator('.vb-try.vb-on, img[alt^="The picture kept"]').count()) continue;
+  await shotBox.getByRole('button', { name: /^(Make the picture|Try again)$/ }).click();
+  await shotBox.locator('.vb-try').last().waitFor();
+  await shotBox.getByRole('button', { name: 'Keep this one' }).last().click();
+  await shotBox.locator('.vb-try.vb-on').waitFor();
+}
+const closingBox = page.locator('section:has(#vb-closing-h)');
+await closingBox.locator('textarea').fill('(Screenshot test, typed by the script) Snow over a dark harbour, the lamps out, one window lit.');
+await closingBox.getByRole('button', { name: 'Make the background' }).click();
+await closingBox.locator('.vb-try').waitFor();
+await closingBox.getByRole('button', { name: 'Keep this one' }).click();
+await closingBox.locator('.vb-try.vb-on').waitFor();
+await closingBox.getByRole('button', { name: /^Save$/ }).click();
+await closingBox.locator('.vb-card-preview img').waitFor({ timeout: 30_000 });
+await page.waitForTimeout(1000);
+await shoot('16-closing-card', '#vb-closing-h');
+await page.locator('section:has(#vb-publish-h) details summary').click();
+await page.locator('text=Ready: every sentence').waitFor({ timeout: 30_000 });
+await shoot('17-publish-ready', '#vb-publish-h');
+await page.getByRole('button', { name: 'Publish' }).click();
+await wait(page, 'text=This storyboard is public at');
+await shoot('18-published', 'h1');
+await page.locator('a[href^="/storyboard/spoken/"]').click();
+await wait(page, '#vs-play-h', 30_000);
+await page.locator('.vr-audio').waitFor({ timeout: 30_000 });
+await shoot('19-public-page', '#vs-play-h');
+await page.locator('#vs-credits-h ~ details summary').click();
+await shoot('20-credits-and-recipe', '#vs-credits-h');
+// Save as a video: made in this browser in real time, then downloaded.
+const download = page.waitForEvent('download', { timeout: 240_000 });
+const started = Date.now();
+await page.getByRole('button', { name: 'Save as a video' }).click();
+await page.waitForTimeout(4000);
+await shoot('21-saving-video', '#vs-play-h');
+const file = await download;
+const saved = path.join(out!, `video-${file.suggestedFilename()}`);
+await file.saveAs(saved);
+console.log(`video saved: ${saved} (${Math.round((Date.now() - started) / 1000)} s to make)`);
+await page.goBack();
+await wait(page, 'text=Take it down');
+await page.getByRole('button', { name: 'Take it down' }).click();
+await wait(page, '#vb-strip-h', 30_000);
+await shoot('22-taken-down-draft-again', 'h1');
 console.log(errors.length ? `page errors:\n${errors.join('\n')}` : 'no page errors');
 await browser.close();

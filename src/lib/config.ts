@@ -1144,6 +1144,12 @@ export const VOICE = {
   // 'admins' (Nate, 2026-11-21): real pictures for admins only, on the admins' pool and its daily cap (paidPicture's
   // pool 'admin', CHAPTER_PICTURES.adminDailyCapUsd); everyone else stays off.
   realPictures: 'admins' as false | 'admins' | true,
+  /**
+   * Publishing a storyboard (slice 4, 2026-11-21; DRAFT): off until Nate's word, the reread Privacy and Terms lines
+   * for it, and a confirmed public bucket for storyboards/. While off, the publish route refuses and every
+   * /storyboard/spoken/<id> page is "not found" (the local tests turn it on with VOICE_TEST_ON, stand-ins only).
+   */
+  publish: false,
   /** The team's invented speeches (Nate, 2026-11-22): admins only, and not to be published until Nate says. */
   publishInvented: false,
   board: { maxShots: 12, maxTriesPerShot: 3, descriptionMaxChars: 600 },

@@ -651,6 +651,127 @@ synthetic test clips transcribed before today (21 Nov night, 4 calls) can't be f
 
 The migration is numbered **0044** (`supabase/migrations/0044_ephelion_voice.sql`; main's highest was 0043).
 
+## Slice 4 (2026-11-21, stand-ins only; branch ephelion-publish, stacked on ephelion-voice)
+
+Kept on its own branch, on top of this one, so the plan above for slices 1 and 2 and the migration the coordinator
+tested stay as they are. Nothing spent, nothing merged.
+
+- **Closing card** (section 4 of the board). Its words are set by the site from the recipe, never typed by the person or
+  written by a model: the speech and its block (Book), who performed and storyboarded it (People), the voice conversion,
+  the word check and each picture model by name and maker, "closed model" or "open model" (AI), "People did … AI did …
+  No AI video.", and the not-affiliated line, with the snowmoon.party mark. Only the look is the person's: their own
+  words prompt a background through the same picture flow as the shots (key `end`, no camera, 3 tries), and our server
+  draws the text over it (sharp), so no model can change a word. "Name me" (on by default) or "a reader".
+- **Publish** (section 5). The check lists what stands in the way, by rule: every sentence matching the speech word for
+  word (the rule for unmatched sentences: accepting a mismatch is allowed, publishing it isn't; names heard by sound
+  count, as the word check lists them), every shot with a description and a kept picture, the closing background kept,
+  the board saved, and no stand-in cards outside a local test copy. Publishing copies the audio pieces, the shots'
+  pictures, the background and the composed card to public storage under `storyboards/<id>/`, byte for byte, and stores
+  the full recipe: the voice's (each raw take by sha256 only), every shot's words, camera and picture recipe, the
+  closing card's words and credits, who did what. Not named: no FID or name in the public recipe. One function
+  (`studio.publish_voice_board`) does it in one transaction; a published draft can't be removed or published twice.
+- **Take down:** from the draft's page. Every public file is deleted, the page is gone, and it is a draft again.
+- **The page:** `/storyboard/spoken/<id>` (`/storyboard/<id>` is Remix's). The play-through, the closing card at the end,
+  the credits as text, "Recipe", "Save as a video".
+- **Save as a video:** in the browser only: a canvas holds each shot's picture for its span, then the closing card for
+  6 seconds, recorded with the joined audio by the browser's MediaRecorder (MP4 where the browser can, else WebM). In
+  real time (a 3-minute speech takes 3 minutes), saved on the device, nothing uploaded, no AI video. Every frame has a
+  corner label ("snowmoon.party · AI pictures · AI voice conversion", "stand-in cards" when they are, "draft" from the
+  board), so a clip cut from it still says so. Also on the draft's board, so admins can try it before publishing exists.
+- **The switch:** `VOICE.publish: false`. While off the publish route refuses and every spoken page is "not found";
+  the local tests turn it on (`VOICE_TEST_ON`), stand-ins only.
+- **Schema:** `0046_ephelion_voice_publish.sql` (after `NEXT_ephelion_voice.sql`): `voice_boards.closing`,
+  `voice_publications`, the publish and take-down functions, and `delete_voice_draft` replaced so removing a draft
+  also removes its taken-down publications' rows (a live one still blocks it; the undo restores the old one); dry run, migration, read-back (a realistic publication
+  made, refused for someone else, for a stray file key, twice, then taken down), undo (refuses once anything was
+  published). **Tested by the coordinator** on Postgres 16 after `NEXT_ephelion_voice.sql` (2026-11-21): dry run
+  clean, applies twice, read-back passes, `voice_publications` select-only to studio_writer and closed to anon and
+  authenticated, publish and take-down only through their functions, the undo refuses once anything was published and
+  restores `delete_voice_draft` exactly. Applied after slices 1 and 2 are merged.
+- **Legal (DRAFT):** Privacy §3, §4, §6 and Terms §8 lines in `docs/legal/ephelion-voice-draft.md`, under "Slice 4".
+  own-voice-v2 already says publishing makes it public and that it can be hidden; nothing new there.
+
+**Choices, and why**
+
+| # | Choice | Why |
+|---|---|---|
+| 25 | A separate stacked branch and migration | The slices 1–2 merge plan and the tested migration don't move. |
+| 26 | Unmatched sentences block publishing, not accepting | Story words stay the book's, checked word for word (P2); a draft can still be kept and redone. |
+| 27 | The card's text drawn by our server over the picture | A model can't misspell or change a credit; the person still sets the look. |
+| 28 | Stand-ins can't be published on Vercel | A placeholder card must never be public. |
+| 29 | Public files copied at publish (not served from private) | The private bucket has no public address; a take-down deletes the copies. |
+| 30 | Video made in the browser, in real time | No server video work, no upload, no AI video; works in current browsers. |
+| 31 | `/storyboard/spoken/<id>` | `/storyboard/<id>` is already Remix's storyboards. |
+
+**Screenshots and a saved video:** https://media.snowmoon.party/review/97b99d7a1096735ef24af1843d5ccd65/index.html
+(22 steps, phone and desktop, light and dark, on a local build of this branch with the stub ElevenLabs, a throwaway
+database, a fake microphone and stand-in cards; and the MP4 that "Save as a video" made in Chromium: 1280×720, H.264 and
+AAC, 67 s, made in 70 s). Found from them and fixed: the closing background's own text showed through the credits (it
+is now blurred and darkened, which also keeps any lettering a model draws from competing), the long title ran to the
+edge, and with stand-ins only the card said AI made the pictures. The last fix's wording ("AI did the voice conversion
+and the word check") came after the screenshots. Supersedes 608b… for slices 1–2.
+
+**For Nate before `VOICE.publish`:** the reread of slice 4's lines; which public bucket holds `storyboards/` (the code
+uses the readers' bucket, R2_BUCKET, at R2_IMAGES_PUBLIC_URL) and whether its key may write there; CORS on that host
+for GET from snowmoon.party (the video draws the pictures and reads the audio from it); the migration applied; real
+pictures switched on first (stand-ins can't be published).
+
+## Storyboards on the ready-made reading (2026-11-21 night; branch ephelion-publish, not merged)
+
+Nate: "The ready-made reading offers no 'Make the storyboard'", then "a storyboard on a shared reading belongs to the
+person making it, not to whoever made the reading."
+
+- **Word timings for a reading:** one transcription of the reading's own audio, made once, the first time anyone
+  storyboards it ("Time this reading", with its estimate), through the same allowance as every voice call (the daily
+  cap, and the stop once today's calls run more than 20% over their estimates), the transcript deleted at ElevenLabs
+  right after, kept in `voice_reading_timings`. Measured on 2026-11-21 on the 20 Nov reading (144 s, the same voice and
+  speech): **55 credits ($0.01)** against an estimate of 58, all 28 sentences matched and timed, transcript deleted.
+  ElevenLabs' with-timestamps text-to-speech (timings with a new reading) wasn't priced or tried: not needed for the three
+  readings already made.
+- **Production's three readings** (one per voice, made 22 Nov 03:16–03:18 UTC) can't be timed by an agent: their audio
+  is in the private bucket, which only the site's own production key reads (agents never read production secrets), and
+  the timings need this branch's table. Once its SQL is applied and the branch merged, the first person to open a
+  reading's storyboard times it (about 55 credits each; Nate's word of 2026-11-21 covers the three).
+- **A board has its own owner:** versions per (draft, person); kept pictures under `voice-boards/<draft>/<fid>/`; tries
+  per person; a reading is shared (its audio plays for anyone let in), a performance stays its person's alone. The
+  reading's maker can't remove it while anyone else has a board on it; each person removes their own board
+  (`DELETE /api/voice/boards?draft=`). Found and fixed on the way: removing a draft deleted its files before the
+  database decided, which on a shared reading would have deleted others' pictures.
+- **Publishing from a reading:** the card says "Voice: a ready-made reading by ElevenLabs text-to-speech (Multilingual
+  v2) by ElevenLabs (closed model), in the voice “…”. No performer. Word timings by ElevenLabs Scribe v3 …", with no
+  "Performed by" line, and "Storyboard by" its maker (or "a reader"). A reading isn't held to the performance's
+  word-for-word rule (it reads the written words); its timings' word check is in the recipe. Many people can publish
+  boards on one reading (one live publication per person).
+- **Challenge note:** entries made on the ready-made reading count (Nate, 2026-11-21: "as the proposal says"). Nothing in
+  the challenge code changes here: a storyboard isn't an entry type yet.
+- **SQL:** `0046_ephelion_voice_publish.sql` version 2 (requires 0044): adds the owner, the timings table and reading
+  publications to version 1, and its read-back no longer uses SET ROLE. Tested in PGlite: applies twice, read-back
+  passes, the undo restores 0044's exact shape, and refuses once anything was published. For the coordinator to test.
+
+## Plan: merging ephelion-publish (2026-11-22; not done; for Nate)
+
+What would ship: slice 4 and storyboards on the ready-made reading, with **`VOICE.publish` off** (the publish route refuses
+and every `/storyboard/spoken/<id>` is "not found"), `VOICE.publishInvented` off, admins only as today. Admins get: the
+closing card (its look, the site's credits; an invented speech shows "Invented, not from the book" and a DRAFT credit),
+"Save as a video" on the board, a reading's "Time this reading" (one measured transcription, about 55 credits a reading),
+everyone's own boards on a shared reading, and removing one's own board. No legal text changes in this merge: slice 4's
+Privacy and Terms lines (docs/legal) ship with `VOICE.publish`, not before; Privacy §7's line for admins' storyboard
+pictures waits until storyboards open to everyone (coordinator, 2026-11-22).
+
+**Order** (each waits for the one before):
+1. **#209** (the three invented speeches) first, if Nate merges it: then main is merged into this branch again and the
+   checks below re-run. The two are independent; this branch shows an invented speech on the card either way.
+2. **Checks on the merge result** (main merged in, clean tree): typecheck, `npm run build`, `test:voice`,
+   `check:voice-proof`, `check:principles` locally, `check:ui` locally (only the known local-only results may fail).
+3. **Migration (Nate):** `0046_ephelion_voice_publish.sql` (numbered at merge; main's highest is 0045, #188), tested by the
+   coordinator. Nate runs it as postgres in the SQL Editor (dry run, migration, read-back ending "READ-BACK PASSED") and
+   says "applied". Nothing in production uses its tables before the merge.
+4. **Merge (Nate's word):** a merge commit; wait for /api/version.
+5. **Live checks:** check:shipped, check:principles, check:ui (load under 8), check:miniapp; by hand: every voice route
+   401 signed out, and `/storyboard/spoken/<any id>` "not found".
+6. **Then:** the three production readings can be timed from their storyboards (Nate's yes of 2026-11-21: about 55
+   credits each, measured, stopping past 20% over).
+
 ## What Nate needs to do (one at a time)
 
 1. #195 is merged and live: the iPhone and desktop tests on /admin/mic-test; Android goes to Garance or Luis.

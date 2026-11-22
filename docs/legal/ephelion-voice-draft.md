@@ -41,6 +41,27 @@ can come a little later than stated." The other counts are not changed by this b
 > right after. It doesn't use them to train its models. ElevenLabs also reads this edition's speeches aloud in
 > the characters' voices, from their written words.
 
+### Slice 4: publishing a storyboard (DRAFT, 2026-11-21; these ship only with VOICE.publish, never before)
+
+**Section 3 (Kept on your device only), add:**
+
+> , a video you save of a storyboard (it is made in your browser and never uploaded)
+
+**Section 4, a new list item after the speeches item:**
+
+> Storyboards for a speech you accepted, or on a ready-made reading: the cuts, your words for each shot and for the
+> closing card, and the pictures you keep, as your draft until you publish it. A storyboard is yours alone, even on a
+> reading others use too. You can remove it; a draft's own storyboards are removed with the draft.
+
+**Section 6 (What you publish), add:**
+
+> A storyboard you publish shows your converted speech (never your recording), your words for each shot and for the
+> closing card, the pictures and its recipe, under your name here unless you choose not to be named. You can take it
+> down: its public files are deleted, and it is your draft again. Copies others have made may remain.
+
+(Section 7 needs nothing new: the storyboard's pictures go to the same picture services as the challenge's, already
+listed, and the video is made on the device.)
+
 ## Terms
 
 **Section 5 (What you add), add at the end:**
@@ -52,6 +73,10 @@ can come a little later than stated." The other counts are not changed by this b
 
 > The narration, many pictures (every frame made in Remix among them), the characters' voices in storyboards and the
 > assistant's answers are produced by AI models and are labelled as such.
+
+**Section 8, with slice 4 (publishing), add:**
+
+> A published storyboard's closing card lists who did what, people and AI apart; the site sets its words.
 
 ## About and the consent screen
 

@@ -50,7 +50,8 @@ export async function myDrafts(sql: postgres.Sql, fid: number) {
 /** One of this person's drafts' audio files, or null (someone else's draft reads as missing). */
 export async function draftAudio(sql: postgres.Sql, fid: number, id: string, n: number): Promise<Uint8Array | null> {
   if (!/^[0-9a-f-]{36}$/.test(id) || !Number.isInteger(n)) return null;
-  const [r] = await sql`select a.storage_key from studio.voice_draft_audio a join studio.voice_drafts d on d.id = a.draft_id where d.id = ${id} and d.fid = ${fid} and a.n = ${n}`;
+  // A performance is its person's alone; a ready-made reading is shared (anyone let in can storyboard it, 2026-11-21).
+  const [r] = await sql`select a.storage_key from studio.voice_draft_audio a join studio.voice_drafts d on d.id = a.draft_id where d.id = ${id} and (d.fid = ${fid} or d.kind = 'reading') and a.n = ${n}`;
   return r ? getAudio(r.storage_key) : null;
 }
 
@@ -72,6 +73,12 @@ export async function removeDraft(sql: postgres.Sql, fid: number, id: string): P
     select p.storage_key from studio.voice_board_pictures p join studio.voice_drafts d on d.id = p.draft_id where d.id = ${id} and d.fid = ${fid} and d.published_at is null`;
   const [own] = await sql`select 1 from studio.voice_drafts where id = ${id} and fid = ${fid} and published_at is null`;
   if (!own) return false;
+  // The database's own refusals, checked before any file is deleted (studio.delete_voice_draft): not while a board on it
+  // is published, and not while anyone else has a board on it (a shared reading). Otherwise their files would go first.
+  const [blocked] = await sql`select 1 where exists (select 1 from studio.voice_publications where draft_id = ${id} and taken_down_at is null)
+    or exists (select 1 from studio.voice_boards where draft_id = ${id} and fid <> ${fid})
+    or exists (select 1 from studio.voice_board_pictures where draft_id = ${id} and fid <> ${fid})`;
+  if (blocked) return false;
   for (const f of files) await deleteAudio(f.storage_key);
   const gone = await sql`select storage_key from studio.delete_voice_draft(${id}, ${fid}) as storage_key`;
   // A file added between the two reads (none can be: drafts are never added to) would be deleted here too.

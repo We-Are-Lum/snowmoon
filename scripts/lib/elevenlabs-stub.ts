@@ -9,7 +9,8 @@
  * - POST /v1/speech-to-text: reads its WAV's length. 30 s or more: the whole speech's words with even timings, with one
  *   sentence (mismatch, default 3) said wrong; shorter: that sentence, right. (The stub's own convention: the real
  *   service hears the audio.)
- * - POST /v1/text-to-speech/:voice: a 5-second tone, character-cost = the text's length.
+ * - POST /v1/text-to-speech/:voice: a tone as long as the text would take to read (about 14 characters a second, 5 to
+ *   180 s, so a whole speech's reading can be timed), character-cost = the text's length.
  * - GET /v1/user/subscription: { character_count }.
  *
  *   tsx scripts/lib/elevenlabs-stub.ts --port=54390   (the screenshot run)
@@ -132,7 +133,7 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
       // As measured: 0.46 credits a character.
       const cost = Math.ceil(text.length * 0.46);
       used += cost;
-      return send(200, tone(5, 140), { 'content-type': 'audio/mpeg', 'history-item-id': `stubtts${++seq}`, 'character-cost': String(cost) });
+      return send(200, tone(Math.min(180, Math.max(5, text.length / 14)), 140), { 'content-type': 'audio/mpeg', 'history-item-id': `stubtts${++seq}`, 'character-cost': String(cost) });
     }
     send(404, 'stub: no such path');
   });
