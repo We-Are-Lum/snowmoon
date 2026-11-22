@@ -60,8 +60,12 @@ await check('chapter 1 has the narration player and its audio and images load', 
   if (!audio) return 'no chapter audio URL';
   const a = await fetch(audio, { method: 'HEAD' });
   if (a.status !== 200 || !a.headers.get('content-type')?.startsWith('audio/')) return `audio HTTP ${a.status} ${a.headers.get('content-type')}`;
-  const img = r.body.match(/https:\/\/[^"]+\/images\/seed\/c1\/[^"]+\.jpg/)?.[0];
-  if (!img) return 'no seeded image';
+  // The edition's own picture: the committed file (/images/seed/c1/…), or an admin's kept redo of it (owner,
+  // 2026-11-22: since #191 a redo replaces it, served from /images/readers/…, and its figure says data-replaced).
+  const seeded = r.body.match(/https:\/\/[^"]+\/images\/seed\/c1\/[^"]+\.jpg/)?.[0];
+  const redone = r.body.match(/<figure class="seed-image"[^>]*\bdata-replaced="[^"]+"[^>]*><img src="(https:\/\/[^"]+\.jpg)"/)?.[1];
+  const img = seeded ?? redone;
+  if (!img) return 'no seeded image, and no redone one';
   const i = await fetch(img, { method: 'HEAD' });
   return i.status === 200 ? null : `image HTTP ${i.status}`;
 });
