@@ -130,7 +130,7 @@ export function shotsFromCuts(t: Timeline, cuts: number[], previous: Shot[] = []
     if (best && bestOverlap >= (end - start) / 2) {
       used.add(best.key);
       out.push({ ...best, start, end });
-    } else out.push({ key: newKey(out.map((s) => s.key).concat(previous.map((p) => p.key))), start, end, description: '', angle: '', styleId: null, characterIds: [], kept: null });
+    } else out.push({ key: newKey(out.map((s) => s.key).concat(previous.map((p) => p.key))), start, end, description: '', angle: 'medium', styleId: null, characterIds: [], kept: null });
   }
   return out;
 }
@@ -211,6 +211,5 @@ export function pictureBlocked(o: { real: boolean; standIn: boolean; description
   if (!o.real && !o.standIn) return 'Real pictures are off for now.';
   if (o.tries >= o.maxTries) return `No tries left for this shot (${o.maxTries} of ${o.maxTries} made): keep one of them.`;
   if (!o.description.trim()) return 'No description yet: write what the shot shows first.';
-  if (!o.angle) return 'Choose a camera first.';
   return null;
 }

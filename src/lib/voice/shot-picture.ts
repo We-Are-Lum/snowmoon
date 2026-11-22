@@ -21,7 +21,8 @@ import { signTicket } from './ticket';
  * word for word, and needs the own-words consent (it is published with the picture). Characters' sheet front views go
  * as references. At most 12 shots and 3 pictures a shot. Nothing is stored until Keep.
  *
- * No real picture before Nate's word: until VOICE.realPictures is true, a real model is refused. The tests and the
+ * Real pictures by VOICE.realPictures: 'admins' (Nate, 2026-11-21) for admins only, on the admins' pool and its daily cap;
+ * anyone else is refused before any call. The tests and the
  * screenshot run pass stand-in dependencies (a placeholder card; no model, no cost).
  */
 type Sql = postgres.Sql;
@@ -38,7 +39,9 @@ export interface ShotDeps {
 }
 
 /** What the board page offers: the models for this visitor, the default, and the limits. */
-export const shotModels = (where: Where) => ({ models: modelRow(where), defaultModel: chapterDefaultModel(where), real: VOICE.realPictures, limits: VOICE.board });
+/** May this person make real pictures for a storyboard? (VOICE.realPictures: 'admins' lets admins only.) */
+export const realPicturesFor = (fid: number) => VOICE.realPictures === true || (VOICE.realPictures === 'admins' && isAdmin(fid));
+export const shotModels = (where: Where, fid: number) => ({ models: modelRow(where), defaultModel: chapterDefaultModel(where), real: realPicturesFor(fid), limits: VOICE.board });
 
 export async function triesMade(sql: Sql, draftId: string): Promise<Record<string, number>> {
   const rows = await sql`select shot_key, count(*)::int as n from studio.voice_board_asks where draft_id = ${draftId} group by shot_key`;
@@ -48,7 +51,7 @@ export async function triesMade(sql: Sql, draftId: string): Promise<Record<strin
 const kindOf = (b: Buffer) => (b[0] === 0x89 && b.subarray(1, 4).toString() === 'PNG' ? { mime: 'image/png', ext: 'png' as const } : { mime: 'image/jpeg', ext: 'jpg' as const });
 
 export async function makeShotPicture(sql: Sql, fid: number, request: Request, raw: unknown, where: Where, deps: ShotDeps): Promise<Result> {
-  if (deps.real && !VOICE.realPictures) return no(403, 'Pictures for storyboards are not switched on yet.', { reason: 'not-yet' });
+  if (deps.real && !realPicturesFor(fid)) return no(403, 'Pictures for storyboards are not switched on yet.', { reason: 'not-yet' });
   const b = (raw ?? {}) as { draftId?: unknown; shotKey?: unknown; description?: unknown; angle?: unknown; styleId?: unknown; characterIds?: unknown; model?: unknown; notice?: unknown };
   const draft = await ownPerformance(sql, fid, String(b.draftId ?? ''));
   if (!draft) return no(404, 'Not found');

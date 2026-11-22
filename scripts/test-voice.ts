@@ -102,7 +102,7 @@ const as = (fid: number | null, init: RequestInit = {}, url = 'http://localhost/
 const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
 
 // S. The switch.
-check('S. committed: the admins\' trial on (Nate\'s merge plan, 2026-11-21), the open switch and real pictures off', VOICE.adminTrial === true && VOICE.open === false && VOICE.realPictures === false);
+check('S. committed: the admins\' trial on, the open switch off, real pictures for admins only (Nate, 2026-11-21)', VOICE.adminTrial === true && VOICE.open === false && VOICE.realPictures === 'admins');
 check('S. the local test switch is on here', voiceTestOn());
 for (const [k, v] of [['VERCEL', '1'], ['VERCEL_ENV', 'production'], ['VERCEL_ENV', 'preview']] as const) {
   process.env[k] = v;
@@ -333,7 +333,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   const ends = tl.sentences.map((x) => Math.round(x.end * 100) / 100);
   check('B. the first board is the automatic cuts, every one at a sentence end', r.status === 200 && b0.board.fromProposal && b0.board.cuts.length > 1 && b0.board.cuts.every((c) => ends.includes(c)) && b0.board.shots.length === b0.board.cuts.length + 1);
   check('B. the board sends the speech\'s own sentences (its text, not the transcription) for the shots and the play-through', JSON.stringify((b0 as unknown as { draft: { sentences: { n: number; text: string }[] } }).draft.sentences) === JSON.stringify(speech.sentences.map((x) => ({ n: x.n, text: x.text }))));
-  check('B. ... and no shot has words written for it (P2): every description is empty', b0.board.shots.every((x) => x.description === '' && x.angle === '' && x.kept === null));
+  check('B. ... and no shot has words written for it (P2): every description is empty, and every camera starts on Medium shot (Nate, 2026-11-21)', b0.board.shots.every((x) => x.description === '' && x.angle === 'medium' && x.kept === null));
   check('B. the notes are rule checks that name no content (P2)', b0.notes.length > 0 && b0.notes.every((n) => /^Shot|^Shots/.test(n.text) && !/should show|try showing|describe/i.test(n.text)));
   check('B. the kept pictures and the picture-making settings are separate fields (neither hides the other)', Array.isArray((b0 as unknown as { pictures: unknown }).pictures) && typeof (b0 as unknown as { making: unknown }).making === 'object');
   check('B. the published sheets are offered', b0.sheets.styles.some((x) => x.title === 'Ink and wash') && b0.sheets.characters.some((x) => x.title === 'Ephelion'));
@@ -355,7 +355,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   // A picture for shot 1 (a stand-in card: no model, no cost).
   const callsBefore = stub.calls.length;
   const pic = (body: Record<string, unknown>, fid = NATE) => boardPicture.POST(as(fid, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: s2.shots[0].key, ...body }) }));
-  check('B. the board offers the challenge\'s models, with its default, and says these are stand-ins here', (b0 as unknown as { making: { models: { id: string }[]; standIn: boolean; real: boolean } }).making.models.length >= 1 && (b0 as unknown as { making: { standIn: boolean } }).making.standIn && !(b0 as unknown as { making: { real: boolean } }).making.real);
+  check('B. the board offers the challenge\'s models, with its default, says these are stand-ins here, and that real pictures are on for this admin', (b0 as unknown as { making: { models: { id: string }[]; standIn: boolean; real: boolean } }).making.models.length >= 1 && (b0 as unknown as { making: { standIn: boolean } }).making.standIn && (b0 as unknown as { making: { real: boolean } }).making.real === true);
   check('B. a shot that isn\'t on the saved storyboard gets no picture (400)', (await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: 'zz9', description: mine, angle: 'low' }) }))).status === 400);
   check('B. no picture without the person\'s own description (400)', (await pic({ description: '  ', angle: 'low' })).status === 400);
   check('B. ... or without a camera angle (400)', (await pic({ description: mine, angle: '' })).status === 400);
@@ -374,12 +374,17 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   r = await pic({ description: mine, angle: 'low' });
   check('B. at most 3 pictures a shot: the fourth is refused (429)', r.status === 429 && ((await r.json()) as { reason?: string }).reason === 'tries');
   {
-    const { makeShotPicture } = await import('../src/lib/voice/shot-picture');
+    const { makeShotPicture, realPicturesFor } = await import('../src/lib/voice/shot-picture');
     let made = false;
-    const real = await makeShotPicture(sql, NATE, new Request('http://localhost/x'), { draftId: acc.id, shotKey: s2.shots[1].key, description: mine, angle: 'low' }, { country: null, region: null } as never, {
-      real: true, consented: async () => true, reference: async () => null, paid: (async () => { made = true; return { ok: false, status: 500, error: 'x', extra: {} }; }) as never, make: async () => { made = true; throw new Error('no'); },
-    });
-    check('B. no real picture before Nate\'s word: VOICE.realPictures is off, and a real model is refused before any call', real.status === 403 && !made);
+    let pool: string | undefined;
+    const realDeps = {
+      real: true, consented: async () => true, reference: async () => null, paid: (async (_s: unknown, _f: unknown, _r: unknown, job: { spend: { pool?: string } }) => { made = true; pool = job.spend.pool; return { ok: false, status: 429, error: 'stopped by the test', extra: {} }; }) as never, make: async () => { throw new Error('no'); },
+    };
+    const body = { draftId: acc.id, shotKey: s2.shots[1].key, description: mine, angle: 'low' };
+    const stranger = await makeShotPicture(sql, STRANGER, new Request('http://localhost/x'), body, { country: null, region: null } as never, realDeps);
+    check('B. real pictures for admins only: anyone else is refused before any call (403)', stranger.status === 403 && !made && !realPicturesFor(STRANGER) && realPicturesFor(NATE) && realPicturesFor(GARANCE));
+    const admin = await makeShotPicture(sql, NATE, new Request('http://localhost/x'), body, { country: null, region: null } as never, realDeps);
+    check('B. ... an admin reaches the paid step, on the admins\' pool (its daily cap)', made && pool === 'admin' && admin.status === 429, `${admin.status} ${pool}`);
   }
   {
     const many = Array.from({ length: 12 }, (_, i) => Math.round((tl.seconds / 13) * (i + 1) * 100) / 100);
@@ -425,10 +430,10 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   check('B2. "New shot starts here" sits between each pair of sentences, at the first one\'s end', board.sentenceBoundaries(tl).map((b) => `${b.after}-${b.before}@${b.at}`).join() === '0-1@9,1-2@17');
   check('B2. a cut moved on the strip still counts at its boundary (within a third of a second)', board.cutNear([9.2, 20], 9) === 9.2 && board.cutNear([9.5], 9) === null);
   const why = (o: Partial<Parameters<typeof board.pictureBlocked>[0]>) => board.pictureBlocked({ real: false, standIn: false, description: 'x', angle: 'wide', tries: 0, maxTries: 3, ...o });
-  check('B2. why "Make the picture" is off, in one line: real pictures off, no tries left, no description, no camera', why({}) === 'Real pictures are off for now.' && /No tries left/.test(why({ standIn: true, tries: 3 }) ?? '') && /No description yet/.test(why({ standIn: true, description: ' ' }) ?? '') && why({ standIn: true, angle: '' }) === 'Choose a camera first.' && why({ standIn: true }) === null);
+  check('B2. why "Make the picture" is off, in one line: real pictures off, no tries left, no description (no camera line: every shot has one)', why({}) === 'Real pictures are off for now.' && /No tries left/.test(why({ standIn: true, tries: 3 }) ?? '') && /No description yet/.test(why({ standIn: true, description: ' ' }) ?? '') && why({ standIn: true }) === null && why({ standIn: true, angle: '' }) === null);
   const page = readFileSync(path.join(ROOT, 'src/components/voice-board.tsx'), 'utf8');
   check('B2. the page: one Style, Ephelion\'s look and Model for every picture; no per-shot style, characters list or model list', /Settings for every picture/.test(page) && /Ephelion&rsquo;s look/.test(page) && !/<ModelRow\b/.test(page) && !/Characters \(published sheets\)/.test(page) && !/name=\{`angle-/.test(page));
-  check('B2. ... each shot keeps its own words and a camera dropdown; the cuts are a sentence list with "New shot starts here"', /What the shot shows \(your words\)/.test(page) && /Choose a camera/.test(page) && /New shot starts here/.test(page));
+  check('B2. ... each shot keeps its own words and a camera dropdown; the cuts are a sentence list with "New shot starts here"', /What the shot shows \(your words\)/.test(page) && /<span className="vb-label">Camera<\/span>/.test(page) && !/Choose a camera/.test(page) && /New shot starts here/.test(page));
   check('B2. the play-through and the shot show the speech\'s own words (never wordsIn, the transcription\'s)', !/wordsIn\(/.test(page) && /sentenceText\(sentenceAt\(t, now\)\)/.test(page));
 }
 

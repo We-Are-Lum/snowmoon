@@ -88,7 +88,8 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
     if (!r.ok) return setData({ error: j.error ?? 'Not available' });
     setData(j);
     setCuts(j.board.cuts);
-    setShots(j.board.shots);
+    // Every shot starts on Medium shot (Nate, 2026-11-21), boards saved before then included.
+    setShots(j.board.shots.map((x) => (x.angle ? x : { ...x, angle: 'medium' as const })));
     setSettings({ styleId: j.board.shots[0]?.styleId ?? null, lookId: j.board.shots[0]?.characterIds[0] ?? null });
     setKept(j.pictures.map((p) => ({ shotKey: p.shotKey, sha256: p.sha256 })));
     setSaved(j.board.version);
@@ -396,7 +397,6 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
           <label className="vb-field">
             <span className="vb-label">Camera</span>
             <select value={shot.angle} onChange={(e) => edit({ angle: e.target.value as Shot['angle'] })}>
-              <option value="">Choose a camera</option>
               {d.angles.map((x) => (
                 <option key={x.id} value={x.id}>{x.label}</option>
               ))}
