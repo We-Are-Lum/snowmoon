@@ -40,8 +40,8 @@ export const REFUSAL_WORDING = {
   /** The owner's words (2026-11-18): a closed model's maker (OpenAI, Google) refused the picture. */
   maker: (maker: string) => `${maker}’s own safety check refused this picture. Try other words.`,
   /**
-   * The prompt check gave no answer, twice (owner Nate's words, 2026-11-22). DRAFT: for Nate's reread (branch
-   * prompt-check-budget); never the rules line.
+   * The prompt check gave no answer, twice (owner Nate's words, 2026-11-22; reread by the owner
+   * 2026-11-22, branch prompt-check-budget); never the rules line.
    */
   noAnswer: 'The prompt check didn’t give an answer. Try again.',
 } as const;
