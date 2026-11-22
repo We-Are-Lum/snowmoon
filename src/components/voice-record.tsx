@@ -5,6 +5,7 @@ import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, inMiniApp, useAuth } from '~/lib/client-auth';
 import { HOST_CHECK_MS, HOST_PROMPT_MS, withTimeout } from '~/lib/host-timeout';
 import { MIC_HELP, micPlace } from '~/lib/mic-help';
+import { loadTake, removeTake, saveTake, type DeviceTake } from '~/lib/voice/device-takes';
 import '../styles/voice.css';
 
 /**
@@ -31,7 +32,7 @@ interface Status {
   readings: { speechId: string; presetId: string; id: string; candidate: number | null; madeAt: string }[];
 }
 interface Speech { id: string; title: string; character: string; source: { kind: string; block?: string }; label: { kind: 'book'; text: string; block: string } | { kind: 'invented'; text: string; writers: string[] }; version: number; standIn: boolean; paragraphs: string[]; sentences: { n: number; text: string }[]; characters: number; names: string[]; aiHelp: boolean | null; credit: string | null }
-interface Converted { blob: Blob; url: string; ticket: string; check?: string; checks?: Check[]; seconds: number }
+interface Converted { blob: Blob; url: string; ticket: string; check?: string; checks?: Check[]; seconds: number; draftId?: string }
 interface Redo extends Converted { n: number }
 
 const TYPES = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/webm', 'audio/mp4;codecs=mp4a.40.2', 'audio/ogg;codecs=opus'];
@@ -229,8 +230,12 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
   const [choice, setChoice] = useState<string>('');
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [take, setTake] = useState<{ seconds: number; url: string } | null>(null);
+  // The take in the tab, and the speech it is of: only ever shown and sent with that speech (Nate, 2026-11-22).
+  const [take, setTake] = useState<{ seconds: number; url: string; speechId: string } | null>(null);
   const takeBlob = useRef<Blob | null>(null);
+  // The raw take kept on this device, in this browser's storage, under the signed-in FID (Nate, 2026-11-22).
+  const [onDevice, setOnDevice] = useState<DeviceTake | null>(null);
+  const [deviceNote, setDeviceNote] = useState<string | null>(null);
   const [agree, setAgree] = useState(false);
   const [converted, setConverted] = useState<Converted | null>(null);
   const [redos, setRedos] = useState<Redo[]>([]);
@@ -268,13 +273,15 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     if (status && status !== 'none' && !choice && status.choices[0]?.saved) setChoice(`${status.choices[0].presetId}#${status.choices[0].candidate}`);
   }, [status, choice]);
 
-  // Leaving before Accept discards: say so if there is something to lose.
+  // Leaving while a conversion is in flight, or with a converted sentence not yet used: say so. (A whole take is kept as a
+  // draft by the server even if the page goes, and the raw take stays on the device; the warning is for the wait.)
+  const inFlight = busy === 'convert' || busy === 'redo';
   useEffect(() => {
-    if (!converted || accepted) return;
+    if (!inFlight && !(converted && redos.length && !accepted)) return;
     const h = (e: BeforeUnloadEvent) => e.preventDefault();
     window.addEventListener('beforeunload', h);
     return () => window.removeEventListener('beforeunload', h);
-  }, [converted, accepted]);
+  }, [inFlight, converted, redos.length, accepted]);
 
   // The chosen speech (Nate, 2026-11-22: "a 'pick a speech' step before the voice picker"): the page reads it as s.speech,
   // and the readings shown are that speech's.
@@ -284,6 +291,30 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     const sp = status.speeches.find((x) => x.id === speechId) ?? status.speech;
     return { ...status, speech: sp, readings: status.readings.filter((r) => r.speechId === sp.id) };
   }, [status, speechId]);
+
+  // Coming back (a reload, a crash, the app sent to the background): this sign-in's take of this speech, from the device.
+  const fid = auth.kind === 'signed-in' ? auth.fid : null;
+  const sid = s?.speech.id ?? null;
+  useEffect(() => {
+    if (fid === null || !sid) return;
+    let alive = true;
+    // Another speech (or sign-in): its take goes from the tab at once, and this speech's own is read from the device.
+    takeBlob.current = null;
+    setTake((old) => (old && URL.revokeObjectURL(old.url), null));
+    setOnDevice(null);
+    setAgree(false);
+    void loadTake(fid, sid)
+      .then((t) => {
+        if (!alive || !t || t.speechId !== sid) return;
+        setOnDevice(t);
+        takeBlob.current = t.blob;
+        setTake({ seconds: t.seconds, url: URL.createObjectURL(t.blob), speechId: t.speechId });
+      })
+      .catch((e) => alive && setDeviceNote(`This browser couldn't read its saved recordings (${e instanceof Error ? e.message : String(e)}).`));
+    return () => {
+      alive = false;
+    };
+  }, [fid, sid]);
   const picked = useMemo(() => s?.choices.find((c) => `${c.presetId}#${c.candidate}` === choice) ?? null, [s, choice]);
   const words = useMemo(() => (s ? s.speech.sentences.map((x) => wordCount(x.text)) : []), [s]);
   const totalWords = words.reduce((a, b) => a + b, 0);
@@ -314,6 +345,24 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     setTake(null);
     setAgree(false);
   };
+  /** Remove the take from this device too (the only way it goes, besides recording again or the browser clearing it). */
+  const removeHere = async () => {
+    dropTake();
+    setOnDevice(null);
+    if (fid !== null && take) await removeTake(fid, take.speechId).catch(() => {});
+  };
+  // The draft this device's take became, if it was converted (the recipe keeps only the take's sha256).
+  const keptFromTake = onDevice ? s.drafts.find((d) => ((d.recipe as { takes?: { takeSha256?: string }[] }).takes ?? [])[0]?.takeSha256 === onDevice.sha256) : undefined;
+
+  /** Another speech: the converted take shown is already a draft; its own recording, if any, comes from the device. */
+  const pickSpeech = (id: string) => {
+    setConverted(null);
+    setRedos([]);
+    setAccepted(null);
+    setPlayUrl(null);
+    setMessage(null);
+    setSpeechId(id);
+  };
 
   async function agreeConsent() {
     setBusy('consent');
@@ -333,15 +382,21 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     const out = await rec.start(s!.limits.maxTakeSeconds);
     if (out) {
       takeBlob.current = out.blob;
-      setTake({ seconds: out.seconds, url: URL.createObjectURL(out.blob) });
+      setTake({ seconds: out.seconds, url: URL.createObjectURL(out.blob), speechId: s!.speech.id });
+      setDeviceNote(null);
+      // Kept on this device until it is removed or recorded again (replaces this speech's earlier take).
+      if (fid !== null)
+        await saveTake(fid, s!.speech.id, out.blob, out.seconds)
+          .then((t) => (setOnDevice(t), log.note(`saved on this device (${out.blob.size} bytes)`)))
+          .catch((e) => (setOnDevice(null), setDeviceNote(`Not saved on this device: ${e instanceof Error ? e.message : String(e)}. It is only in this tab.`), log.note(`device save failed: ${errText(e)}`)));
     }
   }
 
-  /** Send one recording, once, then forget it, whatever the answer. */
-  async function convert(blob: Blob, seconds: number, sentence: number | null): Promise<Converted | null> {
+  /** Send one recording to be converted (a whole take stays on the device whatever the answer). */
+  async function convert(blob: Blob, seconds: number, sentence: number | null, speechOfTake = s!.speech.id): Promise<Converted | null> {
     const form = new FormData();
     form.set('take', blob, 'take');
-    form.set('speechId', s!.speech.id);
+    form.set('speechId', speechOfTake);
     form.set('presetId', picked!.presetId);
     form.set('candidate', String(picked!.candidate));
     form.set('seconds', String(seconds));
@@ -352,8 +407,17 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     if (!r?.ok) {
       const err = ((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error;
       if (r) log.note(`convert: HTTP ${r.status}${err ? `: ${err}` : ''}`);
-      setMessage(err ?? 'The conversion failed. Your recording was not kept.');
+      setMessage(err ?? (sentence === null ? 'The conversion failed. Your recording is still on this device: tick the box and convert it again.' : 'The conversion failed. Your recording was not kept.'));
       return null;
+    }
+    if (sentence === null) {
+      // A whole take: the server converted it, checked it and kept it as a draft before answering (Nate, 2026-11-22).
+      const j = (await r.json()) as { draftId: string; ticket: string; check: string | null; checks: Check[] | null };
+      log.note(`convert: HTTP ${r.status}, kept as draft ${j.draftId}${j.checks ? `; ${j.checks.filter((x) => x.ok).length} of ${j.checks.length} sentences match` : '; no word check'}`);
+      const a = await authFetch(`/api/voice/drafts/${j.draftId}/0`).catch(() => null);
+      const kept = a?.ok ? await a.blob() : new Blob();
+      if (!j.checks) setMessage('Converted and kept as your draft, but the word check could not be made.');
+      return { blob: kept, url: URL.createObjectURL(kept), ticket: j.ticket, seconds, draftId: j.draftId, check: j.check ?? undefined, checks: j.checks ?? undefined };
     }
     const out = await r.blob();
     log.note(`convert: HTTP ${r.status}, ${out.size} bytes back`);
@@ -395,16 +459,20 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
   async function convertWhole() {
     const blob = takeBlob.current;
     if (!blob || !take || !picked) return;
+    // Never another speech's take (the take is shown and sent with its own speech only).
+    if (take.speechId !== s!.speech.id) return setMessage('That recording is of another speech: pick that speech to convert it.');
     setBusy('convert');
     setMessage(null);
     const seconds = take.seconds;
-    // Sent once: the take leaves this tab's memory now, converted or not.
-    dropTake();
-    const c = await convert(blob, seconds, null);
+    // Sent only now, when Convert is pressed; the take stays on this device until it is removed.
+    setAgree(false);
+    const c = await convert(blob, seconds, null, take.speechId);
     setBusy(null);
     if (c) {
       setConverted(c);
       setPlayUrl(c.url);
+      // Already kept as a draft by the server.
+      setAccepted(c.draftId ?? null);
       void load();
     }
   }
@@ -430,8 +498,9 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     void load();
   }
 
+  /** "Use this one": the take with its redone sentences, kept as a new draft (the take alone is already kept). */
   async function accept() {
-    if (!converted?.check) return;
+    if (!converted?.check || !redos.length) return;
     setBusy('accept');
     const f = new FormData();
     f.set('take', converted.blob, 'take.mp3');
@@ -458,13 +527,14 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     setAccepted(null);
   }
 
-  async function removeDraft(id: string) {
-    if (!window.confirm('Remove this draft? Its audio is deleted and it can\'t be brought back.')) return;
+  async function removeDraft(id: string): Promise<boolean> {
+    if (!window.confirm('Remove this draft? Its audio is deleted and it can\'t be brought back.')) return false;
     setBusy('remove');
     const r = await authFetch(`/api/voice/drafts/${id}`, { method: 'DELETE' });
     setBusy(null);
     if (r.ok) void load();
     else setMessage(((await r.json().catch(() => ({}))) as { error?: string }).error ?? 'It could not be removed');
+    return r.ok;
   }
 
   async function makeReading() {
@@ -517,11 +587,11 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
         <>
           <section className="vr-card" aria-labelledby="vr-speech-h">
             <h2 id="vr-speech-h">Pick a speech</h2>
-            <fieldset className="vr-speeches" disabled={busy !== null || recording || Boolean(take) || Boolean(converted)}>
-              <legend className="vr-small">Lord Ephelion&rsquo;s words to perform. Changing it starts again.</legend>
+            <fieldset className="vr-speeches" disabled={busy !== null || recording || (Boolean(take) && !onDevice) || Boolean(converted && redos.length && accepted === converted.draftId)}>
+              <legend className="vr-small">Lord Ephelion&rsquo;s words to perform. Each speech keeps its own recording on this device.</legend>
               {s.speeches.map((x) => (
                 <label key={x.id} className={`vr-speech${x.id === s.speech.id ? ' vr-on' : ''}`}>
-                  <input type="radio" name="speech" checked={x.id === s.speech.id} onChange={() => setSpeechId(x.id)} />
+                  <input type="radio" name="speech" checked={x.id === s.speech.id} onChange={() => pickSpeech(x.id)} />
                   <span>
                     <strong>{x.title}</strong>{' '}
                     <span className="vr-tag">{x.label.text}</span>
@@ -617,9 +687,14 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                     <p className="vr-small">What each step answered on this device. Text only; no audio. Copy it to send it along.</p>
                     <pre>{log.lines.join('\n') || 'Nothing yet.'}</pre>
                   </details>
-                  {take && (
+                  {take && take.speechId === s.speech.id && (
                     <div className="vr-take">
-                      <p className="vr-note">Your recording, {mmss(take.seconds)}. Only in this tab.</p>
+                      <p className="vr-note">
+                        Your recording, {mmss(take.seconds)}.{' '}
+                        {onDevice ? <span className="vr-ok">Saved on this device</span> : <>Only in this tab.</>} It stays here until you remove it or record again, and is sent to be converted only when you press Convert.
+                      </p>
+                      {deviceNote && <p className="vr-warn">{deviceNote}</p>}
+                      {keptFromTake && <p className="vr-ok">This recording was converted and kept as your draft ({new Date(keptFromTake.madeAt).toLocaleString()}). It is in your drafts below.</p>}
                       <audio controls src={take.url} className="vr-audio" />
                       <label className="vr-tick">
                         <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
@@ -629,8 +704,8 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                         <button type="button" className="vr-btn" onClick={convertWhole} disabled={!agree || !s.ready || busy !== null}>
                           {busy === 'convert' ? 'Converting…' : `Convert (≈ ${credits(take.seconds).toLocaleString()} credits)`}
                         </button>
-                        <button type="button" className="vr-btn vr-quiet" onClick={dropTake} disabled={busy !== null}>
-                          Delete it
+                        <button type="button" className="vr-btn vr-quiet" onClick={() => void removeHere()} disabled={busy !== null}>
+                          Remove
                         </button>
                       </div>
                       {s.today && <p className="vr-small">Today: {s.today.credits.toLocaleString()} of {s.today.capCredits.toLocaleString()} credits used; {s.today.conversionsLeft} whole takes left for you.</p>}
@@ -645,7 +720,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
             <section className="vr-card" aria-labelledby="vr-check-h">
               <h2 id="vr-check-h">3. Listen and check</h2>
               <p className="vr-note">
-                <span className="vr-tag">AI</span> Your performance in {picked?.name}, converted by ElevenLabs ({s.models.convert}, a closed model by ElevenLabs). Your recording is gone; this is the converted speech.
+                <span className="vr-tag">AI</span> Your performance in {picked?.name}, converted by ElevenLabs ({s.models.convert}, a closed model by ElevenLabs). This is the converted speech, kept as your private draft; your recording is still on this device until you remove it.
               </p>
               {playUrl && <audio controls src={playUrl} className="vr-audio" />}
               {checks ? (
@@ -709,17 +784,22 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
               ) : (
                 <button type="button" className="vr-btn vr-quiet" onClick={recheck}>Check the words again</button>
               )}
-              {!accepted ? (
+              {redos.length > 0 && !(accepted && accepted !== converted.draftId) ? (
                 <div className="vr-row">
                   <button type="button" className="vr-btn" onClick={accept} disabled={!converted.check || busy !== null || recording}>
-                    {busy === 'accept' ? 'Keeping…' : 'Accept and keep as a draft'}
+                    {busy === 'accept' ? 'Keeping…' : 'Use this one (with the redone sentences)'}
                   </button>
-                  <button type="button" className="vr-btn vr-quiet" onClick={discard} disabled={busy !== null}>Discard</button>
+                  <span className="vr-small">The take alone is already kept as a draft.</span>
                 </div>
+              ) : !accepted ? (
+                <p className="vr-warn">Not kept: the conversion didn&rsquo;t come back as a draft. Your recording is still on this device: convert it again.</p>
               ) : (
-                <p className="vr-ok">Kept as your draft. Only you can see it; nothing is published.</p>
+                <div className="vr-row">
+                  <p className="vr-ok">Kept as your draft. Only you can see it; nothing is published.</p>
+                  <button type="button" className="vr-btn vr-quiet vr-small-btn" onClick={async () => { if (await removeDraft(accepted)) discard(); }} disabled={busy !== null}>Remove</button>
+                </div>
               )}
-              <p className="vr-small">If you leave before Accept, this is discarded.</p>
+              <p className="vr-small">Each converted take is kept as your draft as soon as it comes back, until you remove it. Redone sentences are kept when you press &ldquo;Use this one&rdquo;.</p>
             </section>
           )}
 

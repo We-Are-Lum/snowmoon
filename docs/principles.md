@@ -74,8 +74,8 @@ coding agent and its helpers are in `docs/prompts/`.
   And (Nate, 2026-11-21: "confirm whether transcription requests leave a history item … If they do, delete those too";
   this sentence reread by him the same day): ElevenLabs keeps each transcript by its id (not in history), so the flow
   deletes it with the same retries, and a planted skipped transcript delete is caught too.
-- `P1i` (reread by Nate 2026-11-21): the own-voice consent shown is `own-voice-v2`, and only by the voice pages and routes,
-  only while `P1h` passes; `own-voice-v1` is used by nothing under `src/`.
+- `P1i` (reread by Nate 2026-11-21; v3 reread 2026-11-22): the own-voice consent shown is `own-voice-v3`, and only by the voice pages and routes,
+  only while `P1h` passes; `own-voice-v1` is used by nothing under `src/`; v2 stays on file, retired.
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
   drafts, hidden work and abandoned attempts stay private.
@@ -102,14 +102,16 @@ closed model by Anthropic, from Nate's words, adjusted to what ElevenLabs' own p
 they agree for that recording, to convert it into a character's voice. ElevenLabs may keep it under its own privacy
 policy, in the United States, and the performer is told so before recording. The site asks ElevenLabs to delete each
 conversion from its history right after, and only the converted audio, never the recording, is sent to be transcribed."
-In practice: the take is a Blob in the performer's tab until it is sent once for conversion; the site's server passes
-it to ElevenLabs without writing it to the database, storage, disk or a log, and keeps only its sha256. This replaces
+In practice: the take stays on the performer's device, in the browser's storage, until they remove it or record again, and
+leaves it only when they press Convert; the site's server passes it to ElevenLabs without writing it to the database,
+storage, disk or a log, keeps only its sha256, and keeps the converted speech as the performer's private draft (owner,
+2026-11-22, reread). This replaces
 the earlier rule (owner, 2026-10-22: "Raw recordings are never published and never sent to any service that processes
 them; they stay on my devices and my own encrypted storage") and its temporary Modal exception (owner, 2026-10-22).
 The Modal conversion code (`modal/chatterbox_vc.py`) stays in the repository and its proof (`check:modal-vc`) still
 runs, but no page uses it. Training: Nate turned off the account's "Improve the models for everyone" (2026-11-21), so
 the consent's line that ElevenLabs doesn't train on them stands without brackets.
-The performer agrees to `own-voice-v2` (`config/consent-own-voice.json`; reread 2026-11-21) first, for each recording sent. Every
+The performer agrees to `own-voice-v3` (`config/consent-own-voice.json`; reread 2026-11-22) first, for each recording sent. Every
 performer gets the same terms. Anyone can still re-run the conversion with
 their own voice or another reference clip; they cannot reproduce the exact
 converted line from the recipe alone, which is why the converted line itself
