@@ -3,7 +3,7 @@
  *  S. the switch: off in the committed config; every route 401 signed out, 404 to anyone not let in; on Vercel the
  *     local test switch and the stub address are ignored; a real ElevenLabs call is refused in the local tests;
  *  W. the speech: c13-b64 word for word, cut into sentences; the word check (case, punctuation, dashes, numbers);
- *  C. the consent: own-voice-v2 (the draft), agreed once, and a tick for each recording;
+ *  C. the consent: own-voice-v2 (current), agreed once, and a tick for each recording;
  *  V. convert: the take goes to ElevenLabs once, its history item is deleted, nothing of it is stored;
  *  T. transcribe: only converted audio; the mismatch shows; a redone sentence passes;
  *  A. accept: a private draft with its recipe (voice, model, settings, each take's sha256); forged files and records
@@ -15,7 +15,7 @@
  *
  *   npm run test:voice
  *
- * In-memory Postgres (PGlite, every migration, NEXT_ephelion_voice included); ElevenLabs is the local stub
+ * In-memory Postgres (PGlite, every migration, 0044_ephelion_voice included); ElevenLabs is the local stub
  * (scripts/lib/elevenlabs-stub.ts). No network, no spending.
  */
 import path from 'node:path';
@@ -102,11 +102,11 @@ const as = (fid: number | null, init: RequestInit = {}, url = 'http://localhost/
 const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
 
 // S. The switch.
-check('S. committed: the admin trial and the open switch are both off', VOICE.adminTrial === false && VOICE.open === false);
+check('S. committed: the admins\' trial on (Nate\'s merge plan, 2026-11-21), the open switch and real pictures off', VOICE.adminTrial === true && VOICE.open === false && VOICE.realPictures === false);
 check('S. the local test switch is on here', voiceTestOn());
 for (const [k, v] of [['VERCEL', '1'], ['VERCEL_ENV', 'production'], ['VERCEL_ENV', 'preview']] as const) {
   process.env[k] = v;
-  check(`S. with ${k}=${v} the test switch is off, nobody is let in, and the stub address is ignored`, !voiceTestOn() && !voiceAllowed(NATE) && elevenLabsBase() === 'https://api.elevenlabs.io');
+  check(`S. with ${k}=${v} the test switch is off, only admins are let in (the trial), and the stub address is ignored`, !voiceTestOn() && voiceAllowed(NATE) && voiceAllowed(GARANCE) && !voiceAllowed(STRANGER) && elevenLabsBase() === 'https://api.elevenlabs.io');
   delete process.env[k];
 }
 check('S. a non-admin is not let in during the admin trial', !voiceAllowed(STRANGER) && voiceAllowed(NATE) && voiceAllowed(GARANCE));
@@ -125,8 +125,10 @@ for (const r of routeFiles) {
   }
 }
 process.env.VOICE_TEST_ON = '';
-// Off, the test sign-in isn't honoured either (401); a real admin sign-in is let in by nothing (404, voiceAllowed).
+// With the trial switched off again (as before this merge), the test sign-in isn't honoured (401) and no admin is let in.
+(VOICE as { adminTrial: boolean }).adminTrial = false;
 check('S. with the switch off, an admin isn\'t let in either', !voiceAllowed(NATE) && [401, 404].includes((await status.GET(as(NATE))).status));
+(VOICE as { adminTrial: boolean }).adminTrial = true;
 process.env.VOICE_TEST_ON = '1';
 for (const f of ['src/app/storyboard/record/page.tsx']) check(`S. ${f} is the site's usual not-found for everyone`, /notFound\(\);/.test(readFileSync(path.join(ROOT, f), 'utf8')));
 {
@@ -176,8 +178,9 @@ check('W. numbers, case, punctuation and apostrophes compare as words', norm('4'
 // C. The consent.
 const wording = voiceConsentWording();
 const own = JSON.parse(readFileSync(path.join(ROOT, 'config/consent-own-voice.json'), 'utf8'));
-check('C. the page shows own-voice-v2, the draft, with Nate\'s fixes', wording.version === 'own-voice-v2' && wording.text[0] === 'You record a speech. Your recording is converted into a character\'s voice, and only the converted speech can be published.' && /against the speech\.$/.test(wording.text[3]));
-check('C. own-voice-v1 is still the file\'s current, untouched', own.current === 'own-voice-v1' && Boolean(own.versions['own-voice-v1']));
+check('C. the page shows own-voice-v2, current, with Nate\'s fixes', wording.version === 'own-voice-v2' && wording.text[0] === 'You record a speech. Your recording is converted into a character\'s voice, and only the converted speech can be published.' && /against the speech\.$/.test(wording.text[3]));
+check('C. own-voice-v2 is the file\'s current (reread 2026-11-21), with no draft left; v1 stays on file, retired', own.current === 'own-voice-v2' && !('draft' in own) && Boolean(own.versions['own-voice-v1']));
+check('C. the training line stands without brackets (Nate turned training off, 2026-11-21)', wording.text.some((t) => t.includes('Our account is set so it doesn\'t use them to train its models.')) && !wording.text.join(' ').includes('['));
 check('C. the bracketed training line is still there (Nate hasn\'t said it\'s done)', wording.text.some((t) => /\[Our account is set so it doesn't use them to train its models\.\]/.test(t)));
 const take = randomBytes(160_000); // the stub hears it as 40 s
 const form = (fields: Record<string, string | Blob>) => {

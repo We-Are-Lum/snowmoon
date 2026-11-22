@@ -1124,8 +1124,9 @@ export function appUrl(): string {
  * pick a voice, record a speech, convert it with ElevenLabs (closed models, by ElevenLabs), check it word for word,
  * redo one sentence, accept a private draft; and a ready-made reading for people who don't record.
  *
- * The switch: `adminTrial` lets admins use it; `open` lets everyone signed in. Both are false: every page and route
- * answers "not found". Turning one on is a reviewed commit, never an environment variable, and `open` waits for the
+ * The switch: `adminTrial` lets admins use it; `open` lets everyone signed in. `adminTrial` is on (Nate's merge plan,
+ * 2026-11-21, after his reread): admins only; `open` is off, so to everyone else every page and route answers "not
+ * found". Turning one on is a reviewed commit, never an environment variable, and `open` waits for the
  * reread Terms and Privacy that name ElevenLabs (owner, 2026-10-18). The local tests turn it on with VOICE_TEST_ON=1,
  * never on Vercel (src/lib/voice/flag.ts).
  *
@@ -1133,7 +1134,7 @@ export function appUrl(): string {
  * plan (review page, B7). Credits are ElevenLabs' units on our plan; dollars use Creator's $22 for 121,000 credits.
  */
 export const VOICE = {
-  adminTrial: false,
+  adminTrial: true,
   open: false,
   /**
    * Storyboard pictures (Nate, 2026-11-21): made with the challenge's picture code (GPT Image 2.5 Sunburst the default

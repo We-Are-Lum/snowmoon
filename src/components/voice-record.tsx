@@ -116,7 +116,7 @@ function useRecorder() {
     } catch (e) {
       stopAll();
       setState('idle');
-      // Refused: the line for this browser or the app (src/lib/mic-help.ts, DRAFT wording).
+      // Refused: the line for this browser or the app (src/lib/mic-help.ts, reread 2026-11-21).
       setError(e instanceof Error && /denied|NotAllowed/i.test(`${e.name} ${e.message}`) ? MIC_HELP[micPlace(navigator.userAgent, inApp.current === true)] : 'The microphone could not be opened here.');
       return null;
     }

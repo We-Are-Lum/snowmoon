@@ -1,8 +1,10 @@
--- NEXT_ephelion_voice.sql: the Ephelion voice slice 1 (Nate, 2026-11-19, branch ephelion-voice): what its ElevenLabs
--- calls cost, as daily totals, and the drafts a person accepts. NOT APPLIED. Unnumbered while the branch is unmerged: it
--- takes the next free number at merge, checked against origin/main and production. Drafted by the coding agent (Claude,
--- a closed model by Anthropic), DRAFT until Nate approves it; tested in PGlite by the agent (npm run test:voice). Was
--- NEXT_voice_costs.sql (2026-11-19); the draft tables were added on 2026-11-20.
+-- 0044_ephelion_voice.sql: the Ephelion voice slice 1 (Nate, 2026-11-19, branch ephelion-voice): what its ElevenLabs
+-- calls cost, as daily totals, and the drafts a person accepts. Numbered 0044 at merge (2026-11-21; main's highest was
+-- 0043); it was NEXT_ephelion_voice.sql, and before that NEXT_voice_costs.sql (2026-11-19); the draft tables were added
+-- on 2026-11-20, the storyboard tables on 2026-11-21. Drafted by the coding agent (Claude, a closed model by Anthropic);
+-- tested in PGlite by the agent (npm run test:voice) and by the coordinator on Postgres (2026-11-21: dry run clean,
+-- applies twice, read-back passes, the undo refuses while drafts exist and otherwise removes only the voice tables).
+-- NOT APPLIED until Nate applies it; the branch merges only after he says "applied".
 -- Requires 0001_core (the studio schema, studio_writer).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:

@@ -532,7 +532,7 @@ add({
 add({
   id: 'P1i',
   principle: 1,
-  name: 'the own-voice consent shown is own-voice-v2 (DRAFT), only by the voice slice, only while P1h passes; own-voice-v1 is used by nothing',
+  name: 'the own-voice consent shown is own-voice-v2 (current; reread 2026-11-21), only by the voice slice, only while P1h passes; own-voice-v1 is used by nothing',
   load: async () => ({
     users: walk('src', /\.(ts|tsx)$/).filter((f) => /consent-own-voice/.test(read(f))),
     file: json('config/consent-own-voice.json') as { draft?: string; current: string; versions: Record<string, unknown> },
@@ -542,7 +542,7 @@ add({
   run: async ({ users, file, v1Users, proof }) => {
     const p: string[] = [];
     for (const f of users as string[]) if (f !== 'src/lib/voice/consent.ts') p.push(`${f} reads the own-voice consent; only src/lib/voice/consent.ts may`);
-    if (file.draft !== 'own-voice-v2' || !file.versions['own-voice-v2']) p.push('the voice pages would not show own-voice-v2');
+    if ((file.draft ?? file.current) !== 'own-voice-v2' || !file.versions['own-voice-v2']) p.push('the voice pages would not show own-voice-v2');
     for (const f of v1Users as string[]) p.push(`${f} uses own-voice-v1`);
     const fails = (proof as string[]).length ? (proof as string[]) : [...voiceStatic(read(VOICE_FLOW_FILE), read(VOICE_ROUTE_FILE)), ...(await voiceRun(ROOT))];
     if ((VOICE.adminTrial || VOICE.open) && fails.length) p.push(...fails.map((x) => `the voice slice is switched on while P1h fails: ${x}`));
@@ -2009,6 +2009,8 @@ const SERVICES: [string, RegExp][] = [
   ['OpenAI', /\bOpenAI\b/g],
   ['Google', /\bGoogle\b(?! Fonts)/g],
   ['Spotify', /\bSpotify\b/g],
+  // The Ephelion voice (branch ephelion-voice, 2026-11-21): ElevenLabs converts and transcribes a recorded speech.
+  ['ElevenLabs', /\bElevenLabs\b/g],
 ];
 /** Makers named for provenance only: some pictures the owner made with them outside the site are brought in with the
  *  recipe the owner reports, and nothing is sent to them. They are not services, so P6g and P6h never ask the Privacy

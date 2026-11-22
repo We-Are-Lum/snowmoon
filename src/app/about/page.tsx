@@ -132,6 +132,15 @@ export default async function About() {
         them for this. Every outside service, and what each receives, is in the <a href="/privacy">Privacy Policy</a>;
         the rules for using this site are in the <a href="/terms">Terms</a>.
       </p>
+      {/* Word for word the Privacy Policy's ElevenLabs item (section 7), reread by the owner on 2026-11-21 (branch
+          ephelion-voice), so About names the same services as the Privacy page (check:principles P6h). */}
+      <p>
+        If you record a speech and agree to send it: ElevenLabs receives your recording and converts it into a character&apos;s
+        voice, then receives the converted speech to transcribe it. It receives nothing else about you. It stores what it
+        receives in the United States and may keep it under its own privacy policy; we ask it to delete each conversion from
+        its history. It doesn&apos;t use them to train its models. ElevenLabs also reads this edition&apos;s speeches aloud in
+        the characters&apos; voices, from their written words.
+      </p>
       <h2>Theme</h2>
       <ThemeSwitch name="theme-about" />
       <h2>Payments</h2>

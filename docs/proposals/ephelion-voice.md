@@ -632,6 +632,25 @@ merge.
 **Before the switch opens to everyone** (later, separate): the Privacy/Terms lines for everyone, the open caps, the
 publish slice and its rule for unmatched sentences, a check:ui on production data.
 
+## Merge prep, 2026-11-21 (Nate's reread)
+
+Nate: "Training is off in ElevenLabs. Remove the brackets … reread: the raw-recordings rule, own-voice-v2 (make it
+current), P1h and P1i, the Privacy §3, §4 and §7 lines, the Terms §5 and §8 lines, and the mic-help lines." Done on this
+branch, word for word, brackets removed: `src/lib/legal.ts` (keys terms kwbmuq, privacy 171ia1m, `LEGAL.effective`
+2026-11-21, to move if the merge does), own-voice-v2 current (`config/consent-own-voice.json`), the rule, P1h and P1i
+marked reread (`docs/principles.md`), mic-help marked reread, `VOICE.adminTrial: true`. About names ElevenLabs with the
+Privacy §7 sentence word for word, and check:principles' services list now has ElevenLabs (P6g, P6h).
+
+**Transcripts at ElevenLabs** (Nate: "confirm whether transcription requests leave a history item"): not a history item,
+but ElevenLabs keeps each transcript by its `transcription_id` (default `enable_logging=true`; turning it off is
+Enterprise-only). Tested once on a 1.3 s synthetic clip (0 credits): the transcript could be read by id at once, DELETE
+removed it (then 404 "transcript_not_found"), and history stayed empty. The flow now deletes each transcript right after,
+with the history delete's waits (1, 3, 6 s), records it per take in the recipe (`transcriptDeleted`), and P1h has a
+planted skipped transcript delete. ElevenLabs has no list of transcripts, so the sweep can't look for leftovers; the
+synthetic test clips transcribed before today (21 Nov night, 4 calls) can't be found to delete.
+
+The migration is numbered **0044** (`supabase/migrations/0044_ephelion_voice.sql`; main's highest was 0043).
+
 ## What Nate needs to do (one at a time)
 
 1. #195 is merged and live: the iPhone and desktop tests on /admin/mic-test; Android goes to Garance or Luis.

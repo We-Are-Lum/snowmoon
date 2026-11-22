@@ -1,7 +1,7 @@
 /**
- * What to tell someone whose microphone was refused (NotAllowedError), by browser. DRAFT wording (Nate, 2026-11-20,
- * after his iPhone Safari test), for his reread. Used by /admin/mic-test now; the Ephelion recording page
- * (/storyboard/record, branch ephelion-voice) will show the same lines. Pure: safe in the browser.
+ * What to tell someone whose microphone was refused (NotAllowedError), by browser. Wording drafted after Nate's iPhone
+ * Safari test (2026-11-20), reread by Nate on 2026-11-21 ("reread: … and the mic-help lines"). Used by /admin/mic-test and
+ * the Ephelion recording page (/storyboard/record). Pure: safe in the browser.
  */
 export type MicPlace = 'farcaster-app' | 'ios-safari' | 'mac-safari' | 'chrome' | 'other';
 
@@ -15,7 +15,7 @@ export function micPlace(ua: string, inFarcasterApp: boolean): MicPlace {
   return 'other';
 }
 
-/** DRAFT: one plain line per place. */
+/** One plain line per place (reread 2026-11-21). */
 export const MIC_HELP: Record<MicPlace, string> = {
   'ios-safari':
     "Safari didn't allow the microphone. Tap aA in the address bar, then Website Settings, set Microphone to Allow, and reload the page. If it's already set to Allow, check Settings › Apps › Safari › Microphone.",

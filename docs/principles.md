@@ -62,7 +62,7 @@ coding agent and its helpers are in `docs/prompts/`.
   the reader's device over the text served whole by `/api/book/text`; the
   query is never sent anywhere, kept or published, and the page may fetch
   only that text).
-- `P1h` (raw voice takes; DRAFT for Nate's reread, 2026-11-19, replacing the Modal proof of 2026-10-23): the
+- `P1h` (raw voice takes; reread by Nate 2026-11-21, replacing the Modal proof of 2026-10-23): the
   ElevenLabs conversion route keeps no recording. A static read of the route and its ElevenLabs client finds the
   request body passed only to ElevenLabs' speech-to-speech call and to sha256, and no database write, storage put, file
   write, log or error report that can hold it. A local run against a stub ElevenLabs (no spending) leaves no new file
@@ -71,7 +71,10 @@ coding agent and its helpers are in `docs/prompts/`.
   history item; transcription receives the converted audio, never the take. Planted violations (a log of the body, a
   storage put, a transcription of the take, a skipped history delete) are each caught. Not covered: what ElevenLabs
   keeps on its side (`docs/proposals/ephelion-voice.md`). The Modal proof (`check:modal-vc`) still runs on its own.
-- `P1i` (DRAFT, 2026-11-19): the own-voice consent shown is `own-voice-v2`, and only by the voice pages and routes,
+  Added after the reread (2026-11-21, Nate: "confirm whether transcription requests leave a history item … If they do,
+  delete those too"): ElevenLabs keeps each transcript by its id (not in history), so the flow deletes it with the
+  same retries, and a planted skipped transcript delete is caught too.
+- `P1i` (reread by Nate 2026-11-21): the own-voice consent shown is `own-voice-v2`, and only by the voice pages and routes,
   only while `P1h` passes; `own-voice-v1` is used by nothing under `src/`.
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
@@ -93,7 +96,7 @@ are never published. The reason is privacy: a raw recording of a person's
 voice is enough to clone it. The converted line is the published source of
 that line, and its recipe gives the model and revision, the settings, the
 character's reference clip and the sha256 of the raw take, but not the take.
-**The rule (DRAFT for Nate's reread, 2026-11-19, branch `ephelion-voice`; drafted by the coding agent, Claude, a
+**The rule (reread by Nate 2026-11-21, branch `ephelion-voice`; drafted by the coding agent, Claude, a
 closed model by Anthropic, from Nate's words, adjusted to what ElevenLabs' own pages say: `docs/proposals/ephelion-voice.md`):**
 "Raw recordings are never published or kept by the site. A performer's recording may be sent to ElevenLabs, only if
 they agree for that recording, to convert it into a character's voice. ElevenLabs may keep it under its own privacy
@@ -104,10 +107,9 @@ it to ElevenLabs without writing it to the database, storage, disk or a log, and
 the earlier rule (owner, 2026-10-22: "Raw recordings are never published and never sent to any service that processes
 them; they stay on my devices and my own encrypted storage") and its temporary Modal exception (owner, 2026-10-22).
 The Modal conversion code (`modal/chatterbox_vc.py`) stays in the repository and its proof (`check:modal-vc`) still
-runs, but no page uses it. Open point for Nate: ElevenLabs trains on inputs unless the account's "Improve the models
-for everyone" is off (Enterprise accounts only are off by default); the consent's bracketed line is true only once he
-turns it off.
-The performer agrees to `own-voice-v2` (`config/consent-own-voice.json`; DRAFT) first, for each recording sent. Every
+runs, but no page uses it. Training: Nate turned off the account's "Improve the models for everyone" (2026-11-21), so
+the consent's line that ElevenLabs doesn't train on them stands without brackets.
+The performer agrees to `own-voice-v2` (`config/consent-own-voice.json`; reread 2026-11-21) first, for each recording sent. Every
 performer gets the same terms. Anyone can still re-run the conversion with
 their own voice or another reference clip; they cannot reproduce the exact
 converted line from the recipe alone, which is why the converted line itself

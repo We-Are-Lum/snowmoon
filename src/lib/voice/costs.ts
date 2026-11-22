@@ -4,7 +4,7 @@ import { VOICE } from '../config';
 import { isAdmin } from '../admins';
 
 /**
- * Voice costs, as daily totals in studio.voice_costs (no person, no request id; NEXT_ephelion_voice.sql), and the caps
+ * Voice costs, as daily totals in studio.voice_costs (no person, no request id; 0044_ephelion_voice.sql), and the caps
  * (src/lib/config.ts VOICE.caps). A call reserves its worst case first, then settles at its real cost. The owner's
  * standing rule (2026-11-20): once a day's measured credits are more than 20% over its estimates, every call is refused
  * until the next UTC day.
