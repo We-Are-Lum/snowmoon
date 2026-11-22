@@ -237,6 +237,7 @@ const t1 = (await r.json()) as { checks: { n: number; ok: boolean; missing: stri
 const stt = stub.calls.filter((c) => c.path === '/v1/speech-to-text');
 check('T. the converted speech is transcribed with word timings', r.status === 200 && stt.length === sttBefore + 1 && stt.at(-1)!.files[0].sha256 === sha(converted) && stt.at(-1)!.fields.timestamps_granularity === 'word');
 check('T. ... by scribe_v3, with the speech\'s names as key terms', stt.at(-1)!.fields.model_id === 'scribe_v3' && (stt.at(-1)!.fields.keyterms ?? '').length > 0);
+check('T. the transcript ElevenLabs keeps is deleted right after (ElevenLabs keeps one per transcription, 2026-11-21)', stub.deletedTranscripts.length >= 1 && stub.kept().length === 0, `deleted ${stub.deletedTranscripts.length}, still kept ${stub.kept().length}`);
 check('T. the stub\'s one wrong word shows in sentence 4 only', t1.checks.filter((c) => !c.ok).map((c) => c.n).join() === '3' && t1.checks[3].extra.includes('weakness'), JSON.stringify(t1.checks.filter((c) => !c.ok)));
 {
   const stsAt = stub.calls.findIndex((c, i) => i >= before && c.path.startsWith('/v1/speech-to-speech/'));
@@ -275,6 +276,10 @@ check('A. a sentence record can\'t be accepted as a whole take', r.status === 40
 check('A. nothing is stored before Accept', (await sql`select count(*)::int n from studio.voice_drafts`)[0].n === 0);
 r = await accept.POST(as(NATE, { method: 'POST', body: acceptForm(converted, ticket, t1.check, { audio: redoAudio, ticket: redoTicket, check: t2.check }) }));
 const acc = (await r.json()) as { id: string; recipe: Record<string, unknown>; error?: string };
+{
+  const takes = ((acc.recipe?.takes ?? []) as { transcriptDeleted?: boolean }[]);
+  check('A. the accepted recipe says each take\'s and redo\'s transcript was deleted at ElevenLabs', takes.length >= 2 && takes.every((t) => t.transcriptDeleted === true), JSON.stringify(takes));
+}
 if (!acc.id) console.log('  accept said:', r.status, acc.error);
 check('A. accept keeps a private draft', r.status === 200 && /^[0-9a-f-]{36}$/.test(acc.id));
 const [d] = await sql`select * from studio.voice_drafts where id = ${acc.id}`;
@@ -488,6 +493,7 @@ for (const id of Object.values(VOICE.models)) {
   check('H. Record\'s button waits on no host check', !/disabled=\{[^}]*(inApp|webClient|caps)/.test(page));
 }
 
+check('T. every transcript made in this run was deleted at ElevenLabs (none left)', stub.kept().length === 0 && stub.deletedTranscripts.length >= 2, `kept ${stub.kept().length}`);
 // P. P1h.
 const proof = await voiceProof(ROOT);
 check('P. P1h: the real take flow and convert route keep no recording', proof.real.length === 0, proof.real.join('; '));

@@ -87,6 +87,18 @@ export async function deleteHistoryItem(id: string): Promise<'gone' | 'not-yet'>
   return 'gone';
 }
 
+/**
+ * Delete the transcript ElevenLabs keeps of one transcription (DELETE /v1/speech-to-text/transcripts/{id}; seen
+ * 2026-11-21: it is kept by default, readable by id, and gone after this). 'not-yet' on a 404, so the caller tries again.
+ */
+export async function deleteTranscript(id: string): Promise<'gone' | 'not-yet'> {
+  const res = await fetch(`${base()}/v1/speech-to-text/transcripts/${encodeURIComponent(id)}`, { method: 'DELETE', headers: { 'xi-api-key': key() }, signal: AbortSignal.timeout(TIMEOUT_MS) });
+  await res.body?.cancel().catch(() => {});
+  if (res.status === 404) return 'not-yet';
+  if (!res.ok) throw new Error(`ElevenLabs answered ${res.status} on a transcript delete`);
+  return 'gone';
+}
+
 /** Every history item made with these voices in the last `hours` (a backstop sweep, scripts/voice-history-sweep.ts). */
 export async function recentHistory(voiceIds: string[], hours: number): Promise<{ id: string; source: string; at: number }[]> {
   const res = await call('/v1/history?page_size=100', { method: 'GET' });
@@ -107,9 +119,9 @@ export function speechToText(audio: Uint8Array, keyterms: string[] = []) {
     form.set('timestamps_granularity', 'word');
     form.set('tag_audio_events', 'false');
     const res = await call('/v1/speech-to-text', { method: 'POST', body: form });
-    const j = (await res.json()) as { words?: { text: string; start: number; end: number; type?: string }[] };
+    const j = (await res.json()) as { words?: { text: string; start: number; end: number; type?: string }[]; transcription_id?: string | null };
     const words: HeardWord[] = (j.words ?? []).filter((w) => !w.type || w.type === 'word').map((w) => ({ text: w.text, start: w.start, end: w.end }));
-    return { words, credits: creditsOf(res) };
+    return { words, credits: creditsOf(res), transcriptionId: j.transcription_id ?? null };
   });
 }
 

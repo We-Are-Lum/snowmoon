@@ -33,6 +33,7 @@ export function voiceStatic(flow: string, route: string): string[] {
   if (!/finally\s*\{\s*take\.fill\(0\);\s*\}/.test(code)) p.push('take-flow does not zero the take in a finally');
   if (!/\(await deps\.deleteHistory\(out\.historyItemId\)\) === 'gone'/.test(code)) p.push('take-flow does not delete the history item');
   if (!/if \(sha !== convert\.convertedSha256 \|\| sha === convert\.takeSha256\) throw/.test(code)) p.push('take-flow transcribes without checking it is converted audio');
+  if (!/\(await deps\.deleteTranscript\(transcriptionId\)\) === 'gone'/.test(code)) p.push('take-flow does not delete the stored transcript');
   if ((code.match(/deps\.transcribe\(/g) ?? []).length !== 1 || !/deps\.transcribe\(input\.audio\)/.test(code)) p.push('take-flow calls transcribe with something other than the checked converted audio');
   const r = route.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   if (/\bconsole\./.test(r)) p.push('convert route uses console');
@@ -105,7 +106,8 @@ export async function voiceRun(root: string, flowSrc?: string): Promise<string[]
       // Like ElevenLabs on 2026-11-21: the item isn't written yet at the first delete, and is there at the next.
       deleteHistory: rec('deleteHistory', async () => (++deletes === 1 ? 'not-yet' : 'gone')),
       sleep: async () => {},
-      transcribe: rec('transcribe', async () => ({ words: [{ text: 'all', start: 0, end: 0.3 }], credits: 1 })),
+      transcribe: rec('transcribe', async () => ({ words: [{ text: 'all', start: 0, end: 0.3 }], credits: 1, transcriptionId: 'stt1' })),
+      deleteTranscript: rec('deleteTranscript', async () => 'gone'),
       sign: rec('sign', (t: unknown) => (signed.push(structuredClone(t)), `signed.${signed.length}`)),
       verify: rec('verify', (s: string) => (signed[Number(s.split('.')[1]) - 1] ?? null) as never),
       cost: rec('cost', async () => {}),
@@ -149,6 +151,7 @@ export async function voiceRun(root: string, flowSrc?: string): Promise<string[]
           const d = make(convert);
           seen.length = 0;
           await mod.transcribeConverted(d as never, { audio: new Uint8Array(converted), ticket: out.ticket, fid: 6786 }).catch(() => problems.push('transcription refused the converted audio'));
+          if (!seen.some((s) => s.dep === 'deleteTranscript' && s.args[0] === 'stt1') || !(signed.at(-1) as { transcriptDeleted?: boolean } | undefined)?.transcriptDeleted) problems.push('success: the stored transcript was not deleted');
           seen.length = 0;
           let refused = false;
           await mod.transcribeConverted(d as never, { audio: new Uint8Array(original), ticket: out.ticket, fid: 6786 }).catch(() => (refused = true));
@@ -177,6 +180,7 @@ export const VOICE_PLANTS: { name: string; plant: (s: string) => string }[] = [
   { name: 'a log of the take', plant: (s) => s.replace('const takeSha256 = deps.sha256(take);', "const takeSha256 = deps.sha256(take);\n    console.log('take', Buffer.from(take).toString('base64'));") },
   { name: 'a storage put of the take', plant: (s) => s.replace('const takeSha256 = deps.sha256(take);', "const takeSha256 = deps.sha256(take);\n    (await import('node:fs')).writeFileSync((await import('node:os')).tmpdir() + '/voice-planted-take.bin', take);") },
   { name: 'a transcription of the take', plant: (s) => s.replace('let historyDeleted = false;', 'await deps.transcribe(take);\n    let historyDeleted = false;') },
+  { name: 'a skipped transcript delete', plant: (s) => s.replace("(await deps.deleteTranscript(transcriptionId)) === 'gone'", 'true') },
   { name: 'a skipped history delete', plant: (s) => s.replace("(await deps.deleteHistory(out.historyItemId)) === 'gone'", 'true') },
   { name: 'no retry while the history item is not written yet', plant: (s) => s.replace('for (const wait of [0, 1000, 3000, 6000])', 'for (const wait of [0])') },
   { name: 'the take not zeroed', plant: (s) => s.replace('take.fill(0);', '') },

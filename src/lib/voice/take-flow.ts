@@ -8,6 +8,8 @@
  * - nothing here writes it anywhere, logs it, or returns it; its bytes are zeroed when the call ends, however it ends;
  * - the conversion's history item is deleted at ElevenLabs right after (deps.deleteHistory);
  * - transcription (deps.transcribe) only ever gets converted audio: audio whose sha256 is a conversion's, never a take's;
+ * - the transcript ElevenLabs keeps is deleted right after (deps.deleteTranscript; it keeps one per transcription, by id,
+ *   and has no list of them to sweep: seen 2026-11-21);
  * - a cost is recorded with numbers only (no audio, no hash).
  */
 import type { HeardWord } from './match';
@@ -42,6 +44,8 @@ export interface CheckTicket {
   convertedSha256: string;
   model: string;
   words: HeardWord[];
+  /** Whether ElevenLabs' stored transcript of the converted audio was deleted (2026-11-21). */
+  transcriptDeleted: boolean;
   issuedAt: number;
   expiresAt: number;
 }
@@ -60,7 +64,9 @@ export interface FlowDeps {
   /** 'gone' once deleted; 'not-yet' while ElevenLabs hasn't written the item (it writes history after answering). */
   deleteHistory(id: string): Promise<'gone' | 'not-yet'>;
   sleep(ms: number): Promise<void>;
-  transcribe(audio: Uint8Array): Promise<{ words: HeardWord[]; credits: number | null }>;
+  transcribe(audio: Uint8Array): Promise<{ words: HeardWord[]; credits: number | null; transcriptionId: string | null }>;
+  /** 'gone' once deleted; 'not-yet' when ElevenLabs answers that it has none by that id (tried again, as for history). */
+  deleteTranscript(id: string): Promise<'gone' | 'not-yet'>;
   sign(t: ConvertTicket | CheckTicket): string;
   verify(s: string): ConvertTicket | CheckTicket | null;
   cost(e: CostEntry): Promise<void>;
@@ -178,14 +184,31 @@ export async function transcribeConverted(deps: FlowDeps, input: { audio: Uint8A
   if (sha !== convert.convertedSha256 || sha === convert.takeSha256) throw new FlowError(400, 'Only the converted speech can be transcribed.');
   let words: HeardWord[];
   let credits: number | null;
+  let transcriptionId: string | null;
   try {
-    ({ words, credits } = await deps.transcribe(input.audio));
+    ({ words, credits, transcriptionId } = await deps.transcribe(input.audio));
   } catch {
     await deps.cost({ kind: 'transcribe', ok: false, seconds: convert.seconds, estimatedCredits: 0, credits: null });
     throw new FlowError(502, 'The transcription failed. Try again.');
   }
   await deps.cost({ kind: 'transcribe', ok: true, seconds: convert.seconds, estimatedCredits: 0, credits });
+  // ElevenLabs keeps each transcript by its id (seen 2026-11-21; history has no entry for it): delete it, with the same
+  // waits as a history item, and say in the record whether it went.
+  let transcriptDeleted = false;
+  if (transcriptionId) {
+    for (const wait of [0, 1000, 3000, 6000]) {
+      if (wait) await deps.sleep(wait);
+      try {
+        if ((await deps.deleteTranscript(transcriptionId)) === 'gone') {
+          transcriptDeleted = true;
+          break;
+        }
+      } catch {
+        // An error: tried again after the next wait; the record says whether it was deleted.
+      }
+    }
+  }
   const now = deps.now();
-  const check: CheckTicket = { v: 1, kind: 'check', fid: input.fid, convertedSha256: sha, model: deps.transcribeModel, words, issuedAt: now, expiresAt: now + deps.ticketMinutes * 60_000 };
+  const check: CheckTicket = { v: 1, kind: 'check', fid: input.fid, convertedSha256: sha, model: deps.transcribeModel, words, transcriptDeleted, issuedAt: now, expiresAt: now + deps.ticketMinutes * 60_000 };
   return { convert, words, check: deps.sign(check) };
 }

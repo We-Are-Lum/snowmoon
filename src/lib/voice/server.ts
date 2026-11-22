@@ -4,7 +4,7 @@ import { getPerson } from '../auth';
 import { db } from '../db';
 import { VOICE } from '../config';
 import { voiceAllowed, voiceTestPerson } from './flag';
-import { deleteHistoryItem, elevenLabsReady, speechToSpeech, speechToText } from './elevenlabs';
+import { deleteHistoryItem, deleteTranscript, elevenLabsReady, speechToSpeech, speechToText } from './elevenlabs';
 import { sha256Hex, signTicket, ticketsReady, verifyTicket } from './ticket';
 import { voiceStoreReady } from './store';
 import type { CostEntry, FlowDeps } from './take-flow';
@@ -28,6 +28,7 @@ export function flowDeps(cost: (e: CostEntry) => Promise<void>, keyterms: string
     sha256: sha256Hex,
     convert: speechToSpeech,
     deleteHistory: deleteHistoryItem,
+    deleteTranscript,
     sleep: (ms) => new Promise((r) => setTimeout(r, ms)),
     transcribe: (audio) => speechToText(audio, keyterms),
     sign: signTicket,

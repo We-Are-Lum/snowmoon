@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     if (files.length !== tickets.length || files.length !== redoChecks.length || files.length > 20) throw new FlowError(400, 'Each redone sentence needs its file, its record and its check');
     let total = mainBytes.length;
     const audio: DraftAudio[] = [{ role: 'take', sentence: null, replacesStart: null, replacesEnd: null, mp3: mainBytes, sha256: t.convertedSha256, seconds: t.seconds }];
-    const takes: Record<string, unknown>[] = [{ role: 'take', takeSha256: t.takeSha256, convertedSha256: t.convertedSha256, historyDeleted: t.historyDeleted, seconds: t.seconds }];
+    const takes: Record<string, unknown>[] = [{ role: 'take', takeSha256: t.takeSha256, convertedSha256: t.convertedSha256, historyDeleted: t.historyDeleted, transcriptDeleted: c.transcriptDeleted === true, seconds: t.seconds }];
     const redone = new Map<number, boolean>();
     const spliced: { start: number; end: number; seconds: number; words: TimedWord[] }[] = [];
     for (const [i, f] of files.entries()) {
@@ -74,7 +74,7 @@ export async function POST(request: Request) {
       spliced.push({ start, end: Math.max(start, end), seconds: rt.seconds, words: rc.words });
       total += bytes.length;
       audio.push({ role: 'redo', sentence: n, replacesStart: start, replacesEnd: Math.max(start, end), mp3: bytes, sha256: rt.convertedSha256, seconds: rt.seconds });
-      takes.push({ role: 'redo', sentence: n, takeSha256: rt.takeSha256, convertedSha256: rt.convertedSha256, historyDeleted: rt.historyDeleted, seconds: rt.seconds, replaces: [start, Math.max(start, end)] });
+      takes.push({ role: 'redo', sentence: n, takeSha256: rt.takeSha256, convertedSha256: rt.convertedSha256, historyDeleted: rt.historyDeleted, transcriptDeleted: rc.transcriptDeleted === true, seconds: rt.seconds, replaces: [start, Math.max(start, end)] });
     }
     if (total > 4_400_000) throw new FlowError(413, 'Too large to keep in one go');
     const unmatched = checks.filter((x) => !(redone.get(x.n) ?? x.ok)).map((x) => x.n);
