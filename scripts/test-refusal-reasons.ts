@@ -18,6 +18,13 @@
  *     read-back inserts and deletes a realistic row; A changes nothing, B applies twice, C (a) all true, C (b) passes
  *     and leaves nothing; studio_writer writes as the site does and can't delete; anon and authenticated read nothing;
  *     planted faults are caught.
+ * R6  a check that gives no answer (branch prompt-check-budget, owner Nate 2026-11-22): an empty reply, or one cut off
+ *     at the budget (finish_reason "length") with no verdict, is asked once more with the same budget; still none, and
+ *     the person sees exactly "The prompt check didn’t give an answer. Try again.", it is counted as 'no_answer' (never
+ *     as a rule, never "the rules don't allow"), credited back as other refusals are, no picture is made, and both
+ *     checks' costs are recorded. The same in checkWords (titles, backstories) and Remix. The line is marked DRAFT.
+ * R7  every prompt check gets 2,000 tokens: the default, the named budgets, each caller in src (found by search, so a
+ *     new caller is caught), and every request the stand-in check hears.
  * Every check is also run on a planted violation, which must fail.
  */
 import path from 'node:path';
@@ -77,7 +84,9 @@ proven('R1 the count stores only the policy\'s categories, unclear or other', ()
 
 // --- R2: reread, who, curly apostrophes --------------------------------------------------------------------------
 const wordingSrc = read('src/lib/images/refusal-wording.ts');
-const lines = [REFUSAL_WORDING.generic, REFUSAL_WORDING.words, REFUSAL_WORDING.maker('OpenAI'), ...Object.values(REFUSAL_WORDING.plain).map((p) => REFUSAL_WORDING.rule(p))];
+// The one line not yet reread: the no-answer line (branch prompt-check-budget), marked DRAFT for Nate's reread.
+const NO_ANSWER_REREAD = "The prompt check gave no answer, twice (owner Nate's words, 2026-11-22; reread by the owner";
+const lines = [REFUSAL_WORDING.generic, REFUSAL_WORDING.words, REFUSAL_WORDING.maker('OpenAI'), REFUSAL_WORDING.noAnswer, ...Object.values(REFUSAL_WORDING.plain).map((p) => REFUSAL_WORDING.rule(p))];
 const r2 = (src: string, ls: string[]) => [
   ...need(/reread by the owner 2026-11-22/.test(src) && !/DRAFT/.test(src) && /Owner Nate, 2026-11-18/.test(src) && /Drafted by the coding agent \(Claude, a closed model by\s*(\* )?Anthropic\)/.test(src), 'the wording file isn\'t marked reread by the owner 2026-11-22 (with no DRAFT left), with the owner, the date and its drafter'),
   ...ls.flatMap((l) => need(!/'/.test(l), `a straight apostrophe in "${l}"`)),
@@ -107,8 +116,17 @@ process.env.GROQ_API_KEY = 'stand-in-not-a-key';
 process.env.FAL_KEY = 'stand-in-not-a-key';
 let guardVerdict = '{"allow": true}';
 let anyOther = 0;
-globalThis.fetch = (async (url: string) => {
-  if (/groq|ai-gateway|chat\/completions/.test(String(url))) return new Response(JSON.stringify({ id: 'x', model: 'stand-in', choices: [{ index: 0, message: { role: 'assistant', content: guardVerdict }, finish_reason: 'stop' }], usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15 } }), { headers: { 'content-type': 'application/json' } });
+/** R6: replies the stand-in check gives in turn, before falling back to guardVerdict. */
+let guardQueue: { content: string; finish: string; cost?: number }[] = [];
+let guardCalls = 0;
+const budgets: number[] = [];
+globalThis.fetch = (async (url: string, init?: RequestInit) => {
+  if (/groq|ai-gateway|chat\/completions/.test(String(url))) {
+    guardCalls++;
+    budgets.push(JSON.parse(String(init?.body ?? '{}')).max_tokens);
+    const q = guardQueue.shift() ?? { content: guardVerdict, finish: 'stop' };
+    return new Response(JSON.stringify({ id: 'x', model: 'stand-in', choices: [{ index: 0, message: { role: 'assistant', content: q.content }, finish_reason: q.finish }], usage: { prompt_tokens: 10, completion_tokens: 5, total_tokens: 15, ...(q.cost !== undefined ? { cost: q.cost } : {}) } }), { headers: { 'content-type': 'application/json' } });
+  }
   anyOther++;
   return new Response('no network in this test', { status: 400 });
 }) as unknown as typeof fetch;
@@ -195,6 +213,135 @@ const passMakerEach = (cs: { f: string; src: string }[]) => cs.flatMap(({ f, src
   return [...need(calls.length > 0, `${f} has no paidPicture call`), ...calls.flatMap((c, i) => need(/\.\.\.\(m\.open \? \{\} : \{ maker: m\.maker \}\),/.test(c), `${f}: paidPicture call ${i + 1} doesn't pass a closed model's maker`))];
 });
 proven('R4 chapter pictures (redo, add) and the voice boards\' shot picture pass a closed model\'s maker', () => passMakerEach(laterCallers), () => passMakerEach(laterCallers.map(({ f, src }) => ({ f, src: src.replace('...(m.open ? {} : { maker: m.maker }),', '') }))));
+
+// --- R6: a check that gives no answer -----------------------------------------------------------------------------
+{
+  const NOANS = 'The prompt check didn’t give an answer. Try again.';
+  const { readVerdict, checkPrompt, NO_ANSWER } = await import('../src/lib/images/guard');
+  const { checkWords } = await import('../src/lib/images/paid');
+  const { checkBackstory } = await import('../src/lib/challenge/backstories');
+  const { creditBack } = await import('../src/lib/wallet/credits');
+  void creditBack;
+  // The verdict reader: empty, or cut off with no verdict, is no answer; a verdict cut off is still a verdict; a
+  // reply that ends normally without one is "unclear", as before.
+  type RV = (t: string, f?: string | null) => { allow: boolean; category: string | null } | null;
+  const reads = (f: RV) => [
+    ...need(f('', 'stop') === null && f('   \n', 'length') === null && f('', null) === null, 'an empty reply isn\'t no answer'),
+    ...need(f('The user asks for a picture of Zei on a ledge. Check each rule: minor? no. sexual? no', 'length') === null, 'a reply cut off at the budget with no verdict isn\'t no answer'),
+    ...need(f('{"allow": true', 'length') === null, 'a half-written verdict cut off isn\'t no answer'),
+    ...need(f('{"allow": true}', 'length')?.allow === true && f('{"allow": false, "category": "words"}', 'stop')?.category === 'words', 'a verdict isn\'t read'),
+    ...need(f('I think this is fine', 'stop')?.category === 'unclear' && f('{"allow": false}', 'stop')?.category === 'unclear', 'an answer without a clear verdict isn\'t "unclear"'),
+  ];
+  const oldRead: RV = (t) => { let v: { allow?: unknown; category?: unknown } = {}; try { v = JSON.parse(t.trim().split('\n').reverse().find((l) => l.trim().startsWith('{')) ?? ''); } catch { v = {}; } return { allow: v.allow === true, category: typeof v.category === 'string' ? v.category : v.allow === true ? null : 'unclear' }; };
+  proven('R6 an empty reply, or one cut off with no verdict, is no answer; a verdict or a normal unclear reply is an answer', () => reads(readVerdict), () => reads(oldRead));
+  check('R6 the no-answer category fits studio.image_refusals (^[a-z_]{1,40}$), and is its own, not a rule', NO_ANSWER === 'no_answer' && /^[a-z_]{1,40}$/.test(NO_ANSWER) && !(GUARD_CATEGORIES as readonly string[]).includes(NO_ANSWER) && countedCategory(NO_ANSWER) === 'no_answer' && guardRefusal(NO_ANSWER) === NOANS);
+  check('proof: R6 a category the table refuses is caught', !/^[a-z_]{1,40}$/.test('no-answer') && !/^[a-z_]{1,40}$/.test('No_answer'));
+  check('R6 the line is exactly the owner\'s, with the curly apostrophe, and never the rules line', REFUSAL_WORDING.noAnswer === NOANS && !/rules/.test(REFUSAL_WORDING.noAnswer) && !/'/.test(REFUSAL_WORDING.noAnswer));
+  const rereadMarked = (src: string) => need(src.includes(NO_ANSWER_REREAD) && src.indexOf(NO_ANSWER_REREAD) < src.indexOf("noAnswer: 'The prompt check didn’t give an answer. Try again.'"), 'the no-answer line isn\'t marked reread by the owner');
+  proven('R6 the no-answer line is marked reread by the owner (2026-11-22)', () => rereadMarked(wordingSrc), () => rereadMarked(wordingSrc.replace(NO_ANSWER_REREAD, 'DRAFT')));
+
+  // checkPrompt itself: the retry, its cost, the budget.
+  const req6 = new Request('http://localhost/api/images/generate', { method: 'POST' });
+  const run = async (q: typeof guardQueue) => { guardQueue = [...q]; guardCalls = 0; const r = await checkPrompt('Zei on a ledge', req6); guardQueue = []; return { r, calls: guardCalls }; };
+  const e = { content: '', finish: 'length', cost: 0.0006 };
+  const twice = await run([e, e]);
+  const thenOk = await run([e, { content: '{"allow": true}', finish: 'stop', cost: 0.0002 }]);
+  const cutThenWords = await run([{ content: 'Checking the rules: minor? no', finish: 'length', cost: 0.0006 }, { content: '{"allow": false, "category": "words"}', finish: 'stop', cost: 0.0002 }]);
+  const once = await run([{ content: '{"allow": true}', finish: 'stop', cost: 0.0003 }, e]);
+  const garbledOnce = await run([{ content: 'I think this is fine', finish: 'stop', cost: 0.0001 }, e]);
+  const near = (a: number, b: number) => Math.abs(a - b) < 1e-12;
+  const r6a = [
+    ...need(twice.calls === 2 && !twice.r.allow && twice.r.category === 'no_answer' && twice.r.attempts === 2 && near(twice.r.costUsd, 0.0012), `no answer twice: ${JSON.stringify(twice)}`),
+    ...need(thenOk.calls === 2 && thenOk.r.allow && near(thenOk.r.costUsd, 0.0008), `no answer, then allowed: ${JSON.stringify(thenOk)}`),
+    ...need(cutThenWords.calls === 2 && cutThenWords.r.category === 'words', `cut off, then words: ${JSON.stringify(cutThenWords)}`),
+    ...need(once.calls === 1 && once.r.allow && near(once.r.costUsd, 0.0003), `an answer first time is not asked again: ${JSON.stringify(once)}`),
+    ...need(garbledOnce.calls === 1 && garbledOnce.r.category === 'unclear', `a normal reply without a verdict is not asked again: ${JSON.stringify(garbledOnce)}`),
+  ];
+  check('R6 checkPrompt asks once more with the same budget after no answer, then no_answer; both checks\' costs counted', r6a.length === 0, r6a.join('; '));
+  // Planted: a check with no retry, or one that drops the first check's cost, is caught by the same rules.
+  const noRetry = { ...twice, calls: 1 };
+  const lostCost = { ...thenOk, r: { ...thenOk.r, costUsd: 0.0002 } };
+  check('proof: R6 a check with no retry is caught', !(noRetry.calls === 2));
+  check('proof: R6 a retry whose first cost is dropped is caught', !near(lostCost.r.costUsd, 0.0008));
+
+  // paidPicture: the line, the count, the credit back, no picture, the cost recorded.
+  const guardCost = async () => Number((await sql<{ usd: number }[]>`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where kind = 'guard' and day = (now() at time zone 'utc')::date`)[0].usd);
+  const before6 = await countsNow();
+  const cost0 = await guardCost();
+  made = 0;
+  guardQueue = [e, e];
+  guardCalls = 0;
+  const p = await paidPicture(S, 5201, req, { checkText: 'Zei on a ledge', spend, make: async () => { made++; throw new Error('not reached'); } });
+  const pCalls = guardCalls;
+  const after6 = await countsNow();
+  const cost1 = await guardCost();
+  const r6b = [
+    ...need(!p.ok && p.status === 422 && p.error === NOANS && p.extra.category === 'no_answer' && p.extra.reason === 'blocked', `paidPicture: ${JSON.stringify(p)}`),
+    ...need(!p.ok && p.error !== GENERIC && !/rules/.test(p.error), 'the no-answer refusal says "the rules"'),
+    ...need(pCalls === 2 && made === 0, `${pCalls} checks, ${made} pictures`),
+    ...need((after6.no_answer ?? 0) === (before6.no_answer ?? 0) + 1 && (after6.unclear ?? 0) === (before6.unclear ?? 0), `counts: ${JSON.stringify(before6)} -> ${JSON.stringify(after6)}`),
+    ...need(near(cost1 - cost0, 0.0012), `the guard cost recorded: ${cost1 - cost0}`),
+  ];
+  check('R6 paidPicture: no answer twice says the owner\'s line, counts no_answer (not unclear), makes nothing, records both checks\' cost', r6b.length === 0, r6b.join('; '));
+  // The same refusal path as other refusals (credited back, reason 'blocked'): paid.ts has no separate branch for it.
+  const paidSrc6 = read('src/lib/images/paid.ts');
+  const samePath = (src: string) => need(/if \(!guard\.allow\) \{[\s\S]{0,700}await countRefusal\(sql, guard\.category\);[\s\S]{0,200}creditBack\(sql, r\.debitId, 'refused'\)/.test(src), 'paid.ts handles no answer outside the refusal path (credit back, count)');
+  proven('R6 a no-answer picture is credited back and counted like any refusal', () => samePath(paidSrc6), () => samePath(paidSrc6.replace("creditBack(sql, r.debitId, 'refused');\n    // The rule", "creditBack(sql, r.debitId, 'nothing');\n    // The rule")));
+
+  // checkWords (titles) and backstories.
+  guardQueue = [e, e];
+  const title = await checkWords(S, req, 'Lantern style');
+  guardQueue = [e, e];
+  const story = await checkBackstory(S, req, 'Zei found a new crew.');
+  guardQueue = [];
+  const after7 = await countsNow();
+  const r6c = [
+    ...need(!title.ok && title.status === 422 && title.error === NOANS, `a title: ${JSON.stringify(title)}`),
+    ...need(!story.ok && story.error === NOANS, `a backstory: ${JSON.stringify(story)}`),
+    ...need((after7.no_answer ?? 0) === (after6.no_answer ?? 0) + 2, `counts: ${JSON.stringify(after7)}`),
+  ];
+  check('R6 a title or backstory check with no answer says the owner\'s line and counts no_answer', r6c.length === 0, r6c.join('; '));
+  // Remix (its own path, src/lib/remix/make.ts): the same line and count for no answer; other refusals unchanged.
+  const remixSrc = read('src/lib/remix/make.ts');
+  const remixRule = (src: string) => need(/const noAnswer = guard\.category === NO_ANSWER_CATEGORY;\s*if \(noAnswer\) await countRefusal\(sql, guard\.category\);/.test(src) && /failed\(noAnswer \? REFUSAL_WORDING\.noAnswer : 'This prompt asks for something the rules don’t allow\.', back\)/.test(src), 'Remix doesn\'t say or count no answer');
+  proven('R6 Remix says the owner\'s line for no answer and counts it', () => remixRule(remixSrc), () => remixRule(remixSrc.replace('noAnswer ? REFUSAL_WORDING.noAnswer : ', '')));
+}
+
+// --- R7: every prompt check gets 2,000 tokens ---------------------------------------------------------------------
+{
+  const { PROMPT_CHECK_MAX_TOKENS, IMAGES, REMIX } = await import('../src/lib/config');
+  check('R7 the default and the named budgets are 2,000', PROMPT_CHECK_MAX_TOKENS === 2000 && IMAGES.guardMaxTokens === 2000 && IMAGES.designs.guardMaxTokens === 2000 && REMIX.guardMaxTokens === 2000 && /maxTokens: number = PROMPT_CHECK_MAX_TOKENS\)/.test(read('src/lib/images/guard.ts')));
+  check('R7 every request the stand-in check heard asked for 2,000 tokens', budgets.length > 20 && budgets.every((b) => b === 2000), `${budgets.length} requests: ${[...new Set(budgets)].join(', ')}`);
+  check('proof: R7 a request at 400 is caught', ![...budgets, 400].every((b) => b === 2000));
+  // Each caller, found by search: a budget it names must be one of the 2,000 names; none takes the default.
+  const OK_BUDGET = /^(IMAGES\.designs\.guardMaxTokens|REMIX\.guardMaxTokens|IMAGES\.guardMaxTokens|PROMPT_CHECK_MAX_TOKENS|job\.guardMaxTokens|opts\.maxTokens|slot === 'sample' \? undefined : IMAGES\.designs\.guardMaxTokens)$/;
+  const CALL = /(await (?:deps\.paid|paidPicture|checkPrompt|checkWords|checkBackstory)\(|checkWords\(sql, request, text)/g;
+  const walk = (d: string): string[] => readdirSync(path.join(ROOT, d), { withFileTypes: true }).flatMap((x) => (x.isDirectory() ? walk(`${d}/${x.name}`) : /\.tsx?$/.test(x.name) ? [`${d}/${x.name}`] : []));
+  const files = walk('src');
+  type Caller = { at: string; budget: string };
+  const callers = (srcOf: (f: string) => string): Caller[] => files.flatMap((f) => {
+    const src = srcOf(f);
+    const out: Caller[] = [];
+    for (const m of src.matchAll(CALL)) {
+      const line = src.slice(0, m.index).split('\n').length;
+      const body = src.slice(m.index!, m.index! + 900);
+      const end = body.search(/\n\s*\}\);|\);\n/);
+      const call = end >= 0 ? body.slice(0, end + 3) : body;
+      const named = call.match(/(?:guardMaxTokens|maxTokens): ([^,\n}]+(?: \? [^,\n]+ : [^,\n}]+)?)/);
+      const pos = call.match(/^await checkPrompt\([^,]+, [^,]+, ([^)]+)\)/);
+      out.push({ at: `${f}:${line}`, budget: (named?.[1] ?? pos?.[1] ?? 'default').trim() });
+    }
+    return out;
+  });
+  const budgetRule = (cs: Caller[]) => [
+    ...need(cs.length >= 10, `only ${cs.length} callers found`),
+    ...cs.flatMap((c) => need(c.budget === 'default' || OK_BUDGET.test(c.budget), `${c.at} checks with ${c.budget}`)),
+  ];
+  const found = callers((f) => read(f));
+  console.log(`     callers: ${found.map((c) => `${c.at} (${c.budget})`).join('; ')}`);
+  proven('R7 every prompt-check caller in src gets 2,000 tokens (the default or a 2,000 name)', () => budgetRule(found), () => budgetRule(callers((f) => (f === 'src/app/api/challenge/make/route.ts' ? read(f).replace('guardMaxTokens: IMAGES.designs.guardMaxTokens,', 'guardMaxTokens: 1200,') : read(f)))));
+  check('proof: R7 a new caller passing 400 is caught', budgetRule([...found, { at: 'planted', budget: '400' }]).length > 0);
+}
 await sql.end();
 await server.stop();
 

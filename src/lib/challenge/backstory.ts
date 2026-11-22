@@ -3,7 +3,7 @@
  * at most BACKSTORY_MAX characters, typed in a PublishedTextField on the publish (preview) screen of a NEW challenge
  * picture (owner, 2026-11-09: new pictures only). Three starter questions are shown as hints and never put in the box.
  * Shown under the picture as "Invented by @maker, not from the book". No spoiler mark: on the challenge's pages people
- * work on the whole story (owner, 2026-11-09). The prompt check (the same guard, 1,200 tokens) reads it at publish; a
+ * work on the whole story (owner, 2026-11-09). The prompt check (the same guard, 2,000 tokens since 2026-11-22) reads it at publish; a
  * refusal lets the maker edit it or publish without it. No model writes, fills or suggests it (scripts/test-backstory.ts
  * proves it). Pure: no network, no database; the browser and the server both read it.
  */

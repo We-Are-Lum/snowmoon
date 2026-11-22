@@ -328,6 +328,21 @@ export const AGENTS = {
   resourcePath: '/mcp',
 };
 
+/**
+ * Every prompt check's token budget (owner Nate, 2026-11-22): the chapter flow, Make an image, style samples, sheet
+ * views, voice-board pictures, Remix, the challenge, backstories and title checks. gpt-oss-safeguard-20b reasons
+ * before it answers, so at 400 it was often cut off with no answer (and 1,200 was close: the longest of 48 runs on
+ * 2026-11-22 used 1,055). Only the tokens used are billed. src/lib/images/guard.ts uses it as checkPrompt's default.
+ */
+export const PROMPT_CHECK_MAX_TOKENS = 2000;
+/**
+ * The prompt check's share of every picture's reservation (USD): its worst case at PROMPT_CHECK_MAX_TOKENS, twice,
+ * since a check that gives no answer is asked once more (src/lib/images/guard.ts). The longest prompt a check reads
+ * (a Remix prompt, 6,000 characters) costs at most about $0.0012 a check with the policy; 0.0015 before (one check at
+ * 400 or 1,200 tokens). scripts/test-images-gate.ts and scripts/test-designs.ts check that it covers both checks.
+ */
+export const PROMPT_CHECK_SHARE_USD = 0.0025;
+
 export const REMIX = {
   /** Across everyone, per UTC day, for free generations (owner: "$10/day to start"). */
   dailyFreeCapUsd: 10,
@@ -345,13 +360,15 @@ export const REMIX = {
   promptMaxChars: 6000,
   /**
    * Tokens for the prompt check on a Remix prompt (the shot's own prompt and the person's words, up to
-   * 4,400 characters). At Pictures' 400 the check sometimes spent them all reasoning and gave no
-   * answer, which counts as a refusal: 6 of 78 plain prompts in the real check of 2026-10-18. Only the
-   * tokens used are billed (about 200 to 400).
+   * 4,400 characters): every prompt check's budget, PROMPT_CHECK_MAX_TOKENS (owner, 2026-11-22; 1,200 before).
+   * Only the tokens used are billed.
    */
-  guardMaxTokens: 1200,
-  /** The worst case reserved before a Generate: every picture and the output rounded up to 1 MP, plus the prompt check. */
-  reserveUsd: (pictures: number) => (1 + pictures) * 0.01 + 0.0015,
+  guardMaxTokens: PROMPT_CHECK_MAX_TOKENS,
+  /**
+   * The worst case reserved before a Generate: every picture and the output rounded up to 1 MP, plus the prompt
+   * check's share (PROMPT_CHECK_SHARE_USD: two checks at PROMPT_CHECK_MAX_TOKENS, for the one retry).
+   */
+  reserveUsd: (pictures: number) => (1 + pictures) * 0.01 + PROMPT_CHECK_SHARE_USD,
   /** Storyboards: frames per board and each frame's length (seconds). */
   storyboard: { maxItems: 200, minSeconds: 0.5, maxSeconds: 20, titleMaxChars: 80 },
 } as const;
@@ -893,8 +910,10 @@ export const IMAGES = {
   suffix: 'No text, no lettering, no signs with words.',
   /** USD per megapixel on fal.ai (fetched 2026-10-08); fal may round up to 1 MP, so 0.005 is reserved. */
   pricePerMp: 0.005,
-  /** Worst case reserved before each Generate: the image, the prompt check, margin (section 4). */
-  reserveUsd: 0.0065,
+  /** Worst case reserved before each Generate: the image, the prompt check (PROMPT_CHECK_SHARE_USD), margin (section 4). */
+  reserveUsd: 0.005 + PROMPT_CHECK_SHARE_USD,
+  /** Every prompt check's token budget (PROMPT_CHECK_MAX_TOKENS), checkPrompt's default. */
+  guardMaxTokens: PROMPT_CHECK_MAX_TOKENS,
   /** The prompt check (decision 14): open weights, Apache-2.0, on Groq like the assistant. */
   guardModel: 'openai/gpt-oss-safeguard-20b',
   promptMaxChars: 600,
@@ -978,7 +997,7 @@ export const IMAGES = {
   /** At most this many reference pictures go to the edit model (the model takes up to 4). */
   maxReferences: 3,
   /** Worst case reserved before an edit: every picture rounded up to 1 MP, plus the prompt check. */
-  editReserveUsd: (inputs: number) => (1 + inputs) * 0.01 + 0.0015,
+  editReserveUsd: (inputs: number) => (1 + inputs) * 0.01 + PROMPT_CHECK_SHARE_USD,
   /** A sheet's views are portrait (Design 5a: about 0.77:1). */
   viewSize: { width: 576, height: 768 },
   /** Styles and character sheets (step 4). Text added to every prompt that uses them, shown in full. */
@@ -986,12 +1005,11 @@ export const IMAGES = {
     nameMaxChars: 60,
     textMaxChars: 600,
     /**
-     * Tokens for the prompt check on a sheet's view prompt (the view line, the style's text and the sheet's text, up to
-     * about 1,350 characters), as Remix's (REMIX.guardMaxTokens): at 400 the check can spend them all reasoning and
-     * give no answer, which counts as a refusal (owner, 2026-11-03). Only the tokens used are billed; the worst case
-     * still fits the prompt check's share of the reservation (scripts/test-designs.ts checks it).
+     * Tokens for the prompt check on a sheet's view prompt, the challenge's and a backstory's: every prompt check's
+     * budget, PROMPT_CHECK_MAX_TOKENS (owner, 2026-11-22; 1,200 since 2026-11-03). Only the tokens used are billed;
+     * the worst case, twice, fits the prompt check's share of the reservation (scripts/test-designs.ts checks it).
      */
-    guardMaxTokens: 1200,
+    guardMaxTokens: PROMPT_CHECK_MAX_TOKENS,
     /** A style needs at least this many sample pictures, made with its text (Design 4b). */
     samplesMin: 2,
     samplesMax: 4,

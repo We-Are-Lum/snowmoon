@@ -11,7 +11,7 @@ import { BACKSTORY_WORDING, storedBackstory, type StoredBackstory } from './back
  */
 type Sql = postgres.Sql;
 
-/** The prompt check on a backstory: blocked names, then the same guard with the larger budget (1,200 tokens). */
+/** The prompt check on a backstory: blocked names, then the same guard at every check's budget (2,000 tokens since 2026-11-22; 1,200 before). */
 export const checkBackstory = (sql: Sql, request: Request, text: string) =>
   checkWords(sql, request, text, { maxTokens: IMAGES.designs.guardMaxTokens, refused: BACKSTORY_WORDING.refused });
 

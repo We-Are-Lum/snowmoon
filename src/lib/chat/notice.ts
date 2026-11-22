@@ -21,11 +21,15 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: '625508bf63cde93a',
+  reviewedFor: '2a579cd2dcf02acc',
   /** Who did that reread: the coding agent, or the owner. */
   by: 'agent',
-  on: '2026-11-18',
+  on: '2026-11-22',
   note:
+    'Reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-22 for branch prompt-check-budget, words unchanged: ' +
+    'src/lib/chat/model.ts now also reads the reply\'s finish_reason ("stop", or "length" at the token budget) into ModelReply, so the image prompt check ' +
+    'can tell a check cut off with no answer from a refusal; the assistant\'s own code does not use it, nothing new is sent to any service or kept, so items 1 to 4 hold. ' +
+    'Before that: ' +
     'Reread again by the coding agent on 2026-11-18 for the owner\'s second #186 decisions (option A and the fallback), words unchanged: ' +
     'a refused answer is asked for once more, with the check\'s reasons, from the same model and provider (items 3 and 4 hold: nothing new is sent elsewhere or kept); ' +
     'still refused, a question that asks for a note itself (one character\'s who-is, a chapter summary, "where was I") gets that note as written, with its passages and who wrote it, ' +

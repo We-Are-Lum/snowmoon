@@ -5,6 +5,8 @@ import { IMAGES, REMIX } from '../config';
 import { checkPrompt, type GuardResult } from '../images/guard';
 import { ImageUnavailable, makeEdit, type Made } from '../images/fal';
 import { blockedName } from '../images/rules';
+import { countRefusal } from '../images/limits';
+import { NO_ANSWER_CATEGORY, REFUSAL_WORDING } from '../images/refusal-wording';
 import { FREE_WORDING } from '../social/free';
 import { IMAGE_WORDING } from '../images/wording';
 import { fundedBy, perDay, reserve, settle, type Refusal, type Spend } from './limits';
@@ -103,8 +105,11 @@ export async function generate(sql: Sql, person: number, request: Request, promp
   const checked = { costUsd: guard.costUsd, provider: guard.provider, verdict: guard.allow ? ('ok' as const) : ('blocked' as const) };
   if (!guard.allow) {
     await settle(sql, { guard: checked }, spend, funded);
+    // A check that gave no answer, twice (owner, 2026-11-22): counted as 'no_answer', and says so, not "the rules".
+    const noAnswer = guard.category === NO_ANSWER_CATEGORY;
+    if (noAnswer) await countRefusal(sql, guard.category);
     const back = await creditBack(sql, r.debitId, 'refused');
-    return { ok: false, status: 422, error: failed('This prompt asks for something the rules don’t allow.', back), extra: { reason: 'blocked', category: guard.category, left: r.left, ...(back ? { creditedBack: true } : {}) } };
+    return { ok: false, status: 422, error: failed(noAnswer ? REFUSAL_WORDING.noAnswer : 'This prompt asks for something the rules don’t allow.', back), extra: { reason: 'blocked', category: guard.category, left: r.left, ...(back ? { creditedBack: true } : {}) } };
   }
   let made: Made;
   try {

@@ -54,7 +54,7 @@ export async function POST(request: Request) {
   const remixedFrom = t.challenge ? (t.challenge.fromKind === 'picture' ? [t.challenge.from] : []) : Array.isArray(body.remixedFrom) ? body.remixedFrom.filter(isId).slice(0, 4) : [];
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403);
   // A challenge picture's optional backstory (owner, 2026-11-09): the maker's typed words, checked like a prompt (the
-  // same guard, 1,200 tokens). A refusal publishes nothing: the maker edits it, or publishes without it.
+  // same guard, PROMPT_CHECK_MAX_TOKENS: 2,000 tokens since 2026-11-22). A refusal publishes nothing: the maker edits it, or publishes without it.
   const bs = t.challenge ? readBackstory(body.backstory) : { ok: true as const, backstory: null };
   if (!bs.ok) return NextResponse.json({ error: bs.error, reason: 'backstory' }, { status: 400 });
   if (bs.backstory) {
