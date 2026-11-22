@@ -8,7 +8,10 @@
  *  L2. in the browser: a take is saved on the device and is there after a reload; another sign-in on the same browser
  *      neither sees nor converts it; Remove deletes it;
  *  L3. in the browser: leaving during a conversion asks first (beforeunload); the page closed mid-conversion, the draft
- *      is kept all the same, and coming back shows the take and the draft it became.
+ *      is kept all the same, and coming back shows the take and the draft it became;
+ *  L5. keeping fails after the conversion (the store refuses the write): the page says so, nothing is half-kept, and
+ *      Convert again from the take on the device keeps it;
+ *  L4. switching speeches with a take in the tab: each speech shows and sends only its own take.
  *
  *   npm run build, then:   tsx scripts/test-voice-leave.ts --url=http://127.0.0.1:3417
  * The script starts `next start` itself on that port. Run it with the worktree's .env.local moved aside (it points at
@@ -80,7 +83,7 @@ for (let i = 0; ; i++) {
 
 const api = (fid: number, p: string, init: RequestInit = {}) => fetch(`${url}/api/voice/${p}`, { ...init, headers: { ...(init.headers ?? {}), authorization: `Bearer voice-test-${fid}` } });
 const drafts = async (fid: number) => (await pg.query<{ id: string; recipe: { kept?: string; takes: { takeSha256: string; convertedSha256: string }[] } }>(`select id, recipe from studio.voice_drafts where fid = $1 and kind = 'performance' order by made_at`, [fid])).rows;
-const status = (await (await api(NATE, 'status')).json()) as { consent: { sha256: string }; speech: { id: string }; choices: { presetId: string; candidate: number }[] };
+const status = (await (await api(NATE, 'status')).json()) as { consent: { sha256: string }; speech: { id: string }; speeches: { id: string; title: string }[]; choices: { presetId: string; candidate: number }[] };
 for (const fid of [NATE, GARANCE]) await api(fid, 'consent', { method: 'POST', body: JSON.stringify({ sha256: status.consent.sha256 }) });
 
 try {
@@ -196,10 +199,69 @@ try {
   check('L3. coming back: the take is still on the device, and says it became a draft', await page.locator('.vr-take', { hasText: 'converted and kept as your draft' }).count() === 1);
   check('L3. ... and the draft is in the list', await page.locator('#vr-drafts-h').count() === 1);
 
+  // L5. Keeping fails after the conversion: the store refuses every write (as a storage outage would).
+  const { chmodSync } = await import('node:fs');
+  // The test database's daily counts are cleared between steps: three whole takes a person a day would stop this run.
+  const freshDay = () => pg.query('delete from studio.voice_asks');
+  await freshDay();
+  const filesBefore = storeFiles().length;
+  chmodSync(STORE, 0o500);
+  await page.locator('.vr-take input[type="checkbox"]').check();
+  await page.getByRole('button', { name: /^Convert/ }).click();
+  const said = page.locator('text=/couldn.t be kept as your draft/');
+  await said.first().waitFor({ timeout: 60_000 }).catch(() => {});
+  check('L5. keeping failed after the conversion: the page says so, and that the recording is still on this device', (await said.count()) > 0 && (await page.locator('text=/still on this device/').count()) > 0);
+  chmodSync(STORE, 0o700);
+  check('L5. ... nothing was half-kept (no new draft, no new file)', (await drafts(NATE)).length === 1 && storeFiles().length === filesBefore);
+  check('L5. ... the take is still there, with Convert', (await page.locator('.vr-take', { hasText: 'Saved on this device' }).count()) === 1 && (await page.getByRole('button', { name: /^Convert/ }).count()) === 1);
+  await page.locator('.vr-take input[type="checkbox"]').check();
+  await page.getByRole('button', { name: /^Convert/ }).click();
+  await page.locator('text=Kept as your draft.').first().waitFor({ timeout: 60_000 }).catch(() => {});
+  check('L5. Convert again from the take on the device: kept', (await drafts(NATE)).length === 2 && (await page.locator('text=Kept as your draft.').count()) > 0);
+
+  // L4. Switching speeches with a take in the tab.
+  const [first, second] = status.speeches;
+  const takeShaOnPage = () => page.locator('.vr-take audio').first().evaluate(async (a: HTMLAudioElement) => {
+    const b = await (await fetch(a.src)).arrayBuffer();
+    return [...new Uint8Array(await crypto.subtle.digest('SHA-256', b))].map((x) => x.toString(16).padStart(2, '0')).join('');
+  });
+  const firstSha = await takeShaOnPage();
+  await page.locator('label.vr-speech', { hasText: second.title }).locator('input').check();
+  await sleep(1000);
+  check(`L4. switching to "${second.title}" with "${first.title}"'s take in the tab: no take is shown for it`, (await page.locator('.vr-take').count()) === 0 && (await page.getByRole('button', { name: /^Convert/ }).count()) === 0);
+  await page.getByRole('button', { name: 'Record' }).click();
+  await sleep(2500);
+  await page.getByRole('button', { name: /^Stop/ }).click();
+  await page.locator('.vr-take').waitFor({ timeout: 30_000 });
+  const secondSha = await takeShaOnPage();
+  check('L4. ... its own take is recorded and kept beside the first, under its own key', secondSha !== firstSha && (await keys()).sort().join() === [`${NATE}:${first.id}`, `${NATE}:${second.id}`].sort().join(), (await keys()).join());
+  await page.locator('label.vr-speech', { hasText: first.title }).locator('input').check();
+  await page.locator('.vr-take').waitFor({ timeout: 15_000 });
+  check(`L4. back on "${first.title}": its own take is shown, not the other's`, (await takeShaOnPage()) === firstSha);
+  await page.locator('label.vr-speech', { hasText: second.title }).locator('input').check();
+  await page.locator('.vr-take').waitFor({ timeout: 15_000 });
+  check(`L4. on "${second.title}" again: its own take`, (await takeShaOnPage()) === secondSha);
+  await freshDay();
+  const sent: string[] = [];
+  const onReq = (r: import('playwright-core').Request) => {
+    if (r.url().endsWith('/api/voice/convert')) sent.push(r.postDataBuffer()?.toString('latin1') ?? '');
+  };
+  page.on('request', onReq);
+  await page.locator('.vr-take input[type="checkbox"]').check();
+  await page.getByRole('button', { name: /^Convert/ }).click();
+  await page.locator('text=Kept as your draft.').first().waitFor({ timeout: 60_000 }).catch(() => {});
+  page.off('request', onReq);
+  const all = await drafts(NATE);
+  const last = all.at(-1);
+  const lastSpeech = (await pg.query<{ speech_id: string }>(`select speech_id from studio.voice_drafts where id = $1`, [last?.id])).rows[0]?.speech_id;
+  check(`L4. Convert sends "${second.title}"'s take with "${second.title}" only, and its draft is of that speech`, sent.length === 1 && sent[0].includes(`\r\n\r\n${second.id}\r\n`) && !sent[0].includes(`\r\n\r\n${first.id}\r\n`) && last?.recipe.takes[0].takeSha256 === secondSha && lastSpeech === second.id, `${lastSpeech} ${sent.length}`);
+  await page.locator('label.vr-speech', { hasText: first.title }).locator('input').check();
+  await page.locator('.vr-take').waitFor({ timeout: 15_000 });
+
   // Remove: the take leaves the device.
   await page.locator('.vr-take').getByRole('button', { name: 'Remove' }).click();
   await sleep(500);
-  check('L2. Remove deletes the take from the device', (await keys()).length === 0 && (await page.locator('.vr-take').count()) === 0);
+  check('L2. Remove deletes that speech\'s take from the device, and only that one', (await keys()).join() === `${NATE}:${second.id}` && (await page.locator('.vr-take').count()) === 0, (await keys()).join());
   await page.reload();
   await ready();
   await sleep(1500);

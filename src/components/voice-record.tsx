@@ -230,7 +230,8 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
   const [choice, setChoice] = useState<string>('');
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [take, setTake] = useState<{ seconds: number; url: string } | null>(null);
+  // The take in the tab, and the speech it is of: only ever shown and sent with that speech (Nate, 2026-11-22).
+  const [take, setTake] = useState<{ seconds: number; url: string; speechId: string } | null>(null);
   const takeBlob = useRef<Blob | null>(null);
   // The raw take kept on this device, in this browser's storage, under the signed-in FID (Nate, 2026-11-22).
   const [onDevice, setOnDevice] = useState<DeviceTake | null>(null);
@@ -297,18 +298,17 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
   useEffect(() => {
     if (fid === null || !sid) return;
     let alive = true;
+    // Another speech (or sign-in): its take goes from the tab at once, and this speech's own is read from the device.
+    takeBlob.current = null;
+    setTake((old) => (old && URL.revokeObjectURL(old.url), null));
+    setOnDevice(null);
+    setAgree(false);
     void loadTake(fid, sid)
       .then((t) => {
-        if (!alive) return;
+        if (!alive || !t || t.speechId !== sid) return;
         setOnDevice(t);
-        if (t && !takeBlob.current) {
-          takeBlob.current = t.blob;
-          setTake({ seconds: t.seconds, url: URL.createObjectURL(t.blob) });
-        }
-        if (!t) {
-          takeBlob.current = null;
-          setTake(null);
-        }
+        takeBlob.current = t.blob;
+        setTake({ seconds: t.seconds, url: URL.createObjectURL(t.blob), speechId: t.speechId });
       })
       .catch((e) => alive && setDeviceNote(`This browser couldn't read its saved recordings (${e instanceof Error ? e.message : String(e)}).`));
     return () => {
@@ -349,10 +349,20 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
   const removeHere = async () => {
     dropTake();
     setOnDevice(null);
-    if (fid !== null) await removeTake(fid, s!.speech.id).catch(() => {});
+    if (fid !== null && take) await removeTake(fid, take.speechId).catch(() => {});
   };
   // The draft this device's take became, if it was converted (the recipe keeps only the take's sha256).
   const keptFromTake = onDevice ? s.drafts.find((d) => ((d.recipe as { takes?: { takeSha256?: string }[] }).takes ?? [])[0]?.takeSha256 === onDevice.sha256) : undefined;
+
+  /** Another speech: the converted take shown is already a draft; its own recording, if any, comes from the device. */
+  const pickSpeech = (id: string) => {
+    setConverted(null);
+    setRedos([]);
+    setAccepted(null);
+    setPlayUrl(null);
+    setMessage(null);
+    setSpeechId(id);
+  };
 
   async function agreeConsent() {
     setBusy('consent');
@@ -372,7 +382,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     const out = await rec.start(s!.limits.maxTakeSeconds);
     if (out) {
       takeBlob.current = out.blob;
-      setTake({ seconds: out.seconds, url: URL.createObjectURL(out.blob) });
+      setTake({ seconds: out.seconds, url: URL.createObjectURL(out.blob), speechId: s!.speech.id });
       setDeviceNote(null);
       // Kept on this device until it is removed or recorded again (replaces this speech's earlier take).
       if (fid !== null)
@@ -382,11 +392,11 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     }
   }
 
-  /** Send one recording, once, then forget it, whatever the answer. */
-  async function convert(blob: Blob, seconds: number, sentence: number | null): Promise<Converted | null> {
+  /** Send one recording to be converted (a whole take stays on the device whatever the answer). */
+  async function convert(blob: Blob, seconds: number, sentence: number | null, speechOfTake = s!.speech.id): Promise<Converted | null> {
     const form = new FormData();
     form.set('take', blob, 'take');
-    form.set('speechId', s!.speech.id);
+    form.set('speechId', speechOfTake);
     form.set('presetId', picked!.presetId);
     form.set('candidate', String(picked!.candidate));
     form.set('seconds', String(seconds));
@@ -397,7 +407,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
     if (!r?.ok) {
       const err = ((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error;
       if (r) log.note(`convert: HTTP ${r.status}${err ? `: ${err}` : ''}`);
-      setMessage(err ?? 'The conversion failed. Your recording was not kept.');
+      setMessage(err ?? (sentence === null ? 'The conversion failed. Your recording is still on this device: tick the box and convert it again.' : 'The conversion failed. Your recording was not kept.'));
       return null;
     }
     if (sentence === null) {
@@ -449,12 +459,14 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
   async function convertWhole() {
     const blob = takeBlob.current;
     if (!blob || !take || !picked) return;
+    // Never another speech's take (the take is shown and sent with its own speech only).
+    if (take.speechId !== s!.speech.id) return setMessage('That recording is of another speech: pick that speech to convert it.');
     setBusy('convert');
     setMessage(null);
     const seconds = take.seconds;
     // Sent only now, when Convert is pressed; the take stays on this device until it is removed.
     setAgree(false);
-    const c = await convert(blob, seconds, null);
+    const c = await convert(blob, seconds, null, take.speechId);
     setBusy(null);
     if (c) {
       setConverted(c);
@@ -575,11 +587,11 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
         <>
           <section className="vr-card" aria-labelledby="vr-speech-h">
             <h2 id="vr-speech-h">Pick a speech</h2>
-            <fieldset className="vr-speeches" disabled={busy !== null || recording || Boolean(take) || Boolean(converted)}>
-              <legend className="vr-small">Lord Ephelion&rsquo;s words to perform. Changing it starts again.</legend>
+            <fieldset className="vr-speeches" disabled={busy !== null || recording || (Boolean(take) && !onDevice) || Boolean(converted && redos.length && accepted === converted.draftId)}>
+              <legend className="vr-small">Lord Ephelion&rsquo;s words to perform. Each speech keeps its own recording on this device.</legend>
               {s.speeches.map((x) => (
                 <label key={x.id} className={`vr-speech${x.id === s.speech.id ? ' vr-on' : ''}`}>
-                  <input type="radio" name="speech" checked={x.id === s.speech.id} onChange={() => setSpeechId(x.id)} />
+                  <input type="radio" name="speech" checked={x.id === s.speech.id} onChange={() => pickSpeech(x.id)} />
                   <span>
                     <strong>{x.title}</strong>{' '}
                     <span className="vr-tag">{x.label.text}</span>

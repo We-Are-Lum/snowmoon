@@ -197,7 +197,7 @@ export const VOICE_PLANTS: { name: string; plant: (s: string) => string }[] = [
 /** Planted violations in the conversion route (2026-11-22): each must be caught statically. */
 export const VOICE_ROUTE_PLANTS: { name: string; plant: (s: string) => string }[] = [
   { name: 'the take kept as the draft', plant: (s) => s.replace('keepConvertedTake(sql, who.fid, { audio, ticket })', 'keepConvertedTake(sql, who.fid, { audio: new Uint8Array(await file.arrayBuffer()), ticket })') },
-  { name: 'the take saved straight to a draft', plant: (s) => s.replace('const kept = await keepConvertedTake(sql, who.fid, { audio, ticket });', "const kept = await keepConvertedTake(sql, who.fid, { audio, ticket });\n    await saveDraft(sql, { fid: who.fid, kind: 'performance', speechId: speech.id, presetId, recipe: {}, audio: [] });") },
+  { name: 'the take saved straight to a draft', plant: (s) => s.replace('kept = await keepConvertedTake(sql, who.fid, { audio, ticket });', "kept = await keepConvertedTake(sql, who.fid, { audio, ticket });\n      await saveDraft(sql, { fid: who.fid, kind: 'performance', speechId: speech.id, presetId, recipe: {}, audio: [] });") },
 ];
 
 /** Every check at once: the real files pass, and each plant is caught. */

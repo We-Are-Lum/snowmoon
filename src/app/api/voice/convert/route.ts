@@ -77,7 +77,14 @@ export async function POST(request: Request) {
     if (scope.kind === 'sentence') return new Response(Buffer.from(audio), { headers: { 'content-type': 'audio/mpeg', 'x-voice-ticket': ticket, ...noStore } });
     // A whole take is kept as the person's private draft before the reply (Nate, 2026-11-22), so leaving the page
     // mid-conversion loses nothing. Only the converted audio is kept: the take is never handed on (P1h).
-    const kept = await keepConvertedTake(sql, who.fid, { audio, ticket });
+    let kept: Awaited<ReturnType<typeof keepConvertedTake>>;
+    try {
+      kept = await keepConvertedTake(sql, who.fid, { audio, ticket });
+    } catch {
+      // Converted, but not kept (a database or storage error): nothing of it is half-kept (saveDraft), and the
+      // recording is still on the person's device to convert again.
+      throw new FlowError(500, "Converted, but it couldn't be kept as your draft. Your recording is still on this device: tick the box and convert it again.");
+    }
     return NextResponse.json({ draftId: kept.draftId, ticket, check: kept.check, checks: kept.checks }, { headers: { 'x-voice-ticket': ticket, ...noStore } });
   })();
   try {
