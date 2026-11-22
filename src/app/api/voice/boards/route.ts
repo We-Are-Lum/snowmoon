@@ -18,7 +18,8 @@ import { CLOSING, emptyClosing, type Closing } from '~/lib/voice/closing';
  * automatic cuts at sentence ends), kept pictures, the sheets to choose from, the camera angles and the notes. POST:
  * save a new version (cuts and shots; each shot's description is the person's own words, stored as given).
  */
-const sheet = (d: { versionId: string; title: string; text: string; entity: string; thumb: string | null }) => ({ id: d.versionId, title: d.title, entity: d.entity, text: d.text, thumb: d.thumb });
+// A style's first three published samples go with it, so the picker shows examples (Nate, 2026-11-22).
+const sheet = (d: { versionId: string; title: string; text: string; entity: string; thumb: string | null; samples?: string[] }) => ({ id: d.versionId, title: d.title, entity: d.entity, text: d.text, thumb: d.thumb, samples: (d.samples ?? []).slice(0, 3) });
 
 export async function GET(request: Request) {
   const who = await voicePerson(request);
