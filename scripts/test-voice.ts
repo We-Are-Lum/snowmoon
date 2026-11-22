@@ -181,7 +181,6 @@ const own = JSON.parse(readFileSync(path.join(ROOT, 'config/consent-own-voice.js
 check('C. the page shows own-voice-v2, current, with Nate\'s fixes', wording.version === 'own-voice-v2' && wording.text[0] === 'You record a speech. Your recording is converted into a character\'s voice, and only the converted speech can be published.' && /against the speech\.$/.test(wording.text[3]));
 check('C. own-voice-v2 is the file\'s current (reread 2026-11-21), with no draft left; v1 stays on file, retired', own.current === 'own-voice-v2' && !('draft' in own) && Boolean(own.versions['own-voice-v1']));
 check('C. the training line stands without brackets (Nate turned training off, 2026-11-21)', wording.text.some((t) => t.includes('Our account is set so it doesn\'t use them to train its models.')) && !wording.text.join(' ').includes('['));
-check('C. the bracketed training line is still there (Nate hasn\'t said it\'s done)', wording.text.some((t) => /\[Our account is set so it doesn't use them to train its models\.\]/.test(t)));
 const take = randomBytes(160_000); // the stub hears it as 40 s
 const form = (fields: Record<string, string | Blob>) => {
   const f = new FormData();

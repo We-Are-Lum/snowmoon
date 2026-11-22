@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { authFetch, useAuth } from '~/lib/client-auth';
-import { isAdmin } from '~/lib/admins';
 import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
 import { useChallengeModel } from '~/components/challenge-model-row';
 import { ModelRow } from '~/components/chapter-pictures';
@@ -55,7 +54,9 @@ function KeptPicture({ draftId, shot, sha, alt }: { draftId: string; shot: strin
 
 export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const auth = useAuth();
-  const admin = auth.kind === 'signed-in' && isAdmin(auth.fid);
+  // Who may use it is the server's to say (src/lib/voice/flag.ts): its routes answer 404 to anyone the switch doesn't
+  // let in, and the page then shows the site's usual not-found. So no admin list is checked here (P5b).
+  const admin = auth.kind === 'signed-in';
   const params = useParams<{ draft: string }>();
   const draftId = String(params?.draft ?? '');
   const [data, setData] = useState<Data | null | 'none' | { error: string }>(null);

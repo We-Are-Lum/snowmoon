@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, inMiniApp, useAuth } from '~/lib/client-auth';
-import { isAdmin } from '~/lib/admins';
 import { HOST_CHECK_MS, HOST_PROMPT_MS, withTimeout } from '~/lib/host-timeout';
 import { MIC_HELP, micPlace } from '~/lib/mic-help';
 import '../styles/voice.css';
@@ -190,7 +189,9 @@ function SignedAudio({ path, label }: { path: string; label: string }) {
 
 export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
   const auth = useAuth();
-  const admin = auth.kind === 'signed-in' && isAdmin(auth.fid);
+  // Who may use it is the server's to say (src/lib/voice/flag.ts): its routes answer 404 to anyone the switch doesn't
+  // let in, and the page then shows the site's usual not-found. So no admin list is checked here (P5b).
+  const admin = auth.kind === 'signed-in';
   const [status, setStatus] = useState<Status | null | 'none'>(null);
   const [webClient, setWebClient] = useState(false);
   const [choice, setChoice] = useState<string>('');
