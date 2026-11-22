@@ -2534,6 +2534,9 @@ async function checkChallengeLanding() {
       // Make it is answered here, so no model is called and nothing is spent.
       {
         const { MAKE_WORDING: MKW } = await import('../src/lib/challenge/make-wording');
+        const { REFUSAL_WORDING: RW } = await import('../src/lib/images/refusal-wording');
+        // A refusal the stand-in answers for Make it (branch refusal-reasons), as the route answers a prompt check's.
+        let refusal: { error: string; category: string } | null = null;
         const sharp = (await import('sharp')).default;
         const madeUrl = 'https://media.snowmoon.party/fixture/check-ui-made.jpg';
         let left = 3;
@@ -2546,6 +2549,7 @@ async function checkChallengeLanding() {
           const u = new URL(req.url());
           if (u.pathname === '/api/you') return r.fulfill({ json: { work: { images: [], scenes: [], designs: [] }, maintainer: false, prices: null, wallet: null, link: null, linkedWallets: [], who: { kind: 'farcaster', name: '@fixture4242', handle: 'fixture4242', fid: 4242, username: 'fixture4242' } } });
           if (u.pathname === '/api/consent') return r.fulfill({ json: { wording: { sha256: 'x', title: 'x', text: ['x'] }, signedIn: true, agreed: true } });
+          if (u.pathname === '/api/challenge/make' && req.method() === 'POST' && refusal) return r.fulfill({ status: 422, json: { error: refusal.error, reason: 'blocked', category: refusal.category, left } });
           if (u.pathname === '/api/challenge/make' && req.method() === 'POST') return r.fulfill({ json: { ticket: 'stand-in-ticket', image: madeUrl, prompt: '(stand-in: no model was called)', style: null, setting: null } });
           if (u.pathname === '/api/challenge/make') {
             const res = await r.fetch({ headers: { ...req.headers(), authorization: '' } });
@@ -2585,6 +2589,24 @@ async function checkChallengeLanding() {
           if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/make ${tag} (${kind}): the preview scrolls sideways`);
           if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `challenge-preview-${kind}-${w}x${h}-${scheme}.png`) });
         }
+        // A prompt the check refused for "words" (owner, 2026-11-18): the screen shows the words line, exactly, as an alert,
+        // stays on the remix screen, and doesn't scroll sideways. The route's answer is the stand-in's (no model is called).
+        refusal = { error: RW.words, category: 'words' };
+        await at(`/challenge/make?from=${FX.sheets.zei[0]}`, '.mk-styles');
+        await page.locator('.mk-page textarea').first().fill('Zei holding a sign that says hello');
+        await page.locator('.mk-make').first().click();
+        const refusedLine = page.locator('.mk-page[data-step="remix"] .mk-error[role="alert"]');
+        await refusedLine.waitFor({ timeout: 10000 }).catch(() => {});
+        const refusedText = ((await refusedLine.textContent().catch(() => '')) ?? '').trim();
+        if (refusedText !== RW.words) fail(`/challenge/make ${tag}: a "words" refusal shows "${refusedText}", not "${RW.words}"`);
+        else if (!(await refusedLine.isVisible())) fail(`/challenge/make ${tag}: the "words" refusal isn't visible`);
+        if (/\/challenge\/make\/[0-9a-f-]{36}/.test(page.url())) fail(`/challenge/make ${tag}: a refused prompt opened the preview`);
+        if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/make ${tag}: the "words" refusal scrolls sideways`);
+        if (SHOTS) {
+          await refusedLine.scrollIntoViewIfNeeded().catch(() => {});
+          await page.screenshot({ path: path.join(SHOTS, `challenge-make-refused-words-${w}x${h}-${scheme}.png`) });
+        }
+        refusal = null;
         // None of today's pictures left: said plainly, and no Make it.
         left = 0;
         await at(`/challenge/make?from=${FX.sheets.zei[0]}`, '.mk-styles');

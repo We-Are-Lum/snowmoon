@@ -7,6 +7,7 @@ import { paysFor } from './price';
 import { countsRemixes, isWalletNumber, remixesLeft, remixRefusal, type RemixRefusal } from './remixes';
 import { isSocialPerson } from '../people';
 import { freeFor } from '../social/free';
+import { countedCategory } from './refusal-wording';
 
 /**
  * Caps for readers' images (decision 10). A Generate is counted under the person's FID in
@@ -228,6 +229,25 @@ export async function wordsCheckFits(sql: Sql): Promise<boolean> {
   const [today] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${sql.unsafe(TODAY)} and funded = 'free'`;
   const worst = IMAGES.reserveUsd - IMAGES.pricePerMp;
   return today.usd + worst <= imagesDailySpendCapUsd();
+}
+
+/**
+ * Counts one prompt-check refusal under its category in the day's totals (owner, 2026-11-18): studio.image_refusals,
+ * the day, the category and how many, nothing about the person or the prompt (0045_refusal_categories.sql). The category
+ * is one the policy names, 'unclear' or 'other' (countedCategory), never the model's own word. Until that table exists,
+ * or if writing it fails, nothing is counted and the refusal is answered as before.
+ */
+export async function countRefusal(sql: Sql, category: string | null | undefined): Promise<boolean> {
+  try {
+    const [t] = await sql<{ ok: boolean }[]>`select to_regclass('studio.image_refusals') is not null as ok`;
+    if (!t?.ok) return false;
+    await sql`insert into studio.image_refusals (category, refusals) values (${countedCategory(category)}, 1)
+      on conflict (day, category) do update set refusals = studio.image_refusals.refusals + 1`;
+    return true;
+  } catch (e) {
+    console.error('refusal count skipped', (e as Error).name);
+    return false;
+  }
 }
 
 export async function recordGuard(sql: Sql, guard: { costUsd: number; provider: string | null; verdict: 'ok' | 'blocked' }) {
