@@ -85,10 +85,10 @@ proven('R1 the count stores only the policy\'s categories, unclear or other', ()
 // --- R2: reread, who, curly apostrophes --------------------------------------------------------------------------
 const wordingSrc = read('src/lib/images/refusal-wording.ts');
 // The one line not yet reread: the no-answer line (branch prompt-check-budget), marked DRAFT for Nate's reread.
-const NO_ANSWER_DRAFT = "The prompt check gave no answer, twice (owner Nate's words, 2026-11-22). DRAFT: for Nate's reread";
+const NO_ANSWER_REREAD = "The prompt check gave no answer, twice (owner Nate's words, 2026-11-22; reread by the owner";
 const lines = [REFUSAL_WORDING.generic, REFUSAL_WORDING.words, REFUSAL_WORDING.maker('OpenAI'), REFUSAL_WORDING.noAnswer, ...Object.values(REFUSAL_WORDING.plain).map((p) => REFUSAL_WORDING.rule(p))];
 const r2 = (src: string, ls: string[]) => [
-  ...need(/reread by the owner 2026-11-22/.test(src) && !/DRAFT/.test(src.replace(NO_ANSWER_DRAFT, '')) && /Owner Nate, 2026-11-18/.test(src) && /Drafted by the coding agent \(Claude, a closed model by\s*(\* )?Anthropic\)/.test(src), 'the wording file isn\'t marked reread by the owner 2026-11-22 (with no DRAFT left), with the owner, the date and its drafter'),
+  ...need(/reread by the owner 2026-11-22/.test(src) && !/DRAFT/.test(src) && /Owner Nate, 2026-11-18/.test(src) && /Drafted by the coding agent \(Claude, a closed model by\s*(\* )?Anthropic\)/.test(src), 'the wording file isn\'t marked reread by the owner 2026-11-22 (with no DRAFT left), with the owner, the date and its drafter'),
   ...ls.flatMap((l) => need(!/'/.test(l), `a straight apostrophe in "${l}"`)),
   ...need(REFUSAL_WORDING.generic === GENERIC, 'the generic line changed'),
 ];
@@ -237,8 +237,8 @@ proven('R4 chapter pictures (redo, add) and the voice boards\' shot picture pass
   check('R6 the no-answer category fits studio.image_refusals (^[a-z_]{1,40}$), and is its own, not a rule', NO_ANSWER === 'no_answer' && /^[a-z_]{1,40}$/.test(NO_ANSWER) && !(GUARD_CATEGORIES as readonly string[]).includes(NO_ANSWER) && countedCategory(NO_ANSWER) === 'no_answer' && guardRefusal(NO_ANSWER) === NOANS);
   check('proof: R6 a category the table refuses is caught', !/^[a-z_]{1,40}$/.test('no-answer') && !/^[a-z_]{1,40}$/.test('No_answer'));
   check('R6 the line is exactly the owner\'s, with the curly apostrophe, and never the rules line', REFUSAL_WORDING.noAnswer === NOANS && !/rules/.test(REFUSAL_WORDING.noAnswer) && !/'/.test(REFUSAL_WORDING.noAnswer));
-  const draftMarked = (src: string) => need(src.includes(NO_ANSWER_DRAFT) && src.indexOf(NO_ANSWER_DRAFT) < src.indexOf("noAnswer: 'The prompt check didn’t give an answer. Try again.'"), 'the no-answer line isn\'t marked DRAFT for Nate\'s reread');
-  proven('R6 the no-answer line is marked DRAFT for Nate\'s reread', () => draftMarked(wordingSrc), () => draftMarked(wordingSrc.replace(NO_ANSWER_DRAFT, 'Reread')));
+  const rereadMarked = (src: string) => need(src.includes(NO_ANSWER_REREAD) && src.indexOf(NO_ANSWER_REREAD) < src.indexOf("noAnswer: 'The prompt check didn’t give an answer. Try again.'"), 'the no-answer line isn\'t marked reread by the owner');
+  proven('R6 the no-answer line is marked reread by the owner (2026-11-22)', () => rereadMarked(wordingSrc), () => rereadMarked(wordingSrc.replace(NO_ANSWER_REREAD, 'DRAFT')));
 
   // checkPrompt itself: the retry, its cost, the budget.
   const req6 = new Request('http://localhost/api/images/generate', { method: 'POST' });
