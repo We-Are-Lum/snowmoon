@@ -1,6 +1,6 @@
 # Opening the Ephelion challenge in early December: the launch list (DRAFT)
 
-2026-11-23, overnight; v2 the same day (the continuity result, #220 merged, the proposed numbers). Drafted by the coding agent (Claude, a closed model by Anthropic) for Nate; DRAFT until he approves
+2026-11-23, overnight; v2 the same day (the continuity result, #220 merged, the proposed numbers); v3 (Nate's take caps and default model, the GPT Image picture numbers). Drafted by the coding agent (Claude, a closed model by Anthropic) for Nate; DRAFT until he approves
 it. "Live" means on production (snowmoon.party) today; "open PR" means not merged. Every merge waits for Nate's word;
 every legal text for his "reread"; every migration for his "applied".
 
@@ -16,6 +16,8 @@ every legal text for his "reread"; every migration for his "applied".
 
 ## Done (live)
 
+- **Since 2026-11-23:** the record page's top and Learn more (#219), take down on a reading (#221), the "stays on this
+  device" line (#223, reread), Remove my storyboard with an in-page confirm (#222).
 - **Recording:**
   - consent own-voice-v3 (reread);
   - the take kept on the device, per FID and speech;
@@ -33,9 +35,9 @@ every legal text for his "reread"; every migration for his "applied".
 
 | What | State | Needs from Nate |
 |---|---|---|
-| #219, the record page's top, Learn more, the speeches' lines | tests and check:ui passed; 390 px screenshot | approve the one draft Learn more item ("Where he speaks from"), then the merge word |
-| `storyboard-guide`, the guided dialogue over the one-scene engine (PR to open on Nate's word) | test:voice 310 ok; one real board ($0.17) | the build's go; reread: the P2u line, 3 Privacy lines; SQL: test then apply `NEXT_storyboard_scene.sql` and `NEXT_storyboard_guide.sql` |
-| Rehearsal fixes: take down on a reading; Remove my storyboard; the record page's "stays in this tab" wording | three PRs (see the report) | the merge word for each; the wording for reread |
+| #224, the storyboard guide over the one-scene engine | migrations 0048 and 0049 applied (2026-11-23); check:ui on the branch running | merges on Nate's word once check:ui shows only the known /challenge/make items |
+| `voice-take-caps`: 2 takes a person, 6,000 credits a day, readings from the admins' pool | built, test:voice to run | the merge word |
+| Moderation (report, the admin queue, hide), on its own branch | being built | reread: the ntfy item; test `NEXT_voice_moderation.sql` |
 
 ## Left before opening
 
@@ -78,38 +80,57 @@ every legal text for his "reread"; every migration for his "applied".
     comes with it.
 11. **Cleanup**: the throwaway worktrees of this work (listed in the report), on Nate's OK.
 
-## Proposed numbers (2026-11-23, for Nate to decide)
+## Numbers (2026-11-23)
 
-All from measured rates; all days are UTC days as today (midnight UTC is 4 pm Pacific).
+### Decided by Nate (2026-11-23)
 
-**A take.** A 2.5-minute take is about 1,700 credits with its word check (convert 665 a minute, transcribe 0.4 a second).
-The plan is 121,000 credits a month for $22, so a take costs about $0.31.
+- **Takes:** 2 whole takes per person a day, and 6,000 credits a day for everyone's takes (about 3 whole 2.5-minute
+  takes with their word checks, $1.09). Ready-made readings don't count: they and their timing are paid from the admins'
+  pool. Built on branch `voice-take-caps` (not merged).
+- **Default picture model for storyboards:** GPT Image 2.5 Sunburst wherever OpenAI serves; FLUX stays in the picker as
+  the cheaper choice. Already so on production (storyboards use the chapter pictures' default).
 
-**1. The daily take cap.**
-- Per person: **2 whole takes a day** (today 3). One to try, one to keep; redone sentences don't count.
-- Everyone together: **10 takes a day**, so `dailyCredits` **17,000** and `dailyUsd` **$3.10** (today 20,000 and $4).
-- The plan: 10 takes a day is about 510,000 credits a month, four times today's plan. Either a bigger ElevenLabs plan
-  before `open` (about $93 a month at today's price per credit, if the bigger plan's is no worse), or keep today's plan
-  and set the site-wide cap to **2 takes a day** (3,400 credits) with a waiting list.
+### Proposed: storyboard pictures on GPT Image (for Nate to decide)
 
-**2. A site-paid daily pool for FLUX boards** (non-admins; closed models stay admins-only at launch).
-- A board is 14 pictures (scene, 12 shots, closing card), up to 3 tries each. On FLUX: about $0.25 with one try each,
-  about $0.40 typical (one and a half), $0.92 at most.
-- Per person: **30 FLUX pictures a day** (one board with some tries; at most about $0.66).
-- Everyone together: **$10 a day**, a new pool `voice` apart from the admins' $20 and the remix challenge's: about 25
-  typical boards a day, or 15 people at their full 30.
+At the measured rates: $0.047 a picture plus about $0.012 a reference.
+- The scene picture has 1 reference (his sheet): $0.059.
+- Each shot in the scene has 3 references (the scene, his sheet, the shot before it): $0.083.
+- An insert has 0 or 1 reference: $0.047 to $0.059. The closing card has none: $0.047.
+- A 12-shot board, one try each: $0.059 + 12 × $0.083 + $0.047 = **$1.10**.
+- With 6 redos: **about $1.60**. At the most (3 tries of each of its 14 pictures): **about $3.30**.
 
-**3. What a person sees.** Before either runs out, the count left: "2 takes left today" and "18 pictures left today".
-When it runs out (each time shown in the person's own time zone, here as 4:00 pm):
-- their takes: "You've converted today's 2 takes. Your drafts are kept, and your recording stays on this device:
-  convert it again from 4:00 pm."
-- everyone's takes: "Today's recordings for everyone are used up. Your recording stays on this device: convert it from
+**1. Each person's daily allowance.** Today a storyboard picture is one of the day's 10 free pictures, and a GPT picture
+counts as 3 of them, so only 3 GPT pictures fit in a day: not one board.
+- Proposed: **storyboards get their own allowance, 20 storyboard pictures a day on any model** (a GPT picture counts
+  as 1 here). That is a 12-shot board plus 6 redos: about $1.60 on GPT Image at most, $0.45 on FLUX.
+- Their own count: storyboard pictures stop counting toward the 10 free images, and images stop counting toward these.
+- The per-shot limit (3 tries) stays.
+
+**2. The site-paid daily pool for storyboard pictures.**
+- Proposed: **$20 a day**, a new pool `storyboards`, apart from the admins' $20, the images' free cap and the remix
+  challenge's.
+- It covers **about 12 boards a day at the full 20 pictures** ($1.60 each), or about 18 boards made with one try each
+  ($1.10).
+- FLUX boards stretch it: one at 20 pictures is about $0.45.
+
+**3. What a person sees** (each time in the person's own time zone, here as 4:00 pm; the reset is midnight UTC).
+- Before it runs out, the count left: "14 storyboard pictures left today".
+- Their own allowance used up: "You've made today's 20 storyboard pictures. Your storyboard is saved: make the rest from
   4:00 pm."
-- their pictures: "You've made today's 30 pictures. Your storyboard is saved: make the rest from 4:00 pm."
-- everyone's pictures: "Today's pictures for everyone are used up. Your storyboard is saved: make the rest from
-  4:00 pm."
+- Everyone's pool used up: "Today's storyboard pictures for everyone are used up. Your storyboard is saved: make the
+  rest from 4:00 pm."
+- For a wallet account with a prepaid balance, under either line: "Or use your prepaid balance: $0.11 a shot with GPT
+  Image, $0.03 with FLUX." This is the prepaid price with its 30% markup on the measured cost: $0.083 × 1.3 = $0.108, and
+  FLUX $0.022 × 1.3 = $0.029. Prepaid storyboard pictures are not built yet.
+- Takes, with the decided caps:
+  - their own: "You've converted today's 2 takes. Your drafts are kept, and your recording stays on this device: convert
+    it again from 4:00 pm."
+  - everyone's: "Today's recordings for everyone are used up. Your recording stays on this device: convert it from
+    4:00 pm."
+  - The lines on production today are "You've converted 2 whole takes today. Redo single sentences, or come back
+    tomorrow." and "Today's voice allowance is used up. It resets at midnight UTC."; these would replace them.
 
-Wording drafted by the coding agent: "Draft wording" on the page until Nate's reread. Nothing here is built.
+The six lines are drafted by the coding agent, for Nate's reread. Nothing in the pictures proposal is built.
 
 ## The order
 
