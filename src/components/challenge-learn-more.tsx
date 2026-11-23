@@ -1,5 +1,7 @@
 'use client';
 import { useRef } from 'react';
+import Link from 'next/link';
+import type { LearnMoreView, Rendered } from '~/lib/challenge/learn-more-view';
 
 /**
  * "Learn more about {name}" on a character's page: the <details> and its summary drawn as a button (the design pass,
@@ -34,5 +36,101 @@ export function LearnMore({ title, children }: { title: string; children: React.
       </summary>
       {children}
     </details>
+  );
+}
+
+/**
+ * A "Learn more" text: plain words; citations as small links to the reader's block; glossary terms with a small ⓘ that
+ * opens the entry in a popover (no script: the browser's popover; where it isn't supported the note shows inline), the
+ * glossary page linked inside. A term with no entry (none today) shows as plain words.
+ */
+function Segs({ segs, more }: { segs: Rendered[]; more: string }) {
+  return (
+    <>
+      {segs.map((s, i) =>
+        s.kind === 'text' ? (
+          <span key={i}>{s.text}</span>
+        ) : s.kind === 'cite' ? (
+          <Link key={i} className="chc-cite" href={s.href} prefetch={false}>
+            {s.label}
+          </Link>
+        ) : (
+          <span key={i} className="chc-term">
+            {s.term}
+            {s.note && (
+              <>
+                <button type="button" className="chc-term-i" popoverTarget={s.id} aria-label={`What is ${s.term}?`}>
+                  ⓘ
+                </button>
+                <span id={s.id} popover="auto" className="chc-term-note" role="note">
+                  <strong>{s.term}</strong> <q>{s.note.text}</q> <span className="chc-cite">{s.note.cite}</span>{' '}
+                  {s.href && (
+                    <Link href={s.href} prefetch={false}>
+                      {more}
+                    </Link>
+                  )}
+                </span>
+              </>
+            )}
+          </span>
+        ),
+      )}
+    </>
+  );
+}
+
+/** The expander's body (shared: a challenge character's page and the Ephelion challenge, /storyboard/record). */
+export function LearnMoreParts({ learn }: { learn: LearnMoreView }) {
+  return (
+      <div className="chc-more-body">
+        {learn.draft && <p className="as-draft ch-draft">{learn.draft}</p>}
+        {learn.text ? (
+          <>
+            <p className="chc-learn-part" data-part="who">
+              <strong>{learn.text.who.head}</strong> <Segs segs={learn.text.who.segs} more={learn.glossaryLink} />
+            </p>
+            <p className="chc-learn-part" data-part="start">
+              <strong>{learn.text.start.head}</strong> <Segs segs={learn.text.start.segs} more={learn.glossaryLink} />
+            </p>
+            <p className="chc-learn-part" data-part="later">
+              <strong>{learn.text.later.head}</strong> <Segs segs={learn.text.later.segs} more={learn.glossaryLink} />
+            </p>
+            <p className="chc-learn-part" data-part="drives">
+              <strong>{learn.text.drives.head}</strong> <Segs segs={learn.text.drives.segs} more={learn.glossaryLink} />
+            </p>
+            <div className="chc-learn-part" data-part="invent">
+              <strong>{learn.text.invent.head}</strong>
+              <ul className="chc-invent">
+                {learn.text.invent.items.map((it, i) => (
+                  <li key={i}>
+                    <Segs segs={it} more={learn.glossaryLink} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </>
+        ) : (
+          <>
+            {learn.facts.length > 0 && (
+              <>
+                <p className="chc-facts-note">{learn.factsNote}</p>
+                <ul className="chc-facts">
+                  {learn.facts.map((f, i) => (
+                    <li key={f.block} className="chc-fact" data-block={f.block}>
+                      <span className="chc-fact-text">{f.text}</span>
+                      <q className="chc-fact-quote">{f.quote}</q>
+                      <span className="chc-fact-cite">
+                        {learn.chips[i]} · {f.block}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {/* Only here, with no Learn more text: "Room to invent" ends with its own looks line (owner, 2026-11-16). */}
+            <p className="chc-looks">{learn.looks}</p>
+          </>
+        )}
+      </div>
   );
 }
