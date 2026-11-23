@@ -39,6 +39,11 @@ export function voiceStatic(flow: string, route: string): string[] {
   if (/\bconsole\./.test(r)) p.push('convert route uses console');
   if ((r.match(/\.arrayBuffer\(\)/g) ?? []).length !== 1 || !/take: new Uint8Array\(await file\.arrayBuffer\(\)\)/.test(r)) p.push('convert route reads the take other than once, straight into convertTake');
   if (/writeFile|createWriteStream|PutObject|\.put\(|storage|r2\(/.test(r)) p.push('convert route can write a file or to storage');
+  // The converted take is kept as the person's draft (Nate, 2026-11-22): only the audio convertTake returned, never the take.
+  if (!/const \{ audio, ticket \} = await convertTake\(/.test(r)) p.push('convert route does not take its converted audio from convertTake');
+  const keeps = [...r.matchAll(/keepConvertedTake\(([^)]*)\)/g)].map((m) => m[1].trim());
+  if (keeps.length !== 1 || keeps[0] !== 'sql, who.fid, { audio, ticket }') p.push(`convert route keeps something other than the converted audio (${keeps.join(' | ') || 'no keep'})`);
+  if (/\b(saveDraft|keepPerformance|putAudio)\(/.test(r)) p.push('convert route writes a draft other than through keepConvertedTake');
   if (/\bfile\b[^\n]*\b(sql|db|log|cost|settle)\b|\b(sql|settle|reserve)\b[^\n]*\bfile\b(?!\.size)/.test(r.replace(/form\.get\('take'\)/, ''))) p.push('convert route passes the take near the database or costs');
   return p;
 }
@@ -189,6 +194,12 @@ export const VOICE_PLANTS: { name: string; plant: (s: string) => string }[] = [
   { name: 'the take in a cost entry', plant: (s) => s.replace("await deps.cost({ kind: 'convert', ok: true,", "await deps.cost({ take, kind: 'convert', ok: true,") },
 ];
 
+/** Planted violations in the conversion route (2026-11-22): each must be caught statically. */
+export const VOICE_ROUTE_PLANTS: { name: string; plant: (s: string) => string }[] = [
+  { name: 'the take kept as the draft', plant: (s) => s.replace('keepConvertedTake(sql, who.fid, { audio, ticket })', 'keepConvertedTake(sql, who.fid, { audio: new Uint8Array(await file.arrayBuffer()), ticket })') },
+  { name: 'the take saved straight to a draft', plant: (s) => s.replace('kept = await keepConvertedTake(sql, who.fid, { audio, ticket });', "kept = await keepConvertedTake(sql, who.fid, { audio, ticket });\n      await saveDraft(sql, { fid: who.fid, kind: 'performance', speechId: speech.id, presetId, recipe: {}, audio: [] });") },
+];
+
 /** Every check at once: the real files pass, and each plant is caught. */
 export async function voiceProof(root: string): Promise<{ real: string[]; missed: string[] }> {
   const flow = readFileSync(path.join(root, FLOW_FILE), 'utf8');
@@ -203,6 +214,14 @@ export async function voiceProof(root: string): Promise<{ real: string[]; missed
     }
     const caught = [...voiceStatic(planted, route), ...(await voiceRun(root, planted).catch((e) => [`run failed: ${String(e)}`]))];
     if (!caught.length) missed.push(p.name);
+  }
+  for (const p of VOICE_ROUTE_PLANTS) {
+    const planted = p.plant(route);
+    if (planted === route) {
+      missed.push(`${p.name}: the plant no longer applies to the route (update VOICE_ROUTE_PLANTS)`);
+      continue;
+    }
+    if (!voiceStatic(flow, planted).length) missed.push(p.name);
   }
   rmSync(path.join(os.tmpdir(), 'voice-planted-take.bin'), { force: true });
   return { real, missed };

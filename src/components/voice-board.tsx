@@ -20,7 +20,7 @@ import '../styles/voice.css';
  * a picture (a stand-in card tonight), retry, keep one, next; then the kept pictures played over the audio.
  * Nothing here writes a description or any story words (principle 2).
  */
-interface Sheet { id: string; title: string; entity: string; text: string; thumb: string | null }
+interface Sheet { id: string; title: string; entity: string; text: string; thumb: string | null; samples?: string[] }
 interface Data {
   draft: { id: string; kind: 'performance' | 'reading'; preset: string | null; speech: { id: string; title: string; label?: { text: string } } | null; sentences: { n: number; text: string }[]; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
   board: { version: number; cuts: number[]; shots: Shot[]; closing: Closing; proposed: number[]; fromProposal: boolean };
@@ -422,15 +422,27 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
 
       <section className="vr-card" aria-labelledby="vb-set-h">
         <h2 id="vb-set-h">Settings for every picture</h2>
-        <label className="vb-field">
-          <span className="vb-label">Style</span>
-          <select value={settings.styleId ?? ''} onChange={(e) => choose({ styleId: e.target.value || null })}>
-            <option value="">None</option>
+        {/* Each style with its published samples, as the look cards (Nate, 2026-11-22). The row scrolls inside itself. */}
+        <fieldset className="vb-looks vb-styles">
+          <legend className="vb-label">Style</legend>
+          <div className="vb-look-row">
+            <button type="button" className={`vb-look${settings.styleId === null ? ' vb-on' : ''}`} aria-pressed={settings.styleId === null} onClick={() => choose({ styleId: null })}>
+              <span className="vb-look-none">None</span>
+            </button>
             {d.sheets.styles.map((x) => (
-              <option key={x.id} value={x.id}>{x.title}</option>
+              <button key={x.id} type="button" className={`vb-look vb-style${settings.styleId === x.id ? ' vb-on' : ''}`} aria-pressed={settings.styleId === x.id} onClick={() => choose({ styleId: x.id })}>
+                {x.samples?.length ? (
+                  <span className="vb-samples">
+                    {x.samples.map((u) => <img key={u} src={u} alt="" />)}
+                  </span>
+                ) : (
+                  <span className="vb-look-none">No samples</span>
+                )}
+                <span className="vr-small">{x.title}</span>
+              </button>
             ))}
-          </select>
-        </label>
+          </div>
+        </fieldset>
         {styleOf(settings.styleId) && <p className="vr-small">Style text, as sent: {styleOf(settings.styleId)!.text}</p>}
         <fieldset className="vb-looks">
           <legend className="vb-label">Ephelion&rsquo;s look</legend>

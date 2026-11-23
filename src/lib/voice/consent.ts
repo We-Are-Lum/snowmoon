@@ -5,8 +5,8 @@ import type postgres from 'postgres';
 import { wordingSha256, type ConsentWording } from '../consent';
 
 /**
- * The own-voice consent (config/consent-own-voice.json). The voice pages show `own-voice-v2`, the file's `current`
- * (reread by Nate, 2026-11-21); v1 is retired and used by nothing (P1i). Agreeing once to the screen is recorded in
+ * The own-voice consent (config/consent-own-voice.json). The voice pages show `own-voice-v3`, the file's `current`
+ * (reread by Nate, 2026-11-22); v2 and v1 are retired and used by nothing (P1i). Agreeing once to the screen is recorded in
  * studio.contributor_consents (kind 'voice_recording', the wording's sha256); each conversion then needs its own tick
  * ("only if you agree for that recording"), carried by the convert request and kept in the accepted draft's recipe.
  */

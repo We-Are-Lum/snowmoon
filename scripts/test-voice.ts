@@ -4,7 +4,8 @@
  *     local test switch and the stub address are ignored; a real ElevenLabs call is refused in the local tests;
  *  W. the speech: c13-b64 word for word, cut into sentences; the word check (case, punctuation, dashes, numbers);
  *  C. the consent: own-voice-v2 (current), agreed once, and a tick for each recording;
- *  V. convert: the take goes to ElevenLabs once, its history item is deleted, nothing of it is stored;
+ *  V. convert: the take goes to ElevenLabs once, its history item is deleted, nothing of it is stored; a whole take's
+ *     conversion is kept as its person's private draft as soon as it comes back (converted audio only);
  *  T. transcribe: only converted audio; the mismatch shows; a redone sentence passes;
  *  A. accept: a private draft with its recipe (voice, model, settings, each take's sha256); forged files and records
  *     refused; no raw take anywhere in the database;
@@ -25,7 +26,7 @@ import os from 'node:os';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import { startStub } from './lib/elevenlabs-stub';
-import { voiceProof, VOICE_PLANTS } from './lib/voice-proof';
+import { voiceProof, VOICE_PLANTS, VOICE_ROUTE_PLANTS } from './lib/voice-proof';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -110,7 +111,7 @@ for (const [k, v] of [['VERCEL', '1'], ['VERCEL_ENV', 'production'], ['VERCEL_EN
   delete process.env[k];
 }
 check('S. a non-admin is not let in during the admin trial', !voiceAllowed(STRANGER) && voiceAllowed(NATE) && voiceAllowed(GARANCE));
-const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]', 'boards', 'boards/picture', 'boards/keep', 'boards/closing', 'publish', 'publish/[id]'];
+const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]', 'drafts/[id]/check', 'boards', 'boards/picture', 'boards/keep', 'boards/closing', 'publish', 'publish/[id]'];
 for (const r of routeFiles) {
   const mod = await route(r);
   const h = mod.POST ?? mod.GET ?? mod.DELETE;
@@ -202,8 +203,8 @@ check('W. numbers, case, punctuation and apostrophes compare as words', norm('4'
 // C. The consent.
 const wording = voiceConsentWording();
 const own = JSON.parse(readFileSync(path.join(ROOT, 'config/consent-own-voice.json'), 'utf8'));
-check('C. the page shows own-voice-v2, current, with Nate\'s fixes', wording.version === 'own-voice-v2' && wording.text[0] === 'You record a speech. Your recording is converted into a character\'s voice, and only the converted speech can be published.' && /against the speech\.$/.test(wording.text[3]));
-check('C. own-voice-v2 is the file\'s current (reread 2026-11-21), with no draft left; v1 stays on file, retired', own.current === 'own-voice-v2' && !('draft' in own) && Boolean(own.versions['own-voice-v1']));
+check('C. the page shows own-voice-v3, current, with Nate\'s reread points 2 and 5', wording.version === 'own-voice-v3' && wording.text[1] === "We never publish or keep your recording. It stays on your device, in this browser's storage, until you remove it or record again; your browser may also clear it. It is sent to be converted only when you press Convert." && wording.text[4].startsWith('We keep each converted speech as your draft as soon as it comes back, until you remove it. Once you publish it,') && wording.text[0] === 'You record a speech. Your recording is converted into a character\'s voice, and only the converted speech can be published.' && /against the speech\.$/.test(wording.text[3]));
+check('C. own-voice-v3 is the file\'s current (reread 2026-11-22), with no draft left; v1 and v2 stay on file, retired', own.current === 'own-voice-v3' && !('draft' in own) && Boolean(own.versions['own-voice-v1']) && Boolean(own.versions['own-voice-v2']));
 check('C. the training line stands without brackets (Nate turned training off, 2026-11-21)', wording.text.some((t) => t.includes('Our account is set so it doesn\'t use them to train its models.')) && !wording.text.join(' ').includes('['));
 const take = randomBytes(160_000); // the stub hears it as 40 s
 const form = (fields: Record<string, string | Blob>) => {
@@ -225,13 +226,40 @@ check('C. ... and nothing reached ElevenLabs', !stub.calls.some((c) => c.path.st
 // V. Convert.
 const before = stub.calls.length;
 r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take)) }));
-const ticket = r.headers.get('x-voice-ticket') ?? '';
-const converted = new Uint8Array(await r.arrayBuffer());
-check('V. the whole take is converted: MP3 back, with its signed record', r.status === 200 && r.headers.get('content-type') === 'audio/mpeg' && ticket.includes('.') && converted.length > 1000, String(r.status));
+const whole = (await r.json()) as { draftId: string; ticket: string; check: string | null; checks: { n: number; ok: boolean; missing: string[]; extra: string[] }[] | null; error?: string };
+const ticket = whole.ticket ?? '';
+const autoId = whole.draftId;
+check('V. the whole take is converted and kept at once: its draft\'s id, its signed record and its word check come back', r.status === 200 && /^[0-9a-f-]{36}$/.test(autoId) && ticket.includes('.') && r.headers.get('x-voice-ticket') === ticket && typeof whole.check === 'string' && (whole.checks?.length ?? 0) > 0, `${r.status} ${whole.error ?? ''}`);
+const converted = new Uint8Array(await (await draftAudioRoute.GET(as(NATE), { params: Promise.resolve({ id: autoId, n: '0' }) })).arrayBuffer());
+check('V. the kept draft plays the converted speech for its person', converted.length > 1000);
+{
+  const [kd] = await sql`select fid, kind, published_at, recipe from studio.voice_drafts where id = ${autoId}`;
+  const kr = kd?.recipe as { kept: string; takes: { takeSha256: string; convertedSha256: string }[]; check: { sentences: number } | null; timeline: unknown } | undefined;
+  check('V. ... a private draft of its person, kept automatically, with the take\'s sha256 only and its word check and strip', Number(kd?.fid) === NATE && kd.kind === 'performance' && kd.published_at === null && kr?.kept === 'automatically, when the conversion came back' && kr.takes.length === 1 && kr.takes[0].takeSha256 === sha(take) && kr.takes[0].convertedSha256 === sha(converted) && kr.check?.sentences === speech.sentences.length && kr.timeline !== null, JSON.stringify({ fid: kd?.fid, kind: kd?.kind, pub: kd?.published_at, kept: kr?.kept, takes: kr?.takes?.length, check: kr?.check?.sentences, tl: Boolean(kr?.timeline) }));
+  const rows = await sql`select storage_key, sha256 from studio.voice_draft_audio where draft_id = ${autoId}`;
+  check('V. ... its storage holds the converted audio only, byte for byte', rows.length === 1 && rows[0].sha256 === sha(converted) && sha(new Uint8Array(readFileSync(path.join(STORE, rows[0].storage_key)))) === sha(converted) && !storeFiles().some((f) => sha(new Uint8Array(readFileSync(path.join(STORE, f)))) === sha(take)));
+  const stG0 = (await (await status.GET(as(GARANCE))).json()) as { drafts: { id: string }[] };
+  check('V. ... and nobody else sees it, even an admin', !stG0.drafts.some((x) => x.id === autoId) && (await draftAudioRoute.GET(as(GARANCE), { params: Promise.resolve({ id: autoId, n: '0' }) })).status === 404);
+}
+{
+  // The keeping refuses the raw take itself (a planted bug that handed it the take would be stopped here too).
+  const { keepPerformance } = await import('../src/lib/voice/keep-converted');
+  const { readConvertTicket } = await import('../src/lib/voice/take-flow');
+  const { verifyTicket } = await import('../src/lib/voice/ticket');
+  const parsed = readConvertTicket({ verify: (x: string) => verifyTicket<never>(x), now: () => Date.now() }, ticket, NATE);
+  const n0 = (await sql`select count(*)::int n from studio.voice_drafts`)[0].n;
+  let refused = false;
+  try {
+    await keepPerformance(sql, NATE, { ticket: parsed, audio: new Uint8Array(take), check: null });
+  } catch {
+    refused = true;
+  }
+  check('V. keeping refuses the raw take\'s bytes, and stores nothing', refused && (await sql`select count(*)::int n from studio.voice_drafts`)[0].n === n0);
+}
 const sts = stub.calls.slice(before).filter((c) => c.path.startsWith('/v1/speech-to-speech/'));
 check('V. ElevenLabs got the take once, into the preview\'s voice, with the model and settings', sts.length === 1 && sts[0].files[0]?.sha256 === sha(take) && /fdoGbz5eU4VUde5iMQYV/.test(sts[0].path) && sts[0].fields.model_id === VOICE.models.convert && JSON.parse(sts[0].fields.voice_settings).stability === 0.5);
 check('V. the conversion\'s history item was deleted at ElevenLabs right after', stub.deleted.length === 1 && stub.deleted[0] === 'stubhist1');
-check('V. the reply is not the take', sha(converted) !== sha(take));
+check('V. the reply is not the take', sha(converted) !== sha(take) && !JSON.stringify(whole).includes(take.subarray(0, 30).toString('base64')));
 check('V. the reply\'s cache is off', r.headers.get('cache-control') === 'no-store');
 const preset = (await (await status.GET(as(NATE))).json()) as { choices: { presetId: string; candidate: number; previewUrl: string; saved?: boolean }[]; today: { credits: number } };
 check('V. the three picked voices, in Nate\'s order (the default first), saved, played from our media host', preset.choices.map((c) => c.presetId).join() === 'ephelion-warm-lecturer,ephelion-warm-lecturer-2,ephelion-light-russian' && preset.choices.every((c) => (c as { saved?: boolean }).saved && c.previewUrl.startsWith('https://media.snowmoon.party/review/161f656a64a8e8f7c7ad4cb26b23703a/')));
@@ -299,7 +327,7 @@ r = await accept.POST(as(NATE, { method: 'POST', body: acceptForm(converted, tic
 check('A. another file\'s check is refused', r.status === 400);
 r = await accept.POST(as(NATE, { method: 'POST', body: acceptForm(converted, redoTicket, t1.check) }));
 check('A. a sentence record can\'t be accepted as a whole take', r.status === 400);
-check('A. nothing is stored before Accept', (await sql`select count(*)::int n from studio.voice_drafts`)[0].n === 0);
+check('A. before "Use this one", the only draft is the one kept when the conversion came back', (await sql`select count(*)::int n from studio.voice_drafts`)[0].n === 1);
 r = await accept.POST(as(NATE, { method: 'POST', body: acceptForm(converted, ticket, t1.check, { audio: redoAudio, ticket: redoTicket, check: t2.check }) }));
 const acc = (await r.json()) as { id: string; recipe: Record<string, unknown>; error?: string };
 {
@@ -615,7 +643,7 @@ check('R. anyone let in can play it', r.status === 200 && (await r.arrayBuffer()
 // $. Costs and caps.
 const rows = await sql`select kind, funded, verdict, calls, credits, estimated_credits, cost_usd::float8 usd from studio.voice_costs order by kind, verdict`;
 const by = (k: string, v = 'ok') => rows.filter((x) => x.kind === k && x.verdict === v);
-check('$. each call is counted: 3 conversions, 2 transcriptions, 1 reading, no failed ones (refusals count nothing; admins: funded admin)', by('convert')[0]?.calls === 3 && by('transcribe')[0]?.calls === 2 && !by('transcribe', 'failed').length && by('reading')[0]?.calls === 1 && rows.every((x) => x.funded === 'admin'), JSON.stringify(rows));
+check('$. each call is counted: 3 conversions, 3 transcriptions (the whole take\'s, made when it is kept, among them), 1 reading, no failed ones (refusals count nothing; admins: funded admin)', by('convert')[0]?.calls === 3 && by('transcribe')[0]?.calls === 3 && !by('transcribe', 'failed').length && by('reading')[0]?.calls === 1 && rows.every((x) => x.funded === 'admin'), JSON.stringify(rows));
 check('$. the holds were all given back', rows.filter((x) => x.kind === 'reserved').every((x) => x.calls === 0 && x.estimated_credits === 0 && Math.abs(x.usd) < 1e-6));
 check('$. credits are the stub\'s own (header), estimated beside them', by('convert')[0].credits === 444 + 56 + 23 && by('convert')[0].estimated_credits > 0, JSON.stringify(by('convert')));
 check('$. the cost table has no person, request or time of day', !rows.some((x) => 'fid' in x || 'request_id' in x || 'at' in x));
@@ -709,6 +737,39 @@ check('$. the caps are placeholders in config, in credits and dollars', VOICE.ca
   check('G. with no one else\'s board on it, its maker can remove the reading, timings and all', r.status === 200 && (await sql`select count(*)::int n from studio.voice_reading_timings where draft_id = ${rdId}`)[0].n === 0);
 }
 
+// R. Checking the words again on a draft kept without its check (Nate, 2026-11-22, the no-SQL version).
+{
+  const checkRoute = await route('drafts/[id]/check');
+  const post = (fid: number, id: string) => checkRoute.POST(as(fid, { method: 'POST' }), { params: Promise.resolve({ id }) });
+  stub.setFailTranscribe(true);
+  r = await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(160_000)) }));
+  stub.setFailTranscribe(false);
+  const w = (await r.json()) as { draftId: string; checks: unknown };
+  const [old] = await sql`select recipe from studio.voice_drafts where id = ${w.draftId}`;
+  const oldRecipe = old?.recipe as { check: unknown; timeline: unknown; takes: { takeSha256: string; convertedSha256: string }[] } | undefined;
+  check('R. a whole take whose transcription failed is kept all the same, with no check and no strip', r.status === 200 && w.checks === null && oldRecipe?.check === null && oldRecipe.timeline === null);
+  check('R. ... so it can\'t be storyboarded yet', (await boards.GET(as(GARANCE, {}, `http://localhost/api/voice/boards?draft=${w.draftId}`))).status === 409);
+  check('R. checking someone else\'s draft reads as missing (404), even for an admin, and nothing is called', (await post(NATE, w.draftId)).status === 404);
+  const sttBefore = stub.calls.filter((c) => c.path === '/v1/speech-to-text').length;
+  const tdBefore = stub.deletedTranscripts.length;
+  r = await post(GARANCE, w.draftId);
+  const j = (await r.json()) as { id: string; replaced: string; oldRemoved: boolean; matched: number; sentences: number; check: string; transcriptDeleted: boolean; error?: string };
+  const stt = stub.calls.filter((c) => c.path === '/v1/speech-to-text');
+  check('R. "Check the words": one transcription of the draft\'s own converted audio, never the take', r.status === 200 && stt.length === sttBefore + 1 && stt.at(-1)!.files[0].sha256 === oldRecipe!.takes[0].convertedSha256 && stt.at(-1)!.files[0].sha256 !== oldRecipe!.takes[0].takeSha256, `${r.status} ${j.error ?? ''}`);
+  check('R. ... its transcript deleted at ElevenLabs right after', j.transcriptDeleted === true && stub.deletedTranscripts.length === tdBefore + 1 && stub.kept().length === 0);
+  const [nd] = await sql`select fid, kind, speech_id, preset_id, published_at, recipe from studio.voice_drafts where id = ${j.id}`;
+  const nr = nd?.recipe as { check: { sentences: number; matched: number } | null; timeline: { sentences: unknown[] } | null; kept: string; checkedAgain: { from: string }; takes: { takeSha256: string; convertedSha256: string; transcriptDeleted: boolean }[] } | undefined;
+  check('R. ... kept again under a new id, with its check, its strip and where it came from', Boolean(nd) && j.id !== w.draftId && Number(nd.fid) === GARANCE && nd.published_at === null && nr!.check?.sentences === speech.sentences.length && nr!.timeline?.sentences.length === speech.sentences.length && nr!.checkedAgain.from === w.draftId && /checked again/.test(nr!.kept) && nr!.takes[0].takeSha256 === oldRecipe!.takes[0].takeSha256 && nr!.takes[0].transcriptDeleted === true);
+  const rows = await sql`select storage_key, sha256 from studio.voice_draft_audio where draft_id = ${j.id}`;
+  check('R. ... with the same converted audio, copied, byte for byte', rows.length === 1 && rows[0].sha256 === oldRecipe!.takes[0].convertedSha256 && sha(new Uint8Array(readFileSync(path.join(STORE, rows[0].storage_key)))) === rows[0].sha256);
+  check('R. the draft without a check is removed, rows and audio', j.oldRemoved && (await sql`select count(*)::int n from studio.voice_drafts where id = ${w.draftId}`)[0].n === 0 && storeFiles().every((f) => !f.startsWith(`voice-drafts/${w.draftId}/`)));
+  check('R. the new draft can be storyboarded', (await boards.GET(as(GARANCE, {}, `http://localhost/api/voice/boards?draft=${j.id}`))).status === 200);
+  check('R. a signed check record comes back, for a page still holding the take (redone sentences)', typeof j.check === 'string' && j.check.includes('.'));
+  check('R. a draft that has its check can\'t be checked again (409), and nothing is called', (await post(GARANCE, j.id)).status === 409 && stub.calls.filter((c) => c.path === '/v1/speech-to-text').length === sttBefore + 1);
+  check('R. ... nor a draft id that isn\'t one (404)', (await post(GARANCE, 'nope')).status === 404);
+  check('R. the cost is counted as a transcription, measured against its estimate', (await sql`select coalesce(sum(calls),0)::int n from studio.voice_costs where kind = 'transcribe' and verdict = 'ok'`)[0].n >= 1);
+}
+
 // M. The allowlist.
 const models = JSON.parse(readFileSync(path.join(ROOT, 'config/models.json'), 'utf8')).models as { id: string; maker?: string; open_weights: boolean; keeps?: string; hosted?: { endpoints: Record<string, null> } }[];
 for (const id of Object.values(VOICE.models)) {
@@ -730,7 +791,7 @@ check('T. every transcript made in this run was deleted at ElevenLabs (none left
 // P. P1h.
 const proof = await voiceProof(ROOT);
 check('P. P1h: the real take flow and convert route keep no recording', proof.real.length === 0, proof.real.join('; '));
-check(`P. P1h: all ${VOICE_PLANTS.length} planted violations are caught`, proof.missed.length === 0, proof.missed.join('; '));
+check(`P. P1h: all ${VOICE_PLANTS.length + VOICE_ROUTE_PLANTS.length} planted violations are caught (the route's too)`, proof.missed.length === 0, proof.missed.join('; '));
 
 rmSync(STORE, { recursive: true, force: true });
 await sql.end();

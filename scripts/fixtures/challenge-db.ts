@@ -33,9 +33,10 @@ export const FIXTURE_CHALLENGE = (() => {
   const sheets: Record<string, string[]> = { zei: [], bai: [] };
   const remixes: { versionId: string; character: string; createdAt: string; from: string; title: string }[] = [];
   let n = 0;
-  // Once the owner has picked a character's bases (CHALLENGE.bases), its first sheet is its first base, by that id, so
-  // /challenge shows it (only bases are shown then); the others stay fixture sheets that aren't bases.
-  for (const c of ['zei', 'bai']) for (let i = 0; i < 3; i++) sheets[c].push(i === 0 && CHALLENGE.bases[c]?.[0] ? CHALLENGE.bases[c][0] : id(3, ++n));
+  // Once the owner has picked a character's bases (CHALLENGE.bases), its sheets are its bases, by their ids, so whichever
+  // base /challenge draws for the tile is one of the fixture's (it draws among all of them; 2026-11-22: with only the
+  // first, the check failed whenever the tile drew another). A character with fewer bases fills up with fixture sheets.
+  for (const c of ['zei', 'bai']) for (let i = 0; i < 3; i++) sheets[c].push(CHALLENGE.bases[c]?.[i] ?? id(3, ++n));
   // Newest first. The sheets were made on 2 Nov, one hour apart, the first listed the newest, after the remixes (30 Oct),
   // so before the bases are picked the triptych shows them (the newest sheets of the character).
   for (let i = 0; i < 8; i++) {

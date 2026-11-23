@@ -2,7 +2,7 @@
  * A stand-in for ElevenLabs' API (the voice slice's tests and screenshots; no network, no spending). The same paths
  * the site calls (src/lib/voice/elevenlabs.ts), and a record of everything each one received, so a test can see where
  * each recording went.
- * - POST /v1/speech-to-speech/:voice: answers a WAV tone (not the input), as long as the input "sounds" (bytes / 4000
+ * - POST /v1/speech-to-speech/:voice (optionally after a delay, --convert-delay-ms): answers a WAV tone (not the input), as long as the input "sounds" (bytes / 4000
  *   seconds by default, 1 to 300; 8 kHz, so a long take stays under the 4.5 MB request limit), with a history-item-id and a character-cost (1,000 a minute).
  * - DELETE /v1/history/:id
  * - DELETE /v1/speech-to-text/transcripts/:id (each transcription's stored transcript, as ElevenLabs keeps one)
@@ -66,7 +66,7 @@ function multipart(body: Buffer, type: string) {
   return { fields, files };
 }
 
-export async function startStub(port: number, opts: { mismatch?: number | null; failConvert?: boolean; bytesPerSecond?: number } = {}) {
+export async function startStub(port: number, opts: { mismatch?: number | null; failConvert?: boolean; failTranscribe?: boolean; bytesPerSecond?: number; convertDelayMs?: number } = {}) {
   const calls: StubCall[] = [];
   const deleted: string[] = [];
   const tried = new Set<string>();
@@ -110,6 +110,8 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
     }
     if (req.method === 'POST' && url.pathname.startsWith('/v1/speech-to-speech/')) {
       if (opts.failConvert) return send(500, 'stub: failed, and this text quotes the input');
+      // A slow conversion, so a test can leave mid-flight (Nate, 2026-11-22).
+      if (opts.convertDelayMs) await new Promise((r) => setTimeout(r, opts.convertDelayMs));
       const input = call.files[0]?.bytes ?? Buffer.alloc(0);
       const seconds = Math.min(300, Math.max(1, input.length / (opts.bytesPerSecond ?? 4000)));
       // As measured on the first real calls (2026-11-20): about 665 credits a minute.
@@ -118,6 +120,7 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
       return send(200, tone(seconds, 180), { 'content-type': 'audio/mpeg', 'history-item-id': `stubhist${++seq}`, 'character-cost': String(cost) });
     }
     if (req.method === 'POST' && url.pathname === '/v1/speech-to-text') {
+      if (opts.failTranscribe) return send(500, 'stub: transcription failed');
       const seconds = wavSeconds(call.files[0]?.bytes ?? Buffer.alloc(0));
       const pick = seconds >= 30 ? sentences : sentences.filter((s) => s.n === (mismatch ?? 3));
       const all = pick.flatMap((s) => s.words.map((w, k) => (seconds >= 30 && s.n === mismatch && k === 1 ? 'weakness' : w)));
@@ -138,12 +141,12 @@ export async function startStub(port: number, opts: { mismatch?: number | null; 
     send(404, 'stub: no such path');
   });
   await new Promise<void>((r) => server.listen(port, '127.0.0.1', r));
-  return { calls, deleted, deletedTranscripts, kept: () => [...transcripts], close: () => new Promise<void>((r) => server.close(() => r())), setFail: (v: boolean) => (opts.failConvert = v) };
+  return { calls, deleted, deletedTranscripts, kept: () => [...transcripts], close: () => new Promise<void>((r) => server.close(() => r())), setFail: (v: boolean) => (opts.failConvert = v), setFailTranscribe: (v: boolean) => (opts.failTranscribe = v), setConvertDelay: (ms: number) => (opts.convertDelayMs = ms) };
 }
 
 if (process.argv[1] && /elevenlabs-stub\.ts$/.test(process.argv[1])) {
   const port = Number(process.argv.find((a) => a.startsWith('--port='))?.split('=')[1] ?? 54390);
   // Chromium's fake microphone, as WebM/Opus, makes about 12 kB a second.
-  await startStub(port, { bytesPerSecond: Number(process.argv.find((a) => a.startsWith('--bytes-per-second='))?.split('=')[1] ?? 12000) });
+  await startStub(port, { bytesPerSecond: Number(process.argv.find((a) => a.startsWith('--bytes-per-second='))?.split('=')[1] ?? 12000), convertDelayMs: Number(process.argv.find((a) => a.startsWith('--convert-delay-ms='))?.split('=')[1] ?? 0) });
   console.log(`ElevenLabs stub on http://127.0.0.1:${port}`);
 }
