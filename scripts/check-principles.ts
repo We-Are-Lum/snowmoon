@@ -1400,6 +1400,18 @@ add({
   },
 });
 add({
+  id: 'P5b-review',
+  principle: 5,
+  name: 'the admins\' private review tables (owner\'s P5b line, reread 2026-11-23): only src/lib/review writes them, and no other file reads them',
+  load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
+  // The same rule as P5b (scripts/lib/p5b.ts); test:bounty-review and test:admin-activity prove each planted fault.
+  run: (files) => p5bProblems(files).filter((p) => /private review tables/.test(p)),
+  plant: (files) => {
+    // A route outside src/lib/review that writes a review label must fail.
+    files.push(P5B_PLANTS.reviewWriteElsewhere);
+  },
+});
+add({
   id: 'P5j',
   principle: 5,
   name: 'admin publishing code (the owner\'s ruling of 2026-11-18, reread 2026-11-19) touches only the edition\'s chapter pictures: one file, gated by the admin check, new rows only',

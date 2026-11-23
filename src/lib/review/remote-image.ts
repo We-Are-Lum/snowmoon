@@ -1,5 +1,8 @@
 import 'server-only';
 import { lookup } from 'node:dns/promises';
+import { get as httpsGet } from 'node:https';
+import type { IncomingMessage } from 'node:http';
+import type { LookupFunction } from 'node:net';
 import { isIP } from 'node:net';
 import sharp from 'sharp';
 import { BOUNTY_REVIEW as B } from '../config';
@@ -11,10 +14,16 @@ import { BOUNTY_REVIEW as B } from '../config';
  *
  * THE URL IS A STRANGER'S. Anyone can claim with any tokenURI. So, on every fetch (the metadata and the image):
  * - https only (ipfs:// is read through BOUNTY_REVIEW.ipfsGateway), to a host name, never an address, localhost or an
- *   internal name; the name must not resolve to a private, loopback or link-local address;
- * - redirects followed by hand, at most MAX_HOPS, each checked the same way before it is asked;
+ *   internal name;
+ * - the address the connection actually uses must not be private, loopback or link-local (owner, 2026-11-23: DNS
+ *   rebinding). The check is in the connection's own DNS lookup (node:https's `lookup` option, on every hop), not a
+ *   separate lookup before it, so a host can't answer the check with a public address and the connection with a
+ *   private one. Node's own https is used rather than undici's Agent: undici isn't one of the site's dependencies, and
+ *   the `lookup` hook is the same thing (the address the socket connects to);
+ * - redirects followed by hand, at most MAX_HOPS, each checked the same way;
  * - the body read as a stream and dropped past MAX_BYTES (content-length isn't trusted);
- * - sharp refuses anything over MAX_PIXELS before decoding.
+ * - only raster pictures (owner, 2026-11-23): JPEG, PNG, WebP, GIF or AVIF, known by their bytes and confirmed by
+ *   sharp's own reading, never SVG or anything else; sharp refuses anything over MAX_PIXELS before decoding.
  * Anything that trips one of these is "picture not readable", and the claim is still listed.
  */
 export const MAX_BYTES = 12 * 1024 * 1024;
@@ -45,70 +54,124 @@ export function privateAddress(ip: string): boolean {
   }
   const v = ip.toLowerCase();
   if (v.startsWith('::ffff:')) return privateAddress(v.slice(7));
-  return v === '::' || v === '::1' || /^f[cd]/.test(v) || /^fe[89ab]/.test(v) || v.startsWith('ff');
+  return isIP(v) !== 6 || v === '::' || v === '::1' || /^f[cd]/.test(v) || /^fe[89ab]/.test(v) || v.startsWith('ff');
 }
 
 export type Resolve = (host: string) => Promise<string[]>;
 const resolveHost: Resolve = async (host) => (await lookup(host, { all: true, verbatim: true })).map((a) => a.address);
 
+/**
+ * The connection's own DNS lookup: the addresses the socket will use, refused if any is private. Answers both ways
+ * Node asks (one address, or all of them for happy eyeballs).
+ */
+export function guardedLookup(resolve: Resolve = resolveHost): LookupFunction {
+  return ((hostname: string, options: { all?: boolean } | number | undefined, cb: (...a: unknown[]) => void) => {
+    const all = typeof options === 'object' && options !== null && options.all === true;
+    resolve(hostname).then(
+      (addrs) => {
+        if (!addrs.length || addrs.some(privateAddress)) return cb(Object.assign(new Error('host not allowed'), { code: 'EHOSTNOTALLOWED' }));
+        const list = addrs.map((address) => ({ address, family: isIP(address) }));
+        return all ? cb(null, list) : cb(null, list[0].address, list[0].family);
+      },
+      (e) => cb(e),
+    );
+  }) as unknown as LookupFunction;
+}
+
+/** One GET over node:https, connecting only where guardedLookup allows. */
+export type Getter = (url: URL, signal: AbortSignal) => Promise<{ status: number; location: string | null; contentType: string; body: AsyncIterable<Uint8Array>; cancel: () => void }>;
+export function httpsGetter(resolve: Resolve = resolveHost): Getter {
+  const lookupFn = guardedLookup(resolve);
+  return (url, signal) =>
+    new Promise((ok, fail) => {
+      const req = httpsGet(url, { lookup: lookupFn, agent: false, signal, headers: { accept: 'image/avif,image/webp,image/png,image/jpeg,image/gif,application/json;q=0.9' } }, (res: IncomingMessage) =>
+        ok({
+          status: res.statusCode ?? 0,
+          location: typeof res.headers.location === 'string' ? res.headers.location : null,
+          contentType: String(res.headers['content-type'] ?? ''),
+          body: res,
+          cancel: () => res.destroy(),
+        }),
+      );
+      req.on('error', fail);
+    });
+}
+
 /** GET with checked, hand-followed redirects and a streamed byte cap. Throws on any breach. */
-export async function cappedFetch(raw: string, opts: { resolve?: Resolve; fetcher?: typeof fetch } = {}): Promise<{ url: string; contentType: string; body: Buffer }> {
-  const resolve = opts.resolve ?? resolveHost;
-  const fetcher = opts.fetcher ?? fetch;
+export async function cappedFetch(raw: string, opts: { resolve?: Resolve; getter?: Getter } = {}): Promise<{ url: string; contentType: string; body: Buffer }> {
+  const getter = opts.getter ?? httpsGetter(opts.resolve);
   const signal = AbortSignal.timeout(TIMEOUT_MS);
   let url = allowedUrl(raw);
   for (let hop = 0; ; hop++) {
     if (!url) throw new Error('url not allowed');
-    const addrs = await resolve(url.hostname);
-    if (!addrs.length || addrs.some(privateAddress)) throw new Error('host not allowed');
-    const res = await fetcher(url, { redirect: 'manual', signal, headers: { accept: 'image/*, application/json;q=0.9' } });
+    const res = await getter(url, signal);
     if (res.status >= 300 && res.status < 400) {
-      await res.body?.cancel();
-      const next = res.headers.get('location');
-      if (!next || hop >= MAX_HOPS) throw new Error('redirect not followed');
-      url = allowedUrl(next, url.href);
+      res.cancel();
+      if (!res.location || hop >= MAX_HOPS) throw new Error('redirect not followed');
+      url = allowedUrl(res.location, url.href);
       continue;
     }
-    if (!res.ok || !res.body) {
-      await res.body?.cancel();
+    if (res.status < 200 || res.status >= 300) {
+      res.cancel();
       throw new Error(`status ${res.status}`);
     }
-    const reader = res.body.getReader();
     const chunks: Uint8Array[] = [];
     let n = 0;
-    for (;;) {
-      const { done, value } = await reader.read();
-      if (done) break;
+    for await (const value of res.body) {
       n += value.byteLength;
       if (n > MAX_BYTES) {
-        await reader.cancel();
+        res.cancel();
         throw new Error('too large');
       }
       chunks.push(value);
     }
-    return { url: url.href, contentType: res.headers.get('content-type') ?? '', body: Buffer.concat(chunks) };
+    return { url: url.href, contentType: res.contentType, body: Buffer.concat(chunks) };
   }
 }
 
 export const toHttps = (u: string) => (u.startsWith('ipfs://') ? `${B.ipfsGateway}${u.slice(7).replace(/^ipfs\//, '')}` : u);
 
-const looksLikeImage = (b: Buffer) =>
-  (b[0] === 0xff && b[1] === 0xd8) || (b[0] === 0x89 && b[1] === 0x50) || b.subarray(0, 4).toString('latin1') === 'RIFF' || b.subarray(0, 3).toString('latin1') === 'GIF' || b.subarray(4, 12).toString('latin1').includes('ftyp');
+export type Raster = 'jpeg' | 'png' | 'webp' | 'gif' | 'avif';
+/** The raster kind these bytes start with, or null (SVG, HTML, JSON, HEIC and anything else). */
+export function rasterKind(b: Buffer): Raster | null {
+  if (b.length >= 3 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff) return 'jpeg';
+  if (b.length >= 8 && b.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'png';
+  if (b.length >= 6 && /^GIF8[79]a$/.test(b.subarray(0, 6).toString('latin1'))) return 'gif';
+  if (b.length >= 12 && b.subarray(0, 4).toString('latin1') === 'RIFF' && b.subarray(8, 12).toString('latin1') === 'WEBP') return 'webp';
+  if (b.length >= 16 && b.subarray(4, 8).toString('latin1') === 'ftyp') {
+    const size = Math.min(b.readUInt32BE(0), b.length, 256);
+    const brands = [b.subarray(8, 12).toString('latin1')];
+    for (let i = 16; i + 4 <= size; i += 4) brands.push(b.subarray(i, i + 4).toString('latin1'));
+    if (brands.includes('avif') || brands.includes('avis')) return 'avif';
+  }
+  return null;
+}
+/** sharp's name for each raster kind (AVIF is read by sharp's HEIF reader, with AV1 compression). */
+const SHARP_FORMAT: Record<Raster, string> = { jpeg: 'jpeg', png: 'png', webp: 'webp', gif: 'gif', avif: 'heif' };
 
 /**
  * The picture a claim's tokenURI names, drawn again as a JPEG at most `size` px on its long side; and the address it
- * came from. A tokenURI may be JSON naming an image (poidh's own claims) or the image itself. Null if unreadable.
+ * came from. A tokenURI may be JSON naming an image (poidh's own claims) or the image itself. Null if unreadable or
+ * not one of the five raster kinds.
  */
-export async function claimPicture(tokenUri: string, size = 1200, opts: { resolve?: Resolve; fetcher?: typeof fetch } = {}): Promise<{ jpeg: Buffer; from: string } | null> {
+export async function claimPicture(tokenUri: string, size = 1200, opts: { resolve?: Resolve; getter?: Getter } = {}): Promise<{ jpeg: Buffer; from: string; kind: Raster } | null> {
   try {
     let got = await cappedFetch(toHttps(tokenUri), opts);
-    if (!got.contentType.startsWith('image/') && !looksLikeImage(got.body)) {
+    let kind = rasterKind(got.body);
+    if (!kind) {
+      // Not a picture: only JSON naming one goes on (an image/* type, SVG or HTML here is refused).
+      if (/^image\//i.test(got.contentType) || /^\s*</.test(got.body.subarray(0, 64).toString('utf8'))) return null;
       const meta = JSON.parse(got.body.toString('utf8')) as { image?: unknown };
       if (typeof meta.image !== 'string') return null;
       got = await cappedFetch(toHttps(meta.image), opts);
+      kind = rasterKind(got.body);
+      if (!kind) return null;
     }
-    const jpeg = await sharp(got.body, { limitInputPixels: MAX_PIXELS }).rotate().resize(size, size, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 82 }).toBuffer();
-    return { jpeg, from: got.url };
+    const img = sharp(got.body, { limitInputPixels: MAX_PIXELS });
+    const meta = await img.metadata();
+    if (meta.format !== SHARP_FORMAT[kind] || (kind === 'avif' && meta.compression !== 'av1')) return null;
+    const jpeg = await img.rotate().resize(size, size, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 82 }).toBuffer();
+    return { jpeg, from: got.url, kind };
   } catch {
     return null;
   }

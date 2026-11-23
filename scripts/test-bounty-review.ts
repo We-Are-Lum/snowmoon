@@ -312,35 +312,75 @@ check('nothing was asked of Base but reads', writes.length === 0);
   check('a picture that cannot be read: 502, the claim still listed', (await R.claimPictureFor(admin, '4258', { reader: stub, picture: async () => null })).status === 502);
   for (const u of ['http://example.com/a.jpg', 'https://127.0.0.1/a.jpg', 'https://localhost/a.jpg', 'https://[::1]/a.jpg', 'https://intranet/a.jpg', 'https://a.internal/x', 'https://u:p@example.com/a', 'https://example.com:8443/a']) check(`not fetched: ${u}`, I.allowedUrl(u) === null);
   check('fetched: https to a public host name', I.allowedUrl('https://beige-impossible-dragon-883.mypinata.cloud/ipfs/Qm') !== null);
-  for (const ip of ['10.0.0.1', '127.0.0.1', '169.254.169.254', '172.16.0.1', '192.168.1.1', '100.64.0.1', '::1', 'fd00::1', 'fe80::1', '::ffff:10.0.0.1']) check(`a private address is refused: ${ip}`, I.privateAddress(ip));
+  for (const ip of ['10.0.0.1', '127.0.0.1', '169.254.169.254', '172.16.0.1', '192.168.1.1', '100.64.0.1', '0.0.0.0', '::1', 'fd00::1', 'fe80::1', '::ffff:10.0.0.1', '::ffff:127.0.0.1', 'not-an-ip']) check(`a private address is refused: ${ip}`, I.privateAddress(ip));
   check('a public address is allowed', !I.privateAddress('104.16.1.1') && !I.privateAddress('2606:4700::1'));
-  const pub = async () => ['104.16.1.1'];
-  const fakeFetch = (routes: Record<string, () => Response>) => (async (u: URL | string) => (routes[String(u)] ?? (() => new Response('no', { status: 404 })))()) as typeof fetch;
+
+  // DNS rebinding (owner, 2026-11-23): the check is the connection's own lookup. A host whose first answer is public and
+  // whose second is 127.0.0.1 is refused at the connection, through the real node:https path (no request is sent: the
+  // lookup refuses before any socket connects).
+  {
+    const asked: string[] = [];
+    const rebinding: import('../src/lib/review/remote-image').Resolve = async (h) => (asked.push(h), asked.length === 1 ? ['104.16.1.1'] : ['127.0.0.1']);
+    await rebinding('rebind.example'); // the answer a separate check before the fetch would have seen: public
+    let threw = '';
+    try {
+      await I.cappedFetch('https://rebind.example/x.png', { resolve: rebinding });
+    } catch (e) {
+      threw = (e as Error).message;
+    }
+    check('DNS rebinding: a second lookup of 127.0.0.1 is refused by the connection itself', threw === 'host not allowed' && asked.length === 2, `${threw}; lookups ${asked.length}`);
+    const lk = I.guardedLookup(async () => ['93.184.216.34', '10.0.0.7']);
+    const out = await new Promise<string>((done) => (lk as unknown as (h: string, o: object, cb: (e: Error | null) => void) => void)('mixed.example', { all: true }, (e) => done(e ? e.message : 'connected')));
+    check('a host with one public and one private address is refused (every address the socket might use)', out === 'host not allowed');
+    const one = I.guardedLookup(async () => ['93.184.216.34']);
+    const got = await new Promise<string>((done) => (one as unknown as (h: string, o: object, cb: (e: Error | null, a?: unknown, f?: number) => void) => void)('public.example', {}, (e, a, f) => done(e ? e.message : `${a}/${f}`)));
+    check('a public address is handed to the connection (one-address form)', got === '93.184.216.34/4');
+    const src = read('src/lib/review/remote-image.ts');
+    check('every hop goes through the guarded lookup (node:https with lookup, no global fetch)', /httpsGet\(url, \{ lookup: lookupFn/.test(src) && !/\bawait fetch\(|fetcher\(/.test(src));
+  }
+
+  // The logic of hops and the byte cap, with a stand-in for the connection.
+  type G = import('../src/lib/review/remote-image').Getter;
+  const getter = (routes: Record<string, () => { status: number; type?: string; location?: string; body?: Buffer }>): G => async (u) => {
+    const r = (routes[u.href] ?? (() => ({ status: 404 })))();
+    return { status: r.status, location: r.location ?? null, contentType: r.type ?? '', body: (async function* () { if (r.body) yield new Uint8Array(r.body); })(), cancel: () => {} };
+  };
   let threw = '';
   try {
-    await I.cappedFetch('https://a.example/x', { resolve: async () => ['10.0.0.5'], fetcher: fakeFetch({}) });
-  } catch (e) {
-    threw = (e as Error).message;
-  }
-  check('a host name that resolves to a private address is refused before asking', threw === 'host not allowed');
-  threw = '';
-  try {
-    await I.cappedFetch('https://a.example/x', { resolve: pub, fetcher: fakeFetch({ 'https://a.example/x': () => new Response(null, { status: 302, headers: { location: 'http://169.254.169.254/latest' } }) }) });
+    await I.cappedFetch('https://a.example/x', { getter: getter({ 'https://a.example/x': () => ({ status: 302, location: 'http://169.254.169.254/latest' }) }) });
   } catch (e) {
     threw = (e as Error).message;
   }
   check('a redirect to a private address is not followed', threw === 'url not allowed');
   threw = '';
   try {
-    await I.cappedFetch('https://a.example/big', { resolve: pub, fetcher: fakeFetch({ 'https://a.example/big': () => new Response(new Uint8Array(I.MAX_BYTES + 1)) }) });
+    await I.cappedFetch('https://a.example/big', { getter: getter({ 'https://a.example/big': () => ({ status: 200, body: Buffer.alloc(I.MAX_BYTES + 1) }) }) });
   } catch (e) {
     threw = (e as Error).message;
   }
   check('a body over the cap is dropped', threw === 'too large');
+
+  // Raster only (owner, 2026-11-23): JPEG, PNG, WebP, GIF and AVIF, by their bytes and sharp's reading; never SVG.
   const sharp = (await import('sharp')).default;
-  const png = await sharp({ create: { width: 40, height: 30, channels: 3, background: '#88a' } }).png().toBuffer();
-  const pic = await I.claimPicture('https://meta.example/m.json', 1200, { resolve: pub, fetcher: fakeFetch({ 'https://meta.example/m.json': () => new Response(JSON.stringify({ image: 'https://img.example/p.png' }), { headers: { 'content-type': 'application/json' } }), 'https://img.example/p.png': () => new Response(png, { headers: { 'content-type': 'image/png' } }) }) });
-  check('JSON naming a picture: the picture, drawn again as a JPEG', pic !== null && pic.jpeg[0] === 0xff && pic.jpeg[1] === 0xd8 && pic.from === 'https://img.example/p.png');
+  const base = () => sharp({ create: { width: 40, height: 30, channels: 3, background: '#88a' } });
+  const rasters: Record<string, Buffer> = {
+    jpeg: await base().jpeg().toBuffer(), png: await base().png().toBuffer(), webp: await base().webp().toBuffer(), gif: await base().gif().toBuffer(), avif: await base().avif().toBuffer(),
+  };
+  const svg = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="40" height="30"><rect width="40" height="30" fill="red"/></svg>');
+  const one = (body: Buffer, type: string) => getter({ 'https://img.example/p': () => ({ status: 200, type, body }) });
+  for (const [k, b] of Object.entries(rasters)) {
+    const pic = await I.claimPicture('https://img.example/p', 1200, { getter: one(b, `image/${k}`) });
+    check(`${k.toUpperCase()}: accepted, known by its bytes, drawn again as a JPEG`, I.rasterKind(b) === k && pic?.kind === k && pic.jpeg[0] === 0xff && pic.jpeg[1] === 0xd8, `${I.rasterKind(b)} ${pic?.kind}`);
+  }
+  check('SVG sent as image/svg+xml: refused', (await I.claimPicture('https://img.example/p', 1200, { getter: one(svg, 'image/svg+xml') })) === null);
+  check('SVG sent as image/png (a lying type): refused, the bytes decide', (await I.claimPicture('https://img.example/p', 1200, { getter: one(svg, 'image/png') })) === null);
+  check('SVG named by JSON metadata: refused', (await I.claimPicture('https://meta.example/m.json', 1200, { getter: getter({ 'https://meta.example/m.json': () => ({ status: 200, type: 'application/json', body: Buffer.from(JSON.stringify({ image: 'https://img.example/s.svg' })) }), 'https://img.example/s.svg': () => ({ status: 200, type: 'image/png', body: svg }) }) })) === null);
+  check('HTML: refused', (await I.claimPicture('https://img.example/p', 1200, { getter: one(Buffer.from('<!doctype html><img src=x>'), 'text/html') })) === null);
+  const heic = await base().heif({ compression: 'hevc' }).toBuffer().catch(() => null);
+  if (heic) check('HEIC (not one of the five): refused', I.rasterKind(heic) === null && (await I.claimPicture('https://img.example/p', 1200, { getter: one(heic, 'image/heic') })) === null);
+  proof('a JPEG header on SVG bytes is refused by sharp’s reading', (await I.claimPicture('https://img.example/p', 1200, { getter: one(Buffer.concat([Buffer.from([0xff, 0xd8, 0xff]), svg]), 'image/jpeg') })) === null);
+  const pic = await I.claimPicture('https://meta.example/m.json', 1200, { getter: getter({ 'https://meta.example/m.json': () => ({ status: 200, type: 'application/json', body: Buffer.from(JSON.stringify({ image: 'https://img.example/p.png' })) }), 'https://img.example/p.png': () => ({ status: 200, type: 'image/png', body: rasters.png }) }) });
+  check('JSON naming a PNG: the picture, drawn again as a JPEG', pic !== null && pic.kind === 'png' && pic.from === 'https://img.example/p.png');
   check('ipfs:// goes through the configured gateway', I.toHttps('ipfs://QmA') === `${BOUNTY_REVIEW.ipfsGateway}QmA`);
 }
 
@@ -355,6 +395,12 @@ check('nothing was asked of Base but reads', writes.length === 0);
   proof('a public page reading review_labels is caught', problems([...files, { file: 'src/app/challenge/entries/page.tsx', text: 'await sql`select * from studio.review_labels`' }]).length === 1);
   proof('a feed importing the review code is caught', problems([...files, { file: 'src/lib/feed.ts', text: "import { reviewView } from './review/review';" }]).length === 1);
   check('the review tables are in no read API, agent tool or feed file (src/app/api outside admin/bounty)', !files.some((f) => f.file.startsWith('src/app/api/') && !f.file.startsWith('src/app/api/admin/bounty/') && TABLES.test(f.text)));
+  const { P5B_PLANTS, REVIEW_DIR } = await import('./lib/p5b');
+  check('P5b (the owner\'s line, 2026-11-23): only src/lib/review writes or reads the review tables, on the real files', p5bProblems(files).filter((x) => /private review tables/.test(x)).length === 0 && REVIEW_DIR === 'src/lib/review/');
+  proof('P5b catches a route outside src/lib/review writing studio.review_labels', p5bProblems([P5B_PLANTS.reviewWriteElsewhere]).some((x) => /writes the private review tables/.test(x)));
+  proof('P5b catches a feed reading studio.review_labels', p5bProblems([P5B_PLANTS.reviewReadInFeed]).some((x) => /reads the private review tables/.test(x)));
+  check('P5b lets src/lib/review write them', p5bProblems([{ file: 'src/lib/review/review.ts', text: "await tx`insert into studio.review_labels (kind) values ('x')`;" }]).filter((x) => /private review tables/.test(x)).length === 0);
+  check('principles.md carries the owner\'s P5b line word for word', read('docs/principles.md').includes('admin code may write `studio.admin_picks`, and nothing else; and, from /admin/bounty only, its private review tables (studio.review_labels, studio.review_notes, studio.review_log), which no public page, feed or tool reads.'));
   const mine = files.filter((f) => OWN.has(f.file));
   check('P5b passes on the new files (the review sorts behind its own 404 gate)', p5bProblems(mine).length === 0, p5bProblems(mine).join('; '));
   const lib = mine.find((f) => f.file === 'src/lib/review/review.ts')!;
