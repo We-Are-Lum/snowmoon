@@ -270,7 +270,7 @@ check('T. the remix screen shows the mismatch in place of Make it', /mismatch \?
 const publish = read('src/app/api/images/publish/route.ts');
 check('T. publish refuses a lettered draft whose read-back didn\'t match this file', /t\.lettering && \(t\.lettering\.readback\?\.verdict !== 'match' \|\| t\.lettering\.readback\.sha256 !== t\.sha256\)/.test(publish));
 check('T. publish writes body.lettering drawn_by model and the record in the recipe', /lettering: t\.lettering \? bodyItems\(t\.lettering\) : \[\]/.test(publish) && /\.\.\.\(t\.lettering \? \{ lettering: t\.lettering \} : \{\}\)/.test(publish) && bodyItems(ok.ok ? ok.record : (null as never)).every((b) => b.drawn_by === 'model'));
-check('T. the warning before Make it says words can come out wrong and a redo uses one of today\'s pictures', /get words wrong/.test(W.warning) && /one of today’s pictures/.test(W.warning));
+check('T. the warning before Make it says words can come out wrong and a redo uses today\'s pictures (3 for a closed one)', /get words wrong/.test(W.warning) && W.warning.includes(`uses ${(await import('../src/lib/config')).CLOSED_IMAGES.countsAs} more of today’s pictures`));
 
 // ---------------------------------------------------------------------------------------------------------------------
 // O. The open model with quoted words.

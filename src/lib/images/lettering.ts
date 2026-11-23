@@ -17,6 +17,7 @@
  *   for GPT Image, Google's for Gemini), against rule v1. A mismatch is never kept: the person can only try again.
  */
 import { quotedText } from '../challenge/book-quotes';
+import { CLOSED_IMAGES } from '../config';
 
 // ---------------------------------------------------------------------------------------------------------------------
 // The cap and the parser.
@@ -250,7 +251,8 @@ export const LETTERING_WORDING = {
   own: 'your own words',
   ownBy: (by: string) => `${by}’s own words`,
   /** Before Make it, whenever quoted words go to a closed model (owner, 2026-11-22). */
-  warning: 'The model can get words wrong. Each picture is read back; if the words aren’t exactly yours, it isn’t kept, and making it again uses one of today’s pictures.',
+  // "Uses one of today's pictures" (the owner's words) made true for a closed picture, which counts as CLOSED_IMAGES.countsAs.
+  warning: `The model can get words wrong. Each picture is read back; if the words aren’t exactly yours, it isn’t kept, and making it again uses ${CLOSED_IMAGES.countsAs} more of today’s pictures.`,
   warningAdmin: 'The model can get words wrong. Each picture is read back; if the words aren’t exactly yours, it isn’t kept, and making it again is paid from the admins’ daily limit.',
   /** The open model with quoted words: refused before anything is spent (owner, 2026-11-22). */
   openRefused: (open: string, closed: readonly string[]) =>
@@ -260,7 +262,7 @@ export const LETTERING_WORDING = {
   mismatchAsked: 'You asked for',
   mismatchRead: (reader: string) => `${reader} read`,
   mismatchNothing: 'no writing',
-  mismatchKept: 'This picture isn’t kept. Try again to make a new one; it uses one of today’s pictures.',
+  mismatchKept: `This picture isn’t kept. Try again to make a new one; it uses ${CLOSED_IMAGES.countsAs} more of today’s pictures.`,
   mismatchKeptAdmin: 'This picture isn’t kept. Try again to make a new one; it is paid from the admins’ daily limit.',
   tryAgain: 'Try again',
   /** The read-back gave no answer: the same, try again only. */
