@@ -975,7 +975,7 @@ check('$. the caps are placeholders in config, in credits and dollars', VOICE.ca
   ];
   check('GU. P2u: the real recipes pass', g.guideRecipeProblems(good).length === 0 && g.guideRecipeProblems(p2G.recipe.guided).length === 0);
   check(`GU. P2u: all ${plants.length} planted faults are caught (a missing request first)`, plants.every(([, x]) => g.guideRecipeProblems(x as never).length > 0), plants.filter(([, x]) => !g.guideRecipeProblems(x as never).length).map(([n]) => n).join());
-  // Removing the board removes its dialogue (NEXT_storyboard_guide.sql's delete_voice_board).
+  // Removing the board removes its dialogue (0049_storyboard_guide.sql's delete_voice_board).
   r = await boards.DELETE(as(NATE, { method: 'DELETE' }, `http://localhost/api/voice/boards?draft=${gd}`));
   check('GU. removing the storyboard removes its dialogue', r.status === 200 && (await gget()).messages.length === 0);
 }

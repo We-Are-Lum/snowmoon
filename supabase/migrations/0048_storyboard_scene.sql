@@ -1,7 +1,6 @@
--- NEXT_storyboard_scene.sql: a storyboard is one scene, shot with several cameras (Nate, 2026-11-22, branch
--- storyboard-scene; docs/proposals/storyboard-scene.md v2). Not numbered until merge: it takes the next free number then,
--- checked against origin/main and production. NOT APPLIED until Nate applies it; the branch merges only after he says
--- "applied". Drafted by the coding agent (Claude, a closed model by Anthropic); tested in PGlite by the agent
+-- 0048_storyboard_scene.sql (was NEXT_storyboard_scene.sql; numbered at merge, 2026-11-23): a storyboard is one scene, shot with several cameras (Nate, 2026-11-22, branch
+-- storyboard-scene; docs/proposals/storyboard-scene.md v2). APPLIED on production by Nate on 2026-11-23 ("applied": A, B, C
+-- run at once, Success), and confirmed read-only by the agent the same day. Drafted by the coding agent (Claude, a closed model by Anthropic); tested in PGlite by the agent
 -- (npm run test:voice, every migration in order). Version 2 (2026-11-23): the check is null-safe (coalesce): version 1
 -- let a scene with no setting through, because a NULL check passes; its own read-back caught it.
 -- Requires 0046_ephelion_voice_publish.sql (applied on production 2026-11-22).

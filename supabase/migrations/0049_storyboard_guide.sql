@@ -1,9 +1,8 @@
--- NEXT_storyboard_guide.sql: the storyboard guide's dialogue (Nate, 2026-11-22/23, branch storyboard-guide; P2's
--- "Storyboard pictures" ruling: the recipe keeps the person's request, word for word). Not numbered until merge: it takes
--- the next free number then, checked against origin/main and production. NOT APPLIED until Nate applies it; the branch
--- merges only after he says "applied". Drafted by the coding agent (Claude, a closed model by Anthropic); tested in
+-- 0049_storyboard_guide.sql (was NEXT_storyboard_guide.sql; numbered at merge, 2026-11-23): the storyboard guide's dialogue (Nate, 2026-11-22/23, branch storyboard-guide; P2's
+-- "Storyboard pictures" ruling: the recipe keeps the person's request, word for word). APPLIED on production by Nate on
+-- 2026-11-23, after 0048 ("applied": A, B, C run at once, Success), and confirmed read-only by the agent the same day. Drafted by the coding agent (Claude, a closed model by Anthropic); tested in
 -- PGlite by the agent (npm run test:voice, every migration in order). Requires 0046_ephelion_voice_publish.sql
--- (applied) and NEXT_storyboard_scene.sql (on this branch, also not applied).
+-- (applied) and 0048_storyboard_scene.sql (applied).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:
 -- A. the dry run (ending in `rollback;`), B. the migration (ending in `commit;`), C. the read-back (a realistic draft,

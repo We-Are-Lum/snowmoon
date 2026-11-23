@@ -6,7 +6,7 @@ word". The three items below are his words; they are in `src/lib/legal.ts` (Priv
 same release as the guide and the scene step (legal texts describe today). They replace the drafts in this file's
 earlier version and in `docs/legal/storyboard-scene-draft.md`. Terms: no change (§5 already says the prompts and any
 planning thread that led to a piece are published with it; §8 says storyboard pictures are AI-made and labelled).
-`LEGAL.effective` becomes the merge day.
+`LEGAL.effective` is the merge day, 2026-11-23.
 
 ## Privacy §7, a new item after the closed-model challenge item (the scene's references)
 
@@ -31,7 +31,7 @@ planning thread that led to a piece are published with it; §8 says storyboard p
 > remove it. When you publish the storyboard, each picture's request and the prompt it was made with are published with
 > it.
 
-**Its source:** `studio.voice_guide_messages` (`NEXT_storyboard_guide.sql`), insert only, removed with the board
+**Its source:** `studio.voice_guide_messages` (`0049_storyboard_guide.sql`), insert only, removed with the board
 (`studio.delete_voice_board`) or the draft (`studio.delete_voice_draft`); each picture's recipe `guided`
 (`shot-picture.ts`) carries the request word for word and the prompt; `publish.ts` copies the recipe as kept.
 
