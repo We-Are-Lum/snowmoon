@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '~/lib/db';
 import { VOICE } from '~/lib/config';
 import { noStore, voicePerson, voiceReady } from '~/lib/voice/server';
-import { speeches } from '~/lib/voice/speech';
+import { offeredSpeeches, speeches } from '~/lib/voice/speech';
 import { presetChoices } from '~/lib/voice/presets';
 import { hasVoiceConsent, voiceConsentWording } from '~/lib/voice/consent';
 import { fundedFor, purgeOldAsks, today } from '~/lib/voice/costs';
@@ -22,7 +22,8 @@ export async function GET(request: Request) {
   if (sql) await purgeOldAsks(sql).catch(() => 0);
   const t = sql ? await today(sql, funded, who.fid) : null;
   // The ready-made readings, per speech and voice (Nate, 2026-11-22: the team's three speeches beside c13-b64).
-  const all = speeches();
+  // The versions offered (a retired one stays findable for its recordings, not offered: Nate, 2026-11-22).
+  const all = offeredSpeeches();
   const presets = [...new Set(choices.map((c) => c.presetId))];
   const readings = sql
     ? (await Promise.all(all.flatMap((sp) => presets.map(async (p) => [sp.id, p, await latestReading(sql, sp.id, p)] as const))))

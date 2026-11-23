@@ -79,7 +79,7 @@ delete process.env.ELEVENLABS_API_KEY;
 const { VOICE } = await import('../src/lib/config');
 const { voiceAllowed, voiceTestOn, elevenLabsBase } = await import('../src/lib/voice/flag');
 type Shot = import('../src/lib/voice/board').Shot;
-const { speeches } = await import('../src/lib/voice/speech');
+const { speeches, speechById } = await import('../src/lib/voice/speech');
 const { checkSpeech, norm, wordsOf } = await import('../src/lib/voice/match');
 const { voiceConsentWording } = await import('../src/lib/voice/consent');
 const { db } = await import('../src/lib/db');
@@ -193,22 +193,31 @@ check('W. numbers, case, punctuation and apostrophes compare as words', norm('4'
   const all = speeches();
   const inv = all.filter((x) => x.label.kind === 'invented');
   const file = JSON.parse(readFileSync(path.join(ROOT, 'config/voice-speeches.json'), 'utf8')) as { source: { googleDocId: string }; speeches: { id: string; title: string; paragraphs: string[] }[] };
-  check('I. c13-b64 stays first and unchanged; the three invented speeches follow', all[0].id === 'ephelion-c13-b64' && all[0].label.kind === 'book' && inv.map((x) => x.id).join() === 'doing-fine-v2,natural-way-v2,last-five-years-v2');
-  check('I. each is labelled "Invented, not from the book", versioned (v2), from its source doc', inv.every((x) => x.label.text === 'Invented, not from the book' && x.version === 2 && x.source.kind === 'edition' && x.source.doc === file.source.googleDocId && x.label.kind === 'invented'));
+  check('I. c13-b64 stays first and unchanged; the three invented speeches follow', all[0].id === 'ephelion-c13-b64' && all[0].label.kind === 'book' && inv.map((x) => x.id).join() === 'doing-fine-v2,natural-way-v2,last-five-years-v2,last-five-years-v3');
+  check('I. each is labelled "Invented, not from the book", versioned (v2; the last five years also v3), from its source doc', inv.every((x) => x.label.text === 'Invented, not from the book' && x.version === (x.id === 'last-five-years-v3' ? 3 : 2) && x.source.kind === 'edition' && x.source.doc === file.source.googleDocId && x.label.kind === 'invented'));
   check('I. each version\'s aiHelp is set in the file (true for v2, set by Nate) and its credit follows from it, word for word', (file as unknown as { speeches: { aiHelp: unknown }[] }).speeches.every((x) => x.aiHelp === true) && inv.every((x) => x.aiHelp === true && x.credit === 'Words by the Snowmoon team, drafted with AI help (Claude, by Anthropic)' && x.label.kind === 'invented' && x.label.writers[0] === x.credit));
   check('I. ... the credit for a version without AI help is "Words by the Snowmoon team"', (JSON.parse(readFileSync(path.join(ROOT, 'config/voice-speeches.json'), 'utf8')) as { credits: { noAiHelp: string } }).credits.noAiHelp === 'Words by the Snowmoon team');
   check('I. the page shows the credit beside "Invented, not from the book" wherever the speech is named', /\{s\.speech\.label\.text\}<\/span> \{s\.speech\.credit\}/.test(readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8')) && /\$\{x\.credit\} · version/.test(readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8')));
   check('I. the spoken text is the paragraphs only: ending "With regards.", no title, no notes', inv.every((x) => x.paragraphs.at(-1) === 'With regards.' && x.sentences.at(-1)!.text === 'With regards.' && !x.paragraphs.some((p) => p === x.title || /Still open|\(worth\)|\(death\)|\(stagnation\)/.test(p))));
   check('I. the speeches are word for word the file\'s (sentence by sentence)', inv.every((x) => x.sentences.map((y) => y.text).join(' ') === file.speeches.find((f) => f.id === x.id)!.paragraphs.join(' ')));
-  check('I. each has its own names: "Veridia" for the last five years, none for the other two', inv.find((x) => x.id === 'last-five-years-v2')!.names.join() === 'Veridia' && inv.filter((x) => x.id !== 'last-five-years-v2').every((x) => x.names.length === 0));
-  const five = inv.find((x) => x.id === 'last-five-years-v2')!;
+  check('I. each has its own names: "Veridia" for the last five years, none for the other two', inv.filter((x) => x.id.startsWith('last-five-years')).every((x) => x.names.join() === 'Veridia') && inv.filter((x) => !x.id.startsWith('last-five-years')).every((x) => x.names.length === 0));
+  // Speech 3, version 3 (Nate, 2026-11-22): one sentence order changed; v2 stays on file, retired, for its recordings.
+  {
+    const v2 = inv.find((x) => x.id === 'last-five-years-v2')!;
+    const v3 = inv.find((x) => x.id === 'last-five-years-v3')!;
+    const was = 'The future has never been built by everyone. It is built by the few who can. The rest still receive the benefits.';
+    const now = 'The future has never been built by everyone. The rest still receive the benefits, but it is built by the few who can.';
+    check('I. the last five years v3: Nate\'s sentence, word for word, in place of v2\'s; everything else as v2', v3.version === 3 && v3.paragraphs.join('\n').includes(now) && !v3.paragraphs.join('\n').includes(was) && v2.paragraphs.join('\n').includes(was) && v3.paragraphs.join('\n') === v2.paragraphs.join('\n').replace(was, now) && v3.title === v2.title);
+    check('I. ... v2 is retired: still found by its id (its recordings), not offered; v3 is offered', v2.retired === true && !v3.retired && speechById('last-five-years-v2')?.id === 'last-five-years-v2');
+  }
+  const five = inv.find((x) => x.id === 'last-five-years-v3')!;
   const s3 = five.sentences.find((x) => x.text.startsWith('Veridia'))!;
   const heard = (text: string) => text.split(' ').map((w, i) => ({ text: w, start: i * 0.3, end: i * 0.3 + 0.25 }));
   const byS = checkSpeech([s3], heard(s3.text.replace('Veridia', 'Varidia')), five.names);
   check('I. the word check, sentence by sentence: "Veridia" heard as "Varidia" passes by sound, and is listed', byS[0].ok && byS[0].bySound.length === 1, JSON.stringify(byS[0]));
   check('I. ... a different word still fails ("Venice"), and the numbers compare as words', !checkSpeech([s3], heard(s3.text.replace('Veridia', 'Venice')), five.names)[0].ok && checkSpeech([s3], heard(s3.text.replace('twenty', '20').replace('forty', '40')), five.names)[0].ok);
   const st = (await (await status.GET(as(NATE))).json()) as { speeches: { id: string; label: { text: string }; version: number }[]; readings: { speechId: string }[] };
-  check('I. the status lists every speech, with its label and version, and readings by speech', st.speeches.length === 4 && st.speeches[1].label.text === 'Invented, not from the book' && st.speeches[1].version === 2 && st.readings.every((x) => typeof x.speechId === 'string'));
+  check('I. the status lists every offered speech (not the retired v2), with its label and version, and readings by speech', st.speeches.length === 4 && st.speeches.map((x) => x.id).join() === 'ephelion-c13-b64,doing-fine-v2,natural-way-v2,last-five-years-v3' && st.speeches[1].label.text === 'Invented, not from the book' && st.speeches[1].version === 2 && st.speeches[3].version === 3 && st.readings.every((x) => typeof x.speechId === 'string'));
   check('I. publishing the invented speeches is off until Nate says', VOICE.publishInvented === false);
 }
 
