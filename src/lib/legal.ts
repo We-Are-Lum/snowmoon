@@ -14,7 +14,7 @@
  * and 2026-11-19 (admins redo the edition's chapter pictures: Terms section 7, Privacy sections 6 and 7; the lines on the
  * chapter-pictures review page, PR #191), and 2026-11-20 (admins add a chapter picture while reading: Terms section 7,
  * Privacy sections 6 and 7; PR #196's review page), and 2026-11-21 (others' published pictures as references for the
- * chapter pictures: Terms section 7, Privacy sections 6 and 7; PR #204's review page), and 2026-11-23 (lettering, part C:
+ * chapter pictures: Terms section 7, Privacy sections 6 and 7; PR #204's review page), and 2026-11-22 (lettering, part C:
  * words a closed model draws in quotation marks, read back by its maker: Terms section 8, Privacy sections 4 and 7; PR #215's
  * review page).
  * Only the owner changes the words.
@@ -53,7 +53,7 @@ export const LEGAL: {
   // MERGE DAY: the day lettering, part C (PR #215: closed models draw quoted words, read back by their maker) merges and
   // goes live. If the merge moves, this moves with it. (Before: 2026-11-21, the Ephelion voice; 2026-11-21, PR #204;
   // 2026-11-20, PR #196; 2026-11-19, PR #191.)
-  effective: '2026-11-23',
+  effective: '2026-11-22',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -155,11 +155,11 @@ export const LEGAL: {
     // speech, record only your own voice, and don't imitate a real person. Your recording is never published; the
     // converted speech you publish is licensed GPL-3.0, like everything else you publish here."; §8's list adds "the
     // characters' voices in storyboards". The owner's word sets this key. The words before were f9vf2l.
-    // 2026-11-23, owner's reread for #215 (lettering, part C), relayed from his session: "reread, with these changes: … Google's abuse-log period is still sourced: Google Cloud's "Abuse monitoring" page … says, for Google models not designated as Frontier or Advanced AI, "This data is stored securely for up to 90 days". Keep the existing lines as they are, and end both new Google read-back sentences "and may keep logs to check for abuse, for up to 90 days." … No optional notice line, and no new notice version. Everything else as drafted."
+    // 2026-11-22, owner's reread for #215 (lettering, part C), relayed from his session: "reread, with these changes: … Google's abuse-log period is still sourced: Google Cloud's "Abuse monitoring" page … says, for Google models not designated as Frontier or Advanced AI, "This data is stored securely for up to 90 days". Keep the existing lines as they are, and end both new Google read-back sentences "and may keep logs to check for abuse, for up to 90 days." … No optional notice line, and no new notice version. Everything else as drafted."
     // §8 adds, word for word as on #215's review page: "A closed model can draw words you put in quotation marks wrongly.
     // Each such picture is read back by its maker, and one whose words aren't exactly the ones asked for isn't kept;
     // making it again counts as another picture." The owner's word sets this key. The words before were kwbmuq.
-    terms: { words: '1tjanx5', on: '2026-11-23', by: 'FID 6786' },
+    terms: { words: '1tjanx5', on: '2026-11-22', by: 'FID 6786' },
     // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
     // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
     // 2026-10-19, the owner's "Reread is done" for push 3, at these words: My picks in §4 (the owner's own sentence),
@@ -321,12 +321,12 @@ export const LEGAL: {
     // proposed: "Speeches you record: each converted speech, in the character's voice, kept as your draft as soon as it
     // comes back, until you remove it or publish it, …" (the rest unchanged). … Terms: no change." The words before were
     // adecw7.
-    // 2026-11-23, owner's reread for #215 (lettering, part C; his words above, under terms): §4's images item adds the
+    // 2026-11-22, owner's reread for #215 (lettering, part C; his words above, under terms): §4's images item adds the
     // lettering record; §7's closed-model item adds the read-back sentence, and the project's-pictures item the chapter
     // pictures' read-back sentence, each Google sentence ending "and may keep logs to check for abuse, for up to 90 days."
     // as he asked; word for word as on #215's review page otherwise. No notice line, no new notice version. The words
     // before were mzoagf.
-    privacy: { words: '1f6i5bx', on: '2026-11-23', by: 'FID 6786' },
+    privacy: { words: '1f6i5bx', on: '2026-11-22', by: 'FID 6786' },
   },
 };
 

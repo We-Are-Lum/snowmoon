@@ -124,7 +124,7 @@ export interface PicturesState {
   defaultModel?: string;
   /** Whether pictures can be added (0043_chapter_picture_additions applied). */
   adding?: boolean;
-  /** Lettering's words (part C; the server's, reread by the owner 2026-11-23): the preview, the line before Make, the open refusal, the mismatch. */
+  /** Lettering's words (part C; the server's, reread by the owner 2026-11-22): the preview, the line before Make, the open refusal, the mismatch. */
   lettering?: LetteringW;
 }
 export interface PictureItem {

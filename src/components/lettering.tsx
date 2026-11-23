@@ -5,7 +5,7 @@ import type { LetteringPhrase, LetteringRecord, Parsed } from '~/lib/images/lett
 /**
  * Lettering's pieces of screen (part C; owner, 2026-11-22), shared by the remix screen, its preview, a challenge
  * picture's page and the admins' chapter pictures. Every word comes from the server (src/lib/images/lettering.ts
- * LETTERING_WORDING, through letteringWords); reread by the owner 2026-11-23 (#215).
+ * LETTERING_WORDING, through letteringWords); reread by the owner 2026-11-22 (#215).
  */
 export type LetteringW = {
   previewHead: string;

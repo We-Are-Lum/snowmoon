@@ -2,7 +2,7 @@
  * Words a closed model draws in a picture (lettering, part C; owner's decisions of 2026-11-18 to 2026-11-22). Pure: no
  * database, no network, no server-only import, so the make screens (for the "Words to draw" preview), the server, the
  * tests and check:principles P8j all run the same rules. Drafted on branch closed-lettering (scripts/lib/lettering-draft.ts,
- * 2026-11-18) by the coding agent (Claude, a closed model by Anthropic); wired in on branch lettering. Wording reread by the owner 2026-11-23 (#215).
+ * 2026-11-18) by the coding agent (Claude, a closed model by Anthropic); wired in on branch lettering. Wording reread by the owner 2026-11-22 (#215).
  *
  * The rules (owner):
  * - Only words in double quotation marks, straight or curly, are lettering; at most 3 phrases, 8 words and 48
@@ -88,7 +88,7 @@ export function phraseSource(text: string, blocks: BookBlocks, fid: number): Let
 // The prompt's lettering line, in place of the no-text line, for these pictures only.
 // ---------------------------------------------------------------------------------------------------------------------
 const listed = (ps: string[]) => (ps.length === 1 ? `"${ps[0]}"` : `${ps.slice(0, -1).map((p) => `"${p}"`).join(', ')} and "${ps[ps.length - 1]}"`);
-/** Drafted by the coding agent (2026-11-18; the 10-picture test's line, with "well inside the edges" for the pad); reread by the owner 2026-11-23. */
+/** Drafted by the coding agent (2026-11-18; the 10-picture test's line, with "well inside the edges" for the pad); reread by the owner 2026-11-22. */
 export const letteringLine = (ps: string[]) =>
   `Draw exactly ${ps.length === 1 ? 'these words' : 'these words, each where the change puts it'}, spelled exactly as written, and no other lettering, logos or signs with words: ${listed(ps)}. Put them in the upper half of the picture, well inside the edges.`;
 
@@ -132,7 +132,7 @@ export const READERS: Record<'OpenAI' | 'Google', Reader> = {
 };
 export const readerFor = (maker: string): Reader | null => (maker === 'OpenAI' || maker === 'Google' ? READERS[maker] : null);
 export const READ_MAX_TOKENS = 1500;
-/** The reader's one instruction (the coding agent's, the 2026-11-18 test's; kept by the owner 2026-11-23). It never contains the words asked for. */
+/** The reader's one instruction (the coding agent's, the 2026-11-18 test's; kept by the owner 2026-11-22). It never contains the words asked for. */
 export const READ_TEXT_INSTRUCTION = [
   'You transcribe writing in pictures. List every piece of visible writing in the picture (a sign, a banner, a label, a caption, a printed or painted word), exactly as drawn: the same letters, capitals, spelling and punctuation, even where it is misspelled, oddly spaced or partly cut off. Never correct, complete or guess at a word you cannot see; transcribe only what is there.',
   'Give one entry per separate piece of writing, in reading order. Join the lines of one piece with a single space. Set cut_off to true for a piece that runs off an edge of the picture. If there is no writing at all, return an empty list.',
@@ -235,7 +235,7 @@ export function p8jProblems(pictures: readonly LetteredPicture[], blocks: Readon
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-// The words: drafted by the coding agent (2026-11-22); reread by the owner 2026-11-23 (#215: "reread, with these changes"),
+// The words: drafted by the coding agent (2026-11-22); reread by the owner 2026-11-22 (#215: "reread, with these changes"),
 // with his one change to warning and warningAdmin ("if the words aren't exactly yours" becomes "if the words aren't
 // exactly the ones in quotation marks"); everything else as drafted.
 // ---------------------------------------------------------------------------------------------------------------------
