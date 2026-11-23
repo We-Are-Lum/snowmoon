@@ -17,8 +17,9 @@ import '../styles/voice.css';
  * consent, pick a voice, record the whole speech with the words scrolling, convert it with ElevenLabs, check it word
  * for word, redo one sentence, accept a private draft; or listen to the ready-made reading.
  *
- * The raw take lives in this tab only (a Blob in a ref), is sent once for conversion and dropped right after, whatever
- * the answer; it is never stored by the site. Leaving the page before Accept discards everything.
+ * The raw take stays on the person's device (IndexedDB, under their FID and the speech) until they remove it or record
+ * again, and is sent only when they press Convert; it is never stored by the site. Each converted take is kept as their
+ * private draft as soon as it comes back (own-voice-v3, reread by Nate 2026-11-22).
  */
 
 interface Choice { presetId: string; name: string; description: string; candidate: number; generatedVoiceId: string; previewUrl: string; saved: boolean }
@@ -698,7 +699,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
               ) : (
                 <>
                   <p className="vr-note">
-                    About {totalWords} words, {mmss(estMinutes * 60)} at your pace. The words scroll while you read; your recording stays in this tab until you send it.
+                    About {totalWords} words, {mmss(estMinutes * 60)} at your pace. The words scroll while you read; your recording stays on this device until you remove it or record again, and is sent to be converted only when you press Convert.
                   </p>
                   <label className="vr-pace">
                     Pace: {wpm} words a minute
