@@ -2,7 +2,8 @@
 -- storyboard-scene; docs/proposals/storyboard-scene.md v2). Not numbered until merge: it takes the next free number then,
 -- checked against origin/main and production. NOT APPLIED until Nate applies it; the branch merges only after he says
 -- "applied". Drafted by the coding agent (Claude, a closed model by Anthropic); tested in PGlite by the agent
--- (npm run test:voice, every migration in order).
+-- (npm run test:voice, every migration in order). Version 2 (2026-11-23): the check is null-safe (coalesce): version 1
+-- let a scene with no setting through, because a NULL check passes; its own read-back caught it.
 -- Requires 0046_ephelion_voice_publish.sql (applied on production 2026-11-22).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:
@@ -25,8 +26,8 @@ alter table studio.voice_boards drop constraint if exists voice_boards_scene_che
 alter table studio.voice_boards add constraint voice_boards_scene_check check (
   scene is null or (
     jsonb_typeof(scene) = 'object'
-    and jsonb_typeof(scene -> 'setting') = 'string'
-    and char_length(scene ->> 'setting') <= 600
+    and coalesce(jsonb_typeof(scene -> 'setting') = 'string', false)
+    and coalesce(char_length(scene ->> 'setting') <= 600, false)
     and (jsonb_typeof(scene -> 'kept') is null or jsonb_typeof(scene -> 'kept') = 'null' or (scene ->> 'kept') ~ '^[0-9a-f]{64}$')
   )
 );
@@ -39,8 +40,8 @@ alter table studio.voice_boards drop constraint if exists voice_boards_scene_che
 alter table studio.voice_boards add constraint voice_boards_scene_check check (
   scene is null or (
     jsonb_typeof(scene) = 'object'
-    and jsonb_typeof(scene -> 'setting') = 'string'
-    and char_length(scene ->> 'setting') <= 600
+    and coalesce(jsonb_typeof(scene -> 'setting') = 'string', false)
+    and coalesce(char_length(scene ->> 'setting') <= 600, false)
     and (jsonb_typeof(scene -> 'kept') is null or jsonb_typeof(scene -> 'kept') = 'null' or (scene ->> 'kept') ~ '^[0-9a-f]{64}$')
   )
 );

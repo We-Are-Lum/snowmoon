@@ -13,6 +13,9 @@ import { angleById, COVERAGE, SCENE, shotPrompt, shotReferences, type Shot } fro
 import { boardSource, latestBoard, pictureBytes } from './board-store';
 import { signTicket } from './ticket';
 import { CLOSING } from './closing';
+import { CHAT } from '../config';
+import { guideRecipe, type GuideRef } from './guide';
+import { guideDraftById } from './guide-server';
 
 /**
  * A picture for one shot of a storyboard (Nate, 2026-11-21): the challenge's picture code, as the admins' chapter
@@ -53,7 +56,7 @@ const kindOf = (b: Buffer) => (b[0] === 0x89 && b.subarray(1, 4).toString() === 
 
 export async function makeShotPicture(sql: Sql, fid: number, request: Request, raw: unknown, where: Where, deps: ShotDeps): Promise<Result> {
   if (deps.real && !realPicturesFor(fid)) return no(403, 'Pictures for storyboards are not switched on yet.', { reason: 'not-yet' });
-  const b = (raw ?? {}) as { draftId?: unknown; shotKey?: unknown; description?: unknown; angle?: unknown; styleId?: unknown; characterIds?: unknown; model?: unknown; notice?: unknown };
+  const b = (raw ?? {}) as { draftId?: unknown; shotKey?: unknown; description?: unknown; angle?: unknown; styleId?: unknown; characterIds?: unknown; model?: unknown; notice?: unknown; guide?: unknown };
   const draft = await boardSource(sql, fid, String(b.draftId ?? ''));
   if (!draft) return no(404, 'Not found');
   const board = await latestBoard(sql, draft.id, fid);
@@ -96,32 +99,88 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   // time), then the last kept shot in the scene before it (continuity; never an insert). The scene sends the look only;
   // an insert, the look only if one is chosen; the closing background, none.
   const refs: Buffer[] = [];
-  const references: { role: 'anchor-scene' | 'anchor-look' | 'continuity'; name: string; versionId?: string; shotKey?: string; url?: string; sha256: string }[] = [];
+  const references: { role: GuideRef['role']; name: string; versionId?: string; shotKey?: string; url?: string; sha256: string }[] = [];
   const sceneKept = board?.scene?.kept ?? null;
   const plan = inScene ? shotReferences(shots, String(b.shotKey)) : null;
-  if (inScene) {
-    if (!sceneKept) return no(400, 'Make and keep the scene first: every shot in the scene uses it.', { reason: 'no-scene' });
-    const bytes = await pictureBytes(sql, draft.id, fid, SCENE.key, sceneKept);
-    if (!bytes) return no(503, 'The scene picture could not be read. Try again in a moment.');
-    refs.push(Buffer.from(bytes));
-    references.push({ role: 'anchor-scene', name: 'the scene', shotKey: SCENE.key, sha256: sceneKept });
+  if (inScene && !sceneKept) return no(400, 'Make and keep the scene first: every shot in the scene uses it.', { reason: 'no-scene' });
+  // The guide's draft this picture answers (P2's ruling, Nate 2026-11-22): its stored message, the person's request
+  // before it, and the references as sent (the guide's, or the person's change to them).
+  const g = b.guide && typeof b.guide === 'object' ? (b.guide as { messageId?: unknown; clothingId?: unknown; references?: unknown }) : null;
+  const gd = g ? await guideDraftById(sql, draft.id, fid, String(g.messageId ?? '')) : null;
+  if (g && !gd) return no(400, 'That draft of the guide is not on this storyboard.');
+  const clothing = g && g.clothingId ? await guideDraftById(sql, draft.id, fid, String(g.clothingId)) : null;
+  let drafted: { prompt: string; references: GuideRef[] } | null = null;
+  if (gd) {
+    const d = gd.guide.draft as Record<string, unknown> | null;
+    if (sceneShot) {
+      const setting = typeof d?.setting === 'string' ? d.setting : null;
+      if (!setting) return no(400, 'That draft is not a setting.');
+      const wear = (clothing?.guide.draft as { clothing?: string } | null)?.clothing;
+      // The scene's one reference (his look) is the site's, not the guide's choice: filled in below, as sent.
+      drafted = { prompt: [setting, wear].filter(Boolean).join(' '), references: [] };
+    } else {
+      if (d?.shotKey !== b.shotKey || typeof d?.prompt !== 'string') return no(400, 'That draft is for another shot.');
+      drafted = { prompt: d.prompt, references: Array.isArray(d.references) ? (d.references as GuideRef[]) : [] };
+    }
   }
-  for (const c of chosen) {
-    const front = (await designByVersion(sql, c!.versionId).catch(() => null))?.shown.body.views.front;
-    if (!front?.url || !front.sha256) continue;
-    const bytes = await deps.reference(front.url, front.sha256);
-    if (!bytes) return no(503, `${c!.title}’s sheet picture could not be read. Try again in a moment.`);
-    refs.push(bytes);
-    references.push({ role: 'anchor-look', name: c!.title, versionId: c!.versionId, url: front.url, sha256: front.sha256 });
-  }
-  if (plan?.continuity) {
-    const prev = shots.find((s) => s.key === plan.continuity)!;
-    const bytes = await pictureBytes(sql, draft.id, fid, prev.key, prev.kept!);
-    if (!bytes) return no(503, 'The previous shot’s picture could not be read. Try again in a moment.');
-    refs.push(Buffer.from(bytes));
-    references.push({ role: 'continuity', name: `shot ${shots.indexOf(prev) + 1} as kept`, shotKey: prev.key, sha256: prev.kept! });
+  const sentRefs: { role: GuideRef['role']; ref: string }[] | null = g && !sceneShot
+    ? (Array.isArray(g.references) ? g.references : []).slice(0, IMAGES.maxReferences + 1).map((r) => ({ role: String((r as { role?: unknown }).role ?? '') as GuideRef['role'], ref: String((r as { ref?: unknown }).ref ?? '') }))
+    : null;
+  if (sentRefs) {
+    if (sentRefs.length > IMAGES.maxReferences) return no(400, `At most ${IMAGES.maxReferences} reference pictures`);
+    // An insert never takes the scene or a shot of the scene (proposal v2, section 3b).
+    if (insert && sentRefs.some((r) => r.ref === 'scene' || r.role === 'continuity')) return no(400, 'An insert takes neither the scene nor a previous shot.');
+    for (const r of sentRefs) {
+      if (r.ref === SCENE.key) {
+        if (!sceneKept) return no(400, 'No scene is kept yet.');
+        const bytes = await pictureBytes(sql, draft.id, fid, SCENE.key, sceneKept);
+        if (!bytes) return no(503, 'The scene picture could not be read. Try again in a moment.');
+        refs.push(Buffer.from(bytes));
+        references.push({ role: r.role, name: 'the scene', shotKey: SCENE.key, sha256: sceneKept });
+        continue;
+      }
+      const shotRef = shots.find((s) => s.key === r.ref && s.kept);
+      if (shotRef) {
+        if (shotRef.key === b.shotKey) return no(400, 'A shot can\u2019t be its own reference.');
+        const bytes = await pictureBytes(sql, draft.id, fid, shotRef.key, shotRef.kept!);
+        if (!bytes) return no(503, 'A kept shot could not be read. Try again in a moment.');
+        refs.push(Buffer.from(bytes));
+        references.push({ role: r.role, name: `shot ${shots.indexOf(shotRef) + 1} as kept`, shotKey: shotRef.key, sha256: shotRef.kept! });
+        continue;
+      }
+      const c = characters.find((x) => x.versionId === r.ref);
+      const front = c ? (await designByVersion(sql, c.versionId).catch(() => null))?.shown.body.views.front : null;
+      if (!c || !front?.url || !front.sha256) return no(400, `A reference isn\u2019t a picture of this storyboard (${r.ref}).`);
+      const bytes = await deps.reference(front.url, front.sha256);
+      if (!bytes) return no(503, `${c.title}\u2019s sheet picture could not be read. Try again in a moment.`);
+      refs.push(bytes);
+      references.push({ role: r.role, name: c.title, versionId: c.versionId, url: front.url, sha256: front.sha256 });
+    }
+  } else {
+    if (inScene && sceneKept) {
+      const bytes = await pictureBytes(sql, draft.id, fid, SCENE.key, sceneKept);
+      if (!bytes) return no(503, 'The scene picture could not be read. Try again in a moment.');
+      refs.push(Buffer.from(bytes));
+      references.push({ role: 'anchor-scene', name: 'the scene', shotKey: SCENE.key, sha256: sceneKept });
+    }
+    for (const c of chosen) {
+      const front = (await designByVersion(sql, c!.versionId).catch(() => null))?.shown.body.views.front;
+      if (!front?.url || !front.sha256) continue;
+      const bytes = await deps.reference(front.url, front.sha256);
+      if (!bytes) return no(503, `${c!.title}’s sheet picture could not be read. Try again in a moment.`);
+      refs.push(bytes);
+      references.push({ role: 'anchor-look', name: c!.title, versionId: c!.versionId, url: front.url, sha256: front.sha256 });
+    }
+    if (plan?.continuity) {
+      const prev = shots.find((s) => s.key === plan.continuity)!;
+      const bytes = await pictureBytes(sql, draft.id, fid, prev.key, prev.kept!);
+      if (!bytes) return no(503, 'The previous shot’s picture could not be read. Try again in a moment.');
+      refs.push(Buffer.from(bytes));
+      references.push({ role: 'continuity', name: `shot ${shots.indexOf(prev) + 1} as kept`, shotKey: prev.key, sha256: prev.kept! });
+    }
   }
   if (refs.length > IMAGES.maxReferences) return no(400, `At most ${IMAGES.maxReferences} reference pictures`);
+  if (sceneShot && drafted) drafted.references = references.map((r) => ({ role: r.role, ref: r.shotKey ?? r.versionId ?? '', why: 'his look, the scene picture’s one reference' }));
   const prompt = `${shotPrompt({ description, angle: angle?.id ?? '' }, style, chosen as { title: string; text: string }[], inScene)}\n\n${IMAGES.suffix}`;
   const worst = reserveUsd(m, { width: IMAGES.viewSize.width, height: IMAGES.viewSize.height * Math.max(1, refs.length) });
   const paid = await deps.paid(sql, fid, request, {
@@ -149,6 +208,14 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
     style: style ? { versionId: style.versionId, title: style.title } : null,
     characters: chosen.map((c) => ({ versionId: c!.versionId, title: c!.title })),
     references,
+    // P2's ruling (Nate, 2026-11-22): the person's request word for word, the guide's model, the prompt it wrote and the
+    // one sent, each reference with who chose it and why, and every edit. A picture the person wrote alone says so.
+    guided: guideRecipe({
+      guide: gd ? { model: gd.guide.model ?? 'unknown', host: CHAT.route, open: !/stand-in/.test(gd.guide.model ?? '') } : null,
+      request: gd?.request ? { text: gd.request.text, id: gd.request.id, madeAt: gd.request.madeAt } : null,
+      drafted,
+      sent: { prompt: description, references: references.map((r) => ({ role: r.role, ref: r.shotKey ?? r.versionId ?? '' })) },
+    }),
     // The scene this picture belongs to (a shot in the scene), the camera and who set it, and whether it is an insert.
     ...(sceneShot ? { setting: { text: description, by: `written by FID ${fid}` } } : {}),
     ...(inScene ? { scene: { sha256: sceneKept, setting: board?.scene?.setting ?? null, by: `written by FID ${fid}` }, continuity: plan?.continuity ?? null } : {}),

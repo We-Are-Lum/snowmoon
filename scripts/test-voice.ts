@@ -46,12 +46,13 @@ await pg.exec(`create role anon nologin; create role authenticated nologin; crea
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 // Published sheets to choose from (slice 2): one style, one character.
 await pg.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
-const SHEET_BODY = (title: string, text: string) => JSON.stringify({ title, text, samples: [], views: {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null });
+const SHEET_BODY = (title: string, text: string, front?: { url: string; sha256: string }) => JSON.stringify({ title, text, samples: [], views: front ? { front } : {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null });
 await pg.query(`insert into studio.entities (id, work_id, kind, name) values ('00000001-0000-4000-8000-000000000101','snowmoon','style','Ink and wash'), ('00000001-0000-4000-8000-000000000102','snowmoon','character','Ephelion')`);
 await pg.query(`insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id, status) values ('00000008-0000-4000-8000-000000000101','snowmoon','design',6786,'00000001-0000-4000-8000-000000000101','published'), ('00000008-0000-4000-8000-000000000102','snowmoon','design',6786,'00000001-0000-4000-8000-000000000102','published')`);
 await pg.query(`insert into studio.element_versions (id, element_id, version_no, body) values ('00000009-0000-4000-8000-000000000101','00000008-0000-4000-8000-000000000101',1,$1), ('00000009-0000-4000-8000-000000000102','00000008-0000-4000-8000-000000000102',1,$2)`, [
   SHEET_BODY('Ink and wash', 'Ink and wash: loose black ink lines, grey washes, paper texture.'),
-  SHEET_BODY('Ephelion', 'Lord Ephelion: a tall man in a dark coat with a high collar.'),
+  // A front view, as every published look has (the stand-in picture deps never fetch it).
+  SHEET_BODY('Ephelion', 'Lord Ephelion: a tall man in a dark coat with a high collar.', { url: 'https://pictures.snowmoon.party/images/readers/test-ephelion.jpg', sha256: 'f'.repeat(64) }),
 ]);
 const pgServer = new PGLiteSocketServer({ db: pg, port: PG_PORT, host: '127.0.0.1' });
 await pgServer.start();
@@ -123,7 +124,7 @@ for (const [k, v] of [['VERCEL', '1'], ['VERCEL_ENV', 'production'], ['VERCEL_EN
   delete process.env[k];
 }
 check('S. a non-admin is not let in during the admin trial', !voiceAllowed(STRANGER) && voiceAllowed(NATE) && voiceAllowed(GARANCE));
-const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]', 'drafts/[id]/check', 'boards', 'boards/picture', 'boards/keep', 'boards/closing', 'publish', 'publish/[id]'];
+const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]', 'drafts/[id]/check', 'boards', 'boards/picture', 'boards/keep', 'boards/closing', 'publish', 'publish/[id]', 'guide'];
 for (const r of routeFiles) {
   const mod = await route(r);
   const h = mod.POST ?? mod.GET ?? mod.DELETE;
@@ -433,7 +434,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   const setting = '(test script\'s words) A tall window over a grey harbour, early light, a lectern of dark wood.';
   r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: 'scene', description: setting, angle: 'low', styleId: style, characterIds: [eph] }) }));
   const sc = (await r.json()) as { image: string; sha256: string; ticket: string; recipe: { kind: string; prompt: string; angle: string; references: { role: string }[]; setting: { text: string } } };
-  check('S2. the scene: the person\'s setting first, word for word, always the wide master (a sent camera is ignored), his look its one reference', r.status === 200 && sc.recipe.kind === 'storyboard-scene' && sc.recipe.prompt.startsWith(setting) && sc.recipe.angle === 'wide' && /Camera: a wide shot/.test(sc.recipe.prompt) && sc.recipe.references.map((x) => x.role).join() === 'anchor-look' && sc.recipe.setting.text === setting && !/The same place, light/.test(sc.recipe.prompt));
+  check('S2. the scene: the person\'s setting first, word for word, always the wide master (a sent camera is ignored), his look its one reference', r.status === 200 && sc.recipe.kind === 'storyboard-scene' && sc.recipe.prompt.startsWith(setting) && sc.recipe.angle === 'wide' && /Camera: a wide shot/.test(sc.recipe.prompt) && sc.recipe.references.map((x) => x.role).join() === 'anchor-look' && sc.recipe.setting.text === setting && !/The same place, light/.test(sc.recipe.prompt), JSON.stringify({ s: r.status, kind: sc.recipe?.kind, angle: sc.recipe?.angle, refs: sc.recipe?.references?.map((x) => x.role), start: sc.recipe?.prompt?.slice(0, 60) }));
   check('S2. ... one look a picture: two characters are refused (400)', (await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: 'scene', description: setting, characterIds: [eph, eph] }) }))).status === 400);
   check('S2. ... kept like a shot\'s picture', (await boardKeep.POST(as(NATE, { method: 'POST', body: JSON.stringify({ ticket: sc.ticket, image: sc.image }) }))).status === 200);
   r = await boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, cuts, shots: s2.shots, scene: { setting, kept: sc.sha256 } }) }));
@@ -451,7 +452,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   check('B. nothing is stored before Keep (only the try is counted; the scene is the one kept picture so far)', (await sql`select count(*)::int n from studio.voice_board_pictures where shot_key <> 'scene'`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_board_asks where draft_id = ${acc.id} and shot_key <> 'scene'`)[0].n === 1);
   {
     const rr = p1.recipe as unknown as { references: { role: string; sha256: string }[]; prompt: string; scene: { sha256: string; setting: string }; camera: { angle: string; by: string }; coverage: { name: string }; insert: boolean; continuity: string | null };
-    check('S2. shot 1 sends the scene and his look as anchors, in that order, and no previous shot', rr.references.map((x) => x.role).join() === 'anchor-scene,anchor-look' && rr.references[0].sha256 === sc.sha256 && rr.continuity === null);
+    check('S2. shot 1 sends the scene and his look as anchors, in that order, and no previous shot', rr.references.map((x) => x.role).join() === 'anchor-scene,anchor-look' && rr.references[0].sha256 === sc.sha256 && rr.continuity === null, JSON.stringify({ refs: rr.references.map((x) => x.role), c: rr.continuity }));
     check('S2. ... its prompt adds the one same-scene line; its recipe names the scene, the camera and who set it, the coverage rule, not an insert', /The same place, light, clothes and person as the first reference pictures\./.test(rr.prompt) && rr.scene.sha256 === sc.sha256 && rr.scene.setting === setting && rr.camera.angle === 'low' && rr.coverage.name === 'scene-coverage' && rr.insert === false);
   }
   const keep = (ticket: string, image: string, fid = NATE) => boardKeep.POST(as(fid, { method: 'POST', body: JSON.stringify({ ticket, image }) }));
@@ -553,7 +554,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
       const rows = await sql`select shot_key, recipe from studio.voice_board_pictures where draft_id = ${acc.id} and fid = ${NATE}`;
       const r2 = rows.find((x) => x.shot_key === sv.shots[1].key)?.recipe as { references: { role: string; shotKey?: string }[]; continuity: string | null } | undefined;
       const r3 = rows.find((x) => x.shot_key === sv.shots[2]?.key)?.recipe as { continuity: string | null } | undefined;
-      check('S2. shot 2 sends the scene, then shot 1 as kept (continuity); shot 3 follows shot 2', r2?.references.map((x) => x.role).join() === 'anchor-scene,continuity' && r2.continuity === sv.shots[0].key && r2.references[1].shotKey === sv.shots[0].key && (sv.shots.length < 3 || r3?.continuity === sv.shots[1].key), JSON.stringify(r2?.references));
+      check('S2. shot 2 sends the scene, then shot 1 as kept (continuity); shot 3 follows the last kept shot on the saved board', r2?.references.map((x) => x.role).join() === 'anchor-scene,continuity' && r2.continuity === sv.shots[0].key && r2.references[1].shotKey === sv.shots[0].key && (sv.shots.length < 3 || [sv.shots[0].key, sv.shots[1].key].includes(r3?.continuity ?? '')), JSON.stringify(r2?.references));
     }
     const look = "(test script's words) Snow falling over a dark harbour, the lamps out.";
     r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: 'end', description: look }) }));
@@ -667,7 +668,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   check('B2. why "Make the picture" is off, in one line: real pictures off, no tries left, no description (no camera line: every shot has one)', why({}) === 'Real pictures are off for now.' && /No tries left/.test(why({ standIn: true, tries: 3 }) ?? '') && /No description yet/.test(why({ standIn: true, description: ' ' }) ?? '') && why({ standIn: true }) === null && why({ standIn: true, angle: '' }) === null);
   const page = readFileSync(path.join(ROOT, 'src/components/voice-board.tsx'), 'utf8');
   check('B2. the page: one Style, Ephelion\'s look and Model for every picture; no per-shot style, characters list or model list', /Settings for every picture/.test(page) && /Ephelion&rsquo;s look/.test(page) && !/<ModelRow\b/.test(page) && !/Characters \(published sheets\)/.test(page) && !/name=\{`angle-/.test(page));
-  check('B2. ... each shot keeps its own words and a camera dropdown; the cuts are a sentence list with "New shot starts here"', /What the shot shows \(your words\)/.test(page) && /<span className="vb-label">Camera<\/span>/.test(page) && !/Choose a camera/.test(page) && /New shot starts here/.test(page));
+  check('B2. ... each shot keeps its own words and a camera dropdown; the cuts are a sentence list with "New shot starts here"', /What the shot shows \(your words\)/.test(page) && /<span className="vb-label">\s*Camera\b/.test(page) && !/Choose a camera/.test(page) && /New shot starts here/.test(page));
   check('B2. the play-through and the shot show the speech\'s own words (never wordsIn, the transcription\'s)', !/wordsIn\(/.test(page) && /sentenceText\(sentenceAt\(t, now\)\)/.test(page));
 }
 
@@ -840,6 +841,109 @@ check('$. the caps are placeholders in config, in credits and dollars', VOICE.ca
   check('R. a draft that has its check can\'t be checked again (409), and nothing is called', (await post(GARANCE, j.id)).status === 409 && stub.calls.filter((c) => c.path === '/v1/speech-to-text').length === sttBefore + 1);
   check('R. ... nor a draft id that isn\'t one (404)', (await post(GARANCE, 'nope')).status === 404);
   check('R. the cost is counted as a transcription, measured against its estimate', (await sql`select coalesce(sum(calls),0)::int n from studio.voice_costs where kind = 'transcribe' and verdict = 'ok'`)[0].n >= 1);
+}
+
+// GU. The guide (Nate, 2026-11-22/23; P2's "Storyboard pictures" ruling): a dialogue on a stand-in guide (no model).
+{
+  const guideRoute = await route('guide');
+  const g = await import('../src/lib/voice/guide');
+  const B = await import('../src/lib/voice/board');
+  // A performance draft of Nate's with a timeline (the speech's sentences, 3 s each), as a kept take has.
+  const per = 3;
+  const tlG = { seconds: speech.sentences.length * per, words: speech.sentences.flatMap((x, i) => x.words.map((w, k) => ({ text: w, start: i * per + (k * per) / x.words.length, end: i * per + ((k + 0.8) * per) / x.words.length }))), sentences: speech.sentences.map((x, i) => ({ n: x.n, start: i * per, end: (i + 1) * per - 0.1 })) };
+  const [{ id: gd }] = await sql`insert into studio.voice_drafts (fid, kind, speech_id, preset_id, recipe) values (${NATE}, 'performance', ${speech.id}, 'ephelion-light-russian', ${sql.json({ provider: 'ElevenLabs', model: 'eleven_multilingual_sts_v2', takes: [{ role: 'take', takeSha256: 'a'.repeat(64), convertedSha256: 'e'.repeat(64) }], speech: { id: speech.id, title: speech.title, label: speech.label, source: speech.source }, timeline: tlG, check: { sentences: speech.sentences.length, matched: speech.sentences.length, unmatched: [] }, preset: { name: 'Light' } } as never)}) returning id`;
+  const gpost = (body: Record<string, unknown>, fid = NATE) => guideRoute.POST(as(fid, { method: 'POST', body: JSON.stringify({ draftId: gd, ...body }) }));
+  const gget = async (fid = NATE) => (await guideRoute.GET(as(fid, {}, `http://localhost/api/voice/guide?draft=${gd}`))).json() as Promise<{ messages: { id: string; n: number; role: string; text: string; draft: unknown; model: string | null }[]; model: string }>;
+  const bget = async () => (await (await boards.GET(as(NATE, {}, `http://localhost/api/voice/boards?draft=${gd}`))).json()) as { board: { cuts: number[]; shots: Shot[] }; sheets: { styles: { id: string }[]; characters: { id: string; title: string; text: string }[] } };
+  const b0 = await bget();
+  const lookG = b0.sheets.characters[0];
+  const styleG = b0.sheets.styles[0].id;
+  const lookArg = { id: lookG.id, title: lookG.title, text: lookG.text };
+  check('GU. the dialogue starts empty, and names its model (a stand-in on a local copy: no model is called)', (await gget()).messages.length === 0 && /stand-in/.test((await gget()).model));
+  check('GU. someone else\'s draft reads as missing (404)', (await gpost({ step: 'setting', text: 'x' }, GARANCE)).status === 404);
+  const asked = '(test script\'s words) An empty lecture hall in the Arctic, cold blue morning light, he stands at a lectern.';
+  let r = await gpost({ step: 'setting', text: asked, look: lookArg });
+  let j = (await r.json()) as { person: { id: string; text: string }; guide: { id: string; draft: { setting: string }; model: string } };
+  check('GU. 1. the scene: the person\'s message is kept word for word, and the guide drafts a setting, named with its model', r.status === 200 && j.person.text === asked && typeof j.guide.draft.setting === 'string' && j.guide.draft.setting.length > 0 && /stand-in/.test(j.guide.model));
+  const settingMsg = j.guide.id;
+  const leak = `(test) ${speech.sentences[2].text}`;
+  r = await gpost({ step: 'setting', text: leak });
+  const leakJ = (await r.json()) as { error?: string };
+  const persons = (await gget()).messages.filter((m) => m.role === 'person').length;
+  check('GU. a draft that repeats the speech\'s words is refused (P2: the guide never writes them), and the person\'s message is kept', r.status === 422 && /speech's words/.test(leakJ.error ?? '') && persons === 2, `${r.status} ${leakJ.error} persons ${persons}`);
+  const wear = '(test script\'s words) A long grey coat over his usual clothes.';
+  r = await gpost({ step: 'clothing', text: wear, look: lookArg });
+  j = (await r.json()) as typeof j;
+  const clothingMsg = j.guide.id;
+  const clothingText = (j.guide.draft as unknown as { clothing: string }).clothing;
+  const save = async (shots: Shot[], cuts: number[], scene: Record<string, unknown>) => (await (await boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: gd, cuts, shots: shots.map((x) => ({ ...x, styleId: styleG, characterIds: x.insert ? x.characterIds : [lookG.id] })), scene }) }))).json()) as { shots: Shot[]; cuts: number[]; scene: { setting: string; clothing?: string; kept: string | null; settingFrom?: string; clothingFrom?: string } };
+  const settingText = ((await gget()).messages.find((m) => m.id === settingMsg)!.draft as { setting: string }).setting;
+  let sv = await save(b0.board.shots, b0.board.cuts, { setting: settingText, clothing: clothingText, settingFrom: settingMsg, clothingFrom: clothingMsg });
+  check('GU. 2. his clothing becomes part of the scene; the board keeps which guide messages they came from', sv.scene.clothing === clothingText && sv.scene.settingFrom === settingMsg && sv.scene.clothingFrom === clothingMsg);
+  // The scene picture, from the guide's drafts.
+  r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: gd, shotKey: 'scene', description: B.sceneWords(sv.scene), styleId: styleG, characterIds: [lookG.id], guide: { messageId: settingMsg, clothingId: clothingMsg } }) }));
+  const scP = (await r.json()) as { image: string; ticket: string; sha256: string; recipe: { guided: import('../src/lib/voice/guide').GuideRecipe; prompt: string } };
+  check('GU. the scene picture\'s recipe keeps the person\'s request word for word, the guide\'s model and draft, and no edits', r.status === 200 && scP.recipe.guided.request?.text === asked && /stand-in/.test(scP.recipe.guided.guide?.model ?? '') && scP.recipe.guided.prompt.by === 'guide' && scP.recipe.guided.edits.length === 0 && g.guideRecipeProblems(scP.recipe.guided).length === 0, JSON.stringify(scP.recipe.guided).slice(0, 300));
+  await boardKeep.POST(as(NATE, { method: 'POST', body: JSON.stringify({ ticket: scP.ticket, image: scP.image }) }));
+  sv = await save(sv.shots, sv.cuts, { ...sv.scene, kept: scP.sha256 });
+  // 3. The plan, from the speech's numbered sentences.
+  r = await gpost({ step: 'plan', text: '(test script\'s words) Plan it: start wide, end wide, a close-up in the middle.', look: lookArg });
+  const pj = (await r.json()) as { guide: { draft: { plan: import('../src/lib/voice/board').PlanShot[] } } };
+  const planG = pj.guide.draft.plan;
+  check('GU. 3. the plan covers every sentence once, in order, by number only (never the words)', r.status === 200 && B.planProblems(tlG as never, planG).length === 0 && !JSON.stringify(planG).includes(speech.sentences[1].text.slice(0, 30)));
+  const applied = B.planToBoard(tlG as never, planG, sv.shots);
+  sv = await save(applied.shots, applied.cuts, sv.scene);
+  check('GU. ... applied: a cut at each group\'s sentence end, the guide\'s cameras kept (angleBy guide)', sv.shots.length === planG.length && sv.shots.every((x, i) => x.angle === planG[i].camera && x.angleBy === 'guide') && sv.cuts.every((c) => tlG.sentences.some((x) => Math.abs(x.end - c) < 0.02)));
+  // 4. Shot 1: the guide writes its prompt and picks its references; the person edits the prompt, then makes it.
+  const k1 = sv.shots[0].key;
+  const ask1 = '(test script\'s words) Seen from the back of the hall, small at the lectern.';
+  r = await gpost({ step: 'shot', text: ask1, shotKey: k1, look: lookArg });
+  const s1 = (await r.json()) as { guide: { id: string; draft: { prompt: string; references: import('../src/lib/voice/guide').GuideRef[] } } };
+  check('GU. 4. shot 1: the guide\'s prompt from the person\'s words, and its references with why (the scene and his look)', r.status === 200 && s1.guide.draft.references.map((x) => x.ref).join() === `scene,${lookG.id}` && s1.guide.draft.references.every((x) => x.why), JSON.stringify(s1.guide?.draft?.references));
+  const edited = `${s1.guide.draft.prompt} (edited by the test)`;
+  r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: gd, shotKey: k1, description: edited, angle: sv.shots[0].angle, styleId: styleG, characterIds: [lookG.id], guide: { messageId: s1.guide.id, references: s1.guide.draft.references.map((x) => ({ role: x.role, ref: x.ref })) } }) }));
+  const p1G = (await r.json()) as { image: string; ticket: string; sha256: string; recipe: { guided: import('../src/lib/voice/guide').GuideRecipe; references: { role: string }[] } };
+  check('GU. ... its recipe: the request word for word, the guide\'s draft, the prompt as sent, the person\'s edit, each reference chosen by the guide with why', r.status === 200 && p1G.recipe.guided.request?.text === ask1 && p1G.recipe.guided.prompt.draft === s1.guide.draft.prompt && p1G.recipe.guided.prompt.text === edited && p1G.recipe.guided.prompt.by === 'person' && p1G.recipe.guided.edits.some((x) => x.what === 'prompt' && x.after === edited) && p1G.recipe.guided.references.every((x) => x.chosenBy === 'guide' && x.why) && g.guideRecipeProblems(p1G.recipe.guided).length === 0, JSON.stringify(p1G.recipe.guided).slice(0, 400));
+  await boardKeep.POST(as(NATE, { method: 'POST', body: JSON.stringify({ ticket: p1G.ticket, image: p1G.image }) }));
+  sv = await save(sv.shots.map((x, i) => (i === 0 ? { ...x, kept: p1G.sha256, description: edited, guideFrom: s1.guide.id } : x)), sv.cuts, sv.scene);
+  // Shot 2: the guide adds shot 1 as continuity; the person drops his look, recorded as an edit of the references.
+  const k2 = sv.shots[1].key;
+  r = await gpost({ step: 'shot', text: '(test script\'s words) Closer, his hands on the lectern.', shotKey: k2, look: lookArg });
+  const s2 = (await r.json()) as typeof s1;
+  check('GU. shot 2: the guide adds the last kept shot in the scene as continuity', s2.guide.draft.references.map((x) => x.ref).join() === `scene,${lookG.id},${k1}`);
+  const mine = s2.guide.draft.references.filter((x) => x.ref !== lookG.id).map((x) => ({ role: x.role, ref: x.ref }));
+  r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: gd, shotKey: k2, description: s2.guide.draft.prompt, angle: sv.shots[1].angle, styleId: styleG, characterIds: [lookG.id], guide: { messageId: s2.guide.id, references: mine } }) }));
+  const p2G = (await r.json()) as typeof p1G;
+  check('GU. ... the person\'s change to the references is an edit, and the prompt stays the guide\'s', r.status === 200 && p2G.recipe.guided.prompt.by === 'guide' && p2G.recipe.guided.edits.some((x) => x.what === 'references') && p2G.recipe.references.map((x) => x.role).join() === 'anchor-scene,continuity');
+  // 5. A fix by asking.
+  const fix = '(test script\'s words) Make him lean in.';
+  r = await gpost({ step: 'fix', text: fix, shotKey: k2, look: lookArg });
+  const f2 = (await r.json()) as typeof s1;
+  check('GU. 5. a fix by asking: the guide\'s changed prompt for that shot, the request kept word for word', r.status === 200 && f2.guide.draft.prompt.includes('lean in') && (await gget()).messages.some((m) => m.role === 'person' && m.text === fix));
+  // An insert: the guide never sends it the scene or a shot of the scene, and the route refuses them.
+  sv = await save(sv.shots.map((x, i) => (i === 2 ? { ...x, insert: true, angle: '' as const, characterIds: [] } : x)), sv.cuts, sv.scene);
+  if (sv.shots[2]) {
+    r = await gpost({ step: 'shot', text: '(test script\'s words) A family at dinner, the screen behind them.', shotKey: sv.shots[2].key });
+    const i3 = (await r.json()) as typeof s1;
+    check('GU. an insert: the guide sends no scene and no previous shot', r.status === 200 && !i3.guide.draft.references.some((x) => x.ref === 'scene' || x.role === 'continuity'));
+    r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: gd, shotKey: sv.shots[2].key, description: i3.guide.draft.prompt, styleId: styleG, characterIds: [], guide: { messageId: i3.guide.id, references: [{ role: 'anchor-scene', ref: 'scene' }] } }) }));
+    check('GU. ... and the route refuses an insert sent with the scene (400)', r.status === 400);
+  }
+  check('GU. more than 3 references are refused (400)', (await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: gd, shotKey: k2, description: 'x', angle: 'wide', styleId: styleG, characterIds: [lookG.id], guide: { messageId: s2.guide.id, references: [{ role: 'anchor-scene', ref: 'scene' }, { role: 'anchor-look', ref: lookG.id }, { role: 'continuity', ref: k1 }, { role: 'other', ref: k1 }] } }) }))).status === 400);
+  check('GU. a draft of another person\'s dialogue can\'t be claimed (400)', (await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: gd, shotKey: k2, description: 'x', angle: 'wide', guide: { messageId: '00000000-0000-4000-8000-000000000000', references: [] } }) }))).status === 400);
+  // P2u's planted faults: a recipe missing the person's request, the guide's model, or the person's edit.
+  const good = p1G.recipe.guided;
+  const plants: [string, unknown][] = [
+    ['the request removed', { ...good, request: null }],
+    ["the guide's model removed", { ...good, guide: { ...good.guide!, model: '' } }],
+    ['the edit dropped', { ...good, edits: [] }],
+    ["a reference's reason removed", { ...good, references: good.references.map((x) => ({ ...x, why: '' })) }],
+  ];
+  check('GU. P2u: the real recipes pass', g.guideRecipeProblems(good).length === 0 && g.guideRecipeProblems(p2G.recipe.guided).length === 0);
+  check(`GU. P2u: all ${plants.length} planted faults are caught (a missing request first)`, plants.every(([, x]) => g.guideRecipeProblems(x as never).length > 0), plants.filter(([, x]) => !g.guideRecipeProblems(x as never).length).map(([n]) => n).join());
+  // Removing the board removes its dialogue (NEXT_storyboard_guide.sql's delete_voice_board).
+  r = await boards.DELETE(as(NATE, { method: 'DELETE' }, `http://localhost/api/voice/boards?draft=${gd}`));
+  check('GU. removing the storyboard removes its dialogue', r.status === 200 && (await gget()).messages.length === 0);
 }
 
 // M. The allowlist.

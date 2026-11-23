@@ -438,7 +438,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
         ) : !d.making.real ? (
           <>Pictures aren&rsquo;t switched on yet ·{' '}</>
         ) : null}
-        <Link href="/storyboard/record">Back to recording</Link>
+        <Link href="/storyboard/record">Back to recording</Link> · <Link href={`/storyboard/guide/${d.draft.id}`}>Storyboard it with the guide</Link>
       </p>
       {message && <p className="vr-warn" role="alert">{message}</p>}
 

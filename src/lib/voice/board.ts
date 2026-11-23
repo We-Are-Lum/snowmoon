@@ -115,9 +115,11 @@ export interface Shot {
    */
   insert?: boolean;
   /** Who set the camera: the coverage rule (until the person picks one), or the person. */
-  angleBy?: 'rule' | 'person';
+  angleBy?: 'rule' | 'person' | 'guide';
   /** The kept scene's sha256 the person confirmed this shot's kept picture with, after the scene was changed. */
   sceneConfirmed?: string | null;
+  /** The guide's message this shot's prompt came from (the guided flow), if any. */
+  guideFrom?: string | null;
 }
 
 /**
@@ -128,6 +130,44 @@ export interface Shot {
 export interface Scene {
   setting: string;
   kept: string | null;
+  /** What he wears in this scene (the guide's step 2, Nate 2026-11-22): part of the scene's picture. */
+  clothing?: string;
+  /** The guide's messages the setting and the clothing came from, when the person used the guide's drafts. */
+  settingFrom?: string | null;
+  clothingFrom?: string | null;
+}
+/** The scene picture's words: the setting, then what he wears in it. */
+export const sceneWords = (s: Pick<Scene, 'setting' | 'clothing'>) => [s.setting.trim(), (s.clothing ?? '').trim()].filter(Boolean).join(' ');
+
+/**
+ * The guide's shot plan (Nate, 2026-11-22): the speech's sentences in groups, one shot each, in order, with a camera and
+ * whether it is an insert. Sentence numbers only: the plan never carries the speech's words.
+ */
+export interface PlanShot {
+  sentences: number[];
+  camera: AngleId | '';
+  insert: boolean;
+  /** Why the guide chose this camera or insert (one line), shown to the person. */
+  why?: string;
+}
+/** Problems with a plan for this timeline (empty: it can be applied). */
+export function planProblems(t: Timeline, plan: PlanShot[], maxShots: number = SHOT.maxShots): string[] {
+  const out: string[] = [];
+  if (!Array.isArray(plan) || !plan.length) return ['the plan has no shots'];
+  if (plan.length > maxShots) out.push(`at most ${maxShots} shots`);
+  const flat = plan.flatMap((p) => p.sentences);
+  const want = t.sentences.map((x) => x.n);
+  if (flat.join() !== want.join()) out.push('the shots must cover every sentence once, in order');
+  if (plan.some((p) => !p.sentences.length)) out.push('a shot has no sentences');
+  if (plan.some((p) => !p.insert && !angleById(p.camera))) out.push('a shot in the scene needs a camera');
+  return out;
+}
+/** Cuts and shots from a plan: a cut where each group of sentences ends (a sentence end, never inside one). */
+export function planToBoard(t: Timeline, plan: PlanShot[], previous: Shot[] = []): { cuts: number[]; shots: Shot[] } {
+  const ends = new Map(sentenceBoundaries(t).map((b) => [b.after, b.at]));
+  const cuts = plan.slice(0, -1).map((p) => ends.get(p.sentences[p.sentences.length - 1])!).filter((x) => typeof x === 'number');
+  const shots = shotsFromCuts(t, cuts, previous).map((s, i) => ({ ...s, insert: plan[i]?.insert === true, angle: (plan[i]?.camera ?? s.angle) as Shot['angle'], angleBy: 'guide' as const }));
+  return { cuts, shots };
 }
 export const SCENE = { key: 'scene', angle: 'wide' as const } as const;
 export const emptyScene = (): Scene => ({ setting: '', kept: null });
@@ -162,7 +202,8 @@ export function coverageAngles(shots: Pick<Shot, 'start' | 'end' | 'insert'>[]):
 /** Fill the rule's cameras into the shots the person hasn't set (inserts keep theirs, or none). */
 export function applyCoverage<T extends Shot>(shots: T[]): T[] {
   const rule = coverageAngles(shots);
-  return shots.map((s, i) => (s.insert || s.angleBy === 'person' ? s : { ...s, angle: rule[i], angleBy: 'rule' as const }));
+  // A camera the person or the guide set is kept; only the rule's own are refilled.
+  return shots.map((s, i) => (s.insert || (s.angleBy && s.angleBy !== 'rule') ? s : { ...s, angle: rule[i], angleBy: 'rule' as const }));
 }
 
 /**

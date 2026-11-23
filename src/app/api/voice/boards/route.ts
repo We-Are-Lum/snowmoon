@@ -91,8 +91,9 @@ export async function POST(request: Request) {
     // Only the person makes an insert, and picks a camera (the rule fills in the rest: applyCoverage below).
     insert: s.insert === true,
     // A shot saved before the coverage rule has no angleBy: its camera was the person's, so it stays theirs.
-    angleBy: s.angleBy === 'rule' ? 'rule' : 'person',
+    angleBy: s.angleBy === 'rule' ? 'rule' : s.angleBy === 'guide' ? 'guide' : 'person',
     sceneConfirmed: typeof s.sceneConfirmed === 'string' && /^[0-9a-f]{64}$/.test(s.sceneConfirmed) ? s.sceneConfirmed : null,
+    guideFrom: typeof s.guideFrom === 'string' && /^[0-9a-f-]{36}$/.test(s.guideFrom) ? s.guideFrom : null,
   })));
   const withCameras = applyCoverage(shots);
   // The closing card's choices (slice 4): the person's own words for its look, a style, the kept background.
@@ -107,6 +108,9 @@ export async function POST(request: Request) {
   const sc = body.scene ?? (await latestBoard(sql, draft.id, who.fid))?.scene ?? {};
   const scene: Scene = {
     setting: String(sc.setting ?? '').slice(0, VOICE.board.descriptionMaxChars),
+    ...(typeof sc.clothing === 'string' && sc.clothing.trim() ? { clothing: sc.clothing.slice(0, 400) } : {}),
+    settingFrom: typeof sc.settingFrom === 'string' && /^[0-9a-f-]{36}$/.test(sc.settingFrom) ? sc.settingFrom : null,
+    clothingFrom: typeof sc.clothingFrom === 'string' && /^[0-9a-f-]{36}$/.test(sc.clothingFrom) ? sc.clothingFrom : null,
     kept: typeof sc.kept === 'string' && kept.has(`${SCENE.key}:${sc.kept}`) ? sc.kept : null,
   };
   const version = await saveBoard(sql, who.fid, draft.id, cuts, withCameras, closing, scene);
