@@ -47,6 +47,38 @@ for (const h of ['/', '/assistant']) {
   }
 }
 
+// The voice pages' own embeds (Nate, 2026-11-22: a cast of /storyboard/record opened the home page): /storyboard/record
+// opens itself with "Record a speech", and stays noindex; a published storyboard opens itself with "Watch this storyboard".
+// No published storyboard can be found on a target (publishing is off, and there is no public list), so that one is
+// checked on the page given with --spoken=<id>, and otherwise its embed's launch URL is checked as the page builds it.
+const { RECORD_BUTTON, SPOKEN_BUTTON, spokenEmbed } = await import('../src/lib/voice/embeds');
+const metaOf = (html: string, name: string) => {
+  const m = html.match(new RegExp(`<meta name="${name}" content="([^"]+)"`));
+  return m ? JSON.parse(m[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&')) : null;
+};
+let spokenNote = '';
+{
+  const html = await (await fetch(`${BASE}/storyboard/record`, { redirect: 'manual' })).text();
+  for (const name of ['fc:miniapp', 'fc:frame']) {
+    const e = metaOf(html, name);
+    if (!e?.button?.action?.url?.endsWith('/storyboard/record') || e.button.action.type !== 'launch_frame') fail(`/storyboard/record: its ${name} embed does not open /storyboard/record (${e?.button?.action?.url})`);
+    if (e?.button?.title !== RECORD_BUTTON) fail(`/storyboard/record: its ${name} button reads "${e?.button?.title}", not "${RECORD_BUTTON}"`);
+  }
+  if (!/<meta name="robots" content="noindex[^"]*"/.test(html)) fail('/storyboard/record: not marked noindex');
+  const id = arg('spoken');
+  if (id) {
+    const sh = await (await fetch(`${BASE}/storyboard/spoken/${id}`)).text();
+    for (const name of ['fc:miniapp', 'fc:frame']) {
+      const e = metaOf(sh, name);
+      if (!e?.button?.action?.url?.endsWith(`/storyboard/spoken/${id}`) || e.button.title !== SPOKEN_BUTTON) fail(`/storyboard/spoken/${id}: its ${name} embed opens ${e?.button?.action?.url} with "${e?.button?.title}"`);
+    }
+  } else {
+    const e = JSON.parse(spokenEmbed('00000000-0000-4000-8000-000000000000'));
+    if (!e.button.action.url.endsWith('/storyboard/spoken/00000000-0000-4000-8000-000000000000') || e.button.title !== SPOKEN_BUTTON || e.button.action.type !== 'launch_frame') fail(`a published storyboard's embed would open ${e.button.action.url} with "${e.button.title}"`);
+    spokenNote = 'a published storyboard\'s embed checked as the page builds it (none is published on the target; pass --spoken=<id> to check one)';
+  }
+}
+
 // The share card for /minpentai (owner, 2026-10-20): Farcaster's 3:2 embed with "Start the tutorial" opening
 // /minpentai?lesson=1 (also when the pasted link already has it), and X's 1200×630 large card. The images are
 // fetched from this server by path, since the tags name the app's own address.
@@ -378,4 +410,4 @@ if (failures.length) {
   console.error(`MINIAPP CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`miniapp check passed: ${BASE}, home, a chapter, the assistant and Learn Minpentai (full screen) and Minpentai Play in a stand-in Farcaster client; the /minpentai share card and the win card's embed; a remix page's embed and link preview${remixNote ? ` (${remixNote})` : ''}`);
+console.log(`miniapp check passed: ${BASE}, home, a chapter, the assistant and Learn Minpentai (full screen) and Minpentai Play in a stand-in Farcaster client; the /minpentai share card and the win card's embed; a remix page's embed and link preview${remixNote ? ` (${remixNote})` : ''}; /storyboard/record's embed${spokenNote ? ` (${spokenNote})` : ''}`);

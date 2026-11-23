@@ -7,6 +7,7 @@ import { sentencesIn, type Timeline } from '~/lib/voice/board';
 import { speechById } from '~/lib/voice/speech';
 import { CLOSING, type CreditLine } from '~/lib/voice/closing';
 import { VoiceSpoken, type SpokenFile } from '~/components/voice-spoken';
+import { embedMeta, spokenEmbed } from '~/lib/voice/embeds';
 import '~/styles/voice.css';
 
 /**
@@ -14,7 +15,14 @@ import '~/styles/voice.css';
  * off (the local tests turn it on, stand-ins only) and once its person takes it down.
  */
 export const dynamic = 'force-dynamic';
-export const metadata: Metadata = { robots: { index: false, follow: false } };
+// Its own miniapp embed for each published storyboard (Nate, 2026-11-22), so a shared one opens on itself; never indexed.
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const robots = { index: false, follow: false };
+  if (!publishOn()) return { robots };
+  const sql = db();
+  const pub = sql ? await publication(sql, (await params).id).catch(() => null) : null;
+  return pub ? { robots, other: embedMeta(spokenEmbed(pub.id)) } : { robots };
+}
 
 export default async function SpokenPage({ params }: { params: Promise<{ id: string }> }) {
   if (!publishOn()) notFound();

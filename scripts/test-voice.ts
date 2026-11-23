@@ -102,6 +102,18 @@ const as = (fid: number | null, init: RequestInit = {}, url = 'http://localhost/
   new Request(url, { ...init, headers: { ...(init.headers ?? {}), ...(fid ? { authorization: `Bearer voice-test-${fid}` } : {}) } });
 const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
 
+// E. The voice pages' own miniapp embeds (Nate, 2026-11-22; button titles reread word for word).
+{
+  const { recordEmbed, spokenEmbed, RECORD_BUTTON, SPOKEN_BUTTON } = await import('../src/lib/voice/embeds');
+  const r = JSON.parse(recordEmbed());
+  const sp = JSON.parse(spokenEmbed('11111111-2222-4333-8444-555555555555'));
+  check('E. /storyboard/record opens itself: launch_frame, "Record a speech"', RECORD_BUTTON === 'Record a speech' && r.button.title === RECORD_BUTTON && r.button.action.type === 'launch_frame' && r.button.action.url.endsWith('/storyboard/record'));
+  check('E. a published storyboard opens itself: launch_frame, "Watch this storyboard"', SPOKEN_BUTTON === 'Watch this storyboard' && sp.button.title === SPOKEN_BUTTON && sp.button.action.type === 'launch_frame' && sp.button.action.url.endsWith('/storyboard/spoken/11111111-2222-4333-8444-555555555555'));
+  const layout = readFileSync(path.join(ROOT, 'src/app/storyboard/record/layout.tsx'), 'utf8');
+  const spoken = readFileSync(path.join(ROOT, 'src/app/storyboard/spoken/[id]/page.tsx'), 'utf8');
+  check('E. both stay noindex, and the spoken embed is set only for a live publication', /robots: \{ index: false, follow: false \}, other: embedMeta\(recordEmbed\(\)\)/.test(layout) && /return pub \? \{ robots, other: embedMeta\(spokenEmbed\(pub\.id\)\) \} : \{ robots \}/.test(spoken) && /if \(!publishOn\(\)\) return \{ robots \}/.test(spoken));
+}
+
 // S. The switch.
 check('S. committed: the admins\' trial on, the open switch off, real pictures for admins only (Nate, 2026-11-21)', VOICE.adminTrial === true && VOICE.open === false && VOICE.realPictures === 'admins');
 check('S. the local test switch is on here', voiceTestOn());
