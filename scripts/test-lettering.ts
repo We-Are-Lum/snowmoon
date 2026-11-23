@@ -18,7 +18,7 @@
  *
  *   npm run test:lettering
  *
- * In-memory Postgres (PGlite, every migration and NEXT_challenge_lettering.sql), as studio_writer. No network, no model,
+ * In-memory Postgres (PGlite, every migration and 0047_challenge_lettering.sql), as studio_writer. No network, no model,
  * no bucket: the prompt check's model, the picture model and the reader are stand-ins (fetch is replaced; nothing leaves).
  */
 import path from 'node:path';
@@ -222,7 +222,7 @@ type Sql = Parameters<typeof letteringReady>[0];
 const S = sql as unknown as Sql;
 const { paidPicture } = await import('../src/lib/images/paid');
 const { closedSpentToday, adminSpentToday } = await import('../src/lib/images/limits');
-check('R. read-back costs can be counted once NEXT_challenge_lettering.sql is applied', await letteringReady(S));
+check('R. read-back costs can be counted once 0047_challenge_lettering.sql is applied', await letteringReady(S));
 const NATE = 6786;
 const made = async () => ({ ...padded });
 const after = (texts: string[]) => (m: { bytes: Buffer; contentType: string }) => readBack({ ...m, sha256: createHash('sha256').update(m.bytes).digest('hex') }, 'OpenAI', own, oidc, standIn(texts));

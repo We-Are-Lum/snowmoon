@@ -264,7 +264,7 @@ export async function settle(
   spent: {
     guard?: { costUsd: number; provider: string | null; verdict: 'ok' | 'blocked' };
     image?: { costUsd: number; verdict: 'ok' | 'nsfw' };
-    /** A lettered picture's read-back (NEXT_challenge_lettering.sql: kind 'readback', verdicts 'mismatch' and 'unread'). */
+    /** A lettered picture's read-back (0047_challenge_lettering.sql: kind 'readback', verdicts 'mismatch' and 'unread'). */
     readback?: { model: string; provider: string; verdict: 'ok' | 'mismatch' | 'unread'; costUsd: number };
   },
   spend: Spend = DEFAULT_SPEND,

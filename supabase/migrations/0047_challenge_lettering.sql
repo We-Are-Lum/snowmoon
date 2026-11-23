@@ -1,8 +1,8 @@
--- NEXT_challenge_lettering.sql: words a closed model draws in a picture (lettering, part C; owner's decisions of
--- 2026-11-18 to 2026-11-22; drafted on branch closed-lettering, wired in on branch lettering). NOT APPLIED. Unnumbered
--- until merge: it takes the next free number then, checked against origin/main and production (main holds 0001-0046 on
--- 2026-11-22, so 0047 if nothing else lands first). Drafted by the coding agent (Claude, a closed model by Anthropic).
--- DRAFT: the owner applies it. Re-checked against main's 0001-0046 on 2026-11-22: nothing since 0001_core redefines
+-- 0047_challenge_lettering.sql: words a closed model draws in a picture (lettering, part C; owner's decisions of
+-- 2026-11-18 to 2026-11-23; drafted on branch closed-lettering, wired in on branch lettering, PR #215). Numbered 0047 on
+-- 2026-11-23 (was NEXT_challenge_lettering.sql), the next free number after main's 0001-0046. Drafted by the coding agent
+-- (Claude, a closed model by Anthropic). The owner applies it, and tested it on Postgres 16 against main's migrations
+-- (2026-11-23). Re-checked against main's 0001-0046 on 2026-11-22: nothing since 0001_core redefines
 -- studio.check_take_item_display, and nothing since 0008_images changes image_costs' kind or verdict checks (0011 added
 -- `funded`, 0042 added funded 'admin'; 0045 counts refusals in its own table). Tested on in-memory PGlite (every
 -- migration, then A, B twice, C, D, B again; scratchpad sqltest pattern).

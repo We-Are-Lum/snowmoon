@@ -31,7 +31,7 @@ export const sourcesOf = (phrases: readonly string[], fid: number): LetteringPhr
 export const letteringPolicy = (phrases: readonly string[]) => fillPolicy(promptFile(LETTERING_POLICY_FILE), phrases);
 
 /**
- * Whether read-back costs can be counted on this database (NEXT_challenge_lettering.sql applied: studio.image_costs takes
+ * Whether read-back costs can be counted on this database (0047_challenge_lettering.sql applied: studio.image_costs takes
  * the kind 'readback'). Until then no lettered picture is made (the route says so, before anything is spent).
  */
 export async function letteringReady(sql: Sql): Promise<boolean> {

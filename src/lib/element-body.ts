@@ -96,7 +96,7 @@ export interface LetteringItem {
 /**
  * Words a closed model drew in a challenge picture (lettering, part C; owner, 2026-11-22), as the publish route writes
  * them: no position (the model placed them), `drawn_by` 'model', and whose words they are. Such a picture never stands
- * in for the book's text (NEXT_challenge_lettering.sql: the take_items trigger ignores drawn_by 'model').
+ * in for the book's text (0047_challenge_lettering.sql: the take_items trigger ignores drawn_by 'model').
  */
 export interface ModelLetteringItem {
   kind: 'sign';

@@ -142,7 +142,7 @@ export async function POST(request: Request) {
   const notice = noticeProblem(chosen, (body as { notice?: unknown }).notice);
   if (notice) return no(notice === 'adult' ? MODEL_WORDING.adultFirst : MODEL_WORDING.noticeFirst, 403, { reason: notice });
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403, { reason: 'consent' });
-  // The read-back's costs need NEXT_challenge_lettering.sql (image_costs kind 'readback'); until then, no lettered picture.
+  // The read-back's costs need 0047_challenge_lettering.sql (image_costs kind 'readback'); until then, no lettered picture.
   if (phrases.length && !(await letteringReady(sql))) return no(LETTERING_WORDING.notReady, 503, { reason: 'lettering-not-ready' });
   const gate = await mayGenerate(sql, fid);
   if (!gate.ok) return no(gate.error, gate.status, { reason: gate.reason });

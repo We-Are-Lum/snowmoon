@@ -58,7 +58,7 @@ export interface Deps {
   sheets: (sql: Sql, chapter: number, start: number, end: number) => Promise<SheetRef[]>;
   /** The lettering read-back's reader (lettering, part C): the picture's maker's, through the gateway; a stand-in in tests. */
   read?: ReadText;
-  /** Whether read-back costs can be counted yet (NEXT_challenge_lettering.sql); tests may stand in. */
+  /** Whether read-back costs can be counted yet (0047_challenge_lettering.sql); tests may stand in. */
   letteringReady?: (sql: Sql) => Promise<boolean>;
 }
 
