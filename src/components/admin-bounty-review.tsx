@@ -241,7 +241,7 @@ function Note({ c, disabled, onSave }: { c: Card; disabled: boolean; onSave: (no
       <textarea id="ab-note" rows={3} maxLength={280} value={text} onChange={(e) => setText(e.target.value)} placeholder="Only admins see this." />
       <div className="ab-note-row">
         <span className="ab-note">{c.marks.note ? `${c.marks.note.by} · ${when(c.marks.note.at)}` : `${text.length}/280`}</span>
-        <button type="button" disabled={disabled || text.trim() === saved} onClick={() => onSave(text)}>{text.trim() ? 'Save note' : 'Clear note'}</button>
+        <button type="button" disabled={disabled || text.trim() === saved} onClick={() => onSave(text)}>{text.trim() || !saved ? 'Save note' : 'Clear note'}</button>
       </div>
     </section>
   );
