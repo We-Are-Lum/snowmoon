@@ -347,7 +347,7 @@ function Item({ item, canSave, pictures, reload }: { item: Data['items'][number]
         {item.inJobFile && <p className="you-meta">{W.inJobFile}</p>}
         {pictures && (
           <PicturePanel
-            item={{ id: item.id, chapter: item.chapter, redoable: Boolean(item.redoable), shown: item.shown ?? null, versions: item.versions ?? [], decisions: item.decisions ?? [], image: item.image }}
+            item={{ id: item.id, chapter: item.chapter, redoable: Boolean(item.redoable), lettered: item.lettered ?? [], shown: item.shown ?? null, versions: item.versions ?? [], decisions: item.decisions ?? [], image: item.image }}
             state={pictures}
             reload={reload}
           />

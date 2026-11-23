@@ -191,8 +191,25 @@ export async function toWide(original: Buffer, size: { width: number; height: nu
   return { bytes, crop: { original: `${w}x${h}`, kept: { left, top, width: cw, height: ch }, removed_top: top, removed_bottom: h - ch - top, removed_left: left, removed_right: w - cw - left }, words: cropWords(w, h) };
 }
 
-/** One closed challenge picture: the call, the picture cropped to 16:9 and saved as the site's JPEG at IMAGES.size, its cost. */
-export async function makeChallengeClosed(m: ChallengeModel, prompt: string, reference: Buffer, request: Request, worstUsd: number, send: typeof fetch = fetch): Promise<Made> {
+/**
+ * How a closed picture is fitted to IMAGES.size: cropped (toWide, as every closed picture since 2026-11-08), or, for a
+ * picture with words drawn by the model, padded (owner, 2026-11-22, "pad, not crop": the existing pad path, toView, the
+ * whole picture scaled to fit and padded with its own corner colour, so no word is cut). Returns the bytes and what
+ * the recipe's settings say of the conversion.
+ */
+export type Fit = 'crop' | 'pad';
+export const PAD_WORDS = 'padded to 16:9 with its own corner colour, not cropped (it has words in it)';
+export async function fitted(original: Buffer, fit: Fit, size: { width: number; height: number } = IMAGES.size): Promise<{ bytes: Buffer; converted: Record<string, unknown> }> {
+  if (fit === 'pad') {
+    const meta = await sharp(original).metadata();
+    return { bytes: await toView(original, size), converted: { resized_to: size, fit: 'contain, padded with the picture\'s own corner colour', padded: PAD_WORDS, original: `${meta.width}x${meta.height}` } };
+  }
+  const wide = await toWide(original, size);
+  return { bytes: wide.bytes, converted: { resized_to: size, crop: wide.words, cropped: wide.crop } };
+}
+
+/** One closed challenge picture: the call, the picture cropped to 16:9 (padded, with lettering) and saved as the site's JPEG at IMAGES.size, its cost. */
+export async function makeChallengeClosed(m: ChallengeModel, prompt: string, reference: Buffer, request: Request, worstUsd: number, send: typeof fetch = fetch, fit: Fit = 'crop'): Promise<Made> {
   const token = gatewayToken(request);
   if (!token) throw new ImageUnavailable('no gateway credential');
   const r = challengeClosedRequest(m, prompt, reference);
@@ -200,10 +217,10 @@ export async function makeChallengeClosed(m: ChallengeModel, prompt: string, ref
   if (!res) throw new ImageUnavailable('the gateway did not answer');
   // parseClosed reads GPT's and Gemini's answers by the model's id, as for a sheet's views.
   const pic = parseClosed({ id: m.id } as SheetModel, res.status, await res.json().catch(() => ({})));
-  const wide = await toWide(pic.bytes, IMAGES.size);
+  const out = await fitted(pic.bytes, fit, IMAGES.size);
   const from = pic.contentType.split('/')[1] ?? 'png';
   return {
-    bytes: wide.bytes,
+    bytes: out.bytes,
     contentType: 'image/jpeg',
     seed: null,
     requestId: pic.requestId,
@@ -211,8 +228,8 @@ export async function makeChallengeClosed(m: ChallengeModel, prompt: string, ref
     costUsd: pic.costUsd ?? worstUsd,
     settings: {
       ...r.settings,
-      // The crop's words are shown in the recipe's settings (DRAFT wording): e.g. "cropped from 3:2 to 16:9, mostly from the bottom".
-      converted: { from, sha256: createHash('sha256').update(pic.bytes).digest('hex'), to: 'jpeg', resized_to: IMAGES.size, crop: wide.words, cropped: wide.crop },
+      // The crop's words are shown in the recipe's settings (DRAFT wording): e.g. "cropped from 3:2 to 16:9, mostly from the bottom"; or the pad's.
+      converted: { from, sha256: createHash('sha256').update(pic.bytes).digest('hex'), to: 'jpeg', ...out.converted },
       content_credentials: hasC2pa(pic.bytes) ? 'the original had a C2PA manifest from its maker; the JPEG does not keep it' : 'none found in the original',
     },
   };
@@ -249,17 +266,17 @@ export function chapterClosedRequest(m: ChallengeModel, prompt: string, refs: Bu
 }
 
 /** One closed picture an admin adds: the call, the picture cropped to 16:9 and saved as the site's JPEG, its cost. */
-export async function makeChapterClosed(m: ChallengeModel, prompt: string, refs: Buffer[], request: Request, worstUsd: number, send: typeof fetch = fetch): Promise<Made> {
+export async function makeChapterClosed(m: ChallengeModel, prompt: string, refs: Buffer[], request: Request, worstUsd: number, send: typeof fetch = fetch, fit: Fit = 'crop'): Promise<Made> {
   const token = gatewayToken(request);
   if (!token) throw new ImageUnavailable('no gateway credential');
   const r = chapterClosedRequest(m, prompt, refs);
   const res = await send(r.url, { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(r.body) }).catch(() => null);
   if (!res) throw new ImageUnavailable('the gateway did not answer');
   const pic = parseClosed({ id: m.id } as SheetModel, res.status, await res.json().catch(() => ({})));
-  const wide = await toWide(pic.bytes, IMAGES.size);
+  const out = await fitted(pic.bytes, fit, IMAGES.size);
   const from = pic.contentType.split('/')[1] ?? 'png';
   return {
-    bytes: wide.bytes,
+    bytes: out.bytes,
     contentType: 'image/jpeg',
     seed: null,
     requestId: pic.requestId,
@@ -267,7 +284,7 @@ export async function makeChapterClosed(m: ChallengeModel, prompt: string, refs:
     costUsd: pic.costUsd ?? worstUsd,
     settings: {
       ...r.settings,
-      converted: { from, sha256: createHash('sha256').update(pic.bytes).digest('hex'), to: 'jpeg', resized_to: IMAGES.size, crop: wide.words, cropped: wide.crop },
+      converted: { from, sha256: createHash('sha256').update(pic.bytes).digest('hex'), to: 'jpeg', ...out.converted },
       content_credentials: hasC2pa(pic.bytes) ? 'the original had a C2PA manifest from its maker; the JPEG does not keep it' : 'none found in the original',
     },
   };

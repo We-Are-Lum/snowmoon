@@ -1,7 +1,7 @@
 import 'server-only';
 import type postgres from 'postgres';
 import { CHAPTER_PICTURES, IMAGES } from '../config';
-import { checkPrompt } from './guard';
+import { checkPrompt, checkPromptWith } from './guard';
 import { ImageRefused, ImageUnavailable, type Made } from './fal';
 import { countRefusal, fundedBy, giveBack, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
 import { guardRefusal, NO_ANSWER_CATEGORY, REFUSAL_WORDING } from './refusal-wording';
@@ -9,6 +9,9 @@ import { blockedName } from './rules';
 import { FREE_WORDING } from '../social/free';
 import { IMAGE_WORDING } from './wording';
 import { creditBack } from '../wallet/credits';
+import { LETTERING_WORDING } from './lettering';
+import type { LetteringRecord } from './lettering';
+import type { AfterMade } from './readback';
 
 /**
  * Every paid picture goes through here, in this order (docs/proposals/add-an-image.md, section 5;
@@ -29,7 +32,7 @@ import { creditBack } from '../wallet/credits';
 type Sql = postgres.Sql;
 
 export type Paid =
-  | { ok: true; made: Made; left: number }
+  | { ok: true; made: Made; left: number; /** A lettered picture's record, once its read-back matched. */ lettering?: LetteringRecord }
   | { ok: false; status: number; error: string; extra: Record<string, unknown> };
 
 export const LIMIT_SAY = {
@@ -73,6 +76,17 @@ export async function paidPicture(
      * 2026-11-18, reread by the owner 2026-11-22); it counts, as before. Unset for an open model: its own check's words stay as they are.
      */
     maker?: string | null;
+    /**
+     * The prompt check's policy, when not image-guard.md: a closed model's picture with words in quotation marks gets the
+     * lettering variant with those phrases (src/lib/images/readback.ts letteringPolicy; owner, 2026-11-22).
+     */
+    guardPolicy?: string;
+    /**
+     * A step after the picture, inside the same reservation (lettering, part C: the read-back, src/lib/images/readback.ts
+     * readBack): its cost is counted with the picture's, under the same funding. Not ok: nothing is kept, the person
+     * is told what was read, and can only try again (option a, owner 2026-11-22); the picture still counts.
+     */
+    after?: (made: Made) => Promise<AfterMade>;
   },
 ): Promise<Paid> {
   const spend = job.spend;
@@ -88,7 +102,8 @@ export async function paidPicture(
   }
   let guard;
   try {
-    guard = await checkPrompt(job.checkText, request, job.guardMaxTokens);
+    // Quoted words for a closed model: the lettering policy; every other picture: image-guard.md, as before.
+    guard = job.guardPolicy ? await checkPromptWith(job.guardPolicy, job.checkText, request, job.guardMaxTokens) : await checkPrompt(job.checkText, request, job.guardMaxTokens);
   } catch (e) {
     await settle(sql, {}, spend, funded);
     console.error('image prompt check failed', (e as Error).name);
@@ -119,10 +134,26 @@ export async function paidPicture(
     const back = await creditBack(sql, r.debitId, 'failed');
     return { ok: false, status: 503, error: failed('The image model did not answer. Try again in a moment.', back), extra: { left: r.left, ...(back ? { creditedBack: true } : {}) } };
   }
-  await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' }, image: { costUsd: made.costUsd, verdict: made.nsfw ? 'nsfw' : 'ok' } }, spend, funded);
-  // Flagged by the host's safety checker: dropped here, never shown or stored.
-  if (made.nsfw) return dropped(sql, fid, r, job.blocked);
-  return { ok: true, made, left: r.left };
+  // Flagged by the host's safety checker: dropped here, never shown or stored (and never read back).
+  if (made.nsfw) {
+    await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' }, image: { costUsd: made.costUsd, verdict: 'nsfw' } }, spend, funded);
+    return dropped(sql, fid, r, job.blocked);
+  }
+  // A lettered picture's read-back, before the reservation is settled, so its worst case was held with the picture's.
+  let after: AfterMade | null = null;
+  if (job.after) {
+    try {
+      after = await job.after(made);
+    } catch (e) {
+      console.error('lettering read-back failed', (e as Error).name);
+      after = null;
+    }
+  }
+  await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' }, image: { costUsd: made.costUsd, verdict: 'ok' }, ...(after ? { readback: after.cost } : {}) }, spend, funded);
+  if (job.after && !after) return { ok: false, status: 503, error: LETTERING_WORDING.unread, extra: { reason: 'lettering-unread', left: r.left, read: [], asked: [] } };
+  // Not the words asked for (or no answer): nothing is kept; what was read goes back so the screen can show it.
+  if (after && !after.ok) return { ok: false, status: 422, error: after.reason === 'lettering-mismatch' ? LETTERING_WORDING.mismatchHead : LETTERING_WORDING.unread, extra: { reason: after.reason, read: after.read, asked: after.asked, reader: after.reader, left: r.left } };
+  return { ok: true, made, left: r.left, ...(after?.ok ? { lettering: after.record } : {}) };
 }
 
 /** A picture the safety check blocked: dropped, never shown or stored; credited back to a wallet; given back when asked. */

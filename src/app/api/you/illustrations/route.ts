@@ -34,7 +34,8 @@ export async function GET(request: Request) {
   const shown = pictures.ready ? await readReplacements(sql) : new Map();
   const withPictures = items.map((i) => {
     const job = checkJob(i.id);
-    return { ...i, redoable: job ? redoable(job) : false, shown: shown.get(i.id)?.versionId ?? null, versions: history.versions.get(i.id) ?? [], decisions: history.decisions.get(i.id) ?? [] };
+    // A lettered edition picture's words (drawn in code), so its redo box can say how to keep them (lettering, part C).
+    return { ...i, redoable: job ? redoable(job) : false, lettered: job?.lettering.map((l) => l.text) ?? [], shown: shown.get(i.id)?.versionId ?? null, versions: history.versions.get(i.id) ?? [], decisions: history.decisions.get(i.id) ?? [] };
   });
   // Pictures admins added while reading (owner, 2026-11-19), and every draft not kept yet, with where each sits.
   const additions = pictures.adding ? await readAdditions(sql) : [];

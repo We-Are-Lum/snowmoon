@@ -10,6 +10,7 @@ import { justPublishedHref } from '~/lib/challenge/just-published';
 import { AiTag } from './ai-tag';
 import { BackstoryField } from './challenge-backstory';
 import { BACKSTORY_MAX, BACKSTORY_WORDING } from '~/lib/challenge/backstory';
+import { LetteringRecordView, mismatchOf } from './lettering';
 
 /**
  * The preview, /challenge/make/<draft> (owner, 2026-11-05; docs/proposals/challenge-moments.md §1.3 S3): the new
@@ -62,10 +63,13 @@ export function ChallengePreview({ id }: { id: string }) {
     // The same request again: the moment while the moments are on; else the same style choice (Random draws afresh) and model.
     const body = d.moment ? { from: d.from, moment: d.moment.id, words: d.words, model: d.modelId } : { from: d.from, words: d.words, style: d.style, model: d.modelId };
     const r = await authFetch('/api/challenge/make', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
-    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; style?: string | null; setting?: { id: string; text: string; blocks: string[] } | null; error?: string };
+    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; style?: string | null; setting?: { id: string; text: string; blocks: string[] } | null; lettering?: FlowDraft['lettering']; error?: string; reason?: string; asked?: string[]; read?: string[]; reader?: string };
     setBusy(null);
+    // Lettering: words read back wrong. Nothing was kept; this preview's picture stays as it was, with what was read.
+    const wrong = mismatchOf(out);
+    if (wrong && d.letteringW) return setError(wrong.reason === 'lettering-mismatch' ? `${d.letteringW.mismatchHead}: ${d.letteringW.mismatchRead.replace('{reader}', wrong.reader)} ${wrong.read.length ? wrong.read.map((x) => `“${x}”`).join(', ') : d.letteringW.mismatchNothing}. ${d.letteringW.mismatchKept}` : `${d.letteringW.unread}`);
     if (!r?.ok || !out.ticket || !out.image) return setError(out.error ?? 'Could not make it');
-    const next = { ...d, ticket: out.ticket, image: out.image, prompt: out.prompt ?? d.prompt, styleLine: out.style ?? d.styleLine ?? null, setting: out.setting ?? null };
+    const next = { ...d, ticket: out.ticket, image: out.image, prompt: out.prompt ?? d.prompt, styleLine: out.style ?? d.styleLine ?? null, setting: out.setting ?? null, lettering: out.lettering ?? undefined };
     saveDraft(next);
     setD(next);
   };
@@ -145,6 +149,8 @@ export function ChallengePreview({ id }: { id: string }) {
           <p className="mk-said-label">{w.yourWords}</p>
           <p className="mk-words">“{d.words}”</p>
           {recipe && <p className="mk-recipe">{recipe}</p>}
+          {/* Words the model drew, read back: each phrase, the book's at its block or the maker's own (P8j). */}
+          {d.lettering && d.letteringW && <LetteringRecordView r={d.lettering} w={d.letteringW} />}
         </div>
         <details className="mk-story" open={storyOpen} onToggle={(e) => setStoryOpen(e.currentTarget.open)}>
           <summary>

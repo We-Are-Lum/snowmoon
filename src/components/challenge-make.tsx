@@ -15,6 +15,8 @@ import { StyleExamples } from './style-examples';
 import { useChallengeModel } from './challenge-model-row';
 import { oneCharacterProblem } from '~/lib/challenge/one-character';
 import { withReset } from '~/lib/challenge/model-wording';
+import { parseQuotes } from '~/lib/images/lettering';
+import { LetteringMismatch, LetteringWarning, WordsToDraw, mismatchOf, type Mismatch } from './lettering';
 
 /**
  * The remix screen, /challenge/make?from=<version> (owner, 2026-11-05; simplified 2026-11-08, the simpler challenge).
@@ -66,6 +68,8 @@ export function ChallengeMake() {
   const [error, setError] = useState<string | null>(null);
   const [signIn, setSignIn] = useState(false);
   const [consent, setConsent] = useState<Wording | null>(null);
+  // Lettering (part C): a picture whose words were read back wrong; nothing was kept, and the only way on is Try again.
+  const [mismatch, setMismatch] = useState<Mismatch | null>(null);
   // The Model row (branch challenge-models): the server's list for this visitor; a closed pick waits for its maker's
   // notice and, once per device, the 18+ box; a wallet account sees why closed models aren't offered.
   const loaded = view && view !== 'missing' ? (view as MakeView & { modelsNote?: string | null; picturesLeft?: number | null; defaultModel?: string | null; capLine?: { text: string; resetAt: string } | null; notFree?: string | null }) : null;
@@ -129,6 +133,11 @@ export function ChallengeMake() {
   const hasPublished = view.styles.some((s) => s.kind === 'published');
   const style = styleSel === 'same' ? { kind: 'same' as const } : styleSel === 'random' ? { kind: 'random' as const } : styleSel === 'own' ? { kind: 'own' as const, text: ownStyle } : styleSel ? { kind: 'style' as const, id: styleSel } : null;
   const model = mc.chosen;
+  // Lettering (part C): the words in double quotation marks, as they would be drawn; only a closed model draws them.
+  const L = view.lettering;
+  const parsed = parseQuotes(words);
+  const phrases = parsed.ok ? parsed.phrases : [];
+  const openWithWords = phrases.length > 0 && Boolean(model?.open);
 
   const make = async () => {
     if (momentsOn && !chosen) return setError(w.noMoment);
@@ -136,6 +145,9 @@ export function ChallengeMake() {
     if (!momentsOn && !style) return setError(w.noStyle);
     if (style?.kind === 'own' && !style.text.trim()) return setError(w.ownEmpty);
     if (!model) return setError(w.noModel);
+    // Quoted words: within the cap, and never with the open model (the server refuses both too, before any spend).
+    if (!parsed.ok) return setError(parsed.error);
+    if (openWithWords) return setError(L.openRefused);
     // One character per picture (owner, 2026-11-09): said here before any notice or request; the server refuses it too.
     const second = oneCharacterProblem(words, view.source.character);
     if (second) return setError(second);
@@ -143,10 +155,14 @@ export function ChallengeMake() {
     if (!mc.readyNow()) return mc.askFirst(() => makeRef.current()) ? setError(null) : setError(w.noModel);
     setBusy(true);
     setError(null);
+    setMismatch(null);
     const body = momentsOn ? { from, moment: chosen!.id, words, ...mc.body() } : { from, words, style, ...mc.body() };
     const r = await authFetch('/api/challenge/make', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
-    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; style?: string | null; setting?: { id: string; text: string; blocks: string[] } | null; error?: string; reason?: string; resetAt?: string };
+    const out = (await r?.json().catch(() => ({}))) as { ticket?: string; image?: string; prompt?: string; style?: string | null; setting?: { id: string; text: string; blocks: string[] } | null; lettering?: FlowDraft['lettering']; error?: string; reason?: string; resetAt?: string; asked?: string[]; read?: string[]; reader?: string };
     setBusy(false);
+    // The words came out wrong (or couldn't be read back): nothing was kept; the screen shows what was read, and Try again.
+    const wrong = mismatchOf(out);
+    if (wrong) return setMismatch(wrong);
     if (r?.status === 403 && out.reason === 'consent') {
       const c = await authFetch('/api/consent').catch(() => null);
       if (c?.ok) setConsent(((await c.json()) as { wording: Wording }).wording);
@@ -158,6 +174,7 @@ export function ChallengeMake() {
       id: crypto.randomUUID(), from, character: view.source.character, name: view.source.name, sourceUrl: view.source.url,
       moment: chosen ? { id: chosen.id, title: chosen.title, chip: chosen.chip } : null, words, style: momentsOn ? null : style, modelId: model.id, styleLine: out.style ?? null, setting: out.setting ?? null,
       ticket: out.ticket, image: out.image, prompt: out.prompt ?? '', model: model.chip, w,
+      ...(out.lettering ? { lettering: out.lettering, letteringW: L } : {}),
     };
     if (!saveDraft(draft)) return setError('Could not keep the picture in this tab. Try again.');
     router.push(`/challenge/make/${draft.id}`);
@@ -209,6 +226,8 @@ export function ChallengeMake() {
       </div>
       <div className="mk-panel">
         <PublishedTextField id="mk-words" label={w.wordsLabel} value={words} onChange={setWords} rows={3} maxLength={600} placeholder={w.wordsPlaceholder || undefined} />
+        {/* Lettering (part C): the words in quotation marks, as they would be drawn, or why they can't be. */}
+        <WordsToDraw parsed={parsed} w={L} refused={openWithWords} />
         {momentsOn && (
           <section className="mk-moments" aria-labelledby="mk-moment">
             <div className="mk-moment-head">
@@ -326,12 +345,17 @@ export function ChallengeMake() {
       </div>
       {/* The MakeBar: errors and limits inline above it, today's messages. */}
       <div className="mk-makebar">
+        {/* Before Make it, whenever quoted words go to a closed model: words can come out wrong, and a redo uses a picture. */}
+        {phrases.length > 0 && model && !model.open && !mismatch && <LetteringWarning w={L} />}
         {error && (
           <p className="ia-note mk-error" role="alert">
             {error}
           </p>
         )}
-        {blocked ? (
+        {mismatch ? (
+          // Option a (owner, 2026-11-22): a mismatch is never kept; Try again is the only way on.
+          <LetteringMismatch m={mismatch} w={L} busy={busy} onTryAgain={() => void make()} />
+        ) : blocked ? (
           // No Make it (owner, 2026-11-16): an account without the free count says why (its own line; waiting won't help),
           // else the day's pictures are used up, said plainly.
           notFree ? (

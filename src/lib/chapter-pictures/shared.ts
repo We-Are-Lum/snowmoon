@@ -4,7 +4,7 @@
  * no network, no server-only import, so the tests run it as it is.
  *
  * The rules a redo keeps (owner, 2026-11-18): no artist, studio or film names, no real people, no words in the picture
- * (the lettering work hasn't shipped). The whole prompt (the scene, the admin's note and the look) goes through the
+ * except words in quotation marks a closed model draws and that are read back (lettering, part C, 2026-11-22). The whole prompt (the scene, the admin's note and the look) goes through the
  * site's prompt check (src/lib/images/paid.ts: the blocked names, then the guard model, whose rules name all three)
  * before anything is spent, and ends with the site's no-words line (IMAGES.suffix).
  */
@@ -112,7 +112,7 @@ export interface PictureRecipe {
   model: { id: string; name: string; maker: string; open: boolean; terms: string; host: string; endpoint: string; only?: string[] };
   prompt: string;
   /** The prompt's parts, as they were joined (every one is in `prompt`). */
-  parts: { redo: string; scene: string; note: string; look: Look | null; suffix: string; refs?: string };
+  parts: { redo: string; scene: string; note: string; look: Look | null; suffix: string; refs?: string; /** The lettering line, in place of the no-text line (suffix then ''), for words the model drew. */ lettering?: string };
   /** The one picture a redo starts from (the picture shown before); null for a picture an admin added. */
   reference: { what: string; url: string; sha256: string } | null;
   /** An added picture (owner, 2026-11-19): where it sits and the passage it shows. */
@@ -136,6 +136,8 @@ export interface PictureRecipe {
   madeAt: string;
   /** Who drafted which input (principle 3c's `assist`): the scene prompt is the edition's job prompt; the note and look are the admin's. */
   assist: { scene: string; note: string; look: string };
+  /** Words the model drew (lettering, part C; src/lib/images/lettering.ts LetteringRecord), once its read-back matched. */
+  lettering?: import('../images/lettering').LetteringRecord;
 }
 
 /** The line that starts a redo's prompt. DRAFT wording (coding agent, 2026-11-18). */

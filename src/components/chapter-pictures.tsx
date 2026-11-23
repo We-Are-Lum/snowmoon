@@ -9,6 +9,8 @@ import { adminName, creditLine, noClosedOffered, localDay as day, lookName, mode
 import { useChallengeModel } from './challenge-model-row';
 import { PublishedTextField } from './publish-words';
 import { RefSearchField } from './ref-search-field';
+import { LETTERING_WORDING, parseQuotes } from '~/lib/images/lettering';
+import { LetteringMismatch, LetteringRecordView, LetteringWarning, WordsToDraw, mismatchOf, type LetteringW, type Mismatch } from './lettering';
 import '../styles/chapter-pictures.css';
 
 /**
@@ -39,7 +41,6 @@ export const P = {
   history: 'Who showed what',
   historyLine: (d: PictureDecision) => `${day(d.at)} · ${adminName(d.byFid, d.byHandle)} · ${d.action === 'keep' ? 'kept a redo' : d.versionId ? 'showed a redo again' : 'showed the first picture again'}`,
   versionMeta: (v: PictureVersion, modelName: string) => `${modelLine(modelName, v.maker, v.open)} · ${lookName(v.look)} · by FID ${v.madeByFid} · ${day(v.madeAt)}`,
-  lettered: 'This picture has lettering: it can be redone once the lettering work ships.',
   notReady: 'Redoing pictures needs the chapter-picture migration first (0042_chapter_picture_versions).',
   noStorage: 'Kept pictures can’t be stored on this copy of the site.',
   cap: (spent: number, cap: number, reset: string) => `Admins’ chapter pictures today: $${spent.toFixed(2)} of $${cap}. The day resets at ${reset}.`,
@@ -123,6 +124,8 @@ export interface PicturesState {
   defaultModel?: string;
   /** Whether pictures can be added (0043_chapter_picture_additions applied). */
   adding?: boolean;
+  /** Lettering's words (part C; the server's, reread by the owner 2026-11-22): the preview, the line before Make, the open refusal, the mismatch. */
+  lettering?: LetteringW;
 }
 export interface PictureItem {
   id: string;
@@ -134,6 +137,8 @@ export interface PictureItem {
   image: { url: string; width: number; height: number } | null;
   /** A picture an admin added (owner, 2026-11-19): the block it sits after and the passage it shows. */
   added?: { after: number; start: number; end: number } | null;
+  /** An edition picture's words drawn in code (lettering, part C: it can be redone now; quoted words keep them). */
+  lettered?: string[];
 }
 
 /** A character's sheet picture an added picture may take along (GET /api/you/illustrations/passage). */
@@ -450,16 +455,28 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
   const look = lookOf(state, item.chapter);
   const keptIds = new Set(item.decisions.filter((d) => d.versionId).map((d) => d.versionId));
   const shownDecision = item.decisions.find((d) => d.versionId === item.shown);
+  // Lettering (part C): the note's words in quotation marks, as a closed model would draw them; never the open model.
+  const [mismatch, setMismatch] = useState<Mismatch | null>(null);
+  const L = state.lettering;
+  const parsed = parseQuotes(note);
+  const phrases = parsed.ok ? parsed.phrases : [];
+  const openWithWords = phrases.length > 0 && Boolean(m.chosen?.open);
 
   async function redo() {
     if (!note.trim()) return setError('Write what should change first.');
+    if (!parsed.ok) return setError(parsed.error);
+    if (openWithWords && L) return setError(L.openRefused);
     const send = async () => {
       setBusy(true);
       setError(null);
+      setMismatch(null);
       const r = added
         ? await post('/api/you/illustrations/add', { jobId: item.id, note, characters: chosen, picked: pickedIds, ...m.body() })
         : await post('/api/you/illustrations/redo', { jobId: item.id, note, picked: pickedIds, ...m.body() });
       setBusy(false);
+      // The words came out wrong: nothing was saved; what was read, and Try again only (option a).
+      const wrong = mismatchOf(r.json as { reason?: string });
+      if (wrong) return setMismatch(wrong);
       if (!r.ok) return setError(errorOf(r.json));
       setOpen(false);
       setNote('');
@@ -481,7 +498,7 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
   }
 
   if (!state.ready) return <p className="you-note">{P.notReady}</p>;
-  if (!item.redoable) return item.image ? <p className="you-note">{P.lettered}</p> : null;
+  if (!item.redoable) return null;
   const shown = item.versions.find((v) => v.id === item.shown);
   return (
     <section className="cp-panel" aria-label={P.versions} data-shown={item.shown ?? 'original'}>
@@ -499,17 +516,27 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
       </div>
       {open && (
         <div className="cp-redo">
+          {item.lettered && item.lettered.length > 0 && (
+            <p className="you-meta" data-slot="lettered-job">
+              {LETTERING_WORDING.letteredJob(item.lettered)}
+            </p>
+          )}
           <PublishedTextField id={`cp-note-${item.id}`} label={added ? P.noteAdded : P.noteLabel} value={note} onChange={setNote} rows={3} maxLength={CHAPTER_PICTURES.noteMaxChars} />
+          {L && <WordsToDraw parsed={parsed} w={L} refused={openWithWords} />}
           {added && <SheetPicker chapter={item.chapter} start={added.start} end={added.end} chosen={chosen} setChosen={setChosen} max={3 - picked.length} />}
           <ReferencePicker id={item.id} max={added ? 3 - chosen.length : 2} picked={picked} setPicked={setPicked} redo={!added} />
           <ModelRow m={m} name={`cp-model-${item.id}`} />
           <p className="you-meta" data-look="">
             {P.look(look, ownLook)}
           </p>
+          {L && phrases.length > 0 && m.chosen && !m.chosen.open && !mismatch && <LetteringWarning w={L} />}
+          {L && mismatch && <LetteringMismatch m={mismatch} w={L} busy={busy} onTryAgain={() => void redo()} />}
           <div className="you-actions">
-            <button type="button" className="ic-secondary" disabled={busy} onClick={() => void redo()}>
-              {busy ? P.making : P.make}
-            </button>
+            {!mismatch && (
+              <button type="button" className="ic-secondary" disabled={busy} onClick={() => void redo()}>
+                {busy ? P.making : P.make}
+              </button>
+            )}
             <button type="button" className="ic-secondary" disabled={busy} onClick={() => setOpen(false)}>
               {P.cancel}
             </button>
@@ -532,6 +559,7 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
                     {P.versionMeta(v, v.recipe?.model?.name ?? v.model)}
                     {v.recipe?.picked?.length ? <> · {creditLine(v.recipe.picked.map((x) => ({ what: x.what, by: x.by, hidden: false })))}</> : null}
                     <br />“{v.note}”
+                    {v.recipe?.lettering && L ? <LetteringRecordView r={v.recipe.lettering} w={L} /> : null}
                   </figcaption>
                 </figure>
                 {isShown ? (

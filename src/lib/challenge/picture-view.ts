@@ -20,6 +20,7 @@ import { PICTURE_WORDING as P } from './picture-wording';
 import { sameTexts, shareMaker, textsFor } from './share-makers';
 import type { PostedOnItem } from '~/components/posted-on';
 import { callNameOf } from './names';
+import { LETTERING_WORDING as LW, type LetteringRecord } from '../images/lettering';
 
 /**
  * A challenge picture's page, /challenge/p/<version> (owner, 2026-11-05; docs/proposals/challenge-moments.md §1.3
@@ -103,7 +104,7 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
   const posts: PostedOnItem[] = CHALLENGE.posts ? (await postsFor(sql, p.versionId).catch(() => [])).map(({ id, network, handle, at, url }) => ({ id, network, handle, at, url })) : [];
   const maker = designByline(p.byName, p.byFid);
   // Its backstory (owner, 2026-11-09): in its version's body (new pictures only).
-  const [vb] = await sql<{ body: unknown }[]>`select body from studio.element_versions where id = ${p.versionId}`;
+  const [vb] = await sql<{ body: unknown; lettering: LetteringRecord | null }[]>`select v.body, r.params->'lettering' as lettering from studio.element_versions v left join studio.recipes r on r.id = v.recipe_id where v.id = ${p.versionId}`;
   const backstory = backstoryOf(vb?.body);
   // The redesign (screen 4): the model and its maker, the date, the chain and the recipe's main lines.
   const im = await imageByVersion(sql, p.versionId).catch(() => null);
@@ -127,6 +128,9 @@ export async function pictureView(sql: Sql, versionId: string, now: Date = new D
     by: P.by(maker),
     words: p.words,
     backstory,
+    /** Words the model drew (lettering, part C): its record, as published with it (P8j), and the words to show it. */
+    lettering: vb?.lettering && Array.isArray(vb.lettering.phrases) ? vb.lettering : null,
+    letteringW: { recordHead: LW.recordHead, book: LW.book('{block}'), own: LW.own, ownBy: LW.ownBy(maker), recordRead: LW.recordRead('{reader}', '{maker}'), recordPad: LW.recordPad },
     name,
     /** Who it's invented by, as the page names its maker ('@name'). */
     maker,
