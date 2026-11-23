@@ -6,15 +6,23 @@ import { authFetch, inMiniApp, useAuth } from '~/lib/client-auth';
 import { HOST_CHECK_MS, HOST_PROMPT_MS, withTimeout } from '~/lib/host-timeout';
 import { MIC_HELP, micPlace } from '~/lib/mic-help';
 import { loadTake, removeTake, saveTake, type DeviceTake } from '~/lib/voice/device-takes';
+import { VoiceRemove } from '~/components/voice-remove';
+import Link from 'next/link';
+import { LearnMore, LearnMoreParts } from '~/components/challenge-learn-more';
+import type { LearnMoreView } from '~/lib/challenge/learn-more-view';
+import { citeHref } from '~/lib/challenge/learn-more';
 import '../styles/voice.css';
+
+const REMOVE_DRAFT = 'Remove this draft? Its audio is deleted and it can’t be brought back.';
 
 /**
  * /storyboard/record, the Ephelion voice slice 1 (Nate, 2026-11-19; DRAFT, admins only behind VOICE's switch):
  * consent, pick a voice, record the whole speech with the words scrolling, convert it with ElevenLabs, check it word
  * for word, redo one sentence, accept a private draft; or listen to the ready-made reading.
  *
- * The raw take lives in this tab only (a Blob in a ref), is sent once for conversion and dropped right after, whatever
- * the answer; it is never stored by the site. Leaving the page before Accept discards everything.
+ * The raw take stays on the person's device (IndexedDB, under their FID and the speech) until they remove it or record
+ * again, and is sent only when they press Convert; it is never stored by the site. Each converted take is kept as their
+ * private draft as soon as it comes back (own-voice-v3, reread by Nate 2026-11-22).
  */
 
 interface Choice { presetId: string; name: string; description: string; candidate: number; generatedVoiceId: string; previewUrl: string; saved: boolean }
@@ -220,7 +228,14 @@ function SignedAudio({ path, label }: { path: string; label: string }) {
   );
 }
 
-export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
+/** A citation, linked to its block in the reader (as the Learn more texts link theirs). */
+const Cite = ({ b }: { b: string }) => (
+  <Link className="chc-cite" href={citeHref(b)} prefetch={false}>
+    {b}
+  </Link>
+);
+
+export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; learn?: LearnMoreView }) {
   const auth = useAuth();
   // Who may use it is the server's to say (src/lib/voice/flag.ts): its routes answer 404 to anyone the switch doesn't
   // let in, and the page then shows the site's usual not-found. So no admin list is checked here (P5b).
@@ -552,7 +567,6 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
   }
 
   async function removeDraft(id: string): Promise<boolean> {
-    if (!window.confirm('Remove this draft? Its audio is deleted and it can\'t be brought back.')) return false;
     setBusy('remove');
     const r = await authFetch(`/api/voice/drafts/${id}`, { method: 'DELETE' });
     setBusy(null);
@@ -578,16 +592,19 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
 
   return (
     <main className="vr">
-      <p className="vr-kicker">Admin trial · Draft</p>
-      <h1>{s.speech.title}</h1>
-      <p className="vr-labels">
-        {s.speech.label.kind === 'book' ? (
-          <><span className="vr-tag">{s.speech.label.text}</span> Lord Ephelion&rsquo;s letter, {s.speech.label.block}, word for word</>
-        ) : (
-          <><span className="vr-tag">{s.speech.label.text}</span> {s.speech.credit} · version {s.speech.version}</>
-        )}
-        {s.speech.standIn && <> · <span className="vr-tag">Stand-in</span> until the team&rsquo;s speeches arrive</>} · <span className="vr-tag">Invented</span> performing it aloud is this edition&rsquo;s
-      </p>
+      {/* The top of the page (Nate, 2026-11-22; title, intro and the picker's lines reread word for word). */}
+      <h1>The Ephelion challenge</h1>
+      <div className="vr-intro">
+        <p>
+          Lord Ephelion is the Arctic Empire&apos;s consul to Veridia (<Cite b="c3-b5" />). In the book his messages reach Veridians everywhere: on a poster in a tunnel (<Cite b="c3-b4" />), in a live debate (<Cite b="c8-b17" />), on a restaurant screen that cuts into a Helisport game (<Cite b="c13-b62" />). As one character puts it, &quot;Ephelion&apos;s goal is to inspire people inside Veridia to join the Arctic cause.&quot; (<Cite b="c21-b76" />)
+        </p>
+        <p>Give one of his speeches a voice: perform it yourself, or start from a ready-made reading, then storyboard it.</p>
+      </div>
+      {learn && (
+        <LearnMore title={learn.title}>
+          <LearnMoreParts learn={learn} />
+        </LearnMore>
+      )}
       {!s.ready && <p className="vr-warn" role="status">Not ready: the voice service isn&rsquo;t set up on this server.</p>}
       {message && <p className="vr-warn" role="alert">{message}</p>}
 
@@ -616,10 +633,14 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
               {s.speeches.map((x) => (
                 <label key={x.id} className={`vr-speech${x.id === s.speech.id ? ' vr-on' : ''}`}>
                   <input type="radio" name="speech" checked={x.id === s.speech.id} onChange={() => pickSpeech(x.id)} />
+                  {/* Its title, and one line under it (Nate, 2026-11-22, reread word for word). */}
                   <span>
-                    <strong>{x.title}</strong>{' '}
-                    <span className="vr-tag">{x.label.text}</span>
-                    <span className="vr-small"> {x.label.kind === 'book' ? `${x.label.block}, word for word` : `${x.credit} · version ${x.version}`} · {x.sentences.length} sentences</span>
+                    <strong>{x.title}</strong>
+                    <span className="vr-small vr-speech-line">
+                      {x.label.kind === 'book'
+                        ? `From the book, word for word (${x.label.block}). In the book it is a written message; reading it aloud is this edition's idea.`
+                        : `${x.label.text} · ${x.credit} · version ${x.version}`}
+                    </span>
                   </span>
                 </label>
               ))}
@@ -680,7 +701,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
               ) : (
                 <>
                   <p className="vr-note">
-                    About {totalWords} words, {mmss(estMinutes * 60)} at your pace. The words scroll while you read; your recording stays in this tab until you send it.
+                    About {totalWords} words, {mmss(estMinutes * 60)} at your pace. The words scroll while you read; your recording stays on this device until you remove it or record again, and is sent to be converted only when you press Convert.
                   </p>
                   <label className="vr-pace">
                     Pace: {wpm} words a minute
@@ -820,7 +841,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
               ) : (
                 <div className="vr-row">
                   <p className="vr-ok">Kept as your draft. Only you can see it; nothing is published.</p>
-                  <button type="button" className="vr-btn vr-quiet vr-small-btn" onClick={async () => { if (await removeDraft(accepted)) discard(); }} disabled={busy !== null}>Remove</button>
+                  <VoiceRemove label="Remove" question={REMOVE_DRAFT} disabled={busy !== null} busy={busy === 'remove'} onRemove={async () => { if (await removeDraft(accepted)) discard(); }} />
                 </div>
               )}
               <p className="vr-small">Each converted take is kept as your draft as soon as it comes back, until you remove it. Redone sentences are kept when you press &ldquo;Use this one&rdquo;.</p>
@@ -856,9 +877,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                     ) : d.kind === 'performance' ? (
                       <a className="vr-btn vr-small-btn vr-remove" href={`/storyboard/board/${d.id}`}>Make the storyboard</a>
                     ) : null}{' '}
-                    <button type="button" className="vr-btn vr-quiet vr-small-btn vr-remove" onClick={() => removeDraft(d.id)} disabled={busy !== null}>
-                      Remove this draft
-                    </button>
+                    <VoiceRemove className="vr-btn vr-quiet vr-small-btn vr-remove" label="Remove this draft" question={REMOVE_DRAFT} disabled={busy !== null} onRemove={() => removeDraft(d.id)} />
                   </li>
                 ))}
               </ul>
