@@ -103,3 +103,17 @@ export function speeches(): Speech[] {
   return (cache ??= [fromBlock('ephelion-c13-b64', 13, 64, ['Lord Ephelion', 'Ephelion', 'Dreadknot', 'Veridia', 'Arctic Empire']), ...invented()]);
 }
 export const speechById = (id: string) => speeches().find((s) => s.id === id) ?? null;
+
+/**
+ * Where the book shows a speech, shown above the scene's setting box (Nate, 2026-11-22): the book's own words, word for
+ * word from its chapter file, with the block. Only the book speech has one: c13-b64 is broadcast on a restaurant screen,
+ * and the book never says where Ephelion is (c13-b62, c13-b63). It is shown as a Book quote, never sent as the setting:
+ * the setting box starts empty, for the person's own words. The invented speeches have none.
+ */
+const SETTING_QUOTES: Record<string, { chapter: number; idx: number }> = { 'ephelion-c13-b64': { chapter: 13, idx: 63 } };
+export function settingQuote(speechId: string): { text: string; block: string } | null {
+  const q = SETTING_QUOTES[speechId];
+  if (!q) return null;
+  const b = loadChapter(q.chapter)?.blocks.find((x) => x.idx === q.idx);
+  return b ? { text: strip(b.content), block: `c${q.chapter}-b${q.idx}` } : null;
+}
