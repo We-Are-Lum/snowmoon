@@ -187,7 +187,7 @@ export function makeView(src: Source, opts: { styles: readonly PublishedStyle[];
 export type MakeView = ReturnType<typeof makeView>;
 
 /**
- * The lettering words the remix screen shows (lettering, part C; DRAFT wording, src/lib/images/lettering.ts): the
+ * The lettering words the remix screen shows (lettering, part C; reread by the owner 2026-11-23, src/lib/images/lettering.ts): the
  * "Words to draw" preview, the line before Make it, the open model's refusal (naming the closed models offered to this
  * visitor, or only the line when none is), and the mismatch screen. Plain strings: the screen fills {block}, {reader}.
  */

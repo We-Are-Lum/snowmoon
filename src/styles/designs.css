@@ -913,7 +913,6 @@ a.chp-btn:hover, .chp-btn:hover { background: var(--soft); text-decoration: none
 .lt-phrase { overflow-wrap: anywhere; font-size: 17px; line-height: 1.4; color: var(--ink); }
 .lt-note { margin: 4px 0 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; text-wrap: pretty; }
 .lt-warning { margin: 0 0 6px; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--body); text-wrap: pretty; }
-.lt-draft { display: inline-block; padding: 0 5px; border: 1px solid var(--muted); border-radius: 3px; font-size: 11px; letter-spacing: 0.06em; color: var(--muted); }
 .lt-mismatch { display: flex; flex-direction: column; gap: 6px; padding: 12px; border: 1.5px solid var(--warn); border-radius: var(--radius); }
 .lt-mismatch-head { margin: 0; font-weight: 600; color: var(--warn); }
 .lt-mismatch p { margin: 0; text-wrap: pretty; }

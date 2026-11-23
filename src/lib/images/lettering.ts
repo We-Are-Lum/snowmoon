@@ -2,7 +2,7 @@
  * Words a closed model draws in a picture (lettering, part C; owner's decisions of 2026-11-18 to 2026-11-22). Pure: no
  * database, no network, no server-only import, so the make screens (for the "Words to draw" preview), the server, the
  * tests and check:principles P8j all run the same rules. Drafted on branch closed-lettering (scripts/lib/lettering-draft.ts,
- * 2026-11-18) by the coding agent (Claude, a closed model by Anthropic); wired in on branch lettering. DRAFT wording.
+ * 2026-11-18) by the coding agent (Claude, a closed model by Anthropic); wired in on branch lettering. Wording reread by the owner 2026-11-23 (#215).
  *
  * The rules (owner):
  * - Only words in double quotation marks, straight or curly, are lettering; at most 3 phrases, 8 words and 48
@@ -88,7 +88,7 @@ export function phraseSource(text: string, blocks: BookBlocks, fid: number): Let
 // The prompt's lettering line, in place of the no-text line, for these pictures only.
 // ---------------------------------------------------------------------------------------------------------------------
 const listed = (ps: string[]) => (ps.length === 1 ? `"${ps[0]}"` : `${ps.slice(0, -1).map((p) => `"${p}"`).join(', ')} and "${ps[ps.length - 1]}"`);
-/** DRAFT wording (coding agent, 2026-11-18; the 10-picture test's line, with "well inside the edges" for the pad). */
+/** Drafted by the coding agent (2026-11-18; the 10-picture test's line, with "well inside the edges" for the pad); reread by the owner 2026-11-23. */
 export const letteringLine = (ps: string[]) =>
   `Draw exactly ${ps.length === 1 ? 'these words' : 'these words, each where the change puts it'}, spelled exactly as written, and no other lettering, logos or signs with words: ${listed(ps)}. Put them in the upper half of the picture, well inside the edges.`;
 
@@ -132,7 +132,7 @@ export const READERS: Record<'OpenAI' | 'Google', Reader> = {
 };
 export const readerFor = (maker: string): Reader | null => (maker === 'OpenAI' || maker === 'Google' ? READERS[maker] : null);
 export const READ_MAX_TOKENS = 1500;
-/** The reader's one instruction (DRAFT, coding agent; the 2026-11-18 test's). It never contains the words asked for. */
+/** The reader's one instruction (the coding agent's, the 2026-11-18 test's; kept by the owner 2026-11-23). It never contains the words asked for. */
 export const READ_TEXT_INSTRUCTION = [
   'You transcribe writing in pictures. List every piece of visible writing in the picture (a sign, a banner, a label, a caption, a printed or painted word), exactly as drawn: the same letters, capitals, spelling and punctuation, even where it is misspelled, oddly spaced or partly cut off. Never correct, complete or guess at a word you cannot see; transcribe only what is there.',
   'Give one entry per separate piece of writing, in reading order. Join the lines of one piece with a single space. Set cut_off to true for a piece that runs off an edge of the picture. If there is no writing at all, return an empty list.',
@@ -235,7 +235,9 @@ export function p8jProblems(pictures: readonly LetteredPicture[], blocks: Readon
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-// The words. DRAFT wording (coding agent, 2026-11-22), for the owner's reread before merge.
+// The words: drafted by the coding agent (2026-11-22); reread by the owner 2026-11-23 (#215: "reread, with these changes"),
+// with his one change to warning and warningAdmin ("if the words aren't exactly yours" becomes "if the words aren't
+// exactly the ones in quotation marks"); everything else as drafted.
 // ---------------------------------------------------------------------------------------------------------------------
 const names = (xs: readonly string[]) => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} or ${xs[xs.length - 1]}`);
 export const LETTERING_WORDING = {
@@ -252,8 +254,8 @@ export const LETTERING_WORDING = {
   ownBy: (by: string) => `${by}’s own words`,
   /** Before Make it, whenever quoted words go to a closed model (owner, 2026-11-22). */
   // "Uses one of today's pictures" (the owner's words) made true for a closed picture, which counts as CLOSED_IMAGES.countsAs.
-  warning: `The model can get words wrong. Each picture is read back; if the words aren’t exactly yours, it isn’t kept, and making it again uses ${CLOSED_IMAGES.countsAs} more of today’s pictures.`,
-  warningAdmin: 'The model can get words wrong. Each picture is read back; if the words aren’t exactly yours, it isn’t kept, and making it again is paid from the admins’ daily limit.',
+  warning: `The model can get words wrong. Each picture is read back; if the words aren’t exactly the ones in quotation marks, it isn’t kept, and making it again uses ${CLOSED_IMAGES.countsAs} more of today’s pictures.`,
+  warningAdmin: 'The model can get words wrong. Each picture is read back; if the words aren’t exactly the ones in quotation marks, it isn’t kept, and making it again is paid from the admins’ daily limit.',
   /** The open model with quoted words: refused before anything is spent (owner, 2026-11-22). */
   openRefused: (open: string, closed: readonly string[]) =>
     closed.length ? `${open} can’t draw words. To draw the words in quotation marks, choose ${names(closed)}.` : `${open} can’t draw words, and no model that can is offered where you are. Take the quotation marks out to make it without words.`,

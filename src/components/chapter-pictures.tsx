@@ -124,7 +124,7 @@ export interface PicturesState {
   defaultModel?: string;
   /** Whether pictures can be added (0043_chapter_picture_additions applied). */
   adding?: boolean;
-  /** Lettering's words (part C; the server's, DRAFT): the preview, the line before Make, the open refusal, the mismatch. */
+  /** Lettering's words (part C; the server's, reread by the owner 2026-11-23): the preview, the line before Make, the open refusal, the mismatch. */
   lettering?: LetteringW;
 }
 export interface PictureItem {
@@ -518,7 +518,7 @@ export function PicturePanel({ item, state, reload, onShown }: { item: PictureIt
         <div className="cp-redo">
           {item.lettered && item.lettered.length > 0 && (
             <p className="you-meta" data-slot="lettered-job">
-              <span className="lt-draft">DRAFT</span> {LETTERING_WORDING.letteredJob(item.lettered)}
+              {LETTERING_WORDING.letteredJob(item.lettered)}
             </p>
           )}
           <PublishedTextField id={`cp-note-${item.id}`} label={added ? P.noteAdded : P.noteLabel} value={note} onChange={setNote} rows={3} maxLength={CHAPTER_PICTURES.noteMaxChars} />
