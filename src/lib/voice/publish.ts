@@ -6,6 +6,7 @@ import { boardSource, keptPictures, latestBoard } from './board-store';
 import { CLOSING, closingCredits, publishProblems, type Closing, type PictureModel } from './closing';
 import { closingCard } from './closing-card';
 import { publicUrl } from './public-store';
+import { hiddenKeyFor } from './store';
 import type { Shot } from './board';
 
 /**
@@ -195,22 +196,28 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
   }
 }
 
-export async function takeDown(sql: Sql, fid: number, id: string, deps: Pick<PublishDeps, 'deletePublic'>): Promise<Result> {
+export async function takeDown(sql: Sql, fid: number, id: string, deps: Pick<PublishDeps, 'deletePublic'> & { deletePrivate?: (key: string) => Promise<void> }): Promise<Result> {
   if (!/^[0-9a-f-]{36}$/.test(id)) return { status: 404, json: { error: 'Not found' } };
   const keys = (await sql`select k from studio.take_down_voice_publication(${id}::uuid, ${fid}::bigint) as k`).map((r) => r.k as string);
   if (!keys.length) return { status: 404, json: { error: 'Not found' } };
   const failed: string[] = [];
   for (const k of keys) await deps.deletePublic(k).catch(() => failed.push(k));
+  // A hidden storyboard's files are kept privately while it is hidden (moderation): its maker's take-down deletes those too.
+  if (deps.deletePrivate) for (const k of keys) await deps.deletePrivate(hiddenKeyFor(k)).catch(() => {});
   return { status: 200, json: { ok: true, removed: keys.length - failed.length, failed: failed.length } };
 }
 
-/** A live publication, for its public page: the recipe and the files' public addresses. */
+/**
+ * A live publication, for its public page: the recipe and the files' public addresses. A hidden one (moderation) comes
+ * back with `hidden` and no files: its page shows only the notice (its maker asks for the reason themselves).
+ */
 export async function publication(sql: Sql, id: string) {
   if (!/^[0-9a-f-]{36}$/.test(id)) return null;
-  const [r] = await sql`select id, fid, named, published_at, recipe, files from studio.voice_publications where id = ${id} and taken_down_at is null`;
+  const [r] = await sql`select id, fid, named, published_at, recipe, files, hidden_at from studio.voice_publications where id = ${id} and taken_down_at is null`;
   if (!r) return null;
-  const files = (r.files as { role: string; key: string; sha256: string }[]).map((f) => ({ ...f, url: publicUrl(f.key) }));
-  return { id: r.id as string, fid: r.named ? (r.fid as number) : null, publishedAt: r.published_at, recipe: r.recipe as Record<string, unknown>, files };
+  const hidden = r.hidden_at ? {} : null;
+  const files = hidden ? [] : (r.files as { role: string; key: string; sha256: string }[]).map((f) => ({ ...f, url: publicUrl(f.key) }));
+  return { id: r.id as string, fid: r.named ? (r.fid as number) : null, publishedAt: r.published_at, recipe: r.recipe as Record<string, unknown>, files, hidden };
 }
 
 /** A person's own live publication of a draft, if any (the draft page links to it). */

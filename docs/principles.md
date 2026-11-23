@@ -467,6 +467,9 @@ A hide still wins everywhere, and with no database none shows (`npm run test:add
   decisions; and for the additions, a second file writing them and an addition moved in place; each must fail
   (`scripts/lib/p5b.ts`, `npm run test:chapter-pictures`, `npm run test:chapter-additions`).
 - `P5c`: a hidden image's file leaves the public bucket.
+- `P5k` (DRAFT, branch voice-moderation, 2026-11-23): a hidden published storyboard's page shows only the notice ("This
+  storyboard was hidden by a moderator."), names none of its files, and none of its files is still public; a planted
+  public file must fail. Hiding is reversible (a moderator or the maintainer may unhide); every step is logged.
 - `P5d`: every component that shows a pick shows its label ("Picked by @…") and the switch with "Most liked",
   "Newest" and "Liked by me"; the switch keeps the reader's choice on their device (localStorage) and never sends it.
 - `P5e`: nothing outside the pick code reads `studio.admin_picks` (the feed, search, profiles, the agent tools and
