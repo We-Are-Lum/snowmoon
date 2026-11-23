@@ -74,7 +74,7 @@ coding agent and its helpers are in `docs/prompts/`.
   And (Nate, 2026-11-21: "confirm whether transcription requests leave a history item … If they do, delete those too";
   this sentence reread by him the same day): ElevenLabs keeps each transcript by its id (not in history), so the flow
   deletes it with the same retries, and a planted skipped transcript delete is caught too.
-- `P2u` (proposed, for Nate's reread): a storyboard picture the guide drafted keeps the person's request word for word, the
+- `P2u` (reread by Nate 2026-11-23, as drafted): a storyboard picture the guide drafted keeps the person's request word for word, the
   guide's model, its draft and the prompt as sent, each reference with who chose it and why, and every edit; a planted
   recipe without the request must fail (`scripts/check-principles.ts`, `test:voice` section GU).
 - `P1i` (reread by Nate 2026-11-21; v3 reread 2026-11-22): the own-voice consent shown is `own-voice-v3`, and only by the voice pages and routes,

@@ -223,8 +223,19 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
         />
       )}
 
-      {/* The dialogue, top to bottom: every message, the person's word for word, the guide's with its model. */}
-      <section className="vg-dialogue" aria-label="Your dialogue with the guide">
+      {/* The dialogue: every message, the person's word for word, the guide's with its model. The finished steps fold
+          under "Earlier", so on a phone the current step's card sits near the top. */}
+      {(() => {
+        const groupOf = (step: GuideStep) => (step === 'shot' || step === 'fix' ? 'shots' : step);
+        // A person's message belongs to the shot of the guide's reply after it.
+        const keyOf = (i: number): string | undefined => {
+          for (let j = i; j < msgs.length; j++) if (msgs[j].role === 'guide') return (msgs[j].draft as { shotKey?: string } | null)?.shotKey;
+          return undefined;
+        };
+        const isNow = (i: number) => groupOf(msgs[i].step) === stage && (stage !== 'shots' || keyOf(i) === shot?.key);
+        const earlier = msgs.filter((_, i) => !isNow(i));
+        const now = msgs.filter((_, i) => isNow(i));
+        const intro = (
         <div className="vg-msg vg-guide">
           <p className="vg-by">Guide</p>
           <p>Let&rsquo;s build the one scene every shot is filmed in: one place, one light, one set of clothes.</p>
@@ -235,7 +246,8 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
           )}
           <p>{ok.settingQuote ? 'The book doesn’t say where he is. ' : ''}Where is he speaking from, and what are the light and the mood?</p>
         </div>
-        {msgs.map((x) => (
+        );
+        const renderMsg = (x: GuideMessage) => (
           <div key={x.id} className={`vg-msg ${x.role === 'person' ? 'vg-person' : 'vg-guide'}`}>
             {x.role === 'person' ? <p className="vg-by">You</p> : byGuide(x)}
             <p>{x.text}</p>
@@ -254,8 +266,21 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
             )}
             {x.role === 'guide' && x.draft && 'prompt' in x.draft && <p className="vg-draft">{x.draft.prompt}</p>}
           </div>
-        ))}
-      </section>
+        );
+        return (
+          <section className="vg-dialogue" aria-label="Your dialogue with the guide">
+            {stage === 'setting' && intro}
+            {(stage !== 'setting' || earlier.length > 0) && (
+              <details className="vg-earlier">
+                <summary>Earlier in your dialogue ({earlier.length + (stage === 'setting' ? 0 : 1)} messages)</summary>
+                {stage !== 'setting' && intro}
+                {earlier.map(renderMsg)}
+              </details>
+            )}
+            {now.map(renderMsg)}
+          </section>
+        );
+      })()}
 
       {/* The current step's card: use the draft, edit it, or ask again. */}
       <section className="vr-card vg-card" aria-labelledby="vg-step-h">

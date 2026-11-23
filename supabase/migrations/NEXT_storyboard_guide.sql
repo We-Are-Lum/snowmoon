@@ -146,6 +146,33 @@ rollback;
 -- do $$ begin
 --   if exists (select 1 from studio.voice_guide_messages) then raise exception 'UNDO REFUSED: dialogues exist; nothing is changed'; end if;
 -- end $$;
+-- -- 0046's two functions, word for word, without the dialogue (the table goes after them, so nothing refers to it).
+-- create or replace function studio.delete_voice_draft(p_id uuid, p_fid bigint) returns setof text
+-- language plpgsql security definer set search_path = studio, pg_temp as $fn$
+-- begin
+--   if not exists (select 1 from studio.voice_drafts where id = p_id and fid = p_fid and published_at is null) then return; end if;
+--   if exists (select 1 from studio.voice_publications where draft_id = p_id and taken_down_at is null) then return; end if;
+--   if exists (select 1 from studio.voice_boards where draft_id = p_id and fid <> p_fid) or exists (select 1 from studio.voice_board_pictures where draft_id = p_id and fid <> p_fid) then return; end if;
+--   delete from studio.voice_publications where draft_id = p_id and taken_down_at is not null;
+--   return query delete from studio.voice_board_pictures where draft_id = p_id returning storage_key;
+--   delete from studio.voice_board_asks where draft_id = p_id;
+--   delete from studio.voice_boards where draft_id = p_id;
+--   delete from studio.voice_reading_timings where draft_id = p_id;
+--   return query delete from studio.voice_draft_audio where draft_id = p_id returning storage_key;
+--   delete from studio.voice_drafts where id = p_id and fid = p_fid and published_at is null;
+-- end $fn$;
+-- revoke all on function studio.delete_voice_draft(uuid, bigint) from public, anon, authenticated;
+-- grant execute on function studio.delete_voice_draft(uuid, bigint) to studio_writer;
+-- create or replace function studio.delete_voice_board(p_draft uuid, p_fid bigint) returns setof text
+-- language plpgsql security definer set search_path = studio, pg_temp as $fn$
+-- begin
+--   if exists (select 1 from studio.voice_publications where draft_id = p_draft and fid = p_fid and taken_down_at is null) then return; end if;
+--   delete from studio.voice_publications where draft_id = p_draft and fid = p_fid and taken_down_at is not null;
+--   return query delete from studio.voice_board_pictures where draft_id = p_draft and fid = p_fid returning storage_key;
+--   delete from studio.voice_board_asks where draft_id = p_draft and fid = p_fid;
+--   delete from studio.voice_boards where draft_id = p_draft and fid = p_fid;
+-- end $fn$;
+-- revoke all on function studio.delete_voice_board(uuid, bigint) from public, anon, authenticated;
+-- grant execute on function studio.delete_voice_board(uuid, bigint) to studio_writer;
 -- drop table if exists studio.voice_guide_messages;
--- (then re-run 0046's two "create or replace function" blocks, delete_voice_draft and delete_voice_board, as they are there)
 -- commit;
