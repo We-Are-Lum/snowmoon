@@ -4,7 +4,7 @@ The owner's request of 2026-11-23: a private review tool for the poidh backstory
 (poidh.xyz/base/bounty/1546; bounty 560 on PoidhV3 on Base), to go through the claims and make a shortlist before the
 challenge closes on 29 Nov, and the same tool for the challenge's entries. Written by the coding agent (Anthropic's
 Claude, a closed model). **Not merged, no pull request.** Branch `bounty-review`, from `origin/main` at 8bf0b667.
-Merges only after the owner's "applied" (NEXT_bounty_review.sql) and the merge word. $0 spent; no model called.
+The owner applied the migration (now 0048_bounty_review.sql) on 2026-11-23 and asked for the merge once the checks pass. $0 spent; no model called.
 
 ## What it is
 
@@ -34,7 +34,10 @@ Merges only after the owner's "applied" (NEXT_bounty_review.sql) and the merge w
 - **Pictures** come through the site (`/api/admin/bounty/image?claim=<id>`, admins only): the server reads the claim's
   tokenURI on Base (never from the request), fetches it with the guards from warplore's comic bounty (https to a
   public host name only, never an address or a name that resolves to a private one; redirects re-checked; 12 MB cap;
-  40 MP cap) and sends a JPEG it drew itself. An admin's browser never asks a claimer's host for anything (P6).
+  40 MP cap) and sends a JPEG it drew itself. After the owner's review (2026-11-23): the private-address check is the
+  connection's own DNS lookup on every hop (node:https `lookup`), so DNS rebinding can't slip a private address past a
+  separate check; and only JPEG, PNG, WebP, GIF or AVIF are accepted, known by their bytes and sharp's reading (never
+  SVG). An admin's browser never asks a claimer's host for anything (P6).
 
 ## Which Base RPC it reads
 
@@ -55,7 +58,7 @@ reread: the server, when an admin opens a claim, fetches that claim's picture fr
 IPFS gateway). That request carries no visitor data (it is the site's server, not the admin's browser). No legal text is
 changed on this branch.
 
-## The migration: NEXT_bounty_review.sql (not applied)
+## The migration: 0048_bounty_review.sql (applied by the owner, 2026-11-23)
 
 Three new tables, additive, nothing else changes. Must run as `postgres` in the Supabase SQL Editor: A dry run (ends in
 rollback), B migration, C read-back (inside a transaction ending in rollback: rights read with has_table_privilege,
@@ -92,8 +95,9 @@ applied the page still lists every claim and says "Labels can't be saved yet".
   page, feed, agent tool or API reads them, and nothing anyone else sees is ordered or marked by them. The page sorts
   newest first under P5b's admin-only exception (its own 404 gate). **Tension:** P5b's text says admin code may write
   `studio.admin_picks` "and nothing else"; these private labels are a second admin write. p5b.ts doesn't test writes,
-  so the check passes, but the principle's wording needs a line from the owner, e.g. "and its private review labels
-  (studio.review_*), which no public page reads". I haven't changed principles.md.
+  so the check passed, and the principle's wording needed a line. **Resolved 2026-11-23:** the owner's line, reread
+  word for word, is in principles.md's P5b, and scripts/lib/p5b.ts now enforces it (only src/lib/review/ writes or
+  reads the review tables; planted faults in test:bounty-review, test:admin-activity and check:principles P5b-review).
 - **P6 (no third-party requests):** touched. Pass: the admin's browser loads only from the site (pictures are proxied
   and re-encoded by the server). Ratings/likes untouched.
 - **P7 (payments never enter scoring or ordering):** not touched (the bounty's amount is shown as read; nothing orders

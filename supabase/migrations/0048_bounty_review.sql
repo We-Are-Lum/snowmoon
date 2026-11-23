@@ -1,7 +1,10 @@
--- NEXT_bounty_review.sql: the admins' private review labels for the poidh backstory bounty's claims and the remix
--- challenge's entries (/admin/bounty; owner, 2026-11-23; branch bounty-review). NOT APPLIED. Takes the next free number
--- at merge (CLAUDE.md), checked against origin/main and production. DRAFT, drafted by the coding agent (Claude, a closed
--- model by Anthropic). Tested on in-memory PGlite against main's 0001-0047 (npm run test:bounty-review).
+-- 0048_bounty_review.sql: the admins' private review labels for the poidh backstory bounty's claims and the remix
+-- challenge's entries (/admin/bounty; owner, 2026-11-23; branch bounty-review). Numbered 0048 on 2026-11-23 (was
+-- NEXT_bounty_review.sql), the next free number after main's 0001-0047 (no unmerged branch holds a later number).
+-- APPLIED by the owner in production on 2026-11-23 (A, B, C: READ-BACK PASSED; the owner also tested it on Postgres 16
+-- against main's migrations: the dry run changes nothing, it applies twice, the read-back keeps nothing, the undo puts
+-- back main's exact shape). Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory PGlite
+-- against main's 0001-0047 (npm run test:bounty-review).
 -- Requires 0001_core (the studio schema and the studio_writer role). Nothing else.
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:
