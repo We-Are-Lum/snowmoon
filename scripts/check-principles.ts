@@ -357,6 +357,14 @@ add({
       }
       // A private draft's box ("Make your own", owner's long run 2, 2026-10-19): saved in the person's own drafts, never
       // published, sent to the model only with a message to the coach, and it says so.
+      // An admin's private note on a bounty claim or a challenge entry (/admin/bounty, owner 2026-11-23): read only by
+      // admins, never published, and it says so.
+      if (file.endsWith('components/admin-note-field.tsx')) {
+        for (const [what, re] of [['private', /Private:/], ['read only by admins', /only admins read it/], ['never published', /Never published/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the note box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the note box must not send its text anywhere itself`);
+        continue;
+      }
       if (file.endsWith('components/private-draft-field.tsx')) {
         for (const [what, re] of [['private', /Private:/], ['only theirs', /only you can open/], ['never published', /Never published/], ['sent only with a message to the coach', /only with a message to the coach/], ['described to screen readers', /aria-describedby/]] as const)
           if (!re.test(text)) problems.push(`${file}: the draft box must say it is ${what}`);

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { authFetch, useAuth } from '~/lib/client-auth';
 import { isAdmin } from '~/lib/admins';
+import { AdminNoteField } from './admin-note-field';
 import { FILTERS, LABELS, type ClaimCard, type EntryCard, type Filter, type Kind, type LabelKey, type ReviewView } from '~/lib/review/types';
 import '../styles/admin-bounty.css';
 
@@ -237,8 +238,7 @@ function Note({ c, disabled, onSave }: { c: Card; disabled: boolean; onSave: (no
   const saved = c.marks.note?.text ?? '';
   return (
     <section className="ab-notebox">
-      <label htmlFor="ab-note">Private note</label>
-      <textarea id="ab-note" rows={3} maxLength={280} value={text} onChange={(e) => setText(e.target.value)} placeholder="Only admins see this." />
+      <AdminNoteField id="ab-note" label="Private note" value={text} onChange={setText} maxLength={280} />
       <div className="ab-note-row">
         <span className="ab-note">{c.marks.note ? `${c.marks.note.by} · ${when(c.marks.note.at)}` : `${text.length}/280`}</span>
         <button type="button" disabled={disabled || text.trim() === saved} onClick={() => onSave(text)}>{text.trim() || !saved ? 'Save note' : 'Clear note'}</button>
