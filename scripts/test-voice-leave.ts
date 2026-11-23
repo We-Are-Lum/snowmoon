@@ -287,9 +287,9 @@ try {
   const row = page.locator('.vr-drafts li', { hasText: 'No word check yet' });
   check('L6. ... its draft says it has no word check, with "Check the words" and its estimate, and no "Make the storyboard"', (await row.count()) === 1 && (await row.getByRole('button', { name: /^Check the words \(≈ \d+ credits\)$/ }).count()) === 1 && (await row.locator('a', { hasText: 'Make the storyboard' }).count()) === 0);
   await row.getByRole('button', { name: /^Check the words/ }).click();
-  await page.locator('text=/^Checked: \d+ of \d+ sentences match/').first().waitFor({ timeout: 60_000 }).catch(() => {});
+  await page.getByText(/^Checked: \d+ of \d+ sentences match/).first().waitFor({ timeout: 60_000 }).catch(() => {});
   const after6 = (await pg.query<{ id: string; recipe: { check: unknown; checkedAgain?: { from: string } } }>(`select id, recipe from studio.voice_drafts where fid = $1 order by made_at desc limit 1`, [NATE])).rows[0];
-  check('L6. "Check the words": the page says how many sentences match', (await page.locator('text=/^Checked: \d+ of \d+ sentences match/').count()) > 0);
+  check('L6. "Check the words": the page says how many sentences match', (await page.getByText(/^Checked: \d+ of \d+ sentences match/).count()) > 0);
   check('L6. ... the draft is kept again with its check, and the one without it is gone', after6?.recipe.check !== null && after6?.recipe.checkedAgain?.from === noCheck?.id && (await pg.query(`select 1 from studio.voice_drafts where id = $1`, [noCheck?.id])).rows.length === 0);
   await page.waitForTimeout(1000);
   check('L6. ... and its draft now offers "Make the storyboard", with no "No word check yet" left', (await page.locator('.vr-drafts li', { hasText: 'No word check yet' }).count()) === 0 && (await page.locator(`a[href="/storyboard/board/${after6?.id}"]`).count()) === 1);
