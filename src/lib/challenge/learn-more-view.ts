@@ -4,7 +4,7 @@ import { firstLayerFacts } from './cards';
 import { callNameOf } from './names';
 import { LANDING_WORDING as L } from './landing-wording';
 import { loadChapter } from '../book';
-import { LATER_LABEL, LEARN_MORE, NOTE_PICKS, citeChapter, citeHref, learnMoreProblems, type Segment } from './learn-more';
+import { LATER_LABEL, LEARN_MORE, NOTE_PICKS, citeChapter, citeHref, learnMoreProblems, type LearnMoreText, type Segment } from './learn-more';
 
 /**
  * "Learn more about {Name}" as the page draws it (owner, 2026-11-12): one expander, replacing "Read where {Name} first
@@ -65,10 +65,11 @@ function render(slug: string, part: string, segs: readonly Segment[]): Rendered[
   });
 }
 
-export function learnMoreView(slug: string, name: string): LearnMoreView {
+/** texts: a character's own texts when they aren't LEARN_MORE's (the Ephelion challenge's, src/lib/voice/learn-more.ts). */
+export function learnMoreView(slug: string, name: string, texts: LearnMoreText | undefined = LEARN_MORE[slug]): LearnMoreView {
   const P = L.character;
-  const t = LEARN_MORE[slug];
-  const shown = t && learnMoreProblems(slug).length === 0 ? t : null;
+  const t = texts;
+  const shown = t && learnMoreProblems(slug, t).length === 0 ? t : null;
   // The book's call name: "Zei", and "Lord Ephelion" with his title (src/lib/challenge/names.ts).
   const call = callNameOf(name);
   return {

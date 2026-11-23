@@ -27,6 +27,8 @@ export interface Speech {
    */
   label: { kind: 'book'; text: 'Book'; block: string } | { kind: 'invented'; text: 'Invented, not from the book'; writers: string[] };
   standIn: boolean;
+  /** A version replaced by a newer one: still found by its id (recordings made against it), no longer offered. */
+  retired?: boolean;
   paragraphs: string[];
   sentences: Sentence[];
   /** The speech's names, sent to transcription as key terms and matched by sound in the word check (Nate, 2026-11-21). */
@@ -60,7 +62,8 @@ function fromBlock(id: string, chapter: number, idx: number, names: string[]): S
     version: 1,
     aiHelp: null,
     credit: null,
-    standIn: true,
+    // No longer a stand-in (Nate, 2026-11-22): c13-b64 is one of the challenge's speeches. Recipes made before keep what they recorded.
+    standIn: false,
     paragraphs,
     sentences: sentencesOf(paragraphs),
     names,
@@ -71,7 +74,7 @@ function fromBlock(id: string, chapter: number, idx: number, names: string[]): S
 interface InventedFile {
   source: { title: string; googleDocId: string; version: number };
   credits: { aiHelp: string; noAiHelp: string };
-  speeches: { id: string; version: number; aiHelp: boolean; title: string; names: string[]; paragraphs: string[] }[];
+  speeches: { id: string; version: number; aiHelp: boolean; title: string; names: string[]; paragraphs: string[]; retired?: string }[];
 }
 /** The team's speeches, as written (titles and notes are not spoken: only the paragraphs). */
 function invented(): Speech[] {
@@ -90,6 +93,7 @@ function invented(): Speech[] {
     aiHelp: x.aiHelp,
     credit,
     standIn: false,
+    ...(x.retired ? { retired: true } : {}),
     paragraphs: x.paragraphs,
     sentences: sentencesOf(x.paragraphs),
     names: x.names,
@@ -117,3 +121,6 @@ export function settingQuote(speechId: string): { text: string; block: string } 
   const b = loadChapter(q.chapter)?.blocks.find((x) => x.idx === q.idx);
   return b ? { text: strip(b.content), block: `c${q.chapter}-b${q.idx}` } : null;
 }
+
+/** The speeches offered to record: every one but the retired versions. */
+export const offeredSpeeches = () => speeches().filter((s) => !s.retired);

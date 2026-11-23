@@ -63,7 +63,31 @@
         "The future has never been built by everyone. It is built by the few who can. The rest still receive the benefits.",
         "Come and build with us.",
         "With regards."
-      ]
+      ],
+      "retired": "2026-11-22: replaced by last-five-years-v3; kept so recordings made against it still resolve, and no longer offered"
+    },
+    {
+      "id": "last-five-years-v3",
+      "version": 3,
+      "aiHelp": true,
+      "title": "The last five years",
+      "theme": "stagnation",
+      "names": [
+        "Veridia"
+      ],
+      "paragraphs": [
+        "What is one thing your city has built in the last five years that you're proud of?",
+        "Take your time.",
+        "Veridia last went to space twenty years ago. Its tallest building is forty years old.",
+        "And it is a lovely country. The gardens, the quiet streets.",
+        "But a country can be so careful with what it has that it stops making anything new. You have felt it.",
+        "There was something you were excited about once. An idea, a plan. And it never happened.",
+        "It never happened because somebody didn't have the courage to take a risk.",
+        "The future has never been built by everyone. The rest still receive the benefits, but it is built by the few who can.",
+        "Come and build with us.",
+        "With regards."
+      ],
+      "changed": "Nate, 2026-11-22: one sentence order changed in chat (\"Replace: 'The future has never been built by everyone. It is built by the few who can. The rest still receive the benefits.' with: 'The future has never been built by everyone. The rest still receive the benefits, but it is built by the few who can.'\"); the rest is v2 word for word. aiHelp carried from v2 until Nate sets it for v3."
     }
   ],
   "credits": {

@@ -159,3 +159,10 @@
 .vg-composer { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: var(--space-3); }
 .vg-composer > :first-child { width: 100%; }
 .vg-composer input { flex: 1; min-width: 0; font: inherit; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 18px; }
+
+.vr-confirm { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
+.vr-confirm-q { font-size: 0.95em; }
+
+/* The Ephelion challenge's top (Nate, 2026-11-22): the intro, and each speech's one line under its title. */
+.vr-intro p { margin: var(--space-2) 0; }
+.vr-speech-line { display: block; }

@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
 import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
+import { VoiceRemove } from '~/components/voice-remove';
 import { useChallengeModel } from '~/components/challenge-model-row';
 import type { ModelRowEntry } from '~/lib/challenge/models';
 import { applyCoverage, boardNotes, cutNear, emptyScene, pictureBlocked, SCENE, sentenceAt, sentenceBoundaries, sentencesIn, shotAt, shotReferences, shotsFromCuts, snapToWordEnd, type Note, type Scene, type Shot, type Timeline } from '~/lib/voice/board';
@@ -850,6 +851,25 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
         <button type="button" className="vr-btn" onClick={publish} disabled={busy !== null || dirty || !check?.on || (check?.problems.length ?? 1) > 0}>
           {busy === 'publish' ? 'Publishing…' : 'Publish'}
         </button>
+      </section>
+      {/* Removing one's own storyboard (rehearsal, 2026-11-23: there was no way on the page; the route existed). On a shared
+          ready-made reading it removes only this person's board, its pictures and tries; the reading stays. */}
+      <section className="vr-card" aria-labelledby="vb-remove-h">
+        <h2 id="vb-remove-h">Remove this storyboard</h2>
+        <p className="vr-small">{d.draft.kind === 'reading' ? 'Your storyboard on this reading: its versions, its kept pictures and its tries. The reading and anyone else’s storyboard on it stay.' : 'Its versions, its kept pictures and its tries. Your performance stays in your drafts.'}</p>
+        <VoiceRemove
+          label="Remove my storyboard"
+          question="Remove this storyboard? Its pictures are deleted and it can’t be brought back."
+          disabled={busy !== null || saved === 0}
+          busy={busy === 'remove'}
+          onRemove={async () => {
+            setBusy('remove');
+            const r = await authFetch(`/api/voice/boards?draft=${d.draft.id}`, { method: 'DELETE' }).catch(() => null);
+            setBusy(null);
+            if (r?.ok) window.location.href = '/storyboard/record';
+            else setMessage(((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error ?? 'It could not be removed. Try again.');
+          }}
+        />
       </section>
     </main>
   );

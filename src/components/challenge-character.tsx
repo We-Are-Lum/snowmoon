@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import type { CharacterView } from '~/lib/challenge/view';
-import type { Rendered } from '~/lib/challenge/learn-more-view';
 import type { CardTile } from './challenge-card';
 import { designByline } from '~/lib/images/byline';
 import { AiTag } from './ai-tag';
 import { CardLine, CharacterBases } from './challenge-card';
-import { LearnMore } from './challenge-learn-more';
+import { LearnMore, LearnMoreParts } from './challenge-learn-more';
 
 /**
  * A character's page, /challenge/<slug>: the redesign's screen 2 (Claude Design's handoff; owner-approved 2026-11-11),
@@ -56,46 +55,6 @@ function RemixGrid({ tiles, alt, remixThis, label }: { tiles: CardTile[]; alt: s
   );
 }
 
-/**
- * A "Learn more" text: plain words; citations as small links to the reader's block; glossary terms with a small ⓘ that
- * opens the entry in a popover (no script: the browser's popover; where it isn't supported the note shows inline), the
- * glossary page linked inside. A term with no entry (none today) shows as plain words.
- */
-function Segs({ segs, more }: { segs: Rendered[]; more: string }) {
-  return (
-    <>
-      {segs.map((s, i) =>
-        s.kind === 'text' ? (
-          <span key={i}>{s.text}</span>
-        ) : s.kind === 'cite' ? (
-          <Link key={i} className="chc-cite" href={s.href} prefetch={false}>
-            {s.label}
-          </Link>
-        ) : (
-          <span key={i} className="chc-term">
-            {s.term}
-            {s.note && (
-              <>
-                <button type="button" className="chc-term-i" popoverTarget={s.id} aria-label={`What is ${s.term}?`}>
-                  ⓘ
-                </button>
-                <span id={s.id} popover="auto" className="chc-term-note" role="note">
-                  <strong>{s.term}</strong> <q>{s.note.text}</q> <span className="chc-cite">{s.note.cite}</span>{' '}
-                  {s.href && (
-                    <Link href={s.href} prefetch={false}>
-                      {more}
-                    </Link>
-                  )}
-                </span>
-              </>
-            )}
-          </span>
-        ),
-      )}
-    </>
-  );
-}
-
 export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
   const { c, w, page: P } = v;
   return (
@@ -117,56 +76,7 @@ export function ChallengeCharacterBody({ v }: { v: CharacterView }) {
           {/* A button that opens the expander in place (the design pass, owner 2026-11-16): the <details>' own summary, so
               it keeps its keyboard and screen-reader behaviour; only its look is a button's. */}
           <LearnMore title={P.learn.title}>
-            <div className="chc-more-body">
-              {P.learn.draft && <p className="as-draft ch-draft">{P.learn.draft}</p>}
-              {P.learn.text ? (
-                <>
-                  <p className="chc-learn-part" data-part="who">
-                    <strong>{P.learn.text.who.head}</strong> <Segs segs={P.learn.text.who.segs} more={P.learn.glossaryLink} />
-                  </p>
-                  <p className="chc-learn-part" data-part="start">
-                    <strong>{P.learn.text.start.head}</strong> <Segs segs={P.learn.text.start.segs} more={P.learn.glossaryLink} />
-                  </p>
-                  <p className="chc-learn-part" data-part="later">
-                    <strong>{P.learn.text.later.head}</strong> <Segs segs={P.learn.text.later.segs} more={P.learn.glossaryLink} />
-                  </p>
-                  <p className="chc-learn-part" data-part="drives">
-                    <strong>{P.learn.text.drives.head}</strong> <Segs segs={P.learn.text.drives.segs} more={P.learn.glossaryLink} />
-                  </p>
-                  <div className="chc-learn-part" data-part="invent">
-                    <strong>{P.learn.text.invent.head}</strong>
-                    <ul className="chc-invent">
-                      {P.learn.text.invent.items.map((it, i) => (
-                        <li key={i}>
-                          <Segs segs={it} more={P.learn.glossaryLink} />
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </>
-              ) : (
-                <>
-                  {P.learn.facts.length > 0 && (
-                    <>
-                      <p className="chc-facts-note">{P.learn.factsNote}</p>
-                      <ul className="chc-facts">
-                        {P.learn.facts.map((f, i) => (
-                          <li key={f.block} className="chc-fact" data-block={f.block}>
-                            <span className="chc-fact-text">{f.text}</span>
-                            <q className="chc-fact-quote">{f.quote}</q>
-                            <span className="chc-fact-cite">
-                              {P.learn.chips[i]} · {f.block}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  )}
-                  {/* Only here, with no Learn more text: "Room to invent" ends with its own looks line (owner, 2026-11-16). */}
-                  <p className="chc-looks">{P.learn.looks}</p>
-                </>
-              )}
-            </div>
+            <LearnMoreParts learn={P.learn} />
           </LearnMore>
         </div>
       </div>
