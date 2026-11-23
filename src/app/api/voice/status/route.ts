@@ -39,7 +39,7 @@ export async function GET(request: Request) {
       choices,
       consent: { version: wording.version, line: wording.line, title: wording.title, text: wording.text, sha256: wording.sha256, agreed: sql ? await hasVoiceConsent(sql, who.fid) : false },
       models: { ...VOICE.models, provider: VOICE.provider },
-      limits: { maxTakeSeconds: VOICE.maxTakeSeconds, maxSentenceSeconds: VOICE.maxSentenceSeconds, maxTakeBytes: VOICE.maxTakeBytes, creditsPerMinute: VOICE.rates.convertCreditsPerMinute, readingCreditsPerChar: VOICE.rates.readingCreditsPerChar },
+      limits: { maxTakeSeconds: VOICE.maxTakeSeconds, maxSentenceSeconds: VOICE.maxSentenceSeconds, maxTakeBytes: VOICE.maxTakeBytes, creditsPerMinute: VOICE.rates.convertCreditsPerMinute, readingCreditsPerChar: VOICE.rates.readingCreditsPerChar, transcribeCreditsPerSecond: VOICE.rates.transcribeCreditsPerSecond },
       today: t && {
         funded,
         credits: Math.round(t.credits),

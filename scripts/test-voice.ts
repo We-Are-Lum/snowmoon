@@ -111,7 +111,7 @@ for (const [k, v] of [['VERCEL', '1'], ['VERCEL_ENV', 'production'], ['VERCEL_EN
   delete process.env[k];
 }
 check('S. a non-admin is not let in during the admin trial', !voiceAllowed(STRANGER) && voiceAllowed(NATE) && voiceAllowed(GARANCE));
-const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]', 'boards', 'boards/picture', 'boards/keep', 'boards/closing', 'publish', 'publish/[id]'];
+const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]', 'drafts/[id]/check', 'boards', 'boards/picture', 'boards/keep', 'boards/closing', 'publish', 'publish/[id]'];
 for (const r of routeFiles) {
   const mod = await route(r);
   const h = mod.POST ?? mod.GET ?? mod.DELETE;
@@ -735,6 +735,39 @@ check('$. the caps are placeholders in config, in credits and dollars', VOICE.ca
   check('G. ... its kept pictures\' files go too', r.status === 200 && storeFiles().every((f) => !f.startsWith(`voice-boards/${rdId}/${GARANCE}/`)));
   r = await draftRoute.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: rdId }) });
   check('G. with no one else\'s board on it, its maker can remove the reading, timings and all', r.status === 200 && (await sql`select count(*)::int n from studio.voice_reading_timings where draft_id = ${rdId}`)[0].n === 0);
+}
+
+// R. Checking the words again on a draft kept without its check (Nate, 2026-11-22, the no-SQL version).
+{
+  const checkRoute = await route('drafts/[id]/check');
+  const post = (fid: number, id: string) => checkRoute.POST(as(fid, { method: 'POST' }), { params: Promise.resolve({ id }) });
+  stub.setFailTranscribe(true);
+  r = await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(160_000)) }));
+  stub.setFailTranscribe(false);
+  const w = (await r.json()) as { draftId: string; checks: unknown };
+  const [old] = await sql`select recipe from studio.voice_drafts where id = ${w.draftId}`;
+  const oldRecipe = old?.recipe as { check: unknown; timeline: unknown; takes: { takeSha256: string; convertedSha256: string }[] } | undefined;
+  check('R. a whole take whose transcription failed is kept all the same, with no check and no strip', r.status === 200 && w.checks === null && oldRecipe?.check === null && oldRecipe.timeline === null);
+  check('R. ... so it can\'t be storyboarded yet', (await boards.GET(as(GARANCE, {}, `http://localhost/api/voice/boards?draft=${w.draftId}`))).status === 409);
+  check('R. checking someone else\'s draft reads as missing (404), even for an admin, and nothing is called', (await post(NATE, w.draftId)).status === 404);
+  const sttBefore = stub.calls.filter((c) => c.path === '/v1/speech-to-text').length;
+  const tdBefore = stub.deletedTranscripts.length;
+  r = await post(GARANCE, w.draftId);
+  const j = (await r.json()) as { id: string; replaced: string; oldRemoved: boolean; matched: number; sentences: number; check: string; transcriptDeleted: boolean; error?: string };
+  const stt = stub.calls.filter((c) => c.path === '/v1/speech-to-text');
+  check('R. "Check the words": one transcription of the draft\'s own converted audio, never the take', r.status === 200 && stt.length === sttBefore + 1 && stt.at(-1)!.files[0].sha256 === oldRecipe!.takes[0].convertedSha256 && stt.at(-1)!.files[0].sha256 !== oldRecipe!.takes[0].takeSha256, `${r.status} ${j.error ?? ''}`);
+  check('R. ... its transcript deleted at ElevenLabs right after', j.transcriptDeleted === true && stub.deletedTranscripts.length === tdBefore + 1 && stub.kept().length === 0);
+  const [nd] = await sql`select fid, kind, speech_id, preset_id, published_at, recipe from studio.voice_drafts where id = ${j.id}`;
+  const nr = nd?.recipe as { check: { sentences: number; matched: number } | null; timeline: { sentences: unknown[] } | null; kept: string; checkedAgain: { from: string }; takes: { takeSha256: string; convertedSha256: string; transcriptDeleted: boolean }[] } | undefined;
+  check('R. ... kept again under a new id, with its check, its strip and where it came from', Boolean(nd) && j.id !== w.draftId && Number(nd.fid) === GARANCE && nd.published_at === null && nr!.check?.sentences === speech.sentences.length && nr!.timeline?.sentences.length === speech.sentences.length && nr!.checkedAgain.from === w.draftId && /checked again/.test(nr!.kept) && nr!.takes[0].takeSha256 === oldRecipe!.takes[0].takeSha256 && nr!.takes[0].transcriptDeleted === true);
+  const rows = await sql`select storage_key, sha256 from studio.voice_draft_audio where draft_id = ${j.id}`;
+  check('R. ... with the same converted audio, copied, byte for byte', rows.length === 1 && rows[0].sha256 === oldRecipe!.takes[0].convertedSha256 && sha(new Uint8Array(readFileSync(path.join(STORE, rows[0].storage_key)))) === rows[0].sha256);
+  check('R. the draft without a check is removed, rows and audio', j.oldRemoved && (await sql`select count(*)::int n from studio.voice_drafts where id = ${w.draftId}`)[0].n === 0 && storeFiles().every((f) => !f.startsWith(`voice-drafts/${w.draftId}/`)));
+  check('R. the new draft can be storyboarded', (await boards.GET(as(GARANCE, {}, `http://localhost/api/voice/boards?draft=${j.id}`))).status === 200);
+  check('R. a signed check record comes back, for a page still holding the take (redone sentences)', typeof j.check === 'string' && j.check.includes('.'));
+  check('R. a draft that has its check can\'t be checked again (409), and nothing is called', (await post(GARANCE, j.id)).status === 409 && stub.calls.filter((c) => c.path === '/v1/speech-to-text').length === sttBefore + 1);
+  check('R. ... nor a draft id that isn\'t one (404)', (await post(GARANCE, 'nope')).status === 404);
+  check('R. the cost is counted as a transcription, measured against its estimate', (await sql`select coalesce(sum(calls),0)::int n from studio.voice_costs where kind = 'transcribe' and verdict = 'ok'`)[0].n >= 1);
 }
 
 // M. The allowlist.
