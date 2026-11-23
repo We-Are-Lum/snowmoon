@@ -736,6 +736,27 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
           {busy === 'publish' ? 'Publishing…' : 'Publish'}
         </button>
       </section>
+      {/* Removing one's own storyboard (rehearsal, 2026-11-23: there was no way on the page; the route existed). On a shared
+          ready-made reading it removes only this person's board, its pictures and tries; the reading stays. */}
+      <section className="vr-card" aria-labelledby="vb-remove-h">
+        <h2 id="vb-remove-h">Remove this storyboard</h2>
+        <p className="vr-small">{d.draft.kind === 'reading' ? 'Your storyboard on this reading: its versions, its kept pictures and its tries. The reading and anyone else’s storyboard on it stay.' : 'Its versions, its kept pictures and its tries. Your performance stays in your drafts.'}</p>
+        <button
+          type="button"
+          className="vr-btn vr-quiet vr-small-btn"
+          disabled={busy !== null || saved === 0}
+          onClick={async () => {
+            if (!window.confirm('Remove this storyboard? Its pictures are deleted and it can’t be brought back.')) return;
+            setBusy('remove');
+            const r = await authFetch(`/api/voice/boards?draft=${d.draft.id}`, { method: 'DELETE' }).catch(() => null);
+            setBusy(null);
+            if (r?.ok) window.location.href = '/storyboard/record';
+            else setMessage(((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error ?? 'It could not be removed. Try again.');
+          }}
+        >
+          {busy === 'remove' ? 'Removing…' : 'Remove my storyboard'}
+        </button>
+      </section>
     </main>
   );
 }
