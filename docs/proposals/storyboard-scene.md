@@ -270,7 +270,10 @@ The style stays text, as today. A fourth reference would be needed only for a se
 sample sent as a picture. FLUX edit takes up to 4 (Remix sends 4), so raising it later is a one-line change, but I
 wouldn't now: each picture adds cost, and the anchors matter more.
 
-## 5. P2: who writes the default text, and what the recipe records
+## 5. P2 in "I'll write it myself" (v2): who writes the default text, and what the recipe records
+
+(With the guide, v3, the ruling in section 0 applies instead: the guide may write each prompt from the person's
+request, and the recipe keeps both.)
 
 - **Default text:**
   - The setting is the person's own words. The book's c13-b62–63 is shown only as a quote, word for word with its
