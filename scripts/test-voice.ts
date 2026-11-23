@@ -157,18 +157,14 @@ check('W. it is from the book, block c13-b64, with its own label "Book", and no 
   check('W. the intro, word for word, each citation linked to its block', page.includes(intro) && page.includes('<p>Give one of his speeches a voice: perform it yourself, or start from a ready-made reading, then storyboard it.</p>'));
   check('W. ... and its quotation is the book\'s, word for word (c21-b76)', readFileSync(path.join(ROOT, 'content/snowmoon/text/chapter-21.json'), 'utf8').includes("Ephelion's goal is to inspire people inside Veridia to join the Arctic cause."));
   check('W. each speech\'s one line, word for word', page.includes("`From the book, word for word (${x.label.block}). In the book it is a written message; reading it aloud is this edition's idea.`") && page.includes('`${x.label.text} · ${x.credit} · version ${x.version}`'));
-  const { EPHELION_LEARN_MORE: E, EPHELION_QUOTES: Q } = await import('../src/lib/voice/learn-more');
-  const blockText = (cite: string) => {
-    const m = /^c(\d+)-b(\d+)/.exec(cite)!;
-    const ch = JSON.parse(readFileSync(path.join(ROOT, `content/snowmoon/text/chapter-${m[1]}.json`), 'utf8')) as { blocks: { idx: number; content: string }[] };
-    return (ch.blocks.find((b) => b.idx === Number(m[2]))?.content ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').replace(/[’‘]/g, "'");
-  };
-  const all = JSON.stringify(E);
-  check('W. Learn more about Lord Ephelion: every quotation is the book\'s, word for word, in its block', Q.every((q) => blockText(q.block).includes(q.quote.replace(/[’‘]/g, "'")) && all.includes(q.quote)), Q.filter((q) => !blockText(q.block).includes(q.quote.replace(/[’‘]/g, "'"))).map((q) => q.block).join());
-  check('W. ... it is a draft until Nate approves it (shows "Draft wording"), with who, start, later, drives and room to invent', E.approved === false && E.who.length > 0 && E.start.length > 0 && E.later.length > 0 && E.drives.length > 0 && E.invent.length >= 2);
-  check('W. ... its room to invent says what the book gives about his looks and where he speaks from', E.invent.some((x) => /His looks/.test(JSON.stringify(x))) && E.invent.some((x) => /Where he speaks from/.test(JSON.stringify(x))));
+  const { EPHELION_LEARN_MORE: E, WHERE_HE_SPEAKS_FROM: W } = await import('../src/lib/voice/learn-more');
   const { LEARN_MORE } = await import('../src/lib/challenge/learn-more');
-  check('W. ... and it is kept apart from the remix challenge\'s (no /challenge/ephelion link from the assistant)', !('ephelion' in LEARN_MORE));
+  check('W. Learn more about Lord Ephelion: his approved texts (as on /challenge/ephelion), unchanged', JSON.stringify([E.who, E.start, E.later, E.drives]) === JSON.stringify([LEARN_MORE.ephelion.who, LEARN_MORE.ephelion.start, LEARN_MORE.ephelion.later, LEARN_MORE.ephelion.drives]) && JSON.stringify(E.invent.filter((x) => x !== W)) === JSON.stringify(LEARN_MORE.ephelion.invent));
+  check('W. ... plus "Where he speaks from" in room to invent, a draft until Nate approves it (shows "Draft wording")', E.approved === false && E.invent[1] === W && /Where he speaks from: the book never says/.test(JSON.stringify(W)) && E.invent.some((x) => /His face|His looks/.test(JSON.stringify(x))));
+  check('W. ... its citations are blocks that exist and say so: the tunnel and poster, the debate, the screen, Northglade', (() => {
+    const t = (c: number, b: number) => (JSON.parse(readFileSync(path.join(ROOT, `content/snowmoon/text/chapter-${c}.json`), 'utf8')) as { blocks: { idx: number; content: string }[] }).blocks.find((x) => x.idx === b)?.content ?? '';
+    return /tunnel/.test(t(3, 3)) && /poster/.test(t(3, 4)) && /Live debate/.test(t(8, 17)) && /Helisport game cut out/.test(t(13, 62)) && /Lord Ephelion, Arctic consul to Veridia, was in Northglade/.test(t(20, 8));
+  })());
 }
 check('W. numbers, case, punctuation and apostrophes compare as words', norm('4') === norm('four') && norm("That's") === norm('thats') && norm('Veridia.') === norm('veridia') && wordsOf('Dreadknot - but').length === 2);
 {
@@ -206,7 +202,7 @@ check('W. numbers, case, punctuation and apostrophes compare as words', norm('4'
   check('I. each is labelled "Invented, not from the book", versioned (v2), from its source doc', inv.every((x) => x.label.text === 'Invented, not from the book' && x.version === 2 && x.source.kind === 'edition' && x.source.doc === file.source.googleDocId && x.label.kind === 'invented'));
   check('I. each version\'s aiHelp is set in the file (true for v2, set by Nate) and its credit follows from it, word for word', (file as unknown as { speeches: { aiHelp: unknown }[] }).speeches.every((x) => x.aiHelp === true) && inv.every((x) => x.aiHelp === true && x.credit === 'Words by the Snowmoon team, drafted with AI help (Claude, by Anthropic)' && x.label.kind === 'invented' && x.label.writers[0] === x.credit));
   check('I. ... the credit for a version without AI help is "Words by the Snowmoon team"', (JSON.parse(readFileSync(path.join(ROOT, 'config/voice-speeches.json'), 'utf8')) as { credits: { noAiHelp: string } }).credits.noAiHelp === 'Words by the Snowmoon team');
-  check('I. the page shows the credit beside "Invented, not from the book" wherever the speech is named', /\{s\.speech\.label\.text\}<\/span> \{s\.speech\.credit\}/.test(readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8')) && /\$\{x\.credit\} · version/.test(readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8')));
+  check('I. the picker shows each invented speech\'s credit beside "Invented, not from the book", with its version', /\$\{x\.label\.text\} · \$\{x\.credit\} · version \$\{x\.version\}/.test(readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8')));
   check('I. the spoken text is the paragraphs only: ending "With regards.", no title, no notes', inv.every((x) => x.paragraphs.at(-1) === 'With regards.' && x.sentences.at(-1)!.text === 'With regards.' && !x.paragraphs.some((p) => p === x.title || /Still open|\(worth\)|\(death\)|\(stagnation\)/.test(p))));
   check('I. the speeches are word for word the file\'s (sentence by sentence)', inv.every((x) => x.sentences.map((y) => y.text).join(' ') === file.speeches.find((f) => f.id === x.id)!.paragraphs.join(' ')));
   check('I. each has its own names: "Veridia" for the last five years, none for the other two', inv.find((x) => x.id === 'last-five-years-v2')!.names.join() === 'Veridia' && inv.filter((x) => x.id !== 'last-five-years-v2').every((x) => x.names.length === 0));
