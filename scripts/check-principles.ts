@@ -36,6 +36,8 @@ import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 import { MENTIONS_FILE, byMentionsThenName, mentionsFile } from './lib/character-mentions';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
+import { LETTERING_POLICY_FILE, letteringLine, p8jProblems, type LetteredPicture, type LetteringRecord } from '../src/lib/images/lettering';
+import { P8J_PLANTS, letteredPictures } from './lib/p8j';
 import { p4aProblems } from './lib/p4a';
 import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, P5I_FILES, p5gProblems, p5iProblems } from './lib/p5g';
 import { P5B_PLANTS, P5J_PLANTS, p5bProblems, p5jProblems } from './lib/p5b';
@@ -532,7 +534,7 @@ add({
 add({
   id: 'P1i',
   principle: 1,
-  name: 'the own-voice consent shown is own-voice-v2 (current; reread 2026-11-21), only by the voice slice, only while P1h passes; own-voice-v1 is used by nothing',
+  name: 'the own-voice consent shown is own-voice-v3 (current; reread 2026-11-22), only by the voice slice, only while P1h passes; own-voice-v1 is used by nothing',
   load: async () => ({
     users: walk('src', /\.(ts|tsx)$/).filter((f) => /consent-own-voice/.test(read(f))),
     file: json('config/consent-own-voice.json') as { draft?: string; current: string; versions: Record<string, unknown> },
@@ -542,7 +544,7 @@ add({
   run: async ({ users, file, v1Users, proof }) => {
     const p: string[] = [];
     for (const f of users as string[]) if (f !== 'src/lib/voice/consent.ts') p.push(`${f} reads the own-voice consent; only src/lib/voice/consent.ts may`);
-    if ((file.draft ?? file.current) !== 'own-voice-v2' || !file.versions['own-voice-v2']) p.push('the voice pages would not show own-voice-v2');
+    if ((file.draft ?? file.current) !== 'own-voice-v3' || !file.versions['own-voice-v3']) p.push('the voice pages would not show own-voice-v3');
     for (const f of v1Users as string[]) p.push(`${f} uses own-voice-v1`);
     const fails = (proof as string[]).length ? (proof as string[]) : [...voiceStatic(read(VOICE_FLOW_FILE), read(VOICE_ROUTE_FILE)), ...(await voiceRun(ROOT))];
     if ((VOICE.adminTrial || VOICE.open) && fails.length) p.push(...fails.map((x) => `the voice slice is switched on while P1h fails: ${x}`));
@@ -1514,6 +1516,36 @@ add({
     // One word changed in a moment's quote, and a card's fact quoting words its block doesn't hold.
     c.moments[2].quotes[0].text = c.moments[2].quotes[0].text.replace('shine', 'win');
     c.cards[2].facts[0] = { ...c.cards[2].facts[0], quote: 'Words that are nowhere in the book' };
+  },
+});
+// P8j (owner, 2026-11-22; lettering, part C): words a closed model draws. Each lettered picture (a challenge picture
+// whose body has items drawn_by 'model' or whose recipe has a lettering record; a chapter-picture version with one) has
+// its record; book phrases are word for word at their blocks; own phrases name their person (by_fid); the read-back
+// read the published file and said "match"; the prompt ends with the lettering line and never the no-text line. The rule
+// is src/lib/images/lettering.ts p8jProblems; scripts/lib/p8j.ts reads the database (read-only) and holds the planted
+// faults, each proved alone by scripts/test-lettering.ts and planted together here.
+add({
+  id: 'P8j',
+  principle: 8,
+  name: 'every picture whose words a model drew has its lettering record: book phrases at their blocks, own phrases with by_fid, the read-back "match" on the published file, the prompt with the lettering line and no no-text line',
+  load: async () => {
+    const url = process.env.STUDIO_DATABASE_URL;
+    if (!url) return { skipped: true, pictures: [] as LetteredPicture[] };
+    const sql = postgres(url, { prepare: false, max: 1 });
+    const pictures = await letteredPictures(sql);
+    await sql.end();
+    return { skipped: false, pictures };
+  },
+  run: ({ skipped, pictures }) => (skipped ? ['skipped: STUDIO_DATABASE_URL not set'] : p8jProblems(pictures, loadBlocks(ROOT), IMAGES.suffix)),
+  plant: (c) => {
+    c.skipped = false;
+    const record: LetteringRecord = {
+      v: 1, phrases: [{ text: 'Embrace the competition', source: 'book', block: 'c13-b64', also_in: 0 }], line: letteringLine(['Embrace the competition']), policy: LETTERING_POLICY_FILE, fit: 'pad',
+      readback: { reader: 'openai/gpt-6.1-sol', name: 'GPT-6.1 Sol', maker: 'OpenAI', provider: 'openai', sha256: 'a'.repeat(64), read: ['Embrace the competition'], verdict: 'match', rule: 'v1', costUsd: 0, requestId: null, at: '2026-11-22T00:00:00Z' },
+    };
+    const book = { where: 'planted book', sha256: 'a'.repeat(64), prompt: `A banner\n\n${record.line}`, body: [{ text: 'Embrace the competition', drawn_by: 'model' }], record };
+    const own = { ...book, where: 'planted own', record: { ...record, phrases: [{ text: 'Night Market', source: 'own' as const, by_fid: 6786 }], line: letteringLine(['Night Market']) }, prompt: `A sign\n\n${letteringLine(['Night Market'])}`, body: [{ text: 'Night Market', drawn_by: 'model' }] };
+    c.pictures.push(...Object.values(P8J_PLANTS).flatMap((f) => f(book, own)));
   },
 });
 // Character lists (owner, 2026-11-04: "list characters by how often they're named in the book, most first, everywhere

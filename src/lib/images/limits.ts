@@ -77,9 +77,13 @@ export async function giveBack(sql: Sql, fid: number): Promise<boolean> {
 }
 
 
-/** Today's free spend on closed models, reserved and real (image_costs by model; the prompt checks count in the open total). */
+/**
+ * Today's free spend on closed models, reserved and real (image_costs by model; the prompt checks count in the open
+ * total), and the read-backs of their lettered pictures (kind 'readback', owner 2026-11-22: they count against the
+ * challenge's closed cap; only a closed picture is ever read back).
+ */
 export async function closedSpentToday(sql: Sql): Promise<number> {
-  const [r] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${sql.unsafe(TODAY)} and funded = 'free' and model in ${sql(CLOSED_MODEL_IDS as string[])}`;
+  const [r] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${sql.unsafe(TODAY)} and funded = 'free' and (model in ${sql(CLOSED_MODEL_IDS as string[])} or kind = 'readback')`;
   return r?.usd ?? 0;
 }
 
@@ -257,7 +261,12 @@ export async function recordGuard(sql: Sql, guard: { costUsd: number; provider: 
 /** Replaces the reservation with what was really spent. Safe to call once per reserve(). */
 export async function settle(
   sql: Sql,
-  spent: { guard?: { costUsd: number; provider: string | null; verdict: 'ok' | 'blocked' }; image?: { costUsd: number; verdict: 'ok' | 'nsfw' } },
+  spent: {
+    guard?: { costUsd: number; provider: string | null; verdict: 'ok' | 'blocked' };
+    image?: { costUsd: number; verdict: 'ok' | 'nsfw' };
+    /** A lettered picture's read-back (0047_challenge_lettering.sql: kind 'readback', verdicts 'mismatch' and 'unread'). */
+    readback?: { model: string; provider: string; verdict: 'ok' | 'mismatch' | 'unread'; costUsd: number };
+  },
   spend: Spend = DEFAULT_SPEND,
   funded: Funded = 'free',
 ) {
@@ -266,6 +275,7 @@ export async function settle(
     await addCost(t, funded, 'reserved', spend.model.id, '', '', -1, -spend.reserveUsd);
     if (spent.guard) await addCost(t, funded, 'guard', IMAGES.guardModel, spent.guard.provider ?? '', spent.guard.verdict, 1, spent.guard.costUsd);
     if (spent.image) await addCost(t, funded, 'image', spend.model.id, spend.model.host, spent.image.verdict, 1, spent.image.costUsd);
+    if (spent.readback) await addCost(t, funded, 'readback', spent.readback.model, spent.readback.provider, spent.readback.verdict, 1, spent.readback.costUsd);
   });
 }
 

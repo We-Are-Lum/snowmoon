@@ -3,6 +3,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import { IMAGES } from '../config';
 import { SHORTHAND_ASSIST_SOURCE } from './sheets';
 import type { SheetModelId } from './sheet-models';
+import type { LetteringRecord } from './lettering';
 
 /**
  * A draft image is never stored on the server (docs/proposals/add-an-image.md, section 5). The
@@ -58,6 +59,11 @@ export interface Ticket {
    * published as a 'remixed_from' link). Recorded in the recipe's params.challenge. Absent on every other image.
    */
   challenge?: TicketChallenge;
+  /**
+   * Words a closed model drew (lettering, part C; owner, 2026-11-22): the phrases (the book's at their block, or the
+   * maker's own), the lettering line, the pad and the read-back's "match". Only a picture whose read-back matched has one.
+   */
+  lettering?: LetteringRecord;
 }
 
 export interface TicketChallenge {

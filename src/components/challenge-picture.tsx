@@ -12,6 +12,7 @@ import { PostedOn } from './posted-on';
 import { AdminExampleLabel } from './admin-example-label';
 import { BackstoryShown } from './challenge-backstory';
 import { readJustPublished } from '~/lib/challenge/just-published';
+import { LetteringRecordView } from './lettering';
 
 /**
  * A challenge picture's page, /challenge/p/<version>, share first (owner, 2026-11-05; docs/proposals/challenge-moments.md
@@ -179,6 +180,8 @@ export function ChallengePicture({ id }: { id: string }) {
           )}
           {v.note && <p className="dz-muted">{v.note}</p>}
           {v.posts.length > 0 && <PostedOn versionId={v.versionId} posts={v.posts} head={v.w.postsHead} note={v.w.postsNote} />}
+          {/* Words the model drew (lettering, part C): each phrase, the book's at its block or the maker's own, and its read-back. */}
+          {v.lettering && <LetteringRecordView r={v.lettering} w={v.letteringW} ownBy={v.letteringW.ownBy} />}
           <details className="chp-made">
             <summary>{v.w.madeHead}</summary>
             <dl className="chp-made-list">

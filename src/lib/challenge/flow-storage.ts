@@ -27,6 +27,9 @@ export interface FlowDraft {
   prompt: string;
   model: string;
   w: MakeView['w'];
+  /** Words a closed model drew, read back and matched (lettering, part C), and the words to show its record. */
+  lettering?: import('../images/lettering').LetteringRecord;
+  letteringW?: MakeView['lettering'];
 }
 
 const PREFIX = 'snowmoon.challenge.';

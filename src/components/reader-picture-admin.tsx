@@ -8,6 +8,8 @@ import { lookName } from '~/lib/chapter-pictures/shared';
 import { paragraphOrBlock } from '~/lib/reading';
 import { useChallengeModel } from './challenge-model-row';
 import { CapLine, DraftImage, ModelRow, PicturePanel, ReferencePicker, SheetPicker, errorOf, post, type PictureItem, type PicturesState, type RefChoice } from './chapter-pictures';
+import { parseQuotes } from '~/lib/images/lettering';
+import { LetteringMismatch, LetteringWarning, WordsToDraw, mismatchOf, type Mismatch } from './lettering';
 import { PublishedTextField } from './publish-words';
 
 /**
@@ -177,15 +179,26 @@ function AddSheet({ chapter, after, label: given, start: from = after, end: to =
   useEffect(() => setBlocks(pageBlocks()), []);
   const m = useChallengeModel(data?.pictures.models, null, data?.pictures.defaultModel ?? null);
   const look = data ? ((data.pictures.looks.chapters[chapter] ? data.pictures.looks.chapters[chapter].look : null) ?? data.pictures.looks.all?.look ?? null) : null;
+  // Lettering (part C): the note's quoted words, drawn only by a closed model and read back; a mismatch keeps nothing.
+  const [mismatch, setMismatch] = useState<Mismatch | null>(null);
+  const L = data?.pictures.lettering;
+  const parsed = parseQuotes(note);
+  const phrases = parsed.ok ? parsed.phrases : [];
+  const openWithWords = phrases.length > 0 && Boolean(m.chosen?.open);
 
   async function make() {
     if (!note.trim()) return setError(R.noteFirst);
+    if (!parsed.ok) return setError(parsed.error);
+    if (openWithWords && L) return setError(L.openRefused);
     const send = async () => {
       setBusy(true);
       setError(null);
+      setMismatch(null);
       const body = draft ? { jobId: draft.jobId } : { chapter, after, start: Math.min(start, end), end: Math.max(start, end) };
       const r = await post('/api/you/illustrations/add', { ...body, note, characters: chosen, picked: picked.map((x) => x.versionId), ...m.body() });
       setBusy(false);
+      const wrong = mismatchOf(r.json as { reason?: string });
+      if (wrong) return setMismatch(wrong);
       if (!r.ok) return setError(errorOf(r.json));
       setDraft({ jobId: String(r.json.jobId), versionId: String(r.json.versionId) });
     };
@@ -234,13 +247,16 @@ function AddSheet({ chapter, after, label: given, start: from = after, end: to =
             </label>
           </div>
           <PublishedTextField id={`rpa-note-${after}`} label={R.note} value={note} onChange={setNote} rows={3} maxLength={CHAPTER_PICTURES.noteMaxChars} />
+          {L && <WordsToDraw parsed={parsed} w={L} refused={openWithWords} />}
           <SheetPicker chapter={chapter} start={Math.min(start, end)} end={Math.max(start, end)} chosen={chosen} setChosen={setChosen} max={3 - picked.length} />
           <ReferencePicker id={`add-${after}`} max={3 - chosen.length} picked={picked} setPicked={setPicked} redo={false} />
           <ModelRow m={m} name={`rpa-model-${after}`} />
           <p className="you-meta" data-look="">
             {R.look(look ? lookName(look) : 'none set yet')}
           </p>
-          {!kept && (
+          {L && phrases.length > 0 && m.chosen && !m.chosen.open && !mismatch && !draft && <LetteringWarning w={L} />}
+          {L && mismatch && <LetteringMismatch m={mismatch} w={L} busy={busy} onTryAgain={() => void make()} />}
+          {!kept && !mismatch && (
             <div className="you-actions">
               <button type="button" className="ic-secondary" disabled={busy} onClick={() => void make()}>
                 {busy && !draft ? R.making : R.make}

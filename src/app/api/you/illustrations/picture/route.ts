@@ -32,6 +32,7 @@ export async function GET(request: Request) {
     id,
     chapter: added?.chapter ?? job!.chapter,
     redoable: added ? true : redoable(job!),
+    lettered: job?.lettering.map((l) => l.text) ?? [],
     added: added ? { after: added.after, start: added.start, end: added.end } : null,
     shown: shown.get(id)?.versionId ?? null,
     versions: history.versions.get(id) ?? [],

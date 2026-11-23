@@ -315,7 +315,7 @@ proven('R4 chapter pictures (redo, add) and the voice boards\' shot picture pass
   check('proof: R7 a request at 400 is caught', ![...budgets, 400].every((b) => b === 2000));
   // Each caller, found by search: a budget it names must be one of the 2,000 names; none takes the default.
   const OK_BUDGET = /^(IMAGES\.designs\.guardMaxTokens|REMIX\.guardMaxTokens|IMAGES\.guardMaxTokens|PROMPT_CHECK_MAX_TOKENS|job\.guardMaxTokens|opts\.maxTokens|slot === 'sample' \? undefined : IMAGES\.designs\.guardMaxTokens)$/;
-  const CALL = /(await (?:deps\.paid|paidPicture|checkPrompt|checkWords|checkBackstory)\(|checkWords\(sql, request, text)/g;
+  const CALL = /(await (?:deps\.paid|paidPicture|checkPromptWith|checkPrompt|checkWords|checkBackstory)\(|checkWords\(sql, request, text)/g;
   const walk = (d: string): string[] => readdirSync(path.join(ROOT, d), { withFileTypes: true }).flatMap((x) => (x.isDirectory() ? walk(`${d}/${x.name}`) : /\.tsx?$/.test(x.name) ? [`${d}/${x.name}`] : []));
   const files = walk('src');
   type Caller = { at: string; budget: string };
@@ -328,7 +328,7 @@ proven('R4 chapter pictures (redo, add) and the voice boards\' shot picture pass
       const end = body.search(/\n\s*\}\);|\);\n/);
       const call = end >= 0 ? body.slice(0, end + 3) : body;
       const named = call.match(/(?:guardMaxTokens|maxTokens): ([^,\n}]+(?: \? [^,\n]+ : [^,\n}]+)?)/);
-      const pos = call.match(/^await checkPrompt\([^,]+, [^,]+, ([^)]+)\)/);
+      const pos = call.match(/^await checkPrompt\([^,]+, [^,]+, ([^)]+)\)/) ?? call.match(/^await checkPromptWith\([^,]+, [^,]+, [^,]+, ([^)]+)\)/);
       out.push({ at: `${f}:${line}`, budget: (named?.[1] ?? pos?.[1] ?? 'default').trim() });
     }
     return out;
