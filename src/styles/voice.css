@@ -153,5 +153,6 @@
 .vg-try.vg-on { border-color: currentColor; }
 .vg-try img, .vg-pic { width: 100%; height: auto; display: block; border-radius: 4px; }
 .vg-empty { aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; font-size: var(--text-small); }
-.vg-composer { display: flex; gap: 6px; margin-top: var(--space-3); }
+.vg-composer { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: var(--space-3); }
+.vg-composer > :first-child { width: 100%; }
 .vg-composer input { flex: 1; min-width: 0; font: inherit; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 18px; }

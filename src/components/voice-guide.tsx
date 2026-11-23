@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { authFetch, useAuth } from '~/lib/client-auth';
 import { useChallengeModel } from '~/components/challenge-model-row';
+import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
 import type { ModelRowEntry } from '~/lib/challenge/models';
 import { angleById, planToBoard, SCENE, sceneWords, sentencesIn, type PlanShot, type Scene, type Shot, type Timeline } from '~/lib/voice/board';
 import type { GuideDraft, GuideMessage, GuideRef, GuideStep } from '~/lib/voice/guide';
@@ -66,6 +67,8 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
   const [tries, setTries] = useState<Record<string, Try[]>>({});
   const [triesMade, setTriesMade] = useState<Record<string, number>>({});
   const [current, setCurrent] = useState(0);
+  // The own-words consent (as on the storyboard page): shown before a person's first picture made from their words.
+  const [consent, setConsent] = useState<Parameters<typeof ConsentScreen>[0]['wording'] | null>(null);
   // The draft being worked on: the guide's text as the person may edit it, and the references as chosen.
   const [edit, setEdit] = useState<{ id: string; text: string; refs: { role: GuideRef['role']; ref: string; why: string }[] } | null>(null);
   const m = useChallengeModel(d && d !== 'none' ? d.making.models : undefined, null, d && d !== 'none' ? d.making.defaultModel : null);
@@ -140,7 +143,11 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
     const body = { draftId: ok!.draft.id, shotKey: key, description, angle, styleId: style, characterIds: key === SCENE.key ? (look ? [look] : []) : shots.find((s) => s.key === key)?.insert ? shots.find((s) => s.key === key)!.characterIds : look ? [look] : [], ...(guide ? { guide } : {}), ...m.body() };
     const r = await authFetch('/api/voice/boards/picture', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
     setBusy(null);
-    const j = (await r.json().catch(() => ({}))) as Try & { error?: string };
+    const j = (await r.json().catch(() => ({}))) as Try & { error?: string; reason?: string };
+    if (r.status === 403 && j.reason === 'consent') {
+      const c = await authFetch('/api/consent').catch(() => null);
+      if (c?.ok) return setConsent(((await c.json()) as { wording: Parameters<typeof ConsentScreen>[0]['wording'] }).wording);
+    }
     if (!r.ok) return setMessage(j.error ?? 'The picture could not be made');
     setTries((x) => ({ ...x, [key]: [...(x[key] ?? []), j] }));
     setTriesMade((x) => ({ ...x, [key]: (x[key] ?? 0) + 1 }));
@@ -200,6 +207,21 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
         ))}
       </ol>
       {message && <p className="vr-warn" role="alert">{message}</p>}
+      {consent && (
+        <ConsentScreen
+          wording={consent}
+          name={auth.kind === 'signed-in' ? (auth.username ?? null) : null}
+          onAgree={async () => {
+            const r = await authFetch('/api/consent', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sha256: consent.sha256 }) });
+            if (r.ok) {
+              setConsent(null);
+              setMessage('Agreed. Press Make again.');
+            } else setMessage('Your agreement could not be recorded. Try again.');
+          }}
+          onCancel={() => setConsent(null)}
+          error={null}
+        />
+      )}
 
       {/* The dialogue, top to bottom: every message, the person's word for word, the guide's with its model. */}
       <section className="vg-dialogue" aria-label="Your dialogue with the guide">
@@ -244,9 +266,7 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
               <h2 id="vg-step-h">1. The scene</h2>
               {g && edit?.id === g.id && (
                 <>
-                  <label className="vb-field"><span className="vb-label">The setting (the guide&rsquo;s draft; edit it if you like)</span>
-                    <textarea rows={3} value={edit.text} onChange={(e) => setEdit({ ...edit, text: e.target.value })} />
-                  </label>
+                  <PublishedTextField id="vg-setting" label="The setting (the guide’s draft; edit it if you like)" value={edit.text} onChange={(v) => setEdit({ ...edit, text: v })} rows={3} maxLength={600} />
                   <button type="button" className="vr-btn" disabled={busy !== null || !edit.text.trim()} onClick={() => save({ scene: { ...scene, setting: edit.text, settingFrom: g.id } }).then(() => setEdit(null))}>Use this</button>
                 </>
               )}
@@ -275,9 +295,7 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
               </label>
               {g && edit?.id === g.id && (
                 <>
-                  <label className="vb-field"><span className="vb-label">What he wears (the guide&rsquo;s draft; edit it if you like)</span>
-                    <textarea rows={2} value={edit.text} onChange={(e) => setEdit({ ...edit, text: e.target.value })} />
-                  </label>
+                  <PublishedTextField id="vg-clothing" label="What he wears (the guide’s draft; edit it if you like)" value={edit.text} onChange={(v) => setEdit({ ...edit, text: v })} rows={2} maxLength={400} />
                   <button type="button" className="vr-btn" disabled={busy !== null || !look || !edit.text.trim()} onClick={() => save({ scene: { ...scene, clothing: edit.text, clothingFrom: g.id } }).then(() => setEdit(null))}>Use this</button>
                 </>
               )}
@@ -325,9 +343,7 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
               {!g && <p className="vr-small">Say what this shot shows, in your words; the guide writes its prompt and picks its references.</p>}
               {working && (
                 <>
-                  <label className="vb-field"><span className="vb-label">The prompt (the guide&rsquo;s draft; edit it if you like)</span>
-                    <textarea rows={4} value={working.text} onChange={(e) => setEdit({ ...working, text: e.target.value })} />
-                  </label>
+                  <PublishedTextField id={`vg-prompt-${shot.key}`} label="The prompt (the guide’s draft; edit it if you like)" value={working.text} onChange={(v) => setEdit({ ...working, text: v })} rows={4} maxLength={600} />
                   <fieldset className="vg-refs"><legend className="vb-label">Reference pictures (at most 3)</legend>
                     {refChoices(shot).map((c) => {
                       const on = working.refs.some((r) => r.ref === c.ref);
@@ -371,8 +387,7 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
             void askGuide(step, ask, stage === 'shots' ? shot?.key : undefined);
           }}
         >
-          <label className="sr-only" htmlFor="vg-ask">Ask the guide</label>
-          <input id="vg-ask" value={ask} onChange={(e) => setAsk(e.target.value)} maxLength={1000} placeholder={stage === 'setting' ? 'Where is he, what light, what mood?' : stage === 'clothing' ? 'What does he wear in this scene?' : stage === 'plan' ? 'How should the shots go?' : stage === 'scene' ? 'Make the scene picture above first' : 'What should this shot show? Or a fix, e.g. “make him lean in”'} disabled={stage === 'scene' || busy !== null} />
+          <PublishedTextField id="vg-ask" label="Ask the guide, in your own words" value={ask} onChange={setAsk} rows={2} maxLength={1000} placeholder={stage === 'setting' ? 'Where is he, what light, what mood?' : stage === 'clothing' ? 'What does he wear in this scene?' : stage === 'plan' ? 'How should the shots go?' : stage === 'scene' ? 'Make the scene picture above first' : 'What should this shot show? Or a fix, e.g. “make him lean in”'} />
           <button type="submit" className="vr-btn" disabled={!ask.trim() || busy !== null || stage === 'scene'}>{busy === 'guide' ? '…' : 'Send'}</button>
         </form>
         <p className="vr-small">Your words are kept with the storyboard, and published with each picture they asked for if you publish it. The guide runs on {model}{/stand-in/.test(model) ? '' : ' (an open model, on the assistant’s provider)'}; it never writes the speech&rsquo;s words.</p>
