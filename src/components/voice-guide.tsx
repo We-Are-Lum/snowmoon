@@ -92,9 +92,10 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
   const ok = d && d !== 'none' ? d : null;
   const looks = useMemo(() => (ok ? ok.sheets.characters.filter((c) => /ephelion/i.test(`${c.title} ${c.entity}`)) : []), [ok]);
   const lastGuide = (step: GuideStep, shotKey?: string) => [...msgs].reverse().find((x) => x.role === 'guide' && x.step === step && (!shotKey || (x.draft as { shotKey?: string } | null)?.shotKey === shotKey)) ?? null;
-  const planned = shots.some((s) => s.guideFrom !== undefined) || msgs.some((x) => x.step === 'shot');
+  // The plan is used once its cameras are on the board (planToBoard marks each shot angleBy 'guide').
+  const planned = shots.some((s) => s.angleBy === 'guide');
   // Where the person is: the first step not yet done.
-  const stage: 'setting' | 'clothing' | 'scene' | 'plan' | 'shots' = !scene.setting.trim() ? 'setting' : !look || !scene.clothing ? 'clothing' : !scene.kept ? 'scene' : !planned && !msgs.some((x) => x.step === 'plan' && x.role === 'guide' && (x as GuideMessage & { used?: boolean }).used) && !shots.some((s) => s.angleBy === 'guide') ? 'plan' : 'shots';
+  const stage: 'setting' | 'clothing' | 'scene' | 'plan' | 'shots' = !scene.setting.trim() ? 'setting' : !look || !scene.clothing ? 'clothing' : !scene.kept ? 'scene' : !planned ? 'plan' : 'shots';
 
   if (auth.kind !== 'signed-in' || d === 'none') return <>{fallback}</>;
   if (!ok) return <main className="vr vg"><p className="vr-note">Loading…</p></main>;
