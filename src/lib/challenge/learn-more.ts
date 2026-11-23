@@ -1751,6 +1751,35 @@ export const LEARN_MORE: Readonly<Record<string, LearnMoreText>> = {
       ],
       [
         {
+          "text": "Where he speaks from: the book never says. His messages reach Veridians as a poster in a tunnel "
+        },
+        {
+          "cite": "c3-b3–b4"
+        },
+        {
+          "text": ", a live debate on a hand device "
+        },
+        {
+          "cite": "c8-b17"
+        },
+        {
+          "text": " and a broadcast on a restaurant screen "
+        },
+        {
+          "cite": "c13-b62"
+        },
+        {
+          "text": "; the book places him in Northglade, in the province of Northshore, at the time of the Arctic invasion "
+        },
+        {
+          "cite": "c20-b8"
+        },
+        {
+          "text": "."
+        }
+      ],
+      [
+        {
           "text": "His life in the Arctic Empire, and how he became its consul."
         }
       ],

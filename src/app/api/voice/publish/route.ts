@@ -19,12 +19,13 @@ export async function GET(request: Request) {
   const draftId = String(q.get('draft') ?? '');
   const deps = publishDeps();
   const performer = q.get('named') === 'no' ? null : await deps.name(who.fid, request.headers.get('x-name-proof'));
+  // A live publication of this person's board on this draft comes first (rehearsal, 2026-11-23): a board on a shared
+  // ready-made reading still finds its draft after it is published, so the preview alone never said "published" and
+  // the board page showed "not found", with no way to take it down.
+  const live = (await ownPublications(sql, who.fid)).find((x) => x.draftId === draftId);
+  if (live) return NextResponse.json({ published: { id: live.id, url: `/storyboard/spoken/${live.id}` } }, { headers: noStore });
   const p = await publishPreview(sql, who.fid, draftId, deps, performer);
-  if (!p) {
-    const live = (await ownPublications(sql, who.fid)).find((x) => x.draftId === draftId);
-    if (live) return NextResponse.json({ published: { id: live.id, url: `/storyboard/spoken/${live.id}` } }, { headers: noStore });
-    return NextResponse.json({ error: 'Not found' }, { status: 404 });
-  }
+  if (!p) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   return NextResponse.json({ on: publishOn(), problems: p.problems, credits: p.credits, version: p.board?.version ?? 0, performer }, { headers: noStore });
 }
 

@@ -131,3 +131,7 @@
 .vr-speech input { margin-top: 4px; }
 .vr-confirm { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
 .vr-confirm-q { font-size: 0.95em; }
+
+/* The Ephelion challenge's top (Nate, 2026-11-22): the intro, and each speech's one line under its title. */
+.vr-intro p { margin: var(--space-2) 0; }
+.vr-speech-line { display: block; }

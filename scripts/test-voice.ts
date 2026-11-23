@@ -79,7 +79,7 @@ delete process.env.ELEVENLABS_API_KEY;
 const { VOICE } = await import('../src/lib/config');
 const { voiceAllowed, voiceTestOn, elevenLabsBase } = await import('../src/lib/voice/flag');
 type Shot = import('../src/lib/voice/board').Shot;
-const { speeches } = await import('../src/lib/voice/speech');
+const { speeches, speechById } = await import('../src/lib/voice/speech');
 const { checkSpeech, norm, wordsOf } = await import('../src/lib/voice/match');
 const { voiceConsentWording } = await import('../src/lib/voice/consent');
 const { db } = await import('../src/lib/db');
@@ -160,7 +160,25 @@ const ch13 = JSON.parse(readFileSync(path.join(ROOT, 'content/snowmoon/text/chap
 const blockText = ch13.blocks.find((b) => b.idx === 64)!.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 check('W. the speech is c13-b64, word for word (title, letter and sign-off)', speech.paragraphs.join(' ').replace(/\s+/g, ' ') === blockText, `${speech.paragraphs.join(' ').slice(0, 60)} | ${blockText.slice(0, 60)}`);
 check('W. its sentences hold all its words, in order', speech.sentences.flatMap((s) => s.words).join(' ') === wordsOf(speech.paragraphs.join(' ')).join(' '));
-check('W. it is marked a stand-in from the book, block c13-b64, with its own label "Book"', speech.standIn && speech.source.kind === 'book' && (speech.source as { block: string }).block === 'c13-b64' && speech.label.kind === 'book' && speech.label.text === 'Book');
+check('W. it is from the book, block c13-b64, with its own label "Book", and no longer a stand-in (Nate, 2026-11-22)', !speech.standIn && speech.source.kind === 'book' && (speech.source as { block: string }).block === 'c13-b64' && speech.label.kind === 'book' && speech.label.text === 'Book');
+// The top of the page (Nate, 2026-11-22; reread word for word): the title, the intro, the picker's lines, Learn more.
+{
+  const page = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  check('W. the page is "The Ephelion challenge", with no "Admin trial · Draft" and no label row or "Stand-in … speeches arrive"', page.includes('<h1>The Ephelion challenge</h1>') && !/Admin trial · Draft/.test(page) && !/vr-labels/.test(page) && !/until the team&rsquo;s speeches arrive/.test(page));
+  const intro = 'Lord Ephelion is the Arctic Empire&apos;s consul to Veridia (<Cite b="c3-b5" />). In the book his messages reach Veridians everywhere: on a poster in a tunnel (<Cite b="c3-b4" />), in a live debate (<Cite b="c8-b17" />), on a restaurant screen that cuts into a Helisport game (<Cite b="c13-b62" />). As one character puts it, &quot;Ephelion&apos;s goal is to inspire people inside Veridia to join the Arctic cause.&quot; (<Cite b="c21-b76" />)';
+  check('W. the intro, word for word, each citation linked to its block', page.includes(intro) && page.includes('<p>Give one of his speeches a voice: perform it yourself, or start from a ready-made reading, then storyboard it.</p>'));
+  check('W. ... and its quotation is the book\'s, word for word (c21-b76)', readFileSync(path.join(ROOT, 'content/snowmoon/text/chapter-21.json'), 'utf8').includes("Ephelion's goal is to inspire people inside Veridia to join the Arctic cause."));
+  check('W. each speech\'s one line, word for word', page.includes("`From the book, word for word (${x.label.block}). In the book it is a written message; reading it aloud is this edition's idea.`") && page.includes('`${x.label.text} · ${x.credit} · version ${x.version}`'));
+  const { EPHELION_LEARN_MORE: E, WHERE_HE_SPEAKS_FROM: W } = await import('../src/lib/voice/learn-more');
+  const { LEARN_MORE } = await import('../src/lib/challenge/learn-more');
+  check('W. Learn more about Lord Ephelion: the approved texts of /challenge/ephelion, the same object', E === LEARN_MORE.ephelion && E.approved === true);
+  const said = W.map((x) => ('text' in x ? x.text : 'cite' in x ? `(${x.cite})` : '')).join('');
+  check('W. ... with "Where he speaks from" second in room to invent, approved with Nate\'s change (2026-11-23), word for word', E.invent[1] === W && said === 'Where he speaks from: the book never says. His messages reach Veridians as a poster in a tunnel (c3-b3–b4), a live debate on a hand device (c8-b17) and a broadcast on a restaurant screen (c13-b62); the book places him in Northglade, in the province of Northshore, at the time of the Arctic invasion (c20-b8).' && /His face/.test(JSON.stringify(E.invent[0])), said);
+  check('W. ... its citations are blocks that exist and say so: the tunnel and poster, the debate, the screen, Northglade', (() => {
+    const t = (c: number, b: number) => (JSON.parse(readFileSync(path.join(ROOT, `content/snowmoon/text/chapter-${c}.json`), 'utf8')) as { blocks: { idx: number; content: string }[] }).blocks.find((x) => x.idx === b)?.content ?? '';
+    return /tunnel/.test(t(3, 3)) && /poster/.test(t(3, 4)) && /Live debate/.test(t(8, 17)) && /Helisport game cut out/.test(t(13, 62)) && /Lord Ephelion, Arctic consul to Veridia, was in Northglade/.test(t(20, 8));
+  })());
+}
 check('W. numbers, case, punctuation and apostrophes compare as words', norm('4') === norm('four') && norm("That's") === norm('thats') && norm('Veridia.') === norm('veridia') && wordsOf('Dreadknot - but').length === 2);
 {
   const ss = speech.sentences.slice(0, 3);
@@ -193,22 +211,31 @@ check('W. numbers, case, punctuation and apostrophes compare as words', norm('4'
   const all = speeches();
   const inv = all.filter((x) => x.label.kind === 'invented');
   const file = JSON.parse(readFileSync(path.join(ROOT, 'config/voice-speeches.json'), 'utf8')) as { source: { googleDocId: string }; speeches: { id: string; title: string; paragraphs: string[] }[] };
-  check('I. c13-b64 stays first and unchanged; the three invented speeches follow', all[0].id === 'ephelion-c13-b64' && all[0].label.kind === 'book' && inv.map((x) => x.id).join() === 'doing-fine-v2,natural-way-v2,last-five-years-v2');
-  check('I. each is labelled "Invented, not from the book", versioned (v2), from its source doc', inv.every((x) => x.label.text === 'Invented, not from the book' && x.version === 2 && x.source.kind === 'edition' && x.source.doc === file.source.googleDocId && x.label.kind === 'invented'));
+  check('I. c13-b64 stays first and unchanged; the three invented speeches follow', all[0].id === 'ephelion-c13-b64' && all[0].label.kind === 'book' && inv.map((x) => x.id).join() === 'doing-fine-v2,natural-way-v2,last-five-years-v2,last-five-years-v3');
+  check('I. each is labelled "Invented, not from the book", versioned (v2; the last five years also v3), from its source doc', inv.every((x) => x.label.text === 'Invented, not from the book' && x.version === (x.id === 'last-five-years-v3' ? 3 : 2) && x.source.kind === 'edition' && x.source.doc === file.source.googleDocId && x.label.kind === 'invented'));
   check('I. each version\'s aiHelp is set in the file (true for v2, set by Nate) and its credit follows from it, word for word', (file as unknown as { speeches: { aiHelp: unknown }[] }).speeches.every((x) => x.aiHelp === true) && inv.every((x) => x.aiHelp === true && x.credit === 'Words by the Snowmoon team, drafted with AI help (Claude, by Anthropic)' && x.label.kind === 'invented' && x.label.writers[0] === x.credit));
   check('I. ... the credit for a version without AI help is "Words by the Snowmoon team"', (JSON.parse(readFileSync(path.join(ROOT, 'config/voice-speeches.json'), 'utf8')) as { credits: { noAiHelp: string } }).credits.noAiHelp === 'Words by the Snowmoon team');
-  check('I. the page shows the credit beside "Invented, not from the book" wherever the speech is named', /\{s\.speech\.label\.text\}<\/span> \{s\.speech\.credit\}/.test(readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8')) && /\$\{x\.credit\} · version/.test(readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8')));
+  check('I. the picker shows each invented speech\'s credit beside "Invented, not from the book", with its version', /\$\{x\.label\.text\} · \$\{x\.credit\} · version \$\{x\.version\}/.test(readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8')));
   check('I. the spoken text is the paragraphs only: ending "With regards.", no title, no notes', inv.every((x) => x.paragraphs.at(-1) === 'With regards.' && x.sentences.at(-1)!.text === 'With regards.' && !x.paragraphs.some((p) => p === x.title || /Still open|\(worth\)|\(death\)|\(stagnation\)/.test(p))));
   check('I. the speeches are word for word the file\'s (sentence by sentence)', inv.every((x) => x.sentences.map((y) => y.text).join(' ') === file.speeches.find((f) => f.id === x.id)!.paragraphs.join(' ')));
-  check('I. each has its own names: "Veridia" for the last five years, none for the other two', inv.find((x) => x.id === 'last-five-years-v2')!.names.join() === 'Veridia' && inv.filter((x) => x.id !== 'last-five-years-v2').every((x) => x.names.length === 0));
-  const five = inv.find((x) => x.id === 'last-five-years-v2')!;
+  check('I. each has its own names: "Veridia" for the last five years, none for the other two', inv.filter((x) => x.id.startsWith('last-five-years')).every((x) => x.names.join() === 'Veridia') && inv.filter((x) => !x.id.startsWith('last-five-years')).every((x) => x.names.length === 0));
+  // Speech 3, version 3 (Nate, 2026-11-22): one sentence order changed; v2 stays on file, retired, for its recordings.
+  {
+    const v2 = inv.find((x) => x.id === 'last-five-years-v2')!;
+    const v3 = inv.find((x) => x.id === 'last-five-years-v3')!;
+    const was = 'The future has never been built by everyone. It is built by the few who can. The rest still receive the benefits.';
+    const now = 'The future has never been built by everyone. The rest still receive the benefits, but it is built by the few who can.';
+    check('I. the last five years v3: Nate\'s sentence, word for word, in place of v2\'s; everything else as v2', v3.version === 3 && v3.paragraphs.join('\n').includes(now) && !v3.paragraphs.join('\n').includes(was) && v2.paragraphs.join('\n').includes(was) && v3.paragraphs.join('\n') === v2.paragraphs.join('\n').replace(was, now) && v3.title === v2.title);
+    check('I. ... v2 is retired: still found by its id (its recordings), not offered; v3 is offered', v2.retired === true && !v3.retired && speechById('last-five-years-v2')?.id === 'last-five-years-v2');
+  }
+  const five = inv.find((x) => x.id === 'last-five-years-v3')!;
   const s3 = five.sentences.find((x) => x.text.startsWith('Veridia'))!;
   const heard = (text: string) => text.split(' ').map((w, i) => ({ text: w, start: i * 0.3, end: i * 0.3 + 0.25 }));
   const byS = checkSpeech([s3], heard(s3.text.replace('Veridia', 'Varidia')), five.names);
   check('I. the word check, sentence by sentence: "Veridia" heard as "Varidia" passes by sound, and is listed', byS[0].ok && byS[0].bySound.length === 1, JSON.stringify(byS[0]));
   check('I. ... a different word still fails ("Venice"), and the numbers compare as words', !checkSpeech([s3], heard(s3.text.replace('Veridia', 'Venice')), five.names)[0].ok && checkSpeech([s3], heard(s3.text.replace('twenty', '20').replace('forty', '40')), five.names)[0].ok);
   const st = (await (await status.GET(as(NATE))).json()) as { speeches: { id: string; label: { text: string }; version: number }[]; readings: { speechId: string }[] };
-  check('I. the status lists every speech, with its label and version, and readings by speech', st.speeches.length === 4 && st.speeches[1].label.text === 'Invented, not from the book' && st.speeches[1].version === 2 && st.readings.every((x) => typeof x.speechId === 'string'));
+  check('I. the status lists every offered speech (not the retired v2), with its label and version, and readings by speech', st.speeches.length === 4 && st.speeches.map((x) => x.id).join() === 'ephelion-c13-b64,doing-fine-v2,natural-way-v2,last-five-years-v3' && st.speeches[1].label.text === 'Invented, not from the book' && st.speeches[1].version === 2 && st.speeches[3].version === 3 && st.readings.every((x) => typeof x.speechId === 'string'));
   check('I. publishing the invented speeches is off until Nate says', VOICE.publishInvented === false);
 }
 
