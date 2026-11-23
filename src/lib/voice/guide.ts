@@ -83,7 +83,10 @@ export function readGuideReply(step: GuideStep, raw: string, c: DraftContext, sh
   }
   const say = typeof j.say === 'string' ? j.say.trim() : '';
   if (!say || say.length > GUIDE.maxDraftChars) return { error: 'the reply needs a short "say" for the person' };
-  const d = (j.draft ?? {}) as Record<string, unknown>;
+  let d = (j.draft ?? {}) as Record<string, unknown>;
+  // A model sometimes nests the draft under its step's name ({"setting": {"setting": "…"}}): read the inner one.
+  const inner = d[step === 'fix' ? 'shot' : step];
+  if (inner && typeof inner === 'object' && !Array.isArray(inner)) d = inner as Record<string, unknown>;
   let draft: GuideDraft;
   if (step === 'setting') {
     if (typeof d.setting !== 'string' || !d.setting.trim()) return { error: 'the draft needs a "setting"' };
