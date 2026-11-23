@@ -192,6 +192,11 @@ a version, its credit says so; each version records that, set by Nate. A recordi
 exact version it was made from. (The three speeches of 2026-11-22: `config/voice-speeches.json`, from the Google Doc
 "Lord Ephelion: three speeches v2 (DRAFT)", each version's `aiHelp` set by Nate; checked by `test:voice`, section I.)
 
+**Storyboard pictures (owner, 2026-11-22; reread by the owner 2026-11-22).** Storyboard pictures: the person asks the
+guide in their own words; the guide may write each picture's prompt and choose its reference pictures, never the
+speech's words. The recipe keeps the person's request, the guide's model, the prompt it wrote, the references it chose,
+and every edit. (Proposal: `docs/proposals/storyboard-scene.md`, v3, the guided dialogue; not built yet.)
+
 **Recorded exception.** The house narration keeps 148 model-drafted spoken
 descriptions of screens, figures and lyric cards. Each is preceded by a tone
 and shown in Listen with the label "AI description ⓘ", which opens the details

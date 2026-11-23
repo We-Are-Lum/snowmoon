@@ -1,14 +1,156 @@
-# A storyboard is one scene, shot with several cameras (proposal, DRAFT)
+# A storyboard is one scene, shot with several cameras (proposal, DRAFT, v3: the guided dialogue)
 
 Branch `storyboard-scene`, 2026-11-22. Drafted by the coding agent (Claude, a closed model by Anthropic) from Nate's
-direction of 2026-11-22; DRAFT until Nate approves it. Nothing is built yet. Phone mock (390 px):
-`docs/proposals/storyboard-scene/scene-mock-390.png` (its HTML beside it).
+direction of 2026-11-22; DRAFT until Nate approves it. **Building is held** (Nate, 2026-11-22): v2's engine is on the
+branch (commit 250be0a0, not merged, migration `NEXT_storyboard_scene.sql` not applied); the guided dialogue below is
+not built. Phone mocks (390 px): `docs/proposals/storyboard-scene/dialogue-mock-390.png` (v3, the dialogue) and
+`scene-mock-390.png` (v2, the engine's controls). The continuity test (section 7) comes first, before anyone uses it.
 
 **The direction (Nate):** a storyboard is one scene, shot as if with several cameras, or in several takes on the same
 day. Cutting between angles and close-ups is fine. What must not change is the place, the light, the clothes and
-Ephelion himself.
+Ephelion himself. **v3 (Nate, 2026-11-22):** the shot step on a phone isn't good. The scene, his clothing and the plan of
+shots come first, as a dialogue, with AI guiding the person through what they need. v2 stays the engine underneath.
 
-## 1. The scene, made and kept first
+## 0. The guided dialogue (v3)
+
+**The ruling (Nate, 2026-11-22; now in P2, `docs/principles.md`):** "Storyboard pictures: the person asks the guide in
+their own words; the guide may write each picture's prompt and choose its reference pictures, never the speech's words.
+The recipe keeps the person's request, the guide's model, the prompt it wrote, the references it chose, and every edit."
+
+The page becomes one conversation, top to bottom, with what has been decided pinned above it as cards: the scene
+picture, his clothing, the plan. Each step ends in a card the person approves or edits before the next one starts.
+Every guide message and every draft is labelled "Drafted by the guide · gpt-oss-120b (open model)" and has **Edit**.
+
+1. **The scene.**
+   - The guide asks where he speaks from, the light and the mood.
+   - For c13-b64 it first shows the book's words as a **Book** quote: c13-b63 word for word ("An image of Lord Ephelion
+     appeared on the left side of the screen, and a multi-paragraph message on the right side."). The book doesn't say
+     where he is.
+   - The person answers in their own words. The guide drafts the setting (two or three sentences, a prompt, not story
+     words). The person approves it or edits it.
+   - The scene picture is made, up to 3 tries, and one is kept: v2's anchor, made with the look as its one reference.
+2. **His clothing.**
+   - The person picks one of his published looks and says, in their own words, what he wears in this scene.
+   - The guide folds that into the scene's prompt ("in the look's clothes, with …") and shows it; the person approves or
+     edits it.
+   - It is part of the scene: it goes into the scene picture, so the scene is made after this step. The order on the
+     page is setting, clothing, then the scene picture.
+3. **The shot plan.**
+   - The guide reads the speech (its sentences, numbered) and the cuts proposed at sentence ends.
+   - It proposes, for each shot: its sentences (by number, never rewritten), a camera (v2's coverage as its default,
+     which it may change and must say why), and whether it is an insert (with what it shows).
+   - The plan shows as a list the person changes freely before any picture is made: cuts, cameras, inserts, the order.
+   - An insert is proposed, never forced: it shows as "Insert (proposed)" until the person keeps it.
+4. **The shots.**
+   - For each shot the guide writes the picture's prompt and chooses its reference pictures. By default these are v2's:
+     the scene, the look and the previous kept shot in the scene; an insert gets the style and a look only if a
+     character is in it. It may choose another kept picture (an earlier shot, or another character's published sheet)
+     and must say why, at most 3 in all.
+   - The person sees the prompt and the references, can edit either, and presses Make. The guide never makes a picture
+     on its own.
+5. **Fixes by asking.**
+   - The person writes "make him lean in on shot 4". The guide answers with a changed prompt (and references, if needed)
+     for that shot, shown as a change against the last one.
+   - The person approves it, edits it or drops it; nothing is made until they press Make.
+
+**What the guide never does.** It never writes or changes the speech's words: they are placed from the speech file and
+shown as **Book** or **Invented** with their block or version. It never cuts inside a sentence, publishes, spends, or
+makes a picture without the person's press. Its messages are not story words; none is spoken or shown in the
+play-through.
+
+**Writing it yourself (skipping the guide).** The first message offers "Guide me" (the default) or "I'll write it
+myself".
+- Write it myself is v2's form, as on the branch: the setting box, the look, the cameras (v2's coverage, changeable)
+  and each shot's own words. No model is called for the words, and every prompt's recipe says `by: the person`.
+- The person can switch either way at any step. A draft the guide wrote stays labelled as the guide's until the person
+  edits it. The recipe then keeps both: the guide's draft and the person's edit.
+
+**Reusing the agents' conventions** (`src/lib/agents/tools.ts`, `draft_storyboard`, `draft_frames`):
+- every draft answers a request (here, the person's message, by its id in the dialogue);
+- its stamp keeps what the person did apart from what the guide did;
+- frame prompts are drafted per shot, as `draft_frames`' `{ shot, prompt, note }`;
+- story lines carry their source (`book`, `person`, `ai`), and the guide's is never a line.
+Unlike an agent, the guide runs on the site, for the person on the page; nothing it drafts is public until they publish.
+
+### What each picture's recipe keeps (the ruling, made concrete)
+
+```
+guide: { model: "openai/gpt-oss-120b", host: "Groq (or Vercel AI Gateway when Groq is busy)", open: true } | null
+request: { text: "<the person's message, word for word>", at, messageId }   // the one this picture answers
+prompt: { text: "<as sent>", by: "guide" | "person", draft: "<the guide's text, if the person changed it>" }
+references: [ { role: "anchor-scene" | "anchor-look" | "continuity" | "other", ref: <sha256 / version id / shot key>,
+                chosenBy: "guide" | "person", why: "<the guide's one line, or 'default'>" } ]
+edits: [ { what: "prompt" | "references" | "camera" | "insert" | "setting" | "clothing", before, after, at } ]
+camera: { angle, by: "rule" | "guide" | "person", why } ; insert: true | false ; scene: { sha256, setting, clothing }
+```
+
+The scene picture's recipe keeps the same for the setting and the clothing. The board version keeps the plan as the
+guide proposed it and as the person saved it. The published recipe carries all of it (Terms §5 already says "the
+prompts and any planning thread that led to the piece are published with it" where the Service says so before
+publishing; the publish screen says so).
+
+### The guide's model, and its cost per board
+
+- **Recommended: gpt-oss-120b, an open model** (OpenAI's open weights, Apache-2.0), the assistant's own: on Groq with
+  zero data retention (Nate confirmed it in the Groq console, 2026-10-08), or through Vercel AI Gateway when Groq is
+  busy. It is already on the allowlist, at $0.10 and $0.50 per million input and output tokens (`config/models.json`).
+- **Per board**, estimated for 12 shots with a few fixes: about 20 guide turns.
+  - Input: about 5,000 tokens a turn (its instructions, the speech of about 900 tokens, the board's state, the recent
+    dialogue), so about 100,000 tokens, $0.01.
+  - Output: about 600 tokens a turn, so about 12,000 tokens, $0.006.
+  - In all, about **$0.02 a board**, measured on the first boards before the estimate is relied on (the 20% rule).
+- A closed model (Claude Sonnet, for example) would be about $0.50 a board. It is not proposed: the open model is
+  enough to plan and write prompts, and no new provider would need naming.
+
+### What the guide receives, and the Privacy lines it changes (drafted for Nate's reread)
+
+**It receives only text:**
+- the person's messages;
+- the speech's sentences (the book's or the team's, already public), numbered;
+- the board's choices (cuts with their sentence numbers, cameras, inserts, the setting and clothing as written);
+- the published sheet's text for the chosen look;
+- a list of the kept pictures by name and role ("the scene", "shot 3 as kept"), never the pictures themselves.
+
+It receives no recording, no audio, no picture and nothing about the person but what they type. gpt-oss-120b reads text
+only.
+
+**Privacy §7, the Groq item. Today:**
+> Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, and the prompts for images you make,
+> which are checked against the published rules.
+
+**Proposed:**
+> Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, the prompts for images you make, which
+> are checked against the published rules, and what you write to the storyboard guide, with the speech and your
+> storyboard's choices; never your recording or your pictures.
+
+**Privacy §4, after the storyboards item, a new item:**
+> Your conversation with the storyboard guide: what you asked and what it drafted, kept with your storyboard until you
+> remove it. When you publish the storyboard, what each picture answered and the prompt it was made with are published
+> with it.
+
+**Sources:**
+- the guide's request builder sends exactly those fields; it is not built yet, and its test will fail on a picture,
+  audio or any other field;
+- `CHAT.provider` and `CHAT.direct` (Groq, zero data retention), and `CHAT.gatewayFallback`;
+- `publish.ts`, which copies the recipe as kept.
+
+### The planted fault: a recipe missing the person's request
+
+**A new check, P2u**, in `scripts/check-principles.ts`, beside the voice proof, plus `test:voice`:
+- every storyboard picture whose prompt is `by: "guide"` must keep a non-empty `request.text`, the guide's `model`, the
+  prompt as sent and the guide's draft, each reference with `chosenBy` and `why`, and an `edits` array;
+- it also requires that the speech's sentences never appear in a guide-written field except as `n` numbers.
+
+**Its planted faults, each of which must be caught:**
+- a guide-written prompt's recipe with `request` removed (the case Nate named);
+- with the guide's `model` removed;
+- with an edit dropped (the person's change not in `edits`);
+- a guide message carrying a sentence of the speech as words.
+
+The check runs the real recipe builder on a stand-in board (no model called) and on each planted copy, as P1h does for
+recordings.
+
+## 1. The scene, made and kept first (the engine, v2)
 
 A new first step, above the cuts: **1. The scene**.
 
@@ -147,9 +289,37 @@ wouldn't now: each picture adds cost, and the anchors matter more.
 - **The published card** says "Scene: the person's words; pictures by <model> (closed/open), each with the scene and
   his look as references".
 
+## 7. Before anyone uses it: the continuity test (Nate, 2026-11-22)
+
+- **What:** one speech; one scene, look and style; 6 shots on each of FLUX, GPT Image and Gemini, up to $1.50 in all
+  (about $1.05 estimated at one try a shot).
+- **Shown:** the three boards side by side on a review page, so Nate can judge whether Ephelion, his clothes and the
+  room stay the same from shot to shot. He picks the default model from it.
+- **Before it runs** (raised, not assumed): the setting and the six shots' words must be a person's (P2).
+  - With the guide built, Nate asks it in his own words and it writes the prompts, as the ruling allows.
+  - Before the guide exists, the words are Nate's, or Nate says the test may use words marked "typed by the agent for
+    the test, never published".
+
+## 8. How many shots a person can make in a day, today
+
+Real storyboard pictures are on for admins only (`VOICE.realPictures: 'admins'`), on the admins' pool.
+- **The pool:** `CHAPTER_PICTURES.adminDailyCapUsd`, $20 a UTC day, shared by every admin and by the admins' chapter
+  pictures. There is no per-person count; each picture reserves its worst case and settles to its real cost.
+- **Tries:** at most 3 per shot, the scene and the closing card each (`VOICE.board.maxTriesPerShot`).
+
+| Model | With 3 references (estimate) | Pictures in $20, if one admin used it all | A 12-shot board (scene + 12 shots + closing = 14 pictures) |
+|---|---|---|---|
+| FLUX.2 [klein] 4B edit | about $0.024 | about 830 | fits: about $0.34, or $1.01 at 3 tries each |
+| GPT Image 2.5 Sunburst | about $0.05 to $0.06 | about 330 to 400 | fits: about $0.80, or $2.50 at 3 tries each |
+| Gemini 3.1 Flash Image | about $0.07 | about 285 | fits: about $1.00, or $2.95 at 3 tries each |
+
+So a 12-shot board fits in one day on any model, even at every try, as long as other admins' chapter pictures haven't
+used the pool. Non-admins can't make real storyboard pictures yet.
+
 ## Order and what it needs
 
-- **Order:** it builds on main once voice-keep-takes (#213) is merged.
+- **Order:** held until Nate's word. Then: the continuity test (section 7); the engine (v2, on the branch); the guide
+  (v3) on top; P2u with its planted faults; the Privacy lines after Nate's reread.
 - **Legal, to check before building:** today a shot sends only a published sheet's front view. This design also sends
   the person's own kept scene and previous shot to the image model's host. I haven't found a Privacy line that names a
   person's own private board pictures being sent as references. If none covers it, a one-line Privacy draft goes in this
