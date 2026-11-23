@@ -27,6 +27,7 @@ import postgres from 'postgres';
 import { ADMINS, BOUNTY_REVIEW } from '../src/lib/config';
 import { p5bProblems } from './lib/p5b';
 import { gatePglite } from './lib/pglite-gate';
+import type { EntriesOf } from '../src/lib/review/review';
 
 process.env.FARCASTER_API_URL = 'http://127.0.0.1:9';
 delete process.env.BASE_RPC_URL;
@@ -211,9 +212,9 @@ const stub = {
     });
   },
 } as unknown as Parameters<typeof C.readOnChain>[0];
-const noEntries = async () => ({ entries: [] });
+const noEntries: EntriesOf = async () => ({ entries: [] });
 const ENTRY = '72222222-2222-4222-8222-222222222222';
-const oneEntry = async () => ({ entries: [{ versionId: ENTRY, elementId: '71111111-1111-4111-8111-111111111111', character: 'bai', person: 900001, createdAt: '2026-11-12T19:00:00.000Z', forked: true, maker: 900001, versionNo: 1, title: 'Bai at the board', byName: 'zeimaker', thumb: 'https://pictures.snowmoon.party/images/readers/abc.jpg' }] });
+const oneEntry: EntriesOf = async () => ({ entries: [{ versionId: ENTRY, elementId: '71111111-1111-4111-8111-111111111111', character: 'bai', person: 900001, createdAt: '2026-11-12T19:00:00.000Z', forked: true, maker: 900001, versionNo: 1, title: 'Bai at the board', byName: 'zeimaker', thumb: 'https://pictures.snowmoon.party/images/readers/abc.jpg' }] });
 
 // The gate.
 {
