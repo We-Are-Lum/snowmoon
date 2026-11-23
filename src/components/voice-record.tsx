@@ -6,7 +6,10 @@ import { authFetch, inMiniApp, useAuth } from '~/lib/client-auth';
 import { HOST_CHECK_MS, HOST_PROMPT_MS, withTimeout } from '~/lib/host-timeout';
 import { MIC_HELP, micPlace } from '~/lib/mic-help';
 import { loadTake, removeTake, saveTake, type DeviceTake } from '~/lib/voice/device-takes';
+import { VoiceRemove } from '~/components/voice-remove';
 import '../styles/voice.css';
+
+const REMOVE_DRAFT = 'Remove this draft? Its audio is deleted and it can’t be brought back.';
 
 /**
  * /storyboard/record, the Ephelion voice slice 1 (Nate, 2026-11-19; DRAFT, admins only behind VOICE's switch):
@@ -552,7 +555,6 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
   }
 
   async function removeDraft(id: string): Promise<boolean> {
-    if (!window.confirm('Remove this draft? Its audio is deleted and it can\'t be brought back.')) return false;
     setBusy('remove');
     const r = await authFetch(`/api/voice/drafts/${id}`, { method: 'DELETE' });
     setBusy(null);
@@ -820,7 +822,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
               ) : (
                 <div className="vr-row">
                   <p className="vr-ok">Kept as your draft. Only you can see it; nothing is published.</p>
-                  <button type="button" className="vr-btn vr-quiet vr-small-btn" onClick={async () => { if (await removeDraft(accepted)) discard(); }} disabled={busy !== null}>Remove</button>
+                  <VoiceRemove label="Remove" question={REMOVE_DRAFT} disabled={busy !== null} busy={busy === 'remove'} onRemove={async () => { if (await removeDraft(accepted)) discard(); }} />
                 </div>
               )}
               <p className="vr-small">Each converted take is kept as your draft as soon as it comes back, until you remove it. Redone sentences are kept when you press &ldquo;Use this one&rdquo;.</p>
@@ -856,9 +858,7 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
                     ) : d.kind === 'performance' ? (
                       <a className="vr-btn vr-small-btn vr-remove" href={`/storyboard/board/${d.id}`}>Make the storyboard</a>
                     ) : null}{' '}
-                    <button type="button" className="vr-btn vr-quiet vr-small-btn vr-remove" onClick={() => removeDraft(d.id)} disabled={busy !== null}>
-                      Remove this draft
-                    </button>
+                    <VoiceRemove className="vr-btn vr-quiet vr-small-btn vr-remove" label="Remove this draft" question={REMOVE_DRAFT} disabled={busy !== null} onRemove={() => removeDraft(d.id)} />
                   </li>
                 ))}
               </ul>

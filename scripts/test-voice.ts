@@ -743,6 +743,13 @@ check('$. the caps are placeholders in config, in credits and dollars', VOICE.ca
   check('G. the reading can\'t be removed while someone else has a board on it, and none of its files is touched', r.status === 404 && (await sql`select count(*)::int n from studio.voice_drafts where id = ${rdId}`)[0].n === 1 && storeFiles().some((f) => f.startsWith(`voice-drafts/${rdId}/`)) && storeFiles().some((f) => f.startsWith(`voice-boards/${rdId}/${GARANCE}/`)));
   r = await boards.DELETE(as(NATE, { method: 'DELETE' }, `http://localhost/api/voice/boards?draft=${rdId}`));
   check('G. a person removes their own board on it, and only theirs', r.status === 200 && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${rdId} and fid = ${NATE}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${rdId} and fid = ${GARANCE}`)[0].n === 1);
+  {
+    // Asked in the page, not window.confirm (Nate, 2026-11-23): removing one's own storyboard and removing a draft.
+    const rm = readFileSync(path.join(ROOT, 'src/components/voice-remove.tsx'), 'utf8');
+    const vb = readFileSync(path.join(ROOT, 'src/components/voice-board.tsx'), 'utf8');
+    const vr = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+    check('G. removing a storyboard or a draft asks in the page, "Remove it" or "Keep it", never window.confirm', />\s*Remove it\s*</.test(rm) && />\s*Keep it\s*</.test(rm) && !/window\.confirm/.test(vb + vr) && /<VoiceRemove\s+label="Remove my storyboard"/.test(vb) && (vr.match(/<VoiceRemove /g) ?? []).length === 2);
+  }
   r = await boards.DELETE(as(GARANCE, { method: 'DELETE' }, `http://localhost/api/voice/boards?draft=${rdId}`));
   check('G. ... its kept pictures\' files go too', r.status === 200 && storeFiles().every((f) => !f.startsWith(`voice-boards/${rdId}/${GARANCE}/`)));
   r = await draftRoute.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: rdId }) });
