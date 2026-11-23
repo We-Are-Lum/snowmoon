@@ -9,8 +9,8 @@ import { designByVersion, listDesigns } from '../images/designs';
 import type { Where } from '../images/countries';
 import type { Made } from '../images/fal';
 import type { paidPicture } from '../images/paid';
-import { angleById, shotPrompt, type Shot } from './board';
-import { boardSource, latestBoard } from './board-store';
+import { angleById, COVERAGE, SCENE, shotPrompt, shotReferences, type Shot } from './board';
+import { boardSource, latestBoard, pictureBytes } from './board-store';
 import { signTicket } from './ticket';
 import { CLOSING } from './closing';
 
@@ -61,15 +61,22 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   // The closing card's background (slice 4) goes through the same flow under the key 'end': the person's own words for
   // its look, a style, no camera; the site draws the card's text over it.
   const closing = b.shotKey === CLOSING.key;
-  if (closing && !board) return no(400, 'Save the storyboard first.');
-  const shotNo = closing ? shots.length + 1 : shots.findIndex((s) => s.key === b.shotKey) + 1;
-  if (!shotNo) return no(400, 'Save the cuts first: this shot is not on the saved storyboard.');
+  // The scene (Nate, 2026-11-22): one establishing picture, made and kept first, under the key 'scene': the person's own
+  // words for the setting, a wide eye-level camera, the look. Every shot in the scene then sends it as a reference.
+  const sceneShot = b.shotKey === SCENE.key;
+  if ((closing || sceneShot) && !board) return no(400, 'Save the storyboard first.');
+  const shotNo = closing ? shots.length + 1 : sceneShot ? 0 : shots.findIndex((s) => s.key === b.shotKey) + 1;
+  if (!closing && !sceneShot && !shotNo) return no(400, 'Save the cuts first: this shot is not on the saved storyboard.');
+  const shot = shots.find((s) => s.key === b.shotKey) ?? null;
+  const insert = shot?.insert === true;
+  const inScene = !closing && !sceneShot && !insert;
   if (shots.length > VOICE.board.maxShots) return no(400, `A storyboard has at most ${VOICE.board.maxShots} shots: remove a cut first.`);
   const description = typeof b.description === 'string' ? b.description.trim() : '';
   if (!description) return no(400, 'Write what the shot shows first: your words are the prompt.');
   if (description.length > VOICE.board.descriptionMaxChars) return no(400, `At most ${VOICE.board.descriptionMaxChars} characters.`);
-  const angle = closing ? null : angleById(String(b.angle ?? ''));
-  if (!closing && !angle) return no(400, 'Pick a camera angle');
+  // The scene is always the wide master; an insert's camera is optional (it has no default); every other shot needs one.
+  const angle = closing ? null : sceneShot ? angleById(SCENE.angle) : angleById(String(b.angle ?? ''));
+  if (!closing && !insert && !angle) return no(400, 'Pick a camera angle');
   const tries = (await triesMade(sql, draft.id, fid))[String(b.shotKey)] ?? 0;
   if (tries >= VOICE.board.maxTriesPerShot) return no(429, `${VOICE.board.maxTriesPerShot} pictures for this shot already: keep one of them.`, { reason: 'tries' });
   if (!(await deps.consented(fid))) return no(403, 'Agree to how your words are published first', { reason: 'consent' });
@@ -81,21 +88,41 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   const style = typeof b.styleId === 'string' && b.styleId ? (styles.find((s) => s.versionId === b.styleId) ?? null) : null;
   if (typeof b.styleId === 'string' && b.styleId && !style) return no(400, 'That style is not a published sheet');
   const wanted = closing ? [] : Array.isArray(b.characterIds) ? b.characterIds.filter((x): x is string => typeof x === 'string') : [];
-  if (wanted.length > IMAGES.maxReferences) return no(400, `Up to ${IMAGES.maxReferences} characters’ sheets`);
+  // One look a picture (the scene, a shot, an insert): the scene and the previous shot take the other two references.
+  if (wanted.length > 1) return no(400, 'One character’s look a picture');
   const chosen = wanted.map((id) => characters.find((c) => c.versionId === id));
   if (chosen.some((c) => !c)) return no(400, 'A character is not a published sheet');
-  // Each character's sheet front view goes along as a reference picture, as the chapter pictures send them.
+  // The references, in order (proposal v2): a shot in the scene sends the kept scene and the look (the anchors, every
+  // time), then the last kept shot in the scene before it (continuity; never an insert). The scene sends the look only;
+  // an insert, the look only if one is chosen; the closing background, none.
   const refs: Buffer[] = [];
-  const references: { name: string; versionId: string; url: string; sha256: string }[] = [];
+  const references: { role: 'anchor-scene' | 'anchor-look' | 'continuity'; name: string; versionId?: string; shotKey?: string; url?: string; sha256: string }[] = [];
+  const sceneKept = board?.scene?.kept ?? null;
+  const plan = inScene ? shotReferences(shots, String(b.shotKey)) : null;
+  if (inScene) {
+    if (!sceneKept) return no(400, 'Make and keep the scene first: every shot in the scene uses it.', { reason: 'no-scene' });
+    const bytes = await pictureBytes(sql, draft.id, fid, SCENE.key, sceneKept);
+    if (!bytes) return no(503, 'The scene picture could not be read. Try again in a moment.');
+    refs.push(Buffer.from(bytes));
+    references.push({ role: 'anchor-scene', name: 'the scene', shotKey: SCENE.key, sha256: sceneKept });
+  }
   for (const c of chosen) {
     const front = (await designByVersion(sql, c!.versionId).catch(() => null))?.shown.body.views.front;
     if (!front?.url || !front.sha256) continue;
     const bytes = await deps.reference(front.url, front.sha256);
     if (!bytes) return no(503, `${c!.title}’s sheet picture could not be read. Try again in a moment.`);
     refs.push(bytes);
-    references.push({ name: c!.title, versionId: c!.versionId, url: front.url, sha256: front.sha256 });
+    references.push({ role: 'anchor-look', name: c!.title, versionId: c!.versionId, url: front.url, sha256: front.sha256 });
   }
-  const prompt = `${shotPrompt({ description, angle: angle?.id ?? '' }, style, chosen as { title: string; text: string }[])}\n\n${IMAGES.suffix}`;
+  if (plan?.continuity) {
+    const prev = shots.find((s) => s.key === plan.continuity)!;
+    const bytes = await pictureBytes(sql, draft.id, fid, prev.key, prev.kept!);
+    if (!bytes) return no(503, 'The previous shot’s picture could not be read. Try again in a moment.');
+    refs.push(Buffer.from(bytes));
+    references.push({ role: 'continuity', name: `shot ${shots.indexOf(prev) + 1} as kept`, shotKey: prev.key, sha256: prev.kept! });
+  }
+  if (refs.length > IMAGES.maxReferences) return no(400, `At most ${IMAGES.maxReferences} reference pictures`);
+  const prompt = `${shotPrompt({ description, angle: angle?.id ?? '' }, style, chosen as { title: string; text: string }[], inScene)}\n\n${IMAGES.suffix}`;
   const worst = reserveUsd(m, { width: IMAGES.viewSize.width, height: IMAGES.viewSize.height * Math.max(1, refs.length) });
   const paid = await deps.paid(sql, fid, request, {
     checkText: prompt,
@@ -103,7 +130,7 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
     // A closed model's maker (OpenAI, Google): a refusal by its own check names it (branch refusal-reasons, owner
     // 2026-11-18; wording reread by the owner 2026-11-22).
     ...(m.open ? {} : { maker: m.maker }),
-    make: () => deps.make(m, prompt, refs, request, worst, { no: shotNo, attempt: tries + 1, description, angle: angle?.label ?? 'Closing card background', style: style?.title ?? null, characters: chosen.map((c) => c!.title) }),
+    make: () => deps.make(m, prompt, refs, request, worst, { no: shotNo, attempt: tries + 1, description, angle: angle?.label ?? (insert ? 'Insert' : 'Closing card background'), style: style?.title ?? null, characters: chosen.map((c) => c!.title) }),
   });
   if (!paid.ok) return { status: paid.status, json: { error: paid.error, ...paid.extra } };
   const made = paid.made;
@@ -113,7 +140,7 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   const { mime, ext } = kindOf(bytes);
   const recipe = {
     v: 1,
-    kind: closing ? 'storyboard-closing' : 'storyboard-shot',
+    kind: closing ? 'storyboard-closing' : sceneShot ? 'storyboard-scene' : 'storyboard-shot',
     model: deps.real ? { id: m.allowlistId, name: m.name, maker: m.maker, open: m.open, terms: m.terms, host: m.call.host, endpoint: m.call.endpoint } : { id: 'stand-in', name: 'Stand-in card', maker: 'this edition (no model)', open: true },
     standIn: !deps.real,
     prompt,
@@ -122,6 +149,10 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
     style: style ? { versionId: style.versionId, title: style.title } : null,
     characters: chosen.map((c) => ({ versionId: c!.versionId, title: c!.title })),
     references,
+    // The scene this picture belongs to (a shot in the scene), the camera and who set it, and whether it is an insert.
+    ...(sceneShot ? { setting: { text: description, by: `written by FID ${fid}` } } : {}),
+    ...(inScene ? { scene: { sha256: sceneKept, setting: board?.scene?.setting ?? null, by: `written by FID ${fid}` }, continuity: plan?.continuity ?? null } : {}),
+    ...(closing ? {} : { camera: { angle: angle?.id ?? null, by: sceneShot ? 'the scene (always the wide master)' : (shot?.angleBy ?? 'person') }, coverage: { name: COVERAGE.name, version: COVERAGE.version }, insert }),
     attempt: tries + 1,
     settings: made.settings,
     seed: made.seed,

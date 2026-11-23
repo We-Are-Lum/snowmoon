@@ -397,8 +397,11 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   const ends = tl.sentences.map((x) => Math.round(x.end * 100) / 100);
   check('B. the first board is the automatic cuts, every one at a sentence end', r.status === 200 && b0.board.fromProposal && b0.board.cuts.length > 1 && b0.board.cuts.every((c) => ends.includes(c)) && b0.board.shots.length === b0.board.cuts.length + 1);
   check('B. the board sends the speech\'s own sentences (its text, not the transcription) for the shots and the play-through', JSON.stringify((b0 as unknown as { draft: { sentences: { n: number; text: string }[] } }).draft.sentences) === JSON.stringify(speech.sentences.map((x) => ({ n: x.n, text: x.text }))));
-  check('B. ... and no shot has words written for it (P2): every description is empty, and every camera starts on Medium shot (Nate, 2026-11-21)', b0.board.shots.every((x) => x.description === '' && x.angle === 'medium' && x.kept === null));
-  check('B. the notes are rule checks that name no content (P2)', b0.notes.length > 0 && b0.notes.every((n) => /^Shot|^Shots/.test(n.text) && !/should show|try showing|describe/i.test(n.text)));
+  {
+    const want = board.coverageAngles(b0.board.shots);
+    check('B. ... and no shot has words written for it (P2): every description is empty; the cameras are the default coverage, set by the rule (Nate, 2026-11-22)', b0.board.shots.every((x, i) => x.description === '' && x.kept === null && x.angle === want[i] && x.angleBy === 'rule' && !x.insert) && b0.board.shots[0].angle === 'wide', b0.board.shots.map((x) => x.angle).join());
+  }
+  check('B. the notes are rule checks that name no content (P2)', b0.notes.length > 0 && b0.notes.every((n) => /^Shot|^Shots|^The scene/.test(n.text) && !/should show|try showing|describe/i.test(n.text)));
   check('B. the kept pictures and the picture-making settings are separate fields (neither hides the other)', Array.isArray((b0 as unknown as { pictures: unknown }).pictures) && typeof (b0 as unknown as { making: unknown }).making === 'object');
   check('B. the published sheets are offered', b0.sheets.styles.some((x) => x.title === 'Ink and wash') && b0.sheets.characters.some((x) => x.title === 'Ephelion'));
   // The person moves a cut, adds one, removes one, writes shot 1, picks a camera and the sheets, saves.
@@ -424,13 +427,33 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   check('B. no picture without the person\'s own description (400)', (await pic({ description: '  ', angle: 'low' })).status === 400);
   check('B. ... or without a camera angle (400)', (await pic({ description: mine, angle: '' })).status === 400);
   check('B. ... or with a sheet that isn\'t published (400)', (await pic({ description: mine, angle: 'low', styleId: '00000009-0000-4000-8000-999999999999' })).status === 400);
+  // The scene (Nate, 2026-11-22): every shot in the scene needs it kept first.
+  r = await pic({ description: mine, angle: 'low', styleId: style, characterIds: [eph] });
+  check('S2. a shot in the scene gets no picture before the scene is kept (400), and nothing is counted', r.status === 400 && ((await r.json()) as { reason?: string }).reason === 'no-scene' && (await sql`select count(*)::int n from studio.voice_board_asks where draft_id = ${acc.id}`)[0].n === 0);
+  const setting = '(test script\'s words) A tall window over a grey harbour, early light, a lectern of dark wood.';
+  r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: 'scene', description: setting, angle: 'low', styleId: style, characterIds: [eph] }) }));
+  const sc = (await r.json()) as { image: string; sha256: string; ticket: string; recipe: { kind: string; prompt: string; angle: string; references: { role: string }[]; setting: { text: string } } };
+  check('S2. the scene: the person\'s setting first, word for word, always the wide master (a sent camera is ignored), his look its one reference', r.status === 200 && sc.recipe.kind === 'storyboard-scene' && sc.recipe.prompt.startsWith(setting) && sc.recipe.angle === 'wide' && /Camera: a wide shot/.test(sc.recipe.prompt) && sc.recipe.references.map((x) => x.role).join() === 'anchor-look' && sc.recipe.setting.text === setting && !/The same place, light/.test(sc.recipe.prompt));
+  check('S2. ... one look a picture: two characters are refused (400)', (await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: 'scene', description: setting, characterIds: [eph, eph] }) }))).status === 400);
+  check('S2. ... kept like a shot\'s picture', (await boardKeep.POST(as(NATE, { method: 'POST', body: JSON.stringify({ ticket: sc.ticket, image: sc.image }) }))).status === 200);
+  r = await boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, cuts, shots: s2.shots, scene: { setting, kept: sc.sha256 } }) }));
+  const sSc = (await r.json()) as { version: number; scene: { setting: string; kept: string | null }; notes: { kind: string }[] };
+  check('S2. the board saves the scene: the setting word for word, and the kept picture', r.status === 200 && sSc.scene.setting === setting && sSc.scene.kept === sc.sha256 && !sSc.notes.some((n) => n.kind === 'no-scene'));
+  r = await boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, cuts, shots: s2.shots, scene: { setting, kept: 'e'.repeat(64) } }) }));
+  check('S2. ... a scene picture that was never kept can\'t be claimed', ((await r.json()) as { scene: { kept: string | null } }).scene.kept === null);
+  r = await boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, cuts, shots: s2.shots, scene: { setting, kept: sc.sha256 } }) }));
   r = await pic({ description: mine, angle: 'low', styleId: style, characterIds: [eph] });
   const p1 = (await r.json()) as { image: string; sha256: string; ticket: string; triesLeft: number; recipe: { model: { id: string }; prompt: string; costUsd: number; standIn: boolean; description: string } };
   const png = Buffer.from(p1.image.split(',')[1], 'base64');
   check('B. a stand-in picture comes back in the picture flow\'s shape: PNG, sha256, signed record, recipe', r.status === 200 && png.subarray(1, 4).toString() === 'PNG' && sha(png) === p1.sha256 && p1.ticket.includes('.') && p1.recipe.model.id === 'stand-in' && p1.recipe.standIn && p1.recipe.costUsd === 0 && p1.triesLeft === 2);
   check('B. its prompt is the person\'s words first, word for word, then the camera, the sheets\' own texts and the site\'s rules', p1.recipe.prompt.startsWith(mine) && /Camera: a low-angle shot/.test(p1.recipe.prompt) && /Lord Ephelion: a tall man/.test(p1.recipe.prompt) && /Style: Ink and wash: loose/.test(p1.recipe.prompt) && p1.recipe.description === mine);
   check('B. no model was called and nothing was spent (no ElevenLabs or image host call)', stub.calls.length === callsBefore);
-  check('B. nothing is stored before Keep (only the try is counted)', (await sql`select count(*)::int n from studio.voice_board_pictures`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_board_asks where draft_id = ${acc.id}`)[0].n === 1);
+  check('B. nothing is stored before Keep (only the try is counted; the scene is the one kept picture so far)', (await sql`select count(*)::int n from studio.voice_board_pictures where shot_key <> 'scene'`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_board_asks where draft_id = ${acc.id} and shot_key <> 'scene'`)[0].n === 1);
+  {
+    const rr = p1.recipe as unknown as { references: { role: string; sha256: string }[]; prompt: string; scene: { sha256: string; setting: string }; camera: { angle: string; by: string }; coverage: { name: string }; insert: boolean; continuity: string | null };
+    check('S2. shot 1 sends the scene and his look as anchors, in that order, and no previous shot', rr.references.map((x) => x.role).join() === 'anchor-scene,anchor-look' && rr.references[0].sha256 === sc.sha256 && rr.continuity === null);
+    check('S2. ... its prompt adds the one same-scene line; its recipe names the scene, the camera and who set it, the coverage rule, not an insert', /The same place, light, clothes and person as the first reference pictures\./.test(rr.prompt) && rr.scene.sha256 === sc.sha256 && rr.scene.setting === setting && rr.camera.angle === 'low' && rr.coverage.name === 'scene-coverage' && rr.insert === false);
+  }
   const keep = (ticket: string, image: string, fid = NATE) => boardKeep.POST(as(fid, { method: 'POST', body: JSON.stringify({ ticket, image }) }));
   const p2 = (await (await pic({ description: mine, angle: 'low' })).json()) as { image: string; sha256: string; ticket: string };
   check('B. a retry makes a different picture', p2.sha256 !== p1.sha256);
@@ -462,7 +485,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   check('B. Keep stores it privately, under voice-boards/<draft>/<owner>/, with its recipe', r.status === 200 && existsSync(path.join(STORE, keyP)) && (await sql`select recipe from studio.voice_board_pictures where storage_key = ${keyP}`)[0]?.recipe.prompt === p1.recipe.prompt);
   r = await save(cuts, s2.shots.map((x, i) => (i === 0 ? { ...x, kept: p1.sha256 } : x)));
   const s3 = (await r.json()) as { version: number; shots: Shot[]; notes: { kind: string; shot: string }[] };
-  check('B. the kept picture is on the board now (version 3), and its note is gone', s3.version === 3 && s3.shots[0].kept === p1.sha256 && !s3.notes.some((n) => n.kind === 'no-picture' && n.shot === s3.shots[0].key));
+  check('B. the kept picture is on the board now (version 6, after the scene\'s three saves), and its note is gone', s3.version === 6 && s3.shots[0].kept === p1.sha256 && !s3.notes.some((n) => n.kind === 'no-picture' && n.shot === s3.shots[0].key));
   const pget = (fid: number) => boardPicture.GET(as(fid, {}, `http://localhost/api/voice/boards/picture?draft=${acc.id}&shot=${s2.shots[0].key}&sha=${p1.sha256}`));
   r = await pget(NATE);
   check('B. the kept picture plays for its person', r.status === 200 && sha(new Uint8Array(await r.arrayBuffer())) === p1.sha256);
@@ -526,6 +549,12 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
       cur = sv.shots.map((x) => (x.key === sh.key ? { ...x, kept: made.sha256 } : x));
       sv = { ...sv, shots: cur };
     }
+    {
+      const rows = await sql`select shot_key, recipe from studio.voice_board_pictures where draft_id = ${acc.id} and fid = ${NATE}`;
+      const r2 = rows.find((x) => x.shot_key === sv.shots[1].key)?.recipe as { references: { role: string; shotKey?: string }[]; continuity: string | null } | undefined;
+      const r3 = rows.find((x) => x.shot_key === sv.shots[2]?.key)?.recipe as { continuity: string | null } | undefined;
+      check('S2. shot 2 sends the scene, then shot 1 as kept (continuity); shot 3 follows shot 2', r2?.references.map((x) => x.role).join() === 'anchor-scene,continuity' && r2.continuity === sv.shots[0].key && r2.references[1].shotKey === sv.shots[0].key && (sv.shots.length < 3 || r3?.continuity === sv.shots[1].key), JSON.stringify(r2?.references));
+    }
     const look = "(test script's words) Snow falling over a dark harbour, the lamps out.";
     r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: 'end', description: look }) }));
     const bg = (await r.json()) as { ticket: string; image: string; sha256: string; recipe: { kind: string; prompt: string; angle: unknown; assist: { text: string } } };
@@ -586,6 +615,31 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
     check('K. public copies have their own store file, under storyboards/ only; the draft store stays private', /R2_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && /\^storyboards/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && !/R2_PRIVATE_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')));
   check('K. "Save as a video" is in the browser only: no server route records, uploads or calls a video model', !existsSync(path.join(ROOT, 'src/app/api/voice/video')) && !/fetch\([^)]*(upload|api\/)/.test(readFileSync(path.join(ROOT, 'src/lib/voice/video.ts'), 'utf8')) && /MediaRecorder/.test(readFileSync(path.join(ROOT, 'src/lib/voice/video.ts'), 'utf8')));
   }
+}
+
+// S. One scene, several cameras (Nate, 2026-11-22; proposal v2): the coverage rule, the references, the old-scene marks.
+{
+  const closingLib = await import('../src/lib/voice/closing');
+  const mk = (len: number[], ins: number[] = []) => {
+    return len.map((l, i) => ({ key: `s${i + 1}`, start: len.slice(0, i).reduce((a, b) => a + b, 0), end: len.slice(0, i + 1).reduce((a, b) => a + b, 0), description: '', angle: '' as const, styleId: null, characterIds: [], kept: null, insert: ins.includes(i) }));
+  };
+  check('S. coverage: 6 shots read A, B, C, D, C, A (wide, medium, close, left, close, wide)', board.coverageAngles(mk([8, 8, 8, 8, 8, 8])).join() === 'wide,medium,close,left,close,wide');
+  check('S. ... 12 shots read A, B, C, D, C, E, B, C, D, C, E, A', board.coverageAngles(mk(Array(12).fill(8))).join() === 'wide,medium,close,left,close,low,medium,close,left,close,low,wide');
+  check('S. ... a shot of 4 seconds or less is a close-up, and no camera comes twice in a row', board.coverageAngles(mk([8, 3, 8, 8, 8])).join() === 'wide,close,left,close,wide', board.coverageAngles(mk([8, 3, 8, 8, 8])).join());
+  check('S. ... inserts are skipped: the cycle runs over the shots in the scene, and an insert gets no camera', board.coverageAngles(mk([8, 8, 8, 8, 8, 8], [2])).join() === 'wide,medium,,close,left,wide');
+  check('S. ... the person\'s camera is kept; only the rule\'s are filled in', board.applyCoverage(mk([8, 8, 8]).map((x, i) => (i === 1 ? { ...x, angle: 'pov' as const, angleBy: 'person' as const } : x))).map((x) => x.angle).join() === 'wide,pov,wide');
+  const kept = mk([8, 8, 8, 8]).map((x, i) => ({ ...x, kept: String(i).repeat(64), insert: i === 2 }));
+  check('S. references: shot 1 has no previous shot; shot 2 follows shot 1; an insert sends no scene; shot 4 follows shot 2, not the insert', board.shotReferences(kept, 's1').continuity === null && board.shotReferences(kept, 's2').continuity === 's1' && board.shotReferences(kept, 's3').insert && !board.shotReferences(kept, 's3').scene && board.shotReferences(kept, 's4').continuity === 's2');
+  const scene = { setting: 'x', kept: 'a'.repeat(64) };
+  const made = { s1: 'a'.repeat(64), s2: 'b'.repeat(64), s3: null, s4: 'b'.repeat(64) };
+  check('S. a shot made with an earlier scene is marked; an insert never is; keeping it with this scene clears the mark', board.oldSceneShots(kept, scene, made).join() === '1,3' && board.oldSceneShots(kept.map((x, i) => (i === 1 ? { ...x, sceneConfirmed: scene.kept } : x)), scene, made).join() === '3');
+  check('S. ... and publishing waits for it, and for a kept scene', closingLib.publishProblems({ unmatched: [], sentences: 1, shots: kept, keptShots: new Set(kept.map((x) => `${x.key}:${x.kept}`)), closing: { description: 'x', styleId: null, kept: 'c'.repeat(64) }, closingKept: true, standIns: 0, standInsAllowed: true, sceneKept: true, oldScene: [1] }).some((x) => /Shot 2 was made with an earlier scene/.test(x)) && closingLib.publishProblems({ unmatched: [], sentences: 1, shots: kept, keptShots: new Set(kept.map((x) => `${x.key}:${x.kept}`)), closing: { description: 'x', styleId: null, kept: 'c'.repeat(64) }, closingKept: true, standIns: 0, standInsAllowed: true, sceneKept: false }).some((x) => /The scene has no picture kept/.test(x)));
+  check('S. P2: the defaults write no words: a new shot\'s description is empty and it starts in the scene; the setting box starts empty', board.shotsFromCuts({ seconds: 20, words: [], sentences: [] } as never, [10]).every((x) => x.description === '' && x.insert === false) && board.emptyScene().setting === '');
+  const { settingQuote } = await import('../src/lib/voice/speech');
+  const q = settingQuote('ephelion-c13-b64');
+  check('S. the book\'s words for where c13-b64 is shown: c13-b63, word for word; none for the invented speeches', q?.block === 'c13-b63' && q.text === 'An image of Lord Ephelion appeared on the left side of the screen, and a multi-paragraph message on the right side.' && settingQuote('doing-fine-v2') === null);
+  const page = readFileSync(path.join(ROOT, 'src/components/voice-board.tsx'), 'utf8');
+  check('S. the page: the scene first, the Book quote above an empty setting box, the insert switch, "Sent with"', /1\. The scene/.test(page) && /Where the book shows this speech/.test(page) && /Insert: outside the scene/.test(page) && /Sent with:/.test(page));
 }
 
 // B2. The storyboard on a phone (Nate, 2026-11-21, after his iPhone test).
@@ -721,12 +775,18 @@ check('$. the caps are placeholders in config, in credits and dollars', VOICE.ca
   check('G. anyone let in can make a board on the reading (it says it is the reading)', gb.draft.kind === 'reading' && gb.board.version === 0 && nb.board.version === 0);
   const saveOn = async (fid: number, shots: Shot[], cuts: number[]) => (await (await boards.POST(as(fid, { method: 'POST', body: JSON.stringify({ draftId: rdId, cuts, shots }) }))).json()) as { version: number; shots: Shot[] };
   const gWords = "(test script's words) Garance's board: the letter on a wall.";
-  const gs = await saveOn(GARANCE, gb.board.shots.map((x, i) => (i === 0 ? { ...x, description: gWords } : x)), gb.board.cuts);
+  const gs = await saveOn(GARANCE, gb.board.shots.map((x, i) => (i === 0 ? { ...x, description: gWords, insert: true, angle: '' as const, angleBy: 'person' as const } : x)), gb.board.cuts);
+  check('S3. an insert is the person\'s choice, kept on the board; the camera rule skips it', gs.shots[0].insert === true && gs.shots[0].angle === '' && gs.shots.slice(1).every((x) => !x.insert));
+  {
+    const inScene = await boardPicture.POST(as(GARANCE, { method: 'POST', body: JSON.stringify({ draftId: rdId, shotKey: gs.shots[1]?.key, description: gWords, angle: 'medium' }) }));
+    check('S3. ... on a board with no scene kept, a shot in the scene is refused (400) but the insert is not', gs.shots.length < 2 || inScene.status === 400);
+  }
   const ns = await saveOn(NATE, nb.board.shots, nb.board.cuts.slice(0, 1));
   check('G. each person\'s board is their own: both start at version 1', gs.version === 1 && ns.version === 1);
   const nb2 = (await (await boardGet(NATE)).json()) as { board: { shots: Shot[]; cuts: number[] } };
   check('G. ... and one person never sees another\'s words or cuts', nb2.board.shots.every((x) => x.description !== gWords) && nb2.board.cuts.length === 1);
-  const gPic = (await (await boardPicture.POST(as(GARANCE, { method: 'POST', body: JSON.stringify({ draftId: rdId, shotKey: gs.shots[0].key, description: gWords, angle: 'wide' }) }))).json()) as { ticket: string; image: string; sha256: string };
+  const gPic = (await (await boardPicture.POST(as(GARANCE, { method: 'POST', body: JSON.stringify({ draftId: rdId, shotKey: gs.shots[0].key, description: gWords, angle: '' }) }))).json()) as { ticket: string; image: string; sha256: string; recipe: { insert: boolean; references: unknown[]; prompt: string; scene?: unknown } };
+  check('S3. an insert: no camera needed, no reference picture, no same-scene line, no scene; its recipe says it is an insert', gPic.recipe?.insert === true && gPic.recipe.references.length === 0 && !/The same place, light/.test(gPic.recipe.prompt) && gPic.recipe.scene === undefined);
   r = await boardKeep.POST(as(GARANCE, { method: 'POST', body: JSON.stringify({ ticket: gPic.ticket, image: gPic.image }) }));
   check('G. a picture kept on a reading goes under its owner\'s folder', r.status === 200 && existsSync(path.join(STORE, `voice-boards/${rdId}/${GARANCE}/${gs.shots[0].key}-${gPic.sha256}.png`)));
   const pg2 = (fid: number) => boardPicture.GET(as(fid, {}, `http://localhost/api/voice/boards/picture?draft=${rdId}&shot=${gs.shots[0].key}&sha=${gPic.sha256}`));

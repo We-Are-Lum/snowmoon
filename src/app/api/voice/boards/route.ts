@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server';
 import { db } from '~/lib/db';
 import { noStore, voicePerson } from '~/lib/voice/server';
 import { listDesigns } from '~/lib/images/designs';
-import { CAMERA_ANGLES, SHOT, boardNotes, proposeCuts, shotsFromCuts, type Shot } from '~/lib/voice/board';
-import { boardSource, keptPictures, latestBoard, livePublication, saveBoard } from '~/lib/voice/board-store';
+import { CAMERA_ANGLES, COVERAGE, SCENE, SHOT, applyCoverage, boardNotes, emptyScene, proposeCuts, shotsFromCuts, type Scene, type Shot } from '~/lib/voice/board';
+import { boardSource, keptPictures, latestBoard, livePublication, madeWithScene, saveBoard } from '~/lib/voice/board-store';
 import { readingEstimate } from '~/lib/voice/reading-timing';
 import { deleteAudio } from '~/lib/voice/store';
 import { shotModels, triesMade } from '~/lib/voice/shot-picture';
 import { whereFrom } from '~/lib/images/countries';
 import { VOICE } from '~/lib/config';
-import { speechById } from '~/lib/voice/speech';
+import { settingQuote, speechById } from '~/lib/voice/speech';
 import { voiceTestOn } from '~/lib/voice/flag';
 import { CLOSING, emptyClosing, type Closing } from '~/lib/voice/closing';
 
@@ -48,9 +48,12 @@ export async function GET(request: Request) {
         audio: draft.audio,
         timeline: draft.timeline,
       },
-      board: { version: saved?.version ?? 0, cuts, shots, closing: saved?.closing ?? emptyClosing(), proposed: proposeCuts(draft.timeline), fromProposal: !saved },
+      board: { version: saved?.version ?? 0, cuts, shots, closing: saved?.closing ?? emptyClosing(), scene: saved?.scene ?? emptyScene(), proposed: proposeCuts(draft.timeline), fromProposal: !saved },
       pictures,
-      notes: boardNotes(shots),
+      notes: boardNotes(shots, saved?.scene ?? emptyScene(), madeWithScene(shots, pictures as unknown as { shotKey: string; sha256: string; recipe: unknown }[])),
+      // Where the book shows this speech (c13-b63 for c13-b64), shown above the empty setting box; none for an invented speech.
+      settingQuote: draft.recipe.speech ? settingQuote(draft.recipe.speech.id) : null,
+      coverage: { name: COVERAGE.name, version: COVERAGE.version, cycle: COVERAGE.cycle, shortSeconds: COVERAGE.shortSeconds },
       sheets: { styles: styles.map(sheet), characters: characters.map(sheet) },
       angles: CAMERA_ANGLES,
       limits: SHOT,
@@ -66,7 +69,7 @@ export async function POST(request: Request) {
   if (who instanceof NextResponse) return who;
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Not available right now' }, { status: 503 });
-  const body = (await request.json().catch(() => ({}))) as { draftId?: string; cuts?: unknown; shots?: unknown; closing?: Partial<Closing> };
+  const body = (await request.json().catch(() => ({}))) as { draftId?: string; cuts?: unknown; shots?: unknown; closing?: Partial<Closing>; scene?: Partial<Scene> };
   const draft = await boardSource(sql, who.fid, String(body.draftId ?? ''));
   if (!draft?.timeline) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   const cuts = Array.isArray(body.cuts) ? body.cuts.filter((c): c is number => typeof c === 'number' && c > 0 && c < draft.timeline!.seconds).slice(0, 200) : null;
@@ -85,7 +88,13 @@ export async function POST(request: Request) {
     styleId: typeof s.styleId === 'string' ? s.styleId : null,
     characterIds: Array.isArray(s.characterIds) ? s.characterIds.filter((c): c is string => typeof c === 'string').slice(0, 6) : [],
     kept: typeof s.kept === 'string' && kept.has(`${s.key}:${s.kept}`) ? s.kept : null,
+    // Only the person makes an insert, and picks a camera (the rule fills in the rest: applyCoverage below).
+    insert: s.insert === true,
+    // A shot saved before the coverage rule has no angleBy: its camera was the person's, so it stays theirs.
+    angleBy: s.angleBy === 'rule' ? 'rule' : 'person',
+    sceneConfirmed: typeof s.sceneConfirmed === 'string' && /^[0-9a-f]{64}$/.test(s.sceneConfirmed) ? s.sceneConfirmed : null,
   })));
+  const withCameras = applyCoverage(shots);
   // The closing card's choices (slice 4): the person's own words for its look, a style, the kept background.
   const c = body.closing ?? {};
   const closing: Closing = {
@@ -93,8 +102,16 @@ export async function POST(request: Request) {
     styleId: typeof c.styleId === 'string' ? c.styleId : null,
     kept: typeof c.kept === 'string' && kept.has(`${CLOSING.key}:${c.kept}`) ? c.kept : null,
   };
-  const version = await saveBoard(sql, who.fid, draft.id, cuts, shots, closing);
-  return NextResponse.json({ version, cuts, shots, closing, notes: boardNotes(shots) }, { headers: noStore });
+  // The scene: the person's own words for the setting, and the kept scene picture (a board picture under 'scene').
+  // A save that doesn't send the scene keeps the last saved one (the setting and the kept picture carry over).
+  const sc = body.scene ?? (await latestBoard(sql, draft.id, who.fid))?.scene ?? {};
+  const scene: Scene = {
+    setting: String(sc.setting ?? '').slice(0, VOICE.board.descriptionMaxChars),
+    kept: typeof sc.kept === 'string' && kept.has(`${SCENE.key}:${sc.kept}`) ? sc.kept : null,
+  };
+  const version = await saveBoard(sql, who.fid, draft.id, cuts, withCameras, closing, scene);
+  const pictures = await keptPictures(sql, draft.id, who.fid);
+  return NextResponse.json({ version, cuts, shots: withCameras, closing, scene, notes: boardNotes(withCameras, scene, madeWithScene(withCameras, pictures as unknown as { shotKey: string; sha256: string; recipe: unknown }[])) }, { headers: noStore });
 }
 
 /**

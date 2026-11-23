@@ -7,7 +7,7 @@ import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
 import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
 import { useChallengeModel } from '~/components/challenge-model-row';
 import type { ModelRowEntry } from '~/lib/challenge/models';
-import { boardNotes, cutNear, pictureBlocked, sentenceAt, sentenceBoundaries, sentencesIn, shotAt, shotsFromCuts, snapToWordEnd, type Note, type Shot, type Timeline } from '~/lib/voice/board';
+import { applyCoverage, boardNotes, cutNear, emptyScene, pictureBlocked, SCENE, sentenceAt, sentenceBoundaries, sentencesIn, shotAt, shotReferences, shotsFromCuts, snapToWordEnd, type Note, type Scene, type Shot, type Timeline } from '~/lib/voice/board';
 import { joinAudio } from '~/lib/voice/join-audio';
 import { CLOSING, emptyClosing, type Closing, type CreditLine } from '~/lib/voice/closing';
 import { saveVideo, videoType } from '~/lib/voice/video';
@@ -23,7 +23,8 @@ import '../styles/voice.css';
 interface Sheet { id: string; title: string; entity: string; text: string; thumb: string | null; samples?: string[] }
 interface Data {
   draft: { id: string; kind: 'performance' | 'reading'; preset: string | null; speech: { id: string; title: string; label?: { text: string } } | null; sentences: { n: number; text: string }[]; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
-  board: { version: number; cuts: number[]; shots: Shot[]; closing: Closing; proposed: number[]; fromProposal: boolean };
+  board: { version: number; cuts: number[]; shots: Shot[]; closing: Closing; scene?: Scene; proposed: number[]; fromProposal: boolean };
+  settingQuote?: { text: string; block: string } | null;
   pictures: { shotKey: string; sha256: string; recipe: Record<string, unknown> }[];
   sheets: { styles: Sheet[]; characters: Sheet[] };
   angles: readonly { id: string; label: string }[];
@@ -87,7 +88,9 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const [published, setPublished] = useState<{ id: string; url: string } | null>(null);
   const [saving, setSaving] = useState<number | null>(null);
   const stopVideo = useRef<AbortController | null>(null);
-  const target = useRef<'shot' | 'closing'>('shot');
+  const target = useRef<'shot' | 'closing' | 'scene'>('shot');
+  // The scene (Nate, 2026-11-22): the person's own words for the setting, and the kept establishing picture.
+  const [scene, setScene] = useState<Scene>(emptyScene());
   // The storyboard's settings, chosen once and used for every picture (Nate, 2026-11-21): a style and Ephelion's look.
   const [settings, setSettings] = useState<{ styleId: string | null; lookId: string | null }>({ styleId: null, lookId: null });
   const dataOk = data && data !== 'none' && !('error' in data) ? data : null;
@@ -111,9 +114,10 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
     setData(j);
     setCuts(j.board.cuts);
     // Every shot starts on Medium shot (Nate, 2026-11-21), boards saved before then included.
-    setShots(j.board.shots.map((x) => (x.angle ? x : { ...x, angle: 'medium' as const })));
+    setShots(j.board.shots);
     setSettings({ styleId: j.board.shots[0]?.styleId ?? null, lookId: j.board.shots[0]?.characterIds[0] ?? null });
     setClosing(j.board.closing ?? emptyClosing());
+    setScene(j.board.scene ?? emptyScene());
     setKept(j.pictures.map((p) => ({ shotKey: p.shotKey, sha256: p.sha256 })));
     setSaved(j.board.version);
     setTriesMade(j.making.tries ?? {});
@@ -149,7 +153,14 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
     };
   }, [d]);
 
-  const notes: Note[] = useMemo(() => boardNotes(shots.map((s) => ({ ...s, kept: s.kept && kept.some((k) => k.shotKey === s.key && k.sha256 === s.kept) ? s.kept : null }))), [shots, kept]);
+  // Each kept picture's scene (from its recipe), so a shot made with an earlier scene is marked (proposal v2).
+  const madeWith = useMemo(() => {
+    const recipes = [...(dataOk?.pictures ?? []), ...Object.entries(tries).flatMap(([k, list]) => list.map((tr) => ({ shotKey: k, sha256: tr.sha256, recipe: tr.recipe })))];
+    const out: Record<string, string | null> = {};
+    for (const s of shots) out[s.key] = ((recipes.find((p) => p.shotKey === s.key && p.sha256 === s.kept)?.recipe as { scene?: { sha256?: string } } | undefined)?.scene?.sha256) ?? null;
+    return out;
+  }, [dataOk, tries, shots]);
+  const notes: Note[] = useMemo(() => boardNotes(shots.map((s) => ({ ...s, kept: s.kept && kept.some((k) => k.shotKey === s.key && k.sha256 === s.kept) ? s.kept : null })), scene, madeWith), [shots, kept, scene, madeWith]);
 
   // The publish check and the closing card's preview follow the saved board (and the "name me" choice).
   useEffect(() => {
@@ -230,7 +241,8 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   if (data && 'error' in data) return <main className="vr"><p className="vr-warn">{data.error}</p></main>;
   if (!d || !t) return <main className="vr"><p className="vr-note">Loading…</p></main>;
 
-  const apply = (list: Shot[], st = settings) => list.map((x) => ({ ...x, styleId: st.styleId, characterIds: st.lookId ? [st.lookId] : [] }));
+  // The settings go to every shot; an insert keeps its own character (or none): it never takes his look by default.
+  const apply = (list: Shot[], st = settings) => list.map((x) => ({ ...x, styleId: st.styleId, characterIds: x.insert ? x.characterIds : st.lookId ? [st.lookId] : [] }));
   const choose = (patch: Partial<typeof settings>) => {
     const st = { ...settings, ...patch };
     setSettings(st);
@@ -271,21 +283,23 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const endDrag = () => setTimeout(() => (drag.current = null), 0);
 
   const shot = shots[current];
+  // Every change re-runs the camera rule over the shots whose camera the person hasn't picked (inserts are skipped).
   const edit = (patch: Partial<Shot>) => {
-    setShots(shots.map((s, i) => (i === current ? { ...s, ...patch } : s)));
+    setShots(applyCoverage(shots.map((s, i) => (i === current ? { ...s, ...patch } : s))));
     setDirty(true);
   };
 
   async function save(): Promise<boolean> {
     setBusy('save');
     setMessage(null);
-    const r = await authFetch('/api/voice/boards', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ draftId: d!.draft.id, cuts, shots, closing }) });
+    const r = await authFetch('/api/voice/boards', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ draftId: d!.draft.id, cuts, shots, closing, scene }) });
     setBusy(null);
-    const j = (await r.json().catch(() => ({}))) as { version?: number; shots?: Shot[]; closing?: Closing; error?: string };
+    const j = (await r.json().catch(() => ({}))) as { version?: number; shots?: Shot[]; closing?: Closing; scene?: Scene; error?: string };
     if (r.ok && j.version) {
       setSaved(j.version);
       if (j.shots) setShots(j.shots);
       if (j.closing) setClosing(j.closing);
+      if (j.scene) setScene(j.scene);
       setDirty(false);
       return true;
     }
@@ -294,14 +308,18 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   }
   async function makePicture() {
     const forClosing = target.current === 'closing';
-    if (!forClosing && !shot) return;
+    const forScene = target.current === 'scene';
+    if (!forClosing && !forScene && !shot) return;
     // A picture is made only for a shot on the saved storyboard: save first if anything changed.
     if (dirty && !(await save())) return;
-    setBusy(forClosing ? 'closing' : 'picture');
+    setBusy(forClosing ? 'closing' : forScene ? 'scene' : 'picture');
     setMessage(null);
+    const look = settings.lookId ? [settings.lookId] : [];
     const what = forClosing
       ? { shotKey: CLOSING.key, description: closing.description, styleId: closing.styleId }
-      : { shotKey: shot.key, description: shot.description, angle: shot.angle, styleId: settings.styleId, characterIds: settings.lookId ? [settings.lookId] : [] };
+      : forScene
+        ? { shotKey: SCENE.key, description: scene.setting, angle: SCENE.angle, styleId: settings.styleId, characterIds: look }
+        : { shotKey: shot.key, description: shot.description, angle: shot.angle, styleId: settings.styleId, characterIds: shot.insert ? shot.characterIds.slice(0, 1) : look };
     const r = await authFetch('/api/voice/boards/picture', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -324,19 +342,23 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       void makePicture();
     } else setMessage('Your agreement could not be recorded. Try again.');
   }
-  const pictureNow = (which: 'shot' | 'closing' = 'shot') => {
+  const pictureNow = (which: 'shot' | 'closing' | 'scene' = 'shot') => {
     target.current = which;
     // A closed model's notice (and the 18+ box) comes first; the picture is made once it is answered.
     if (m.askFirst(() => void makePicture())) return;
     void makePicture();
   };
-  async function keep(tr: Try, forClosing = false) {
+  async function keep(tr: Try, forClosing = false, forScene = false) {
     setBusy('keep');
     const r = await authFetch('/api/voice/boards/keep', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ticket: tr.ticket, image: tr.image }) });
     setBusy(null);
     if (r.ok) {
-      setKept([...kept, { shotKey: forClosing ? CLOSING.key : shot.key, sha256: tr.sha256 }]);
-      if (forClosing) {
+      setKept([...kept, { shotKey: forClosing ? CLOSING.key : forScene ? SCENE.key : shot.key, sha256: tr.sha256 }]);
+      if (forScene) {
+        // Saved with the board (making a shot's picture saves first): every shot in the scene is made from the saved scene.
+        setScene({ ...scene, kept: tr.sha256 });
+        setDirty(true);
+      } else if (forClosing) {
         setClosing({ ...closing, kept: tr.sha256 });
         setDirty(true);
       } else edit({ kept: tr.sha256 });
@@ -403,7 +425,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const boundaries = sentenceBoundaries(t);
   // Ephelion's look: his published sheets (Nate, 2026-11-21: "one published Ephelion picture or sheet").
   const looks = d.sheets.characters.filter((c) => /ephelion/i.test(`${c.title} ${c.entity}`));
-  const blocked = shot ? pictureBlocked({ real: d.making.real, standIn: d.making.standIn, description: shot.description, angle: shot.angle, tries: triesMade[shot.key] ?? 0, maxTries: d.making.limits.maxTriesPerShot }) : null;
+  const blocked = shot ? pictureBlocked({ real: d.making.real, standIn: d.making.standIn, description: shot.description, angle: shot.angle, tries: triesMade[shot.key] ?? 0, maxTries: d.making.limits.maxTriesPerShot, insert: shot.insert, sceneKept: Boolean(scene.kept) }) : null;
 
   return (
     <main className="vr vb">
@@ -474,8 +496,57 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
         {m.notice}
       </section>
 
+      {/* The scene (Nate, 2026-11-22): one place, one light, one set of clothes, made and kept first. */}
+      <section className="vr-card" aria-labelledby="vb-scene-h">
+        <h2 id="vb-scene-h">1. The scene</h2>
+        <p className="vr-note">One place, one light, one set of clothes: every shot is this scene, filmed from another camera. Make it first; each shot in the scene is then made with it and his look as references.</p>
+        {d.settingQuote && (
+          <>
+            <p className="vr-small"><span className="vr-tag">Book</span> Where the book shows this speech ({d.settingQuote.block}), word for word:</p>
+            <blockquote className="vb-words vb-book-quote">{d.settingQuote.text}</blockquote>
+          </>
+        )}
+        <PublishedTextField
+          id="vb-scene-setting"
+          label={d.settingQuote ? 'Where he is, in your words (the book doesn’t say)' : 'Where he is, in your words'}
+          value={scene.setting}
+          onChange={(v) => {
+            setScene({ ...scene, setting: v });
+            setDirty(true);
+          }}
+          rows={3}
+          maxLength={600}
+        />
+        <p className="vr-small">Made as a wide shot at eye level, with the style and his look above.</p>
+        <div className="vr-row">
+          <button type="button" className="vr-btn" onClick={() => pictureNow('scene')} disabled={busy !== null || !scene.setting.trim() || (triesMade[SCENE.key] ?? 0) >= d.making.limits.maxTriesPerShot || !(d.making.real || d.making.standIn)}>
+            {busy === 'scene' ? 'Making…' : (triesMade[SCENE.key] ?? 0) ? 'Try again' : 'Make the scene'}
+          </button>
+          <span className="vr-small">{Math.min(triesMade[SCENE.key] ?? 0, d.making.limits.maxTriesPerShot)} of {d.making.limits.maxTriesPerShot} pictures for the scene</span>
+        </div>
+        {(tries[SCENE.key]?.length ?? 0) > 0 && (
+          <div className="vb-tries">
+            {tries[SCENE.key].map((tr, i) => (
+              <figure key={tr.sha256} className={`vb-try${scene.kept === tr.sha256 ? ' vb-on' : ''}`}>
+                <img src={tr.image} alt={`Try ${i + 1} for the scene`} />
+                <figcaption>
+                  Try {i + 1}
+                  {scene.kept === tr.sha256 ? <span className="vr-ok"> · Kept</span> : <button type="button" className="vr-btn vr-quiet vr-small-btn" onClick={() => keep(tr, false, true)} disabled={busy !== null}>Keep this one</button>}
+                  <details>
+                    <summary>Recipe</summary>
+                    <pre>{JSON.stringify(tr.recipe, null, 2)}</pre>
+                  </details>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        )}
+        {scene.kept && !(tries[SCENE.key] ?? []).some((tr) => tr.sha256 === scene.kept) && <KeptPicture draftId={d.draft.id} shot={SCENE.key} sha={scene.kept} alt="The scene, as kept" />}
+        {scene.kept && <p className="vr-ok">The scene is kept. Changing it later marks the shots made with this one.</p>}
+      </section>
+
       <section className="vr-card" aria-labelledby="vb-strip-h">
-        <h2 id="vb-strip-h">1. Cuts</h2>
+        <h2 id="vb-strip-h">2. Cuts</h2>
         <p className="vr-note">
           The speech&rsquo;s sentences, in time. <span className="vr-tag">Automatic</span> Cuts were first placed at sentence ends about every {d.limits.target} seconds, by a rule (no AI model). Turn &ldquo;New shot starts here&rdquo; on or off between any two sentences, up to {d.making.limits.maxShots} shots. On a wide screen you can also drag a cut on the strip, tap the strip to add one at the nearest word&rsquo;s end, or tap × to remove it.
         </p>
@@ -560,19 +631,63 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       {shot && (
         <section className="vr-card" aria-labelledby="vb-shot-h">
           <div className="vb-shot-head">
-            <h2 id="vb-shot-h">2. Shot {current + 1} of {shots.length}</h2>
+            <h2 id="vb-shot-h">3. Shot {current + 1} of {shots.length}{shot.insert ? ' · Insert, outside the scene' : ''}</h2>
             <span className="vr-small">{fmt(shot.start)} – {fmt(shot.end)} · {(shot.end - shot.start).toFixed(1)} s</span>
           </div>
           <blockquote className="vb-words"><span className="vr-tag">{d.draft.speech?.label?.text ?? 'Book'}</span> {sentencesIn(t, shot).map(sentenceText).join(' ')}</blockquote>
           <PublishedTextField id={`vb-desc-${shot.key}`} label="What the shot shows (your words)" value={shot.description} onChange={(v) => edit({ description: v })} rows={3} maxLength={600} />
+          {/* In the scene or an insert (Nate, 2026-11-22): only the person makes an insert; a shot starts in the scene. */}
+          <fieldset className="vb-insert">
+            <legend className="vb-label">This shot</legend>
+            <label className="vb-toggle">
+              <input type="radio" name={`vb-insert-${shot.key}`} checked={!shot.insert} onChange={() => edit({ insert: false, characterIds: settings.lookId ? [settings.lookId] : [] })} />
+              In the scene
+            </label>
+            <label className="vb-toggle">
+              <input type="radio" name={`vb-insert-${shot.key}`} checked={Boolean(shot.insert)} onChange={() => edit({ insert: true, angle: '', angleBy: 'person', characterIds: [] })} />
+              Insert: outside the scene, while his voice goes on
+            </label>
+          </fieldset>
           <label className="vb-field">
-            <span className="vb-label">Camera</span>
-            <select value={shot.angle} onChange={(e) => edit({ angle: e.target.value as Shot['angle'] })}>
+            <span className="vb-label">
+              Camera {!shot.insert && shot.angleBy !== 'person' && <span className="vr-tag">Automatic</span>}
+            </span>
+            <select value={shot.angle} onChange={(e) => edit({ angle: e.target.value as Shot['angle'], angleBy: 'person' })}>
+              {shot.insert && <option value="">No camera</option>}
               {d.angles.map((x) => (
                 <option key={x.id} value={x.id}>{x.label}</option>
               ))}
             </select>
           </label>
+          {shot.insert && (
+            <label className="vb-field">
+              <span className="vb-label">A character in it (optional)</span>
+              <select value={shot.characterIds[0] ?? ''} onChange={(e) => edit({ characterIds: e.target.value ? [e.target.value] : [] })}>
+                <option value="">None</option>
+                {d.sheets.characters.map((c) => (
+                  <option key={c.id} value={c.id}>{c.title} ({c.entity})</option>
+                ))}
+              </select>
+            </label>
+          )}
+          <p className="vr-small vb-sent">
+            Sent with:{' '}
+            {(() => {
+              if (shot.insert) {
+                const c = d.sheets.characters.find((x) => x.id === shot.characterIds[0]);
+                return `${settings.styleId ? 'the style' : 'no style'} · ${c ? `${c.title}’s look` : 'no reference picture'}`;
+              }
+              const r = shotReferences(shots, shot.key);
+              const prev = r.continuity ? shots.findIndex((x) => x.key === r.continuity) + 1 : 0;
+              return [scene.kept ? 'the scene' : 'the scene (not kept yet)', settings.lookId ? 'his look' : null, prev ? `shot ${prev} as kept` : null].filter(Boolean).join(' · ');
+            })()}
+          </p>
+          {!shot.insert && shot.kept && scene.kept && madeWith[shot.key] && madeWith[shot.key] !== scene.kept && shot.sceneConfirmed !== scene.kept && (
+            <p className="vr-warn">
+              This shot was made with an earlier scene.{' '}
+              <button type="button" className="vr-btn vr-quiet vr-small-btn" onClick={() => edit({ sceneConfirmed: scene.kept })}>Keep it with this scene</button>
+            </p>
+          )}
           <div className="vr-row">
             <button
               type="button"
@@ -620,7 +735,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       {consent && <ConsentScreen wording={consent} name={auth.kind === 'signed-in' ? (auth.username ?? null) : null} onAgree={agreeConsent} onCancel={() => setConsent(null)} error={null} />}
 
       <section className="vr-card" aria-labelledby="vb-play-h">
-        <h2 id="vb-play-h">3. Play it through</h2>
+        <h2 id="vb-play-h">4. Play it through</h2>
         <p className="vr-note">The kept pictures over your performance, with the speech&rsquo;s own words as they are spoken.</p>
         <p className="vb-playing" aria-live="polite">{playing ? `Shot ${playingNo}` : '\u00a0'}</p>
         <div className="vb-screen">
