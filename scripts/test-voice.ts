@@ -148,7 +148,28 @@ const ch13 = JSON.parse(readFileSync(path.join(ROOT, 'content/snowmoon/text/chap
 const blockText = ch13.blocks.find((b) => b.idx === 64)!.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 check('W. the speech is c13-b64, word for word (title, letter and sign-off)', speech.paragraphs.join(' ').replace(/\s+/g, ' ') === blockText, `${speech.paragraphs.join(' ').slice(0, 60)} | ${blockText.slice(0, 60)}`);
 check('W. its sentences hold all its words, in order', speech.sentences.flatMap((s) => s.words).join(' ') === wordsOf(speech.paragraphs.join(' ')).join(' '));
-check('W. it is marked a stand-in from the book, block c13-b64, with its own label "Book"', speech.standIn && speech.source.kind === 'book' && (speech.source as { block: string }).block === 'c13-b64' && speech.label.kind === 'book' && speech.label.text === 'Book');
+check('W. it is from the book, block c13-b64, with its own label "Book", and no longer a stand-in (Nate, 2026-11-22)', !speech.standIn && speech.source.kind === 'book' && (speech.source as { block: string }).block === 'c13-b64' && speech.label.kind === 'book' && speech.label.text === 'Book');
+// The top of the page (Nate, 2026-11-22; reread word for word): the title, the intro, the picker's lines, Learn more.
+{
+  const page = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  check('W. the page is "The Ephelion challenge", with no "Admin trial · Draft" and no label row or "Stand-in … speeches arrive"', page.includes('<h1>The Ephelion challenge</h1>') && !/Admin trial · Draft/.test(page) && !/vr-labels/.test(page) && !/until the team&rsquo;s speeches arrive/.test(page));
+  const intro = 'Lord Ephelion is the Arctic Empire&apos;s consul to Veridia (<Cite b="c3-b5" />). In the book his messages reach Veridians everywhere: on a poster in a tunnel (<Cite b="c3-b4" />), in a live debate (<Cite b="c8-b17" />), on a restaurant screen that cuts into a Helisport game (<Cite b="c13-b62" />). As one character puts it, &quot;Ephelion&apos;s goal is to inspire people inside Veridia to join the Arctic cause.&quot; (<Cite b="c21-b76" />)';
+  check('W. the intro, word for word, each citation linked to its block', page.includes(intro) && page.includes('<p>Give one of his speeches a voice: perform it yourself, or start from a ready-made reading, then storyboard it.</p>'));
+  check('W. ... and its quotation is the book\'s, word for word (c21-b76)', readFileSync(path.join(ROOT, 'content/snowmoon/text/chapter-21.json'), 'utf8').includes("Ephelion's goal is to inspire people inside Veridia to join the Arctic cause."));
+  check('W. each speech\'s one line, word for word', page.includes("`From the book, word for word (${x.label.block}). In the book it is a written message; reading it aloud is this edition's idea.`") && page.includes('`${x.label.text} · ${x.credit} · version ${x.version}`'));
+  const { EPHELION_LEARN_MORE: E, EPHELION_QUOTES: Q } = await import('../src/lib/voice/learn-more');
+  const blockText = (cite: string) => {
+    const m = /^c(\d+)-b(\d+)/.exec(cite)!;
+    const ch = JSON.parse(readFileSync(path.join(ROOT, `content/snowmoon/text/chapter-${m[1]}.json`), 'utf8')) as { blocks: { idx: number; content: string }[] };
+    return (ch.blocks.find((b) => b.idx === Number(m[2]))?.content ?? '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').replace(/[’‘]/g, "'");
+  };
+  const all = JSON.stringify(E);
+  check('W. Learn more about Lord Ephelion: every quotation is the book\'s, word for word, in its block', Q.every((q) => blockText(q.block).includes(q.quote.replace(/[’‘]/g, "'")) && all.includes(q.quote)), Q.filter((q) => !blockText(q.block).includes(q.quote.replace(/[’‘]/g, "'"))).map((q) => q.block).join());
+  check('W. ... it is a draft until Nate approves it (shows "Draft wording"), with who, start, later, drives and room to invent', E.approved === false && E.who.length > 0 && E.start.length > 0 && E.later.length > 0 && E.drives.length > 0 && E.invent.length >= 2);
+  check('W. ... its room to invent says what the book gives about his looks and where he speaks from', E.invent.some((x) => /His looks/.test(JSON.stringify(x))) && E.invent.some((x) => /Where he speaks from/.test(JSON.stringify(x))));
+  const { LEARN_MORE } = await import('../src/lib/challenge/learn-more');
+  check('W. ... and it is kept apart from the remix challenge\'s (no /challenge/ephelion link from the assistant)', !('ephelion' in LEARN_MORE));
+}
 check('W. numbers, case, punctuation and apostrophes compare as words', norm('4') === norm('four') && norm("That's") === norm('thats') && norm('Veridia.') === norm('veridia') && wordsOf('Dreadknot - but').length === 2);
 {
   const ss = speech.sentences.slice(0, 3);

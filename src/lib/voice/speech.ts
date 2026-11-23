@@ -60,7 +60,8 @@ function fromBlock(id: string, chapter: number, idx: number, names: string[]): S
     version: 1,
     aiHelp: null,
     credit: null,
-    standIn: true,
+    // No longer a stand-in (Nate, 2026-11-22): c13-b64 is one of the challenge's speeches. Recipes made before keep what they recorded.
+    standIn: false,
     paragraphs,
     sentences: sentencesOf(paragraphs),
     names,

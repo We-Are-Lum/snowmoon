@@ -6,6 +6,10 @@ import { authFetch, inMiniApp, useAuth } from '~/lib/client-auth';
 import { HOST_CHECK_MS, HOST_PROMPT_MS, withTimeout } from '~/lib/host-timeout';
 import { MIC_HELP, micPlace } from '~/lib/mic-help';
 import { loadTake, removeTake, saveTake, type DeviceTake } from '~/lib/voice/device-takes';
+import Link from 'next/link';
+import { LearnMore, LearnMoreParts } from '~/components/challenge-learn-more';
+import type { LearnMoreView } from '~/lib/challenge/learn-more-view';
+import { citeHref } from '~/lib/challenge/learn-more';
 import '../styles/voice.css';
 
 /**
@@ -220,7 +224,14 @@ function SignedAudio({ path, label }: { path: string; label: string }) {
   );
 }
 
-export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
+/** A citation, linked to its block in the reader (as the Learn more texts link theirs). */
+const Cite = ({ b }: { b: string }) => (
+  <Link className="chc-cite" href={citeHref(b)} prefetch={false}>
+    {b}
+  </Link>
+);
+
+export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; learn?: LearnMoreView }) {
   const auth = useAuth();
   // Who may use it is the server's to say (src/lib/voice/flag.ts): its routes answer 404 to anyone the switch doesn't
   // let in, and the page then shows the site's usual not-found. So no admin list is checked here (P5b).
@@ -578,16 +589,19 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
 
   return (
     <main className="vr">
-      <p className="vr-kicker">Admin trial · Draft</p>
-      <h1>{s.speech.title}</h1>
-      <p className="vr-labels">
-        {s.speech.label.kind === 'book' ? (
-          <><span className="vr-tag">{s.speech.label.text}</span> Lord Ephelion&rsquo;s letter, {s.speech.label.block}, word for word</>
-        ) : (
-          <><span className="vr-tag">{s.speech.label.text}</span> {s.speech.credit} · version {s.speech.version}</>
-        )}
-        {s.speech.standIn && <> · <span className="vr-tag">Stand-in</span> until the team&rsquo;s speeches arrive</>} · <span className="vr-tag">Invented</span> performing it aloud is this edition&rsquo;s
-      </p>
+      {/* The top of the page (Nate, 2026-11-22; title, intro and the picker's lines reread word for word). */}
+      <h1>The Ephelion challenge</h1>
+      <div className="vr-intro">
+        <p>
+          Lord Ephelion is the Arctic Empire&apos;s consul to Veridia (<Cite b="c3-b5" />). In the book his messages reach Veridians everywhere: on a poster in a tunnel (<Cite b="c3-b4" />), in a live debate (<Cite b="c8-b17" />), on a restaurant screen that cuts into a Helisport game (<Cite b="c13-b62" />). As one character puts it, &quot;Ephelion&apos;s goal is to inspire people inside Veridia to join the Arctic cause.&quot; (<Cite b="c21-b76" />)
+        </p>
+        <p>Give one of his speeches a voice: perform it yourself, or start from a ready-made reading, then storyboard it.</p>
+      </div>
+      {learn && (
+        <LearnMore title={learn.title}>
+          <LearnMoreParts learn={learn} />
+        </LearnMore>
+      )}
       {!s.ready && <p className="vr-warn" role="status">Not ready: the voice service isn&rsquo;t set up on this server.</p>}
       {message && <p className="vr-warn" role="alert">{message}</p>}
 
@@ -616,10 +630,14 @@ export function VoiceRecord({ fallback }: { fallback: React.ReactNode }) {
               {s.speeches.map((x) => (
                 <label key={x.id} className={`vr-speech${x.id === s.speech.id ? ' vr-on' : ''}`}>
                   <input type="radio" name="speech" checked={x.id === s.speech.id} onChange={() => pickSpeech(x.id)} />
+                  {/* Its title, and one line under it (Nate, 2026-11-22, reread word for word). */}
                   <span>
-                    <strong>{x.title}</strong>{' '}
-                    <span className="vr-tag">{x.label.text}</span>
-                    <span className="vr-small"> {x.label.kind === 'book' ? `${x.label.block}, word for word` : `${x.credit} · version ${x.version}`} · {x.sentences.length} sentences</span>
+                    <strong>{x.title}</strong>
+                    <span className="vr-small vr-speech-line">
+                      {x.label.kind === 'book'
+                        ? `From the book, word for word (${x.label.block}). In the book it is a written message; reading it aloud is this edition's idea.`
+                        : `${x.label.text} · ${x.credit} · version ${x.version}`}
+                    </span>
                   </span>
                 </label>
               ))}
