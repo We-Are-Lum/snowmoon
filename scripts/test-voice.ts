@@ -1064,6 +1064,13 @@ for (const id of Object.values(VOICE.models)) {
   const team = VOICE.teamBoards as unknown as { draftId: string; fid: number; title: string }[];
   const names = { name: async (fid: number) => (fid === NATE ? 'naaate' : null), getPrivate: (await import('../src/lib/voice/store')).getAudio };
   check('3W. nothing is offered until Nate picks the team\'s storyboards (VOICE.teamBoards is empty)', team.length === 0 && (await WS.reusableBoards(sql, names)).filter((b) => b.kind === 'team').length === 0);
+  process.env.VOICE_TEST_TEAM_BOARDS = JSON.stringify([{ draftId: nd.id, fid: NATE, title: 'From the test hook' }]);
+  const hooked = WS.teamBoards().length;
+  process.env.VERCEL = '1';
+  const onVercel = WS.teamBoards().length;
+  delete process.env.VERCEL;
+  delete process.env.VOICE_TEST_TEAM_BOARDS;
+  check('3W. the screenshots\' test hook (VOICE_TEST_TEAM_BOARDS) counts only on a local test copy, never on Vercel', hooked === 1 && onVercel === 0 && WS.teamBoards().length === 0);
   team.push({ draftId: nd.id, fid: NATE, title: 'The Dead Hand (team)' });
   const offered = await WS.reusableBoards(sql, names);
   check('3W. a team storyboard is offered with its maker, its shots and its length', offered.some((b) => b.kind === 'team' && b.draftId === nd.id && b.by === 'naaate' && b.shots === 3 && b.seconds === 30));

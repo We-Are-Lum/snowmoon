@@ -7,6 +7,7 @@ import { SCENE } from './board';
 import { CLOSING, type Closing } from './closing';
 import { boardSource, keepPicture, latestBoard, saveBoard } from './board-store';
 import { publishOn } from './publish-deps';
+import { voiceTestOn } from './flag';
 import { fitShots, type BoardSource } from './three-ways';
 
 /**
@@ -37,10 +38,24 @@ async function timelineOf(sql: Sql, draftId: string): Promise<{ timeline: Timeli
   return { timeline: ((d.recipe as { timeline?: Timeline }).timeline ?? null) as Timeline | null, speechId: d.speech_id as string, kind: d.kind as string };
 }
 
+/**
+ * The team's storyboards: VOICE.teamBoards (Nate's list); on a local test copy only (VOICE_TEST_ON, never on Vercel), also
+ * VOICE_TEST_TEAM_BOARDS (JSON, the same shape), for the tests and screenshots.
+ */
+export function teamBoards(): readonly { draftId: string; fid: number; title: string }[] {
+  if (!voiceTestOn() || !process.env.VOICE_TEST_TEAM_BOARDS) return VOICE.teamBoards;
+  try {
+    const extra = JSON.parse(process.env.VOICE_TEST_TEAM_BOARDS) as { draftId: string; fid: number; title: string }[];
+    return [...VOICE.teamBoards, ...extra.filter((x) => /^[0-9a-f-]{36}$/.test(x.draftId) && Number.isInteger(x.fid) && typeof x.title === 'string')];
+  } catch {
+    return VOICE.teamBoards;
+  }
+}
+
 /** The team-made storyboards Nate chose (VOICE.teamBoards), and published ones once publishing is on: what can be reused. */
 export async function reusableBoards(sql: Sql, deps: Pick<WaysDeps, 'name'>) {
   const out: { kind: 'team' | 'published'; draftId: string; fid: number; version: number; publicationId: string | null; title: string; speechId: string; by: string | null; shots: number; seconds: number }[] = [];
-  for (const t of VOICE.teamBoards) {
+  for (const t of teamBoards()) {
     const b = await latestBoard(sql, t.draftId, t.fid);
     const src = await timelineOf(sql, t.draftId);
     if (!b || !src.timeline || !src.speechId || !b.shots.length || !b.shots.every((s) => s.kept)) continue;
