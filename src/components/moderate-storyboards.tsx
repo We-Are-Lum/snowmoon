@@ -5,9 +5,12 @@ import { authFetch, useAuth } from '~/lib/client-auth';
 import { REASON_LABELS } from '~/lib/images/reasons';
 
 /**
- * Published storyboards, for the admins (Nate, 2026-11-23): the reported ones, each with its reasons and counts, how many
- * people reported (never who) and their notes, with Hide or Dismiss; and the hidden ones, with who hid them and Unhide.
- * Each action is asked in the page first ("Hide it / Keep it"). Wording drafted by the coding agent.
+ * Published storyboards in the one moderator queue (/moderate, with the images'; Nate, 2026-11-23: one queue, so the
+ * ntfy alert's count covers both and leads to one page): the reported ones, each with its reasons and counts, how many
+ * people reported (never who) and their notes, with Hide or Dismiss; and the hidden ones, with who hid them and Unhide
+ * ("A moderator may unhide what was hidden; it puts back exactly what its maker published, and never publishes anything
+ * else", principle 5, reread by Nate 2026-11-23). Each action is asked in the page first ("Hide it / Keep it"). Wording
+ * drafted by the coding agent.
  */
 type Reported = { id: string; title: string; maker: string | null; publishedAt: string; hidden: { at: string; role: string } | null; reasons: { reason: string; n: number }[]; reporters: number; notes: string[] };
 type Hidden = { id: string; title: string; maker: string | null; publishedAt: string; hiddenAt: string; hiddenBy: string; reason: string | null };
@@ -34,14 +37,17 @@ function Ask({ label: l, yes, no, onYes, busy }: { label: string; yes: string; n
   );
 }
 
-export function AdminStoryboards() {
+export function ModerateStoryboards() {
   const auth = useAuth();
   const [data, setData] = useState<{ reported: Reported[]; hidden: Hidden[] } | null>(null);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const load = useCallback(async () => {
-    const r = await authFetch('/api/admin/storyboards', { cache: 'no-store' }).catch(() => null);
-    if (r?.ok) setData((await r.json()) as { reported: Reported[]; hidden: Hidden[] });
+    const r = await authFetch('/api/moderate', { cache: 'no-store' }).catch(() => null);
+    if (r?.ok) {
+      const j = (await r.json()) as { storyboards?: Reported[]; hiddenStoryboards?: Hidden[] };
+      setData({ reported: j.storyboards ?? [], hidden: j.hiddenStoryboards ?? [] });
+    }
   }, []);
   useEffect(() => {
     if (auth.kind === 'signed-in') void load();
@@ -49,17 +55,16 @@ export function AdminStoryboards() {
   if (auth.kind !== 'signed-in' || !data) return null;
   const act = async (id: string, action: 'hide' | 'unhide' | 'dismiss') => {
     setBusy(true);
-    const r = await authFetch('/api/admin/hide', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ kind: 'storyboard', id, action }) }).catch(() => null);
+    const r = await authFetch('/api/moderate', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ publicationId: id, action }) }).catch(() => null);
     const j = ((await r?.json().catch(() => ({}))) ?? {}) as { error?: string; failed?: number };
     setBusy(false);
     setMsg(r?.ok ? (j.failed ? `Done, but ${j.failed} file(s) didn’t move: look again.` : null) : (j.error ?? 'That didn’t work. Try again.'));
     void load();
   };
   return (
-    <section className="ar-storyboards" aria-labelledby="ar-sb-h">
-      <h2 className="you-section" id="ar-sb-h">Storyboards</h2>
+    <section className="moderate-storyboards" aria-labelledby="mq-sb-h">
+      <h2 id="mq-sb-h">Reported storyboards</h2>
       {msg && <p className="you-note" role="alert">{msg}</p>}
-      <h3>Reported</h3>
       {data.reported.length === 0 ? (
         <p className="you-note">No storyboard reports waiting.</p>
       ) : (

@@ -12,8 +12,6 @@ import { readAddition } from '~/lib/chapter-pictures/read';
 import { isAddedId } from '~/lib/chapter-pictures/shared';
 import { pathsFor } from '~/lib/chapter-pictures/where';
 import { hideReachesChapterPictures } from '~/lib/chapter-pictures/after-hide';
-import { dismissStoryboard, hideStoryboard, unhideStoryboard } from '~/lib/voice/moderation';
-import { moderationDeps } from '~/lib/voice/publish-deps';
 
 /**
  * An admin's Hide in the reader (owner, 2026-10-29: "an admin Hide in the reader for seeded and readers' images").
@@ -27,22 +25,7 @@ export async function POST(request: Request) {
   if (!isAdmin(fid)) return NextResponse.json({ error: 'Admins only' }, { status: 403 });
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Not available here' }, { status: 503 });
-  const b = (await request.json().catch(() => ({}))) as { kind?: unknown; id?: unknown; action?: unknown };
-  // A published storyboard (Nate, 2026-11-23): Hide, Unhide (reversible, its files back from private storage) or Dismiss
-  // its reports. Each step is logged in studio.voice_publication_log (src/lib/voice/moderation.ts).
-  if (b.kind === 'storyboard' && typeof b.id === 'string') {
-    const deps = moderationDeps();
-    if (b.action === 'hide' || b.action === undefined) {
-      const r = await hideStoryboard(sql, b.id, fid, 'moderator', null, null, deps);
-      return NextResponse.json(r.hidden ? { done: 'hidden', moved: r.moved, failed: r.failed } : { error: 'Not shown, or no such storyboard' }, { status: r.hidden ? 200 : 404 });
-    }
-    if (b.action === 'unhide') {
-      const r = await unhideStoryboard(sql, b.id, fid, 'moderator', deps);
-      return NextResponse.json(r.shown ? { done: 'shown', restored: r.restored, failed: r.failed } : { error: 'Not hidden, or no such storyboard' }, { status: r.shown ? 200 : 404 });
-    }
-    if (b.action === 'dismiss') return (await dismissStoryboard(sql, b.id, fid)) ? NextResponse.json({ done: 'dismissed' }) : NextResponse.json({ error: 'No such storyboard' }, { status: 404 });
-    return NextResponse.json({ error: 'Hide, unhide or dismiss' }, { status: 400 });
-  }
+  const b = (await request.json().catch(() => ({}))) as { kind?: unknown; id?: unknown };
   if (b.kind === 'seeded' && typeof b.id === 'string') {
     // A picture an admin added (owner, 2026-11-19) is hidden the same way: a row in studio.seeded_hidden by its id.
     const added = isAddedId(b.id) ? await readAddition(sql, b.id).catch(() => null) : null;
@@ -76,5 +59,5 @@ export async function POST(request: Request) {
     revalidatePath(`/image/${b.id}`);
     return NextResponse.json({ done: 'hidden' });
   }
-  return NextResponse.json({ error: 'Hide a seeded image (kind "seeded", id), a reader\'s image (kind "reader", its version id) or a published storyboard (kind "storyboard", its id)' }, { status: 400 });
+  return NextResponse.json({ error: 'Hide a seeded image (kind "seeded", id) or a reader\'s image (kind "reader", its version id)' }, { status: 400 });
 }

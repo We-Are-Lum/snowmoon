@@ -330,7 +330,11 @@ export const LEGAL: {
     // P2u line as drafted, and the three Privacy items above, word for word": §7's scene item (after the closed-model
     // challenge item), §4's guide item (after the speeches item) and §7's Groq item, as drafted, each in his words. The
     // words before were 1f6i5bx.
-    privacy: { words: '1mbiyd1', on: '2026-11-23', by: 'FID 6786' },
+    // 2026-11-23, owner's reread for storyboard moderation (branch voice-moderation, PR #225), typed in his session:
+    // "reread: the P5 line above, and the ntfy item, "ntfy delivers a short alert to us when an image or a storyboard is
+    // reported. It carries no content and nothing about you."" §7's ntfy item, in his words (docs/legal/voice-moderation-draft.md).
+    // The words before were 1mbiyd1.
+    privacy: { words: '1p2v0c0', on: '2026-11-23', by: 'FID 6786' },
   },
 };
 

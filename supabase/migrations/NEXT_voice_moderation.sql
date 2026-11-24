@@ -8,8 +8,8 @@
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:
 -- A. the dry run (ending in `rollback;`), B. the migration (ending in `commit;`), C. the read-back (a realistic
 -- publication, a report, a rule's hide, an unhide and a dismissal made, read and removed inside a transaction that ends in
--- `rollback;`; it ends "READ-BACK PASSED"; studio_writer's rights are read by definition, as the SQL Editor can't SET
--- ROLE), and D. the undo, only if the release is withdrawn. Safe to run twice.
+-- `rollback;`, and the draft removed as the site removes it, which leaves the log in place; it ends "READ-BACK PASSED";
+-- studio_writer's rights are read by definition, as the SQL Editor can't SET ROLE), and D. the undo, only if the release is withdrawn. Safe to run twice.
 --
 -- What it changes. Nothing is readable by anon or authenticated.
 -- 1. studio.voice_publications.hidden_at, hidden_by, hidden_role: set while a publication is hidden (by a moderator, the
@@ -18,8 +18,10 @@
 -- 2. studio.voice_publication_log: every report, hide, unhide and dismissal of a published storyboard, and each move of
 --    its files to private storage and back, with who (by FID: the reporter's is never shown to moderators), their role,
 --    the reason and the reporter's note. The same shape as studio.removal_log. Insert and read only for studio_writer:
---    append-only. A publication's log goes with it only when the publication row itself is removed, which happens only
---    inside studio.delete_voice_draft and studio.delete_voice_board, after its maker took it down (0046).
+--    append-only. publication_id is a plain uuid with no foreign key (Nate, 2026-11-23: "Keep the log when a storyboard
+--    is removed, so removing it can't erase a hide"): when its maker removes a taken-down storyboard's draft or board
+--    (studio.delete_voice_draft, studio.delete_voice_board, unchanged from 0049), the publication row goes and its log
+--    rows stay.
 -- 3. studio.hide_voice_publication: hides a live, shown publication and logs it; returns its files' public keys (to move
 --    to private storage), or nothing if it was already hidden or is taken down.
 -- 4. studio.unhide_voice_publication: shows a hidden one again and logs it; returns its files' public keys (to restore).
@@ -35,7 +37,7 @@ alter table studio.voice_publications add constraint voice_publications_hidden_c
   or (hidden_at is not null and hidden_by is not null and hidden_by >= 0 and hidden_role in ('moderator', 'maintainer', 'rule'))
 );
 create table if not exists studio.voice_publication_log (
-  publication_id uuid not null references studio.voice_publications(id) on delete cascade,
+  publication_id uuid not null,
   step text not null check (step in ('reported', 'hidden', 'unhidden', 'dismissed', 'moved_private', 'restored_public')),
   by_fid bigint not null check (by_fid >= 0),
   role text not null check (role in ('reader', 'moderator', 'maintainer', 'rule')),
@@ -93,7 +95,7 @@ alter table studio.voice_publications add constraint voice_publications_hidden_c
   or (hidden_at is not null and hidden_by is not null and hidden_by >= 0 and hidden_role in ('moderator', 'maintainer', 'rule'))
 );
 create table if not exists studio.voice_publication_log (
-  publication_id uuid not null references studio.voice_publications(id) on delete cascade,
+  publication_id uuid not null,
   step text not null check (step in ('reported', 'hidden', 'unhidden', 'dismissed', 'moved_private', 'restored_public')),
   by_fid bigint not null check (by_fid >= 0),
   role text not null check (role in ('reader', 'moderator', 'maintainer', 'rule')),
@@ -187,12 +189,16 @@ begin
   begin perform studio.unhide_voice_publication(p, 0, 'rule'); raise exception 'a rule''s unhide was accepted'; exception when invalid_parameter_value then null; end;
   begin update studio.voice_publications set hidden_at = now() where id = p; raise exception 'a hide without who was accepted'; exception when check_violation then null; end;
 
-  -- Removed again, all of it: a publication's log goes with the publication (as delete_voice_draft removes a taken-down one).
-  delete from studio.voice_publications where id = p;
-  if exists (select 1 from studio.voice_publication_log where publication_id = p) then raise exception 'the log did not go with its publication'; end if;
-  delete from studio.voice_boards where draft_id = d;
-  delete from studio.voice_drafts where id = d;
-  if exists (select 1 from studio.voice_publication_log where publication_id = p) or exists (select 1 from studio.voice_publications where id = p) or exists (select 1 from studio.voice_drafts where id = d) then raise exception 'the read-back rows were not removed'; end if;
+  -- Its maker takes it down, then removes the draft as the site does (0049's studio.delete_voice_draft, unchanged): the
+  -- publication, board and draft go, and the log stays, so removing a storyboard can't erase a hide.
+  perform * from studio.take_down_voice_publication(p, 6786);
+  perform * from studio.delete_voice_draft(d, 6786);
+  if exists (select 1 from studio.voice_publications where id = p) or exists (select 1 from studio.voice_drafts where id = d) or exists (select 1 from studio.voice_boards where draft_id = d) then raise exception 'the draft, its board or its publication was not removed'; end if;
+  select count(*) into n from studio.voice_publication_log where publication_id = p;
+  if n <> 6 then raise exception 'removing the draft changed its log (% rows, not 6)', n; end if;
+  -- Removed again: the read-back's own log rows (as postgres; studio_writer can't).
+  delete from studio.voice_publication_log where publication_id = p;
+  if exists (select 1 from studio.voice_publication_log where publication_id = p) then raise exception 'the read-back rows were not removed'; end if;
   raise notice 'READ-BACK PASSED';
 end $$;
 rollback;

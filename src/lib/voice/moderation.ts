@@ -1,4 +1,5 @@
 import 'server-only';
+import { createHash } from 'node:crypto';
 import type postgres from 'postgres';
 import { IMAGES } from '../config';
 import { REASONS } from '../images/reasons';
@@ -10,7 +11,8 @@ import { hiddenKeyFor } from './store';
  * his answers): the images' rules, word for word in effect. Any signed-in person may report a published storyboard once,
  * with a reason and an optional private note, inside the same daily report limit as images (IMAGES.reportsPerDay); its
  * maker can't report their own. One "minor" report (IMAGES.hideAtOnce), or reports from IMAGES.hideAfterReporters
- * different people, hide it at once, until a moderator looks. Otherwise it waits in the admins' queue and stays up.
+ * different people since its last dismissal (Nate, 2026-11-23: images still count all-time), hide it at once, until a
+ * moderator looks. Otherwise it waits in the admins' queue and stays up.
  * Who reported is in the private log only (studio.voice_publication_log); the queue shows counts, never who.
  *
  * Hiding (a moderator, the maintainer or a stated rule) is reversible: the publication is marked hidden
@@ -51,7 +53,9 @@ export async function reportStoryboard(sql: Sql, fid: number, id: string, raw: u
   await sql`insert into studio.voice_publication_log ${sql({ publication_id: id, step: 'reported', by_fid: fid, role: 'reader', reason, note: text || null })}`;
   // A reported maker is checked again at their next Generate or publish, as for images (owner, 2026-11-04).
   await recheckMaker(sql, Number(pub.fid));
-  const [n] = await sql`select count(distinct by_fid)::int as n from studio.voice_publication_log where publication_id = ${id} and step = 'reported'`;
+  // Reporters counted since the last dismissal (Nate, 2026-11-23; storyboards only: images still count all-time).
+  const [n] = await sql`select count(distinct by_fid)::int as n from studio.voice_publication_log where publication_id = ${id} and step = 'reported'
+    and at > coalesce((select max(d.at) from studio.voice_publication_log d where d.publication_id = ${id} and d.step = 'dismissed'), '-infinity')`;
   const rule = IMAGES.hideAtOnce.includes(reason) ? `one "${reason}" report` : n.n >= IMAGES.hideAfterReporters ? `${n.n} reporters` : null;
   let hidden = false;
   if (rule && !pub.hidden_at) hidden = (await hideStoryboard(sql, id, 0, 'rule', reason, rule, deps)).hidden;
@@ -93,7 +97,11 @@ export async function hideStoryboard(sql: Sql, id: string, by: number, role: 'mo
   return { hidden: true, moved, failed };
 }
 
-/** Unhide: show it again, and put each file back in the public bucket from its private copy. */
+/**
+ * Unhide: show it again, and put each file back in the public bucket from its private copy, only if that copy is
+ * byte for byte the file its maker published ("A moderator may unhide what was hidden; it puts back exactly what its
+ * maker published, and never publishes anything else", principle 5, reread by Nate 2026-11-23).
+ */
 export async function unhideStoryboard(sql: Sql, id: string, by: number, role: 'moderator' | 'maintainer', deps: ModerationDeps) {
   if (!UUID.test(id)) return { shown: false, restored: 0, failed: 0 };
   const keys = (await sql`select k from studio.unhide_voice_publication(${id}::uuid, ${by}::bigint, ${role}) as k`).map((x) => x.k as string);
@@ -104,6 +112,8 @@ export async function unhideStoryboard(sql: Sql, id: string, by: number, role: '
     try {
       const bytes = await deps.getPrivate(hiddenKeyFor(k));
       if (!bytes) throw new Error('no private copy');
+      // Exactly what its maker published (principle 5, reread 2026-11-23): each key ends in its file's sha256.
+      if (createHash('sha256').update(bytes).digest('hex') !== /-([0-9a-f]{64})\.[a-z0-9]+$/.exec(k)?.[1]) throw new Error('the private copy is not the published file');
       await deps.putPublic(k, bytes);
       await deps.deletePrivate(hiddenKeyFor(k));
       restored++;

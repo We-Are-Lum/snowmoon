@@ -21,7 +21,7 @@
  */
 import path from 'node:path';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
-import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
@@ -641,7 +641,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
       const { moderationDeps } = await import('../src/lib/voice/publish-deps');
       const deps = moderationDeps();
       const reportRoute = await route('publications/[id]/report');
-      const adminQueue = (await import(path.join(ROOT, 'src/app/api/admin/storyboards/route.ts'))) as { GET: (r: Request) => Promise<Response> };
+      const modQueue = (await import(path.join(ROOT, 'src/app/api/moderate/route.ts'))) as { GET: (r: Request) => Promise<Response> };
       const rep = (fid: number | null, body: unknown) => reportRoute.POST(as(fid, { method: 'POST', body: JSON.stringify(body) }), { params: Promise.resolve({ id: pub.id }) });
       const mine = async (fid: number) => (await (await reportRoute.GET(as(fid, {}), { params: Promise.resolve({ id: pub.id }) })).json()) as { mine: boolean; hiddenReason?: string | null };
       const publicN = () => storeFiles().filter((f) => f.startsWith(`public/storyboards/${pub.id}/`)).length;
@@ -657,7 +657,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
       const item = q.find((x) => x.id === pub.id);
       check('M. the admins\' queue: its reasons with counts, how many reported, the notes, never who', Boolean(item) && item!.reporters === 1 && item!.reasons[0]?.reason === 'spam' && item!.notes[0] === 'Looks like spam to me.' && !JSON.stringify(q).includes(String(GARANCE)) && item!.maker === null, JSON.stringify(item));
       check('M. ... it is counted in the moderators\' push', (await M.storyboardReportsWaiting(sql)) >= 1);
-      check('M. ... the queue answers 404 to anyone but an admin', (await adminQueue.GET(as(STRANGER, {}))).status === 404 && (await adminQueue.GET(as(null, {}))).status === 404);
+      check('M. ... it is in the one moderator queue (/moderate, with the images\'), closed to anyone else', (await modQueue.GET(as(STRANGER, {}))).status !== 200 && (await modQueue.GET(as(null, {}))).status === 401 && /storyboardQueue\(sql\)/.test(readFileSync(path.join(ROOT, 'src/app/api/moderate/route.ts'), 'utf8')) && /<ModerateStoryboards \/>/.test(readFileSync(path.join(ROOT, 'src/app/moderate/page.tsx'), 'utf8')) && !existsSync(path.join(ROOT, 'src/app/api/admin/storyboards')) && !/storyboard/.test(readFileSync(path.join(ROOT, 'src/app/api/admin/hide/route.ts'), 'utf8')));
       // A second publication on the same draft (someone else's, made here by hand), for the limit and the "minor" rule.
       const other = randomUUID();
       await pg.query(`insert into studio.voice_publications (id, draft_id, fid, board_version, recipe, files) values ($1, $2, 555, 1, '{"voice":{},"shots":[],"closing":{}}', $3::jsonb)`, [other, acc.id, JSON.stringify([{ key: `storyboards/${other}/a-${'1'.repeat(64)}.mp3`, sha256: '1'.repeat(64) }, { key: `storyboards/${other}/b-${'2'.repeat(64)}.png`, sha256: '2'.repeat(64) }])]);
@@ -683,6 +683,23 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
       check('M. unhide: shown again, every file back in the public store byte for byte, the private copies removed', u.shown && u.restored === pf.length && u.failed === 0 && publicN() === pf.length && privateN() === 0 && pf.every((f) => sha(readFileSync(path.join(STORE, 'public', f.key))) === f.sha256) && (await publication(sql, pub.id))!.files.length === pf.length);
       check('M. ... and it leaves the queue', !(await M.storyboardQueue(sql)).some((x) => x.id === pub.id));
       check('M. dismiss: logged, it stays out of the queue, and stays as it is', (await M.dismissStoryboard(sql, pub.id, GARANCE)) && !(await M.storyboardQueue(sql)).some((x) => x.id === pub.id) && publicN() === pf.length && (await logOf()).at(-1) === 'dismissed:moderator');
+      // Reporters are counted since the last dismissal (Nate, 2026-11-23; storyboards only): two new ones leave it up.
+      await new Promise((res) => setTimeout(res, 20));
+      const n1 = await M.reportStoryboard(sql, 906, pub.id, { reason: 'spam' }, deps);
+      const n2 = await M.reportStoryboard(sql, 907, pub.id, { reason: 'spam' }, deps);
+      check('M. after a dismissal, earlier reporters don\'t count: two new reporters leave it up', n1.json.hidden === false && n2.json.hidden === false && (await publication(sql, pub.id))?.hidden === null && (await M.storyboardQueue(sql)).find((x) => x.id === pub.id)?.reporters === 2);
+      const n3 = await M.reportStoryboard(sql, 908, pub.id, { reason: 'other' }, deps);
+      check('M. ... a third new reporter hides it', n3.json.hidden === true && publicN() === 0);
+      // Unhide puts back exactly what its maker published: a changed private copy is not put back.
+      const victim = pf.find((f) => f.role === 'shot')!;
+      const asPublished = readFileSync(path.join(STORE, 'voice-hidden', victim.key));
+      writeFileSync(path.join(STORE, 'voice-hidden', victim.key), randomBytes(64));
+      const bad = await M.unhideStoryboard(sql, pub.id, GARANCE, 'moderator', deps);
+      check('M. unhide puts back exactly what its maker published: a changed private copy is refused, the rest restored', bad.shown && bad.failed === 1 && bad.restored === pf.length - 1 && !existsSync(path.join(STORE, 'public', victim.key)));
+      // (Put the test's own file back, as published, for the steps below.)
+      writeFileSync(path.join(STORE, 'public', victim.key), asPublished);
+      rmSync(path.join(STORE, 'voice-hidden', victim.key), { force: true });
+      await M.dismissStoryboard(sql, pub.id, GARANCE);
       // A moderator's own hide, then its maker takes it down: the private copies go too.
       const h = await M.hideStoryboard(sql, pub.id, GARANCE, 'moderator', null, null, deps);
       check('M. a moderator\'s hide: hidden, files moved; a second hide changes nothing', h.hidden && h.moved === pf.length && !(await M.hideStoryboard(sql, pub.id, GARANCE, 'moderator', null, null, deps)).hidden && privateN() === pf.length);
@@ -766,8 +783,12 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   r2 = await draftRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: pubId }) });
   check('X. a published draft can\'t be removed (404)', r2.status === 404 && (await sql`select count(*)::int n from studio.voice_drafts where id = ${pubId}`)[0].n === 1);
   await sql`delete from studio.voice_drafts where id = ${pubId}`;
+  const logBefore = (await sql`select count(*)::int n from studio.voice_publication_log`)[0].n;
+  const orphansBefore = (await sql`select count(*)::int n from studio.voice_publication_log l where not exists (select 1 from studio.voice_publications p where p.id = l.publication_id)`)[0].n;
+  const takenDownLog = (await sql`select count(*)::int n from studio.voice_publication_log l join studio.voice_publications p on p.id = l.publication_id where p.draft_id = ${acc.id}`)[0].n;
   r2 = await draftRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: acc.id }) });
   const left = storeFiles().filter((f) => f.startsWith(`voice-drafts/${acc.id}/`));
+  check('X. removing a taken-down storyboard\'s draft leaves its moderation log in place (Nate, 2026-11-23: removing it can\'t erase a hide)', takenDownLog > 0 && (await sql`select count(*)::int n from studio.voice_publication_log`)[0].n === logBefore && (await sql`select count(*)::int n from studio.voice_publication_log l where not exists (select 1 from studio.voice_publications p where p.id = l.publication_id)`)[0].n === orphansBefore + takenDownLog, `${takenDownLog}`);
   check('X. its person removes it: the rows and both audio files are gone', r2.status === 200 && left.length === 0 && (await sql`select count(*)::int n from studio.voice_drafts where id = ${acc.id}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_draft_audio where draft_id = ${acc.id}`)[0].n === 0);
   check('X. ... and so are its storyboard\'s versions, its kept picture and that file', storeFiles().every((f) => !f.startsWith(`voice-boards/${acc.id}/`)) && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${acc.id}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_board_pictures where draft_id = ${acc.id}`)[0].n === 0);
   r2 = await draftAudioRoute.GET(as(NATE), { params: Promise.resolve({ id: acc.id, n: '0' }) });
@@ -884,8 +905,14 @@ check('$. the caps are placeholders in config, in credits and dollars', VOICE.ca
   // Removing: the reading's maker can't while someone else has a board on it; each person removes their own board.
   r = await draftRoute.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: rdId }) });
   check('G. the reading can\'t be removed while someone else has a board on it, and none of its files is touched', r.status === 404 && (await sql`select count(*)::int n from studio.voice_drafts where id = ${rdId}`)[0].n === 1 && storeFiles().some((f) => f.startsWith(`voice-drafts/${rdId}/`)) && storeFiles().some((f) => f.startsWith(`voice-boards/${rdId}/${GARANCE}/`)));
+  // A taken-down publication of Nate's board on the reading, with a moderation log row: removing the board takes the
+  // publication and leaves the log (Nate, 2026-11-23).
+  const tdPub = randomUUID();
+  await pg.query(`insert into studio.voice_publications (id, draft_id, fid, board_version, recipe, files, taken_down_at) values ($1, $2, $3, 1, '{"voice":{},"shots":[],"closing":{}}', $4::jsonb, now())`, [tdPub, rdId, NATE, JSON.stringify([{ key: `storyboards/${tdPub}/a-${'3'.repeat(64)}.mp3`, sha256: '3'.repeat(64) }, { key: `storyboards/${tdPub}/b-${'4'.repeat(64)}.png`, sha256: '4'.repeat(64) }])]);
+  await pg.query(`insert into studio.voice_publication_log (publication_id, step, by_fid, role, reason) values ($1, 'reported', 909, 'reader', 'spam'), ($1, 'hidden', 0, 'rule', 'spam')`, [tdPub]);
   r = await boards.DELETE(as(NATE, { method: 'DELETE' }, `http://localhost/api/voice/boards?draft=${rdId}`));
   check('G. a person removes their own board on it, and only theirs', r.status === 200 && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${rdId} and fid = ${NATE}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${rdId} and fid = ${GARANCE}`)[0].n === 1);
+  check('G. ... its taken-down publication goes with the board, and its moderation log stays', (await sql`select count(*)::int n from studio.voice_publications where id = ${tdPub}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_publication_log where publication_id = ${tdPub}`)[0].n === 2);
   {
     // Asked in the page, not window.confirm (Nate, 2026-11-23): removing one's own storyboard and removing a draft.
     const rm = readFileSync(path.join(ROOT, 'src/components/voice-remove.tsx'), 'utf8');
