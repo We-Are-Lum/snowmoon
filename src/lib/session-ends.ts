@@ -2,7 +2,7 @@ import 'server-only';
 import type postgres from 'postgres';
 
 /**
- * "Sign out on every device" (owner, 2026-11-23; branch session-30d; studio.session_ends, NEXT_session_ends.sql): one
+ * "Sign out on every device" (owner, 2026-11-23; branch session-30d; studio.session_ends, 0051_session_ends.sql): one
  * row per person, the moment they last chose it. Every session issued before that moment is over: src/lib/auth.ts
  * checks it on every request that carries the site's own session (Farcaster on the website, wallet, Lens, Bluesky),
  * for the person it signs in as and the account it is. Farcaster's own Quick Auth token, inside the Farcaster app, is

@@ -1,6 +1,10 @@
--- NEXT_session_ends.sql: "Sign out on every device" (owner, 2026-11-23; branch session-30d). NOT APPLIED. Takes the
--- next free number at merge (CLAUDE.md), checked against origin/main and production. DRAFT, drafted by the coding agent
--- (Claude, a closed model by Anthropic). Tested on in-memory PGlite against main's migrations (npm run test:sessions).
+-- 0051_session_ends.sql: "Sign out on every device" (owner, 2026-11-23; branch session-30d). Numbered at merge on
+-- 2026-11-23 (was NEXT_session_ends.sql), the next free number after main's 0001-0050 (no unmerged branch holds a later
+-- number). APPLIED by the owner in production on 2026-11-23 (A, B and C run all at once: Success; he also tested it on
+-- Postgres 16 against main's migrations: it passes all at once, a second run changes nothing, studio_writer has select,
+-- insert and update only, nothing for anon or authenticated, and the undo puts back main's exact shape). Drafted by the
+-- coding agent (Claude, a closed model by Anthropic). Tested on in-memory PGlite against main's migrations
+-- (npm run test:sessions).
 -- Requires 0001_core (the studio schema and the studio_writer role). Nothing else.
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:

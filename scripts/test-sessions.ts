@@ -1,12 +1,12 @@
 /**
  * Website sessions (owner, 2026-11-23; branch session-30d): the site's own 30-day session for every website sign-in,
  * and "Sign out on every device". No network, no production database: an in-memory Postgres (PGlite) with every
- * numbered migration, then NEXT_session_ends.sql part by part; the real routes are called with real Request objects.
+ * numbered migration, then 0051_session_ends.sql part by part; the real routes are called with real Request objects.
  * Fails (exit 1) on any problem; each rule is proven on a planted fault ("proof: …").
  *
  *   npm run test:sessions
  *
- * - NEXT_session_ends.sql: who runs it; A is B word for word; A changes nothing; B applies twice; C passes and keeps
+ * - 0051_session_ends.sql: who runs it; A is B word for word; A changes nothing; B applies twice; C passes and keeps
  *   nothing; D undoes it; studio_writer may select, insert, update (no delete); anon and authenticated nothing.
  * - Lengths: Farcaster on the website, wallet, Lens and Bluesky all last 30 days (SESSIONS.hours).
  * - The Farcaster session: accepted by getFid and by real routes (/api/auth/me, an admin route), as the bearer; an
@@ -45,7 +45,7 @@ const walk = (dir: string): string[] =>
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 // --- The migration file -------------------------------------------------------------------------------------------
-const FILE = 'supabase/migrations/NEXT_session_ends.sql';
+const FILE = 'supabase/migrations/0051_session_ends.sql';
 const text = read(FILE);
 const at = (h: string) => text.indexOf(`\n-- ${h}`);
 const between = (a: string, b: string | null) => text.slice(text.indexOf('\n', at(a) + 1) + 1, b ? at(b) : text.length);
@@ -60,14 +60,14 @@ const dry = strip(between('A. DRY RUN', 'B. MIGRATION'));
 const mig = strip(between('B. MIGRATION', 'C. READ-BACK'));
 const readBack = uncomment(between('C. READ-BACK', 'D. UNDO'));
 const undo = uncomment(between('D. UNDO', null));
-check('the file says who runs it (postgres, in the Supabase SQL Editor), and is not applied', /MUST RUN AS postgres/.test(text) && /Supabase SQL Editor/.test(text) && /NOT APPLIED/.test(text) && path.basename(FILE).startsWith('NEXT_'));
+check('the file says who runs it (postgres, in the Supabase SQL Editor); numbered 0051, applied by the owner', /MUST RUN AS postgres/.test(text) && /Supabase SQL Editor/.test(text) && /APPLIED by the owner/.test(text) && path.basename(FILE) === '0051_session_ends.sql');
 check('A ends in rollback, B in commit, C is a rolled-back read-back ending READ-BACK PASSED, D drops the table', dry.startsWith('begin;') && dry.endsWith('rollback;') && mig.startsWith('begin;') && mig.endsWith('commit;') && readBack.startsWith('begin;') && readBack.trim().endsWith('rollback;') && /READ-BACK PASSED/.test(readBack) && /drop table/.test(undo));
 check('the dry run is the migration word for word', dry.slice(0, -'rollback;'.length) === mig.slice(0, -'commit;'.length));
 check('the read-back inserts and deletes realistic rows, and sets no role', /insert into studio\.session_ends/.test(readBack) && /delete from studio\.session_ends/.test(readBack) && !/set role/i.test(readBack));
 
 const pg = new PGlite();
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
-for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort()) await pg.exec(read(`supabase/migrations/${f}`));
+for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f) && f < path.basename(FILE)).sort()) await pg.exec(read(`supabase/migrations/${f}`));
 await pg.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
 const shape = async () => JSON.stringify((await pg.query(`select column_name, data_type from information_schema.columns where table_schema = 'studio' and table_name = 'session_ends' order by 1`)).rows);
 const before = await shape();
@@ -154,7 +154,7 @@ const adminGood = F.signFarcasterSession(ADMIN)!;
 check('… and an admin route takes it the same way (/api/admin/activity: 200 for an admin)', (await adminStatus(adminGood)) === 200);
 check('… a non-admin’s session gets the admin route’s 404', (await adminStatus(good)) === 404);
 {
-  // Without the table (as before NEXT_session_ends.sql is applied): every query on it fails as Postgres fails it.
+  // Without the table (as before 0051_session_ends.sql is applied): every query on it fails as Postgres fails it.
   const SE = await import('../src/lib/session-ends');
   // A stand-in for postgres.js: a query (a tagged template) fails with this code; a helper call (sql(list)) is a fragment.
   const failing = (code: string) => ((q: unknown) => (Array.isArray(q) && 'raw' in (q as object) ? Promise.reject(Object.assign(new Error('relation does not exist'), { code })) : { fragment: q })) as unknown as Parameters<typeof SE.sessionEnded>[0];
