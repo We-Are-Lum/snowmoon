@@ -112,6 +112,13 @@ const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
   const layout = readFileSync(path.join(ROOT, 'src/app/storyboard/record/layout.tsx'), 'utf8');
   const spoken = readFileSync(path.join(ROOT, 'src/app/storyboard/spoken/[id]/page.tsx'), 'utf8');
   check('E. both stay noindex, and the spoken embed is set only for a live publication', /robots: \{ index: false, follow: false \}, other: embedMeta\(recordEmbed\(\)\)/.test(layout) && /return pub \? \{ robots, other: embedMeta\(spokenEmbed\(pub\.id\)\) \} : \{ robots \}/.test(spoken) && /if \(!publishOn\(\)\) return \{ robots \}/.test(spoken));
+  {
+    // React #418 (2026-11-23): the published page read MediaRecorder while rendering, so the server (none) wrote "This
+    // browser can't record a video." and the browser didn't. The capability is read only after the page has loaded.
+    const vs = readFileSync(path.join(ROOT, 'src/components/voice-spoken.tsx'), 'utf8');
+    const calls = vs.split('\n').filter((l) => /videoType\(\)/.test(l) && !/^\s*(\/\/|\*)/.test(l));
+    check('E. the published page reads the video capability after loading, never while rendering (React #418)', calls.length === 1 && /useEffect\(\(\) => setCanVideo\(Boolean\(videoType\(\)\)\), \[\]\)/.test(calls[0]) && /canVideo === false && ' This browser can’t record a video\.'/.test(vs));
+  }
 }
 
 // S. The switch.
