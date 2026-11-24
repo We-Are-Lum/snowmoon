@@ -123,7 +123,7 @@ The six lines are drafted by the coding agent, for Nate's reread. Nothing in the
 
 ## The order
 
-1. Done on 2026-11-23: #220, #219, #221, #223, #222 and the guide (#224), each with live checks; the continuity test;
+1. Done on 2026-11-23: #220, #219, #221, #223 and #222, each with live checks, and the guide (#224, merged); the continuity test;
    the default model.
 2. Next: the take caps and the #418 fix (two small PRs, on Nate's word); moderation (#225: SQL test, "applied", the
    ntfy reread, merge).
