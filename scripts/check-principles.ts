@@ -1125,6 +1125,30 @@ add({
   },
 });
 
+add({
+  id: 'P2v',
+  principle: 2,
+  name: "an improvised take's words are its performer's: transcribed from their take, corrected only by them (kept with the words before), and never written or edited by a model or the guide (DRAFT, for Nate's reread, 2026-11-24)",
+  load: async () => ({
+    correct: read('src/lib/voice/correct-words.ts'),
+    route: read('src/app/api/voice/drafts/[id]/words/route.ts'),
+    guide: read('src/lib/voice/guide.ts'),
+    guideServer: read('src/lib/voice/guide-server.ts'),
+  }),
+  run: (c) => {
+    const p: string[] = [];
+    const model = /from '[^']*(elevenlabs|chat\/|images\/fal|challenge\/models|guide-server|ai-gateway|batch-model)[^']*'|\bcomplete\(|speechToText\(|fetch\(/;
+    if (model.test(c.correct) || model.test(c.route)) p.push('correcting the words reaches a model or a service: only the person changes them');
+    if (!/corrections: \[\.\.\.spoken\.corrections, correction\]/.test(c.correct) || !/byFid: fid, sentences: spoken\.sentences/.test(c.correct)) p.push('a correction is not kept with the words before it and who made it');
+    if (!/speechWordsIn\(s, \[\.\.\.c\.sentences, \.\.\.\(c\.otherWords \?\? \[\]\)\]\)/.test(c.guide)) p.push("the guide's drafts aren't checked against the spoken words");
+    if (!/sentences: spokenSentences\(draft\.recipe/.test(c.guideServer)) p.push('the guide is not given the spoken words as the board\'s sentences');
+    return p;
+  },
+  plant: (c) => {
+    c.correct = `import { complete } from '../chat/model';\n${c.correct}`;
+  },
+});
+
 // ---------------------------------------------------------------------------
 // P3. The allowlist records each model's license and whether its weights are
 //     open; every model in use is on it; closed models in use are reported.
