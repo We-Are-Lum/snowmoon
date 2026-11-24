@@ -1,0 +1,82 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<style>
+  body { margin: 0; font: 15px/1.45 Georgia, serif; background: #f3f1ec; color: #1d1b18; }
+  .k { font: 11px/1.2 ui-monospace, Menlo, monospace; letter-spacing: .06em; text-transform: uppercase; color: #6b665d; }
+  main { padding: 14px 16px 30px; }
+  h1 { font-size: 24px; margin: 6px 0 4px; }
+  .card { background: #faf9f6; border: 1px solid #d8d3c9; border-radius: 8px; padding: 12px; margin: 12px 0; }
+  h2 { font-size: 17px; margin: 0 0 8px; }
+  .tag { display: inline-block; font: 10px ui-monospace, Menlo, monospace; border: 1px solid #8a8578; border-radius: 3px; padding: 0 4px; margin-right: 4px; color: #4a463f; }
+  .book { background: #efeadf; border-left: 3px solid #8a7a52; padding: 6px 8px; font-size: 14px; }
+  textarea { width: 100%; box-sizing: border-box; font: 14px Georgia, serif; border: 1px solid #bdb6a8; border-radius: 6px; padding: 8px; height: 74px; background: #fff; }
+  .small { font-size: 12px; color: #5f5a51; }
+  .row { display: flex; gap: 6px; overflow-x: auto; }
+  .pic { flex: 0 0 auto; width: 96px; border: 2px solid #d8d3c9; border-radius: 6px; padding: 3px; text-align: center; font-size: 11px; }
+  .pic.on { border-color: #1d1b18; }
+  .ph { height: 120px; border-radius: 4px; background: linear-gradient(160deg,#b9c2c9,#7d8790); display: flex; align-items: flex-end; justify-content: center; color: #fff; font-size: 10px; padding-bottom: 4px; }
+  .scene { height: 190px; border-radius: 6px; background: linear-gradient(170deg,#3e4a57 0%,#6b7684 55%,#2b2f35 100%); position: relative; color: #fff; }
+  .scene span { position: absolute; left: 8px; bottom: 8px; font: 11px ui-monospace, Menlo, monospace; }
+  .btn { display: inline-block; border: 1px solid #1d1b18; border-radius: 6px; padding: 7px 12px; font-size: 14px; margin-top: 8px; background: #1d1b18; color: #faf9f6; }
+  .btn.q { background: none; color: #1d1b18; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  td { border-top: 1px solid #e2ddd3; padding: 5px 2px; vertical-align: top; }
+  td.n { width: 22px; color: #6b665d; font-family: ui-monospace, Menlo, monospace; }
+  select { font: 13px Georgia, serif; }
+  .anchor { font: 11px ui-monospace, Menlo, monospace; color: #4a463f; }
+</style></head><body><main>
+<p class="k">Admin trial · Draft · Storyboard</p>
+<h1>The Dead Hand of Egalitarianism…</h1>
+<p class="small">Your performance in Warm lecturer · 2:41</p>
+
+<section class="card">
+  <h2>1. The scene</h2>
+  <p class="small">One place, one light, one set of clothes: every shot is this scene, filmed from another camera.</p>
+  <p class="small"><span class="tag">Book</span>Where the book shows this speech (c13-b63), word for word:</p>
+  <p class="book">An image of Lord Ephelion appeared on the left side of the screen, and a multi-paragraph message on the right side.</p>
+  <p class="small" style="margin-top:8px">Where he is, in your words (the book doesn&rsquo;t say):</p>
+  <textarea placeholder="Where is he speaking from? What is around him, what light?"></textarea>
+  <p class="small">Look: <b>Animated series, A</b> · Style: <b>Quiet</b></p>
+  <div class="scene"><span>The scene · kept 14:02 · wide, eye level</span></div>
+  <span class="btn">Make the scene</span> <span class="btn q">Keep this one</span>
+</section>
+
+<section class="card">
+  <h2>2. Cameras</h2>
+  <p class="small"><span class="tag">Automatic</span>Coverage by a rule (no AI): a wide master first, then medium and close-up, with two side angles, all from his front side of the line. Change any.</p>
+  <table>
+    <tr><td class="n">1</td><td>0:00–0:09</td><td><select><option>Wide (master)</option></select></td></tr>
+    <tr><td class="n">2</td><td>0:09–0:17</td><td><select><option>Medium</option></select></td></tr>
+    <tr><td class="n">3</td><td>0:17–0:24</td><td><select><option>Close-up</option></select></td></tr>
+    <tr><td class="n">4</td><td>0:24–0:33</td><td><select><option>Medium, from the left</option></select></td></tr>
+    <tr><td class="n">5</td><td>0:33–0:41</td><td><select><option>Close-up</option></select></td></tr>
+    <tr><td class="n">6</td><td>0:41–0:50</td><td><select><option>Low angle</option></select></td></tr>
+    <tr><td class="n">…</td><td></td><td class="small">the last shot: Wide (master)</td></tr>
+  </table>
+</section>
+
+<section class="card">
+  <h2>Shot 3 · Close-up</h2>
+  <textarea>(your words) His hand rests on the lectern; he looks straight at us.</textarea>
+  <p class="anchor">Sent with: the scene · his look (A) · shot 2 as kept</p>
+  <div class="row">
+    <div class="pic"><div class="ph">scene</div>anchor</div>
+    <div class="pic"><div class="ph">look A</div>anchor</div>
+    <div class="pic on"><div class="ph">shot 2</div>continuity</div>
+  </div>
+  <span class="btn">Make the picture · ≈ $0.02</span>
+</section>
+<section class="card">
+  <h2>Shot 4 · <span class="tag">Insert</span> outside the scene</h2>
+  <p class="small">In the scene&nbsp;&nbsp;<b>● Insert</b> &nbsp;(you chose this; the cameras never do)</p>
+  <textarea>(your words) A family at dinner, the screen behind them going dark.</textarea>
+  <p class="small">Character in it: <select><option>None</option><option>Bai</option></select></p>
+  <p class="anchor">Sent with: the style (Quiet) · no reference picture</p>
+  <span class="btn">Make the picture · ≈ $0.005</span>
+</section>
+
+<section class="card">
+  <h2>Shot 5 · Close-up</h2>
+  <p class="anchor">Sent with: the scene · his look (A) · shot 3 as kept (the last shot in the scene, not the insert)</p>
+</section>
+</main></body></html>
