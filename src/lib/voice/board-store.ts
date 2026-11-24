@@ -1,8 +1,10 @@
 import 'server-only';
+import { publishOn } from './publish-deps';
 import type postgres from 'postgres';
 import { getAudio, putAudio, deleteAudio, pictureKeyFor } from './store';
 import type { Scene, Shot, Timeline } from './board';
 import type { Closing } from './closing';
+import type { BoardSource } from './three-ways';
 
 /**
  * Storyboards (studio.voice_boards: versions, new rows only) and kept pictures (studio.voice_board_pictures; files in
@@ -17,8 +19,11 @@ export async function boardSource(sql: postgres.Sql, fid: number, draftId: strin
   const [d] = await sql`select id, fid, kind, preset_id, recipe, made_at, published_at from studio.voice_drafts where id = ${draftId}`;
   if (!d) return null;
   const kind = d.kind as 'performance' | 'reading';
-  // A performance is its person's alone, and only while unpublished; a reading is shared.
-  if (kind === 'performance' && (Number(d.fid) !== fid || d.published_at)) return null;
+  // A performance is its person's alone, and only while unpublished; a reading is shared. Three ways in (Nate,
+  // 2026-11-24): once publishing is on, a take its performer has published, named, is shared too, so anyone let in can
+  // make new pictures for it, credited to its performer (sharedTake).
+  if (kind === 'performance' && Number(d.fid) === fid && d.published_at) return null;
+  if (kind === 'performance' && Number(d.fid) !== fid && !(await sharedTake(sql, draftId, Number(d.fid)))) return null;
   const audio = await sql`select n, role, sentence, replaces_start::float8 as "replacesStart", replaces_end::float8 as "replacesEnd", seconds::float8 as seconds, bytes from studio.voice_draft_audio where draft_id = ${draftId} order by n`;
   const recipe = d.recipe as { timeline?: Timeline; preset?: { name?: string }; speech?: { id: string; title: string } };
   let timing: ReadingTiming | null = null;
@@ -29,6 +34,16 @@ export async function boardSource(sql: postgres.Sql, fid: number, draftId: strin
   return { id: d.id as string, kind, owner: Number(d.fid), presetId: d.preset_id as string, recipe, timeline: kind === 'reading' ? (timing?.timeline ?? null) : (recipe.timeline ?? null), timing, audio };
 }
 
+/**
+ * A take others may storyboard (three ways in, "new pictures for an existing recording"): only while publishing is on
+ * (VOICE.publish, or a local test copy), and only while its performer's own storyboard of it is published, live and named (so it can be credited to them).
+ */
+export async function sharedTake(sql: postgres.Sql, draftId: string, performer: number): Promise<boolean> {
+  if (!publishOn()) return false;
+  const [p] = await sql`select 1 from studio.voice_publications where draft_id = ${draftId} and fid = ${performer} and taken_down_at is null and named limit 1`;
+  return Boolean(p);
+}
+
 /** This person's live publication of a board on this draft, if any. */
 export async function livePublication(sql: postgres.Sql, fid: number, draftId: string) {
   const [p] = await sql`select id from studio.voice_publications where draft_id = ${draftId} and fid = ${fid} and taken_down_at is null`;
@@ -36,15 +51,16 @@ export async function livePublication(sql: postgres.Sql, fid: number, draftId: s
 }
 
 export async function latestBoard(sql: postgres.Sql, draftId: string, fid: number) {
-  const [b] = await sql`select version, cuts, shots, closing, scene, made_at from studio.voice_boards where draft_id = ${draftId} and fid = ${fid} order by version desc limit 1`;
-  return b ? { version: b.version as number, cuts: b.cuts as number[], shots: b.shots as Shot[], closing: (b.closing as Closing | null) ?? null, scene: (b.scene as Scene | null) ?? null, madeAt: b.made_at } : null;
+  const [b] = await sql`select version, cuts, shots, closing, scene, source, made_at from studio.voice_boards where draft_id = ${draftId} and fid = ${fid} order by version desc limit 1`;
+  return b ? { version: b.version as number, cuts: b.cuts as number[], shots: b.shots as Shot[], closing: (b.closing as Closing | null) ?? null, scene: (b.scene as Scene | null) ?? null, source: (b.source as BoardSource | null) ?? null, madeAt: b.made_at } : null;
 }
 
-export async function saveBoard(sql: postgres.Sql, fid: number, draftId: string, cuts: number[], shots: Shot[], closing: Closing | null = null, scene: Scene | null = null): Promise<number> {
+/** `source`: the storyboard this one reuses (three ways in: your voice over a storyboard), carried by every version. */
+export async function saveBoard(sql: postgres.Sql, fid: number, draftId: string, cuts: number[], shots: Shot[], closing: Closing | null = null, scene: Scene | null = null, source: BoardSource | null = null): Promise<number> {
   return sql.begin(async (tx) => {
     const [m] = await tx`select coalesce(max(version), 0)::int as v from studio.voice_boards where draft_id = ${draftId} and fid = ${fid}`;
     const version = m.v + 1;
-    await tx`insert into studio.voice_boards (draft_id, fid, version, cuts, shots, closing, scene) values (${draftId}, ${fid}, ${version}, ${tx.json(cuts)}, ${tx.json(shots as unknown as postgres.JSONValue)}, ${closing ? tx.json(closing as unknown as postgres.JSONValue) : null}, ${scene ? tx.json(scene as unknown as postgres.JSONValue) : null})`;
+    await tx`insert into studio.voice_boards (draft_id, fid, version, cuts, shots, closing, scene, source) values (${draftId}, ${fid}, ${version}, ${tx.json(cuts)}, ${tx.json(shots as unknown as postgres.JSONValue)}, ${closing ? tx.json(closing as unknown as postgres.JSONValue) : null}, ${scene ? tx.json(scene as unknown as postgres.JSONValue) : null}, ${source ? tx.json(source as unknown as postgres.JSONValue) : null})`;
     return version;
   }) as Promise<number>;
 }

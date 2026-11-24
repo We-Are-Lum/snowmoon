@@ -90,6 +90,12 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
     oldScene: oldSceneShots(shots, scene, madeWithScene(shots, pictures as unknown as { shotKey: string; sha256: string; recipe: unknown }[])),
   });
   if (!board) problems.unshift('Save the storyboard first.');
+  // Three ways in (2026-11-24): someone else's published take keeps its performer's credit (their name as published);
+  // a reused storyboard credits its maker for the scene, shots and pictures.
+  const othersTake = draft.kind === 'performance' && draft.owner !== fid;
+  const takeBy = othersTake
+    ? (((await sql`select recipe from studio.voice_publications where draft_id = ${draft.id} and fid = ${draft.owner} and taken_down_at is null and named limit 1`)[0]?.recipe as { performer?: { name?: string | null } } | undefined)?.performer?.name ?? null)
+    : null;
   const credits = closingCredits({
     speech: {
       title: r.speech?.title ?? 'A speech',
@@ -98,7 +104,9 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
       // The credit the recording's recipe carries (from its version's aiHelp, which Nate sets).
       ...(invented ? { invented: { version: r.speech?.version ?? null, credit: r.speech?.credit ?? r.speech?.label?.writers?.[0] ?? null } } : {}),
     },
-    performer,
+    performer: othersTake ? takeBy : performer,
+    ...(othersTake ? { storyboardBy: performer } : {}),
+    reusedFrom: board?.source ? { by: board.source.by, title: board.source.title } : null,
     preset: r.preset?.name ?? 'a preset voice',
     voiceModel: elevenLabs(r.model),
     transcribeModel: elevenLabs(reading ? (draft.timing?.model ?? VOICE.models.transcribe) : (r.transcribeModel ?? VOICE.models.transcribe)),
@@ -195,7 +203,11 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
       scene: p.scenePicture ? { setting: p.board.scene!.setting, settingBy: 'the storyboard’s maker', picture: strip(pictureRecipe(SCENE.key, p.scenePicture.sha256)) } : null,
       shots: p.board.shots.map((s, i) => ({ n: i + 1, key: s.key, start: s.start, end: s.end, description: s.description, angle: s.angle, angleBy: s.angleBy ?? 'person', insert: s.insert === true, styleId: s.styleId, characterIds: s.characterIds, picture: strip(pictureRecipe(s.key, s.kept!)) })),
       closing: { description: p.board.closing!.description, styleId: p.board.closing!.styleId, background: strip(pictureRecipe(CLOSING.key, bg.sha256)), credits: p.credits, cardSha256: cardSha, seconds: CLOSING.seconds, text: 'set by the site from this recipe and drawn over the picture' },
-      people: [...(p.draft.kind === 'reading' ? [] : ['the performance']), ...(p.scenePicture ? ['the scene’s setting', 'which shots are inserts'] : []), 'each shot’s description and camera', 'the cuts (moved from a rule’s proposal)', 'the closing card’s look', 'which pictures were kept'],
+      // Three ways in (2026-11-24): the storyboard this one reuses (its maker made the scene, shots and pictures; only the
+      // timing was fitted here), or whose published take this is.
+      source: p.board.source ?? null,
+      takeBy: p.draft.kind === 'performance' && p.draft.owner !== fid ? { fid: p.draft.owner } : null,
+      people: p.board.source ? ['the performance', 'each shot’s timing, fitted to this voice'] : [...(p.draft.kind === 'reading' || p.draft.owner !== fid ? [] : ['the performance']), ...(p.scenePicture ? ['the scene’s setting', 'which shots are inserts'] : []), 'each shot’s description and camera', 'the cuts (moved from a rule’s proposal)', 'the closing card’s look', 'which pictures were kept'],
       ai: p.draft.kind === 'reading' ? ['the reading (text-to-speech)', 'the word timings (transcription)', 'the pictures'] : ['the voice conversion', 'the word check (transcription)', 'the pictures'],
       noAiVideo: true,
     };

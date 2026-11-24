@@ -48,6 +48,13 @@ export interface CreditsInput {
   /** The board has a kept scene (Nate, 2026-11-22), and how many of its shots are inserts (outside the scene). */
   scene?: boolean;
   inserts?: number;
+  /**
+   * Three ways in (Nate, 2026-11-24): the storyboard this one reuses, whose maker made its scene, shots and pictures (only
+   * the timing was fitted to this voice); and, for new pictures on someone else's published take, who made the
+   * storyboard (the performer stays the take's).
+   */
+  reusedFrom?: { by: string | null; title: string } | null;
+  storyboardBy?: string | null;
 }
 
 export interface CreditLine {
@@ -71,7 +78,11 @@ export function closingCredits(c: CreditsInput): CreditLine[] {
         { who: 'invented', text: `Speech: “${c.speech.title}”${c.speech.invented.version ? ` (version ${c.speech.invented.version})` : ''}. Invented, not from the book. ${c.speech.invented.credit ?? 'Words by the Snowmoon team'}.` }
       : { who: 'book', text: `Words: ${c.speech.title}, from Snowmoon by Vitalik Buterin${c.speech.block ? ` (${c.speech.block})` : ''}, word for word.` },
     ...(reading ? [] : [{ who: 'people' as const, text: `Performed by ${by}, in the voice “${c.preset}”.` }]),
-    c.scene
+    c.reusedFrom
+      ? { who: 'people', text: `Storyboard by ${c.reusedFrom.by ? `@${c.reusedFrom.by}` : 'a reader (not named, at their wish)'}: the scene, the cuts, the ${c.shots} shots’ descriptions and cameras, the pictures. Each picture’s timing fitted to this voice by ${by}.` }
+      : c.storyboardBy !== undefined
+      ? { who: 'people', text: `Storyboard by ${c.storyboardBy ? `@${c.storyboardBy}` : 'a reader (not named, at their wish)'}: ${c.scene ? 'the scene’s setting, ' : ''}the cuts, the ${c.shots} shots’ descriptions and cameras${c.inserts ? `, which ${c.inserts === 1 ? 'shot is an insert' : `${c.inserts} shots are inserts`} outside the scene` : ''}, the pictures kept, on @${c.performer ?? 'a reader'}’s published take.` }
+      : c.scene
       ? { who: 'people', text: `Storyboard by ${by}: the scene’s setting, the cuts, the ${c.shots} shots’ descriptions and cameras${c.inserts ? `, which ${c.inserts === 1 ? 'shot is an insert' : `${c.inserts} shots are inserts`} outside the scene` : ''}, the pictures kept.` }
       : { who: 'people', text: `Storyboard by ${by}: the cuts, the ${c.shots} shots’ descriptions and cameras, the pictures kept.` },
     reading

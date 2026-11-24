@@ -2,6 +2,7 @@ import 'server-only';
 import { randomUUID } from 'node:crypto';
 import type postgres from 'postgres';
 import { deleteAudio, getAudio, keyFor, putAudio } from './store';
+import { sharedTake } from './board-store';
 
 /**
  * Accepted drafts (studio.voice_drafts, studio.voice_draft_audio; 0044_ephelion_voice.sql). The audio is in private
@@ -50,9 +51,12 @@ export async function myDrafts(sql: postgres.Sql, fid: number) {
 /** One of this person's drafts' audio files, or null (someone else's draft reads as missing). */
 export async function draftAudio(sql: postgres.Sql, fid: number, id: string, n: number): Promise<Uint8Array | null> {
   if (!/^[0-9a-f-]{36}$/.test(id) || !Number.isInteger(n)) return null;
-  // A performance is its person's alone; a ready-made reading is shared (anyone let in can storyboard it, 2026-11-21).
-  const [r] = await sql`select a.storage_key from studio.voice_draft_audio a join studio.voice_drafts d on d.id = a.draft_id where d.id = ${id} and (d.fid = ${fid} or d.kind = 'reading') and a.n = ${n}`;
-  return r ? getAudio(r.storage_key) : null;
+  // A performance is its person's alone; a ready-made reading is shared (anyone let in can storyboard it, 2026-11-21);
+  // and, once publishing is on, a take its performer published, named (three ways in, 2026-11-24: sharedTake).
+  const [r] = await sql`select a.storage_key, d.fid, d.kind from studio.voice_draft_audio a join studio.voice_drafts d on d.id = a.draft_id where d.id = ${id} and a.n = ${n}`;
+  if (!r) return null;
+  if (Number(r.fid) !== fid && r.kind !== 'reading' && !(await sharedTake(sql, id, Number(r.fid)))) return null;
+  return getAudio(r.storage_key);
 }
 
 /** A reading's audio (any reading: they are project content, playable by anyone let in). */

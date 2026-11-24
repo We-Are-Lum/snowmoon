@@ -9,8 +9,10 @@
  */
 import { angleById, planProblems, type PlanShot, type Shot, type Timeline } from './board';
 
-export type GuideStep = 'setting' | 'clothing' | 'plan' | 'shot' | 'fix';
-export const GUIDE_STEPS: readonly GuideStep[] = ['setting', 'clothing', 'plan', 'shot', 'fix'];
+// 'timing' (Nate, 2026-11-24, three ways in): on a storyboard fitted to a new voice, the guide only proposes making one
+// shot longer or shorter ("make shot 3 longer"); the person accepts it, and the site moves the cut (nudgeShot).
+export type GuideStep = 'setting' | 'clothing' | 'plan' | 'shot' | 'fix' | 'timing';
+export const GUIDE_STEPS: readonly GuideStep[] = ['setting', 'clothing', 'plan', 'shot', 'fix', 'timing'];
 
 export interface GuideRef {
   role: 'anchor-scene' | 'anchor-look' | 'continuity' | 'other';
@@ -22,7 +24,8 @@ export type GuideDraft =
   | { setting: string }
   | { clothing: string }
   | { plan: PlanShot[] }
-  | { shotKey: string; prompt: string; references: GuideRef[] };
+  | { shotKey: string; prompt: string; references: GuideRef[] }
+  | { timing: { shot: number; change: 'longer' | 'shorter'; seconds: number } };
 
 export interface GuideMessage {
   id: string;
@@ -102,6 +105,15 @@ export function readGuideReply(step: GuideStep, raw: string, c: DraftContext, sh
     const problems = planProblems(c.timeline, plan, c.maxShots);
     if (problems.length) return { error: `the plan: ${problems.join('; ')}` };
     draft = { plan };
+  } else if (step === 'timing') {
+    const o = ((d.timing ?? d) as Record<string, unknown>) ?? {};
+    const shot = Number(o.shot);
+    const change = o.change === 'longer' || o.change === 'shorter' ? o.change : null;
+    const seconds = o.seconds === undefined ? 1.5 : Number(o.seconds);
+    if (!Number.isInteger(shot) || shot < 1 || shot > c.shots.length) return { error: `the draft names no shot of this board (1 to ${c.shots.length})` };
+    if (!change) return { error: 'the draft says "longer" or "shorter"' };
+    if (!Number.isFinite(seconds) || seconds < 0.3 || seconds > 10) return { error: 'the change is 0.3 to 10 seconds' };
+    draft = { timing: { shot, change, seconds: Math.round(seconds * 10) / 10 } };
   } else {
     const key = shotKey ?? (typeof d.shotKey === 'string' ? d.shotKey : '');
     if (!c.shots.some((s) => s.key === key)) return { error: 'the draft names no shot of this board' };

@@ -5,6 +5,7 @@ import { voiceTestOn } from './flag';
 import { coverageAngles, sceneWords, sentencesIn, type Shot } from './board';
 import { boardSource, keptPictures, latestBoard } from './board-store';
 import { speechById } from './speech';
+import { timingFromWords } from './three-ways';
 import { GUIDE, GUIDE_STEPS, readGuideReply, type DraftContext, type GuideDraft, type GuideMessage, type GuideStep } from './guide';
 
 /**
@@ -66,6 +67,9 @@ export async function askGuide(sql: Sql, fid: number, raw: unknown, deps: GuideD
     refs: { scene: Boolean(board?.scene?.kept), looks: look?.id ? [look.id] : [], keptShots },
     maxShots: 12,
   };
+  // On a reused storyboard (three ways in) the pictures stay as they are: the guide may only propose timing.
+  if (board?.source && step !== 'timing') return { status: 400, json: { error: 'This storyboard reuses another’s pictures: ask the guide to make a shot longer or shorter.' } };
+  if (step === 'timing' && shots.length < 2) return { status: 400, json: { error: 'A storyboard needs two shots or more before one can be made longer or shorter.' } };
   const n = (had.at(-1)?.n ?? 0) + 1;
   const [person] = await sql`insert into studio.voice_guide_messages (draft_id, fid, n, role, step, text) values (${draft.id}, ${fid}, ${n}, 'person', ${step}, ${text}) returning id, made_at`;
   // What the guide receives (text only; see above).
@@ -78,7 +82,7 @@ export async function askGuide(sql: Sql, fid: number, raw: unknown, deps: GuideD
     defaultCameras: coverageAngles(shots),
     board: {
       scene: board?.scene ? { setting: board.scene.setting, clothing: board.scene.clothing ?? null, kept: Boolean(board.scene.kept) } : null,
-      shots: shots.map((s) => ({ key: s.key, sentences: sentencesIn(draft.timeline!, s), camera: s.angle, insert: s.insert === true, prompt: s.description || null, kept: keptShots.includes(s.key) })),
+      shots: shots.map((s, i) => ({ n: i + 1, key: s.key, seconds: Math.round((s.end - s.start) * 10) / 10, sentences: sentencesIn(draft.timeline!, s), camera: s.angle, insert: s.insert === true, prompt: s.description || null, kept: keptShots.includes(s.key) })),
     },
     look: look ? { id: look.id, title: look.title, sheet: look.text } : null,
     keptPictures: [...(c.refs.scene ? ['scene'] : []), ...keptShots],
@@ -128,6 +132,10 @@ export function standInGuide(user: string): Reply {
   const u = JSON.parse(user.split('\n\nYour last reply was refused')[0]) as { step: GuideStep; request: string; shotKey: string | null; shotsAllowed: number; speech: { sentences: { n: number }[] }; board: { shots: { key: string; insert: boolean; kept: boolean; prompt: string | null }[]; scene: { kept: boolean } | null }; look: { id: string } | null };
   const said = u.request.replace(/\s+/g, ' ').slice(0, 300);
   const model = 'stand-in guide (no model)';
+  if (u.step === 'timing') {
+    const t = timingFromWords(u.request) ?? { shot: 1, change: 'longer' as const, seconds: 1.5 };
+    return { model, costUsd: 0, text: JSON.stringify({ say: `(stand-in) Shot ${t.shot} ${t.change}, by about ${t.seconds} seconds.`, draft: { timing: t } }) };
+  }
   if (u.step === 'setting') return { model, costUsd: 0, text: JSON.stringify({ say: '(stand-in) A setting from your words.', draft: { setting: `(stand-in guide) ${said}` } }) };
   if (u.step === 'clothing') return { model, costUsd: 0, text: JSON.stringify({ say: '(stand-in) His clothing, from your words.', draft: { clothing: `(stand-in guide) ${said}` } }) };
   if (u.step === 'plan') {

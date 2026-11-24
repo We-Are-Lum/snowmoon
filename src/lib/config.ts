@@ -1195,6 +1195,12 @@ export const VOICE = {
   // pool 'admin', CHAPTER_PICTURES.adminDailyCapUsd); everyone else stays off.
   realPictures: 'admins' as false | 'admins' | true,
   /**
+   * Team-made storyboards (three ways in, Nate 2026-11-24; branch voice-three-ways, DRAFT): the storyboards offered for
+   * "Your voice over a storyboard", each a board (its draft and its maker) Nate chooses. Empty until he does: the
+   * proposed ones are in docs/branch-reports/voice-three-ways.md. Published storyboards join them once VOICE.publish is on.
+   */
+  teamBoards: [] as readonly { draftId: string; fid: number; title: string }[],
+  /**
    * Publishing a storyboard (slice 4, 2026-11-21; DRAFT): off until Nate's word, the reread Privacy and Terms lines
    * for it, and a confirmed public bucket for storyboards/. While off, the publish route refuses and every
    * /storyboard/spoken/<id> page is "not found" (the local tests turn it on with VOICE_TEST_ON, stand-ins only).
