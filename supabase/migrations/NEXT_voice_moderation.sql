@@ -17,7 +17,9 @@
 --    unhiding are the two functions below, as publishing and taking down are (0046).
 -- 2. studio.voice_publication_log: every report, hide, unhide and dismissal of a published storyboard, and each move of
 --    its files to private storage and back, with who (by FID: the reporter's is never shown to moderators), their role,
---    the reason and the reporter's note. The same shape as studio.removal_log. Insert and read only: append-only.
+--    the reason and the reporter's note. The same shape as studio.removal_log. Insert and read only for studio_writer:
+--    append-only. A publication's log goes with it only when the publication row itself is removed, which happens only
+--    inside studio.delete_voice_draft and studio.delete_voice_board, after its maker took it down (0046).
 -- 3. studio.hide_voice_publication: hides a live, shown publication and logs it; returns its files' public keys (to move
 --    to private storage), or nothing if it was already hidden or is taken down.
 -- 4. studio.unhide_voice_publication: shows a hidden one again and logs it; returns its files' public keys (to restore).
@@ -33,7 +35,7 @@ alter table studio.voice_publications add constraint voice_publications_hidden_c
   or (hidden_at is not null and hidden_by is not null and hidden_by >= 0 and hidden_role in ('moderator', 'maintainer', 'rule'))
 );
 create table if not exists studio.voice_publication_log (
-  publication_id uuid not null references studio.voice_publications(id),
+  publication_id uuid not null references studio.voice_publications(id) on delete cascade,
   step text not null check (step in ('reported', 'hidden', 'unhidden', 'dismissed', 'moved_private', 'restored_public')),
   by_fid bigint not null check (by_fid >= 0),
   role text not null check (role in ('reader', 'moderator', 'maintainer', 'rule')),
@@ -91,7 +93,7 @@ alter table studio.voice_publications add constraint voice_publications_hidden_c
   or (hidden_at is not null and hidden_by is not null and hidden_by >= 0 and hidden_role in ('moderator', 'maintainer', 'rule'))
 );
 create table if not exists studio.voice_publication_log (
-  publication_id uuid not null references studio.voice_publications(id),
+  publication_id uuid not null references studio.voice_publications(id) on delete cascade,
   step text not null check (step in ('reported', 'hidden', 'unhidden', 'dismissed', 'moved_private', 'restored_public')),
   by_fid bigint not null check (by_fid >= 0),
   role text not null check (role in ('reader', 'moderator', 'maintainer', 'rule')),
@@ -185,9 +187,9 @@ begin
   begin perform studio.unhide_voice_publication(p, 0, 'rule'); raise exception 'a rule''s unhide was accepted'; exception when invalid_parameter_value then null; end;
   begin update studio.voice_publications set hidden_at = now() where id = p; raise exception 'a hide without who was accepted'; exception when check_violation then null; end;
 
-  -- Removed again, all of it.
-  delete from studio.voice_publication_log where publication_id = p;
+  -- Removed again, all of it: a publication's log goes with the publication (as delete_voice_draft removes a taken-down one).
   delete from studio.voice_publications where id = p;
+  if exists (select 1 from studio.voice_publication_log where publication_id = p) then raise exception 'the log did not go with its publication'; end if;
   delete from studio.voice_boards where draft_id = d;
   delete from studio.voice_drafts where id = d;
   if exists (select 1 from studio.voice_publication_log where publication_id = p) or exists (select 1 from studio.voice_publications where id = p) or exists (select 1 from studio.voice_drafts where id = d) then raise exception 'the read-back rows were not removed'; end if;

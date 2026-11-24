@@ -111,7 +111,7 @@ const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
   check('E. a published storyboard opens itself: launch_frame, "Watch this storyboard"', SPOKEN_BUTTON === 'Watch this storyboard' && sp.button.title === SPOKEN_BUTTON && sp.button.action.type === 'launch_frame' && sp.button.action.url.endsWith('/storyboard/spoken/11111111-2222-4333-8444-555555555555'));
   const layout = readFileSync(path.join(ROOT, 'src/app/storyboard/record/layout.tsx'), 'utf8');
   const spoken = readFileSync(path.join(ROOT, 'src/app/storyboard/spoken/[id]/page.tsx'), 'utf8');
-  check('E. both stay noindex, and the spoken embed is set only for a live publication', /robots: \{ index: false, follow: false \}, other: embedMeta\(recordEmbed\(\)\)/.test(layout) && /return pub \? \{ robots, other: embedMeta\(spokenEmbed\(pub\.id\)\) \} : \{ robots \}/.test(spoken) && /if \(!publishOn\(\)\) return \{ robots \}/.test(spoken));
+  check('E. both stay noindex, and the spoken embed is set only for a live publication, never a hidden one', /robots: \{ index: false, follow: false \}, other: embedMeta\(recordEmbed\(\)\)/.test(layout) && /return pub && !pub\.hidden \? \{ robots, other: embedMeta\(spokenEmbed\(pub\.id\)\) \} : \{ robots \}/.test(spoken) && /if \(!publishOn\(\)\) return \{ robots \}/.test(spoken));
 }
 
 // S. The switch.
@@ -628,34 +628,31 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
       check('M. the admins\' queue: its reasons with counts, how many reported, the notes, never who', Boolean(item) && item!.reporters === 1 && item!.reasons[0]?.reason === 'spam' && item!.notes[0] === 'Looks like spam to me.' && !JSON.stringify(q).includes(String(GARANCE)) && item!.maker === null, JSON.stringify(item));
       check('M. ... it is counted in the moderators\' push', (await M.storyboardReportsWaiting(sql)) >= 1);
       check('M. ... the queue answers 404 to anyone but an admin', (await adminQueue.GET(as(STRANGER, {}))).status === 404 && (await adminQueue.GET(as(null, {}))).status === 404);
-      // The daily limit is the images' (one for both): someone with today's reports used up can't report.
+      // A second publication on the same draft (someone else's, made here by hand), for the limit and the "minor" rule.
       const other = randomUUID();
       await pg.query(`insert into studio.voice_publications (id, draft_id, fid, board_version, recipe, files) values ($1, $2, 555, 1, '{"voice":{},"shots":[],"closing":{}}', $3::jsonb)`, [other, acc.id, JSON.stringify([{ key: `storyboards/${other}/a-${'1'.repeat(64)}.mp3`, sha256: '1'.repeat(64) }, { key: `storyboards/${other}/b-${'2'.repeat(64)}.png`, sha256: '2'.repeat(64) }])]);
       for (let i = 0; i < IMAGES.reportsPerDay; i++) await pg.query(`insert into studio.voice_publication_log (publication_id, step, by_fid, role, reason) values ($1, 'reported', 901, 'reader', 'spam')`, [other]);
       const capped = await M.reportStoryboard(sql, 901, pub.id, { reason: 'spam' }, deps);
       check('M. the daily report limit is shared with images (20 a day)', capped.status === 429 && (await M.reportsToday(sql, 901)) === IMAGES.reportsPerDay);
-      // One "minor" report hides it at once: the notice only, and every public file moved to private storage.
-      r = await rep(STRANGER, { reason: 'minor' });
+      const minor = await M.reportStoryboard(sql, 905, other, { reason: 'minor' }, deps);
+      const [oh] = await sql`select hidden_role from studio.voice_publications where id = ${other}`;
+      check('M. one "minor" report hides it at once (a stated rule), with no other report', minor.json.hidden === true && oh.hidden_role === 'rule');
+      // Three different reporters hide it at once: the second reporter leaves it up, the third hides it.
+      const second = await M.reportStoryboard(sql, 902, pub.id, { reason: 'other' }, deps);
+      check('M. two reporters: still up', second.json.hidden === false && (await publication(sql, pub.id))?.hidden === null && publicN() === pf.length);
+      r = await rep(STRANGER, { reason: 'violence' });
       j = (await r.json()) as { reported?: boolean; hidden?: boolean };
       const hid = await publication(sql, pub.id);
-      check('M. one "minor" report hides it at once (a stated rule): the page has no files', j.hidden === true && Boolean(hid?.hidden) && hid!.files.length === 0);
+      check('M. a third reporter hides it at once: the page has no files', j.hidden === true && Boolean(hid?.hidden) && hid!.files.length === 0);
       check('M. ... every public file is gone from the public store, each kept privately byte for byte', publicN() === 0 && privateN() === pf.length && pf.every((f) => sha(readFileSync(path.join(STORE, 'voice-hidden', f.key))) === f.sha256));
-      check('M. ... its maker sees why; the page\'s own data never names them', (await mine(NATE)).hiddenReason === 'minor' && hid!.fid === null && !('makerFid' in hid!));
-      check('M. ... logged: the reports, the rule\'s hide, the move', JSON.stringify(await logOf()) === JSON.stringify(['reported:reader', 'reported:reader', 'hidden:rule', 'moved_private:rule']), JSON.stringify(await logOf()));
-      check('M. ... a rule\'s hide stays in the queue until a moderator looks; the hidden list says who hid it', (await M.storyboardQueue(sql)).some((x) => x.id === pub.id && x.hidden?.role === 'rule') && (await M.hiddenStoryboards(sql)).some((x) => x.id === pub.id && x.hiddenBy === 'a stated rule' && x.reason === 'minor'));
-      // A moderator unhides it (the report was wrong): every file back in public, byte for byte.
+      check('M. ... its maker sees why; the page\'s own data never names them', (await mine(NATE)).hiddenReason === 'violence' && hid!.fid === null && !('makerFid' in hid!));
+      check('M. ... logged: the reports, the rule\'s hide, the move', JSON.stringify(await logOf()) === JSON.stringify(['reported:reader', 'reported:reader', 'reported:reader', 'hidden:rule', 'moved_private:rule']), JSON.stringify(await logOf()));
+      check('M. ... a rule\'s hide stays in the queue until a moderator looks; the hidden list says who hid it', (await M.storyboardQueue(sql)).some((x) => x.id === pub.id && x.hidden?.role === 'rule') && (await M.hiddenStoryboards(sql)).some((x) => x.id === pub.id && x.hiddenBy === 'a stated rule' && x.reason === 'violence'));
+      // A moderator unhides it (the reports were wrong): every file back in public, byte for byte.
       const u = await M.unhideStoryboard(sql, pub.id, GARANCE, 'moderator', deps);
       check('M. unhide: shown again, every file back in the public store byte for byte, the private copies removed', u.shown && u.restored === pf.length && u.failed === 0 && publicN() === pf.length && privateN() === 0 && pf.every((f) => sha(readFileSync(path.join(STORE, 'public', f.key))) === f.sha256) && (await publication(sql, pub.id))!.files.length === pf.length);
       check('M. ... and it leaves the queue', !(await M.storyboardQueue(sql)).some((x) => x.id === pub.id));
-      // Three different reporters hide it (counted since the last dismissal).
-      await M.dismissStoryboard(sql, pub.id, GARANCE);
-      await M.reportStoryboard(sql, 902, pub.id, { reason: 'other' }, deps);
-      const second = await M.reportStoryboard(sql, 903, pub.id, { reason: 'spam' }, deps);
-      check('M. dismissed reports don\'t count again; two new reporters: still up', second.json.hidden === false && (await publication(sql, pub.id))?.hidden === null && (await M.storyboardQueue(sql)).find((x) => x.id === pub.id)?.reporters === 2);
-      const third = await M.reportStoryboard(sql, 904, pub.id, { reason: 'other' }, deps);
-      check('M. a third reporter hides it at once', third.json.hidden === true && publicN() === 0 && privateN() === pf.length);
-      await M.unhideStoryboard(sql, pub.id, GARANCE, 'moderator', deps);
-      check('M. dismiss: it leaves the queue, and stays as it is', (await M.dismissStoryboard(sql, pub.id, GARANCE)) && !(await M.storyboardQueue(sql)).some((x) => x.id === pub.id) && publicN() === pf.length);
+      check('M. dismiss: logged, it stays out of the queue, and stays as it is', (await M.dismissStoryboard(sql, pub.id, GARANCE)) && !(await M.storyboardQueue(sql)).some((x) => x.id === pub.id) && publicN() === pf.length && (await logOf()).at(-1) === 'dismissed:moderator');
       // A moderator's own hide, then its maker takes it down: the private copies go too.
       const h = await M.hideStoryboard(sql, pub.id, GARANCE, 'moderator', null, null, deps);
       check('M. a moderator\'s hide: hidden, files moved; a second hide changes nothing', h.hidden && h.moved === pf.length && !(await M.hideStoryboard(sql, pub.id, GARANCE, 'moderator', null, null, deps)).hidden && privateN() === pf.length);
