@@ -1,0 +1,81 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<style>
+  body { margin: 0; font: 15px/1.45 Georgia, serif; background: #f3f1ec; color: #1d1b18; }
+  main { padding: 12px 14px 30px; }
+  .k { font: 11px/1.2 ui-monospace, Menlo, monospace; letter-spacing: .06em; text-transform: uppercase; color: #6b665d; }
+  h1 { font-size: 22px; margin: 6px 0 2px; }
+  .small { font-size: 12px; color: #5f5a51; }
+  .tag { display: inline-block; font: 10px ui-monospace, Menlo, monospace; border: 1px solid #8a8578; border-radius: 3px; padding: 0 4px; margin-right: 4px; color: #4a463f; }
+  .pinned { background: #f3f1ec; padding: 6px 0; display: flex; gap: 6px; overflow-x: auto; border-bottom: 1px solid #d8d3c9; }
+  .pin { flex: 0 0 auto; font-size: 12px; border: 1px solid #d8d3c9; border-radius: 14px; padding: 3px 9px; background: #faf9f6; }
+  .pin.done { border-color: #3d6b45; color: #2f5536; }
+  .g, .p { max-width: 86%; margin: 10px 0; padding: 9px 11px; border-radius: 12px; }
+  .g { background: #faf9f6; border: 1px solid #d8d3c9; border-top-left-radius: 3px; }
+  .p { background: #1d1b18; color: #faf9f6; margin-left: auto; border-top-right-radius: 3px; }
+  .by { font: 10px ui-monospace, Menlo, monospace; color: #6b665d; margin-bottom: 4px; }
+  .p .by { color: #c9c3b6; }
+  .book { background: #efeadf; border-left: 3px solid #8a7a52; padding: 6px 8px; font-size: 14px; margin-top: 6px; }
+  .draft { background: #fff; border: 1px dashed #8a8578; border-radius: 6px; padding: 7px 8px; font-size: 14px; margin-top: 6px; }
+  .row { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+  .btn { border: 1px solid #1d1b18; border-radius: 6px; padding: 5px 10px; font-size: 13px; background: #1d1b18; color: #faf9f6; }
+  .btn.q { background: none; color: #1d1b18; }
+  .scene { height: 150px; border-radius: 6px; background: linear-gradient(170deg,#3e4a57 0%,#6b7684 55%,#2b2f35 100%); margin-top: 6px; color: #fff; font: 10px ui-monospace, Menlo, monospace; display: flex; align-items: flex-end; padding: 6px; box-sizing: border-box; }
+  .looks { display: flex; gap: 6px; margin-top: 6px; }
+  .look { width: 62px; height: 88px; border-radius: 4px; background: linear-gradient(180deg,#9fb0c6,#5f6f86); border: 2px solid transparent; }
+  .look.on { border-color: #1d1b18; }
+  ol.plan { margin: 6px 0 0; padding-left: 18px; font-size: 13px; }
+  ol.plan li { margin: 3px 0; }
+  .ins { font: 10px ui-monospace, Menlo, monospace; border: 1px dashed #8a7a52; border-radius: 3px; padding: 0 3px; }
+  .refs { display: flex; gap: 5px; margin-top: 6px; }
+  .ref { flex: 1; font-size: 10px; text-align: center; }
+  .ref div { height: 54px; border-radius: 4px; background: linear-gradient(160deg,#b9c2c9,#7d8790); margin-bottom: 2px; }
+  .composer { margin-top: 10px; background: #f3f1ec; padding: 8px 0 0; display: flex; gap: 6px; }
+  .composer input { flex: 1; font: 14px Georgia, serif; padding: 8px; border: 1px solid #bdb6a8; border-radius: 18px; }
+</style></head><body><main>
+<p class="k">The Ephelion challenge · Storyboard · Draft</p>
+<p class="small" style="border:1px dashed #8a8578;padding:4px 6px">Mock: the person's messages and the guide's drafts here are typed by the coding agent to show the flow; none is real.</p>
+<h1>The Dead Hand of Egalitarianism…</h1>
+<p class="small">Your performance in Warm lecturer · 2:41 · <span class="tag">Book</span> c13-b64</p>
+<div class="pinned"><span class="pin done">✓ Scene</span><span class="pin done">✓ Clothing</span><span class="pin done">✓ Plan · 6 shots</span><span class="pin">Shot 1</span></div>
+
+<div class="g"><div class="by">Guide · gpt-oss-120b (open model)</div>Let's build the one scene every shot is filmed in. The book only shows how the family sees this speech:
+  <div class="book"><span class="tag">Book</span> c13-b63 · An image of Lord Ephelion appeared on the left side of the screen, and a multi-paragraph message on the right side.</div>
+  Where is he speaking from, and what is the light like?
+  <div class="row"><span class="btn q">Guide me</span><span class="btn q">I'll write it myself</span></div></div>
+
+<div class="p"><div class="by">You</div>An empty lecture hall in the Arctic, cold blue morning light, he stands at a lectern.</div>
+
+<div class="g"><div class="by">Guide · gpt-oss-120b (open model) · drafted from your words</div>The setting:
+  <div class="draft">An empty tiered lecture hall, pale blue morning light through tall windows, rows of dark seats; Lord Ephelion stands alone at a lectern of dark wood.</div>
+  <div class="row"><span class="btn">Use this</span><span class="btn q">Edit</span></div></div>
+
+<div class="g"><div class="by">Guide</div>Which look, and what does he wear in this scene?
+  <div class="looks"><div class="look on"></div><div class="look"></div><div class="look"></div></div></div>
+<div class="p"><div class="by">You</div>Look A, but with a long grey coat over it.</div>
+
+<div class="g"><div class="by">Guide · drafted from your words</div>Clothing, added to the scene:
+  <div class="draft">…in look A's clothes, with a long grey coat over them.</div>
+  <div class="row"><span class="btn">Use this</span><span class="btn q">Edit</span></div>
+  <div class="scene">The scene · made with look A · kept</div>
+  <div class="row"><span class="btn q">Try again (2 left)</span><span class="btn">Keep</span></div></div>
+
+<div class="g"><div class="by">Guide · gpt-oss-120b (open model) · the plan, from the speech's sentences</div>
+  <ol class="plan">
+    <li>Sentences 1–3 · Wide (the master)</li>
+    <li>4–5 · Medium</li>
+    <li>6 · Close-up</li>
+    <li>7–8 · <span class="ins">Insert, proposed</span> a family at dinner, the screen behind them</li>
+    <li>9–11 · Medium, from his left</li>
+    <li>12–14 · Wide (the master)</li>
+  </ol>
+  <div class="row"><span class="btn">Use this plan</span><span class="btn q">Change it</span></div></div>
+
+<div class="g"><div class="by">Guide · gpt-oss-120b (open model) · shot 1</div>
+  <div class="draft">The scene as kept, from the back of the hall: Lord Ephelion small at the lectern, the rows of empty seats between us and him. Camera: a wide shot that shows the whole place. The same place, light, clothes and person as the first reference pictures.</div>
+  <div class="refs"><div class="ref"><div></div>the scene · anchor</div><div class="ref"><div></div>look A · anchor</div><div class="ref"><div style="background:#e6e1d6"></div>no previous shot</div></div>
+  <div class="small">Why: shot 1 opens the scene, so only the anchors.</div>
+  <div class="row"><span class="btn">Make the picture · ≈ $0.02</span><span class="btn q">Edit</span></div></div>
+
+<div class="composer"><input placeholder="Ask the guide, e.g. “make him lean in on shot 4”" /><span class="btn">Send</span></div>
+</main></body></html>

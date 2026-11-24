@@ -679,7 +679,8 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
                 <>
                   <SignedAudio key={picked.presetId} path={`/api/voice/reading?speech=${s.speech.id}&preset=${picked.presetId}`} label="Play the reading" />
                   <p className="vr-row">
-                    <a className="vr-btn vr-small-btn" href={`/storyboard/board/${reading.id}`}>Make the storyboard</a>
+                    <a className="vr-btn vr-small-btn" href={`/storyboard/guide/${reading.id}`}>Storyboard it with the guide</a>{' '}
+                    <a className="vr-btn vr-quiet vr-small-btn" href={`/storyboard/board/${reading.id}`}>Write it myself</a>
                     <span className="vr-small">Your own storyboard on this reading: others can make theirs on it too.</span>
                   </p>
                 </>
@@ -875,7 +876,10 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
                         </button>
                       </span>
                     ) : d.kind === 'performance' ? (
-                      <a className="vr-btn vr-small-btn vr-remove" href={`/storyboard/board/${d.id}`}>Make the storyboard</a>
+                      <>
+                        <a className="vr-btn vr-small-btn vr-remove" href={`/storyboard/guide/${d.id}`}>Storyboard it with the guide</a>{' '}
+                        <a className="vr-btn vr-quiet vr-small-btn vr-remove" href={`/storyboard/board/${d.id}`}>Write it myself</a>
+                      </>
                     ) : null}{' '}
                     <VoiceRemove className="vr-btn vr-quiet vr-small-btn vr-remove" label="Remove this draft" question={REMOVE_DRAFT} disabled={busy !== null} onRemove={() => removeDraft(d.id)} />
                   </li>

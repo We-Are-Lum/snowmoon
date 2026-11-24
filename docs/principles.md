@@ -74,6 +74,9 @@ coding agent and its helpers are in `docs/prompts/`.
   And (Nate, 2026-11-21: "confirm whether transcription requests leave a history item … If they do, delete those too";
   this sentence reread by him the same day): ElevenLabs keeps each transcript by its id (not in history), so the flow
   deletes it with the same retries, and a planted skipped transcript delete is caught too.
+- `P2u` (reread by Nate 2026-11-23, as drafted): a storyboard picture the guide drafted keeps the person's request word for word, the
+  guide's model, its draft and the prompt as sent, each reference with who chose it and why, and every edit; a planted
+  recipe without the request must fail (`scripts/check-principles.ts`, `test:voice` section GU).
 - `P1i` (reread by Nate 2026-11-21; v3 reread 2026-11-22): the own-voice consent shown is `own-voice-v3`, and only by the voice pages and routes,
   only while `P1h` passes; `own-voice-v1` is used by nothing under `src/`; v2 stays on file, retired.
 - `npm run test:db`: after 0005, a recipe is public only if it made a
@@ -191,6 +194,11 @@ it is named, its writers are credited, and no agent or model on this site writes
 a version, its credit says so; each version records that, set by Nate. A recording is checked against, and tied to, the
 exact version it was made from. (The three speeches of 2026-11-22: `config/voice-speeches.json`, from the Google Doc
 "Lord Ephelion: three speeches v2 (DRAFT)", each version's `aiHelp` set by Nate; checked by `test:voice`, section I.)
+
+**Storyboard pictures (owner, 2026-11-22; reread by the owner 2026-11-22).** Storyboard pictures: the person asks the
+guide in their own words; the guide may write each picture's prompt and choose its reference pictures, never the
+speech's words. The recipe keeps the person's request, the guide's model, the prompt it wrote, the references it chose,
+and every edit. (Proposal: `docs/proposals/storyboard-scene.md`, v3, the guided dialogue; not built yet.)
 
 **Recorded exception.** The house narration keeps 148 model-drafted spoken
 descriptions of screens, figures and lyric cards. Each is preceded by a tone

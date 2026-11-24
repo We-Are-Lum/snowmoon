@@ -1101,6 +1101,30 @@ add({
   },
 });
 
+add({
+  id: 'P2u',
+  principle: 2,
+  name: "a storyboard picture the guide drafted keeps the person's request word for word, the guide's model, its draft, every reference with why, and every edit (Nate's ruling, 2026-11-22)",
+  load: async () => {
+    const { guideRecipe } = await import('../src/lib/voice/guide');
+    // The real recipe builder (shot-picture.ts calls it), on a guide draft the person edited.
+    const recipe = guideRecipe({
+      guide: { model: CHAT.model, host: CHAT.route, open: true },
+      request: { text: 'Make him lean in on shot 4.', id: '00000000-0000-4000-8000-000000000001', madeAt: '2026-11-23T00:00:00.000Z' },
+      drafted: { prompt: 'Lord Ephelion leans over the lectern.', references: [{ role: 'anchor-scene', ref: 'scene', why: 'the place and the light' }] },
+      sent: { prompt: 'Lord Ephelion leans over the lectern, closer.', references: [{ role: 'anchor-scene', ref: 'scene' }] },
+    });
+    return { recipe: JSON.parse(JSON.stringify(recipe)) as Record<string, unknown> };
+  },
+  run: async ({ recipe }) => {
+    const { guideRecipeProblems } = await import('../src/lib/voice/guide');
+    return guideRecipeProblems(recipe as never).map((x) => `a guided picture's recipe: ${x}`);
+  },
+  plant: (c) => {
+    delete (c.recipe as { request?: unknown }).request;
+  },
+});
+
 // ---------------------------------------------------------------------------
 // P3. The allowlist records each model's license and whether its weights are
 //     open; every model in use is on it; closed models in use are reported.
