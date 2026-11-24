@@ -16,7 +16,7 @@ every legal text for his "reread"; every migration for his "applied".
 
 ## Done (live)
 
-- **Since 2026-11-23:** the record page's top and Learn more (#219), take down on a reading (#221), the "stays on this
+- **Since 2026-11-23:** the storyboard guide over the one-scene engine (#224, migrations 0048 and 0049); the record page's top and Learn more (#219), take down on a reading (#221), the "stays on this
   device" line (#223, reread), Remove my storyboard with an in-page confirm (#222).
 - **Recording:**
   - consent own-voice-v3 (reread);
@@ -35,9 +35,9 @@ every legal text for his "reread"; every migration for his "applied".
 
 | What | State | Needs from Nate |
 |---|---|---|
-| #224, the storyboard guide over the one-scene engine | migrations 0048 and 0049 applied (2026-11-23); check:ui on the branch running | merges on Nate's word once check:ui shows only the known /challenge/make items |
-| `voice-take-caps`: 2 takes a person, 6,000 credits a day, readings from the admins' pool | built, test:voice to run | the merge word |
-| Moderation (report, the admin queue, hide), on its own branch | being built | reread: the ntfy item; test `NEXT_voice_moderation.sql` |
+| `voice-take-caps`: 2 takes a person, 6,000 credits a day, readings from the admins' pool | test:voice 277 ok | a PR and the merge word |
+| `voice-spoken-418`: the published page's React #418 | fixed and verified on a production build; test:voice 276 ok | a PR and the merge word |
+| #225, moderation (report, the admins' queue, a reversible hide) | test:voice 295 ok | reread: the ntfy item; test, then apply, `NEXT_voice_moderation.sql` |
 
 ## Left before opening
 
@@ -48,14 +48,14 @@ every legal text for his "reread"; every migration for his "applied".
 3. **Caps and the ElevenLabs plan**: the caps are decided (Numbers, below; branch `voice-take-caps`). 6,000 credits a
    day is about 180,000 a month, still above the plan's 121,000: the plan, or the cap, before `open`.
 4. **Who pays for everyone's storyboard pictures**: proposed in Numbers, below, for Nate's decision.
-5. **Moderation of published storyboards**: Nate's go (2026-11-23), being built on its own branch.
+5. **Moderation of published storyboards**: built as proposed (#225, not merged).
 6. **The challenge's own rules** (a reread). Terms has §6e for the remix challenge. The Ephelion challenge needs its own
    short section: the dates, who can take part, what counts (a published storyboard of one of the four speeches), and
    any reward. Drafted when Nate gives the dates and rewards.
 7. **The ready-made readings**: 8 of the 9 still to make (the three invented speeches × three voices, less the one
    made), by an admin on production, about 1,700 credits each, and timed on first storyboard (about 55 credits each).
 8. **The legal texts for opening** (reread):
-   - the guide's two Privacy lines and the scene-references line (if the guide ships);
+   - the ntfy item for storyboard reports (#225);
    - the Ephelion challenge section;
    - Privacy for everyone's storyboards (today's lines were written for the admins' trial: check they read true once
      `open`).
