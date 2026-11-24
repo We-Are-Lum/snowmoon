@@ -58,7 +58,8 @@ every legal text for his "reread"; every migration for his "applied".
 7. **The ready-made readings**: 8 of the 9 still to make (the three invented speeches × three voices, less the one
    made), by an admin on production, about 1,700 credits each, and timed on first storyboard (about 55 credits each).
 8. **The legal texts for opening** (reread):
-   - the ntfy item for storyboard reports (#225);
+   - the ntfy item for storyboard reports (#225): reread 2026-11-23;
+   - #229's Privacy line (storyboard pictures as a daily count) and its out-of-cap lines;
    - the Ephelion challenge section;
    - Privacy for everyone's storyboards (today's lines were written for the admins' trial: check they read true once
      `open`).
@@ -97,8 +98,8 @@ is $1.10 with one try each, about $1.60 with 6 redos. The pool covers about 12 f
    the default model.
 2. Done: the take caps (#228) and the #418 fix (#227). Next: moderation (#225: SQL test, "applied", merge); the
    storyboard pictures (#229: reread, SQL test, "applied", merge); #231.
-3. Launch decisions: the ElevenLabs plan for 6,000 credits a day; the storyboard pictures' numbers and their lines; the
-   challenge section drafted and reread.
+3. Launch decisions: the challenge section drafted and reread; the reviews (pictures after the first three days, takes
+   after the challenge).
 4. The eight readings made and timed (admin, production).
 5. The switches, one at a time, with live checks after each:
    - `publish` (admins first, for a day);
