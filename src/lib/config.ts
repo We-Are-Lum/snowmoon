@@ -1133,6 +1133,27 @@ export const MINPENTAI_PLAY = {
   dailyKeepDays: 90,
 } as const;
 
+/**
+ * The admins' private review of the poidh backstory bounty (owner, 2026-11-23; branch bounty-review; /admin/bounty):
+ * poidh.xyz's bounty 1546, "Snowmoon Character Backstory", which is bounty 560 on PoidhV3 on Base. Public values, not
+ * secrets. The page reads the bounty and its claims on Base (through src/lib/wallet/chain.ts: BASE_RPC_URL, else Base's
+ * public endpoint), read-only: nothing is sent to poidh, no transaction, no wallet. The winner is picked on poidh.xyz.
+ */
+export const BOUNTY_REVIEW = {
+  bountyId: 560,
+  poidhUrl: 'https://poidh.xyz/base/bounty/1546',
+  /** PoidhV3 on Base (verified source on Basescan; the address poidh-app uses). */
+  core: '0x5555Fa783936C260f77385b4E153B9725feF1719' as `0x${string}`,
+  /** poidh's claim NFT (PoidhV3's poidhNft(), read on Base 2026-11-23): a claim's picture is its tokenURI. */
+  nft: '0x27E117Cc9A8DA363442e7Bd0618939E3EEEACF6A' as `0x${string}`,
+  /** Claims are read again at most this often (a claim never changes once made; new ones arrive). */
+  cacheMs: 60_000,
+  /** IPFS addresses are read through this public gateway (server-side, for admins only). */
+  ipfsGateway: 'https://ipfs.io/ipfs/',
+  /** A private note's length. */
+  noteMax: 280,
+} as const;
+
 export function appUrl(): string {
   return process.env.NEXT_PUBLIC_URL?.replace(/\/$/, '') || 'http://localhost:3000';
 }
