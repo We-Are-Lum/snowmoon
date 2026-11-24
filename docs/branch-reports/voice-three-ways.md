@@ -1,3 +1,50 @@
+# handoff (2026-11-24, for the cloud session carrying on)
+
+Branch `voice-three-ways`, worktree `/Users/nathan/snowmoon-voice-three-ways` on Nate's laptop. Everything is committed and
+pushed. No PR is open yet. Merge only on Nate's word.
+
+## Done
+- **The three ways:** the server, the routes, the pages, the guide's timing step, the credits, and the SQL file. All are described under "What's built" below.
+- **Tests:**
+  - test:voice section 3W, 27 checks;
+  - check:principles P2v, with a planted fault.
+- **Merged in:** `origin/voice-improv` (its WIP as of 3e5beadb).
+- **Last results** (before the latest commits): tsc had 2 small errors, since fixed. The 3W checks passed until a seed bug crashed the run, also fixed. The re-run is queued: `/Users/nathan/ephelion-voice-screens/w3/t2.sh`, log `/tmp/w3-t2.log`.
+- **Known test:voice failures that aren't this branch's:** G (reading timing), R (kept again) and $ (call counts). They come from voice-improv's WIP, which times readings when they're made; its own tests aren't updated yet.
+
+## Left, in order
+1. Read `/tmp/w3-t2.log` (or re-run it). Fix any 3W, tsc or check:ui failures this branch caused.
+2. Upload the screenshots: `node /Users/nathan/ephelion-voice-screens/w3/page.mjs`. It prints the review URL. Put the URL in the "Review page" section below and in the PR.
+3. Merge `origin/guide-fixes` in once it has commits. It moves `/storyboard/record` to `/ephelion`; move the VoiceWays mount, the links and `shots.mts` with it. Re-run the tests.
+4. Merge `origin/voice-improv` in again if it has new commits.
+5. Open the PR (not merged). Its title says "not to merge yet: needs Nate's reread and word". The body carries the words, the proposed team storyboards, the SQL path and the screenshot link.
+6. After #225 (moderation) merges, hidden publications must not count. Add `hidden_at is null` to `sharedTake`, `sharedTakes`, `reusableBoards`, and to the check in `publish_voice_board` in `NEXT_voice_three_ways.sql`.
+
+## How to run the tests
+- **Lock:** every tsc, test, build and server holds `/Users/nathan/.snowmoon-heavy.lock`. Take it with `mkdir`, write an owner line, and remove it with `rm -rf` in a trap. Background jobs over 30 minutes need a long timeout.
+- **`.env.local`:** never run a server on it. Move the worktree's `.env.local` aside by its absolute path and put it back after. Never touch main's.
+- **check:ui:** run it only when the load is under 8.
+- **Commands** (from the worktree):
+  - `npx tsc --noEmit -p .`
+  - `npm run -s test:voice`
+  - `npm run -s test:challenge`
+  - `env -u VERCEL -u VERCEL_ENV STUDIO_DATABASE_URL= npm run build`
+  - `npx tsx scripts/voice-demo-db.ts --port=54397 &`
+  - `env -u VERCEL -u VERCEL_ENV STUDIO_DATABASE_URL=postgres://studio_writer@127.0.0.1:54397/postgres npx next start -p 3097 -H 127.0.0.1 &`
+  - `npm run -s check:principles -- --url=http://127.0.0.1:3097`
+  - `npx tsx scripts/check-ui.ts --url=http://127.0.0.1:3097`
+- **Expected:** check:principles fails only P6a and P6d (local-only). check:ui fails only the two `/challenge/make` "Make it" items.
+- **All of it in one go:** `/Users/nathan/ephelion-voice-screens/w3/t2.sh`, which also takes the screenshots with `w3/shots.mts`.
+
+## Waiting for Nate (paste)
+1. **Reread** the three choices' words and the other page lines (table and list below).
+2. **Choose the team-made storyboards** for `VOICE.teamBoards`. The proposal is below: finish the "Doing fine" reading board `9c51bd22-ade7-4122-acdc-8951ec69f07a`, and one complete c13-b64 board.
+3. **SQL to test:** `supabase/migrations/NEXT_voice_three_ways.sql`, parts A, B, C and D, as postgres. It adds `voice_boards.source`, the guide's `timing` step, and replaces `publish_voice_board` and `take_down_voice_publication`.
+4. **Legal:** `docs/legal/voice-three-ways-draft.md`. Nothing in this release; one Privacy §6 sentence is proposed for the release that turns publishing on.
+5. **Principles:** `P2v`, proposed, for his reread.
+
+---
+
 # Branch voice-three-ways: three ways in (DRAFT)
 
 Nate's item 3 of 2026-11-24. Built by the coding agent (Claude, a closed model by Anthropic). Its own PR; merge only on
