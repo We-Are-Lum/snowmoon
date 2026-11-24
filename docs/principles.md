@@ -460,12 +460,12 @@ A hide still wins everywhere, and with no database none shows (`npm run test:add
 - `P5a`: no migration adds a canon/official/featured/pinned field, and no UI
   string uses those words except to deny them. (The pick table is named for what it is, a pick.)
 - `P5b`: code that checks `MODERATOR_FIDS` or `ADMINS` does not publish, order or sort, with one exception:
-  admin code may write `studio.admin_picks`, and nothing else. **Exception for admin-only pages (owner, 2026-11-05;
+  admin code may write `studio.admin_picks`, and nothing else; and, from /admin/bounty only, its private review tables (studio.review_labels, studio.review_notes, studio.review_log), which no public page, feed or tool reads. **Exception for admin-only pages (owner, 2026-11-05;
   approved by the owner 2026-11-05, coordinator-reviewed, with the narrowed "publishes" test below):** "P5 is about public steering." A page or route that only admins can open, gated by the
   existing admin check and answering 404 to everyone else (`if (!isAdmin(…)) return …404…` in the same file), may
   sort by time or by counts, because no one else sees what it sorts. It still may not publish. A public page that
   checks `isAdmin` and sorts still fails (the planted fault: a public page sorting by likes). The rule is in
-  `scripts/lib/p5b.ts`; `npm run test:admin-activity` proves each of its faults. A read that filters on
+  `scripts/lib/p5b.ts`; `npm run test:admin-activity` proves each of its faults. Only files under `src/lib/review/` may write the review tables (planted fault: a route writing `studio.review_labels`; `npm run test:bounty-review`). A read that filters on
   `status = 'published'` is not publishing; a status set in SQL, given in a row, or assigned in code is.
 - `P5j` (the ruling above, reread by the owner 2026-11-19): admin publishing code touches only the edition's chapter
   pictures. Any file that writes a chapter-picture table (`studio.chapter_picture_versions`, `_decisions`, `_looks`,

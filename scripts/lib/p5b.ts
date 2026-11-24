@@ -20,7 +20,29 @@ export const ADMIN_404_GATE = /if\s*\(\s*!isAdmin\([^)]*\)\s*\)\s*return\b[^;\n]
 const PUBLISHES = /status\s*:\s*['"](published|draft)['"]|set\s+status\s*=\s*'(published|draft)'|^\s*[A-Za-z_$][\w$.]*\.status\s*=\s*['"](published|draft)['"]\s*;/im;
 const ORDERS = /order by|\.sort\(/i;
 
+/**
+ * The admins' private review tables (owner's P5b line, reread 2026-11-23): "from /admin/bounty only, its private review
+ * tables (studio.review_labels, studio.review_notes, studio.review_log), which no public page, feed or tool reads".
+ * Only src/lib/review/ may write them, and no other file may name them in SQL at all (so nothing else reads them).
+ */
+export const REVIEW_DIR = 'src/lib/review/';
+const REVIEW_TABLE = /\bstudio\.review_(labels|notes|log)\b/;
+const REVIEW_WRITE = /\b(insert\s+into|update|delete\s+from|truncate(?:\s+table)?)\s+studio\.review_(labels|notes|log)\b/i;
+function reviewProblems(files: SrcFile[]): string[] {
+  return files
+    .filter((f) => !f.file.startsWith(REVIEW_DIR))
+    .flatMap((f) =>
+      REVIEW_WRITE.test(f.text) ? [`${f.file}: writes the private review tables; only ${REVIEW_DIR} may (P5b)`]
+      : REVIEW_TABLE.test(f.text) ? [`${f.file}: reads the private review tables; only ${REVIEW_DIR} may (P5b: no public page, feed or tool reads them)`]
+      : [],
+    );
+}
+
 export function p5bProblems(files: SrcFile[]): string[] {
+  return [...reviewProblems(files), ...p5bAdminProblems(files)];
+}
+
+function p5bAdminProblems(files: SrcFile[]): string[] {
   return files
     .filter((f) => ADMIN_CODE.test(f.text) && !f.file.endsWith('config.ts') && !f.file.endsWith('src/lib/admins.ts'))
     .map((f) => ({ ...f, text: f.text.replace(/(insert into|update|delete from)\s+studio\.admin_picks\b[^`]*`/gi, '') }))
@@ -37,6 +59,8 @@ export const P5B_PLANTS: Record<string, SrcFile> = {
   publicSort: { file: 'src/app/planted/page.tsx', text: "const admin = isAdmin(fid);\nconst rows = images.sort((a, b) => b.likes - a.likes);" },
   assignPublish: { file: 'src/lib/planted-assign.ts', text: "if (MODERATOR_FIDS.includes(fid)) {\n  item.status = 'published';\n}" },
   gatedPublish: { file: 'src/lib/planted-admin.ts', text: "if (!isAdmin(fid)) return { status: 404 };\nawait sql`update studio.elements set status = 'published'`;" },
+  reviewWriteElsewhere: { file: 'src/app/api/admin/planted/route.ts', text: "if (!isAdmin(fid)) return { status: 404 };\nawait sql`insert into studio.review_labels (kind, subject, label, set_by) values ('bounty_claim', '560:1', 'top', ${fid})`;" },
+  reviewReadInFeed: { file: 'src/lib/feed-planted.ts', text: "const top = await sql`select subject from studio.review_labels where label = 'top'`;" },
 };
 
 /**
