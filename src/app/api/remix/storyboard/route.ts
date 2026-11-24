@@ -29,8 +29,8 @@ export async function POST(request: Request) {
   if ((await boardsToday(sql, person)) >= PER_DAY) return NextResponse.json({ error: `You can save ${PER_DAY} storyboards a day. More tomorrow (00:00 UTC).` }, { status: 429 });
   const c = await checkBoard(sql, person, adaptation, version, body);
   if (!c.ok) return NextResponse.json({ error: c.error }, { status: 400 });
-  const wallet = person < 0 ? getWallet(request) : null;
-  const by = wallet ? { name: shortAddress(wallet.address) } : (socialByline(request, person) ?? (await bylineName(person, body.nameProof)));
+  const wallet = person < 0 ? await getWallet(request) : null;
+  const by = wallet ? { name: shortAddress(wallet.address) } : ((await socialByline(request, person)) ?? (await bylineName(person, body.nameProof)));
   const b = await saveBoard(sql, { adaptation, version, person, title: c.title, items: c.items, takes: c.takes, byName: by.name });
   return NextResponse.json({ id: b.id, page: `/storyboard/${b.id}` }, { headers: { 'Cache-Control': 'no-store' } });
 }

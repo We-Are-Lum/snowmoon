@@ -63,7 +63,7 @@ export async function POST(request: Request) {
   // signed in with; a Bluesky post by the Bluesky account they are signed in with (its DID); a Lens post by the Lens
   // account they are signed in with (its author). Others are refused until linked accounts exist (overnight run
   // 2026-11-05, item 4).
-  const social = getSocial(request);
+  const social = await getSocial(request);
   const farcaster = await getFid(request);
   const mine = writerCheck(got.post, {
     fid: farcaster ?? 0,

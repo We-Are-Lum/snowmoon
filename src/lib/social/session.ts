@@ -30,16 +30,19 @@ export interface SocialSession {
   /** Lens: "lens/<name>"; Bluesky: the handle. Null when there is none we could check. */
   handle: string | null;
   exp: number;
+  /** When it was issued, ms since the epoch (as a wallet session's: src/lib/wallet/session.ts). */
+  at: number;
 }
 
 const SUBJECT = { lens: /^0x[0-9a-f]{40}$/, bluesky: /^did:(plc:[a-z2-7]{24}|web:[a-z0-9.-]{1,253})$/ } as const;
 export const subjectOk = (kind: SocialKind, subject: string) => SUBJECT[kind].test(subject);
 
-export function signSocialSession(s: Omit<SocialSession, 'exp'>, hours: number = SOCIAL_SIGN_IN.sessionHours): string | null {
+export function signSocialSession(s: Omit<SocialSession, 'exp' | 'at'>, hours: number = SOCIAL_SIGN_IN.sessionHours): string | null {
   const k = key('session');
   if (!k) return null;
-  const exp = Math.floor(Date.now() / 1000 + hours * 3600);
-  const body = Buffer.from(JSON.stringify({ ...s, exp })).toString('base64url');
+  const at = Date.now();
+  const exp = Math.floor(at / 1000 + hours * 3600);
+  const body = Buffer.from(JSON.stringify({ ...s, exp, at })).toString('base64url');
   return `s1.${body}.${createHmac('sha256', k).update(body).digest('base64url')}`;
 }
 
@@ -49,10 +52,11 @@ export function readSocialSession(token: string | null | undefined): SocialSessi
   const [, body, sig] = token.split('.');
   if (!body || !sig || !same(Buffer.from(sig, 'base64url'), createHmac('sha256', k).update(body).digest())) return null;
   try {
-    const s = JSON.parse(Buffer.from(body, 'base64url').toString()) as SocialSession;
+    const s = JSON.parse(Buffer.from(body, 'base64url').toString()) as Omit<SocialSession, 'at'> & { at?: unknown };
     if (!Number.isInteger(s.account) || s.account <= 0 || (s.kind !== 'lens' && s.kind !== 'bluesky') || !subjectOk(s.kind, s.subject)) return null;
     if (s.exp * 1000 <= Date.now()) return null;
-    return s;
+    // A token from before 2026-11-23 has no `at`: it was issued 24 hours before it expires.
+    return { ...s, at: Number.isSafeInteger(s.at) ? (s.at as number) : (s.exp - 24 * 3600) * 1000 };
   } catch {
     return null;
   }

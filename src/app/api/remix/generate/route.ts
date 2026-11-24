@@ -69,8 +69,8 @@ export async function POST(request: Request) {
   const made = g.made;
 
   const sha256 = createHash('sha256').update(made.bytes).digest('hex');
-  const wallet = person < 0 ? getWallet(request) : null;
-  const by = wallet ? { name: shortAddress(wallet.address), source: 'wallet' as const } : (socialByline(request, person) ?? (await bylineName(person, body.nameProof)));
+  const wallet = person < 0 ? await getWallet(request) : null;
+  const by = wallet ? { name: shortAddress(wallet.address), source: 'wallet' as const } : ((await socialByline(request, person)) ?? (await bylineName(person, body.nameProof)));
   const url = await putFrame(sha256, made.bytes);
   const model = IMAGES.editModel;
   const frame = await saveFrame(sql, {

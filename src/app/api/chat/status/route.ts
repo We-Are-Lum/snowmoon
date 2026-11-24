@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   const person = await getPerson(request);
   if (person === null) return NextResponse.json({ error: 'Sign in to use the assistant' }, { status: 401 });
   // Who can ask comes first, as before (an unlinked wallet was answered 403 on any deployment). No network is asked.
-  const gate = await mayAsk(db(), person, { lookUp: false, signedInAs: signedInAs(request) }).catch(() => null);
+  const gate = await mayAsk(db(), person, { lookUp: false, signedInAs: await signedInAs(request) }).catch(() => null);
   if (gate && !gate.ok) return NextResponse.json({ error: gate.error, reason: gate.reason, account: gate.account }, { status: 403 });
   // host: the gateway, named only while it is the fallback route.
   const base = { model: CHAT.modelName, host: CHAT.gatewayFallback ? CHAT.host : null, provider: CHAT.providerName, route: CHAT.route, perDay: CHAT.messagesPerDay };

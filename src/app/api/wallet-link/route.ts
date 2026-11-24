@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
-import { getFid, getWallet } from '~/lib/auth';
+import { getFid, getWallet, walletFrom } from '~/lib/auth';
 import { WALLET_LINKS } from '~/lib/config';
 import { db } from '~/lib/db';
 import { link, unlink, unlinkFromFid } from '~/lib/wallet/links';
-import { readSession } from '~/lib/wallet/session';
 
 /**
  * Link this wallet to your Farcaster account, or unlink it (owner, 2026-10-22: "After you are signed in with a
@@ -29,7 +28,7 @@ export async function POST(request: Request) {
   if (!WALLET_LINKS.offer) return no('Not found', 404);
   const fid = await getFid(request);
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster first' }, { status: 401, headers: noStore });
-  const w = readSession(request.headers.get('x-wallet-session'));
+  const w = await walletFrom(request.headers.get('x-wallet-session'));
   if (!w) return NextResponse.json({ error: 'Sign in with the wallet too' }, { status: 401, headers: noStore });
   const sql = db();
   if (!sql) return no('Not available here', 503);
@@ -56,7 +55,7 @@ export async function DELETE(request: Request) {
     if (done === 'none') return no('This wallet isn’t linked to this account.', 409, done);
     return NextResponse.json({ unlinked: true }, { headers: noStore });
   }
-  const w = getWallet(request) ?? readSession(request.headers.get('x-wallet-session'));
+  const w = (await getWallet(request)) ?? (await walletFrom(request.headers.get('x-wallet-session')));
   if (!w) return NextResponse.json({ error: 'Sign in with the wallet or the linked Farcaster account first' }, { status: 401, headers: noStore });
   const sql = db();
   if (!sql) return no('Not available here', 503);

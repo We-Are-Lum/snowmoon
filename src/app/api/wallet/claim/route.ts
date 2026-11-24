@@ -11,7 +11,7 @@ import { IMAGE_WORDING } from '~/lib/images/wording';
  */
 const W = IMAGE_WORDING.prepaid;
 export async function POST(request: Request) {
-  const w = getWallet(request);
+  const w = await getWallet(request);
   if (!w) return NextResponse.json({ error: 'Sign in with a wallet first' }, { status: 401 });
   const sql = db();
   if (!sql || !prepaidOpen()) return NextResponse.json({ error: W.notOpen }, { status: 503 });
