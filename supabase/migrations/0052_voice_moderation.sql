@@ -1,8 +1,7 @@
--- NEXT_voice_moderation.sql: reporting and hiding published storyboards (Nate, 2026-11-23, branch voice-moderation;
+-- 0052_voice_moderation.sql (was NEXT_voice_moderation.sql; numbered at merge, 2026-11-24): reporting and hiding published storyboards (Nate, 2026-11-23, branch voice-moderation;
 -- docs/proposals/storyboard-moderation.md on branch ephelion-launch-list, approved with his answers: the same rules as
--- images, a notice on a hidden page, the admins moderate). Not numbered until merge: it takes the next free number then,
--- checked against origin/main and production. NOT APPLIED until Nate applies it; the branch merges only after he says
--- "applied". Drafted by the coding agent (Claude, a closed model by Anthropic); tested in PGlite by the agent (npm run
+-- images, a notice on a hidden page, the admins moderate). APPLIED on production by Nate on 2026-11-23/24 (as at b1170584,
+-- A, B, C run at once: Success). Drafted by the coding agent (Claude, a closed model by Anthropic); tested in PGlite by the agent (npm run
 -- test:voice, every migration in order). Requires 0046_ephelion_voice_publish.sql (applied).
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:

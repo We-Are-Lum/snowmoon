@@ -50,8 +50,8 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: the day 30-day sign-ins (PR #230, Privacy words 1a8wumq, reread 2026-11-23) merge and go live, 2026-11-24
-  // (PT). If the merge moves, this moves with it. (Before: 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
+  // MERGE DAY: the day storyboard moderation (PR #225, Privacy words 1ou05nb: #230's 1a8wumq with the ntfy item) merges
+  // and goes live, 2026-11-24 (PT). If the merge moves, this moves with it. (Before: 2026-11-24, PR #230, 30-day sign-ins; 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
   // 2026-11-21, the Ephelion voice; 2026-11-21, PR #204; 2026-11-20, PR #196; 2026-11-19, PR #191.)
   effective: '2026-11-24',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
