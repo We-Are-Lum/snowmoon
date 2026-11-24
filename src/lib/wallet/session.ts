@@ -7,7 +7,8 @@ import { IMAGES } from '../config';
  * our server with a key derived from IMAGES_TICKET_SECRET, so nothing is stored for them:
  * - the nonce in the message the wallet signs: random, good for ten minutes;
  * - the session token sent back as a bearer header: the account number and address, good for
- *   IMAGES.prepaid.sessionHours. It starts with "w1." so it is never mistaken for a Farcaster token.
+ *   IMAGES.prepaid.sessionHours (SESSIONS: 30 days), with when it was issued. It starts with "w1." so it is never
+ *   mistaken for a Farcaster token. Its signature here; whether "Sign out on every device" ended it, in src/lib/auth.ts.
  * A wallet session is accepted only by the image routes, consent and "Make your own" (src/lib/auth.ts getPerson).
  */
 const NONCE_MINUTES = 10;
@@ -41,13 +42,19 @@ export interface WalletSession {
   address: `0x${string}`;
   /** Seconds since the epoch. */
   exp: number;
+  /**
+   * When it was issued, ms since the epoch: "Sign out on every device" ends every session issued before it
+   * (src/lib/session-ends.ts). A token from before 2026-11-23 has none: it was issued 24 hours before it expires.
+   */
+  at: number;
 }
 
 export function signSession(account: number, address: string): string | null {
   const k = key('session');
   if (!k) return null;
-  const exp = Math.floor(Date.now() / 1000 + IMAGES.prepaid.sessionHours * 3600);
-  const body = Buffer.from(JSON.stringify({ account, address: address.toLowerCase(), exp })).toString('base64url');
+  const at = Date.now();
+  const exp = Math.floor(at / 1000 + IMAGES.prepaid.sessionHours * 3600);
+  const body = Buffer.from(JSON.stringify({ account, address: address.toLowerCase(), exp, at })).toString('base64url');
   return `w1.${body}.${createHmac('sha256', k).update(body).digest('base64url')}`;
 }
 
@@ -57,9 +64,9 @@ export function readSession(token: string | null | undefined): WalletSession | n
   const [, body, sig] = token.split('.');
   if (!body || !sig || !same(Buffer.from(sig, 'base64url'), createHmac('sha256', k).update(body).digest())) return null;
   try {
-    const s = JSON.parse(Buffer.from(body, 'base64url').toString()) as WalletSession;
+    const s = JSON.parse(Buffer.from(body, 'base64url').toString()) as Omit<WalletSession, 'at'> & { at?: unknown };
     if (!Number.isInteger(s.account) || s.account <= 0 || !/^0x[0-9a-f]{40}$/.test(s.address) || s.exp * 1000 <= Date.now()) return null;
-    return s;
+    return { account: s.account, address: s.address, exp: s.exp, at: Number.isSafeInteger(s.at) ? (s.at as number) : (s.exp - 24 * 3600) * 1000 };
   } catch {
     return null;
   }

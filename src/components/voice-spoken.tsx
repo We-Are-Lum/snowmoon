@@ -33,6 +33,11 @@ export function VoiceSpoken(p: SpokenProps) {
   const stop = useRef<AbortController | null>(null);
   const audioEl = useRef<HTMLAudioElement | null>(null);
   const [ended, setEnded] = useState(false);
+  // Whether this browser can record a video, read after the page has loaded: the server has no MediaRecorder, so
+  // reading it while rendering made the server's text differ from the browser's (React #418, 2026-11-23). Unknown
+  // (null) until then: the button waits, and no "can't record" line is shown.
+  const [canVideo, setCanVideo] = useState<boolean | null>(null);
+  useEffect(() => setCanVideo(Boolean(videoType())), []);
   const pictureFor = useMemo(() => new Map(p.files.filter((f) => f.role === 'shot').map((f) => [f.shotKey!, f.url])), [p.files]);
   const closing = p.files.find((f) => f.role === 'closing')?.url ?? null;
 
@@ -122,7 +127,7 @@ export function VoiceSpoken(p: SpokenProps) {
         )}
         <div className="vr-row">
           {saving === null ? (
-            <button type="button" className="vr-btn" onClick={save} disabled={!audioUrl || !closing || !videoType()}>
+            <button type="button" className="vr-btn" onClick={save} disabled={!audioUrl || !closing || !canVideo}>
               Save as a video
             </button>
           ) : (
@@ -135,7 +140,7 @@ export function VoiceSpoken(p: SpokenProps) {
         </div>
         <p className="vr-small">
           The pictures held for each shot over the performance, then the closing card: stitched in this browser, in real time (as long as the speech), and saved on this device. No AI video.
-          {!videoType() && ' This browser can’t record a video.'}
+          {canVideo === false && ' This browser can’t record a video.'}
         </p>
         {message && <p className="vr-warn" role="alert">{message}</p>}
       </section>

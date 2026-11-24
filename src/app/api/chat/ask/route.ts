@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   const token = gatewayToken(request);
   if (!sql || (!token && !directKey()) || !servingAllowed()) return NextResponse.json({ error: 'The assistant is not available on this deployment' }, { status: 503 });
   try {
-    const gate = await mayAsk(sql, person, { lookUp: true, signedInAs: signedInAs(request) });
+    const gate = await mayAsk(sql, person, { lookUp: true, signedInAs: await signedInAs(request) });
     if (!gate.ok) return NextResponse.json({ error: gate.error, reason: gate.reason, account: gate.account }, { status: gate.status });
     const input = (await request.json()) as AskInput;
     const result = await ask(

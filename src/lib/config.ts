@@ -36,6 +36,17 @@ export const SYSTEM_FID = 6786;
  */
 export const ADMINS: readonly number[] = [6786, 193912];
 
+/**
+ * Website sign-ins (owner, 2026-11-23; branch session-30d): every kind lasts the same, 30 days (Farcaster on the
+ * website, wallet, Lens, Bluesky), as the site's own signed session kept in localStorage and sent as the bearer header,
+ * never a cookie. Inside the Farcaster app, Quick Auth stays as it is (Farcaster's own token). "Sign out on every
+ * device" (the You page) ends every session issued before it (studio.session_ends; src/lib/session-ends.ts).
+ * Was: about an hour for Farcaster on the website (Farcaster's own token), a day for the others.
+ */
+export const SESSIONS = {
+  hours: 30 * 24,
+} as const;
+
 /** Saved quote cards per FID per day (spam limit; saving costs nothing). */
 export const CARD_SAVES_PER_DAY = 50;
 
@@ -465,8 +476,8 @@ export const signInOpen = (id: SignInMethod): boolean => SIGN_IN_METHODS.some((m
  * the DID, and never kept.
  */
 export const SOCIAL_SIGN_IN = {
-  /** A Lens or Bluesky sign-in lasts this long (like a wallet's). */
-  sessionHours: 24,
+  /** A Lens or Bluesky sign-in lasts this long (SESSIONS: the same for every sign-in). */
+  sessionHours: SESSIONS.hours,
   /**
    * Owner, 2026-11-04 (3a, with the 30-day sentence): "An account you unlink can be linked to a different account
    * only after 30 days." Linking it again to the same account is allowed at any time (src/lib/social/accounts.ts).
@@ -960,8 +971,8 @@ export const IMAGES = {
     confirmations: 3,
     /** A payment older than this is not credited (ask the owner instead). */
     maxAgeDays: 7,
-    /** A wallet sign-in lasts this long. */
-    sessionHours: 24,
+    /** A wallet sign-in lasts this long (SESSIONS: the same for every sign-in). */
+    sessionHours: SESSIONS.hours,
     /**
      * Credit back every Generate that gives no picture (the check or the model didn't answer, the prompt was refused,
      * or the safety checker dropped the picture), to the balance only (owner, 2026-10-21: "credit the balance for
@@ -1238,14 +1249,19 @@ export const VOICE = {
     transcribeCreditsPerSecond: 0.4,
   },
   caps: {
-    /** Everyone's calls together, per UTC day ('free'). Nate's number for now (2026-11-21); real numbers once the speeches' length is known. */
-    dailyCredits: 20_000,
-    dailyUsd: 4,
+    /**
+     * Everyone's takes together, per UTC day ('free'): Nate, 2026-11-23, "a site-wide budget of 6,000 credits a day for
+     * takes; ready-made readings don't count" (about 3 whole 2.5-minute takes with their word checks). The dollars match
+     * the credits at the plan's rate (6,000 × $22 / 121,000 = $1.09). Readings are paid from the admins' pool
+     * (READINGS_FUNDED in src/lib/voice/costs.ts). Was 20,000 and $4 (Nate's placeholder of 2026-11-21).
+     */
+    dailyCredits: 6_000,
+    dailyUsd: 1.1,
     /** Admins' own trials, counted apart ('admin'). PLACEHOLDER. */
     adminDailyCredits: 20_000,
     adminDailyUsd: 4,
-    /** Whole-take conversions per person per UTC day (redone sentences don't count). Nate's number for now (2026-11-21). */
-    perPersonConversions: 3,
+    /** Whole-take conversions per person per UTC day (redone sentences don't count). Nate, 2026-11-23: 2 (was 3). */
+    perPersonConversions: 2,
     /**
      * Owner's standing rule (2026-11-20): if a real call costs more than 20% over its estimate, stop before the next
      * one. When today's measured credits exceed 1.2 times today's estimates, every call is refused until the next UTC
