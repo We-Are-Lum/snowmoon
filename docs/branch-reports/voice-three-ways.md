@@ -81,6 +81,7 @@ A storyboard is offered only when every shot has a kept picture. Proposed:
 - Nate's reread of the words; his list for `VOICE.teamBoards`; testing the SQL, then "applied".
 - Screenshots at 390 and 1440 (the first screen, each way, the fit panel): see "Review page" below once taken.
 - **When #225 (moderation) merges:** a hidden publication must not count as shared or reusable. Add `hidden_at is null` to `sharedTake`, `sharedTakes`, `reusableBoards` and the SQL function's check.
+- **guide-fixes** (another agent; the coordinator, 2026-11-24): `voice-guide.tsx` becomes a conversation with tappable cards, look and clothes references in `shot-picture.ts`, Make it and progress, the ask box, and `/ephelion` replacing `/storyboard/record` (a 308 redirect). The three ways' first screen then lives at `/ephelion`. Merge `origin/guide-fixes` in as soon as it has commits (none yet at this writing), and move the VoiceWays mount, the links (`/storyboard/record`), the screenshot script and the tests to `/ephelion`.
 - **When voice-improv merges:** an improvised take has its own sentences, and `fitShots` then fits by length (tested). Merge `origin/voice-improv` in whenever it has new commits.
 
 ## How to run the tests
