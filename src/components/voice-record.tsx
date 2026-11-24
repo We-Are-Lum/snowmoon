@@ -11,6 +11,8 @@ import Link from 'next/link';
 import { LearnMore, LearnMoreParts } from '~/components/challenge-learn-more';
 import type { LearnMoreView } from '~/lib/challenge/learn-more-view';
 import { citeHref } from '~/lib/challenge/learn-more';
+import { withReset } from '~/lib/challenge/model-wording';
+import { ALLOWANCE_WORDING } from '~/lib/voice/allowance-wording';
 import '../styles/voice.css';
 
 const REMOVE_DRAFT = 'Remove this draft? Its audio is deleted and it can’t be brought back.';
@@ -606,7 +608,13 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
         </LearnMore>
       )}
       {!s.ready && <p className="vr-warn" role="status">Not ready: the voice service isn&rsquo;t set up on this server.</p>}
-      {message && <p className="vr-warn" role="alert">{message}</p>}
+      {/* {reset} (a take refusal) in the person's own time; the message only ever appears after an action, never on the server. */}
+      {message && (
+        <p className="vr-warn" role="alert">
+          {withReset(message, null)}
+          {(message === ALLOWANCE_WORDING.takes || message === ALLOWANCE_WORDING.takesPool) && <> <span className="vr-tag">{ALLOWANCE_WORDING.draft}</span></>}
+        </p>
+      )}
 
       {!s.consent.agreed && (
         <section className="vr-card vr-consent" aria-labelledby="vr-consent-h">

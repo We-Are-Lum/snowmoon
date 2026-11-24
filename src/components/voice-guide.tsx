@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { authFetch, useAuth } from '~/lib/client-auth';
 import { useChallengeModel } from '~/components/challenge-model-row';
 import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
+import { VoiceAllowance, nextAllowance, type Allowance } from '~/components/voice-allowance';
+import { withReset } from '~/lib/challenge/model-wording';
 import type { ModelRowEntry } from '~/lib/challenge/models';
 import { angleById, planToBoard, SCENE, sceneWords, sentencesIn, type PlanShot, type Scene, type Shot, type Timeline } from '~/lib/voice/board';
 import type { GuideDraft, GuideMessage, GuideRef, GuideStep } from '~/lib/voice/guide';
@@ -26,7 +28,7 @@ interface Board {
   board: { version: number; cuts: number[]; shots: Shot[]; scene?: Scene; closing: unknown };
   pictures: { shotKey: string; sha256: string; recipe: Record<string, unknown> }[];
   sheets: { styles: Sheet[]; characters: Sheet[] };
-  making: { models: ModelRowEntry[]; defaultModel: string | null; real: boolean; standIn: boolean; limits: { maxShots: number; maxTriesPerShot: number }; tries: Record<string, number> };
+  making: { models: ModelRowEntry[]; defaultModel: string | null; real: boolean; standIn: boolean; limits: { maxShots: number; maxTriesPerShot: number }; tries: Record<string, number>; allowance?: Allowance | null };
   settingQuote?: { text: string; block: string } | null;
 }
 interface Try { image: string; sha256: string; ticket: string; recipe: Record<string, unknown> }
@@ -67,6 +69,8 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
   const [tries, setTries] = useState<Record<string, Try[]>>({});
   const [triesMade, setTriesMade] = useState<Record<string, number>>({});
   const [current, setCurrent] = useState(0);
+  // Storyboard pictures left today (Nate, 2026-11-23), for everyone but admins; null when it doesn't apply.
+  const [allowance, setAllowance] = useState<Allowance | null>(null);
   // The own-words consent (as on the storyboard page): shown before a person's first picture made from their words.
   const [consent, setConsent] = useState<Parameters<typeof ConsentScreen>[0]['wording'] | null>(null);
   // The draft being worked on: the guide's text as the person may edit it, and the references as chosen.
@@ -87,6 +91,7 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
     setLook(bj.board.shots.find((s) => !s.insert)?.characterIds[0] ?? null);
     setStyle(bj.board.shots[0]?.styleId ?? null);
     setTriesMade(bj.making.tries ?? {});
+    setAllowance(bj.making.allowance ?? null);
   }, [draftId]);
   useEffect(() => {
     if (auth.kind === 'signed-in' && draftId) void load();
@@ -143,12 +148,14 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
     const body = { draftId: ok!.draft.id, shotKey: key, description, angle, styleId: style, characterIds: key === SCENE.key ? (look ? [look] : []) : shots.find((s) => s.key === key)?.insert ? shots.find((s) => s.key === key)!.characterIds : look ? [look] : [], ...(guide ? { guide } : {}), ...m.body() };
     const r = await authFetch('/api/voice/boards/picture', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
     setBusy(null);
-    const j = (await r.json().catch(() => ({}))) as Try & { error?: string; reason?: string };
+    const j = (await r.json().catch(() => ({}))) as Try & { error?: string; reason?: string; left?: number; resetAt?: string };
+    setAllowance((a) => nextAllowance(a, j));
     if (r.status === 403 && j.reason === 'consent') {
       const c = await authFetch('/api/consent').catch(() => null);
       if (c?.ok) return setConsent(((await c.json()) as { wording: Parameters<typeof ConsentScreen>[0]['wording'] }).wording);
     }
-    if (!r.ok) return setMessage(j.error ?? 'The picture could not be made');
+    // Out of the allowance or the pool: the allowance's own line (VoiceAllowance) says so, with when it comes back.
+    if (!r.ok) return j.reason === 'storyboard-limit' || j.reason === 'storyboard-spend' ? undefined : setMessage(j.error ? withReset(j.error, j.resetAt) : 'The picture could not be made');
     setTries((x) => ({ ...x, [key]: [...(x[key] ?? []), j] }));
     setTriesMade((x) => ({ ...x, [key]: (x[key] ?? 0) + 1 }));
   }
@@ -206,6 +213,7 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
           </li>
         ))}
       </ol>
+      <VoiceAllowance allowance={allowance} />
       {message && <p className="vr-warn" role="alert">{message}</p>}
       {consent && (
         <ConsentScreen

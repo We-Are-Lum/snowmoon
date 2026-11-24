@@ -6,7 +6,7 @@ import { CAMERA_ANGLES, COVERAGE, SCENE, SHOT, applyCoverage, boardNotes, emptyS
 import { boardSource, keptPictures, latestBoard, livePublication, madeWithScene, saveBoard } from '~/lib/voice/board-store';
 import { readingEstimate } from '~/lib/voice/reading-timing';
 import { deleteAudio } from '~/lib/voice/store';
-import { shotModels, triesMade } from '~/lib/voice/shot-picture';
+import { allowanceFor, shotModels, triesMade } from '~/lib/voice/shot-picture';
 import { whereFrom } from '~/lib/images/countries';
 import { VOICE } from '~/lib/config';
 import { settingQuote, speechById } from '~/lib/voice/speech';
@@ -58,7 +58,7 @@ export async function GET(request: Request) {
       angles: CAMERA_ANGLES,
       limits: SHOT,
       // The challenge's models for this visitor (the country decides; it isn't kept), the default, and the limits.
-      making: { ...shotModels(whereFrom(request.headers), who.fid), standIn: voiceTestOn(), tries: await triesMade(sql, draft.id, who.fid) },
+      making: { ...shotModels(whereFrom(request.headers), who.fid), standIn: voiceTestOn(), tries: await triesMade(sql, draft.id, who.fid), ...(await allowanceFor(sql, who.fid)) },
     },
     { headers: noStore },
   );

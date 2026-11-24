@@ -1,6 +1,6 @@
 import 'server-only';
 import type postgres from 'postgres';
-import { CHALLENGE, CHAPTER_PICTURES, CLOSED_IMAGES, IMAGES, closedChoiceOn, imagesDailySpendCapUsd } from '../config';
+import { CHALLENGE, CHAPTER_PICTURES, CLOSED_IMAGES, IMAGES, VOICE, closedChoiceOn, imagesDailySpendCapUsd } from '../config';
 import { CLOSED_MODEL_IDS } from './sheet-models';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
 import { paysFor } from './price';
@@ -24,9 +24,12 @@ import { countedCategory } from './refusal-wording';
 type Sql = postgres.Sql;
 const TODAY = `(now() at time zone 'utc')::date`;
 
-export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'no-free' | 'closed-limit' | 'closed-spend' | 'admin-spend' | RemixRefusal;
-/** 'admin': an admin's chapter pictures (CHAPTER_PICTURES.adminDailyCapUsd), counted apart from the free cap (0042_chapter_picture_versions.sql). */
-export type Funded = 'free' | 'prepaid' | 'admin';
+export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'no-free' | 'closed-limit' | 'closed-spend' | 'admin-spend' | 'storyboard-limit' | 'storyboard-spend' | RemixRefusal;
+/**
+ * 'admin': an admin's chapter pictures (CHAPTER_PICTURES.adminDailyCapUsd), counted apart from the free cap (0042_chapter_picture_versions.sql).
+ * 'storyboard': storyboard pictures for everyone but admins (VOICE.pictures, Nate 2026-11-23; NEXT_storyboard_pictures.sql).
+ */
+export type Funded = 'free' | 'prepaid' | 'admin' | 'storyboard';
 /** Only a wallet account pays from a balance (not a Lens or Bluesky account, whose numbers are also below zero); Lens and Bluesky accounts use the free count when freeFor allows. */
 export const fundedBy = (fid: number): Funded => (isWalletNumber(fid) ? 'prepaid' : 'free');
 
@@ -46,7 +49,8 @@ export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
   const n = closedChoiceOn()
     ? sql`coalesce(sum(case when pool = 'closed' then ${CLOSED_IMAGES.countsAs} else 1 end), 0)::int`
     : sql`count(*)::int`;
-  const [r] = await sql`select ${n} as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
+  // Storyboard pictures have their own allowance (VOICE.pictures, Nate 2026-11-23): never in the images' count.
+  const [r] = await sql`select ${n} as n from studio.image_asks where fid = ${fid} and pool <> 'storyboard' and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
   // Pictures given back today (a FLUX picture fal's safety checker blocked; 0041_image_asks_back.sql), once that table exists.
   const back = (await backTable(sql)) ? Number((await sql<{ n: number }[]>`select count(*)::int as n from studio.image_asks_back where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`)[0]?.n ?? 0) : 0;
   return Math.max(0, Math.min(perDay(fid), perDay(fid) - (r?.n ?? 0) + back));
@@ -85,6 +89,23 @@ export async function giveBack(sql: Sql, fid: number): Promise<boolean> {
 export async function closedSpentToday(sql: Sql): Promise<number> {
   const [r] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${sql.unsafe(TODAY)} and funded = 'free' and (model in ${sql(CLOSED_MODEL_IDS as string[])} or kind = 'readback')`;
   return r?.usd ?? 0;
+}
+
+/** Today's spend on storyboard pictures (funded 'storyboard'), reserved and real: what VOICE.pictures.dailyPoolUsd caps. */
+export async function storyboardSpentToday(sql: Sql): Promise<number> {
+  const [r] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${sql.unsafe(TODAY)} and funded = 'storyboard'`;
+  return r?.usd ?? 0;
+}
+
+/** How many storyboard pictures this person has left today (VOICE.pictures.perPersonPerDay, any model, each counting 1). */
+export async function storyboardPicturesLeft(sql: Sql, fid: number): Promise<number> {
+  const [r] = await sql<{ n: number }[]>`select count(*)::int as n from studio.image_asks where fid = ${fid} and pool = 'storyboard' and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
+  return Math.max(0, VOICE.pictures.perPersonPerDay - Number(r?.n ?? 0));
+}
+
+/** Would the storyboard pool refuse a picture reserving `reserveUsd` now? Read without the lock, for the page's line only. */
+export async function storyboardPoolReached(sql: Sql, reserveUsd: number): Promise<boolean> {
+  return (await storyboardSpentToday(sql)) + reserveUsd > VOICE.pictures.dailyPoolUsd;
 }
 
 /** Today's spend on admins' chapter pictures (funded 'admin'), reserved and real: what CHAPTER_PICTURES.adminDailyCapUsd caps. */
@@ -133,7 +154,12 @@ export interface Spend {
    * (CHAPTER_PICTURES.adminDailyCapUsd), counted as funded 'admin', never in the free cap or the person's count. The
    * caller has checked that the person is an admin (the chapter-picture routes answer admins only).
    */
-  pool?: 'open' | 'closed' | 'admin';
+  /**
+   * 'storyboard': a storyboard picture by someone who isn't an admin (Nate, 2026-11-23): its own per-person count
+   * (VOICE.pictures.perPersonPerDay, any model, each counting 1) and its own daily pool (VOICE.pictures.dailyPoolUsd),
+   * funded 'storyboard'; never in the images' count or free cap.
+   */
+  pool?: 'open' | 'closed' | 'admin' | 'storyboard';
 }
 
 /** The start of today (UTC), as the other daily counts read it. */
@@ -175,6 +201,18 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.fid'), ${fid}::int)`;
     // Closed models are for the free path only, for now (a wallet account's prepaid Generate: a decision owed).
     if (isWalletNumber(fid) && (spend.pool === 'closed' || spend.pool === 'admin')) return { ok: false as const, refusal: 'closed-limit' as const };
+    // A storyboard picture (Nate, 2026-11-23): its own count and pool, under the same locks. Storyboards are for Farcaster
+    // accounts only (studio.voice_drafts.fid > 0), so no other account reaches this.
+    if (spend.pool === 'storyboard') {
+      const t = tx as unknown as Sql;
+      if (fid <= 0) return { ok: false as const, refusal: 'storyboard-limit' as const };
+      const left = await storyboardPicturesLeft(t, fid);
+      if (left < 1) return { ok: false as const, refusal: 'storyboard-limit' as const };
+      if ((await storyboardSpentToday(t)) + spend.reserveUsd > VOICE.pictures.dailyPoolUsd) return { ok: false as const, refusal: 'storyboard-spend' as const };
+      await tx`insert into studio.image_asks (fid, pool) values (${fid}, 'storyboard')`;
+      await addCost(t, 'storyboard', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
+      return { ok: true as const, left: left - 1 };
+    }
     // An admin's chapter picture: its own cap, its own totals (owner, 2026-11-18). Nothing in the free cap.
     if (spend.pool === 'admin') {
       const t = tx as unknown as Sql;

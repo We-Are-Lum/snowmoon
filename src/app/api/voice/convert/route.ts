@@ -6,7 +6,7 @@ import { speechById } from '~/lib/voice/speech';
 import { voiceIdFor } from '~/lib/voice/presets';
 import { elevenLabsBase } from '~/lib/voice/flag';
 import { hasVoiceConsent, voiceConsentWording } from '~/lib/voice/consent';
-import { refusal, reserve } from '~/lib/voice/costs';
+import { refusal, refusalExtra, reserve } from '~/lib/voice/costs';
 import { convertTake, estimateConvertCredits, FlowError, type CostEntry, type Scope } from '~/lib/voice/take-flow';
 import { keepConvertedTake } from '~/lib/voice/keep-converted';
 
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
 
   const estimatedCredits = estimateConvertCredits(seconds, VOICE.rates.convertCreditsPerMinute);
   const no = await refusal(sql, who.fid, estimatedCredits, scope.kind === 'whole');
-  if (no) return NextResponse.json({ error: no }, { status: 429 });
+  if (no) return NextResponse.json({ error: no, ...refusalExtra(no) }, { status: 429 });
   const settle = await reserve(sql, who.fid, VOICE.models.convert, estimatedCredits, scope.kind === 'whole');
   let costed = false;
   const cost = async (e: CostEntry) => {

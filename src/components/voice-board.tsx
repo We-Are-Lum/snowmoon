@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
 import { ConsentScreen, PublishedTextField } from '~/components/publish-words';
 import { VoiceRemove } from '~/components/voice-remove';
+import { VoiceAllowance, nextAllowance, type Allowance } from '~/components/voice-allowance';
+import { withReset } from '~/lib/challenge/model-wording';
 import { useChallengeModel } from '~/components/challenge-model-row';
 import type { ModelRowEntry } from '~/lib/challenge/models';
 import { applyCoverage, boardNotes, cutNear, emptyScene, pictureBlocked, SCENE, sentenceAt, sentenceBoundaries, sentencesIn, shotAt, shotReferences, shotsFromCuts, snapToWordEnd, type Note, type Scene, type Shot, type Timeline } from '~/lib/voice/board';
@@ -30,7 +32,7 @@ interface Data {
   sheets: { styles: Sheet[]; characters: Sheet[] };
   angles: readonly { id: string; label: string }[];
   limits: { target: number; min: number; max: number; maxShots: number };
-  making: { models: ModelRowEntry[]; defaultModel: string | null; real: boolean; standIn: boolean; limits: { maxShots: number; maxTriesPerShot: number }; tries: Record<string, number> };
+  making: { models: ModelRowEntry[]; defaultModel: string | null; real: boolean; standIn: boolean; limits: { maxShots: number; maxTriesPerShot: number }; tries: Record<string, number>; allowance?: Allowance | null };
 }
 type Wording = Parameters<typeof ConsentScreen>[0]['wording'];
 interface Try { image: string; sha256: string; ticket: string; recipe: Record<string, unknown> }
@@ -79,6 +81,8 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const strip = useRef<HTMLDivElement | null>(null);
   const drag = useRef<number | null>(null);
   const [triesMade, setTriesMade] = useState<Record<string, number>>({});
+  // Storyboard pictures left today (Nate, 2026-11-23), for everyone but admins; null when it doesn't apply.
+  const [allowance, setAllowance] = useState<Allowance | null>(null);
   const [consent, setConsent] = useState<Wording | null>(null);
   // Slice 4: the closing card's choices, the publish check, the published link, the video.
   const [closing, setClosing] = useState<Closing>(emptyClosing());
@@ -122,6 +126,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
     setKept(j.pictures.map((p) => ({ shotKey: p.shotKey, sha256: p.sha256 })));
     setSaved(j.board.version);
     setTriesMade(j.making.tries ?? {});
+    setAllowance(j.making.allowance ?? null);
   }, [draftId]);
   useEffect(() => {
     if (admin && draftId) void load();
@@ -327,14 +332,16 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       body: JSON.stringify({ draftId: d!.draft.id, ...what, ...m.body() }),
     });
     setBusy(null);
-    const j = (await r.json().catch(() => ({}))) as Try & { error?: string; reason?: string; triesLeft?: number };
+    const j = (await r.json().catch(() => ({}))) as Try & { error?: string; reason?: string; triesLeft?: number; left?: number; resetAt?: string };
+    setAllowance((a) => nextAllowance(a, j));
     if (r.ok) {
       setTries({ ...tries, [what.shotKey]: [...(tries[what.shotKey] ?? []), j] });
       setTriesMade({ ...triesMade, [what.shotKey]: (triesMade[what.shotKey] ?? 0) + 1 });
     } else if (r.status === 403 && j.reason === 'consent') {
       const c = await authFetch('/api/consent').catch(() => null);
       if (c?.ok) setConsent(((await c.json()) as { wording: Wording }).wording);
-    } else setMessage(j.error ?? 'The picture could not be made');
+    } else if (j.reason !== 'storyboard-limit' && j.reason !== 'storyboard-spend') setMessage(j.error ? withReset(j.error, j.resetAt) : 'The picture could not be made');
+    // The allowance's own line (VoiceAllowance) says it ran out, with when it comes back.
   }
   async function agreeConsent() {
     const r = await authFetch('/api/consent', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sha256: consent?.sha256 }) });
@@ -441,6 +448,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
         ) : null}
         <Link href="/storyboard/record">Back to recording</Link> · <Link href={`/storyboard/guide/${d.draft.id}`}>Storyboard it with the guide</Link>
       </p>
+      <VoiceAllowance allowance={allowance} />
       {message && <p className="vr-warn" role="alert">{message}</p>}
 
       <section className="vr-card" aria-labelledby="vb-set-h">

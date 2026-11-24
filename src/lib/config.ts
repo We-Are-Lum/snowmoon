@@ -1192,6 +1192,15 @@ export const VOICE = {
   /** The team's invented speeches (Nate, 2026-11-22): admins only, and not to be published until Nate says. */
   publishInvented: false,
   board: { maxShots: 12, maxTriesPerShot: 3, descriptionMaxChars: 600 },
+  /**
+   * Storyboard pictures for everyone but admins (Nate, 2026-11-23): their own allowance, apart from the images' free
+   * pictures, "20 storyboard pictures a person a day on any model, a GPT picture counting as 1, in their own allowance,
+   * and a $20-a-day storyboard pool. Review both after the challenge's first three days." Counted in studio.image_asks
+   * under pool 'storyboard' and paid as funded 'storyboard' in studio.image_costs (NEXT_storyboard_pictures.sql), per UTC
+   * day; never in the images' 10 a day or their free cap, and images never in these. Admins stay on the admins' pool.
+   * Used only once realPictures lets everyone in (it is 'admins' today).
+   */
+  pictures: { perPersonPerDay: 20, dailyPoolUsd: 20 },
   provider: 'ElevenLabs',
   models: {
     /** Speech-to-speech ("Voice Changer"). */

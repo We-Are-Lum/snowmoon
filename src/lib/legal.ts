@@ -330,6 +330,9 @@ export const LEGAL: {
     // P2u line as drafted, and the three Privacy items above, word for word": §7's scene item (after the closed-model
     // challenge item), §4's guide item (after the speeches item) and §7's Groq item, as drafted, each in his words. The
     // words before were 1f6i5bx.
+    // NOT REREAD YET (branch voice-picture-allowance, 2026-11-23): §4's daily-counts item adds "storyboard pictures"
+    // (docs/legal/storyboard-pictures-draft.md), as storyboard pictures get their own daily count. These words no longer
+    // match 1mbiyd1, so P6k is red until Nate says "reread". An agent never sets this key.
     privacy: { words: '1mbiyd1', on: '2026-11-23', by: 'FID 6786' },
   },
 };
@@ -385,7 +388,7 @@ export const PRIVACY: LegalDoc = {
           'Speeches you record: each converted speech, in the character\'s voice, kept as your draft as soon as it comes back, until you remove it or publish it, with its recipe (the voice, the model, its settings and a fingerprint of your recording). Never your recording. You can remove a draft you haven\'t published; it is deleted, audio and all.',
           'Your conversation with the storyboard guide: what you asked and what it drafted, kept with your storyboard until you remove it. When you publish the storyboard, each picture\'s request and the prompt it was made with are published with it.',
           'The styles and character sheets you choose to use in your pictures ("My picks"), kept until you clear them and seen only by you. An image you publish shows the ones it used, in its recipe.',
-          'How many images, sheet remixes, Remix frames and voice conversions you make each day, to count the daily limits, and the reports you make. The count of voice conversions is deleted the next day.',
+          'How many images, sheet remixes, Remix frames, storyboard pictures and voice conversions you make each day, to count the daily limits, and the reports you make. The count of voice conversions is deleted the next day.',
           'Whether your Farcaster account passed the check for making images and asking the assistant (its Neynar score against the score needed), when that was decided, and the score needed then; never the score itself. A pass is kept for 90 days and a fail for a day. A pass is removed sooner if your account is reported or one of your pictures is hidden by a moderator.',
           'Whether your Lens account passed the check for making images and asking the assistant (its Lens score against the score needed), when that was decided, and the score needed then; never the score itself. A pass is kept for 90 days and a fail for a day. A pass is removed sooner if your account is reported or one of your pictures is hidden by a moderator.',
           'Whether your Bluesky account passed the check for making images and asking the assistant (section 7), and when that was decided; never its age or its post count. A pass is kept for 90 days and a fail for a day. A pass is removed sooner if your account is reported or one of your pictures is hidden by a moderator.',
