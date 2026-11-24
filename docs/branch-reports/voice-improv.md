@@ -42,16 +42,19 @@ only after Nate's reread and merge word. No SQL.
   your words" on an improvised draft. Board and guide: "Your words" in place of "Book" for an improvised take.
 - "Time this reading" screen removed from the board page.
 
+- Legal drafts (no key set; P6k and P1i red until Nate's reread): Privacy §7's Groq item and §4's speeches item in
+  `src/lib/legal.ts`, own-voice-v4 as the consent file's draft (the voice pages show it), all in
+  `docs/legal/voice-improv-draft.md`.
+- P2's improvising line in `docs/principles.md` (for Nate's reread), and check:principles P2v with a planted fault.
+- test:voice section IM (each point above).
+
 ## Left (in order)
 
-1. tsc and test:voice (not run yet on this branch).
-2. Tests in `scripts/test-voice.ts` for each point (see the PR's list).
-3. Legal drafts: Privacy §7's Groq item (the guide receives the transcript), §4's speeches item (the transcript and its
-   corrections are kept with the draft), own-voice consent v4 (improvising; the words transcribed and kept as the
-   storyboard's words). In `docs/legal/voice-improv-draft.md`; no reread key set.
-4. P2 line in `docs/principles.md`, for Nate's reread; a check:principles item if needed.
-5. Screenshots at 390 and 1440 (countdown, label, correction) to R2 review/<hex>/; link here and in the PR.
-6. test:challenge, check:principles, check:ui on localhost; open the PR.
+1. tsc and test:voice on this branch (queued on the shared lock), and fixing what they find: older sections expected
+   every take's strip to be the speech's, but the stub always mishears one sentence, so its takes are now improvised.
+2. Screenshots at 390 and 1440 (`/Users/nathan/ephelion-voice-screens/improv/run.mts`, on a production build with the
+   worktree's `.env.local` moved aside) to R2 review/<hex>/; link here and in the PR.
+3. test:challenge, check:principles, check:ui on localhost; open the PR (not to merge: Nate's reread first).
 
 ## How to run the tests
 
