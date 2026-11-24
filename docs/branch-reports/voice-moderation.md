@@ -17,7 +17,7 @@ Written by the coding agent (Claude, a closed model by Anthropic) for the sessio
   - test:challenge: 565 passed, 268 moment checks;
   - test:voice: 348 ok;
   - check:principles: only P6a and P6d fail (local-only);
-  - check:ui: the first run stopped on the "didn't go quiet" flake at /references/designs/place/autobus (seed pictures still loading). The re-run on the same build was in progress at handoff (`/tmp/m2-run.log`).
+  - check:ui: the first run stopped on the "didn't go quiet" flake at /references/designs/place/autobus (seed pictures still loading); the re-run stopped on the same flake at /minpentai?watch=1 (two prefetches still open), with only the two known /challenge/make items before it. Neither page is touched by this PR; the machine was loaded with four agents' checks. A third run (rebuild at the handoff commit, then check:ui) was queued at handoff: `/Users/nathan/ephelion-voice-screens/m3-run.sh`, log `/tmp/m3-run.log`.
 
 ## Left, in order
 1. **check:ui:** if the re-run shows only the two known /challenge/make "Make it" items, it passes. Otherwise re-run it once; a flake on a page this PR doesn't touch is not a failure (CLAUDE.md).
