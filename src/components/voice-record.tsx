@@ -423,6 +423,9 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
     form.set('seconds', String(seconds));
     form.set('agree', s!.consent.sha256);
     if (sentence !== null) form.set('sentence', String(sentence));
+    // Fix 7: the recording's own fingerprint (from this device), and "Convert again" only when it was pressed.
+    if (sentence === null && onDevice?.sha256) form.set('takeSha256', onDevice.sha256);
+    if (sentence === null && again === 'yes') form.set('again', '1');
     log.note(`convert: sending ${blob.size} bytes (${blob.type || 'no type'}), ${seconds.toFixed(1)} s${sentence !== null ? `, sentence ${sentence + 1}` : ''}`);
     const r = await authFetch('/api/voice/convert', { method: 'POST', body: form }).catch((e) => (log.note(`convert: the request failed (${errText(e)})`), null));
     if (!r?.ok) {

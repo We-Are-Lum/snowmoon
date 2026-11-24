@@ -6,16 +6,12 @@
 - **Left, in order:**
   1. Run the checks below. Fix failures, which are most likely in test-voice's GU section (fix 1 changed which
      references a guided shot sends).
-  2. **Fix 7's server side (Nate: NOT optional).** `/api/voice/convert` must refuse a second whole conversion of the
-     same recording (the same take sha256) unless the page sends the explicit "Convert again" (`again: 1` in the
-     form).
-     - The take's sha256 is computed in `convertTake` (src/lib/voice/take-flow.ts) and kept in the draft's recipe as
-       `takes[0].takeSha256`.
-     - Look up the person's drafts with that takeSha256 before converting, without storing or logging the raw take
-       (P1h: check `scripts/check-principles.ts` P1h's scanner).
-     - The page (src/components/voice-record.tsx, `convertWhole` / `convert()`) sends `again` only after "Convert
-       again".
-     - Add a test.
+  2. **Fix 7's server side**: written (untested). The page sends its own fingerprint of the recording (`takeSha256`,
+     computed on the device) and `again=1` only after "Convert again". `/api/voice/convert` refuses a whole take
+     already converted into a draft with 409, `reason: 'converted'`, before anything is counted
+     (`src/lib/voice/converted-before.ts`). `convertTake` checks the real sha256 as a backstop, through a new
+     `deps.convertedBefore` that never sees the take (P1h). Tests: test:voice section $, "fix 7". The `again` and
+     `takeSha256` fields are new: check the P1h static scan still passes.
   3. The 390 px recording of the whole flow: `/Users/nathan/ephelion-voice-screens/guide-fixes/flow.mts` (outside
      the repo). Run it after a local production build, with the worktree's `.env.local` moved aside. Upload the
      screenshots and video to R2 review/<random hex>/ with an index page; the R2 keys are in main's `.env.local`,
@@ -89,8 +85,8 @@ Not merged: merging waits for Nate's word. Kept current as the work goes; a clou
      "Not happy with it? Convert this recording again: it uses one of today's 2 takes." with "Convert again" and
      "Keep this one" (`src/lib/voice/convert-again.ts`), for Nate's reread.
    - The words are reread by Nate (2026-11-24), so no "Draft wording" mark.
-   - **Left (Nate: not optional):** the server refuses a second whole conversion of the same take sha256 unless the
-     page sends "Convert again". See the handoff above.
+   - The server refuses a second whole conversion of the same recording unless the page sends "Convert again"
+     (written; see the handoff above).
 
 ## Left
 - Checks on the full branch: tsc, test:voice, test:challenge, check:principles, check:ui (localhost).

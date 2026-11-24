@@ -60,6 +60,8 @@ export interface CostEntry {
 
 export interface FlowDeps {
   sha256(bytes: Uint8Array): string;
+  /** Whether this person already has a draft converted from a take with this sha256 (fix 7, Nate 2026-11-24). */
+  convertedBefore?(takeSha256: string): Promise<boolean>;
   convert(take: Uint8Array, mime: string, voiceId: string): Promise<{ audio: Uint8Array; historyItemId: string | null; credits: number | null }>;
   /** 'gone' once deleted; 'not-yet' while ElevenLabs hasn't written the item (it writes history after answering). */
   deleteHistory(id: string): Promise<'gone' | 'not-yet'>;
@@ -96,7 +98,12 @@ export interface ConvertInput {
   voiceId: string;
   scope: Scope;
   consentSha256: string;
+  /** The person pressed "Convert again" (fix 7): a recording already converted is converted once more only then. */
+  again?: boolean;
 }
+
+/** The refusal of a second conversion of the same recording (fix 7). */
+export const CONVERTED_ALREADY = 'This recording is converted already: your draft is below. To convert it once more, press Convert again (it uses one of today’s takes).';
 
 export const estimateConvertCredits = (seconds: number, perMinute: number) => Math.ceil((Math.max(0, seconds) / 60) * perMinute);
 
@@ -105,6 +112,9 @@ export async function convertTake(deps: FlowDeps, input: ConvertInput): Promise<
   const { take } = input;
   try {
     const takeSha256 = deps.sha256(take);
+    // A whole recording already converted is converted again only on "Convert again" (Nate, 2026-11-24: "Wasting a
+    // conversion"). The route checks the device's own sha256 first; this is the check on the recording itself.
+    if (input.scope.kind === 'whole' && !input.again && deps.convertedBefore && (await deps.convertedBefore(takeSha256))) throw new FlowError(409, CONVERTED_ALREADY);
     const estimatedCredits = estimateConvertCredits(input.seconds, deps.creditsPerMinute);
     let out: { audio: Uint8Array; historyItemId: string | null; credits: number | null };
     try {

@@ -7,7 +7,8 @@ import { voiceIdFor } from '~/lib/voice/presets';
 import { elevenLabsBase } from '~/lib/voice/flag';
 import { hasVoiceConsent, voiceConsentWording } from '~/lib/voice/consent';
 import { refusal, reserve } from '~/lib/voice/costs';
-import { convertTake, estimateConvertCredits, FlowError, type CostEntry, type Scope } from '~/lib/voice/take-flow';
+import { convertTake, CONVERTED_ALREADY, estimateConvertCredits, FlowError, type CostEntry, type Scope } from '~/lib/voice/take-flow';
+import { convertedBefore } from '~/lib/voice/converted-before';
 import { keepConvertedTake } from '~/lib/voice/keep-converted';
 
 export const maxDuration = 300;
@@ -50,6 +51,12 @@ export async function POST(request: Request) {
   if (!(await hasVoiceConsent(sql, who.fid))) return NextResponse.json({ error: 'Read and agree to the own-voice terms first' }, { status: 403 });
   if (form.get('agree') !== wording.sha256) return NextResponse.json({ error: 'Tick the box to send this recording to ElevenLabs' }, { status: 403 });
 
+  // Fix 7 (Nate, 2026-11-24): a whole recording already converted isn't converted again unless the page sends "Convert
+  // again". The device's own fingerprint of the recording is checked here, before anything is counted.
+  const again = form.get('again') === '1';
+  const claimed = String(form.get('takeSha256') ?? '');
+  if (scope.kind === 'whole' && !again && (await convertedBefore(sql, who.fid, claimed))) return NextResponse.json({ error: CONVERTED_ALREADY, reason: 'converted' }, { status: 409 });
+
   const estimatedCredits = estimateConvertCredits(seconds, VOICE.rates.convertCreditsPerMinute);
   const no = await refusal(sql, who.fid, estimatedCredits, scope.kind === 'whole');
   if (no) return NextResponse.json({ error: no }, { status: 429 });
@@ -62,7 +69,7 @@ export async function POST(request: Request) {
   // The conversion and the keeping run as one job the platform keeps alive past the reply (after), so a person who
   // leaves mid-conversion still has the draft (Nate, 2026-11-22). Nothing here listens to the request's abort.
   const job = (async () => {
-    const { audio, ticket } = await convertTake(flowDeps(cost), {
+    const { audio, ticket } = await convertTake({ ...flowDeps(cost), convertedBefore: (sha) => convertedBefore(sql, who.fid, sha) }, {
       take: new Uint8Array(await file.arrayBuffer()),
       mime: file.type || 'audio/webm',
       seconds,
@@ -73,6 +80,7 @@ export async function POST(request: Request) {
       voiceId,
       scope,
       consentSha256: wording.sha256,
+      again,
     });
     if (scope.kind === 'sentence') return new Response(Buffer.from(audio), { headers: { 'content-type': 'audio/mpeg', 'x-voice-ticket': ticket, ...noStore } });
     // A whole take is kept as the person's private draft before the reply (Nate, 2026-11-22), so leaving the page
