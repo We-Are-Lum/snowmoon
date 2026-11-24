@@ -1,0 +1,39 @@
+{
+  "slug": "bluewhale",
+  "term": "Bluewhale",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Bluewhale is a social platform that is "
+      },
+      {
+        "quote": "more closed and proprietary",
+        "cite": "c8-b56"
+      },
+      {
+        "text": " than Silverchat, the other major social platform."
+      },
+      {
+        "cite": "c3-b24"
+      }
+    ],
+    [
+      {
+        "text": "It cuts its API to allow only verified hardware, and an insider at Bluewhale blows the whistle on a scheme in a Quadratic Funding round, saying "
+      },
+      {
+        "quote": "apparently that was all their doing",
+        "cite": "c11-b113"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c3-b19"
+      }
+    ]
+  ]
+}

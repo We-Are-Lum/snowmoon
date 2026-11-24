@@ -1,0 +1,35 @@
+{
+  "slug": "su",
+  "term": "Su",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Su is "
+      },
+      {
+        "quote": "one of the organizers of the nationals",
+        "cite": "c12-b16"
+      },
+      {
+        "text": ", the national Minpentai championship, where she welcomes the contestants and leads an excursion through the museum."
+      },
+      {
+        "cite": "c12-b84"
+      },
+      {
+        "cite": "c12-b94"
+      }
+    ],
+    [
+      {
+        "text": "She is a different person from Mu."
+      },
+      {
+        "cite": "c31-b15"
+      }
+    ]
+  ]
+}

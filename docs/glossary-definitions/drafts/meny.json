@@ -1,0 +1,23 @@
+{
+  "slug": "meny",
+  "term": "Meny",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Meny is a child on team purple in a Helisport game, scoring a point by catching a redball."
+      },
+      {
+        "cite": "c11-b24"
+      },
+      {
+        "cite": "c11-b26"
+      },
+      {
+        "cite": "c11-b67"
+      }
+    ]
+  ]
+}

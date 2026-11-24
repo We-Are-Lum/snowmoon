@@ -1,0 +1,33 @@
+{
+  "slug": "albor",
+  "term": "Albor",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Albor is the president aboard one of "
+      },
+      {
+        "quote": "Three government aeroplanes",
+        "cite": "c15-b10"
+      },
+      {
+        "text": " shot down during the Arctic Empire's invasion of Redshire."
+      },
+      {
+        "cite": "c15-b6"
+      }
+    ],
+    [
+      {
+        "quote": "The president's son, Tafindel, is believed to be in Arctic captivity",
+        "cite": "c15-b10"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "ten-min",
+  "term": "ten min",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "ten min is the heading of a screen on Zei's watch, which he checks after Gladias says his own watch is detecting nearby drones as a threat."
+      },
+      {
+        "cite": "c19-b6"
+      },
+      {
+        "cite": "c19-b9"
+      },
+      {
+        "cite": "c19-b10"
+      },
+      {
+        "cite": "c19-b12"
+      }
+    ]
+  ]
+}

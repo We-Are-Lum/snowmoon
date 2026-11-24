@@ -1,0 +1,21 @@
+{
+  "slug": "jan",
+  "term": "jan",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "In Dzegoban, "
+      },
+      {
+        "quote": "'jan' is person",
+        "cite": "c19-b18"
+      },
+      {
+        "text": "; with 'min', machine, it is read as robot."
+      }
+    ]
+  ]
+}

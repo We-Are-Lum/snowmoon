@@ -1,0 +1,36 @@
+{
+  "slug": "badra",
+  "term": "Badra",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Badra is a street; Badra St #1103 is a blue-grey "
+      },
+      {
+        "quote": "Five-storey apartment building",
+        "cite": "c1-b18"
+      },
+      {
+        "text": " that Gladias votes on for the aesthetics tax."
+      },
+      {
+        "cite": "c1-b21"
+      }
+    ],
+    [
+      {
+        "text": "He finds it in-character but unexceptional, and at his selection hearing says he gave it "
+      },
+      {
+        "quote": "a very tiny vote of approval",
+        "cite": "c8-b79"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

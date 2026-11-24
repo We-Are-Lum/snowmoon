@@ -1,0 +1,17 @@
+{
+  "slug": "clearhill",
+  "term": "Clearhill",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Clearhill appears once, as the address Clearhill Ave #980 on a screen listing its land taxes, a total of 1.89%."
+      },
+      {
+        "cite": "c1-b28"
+      }
+    ]
+  ]
+}

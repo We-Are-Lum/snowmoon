@@ -1,0 +1,35 @@
+{
+  "slug": "thaldur",
+  "term": "Thaldur",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Thaldur is "
+      },
+      {
+        "quote": "the island east of Northshore that was core Arctic territory",
+        "cite": "c30-b74"
+      },
+      {
+        "text": ", with tens of thousands of people living on it."
+      },
+      {
+        "cite": "c31-b48"
+      }
+    ],
+    [
+      {
+        "text": "Seaborne drones land there and take control of the island, capturing Arctic technology."
+      },
+      {
+        "cite": "c30-b74"
+      },
+      {
+        "cite": "c31-b48"
+      }
+    ]
+  ]
+}

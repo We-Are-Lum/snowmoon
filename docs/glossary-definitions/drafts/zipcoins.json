@@ -1,0 +1,44 @@
+{
+  "slug": "zipcoins",
+  "term": "zipcoins",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Zipcoins (zc) are the money people pay with in the book, held in a wallet and sent through "
+      },
+      {
+        "quote": "the cryptographic network",
+        "cite": "c6-b135"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c6-b137"
+      }
+    ],
+    [
+      {
+        "text": "In Dzego, "
+      },
+      {
+        "quote": "Payment is done in zipcoins, that's fully anonymized",
+        "cite": "c19-b57"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "People also burn zipcoins to signal that a message is worth attention."
+      },
+      {
+        "cite": "c19-b63"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "zume",
+  "term": "Zume",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Zume is the surname of Bo Zume, a Minpentai player from Sadzu Du whom Zei plays in a qualifying match."
+      },
+      {
+        "cite": "c12-b146"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "slug": "delwart",
+  "term": "Delwart",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Delwart is "
+      },
+      {
+        "quote": "the mysterious gentleman who has been having meetings with Gladias for the past months",
+        "cite": "c20-b30"
+      },
+      {
+        "text": ", and with various other Keepers."
+      }
+    ],
+    [
+      {
+        "text": "He urges Gladias to become a Keeper and "
+      },
+      {
+        "quote": "just vote to delete every rubric you see",
+        "cite": "c3-b112"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "He says he is working for Silverchat"
+      },
+      {
+        "cite": "c16-b13"
+      },
+      {
+        "text": ", but Seila concludes: "
+      },
+      {
+        "quote": "Delwart is not from Silverchat",
+        "cite": "c20-b179"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c20-b178"
+      }
+    ]
+  ]
+}

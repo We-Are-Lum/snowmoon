@@ -1,0 +1,20 @@
+{
+  "slug": "dia-lau-shau",
+  "term": "dia lau shau",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "dia lau shau appears once, in a line of Dzegoban text that names Bai, just before Zei wakes to find Bai requesting to call."
+      },
+      {
+        "cite": "c12-b97"
+      },
+      {
+        "cite": "c12-b98"
+      }
+    ]
+  ]
+}

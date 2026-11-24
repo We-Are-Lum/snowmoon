@@ -1,0 +1,29 @@
+{
+  "slug": "hun-min",
+  "term": "Hun Min",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Hun Min street is "
+      },
+      {
+        "quote": "one of the more lively commercial and industrial streets in Pafogai Du",
+        "cite": "c2-b3"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "It is lined with shops selling electronics and with miniature factories, in buildings one or two storeys tall."
+      },
+      {
+        "cite": "c2-b3"
+      }
+    ]
+  ]
+}

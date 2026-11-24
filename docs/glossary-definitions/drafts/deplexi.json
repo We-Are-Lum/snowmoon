@@ -1,0 +1,35 @@
+{
+  "slug": "deplexi",
+  "term": "Deplexi",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Deplexi is a place listed in a chart shown with a lecture on the United Cities' co-governance system."
+      },
+      {
+        "cite": "c5-b45"
+      },
+      {
+        "cite": "c5-b46"
+      }
+    ],
+    [
+      {
+        "text": "When drone activity is rising, it is named among places not taking it seriously: "
+      },
+      {
+        "quote": "Deplexi, Ondak, Imber, not at all",
+        "cite": "c10-b21"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c10-b18"
+      }
+    ]
+  ]
+}

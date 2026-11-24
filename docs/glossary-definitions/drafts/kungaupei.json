@@ -1,0 +1,47 @@
+{
+  "slug": "kungaupei",
+  "term": "Kungaupei",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The Kungaupei is a Dzegojan group, run in part by High Council member Den, that has been protecting Dzego from the Arctic shadow campaign for the last decade."
+      },
+      {
+        "cite": "c9-b56"
+      },
+      {
+        "cite": "c19-b4"
+      },
+      {
+        "cite": "c27-b54"
+      }
+    ],
+    [
+      {
+        "text": "Its existence is confidential, its name comes from "
+      },
+      {
+        "quote": "kun gau",
+        "cite": "c19-b20"
+      },
+      {
+        "text": ", meaning security, and it rescues the Redshire president's son."
+      },
+      {
+        "cite": "c15-b71"
+      },
+      {
+        "cite": "c19-b23"
+      },
+      {
+        "cite": "c27-b54"
+      },
+      {
+        "cite": "c19-b21"
+      }
+    ]
+  ]
+}

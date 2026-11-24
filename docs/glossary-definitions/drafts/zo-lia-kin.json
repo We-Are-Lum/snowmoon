@@ -1,0 +1,30 @@
+{
+  "slug": "zo-lia-kin",
+  "term": "zo lia kin",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "zo lia kin is a Dzegoban term in the message Zei gets when he checks into a hotel, whose translation reads "
+      },
+      {
+        "quote": "Reputation above 150 verified",
+        "cite": "c12-b37"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c12-b34"
+      },
+      {
+        "cite": "c12-b35"
+      },
+      {
+        "cite": "c12-b36"
+      }
+    ]
+  ]
+}

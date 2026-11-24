@@ -1,0 +1,30 @@
+{
+  "slug": "mun-gui",
+  "term": "Mun Gui",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Mun Gui is a street; "
+      },
+      {
+        "quote": "Mun Gui 1842",
+        "cite": "c2-b29"
+      },
+      {
+        "text": " is the decrypted classroom location that Zei's watch receives before a lesson."
+      },
+      {
+        "cite": "c2-b22"
+      },
+      {
+        "cite": "c2-b24"
+      },
+      {
+        "cite": "c2-b23"
+      }
+    ]
+  ]
+}

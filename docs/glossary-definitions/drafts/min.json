@@ -1,0 +1,39 @@
+{
+  "slug": "min",
+  "term": "Min",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Min is "
+      },
+      {
+        "quote": "Zei's mother",
+        "cite": "c5-b4"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "She travels with Zei and Bai to Freetown, her "
+      },
+      {
+        "quote": "first time abroad",
+        "cite": "c5-b7"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c5-b1"
+      },
+      {
+        "cite": "c5-b4"
+      }
+    ]
+  ]
+}

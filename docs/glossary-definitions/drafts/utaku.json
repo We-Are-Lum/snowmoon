@@ -1,0 +1,28 @@
+{
+  "slug": "utaku",
+  "term": "Utaku",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Utaku is from Belpaki and is doing her doctorate at the Freetown Economics Institute, where she meets Jahn."
+      },
+      {
+        "cite": "c10-b2"
+      },
+      {
+        "cite": "c10-b9"
+      }
+    ],
+    [
+      {
+        "text": "She asks what options Freetown still has to raise more funding for defense."
+      },
+      {
+        "cite": "c22-b67"
+      }
+    ]
+  ]
+}

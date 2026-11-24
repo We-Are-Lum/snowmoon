@@ -1,0 +1,40 @@
+{
+  "slug": "febric",
+  "term": "Febric",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Febric is a teenage boy, the son of Uncle Vil and Aunt Daia, the co-family of Gladias and Seila."
+      },
+      {
+        "cite": "c1-b111"
+      },
+      {
+        "cite": "c1-b125"
+      },
+      {
+        "cite": "c1-b130"
+      }
+    ],
+    [
+      {
+        "text": "He and Hreda go on an exchange trip to Northglade, he in computer science; when the Arctics invade it, they reach the Greater Plum Harbor in time."
+      },
+      {
+        "cite": "c17-b99"
+      },
+      {
+        "cite": "c17-b104"
+      },
+      {
+        "cite": "c20-b24"
+      },
+      {
+        "cite": "c20-b25"
+      }
+    ]
+  ]
+}

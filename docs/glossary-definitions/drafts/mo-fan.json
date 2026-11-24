@@ -1,0 +1,38 @@
+{
+  "slug": "mo-fan",
+  "term": "mo fan",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "In Dzegoban, "
+      },
+      {
+        "quote": "'mo fan' is eating room",
+        "cite": "c19-b16"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "It appears on Zei's watch and in the address of a message from a food court."
+      },
+      {
+        "cite": "c19-b14"
+      },
+      {
+        "cite": "c19-b59"
+      },
+      {
+        "cite": "c19-b61"
+      },
+      {
+        "cite": "c19-b11"
+      }
+    ]
+  ]
+}

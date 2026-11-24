@@ -1,0 +1,24 @@
+{
+  "slug": "meldan",
+  "term": "Meldan",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Meldan is "
+      },
+      {
+        "quote": "the capital city of Veridia",
+        "cite": "c1-b3"
+      },
+      {
+        "text": "; it has districts such as Kalimar and a commercial district of greenery, glass and steel."
+      },
+      {
+        "cite": "c13-b24"
+      }
+    ]
+  ]
+}

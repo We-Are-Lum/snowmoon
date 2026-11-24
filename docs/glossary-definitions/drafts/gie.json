@@ -1,0 +1,40 @@
+{
+  "slug": "gie",
+  "term": "gie",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "gie is the first word of the phrase "
+      },
+      {
+        "quote": "'gie fe kiu kai ci bin hu': grow roots, no head",
+        "cite": "c2-b128"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "It also ends the toast "
+      },
+      {
+        "quote": "Dze go ba fau gie",
+        "cite": "c7-b49"
+      },
+      {
+        "text": ", in which "
+      },
+      {
+        "quote": "'fau' just means 'again'",
+        "cite": "c10-b34"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

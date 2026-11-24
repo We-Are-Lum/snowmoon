@@ -1,0 +1,45 @@
+{
+  "slug": "redball",
+  "term": "redball",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "A redball is one of the "
+      },
+      {
+        "quote": "bright red drones, shaped like balls a few centimeters wide",
+        "cite": "c11-b25"
+      },
+      {
+        "text": " used in Helisport, which change direction and fly away from players."
+      },
+      {
+        "cite": "c11-b36"
+      },
+      {
+        "cite": "c11-b46"
+      },
+      {
+        "cite": "c11-b74"
+      },
+      {
+        "cite": "c11-b26"
+      }
+    ],
+    [
+      {
+        "text": "In a redball game, "
+      },
+      {
+        "quote": "If you catch a redball, bring it back to me, and your team gets one point",
+        "cite": "c11-b26"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

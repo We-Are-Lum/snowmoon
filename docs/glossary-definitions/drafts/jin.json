@@ -1,0 +1,24 @@
+{
+  "slug": "jin",
+  "term": "Jin",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Jin is "
+      },
+      {
+        "quote": "Taskmaster Jin",
+        "cite": "c12-b85"
+      },
+      {
+        "text": ", introduced as the lead organizer of the national Minpentai championship."
+      },
+      {
+        "cite": "c12-b84"
+      }
+    ]
+  ]
+}

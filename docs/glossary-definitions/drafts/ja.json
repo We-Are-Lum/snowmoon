@@ -1,0 +1,24 @@
+{
+  "slug": "ja",
+  "term": "Ja",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Ja is a team name in a Minpentai quarter-final: Pan Munbau and Dza Dzingo are "
+      },
+      {
+        "quote": "fated by chance to be on team Ja",
+        "cite": "c4-b89"
+      },
+      {
+        "text": ", against Zei and Bai on team Zau."
+      },
+      {
+        "cite": "c4-b90"
+      }
+    ]
+  ]
+}

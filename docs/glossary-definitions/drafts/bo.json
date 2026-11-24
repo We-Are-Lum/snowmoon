@@ -1,0 +1,29 @@
+{
+  "slug": "bo",
+  "term": "Bo",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Bo is "
+      },
+      {
+        "quote": "Bo Zume, from right here in Sadzu Du",
+        "cite": "c12-b146"
+      },
+      {
+        "text": ", Zei's opponent in a qualifying Minpentai match."
+      }
+    ],
+    [
+      {
+        "text": "Zei destroys all of Bo's symbols within three hundred turns and is announced the winner."
+      },
+      {
+        "cite": "c12-b196"
+      }
+    ]
+  ]
+}

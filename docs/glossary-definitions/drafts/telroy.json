@@ -1,0 +1,29 @@
+{
+  "slug": "telroy",
+  "term": "Telroy",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Telroy is "
+      },
+      {
+        "quote": "a Keeper, you're in the rubric group on cybersecurity",
+        "cite": "c20-b71"
+      },
+      {
+        "text": ", who has met Delwart."
+      }
+    ],
+    [
+      {
+        "text": "With Balme, he sends Seila's message about the social media rubrics."
+      },
+      {
+        "cite": "c20-b137"
+      }
+    ]
+  ]
+}

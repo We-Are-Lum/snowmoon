@@ -1,0 +1,35 @@
+{
+  "slug": "hydrafill",
+  "term": "Hydrafill",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Hydrafill is "
+      },
+      {
+        "quote": "a brand selling water and various kinds of drinks",
+        "cite": "c1-b93"
+      },
+      {
+        "text": " that, nudged by Veridian Steering taxes, has become almost completely sugar free."
+      }
+    ],
+    [
+      {
+        "text": "Its advertisements, with their own style of humor, show its classic yellow and green bottle."
+      },
+      {
+        "cite": "c3-b44"
+      },
+      {
+        "cite": "c3-b46"
+      },
+      {
+        "cite": "c8-b87"
+      }
+    ]
+  ]
+}

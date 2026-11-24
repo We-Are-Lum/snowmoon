@@ -1,0 +1,38 @@
+{
+  "slug": "telpo",
+  "term": "Telpo",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Telpo leads Group Center in the plan Lektor presents to Veridian generals and Kungaupei leaders, tasked with keeping "
+      },
+      {
+        "quote": "the primary Arctic drone group",
+        "cite": "c29-b25"
+      },
+      {
+        "text": " occupied."
+      },
+      {
+        "cite": "c29-b21"
+      },
+      {
+        "cite": "c29-b24"
+      }
+    ],
+    [
+      {
+        "text": "Telpo's fleet later surrounds the Arctic drones of the east flank."
+      },
+      {
+        "cite": "c29-b73"
+      },
+      {
+        "cite": "c29-b75"
+      }
+    ]
+  ]
+}

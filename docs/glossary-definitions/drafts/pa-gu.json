@@ -1,0 +1,40 @@
+{
+  "slug": "pa-gu",
+  "term": "PA GU",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "PA GU is called out in the countdown before a Minpentai game, at ten ticks: "
+      },
+      {
+        "quote": "PA GU GEI FA",
+        "cite": "c7-b59"
+      },
+      {
+        "text": " comes with "
+      },
+      {
+        "quote": "the last remaining ten ticks",
+        "cite": "c7-b60"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "The full countdown runs "
+      },
+      {
+        "quote": "PA GU ... SO ... BI ... ZE",
+        "cite": "c4-b104"
+      },
+      {
+        "text": " and on."
+      }
+    ]
+  ]
+}

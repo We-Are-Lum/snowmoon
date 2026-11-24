@@ -1,0 +1,42 @@
+{
+  "slug": "dreadknot",
+  "term": "Dreadknot",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Dreadknot is a band whose position on "
+      },
+      {
+        "quote": "the tax rubric for social impact of public performances",
+        "cite": "c1-b58"
+      },
+      {
+        "text": " Gladias, as an Acolyte, evaluates."
+      },
+      {
+        "cite": "c3-b97"
+      }
+    ],
+    [
+      {
+        "text": "Gladias votes Tier 3, while some Sentinels push them toward Tier 4 because "
+      },
+      {
+        "quote": "their lyrics are not gentle enough",
+        "cite": "c3-b99"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c3-b100"
+      },
+      {
+        "cite": "c3-b101"
+      }
+    ]
+  ]
+}

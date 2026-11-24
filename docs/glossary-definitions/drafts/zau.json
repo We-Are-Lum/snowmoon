@@ -1,0 +1,20 @@
+{
+  "slug": "zau",
+  "term": "Zau",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Zau is the name of a team in a Minpentai quarter-final, the team of Zei Leimin and Bai Jahen."
+      },
+      {
+        "cite": "c4-b90"
+      },
+      {
+        "cite": "c4-b88"
+      }
+    ]
+  ]
+}

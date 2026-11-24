@@ -1,0 +1,35 @@
+{
+  "slug": "cau-tie-zen",
+  "term": "cau tie zen",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "cau tie zen is part of the Dzegoban message Zei gets when he taps his watch against a green circle at a hotel."
+      },
+      {
+        "cite": "c12-b34"
+      },
+      {
+        "cite": "c12-b35"
+      },
+      {
+        "cite": "c12-b36"
+      }
+    ],
+    [
+      {
+        "text": "The narration renders that screen's message as "
+      },
+      {
+        "quote": "Approved, room number is 304",
+        "cite": "c12-b37"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

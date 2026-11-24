@@ -1,0 +1,36 @@
+{
+  "slug": "blueball",
+  "term": "blueball",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "A blueball is a ball in Helisport that players throw at "
+      },
+      {
+        "quote": "ten yellow standing pins",
+        "cite": "c16-b58"
+      },
+      {
+        "text": " on a board mounted high on a pole."
+      }
+    ],
+    [
+      {
+        "text": "Knocking down pins with it adds to a team's "
+      },
+      {
+        "quote": "Blueball pin knockdowns",
+        "cite": "c16-b62"
+      },
+      {
+        "text": " score."
+      },
+      {
+        "cite": "c16-b60"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "slug": "frostime",
+  "term": "Frostime",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Frostime is a name that appears in chapter datelines followed by a number, such as "
+      },
+      {
+        "quote": "3724 Frostime 1",
+        "cite": "c25-b1"
+      },
+      {
+        "text": " and "
+      },
+      {
+        "quote": "3724 Frostime 18",
+        "cite": "c28-b90"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

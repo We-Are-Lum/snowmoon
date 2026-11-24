@@ -1,0 +1,33 @@
+{
+  "slug": "haragmir",
+  "term": "Haragmir",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Haragmir is a foreign place: one character mentions books "
+      },
+      {
+        "quote": "either Old Belpakian or something from Haragmir",
+        "cite": "c6-b103"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "Another predicts the Arctics will "
+      },
+      {
+        "quote": "go south and clear out Messalia and Haragmir",
+        "cite": "c28-b33"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

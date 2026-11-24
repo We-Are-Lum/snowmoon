@@ -1,0 +1,32 @@
+{
+  "slug": "northshore",
+  "term": "Northshore",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Northshore is a Veridian province that the Arctic Empire invades, with the Veridian military offering "
+      },
+      {
+        "quote": "almost no resistance",
+        "cite": "c20-b8"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c26-b185"
+      }
+    ],
+    [
+      {
+        "text": "Only the Greater Plum Harbor inside Northglade is left untouched by the Arctics."
+      },
+      {
+        "cite": "c20-b8"
+      }
+    ]
+  ]
+}

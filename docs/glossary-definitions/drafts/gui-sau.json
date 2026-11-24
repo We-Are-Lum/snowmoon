@@ -1,0 +1,17 @@
+{
+  "slug": "gui-sau",
+  "term": "GUI SAU",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "GUI SAU is the sign on a store selling lamps in Pafogai Du."
+      },
+      {
+        "cite": "c18-b21"
+      }
+    ]
+  ]
+}

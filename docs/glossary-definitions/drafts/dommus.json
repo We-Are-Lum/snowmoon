@@ -1,0 +1,20 @@
+{
+  "slug": "dommus",
+  "term": "Dommus",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Dommus is a player in a Helisport game, who scores for team purple with a catch."
+      },
+      {
+        "cite": "c11-b21"
+      },
+      {
+        "cite": "c11-b51"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "slug": "messalia",
+  "term": "Messalia",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Messalia is named once, when a speaker warns that after Veridia and the United Cities the Arctics "
+      },
+      {
+        "quote": "will go south and clear out Messalia and Haragmir",
+        "cite": "c28-b33"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

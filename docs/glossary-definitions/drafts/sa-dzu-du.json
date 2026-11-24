@@ -1,0 +1,31 @@
+{
+  "slug": "sa-dzu-du",
+  "term": "sa dzu du",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "sa dzu du is the station sign for "
+      },
+      {
+        "quote": "Dzego's helpfully-named capital city",
+        "cite": "c12-b6"
+      },
+      {
+        "text": ", meaning "
+      },
+      {
+        "quote": "Main city",
+        "cite": "c12-b6"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c12-b5"
+      }
+    ]
+  ]
+}

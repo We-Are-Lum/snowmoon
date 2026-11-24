@@ -1,0 +1,28 @@
+{
+  "slug": "hreda",
+  "term": "Hreda",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Hreda is one of the four children Gladias and Seila share with their co-family, Uncle Vil and Aunt Daia; she and Febric are Vil and Daia's."
+      },
+      {
+        "cite": "c1-b125"
+      }
+    ],
+    [
+      {
+        "text": "She takes after-school number theory, and is later away in Northglade at a math competition."
+      },
+      {
+        "cite": "c1-b116"
+      },
+      {
+        "cite": "c11-b49"
+      }
+    ]
+  ]
+}

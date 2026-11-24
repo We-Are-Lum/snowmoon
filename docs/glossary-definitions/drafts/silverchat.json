@@ -1,0 +1,37 @@
+{
+  "slug": "silverchat",
+  "term": "Silverchat",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "quote": "Silverchat is a social media website",
+        "cite": "c27-b80"
+      },
+      {
+        "text": ", the other major social platform besides Bluewhale."
+      },
+      {
+        "cite": "c3-b24"
+      }
+    ],
+    [
+      {
+        "text": "Its API is open, and it lets developers make alternative clients and users export and migrate their data."
+      },
+      {
+        "cite": "c3-b24"
+      }
+    ],
+    [
+      {
+        "text": "Its founder is Evelor."
+      },
+      {
+        "cite": "c27-b21"
+      }
+    ]
+  ]
+}

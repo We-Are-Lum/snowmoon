@@ -1,0 +1,35 @@
+{
+  "slug": "mov",
+  "term": "Mov",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Mov is a Keeper in the Order of Steering, assigned "
+      },
+      {
+        "quote": "to one of the openness rubrics on internet media",
+        "cite": "c3-b17"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c3-b10"
+      }
+    ],
+    [
+      {
+        "text": "Gladias has Mov on his trust list, and Mov shadows Gladias when he goes to meet a mysterious contact."
+      },
+      {
+        "cite": "c3-b10"
+      },
+      {
+        "cite": "c3-b13"
+      }
+    ]
+  ]
+}

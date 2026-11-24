@@ -1,0 +1,21 @@
+{
+  "slug": "dzai-gun",
+  "term": "Dzai Gun",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Dzai Gun is a street in Pafogai Du: "
+      },
+      {
+        "quote": "the last street before Pafogai Du officially ended",
+        "cite": "c4-b50"
+      },
+      {
+        "text": ", where a path to the entrance of the mountain pyramid begins."
+      }
+    ]
+  ]
+}

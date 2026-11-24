@@ -1,0 +1,30 @@
+{
+  "slug": "de-lu-hin",
+  "term": "De lu hin",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "De lu hin is what Deluin, a contestant from Redshire, is called in Dzego; he translates it as "
+      },
+      {
+        "quote": "'A fork with the appearance of'",
+        "cite": "c12-b78"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c12-b75"
+      },
+      {
+        "cite": "c12-b77"
+      },
+      {
+        "cite": "c12-b80"
+      }
+    ]
+  ]
+}

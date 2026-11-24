@@ -1,0 +1,23 @@
+{
+  "slug": "lei-kai-fun",
+  "term": "lei kai fun",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "\"lei kai fun\" appears only on a restaurant robot's Dzegoban menu screen, shown after Fin picks \"kai\" and a salad."
+      },
+      {
+        "cite": "c4-b20"
+      },
+      {
+        "cite": "c4-b22"
+      },
+      {
+        "cite": "c4-b23"
+      }
+    ]
+  ]
+}

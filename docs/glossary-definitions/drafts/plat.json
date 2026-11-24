@@ -1,0 +1,20 @@
+{
+  "slug": "plat",
+  "term": "Plat",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Plat is one of the kids in a redball game, whose catch scores team yellow's fourth point."
+      },
+      {
+        "cite": "c11-b58"
+      },
+      {
+        "cite": "c11-b66"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "slug": "mo-fan-lai",
+  "term": "mo fan lai",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "mo fan lai is one of the entries, with a count of 4, in a Dzegoban list on Zei's watch in a cafeteria."
+      },
+      {
+        "cite": "c19-b2"
+      },
+      {
+        "cite": "c19-b11"
+      },
+      {
+        "cite": "c19-b13"
+      },
+      {
+        "cite": "c19-b14"
+      }
+    ],
+    [
+      {
+        "text": "Gladias reads "
+      },
+      {
+        "quote": "'mo fan' is eating room, so something to do with the cafeteria",
+        "cite": "c19-b16"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

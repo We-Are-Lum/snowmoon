@@ -1,0 +1,23 @@
+{
+  "slug": "bonne",
+  "term": "Bonne",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Bonne appears once, as a label beside \"Vidrik\" among the individual projects in a Graph Funding chart of an air quality portfolio."
+      },
+      {
+        "cite": "c17-b72"
+      },
+      {
+        "cite": "c17-b73"
+      },
+      {
+        "cite": "c17-b74"
+      }
+    ]
+  ]
+}

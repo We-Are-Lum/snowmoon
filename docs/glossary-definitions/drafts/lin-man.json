@@ -1,0 +1,28 @@
+{
+  "slug": "lin-man",
+  "term": "lin man",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "lin man appears once, in a Dzegoban message containing "
+      },
+      {
+        "quote": "400 lin man",
+        "cite": "c19-b59"
+      },
+      {
+        "text": ", which Zei reads as saying that an anonymous person "
+      },
+      {
+        "quote": "burned four hundred zipcoins to send this message",
+        "cite": "c19-b61"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

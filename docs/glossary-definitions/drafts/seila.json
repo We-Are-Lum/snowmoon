@@ -1,0 +1,43 @@
+{
+  "slug": "seila",
+  "term": "Seila",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Seila is Gladias's wife; their children are Zven and Lily."
+      },
+      {
+        "cite": "c3-b89"
+      },
+      {
+        "cite": "c1-b125"
+      }
+    ],
+    [
+      {
+        "text": "In Freetown she meets Zei and Bai, together with her friend Jahn."
+      },
+      {
+        "cite": "c5-b58"
+      },
+      {
+        "cite": "c13-b14"
+      }
+    ],
+    [
+      {
+        "text": "She sees through Delwart's Silverchat cover "
+      },
+      {
+        "quote": "within a day",
+        "cite": "c21-b44"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

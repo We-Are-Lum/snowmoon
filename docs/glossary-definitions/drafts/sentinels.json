@@ -1,0 +1,36 @@
+{
+  "slug": "sentinels",
+  "term": "Sentinels",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The Sentinels are the part of the Order of Steering that audits individual businesses, "
+      },
+      {
+        "quote": "each audit assigning a particular business a position on a particular rubric",
+        "cite": "c1-b57"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "They repeat a tenth of Acolytes' audits to score them, and because they act on specific things in the world, "
+      },
+      {
+        "quote": "Sentinels are the people everyone is trying to influence",
+        "cite": "c3-b114"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c1-b68"
+      }
+    ]
+  ]
+}

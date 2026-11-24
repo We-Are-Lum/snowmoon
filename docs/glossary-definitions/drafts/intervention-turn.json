@@ -1,0 +1,38 @@
+{
+  "slug": "intervention-turn",
+  "term": "intervention turn",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "In a Minpentai game, an intervention turn is a recurring turn in which "
+      },
+      {
+        "quote": "all players were able to put down more squares near any copy of their symbols",
+        "cite": "c4-b110"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c4-b126"
+      }
+    ],
+    [
+      {
+        "text": "Players use them to put up walls, build glider factories or remove their own walls."
+      },
+      {
+        "cite": "c4-b109"
+      },
+      {
+        "cite": "c4-b121"
+      },
+      {
+        "cite": "c4-b135"
+      }
+    ]
+  ]
+}

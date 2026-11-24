@@ -1,0 +1,38 @@
+{
+  "slug": "ondak",
+  "term": "Ondak",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Ondak is one of the cluster of Ondak, Iptak, Mantak and Belpaki that Veridians call "
+      },
+      {
+        "quote": "the aks",
+        "cite": "c8-b5"
+      },
+      {
+        "text": ", and appears in the diagram of the United Cities' co-governance system."
+      },
+      {
+        "cite": "c5-b46"
+      }
+    ],
+    [
+      {
+        "text": "In a conversation with Jahn, a speaker names Ondak, with Deplexi and Imber, as not taking the Arctic threat seriously at all."
+      },
+      {
+        "cite": "c10-b17"
+      },
+      {
+        "cite": "c10-b21"
+      },
+      {
+        "cite": "c10-b23"
+      }
+    ]
+  ]
+}

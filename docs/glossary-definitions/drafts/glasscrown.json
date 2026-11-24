@@ -1,0 +1,32 @@
+{
+  "slug": "glasscrown",
+  "term": "Glasscrown",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Glasscrown is where the Arctics offer people a position advising their top leadership on integrating conquered populations."
+      },
+      {
+        "cite": "c31-b23"
+      }
+    ],
+    [
+      {
+        "text": "It feels "
+      },
+      {
+        "quote": "like you're living inside of a giant ice crystal",
+        "cite": "c31-b42"
+      },
+      {
+        "text": ", with a tower a kilometer tall and deep caverns, and a month and a half of polar night in winter."
+      },
+      {
+        "cite": "c31-b44"
+      }
+    ]
+  ]
+}

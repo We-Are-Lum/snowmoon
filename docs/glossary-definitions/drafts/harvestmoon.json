@@ -1,0 +1,21 @@
+{
+  "slug": "harvestmoon",
+  "term": "Harvestmoon",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Harvestmoon appears in the book's datelines, as in "
+      },
+      {
+        "quote": "3724 Harvestmoon 8",
+        "cite": "c13-b1"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

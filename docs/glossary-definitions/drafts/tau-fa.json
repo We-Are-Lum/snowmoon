@@ -1,0 +1,46 @@
+{
+  "slug": "tau-fa",
+  "term": "TAU FA",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "TAU FA ends the calls of the automated voice that counts down to the start of each Minpentai game, as in "
+      },
+      {
+        "quote": "MU GU GEI TAU FA",
+        "cite": "c4-b97"
+      },
+      {
+        "text": ": "
+      },
+      {
+        "quote": "The battle begins in fifty ticks",
+        "cite": "c4-b98"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c26-b101"
+      }
+    ],
+    [
+      {
+        "text": "When the voice says "
+      },
+      {
+        "quote": "TAU FA",
+        "cite": "c4-b105"
+      },
+      {
+        "text": " alone, the gliders start flying."
+      },
+      {
+        "cite": "c4-b106"
+      }
+    ]
+  ]
+}

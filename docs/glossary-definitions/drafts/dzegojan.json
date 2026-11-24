@@ -1,0 +1,36 @@
+{
+  "slug": "dzegojan",
+  "term": "Dzegojan",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Dzegojan names the people of Dzego, as in "
+      },
+      {
+        "quote": "millions of Dzegojan who watch the games from across the country",
+        "cite": "c12-b87"
+      },
+      {
+        "text": ", and also describes things of Dzego."
+      },
+      {
+        "cite": "c12-b72"
+      }
+    ],
+    [
+      {
+        "text": "A speaker says the Dzegojan have "
+      },
+      {
+        "quote": "improved and perfected our language eight times with no top-down coercion and no head",
+        "cite": "c18-b126"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "slug": "greater-plum-harbor",
+  "term": "Greater Plum Harbor",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Greater Plum Harbor (GPH) is a walled place in Veridia that a passer-by calls "
+      },
+      {
+        "quote": "almost like a country inside a country",
+        "cite": "c3-b57"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c3-b64"
+      }
+    ],
+    [
+      {
+        "text": "From Veridia's perspective, "
+      },
+      {
+        "quote": "the land was all just one giant business's private property",
+        "cite": "c3-b78"
+      },
+      {
+        "text": ", and its research outputs and tooling are open source."
+      },
+      {
+        "cite": "c3-b53"
+      }
+    ]
+  ]
+}

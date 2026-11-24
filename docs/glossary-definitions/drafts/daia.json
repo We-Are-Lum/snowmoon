@@ -1,0 +1,36 @@
+{
+  "slug": "daia",
+  "term": "Daia",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Daia, "
+      },
+      {
+        "quote": "Aunt Daia",
+        "cite": "c1-b125"
+      },
+      {
+        "text": " to the children, is with Uncle Vil the co-family of Gladias and Seila; Febric and Hreda are from that co-family."
+      },
+      {
+        "cite": "c1-b125"
+      }
+    ],
+    [
+      {
+        "text": "She and Vil take care of all four children, including Gladias and Seila's Zven and Lily, "
+      },
+      {
+        "quote": "for the next half of the year",
+        "cite": "c1-b125"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

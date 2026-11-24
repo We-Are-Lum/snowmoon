@@ -1,0 +1,33 @@
+{
+  "slug": "len-su",
+  "term": "Len Su",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Len Su is a street in Sadzu Du; the Beautiful Plants food court is "
+      },
+      {
+        "quote": "on 2415 Len Su street, in Sadzu Du",
+        "cite": "c19-b61"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "An anonymous message is sent from there by someone who "
+      },
+      {
+        "quote": "burned four hundred zipcoins to send this message",
+        "cite": "c19-b61"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

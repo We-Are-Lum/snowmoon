@@ -1,0 +1,32 @@
+{
+  "slug": "ground-law",
+  "term": "Ground Law",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The Ground Laws are numbered basic laws of Veridia, "
+      },
+      {
+        "quote": "written right there in the documents",
+        "cite": "c25-b111"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "The fourteenth requires the military to defend Veridia, and the twenty-first requires government officials to perform their duties honestly and resign if any undue influence befalls them."
+      },
+      {
+        "cite": "c26-b165"
+      },
+      {
+        "cite": "c26-b176"
+      }
+    ]
+  ]
+}

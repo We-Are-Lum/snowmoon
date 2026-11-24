@@ -1,0 +1,46 @@
+{
+  "slug": "gladias",
+  "term": "Gladias",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Gladias is a citizen of Veridia, in its capital Meldan, and "
+      },
+      {
+        "quote": "an Acolyte: an Order member in training",
+        "cite": "c1-b57"
+      },
+      {
+        "text": " in the Order of Steering."
+      },
+      {
+        "cite": "c1-b3"
+      },
+      {
+        "cite": "c1-b19"
+      },
+      {
+        "cite": "c1-b56"
+      }
+    ],
+    [
+      {
+        "text": "He and Seila are the parents of Zven and Lily."
+      },
+      {
+        "cite": "c1-b125"
+      }
+    ],
+    [
+      {
+        "text": "Later he lives in Dzego as a de-facto Kungaupei advisor."
+      },
+      {
+        "cite": "c24-b20"
+      }
+    ]
+  ]
+}

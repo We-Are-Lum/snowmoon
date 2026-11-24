@@ -1,0 +1,35 @@
+{
+  "slug": "lectoby",
+  "term": "Lectoby",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Lectoby is a man in the "
+      },
+      {
+        "quote": "social media openness rubric",
+        "cite": "c20-b139"
+      },
+      {
+        "text": " whom Seila visits after asking for a message about the social media rubrics to be sent."
+      },
+      {
+        "cite": "c20-b137"
+      },
+      {
+        "cite": "c20-b138"
+      }
+    ],
+    [
+      {
+        "text": "His wife is stuck in Northglade."
+      },
+      {
+        "cite": "c20-b140"
+      }
+    ]
+  ]
+}

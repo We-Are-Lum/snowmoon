@@ -1,0 +1,40 @@
+{
+  "slug": "arturian",
+  "term": "Arturian",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The word appears in a Silverchat poll on who should run the Veridian military, whose options include "
+      },
+      {
+        "quote": "Arturian military advisors",
+        "cite": "c27-b54"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "That option draws 2% of all responses."
+      },
+      {
+        "cite": "c27-b120"
+      }
+    ],
+    [
+      {
+        "text": "Arturia is one of the cities shown in a diagram of the United Cities' co-governance system."
+      },
+      {
+        "cite": "c5-b45"
+      },
+      {
+        "cite": "c5-b46"
+      }
+    ]
+  ]
+}

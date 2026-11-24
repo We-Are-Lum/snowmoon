@@ -1,0 +1,31 @@
+{
+  "slug": "dalias",
+  "term": "Dalias",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Dalias appears only in a chart of individual projects funded through Graph Funding committees, in the entry "
+      },
+      {
+        "quote": "Dalias et al",
+        "cite": "c17-b73"
+      },
+      {
+        "text": " in the "
+      },
+      {
+        "quote": "Air quality portfolio",
+        "cite": "c17-b73"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c17-b74"
+      }
+    ]
+  ]
+}

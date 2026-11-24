@@ -1,0 +1,56 @@
+{
+  "slug": "deluin",
+  "term": "Deluin",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Deluin is a Minpentai player from Redshire who "
+      },
+      {
+        "quote": "won six of six games",
+        "cite": "c14-b31"
+      },
+      {
+        "text": " in the qualifiers and wins his semi-final by building walls and fortifying."
+      },
+      {
+        "cite": "c14-b90"
+      },
+      {
+        "cite": "c14-b91"
+      },
+      {
+        "cite": "c14-b94"
+      }
+    ],
+    [
+      {
+        "text": "Caught in Redshire when the Arctics take it, he sends Zei hidden messages."
+      },
+      {
+        "cite": "c15-b53"
+      },
+      {
+        "cite": "c15-b55"
+      },
+      {
+        "cite": "c19-b153"
+      }
+    ],
+    [
+      {
+        "text": "He later earns the Arctics' trust, becomes "
+      },
+      {
+        "quote": "one of the commanders on the Arctic side",
+        "cite": "c29-b114"
+      },
+      {
+        "text": ", and sends tactics against the flank he controls."
+      }
+    ]
+  ]
+}

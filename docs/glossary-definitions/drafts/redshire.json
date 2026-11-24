@@ -1,0 +1,34 @@
+{
+  "slug": "redshire",
+  "term": "Redshire",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Redshire takes part in the United Cities' co-governance, choosing twelve percent of the seats in Devanvil's parliament, and has south islands where people vacation."
+      },
+      {
+        "cite": "c2-b16"
+      },
+      {
+        "cite": "c10-b21"
+      },
+      {
+        "cite": "c4-b73"
+      }
+    ],
+    [
+      {
+        "text": "The Arctic Empire invades and annexes it; three government planes carrying President Albor and most of the parliament are shot down."
+      },
+      {
+        "cite": "c15-b6"
+      },
+      {
+        "cite": "c15-b10"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "slug": "mu",
+  "term": "Mu",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Mu is "
+      },
+      {
+        "quote": "An older woman",
+        "cite": "c4-b62"
+      },
+      {
+        "text": " who greets Zei at the Minpentai quarter-finals"
+      },
+      {
+        "cite": "c4-b63"
+      },
+      {
+        "cite": "c4-b64"
+      },
+      {
+        "text": ", then congratulates Zei and Bai and tells them about the priests' rule change."
+      },
+      {
+        "cite": "c4-b144"
+      },
+      {
+        "cite": "c4-b145"
+      },
+      {
+        "cite": "c4-b148"
+      }
+    ],
+    [
+      {
+        "text": "During the war she commands a drone fleet."
+      },
+      {
+        "cite": "c30-b71"
+      }
+    ]
+  ]
+}

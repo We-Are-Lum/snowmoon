@@ -1,0 +1,20 @@
+{
+  "slug": "celedil",
+  "term": "Celedil",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Celedil is Redshire's Prime Minister, who is on one of three government aeroplanes shot down during the Arctic invasion of Redshire."
+      },
+      {
+        "cite": "c15-b8"
+      },
+      {
+        "cite": "c15-b10"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "slug": "compute-box",
+  "term": "compute box",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "A compute box is one of the electronics sold on Hun Min street in Pafogai Du, alongside hand devices and watches."
+      },
+      {
+        "cite": "c2-b3"
+      }
+    ],
+    [
+      {
+        "text": "Febric carries one "
+      },
+      {
+        "quote": "attached by a cable",
+        "cite": "c1-b111"
+      },
+      {
+        "text": " to his hand device, and Zei has long hoped to buy his mom a new one."
+      },
+      {
+        "cite": "c7-b138"
+      }
+    ]
+  ]
+}

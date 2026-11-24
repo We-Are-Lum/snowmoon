@@ -1,0 +1,33 @@
+{
+  "slug": "kai",
+  "term": "kai",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "kai is the Dzegoban word in "
+      },
+      {
+        "quote": "'kai ja'. Literally 'plant water'",
+        "cite": "c17-b20"
+      },
+      {
+        "text": ", the word for tea, where ja means water."
+      }
+    ],
+    [
+      {
+        "text": "It also appears in the motto "
+      },
+      {
+        "quote": "'gie fe kiu kai ci bin hu': grow roots, no head",
+        "cite": "c2-b128"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "slug": "belgor",
+  "term": "Belgor",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Belgor is a man in a Veridian privacy robe, worn without the face cover and hood, whom Verdow introduces to Gladias."
+      },
+      {
+        "cite": "c17-b43"
+      },
+      {
+        "cite": "c17-b44"
+      },
+      {
+        "cite": "c17-b46"
+      },
+      {
+        "cite": "c17-b45"
+      }
+    ],
+    [
+      {
+        "text": "He explains to Gladias how Graph Funding works."
+      },
+      {
+        "cite": "c17-b49"
+      },
+      {
+        "cite": "c17-b50"
+      }
+    ]
+  ]
+}

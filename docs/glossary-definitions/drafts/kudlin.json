@@ -1,0 +1,20 @@
+{
+  "slug": "kudlin",
+  "term": "Kudlin",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Kudlin appears only in a chart of individual projects funded through Graph Funding committees, in an entry for Kudlin and Melana on effects on household chemicals."
+      },
+      {
+        "cite": "c17-b73"
+      },
+      {
+        "cite": "c17-b74"
+      }
+    ]
+  ]
+}

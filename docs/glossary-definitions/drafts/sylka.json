@@ -1,0 +1,39 @@
+{
+  "slug": "sylka",
+  "term": "Sylka",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Sylka is "
+      },
+      {
+        "quote": "Professor Sylka, president of VNU",
+        "cite": "c8-b17"
+      },
+      {
+        "text": ", who debates the Arctic ambassador Lord Ephelion on how to measure social progress."
+      },
+      {
+        "cite": "c8-b88"
+      }
+    ],
+    [
+      {
+        "text": "She argues that "
+      },
+      {
+        "quote": "Gross economic output alone measures one part of human progress",
+        "cite": "c8-b19"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c8-b18"
+      }
+    ]
+  ]
+}

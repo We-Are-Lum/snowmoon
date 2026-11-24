@@ -1,0 +1,35 @@
+{
+  "slug": "evelor",
+  "term": "Evelor",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Evelor is "
+      },
+      {
+        "quote": "the founder of Silverchat",
+        "cite": "c27-b21"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "Seila's plan is to convince him to run her Silverchat poll through the company itself, so that it gets the fee back."
+      },
+      {
+        "cite": "c27-b15"
+      },
+      {
+        "cite": "c27-b21"
+      },
+      {
+        "cite": "c27-b53"
+      }
+    ]
+  ]
+}

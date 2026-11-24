@@ -1,0 +1,40 @@
+{
+  "slug": "bai",
+  "term": "Bai",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Bai, full name Bai Jahen, is a Minpentai player who had beaten Zei three out of three times over the past years."
+      },
+      {
+        "cite": "c4-b72"
+      },
+      {
+        "cite": "c4-b90"
+      }
+    ],
+    [
+      {
+        "text": "She and Zei are teammates on team Zau in a quarter-final"
+      },
+      {
+        "cite": "c4-b88"
+      },
+      {
+        "cite": "c4-b90"
+      },
+      {
+        "text": ", then meet as the two finalists, a game Bai resigns."
+      },
+      {
+        "cite": "c7-b62"
+      },
+      {
+        "cite": "c7-b120"
+      }
+    ]
+  ]
+}

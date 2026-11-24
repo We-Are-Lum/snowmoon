@@ -1,0 +1,36 @@
+{
+  "slug": "kalimar",
+  "term": "Kalimar",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Kalimar is a district of "
+      },
+      {
+        "quote": "Meldan, the capital city of Veridia",
+        "cite": "c1-b3"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "It looks like a forest, with paths covered with trees and stone houses on both sides, and "
+      },
+      {
+        "quote": "it contains many hidden homes",
+        "cite": "c26-b26"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c27-b28"
+      }
+    ]
+  ]
+}

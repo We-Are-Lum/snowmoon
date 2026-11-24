@@ -1,0 +1,20 @@
+{
+  "slug": "sho-hei-dai",
+  "term": "sho hei dai",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "sho hei dai appears as a label on Zei's screen while he downloads files at a library terminal."
+      },
+      {
+        "cite": "c19-b100"
+      },
+      {
+        "cite": "c19-b101"
+      }
+    ]
+  ]
+}

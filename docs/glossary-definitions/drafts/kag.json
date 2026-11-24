@@ -1,0 +1,29 @@
+{
+  "slug": "kag",
+  "term": "KAG",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The KAG is Gladias's Key Allocation Group: he generates his voting key by meeting at least 3 of its 5 people and registering a blinded share of the key with each."
+      },
+      {
+        "cite": "c15-b40"
+      }
+    ],
+    [
+      {
+        "text": "Because the KAG "
+      },
+      {
+        "quote": "includes people I've met in person",
+        "cite": "c15-b41"
+      },
+      {
+        "text": ", taking over his votes would mean impersonating him in person."
+      }
+    ]
+  ]
+}

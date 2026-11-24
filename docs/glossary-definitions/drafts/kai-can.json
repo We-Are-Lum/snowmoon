@@ -1,0 +1,33 @@
+{
+  "slug": "kai-can",
+  "term": "kai can",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "kai can appears once, among the Dzegoban labels on a restaurant robot's picture-based menu screen, after Fin clicks "
+      },
+      {
+        "quote": "kai",
+        "cite": "c4-b22"
+      },
+      {
+        "text": " and a picture of a salad."
+      },
+      {
+        "cite": "c4-b23"
+      },
+      {
+        "cite": "c4-b20"
+      },
+      {
+        "cite": "c4-b24"
+      },
+      {
+        "cite": "c4-b25"
+      }
+    ]
+  ]
+}

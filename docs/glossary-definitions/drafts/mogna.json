@@ -1,0 +1,24 @@
+{
+  "slug": "mogna",
+  "term": "Mogna",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Mogna is a company whose cars the charging station makers threatened to lock out of "
+      },
+      {
+        "quote": "ninety percent of charging stations across Freetown",
+        "cite": "c10-b24"
+      },
+      {
+        "text": " when it would not contribute to defense; it then gave in."
+      },
+      {
+        "cite": "c10-b24"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "slug": "grapetime",
+  "term": "Grapetime",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Grapetime is a name used in the book's dates, as in the dateline "
+      },
+      {
+        "quote": "3724 Grapetime 15",
+        "cite": "c19-b1"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "A character from Redshire places it "
+      },
+      {
+        "quote": "about two months after they occupied Redshire",
+        "cite": "c31-b22"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

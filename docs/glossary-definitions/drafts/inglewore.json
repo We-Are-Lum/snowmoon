@@ -1,0 +1,41 @@
+{
+  "slug": "inglewore",
+  "term": "Inglewore",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Inglewore is a place where, Gladias thinks, "
+      },
+      {
+        "quote": "housing districts were for housing",
+        "cite": "c6-b51"
+      },
+      {
+        "text": ", so a coffee shop could not sit beside a house."
+      }
+    ],
+    [
+      {
+        "text": "A character says it makes "
+      },
+      {
+        "quote": "people fill forms for everything",
+        "cite": "c13-b8"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "Its older measurement units were long mocked as complicated and illogical."
+      },
+      {
+        "cite": "c9-b40"
+      }
+    ]
+  ]
+}

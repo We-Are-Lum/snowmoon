@@ -1,0 +1,29 @@
+{
+  "slug": "tapaia",
+  "term": "Tapaia",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Tapaia Square is a square about a kilometer west of Galanar Square, with tea and shops nearby but a more basic playground, and it feels "
+      },
+      {
+        "quote": "less lively than Galanar",
+        "cite": "c6-b102"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "Its library holds books that a speaker finds boring or in foreign languages."
+      },
+      {
+        "cite": "c6-b103"
+      }
+    ]
+  ]
+}

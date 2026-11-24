@@ -1,0 +1,24 @@
+{
+  "slug": "devanvil",
+  "term": "Devanvil",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Devanvil is one of the United Cities, linked to the others by co-governance votes: it gets votes in Redshire, and "
+      },
+      {
+        "quote": "Redshire chooses twelve percent of the seats in Devanvil's parliament",
+        "cite": "c10-b21"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c2-b16"
+      }
+    ]
+  ]
+}

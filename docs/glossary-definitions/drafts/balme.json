@@ -1,0 +1,47 @@
+{
+  "slug": "balme",
+  "term": "Balme",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Balme is a Keeper who is "
+      },
+      {
+        "quote": "in a rubric group for private schools",
+        "cite": "c20-b103"
+      },
+      {
+        "text": " and has met Delwart."
+      },
+      {
+        "cite": "c20-b95"
+      },
+      {
+        "cite": "c20-b102"
+      },
+      {
+        "cite": "c20-b120"
+      }
+    ],
+    [
+      {
+        "text": "When Seila visits her, she agrees to forward Seila's message to Keepers she knows."
+      },
+      {
+        "cite": "c20-b99"
+      },
+      {
+        "cite": "c20-b121"
+      },
+      {
+        "cite": "c20-b122"
+      },
+      {
+        "cite": "c20-b123"
+      }
+    ]
+  ]
+}

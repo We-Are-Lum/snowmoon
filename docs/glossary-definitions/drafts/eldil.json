@@ -1,0 +1,21 @@
+{
+  "slug": "eldil",
+  "term": "Eldil",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Eldil is a train destination mentioned once, while a war attack is being planned: "
+      },
+      {
+        "quote": "Last train to Eldil is arriving today",
+        "cite": "c29-b13"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

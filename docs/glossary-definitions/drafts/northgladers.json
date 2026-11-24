@@ -1,0 +1,21 @@
+{
+  "slug": "northgladers",
+  "term": "Northgladers",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Northgladers are mentioned once: a speaker says that when the Arctics gave them some of their technology, "
+      },
+      {
+        "quote": "it was on their own terms",
+        "cite": "c31-b46"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

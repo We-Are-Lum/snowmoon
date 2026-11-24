@@ -1,0 +1,20 @@
+{
+  "slug": "zin-go",
+  "term": "Zin Go",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Zin Go is a street in Pafogai Du that Gladias reaches on foot; at its intersection he can see the giant pyramid again."
+      },
+      {
+        "cite": "c18-b1"
+      },
+      {
+        "cite": "c18-b76"
+      }
+    ]
+  ]
+}

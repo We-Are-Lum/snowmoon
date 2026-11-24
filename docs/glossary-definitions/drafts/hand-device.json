@@ -1,0 +1,41 @@
+{
+  "slug": "hand-device",
+  "term": "hand device",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "A hand device is the device people carry with them; Gladias's runs "
+      },
+      {
+        "quote": "Emerald, the local AI",
+        "cite": "c1-b9"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "People use theirs to record video, look up buildings' tax rates, check rubrics, place orders and produce cryptographic proofs at entrance gates."
+      },
+      {
+        "cite": "c1-b77"
+      },
+      {
+        "cite": "c1-b22"
+      },
+      {
+        "cite": "c1-b54"
+      },
+      {
+        "cite": "c1-b108"
+      },
+      {
+        "cite": "c1-b41"
+      }
+    ]
+  ]
+}

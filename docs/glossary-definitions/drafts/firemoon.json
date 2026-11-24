@@ -1,0 +1,28 @@
+{
+  "slug": "firemoon",
+  "term": "Firemoon",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Firemoon is a name used in the book's dates, as in the datelines "
+      },
+      {
+        "quote": "3724 Firemoon 10",
+        "cite": "c14-b1"
+      },
+      {
+        "text": " and "
+      },
+      {
+        "quote": "3724 Firemoon 17",
+        "cite": "c15-b1"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

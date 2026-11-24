@@ -1,0 +1,39 @@
+{
+  "slug": "pafogai",
+  "term": "Pafogai",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Pafogai, or Pafogai Du, is Zei's home city in Dzego, where Fin and Zei's mother are, with a mountain pyramid at its south end."
+      },
+      {
+        "cite": "c12-b146"
+      },
+      {
+        "cite": "c15-b88"
+      },
+      {
+        "cite": "c24-b20"
+      }
+    ],
+    [
+      {
+        "text": "The name means "
+      },
+      {
+        "quote": "fourteen stone",
+        "cite": "c26-b40"
+      },
+      {
+        "text": "; asked where it came from, the answer given is "
+      },
+      {
+        "quote": "Think of the periodic table.",
+        "cite": "c26-b41"
+      }
+    ]
+  ]
+}

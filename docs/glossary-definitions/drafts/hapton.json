@@ -1,0 +1,35 @@
+{
+  "slug": "hapton",
+  "term": "Hapton",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Hapton is one of the cities in the diagram of the United Cities' co-governance system shown in Freetown."
+      },
+      {
+        "cite": "c5-b45"
+      },
+      {
+        "cite": "c5-b46"
+      }
+    ],
+    [
+      {
+        "text": "Jahn returns from a meeting there, where, he is told, "
+      },
+      {
+        "quote": "Everyone's been talking about raising their defense budgets",
+        "cite": "c10-b16"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c10-b15"
+      }
+    ]
+  ]
+}
