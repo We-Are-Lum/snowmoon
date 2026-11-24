@@ -16,7 +16,7 @@ export async function designPerson(request: Request): Promise<number | null> {
   const fid = await getFid(request);
   if (fid !== null) return fid;
   if (!blueskyMakesSheets()) return null;
-  const s = getSocial(request);
+  const s = await getSocial(request);
   if (!s || s.kind !== 'bluesky') return null;
   return getPerson(request);
 }

@@ -41,7 +41,7 @@ export async function POST(request: Request) {
   // A Farcaster sign-in; a Bluesky one too once its check is on (src/lib/social/design-person.ts).
   const fid = await designPerson(request);
   // A wallet or another sign-in that can't make sheets: 403, since a 401 would sign it out.
-  if (fid === null && (getWallet(request) || getSocial(request))) return NextResponse.json({ error: 'Sign in with Farcaster to make a picture' }, { status: 403 });
+  if (fid === null && ((await getWallet(request)) || (await getSocial(request)))) return NextResponse.json({ error: 'Sign in with Farcaster to make a picture' }, { status: 403 });
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to make a picture' }, { status: 401 });
   if (!IMAGES.enabled) return no('Making images is switched off for now', 503);
   // Invited FIDs only; while the remix challenge opens sheets (CHALLENGE.openSheets), anyone may make a sheet's views

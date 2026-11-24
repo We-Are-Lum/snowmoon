@@ -52,6 +52,13 @@ const W = {
   socialProfile: (_kind: 'Lens' | 'Bluesky') => 'Public pages for Lens and Bluesky accounts aren\u2019t ready yet.',
   signOutFarcaster: 'Sign out',
   signOutWallet: 'Sign out of this wallet',
+  // "Sign out on every device" (owner, 2026-11-23; branch session-30d). DRAFT wording (coding agent).
+  endAll: 'Sign out on every device',
+  endAllNote: 'Ends every sign-in to this site, in every browser, including this one. Inside the Farcaster app, Farcaster keeps you signed in.',
+  endAllConfirm: 'Sign out everywhere?',
+  endAllYes: 'Sign out everywhere',
+  endAllNo: 'Cancel',
+  endAllFailed: 'That didn’t work. Try again in a moment.',
   bothWork: 'Signed in with Farcaster and a wallet on this device: the work of both accounts is listed together; each piece is hidden by its own account.',
   inApp: 'Signed in through your Farcaster app.',
   wallet: 'Wallet',
@@ -245,6 +252,7 @@ export function YouPage() {
           viaSocial={auth.kind !== 'signed-in' && who.kind === 'farcaster' && wallet === null && social ? social.kind : null}
         />
         {data.wallet && <AccountRows who={data.wallet.who} signOut={signOutWallet} />}
+        <SignOutEverywhere />
         {data.link && <LinkPanel view={data.link} to={who.kind === 'farcaster' ? who : null} reload={load} />}
         {(data.linkedWallets ?? []).map((lw) => <LinkedWallet key={lw.address} w={lw} reload={load} />)}
         {data.social && (
@@ -290,6 +298,37 @@ export function YouPage() {
         <WorkList title={W.pictures} id="you-pictures" items={tag('pictures')} render={(p) => <PictureRow key={p.versionId} p={p} reload={load} />} />
       </section>
     </Frame>
+  );
+}
+
+/**
+ * "Sign out on every device" (owner, 2026-11-23): one tap, then a confirm, ends every session of this person on the
+ * site (POST /api/auth/sign-out-everywhere), and this browser forgets its own sign-ins.
+ */
+function SignOutEverywhere() {
+  const [step, setStep] = useState<'idle' | 'confirm' | 'busy' | 'failed'>('idle');
+  const go = async () => {
+    setStep('busy');
+    const r = await authFetch('/api/auth/sign-out-everywhere', { method: 'POST' }).catch(() => null);
+    if (!r?.ok) return setStep('failed');
+    signOut();
+    signOutWallet();
+    signOutSocial();
+    window.location.reload();
+  };
+  return (
+    <div className="you-end-all">
+      {step === 'confirm' || step === 'busy' ? (
+        <p className="you-note">
+          {W.endAllConfirm}{' '}
+          <button type="button" className="ic-secondary" disabled={step === 'busy'} onClick={() => void go()}>{W.endAllYes}</button>{' '}
+          <button type="button" className="ic-secondary" disabled={step === 'busy'} onClick={() => setStep('idle')}>{W.endAllNo}</button>
+        </p>
+      ) : (
+        <button type="button" className="ic-secondary you-sign-out" onClick={() => setStep('confirm')}>{W.endAll}</button>
+      )}
+      <p className="you-note">{step === 'failed' ? W.endAllFailed : W.endAllNote}</p>
+    </div>
   );
 }
 

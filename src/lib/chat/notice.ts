@@ -21,11 +21,15 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: '2a579cd2dcf02acc',
+  reviewedFor: 'e0bcfcfe67252313',
   /** Who did that reread: the coding agent, or the owner. */
   by: 'agent',
-  on: '2026-11-22',
+  on: '2026-11-23',
   note:
+    'Reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-23 for branch session-30d (30-day sign-ins), words unchanged: ' +
+    'the chat routes now await signedInAs (it reads the site\'s own session and checks "Sign out on every device"); who may ask, what is sent and what is kept are as before, ' +
+    'and the notice says nothing about how long a sign-in lasts, so items 1 to 4 hold. ' +
+    'Before that: ' +
     'Reread by the coding agent (Claude, a closed model by Anthropic) on 2026-11-22 for branch prompt-check-budget, words unchanged: ' +
     'src/lib/chat/model.ts now also reads the reply\'s finish_reason ("stop", or "length" at the token budget) into ModelReply, so the image prompt check ' +
     'can tell a check cut off with no answer from a refusal; the assistant\'s own code does not use it, nothing new is sent to any service or kept, so items 1 to 4 hold. ' +
