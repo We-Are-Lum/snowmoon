@@ -29,7 +29,7 @@ export function VoiceAllowance({ allowance }: { allowance: Allowance | null }) {
   const out = allowance.poolUsedUp || allowance.left <= 0;
   return (
     <p className={out ? 'vr-warn vr-allowance' : 'vr-small vr-allowance'} data-slot="storyboard-allowance" {...(out ? { role: 'status' } : {})}>
-      {line} <span className="vr-tag">{ALLOWANCE_WORDING.draft}</span>
+      {line}
     </p>
   );
 }

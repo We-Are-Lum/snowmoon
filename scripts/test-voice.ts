@@ -794,7 +794,7 @@ r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(800
 {
   const j = (await r.json()) as { error: string; reason?: string; resetAt?: string };
   const { ALLOWANCE_WORDING: AW } = await import('../src/lib/voice/allowance-wording');
-  check('$. a whole take past the day\'s number is refused (429), in the drafted line, with its reason and reset instant (Nate, 2026-11-23)', r.status === 429 && j.error === AW.takes && AW.takes === `You've converted today's ${VOICE.caps.perPersonConversions} takes. Your drafts are kept, and your recording stays on this device: convert it again from {reset}.` && j.reason === 'takes' && typeof j.resetAt === 'string' && /T00:00:00\.000Z$/.test(j.resetAt), JSON.stringify(j));
+  check('$. a whole take past the day\'s number is refused (429), in the reread line, with its reason and reset instant (Nate, 2026-11-23)', r.status === 429 && j.error === AW.takes && AW.takes === `You've converted today's ${VOICE.caps.perPersonConversions} takes. Your drafts are kept, and your recording stays on this device: convert it again from {reset}.` && j.reason === 'takes' && typeof j.resetAt === 'string' && /T00:00:00\.000Z$/.test(j.resetAt), JSON.stringify(j));
 }
 r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
 check('$. ... while a sentence can still be redone', r.status === 200);
@@ -810,7 +810,7 @@ r = await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(
 {
   const j = (await r.json()) as { error: string; reason?: string; resetAt?: string };
   const { ALLOWANCE_WORDING: AW } = await import('../src/lib/voice/allowance-wording');
-  check('$. past the day\'s credits, calls are refused until midnight UTC, in the drafted line', r.status === 429 && j.error === AW.takesPool && AW.takesPool === "Today's recordings for everyone are used up. Your recording stays on this device: convert it from {reset}." && j.reason === 'takes-pool' && typeof j.resetAt === 'string', JSON.stringify(j));
+  check('$. past the day\'s credits, calls are refused until midnight UTC, in the reread line', r.status === 429 && j.error === AW.takesPool && AW.takesPool === "Today's voice conversions for everyone are used up. Your recording stays on this device: convert it from {reset}." && j.reason === 'takes-pool' && typeof j.resetAt === 'string', JSON.stringify(j));
 }
 await sql`delete from studio.voice_costs where model = 'x-cap'`;
 // A failed conversion: counted as failed, the hold given back, and the provider's words (which quote the input) not passed on.

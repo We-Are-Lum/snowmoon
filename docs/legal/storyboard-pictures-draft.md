@@ -1,8 +1,8 @@
-# Storyboard pictures' own daily count: the Privacy line (DRAFT, for Nate's reread)
+# Storyboard pictures' own daily count: the Privacy line (reread)
 
-Branch `voice-picture-allowance`, 2026-11-23. Drafted by the coding agent (Claude, a closed model by Anthropic); DRAFT
-until Nate's reread. In `src/lib/legal.ts` without its reread key (P6k is red until he says "reread"); it ships in the
-same release as the allowance (legal texts describe today). Terms: no change.
+Branch `voice-picture-allowance`, 2026-11-23. Drafted by the coding agent (Claude, a closed model by Anthropic). Reread
+by Nate on 2026-11-24, as drafted ("reread too: Privacy §4's daily-count item with "storyboard pictures" added, as
+drafted"). It ships in the same release as the allowance (legal texts describe today). Terms: no change.
 
 ## Why
 
