@@ -1,4 +1,63 @@
-# voice-improv: improvising, and timing without a button (DRAFT branch report)
+# Handoff: voice-improv (improvising, and timing without a button; DRAFT branch report)
+
+## Handoff (2026-11-24, ~13:30 PT; Nate's laptop closing; a cloud session carries on from here)
+
+**State:** pushed and clean at `20f2b9af` (and this report's commit after it). No PR yet. Not to merge: Nate's reread
+and merge word first. No SQL.
+
+**Done:** everything in "Done" below. tsc clean; test:voice 339 ok, all passed (on 20f2b9af).
+
+**Left, in order:**
+1. **Merge `origin/guide-fixes`** into this branch when it lands (or once it is on main): another agent's six
+   guided-storyboard fixes (voice-guide.tsx's conversation layout, look/clothes references in shot-picture.ts, Make
+   it/progress, the ask box, and /ephelion replacing /storyboard/record with a redirect). Resolve in favour of both;
+   expect conflicts in `src/components/voice-guide.tsx`, `src/lib/voice/shot-picture.ts`, `src/components/voice-record.tsx`.
+   Then re-run tsc and test:voice. (The screenshot script opens `/storyboard/record`: follow the redirect or use `/ephelion`.)
+2. test:challenge, the production build, the screenshots, check:principles and check:ui (the run
+   `/Users/nathan/ephelion-voice-screens/imp-full.sh` was started at ~13:20 and may finish; its log is `/tmp/imp-full.log`).
+   Expected: check:principles fails only P6a and P6d (local-only), P6k (the Privacy drafts, unreread) and P1i (consent
+   v4 is the draft); check:ui only the two known /challenge/make "Make it" items.
+3. Upload the screenshots: `node /Users/nathan/ephelion-voice-screens/improv/page.mjs` (R2 keys from main's `.env.local`,
+   never printed) and put the link here and in the PR.
+4. Open the PR (title: "Voice improv: improvising, the transcript as the words, no Time this reading (not to merge yet:
+   needs Nate's reread)"), body = the "For Nate's reread" list below.
+
+**How to run its tests** (on a Mac with the worktree; a cloud session: clone, `npm ci` in its own checkout, and skip
+the lock):
+- Worktree `/Users/nathan/snowmoon-voice-improv`; `node_modules` is a symlink to the main checkout's: **never `npm
+  install`/`npm ci` there**.
+- Every tsc/test/build/server holds the shared lock: `mkdir /Users/nathan/.snowmoon-heavy.lock` (wait while it exists),
+  write an owner line into it, `rm -rf` it on exit (a trap). Background jobs over 30 minutes need a long timeout, or
+  they are killed with the lock held.
+- `npx tsc --noEmit -p .`; `npm run -s test:voice`; `npm run -s test:challenge`.
+- A build or server **never** runs on `.env.local` (production): move the worktree's `.env.local` aside by absolute path
+  and put it back after; never touch the main checkout's `.env*`. Build: `env -u VERCEL -u VERCEL_ENV
+  STUDIO_DATABASE_URL= npm run build`. Then `npx tsx scripts/voice-demo-db.ts --port=54389 &`,
+  `STUDIO_DATABASE_URL=postgres://studio_writer@127.0.0.1:54389/postgres npx next start -p 3089 -H 127.0.0.1 &`,
+  `npm run -s check:principles -- --url=http://127.0.0.1:3089`, and (only when the load is under 8) `npx tsx
+  scripts/check-ui.ts --url=http://127.0.0.1:3089`. No production secrets, no `vercel env pull`, no spending.
+
+**For Nate's reread (paste waiting):**
+- Label lines (Nate's own): "word for word"; "improvised on 'Doing fine' (version 2)".
+- Credit (Nate's own form): "Words by @name, improvising on 'Doing fine' · [the speech's credit]"; on the closing card the
+  AI line becomes "Voice converted by …; the spoken words transcribed by …" and the site line "People did the
+  performance, its words and the words for each picture. AI did the voice conversion, the transcript and the pictures."
+- Record page (Draft wording): "Read it word for word, or improvise around its theme in your own words. A take is at
+  most 2:00; the recording stops when the countdown reaches 0:00."; Stop button "1:18 left"; under an improvised take
+  "Your storyboard will use your own words, as transcribed. Before you storyboard it, you can correct the transcript
+  below, under Your drafts."; the folded word check "Meant it word for word? N of M sentences don't match the speech:
+  redo them."
+- Correction screen (Draft wording): "Correct the transcript of your words"; "This is what the transcription heard you
+  say, sentence by sentence. Correct any word it got wrong; your storyboard and its credits use these words. Only you
+  change them: no model edits them."; "Sentence N"; "Keep my corrections"; "Kept: your corrected words are your
+  storyboard's words. The correction is in the draft's recipe."
+- Board and guide: "Your words" in place of "Book" over an improvised take's words.
+- P2 line (Nate's own words, in `docs/principles.md` under Improvising).
+- Privacy §7 (Groq) and §4 (speeches), and own-voice consent v4 (points 1, 4, 7): word for word in
+  `docs/legal/voice-improv-draft.md`.
+- **A decision:** the book speech (c13-b64) takes about 2:40 word for word, so it is allowed 3 minutes
+  (`VOICE.takeMaxSecondsFor`); every other take 2 minutes.
+- No SQL to test.
 
 Branch `voice-improv`, from main 8a5e3de2 (2026-11-24). Written by the coding agent (Claude, a closed model by
 Anthropic) for Nate, and kept current so a later session (local or cloud) can carry on from it. Not merged: it merges
