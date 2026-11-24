@@ -505,7 +505,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
         ) : !d.making.real ? (
           <>Pictures aren&rsquo;t switched on yet ·{' '}</>
         ) : null}
-        <Link href="/storyboard/record">Back to recording</Link>{!reused && <> · <Link href={`/storyboard/guide/${d.draft.id}`}>Storyboard it with the guide</Link></>}
+        <Link href="/ephelion">Back to recording</Link>{!reused && <> · <Link href={`/storyboard/guide/${d.draft.id}`}>Storyboard it with the guide</Link></>}
       </p>
       {message && <p className="vr-warn" role="alert">{message}</p>}
 
@@ -957,7 +957,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             setBusy('remove');
             const r = await authFetch(`/api/voice/boards?draft=${d.draft.id}`, { method: 'DELETE' }).catch(() => null);
             setBusy(null);
-            if (r?.ok) window.location.href = '/storyboard/record';
+            if (r?.ok) window.location.href = '/ephelion';
             else setMessage(((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error ?? 'It could not be removed. Try again.');
           }}
         />

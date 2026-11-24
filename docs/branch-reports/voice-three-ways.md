@@ -7,7 +7,7 @@ pushed. No PR is open yet. Merge only on Nate's word.
 - **The three ways:** the server, the routes, the pages, the guide's timing step, the credits, and the SQL file. All are described under "What's built" below.
 - **Tests:**
   - test:voice section 3W, 29 checks;
-  - check:principles P2v, with a planted fault.
+  - check:principles P2w (was P2v; renamed when voice-improv's P2v was merged in), with a planted fault.
 - **Merged in:** `origin/voice-improv` (its WIP as of 3e5beadb).
 - **Last results** (before the latest commits): tsc had 2 small errors, since fixed. The 3W checks passed until a seed bug crashed the run, also fixed. The re-run is queued: `/Users/nathan/ephelion-voice-screens/w3/t2.sh`, log `/tmp/w3-t2.log`.
 - **Known test:voice failures that aren't this branch's:** G (reading timing), R (kept again) and $ (call counts). They come from voice-improv's WIP, which times readings when they're made; its own tests aren't updated yet.
@@ -41,7 +41,7 @@ pushed. No PR is open yet. Merge only on Nate's word.
 2. **Choose the team-made storyboards** for `VOICE.teamBoards`. The proposal is below: finish the "Doing fine" reading board `9c51bd22-ade7-4122-acdc-8951ec69f07a`, and one complete c13-b64 board.
 3. **SQL to test:** `supabase/migrations/NEXT_voice_three_ways.sql`, parts A, B, C and D, as postgres. It adds `voice_boards.source`, the guide's `timing` step, and replaces `publish_voice_board` and `take_down_voice_publication`.
 4. **Legal:** `docs/legal/voice-three-ways-draft.md`. Nothing in this release; one Privacy §6 sentence is proposed for the release that turns publishing on.
-5. **Principles:** `P2v`, proposed, for his reread.
+5. **Principles:** `P2w`, proposed, for his reread.
 
 ---
 
