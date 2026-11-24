@@ -42,26 +42,13 @@ every legal text for his "reread"; every migration for his "applied".
 ## Left before opening
 
 1. **The production test of #213**: Nate closes the tab during "Converting…"; the agent confirms the draft read-only.
-2. **The continuity decision**:
-   - Finished on Nate's word (2026-11-23): all 21 pictures, $1.09 in all, review page
-     https://media.snowmoon.party/review/c22fb345ffa3fb0475936a2232831380/index.html.
-   - Measured per picture: FLUX $0.016 to $0.022; GPT Image $0.073 with three references; Gemini $0.068 to $0.069.
-   - Nate picks the default model.
-3. **Caps and the ElevenLabs plan** (a decision). Today's caps are placeholders: 20,000 credits a day site-wide, $4, and
-   3 whole takes per person a day.
-   - A 2.5-minute take is about 1,700 credits with its word check, so about 11 takes a day for everyone together.
-   - The plan's 121,000 credits a month is about 70 takes a month.
-   - Before `open`: set the caps, and the plan (upgrade, or a waiting list).
-4. **Who pays for everyone's storyboard pictures** (a decision).
-   - Today only admins make real pictures, on their $20/day pool.
-   - At launch: a per-person daily count and a pool (the free pool, a new one, or prepaid), and whether closed models
-     are offered to everyone.
-   - A 12-shot board is 14 pictures (scene, 12 shots, closing card), up to 3 tries each: about $0.34 to $1 on FLUX, and
-     $0.80 to $2.50 on GPT Image.
-5. **Moderation of published storyboards** (a gap):
-   - A published storyboard has no "report" link and no moderator hide; today only its maker can take it down.
-   - Terms §7 says moderators may hide content that breaks the Terms.
-   - Needed before `publish`: a report link on /storyboard/spoken/<id>, and a moderator take-down (the admin queue).
+2. **The continuity test and the default model**: done. All 21 pictures, $1.09
+   (https://media.snowmoon.party/review/c22fb345ffa3fb0475936a2232831380/index.html); Nate chose GPT Image 2.5 Sunburst
+   as the default (2026-11-23).
+3. **Caps and the ElevenLabs plan**: the caps are decided (Numbers, below; branch `voice-take-caps`). 6,000 credits a
+   day is about 180,000 a month, still above the plan's 121,000: the plan, or the cap, before `open`.
+4. **Who pays for everyone's storyboard pictures**: proposed in Numbers, below, for Nate's decision.
+5. **Moderation of published storyboards**: Nate's go (2026-11-23), being built on its own branch.
 6. **The challenge's own rules** (a reread). Terms has §6e for the remix challenge. The Ephelion challenge needs its own
    short section: the dates, who can take part, what counts (a published storyboard of one of the four speeches), and
    any reward. Drafted when Nate gives the dates and rewards.
@@ -76,8 +63,9 @@ every legal text for his "reread"; every migration for his "applied".
    - check:ui and check:shipped can't sign in as an admin, so /storyboard/* is untested on production today.
    - Proposed: a `check:voice-live` that fetches the public pages (/storyboard/record's embed, a published storyboard's
      page) and, with an admin's test token never stored, the status route.
-10. **A React hydration error (#418)** seen by the rehearsal on an admin's page. The re-run names the page; the fix
-    comes with it.
+10. **React #418 on /storyboard/spoken/<id>**: found (2026-11-23). The page read the browser's video recorder while
+    rendering, so the server wrote "This browser can't record a video." and the browser didn't. Fixed on branch
+    `voice-spoken-418`.
 11. **Cleanup**: the throwaway worktrees of this work (listed in the report), on Nate's OK.
 
 ## Numbers (2026-11-23)
