@@ -195,6 +195,11 @@ a version, its credit says so; each version records that, set by Nate. A recordi
 exact version it was made from. (The three speeches of 2026-11-22: `config/voice-speeches.json`, from the Google Doc
 "Lord Ephelion: three speeches v2 (DRAFT)", each version's `aiHelp` set by Nate; checked by `test:voice`, section I.)
 
+**Improvising (owner, 2026-11-24; DRAFT, for Nate's reread; branch `voice-improv`).** A performer may improvise around a
+speech's theme. Their spoken words are their own, transcribed from their take and credited to them; they may correct the
+transcript, and no agent or model writes or edits it. (`src/lib/voice/spoken.ts`, `src/lib/voice/correct-words.ts`;
+checked by `test:voice`, section IM, and `check:principles` P2v, with a planted fault.)
+
 **Storyboard pictures (owner, 2026-11-22; reread by the owner 2026-11-22).** Storyboard pictures: the person asks the
 guide in their own words; the guide may write each picture's prompt and choose its reference pictures, never the
 speech's words. The recipe keeps the person's request, the guide's model, the prompt it wrote, the references it chose,
