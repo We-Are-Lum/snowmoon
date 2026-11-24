@@ -16,7 +16,7 @@ every legal text for his "reread"; every migration for his "applied".
 
 ## Done (live)
 
-- **Since 2026-11-23:** the storyboard guide over the one-scene engine (#224, migrations 0048 and 0049); the record page's top and Learn more (#219), take down on a reading (#221), the "stays on this
+- **Since 2026-11-23:** the take caps (#228); the #418 fix (#227); the storyboard guide over the one-scene engine (#224, migrations 0048 and 0049); the record page's top and Learn more (#219), take down on a reading (#221), the "stays on this
   device" line (#223, reread), Remove my storyboard with an in-page confirm (#222).
 - **Recording:**
   - consent own-voice-v3 (reread);
@@ -35,10 +35,9 @@ every legal text for his "reread"; every migration for his "applied".
 
 | What | State | Needs from Nate |
 |---|---|---|
-| #228, the take caps: 2 a person, 6,000 credits a day, readings from the admins' pool | checks running | merges if test:voice passes (Nate's word) |
-| #227, the published page's React #418 | fixed and verified on a production build | merges if test:voice and check:ui pass (Nate's word) |
-| #225, moderation (report, one queue with images, a reversible hide) | Nate's changes being made | test the changed SQL, "applied", the merge word (reread done) |
-| Storyboard pictures' own allowance and pool | being built | reread: the out-of-cap lines; the merge word |
+| #225, moderation (report, one queue with images, a reversible hide) | Nate's changes made; test:voice 345 ok | test the changed SQL, "applied", the merge word (reread done) |
+| #229, storyboard pictures' own allowance and pool | built; test:voice 332 ok | reread: the out-of-cap lines and the Privacy line; test, then apply, `NEXT_storyboard_pictures.sql`; the merge word |
+| #231, test:challenge reads the Learn more parts where #219 moved them | 565 + 268 pass (main fails 2) | the merge word |
 
 ## Left before opening
 
@@ -46,9 +45,9 @@ every legal text for his "reread"; every migration for his "applied".
 2. **The continuity test and the default model**: done. All 21 pictures, $1.09
    (https://media.snowmoon.party/review/c22fb345ffa3fb0475936a2232831380/index.html); Nate chose GPT Image 2.5 Sunburst
    as the default (2026-11-23).
-3. **Caps and the ElevenLabs plan**: decided (Numbers, below; #228). Nate, 2026-11-23: 6,000 credits a day fits a
+3. **Caps and the ElevenLabs plan**: decided and live (#228). Nate, 2026-11-23: 6,000 credits a day fits a
    two-week challenge within the plan. **Review after the challenge.**
-4. **Who pays for everyone's storyboard pictures**: decided (Numbers, below), being built on its own branch.
+4. **Who pays for everyone's storyboard pictures**: decided (Numbers, below), built (#229, not merged).
 5. **Moderation of published storyboards**: built (#225, not merged), with Nate's changes of 2026-11-23: storyboard
    reporters counted only since the last dismissal, the log kept when a storyboard is removed, one queue with images.
    **Later fix:** images still count reporters for all time, so after a dismissal one new reporter hides an image
@@ -67,9 +66,7 @@ every legal text for his "reread"; every migration for his "applied".
    - check:ui and check:shipped can't sign in as an admin, so /storyboard/* is untested on production today.
    - Proposed: a `check:voice-live` that fetches the public pages (/storyboard/record's embed, a published storyboard's
      page) and, with an admin's test token never stored, the status route.
-10. **React #418 on /storyboard/spoken/<id>**: found (2026-11-23). The page read the browser's video recorder while
-    rendering, so the server wrote "This browser can't record a video." and the browser didn't. Fixed on branch
-    `voice-spoken-418`.
+10. **React #418 on /storyboard/spoken/<id>**: fixed and live (#227).
 11. **Cleanup**: the throwaway worktrees of this work (listed in the report), on Nate's OK.
 
 ## Numbers (2026-11-23)
@@ -78,7 +75,7 @@ every legal text for his "reread"; every migration for his "applied".
 
 - **Takes:** 2 whole takes per person a day, and 6,000 credits a day for everyone's takes (about 3 whole 2.5-minute
   takes with their word checks, $1.09). Ready-made readings don't count: they and their timing are paid from the admins'
-  pool. Built on branch `voice-take-caps` (not merged).
+  pool. Live (#228).
 - **Default picture model for storyboards:** GPT Image 2.5 Sunburst wherever OpenAI serves; FLUX stays in the picker as
   the cheaper choice. Already so on production (storyboards use the chapter pictures' default).
 
@@ -98,8 +95,8 @@ is $1.10 with one try each, about $1.60 with 6 redos. The pool covers about 12 f
 
 1. Done on 2026-11-23: #220, #219, #221, #223 and #222, each with live checks, and the guide (#224, merged); the continuity test;
    the default model.
-2. Next: the take caps and the #418 fix (two small PRs, on Nate's word); moderation (#225: SQL test, "applied", the
-   ntfy reread, merge).
+2. Done: the take caps (#228) and the #418 fix (#227). Next: moderation (#225: SQL test, "applied", merge); the
+   storyboard pictures (#229: reread, SQL test, "applied", merge); #231.
 3. Launch decisions: the ElevenLabs plan for 6,000 credits a day; the storyboard pictures' numbers and their lines; the
    challenge section drafted and reread.
 4. The eight readings made and timed (admin, production).
