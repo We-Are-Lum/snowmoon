@@ -1058,8 +1058,8 @@ for (const id of Object.values(VOICE.models)) {
   }
   const sb = bytes(11);
   const eb = bytes(13);
-  await BS.keepPicture(sql, nd.id, NATE, 'scene', sb, sha(sb), { model: { id: 'stand-in' } });
-  await BS.keepPicture(sql, nd.id, NATE, 'end', eb, sha(eb), { model: { id: 'stand-in' } });
+  await BS.keepPicture(sql, nd.id, NATE, 'scene', sb, sha(sb), { model: { id: 'stand-in' }, prompt: 'The scene' });
+  await BS.keepPicture(sql, nd.id, NATE, 'end', eb, sha(eb), { model: { id: 'stand-in' }, prompt: 'The closing card' });
   await BS.saveBoard(sql, NATE, nd.id, [10, 20], shots, { description: 'A grey harbour.', styleId: null, kept: sha(eb) }, { setting: 'A tall window over a grey harbour.', kept: sha(sb) });
   const team = VOICE.teamBoards as unknown as { draftId: string; fid: number; title: string }[];
   const names = { name: async (fid: number) => (fid === NATE ? 'naaate' : null), getPrivate: (await import('../src/lib/voice/store')).getAudio };
@@ -1082,7 +1082,7 @@ for (const id of Object.values(VOICE.models)) {
   const gb = await BS.latestBoard(sql, gd.id, GARANCE);
   const gp = await BS.keptPictures(sql, gd.id, GARANCE);
   check('3W. Garance\'s voice over Nate\'s storyboard: its shots, words and pictures as they are, fitted to her take by sentence', r.status === 200 && (r.json as { fittedBy?: string }).fittedBy === 'sentences' && gb?.version === 1 && gb.shots.map((s) => s.key).join() === 's1,s2,s3' && gb.cuts.join() === '15,30' && gb.shots.every((s, i) => s.kept === shots[i].kept && s.description === shots[i].description) && gb.scene?.kept === sha(sb) && gb.closing?.kept === sha(eb), JSON.stringify(r.json));
-  check('3W. ... the pictures copied as they are (same sha256), each recipe kept, with where it came from', gp.length === 5 && gp.every((p) => { const rf = (p.recipe as { reusedFrom?: { draftId: string; fid: number; by: string; kind: string } }).reusedFrom; return rf?.draftId === nd.id && rf.fid === NATE && rf.by === 'naaate' && rf.kind === 'team'; }) && (gp.find((p) => p.shotKey === 's1')!.recipe as { prompt?: string }).prompt === "Nate's words for s1");
+  check('3W. ... the pictures copied as they are (same sha256), each recipe kept, with where it came from', gp.length === 5 && gp.every((p) => { const rf = (p.recipe as { reusedFrom?: { draftId: string; fid: number; by: string; kind: string } }).reusedFrom; return rf?.draftId === nd.id && rf?.fid === NATE && rf?.by === "naaate" && rf?.kind === "team"; }) && (gp.find((p) => p.shotKey === 's1')!.recipe as { prompt?: string }).prompt === "Nate's words for s1");
   check('3W. ... and the board carries its source', gb?.source?.kind === 'team' && gb.source.draftId === nd.id && gb.source.by === 'naaate');
   r = await WS.fitFromBoard(sql, GARANCE, { draftId: gd.id, source: { kind: 'team', draftId: nd.id, fid: NATE } }, names);
   check('3W. a take that already has a storyboard isn\'t fitted again', r.status === 409);

@@ -614,7 +614,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
       {/* Three ways in (Nate, 2026-11-24): from scratch (the page below), new pictures for a recording, or your voice over a storyboard. */}
       <VoiceWays
         speeches={s.speeches}
-        readings={status && status !== 'none' ? status.readings : []}
+        readings={status.readings}
         drafts={s.drafts}
         presetName={(id) => s.choices.find((c) => c.presetId === id)?.name ?? id}
         onSpeech={(id) => speechId !== id && pickSpeech(id)}
