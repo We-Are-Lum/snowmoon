@@ -166,3 +166,10 @@
 /* The Ephelion challenge's top (Nate, 2026-11-22): the intro, and each speech's one line under its title. */
 .vr-intro p { margin: var(--space-2) 0; }
 .vr-speech-line { display: block; }
+
+/* Improvising (Nate, 2026-11-24): correcting one's own transcribed words. */
+.vr-correct { margin: var(--space-2) 0; }
+.vr-correct > summary { cursor: pointer; }
+.vr-correct-list { padding-left: 1.4em; display: flex; flex-direction: column; gap: var(--space-2); max-width: 100%; }
+.vr-correct-list textarea { width: 100%; box-sizing: border-box; }
+.vr-word-check > summary { cursor: pointer; }
