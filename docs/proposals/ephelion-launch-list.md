@@ -115,30 +115,24 @@ counts as 3 of them, so only 3 GPT pictures fit in a day: not one board.
     it again from 4:00 pm."
   - everyone's: "Today's recordings for everyone are used up. Your recording stays on this device: convert it from
     4:00 pm."
-  - The lines on production today are "You've converted 2 whole takes today. Redo single sentences, or come back
-    tomorrow." and "Today's voice allowance is used up. It resets at midnight UTC."; these would replace them.
+  - The lines on production today are "You've converted 3 whole takes today. Redo single sentences, or come back
+    tomorrow." (the number follows the cap) and "Today's voice allowance is used up. It resets at midnight UTC."; these
+    would replace them.
 
 The six lines are drafted by the coding agent, for Nate's reread. Nothing in the pictures proposal is built.
 
 ## The order
 
-1. This week:
-   - the #213 production test;
-   - #220 (aiHelp), then #219 (the Learn more approval), then the three rehearsal fixes, one at a time, with live checks
-     between.
-2. The continuity decision and the default picture model.
-3. The guide:
-   - Nate's go;
-   - open its PR;
-   - the reread pack (P2u, three Privacy lines);
-   - SQL test, then "applied" (scene, then guide);
-   - merge, live checks, then admins try it on their phones.
-4. Launch decisions: caps and the ElevenLabs plan; who pays for pictures; moderation built (report and hide); the
+1. Done on 2026-11-23: #220, #219, #221, #223, #222 and the guide (#224), each with live checks; the continuity test;
+   the default model.
+2. Next: the take caps and the #418 fix (two small PRs, on Nate's word); moderation (#225: SQL test, "applied", the
+   ntfy reread, merge).
+3. Launch decisions: the ElevenLabs plan for 6,000 credits a day; the storyboard pictures' numbers and their lines; the
    challenge section drafted and reread.
-5. The eight readings made and timed (admin, production).
-6. The switches, one at a time, with live checks after each:
+4. The eight readings made and timed (admin, production).
+5. The switches, one at a time, with live checks after each:
    - `publish` (admins first, for a day);
    - `realPictures` true (with the chosen pool);
    - `open`;
    - `publishInvented`.
-7. The announcement: Nate's cast of /storyboard/record (it opens on the page since #218).
+6. The announcement: Nate's cast of /storyboard/record (it opens on the page since #218).
