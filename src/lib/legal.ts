@@ -50,9 +50,9 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: the day the storyboard guide (PR #224: the guide's dialogue, the one-scene references, Privacy words
-  // 1mbiyd1) merges and goes live. If the merge moves, this moves with it. (Before: 2026-11-22, PR #215; 2026-11-21, the
-  // Ephelion voice; 2026-11-21, PR #204; 2026-11-20, PR #196; 2026-11-19, PR #191.)
+  // MERGE DAY: the day 30-day sign-ins (branch session-30d, Privacy words 1a8wumq) merge and go live, 2026-11-23 (PT). If
+  // the merge moves, this moves with it. (Before: 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
+  // 2026-11-21, the Ephelion voice; 2026-11-21, PR #204; 2026-11-20, PR #196; 2026-11-19, PR #191.)
   effective: '2026-11-23',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
@@ -330,7 +330,13 @@ export const LEGAL: {
     // P2u line as drafted, and the three Privacy items above, word for word": §7's scene item (after the closed-model
     // challenge item), §4's guide item (after the speeches item) and §7's Groq item, as drafted, each in his words. The
     // words before were 1f6i5bx.
-    privacy: { words: '1mbiyd1', on: '2026-11-23', by: 'FID 6786' },
+    // 2026-11-23, the owner's reread for 30-day sign-ins (branch session-30d; docs/legal/sessions-30-days-draft.md),
+    // typed in his session: "reread: §3 "your sign-in, which lasts 30 days unless you sign out", and the new §4 line,
+    // kept in §4: "If you choose "Sign out on every device" on your You page: when you chose it, so that sign-ins made
+    // before then stop working."" §3's sentence replaces "your sign-in, which lasts about an hour (a day for a wallet,
+    // Lens or Bluesky sign-in)"; the §4 line follows "That you agreed to the terms for publishing, …"; both word for
+    // word. Terms unchanged. The words before were 1mbiyd1.
+    privacy: { words: '1a8wumq', on: '2026-11-23', by: 'FID 6786' },
   },
 };
 
@@ -364,7 +370,7 @@ export const PRIVACY: LegalDoc = {
   sections: [
     { n: 1, head: 'Who we are.', body: ['Lum LLC, a Wyoming limited liability company, operates Snowmoon Party.'] },
     { n: 2, head: 'The short version.', body: ['You can read and listen without an account, and we keep nothing about you when you do. We use no advertising or analytics trackers and set no cookies. We do not sell data.'] },
-    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a speech you record, until you remove it or record again, or your browser clears it (it is sent to us only to be converted, and we keep only its fingerprint, never the recording), a few other settings of yours, and, on the website, your sign-in, which lasts about an hour (a day for a wallet, Lens or Bluesky sign-in), a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, the Bluesky handle you last signed in with, to fill it in next time, and a payment you have sent but not yet seen credited. If you choose a closed model for a challenge picture, it also stores that you confirmed you are 18 or older, and which makers\' notices you asked not to be shown again; with each such picture we receive only that you confirmed, and don\'t keep it. These stay on your device, except that the assistant sends the chapter you\'re reading, as a number, with each question, so it can answer “where was I”; it isn\'t kept. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
+    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a speech you record, until you remove it or record again, or your browser clears it (it is sent to us only to be converted, and we keep only its fingerprint, never the recording), a few other settings of yours, and, on the website, your sign-in, which lasts 30 days unless you sign out, a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, the Bluesky handle you last signed in with, to fill it in next time, and a payment you have sent but not yet seen credited. If you choose a closed model for a challenge picture, it also stores that you confirmed you are 18 or older, and which makers\' notices you asked not to be shown again; with each such picture we receive only that you confirmed, and don\'t keep it. These stay on your device, except that the assistant sends the chapter you\'re reading, as a number, with each question, so it can answer “where was I”; it isn\'t kept. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
     {
       n: 4,
       head: 'Kept by us when you sign in.',
@@ -373,6 +379,7 @@ export const PRIVACY: LegalDoc = {
         [
           'Quote cards you save, and your likes. A saved card\'s page is public. Your individual likes are private; only totals are shown.',
           'That you agreed to the terms for publishing, and any of your own work you have hidden.',
+          'If you choose "Sign out on every device" on your You page: when you chose it, so that sign-ins made before then stop working.',
           'If your wallet is linked to your Farcaster account (because Farcaster lists the wallet\'s address as that account\'s, as its custody address or as an address it verified, or because you linked them while signed in with both): which wallet is linked to which account, how, when it was linked or unlinked, and why a link ended. While linked, signing in with the wallet is signing in as that account. You can unlink it on your You page.',
           'If you sign in with Lens: your Lens account\'s address and its Lens username, as Lens gave them at your last sign-in, and when you first and last signed in that way. If you sign in with Bluesky: your Bluesky account\'s identifier (its DID) and your handle, if your handle points back to that account, and when you first and last signed in that way. We keep these while you use the Service (section 9). We keep no token from Lens or from your Bluesky server: we use what they give us once, to confirm who you are, and drop it. We don\'t keep the wallet you signed with for Lens.',
           'If your Lens or Bluesky account is linked to your Farcaster account, or your Bluesky account to your Lens account (you linked them while signed in with both): which is linked to which, and when it was linked or unlinked. While linked, signing in with it is signing in as that account. You can unlink it on your You page. An account you unlink can be linked to a different account only after 30 days.',

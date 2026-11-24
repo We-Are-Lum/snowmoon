@@ -8,10 +8,16 @@ import type postgres from 'postgres';
  * for the person it signs in as and the account it is. Farcaster's own Quick Auth token, inside the Farcaster app, is
  * Farcaster's and isn't affected.
  *
- * Without the table (before the migration is applied) nothing is ended. If the database can't be read, a session is
- * not ended either (and the error's code is logged): a hiccup must not sign everyone out, since a 401 makes the page
- * forget its session.
+ * Without the table (before the migration is applied: 42P01) nothing is ended. Any other error reading it fails closed
+ * (owner, 2026-11-23): sessionEnded throws SessionCheckUnavailable, so the route answers 500 or 503, never 401. The page
+ * forgets its session only on a 401, so it keeps it through an outage, and an ended session never works during one.
  */
+export class SessionCheckUnavailable extends Error {
+  constructor(readonly code: string | undefined) {
+    super('the sign-in check could not be read');
+    this.name = 'SessionCheckUnavailable';
+  }
+}
 type Sql = postgres.Sql;
 
 const people = (persons: (number | null | undefined)[]) => [...new Set(persons.filter((p): p is number => Number.isSafeInteger(p) && p !== 0))];
@@ -25,8 +31,9 @@ export async function sessionEnded(sql: Sql | null, persons: (number | null | un
     return rows.length > 0;
   } catch (e) {
     const code = (e as { code?: string })?.code;
-    if (code !== '42P01') console.error('session-ends: read failed', code ?? (e as Error).name);
-    return false;
+    if (code === '42P01') return false;
+    console.error('session-ends: read failed', code ?? (e as Error).name);
+    throw new SessionCheckUnavailable(code);
   }
 }
 

@@ -16,6 +16,8 @@
  *   the side headers (X-Wallet-Session, X-Social-Session) are checked the same way.
  * - Old tokens: a wallet or Lens/Bluesky token from before (no issue time) counts as issued 24 hours before it expires.
  * - Without the table nothing is ended and the button answers "not available yet".
+ * - Fail closed (owner, 2026-11-23): any other read error throws, so no route answers 401 (the page keeps its session)
+ *   and an ended session never gets through; the real routes, in a process whose database is unreachable.
  * - One way in: only src/lib/auth.ts verifies a Farcaster token (and the sign-in route, once, to issue the session);
  *   no route reads the Authorization header for a sign-in itself; no cookie.
  */
@@ -160,7 +162,8 @@ check('… a non-admin’s session gets the admin route’s 404', (await adminSt
   check('without the table, nothing is ended (sign-ins work as before)', (await SE.sessionEnded(noTable, [PERSON], 0)) === false);
   check('without the table, "Sign out on every device" says it isn’t here yet, and the route answers 503 for that', (await SE.endEverywhere(noTable!, [PERSON])).ok === false && /if \(!r\.ok\) return NextResponse\.json\(\{ error: 'Not available yet' \}, \{ status: 503/.test(read('src/app/api/auth/sign-out-everywhere/route.ts')));
   const broken = failing('57P01');
-  check('if the database can’t be read, a session is not ended (a hiccup must not sign everyone out)', (await SE.sessionEnded(broken, [PERSON], 0)) === false);
+  const thrown = await SE.sessionEnded(broken, [PERSON], 0).then(() => null, (e: unknown) => e);
+  check('fail closed (owner, 2026-11-23): any other read error throws SessionCheckUnavailable, never "not ended"', thrown instanceof SE.SessionCheckUnavailable && (thrown as { code?: string }).code === '57P01');
 }
 
 // Expired and forged.
@@ -222,6 +225,27 @@ proof('a session issued before the moment is refused even when the moment is in 
   return (await fidOf(t)) === null;
 })());
 
+// Fail closed (owner, 2026-11-23): when studio.session_ends can't be read, no route answers 401 (the page would forget
+// its session) and an ended session never gets through. Run in its own process whose database is a closed port, so
+// every read fails at once, as in an outage (this harness's one shared PGlite session can't be made to fail and carry
+// on). Next answers an uncaught error with 500; the routes that catch answer "try again" (503).
+{
+  const { execFileSync } = await import('node:child_process');
+  const out = execFileSync(path.join(ROOT, 'node_modules/.bin/tsx'), ['--conditions=react-server', path.join(ROOT, 'scripts/lib/sessions-outage.ts')], {
+    env: { ...process.env, STUDIO_DATABASE_URL: 'postgres://studio_writer@127.0.0.1:9/postgres', DB_SILENT_MS: '3000' },
+    encoding: 'utf8',
+    timeout: 120_000,
+  });
+  const r = JSON.parse(out.trim().split('\n').pop()!) as Record<string, unknown>;
+  const no401 = (v: unknown) => v !== 401 && v !== 200 && v !== 404;
+  check('outage: a session never gets through (getFid throws, not its FID)', r.getFid === 'unavailable', String(r.getFid));
+  check('outage: /api/auth/me answers no 401 (it throws: Next answers 500)', r.me === 'unavailable', String(r.me));
+  check('outage: an admin route answers no 401 or 404 (it throws: 500)', r.admin === 'unavailable', String(r.admin));
+  check('outage: wallet and Lens sessions, and the side header, don’t get through', r.wallet === 'unavailable' && r.walletSide === 'unavailable' && r.lens === 'unavailable', `${r.wallet} ${r.walletSide} ${r.lens}`);
+  check('outage: a route that catches answers "try again" (503), not 401', r.hide === 503, String(r.hide));
+  check('outage: "Sign out on every device" answers no 401', no401(r.endAll), String(r.endAll));
+}
+
 // Old tokens (before this release): no issue time; counted as issued 24 hours before they expire.
 {
   const sign = (prefix: string, label: string, payload: object) => {
@@ -254,8 +278,9 @@ proof('a session issued before the moment is refused even when the moment is in 
   const sideReaders = files.filter((f) => f.file.startsWith('src/app/') && /readSession\(request\.headers|readSocialSession\(request\.headers/.test(f.text)).map((f) => f.file);
   check('the side headers (X-Wallet-Session, X-Social-Session) go through walletFrom / socialFrom, never the bare signature check', sideReaders.length === 0, sideReaders.join(', '));
   proof('a route reading X-Wallet-Session with the bare signature check is caught', [{ file: 'src/app/api/x/route.ts', text: "const w = readSession(request.headers.get('x-wallet-session'));" }].filter((f) => /readSession\(request\.headers/.test(f.text)).length === 1);
-  const legal = read('src/lib/legal.ts');
-  check('Privacy §3 still says "about an hour" until the owner’s reread (the new words are a draft in docs/legal/sessions-30-days-draft.md)', /lasts about an hour \(a day for a wallet, Lens or Bluesky sign-in\)/.test(legal));
+  const { PRIVACY, LEGAL, legalKey } = await import('../src/lib/legal');
+  const privacy = PRIVACY.sections.flatMap((x) => x.body.flat()).join('\n');
+  check('Privacy carries the owner’s reread words (2026-11-23): §3 "30 days unless you sign out", and the §4 line, word for word; the hour is gone; the reread key matches', privacy.includes('on the website, your sign-in, which lasts 30 days unless you sign out, a note of a Bluesky sign-in under way') && PRIVACY.sections.find((x) => x.n === 4)!.body.flat().includes('If you choose "Sign out on every device" on your You page: when you chose it, so that sign-ins made before then stop working.') && !/about an hour/.test(privacy) && LEGAL.ownerReread.privacy?.words === legalKey(PRIVACY));
 }
 
 check('no protocol errors on the test database', gate.protocolErrors().length === 0);

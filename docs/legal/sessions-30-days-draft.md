@@ -1,7 +1,8 @@
-# Privacy: 30-day sign-ins and "Sign out on every device" (DRAFT, for the owner's reread)
+# Privacy: 30-day sign-ins and "Sign out on every device" (REREAD by the owner, 2026-11-23)
 
-Branch `session-30d` (owner, 2026-11-23). Drafted by the coding agent (Claude, a closed model by Anthropic). Not in
-`src/lib/legal.ts` yet: the words go in after the owner's "reread", in the same release as the feature, never ahead of it.
+Branch `session-30d` (owner, 2026-11-23). Drafted by the coding agent (Claude, a closed model by Anthropic). The owner's
+reread (2026-11-23): §3 and the §4 line below, kept in §4, word for word; now in `src/lib/legal.ts` (Privacy words
+1a8wumq), shipping in the same release as the feature.
 
 ## What the site will do (and does on this branch)
 
