@@ -77,8 +77,15 @@ export interface ShownReplacement {
   credits?: RefCredit[];
 }
 
-/** What kind of published picture a reference is: a remix-challenge picture, any other reader's picture, a base, a sheet. */
-export type RefKind = 'remix' | 'picture' | 'base' | 'sheet';
+/**
+ * What kind of published picture a reference is: a remix-challenge picture, any other reader's picture, a base, a sheet;
+ * since 2026-11-24 (Garance's request, relayed by the owner), a chapter picture an admin redid or added and kept
+ * (`chapter`), or one of the edition's committed pictures (`edition`), each only while its chapter shows it.
+ */
+export type RefKind = 'remix' | 'picture' | 'base' | 'sheet' | 'chapter' | 'edition';
+/** The kinds that are the edition's own chapter pictures (not in studio.element_versions; their versionId is a chapter picture version's id, or the job's id for a committed one). */
+export const CHAPTER_KINDS: readonly RefKind[] = ['chapter', 'edition'];
+export const isChapterKind = (k: unknown) => CHAPTER_KINDS.includes(k as RefKind);
 
 /** A published picture picked as a reference: what the recipe lists for it (P1, P2). */
 export interface PickedRef {
@@ -93,6 +100,8 @@ export interface PickedRef {
   href: string;
   url: string;
   sha256: string;
+  /** A chapter picture's job (c<chapter>-b<block>-…), for the `chapter` and `edition` kinds: a hide of that job reaches it. */
+  job?: string;
 }
 
 /** One credit in a caption: whose, and what; `hidden` once its maker or a moderator hid it (no name or link then). */
@@ -258,12 +267,23 @@ export function creditLine(credits: RefCredit[]): string {
 /**
  * A snowmoon.party link (or path) to a published picture's page, as an admin pastes it, read to the version it names:
  * /challenge/p/<id> (a remix), /image/<id> (a reader's picture), /references/designs/<id> (a sheet or a base), and
- * /challenge/make?from=<id> (a base's or a remix's "Remix" link). Anything else, another site's address included, is
- * null. Pure; the server looks the version up and refuses it unless it is published (resolveReference).
+ * /challenge/make?from=<id> (a base's or a remix's "Remix" link). Since 2026-11-24 (Garance's request, relayed by the
+ * owner) also a picture's own address: https://pictures.snowmoon.party/images/readers/<32 hex>.jpg (a reader's picture,
+ * a sheet's view or a kept chapter picture: page 'file', id the 32 hex), https://media.snowmoon.party/images/seed/…
+ * (one of the edition's committed pictures: page 'seed', id its path), and a chapter picture's public recipe or draft
+ * link, /api/chapter-pictures/<id> or /api/you/illustrations/draft/<id> (page 'chapter'). Anything else, another
+ * site's address included, is null. Pure: the server looks the address up and refuses it unless what it names is
+ * published and shown (resolveReference, referenceFromLink); a draft's address is never on the public bucket, and the
+ * draft link reads to a draft, which is refused.
  */
 export const REF_HOSTS = ['snowmoon.party', 'www.snowmoon.party'];
+/** Where readers' pictures, sheets' views and kept chapter pictures are served (R2_IMAGES_PUBLIC_URL in production). */
+export const PICTURE_HOSTS = ['pictures.snowmoon.party'];
+/** Where the edition's committed pictures are served (src/lib/images/reference-picture.ts SEED_PICTURES). */
+export const MEDIA_HOSTS = ['media.snowmoon.party'];
+export type RefPage = 'remix' | 'image' | 'design' | 'make' | 'chapter' | 'file' | 'seed';
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-export function parseRefLink(raw: unknown, hosts: readonly string[] = REF_HOSTS): { id: string; page: 'remix' | 'image' | 'design' | 'make' } | null {
+export function parseRefLink(raw: unknown, hosts: readonly string[] = REF_HOSTS): { id: string; page: RefPage } | null {
   if (typeof raw !== 'string') return null;
   const t = raw.trim();
   if (!t || t.length > 500) return null;
@@ -273,10 +293,22 @@ export function parseRefLink(raw: unknown, hosts: readonly string[] = REF_HOSTS)
   } catch {
     return null;
   }
-  if (!['https:', 'http:'].includes(u.protocol) || !hosts.includes(u.hostname.toLowerCase())) return null;
+  if (!['https:', 'http:'].includes(u.protocol)) return null;
+  const host = u.hostname.toLowerCase();
   const path = u.pathname.replace(/\/+$/, '');
+  if (PICTURE_HOSTS.includes(host)) {
+    const f = /^\/images\/readers\/([0-9a-f]{32})\.jpg$/i.exec(path);
+    return f ? { id: f[1].toLowerCase(), page: 'file' } : null;
+  }
+  if (MEDIA_HOSTS.includes(host)) {
+    const f = /^\/images\/seed\/c\d{1,2}\/[a-z0-9-]{1,120}\.jpg$/.exec(path);
+    return f ? { id: path, page: 'seed' } : null;
+  }
+  if (!hosts.includes(host)) return null;
   const m = /^\/(challenge\/p|image|references\/designs)\/([^/]+)$/.exec(path);
   if (m && UUID_RE.test(m[2])) return { id: m[2].toLowerCase(), page: m[1] === 'challenge/p' ? 'remix' : m[1] === 'image' ? 'image' : 'design' };
+  const c = /^\/api\/(?:chapter-pictures|you\/illustrations\/draft)\/([^/]+)$/.exec(path);
+  if (c && UUID_RE.test(c[1])) return { id: c[1].toLowerCase(), page: 'chapter' };
   const from = u.searchParams.get('from') ?? '';
   if (path === '/challenge/make' && UUID_RE.test(from)) return { id: from.toLowerCase(), page: 'make' };
   return null;

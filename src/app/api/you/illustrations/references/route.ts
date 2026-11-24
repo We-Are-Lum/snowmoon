@@ -10,6 +10,8 @@ import { REF_WORDING, referenceFromLink, searchReferences } from '~/lib/chapter-
  * snowmoon.party link to the version it names, on the server, and refuses anything hidden, not published or not
  * found. Each answer gives the picture's kind, what it is, its maker, its page and its thumbnail; picking it is only
  * sending its version id with Make, where it is checked again. Admins only: anyone else gets 401 or 404.
+ * Since 2026-11-24: a picture's own address (pictures.snowmoon.party, media.snowmoon.party) too, and the edition's
+ * chapter pictures their chapters show now, found by chapter, character, note words or a pasted address.
  */
 const noStore = { 'Cache-Control': 'no-store' };
 
@@ -23,7 +25,7 @@ export async function GET(request: Request) {
   const show = (r: { versionId: string; kind: string; what: string; by: string; href: string; url: string }) => ({ versionId: r.versionId, kind: r.kind, what: r.what, by: r.by, href: r.href, thumb: r.url });
   if (q.has('link')) {
     const r = await referenceFromLink(sql, q.get('link'));
-    if (!r.ok) return NextResponse.json({ error: r.error, reason: r.reason }, { status: r.reason === 'not-a-link' ? 400 : r.reason === 'not-found' ? 404 : 409, headers: noStore });
+    if (!r.ok) return NextResponse.json({ error: r.error, reason: r.reason }, { status: r.reason === 'not-a-link' || r.reason === 'other-view' ? 400 : r.reason === 'not-found' ? 404 : 409, headers: noStore });
     return NextResponse.json({ ref: show(r.ref) }, { headers: noStore });
   }
   const words = (q.get('q') ?? '').trim();

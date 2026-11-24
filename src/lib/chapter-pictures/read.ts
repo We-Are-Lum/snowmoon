@@ -3,7 +3,7 @@ import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import type postgres from 'postgres';
 import { db } from '../db';
-import { withoutHidden, type Addition, type Look, type PickedRef, type PictureDecision, type PictureRecipe, type PictureVersion, type RefCredit, type ShownReplacement } from './shared';
+import { isChapterKind, withoutHidden, type Addition, type Look, type PickedRef, type PictureDecision, type PictureRecipe, type PictureVersion, type RefCredit, type ShownReplacement } from './shared';
 
 /**
  * Reading the edition's chapter pictures as admins left them (owner, 2026-11-18, option B; 0042_chapter_picture_versions):
@@ -72,6 +72,23 @@ const HIDDEN_REFS = (sql: Sql) => sql`(
   ) r(x)
   join studio.element_versions ev on ev.id::text = lower(x->>'versionId') join studio.elements e on e.id = ev.element_id
   where e.status <> 'published')`;
+/**
+ * The edition's own chapter pictures among picked references (2026-11-24) whose job an admin hid since
+ * (studio.seeded_hidden; none before 0030_admin_picks): their ids, as for a hidden reader's picture (P5f). One taken
+ * off or replaced is not hidden: its kept file and public recipe stay, so its credit stays.
+ */
+async function hiddenChapterRefs(sql: Sql, ...lists: unknown[]): Promise<Set<string>> {
+  const refs = lists.flatMap((l) => (Array.isArray(l) ? l : [])).filter((x) => isChapterKind((x as { kind?: unknown })?.kind)) as { versionId?: unknown; job?: unknown; kind?: unknown }[];
+  const jobOf = (x: (typeof refs)[number]) => String(x.job ?? (x.kind === 'edition' ? x.versionId : '') ?? '');
+  const jobs = [...new Set(refs.map(jobOf).filter((j) => /^c\d{1,2}-b\d{1,4}-[a-z0-9-]{1,80}$/.test(j)))];
+  if (!jobs.length) return new Set();
+  const rows = await sql<{ image_id: string }[]>`select image_id from studio.seeded_hidden where image_id in ${sql(jobs)}`.catch((e) => {
+    if (missing(e)) return [];
+    throw e;
+  });
+  const hid = new Set(rows.map((r) => r.image_id));
+  return new Set(refs.filter((x) => hid.has(jobOf(x))).map((x) => String(x.versionId).toLowerCase()));
+}
 const idsIn = (...lists: unknown[]) => lists.flatMap((l) => (Array.isArray(l) ? l : [])).map((x) => String((x as { versionId?: unknown })?.versionId ?? '')).filter(Boolean);
 
 /** The latest decision per job, joined to its version: a version shown in place of the committed file, or nothing. */
@@ -83,9 +100,10 @@ export async function readReplacements(sql: Sql): Promise<Map<string, ShownRepla
     from studio.chapter_picture_decisions d left join studio.chapter_picture_versions v on v.id = d.version_id
     order by d.job_id, d.decided_at desc, d.id desc`;
   const out = new Map<string, ShownReplacement>();
+  const chapterHidden = await hiddenChapterRefs(sql, ...rows.map((r) => r.picked));
   for (const r of rows) {
     if (!r.version_id || !r.public_url || !r.sha256) continue;
-    const hidden = new Set((r.hidden_refs ?? []).map((x) => x.toLowerCase()));
+    const hidden = new Set([...(r.hidden_refs ?? []).map((x) => x.toLowerCase()), ...chapterHidden]);
     const credits = creditsOf(r.refs, r.picked, (id) => !hidden.has(id.toLowerCase()));
     out.set(r.job_id, {
       versionId: r.version_id, jobId: r.job_id, chapter: r.chapter, url: r.public_url, sha256: r.sha256, width: r.width ?? 1024, height: r.height ?? 576,
@@ -229,7 +247,7 @@ export async function publicRecipe(sql: Sql, versionId: string) {
   const ds = await sql<DecisionRow[]>`select id, job_id, chapter, version_id, action, public_url, by_fid, by_handle, decided_at from studio.chapter_picture_decisions
     where job_id = ${v.jobId} order by decided_at, id`;
   // A reference hidden since is named nowhere public (P5f; decision 16): only its kind and sha256 stay.
-  const hidden = await hiddenAmong(sql, idsIn(v.recipe?.references, v.recipe?.picked));
+  const hidden = new Set([...(await hiddenAmong(sql, idsIn(v.recipe?.references, v.recipe?.picked))), ...(await hiddenChapterRefs(sql, v.recipe?.picked))]);
   return {
     id: v.id,
     job: v.jobId,
