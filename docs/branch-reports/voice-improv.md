@@ -1,5 +1,23 @@
 # Handoff: voice-improv (improvising, and timing without a button; DRAFT branch report)
 
+## State, 2026-11-25 (cloud session `session_015MNLwvqWNRKiBmpphsR2Lj`, carrying on from the handoff below)
+
+- **Step 1 done:** `origin/guide-fixes` is merged in (b7aae221), with its fix 7 server side. The one conflict was the
+  comment above the Privacy key in `src/lib/legal.ts`: both "NOT REREAD YET" notes are kept, and the Privacy texts
+  merged cleanly.
+- **Checks (cloud container, localhost, on b7aae221):**
+  - tsc: clean.
+  - test:voice: 360 ok, all passed.
+  - test:challenge: 565 passed, 268 moment checks.
+  - next build: passed.
+  - check:principles: fails P1i (own-voice-v4 is the draft, as expected), P6a (local-only), P6k (the Privacy drafts,
+    unreread) and P6d (not run: no Vercel CLI). P6g failed once with the rest and passes alone.
+  - check:ui: see the PR. This container's network refuses media.snowmoon.party.
+- **Not done:**
+  - The screenshots and their R2 page (step 3). The script is on the Mac, and there are no R2 keys here.
+  - Merging. It waits for Nate's reread and word.
+- **The PR body carries the reread list below.**
+
 ## Handoff (2026-11-24, ~13:30 PT; Nate's laptop closing; a cloud session carries on from here)
 
 **State:** pushed and clean at `20f2b9af` (and this report's commit after it). No PR yet. Not to merge: Nate's reread
