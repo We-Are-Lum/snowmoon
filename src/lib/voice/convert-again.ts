@@ -13,9 +13,3 @@ export const CONVERT_AGAIN = {
   keep: 'Keep this one',
 } as const;
 
-/**
- * The server's refusal of a second conversion of the same recording without "Convert again" (fix 7's server side,
- * Nate 2026-11-24: "not optional"). Draft wording, drafted by the coding agent (Claude, a closed model by Anthropic), for
- * Nate's reread; not reread yet. The page normally never sends this request: it shows the line above instead.
- */
-export const CONVERT_AGAIN_REFUSED = 'This recording is already converted and kept in your drafts. To convert it again, press Convert again.';

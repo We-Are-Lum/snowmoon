@@ -294,13 +294,13 @@ check('V. the kept draft plays the converted speech for its person', converted.l
 {
   // Fix 7's server side (Nate, 2026-11-24: "not optional"): the same recording is converted again only with "Convert
   // again" (again=1). Refused before anything is sent or counted: no ElevenLabs call, no take counted, no hold left.
-  const { CONVERT_AGAIN_REFUSED } = await import('../src/lib/voice/convert-again');
+  const { CONVERTED_ALREADY } = await import('../src/lib/voice/take-flow');
   const calls0 = stub.calls.filter((c) => c.path.startsWith('/v1/speech-to-speech')).length;
   const asks0 = (await sql`select count(*)::int n from studio.voice_asks where fid = ${NATE}`)[0].n;
   const rr = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take)) }));
   const jj = (await rr.json()) as { error?: string };
   const held = (await sql`select coalesce(sum(calls),0)::int n from studio.voice_costs where kind = 'reserved'`)[0].n;
-  check('V. fix 7: converting the same recording again without "Convert again" is refused (409), before anything is sent or counted', rr.status === 409 && jj.error === CONVERT_AGAIN_REFUSED && stub.calls.filter((c) => c.path.startsWith('/v1/speech-to-speech')).length === calls0 && (await sql`select count(*)::int n from studio.voice_asks where fid = ${NATE}`)[0].n === asks0 && held === 0, `${rr.status} ${jj.error} held ${held}`);
+  check('V. fix 7: converting the same recording again without "Convert again" is refused (409), before anything is sent or counted', rr.status === 409 && jj.error === CONVERTED_ALREADY && stub.calls.filter((c) => c.path.startsWith('/v1/speech-to-speech')).length === calls0 && (await sql`select count(*)::int n from studio.voice_asks where fid = ${NATE}`)[0].n === asks0 && held === 0, `${rr.status} ${jj.error} held ${held}`);
   const src = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
   check('V. fix 7: the page sends again=1 only from "Convert again"', /if \(convertAgain\) form\.set\('again', '1'\);/.test(src) && /convert\(blob, seconds, null, take\.speechId, again === 'yes'\)/.test(src) && (src.match(/form\.set\('again'/g) ?? []).length === 1);
 }
@@ -789,6 +789,28 @@ await sql`insert into studio.voice_costs (kind, model, funded, verdict, calls, c
 r = await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
 check('$. past the day\'s credits, calls are refused until midnight UTC', r.status === 429 && /allowance/.test(String(((await r.json()) as { error: string }).error)));
 await sql`delete from studio.voice_costs where model = 'x-cap'`;
+// Fix 7 (Nate, 2026-11-24: "it let me click convert again. Wasting a conversion"): the same recording converted twice
+// is refused, before anything is counted, unless the page sends "Convert again".
+{
+  const { createHash } = await import('node:crypto');
+  const twice = randomBytes(9000);
+  const sha = createHash('sha256').update(twice).digest('hex');
+  const asksOf = async () => (await sql`select count(*)::int n from studio.voice_asks where fid = ${GARANCE}`)[0].n;
+  r = await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(twice, { takeSha256: sha }) }));
+  check('$. fix 7: a recording converted once is kept as a draft', r.status === 200, String(r.status));
+  const before = await asksOf();
+  r = await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(twice, { takeSha256: sha }) }));
+  const j7 = (await r.json()) as { error?: string; reason?: string };
+  check('$. fix 7: the same recording again is refused (409), and nothing is counted', r.status === 409 && j7.reason === 'converted' && (await asksOf()) === before, `${r.status} ${JSON.stringify(j7)}`);
+  r = await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(twice) }));
+  check('$. fix 7: ... and refused on the recording itself when the page sends no fingerprint', r.status === 409, String(r.status));
+  // (Garance's two takes today: set the day's count back, so the 2-a-day cap doesn't decide the next step)
+  await sql`update studio.voice_asks set at = now() - interval '2 days' where fid = ${GARANCE}`;
+  r = await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(twice, { takeSha256: sha, again: '1' }) }));
+  check('$. fix 7: "Convert again" converts it once more', r.status === 200, String(r.status));
+  // These test drafts go, so the counts below are as before.
+  await sql`update studio.voice_asks set at = now() - interval '2 days' where fid = ${GARANCE}`;
+}
 // A failed conversion: counted as failed, the hold given back, and the provider's words (which quote the input) not passed on.
 stub.setFail(true);
 r = await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));

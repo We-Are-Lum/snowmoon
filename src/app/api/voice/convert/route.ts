@@ -7,10 +7,9 @@ import { voiceIdFor } from '~/lib/voice/presets';
 import { elevenLabsBase } from '~/lib/voice/flag';
 import { hasVoiceConsent, voiceConsentWording } from '~/lib/voice/consent';
 import { refusal, reserve } from '~/lib/voice/costs';
-import { convertTake, estimateConvertCredits, FlowError, type CostEntry, type Scope } from '~/lib/voice/take-flow';
+import { convertTake, CONVERTED_ALREADY, estimateConvertCredits, FlowError, type CostEntry, type Scope } from '~/lib/voice/take-flow';
 import { keepConvertedTake } from '~/lib/voice/keep-converted';
-import { convertedAlready } from '~/lib/voice/drafts';
-import { CONVERT_AGAIN_REFUSED } from '~/lib/voice/convert-again';
+import { convertedBefore } from '~/lib/voice/converted-before';
 
 export const maxDuration = 300;
 
@@ -59,7 +58,7 @@ export async function POST(request: Request) {
   // anything is sent), so a refused second conversion of the same recording counts nothing, not even a take.
   let settle: Awaited<ReturnType<typeof reserve>> | null = null;
   const admit = async (takeSha256: string) => {
-    if (scope.kind === 'whole' && !again && (await convertedAlready(sql, who.fid, takeSha256))) throw new FlowError(409, CONVERT_AGAIN_REFUSED);
+    if (scope.kind === 'whole' && !again && (await convertedBefore(sql, who.fid, takeSha256))) throw new FlowError(409, CONVERTED_ALREADY, 'converted');
     const no = await refusal(sql, who.fid, estimatedCredits, scope.kind === 'whole');
     if (no) throw new FlowError(429, no);
     settle = await reserve(sql, who.fid, VOICE.models.convert, estimatedCredits, scope.kind === 'whole');
@@ -108,7 +107,7 @@ export async function POST(request: Request) {
   } catch (e) {
     const s = settle as Awaited<ReturnType<typeof reserve>> | null;
     if (!costed && s) await s(null).catch(() => {});
-    if (e instanceof FlowError) return NextResponse.json({ error: e.message }, { status: e.status });
+    if (e instanceof FlowError) return NextResponse.json({ error: e.message, ...(e.reason ? { reason: e.reason } : {}) }, { status: e.status });
     return NextResponse.json({ error: 'Something went wrong. Your recording was not kept.' }, { status: 500 });
   }
 }
