@@ -77,6 +77,9 @@ coding agent and its helpers are in `docs/prompts/`.
 - `P2u` (reread by Nate 2026-11-23, as drafted): a storyboard picture the guide drafted keeps the person's request word for word, the
   guide's model, its draft and the prompt as sent, each reference with who chose it and why, and every edit; a planted
   recipe without the request must fail (`scripts/check-principles.ts`, `test:voice` section GU).
+- `P2v` (proposed, for Nate's reread; branch voice-three-ways): a storyboard reused on someone's own take keeps each shot's
+  picture, words and camera as its maker made them, only the timing fitted to the new voice, and its credits name the
+  maker; a planted change to a shot's words must fail (`scripts/check-principles.ts`, `test:voice` section 3W).
 - `P1i` (reread by Nate 2026-11-21; v3 reread 2026-11-22): the own-voice consent shown is `own-voice-v3`, and only by the voice pages and routes,
   only while `P1h` passes; `own-voice-v1` is used by nothing under `src/`; v2 stays on file, retired.
 - `npm run test:db`: after 0005, a recipe is public only if it made a
