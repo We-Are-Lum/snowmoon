@@ -1,3 +1,24 @@
+# State, 2026-11-25 (cloud session `session_015MNLwvqWNRKiBmpphsR2Lj`, carrying on from the handoff below)
+
+- **Steps 3 and 4 done:** `origin/voice-improv` is merged in, and guide-fixes comes with it (5846805a). /storyboard/record
+  is /ephelion now. The VoiceWays mount is in voice-record.tsx, which /ephelion draws, and "Back to recording" follows.
+- **P2v is now P2w.** voice-improv had also added a check called P2v (an improvised take's words). This branch's check
+  (a reused storyboard keeps its maker's work) is now P2w, in check-principles.ts, docs/principles.md and below.
+- **Two type errors from the merge, fixed:** the guide page's ask box covers every step but 'timing' (that step is the
+  fit panel's), and VoiceWays reads the readings with status's type.
+- **Checks (cloud container, localhost):**
+  - tsc: clean.
+  - test:voice: 391 ok, all passed, including 29 in section 3W. The G, R and $ failures the handoff mentions are gone.
+  - test:challenge: 565 passed, 268 moment checks.
+  - The build, check:principles and check:ui: see the PR.
+- **Step 1:** `/tmp/w3-t2.log` was on the Mac. Its checks were re-run here (above).
+- **Not done:**
+  - Step 2, the screenshots and their R2 page. The script is on the Mac, and there are no R2 keys here.
+  - Step 6, the `hidden_at is null` additions. They wait for #225 to merge; 0052 doesn't touch this branch's
+    functions.
+- **The migration** is still NEXT_ and NOT APPLIED. Its dry run, migration, read-back (a realistic insert and delete)
+  and undo are in place.
+
 # handoff (2026-11-24, for the cloud session carrying on)
 
 Branch `voice-three-ways`, worktree `/Users/nathan/snowmoon-voice-three-ways` on Nate's laptop. Everything is committed and
