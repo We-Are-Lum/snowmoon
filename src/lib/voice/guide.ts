@@ -135,7 +135,7 @@ export interface GuideRecipe {
   guide: { model: string; host: string; open: boolean } | null;
   request: { text: string; messageId: string; at: string } | null;
   prompt: { text: string; by: 'guide' | 'person'; draft: string | null };
-  references: { role: GuideRef['role']; ref: string; chosenBy: 'guide' | 'person'; why: string }[];
+  references: { role: GuideRef['role']; ref: string; chosenBy: 'guide' | 'person' | 'site'; why: string }[];
   edits: { what: 'prompt' | 'references'; before: unknown; after: unknown }[];
 }
 export function guideRecipe(o: {
@@ -143,6 +143,8 @@ export function guideRecipe(o: {
   request: { text: string; id: string; madeAt: string } | null;
   drafted: { prompt: string; references: GuideRef[] } | null;
   sent: { prompt: string; references: { role: GuideRef['role']; ref: string }[] };
+  /** References the site added (a shot in the scene's anchors, Nate 2026-11-24), with why. */
+  siteAdded?: { role: GuideRef['role']; ref: string; why: string }[];
 }): GuideRecipe {
   const edits: GuideRecipe['edits'] = [];
   const d = o.drafted;
@@ -155,7 +157,8 @@ export function guideRecipe(o: {
     prompt: { text: o.sent.prompt, by: d && d.prompt === o.sent.prompt ? 'guide' : 'person', draft: d ? d.prompt : null },
     references: o.sent.references.map((r) => {
       const g = d?.references.find((x) => key(x) === key(r));
-      return { role: r.role, ref: r.ref, chosenBy: g ? 'guide' : 'person', why: g?.why ?? 'chosen by the person' };
+      const site = o.siteAdded?.find((x) => key(x) === key(r));
+      return { role: r.role, ref: r.ref, chosenBy: g ? 'guide' : site ? 'site' : 'person', why: g?.why ?? site?.why ?? 'chosen by the person' };
     }),
     edits,
   };

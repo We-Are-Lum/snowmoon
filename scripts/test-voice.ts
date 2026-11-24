@@ -108,9 +108,10 @@ const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
   const { recordEmbed, spokenEmbed, RECORD_BUTTON, SPOKEN_BUTTON } = await import('../src/lib/voice/embeds');
   const r = JSON.parse(recordEmbed());
   const sp = JSON.parse(spokenEmbed('11111111-2222-4333-8444-555555555555'));
-  check('E. /storyboard/record opens itself: launch_frame, "Record a speech"', RECORD_BUTTON === 'Record a speech' && r.button.title === RECORD_BUTTON && r.button.action.type === 'launch_frame' && r.button.action.url.endsWith('/storyboard/record'));
+  check('E. /ephelion opens itself: launch_frame, "Record a speech" (fix 6, Nate 2026-11-24: the new address)', RECORD_BUTTON === 'Record a speech' && r.button.title === RECORD_BUTTON && r.button.action.type === 'launch_frame' && r.button.action.url.endsWith('/ephelion'));
+  check('E. fix 6: /storyboard/record redirects permanently to /ephelion', /permanentRedirect\('\/ephelion'\)/.test(readFileSync(path.join(ROOT, 'src/app/storyboard/record/page.tsx'), 'utf8')) && !existsSync(path.join(ROOT, 'src/app/storyboard/record/not-found.tsx')) && existsSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx')));
   check('E. a published storyboard opens itself: launch_frame, "Watch this storyboard"', SPOKEN_BUTTON === 'Watch this storyboard' && sp.button.title === SPOKEN_BUTTON && sp.button.action.type === 'launch_frame' && sp.button.action.url.endsWith('/storyboard/spoken/11111111-2222-4333-8444-555555555555'));
-  const layout = readFileSync(path.join(ROOT, 'src/app/storyboard/record/layout.tsx'), 'utf8');
+  const layout = readFileSync(path.join(ROOT, 'src/app/ephelion/layout.tsx'), 'utf8');
   const spoken = readFileSync(path.join(ROOT, 'src/app/storyboard/spoken/[id]/page.tsx'), 'utf8');
   check('E. both stay noindex, and the spoken embed is set only for a live publication', /robots: \{ index: false, follow: false \}, other: embedMeta\(recordEmbed\(\)\)/.test(layout) && /return pub \? \{ robots, other: embedMeta\(spokenEmbed\(pub\.id\)\) \} : \{ robots \}/.test(spoken) && /if \(!publishOn\(\)\) return \{ robots \}/.test(spoken));
   {
@@ -151,7 +152,7 @@ process.env.VOICE_TEST_ON = '';
 check('S. with the switch off, an admin isn\'t let in either', !voiceAllowed(NATE) && [401, 404].includes((await status.GET(as(NATE))).status));
 (VOICE as { adminTrial: boolean }).adminTrial = true;
 process.env.VOICE_TEST_ON = '1';
-for (const f of ['src/app/storyboard/record/page.tsx']) check(`S. ${f} is the site's usual not-found for everyone`, /notFound\(\);/.test(readFileSync(path.join(ROOT, f), 'utf8')));
+for (const f of ['src/app/ephelion/page.tsx']) check(`S. ${f} is the site's usual not-found for everyone`, /notFound\(\);/.test(readFileSync(path.join(ROOT, f), 'utf8')));
 {
   const saved = process.env.ELEVENLABS_BASE_URL;
   delete process.env.ELEVENLABS_BASE_URL;
@@ -896,6 +897,21 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
   check('R. the cost is counted as a transcription, measured against its estimate', (await sql`select coalesce(sum(calls),0)::int n from studio.voice_costs where kind = 'transcribe' and verdict = 'ok'`)[0].n >= 1);
 }
 
+// GF. The guided storyboard's fixes for the testers (Nate, 2026-11-24), read from the pages' code.
+{
+  const vg = readFileSync(path.join(ROOT, 'src/components/voice-guide.tsx'), 'utf8');
+  const vr = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  check('GF. fix 3: "Make it" until a picture is made on this page, then "Try again"; the leftover count of tries never decides it', /madeHere \? 'Try again' : 'Make it'/.test(vg) && /const madeHere = \(tries\[key\] \?\? \[\]\)\.length > 0/.test(vg) && !/triesMade\[[^\]]+\] \?\? 0\) \? 'Try again'/.test(vg));
+  check('GF. fix 3: while it works, "Making shot 2… about N seconds"; if it fails, it says so where it was asked', /Making \{label\}… \{about\(\)\}/.test(vg) && /role="status">Making/.test(vg) && /failed\?\.key === key && <p className="vr-warn" role="alert">/.test(vg) && /The picture could not be made: /.test(vg) && /makeButton\(shot\.key, `shot \$\{current \+ 1\}`/.test(vg));
+  check('GF. fix 4: the guide can be asked at every step (Send waits only for words and a free moment), says what it is for, with examples', /disabled=\{!ask\.trim\(\) \|\| busy !== null\}>/.test(vg) && !/stage === 'scene'\}>/.test(vg) && /'make him lean in'/.test(vg) && /'a close-up on his hands'/.test(vg) && (vg.match(/^    (setting|clothing|plan|shot|fix): 'Tell the guide/gm) ?? []).length === 5 && /className="vg-example"/.test(vg));
+  check('GF. fix 5: a conversation: the guide\'s turn is a bubble in the dialogue, with its choices as cards', /<section className="vg-dialogue"[\s\S]*className="vg-msg vg-guide vg-turn"[\s\S]*<\/section>\s*\{\/\* Ask the guide/.test(vg) && (vg.match(/className="vg-choice/g) ?? []).length >= 6 && /'Plan it for me'\)\}>Plan it for me</.test(vg));
+  check('GF. fix 5: every text box is still a PublishedTextField (P1f), and no bare textarea', !/<textarea/.test(vg) && (vg.match(/<PublishedTextField/g) ?? []).length >= 3);
+  check('GF. fix 1: the guide page leaves out a stale kept shot (another look, or before this scene), and locks the scene and his look on', /staleShots\(shots, scene, look, made\)/.test(vg) && /keptKeys = shots\.filter\(\(s\) => s\.kept && !stale\.includes\(s\.key\)\)/.test(vg) && /locked: true/.test(vg) && /disabled=\{c\.locked/.test(vg));
+  check('GF. fix 7: one tap converts once (a guard, not React state), and a converted recording is converted again only when asked', /if \(converting\.current\) return;\s*converting\.current = true;/.test(vr) && /finally \{\s*converting\.current = false;/.test(vr) && /\(keptFromTake \|\| convertedFor === take\.url\) && again !== 'yes'/.test(vr) && /\(!\(keptFromTake \|\| convertedFor === take\.url\) \|\| again === 'yes'\) && \(/.test(vr));
+  const { CONVERT_AGAIN } = await import('../src/lib/voice/convert-again');
+  check('GF. fix 7: the words, with today\'s take count from the cap', CONVERT_AGAIN.line === `Not happy with it? Convert this recording again: it uses one of today's ${VOICE.caps.perPersonConversions} takes.` && CONVERT_AGAIN.again === 'Convert again' && CONVERT_AGAIN.keep === 'Keep this one');
+}
+
 // GU. The guide (Nate, 2026-11-22/23; P2's "Storyboard pictures" ruling): a dialogue on a stand-in guide (no model).
 {
   const guideRoute = await route('guide');
@@ -937,6 +953,14 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
   r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: gd, shotKey: 'scene', description: B.sceneWords(sv.scene), styleId: styleG, characterIds: [lookG.id], guide: { messageId: settingMsg, clothingId: clothingMsg } }) }));
   const scP = (await r.json()) as { image: string; ticket: string; sha256: string; recipe: { guided: import('../src/lib/voice/guide').GuideRecipe; prompt: string } };
   check('GU. the scene picture\'s recipe keeps the person\'s request word for word, the guide\'s model and draft, and no edits', r.status === 200 && scP.recipe.guided.request?.text === asked && /stand-in/.test(scP.recipe.guided.guide?.model ?? '') && scP.recipe.guided.prompt.by === 'guide' && scP.recipe.guided.edits.length === 0 && g.guideRecipeProblems(scP.recipe.guided).length === 0, JSON.stringify(scP.recipe.guided).slice(0, 300));
+  {
+    // Fix 2 (Nate, 2026-11-24): with clothes described, the look goes as the face only (a head crop, recorded with its
+    // box and the sheet picture it came from), and the clothes lead the prompt.
+    const lr = (scP.recipe as unknown as { references: { role: string; sha256: string; crop?: { kind: string; from: string; box: { width: number; height: number } } }[]; prompt: string }).references.find((x) => x.role === 'anchor-look');
+    const pr = (scP.recipe as unknown as { prompt: string }).prompt;
+    check('GU. fix 2: the scene sends his look as the face only: a head crop, with its box and the sheet picture it came from', Boolean(lr?.crop) && lr!.crop!.kind === 'head' && /^[0-9a-f]{64}$/.test(lr!.crop!.from) && lr!.crop!.from !== lr!.sha256 && lr!.crop!.box.width > 0 && lr!.crop!.box.height <= lr!.crop!.box.width, JSON.stringify(lr));
+    check('GU. fix 2: ... and the clothes come first in the prompt, then the setting, not repeated; the look\'s text is for the face only', pr.startsWith(`Clothes: ${clothingText}\n`) && pr.split(clothingText).length === 2 && /Characters \(the face only; the clothes as above\)/.test(pr), pr.slice(0, 300));
+  }
   await boardKeep.POST(as(NATE, { method: 'POST', body: JSON.stringify({ ticket: scP.ticket, image: scP.image }) }));
   sv = await save(sv.shots, sv.cuts, { ...sv.scene, kept: scP.sha256 });
   // 3. The plan, from the speech's numbered sentences.
@@ -967,7 +991,27 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
   const mine = s2.guide.draft.references.filter((x) => x.ref !== lookG.id).map((x) => ({ role: x.role, ref: x.ref }));
   r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: gd, shotKey: k2, description: s2.guide.draft.prompt, angle: sv.shots[1].angle, styleId: styleG, characterIds: [lookG.id], guide: { messageId: s2.guide.id, references: mine } }) }));
   const p2G = (await r.json()) as typeof p1G;
-  check('GU. ... the person\'s change to the references is an edit, and the prompt stays the guide\'s', r.status === 200 && p2G.recipe.guided.prompt.by === 'guide' && p2G.recipe.guided.edits.some((x) => x.what === 'references') && p2G.recipe.references.map((x) => x.role).join() === 'anchor-scene,continuity');
+  check('GU. ... the person\'s change to the references is an edit, the prompt stays the guide\'s, and the site puts his look back (every shot in the scene is made with it; Nate 2026-11-24)', r.status === 200 && p2G.recipe.guided.prompt.by === 'guide' && p2G.recipe.guided.edits.some((x) => x.what === 'references') && p2G.recipe.references.map((x) => x.role).join() === 'anchor-scene,anchor-look,continuity' && p2G.recipe.guided.references.find((x) => x.role === 'anchor-look')?.chosenBy === 'site', JSON.stringify(p2G.recipe?.references));
+  // Fix 1 (Nate, 2026-11-24): a shot kept with another look (or before this scene) is not this scene's. Here the board's
+  // look changes after shot 1 was kept: shot 2's draft still names the old look and shot 1 as continuity; the picture is
+  // made with the new look and the scene only.
+  {
+    const look2 = b0.sheets.characters.find((c) => c.id !== lookG.id);
+    check('GU. fix 1: the test sheets have a second look', Boolean(look2));
+    if (look2) {
+      const cur = (await bget()).board as unknown as { cuts: number[]; shots: Shot[]; scene: Record<string, unknown> };
+      await boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: gd, cuts: cur.cuts, shots: cur.shots.map((x) => ({ ...x, styleId: styleG, characterIds: x.insert ? x.characterIds : [look2.id] })), scene: cur.scene }) }));
+      r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: gd, shotKey: k2, description: s2.guide.draft.prompt, angle: sv.shots[1].angle, styleId: styleG, characterIds: [lookG.id], guide: { messageId: s2.guide.id, references: s2.guide.draft.references.map((x) => ({ role: x.role, ref: x.ref })) } }) }));
+      const p2b = (await r.json()) as { recipe: { references: { role: string; versionId?: string; shotKey?: string }[]; characters: { versionId: string }[]; guided: import('../src/lib/voice/guide').GuideRecipe } };
+      check('GU. fix 1: after the look changes, shot 2 is made with the board\'s look and the kept scene, never the old look or shot 1 kept with it', r.status === 200 && p2b.recipe.references.map((x) => x.role).join() === 'anchor-scene,anchor-look' && p2b.recipe.references[1].versionId === look2.id && p2b.recipe.characters[0]?.versionId === look2.id && !p2b.recipe.references.some((x) => x.shotKey === k1 || x.versionId === lookG.id), JSON.stringify(p2b.recipe?.references));
+      // Back to his look, as the rest of the section expects.
+      await boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: gd, cuts: cur.cuts, shots: cur.shots.map((x) => ({ ...x, styleId: styleG, characterIds: x.insert ? x.characterIds : [lookG.id] })), scene: cur.scene }) }));
+    }
+    const sh = (key: string, kept: string | null, extra: Partial<Shot> = {}) => ({ key, start: 0, end: 1, description: '', angle: 'wide' as const, styleId: null, characterIds: ['C'], kept, ...extra });
+    const shots4 = [sh('s1', 'k1'), sh('s2', 'k2'), sh('s3', 'k3', { insert: true }), sh('s4', 'k4', { sceneConfirmed: 'S' })];
+    const made4 = { s1: { scene: '', look: 'B' }, s2: { scene: 'S', look: 'C' }, s3: { scene: '', look: 'B' }, s4: { scene: 'old', look: 'C' } };
+    check('GU. fix 1: staleShots: a shot kept before any scene with another look (Nate\'s shot 1) is stale; one made with this scene and look is not; an insert never is; a confirmed one is not', B.staleShots(shots4, { setting: 'x', kept: 'S' }, 'C', made4).join() === 's1' && B.staleShots(shots4, { setting: 'x', kept: 'S' }, 'B', made4).join() === 's1,s2' && B.madeWithOf({ scene: { sha256: 'S' }, characters: [{ versionId: 'C' }] }).look === 'C' && B.madeWithOf({ characters: [] }).scene === '');
+  }
   // 5. A fix by asking.
   const fix = '(test script\'s words) Make him lean in.';
   r = await gpost({ step: 'fix', text: fix, shotKey: k2, look: lookArg });
