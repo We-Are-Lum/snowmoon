@@ -250,8 +250,8 @@ check('W. numbers, case, punctuation and apostrophes compare as words', norm('4'
 // C. The consent.
 const wording = voiceConsentWording();
 const own = JSON.parse(readFileSync(path.join(ROOT, 'config/consent-own-voice.json'), 'utf8'));
-check('C. the page shows own-voice-v3, current, with Nate\'s reread points 2 and 5', wording.version === 'own-voice-v3' && wording.text[1] === "We never publish or keep your recording. It stays on your device, in this browser's storage, until you remove it or record again; your browser may also clear it. It is sent to be converted only when you press Convert." && wording.text[4].startsWith('We keep each converted speech as your draft as soon as it comes back, until you remove it. Once you publish it,') && wording.text[0] === 'You record a speech. Your recording is converted into a character\'s voice, and only the converted speech can be published.' && /against the speech\.$/.test(wording.text[3]));
-check('C. own-voice-v3 is the file\'s current (reread 2026-11-22), with no draft left; v1 and v2 stay on file, retired', own.current === 'own-voice-v3' && !('draft' in own) && Boolean(own.versions['own-voice-v1']) && Boolean(own.versions['own-voice-v2']));
+check('C. the page shows own-voice-v4 (the draft for improvising, for Nate\'s reread), v3\'s reread points 2 and 5 unchanged', wording.version === 'own-voice-v4' && wording.text[1] === "We never publish or keep your recording. It stays on your device, in this browser's storage, until you remove it or record again; your browser may also clear it. It is sent to be converted only when you press Convert." && wording.text[4].startsWith('We keep each converted speech as your draft as soon as it comes back, until you remove it. Once you publish it,') && wording.text[0] === 'You record a speech, word for word or improvised around its theme in your own words. Your recording is converted into a character\'s voice, and only the converted speech can be published.' && /an improvised take\'s transcript becomes its storyboard\'s words, which you can correct/.test(wording.text[3]));
+check('C. own-voice-v3 stays the file\'s current (reread 2026-11-22) and v4 is its draft until Nate\'s reread; v1 and v2 stay on file, retired', own.current === 'own-voice-v3' && own.draft === 'own-voice-v4' && Boolean(own.versions['own-voice-v1']) && Boolean(own.versions['own-voice-v2']));
 check('C. the training line stands without brackets (Nate turned training off, 2026-11-21)', wording.text.some((t) => t.includes('Our account is set so it doesn\'t use them to train its models.')) && !wording.text.join(' ').includes('['));
 const take = randomBytes(160_000); // the stub hears it as 40 s
 const form = (fields: Record<string, string | Blob>) => {
@@ -744,7 +744,7 @@ check('R. anyone let in can play it', r.status === 200 && (await r.arrayBuffer()
 // $. Costs and caps.
 const rows = await sql`select kind, funded, verdict, calls, credits, estimated_credits, cost_usd::float8 usd from studio.voice_costs order by kind, verdict`;
 const by = (k: string, v = 'ok') => rows.filter((x) => x.kind === k && x.verdict === v);
-check('$. each call is counted: 3 conversions, 3 transcriptions (the whole take\'s, made when it is kept, among them), 1 reading, no failed ones (refusals count nothing; admins: funded admin)', by('convert')[0]?.calls === 3 && by('transcribe')[0]?.calls === 3 && !by('transcribe', 'failed').length && by('reading')[0]?.calls === 1 && rows.every((x) => x.funded === 'admin'), JSON.stringify(rows));
+check('$. each call is counted: 3 conversions, 4 transcriptions (the whole take\'s, made when it is kept, and the reading\'s timing, made when it is made, among them), 1 reading, no failed ones (refusals count nothing; admins: funded admin)', by('convert')[0]?.calls === 3 && by('transcribe')[0]?.calls === 4 && !by('transcribe', 'failed').length && by('reading')[0]?.calls === 1 && rows.every((x) => x.funded === 'admin'), JSON.stringify(rows));
 check('$. the holds were all given back', rows.filter((x) => x.kind === 'reserved').every((x) => x.calls === 0 && x.estimated_credits === 0 && Math.abs(x.usd) < 1e-6));
 check('$. credits are the stub\'s own (header), estimated beside them', by('convert')[0].credits === 444 + 56 + 23 && by('convert')[0].estimated_credits > 0, JSON.stringify(by('convert')));
 check('$. the cost table has no person, request or time of day', !rows.some((x) => 'fid' in x || 'request_id' in x || 'at' in x));
@@ -800,22 +800,25 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
   const publishRoute = await route('publish');
   const rdId = rd.id;
   const boardGet = (fid: number) => boards.GET(as(fid, {}, `http://localhost/api/voice/boards?draft=${rdId}`));
+  // No "Time this reading" (Nate, 2026-11-24): the reading was timed when it was made, from the admins' pool.
   let g = await boardGet(NATE);
-  const gj = (await g.json()) as { reason?: string; estimateCredits?: number; seconds?: number };
-  check('G. a reading with no timings asks to be timed first, with its estimate', g.status === 409 && gj.reason === 'needs-timing' && (gj.estimateCredits ?? 0) > 0 && (gj.seconds ?? 0) > 30, JSON.stringify(gj));
+  check('G. the reading opens straight onto its storyboard: it was timed when it was made, with no button', g.status === 200 && Boolean(((await g.json()) as { draft?: { timeline?: unknown } }).draft?.timeline));
   check('G. timing is for people let in only (401 signed out, 404 to anyone else)', (await timingRoute.POST(as(null, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) })).status === 401 && (await timingRoute.POST(as(STRANGER, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) })).status === 404);
   const sttBefore = stub.calls.filter((c) => c.path === '/v1/speech-to-text').length;
-  const deletedBefore = stub.deletedTranscripts.length;
-  // Timed by someone who didn't make the reading (it is shared): Nate times Garance's reading.
-  g = await timingRoute.POST(as(NATE, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) });
-  const tj = (await g.json()) as { ok?: boolean; credits?: number; estimateCredits?: number; matched?: number; sentences?: number; transcriptDeleted?: boolean };
-  const stt = stub.calls.filter((c) => c.path === '/v1/speech-to-text');
-  check('G. one transcription of the reading\'s own audio, with the speech\'s names as key terms', g.status === 200 && stt.length === sttBefore + 1 && (stt.at(-1)!.fields.keyterms ?? '').length > 0 && stt.at(-1)!.files[0].sha256 === (await sql`select sha256 from studio.voice_draft_audio where draft_id = ${rdId} and n = 0`)[0].sha256, JSON.stringify(tj));
-  check('G. ... measured against its estimate, and the transcript deleted at ElevenLabs', typeof tj.credits === 'number' && (tj.estimateCredits ?? 0) > 0 && tj.transcriptDeleted === true && stub.deletedTranscripts.length === deletedBefore + 1 && stub.kept().length === 0);
+  const readingStt = stub.calls.filter((c) => c.path === '/v1/speech-to-text' && c.files[0]?.sha256 === (rd.recipe as unknown as { audioSha256: string }).audioSha256);
+  check('G. one transcription of the reading\'s own audio, when it was made, with the speech\'s names as key terms', readingStt.length === 1 && (readingStt[0].fields.keyterms ?? '').length > 0);
   const [trow] = await sql`select made_by, model, credits, transcript_deleted, timeline from studio.voice_reading_timings where draft_id = ${rdId}`;
-  check('G. ... kept once, with who asked, the model and the credits', Number(trow?.made_by) === NATE && trow.model === VOICE.models.transcribe && trow.transcript_deleted === true && (trow.timeline as { sentences: unknown[] }).sentences.length === speech.sentences.length);
+  check('G. ... kept once, with who made it, the model and the credits, the transcript deleted at ElevenLabs', Boolean(trow) && trow.model === VOICE.models.transcribe && trow.transcript_deleted === true && (trow.timeline as { sentences: unknown[] }).sentences.length === speech.sentences.length && stub.kept().length === 0);
   g = await timingRoute.POST(as(GARANCE, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) });
-  check('G. timing again makes no second call', g.status === 200 && ((await g.json()) as { already?: boolean }).already === true && stub.calls.filter((c) => c.path === '/v1/speech-to-text').length === sttBefore + 1);
+  check('G. timing again makes no second call', g.status === 200 && ((await g.json()) as { already?: boolean }).already === true && stub.calls.filter((c) => c.path === '/v1/speech-to-text').length === sttBefore);
+  {
+    // A reading made before readings were timed when made: timed on its first open, from the admins' pool, no button.
+    await sql`delete from studio.voice_reading_timings where draft_id = ${rdId}`;
+    const before = stub.calls.filter((c) => c.path === '/v1/speech-to-text').length;
+    const first = await boardGet(GARANCE);
+    const [again] = await sql`select made_by from studio.voice_reading_timings where draft_id = ${rdId}`;
+    check('G. an older reading with no timings is timed on its first open (one transcription), and opens', first.status === 200 && Boolean(again) && stub.calls.filter((c) => c.path === '/v1/speech-to-text').length === before + 1);
+  }
   // Two people's boards on the one reading: each their own versions, pictures and tries.
   const gb = (await (await boardGet(GARANCE)).json()) as { draft: { kind: string }; board: { version: number; cuts: number[]; shots: Shot[] } };
   const nb = (await (await boardGet(NATE)).json()) as { board: { version: number; cuts: number[]; shots: Shot[] } };
@@ -885,7 +888,7 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
   check('R. ... its transcript deleted at ElevenLabs right after', j.transcriptDeleted === true && stub.deletedTranscripts.length === tdBefore + 1 && stub.kept().length === 0);
   const [nd] = await sql`select fid, kind, speech_id, preset_id, published_at, recipe from studio.voice_drafts where id = ${j.id}`;
   const nr = nd?.recipe as { check: { sentences: number; matched: number } | null; timeline: { sentences: unknown[] } | null; kept: string; checkedAgain: { from: string }; takes: { takeSha256: string; convertedSha256: string; transcriptDeleted: boolean }[] } | undefined;
-  check('R. ... kept again under a new id, with its check, its strip and where it came from', Boolean(nd) && j.id !== w.draftId && Number(nd.fid) === GARANCE && nd.published_at === null && nr!.check?.sentences === speech.sentences.length && nr!.timeline?.sentences.length === speech.sentences.length && nr!.checkedAgain.from === w.draftId && /checked again/.test(nr!.kept) && nr!.takes[0].takeSha256 === oldRecipe!.takes[0].takeSha256 && nr!.takes[0].transcriptDeleted === true);
+  check('R. ... kept again under a new id, with its check, its strip and where it came from', Boolean(nd) && j.id !== w.draftId && Number(nd.fid) === GARANCE && nd.published_at === null && nr!.check?.sentences === speech.sentences.length && (nr!.timeline?.sentences.length ?? 0) > 0 && (nr as unknown as { spoken?: { kind: string; sentences?: unknown[] } }).spoken?.kind !== undefined && ((nr as unknown as { spoken: { kind: string; sentences?: unknown[] } }).spoken.kind === 'word-for-word' ? nr!.timeline?.sentences.length === speech.sentences.length : nr!.timeline?.sentences.length === (nr as unknown as { spoken: { sentences: unknown[] } }).spoken.sentences.length) && nr!.checkedAgain.from === w.draftId && /checked again/.test(nr!.kept) && nr!.takes[0].takeSha256 === oldRecipe!.takes[0].takeSha256 && nr!.takes[0].transcriptDeleted === true);
   const rows = await sql`select storage_key, sha256 from studio.voice_draft_audio where draft_id = ${j.id}`;
   check('R. ... with the same converted audio, copied, byte for byte', rows.length === 1 && rows[0].sha256 === oldRecipe!.takes[0].convertedSha256 && sha(new Uint8Array(readFileSync(path.join(STORE, rows[0].storage_key)))) === rows[0].sha256);
   check('R. the draft without a check is removed, rows and audio', j.oldRemoved && (await sql`select count(*)::int n from studio.voice_drafts where id = ${w.draftId}`)[0].n === 0 && storeFiles().every((f) => !f.startsWith(`voice-drafts/${w.draftId}/`)));
