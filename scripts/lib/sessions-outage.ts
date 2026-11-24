@@ -3,6 +3,7 @@
  * address set to a closed port, so every read of studio.session_ends fails at once (ECONNREFUSED), as in an outage.
  * Calls the real routes and prints what each did as JSON; test-sessions.ts checks it.
  */
+export {};
 const F = await import('../../src/lib/farcaster-session');
 const Wl = await import('../../src/lib/wallet/session');
 const So = await import('../../src/lib/social/session');
