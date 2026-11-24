@@ -50,10 +50,10 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: the day lettering, part C (PR #215: closed models draw quoted words, read back by their maker) merges and
-  // goes live. If the merge moves, this moves with it. (Before: 2026-11-21, the Ephelion voice; 2026-11-21, PR #204;
-  // 2026-11-20, PR #196; 2026-11-19, PR #191.)
-  effective: '2026-11-22',
+  // MERGE DAY: the day the storyboard guide (PR #224: the guide's dialogue, the one-scene references, Privacy words
+  // 1mbiyd1) merges and goes live. If the merge moves, this moves with it. (Before: 2026-11-22, PR #215; 2026-11-21, the
+  // Ephelion voice; 2026-11-21, PR #204; 2026-11-20, PR #196; 2026-11-19, PR #191.)
+  effective: '2026-11-23',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -326,11 +326,11 @@ export const LEGAL: {
     // pictures' read-back sentence, each Google sentence ending "and may keep logs to check for abuse, for up to 90 days."
     // as he asked; word for word as on #215's review page otherwise. No notice line, no new notice version. The words
     // before were mzoagf.
-    // NOT REREAD YET (branch voice-moderation, 2026-11-23): §7's ntfy item says "an image or a storyboard" (was "an
-    // image"), docs/legal/voice-moderation-draft.md. These words no longer match 1f6i5bx, so P6k is red until Nate says
-    // "reread". An agent never sets this key. (The storyboard guide, PR #224, carries its own reread words 1mbiyd1; at
-    // merge the two sets of words are combined.)
-    privacy: { words: '1f6i5bx', on: '2026-11-22', by: 'FID 6786' },
+    // 2026-11-23, owner's reread for the storyboard guide (branch storyboard-guide), typed in his session: "reread: the
+    // P2u line as drafted, and the three Privacy items above, word for word": §7's scene item (after the closed-model
+    // challenge item), §4's guide item (after the speeches item) and §7's Groq item, as drafted, each in his words. The
+    // words before were 1f6i5bx.
+    privacy: { words: '1mbiyd1', on: '2026-11-23', by: 'FID 6786' },
   },
 };
 
@@ -383,6 +383,7 @@ export const PRIVACY: LegalDoc = {
           'Frames you make in Remix, each with your words, the full prompt sent, the camera and people you set, the pictures sent with it, what it cost and your name. Anyone with a frame\'s link can see it, with your words and name. You can hide your own frames at any time.',
           'Storyboards you save: the frames in order, how long each is shown and the voice takes you chose. Anyone with a storyboard\'s link can see it, with your name. You can hide it.',
           'Speeches you record: each converted speech, in the character\'s voice, kept as your draft as soon as it comes back, until you remove it or publish it, with its recipe (the voice, the model, its settings and a fingerprint of your recording). Never your recording. You can remove a draft you haven\'t published; it is deleted, audio and all.',
+          'Your conversation with the storyboard guide: what you asked and what it drafted, kept with your storyboard until you remove it. When you publish the storyboard, each picture\'s request and the prompt it was made with are published with it.',
           'The styles and character sheets you choose to use in your pictures ("My picks"), kept until you clear them and seen only by you. An image you publish shows the ones it used, in its recipe.',
           'How many images, sheet remixes, Remix frames and voice conversions you make each day, to count the daily limits, and the reports you make. The count of voice conversions is deleted the next day.',
           'Whether your Farcaster account passed the check for making images and asking the assistant (its Neynar score against the score needed), when that was decided, and the score needed then; never the score itself. A pass is kept for 90 days and a fail for a day. A pass is removed sooner if your account is reported or one of your pictures is hidden by a moderator.',
@@ -410,10 +411,11 @@ export const PRIVACY: LegalDoc = {
           'Vercel hosts the site and sees your IP address and browser details, as any web host does. To offer a model only where its maker serves, we read the country your connection comes from; we don\'t keep it.',
           'Cloudflare stores and serves the pictures and audio, and sees the same when your device fetches them.',
           'Supabase holds our database.',
-          'Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, and the prompts for images you make, which are checked against the published rules.',
+          'Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, the prompts for images you make, which are checked against the published rules, and what you write to the storyboard guide, with the speech and your storyboard\'s choices; never your recording or your pictures.',
           'fal.ai receives the prompt for an image you make, and any pictures sent with it (in Remix: a depth picture of the camera you set, and the shot\'s place and cast pictures), and makes the image. It is asked to keep no copy. For a video test you approve, fal.ai receives the shot\'s frame (already public on the site), your note and the acting notes for that shot (yours, and any your agent filed for you), and makes a short video with the open LongCat-Video model. It is asked to keep no copy of the request. It returns the video at a link on its own storage; we copy it at once and keep it privately, for you. fal.ai keeps the video it made on its storage, at an unlisted link it gives only to us but that anyone holding it could open, for as long as fal.ai\'s settings keep it; we don\'t set a time yet.',
           'If you record a speech and agree to send it: ElevenLabs receives your recording and converts it into a character\'s voice, then receives the converted speech to transcribe it. It receives nothing else about you. It stores what it receives in the United States and may keep it under its own privacy policy; we ask it to delete each conversion and its transcript right after. It doesn\'t use them to train its models. ElevenLabs also reads this edition\'s speeches aloud in the characters\' voices, from their written words.',
           'If you choose a closed model for a challenge picture, its maker, OpenAI or Google, receives through Vercel AI Gateway your prompt and the picture you chose. It receives nothing else about you, and may not train on them. OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law. Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days. The gateway keeps no copy. If your prompt puts words in quotation marks, the picture made is also sent back, as it is published, through Vercel AI Gateway to the same maker, to read the words in it. For that, OpenAI keeps no copy, except of a picture its check flags as child sexual abuse material, which it keeps for review, and Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days.',
+          'If you make pictures for a storyboard, the model you choose receives the words for each picture, yours or the guide\'s draft, and up to three reference pictures: the scene you kept, the published sheet of the character in it, and other shots you kept for this storyboard, which stay private to you until you publish. fal.ai receives them for FLUX; OpenAI or Google, through Vercel AI Gateway, for theirs. Each keeps them as set out above for its pictures, and receives nothing else about you.',
           'OpenAI and Google receive, through Vercel AI Gateway, the prompt and the reference pictures for some of the pictures the project makes itself, such as the remix challenge\'s bases, styles and references, and the chapter pictures our admins add or redo with them. A chapter picture with words in quotation marks is also sent back, as it is published, to the same maker, to read the words in it; for that, OpenAI keeps no copy, except of a picture its check flags as child sexual abuse material, and Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days. Those reference pictures can include pictures people have published here; only the picture is sent. They receive nothing about you, and may not train on them. OpenAI may keep them for up to 30 days to check for abuse, and longer if needed to deal with abuse or required by law. Google keeps no copy, except in memory for up to 24 hours, and may keep logs to check for abuse, for up to 90 days. Each picture\'s recipe names the model and its maker.',
           'Farcaster\'s sign-in services confirm who you are when you sign in. They learn your Farcaster ID and that you signed in here, not what you read or ask. Farcaster\'s public API receives a Farcaster ID when we look up the username to show with published work, and in Minpentai\'s lobby and matches, and a username when a page is opened at /@name.',
           'If you sign in with Lens: our server asks Lens\'s API (api.lens.xyz) for a sign-in message for your Lens account and the wallet you sign with, and sends Lens your signature, which Lens checks. Lens receives those two addresses and learns that you signed in here. To show you which Lens accounts your wallet can sign in as, Lens also receives your wallet\'s address. When you make an image or a frame, or ask the assistant, without a linked Farcaster account, and we have no current decision for your Lens account, Lens\'s API also receives your Lens account\'s address, to look up its Lens score, which decides whether you get free images and frames and can ask the assistant. We don\'t keep the score: we keep only whether your account passed and when, for up to 90 days (a day if it didn\'t pass), and we check again sooner if your account is reported, one of your pictures is hidden by a moderator, or the score needed changes. Lens is never asked about you when someone views a page or when you open the image or frame maker or the assistant.',

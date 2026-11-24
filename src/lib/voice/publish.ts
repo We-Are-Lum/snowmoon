@@ -2,12 +2,12 @@ import 'server-only';
 import { createHash, randomUUID } from 'node:crypto';
 import type postgres from 'postgres';
 import { VOICE } from '../config';
-import { boardSource, keptPictures, latestBoard } from './board-store';
+import { boardSource, keptPictures, latestBoard, madeWithScene } from './board-store';
 import { CLOSING, closingCredits, publishProblems, type Closing, type PictureModel } from './closing';
 import { closingCard } from './closing-card';
 import { publicUrl } from './public-store';
 import { hiddenKeyFor } from './store';
-import type { Shot } from './board';
+import { oldSceneShots, SCENE, type Shot } from './board';
 
 /**
  * Publishing a storyboard (Ephelion slice 4, 2026-11-21; DRAFT; behind VOICE.publish, off). The person's own act, from
@@ -69,6 +69,10 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
   const used = [...shots.filter((s) => s.kept && kept.has(`${s.key}:${s.kept}`)).map((s) => pictures.find((p) => p.shotKey === s.key && p.sha256 === s.kept)!)];
   const background = closing?.kept ? (pictures.find((p) => p.shotKey === CLOSING.key && p.sha256 === closing.kept) ?? null) : null;
   if (background) used.push(background);
+  // The scene picture (Nate, 2026-11-22) is published with the board: every shot in the scene was made from it.
+  const scene = board?.scene ?? null;
+  const scenePicture = scene?.kept ? (pictures.find((p) => p.shotKey === SCENE.key && p.sha256 === scene.kept) ?? null) : null;
+  if (scenePicture) used.push(scenePicture);
   const models = used.map((p) => pictureModel(p.recipe as Record<string, unknown>));
   const standIns = models.filter((m) => m.id === 'stand-in').length;
   const problems = publishProblems({
@@ -83,6 +87,8 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
     standIns,
     standInsAllowed: deps.standInsAllowed,
     inventedHeld: invented && !VOICE.publishInvented,
+    sceneKept: Boolean(scenePicture),
+    oldScene: oldSceneShots(shots, scene, madeWithScene(shots, pictures as unknown as { shotKey: string; sha256: string; recipe: unknown }[])),
   });
   if (!board) problems.unshift('Save the storyboard first.');
   const credits = closingCredits({
@@ -100,8 +106,10 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
     pictures: models,
     shots: shots.length,
     voice: reading ? 'reading' : 'performance',
+    scene: Boolean(scenePicture),
+    inserts: shots.filter((s) => s.insert).length,
   });
-  return { draft, board, pictures, used, background, problems, credits, recipe: r };
+  return { draft, board, pictures, used, background, scenePicture, problems, credits, recipe: r };
 }
 
 export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: PublishDeps): Promise<Result> {
@@ -115,7 +123,7 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
 
   const id = randomUUID();
   const audioRows = await sql`select n, role, sentence, replaces_start::float8 as "replacesStart", replaces_end::float8 as "replacesEnd", seconds::float8 as seconds, storage_key as key, sha256 from studio.voice_draft_audio where draft_id = ${p.draft.id} order by n`;
-  const files: { role: 'audio' | 'shot' | 'closing' | 'background'; key: string; sha256: string; [k: string]: unknown }[] = [];
+  const files: { role: 'audio' | 'shot' | 'closing' | 'background' | 'scene'; key: string; sha256: string; [k: string]: unknown }[] = [];
   const put: string[] = [];
   const copy = async (from: string, to: string, role: (typeof files)[number]['role'], extra: Record<string, unknown>, sha256: string) => {
     const bytes = await deps.getPrivate(from);
@@ -131,6 +139,10 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
     for (const s of p.board.shots) {
       const from = keyOf(s.key, s.kept!);
       await copy(from, `storyboards/${id}/${s.key}-${s.kept}.${from.endsWith('.png') ? 'png' : 'jpg'}`, 'shot', { shotKey: s.key, start: s.start, end: s.end }, s.kept!);
+    }
+    if (p.scenePicture) {
+      const scFrom = keyOf(SCENE.key, p.scenePicture.sha256);
+      await copy(scFrom, `storyboards/${id}/scene-${p.scenePicture.sha256}.${scFrom.endsWith('.png') ? 'png' : 'jpg'}`, 'scene', {}, p.scenePicture.sha256);
     }
     const bg = p.background!;
     const bgFrom = keyOf(CLOSING.key, bg.sha256);
@@ -180,9 +192,11 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
       timeline: p.draft.timeline,
       cuts: p.board.cuts,
       boardVersion: p.board.version,
-      shots: p.board.shots.map((s, i) => ({ n: i + 1, key: s.key, start: s.start, end: s.end, description: s.description, angle: s.angle, styleId: s.styleId, characterIds: s.characterIds, picture: strip(pictureRecipe(s.key, s.kept!)) })),
+      // The scene: the person's own words for the setting and the establishing picture every shot in the scene was made from.
+      scene: p.scenePicture ? { setting: p.board.scene!.setting, settingBy: 'the storyboard’s maker', picture: strip(pictureRecipe(SCENE.key, p.scenePicture.sha256)) } : null,
+      shots: p.board.shots.map((s, i) => ({ n: i + 1, key: s.key, start: s.start, end: s.end, description: s.description, angle: s.angle, angleBy: s.angleBy ?? 'person', insert: s.insert === true, styleId: s.styleId, characterIds: s.characterIds, picture: strip(pictureRecipe(s.key, s.kept!)) })),
       closing: { description: p.board.closing!.description, styleId: p.board.closing!.styleId, background: strip(pictureRecipe(CLOSING.key, bg.sha256)), credits: p.credits, cardSha256: cardSha, seconds: CLOSING.seconds, text: 'set by the site from this recipe and drawn over the picture' },
-      people: [...(p.draft.kind === 'reading' ? [] : ['the performance']), 'each shot’s description and camera', 'the cuts (moved from a rule’s proposal)', 'the closing card’s look', 'which pictures were kept'],
+      people: [...(p.draft.kind === 'reading' ? [] : ['the performance']), ...(p.scenePicture ? ['the scene’s setting', 'which shots are inserts'] : []), 'each shot’s description and camera', 'the cuts (moved from a rule’s proposal)', 'the closing card’s look', 'which pictures were kept'],
       ai: p.draft.kind === 'reading' ? ['the reading (text-to-speech)', 'the word timings (transcription)', 'the pictures'] : ['the voice conversion', 'the word check (transcription)', 'the pictures'],
       noAiVideo: true,
     };

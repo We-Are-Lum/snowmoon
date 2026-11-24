@@ -129,6 +129,37 @@
 .vr-speech { display: flex; gap: var(--space-2); align-items: flex-start; padding: var(--space-2); border: 1px solid var(--rule); border-radius: 8px; cursor: pointer; }
 .vr-speech.vr-on { border-color: currentColor; }
 .vr-speech input { margin-top: 4px; }
+
+/* The guided storyboard (Nate, 2026-11-22/23): one conversation, phone first. Nothing scrolls sideways at 390 px. */
+.vg { max-width: 760px; }
+.vg-steps { display: flex; gap: 6px; list-style: none; padding: 0; margin: var(--space-2) 0; overflow-x: auto; max-width: 100%; }
+.vg-steps li { flex: 0 0 auto; font-size: var(--text-small); border: 1px solid var(--rule); border-radius: 14px; padding: 2px 10px; }
+.vg-steps li.vg-now { border-color: currentColor; font-weight: 600; }
+.vg-steps li.vg-done::before { content: '✓ '; }
+.vg-dialogue { display: flex; flex-direction: column; gap: var(--space-2); margin: var(--space-3) 0; }
+.vg-earlier { border: 1px solid var(--rule, #ddd); border-radius: 6px; padding: var(--space-1) var(--space-2); }
+.vg-earlier > summary { cursor: pointer; font-size: 0.9em; }
+.vg-earlier[open] { display: flex; flex-direction: column; gap: var(--space-2); }
+.vg-msg { max-width: 88%; padding: var(--space-2) var(--space-3); border-radius: 12px; overflow-wrap: anywhere; }
+.vg-msg p { margin: 2px 0; }
+.vg-guide { align-self: flex-start; background: var(--paper); border: 1px solid var(--rule); border-top-left-radius: 3px; }
+.vg-person { align-self: flex-end; background: var(--ink, #1d1b18); color: var(--paper, #faf9f6); border-top-right-radius: 3px; }
+.vg-by { font-family: var(--font-mono, ui-monospace, monospace); font-size: 11px; opacity: 0.75; }
+.vg-draft { background: var(--surface-2, rgba(127, 127, 127, 0.08)); border: 1px dashed var(--rule); border-radius: 6px; padding: 6px 8px; font-size: var(--text-small); }
+.vg-book { margin: 6px 0; padding: 6px 8px; border-left: 3px solid var(--rule); font-size: var(--text-small); }
+.vg-plan { margin: 4px 0; padding-left: 18px; font-size: var(--text-small); }
+.vg-ins { border: 1px dashed currentColor; border-radius: 3px; padding: 0 3px; font-size: 11px; }
+.vg-card textarea { width: 100%; box-sizing: border-box; }
+.vg-refs { border: 0; padding: 0; margin: var(--space-2) 0; min-width: 0; }
+.vg-tries { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-2); margin: var(--space-2) 0; }
+.vg-try { margin: 0; border: 2px solid var(--rule); border-radius: 6px; padding: 3px; }
+.vg-try.vg-on { border-color: currentColor; }
+.vg-try img, .vg-pic { width: 100%; height: auto; display: block; border-radius: 4px; }
+.vg-empty { aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; font-size: var(--text-small); }
+.vg-composer { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: var(--space-3); }
+.vg-composer > :first-child { width: 100%; }
+.vg-composer input { flex: 1; min-width: 0; font: inherit; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 18px; }
+
 .vr-confirm { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
 .vr-confirm-q { font-size: 0.95em; }
 

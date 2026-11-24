@@ -1,7 +1,7 @@
 import 'server-only';
 import type postgres from 'postgres';
 import { getAudio, putAudio, deleteAudio, pictureKeyFor } from './store';
-import type { Shot, Timeline } from './board';
+import type { Scene, Shot, Timeline } from './board';
 import type { Closing } from './closing';
 
 /**
@@ -36,17 +36,27 @@ export async function livePublication(sql: postgres.Sql, fid: number, draftId: s
 }
 
 export async function latestBoard(sql: postgres.Sql, draftId: string, fid: number) {
-  const [b] = await sql`select version, cuts, shots, closing, made_at from studio.voice_boards where draft_id = ${draftId} and fid = ${fid} order by version desc limit 1`;
-  return b ? { version: b.version as number, cuts: b.cuts as number[], shots: b.shots as Shot[], closing: (b.closing as Closing | null) ?? null, madeAt: b.made_at } : null;
+  const [b] = await sql`select version, cuts, shots, closing, scene, made_at from studio.voice_boards where draft_id = ${draftId} and fid = ${fid} order by version desc limit 1`;
+  return b ? { version: b.version as number, cuts: b.cuts as number[], shots: b.shots as Shot[], closing: (b.closing as Closing | null) ?? null, scene: (b.scene as Scene | null) ?? null, madeAt: b.made_at } : null;
 }
 
-export async function saveBoard(sql: postgres.Sql, fid: number, draftId: string, cuts: number[], shots: Shot[], closing: Closing | null = null): Promise<number> {
+export async function saveBoard(sql: postgres.Sql, fid: number, draftId: string, cuts: number[], shots: Shot[], closing: Closing | null = null, scene: Scene | null = null): Promise<number> {
   return sql.begin(async (tx) => {
     const [m] = await tx`select coalesce(max(version), 0)::int as v from studio.voice_boards where draft_id = ${draftId} and fid = ${fid}`;
     const version = m.v + 1;
-    await tx`insert into studio.voice_boards (draft_id, fid, version, cuts, shots, closing) values (${draftId}, ${fid}, ${version}, ${tx.json(cuts)}, ${tx.json(shots as unknown as postgres.JSONValue)}, ${closing ? tx.json(closing as unknown as postgres.JSONValue) : null})`;
+    await tx`insert into studio.voice_boards (draft_id, fid, version, cuts, shots, closing, scene) values (${draftId}, ${fid}, ${version}, ${tx.json(cuts)}, ${tx.json(shots as unknown as postgres.JSONValue)}, ${closing ? tx.json(closing as unknown as postgres.JSONValue) : null}, ${scene ? tx.json(scene as unknown as postgres.JSONValue) : null})`;
     return version;
   }) as Promise<number>;
+}
+
+/** Each kept picture's scene sha256 (its recipe's scene.sha256), by shot key, for the kept shot: the old-scene notes. */
+export function madeWithScene(shots: Shot[], pictures: { shotKey: string; sha256: string; recipe: unknown }[]): Record<string, string | null> {
+  const out: Record<string, string | null> = {};
+  for (const s of shots) {
+    const p = s.kept ? pictures.find((x) => x.shotKey === s.key && x.sha256 === s.kept) : undefined;
+    out[s.key] = ((p?.recipe as { scene?: { sha256?: string } } | undefined)?.scene?.sha256) ?? null;
+  }
+  return out;
 }
 
 export async function keptPictures(sql: postgres.Sql, draftId: string, fid: number) {

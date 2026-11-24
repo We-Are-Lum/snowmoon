@@ -45,6 +45,9 @@ export interface CreditsInput {
   shots: number;
   /** A person's converted performance, or the ready-made reading (ElevenLabs' text-to-speech; no performer). */
   voice?: 'performance' | 'reading';
+  /** The board has a kept scene (Nate, 2026-11-22), and how many of its shots are inserts (outside the scene). */
+  scene?: boolean;
+  inserts?: number;
 }
 
 export interface CreditLine {
@@ -68,12 +71,14 @@ export function closingCredits(c: CreditsInput): CreditLine[] {
         { who: 'invented', text: `Speech: “${c.speech.title}”${c.speech.invented.version ? ` (version ${c.speech.invented.version})` : ''}. Invented, not from the book. ${c.speech.invented.credit ?? 'Words by the Snowmoon team'}.` }
       : { who: 'book', text: `Words: ${c.speech.title}, from Snowmoon by Vitalik Buterin${c.speech.block ? ` (${c.speech.block})` : ''}, word for word.` },
     ...(reading ? [] : [{ who: 'people' as const, text: `Performed by ${by}, in the voice “${c.preset}”.` }]),
-    { who: 'people', text: `Storyboard by ${by}: the cuts, the ${c.shots} shots’ descriptions and cameras, the pictures kept.` },
+    c.scene
+      ? { who: 'people', text: `Storyboard by ${by}: the scene’s setting, the cuts, the ${c.shots} shots’ descriptions and cameras${c.inserts ? `, which ${c.inserts === 1 ? 'shot is an insert' : `${c.inserts} shots are inserts`} outside the scene` : ''}, the pictures kept.` }
+      : { who: 'people', text: `Storyboard by ${by}: the cuts, the ${c.shots} shots’ descriptions and cameras, the pictures kept.` },
     reading
       ? { who: 'ai', text: `Voice: a ready-made reading by ${modelLabel(c.voiceModel)}, in the voice “${c.preset}”. No performer. Word timings by ${modelLabel(c.transcribeModel)}.` }
       : { who: 'ai', text: `Voice converted by ${modelLabel(c.voiceModel)}; checked word for word with ${modelLabel(c.transcribeModel)}.` },
   ];
-  if (real.size) lines.push({ who: 'ai', text: `Pictures made by ${[...real.values()].map(modelLabel).join(', ')}, from the storyboard’s own words.` });
+  if (real.size) lines.push({ who: 'ai', text: `Pictures made by ${[...real.values()].map(modelLabel).join(', ')}, from the storyboard’s own words${c.scene ? '; each shot in the scene with the scene and his look as references' : ''}.` });
   if (standIns) lines.push({ who: 'site', text: `${standIns} stand-in card${standIns === 1 ? '' : 's'} in place of pictures (no model).` });
   lines.push(
     reading
@@ -97,6 +102,9 @@ export interface PublishFacts {
   dirty?: boolean;
   /** An invented speech, while its publishing waits for Nate's word (VOICE.publishInvented). */
   inventedHeld?: boolean;
+  /** The scene (Nate, 2026-11-22): whether its picture is kept, and the shots (by index) made with an earlier scene. */
+  sceneKept?: boolean;
+  oldScene?: number[];
 }
 
 /**
@@ -114,6 +122,8 @@ export function publishProblems(f: PublishFacts): string[] {
   if (!f.closing || !f.closing.description.trim() || !f.closing.kept || !f.closingKept) out.push('The closing card has no background kept yet.');
   if (f.standIns && !f.standInsAllowed) out.push('Stand-in cards can’t be published: make real pictures first.');
   if (f.dirty) out.push('Save the storyboard first.');
+  if (f.sceneKept === false && f.shots.some((s) => !s.insert)) out.push('The scene has no picture kept: make and keep it first.');
+  for (const i of f.oldScene ?? []) out.push(`Shot ${i + 1} was made with an earlier scene: make it again, or keep it with this scene.`);
   if (f.inventedHeld) out.push('Storyboards of the invented speeches can’t be published yet: that waits for Nate’s word.');
   return out;
 }
