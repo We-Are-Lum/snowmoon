@@ -748,12 +748,12 @@ check('$. each call is counted: 3 conversions, 3 transcriptions (the whole take\
 check('$. the holds were all given back', rows.filter((x) => x.kind === 'reserved').every((x) => x.calls === 0 && x.estimated_credits === 0 && Math.abs(x.usd) < 1e-6));
 check('$. credits are the stub\'s own (header), estimated beside them', by('convert')[0].credits === 444 + 56 + 23 && by('convert')[0].estimated_credits > 0, JSON.stringify(by('convert')));
 check('$. the cost table has no person, request or time of day', !rows.some((x) => 'fid' in x || 'request_id' in x || 'at' in x));
-// The per-person limit: 3 whole takes a day (two used now: the refused 'nope' never counted).
+// The per-person limit: 2 whole takes a day (Nate, 2026-11-23; one used now: the refused 'nope' never counted).
 const asks = (await sql`select count(*)::int n from studio.voice_asks where fid = ${NATE}`)[0].n;
 check('$. one ask counted per whole-take conversion, none for a sentence', asks === 1, String(asks));
-await sql`insert into studio.voice_asks (fid) values (${NATE}), (${NATE})`;
+await sql`insert into studio.voice_asks (fid) values (${NATE})`;
 r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(8000)) }));
-check('$. a fourth whole take in a day is refused (429)', r.status === 429 && /3 whole takes/.test(String(((await r.json()) as { error: string }).error)));
+check('$. a third whole take in a day is refused (429; 2 a day, Nate 2026-11-23)', r.status === 429 && /2 whole takes/.test(String(((await r.json()) as { error: string }).error)));
 r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
 check('$. ... while a sentence can still be redone', r.status === 200);
 // The 20%-over-estimate stop (Garance agrees to the screen first: without it, convert stops at the consent).
@@ -780,7 +780,19 @@ const todayAsks = (await sql`select count(*)::int n from studio.voice_asks where
 resetPurgeClock();
 await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
 check('$. voice_asks from before today are purged; today\'s stay', (await sql`select count(*)::int n from studio.voice_asks where (at at time zone 'utc')::date < (now() at time zone 'utc')::date`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_asks`)[0].n === todayAsks);
-check('$. the caps are placeholders in config, in credits and dollars', VOICE.caps.dailyCredits > 0 && VOICE.caps.dailyUsd > 0 && VOICE.caps.adminDailyCredits > 0 && VOICE.caps.perPersonConversions === 3 && VOICE.caps.overEstimate === 1.2);
+check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credits a day for everyone\'s takes, its dollars at the plan\'s rate', VOICE.caps.dailyCredits === 6000 && Math.abs(VOICE.caps.dailyUsd - (6000 * 22) / 121000) < 0.02 && VOICE.caps.adminDailyCredits > 0 && VOICE.caps.perPersonConversions === 2 && VOICE.caps.overEstimate === 1.2);
+{
+  // Ready-made readings don't count against everyone's budget (Nate, 2026-11-23): paid from the admins' pool.
+  const C = await import('../src/lib/voice/costs');
+  const someone = 4242;
+  await sql`insert into studio.voice_costs (kind, model, funded, verdict, calls, credits, estimated_credits, cost_usd) values ('convert', 'x-free-full', 'free', 'ok', 1, ${VOICE.caps.dailyCredits}, ${VOICE.caps.dailyCredits}, 0)`;
+  const own = await C.refusal(sql, someone, 100, false);
+  const reading = await C.refusal(sql, someone, 100, false, C.READINGS_FUNDED);
+  await sql`delete from studio.voice_costs where model = 'x-free-full'`;
+  check('$. with everyone\'s budget used up, a take is refused but a reading\'s call is not (it is the admins\' pool)', C.fundedFor(someone) === 'free' && C.READINGS_FUNDED === 'admin' && /allowance/.test(own ?? '') && reading === null, `${own} / ${reading}`);
+  const src = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
+  check('$. ... the reading and its timing both charge READINGS_FUNDED, at the gate and at the hold', ['src/app/api/voice/reading/route.ts', 'src/lib/voice/reading-timing.ts'].every((f) => (src(f).match(/READINGS_FUNDED\)/g) ?? []).length === 2));
+}
 
 // G. Storyboards on the ready-made reading (Nate, 2026-11-21): timed once, then everyone's own boards on it.
 {
