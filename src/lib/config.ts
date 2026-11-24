@@ -1249,14 +1249,19 @@ export const VOICE = {
     transcribeCreditsPerSecond: 0.4,
   },
   caps: {
-    /** Everyone's calls together, per UTC day ('free'). Nate's number for now (2026-11-21); real numbers once the speeches' length is known. */
-    dailyCredits: 20_000,
-    dailyUsd: 4,
+    /**
+     * Everyone's takes together, per UTC day ('free'): Nate, 2026-11-23, "a site-wide budget of 6,000 credits a day for
+     * takes; ready-made readings don't count" (about 3 whole 2.5-minute takes with their word checks). The dollars match
+     * the credits at the plan's rate (6,000 × $22 / 121,000 = $1.09). Readings are paid from the admins' pool
+     * (READINGS_FUNDED in src/lib/voice/costs.ts). Was 20,000 and $4 (Nate's placeholder of 2026-11-21).
+     */
+    dailyCredits: 6_000,
+    dailyUsd: 1.1,
     /** Admins' own trials, counted apart ('admin'). PLACEHOLDER. */
     adminDailyCredits: 20_000,
     adminDailyUsd: 4,
-    /** Whole-take conversions per person per UTC day (redone sentences don't count). Nate's number for now (2026-11-21). */
-    perPersonConversions: 3,
+    /** Whole-take conversions per person per UTC day (redone sentences don't count). Nate, 2026-11-23: 2 (was 3). */
+    perPersonConversions: 2,
     /**
      * Owner's standing rule (2026-11-20): if a real call costs more than 20% over its estimate, stop before the next
      * one. When today's measured credits exceed 1.2 times today's estimates, every call is refused until the next UTC

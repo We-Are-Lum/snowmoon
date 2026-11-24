@@ -6,7 +6,7 @@ import { speechById } from '~/lib/voice/speech';
 import { presetRecipe, voiceIdFor } from '~/lib/voice/presets';
 import { elevenLabsBase } from '~/lib/voice/flag';
 import { deleteHistoryItem, textToSpeech } from '~/lib/voice/elevenlabs';
-import { refusal, reserve } from '~/lib/voice/costs';
+import { READINGS_FUNDED, refusal, reserve } from '~/lib/voice/costs';
 import { latestReading, readingAudio, saveDraft } from '~/lib/voice/drafts';
 import { sha256Hex } from '~/lib/voice/ticket';
 
@@ -44,9 +44,9 @@ export async function POST(request: Request) {
   if (!body.again && (await latestReading(sql, speech.id, preset.id))) return NextResponse.json({ error: 'There is already a reading in this voice' }, { status: 409 });
   const text = speech.paragraphs.join('\n\n');
   const estimatedCredits = Math.ceil(text.length * VOICE.rates.readingCreditsPerChar);
-  const no = await refusal(sql, who.fid, estimatedCredits, false);
+  const no = await refusal(sql, who.fid, estimatedCredits, false, READINGS_FUNDED);
   if (no) return NextResponse.json({ error: no }, { status: 429 });
-  const settle = await reserve(sql, who.fid, VOICE.models.reading, estimatedCredits, false);
+  const settle = await reserve(sql, who.fid, VOICE.models.reading, estimatedCredits, false, READINGS_FUNDED);
   let out: Awaited<ReturnType<typeof textToSpeech>>;
   try {
     out = await textToSpeech(text, voiceId);
