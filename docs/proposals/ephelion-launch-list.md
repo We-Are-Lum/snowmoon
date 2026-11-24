@@ -1,6 +1,6 @@
 # Opening the Ephelion challenge in early December: the launch list (DRAFT)
 
-2026-11-23, overnight; v2 the same day (the continuity result, #220 merged, the proposed numbers); v3 (Nate's take caps and default model, the GPT Image picture numbers). Drafted by the coding agent (Claude, a closed model by Anthropic) for Nate; DRAFT until he approves
+2026-11-23, overnight; v2 the same day (the continuity result, #220 merged, the proposed numbers); v3 (Nate's take caps and default model, the GPT Image picture numbers); v4 (the picture numbers decided, the reviews, moderation's changes). Drafted by the coding agent (Claude, a closed model by Anthropic) for Nate; DRAFT until he approves
 it. "Live" means on production (snowmoon.party) today; "open PR" means not merged. Every merge waits for Nate's word;
 every legal text for his "reread"; every migration for his "applied".
 
@@ -35,9 +35,10 @@ every legal text for his "reread"; every migration for his "applied".
 
 | What | State | Needs from Nate |
 |---|---|---|
-| `voice-take-caps`: 2 takes a person, 6,000 credits a day, readings from the admins' pool | test:voice 277 ok | a PR and the merge word |
-| `voice-spoken-418`: the published page's React #418 | fixed and verified on a production build; test:voice 276 ok | a PR and the merge word |
-| #225, moderation (report, the admins' queue, a reversible hide) | test:voice 295 ok | reread: the ntfy item; test, then apply, `NEXT_voice_moderation.sql` |
+| #228, the take caps: 2 a person, 6,000 credits a day, readings from the admins' pool | checks running | merges if test:voice passes (Nate's word) |
+| #227, the published page's React #418 | fixed and verified on a production build | merges if test:voice and check:ui pass (Nate's word) |
+| #225, moderation (report, one queue with images, a reversible hide) | Nate's changes being made | test the changed SQL, "applied", the merge word (reread done) |
+| Storyboard pictures' own allowance and pool | being built | reread: the out-of-cap lines; the merge word |
 
 ## Left before opening
 
@@ -45,10 +46,13 @@ every legal text for his "reread"; every migration for his "applied".
 2. **The continuity test and the default model**: done. All 21 pictures, $1.09
    (https://media.snowmoon.party/review/c22fb345ffa3fb0475936a2232831380/index.html); Nate chose GPT Image 2.5 Sunburst
    as the default (2026-11-23).
-3. **Caps and the ElevenLabs plan**: the caps are decided (Numbers, below; branch `voice-take-caps`). 6,000 credits a
-   day is about 180,000 a month, still above the plan's 121,000: the plan, or the cap, before `open`.
-4. **Who pays for everyone's storyboard pictures**: proposed in Numbers, below, for Nate's decision.
-5. **Moderation of published storyboards**: built as proposed (#225, not merged).
+3. **Caps and the ElevenLabs plan**: decided (Numbers, below; #228). Nate, 2026-11-23: 6,000 credits a day fits a
+   two-week challenge within the plan. **Review after the challenge.**
+4. **Who pays for everyone's storyboard pictures**: decided (Numbers, below), being built on its own branch.
+5. **Moderation of published storyboards**: built (#225, not merged), with Nate's changes of 2026-11-23: storyboard
+   reporters counted only since the last dismissal, the log kept when a storyboard is removed, one queue with images.
+   **Later fix:** images still count reporters for all time, so after a dismissal one new reporter hides an image
+   again; make images count since the last dismissal too.
 6. **The challenge's own rules** (a reread). Terms has §6e for the remix challenge. The Ephelion challenge needs its own
    short section: the dates, who can take part, what counts (a published storyboard of one of the four speeches), and
    any reward. Drafted when Nate gives the dates and rewards.
@@ -78,48 +82,17 @@ every legal text for his "reread"; every migration for his "applied".
 - **Default picture model for storyboards:** GPT Image 2.5 Sunburst wherever OpenAI serves; FLUX stays in the picker as
   the cheaper choice. Already so on production (storyboards use the chapter pictures' default).
 
-### Proposed: storyboard pictures on GPT Image (for Nate to decide)
+### Storyboard pictures: decided by Nate (2026-11-23)
 
-At the measured rates: $0.047 a picture plus about $0.012 a reference.
-- The scene picture has 1 reference (his sheet): $0.059.
-- Each shot in the scene has 3 references (the scene, his sheet, the shot before it): $0.083.
-- An insert has 0 or 1 reference: $0.047 to $0.059. The closing card has none: $0.047.
-- A 12-shot board, one try each: $0.059 + 12 × $0.083 + $0.047 = **$1.10**.
-- With 6 redos: **about $1.60**. At the most (3 tries of each of its 14 pictures): **about $3.30**.
+- **20 storyboard pictures a person a day, on any model**; a GPT picture counts as 1. Their own allowance, apart from
+  the images' 10 a day.
+- **A $20-a-day storyboard pool**, apart from the admins', the images' and the remix challenge's.
+- **Review both after the challenge's first three days.**
+- No prepaid line until prepaid storyboard pictures exist. When the pool is used up, the line says when it resets.
+- The out-of-cap lines (pictures and takes) are in its PR for Nate's reread.
 
-**1. Each person's daily allowance.** Today a storyboard picture is one of the day's 10 free pictures, and a GPT picture
-counts as 3 of them, so only 3 GPT pictures fit in a day: not one board.
-- Proposed: **storyboards get their own allowance, 20 storyboard pictures a day on any model** (a GPT picture counts
-  as 1 here). That is a 12-shot board plus 6 redos: about $1.60 on GPT Image at most, $0.45 on FLUX.
-- Their own count: storyboard pictures stop counting toward the 10 free images, and images stop counting toward these.
-- The per-shot limit (3 tries) stays.
-
-**2. The site-paid daily pool for storyboard pictures.**
-- Proposed: **$20 a day**, a new pool `storyboards`, apart from the admins' $20, the images' free cap and the remix
-  challenge's.
-- It covers **about 12 boards a day at the full 20 pictures** ($1.60 each), or about 18 boards made with one try each
-  ($1.10).
-- FLUX boards stretch it: one at 20 pictures is about $0.45.
-
-**3. What a person sees** (each time in the person's own time zone, here as 4:00 pm; the reset is midnight UTC).
-- Before it runs out, the count left: "14 storyboard pictures left today".
-- Their own allowance used up: "You've made today's 20 storyboard pictures. Your storyboard is saved: make the rest from
-  4:00 pm."
-- Everyone's pool used up: "Today's storyboard pictures for everyone are used up. Your storyboard is saved: make the
-  rest from 4:00 pm."
-- For a wallet account with a prepaid balance, under either line: "Or use your prepaid balance: $0.11 a shot with GPT
-  Image, $0.03 with FLUX." This is the prepaid price with its 30% markup on the measured cost: $0.083 × 1.3 = $0.108, and
-  FLUX $0.022 × 1.3 = $0.029. Prepaid storyboard pictures are not built yet.
-- Takes, with the decided caps:
-  - their own: "You've converted today's 2 takes. Your drafts are kept, and your recording stays on this device: convert
-    it again from 4:00 pm."
-  - everyone's: "Today's recordings for everyone are used up. Your recording stays on this device: convert it from
-    4:00 pm."
-  - The lines on production today are "You've converted 3 whole takes today. Redo single sentences, or come back
-    tomorrow." (the number follows the cap) and "Today's voice allowance is used up. It resets at midnight UTC."; these
-    would replace them.
-
-The six lines are drafted by the coding agent, for Nate's reread. Nothing in the pictures proposal is built.
+At the measured rates ($0.047 a picture plus about $0.012 a reference): a shot in the scene is $0.083; a 12-shot board
+is $1.10 with one try each, about $1.60 with 6 redos. The pool covers about 12 full boards a day, or 18 with one try each.
 
 ## The order
 
