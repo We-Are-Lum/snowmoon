@@ -66,6 +66,8 @@ const stringsOf = (x: unknown): string[] => (typeof x === 'string' ? [x] : Array
 export interface DraftContext {
   timeline: Timeline;
   sentences: { n: number; text: string }[];
+  /** More words the guide may not write (an improvised take's speech, beside the performer's words in `sentences`). */
+  otherWords?: { n: number; text: string }[];
   shots: Shot[];
   /** Pictures the guide may choose as references: 'scene', the look ids offered, the kept shots' keys. */
   refs: { scene: boolean; looks: string[]; keptShots: string[] };
@@ -124,7 +126,7 @@ export function readGuideReply(step: GuideStep, raw: string, c: DraftContext, sh
   }
   for (const s of [say, ...stringsOf(draft)]) {
     if (s.length > GUIDE.maxDraftChars) return { error: 'a draft is too long' };
-    const hit = speechWordsIn(s, c.sentences);
+    const hit = speechWordsIn(s, [...c.sentences, ...(c.otherWords ?? [])]);
     if (hit) return { error: `a draft repeats the speech's words ("${hit}…"): it must never write them` };
   }
   return { say, draft };

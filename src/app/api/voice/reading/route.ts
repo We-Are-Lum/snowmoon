@@ -7,6 +7,7 @@ import { presetRecipe, voiceIdFor } from '~/lib/voice/presets';
 import { elevenLabsBase } from '~/lib/voice/flag';
 import { deleteHistoryItem, textToSpeech } from '~/lib/voice/elevenlabs';
 import { READINGS_FUNDED, refusal, reserve } from '~/lib/voice/costs';
+import { timeReadingNow } from '~/lib/voice/reading-timing';
 import { latestReading, readingAudio, saveDraft } from '~/lib/voice/drafts';
 import { sha256Hex } from '~/lib/voice/ticket';
 
@@ -82,5 +83,7 @@ export async function POST(request: Request) {
     madeWith: 'snowmoon.party voice slice 1 (DRAFT)',
   };
   const id = await saveDraft(sql, { fid: who.fid, kind: 'reading', speechId: speech.id, presetId: preset.id, recipe, audio: [{ role: 'reading', sentence: null, replacesStart: null, replacesEnd: null, mp3: out.audio, sha256, seconds: null }] });
-  return NextResponse.json({ id, recipe }, { headers: noStore });
+  // Timed now, with no button (Nate, 2026-11-24), from the admins' pool; if it can't be timed now, its first open does it.
+  const timed = await timeReadingNow(sql, who.fid, id).catch(() => ({ status: 502, json: {} }));
+  return NextResponse.json({ id, recipe, timed: timed.status === 200 }, { headers: noStore });
 }
