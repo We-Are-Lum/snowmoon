@@ -183,3 +183,10 @@
 .vf-shot { border: 1px solid var(--rule); border-radius: 8px; padding: var(--space-2); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .vf-shot .vb-picture { width: 100%; height: auto; }
 .vf-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Improvising (Nate, 2026-11-24): correcting one's own transcribed words. */
+.vr-correct { margin: var(--space-2) 0; }
+.vr-correct > summary { cursor: pointer; }
+.vr-correct-list { padding-left: 1.4em; display: flex; flex-direction: column; gap: var(--space-2); max-width: 100%; }
+.vr-correct-list textarea { width: 100%; box-sizing: border-box; }
+.vr-word-check > summary { cursor: pointer; }

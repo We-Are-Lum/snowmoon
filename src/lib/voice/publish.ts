@@ -1,4 +1,5 @@
 import 'server-only';
+import { improvisedCredit, isImprovised, takeLabel, type Spoken } from './spoken';
 import { createHash, randomUUID } from 'node:crypto';
 import type postgres from 'postgres';
 import { VOICE } from '../config';
@@ -47,6 +48,7 @@ interface DraftRecipe {
   speech?: { id: string; title: string; version?: number; credit?: string | null; aiHelp?: boolean | null; source?: { kind: string; block?: string; by?: string }; label?: { kind?: string; writers?: string[] } };
   takes?: unknown[];
   check?: { sentences: number; matched: number; unmatched: number[]; bySound?: unknown[] };
+  spoken?: Spoken | null;
 }
 const pictureModel = (recipe: Record<string, unknown>): PictureModel => {
   const m = (recipe.model ?? {}) as { id?: string; name?: string; maker?: string; open?: boolean };
@@ -77,7 +79,8 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
   const problems = publishProblems({
     // A reading is ElevenLabs reading the speech's own written words, so the word-for-word rule is a performance's; a
     // reading's word check (its timings) is kept in the recipe instead.
-    unmatched: reading ? [] : (r.check?.unmatched ?? []),
+    // An improvised take (Nate, 2026-11-24) isn't held to the speech's words: the word check only labels it.
+    unmatched: reading || isImprovised(r) ? [] : (r.check?.unmatched ?? []),
     sentences: reading ? (draft.timing?.check.sentences ?? 0) : (r.check?.sentences ?? 0),
     shots,
     keptShots: kept,
@@ -107,6 +110,7 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
     performer: othersTake ? takeBy : performer,
     ...(othersTake ? { storyboardBy: performer } : {}),
     reusedFrom: board?.source ? { by: board.source.by, title: board.source.title } : null,
+    ...(isImprovised(r) ? { improvised: improvisedCredit(othersTake ? takeBy : performer, { title: r.speech?.title ?? 'A speech', credit: invented ? (r.speech?.credit ?? null) : null, block: r.speech?.source?.kind === 'book' ? (r.speech.source.block ?? null) : null }) } : {}),
     preset: r.preset?.name ?? 'a preset voice',
     voiceModel: elevenLabs(r.model),
     transcribeModel: elevenLabs(reading ? (draft.timing?.model ?? VOICE.models.transcribe) : (r.transcribeModel ?? VOICE.models.transcribe)),
@@ -172,6 +176,10 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
       performer: named ? { fid, name: performer } : { named: false },
       storyboardBy: named ? { fid, name: performer } : { named: false },
       speech: p.recipe.speech,
+      // The spoken words (Nate, 2026-11-24): word for word, or improvised with the performer's words (as transcribed and
+      // as they corrected them, with each correction), credited to them.
+      spoken: p.recipe.spoken ?? { kind: 'word-for-word' },
+      take: { label: takeLabel(p.recipe) },
       voice:
         p.draft.kind === 'reading'
           ? {
@@ -207,8 +215,10 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
       // timing was fitted here), or whose published take this is.
       source: p.board.source ?? null,
       takeBy: p.draft.kind === 'performance' && p.draft.owner !== fid ? { fid: p.draft.owner } : null,
-      people: p.board.source ? ['the performance', 'each shot’s timing, fitted to this voice'] : [...(p.draft.kind === 'reading' || p.draft.owner !== fid ? [] : ['the performance']), ...(p.scenePicture ? ['the scene’s setting', 'which shots are inserts'] : []), 'each shot’s description and camera', 'the cuts (moved from a rule’s proposal)', 'the closing card’s look', 'which pictures were kept'],
-      ai: p.draft.kind === 'reading' ? ['the reading (text-to-speech)', 'the word timings (transcription)', 'the pictures'] : ['the voice conversion', 'the word check (transcription)', 'the pictures'],
+      people: p.board.source
+        ? [isImprovised(p.recipe) ? 'the performance and its spoken words (improvised), with any corrections to their transcript' : 'the performance', 'each shot’s timing, fitted to this voice']
+        : [...(p.draft.kind === 'reading' || p.draft.owner !== fid ? [] : isImprovised(p.recipe) ? ['the performance', 'the spoken words (improvised), and any corrections to their transcript'] : ['the performance']), ...(p.scenePicture ? ['the scene’s setting', 'which shots are inserts'] : []), 'each shot’s description and camera', 'the cuts (moved from a rule’s proposal)', 'the closing card’s look', 'which pictures were kept'],
+      ai: p.draft.kind === 'reading' ? ['the reading (text-to-speech)', 'the word timings (transcription)', 'the pictures'] : isImprovised(p.recipe) ? ['the voice conversion', 'the transcript of the spoken words (transcription)', 'the pictures'] : ['the voice conversion', 'the word check (transcription)', 'the pictures'],
       noAiVideo: true,
     };
     await sql`select studio.publish_voice_board(${id}::uuid, ${p.draft.id}::uuid, ${fid}::bigint, ${p.board.version}::int, ${named}, ${sql.json(recipe as unknown as postgres.JSONValue)}, ${sql.json(files as unknown as postgres.JSONValue)})`;

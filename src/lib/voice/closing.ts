@@ -37,6 +37,8 @@ export interface CreditsInput {
   speech: { title: string; block: string | null; invented?: { version: number | null; credit: string | null } };
   /** The performer's name here, or null when they asked not to be named. */
   performer: string | null;
+  /** An improvised take (Nate, 2026-11-24): its words' credit line ("Words by @name, improvising on '…' · …"). */
+  improvised?: string;
   preset: string;
   voiceModel: { name: string; maker: string };
   transcribeModel: { name: string; maker: string };
@@ -73,7 +75,9 @@ export function closingCredits(c: CreditsInput): CreditLine[] {
   for (const p of c.pictures) if (p.id !== 'stand-in') real.set(p.id, p);
   const reading = c.voice === 'reading';
   const lines: CreditLine[] = [
-    c.speech.invented
+    c.improvised
+      ? { who: 'people', text: `${c.improvised}.` }
+      : c.speech.invented
       ? // The team's speech (Nate, 2026-11-22): "Invented, not from the book" with its version's credit, and no block.
         { who: 'invented', text: `Speech: “${c.speech.title}”${c.speech.invented.version ? ` (version ${c.speech.invented.version})` : ''}. Invented, not from the book. ${c.speech.invented.credit ?? 'Words by the Snowmoon team'}.` }
       : { who: 'book', text: `Words: ${c.speech.title}, from Snowmoon by Vitalik Buterin${c.speech.block ? ` (${c.speech.block})` : ''}, word for word.` },
@@ -87,14 +91,18 @@ export function closingCredits(c: CreditsInput): CreditLine[] {
       : { who: 'people', text: `Storyboard by ${by}: the cuts, the ${c.shots} shots’ descriptions and cameras, the pictures kept.` },
     reading
       ? { who: 'ai', text: `Voice: a ready-made reading by ${modelLabel(c.voiceModel)}, in the voice “${c.preset}”. No performer. Word timings by ${modelLabel(c.transcribeModel)}.` }
-      : { who: 'ai', text: `Voice converted by ${modelLabel(c.voiceModel)}; checked word for word with ${modelLabel(c.transcribeModel)}.` },
+      : c.improvised
+        ? { who: 'ai', text: `Voice converted by ${modelLabel(c.voiceModel)}; the spoken words transcribed by ${modelLabel(c.transcribeModel)}.` }
+        : { who: 'ai', text: `Voice converted by ${modelLabel(c.voiceModel)}; checked word for word with ${modelLabel(c.transcribeModel)}.` },
   ];
   if (real.size) lines.push({ who: 'ai', text: `Pictures made by ${[...real.values()].map(modelLabel).join(', ')}, from the storyboard’s own words${c.scene ? '; each shot in the scene with the scene and his look as references' : ''}.` });
   if (standIns) lines.push({ who: 'site', text: `${standIns} stand-in card${standIns === 1 ? '' : 's'} in place of pictures (no model).` });
   lines.push(
     reading
       ? { who: 'site', text: `People did the storyboard and the words for each picture. AI did ${real.size ? 'the reading, the word timings and the pictures' : 'the reading and the word timings'}. No AI video.` }
-      : { who: 'site', text: `People did the performance and the words for each picture. AI did ${real.size ? 'the voice conversion, the word check and the pictures' : 'the voice conversion and the word check'}. No AI video.` },
+      : c.improvised
+        ? { who: 'site', text: `People did the performance, its words and the words for each picture. AI did ${real.size ? 'the voice conversion, the transcript and the pictures' : 'the voice conversion and the transcript'}. No AI video.` }
+        : { who: 'site', text: `People did the performance and the words for each picture. AI did ${real.size ? 'the voice conversion, the word check and the pictures' : 'the voice conversion and the word check'}. No AI video.` },
   );
   lines.push({ who: 'site', text: CLOSING.notAffiliated });
   return lines;

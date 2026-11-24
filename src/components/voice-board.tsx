@@ -24,7 +24,7 @@ import '../styles/voice.css';
  */
 interface Sheet { id: string; title: string; entity: string; text: string; thumb: string | null; samples?: string[] }
 interface Data {
-  draft: { id: string; kind: 'performance' | 'reading'; preset: string | null; speech: { id: string; title: string; label?: { text: string } } | null; sentences: { n: number; text: string }[]; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
+  draft: { id: string; kind: 'performance' | 'reading'; preset: string | null; speech: { id: string; title: string; label?: { text: string } } | null; sentences: { n: number; text: string }[]; take?: { label: string; improvised: boolean }; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
   board: { version: number; cuts: number[]; shots: Shot[]; closing: Closing; scene?: Scene; source?: BoardSource | null; proposed: number[]; fromProposal: boolean };
   takeBy?: number | null;
   settingQuote?: { text: string; block: string } | null;
@@ -150,8 +150,6 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const params = useParams<{ draft: string }>();
   const draftId = String(params?.draft ?? '');
   const [data, setData] = useState<Data | null | 'none' | { error: string }>(null);
-  // A ready-made reading with no word timings yet: what one transcription of it is estimated at (2026-11-21).
-  const [needsTiming, setNeedsTiming] = useState<{ estimateCredits: number; seconds: number } | null>(null);
   const [cuts, setCuts] = useState<number[]>([]);
   const [shots, setShots] = useState<Shot[]>([]);
   const [current, setCurrent] = useState(0);
@@ -196,9 +194,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       return setData('none');
     }
     const j = (await r.json()) as Data & { error?: string; reason?: string; estimateCredits?: number; seconds?: number };
-    if (r.status === 409 && j.reason === 'needs-timing') return setNeedsTiming({ estimateCredits: j.estimateCredits ?? 0, seconds: j.seconds ?? 0 }), setData({ error: 'needs-timing' });
     if (!r.ok) return setData({ error: j.error ?? 'Not available' });
-    setNeedsTiming(null);
     setData(j);
     setCuts(j.board.cuts);
     // Every shot starts on Medium shot (Nate, 2026-11-21), boards saved before then included.
@@ -299,35 +295,6 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       </main>
     );
   if (!admin || data === 'none') return <>{fallback}</>;
-  if (needsTiming)
-    return (
-      <main className="vr vb">
-        <p className="vr-kicker">Admin trial · Draft · Storyboard</p>
-        <h1>Time this reading first</h1>
-        <p className="vr-note">
-          This ready-made reading has no word timings yet, so its sentences can&rsquo;t be placed on a strip. One transcription of it ({needsTiming.seconds.toFixed(0)} s, about {needsTiming.estimateCredits} credits) times it once, for everyone who storyboards it. The transcript is deleted at ElevenLabs right after.
-        </p>
-        {message && <p className="vr-warn" role="alert">{message}</p>}
-        <button
-          type="button"
-          className="vr-btn"
-          disabled={busy !== null}
-          onClick={async () => {
-            setBusy('timing');
-            setMessage(null);
-            const r = await authFetch(`/api/voice/readings/${draftId}/timing`, { method: 'POST' }).catch(() => null);
-            setBusy(null);
-            if (r?.ok) {
-              setNeedsTiming(null);
-              setData(null);
-              void load();
-            } else setMessage(((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error ?? 'The timing failed. Try again.');
-          }}
-        >
-          {busy === 'timing' ? 'Timing…' : 'Time this reading'}
-        </button>
-      </main>
-    );
   if (data && 'error' in data) return <main className="vr"><p className="vr-warn">{data.error}</p></main>;
   if (!d || !t) return <main className="vr"><p className="vr-note">Loading…</p></main>;
 
@@ -757,7 +724,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             <h2 id="vb-shot-h">3. Shot {current + 1} of {shots.length}{shot.insert ? ' · Insert, outside the scene' : ''}</h2>
             <span className="vr-small">{fmt(shot.start)} – {fmt(shot.end)} · {(shot.end - shot.start).toFixed(1)} s</span>
           </div>
-          <blockquote className="vb-words"><span className="vr-tag">{d.draft.speech?.label?.text ?? 'Book'}</span> {sentencesIn(t, shot).map(sentenceText).join(' ')}</blockquote>
+          <blockquote className="vb-words"><span className="vr-tag">{d.draft.take?.improvised ? 'Your words' : (d.draft.speech?.label?.text ?? 'Book')}</span> {sentencesIn(t, shot).map(sentenceText).join(' ')}</blockquote>
           <PublishedTextField id={`vb-desc-${shot.key}`} label="What the shot shows (your words)" value={shot.description} onChange={(v) => edit({ description: v })} rows={3} maxLength={600} />
           {/* In the scene or an insert (Nate, 2026-11-22): only the person makes an insert; a shot starts in the scene. */}
           <fieldset className="vb-insert">
@@ -868,7 +835,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             <div className="vb-picture vb-empty">{playing ? `Shot ${playingNo}: no picture kept yet.` : 'Press play.'}</div>
           )}
         </div>
-        <p className="vb-caption"><span className="vr-tag">{d.draft.speech?.label?.text ?? 'Book'}</span> {audioUrl && now > 0 ? sentenceText(sentenceAt(t, now)) : sentenceText(t.sentences[0]?.n ?? null)}</p>
+        <p className="vb-caption"><span className="vr-tag">{d.draft.take?.improvised ? 'Your words' : (d.draft.speech?.label?.text ?? 'Book')}</span> {audioUrl && now > 0 ? sentenceText(sentenceAt(t, now)) : sentenceText(t.sentences[0]?.n ?? null)}</p>
         {audioUrl ? <audio controls src={audioUrl} className="vr-audio" onTimeUpdate={(e) => setNow(e.currentTarget.currentTime)} /> : <p className="vr-small">Loading the audio…</p>}
         <div className="vr-row">
           {saving === null ? (

@@ -4,7 +4,8 @@ import { noStore, voicePerson } from '~/lib/voice/server';
 import { listDesigns } from '~/lib/images/designs';
 import { CAMERA_ANGLES, COVERAGE, SCENE, SHOT, applyCoverage, boardNotes, emptyScene, proposeCuts, shotsFromCuts, type Scene, type Shot } from '~/lib/voice/board';
 import { boardSource, keptPictures, latestBoard, livePublication, madeWithScene, saveBoard } from '~/lib/voice/board-store';
-import { readingEstimate } from '~/lib/voice/reading-timing';
+import { timeReadingNow } from '~/lib/voice/reading-timing';
+import { isImprovised, spokenSentences, takeLabel, type Spoken } from '~/lib/voice/spoken';
 import { deleteAudio } from '~/lib/voice/store';
 import { shotModels, triesMade } from '~/lib/voice/shot-picture';
 import { whereFrom } from '~/lib/images/countries';
@@ -27,11 +28,18 @@ export async function GET(request: Request) {
   if (who instanceof NextResponse) return who;
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Not available right now' }, { status: 503 });
-  const draft = await boardSource(sql, who.fid, String(new URL(request.url).searchParams.get('draft') ?? ''));
+  const id = String(new URL(request.url).searchParams.get('draft') ?? '');
+  let draft = await boardSource(sql, who.fid, id);
   // Not found, or this person's board on it is published (the page then shows where, and the take-down).
   if (!draft || (await livePublication(sql, who.fid, draft.id))) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-  if (!draft.timeline && draft.kind === 'reading')
-    return NextResponse.json({ error: 'This reading has no word timings yet.', reason: 'needs-timing', estimateCredits: readingEstimate(draft.audio).credits, seconds: readingEstimate(draft.audio).seconds }, { status: 409, headers: noStore });
+  // A reading made before readings were timed when made: timed now, on its first open, with no button, from the
+  // admins' pool (Nate, 2026-11-24).
+  if (!draft.timeline && draft.kind === 'reading') {
+    const t = await timeReadingNow(sql, who.fid, draft.id).catch(() => ({ status: 502, json: { error: 'The reading could not be timed. Try again in a moment.' } }));
+    if (t.status !== 200) return NextResponse.json({ error: String(t.json.error ?? 'The reading could not be timed. Try again in a moment.') }, { status: t.status === 429 ? 429 : 503, headers: noStore });
+    draft = await boardSource(sql, who.fid, id);
+    if (!draft?.timeline) return NextResponse.json({ error: 'The reading could not be timed. Try again in a moment.' }, { status: 503, headers: noStore });
+  }
   if (!draft.timeline) return NextResponse.json({ error: 'This draft was kept before storyboards: record and accept it again to make one.' }, { status: 409 });
   const saved = await latestBoard(sql, draft.id, who.fid);
   const cuts = saved?.cuts ?? proposeCuts(draft.timeline);
@@ -44,8 +52,10 @@ export async function GET(request: Request) {
         kind: draft.kind,
         preset: draft.recipe.preset?.name ?? null,
         speech: draft.recipe.speech ?? null,
-        // The speech's own sentences (its text, never the transcription): shown under each shot and in the play-through.
-        sentences: (draft.recipe.speech ? (speechById(draft.recipe.speech.id)?.sentences ?? []) : []).map((x) => ({ n: x.n, text: x.text })),
+        // The spoken words by sentence, shown under each shot and in the play-through: the speech's own (word for word,
+        // never the transcription), or the person's, transcribed and as they corrected it (improvised; spoken.ts).
+        sentences: spokenSentences(draft.recipe as { spoken?: Spoken }),
+        take: { label: takeLabel(draft.recipe as { spoken?: Spoken }), improvised: isImprovised(draft.recipe as { spoken?: Spoken }) },
         audio: draft.audio,
         timeline: draft.timeline,
       },

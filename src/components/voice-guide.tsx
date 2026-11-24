@@ -22,7 +22,7 @@ import '../styles/voice.css';
  */
 interface Sheet { id: string; title: string; entity: string; text: string; thumb: string | null; samples?: string[] }
 interface Board {
-  draft: { id: string; kind: string; speech: { id: string; title: string; label?: { text: string } } | null; sentences: { n: number; text: string }[]; timeline: Timeline };
+  draft: { id: string; kind: string; speech: { id: string; title: string; label?: { text: string } } | null; sentences: { n: number; text: string }[]; take?: { label: string; improvised: boolean }; timeline: Timeline };
   board: { version: number; cuts: number[]; shots: Shot[]; scene?: Scene; closing: unknown };
   pictures: { shotKey: string; sha256: string; recipe: Record<string, unknown> }[];
   sheets: { styles: Sheet[]; characters: Sheet[] };
@@ -103,7 +103,8 @@ export function VoiceGuide({ fallback }: { fallback: React.ReactNode }) {
   if (auth.kind !== 'signed-in' || d === 'none') return <>{fallback}</>;
   if (!ok) return <main className="vr vg"><p className="vr-note">Loading…</p></main>;
   const t = ok.draft.timeline;
-  const speechLabel = ok.draft.speech?.label?.text ?? 'Book';
+  // An improvised take's words are the performer's own (Nate, 2026-11-24).
+  const speechLabel = ok.draft.take?.improvised ? 'Your words' : (ok.draft.speech?.label?.text ?? 'Book');
   const shot = shots[current];
   const lookSheet = looks.find((c) => c.id === look) ?? null;
 
