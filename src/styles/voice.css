@@ -166,3 +166,20 @@
 /* The Ephelion challenge's top (Nate, 2026-11-22): the intro, and each speech's one line under its title. */
 .vr-intro p { margin: var(--space-2) 0; }
 .vr-speech-line { display: block; }
+
+/* Three ways in (Nate, 2026-11-24): three choices side by side on a wide screen, stacked on a phone; nothing scrolls sideways. */
+.vw-ways { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-2); margin: var(--space-2) 0; }
+.vw-way { display: grid; grid-template-columns: auto 1fr; column-gap: var(--space-2); row-gap: 2px; border: 1px solid var(--rule); border-radius: 8px; padding: var(--space-2) var(--space-3); cursor: pointer; min-width: 0; }
+.vw-way input { grid-row: span 3; margin-top: 4px; }
+.vw-way.vw-on { border-color: currentColor; }
+.vw-title { font-weight: 600; }
+.vw-line { overflow-wrap: anywhere; }
+.vw-way .vr-small { grid-column: 2; }
+.vw-items { list-style: none; padding: 0; margin: var(--space-2) 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.vw-items li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); justify-content: space-between; overflow-wrap: anywhere; }
+.vw-pick { display: flex; gap: var(--space-2); align-items: flex-start; cursor: pointer; min-width: 0; }
+.vw-next { border-top: 1px solid var(--rule); padding-top: var(--space-2); }
+.vf-shots { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-2); }
+.vf-shot { border: 1px solid var(--rule); border-radius: 8px; padding: var(--space-2); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.vf-shot .vb-picture { width: 100%; height: auto; }
+.vf-row { display: flex; gap: 6px; flex-wrap: wrap; }

@@ -131,7 +131,7 @@ for (const [k, v] of [['VERCEL', '1'], ['VERCEL_ENV', 'production'], ['VERCEL_EN
   delete process.env[k];
 }
 check('S. a non-admin is not let in during the admin trial', !voiceAllowed(STRANGER) && voiceAllowed(NATE) && voiceAllowed(GARANCE));
-const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]', 'drafts/[id]/check', 'boards', 'boards/picture', 'boards/keep', 'boards/closing', 'publish', 'publish/[id]', 'guide'];
+const routeFiles = ['status', 'consent', 'convert', 'transcribe', 'accept', 'reading', 'drafts/[id]/[n]', 'drafts/[id]', 'drafts/[id]/check', 'boards', 'boards/picture', 'boards/keep', 'boards/closing', 'publish', 'publish/[id]', 'guide', 'ways'];
 for (const r of routeFiles) {
   const mod = await route(r);
   const h = mod.POST ?? mod.GET ?? mod.DELETE;
@@ -1014,6 +1014,107 @@ for (const id of Object.values(VOICE.models)) {
   check('H. ... and none is awaited bare', !/await\s+(inMiniApp\(\)|sdk\.(context|getCapabilities|actions))/.test(code));
   check('H. an unknown host is "maybe the app", and a refusal shows the browser\'s own line (mic-help)', /inApp\.current !== false/.test(code) && /MIC_HELP\[micPlace\(navigator\.userAgent, inApp\.current === true\)\]/.test(code));
   check('H. Record\'s button waits on no host check', !/disabled=\{[^}]*(inApp|webClient|caps)/.test(page));
+}
+
+// 3W. Three ways in (Nate, 2026-11-24; branch voice-three-ways): the choices, fitting a storyboard to a new take, the guide's timing step.
+{
+  const W = await import('../src/lib/voice/three-ways');
+  const WS = await import('../src/lib/voice/three-ways-server');
+  const BS = await import('../src/lib/voice/board-store');
+  const G = await import('../src/lib/voice/guide');
+  const GS = await import('../src/lib/voice/guide-server');
+  check('3W. three choices on the first screen, with their words (Draft wording until Nate\'s reread)', W.WAYS.map((w) => w.title).join(' | ') === 'Start from scratch | New pictures for a recording | Your voice over a storyboard' && W.WAYS_DRAFT === 'Draft wording' && W.WAYS.every((w) => w.line.length > 20));
+  const page = readFileSync(path.join(ROOT, 'src/components/voice-ways.tsx'), 'utf8');
+  const rec = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  check('3W. ... they open the record page, each marked Draft wording', /<VoiceWays\b/.test(rec) && rec.indexOf('<VoiceWays') < rec.indexOf('vr-consent') && /\{WAYS_DRAFT\}/.test(page));
+  // Fitting: two timelines of the same three sentences, the new take slower.
+  const words = (ends: number[]) => ends.map((e, i) => ({ text: `w${i}`, start: e - 0.4, end: e }));
+  const from: import('../src/lib/voice/board').Timeline = { seconds: 30, words: words([3, 6, 10, 14, 20, 25, 29.5]), sentences: [{ n: 0, start: 0, end: 10 }, { n: 1, start: 10, end: 20 }, { n: 2, start: 20, end: 29.5 }] };
+  const to: import('../src/lib/voice/board').Timeline = { seconds: 45, words: words([4, 9, 15, 21, 30, 38, 44.5]), sentences: [{ n: 0, start: 0, end: 15 }, { n: 1, start: 15, end: 30 }, { n: 2, start: 30, end: 44.5 }] };
+  const mk = (key: string, start: number, end: number): Shot => ({ key, start, end, description: `Shot ${key}, in its maker's words.`, angle: 'medium', angleBy: 'person', insert: false, styleId: null, characterIds: [], kept: key.repeat(32).slice(0, 64).padEnd(64, '0').replace(/[^0-9a-f]/g, 'a') });
+  const src = [mk('s1', 0, 10), mk('s2', 10, 20), mk('s3', 20, 30)];
+  const f1 = W.fitShots(src, from, to);
+  check('3W. a word-for-word take: each cut moves to the same sentence\'s end; the same shots, words and pictures', f1.by === 'sentences' && f1.cuts.join() === '15,30' && f1.shots.map((s) => s.key).join() === 's1,s2,s3' && f1.shots.every((s, i) => s.kept === src[i].kept && s.description === src[i].description) && f1.shots[2].end === 45, JSON.stringify(f1.cuts));
+  const impro = { ...to, sentences: [{ n: 0, start: 0, end: 44.5 }] };
+  const f2 = W.fitShots(src, from, impro);
+  check('3W. a take without those sentences: the cuts keep their share of the length, at word ends', f2.by === 'length' && f2.cuts.length === 2 && f2.cuts.every((c) => impro.words.some((w) => w.end === c)) && f2.cuts[0] < f2.cuts[1], JSON.stringify(f2.cuts));
+  const nudged = W.nudgeShot(to, f1.shots, 's2', 'longer');
+  check('3W. Longer moves the shot\'s end to a later word end; Shorter the other way; the last shot moves its start', JSON.stringify(nudged) === JSON.stringify([15, 38]) && JSON.stringify(W.nudgeShot(to, f1.shots, 's2', 'shorter')) === JSON.stringify([15, 21]) && JSON.stringify(W.nudgeShot(to, f1.shots, 's3', 'longer')) === JSON.stringify([15, 21]), JSON.stringify(nudged));
+  check('3W. ... and refuses to leave a shot under 2 seconds', W.nudgeShot({ seconds: 6, words: words([2, 4, 6]), sentences: [] }, [mk('s1', 0, 2), mk('s2', 2, 6)], 's1', 'shorter') === null);
+  check('3W. on a reused storyboard only the timing changes: a changed picture, words or camera is refused', W.reusedProblems(f1.shots, f1.shots).length === 0 && W.reusedProblems(f1.shots, f1.shots.map((s, i) => (i === 1 ? { ...s, description: 'New words' } : s))).length === 1 && W.reusedProblems(f1.shots, f1.shots.slice(0, 2)).length === 1 && W.retimed(f1.shots, [16], 45) === null && W.retimed(f1.shots, [16, 31], 45)?.map((s) => s.key).join() === 's1,s2,s3');
+  check('3W. "make shot 3 longer" reads as shot 3, longer', JSON.stringify(W.timingFromWords('Could you make shot 3 longer?')) === JSON.stringify({ shot: 3, change: 'longer', seconds: 1.5 }) && W.timingFromWords('shorten shot 2 by 2 seconds')?.change === 'shorter' && W.timingFromWords('hello') === null);
+
+  // The server: Nate's storyboard (a team one), reused by Garance on her own take.
+  const tl = (scale: number) => ({ seconds: 30 * scale, words: [3, 6, 10, 14, 20, 25, 29.5].map((e, i) => ({ text: `w${i}`, start: (e - 0.4) * scale, end: e * scale })), sentences: [{ n: 0, start: 0, end: 10 * scale }, { n: 1, start: 10 * scale, end: 20 * scale }, { n: 2, start: 20 * scale, end: 29.5 * scale }] });
+  const recipe = (fid: number, scale: number) => ({ provider: 'ElevenLabs', model: 'eleven_multilingual_sts_v2', takes: [{ role: 'take', takeSha256: 'a'.repeat(64), convertedSha256: 'e'.repeat(64) }], speech: { id: 'ephelion-c13-b64', title: speechById('ephelion-c13-b64')!.title }, timeline: tl(scale), preset: { id: 'ephelion-warm-lecturer', name: 'Warm lecturer' }, by: fid });
+  const [nd] = await sql`insert into studio.voice_drafts (fid, kind, speech_id, preset_id, recipe) values (${NATE}, 'performance', 'ephelion-c13-b64', 'ephelion-warm-lecturer', ${sql.json(recipe(NATE, 1))}) returning id`;
+  const [gd] = await sql`insert into studio.voice_drafts (fid, kind, speech_id, preset_id, recipe) values (${GARANCE}, 'performance', 'ephelion-c13-b64', 'ephelion-warm-lecturer', ${sql.json(recipe(GARANCE, 1.5))}) returning id`;
+  const bytes = (n: number) => new Uint8Array(Array.from({ length: 200 }, (_, i) => (i * n) % 251));
+  const shots: Shot[] = [];
+  for (const [i, k] of ['s1', 's2', 's3'].entries()) {
+    const b = bytes(i + 3);
+    await BS.keepPicture(sql, nd.id, NATE, k, b, sha(b), { model: { id: 'stand-in', name: 'stand-in', maker: 'site', open: true }, prompt: `Nate's words for ${k}` });
+    shots.push({ key: k, start: i * 10, end: i === 2 ? 30 : (i + 1) * 10, description: `Nate's words for ${k}`, angle: 'medium', angleBy: 'person', insert: false, styleId: null, characterIds: [], kept: sha(b) });
+  }
+  const sb = bytes(11);
+  const eb = bytes(13);
+  await BS.keepPicture(sql, nd.id, NATE, 'scene', sb, sha(sb), { model: { id: 'stand-in' } });
+  await BS.keepPicture(sql, nd.id, NATE, 'end', eb, sha(eb), { model: { id: 'stand-in' } });
+  await BS.saveBoard(sql, NATE, nd.id, [10, 20], shots, { description: 'A grey harbour.', styleId: null, kept: sha(eb) }, { setting: 'A tall window over a grey harbour.', kept: sha(sb) });
+  const team = VOICE.teamBoards as unknown as { draftId: string; fid: number; title: string }[];
+  const names = { name: async (fid: number) => (fid === NATE ? 'naaate' : null), getPrivate: (await import('../src/lib/voice/store')).getAudio };
+  check('3W. nothing is offered until Nate picks the team\'s storyboards (VOICE.teamBoards is empty)', team.length === 0 && (await WS.reusableBoards(sql, names)).filter((b) => b.kind === 'team').length === 0);
+  team.push({ draftId: nd.id, fid: NATE, title: 'The Dead Hand (team)' });
+  const offered = await WS.reusableBoards(sql, names);
+  check('3W. a team storyboard is offered with its maker, its shots and its length', offered.some((b) => b.kind === 'team' && b.draftId === nd.id && b.by === 'naaate' && b.shots === 3 && b.seconds === 30));
+  let r = await WS.fitFromBoard(sql, STRANGER, { draftId: gd.id, source: { kind: 'team', draftId: nd.id, fid: NATE } }, names);
+  check('3W. only the take\'s own person fits a storyboard to it', r.status === 404);
+  r = await WS.fitFromBoard(sql, GARANCE, { draftId: gd.id, source: { kind: 'team', draftId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', fid: NATE } }, names);
+  check('3W. ... and only to a storyboard on offer', r.status === 404);
+  r = await WS.fitFromBoard(sql, GARANCE, { draftId: gd.id, source: { kind: 'team', draftId: nd.id, fid: NATE } }, names);
+  const gb = await BS.latestBoard(sql, gd.id, GARANCE);
+  const gp = await BS.keptPictures(sql, gd.id, GARANCE);
+  check('3W. Garance\'s voice over Nate\'s storyboard: its shots, words and pictures as they are, fitted to her take by sentence', r.status === 200 && (r.json as { fittedBy?: string }).fittedBy === 'sentences' && gb?.version === 1 && gb.shots.map((s) => s.key).join() === 's1,s2,s3' && gb.cuts.join() === '15,30' && gb.shots.every((s, i) => s.kept === shots[i].kept && s.description === shots[i].description) && gb.scene?.kept === sha(sb) && gb.closing?.kept === sha(eb), JSON.stringify(r.json));
+  check('3W. ... the pictures copied as they are (same sha256), each recipe kept, with where it came from', gp.length === 5 && gp.every((p) => { const rf = (p.recipe as { reusedFrom?: { draftId: string; fid: number; by: string; kind: string } }).reusedFrom; return rf?.draftId === nd.id && rf.fid === NATE && rf.by === 'naaate' && rf.kind === 'team'; }) && (gp.find((p) => p.shotKey === 's1')!.recipe as { prompt?: string }).prompt === "Nate's words for s1");
+  check('3W. ... and the board carries its source', gb?.source?.kind === 'team' && gb.source.draftId === nd.id && gb.source.by === 'naaate');
+  r = await WS.fitFromBoard(sql, GARANCE, { draftId: gd.id, source: { kind: 'team', draftId: nd.id, fid: NATE } }, names);
+  check('3W. a take that already has a storyboard isn\'t fitted again', r.status === 409);
+  // Saving: only the timing may change.
+  const save = (body: Record<string, unknown>) => boards.POST(as(GARANCE, { method: 'POST', body: JSON.stringify({ draftId: gd.id, ...body }) }));
+  let s1 = await save({ cuts: [16.5, 30], shots: gb!.shots });
+  const after = await BS.latestBoard(sql, gd.id, GARANCE);
+  check('3W. moving a cut saves a new version with the same shots and pictures, and the source carried', s1.status === 200 && after?.version === 2 && after.cuts.join() === '16.5,30' && after.shots.map((s) => s.kept).join() === gb!.shots.map((s) => s.kept).join() && after.source?.draftId === nd.id);
+  s1 = await save({ cuts: [15], shots: gb!.shots });
+  check('3W. ... a cut removed is refused (the shots stay)', s1.status === 400);
+  s1 = await save({ cuts: [15, 30], shots: gb!.shots.map((s, i) => (i === 0 ? { ...s, description: 'My own words now' } : s)), closing: { description: 'Mine', styleId: null, kept: null } });
+  const still = await BS.latestBoard(sql, gd.id, GARANCE);
+  check('3W. ... new words for a shot are not saved: the shots keep their maker\'s, and the closing card stays', still?.shots[0].description === "Nate's words for s1" && still.closing?.kept === sha(eb));
+  // The guide's timing step: it only proposes which shot and how much.
+  const deps = { system: () => 'test', ask: async (_s: string, u: string) => GS.standInGuide(u) };
+  const gt = await GS.askGuide(sql, GARANCE, { draftId: gd.id, step: 'timing', text: 'make shot 2 longer' }, deps);
+  const dr = (gt.json as { guide?: { draft?: { timing?: { shot: number; change: string } } } }).guide?.draft;
+  check('3W. the guide\'s timing step proposes "shot 2, longer", nothing else', gt.status === 200 && dr?.timing?.shot === 2 && dr.timing.change === 'longer' && Object.keys(dr).join() === 'timing', JSON.stringify(gt.json));
+  const gx = await GS.askGuide(sql, GARANCE, { draftId: gd.id, step: 'shot', text: 'a new prompt', shotKey: 's1' }, deps);
+  check('3W. ... and on a reused storyboard the guide drafts no prompt', gx.status === 400);
+  check('3W. the reply reader refuses a timing draft for a shot the board hasn\'t', 'error' in G.readGuideReply('timing', JSON.stringify({ say: 'ok', draft: { timing: { shot: 9, change: 'longer' } } }), { timeline: tl(1.5), sentences: [], shots: still!.shots, refs: { scene: false, looks: [], keptShots: [] }, maxShots: 12 }));
+  // The credits: the storyboard's maker for the pictures, the performer for the voice.
+  const { closingCredits } = await import('../src/lib/voice/closing');
+  const cr = closingCredits({ speech: { title: 'T', block: 'c13-b64' }, performer: 'garance', preset: 'Warm lecturer', voiceModel: { name: 'v', maker: 'ElevenLabs' }, transcribeModel: { name: 't', maker: 'ElevenLabs' }, pictures: [], shots: 3, reusedFrom: { by: 'naaate', title: 'The Dead Hand (team)' } });
+  check('3W. the credits: "Storyboard by @naaate" for its pictures, and "Performed by @garance"', cr.some((l) => l.who === 'people' && l.text.startsWith('Storyboard by @naaate:') && l.text.includes('fitted to this voice by @garance')) && cr.some((l) => l.text.startsWith('Performed by @garance')));
+  const cb = closingCredits({ speech: { title: 'T', block: 'c13-b64' }, performer: 'naaate', storyboardBy: 'garance', preset: 'Warm lecturer', voiceModel: { name: 'v', maker: 'ElevenLabs' }, transcribeModel: { name: 't', maker: 'ElevenLabs' }, pictures: [], shots: 3 });
+  check('3W. new pictures on someone else\'s published take: "Performed by @naaate", "Storyboard by @garance … on @naaate\'s published take"', cb.some((l) => l.text.startsWith('Performed by @naaate')) && cb.some((l) => l.text.startsWith('Storyboard by @garance') && l.text.includes('@naaate’s published take')));
+  // New pictures for a published take: shared only while its performer's own storyboard of it is published and named.
+  check('3W. someone else\'s take is not shared while it isn\'t published', (await BS.boardSource(sql, GARANCE, nd.id)) === null && !(await BS.sharedTake(sql, nd.id, NATE)));
+  await sql`insert into studio.voice_publications (draft_id, fid, board_version, named, recipe, files) values (${nd.id}, ${NATE}, 1, true, ${sql.json({ voice: {}, shots: [], closing: {}, performer: { name: 'naaate' } })}, ${sql.json([{ key: 'a', sha256: 'b' }, { key: 'c', sha256: 'd' }])})`;
+  check('3W. ... and is, once its performer published it, named (publishing on, here on a test copy)', (await BS.sharedTake(sql, nd.id, NATE)) && (await BS.boardSource(sql, GARANCE, nd.id))?.id === nd.id);
+  await sql`update studio.voice_publications set named = false where draft_id = ${nd.id}`;
+  check('3W. ... but not if he published it unnamed (it couldn\'t be credited to him)', !(await BS.sharedTake(sql, nd.id, NATE)));
+  await sql`delete from studio.voice_publications where draft_id = ${nd.id}`;
+  team.length = 0;
+  // Cleaned up as the site removes them.
+  await sql`select studio.delete_voice_draft(${gd.id}::uuid, ${GARANCE}::bigint)`;
+  await sql`select studio.delete_voice_draft(${nd.id}::uuid, ${NATE}::bigint)`;
+  check('3W. ... removed again', (await sql`select count(*)::int n from studio.voice_drafts where id in (${nd.id}, ${gd.id})`)[0].n === 0);
 }
 
 check('T. every transcript made in this run was deleted at ElevenLabs (none left)', stub.kept().length === 0 && stub.deletedTranscripts.length >= 2, `kept ${stub.kept().length}`);

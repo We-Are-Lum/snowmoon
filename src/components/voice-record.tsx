@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { LearnMore, LearnMoreParts } from '~/components/challenge-learn-more';
 import type { LearnMoreView } from '~/lib/challenge/learn-more-view';
 import { citeHref } from '~/lib/challenge/learn-more';
+import { VoiceWays } from '~/components/voice-ways';
 import '../styles/voice.css';
 
 const REMOVE_DRAFT = 'Remove this draft? Its audio is deleted and it can’t be brought back.';
@@ -607,6 +608,15 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
       )}
       {!s.ready && <p className="vr-warn" role="status">Not ready: the voice service isn&rsquo;t set up on this server.</p>}
       {message && <p className="vr-warn" role="alert">{message}</p>}
+      {/* Three ways in (Nate, 2026-11-24): from scratch (the page below), new pictures for a recording, or your voice over a storyboard. */}
+      <VoiceWays
+        speeches={s.speeches}
+        readings={status && status !== 'none' ? status.readings : []}
+        drafts={s.drafts}
+        presetName={(id) => s.choices.find((c) => c.presetId === id)?.name ?? id}
+        onSpeech={(id) => speechId !== id && pickSpeech(id)}
+        disabled={busy !== null || recording}
+      />
 
       {!s.consent.agreed && (
         <section className="vr-card vr-consent" aria-labelledby="vr-consent-h">
