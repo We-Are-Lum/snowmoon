@@ -4,7 +4,7 @@ The owner's request of 2026-11-23: a private review tool for the poidh backstory
 (poidh.xyz/base/bounty/1546; bounty 560 on PoidhV3 on Base), to go through the claims and make a shortlist before the
 challenge closes on 29 Nov, and the same tool for the challenge's entries. Written by the coding agent (Anthropic's
 Claude, a closed model). **Not merged, no pull request.** Branch `bounty-review`, from `origin/main` at 8bf0b667.
-The owner applied the migration (now 0048_bounty_review.sql) on 2026-11-23 and asked for the merge once the checks pass. $0 spent; no model called.
+The owner applied the migration (now 0050_bounty_review.sql; numbered 0048 first, then 0050 after #224 took 0048 and 0049) on 2026-11-23 and asked for the merge once the checks pass. $0 spent; no model called.
 
 ## What it is
 
@@ -58,7 +58,7 @@ reread: the server, when an admin opens a claim, fetches that claim's picture fr
 IPFS gateway). That request carries no visitor data (it is the site's server, not the admin's browser). No legal text is
 changed on this branch.
 
-## The migration: 0048_bounty_review.sql (applied by the owner, 2026-11-23)
+## The migration: 0050_bounty_review.sql (applied by the owner, 2026-11-23, before 0048 and 0049; separate tables)
 
 Three new tables, additive, nothing else changes. Must run as `postgres` in the Supabase SQL Editor: A dry run (ends in
 rollback), B migration, C read-back (inside a transaction ending in rollback: rights read with has_table_privilege,

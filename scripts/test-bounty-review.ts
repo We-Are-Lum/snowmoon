@@ -1,12 +1,12 @@
 /**
  * /admin/bounty (owner, 2026-11-23; branch bounty-review): the admins' private review of the poidh backstory bounty's
  * claims and the challenge's entries. No network, no production database: Base is a stub answering as PoidhV3 does, the
- * database an in-memory Postgres (PGlite) with every numbered migration before 0048, then 0048_bounty_review.sql part by part, read as
+ * database an in-memory Postgres (PGlite) with every numbered migration before 0050, then 0050_bounty_review.sql part by part, read as
  * studio_writer. Fails (exit 1) on any problem; each rule is proven on a planted fault ("proof: …").
  *
  *   npm run test:bounty-review
  *
- * - 0048_bounty_review.sql: who runs it; A is B word for word; A leaves everything as it was; B applies twice; C's
+ * - 0050_bounty_review.sql: who runs it; A is B word for word; A leaves everything as it was; B applies twice; C's
  *   read-back passes and keeps nothing; D undoes it; studio_writer's rights are exactly the site's, anon and
  *   authenticated have none; planted faults make C fail.
  * - The gate: signed out and a non-admin get 404 from every answer before anything is read on Base or in the database.
@@ -45,7 +45,7 @@ const walk = (dir: string): string[] =>
   readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap((d) => (d.isDirectory() ? walk(`${dir}/${d.name}`) : /\.(tsx?|css|sql|json)$/.test(d.name) ? [`${dir}/${d.name}`] : []));
 
 // --- The migration file -------------------------------------------------------------------------------------------
-const FILE = 'supabase/migrations/0048_bounty_review.sql';
+const FILE = 'supabase/migrations/0050_bounty_review.sql';
 const text = read(FILE);
 const at = (h: string) => text.indexOf(`\n-- ${h}`);
 const between = (a: string, b: string | null) => text.slice(text.indexOf('\n', at(a) + 1) + 1, b ? at(b) : text.length);
@@ -62,7 +62,7 @@ const uncomment = (s: string) => {
 const readBack = uncomment(between('C. READ-BACK', 'D. UNDO'));
 const undo = uncomment(between('D. UNDO', null));
 check('the file says who runs it (postgres, in the Supabase SQL Editor)', /MUST RUN AS postgres/.test(text) && /Supabase SQL Editor/.test(text));
-check('numbered 0048, and says it was applied and by whom', path.basename(FILE) === '0048_bounty_review.sql' && /APPLIED by the owner/.test(text));
+check('numbered 0050, and says it was applied and by whom', path.basename(FILE) === '0050_bounty_review.sql' && /APPLIED by the owner/.test(text));
 check('A ends in rollback, B in commit, C in a rolled-back read-back ending READ-BACK PASSED, then D', dry.startsWith('begin;') && dry.endsWith('rollback;') && mig.startsWith('begin;') && mig.endsWith('commit;') && readBack.startsWith('begin;') && readBack.trim().endsWith('rollback;') && /READ-BACK PASSED/.test(readBack) && /drop table/.test(undo));
 check('the dry run is the migration word for word', dry.slice(0, -'rollback;'.length) === mig.slice(0, -'commit;'.length));
 check('the read-back inserts and deletes realistic rows in every table', ['review_labels', 'review_notes', 'review_log'].every((t) => new RegExp(`insert into studio\\.${t}`).test(readBack) && new RegExp(`delete from studio\\.${t}`).test(readBack)));
@@ -290,7 +290,7 @@ const log = (await pg.query<{ change: string; label: string | null; by_fid: stri
 check('every change is in the log, with who (and the repeat "on" is not)', log.map((l) => `${l.change}:${l.label ?? ''}:${l.by_fid}`).join(' ') === `label_on:followed_directions:${admin} label_on:top:${ADMINS[1]} note_set::${admin} label_off:top:${admin} label_on:good:${admin} note_cleared::${admin}`, log.map((l) => l.change).join(' '));
 check('nothing was asked of Base but reads', writes.length === 0);
 
-// Without the tables (as on a database where 0048_bounty_review.sql isn't applied): every query that names them fails
+// Without the tables (as on a database where 0050_bounty_review.sql isn't applied): every query that names them fails
 // as Postgres fails it (42P01); the page still lists the claims and says labels can't be saved.
 {
   const noTable = () => Object.assign(new Error('relation does not exist'), { code: '42P01' });
