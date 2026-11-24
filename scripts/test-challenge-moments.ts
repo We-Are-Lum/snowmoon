@@ -133,11 +133,15 @@ check('config: a current default look per challenge character, each a design id 
   }));
   // "Later in the book." (owner, 2026-11-17): a plain part like the others, shown in full, after "At the start." and
   // before "What drives"; it was a nested fold, "Later in the book (spoilers)", closed by default.
-  const comp = read('src/components/challenge-character.tsx');
-  check('Learn more: "Later in the book." is a plain part, in full, between "At the start." and "What drives"', LM.LATER_LABEL === 'Later in the book.' && !/<details className="chc-later"/.test(comp) && /<p className="chc-learn-part" data-part="later">\s*<strong>\{P\.learn\.text\.later\.head\}<\/strong>/.test(comp) && comp.indexOf('data-part="start"') < comp.indexOf('data-part="later"') && comp.indexOf('data-part="later"') < comp.indexOf('data-part="drives"'));
+  // Since #219 (2026-11-23) the parts are drawn by LearnMoreParts (src/components/challenge-learn-more.tsx), which the
+  // character page and /storyboard/record share; the character page renders it with its own view.
+  const page = read('src/components/challenge-character.tsx');
+  const comp = read('src/components/challenge-learn-more.tsx');
+  check('Learn more: the character page draws its parts with the shared LearnMoreParts', /<LearnMoreParts learn=\{P\.learn\} \/>/.test(page) && !/data-part="later"|chc-looks/.test(page));
+  check('Learn more: "Later in the book." is a plain part, in full, between "At the start." and "What drives"', LM.LATER_LABEL === 'Later in the book.' && !/<details className="chc-later"/.test(comp) && /<p className="chc-learn-part" data-part="later">\s*<strong>\{learn\.text\.later\.head\}<\/strong>/.test(comp) && comp.indexOf('data-part="start"') < comp.indexOf('data-part="later"') && comp.indexOf('data-part="later"') < comp.indexOf('data-part="drives"'));
   // The looks line once (owner, 2026-11-16): "Room to invent." ends with its own looks line, so the page's looks line is
   // drawn only in the fallback (a character with no Learn more text).
-  check('Learn more: the looks line once: every text\'s "Room to invent." ends with its looks line, and the page draws its own only in the fallback', Object.values(LM.LEARN_MORE).every((x) => /\blooks\b/.test(x.invent.at(-1)?.map((s) => ('text' in s ? s.text : '')).join('') ?? '')) && (comp.match(/\{P\.learn\.looks\}/g) ?? []).length === 1 && comp.indexOf('{P.learn.looks}') > comp.indexOf('P.learn.facts.length') && !/<li className="chc-looks">/.test(comp));
+  check('Learn more: the looks line once: every text\'s "Room to invent." ends with its looks line, and the page draws its own only in the fallback', Object.values(LM.LEARN_MORE).every((x) => /\blooks\b/.test(x.invent.at(-1)?.map((s) => ('text' in s ? s.text : '')).join('') ?? '')) && (comp.match(/\{learn\.looks\}/g) ?? []).length === 1 && comp.indexOf('{learn.looks}') > comp.indexOf('learn.facts.length') && !/<li className="chc-looks">/.test(comp));
   check('Learn more: Zei\'s texts are the owner\'s (approved), and are shown', LM.LEARN_MORE.zei.approved && LM.learnMoreProblems('zei').length === 0);
   check('Learn more: every citation is a block that exists in the book', Object.entries(LM.LEARN_MORE).every(([, x]) => [x.who, x.start, x.later, x.drives, ...x.invent].flat().every((s) => !('cite' in s) || blocks.has(/^(c\d+-b\d+)/.exec(s.cite)![1]))));
 
