@@ -97,7 +97,8 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   const asked = closing ? [] : Array.isArray(b.characterIds) ? b.characterIds.filter((x): x is string => typeof x === 'string') : [];
   const wanted = (sceneShot || inScene) && lookOfBoard ? [lookOfBoard] : asked;
   // One look a picture (the scene, a shot, an insert): the scene and the previous shot take the other two references.
-  if (wanted.length > 1) return no(400, 'One character’s look a picture');
+  // A request naming two looks is refused even where the board's look replaces it.
+  if (asked.length > 1 || wanted.length > 1) return no(400, 'One character’s look a picture');
   const chosen = wanted.map((id) => characters.find((c) => c.versionId === id));
   if (chosen.some((c) => !c)) return no(400, 'A character is not a published sheet');
   // The references, in order (proposal v2): a shot in the scene sends the kept scene and the look (the anchors, every
@@ -123,8 +124,8 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   const sceneKept = board?.scene?.kept ?? null;
   // Kept shots made with another scene (or none) or another look are not this scene's: never a reference.
   const keptRows = board ? ((await keptPictures(sql, draft.id, fid)) as unknown as { shotKey: string; sha256: string; recipe: unknown }[]) : [];
-  const made = Object.fromEntries(shots.map((s) => [s.key, s.kept ? keptRows.find((p) => p.shotKey === s.key && p.sha256 === s.kept) : undefined]).map(([k, p]) => [k, p ? madeWithOf((p as { recipe: unknown }).recipe) : undefined]));
-  const stale = staleShots(shots, board?.scene ?? null, lookOfBoard, made);
+  const madeWith = Object.fromEntries(shots.map((s) => [s.key, s.kept ? keptRows.find((p) => p.shotKey === s.key && p.sha256 === s.kept) : undefined]).map(([k, p]) => [k, p ? madeWithOf((p as { recipe: unknown }).recipe) : undefined]));
+  const stale = staleShots(shots, board?.scene ?? null, lookOfBoard, madeWith);
   const fresh = shots.map((s) => (stale.includes(s.key) ? { ...s, kept: null } : s));
   const plan = inScene ? shotReferences(fresh, String(b.shotKey)) : null;
   if (inScene && !sceneKept) return no(400, 'Make and keep the scene first: every shot in the scene uses it.', { reason: 'no-scene' });
@@ -154,10 +155,18 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   // A shot in the scene always sends the kept scene and the board's look first (the anchors), whatever the guide's draft
   // chose; a stale kept shot or another look is left out. What the site added is recorded as the site's choice.
   const siteAdded: { role: GuideRef['role']; ref: string; why: string }[] = [];
+  const siteRemoved: { role: GuideRef['role']; ref: string; why: string }[] = [];
+  // What the person sent, before the site's changes: the person's edit of the guide's references is judged on this.
+  const askedRefs = sentRefs;
+  if (sentRefs && sentRefs.length > IMAGES.maxReferences) return no(400, `At most ${IMAGES.maxReferences} reference pictures`);
   if (sentRefs && inScene) {
     const lookId = chosen[0]?.versionId ?? null;
     const isLook = (ref: string) => characters.some((c) => c.versionId === ref);
-    let list = sentRefs.filter((r) => !stale.includes(r.ref) && !(isLook(r.ref) && r.ref !== lookId));
+    let list = sentRefs.filter((r) => {
+      const why = stale.includes(r.ref) ? 'a kept shot made with another look or before this scene' : isLook(r.ref) && r.ref !== lookId ? 'not the look chosen for the scene' : null;
+      if (why) siteRemoved.push({ role: r.role, ref: r.ref, why });
+      return !why;
+    });
     if (!list.some((r) => r.ref === SCENE.key)) {
       list = [{ role: 'anchor-scene', ref: SCENE.key }, ...list];
       siteAdded.push({ role: 'anchor-scene', ref: SCENE.key, why: 'the kept scene: every shot in the scene is made with it' });
@@ -166,7 +175,9 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
       list = [list[0], { role: 'anchor-look', ref: lookId }, ...list.slice(1)];
       siteAdded.push({ role: 'anchor-look', ref: lookId, why: 'the look chosen for the scene' });
     }
-    sentRefs = list.slice(0, IMAGES.maxReferences);
+    // With the anchors added, more than the limit is refused rather than cut short (nothing the person chose is dropped
+    // silently).
+    sentRefs = list;
   }
   if (sentRefs) {
     if (sentRefs.length > IMAGES.maxReferences) return no(400, `At most ${IMAGES.maxReferences} reference pictures`);
@@ -259,7 +270,9 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
       request: gd?.request ? { text: gd.request.text, id: gd.request.id, madeAt: gd.request.madeAt } : null,
       drafted,
       sent: { prompt: description, references: references.map((r) => ({ role: r.role, ref: r.shotKey ?? r.versionId ?? '' })) },
+      asked: askedRefs ?? undefined,
       siteAdded,
+      siteRemoved,
     }),
     // The scene this picture belongs to (a shot in the scene), the camera and who set it, and whether it is an insert.
     ...(sceneShot ? { setting: { text: description, by: `written by FID ${fid}` } } : {}),

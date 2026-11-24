@@ -414,7 +414,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
   }
 
   /** Send one recording to be converted (a whole take stays on the device whatever the answer). */
-  async function convert(blob: Blob, seconds: number, sentence: number | null, speechOfTake = s!.speech.id): Promise<Converted | null> {
+  async function convert(blob: Blob, seconds: number, sentence: number | null, speechOfTake = s!.speech.id, convertAgain = false): Promise<Converted | null> {
     const form = new FormData();
     form.set('take', blob, 'take');
     form.set('speechId', speechOfTake);
@@ -423,11 +423,15 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
     form.set('seconds', String(seconds));
     form.set('agree', s!.consent.sha256);
     if (sentence !== null) form.set('sentence', String(sentence));
+    // Fix 7: only after the person pressed "Convert again" on a recording already converted; the server refuses otherwise.
+    if (convertAgain) form.set('again', '1');
     log.note(`convert: sending ${blob.size} bytes (${blob.type || 'no type'}), ${seconds.toFixed(1)} s${sentence !== null ? `, sentence ${sentence + 1}` : ''}`);
     const r = await authFetch('/api/voice/convert', { method: 'POST', body: form }).catch((e) => (log.note(`convert: the request failed (${errText(e)})`), null));
     if (!r?.ok) {
       const err = ((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error;
       if (r) log.note(`convert: HTTP ${r.status}${err ? `: ${err}` : ''}`);
+      // Converted already (another tab or device): reload the drafts, so the page offers "Convert again" instead.
+      if (r?.status === 409) void load();
       setMessage(err ?? (sentence === null ? 'The conversion failed. Your recording is still on this device: tick the box and convert it again.' : 'The conversion failed. Your recording was not kept.'));
       return null;
     }
@@ -514,7 +518,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
     // Sent only now, when Convert is pressed; the take stays on this device until it is removed.
     setAgree(false);
     try {
-      const c = await convert(blob, seconds, null, take.speechId);
+      const c = await convert(blob, seconds, null, take.speechId, again === 'yes');
       if (c) {
         setConverted(c);
         setPlayUrl(c.url);

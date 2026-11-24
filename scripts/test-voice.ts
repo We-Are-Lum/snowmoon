@@ -44,15 +44,16 @@ const STUB_PORT = 54391;
 const pg = new PGlite();
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
-// Published sheets to choose from (slice 2): one style, one character.
+// Published sheets to choose from (slice 2): one style, two characters (a second look for guide-fixes' fix 1).
 await pg.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
 const SHEET_BODY = (title: string, text: string, front?: { url: string; sha256: string }) => JSON.stringify({ title, text, samples: [], views: front ? { front } : {}, by_name: 'naaate', by_name_source: 'relay', assist: null, role: null, style: null });
-await pg.query(`insert into studio.entities (id, work_id, kind, name) values ('00000001-0000-4000-8000-000000000101','snowmoon','style','Ink and wash'), ('00000001-0000-4000-8000-000000000102','snowmoon','character','Ephelion')`);
-await pg.query(`insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id, status) values ('00000008-0000-4000-8000-000000000101','snowmoon','design',6786,'00000001-0000-4000-8000-000000000101','published'), ('00000008-0000-4000-8000-000000000102','snowmoon','design',6786,'00000001-0000-4000-8000-000000000102','published')`);
-await pg.query(`insert into studio.element_versions (id, element_id, version_no, body) values ('00000009-0000-4000-8000-000000000101','00000008-0000-4000-8000-000000000101',1,$1), ('00000009-0000-4000-8000-000000000102','00000008-0000-4000-8000-000000000102',1,$2)`, [
+await pg.query(`insert into studio.entities (id, work_id, kind, name) values ('00000001-0000-4000-8000-000000000101','snowmoon','style','Ink and wash'), ('00000001-0000-4000-8000-000000000102','snowmoon','character','Ephelion'), ('00000001-0000-4000-8000-000000000103','snowmoon','character','Test second look')`);
+await pg.query(`insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id, status) values ('00000008-0000-4000-8000-000000000101','snowmoon','design',6786,'00000001-0000-4000-8000-000000000101','published'), ('00000008-0000-4000-8000-000000000102','snowmoon','design',6786,'00000001-0000-4000-8000-000000000102','published'), ('00000008-0000-4000-8000-000000000103','snowmoon','design',6786,'00000001-0000-4000-8000-000000000103','published')`);
+await pg.query(`insert into studio.element_versions (id, element_id, version_no, body) values ('00000009-0000-4000-8000-000000000101','00000008-0000-4000-8000-000000000101',1,$1), ('00000009-0000-4000-8000-000000000102','00000008-0000-4000-8000-000000000102',1,$2), ('00000009-0000-4000-8000-000000000103','00000008-0000-4000-8000-000000000103',1,$3)`, [
   SHEET_BODY('Ink and wash', 'Ink and wash: loose black ink lines, grey washes, paper texture.'),
   // A front view, as every published look has (the stand-in picture deps never fetch it).
   SHEET_BODY('Ephelion', 'Lord Ephelion: a tall man in a dark coat with a high collar.', { url: 'https://pictures.snowmoon.party/images/readers/test-ephelion.jpg', sha256: 'f'.repeat(64) }),
+  SHEET_BODY('Test second look', '(test script\'s words) A second look, for the look-change test.', { url: 'https://pictures.snowmoon.party/images/readers/test-second-look.jpg', sha256: 'e'.repeat(64) }),
 ]);
 const pgServer = new PGLiteSocketServer({ db: pg, port: PG_PORT, host: '127.0.0.1' });
 await pgServer.start();
@@ -102,6 +103,7 @@ const board = await import('../src/lib/voice/board');
 const as = (fid: number | null, init: RequestInit = {}, url = 'http://localhost/api/voice/x') =>
   new Request(url, { ...init, headers: { ...(init.headers ?? {}), ...(fid ? { authorization: `Bearer voice-test-${fid}` } : {}) } });
 const sha = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
+const sharpPng = async () => (await import('sharp')).default({ create: { width: 400, height: 600, channels: 3, background: '#b8b4ac' } }).png().toBuffer();
 
 // E. The voice pages' own miniapp embeds (Nate, 2026-11-22; button titles reread word for word).
 {
@@ -290,6 +292,19 @@ check('V. the kept draft plays the converted speech for its person', converted.l
   check('V. ... and nobody else sees it, even an admin', !stG0.drafts.some((x) => x.id === autoId) && (await draftAudioRoute.GET(as(GARANCE), { params: Promise.resolve({ id: autoId, n: '0' }) })).status === 404);
 }
 {
+  // Fix 7's server side (Nate, 2026-11-24: "not optional"): the same recording is converted again only with "Convert
+  // again" (again=1). Refused before anything is sent or counted: no ElevenLabs call, no take counted, no hold left.
+  const { CONVERT_AGAIN_REFUSED } = await import('../src/lib/voice/convert-again');
+  const calls0 = stub.calls.filter((c) => c.path.startsWith('/v1/speech-to-speech')).length;
+  const asks0 = (await sql`select count(*)::int n from studio.voice_asks where fid = ${NATE}`)[0].n;
+  const rr = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take)) }));
+  const jj = (await rr.json()) as { error?: string };
+  const held = (await sql`select coalesce(sum(calls),0)::int n from studio.voice_costs where kind = 'reserved'`)[0].n;
+  check('V. fix 7: converting the same recording again without "Convert again" is refused (409), before anything is sent or counted', rr.status === 409 && jj.error === CONVERT_AGAIN_REFUSED && stub.calls.filter((c) => c.path.startsWith('/v1/speech-to-speech')).length === calls0 && (await sql`select count(*)::int n from studio.voice_asks where fid = ${NATE}`)[0].n === asks0 && held === 0, `${rr.status} ${jj.error} held ${held}`);
+  const src = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  check('V. fix 7: the page sends again=1 only from "Convert again"', /if \(convertAgain\) form\.set\('again', '1'\);/.test(src) && /convert\(blob, seconds, null, take\.speechId, again === 'yes'\)/.test(src) && (src.match(/form\.set\('again'/g) ?? []).length === 1);
+}
+{
   // The keeping refuses the raw take itself (a planted bug that handed it the take would be stopped here too).
   const { keepPerformance } = await import('../src/lib/voice/keep-converted');
   const { readConvertTicket } = await import('../src/lib/voice/take-flow');
@@ -446,7 +461,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   cuts.push(board.snapToWordEnd(tl as never, 5));
   const mine = 'Ephelion\'s letter glows on a cracked screen in a dim tunnel; a commuter stops to read it.';
   const style = b0.sheets.styles[0].id;
-  const eph = b0.sheets.characters[0].id;
+  const eph = b0.sheets.characters.find((x) => x.title === 'Ephelion')!.id;
   const shots0 = board.shotsFromCuts(tl as never, cuts.sort((a, b) => a - b), b0.board.shots).map((x, i) => (i === 0 ? { ...x, description: mine, angle: 'low' as const, styleId: style, characterIds: [eph] } : x));
   const save = (c: number[], sh: Shot[]) => boards.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, cuts: c, shots: sh }) }));
   r = await save(cuts, shots0);
@@ -501,7 +516,8 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
     let made = false;
     let pool: string | undefined;
     const realDeps = {
-      real: true, consented: async () => true, reference: async () => null, paid: (async (_s: unknown, _f: unknown, _r: unknown, job: { spend: { pool?: string } }) => { made = true; pool = job.spend.pool; return { ok: false, status: 429, error: 'stopped by the test', extra: {} }; }) as never, make: async () => { throw new Error('no'); },
+      // The look's sheet picture: a plain picture (the board's look is sent with every shot in the scene, fix 1).
+      real: true, consented: async () => true, reference: async () => sharpPng(), paid: (async (_s: unknown, _f: unknown, _r: unknown, job: { spend: { pool?: string } }) => { made = true; pool = job.spend.pool; return { ok: false, status: 429, error: 'stopped by the test', extra: {} }; }) as never, make: async () => { throw new Error('no'); },
     };
     const body = { draftId: acc.id, shotKey: s2.shots[1].key, description: mine, angle: 'low' };
     const stranger = await makeShotPicture(sql, STRANGER, new Request('http://localhost/x'), body, { country: null, region: null } as never, realDeps);
@@ -589,7 +605,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
       const rows = await sql`select shot_key, recipe from studio.voice_board_pictures where draft_id = ${acc.id} and fid = ${NATE}`;
       const r2 = rows.find((x) => x.shot_key === sv.shots[1].key)?.recipe as { references: { role: string; shotKey?: string }[]; continuity: string | null } | undefined;
       const r3 = rows.find((x) => x.shot_key === sv.shots[2]?.key)?.recipe as { continuity: string | null } | undefined;
-      check('S2. shot 2 sends the scene, then shot 1 as kept (continuity); shot 3 follows the last kept shot on the saved board', r2?.references.map((x) => x.role).join() === 'anchor-scene,continuity' && r2.continuity === sv.shots[0].key && r2.references[1].shotKey === sv.shots[0].key && (sv.shots.length < 3 || [sv.shots[0].key, sv.shots[1].key].includes(r3?.continuity ?? '')), JSON.stringify(r2?.references));
+      check('S2. shot 2 sends the scene, the board\'s look (fix 1), then shot 1 as kept (continuity); shot 3 follows the last kept shot on the saved board', r2?.references.map((x) => x.role).join() === 'anchor-scene,anchor-look,continuity' && r2.continuity === sv.shots[0].key && r2.references[2].shotKey === sv.shots[0].key && (sv.shots.length < 3 || [sv.shots[0].key, sv.shots[1].key].includes(r3?.continuity ?? '')), JSON.stringify(r2?.references));
     }
     const look = "(test script's words) Snow falling over a dark harbour, the lamps out.";
     r = await boardPicture.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, shotKey: 'end', description: look }) }));
@@ -755,6 +771,11 @@ check('$. one ask counted per whole-take conversion, none for a sentence', asks 
 await sql`insert into studio.voice_asks (fid) values (${NATE})`;
 r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(8000)) }));
 check('$. a third whole take in a day is refused (429; 2 a day, Nate 2026-11-23)', r.status === 429 && /2 whole takes/.test(String(((await r.json()) as { error: string }).error)));
+// Fix 7: "Convert again" passes the once-only rule (here it then meets the day's take limit); without it, the rule refuses first.
+r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take), { again: '1' }) }));
+const againLimit = r.status === 429 && /2 whole takes/.test(String(((await r.json()) as { error: string }).error));
+r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take)) }));
+check('V. fix 7: with "Convert again" the same recording passes the once-only rule (and meets the day\'s limit here); without it, 409', againLimit && r.status === 409);
 r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
 check('$. ... while a sentence can still be redone', r.status === 200);
 // The 20%-over-estimate stop (Garance agrees to the screen first: without it, convert stops at the consent).
@@ -925,7 +946,7 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
   const gget = async (fid = NATE) => (await guideRoute.GET(as(fid, {}, `http://localhost/api/voice/guide?draft=${gd}`))).json() as Promise<{ messages: { id: string; n: number; role: string; text: string; draft: unknown; model: string | null }[]; model: string }>;
   const bget = async () => (await (await boards.GET(as(NATE, {}, `http://localhost/api/voice/boards?draft=${gd}`))).json()) as { board: { cuts: number[]; shots: Shot[] }; sheets: { styles: { id: string }[]; characters: { id: string; title: string; text: string }[] } };
   const b0 = await bget();
-  const lookG = b0.sheets.characters[0];
+  const lookG = b0.sheets.characters.find((x) => x.title === 'Ephelion')!;
   const styleG = b0.sheets.styles[0].id;
   const lookArg = { id: lookG.id, title: lookG.title, text: lookG.text };
   check('GU. the dialogue starts empty, and names its model (a stand-in on a local copy: no model is called)', (await gget()).messages.length === 0 && /stand-in/.test((await gget()).model));

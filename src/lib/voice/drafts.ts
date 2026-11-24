@@ -39,6 +39,15 @@ export async function saveDraft(sql: postgres.Sql, d: { fid: number; kind: 'perf
   }
 }
 
+/**
+ * Whether this person already has a draft converted from this very recording (its whole take's sha256, as the recipe
+ * keeps it). Fix 7 (Nate, 2026-11-24): the conversion route converts it again only when the page sends "Convert again".
+ */
+export async function convertedAlready(sql: postgres.Sql, fid: number, takeSha256: string): Promise<boolean> {
+  const rows = await sql`select 1 from studio.voice_drafts where fid = ${fid} and kind = 'performance' and recipe->'takes'->0->>'takeSha256' = ${takeSha256} limit 1`;
+  return rows.length > 0;
+}
+
 export async function myDrafts(sql: postgres.Sql, fid: number) {
   return sql`
     select d.id, d.kind, d.speech_id, d.preset_id, d.made_at, d.published_at, d.recipe,
