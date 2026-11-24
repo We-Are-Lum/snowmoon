@@ -8,9 +8,9 @@ import { isSocialPerson } from '../people';
  * "a Bluesky account" / "a Lens account" when there is none. Null for anyone else (Farcaster names and wallet
  * addresses keep their own bylines). A linked account signs in as its Farcaster ID, so it gets the Farcaster name.
  */
-export function socialByline(request: Request, person: number): { name: string; source: 'lens' | 'bluesky' } | null {
+export async function socialByline(request: Request, person: number): Promise<{ name: string; source: 'lens' | 'bluesky' } | null> {
   if (!isSocialPerson(person)) return null;
-  const s = getSocial(request);
+  const s = await getSocial(request);
   if (!s) return null;
   return { name: s.handle ?? (s.kind === 'lens' ? 'a Lens account' : 'a Bluesky account'), source: s.kind };
 }

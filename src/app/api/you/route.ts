@@ -1,16 +1,15 @@
 import { NextResponse } from 'next/server';
 import { isWalletPerson } from '~/lib/people';
-import { getFid, getPerson, getSocial, getWallet } from '~/lib/auth';
+import { getFid, getPerson, getSocial, getWallet, socialFrom, walletFrom } from '~/lib/auth';
 import { signInOpen } from '~/lib/config';
 import { activeSocialLink, linkedToMe, relinkWait, socialAccount } from '~/lib/social/accounts';
-import { readSocialSession, type SocialSession } from '~/lib/social/session';
+import { type SocialSession } from '~/lib/social/session';
 import { IMAGES, REMIX, WALLET_LINKS } from '~/lib/config';
 import { db } from '~/lib/db';
 import { configLink, isPayTo, keptLookup, linkedFidFor, linkOf, walletLinksOf } from '~/lib/wallet/links';
 import { linkedTo } from '~/lib/wallet/credit';
 import { shortAddress } from '~/lib/wallet/session';
 import { priceUsd } from '~/lib/wallet/credits';
-import { readSession } from '~/lib/wallet/session';
 import { isAdmin } from '~/lib/admins';
 import { ownWork, whoIs } from '~/lib/you';
 
@@ -39,8 +38,8 @@ export async function GET(request: Request) {
   if (person === null) return NextResponse.json({ error: 'Sign in first' }, { status: 401, headers: noStore });
   // The wallet in play: this request's own wallet sign-in, or one alongside a Farcaster sign-in.
   const fid = await getFid(request);
-  const own = fid === null ? getWallet(request) : null;
-  const also = fid !== null ? readSession(request.headers.get('x-wallet-session')) : null;
+  const own = fid === null ? await getWallet(request) : null;
+  const also = fid !== null ? await walletFrom(request.headers.get('x-wallet-session')) : null;
   const w = own ?? also;
   const wallet = person < 0 ? own : null;
   const who = await whoIs(person, wallet?.address);
@@ -114,8 +113,8 @@ async function linkedWalletsView(fid: number, except: number | null) {
 async function socialView(request: Request, fid: number | null) {
   const sql = db();
   if (!sql) return null;
-  const own = fid === null ? getSocial(request) : null;
-  const beside = readSocialSession(request.headers.get('x-social-session'));
+  const own = fid === null ? await getSocial(request) : null;
+  const beside = await socialFrom(request.headers.get('x-social-session'));
   const here: SocialSession | null = beside && beside.account !== own?.account ? beside : own;
   // What the account here could link to: the Farcaster sign-in, or (Bluesky only) the Lens sign-in that is the bearer.
   const toLens = own?.kind === 'lens' && here?.kind === 'bluesky' && here.account !== own.account ? own : null;

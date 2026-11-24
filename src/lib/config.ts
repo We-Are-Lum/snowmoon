@@ -36,6 +36,17 @@ export const SYSTEM_FID = 6786;
  */
 export const ADMINS: readonly number[] = [6786, 193912];
 
+/**
+ * Website sign-ins (owner, 2026-11-23; branch session-30d): every kind lasts the same, 30 days (Farcaster on the
+ * website, wallet, Lens, Bluesky), as the site's own signed session kept in localStorage and sent as the bearer header,
+ * never a cookie. Inside the Farcaster app, Quick Auth stays as it is (Farcaster's own token). "Sign out on every
+ * device" (the You page) ends every session issued before it (studio.session_ends; src/lib/session-ends.ts).
+ * Was: about an hour for Farcaster on the website (Farcaster's own token), a day for the others.
+ */
+export const SESSIONS = {
+  hours: 30 * 24,
+} as const;
+
 /** Saved quote cards per FID per day (spam limit; saving costs nothing). */
 export const CARD_SAVES_PER_DAY = 50;
 
@@ -465,8 +476,8 @@ export const signInOpen = (id: SignInMethod): boolean => SIGN_IN_METHODS.some((m
  * the DID, and never kept.
  */
 export const SOCIAL_SIGN_IN = {
-  /** A Lens or Bluesky sign-in lasts this long (like a wallet's). */
-  sessionHours: 24,
+  /** A Lens or Bluesky sign-in lasts this long (SESSIONS: the same for every sign-in). */
+  sessionHours: SESSIONS.hours,
   /**
    * Owner, 2026-11-04 (3a, with the 30-day sentence): "An account you unlink can be linked to a different account
    * only after 30 days." Linking it again to the same account is allowed at any time (src/lib/social/accounts.ts).
@@ -960,8 +971,8 @@ export const IMAGES = {
     confirmations: 3,
     /** A payment older than this is not credited (ask the owner instead). */
     maxAgeDays: 7,
-    /** A wallet sign-in lasts this long. */
-    sessionHours: 24,
+    /** A wallet sign-in lasts this long (SESSIONS: the same for every sign-in). */
+    sessionHours: SESSIONS.hours,
     /**
      * Credit back every Generate that gives no picture (the check or the model didn't answer, the prompt was refused,
      * or the safety checker dropped the picture), to the balance only (owner, 2026-10-21: "credit the balance for
