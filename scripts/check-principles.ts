@@ -357,6 +357,14 @@ add({
       }
       // A private draft's box ("Make your own", owner's long run 2, 2026-10-19): saved in the person's own drafts, never
       // published, sent to the model only with a message to the coach, and it says so.
+      // An admin's private note on a bounty claim or a challenge entry (/admin/bounty, owner 2026-11-23): read only by
+      // admins, never published, and it says so.
+      if (file.endsWith('components/admin-note-field.tsx')) {
+        for (const [what, re] of [['private', /Private:/], ['read only by admins', /only admins read it/], ['never published', /Never published/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the note box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the note box must not send its text anywhere itself`);
+        continue;
+      }
       if (file.endsWith('components/private-draft-field.tsx')) {
         for (const [what, re] of [['private', /Private:/], ['only theirs', /only you can open/], ['never published', /Never published/], ['sent only with a message to the coach', /only with a message to the coach/], ['described to screen readers', /aria-describedby/]] as const)
           if (!re.test(text)) problems.push(`${file}: the draft box must say it is ${what}`);
@@ -1093,6 +1101,30 @@ add({
   },
 });
 
+add({
+  id: 'P2u',
+  principle: 2,
+  name: "a storyboard picture the guide drafted keeps the person's request word for word, the guide's model, its draft, every reference with why, and every edit (Nate's ruling, 2026-11-22)",
+  load: async () => {
+    const { guideRecipe } = await import('../src/lib/voice/guide');
+    // The real recipe builder (shot-picture.ts calls it), on a guide draft the person edited.
+    const recipe = guideRecipe({
+      guide: { model: CHAT.model, host: CHAT.route, open: true },
+      request: { text: 'Make him lean in on shot 4.', id: '00000000-0000-4000-8000-000000000001', madeAt: '2026-11-23T00:00:00.000Z' },
+      drafted: { prompt: 'Lord Ephelion leans over the lectern.', references: [{ role: 'anchor-scene', ref: 'scene', why: 'the place and the light' }] },
+      sent: { prompt: 'Lord Ephelion leans over the lectern, closer.', references: [{ role: 'anchor-scene', ref: 'scene' }] },
+    });
+    return { recipe: JSON.parse(JSON.stringify(recipe)) as Record<string, unknown> };
+  },
+  run: async ({ recipe }) => {
+    const { guideRecipeProblems } = await import('../src/lib/voice/guide');
+    return guideRecipeProblems(recipe as never).map((x) => `a guided picture's recipe: ${x}`);
+  },
+  plant: (c) => {
+    delete (c.recipe as { request?: unknown }).request;
+  },
+});
+
 // ---------------------------------------------------------------------------
 // P3. The allowlist records each model's license and whether its weights are
 //     open; every model in use is on it; closed models in use are reported.
@@ -1397,6 +1429,18 @@ add({
   plant: (files) => {
     // A PUBLIC page that checks isAdmin and sorts by counts must still fail.
     files.push(P5B_PLANTS.publicSort);
+  },
+});
+add({
+  id: 'P5b-review',
+  principle: 5,
+  name: 'the admins\' private review tables (owner\'s P5b line, reread 2026-11-23): only src/lib/review writes them, and no other file reads them',
+  load: async () => walk('src', /\.tsx?$/).map((f) => ({ file: f, text: read(f) })),
+  // The same rule as P5b (scripts/lib/p5b.ts); test:bounty-review and test:admin-activity prove each planted fault.
+  run: (files) => p5bProblems(files).filter((p) => /private review tables/.test(p)),
+  plant: (files) => {
+    // A route outside src/lib/review that writes a review label must fail.
+    files.push(P5B_PLANTS.reviewWriteElsewhere);
   },
 });
 add({
