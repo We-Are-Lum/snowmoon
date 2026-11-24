@@ -6,7 +6,7 @@ pushed. No PR is open yet. Merge only on Nate's word.
 ## Done
 - **The three ways:** the server, the routes, the pages, the guide's timing step, the credits, and the SQL file. All are described under "What's built" below.
 - **Tests:**
-  - test:voice section 3W, 27 checks;
+  - test:voice section 3W, 29 checks;
   - check:principles P2v, with a planted fault.
 - **Merged in:** `origin/voice-improv` (its WIP as of 3e5beadb).
 - **Last results** (before the latest commits): tsc had 2 small errors, since fixed. The 3W checks passed until a seed bug crashed the run, also fixed. The re-run is queued: `/Users/nathan/ephelion-voice-screens/w3/t2.sh`, log `/tmp/w3-t2.log`.
