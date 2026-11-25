@@ -228,7 +228,7 @@ function SignedAudio({ path, label }: { path: string; label: string }) {
   );
 }
 
-export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; learn?: LearnMoreView }) {
+export function VoiceRecord({ fallback, signedOut, learn }: { fallback: React.ReactNode; signedOut?: React.ReactNode; learn?: LearnMoreView }) {
   const auth = useAuth();
   // Who may use it is the server's to say (src/lib/voice/flag.ts): its routes answer 404 to anyone the switch doesn't
   // let in, and the page then shows the site's usual not-found. So no admin list is checked here (P5b).
@@ -348,6 +348,9 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
     li?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }, [current]);
 
+  // Signed out (Nate, 2026-11-24): one line and the sign-in, so a tester who opens the link first knows what to do. A
+  // signed-in person the switch doesn't let in still gets the site's usual not-found.
+  if (auth.kind === 'signed-out' && signedOut) return <>{signedOut}</>;
   if (!admin || status === 'none') return <>{fallback}</>;
   if (!s) return <main className="vr"><p className="vr-note">Loading…</p></main>;
 

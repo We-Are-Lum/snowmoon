@@ -121,6 +121,15 @@ const sharpPng = async () => (await import('sharp')).default({ create: { width: 
     check('E. on a phone the ask box isn\'t pinned over the guide\'s card; on a wide screen it is', !/position: sticky/.test(composer) && /@media \(min-width: 700px\) \{ \.vg-composer \{ position: sticky; bottom: 0; \} \}/.test(css));
     check('E. ... and his looks are whole cards that wrap in the guide\'s card', /\.vb-look\.vg-choice \{ width: 104px; display: flex; flex-direction: column;/.test(css) && /\.vg-turn \.vb-look-row \{ flex-wrap: wrap; overflow: visible; flex-shrink: 0; \}/.test(css));
   }
+  {
+    // Signed out at /ephelion (Nate, 2026-11-24, reread): one line and the sign-in, in the page; a signed-in person the
+    // switch doesn't let in still gets the not-found.
+    const nf = readFileSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx'), 'utf8');
+    const si = readFileSync(path.join(ROOT, 'src/components/ephelion-sign-in.tsx'), 'utf8');
+    const vr = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+    const { EPHELION_SIGN_IN_LINE } = await import('../src/lib/voice/ephelion-sign-in-line');
+    check('E. signed out, /ephelion shows "Sign in to try the Lord Ephelion challenge." with the sign-in, in the page; signed in and not let in, the not-found', EPHELION_SIGN_IN_LINE === 'Sign in to try the Lord Ephelion challenge.' && /<SignInChoices\b/.test(si) && /EPHELION_SIGN_IN_LINE/.test(si) && /signedOut=\{<EphelionSignIn \/>\}/.test(nf) && /fallback=\{<NotFound \/>\}/.test(nf) && vr.indexOf("auth.kind === 'signed-out' && signedOut") > 0 && vr.indexOf("auth.kind === 'signed-out' && signedOut") < vr.indexOf("if (!admin || status === 'none') return <>{fallback}</>;"));
+  }
   check('E. a published storyboard opens itself: launch_frame, "Watch this storyboard"', SPOKEN_BUTTON === 'Watch this storyboard' && sp.button.title === SPOKEN_BUTTON && sp.button.action.type === 'launch_frame' && sp.button.action.url.endsWith('/storyboard/spoken/11111111-2222-4333-8444-555555555555'));
   const layout = readFileSync(path.join(ROOT, 'src/app/ephelion/layout.tsx'), 'utf8');
   const spoken = readFileSync(path.join(ROOT, 'src/app/storyboard/spoken/[id]/page.tsx'), 'utf8');
@@ -187,7 +196,7 @@ check('W. it is from the book, block c13-b64, with its own label "Book", and no 
   // The intro is drawn by EphelionIntro (src/components/ephelion-intro.tsx, 2026-11-24), word for word as reread.
   const introFile = readFileSync(path.join(ROOT, 'src/components/ephelion-intro.tsx'), 'utf8');
   check('W. the page is "The Ephelion challenge", with no "Admin trial · Draft" and no label row or "Stand-in … speeches arrive"', page.includes('<h1>The Ephelion challenge</h1>') && !/Admin trial · Draft/.test(page) && !/vr-labels/.test(page) && !/until the team&rsquo;s speeches arrive/.test(page));
-  const intro = 'Lord Ephelion is the Arctic Empire&apos;s consul to Veridia (<Cite b="c3-b5" />). In the book his messages reach Veridians everywhere: on a poster in a tunnel (<Cite b="c3-b4" />), in a live debate (<Cite b="c8-b17" />), on a restaurant screen that cuts into a Helisport game (<Cite b="c13-b62" />). As one character puts it, &quot;Ephelion&apos;s goal is to inspire people inside Veridia to join the Arctic cause.&quot; (<Cite b="c21-b76" />)';
+  const intro = 'Lord Ephelion is the Arctic Empire&apos;s consul to Veridia <Cite b="c3-b5" />. In the book his messages reach Veridians everywhere: on a poster in a tunnel <Cite b="c3-b4" />, in a live debate <Cite b="c8-b17" />, on a restaurant screen that cuts into a Helisport game <Cite b="c13-b62" />. As one character puts it, &quot;Ephelion&apos;s goal is to inspire people inside Veridia to join the Arctic cause.&quot; <Cite b="c21-b76" />';
   check('W. the intro, word for word, each citation linked to its block, drawn on the page', /<EphelionIntro \/>/.test(page) && introFile.includes(intro) && introFile.includes('<p>Give one of his speeches a voice: perform it yourself, or start from a ready-made reading, then storyboard it.</p>'));
   check('W. ... and its quotation is the book\'s, word for word (c21-b76)', readFileSync(path.join(ROOT, 'content/snowmoon/text/chapter-21.json'), 'utf8').includes("Ephelion's goal is to inspire people inside Veridia to join the Arctic cause."));
   check('W. each speech\'s one line, word for word', page.includes("`From the book, word for word (${x.label.block}). In the book it is a written message; reading it aloud is this edition's idea.`") && page.includes('`${x.label.text} · ${x.credit} · version ${x.version}`'));
@@ -212,7 +221,7 @@ check('W. it is from the book, block c13-b64, with its own label "Book", and no 
   const out = JSON.parse(execFileSync(process.execPath, [path.join(ROOT, 'node_modules/tsx/dist/cli.mjs'), path.join(ROOT, 'scripts/lib/render-learn-more.tsx')], { input: JSON.stringify({ views: { ephelion: view } }), encoding: 'utf8', cwd: ROOT, maxBuffer: 64 << 20 })) as { views: { ephelion: string }; intro: string };
   const pi = introCiteProblems(out.intro);
   check('W. the intro as drawn: no block code; five book icons, one per citation, each linking to its block ("In the book: chapter N"); its words the reread text minus the codes; its quotation cited', pi.length === 0, pi.join('; '));
-  check('W. ... e.g. c21-b76 after the quotation: /chapter/21#c21-b76, "In the book: chapter 21"', /&quot; \(<a class="book-cite" data-block="c21-b76" aria-label="In the book: chapter 21" title="In the book: chapter 21" href="\/chapter\/21#c21-b76"><svg/.test(out.intro), out.intro.slice(-400));
+  check('W. ... e.g. c21-b76 after the quotation: /chapter/21#c21-b76, "In the book: chapter 21"', /&quot; <a class="book-cite" data-block="c21-b76" aria-label="In the book: chapter 21" title="In the book: chapter 21" href="\/chapter\/21#c21-b76"><svg/.test(out.intro), out.intro.slice(-400));
   const pl = learnMoreCiteProblems(view, out.views.ephelion, 'Learn more about Lord Ephelion');
   check('W. Learn more about Lord Ephelion as drawn: no block code; one book icon per citation (a range links to its first block); every quote cites its block; the words are the texts\' own', pl.length === 0 && out.views.ephelion.includes('data-block="c3-b3–b4"') && out.views.ephelion.includes('href="/chapter/3#c3-b3"'), pl.join('; '));
   check('W. proof: the intro\'s quotation with no citation link fails', introCiteProblems(out.intro.replace(/<a class="book-cite"[^>]*data-block="c21-b76"[^]*?<\/a>/, '')).some((x) => /a quote with no citation link/.test(x)));
