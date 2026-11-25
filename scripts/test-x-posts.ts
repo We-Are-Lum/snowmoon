@@ -5,6 +5,7 @@
  *
  *   npm run test:x-posts
  *
+ * - A posted card is frozen (version 2): only posted to deleted, nothing else changed; a deleted card never changes.
  * - NEXT_x_posts.sql: who runs it; A is B word for word; A leaves everything as it was; B applies twice; C's read-back
  *   passes and keeps nothing; D undoes it; studio_writer's rights are exactly the site's (the log insert-only, no
  *   proposal ever deleted), anon and authenticated have none; planted faults make C fail.
@@ -58,6 +59,8 @@ const snapshot = async () => {
     await q(`select table_name, column_name, data_type from information_schema.columns where table_schema = 'studio' and table_name like 'x\\_%' order by 1, 2`),
     await q(`select tablename, policyname from pg_policies where schemaname = 'studio' and tablename like 'x\\_%' order by 1, 2`),
     await q(`select count(*) from information_schema.tables where table_schema = 'studio'`),
+    await q(`select proname from pg_proc where pronamespace = 'studio'::regnamespace and proname like 'x\\_%' order by 1`),
+    await q(`select tgname from pg_trigger where tgrelid::regclass::text like 'studio.x\\_%' and not tgisinternal order by 1`),
   ].join('\n');
 };
 const before = await snapshot();
@@ -108,7 +111,44 @@ try {
 } catch {
   await pg.exec('rollback;').catch(() => {});
 }
+// A posted card is frozen, as studio_writer (owner, 2026-11-25: version 1 let it rewrite or reopen one).
+const tryAs = async (s: string) => {
+  try {
+    await pg.exec(s);
+    return true;
+  } catch {
+    await pg.exec('rollback to savepoint t;').catch(() => {});
+    return false;
+  }
+};
+await pg.exec(`begin;`);
+await pg.exec(`insert into studio.x_proposals (source, proposer_discord_id, proposer_name, body, link) values ('team', '100000000000000001', 'naaate', 'Posted text', 'https://snowmoon.party/a');`);
+const idRow = (await pg.query<{ id: number }>(`select id from studio.x_proposals where body = 'Posted text'`)).rows[0];
+const id = idRow.id;
+const openEdit = await tryAs(`savepoint t; update studio.x_proposals set body = 'Edited while open' where id = ${id}; update studio.x_proposals set body = 'Posted text' where id = ${id}; release savepoint t;`);
+const toPosting = await tryAs(`savepoint t; update studio.x_proposals set status = 'posting' where id = ${id} and status = 'open'; release savepoint t;`);
+const backToOpen = await tryAs(`savepoint t; update studio.x_proposals set status = 'open' where id = ${id}; update studio.x_proposals set status = 'posting' where id = ${id}; release savepoint t;`);
+const toPosted = await tryAs(`savepoint t; update studio.x_proposals set status = 'posted', x_post_id = '1993000000000000009', posted_at = now() where id = ${id}; release savepoint t;`);
+const postedBody = await tryAs(`savepoint t; update studio.x_proposals set body = 'Rewritten' where id = ${id}; release savepoint t;`);
+const postedLink = await tryAs(`savepoint t; update studio.x_proposals set link = 'https://snowmoon.party/b' where id = ${id}; release savepoint t;`);
+const reopened = await tryAs(`savepoint t; update studio.x_proposals set status = 'open', x_post_id = null, posted_at = null where id = ${id}; release savepoint t;`);
+const newPostId = await tryAs(`savepoint t; update studio.x_proposals set x_post_id = '1993000000000000010' where id = ${id}; release savepoint t;`);
+const deleteAndEdit = await tryAs(`savepoint t; update studio.x_proposals set status = 'deleted', deleted_at = now(), body = 'Rewritten' where id = ${id}; release savepoint t;`);
+const toDeleted = await tryAs(`savepoint t; update studio.x_proposals set status = 'deleted', deleted_at = now(), updated_at = now() where id = ${id}; release savepoint t;`);
+const afterDelete = (await pg.query<{ status: string; body: string; link: string; x_post_id: string }>(`select status, body, link, x_post_id from studio.x_proposals where id = ${id}`)).rows[0];
+const deletedChange = await tryAs(`savepoint t; update studio.x_proposals set status = 'posted', deleted_at = null where id = ${id}; release savepoint t;`);
+const deletedTouch = await tryAs(`savepoint t; update studio.x_proposals set updated_at = now() where id = ${id}; release savepoint t;`);
+await pg.exec(`rollback;`);
 await pg.exec(`reset role;`);
+check('an open card can still be edited, claimed for posting and put back', openEdit && toPosting && backToOpen);
+check('a card can be marked posted with its X post', toPosted);
+check("a posted card's text can't be changed", !postedBody);
+check("a posted card's link can't be changed", !postedLink);
+check("a posted card can't be reopened", !reopened);
+check("a posted card's X post can't be changed", !newPostId);
+check("a delete that also changes the text is refused", !deleteAndEdit);
+check('posted to deleted still works, and keeps the card as posted', toDeleted && afterDelete?.status === 'deleted' && afterDelete.body === 'Posted text' && afterDelete.link === 'https://snowmoon.party/a' && afterDelete.x_post_id === '1993000000000000009');
+check('a deleted card never changes', !deletedChange && !deletedTouch);
 check('studio_writer can insert a proposal and its log row', writerInsert);
 check('studio_writer cannot change the log', !writerLogUpdate);
 // Planted faults: each must make the read-back fail.
@@ -122,15 +162,18 @@ for (const [name, plant] of [
   ['posted without an X post allowed', 'alter table studio.x_proposals drop constraint x_proposals_posted;'],
   ['a check that refuses every post', "alter table studio.x_proposals add constraint plant check (body = '');"],
   ['a link check that refuses every link', "alter table studio.x_proposals add constraint plant check (link is null);"],
+  ['no freeze on posted cards', 'drop trigger x_proposals_freeze on studio.x_proposals;'],
+  ['a freeze that also refuses the delete', `create or replace function studio.x_proposals_freeze() returns trigger language plpgsql as $f$ begin if old.status in ('posted', 'deleted') then raise exception 'plant: frozen' using errcode = 'check_violation'; end if; return new; end $f$;`],
+  ['a freeze that lets a deleted card change', `create or replace function studio.x_proposals_freeze() returns trigger language plpgsql as $f$ begin if old.status = 'posted' and new.status <> 'deleted' then raise exception 'plant: frozen' using errcode = 'check_violation'; end if; if old.status = 'posted' and new.body is distinct from old.body then raise exception 'plant: frozen' using errcode = 'check_violation'; end if; if old.status = 'posted' and new.link is distinct from old.link then raise exception 'plant: frozen' using errcode = 'check_violation'; end if; return new; end $f$;`],
 ] as const) {
   await pg.exec(`begin; ${plant}`);
   const r = await runReadBack(readBack.replace(/^begin;/, 'savepoint s;').replace(/rollback;\s*$/, 'rollback to savepoint s;'));
   await pg.exec('rollback;').catch(() => {});
-  proof(`the read-back fails on ${name}`, !r.ok && /READ-BACK FAILED|violates/.test(r.why));
+  proof(`the read-back fails on ${name}`, !r.ok && /READ-BACK FAILED|violates|plant: /.test(r.why));
 }
 // D, then B again.
 await pg.exec(undo);
-check('D removes the three tables', (await snapshot()) === before);
+check('D removes the three tables and the trigger function', (await snapshot()) === before);
 await pg.exec(mig);
 check('B applies again after D', /x_proposals/.test(await snapshot()));
 

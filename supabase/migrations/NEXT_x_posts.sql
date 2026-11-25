@@ -2,7 +2,7 @@
 -- #x-posts, and suggested by the site (owner, 2026-11-25; branch x-posts; plan docs/proposals/x-posts.md). Unnumbered
 -- until merge: it takes the next free number then, checked against origin/main and production. NOT APPLIED until the
 -- owner applies it; the branch merges only after he says "applied". Drafted by the coding agent (Claude, a closed model
--- by Anthropic). Tested on in-memory PGlite against main's 0001-0051 (npm run test:x-posts).
+-- by Anthropic). Tested on in-memory PGlite against main's 0001-0051 (npm run test:x-posts), version 2 included.
 -- Requires 0001_core (the studio schema and the studio_writer role). Nothing else.
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:
@@ -10,7 +10,8 @@
 -- `commit;`), C. the read-back (after B: a read-only look at the rights, then a block that writes realistic rows as the
 -- site writes them, checks that bad rows are refused, and deletes them, all inside a transaction that ends in
 -- `rollback;`; it ends "READ-BACK PASSED"; it sets no role, as the SQL Editor can't), and D. the undo, only if the release
--- is withdrawn. Safe to run twice. Additive: three new tables, nothing else changes.
+-- is withdrawn. Safe to run twice. Additive: three new tables and a trigger on one
+-- of them; nothing else changes.
 --
 -- What it is for. Release 1 (cards, posting off) and release 2 (posting on) both use these tables; release 2 needs no
 -- other migration.
@@ -19,7 +20,10 @@
 --   'voice_publication' or a challenge entry 'challenge_entry', by id, at most one suggestion per work). The post's text
 --   and link, the card's Discord message ID, and its state: open, posting (claimed by one click, so it posts at most
 --   once), posted (with X's post ID), failed, unknown (X didn't answer), withdrawn, deleted. studio_writer may select,
---   insert and update; never delete, so the log always has its proposal.
+--   insert and update; never delete, so the log always has its proposal. A posted card is frozen (trigger
+--   studio.x_proposals_freeze): its only change is to 'deleted', setting deleted_at, with everything else unchanged; a
+--   deleted card never changes. The other states change as the site needs. (Version 2, 2026-11-25: the owner found on
+--   Postgres 16 that version 1 let studio_writer rewrite a posted card's text and link, or reopen it.)
 -- - studio.x_approvals: who approves an open proposal now (Discord user ID and name). Taking an approval back or an edit
 --   deletes rows. studio_writer may select, insert and delete.
 -- - studio.x_post_log: every proposal, suggestion, edit, approval, approval taken back, withdrawal, hold, post, failed
@@ -56,6 +60,25 @@ create table if not exists studio.x_proposals (
 create unique index if not exists x_proposals_one_suggestion on studio.x_proposals (subject_kind, subject_id) where source = 'site';
 create index if not exists x_proposals_subject on studio.x_proposals (subject_kind, subject_id) where subject_kind is not null;
 create index if not exists x_proposals_created on studio.x_proposals (source, created_at desc);
+-- Once posted, a card is frozen: its only change is to 'deleted' (with deleted_at), and a deleted card never changes.
+create or replace function studio.x_proposals_freeze() returns trigger language plpgsql set search_path = '' as $fn$
+begin
+  if old.status = 'deleted' then
+    raise exception 'x_proposals: a deleted post is final' using errcode = 'check_violation';
+  end if;
+  if old.status = 'posted' and not (new.status = 'deleted' and new.deleted_at is not null
+      and (new.id, new.source, new.proposer_discord_id, new.proposer_name, new.body, new.link, new.subject_kind, new.subject_id,
+        new.discord_message_id, new.x_post_id, new.created_at, new.posted_at)
+        is not distinct from (old.id, old.source, old.proposer_discord_id, old.proposer_name, old.body, old.link, old.subject_kind,
+        old.subject_id, old.discord_message_id, old.x_post_id, old.created_at, old.posted_at)) then
+    raise exception 'x_proposals: a posted card can only be marked deleted' using errcode = 'check_violation';
+  end if;
+  return new;
+end
+$fn$;
+revoke all on function studio.x_proposals_freeze() from public;
+drop trigger if exists x_proposals_freeze on studio.x_proposals;
+create trigger x_proposals_freeze before update on studio.x_proposals for each row execute function studio.x_proposals_freeze();
 create table if not exists studio.x_approvals (
   proposal_id bigint not null references studio.x_proposals (id) on delete cascade,
   discord_user_id text not null check (discord_user_id ~ '^[0-9]{17,20}$'),
@@ -138,6 +161,25 @@ create table if not exists studio.x_proposals (
 create unique index if not exists x_proposals_one_suggestion on studio.x_proposals (subject_kind, subject_id) where source = 'site';
 create index if not exists x_proposals_subject on studio.x_proposals (subject_kind, subject_id) where subject_kind is not null;
 create index if not exists x_proposals_created on studio.x_proposals (source, created_at desc);
+-- Once posted, a card is frozen: its only change is to 'deleted' (with deleted_at), and a deleted card never changes.
+create or replace function studio.x_proposals_freeze() returns trigger language plpgsql set search_path = '' as $fn$
+begin
+  if old.status = 'deleted' then
+    raise exception 'x_proposals: a deleted post is final' using errcode = 'check_violation';
+  end if;
+  if old.status = 'posted' and not (new.status = 'deleted' and new.deleted_at is not null
+      and (new.id, new.source, new.proposer_discord_id, new.proposer_name, new.body, new.link, new.subject_kind, new.subject_id,
+        new.discord_message_id, new.x_post_id, new.created_at, new.posted_at)
+        is not distinct from (old.id, old.source, old.proposer_discord_id, old.proposer_name, old.body, old.link, old.subject_kind,
+        old.subject_id, old.discord_message_id, old.x_post_id, old.created_at, old.posted_at)) then
+    raise exception 'x_proposals: a posted card can only be marked deleted' using errcode = 'check_violation';
+  end if;
+  return new;
+end
+$fn$;
+revoke all on function studio.x_proposals_freeze() from public;
+drop trigger if exists x_proposals_freeze on studio.x_proposals;
+create trigger x_proposals_freeze before update on studio.x_proposals for each row execute function studio.x_proposals_freeze();
 create table if not exists studio.x_approvals (
   proposal_id bigint not null references studio.x_proposals (id) on delete cascade,
   discord_user_id text not null check (discord_user_id ~ '^[0-9]{17,20}$'),
@@ -249,7 +291,20 @@ commit;
 --   update studio.x_proposals set status = 'posting', updated_at = now() where id = team_id and status = 'open';
 --   update studio.x_proposals set status = 'posted', x_post_id = '1993000000000000001', posted_at = now(), updated_at = now() where id = team_id and status = 'posting';
 --   insert into studio.x_post_log (proposal_id, event, actor_discord_id, actor_name, x_post_id, cost_usd) values (team_id, 'posted', lead, 'luisotravez', '1993000000000000001', 0.2);
+--   -- A posted card is frozen: its text, link and post can't change, it can't reopen, and it can't be posted again.
+--   begin update studio.x_proposals set body = 'Something else.' where id = team_id; refused := false; exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a posted card''s text was changed'; end if;
+--   begin update studio.x_proposals set link = 'https://snowmoon.party/' where id = team_id; refused := false; exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a posted card''s link was changed'; end if;
+--   begin update studio.x_proposals set status = 'open', x_post_id = null, posted_at = null where id = team_id; refused := false; exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a posted card was reopened'; end if;
+--   begin update studio.x_proposals set status = 'deleted', deleted_at = now(), body = 'Something else.' where id = team_id; refused := false; exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a delete that also changed the text was accepted'; end if;
 --   update studio.x_proposals set status = 'deleted', deleted_at = now(), updated_at = now() where id = team_id and status = 'posted';
+--   begin update studio.x_proposals set status = 'posted', deleted_at = null where id = team_id; refused := false; exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a deleted post was changed'; end if;
+--   select count(*) into n from studio.x_proposals where id = team_id and status = 'deleted' and body = 'Chapter 4 is narrated now.' and x_post_id = '1993000000000000001';
+--   if n <> 1 then raise exception 'READ-BACK FAILED: posted to deleted did not keep the card as posted'; end if;
 --   insert into studio.x_post_log (proposal_id, event, actor_discord_id, actor_name, x_post_id, cost_usd) values (team_id, 'deleted', second, 'garance', '1993000000000000001', 0.01);
 --
 --   -- A site suggestion: no proposer, a subject; hidden on the site, so withdrawn by the site.
@@ -306,4 +361,5 @@ commit;
 -- drop table if exists studio.x_post_log;
 -- drop table if exists studio.x_approvals;
 -- drop table if exists studio.x_proposals;
+-- drop function if exists studio.x_proposals_freeze();
 -- commit;
