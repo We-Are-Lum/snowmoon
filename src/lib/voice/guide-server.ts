@@ -5,6 +5,7 @@ import { voiceTestOn } from './flag';
 import { boardLook, coverageAngles, madeWithOf, sceneWords, sentencesIn, staleShots, type Shot } from './board';
 import { boardSource, keptPictures, latestBoard } from './board-store';
 import { speechById } from './speech';
+import { isImprovised, spokenSentences, type Spoken } from './spoken';
 import { GUIDE, GUIDE_STEPS, readGuideReply, type DraftContext, type GuideDraft, type GuideMessage, type GuideStep } from './guide';
 
 /**
@@ -64,7 +65,10 @@ export async function askGuide(sql: Sql, fid: number, raw: unknown, deps: GuideD
   const look = typeof b.look === 'object' && b.look ? (b.look as { id?: string; title?: string; text?: string }) : null;
   const c: DraftContext = {
     timeline: draft.timeline,
-    sentences: speech.sentences.map((s) => ({ n: s.n, text: s.text })),
+    // The spoken words (Nate, 2026-11-24): the speech's sentences for a word-for-word take, the person's transcribed
+    // (and corrected) words for an improvised one. The guide never writes either into a picture's words.
+    sentences: spokenSentences(draft.recipe as { spoken?: Spoken; speech?: { id?: string } }),
+    otherWords: isImprovised(draft.recipe as { spoken?: Spoken }) ? speech.sentences.map((s) => ({ n: s.n, text: s.text })) : [],
     shots,
     refs: { scene: Boolean(board?.scene?.kept), looks: look?.id ? [look.id] : [], keptShots },
     maxShots: 12,
@@ -76,7 +80,7 @@ export async function askGuide(sql: Sql, fid: number, raw: unknown, deps: GuideD
     step,
     request: text,
     shotKey: typeof b.shotKey === 'string' ? b.shotKey : null,
-    speech: { title: speech.title, label: speech.label.text, sentences: c.sentences },
+    speech: { title: speech.title, label: speech.label.text, sentences: c.sentences, ...(isImprovised(draft.recipe as { spoken?: Spoken }) ? { improvised: true, note: "The sentences are the performer's own words, improvised on this speech's theme, as transcribed." } : {}) },
     shotsAllowed: c.maxShots,
     defaultCameras: coverageAngles(shots),
     board: {

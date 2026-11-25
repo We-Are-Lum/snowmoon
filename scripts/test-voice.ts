@@ -291,8 +291,8 @@ check('W. numbers, case, punctuation and apostrophes compare as words', norm('4'
 // C. The consent.
 const wording = voiceConsentWording();
 const own = JSON.parse(readFileSync(path.join(ROOT, 'config/consent-own-voice.json'), 'utf8'));
-check('C. the page shows own-voice-v3, current, with Nate\'s reread points 2 and 5', wording.version === 'own-voice-v3' && wording.text[1] === "We never publish or keep your recording. It stays on your device, in this browser's storage, until you remove it or record again; your browser may also clear it. It is sent to be converted only when you press Convert." && wording.text[4].startsWith('We keep each converted speech as your draft as soon as it comes back, until you remove it. Once you publish it,') && wording.text[0] === 'You record a speech. Your recording is converted into a character\'s voice, and only the converted speech can be published.' && /against the speech\.$/.test(wording.text[3]));
-check('C. own-voice-v3 is the file\'s current (reread 2026-11-22), with no draft left; v1 and v2 stay on file, retired', own.current === 'own-voice-v3' && !('draft' in own) && Boolean(own.versions['own-voice-v1']) && Boolean(own.versions['own-voice-v2']));
+check('C. the page shows own-voice-v4 (improvising, reread 2026-11-24), v3\'s reread points 2 and 5 unchanged', wording.version === 'own-voice-v4' && wording.text[1] === "We never publish or keep your recording. It stays on your device, in this browser's storage, until you remove it or record again; your browser may also clear it. It is sent to be converted only when you press Convert." && wording.text[4].startsWith('We keep each converted speech as your draft as soon as it comes back, until you remove it. Once you publish it,') && wording.text[0] === 'You record a speech, word for word or improvised around its theme in your own words. Your recording is converted into a character\'s voice, and only the converted speech can be published.' && /an improvised take\'s transcript becomes its storyboard\'s words, which you can correct/.test(wording.text[3]));
+check('C. own-voice-v4 is the file\'s current (reread by Nate 2026-11-24, point 4 ending "Either way, the transcript is kept with your draft."), with no draft; v1, v2 and v3 stay on file, retired', own.current === 'own-voice-v4' && !('draft' in own) && own.versions['own-voice-v4'].text[3].endsWith('which you can correct. Either way, the transcript is kept with your draft.') && Boolean(own.versions['own-voice-v1']) && Boolean(own.versions['own-voice-v2']) && Boolean(own.versions['own-voice-v3']));
 check('C. the training line stands without brackets (Nate turned training off, 2026-11-21)', wording.text.some((t) => t.includes('Our account is set so it doesn\'t use them to train its models.')) && !wording.text.join(' ').includes('['));
 const take = randomBytes(160_000); // the stub hears it as 40 s
 const form = (fields: Record<string, string | Blob>) => {
@@ -799,7 +799,7 @@ check('R. anyone let in can play it', r.status === 200 && (await r.arrayBuffer()
 // $. Costs and caps.
 const rows = await sql`select kind, funded, verdict, calls, credits, estimated_credits, cost_usd::float8 usd from studio.voice_costs order by kind, verdict`;
 const by = (k: string, v = 'ok') => rows.filter((x) => x.kind === k && x.verdict === v);
-check('$. each call is counted: 3 conversions, 3 transcriptions (the whole take\'s, made when it is kept, among them), 1 reading, no failed ones (refusals count nothing; admins: funded admin)', by('convert')[0]?.calls === 3 && by('transcribe')[0]?.calls === 3 && !by('transcribe', 'failed').length && by('reading')[0]?.calls === 1 && rows.every((x) => x.funded === 'admin'), JSON.stringify(rows));
+check('$. each call is counted: 3 conversions, 4 transcriptions (the whole take\'s, made when it is kept, and the reading\'s timing, made when it is made, among them), 1 reading, no failed ones (refusals count nothing; admins: funded admin)', by('convert')[0]?.calls === 3 && by('transcribe')[0]?.calls === 4 && !by('transcribe', 'failed').length && by('reading')[0]?.calls === 1 && rows.every((x) => x.funded === 'admin'), JSON.stringify(rows));
 check('$. the holds were all given back', rows.filter((x) => x.kind === 'reserved').every((x) => x.calls === 0 && x.estimated_credits === 0 && Math.abs(x.usd) < 1e-6));
 check('$. credits are the stub\'s own (header), estimated beside them', by('convert')[0].credits === 444 + 56 + 23 && by('convert')[0].estimated_credits > 0, JSON.stringify(by('convert')));
 check('$. the cost table has no person, request or time of day', !rows.some((x) => 'fid' in x || 'request_id' in x || 'at' in x));
@@ -895,22 +895,25 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
   const publishRoute = await route('publish');
   const rdId = rd.id;
   const boardGet = (fid: number) => boards.GET(as(fid, {}, `http://localhost/api/voice/boards?draft=${rdId}`));
+  // No "Time this reading" (Nate, 2026-11-24): the reading was timed when it was made, from the admins' pool.
   let g = await boardGet(NATE);
-  const gj = (await g.json()) as { reason?: string; estimateCredits?: number; seconds?: number };
-  check('G. a reading with no timings asks to be timed first, with its estimate', g.status === 409 && gj.reason === 'needs-timing' && (gj.estimateCredits ?? 0) > 0 && (gj.seconds ?? 0) > 30, JSON.stringify(gj));
+  check('G. the reading opens straight onto its storyboard: it was timed when it was made, with no button', g.status === 200 && Boolean(((await g.json()) as { draft?: { timeline?: unknown } }).draft?.timeline));
   check('G. timing is for people let in only (401 signed out, 404 to anyone else)', (await timingRoute.POST(as(null, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) })).status === 401 && (await timingRoute.POST(as(STRANGER, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) })).status === 404);
   const sttBefore = stub.calls.filter((c) => c.path === '/v1/speech-to-text').length;
-  const deletedBefore = stub.deletedTranscripts.length;
-  // Timed by someone who didn't make the reading (it is shared): Nate times Garance's reading.
-  g = await timingRoute.POST(as(NATE, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) });
-  const tj = (await g.json()) as { ok?: boolean; credits?: number; estimateCredits?: number; matched?: number; sentences?: number; transcriptDeleted?: boolean };
-  const stt = stub.calls.filter((c) => c.path === '/v1/speech-to-text');
-  check('G. one transcription of the reading\'s own audio, with the speech\'s names as key terms', g.status === 200 && stt.length === sttBefore + 1 && (stt.at(-1)!.fields.keyterms ?? '').length > 0 && stt.at(-1)!.files[0].sha256 === (await sql`select sha256 from studio.voice_draft_audio where draft_id = ${rdId} and n = 0`)[0].sha256, JSON.stringify(tj));
-  check('G. ... measured against its estimate, and the transcript deleted at ElevenLabs', typeof tj.credits === 'number' && (tj.estimateCredits ?? 0) > 0 && tj.transcriptDeleted === true && stub.deletedTranscripts.length === deletedBefore + 1 && stub.kept().length === 0);
+  const readingStt = stub.calls.filter((c) => c.path === '/v1/speech-to-text' && c.files[0]?.sha256 === (rd.recipe as unknown as { audioSha256: string }).audioSha256);
+  check('G. one transcription of the reading\'s own audio, when it was made, with the speech\'s names as key terms', readingStt.length === 1 && (readingStt[0].fields.keyterms ?? '').length > 0);
   const [trow] = await sql`select made_by, model, credits, transcript_deleted, timeline from studio.voice_reading_timings where draft_id = ${rdId}`;
-  check('G. ... kept once, with who asked, the model and the credits', Number(trow?.made_by) === NATE && trow.model === VOICE.models.transcribe && trow.transcript_deleted === true && (trow.timeline as { sentences: unknown[] }).sentences.length === speech.sentences.length);
+  check('G. ... kept once, with who made it, the model and the credits, the transcript deleted at ElevenLabs', Boolean(trow) && trow.model === VOICE.models.transcribe && trow.transcript_deleted === true && (trow.timeline as { sentences: unknown[] }).sentences.length === speech.sentences.length && stub.kept().length === 0);
   g = await timingRoute.POST(as(GARANCE, { method: 'POST' }), { params: Promise.resolve({ id: rdId }) });
-  check('G. timing again makes no second call', g.status === 200 && ((await g.json()) as { already?: boolean }).already === true && stub.calls.filter((c) => c.path === '/v1/speech-to-text').length === sttBefore + 1);
+  check('G. timing again makes no second call', g.status === 200 && ((await g.json()) as { already?: boolean }).already === true && stub.calls.filter((c) => c.path === '/v1/speech-to-text').length === sttBefore);
+  {
+    // A reading made before readings were timed when made: timed on its first open, from the admins' pool, no button.
+    await sql`delete from studio.voice_reading_timings where draft_id = ${rdId}`;
+    const before = stub.calls.filter((c) => c.path === '/v1/speech-to-text').length;
+    const first = await boardGet(GARANCE);
+    const [again] = await sql`select made_by from studio.voice_reading_timings where draft_id = ${rdId}`;
+    check('G. an older reading with no timings is timed on its first open (one transcription), and opens', first.status === 200 && Boolean(again) && stub.calls.filter((c) => c.path === '/v1/speech-to-text').length === before + 1);
+  }
   // Two people's boards on the one reading: each their own versions, pictures and tries.
   const gb = (await (await boardGet(GARANCE)).json()) as { draft: { kind: string }; board: { version: number; cuts: number[]; shots: Shot[] } };
   const nb = (await (await boardGet(NATE)).json()) as { board: { version: number; cuts: number[]; shots: Shot[] } };
@@ -980,7 +983,7 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
   check('R. ... its transcript deleted at ElevenLabs right after', j.transcriptDeleted === true && stub.deletedTranscripts.length === tdBefore + 1 && stub.kept().length === 0);
   const [nd] = await sql`select fid, kind, speech_id, preset_id, published_at, recipe from studio.voice_drafts where id = ${j.id}`;
   const nr = nd?.recipe as { check: { sentences: number; matched: number } | null; timeline: { sentences: unknown[] } | null; kept: string; checkedAgain: { from: string }; takes: { takeSha256: string; convertedSha256: string; transcriptDeleted: boolean }[] } | undefined;
-  check('R. ... kept again under a new id, with its check, its strip and where it came from', Boolean(nd) && j.id !== w.draftId && Number(nd.fid) === GARANCE && nd.published_at === null && nr!.check?.sentences === speech.sentences.length && nr!.timeline?.sentences.length === speech.sentences.length && nr!.checkedAgain.from === w.draftId && /checked again/.test(nr!.kept) && nr!.takes[0].takeSha256 === oldRecipe!.takes[0].takeSha256 && nr!.takes[0].transcriptDeleted === true);
+  check('R. ... kept again under a new id, with its check, its strip and where it came from', Boolean(nd) && j.id !== w.draftId && Number(nd.fid) === GARANCE && nd.published_at === null && nr!.check?.sentences === speech.sentences.length && (nr!.timeline?.sentences.length ?? 0) > 0 && (nr as unknown as { spoken?: { kind: string; sentences?: unknown[] } }).spoken?.kind !== undefined && ((nr as unknown as { spoken: { kind: string; sentences?: unknown[] } }).spoken.kind === 'word-for-word' ? nr!.timeline?.sentences.length === speech.sentences.length : nr!.timeline?.sentences.length === (nr as unknown as { spoken: { sentences: unknown[] } }).spoken.sentences.length) && nr!.checkedAgain.from === w.draftId && /checked again/.test(nr!.kept) && nr!.takes[0].takeSha256 === oldRecipe!.takes[0].takeSha256 && nr!.takes[0].transcriptDeleted === true);
   const rows = await sql`select storage_key, sha256 from studio.voice_draft_audio where draft_id = ${j.id}`;
   check('R. ... with the same converted audio, copied, byte for byte', rows.length === 1 && rows[0].sha256 === oldRecipe!.takes[0].convertedSha256 && sha(new Uint8Array(readFileSync(path.join(STORE, rows[0].storage_key)))) === rows[0].sha256);
   check('R. the draft without a check is removed, rows and audio', j.oldRemoved && (await sql`select count(*)::int n from studio.voice_drafts where id = ${w.draftId}`)[0].n === 0 && storeFiles().every((f) => !f.startsWith(`voice-drafts/${w.draftId}/`)));
@@ -1152,6 +1155,101 @@ for (const id of Object.values(VOICE.models)) {
   check('H. ... and none is awaited bare', !/await\s+(inMiniApp\(\)|sdk\.(context|getCapabilities|actions))/.test(code));
   check('H. an unknown host is "maybe the app", and a refusal shows the browser\'s own line (mic-help)', /inApp\.current !== false/.test(code) && /MIC_HELP\[micPlace\(navigator\.userAgent, inApp\.current === true\)\]/.test(code));
   check('H. Record\'s button waits on no host check', !/disabled=\{[^}]*(inApp|webClient|caps)/.test(page));
+}
+
+// IM. Improvising, and timing without a button (Nate, 2026-11-24).
+{
+  const SP = await import('../src/lib/voice/spoken');
+  const G = await import('../src/lib/voice/guide');
+  const CL = await import('../src/lib/voice/closing');
+  const fine = speeches().find((x) => x.id === 'doing-fine-v2')!;
+  // The cap: 2 minutes a take (the book speech 3, for Nate to decide), refused by the server, with a second's grace.
+  check('IM. a take is at most 2 minutes (the book speech 3 minutes, flagged for Nate)', VOICE.takeMaxSeconds === 120 && SP.takeMaxSeconds('doing-fine-v2') === 120 && SP.takeMaxSeconds('ephelion-c13-b64') === 180);
+  const callsBefore = stub.calls.length;
+  let rr = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(8000), { speechId: 'doing-fine-v2', seconds: '125' }) }));
+  check('IM. ... a longer whole take is refused by the server (413), before any call to ElevenLabs', rr.status === 413 && /at most 2 minutes/.test(String(((await rr.json()) as { error: string }).error)) && stub.calls.length === callsBefore);
+  const rec = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  check('IM. ... and the page counts down on Stop and stops the recording at its limit', /rec\.start\(s!\.speech\.maxSeconds/.test(rec) && /IMPROV_WORDING\.left\(mmss\(Math\.max\(0, \(s\.speech\.maxSeconds/.test(rec) && /if \(t >= limitSeconds && r\.state === 'recording'\) r\.stop\(\)/.test(rec));
+  {
+    // Nate's review of #236 (2026-11-24): the bitrate, a too-large take said before it's sent, and a new take never "again".
+    const vr = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+    const rw = vr.slice(vr.indexOf('async function recordWhole'), vr.indexOf('async function recordWhole') + 400);
+    const cw = vr.slice(vr.indexOf('async function convertWhole'), vr.indexOf('async function convertWhole') + 900);
+    check('IM. the recorder runs at 128 kb/s, so a 3:00 take is about 2.9 MB, under the 4 MB limit', /TAKE_BITS_PER_SECOND = 128_000/.test(vr) && /new MediaRecorder\(s, \{ \.\.\.\(type \? \{ mimeType: type \} : \{\}\), audioBitsPerSecond: TAKE_BITS_PER_SECOND \}\)/.test(vr) && (180 * 128_000) / 8 < VOICE.maxTakeBytes);
+    check('IM. ... a take over the size limit is refused on the page, with its line, before anything is sent', cw.indexOf('blob.size > s!.limits.maxTakeBytes') > 0 && cw.indexOf('blob.size > s!.limits.maxTakeBytes') < cw.indexOf('await convert(') && /This recording is \$\{\(Math\.ceil\(bytes \/ 100_000\) \/ 10\)\.toFixed\(1\)\} MB, over the/.test(vr) && (Math.ceil(4_040_000 / 100_000) / 10).toFixed(1) === '4.1');
+    check('IM. ... and a new take resets "Convert again", so a fresh take never goes out with again=1', /setAgain\('ask'\)/.test(rw));
+  }
+  // The transcript's sentences.
+  const w = (t: string, a: number, b: number) => ({ text: t, start: a, end: b });
+  const ts = SP.transcriptSentences([w('I', 0, 0.2), w('am', 0.3, 0.5), w('fine.', 0.6, 0.9), w('Really', 1, 1.2), w('truly', 1.3, 1.5), w('so', 2.6, 2.8)]);
+  check('IM. a transcript splits into sentences at . ! ? and at a pause', ts.length === 3 && ts[0].text === 'I am fine.' && ts[1].text === 'Really truly' && ts[2].text === 'so', JSON.stringify(ts));
+  // A kept take that isn't word for word: improvised, its strip the transcript's sentences.
+  const [imp] = await sql`select id, recipe from studio.voice_drafts where fid = ${NATE} and kind = 'performance' and recipe->'spoken'->>'kind' = 'improvised' order by made_at desc limit 1`;
+  const ir = imp?.recipe as { spoken: { kind: string; sentences: { n: number; text: string }[]; on: { title: string; version: number } }; timeline: { sentences: { n: number }[] } } | undefined;
+  check('IM. a take that isn\'t word for word is kept as improvised: its words are the transcript, its strip the transcript\'s sentences', Boolean(ir) && ir!.spoken.sentences.length === ir!.timeline.sentences.length && ir!.spoken.sentences.every((x, i) => x.n === ir!.timeline.sentences[i].n && x.text.length > 0));
+  // Labels and credits, both ways (Nate's words).
+  const impRecipe = { spoken: SP.spokenFor(fine, false, [{ n: 0, text: 'My own words.' }], 'scribe_v3') };
+  check('IM. the label: "word for word", or "improvised on \'Doing fine\' (version 2)"', SP.takeLabel({ spoken: { kind: 'word-for-word' } }) === 'word for word' && SP.takeLabel({}) === 'word for word' && SP.takeLabel(impRecipe) === "improvised on 'Doing fine' (version 2)");
+  const credit = SP.improvisedCredit('naaate', { title: fine.title, credit: fine.credit, block: null });
+  check('IM. the improvised credit: "Words by @name, improvising on \'Doing fine\' · [the speech\'s credit]"', credit === `Words by @naaate, improvising on 'Doing fine' · ${fine.credit}`, credit);
+  const base = { speech: { title: fine.title, block: null, invented: { version: 2, credit: fine.credit } }, performer: 'naaate', preset: 'Warm lecturer', voiceModel: { name: 'v', maker: 'ElevenLabs' }, transcribeModel: { name: 't', maker: 'ElevenLabs' }, pictures: [], shots: 3 };
+  const ww = CL.closingCredits(base);
+  const im = CL.closingCredits({ ...base, improvised: credit });
+  check('IM. ... word for word keeps today\'s credit; improvised leads with the performer\'s words and says "transcribed", not "checked word for word"', /^Speech: “Doing fine” \(version 2\)\. Invented, not from the book\./.test(ww[0].text) && im[0].text === `${credit}.` && im[0].who === 'people' && im.some((l) => /transcribed by/.test(l.text)) && !im.some((l) => /checked word for word/.test(l.text)));
+  // Correcting one's own words: kept with its history, never by a model; only an improvised take, only before storyboarding.
+  if (imp) {
+    const words = await route('drafts/[id]/words');
+    const [hasBoard] = await sql`select 1 from studio.voice_boards where draft_id = ${imp.id} limit 1`;
+    let target = imp.id as string;
+    let tr = ir!;
+    if (hasBoard) {
+      const bad = await words.POST(as(NATE, { method: 'POST', body: JSON.stringify({ sentences: ir!.spoken.sentences.map((x) => x.text) }) }), { params: Promise.resolve({ id: imp.id }) });
+      check('IM. a take with a saved storyboard can\'t be corrected (409)', bad.status === 409);
+      const [other] = await sql`select d.id, d.recipe from studio.voice_drafts d where d.fid = ${NATE} and d.kind = 'performance' and d.recipe->'spoken'->>'kind' = 'improvised' and not exists (select 1 from studio.voice_boards b where b.draft_id = d.id) order by made_at desc limit 1`;
+      target = other?.id ?? '';
+      tr = other?.recipe as typeof tr;
+    }
+    if (target) {
+      const before = stub.calls.length;
+      const texts = tr.spoken.sentences.map((x) => x.text);
+      texts[0] = `${texts[0]} (as I meant it)`;
+      const ok = await words.POST(as(NATE, { method: 'POST', body: JSON.stringify({ sentences: texts }) }), { params: Promise.resolve({ id: target }) });
+      const oj = (await ok.json()) as { id?: string; replaced?: string; oldRemoved?: boolean };
+      const [nd] = await sql`select recipe from studio.voice_drafts where id = ${oj.id ?? '00000000-0000-4000-8000-000000000000'}`;
+      const ns = (nd?.recipe as { spoken?: { sentences: { text: string }[]; corrections: { byFid: number; sentences: { text: string }[] }[] } } | undefined)?.spoken;
+      check('IM. the performer corrects their words: kept under a new id, with the correction (the words before, by whom) in its history, the old draft removed', ok.status === 200 && oj.replaced === target && oj.oldRemoved === true && ns?.sentences[0].text === texts[0] && ns?.corrections.length === 1 && ns.corrections[0].byFid === NATE && ns.corrections[0].sentences[0].text === tr.spoken.sentences[0].text);
+      check('IM. ... and no model or service is called to make it', stub.calls.length === before);
+      const empty = await words.POST(as(NATE, { method: 'POST', body: JSON.stringify({ sentences: texts.map(() => ' ') }) }), { params: Promise.resolve({ id: oj.id! }) });
+      const other = await words.POST(as(GARANCE, { method: 'POST', body: JSON.stringify({ sentences: texts }) }), { params: Promise.resolve({ id: oj.id! }) });
+      check('IM. ... an empty sentence is refused (400), and someone else\'s draft reads as missing (404)', empty.status === 400 && other.status === 404);
+    } else check('IM. an improvised draft with no storyboard to correct', false, 'none found');
+  } else check('IM. an improvised draft was kept in this run', false, 'none found');
+  const [wfw] = await sql`select id from studio.voice_drafts where kind = 'performance' and (recipe->'spoken'->>'kind' = 'word-for-word') limit 1`;
+  if (wfw) {
+    const words = await route('drafts/[id]/words');
+    const [owner] = await sql`select fid from studio.voice_drafts where id = ${wfw.id}`;
+    const no = await words.POST(as(Number(owner.fid), { method: 'POST', body: JSON.stringify({ sentences: ['x'] }) }), { params: Promise.resolve({ id: wfw.id }) });
+    check('IM. a word-for-word take has no words of its own to correct (409)', no.status === 409);
+  }
+  check('IM. corrected words that are the speech\'s, word for word, label the take word for word', SP.matchesSpeech(fine.sentences.map((x) => ({ n: x.n, text: x.text.toUpperCase() })), fine) && !SP.matchesSpeech([{ n: 0, text: 'My own words.' }], fine) && SP.takeLabel({ spoken: { ...(impRecipe.spoken as object), wordForWord: true } as never }) === 'word for word');
+  // The guide: the performer's words are the board's sentences, and it writes neither theirs nor the speech's.
+  const perf = [{ n: 0, text: 'The river runs cold under the old stone bridge tonight' }];
+  const ctx = { timeline: { seconds: 10, words: [], sentences: [{ n: 0, start: 0, end: 10 }] }, sentences: perf, otherWords: fine.sentences.map((x) => ({ n: x.n, text: x.text })), shots: [], refs: { scene: false, looks: [], keptShots: [] }, maxShots: 12 };
+  const mine = G.readGuideReply('setting', JSON.stringify({ say: 'Here.', draft: { setting: 'A room where the river runs cold under the old stone bridge' } }), ctx as never);
+  const sixOfSpeech = fine.sentences.flatMap((x) => x.text.split(/\s+/)).slice(0, 8).join(' ');
+  const theirs = G.readGuideReply('setting', JSON.stringify({ say: 'Here.', draft: { setting: `A room. ${sixOfSpeech}` } }), ctx as never);
+  check('IM. the guide may write neither the performer\'s words nor the speech\'s into a draft', 'error' in mine && 'error' in theirs, JSON.stringify([mine, theirs]));
+  const gs = readFileSync(path.join(ROOT, 'src/lib/voice/guide-server.ts'), 'utf8');
+  check('IM. ... and receives the spoken sentences (the performer\'s, for an improvised take)', /sentences: spokenSentences\(draft\.recipe/.test(gs) && /otherWords: isImprovised\(/.test(gs));
+  // Publishing and the published page.
+  const pb = readFileSync(path.join(ROOT, 'src/lib/voice/publish.ts'), 'utf8');
+  const spokenPage = readFileSync(path.join(ROOT, 'src/app/storyboard/spoken/[id]/page.tsx'), 'utf8');
+  check('IM. an improvised take isn\'t held to the speech\'s words to publish; its words and label are in the published recipe, and shown', /unmatched: reading \|\| isImprovised\(r\) \? \[\]/.test(pb) && /spoken: p\.recipe\.spoken \?\? \{ kind: 'word-for-word' \}/.test(pb) && /const own = spokenSentences\(/.test(spokenPage));
+  // No "Time this reading": timed when made, and on first open, from the admins' pool.
+  const vb = readFileSync(path.join(ROOT, 'src/components/voice-board.tsx'), 'utf8');
+  const rd = readFileSync(path.join(ROOT, 'src/app/api/voice/reading/route.ts'), 'utf8');
+  const bd = readFileSync(path.join(ROOT, 'src/app/api/voice/boards/route.ts'), 'utf8');
+  check('IM. "Time this reading" is gone: a reading is timed when made, and an older one on its first open', !/Time this reading|needs-timing/.test(vb + bd) && /await timeReadingNow\(sql, who\.fid, id\)/.test(rd) && /timeReadingNow\(sql, who\.fid, draft\.id\)/.test(bd));
 }
 
 check('T. every transcript made in this run was deleted at ElevenLabs (none left)', stub.kept().length === 0 && stub.deletedTranscripts.length >= 2, `kept ${stub.kept().length}`);

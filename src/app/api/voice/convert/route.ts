@@ -3,6 +3,8 @@ import { db } from '~/lib/db';
 import { VOICE } from '~/lib/config';
 import { flowDeps, noStore, voicePerson, voiceReady } from '~/lib/voice/server';
 import { speechById } from '~/lib/voice/speech';
+import { takeMaxSeconds } from '~/lib/voice/spoken';
+
 import { voiceIdFor } from '~/lib/voice/presets';
 import { elevenLabsBase } from '~/lib/voice/flag';
 import { hasVoiceConsent, voiceConsentWording } from '~/lib/voice/consent';
@@ -10,6 +12,8 @@ import { refusal, reserve } from '~/lib/voice/costs';
 import { convertTake, CONVERTED_ALREADY, estimateConvertCredits, FlowError, type CostEntry, type Scope } from '~/lib/voice/take-flow';
 import { keepConvertedTake } from '~/lib/voice/keep-converted';
 import { convertedBefore } from '~/lib/voice/converted-before';
+
+const mmssLimit = (s: number) => (s % 60 ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}` : `${s / 60} minute${s === 60 ? '' : 's'}`);
 
 export const maxDuration = 300;
 
@@ -45,8 +49,10 @@ export async function POST(request: Request) {
   if (scope.kind === 'sentence' && !speech.sentences.some((s) => s.n === scope.n)) return NextResponse.json({ error: 'No such sentence' }, { status: 400 });
   // The length the device reports, and never less than the file could hold at 320 kb/s, so a short claim can't dodge the cap.
   const seconds = Math.max(Number(form.get('seconds')) || 0, file.size / 40_000);
-  const max = scope.kind === 'whole' ? VOICE.maxTakeSeconds : VOICE.maxSentenceSeconds;
-  if (seconds > max) return NextResponse.json({ error: `A ${scope.kind === 'whole' ? 'take' : 'sentence'} can be at most ${max} seconds` }, { status: 413 });
+  // A whole take: at most 2 minutes (Nate, 2026-11-24; the book speech 3, takeMaxSeconds), with a second's grace for the
+  // recorder's stop; the page's countdown stops the recording at its limit.
+  const max = scope.kind === 'whole' ? takeMaxSeconds(speech.id) : VOICE.maxSentenceSeconds;
+  if (seconds > max + 1) return NextResponse.json({ error: `A ${scope.kind === 'whole' ? 'take' : 'sentence'} can be at most ${mmssLimit(max)}` }, { status: 413 });
   const wording = voiceConsentWording();
   if (!(await hasVoiceConsent(sql, who.fid))) return NextResponse.json({ error: 'Read and agree to the own-voice terms first' }, { status: 403 });
   if (form.get('agree') !== wording.sha256) return NextResponse.json({ error: 'Tick the box to send this recording to ElevenLabs' }, { status: 403 });

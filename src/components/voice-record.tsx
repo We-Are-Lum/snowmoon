@@ -7,12 +7,22 @@ import { HOST_CHECK_MS, HOST_PROMPT_MS, withTimeout } from '~/lib/host-timeout';
 import { MIC_HELP, micPlace } from '~/lib/mic-help';
 import { loadTake, removeTake, saveTake, type DeviceTake } from '~/lib/voice/device-takes';
 import { VoiceRemove } from '~/components/voice-remove';
+import { CorrectWords } from '~/components/voice-correct-words';
+import { IMPROV_WORDING } from '~/lib/voice/improv-wording';
+import Link from 'next/link';
 import { LearnMore, LearnMoreParts } from '~/components/challenge-learn-more';
 import type { LearnMoreView } from '~/lib/challenge/learn-more-view';
 import { CONVERT_AGAIN } from '~/lib/voice/convert-again';
 import { EphelionIntro } from '~/components/ephelion-intro';
 import '../styles/voice.css';
 
+/** The recorder's bitrate: about 2.9 MB for a 3:00 take (Nate's review, 2026-11-24). */
+const TAKE_BITS_PER_SECOND = 128_000;
+/**
+ * A take over the size limit, said before it is sent. Reread by Nate on 2026-11-24; its size rounded up to one decimal, so
+ * a 4.04 MB take reads "4.1 MB", never "4.0 MB, over the 4 MB".
+ */
+const TOO_LARGE = (bytes: number, max: number) => `This recording is ${(Math.ceil(bytes / 100_000) / 10).toFixed(1)} MB, over the ${Math.round(max / 1_000_000)} MB a take can be, so it can't be sent. Record it again, a little shorter.`;
 const REMOVE_DRAFT = 'Remove this draft? Its audio is deleted and it can’t be brought back.';
 
 /**
@@ -36,10 +46,10 @@ interface Status {
   models: { convert: string; transcribe: string; reading: string; design: string; provider: string };
   limits: { maxTakeSeconds: number; maxSentenceSeconds: number; maxTakeBytes: number; creditsPerMinute: number; readingCreditsPerChar: number; transcribeCreditsPerSecond: number };
   today: { funded: string; credits: number; capCredits: number; conversionsLeft: number } | null;
-  drafts: { id: string; kind: string; speechId: string; presetId: string; madeAt: string; publishedAt: string | null; recipe: Record<string, unknown>; audio: { n: number; role: string; sentence: number | null }[] }[];
+  drafts: { id: string; label: string | null; improvised: boolean; sentences: { n: number; text: string }[] | null; kind: string; speechId: string; presetId: string; madeAt: string; publishedAt: string | null; recipe: Record<string, unknown>; audio: { n: number; role: string; sentence: number | null }[] }[];
   readings: { speechId: string; presetId: string; id: string; candidate: number | null; madeAt: string }[];
 }
-interface Speech { id: string; title: string; character: string; source: { kind: string; block?: string }; label: { kind: 'book'; text: string; block: string } | { kind: 'invented'; text: string; writers: string[] }; version: number; standIn: boolean; paragraphs: string[]; sentences: { n: number; text: string }[]; characters: number; names: string[]; aiHelp: boolean | null; credit: string | null }
+interface Speech { id: string; maxSeconds: number; title: string; character: string; source: { kind: string; block?: string }; label: { kind: 'book'; text: string; block: string } | { kind: 'invented'; text: string; writers: string[] }; version: number; standIn: boolean; paragraphs: string[]; sentences: { n: number; text: string }[]; characters: number; names: string[]; aiHelp: boolean | null; credit: string | null }
 interface Converted { blob: Blob; url: string; ticket: string; check?: string; checks?: Check[]; seconds: number; draftId?: string }
 interface Redo extends Converted { n: number }
 
@@ -126,7 +136,9 @@ function useRecorder(note: Note) {
       const type = pickType();
       const supported = typeof MediaRecorder === 'undefined' ? 'none (no MediaRecorder)' : TYPES.filter((t) => MediaRecorder.isTypeSupported(t)).join(', ') || 'none of ours';
       note(`recording format: asked ${type || '(browser default)'}; supported: ${supported}`);
-      const r = new MediaRecorder(s, type ? { mimeType: type } : undefined);
+      // 128 kb/s (Nate's review, 2026-11-24): a 3:00 take is then about 2.9 MB, under the 4 MB a take may be. The browser's
+      // default can be 192 kb/s or more, about 4.3 MB for 3:00.
+      const r = new MediaRecorder(s, { ...(type ? { mimeType: type } : {}), audioBitsPerSecond: TAKE_BITS_PER_SECOND });
       r.onerror = (e) => note(`recorder error: ${errText((e as unknown as { error?: unknown }).error ?? e)}`);
       const parts: Blob[] = [];
       r.ondataavailable = (e) => e.data.size && parts.push(e.data);
@@ -390,12 +402,15 @@ export function VoiceRecord({ fallback, signedOut, learn }: { fallback: React.Re
 
   async function recordWhole() {
     dropTake();
+    // A new take is a fresh recording: never sent as "Convert again" (Nate's review, 2026-11-24).
+    setAgain('ask');
     setConverted(null);
     setRedos([]);
     setAccepted(null);
     setPlayUrl(null);
     setMessage(null);
-    const out = await rec.start(s!.limits.maxTakeSeconds);
+    // At most 2 minutes a take (Nate, 2026-11-24; the book speech 3): the countdown stops the recording at 0.
+    const out = await rec.start(s!.speech.maxSeconds ?? s!.limits.maxTakeSeconds);
     if (out) {
       takeBlob.current = out.blob;
       setTake({ seconds: out.seconds, url: URL.createObjectURL(out.blob), speechId: s!.speech.id });
@@ -505,6 +520,8 @@ export function VoiceRecord({ fallback, signedOut, learn }: { fallback: React.Re
     if (!blob || !take || !picked) return;
     // Never another speech's take (the take is shown and sent with its own speech only).
     if (take.speechId !== s!.speech.id) return setMessage('That recording is of another speech: pick that speech to convert it.');
+    // Too large to send: said here, before anything is sent (the server refuses it too).
+    if (blob.size > s!.limits.maxTakeBytes) return setMessage(TOO_LARGE(blob.size, s!.limits.maxTakeBytes));
     if (converting.current) return;
     converting.current = true;
     setBusy('convert');
@@ -702,15 +719,16 @@ export function VoiceRecord({ fallback, signedOut, learn }: { fallback: React.Re
 
           {picked && (
             <section className="vr-card" aria-labelledby="vr-rec-h">
-              <h2 id="vr-rec-h">2. Record the whole speech</h2>
+              <h2 id="vr-rec-h">2. Record your take</h2>
               {webClient ? (
                 <p className="vr-warn" role="note">
                   Recording doesn&rsquo;t work in Farcaster on the web. Open this page in the Farcaster app on your phone, or in a browser at snowmoon.party/ephelion.
                 </p>
               ) : (
                 <>
+                  <p className="vr-note">{IMPROV_WORDING.intro(mmss(s.speech.maxSeconds ?? s.limits.maxTakeSeconds))}</p>
                   <p className="vr-note">
-                    About {totalWords} words, {mmss(estMinutes * 60)} at your pace. The words scroll while you read; your recording stays on this device until you remove it or record again, and is sent to be converted only when you press Convert.
+                    About {totalWords} words, {mmss(estMinutes * 60)} at your pace word for word. The words scroll while you read; your recording stays on this device until you remove it or record again, and is sent to be converted only when you press Convert.
                   </p>
                   <label className="vr-pace">
                     Pace: {wpm} words a minute
@@ -730,7 +748,7 @@ export function VoiceRecord({ fallback, signedOut, learn }: { fallback: React.Re
                       </button>
                     ) : (
                       <button type="button" className="vr-btn vr-stop" onClick={rec.stop}>
-                        Stop · {mmss(rec.elapsed)}
+                        Stop · {IMPROV_WORDING.left(mmss(Math.max(0, (s.speech.maxSeconds ?? s.limits.maxTakeSeconds) - rec.elapsed)))}
                       </button>
                     )}
                     {recording && redoing === null && <span className="vr-level" aria-hidden><span style={{ width: `${Math.min(100, rec.level * 300)}%` }} /></span>}
@@ -794,11 +812,12 @@ export function VoiceRecord({ fallback, signedOut, learn }: { fallback: React.Re
               {playUrl && <audio controls src={playUrl} className="vr-audio" />}
               {checks ? (
                 <>
-                  <p className={stillWrong.length ? 'vr-warn' : 'vr-ok'}>
-                    {stillWrong.length
-                      ? `${stillWrong.length} of ${checks.length} sentences don't match the speech word for word.`
-                      : `All ${checks.length} sentences match the speech word for word.`}
+                  <p className="vr-ok" data-slot="take-label">
+                    {stillWrong.length ? IMPROV_WORDING.improvisedLabel(s.speech.title, s.speech.version) : IMPROV_WORDING.wordForWordLabel}
                   </p>
+                  {stillWrong.length > 0 && <p className="vr-note">{IMPROV_WORDING.improvisedNote}</p>}
+                  <details className="vr-word-check" open={stillWrong.length > 0 && stillWrong.length <= Math.ceil(checks.length / 2)}>
+                  <summary>{stillWrong.length ? `Meant it word for word? ${stillWrong.length} of ${checks.length} sentences don't match the speech: redo them.` : `All ${checks.length} sentences match the speech word for word.`}</summary>
                   <ol className="vr-checks">
                     {checks.map((c) => {
                       const redo = redos.find((r) => r.n === c.n);
@@ -847,6 +866,7 @@ export function VoiceRecord({ fallback, signedOut, learn }: { fallback: React.Re
                       );
                     })}
                   </ol>
+                  </details>
                 </>
               ) : busy === 'convert' || busy === 'check' ? (
                 <p className="vr-note">Checking the words…</p>
@@ -880,7 +900,9 @@ export function VoiceRecord({ fallback, signedOut, learn }: { fallback: React.Re
                   <li key={d.id}>
                     <p>
                       {d.kind === 'reading' ? 'Ready-made reading' : 'Your performance'} · {String((d.recipe.preset as { name?: string })?.name ?? d.presetId)} · {new Date(d.madeAt).toLocaleString()}
+                      {d.label && <> · <span className="vr-tag" data-slot="draft-label">{d.label}</span></>}
                     </p>
+                    {d.improvised && d.sentences && <CorrectWords draftId={d.id} sentences={d.sentences} busy={busy !== null} onSaved={(m) => (setMessage(m), void load())} />}
                     {d.audio.map((a) => (
                       <div key={a.n} className="vr-draft-audio">
                         <span className="vr-small">{a.role === 'redo' ? `Sentence ${Number(a.sentence) + 1}, redone` : a.role === 'take' ? 'Whole take' : 'Reading'}</span>

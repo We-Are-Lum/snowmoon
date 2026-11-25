@@ -8,6 +8,7 @@ import { refusal, reserve } from './costs';
 import { removeDraft, saveDraft } from './drafts';
 import { sha256Hex, signTicket } from './ticket';
 import type { CheckTicket } from './take-flow';
+import { improvisedTimeline, spokenFor } from './spoken';
 
 /**
  * Check the words again on a draft that was kept without its word check (Nate, 2026-11-22: "the no-SQL version"): the
@@ -92,13 +93,17 @@ export async function recheckDraft(sql: Sql, fid: number, draftId: string, deps:
     })),
   };
   const unmatched = checks.filter((x) => !x.ok).map((x) => x.n);
+  // Improvising (Nate, 2026-11-24): word for word keeps the speech's strip; otherwise the transcript's (spoken.ts).
+  const imp = unmatched.length ? improvisedTimeline(joined) : null;
+  const spoken = spokenFor(speech, !imp, imp?.sentences ?? [], VOICE.models.transcribe);
   const check = { sentences: speech.sentences.length, matched: speech.sentences.length - unmatched.length, unmatched, bySound: checks.flatMap((x) => x.bySound.map((b) => ({ sentence: x.n, ...b }))), names: speech.names };
   const next = {
     ...recipe,
     transcribeModel: VOICE.models.transcribe,
     takes: [{ ...take, transcriptDeleted }, ...recipe.takes.slice(1)],
     check,
-    timeline,
+    timeline: imp ? imp.timeline : timeline,
+    spoken,
     kept: 'checked again later, replacing a draft kept without its word check',
     checkedAgain: { from: draftId, at: new Date().toISOString(), credits: heard.credits },
   };
