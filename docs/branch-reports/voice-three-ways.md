@@ -1,3 +1,13 @@
+# Back to the Mac session: voice-three-ways (2026-11-25, from cloud session `session_015MNLwvqWNRKiBmpphsR2Lj`)
+
+PR #237 is open; the cloud session pushes nothing more here.
+- **Done:** voice-improv (with guide-fixes) merged in; P2v renamed P2w; two merge type errors fixed. tsc, test:voice
+  (391, 29 in 3W), test:challenge, the build and check:principles were run (expected failures only; P2v and P2w pass).
+- **check:ui here:** it never got a full pass in this container. Every branch run broke at `/references` on a stalled prefetch of `/references/glossary`, and a probe reproduced the same stall on an unchanged main build (main's own run happened to pass). This container also can't reach media.snowmoon.party. check:ui doesn't cover the voice pages. **Left: one clean check:ui run on the Mac before merging.**
+- **Left:** check:ui on the Mac; the screenshots and their R2 page (step 2); step 6, the `hidden_at is null` additions,
+  after #225 merges; Nate's reread, his choice of team storyboards and the SQL (`NEXT_voice_three_ways.sql`); merging
+  after #235 and #236, on Nate's word.
+
 # State, 2026-11-25 (cloud session `session_015MNLwvqWNRKiBmpphsR2Lj`, carrying on from the handoff below)
 
 - **Steps 3 and 4 done:** `origin/voice-improv` is merged in, and guide-fixes comes with it (5846805a). /storyboard/record
@@ -19,7 +29,7 @@
 - **The migration** is still NEXT_ and NOT APPLIED. Its dry run, migration, read-back (a realistic insert and delete)
   and undo are in place.
 
-# handoff (2026-11-24, for the cloud session carrying on)
+# The Mac's handoff to the cloud session (2026-11-24; now back to the Mac session, above)
 
 Branch `voice-three-ways`, worktree `/Users/nathan/snowmoon-voice-three-ways` on Nate's laptop. Everything is committed and
 pushed. No PR is open yet. Merge only on Nate's word.
