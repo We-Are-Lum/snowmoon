@@ -1,7 +1,8 @@
 # X posts from Discord: plan
 
-**DRAFT.** Written by an AI coding agent (Claude, made by Anthropic), 2026-11-25, for the owner's reread. No code yet.
-Every wording below is this edition's own, a draft until the owner rereads it.
+**DRAFT.** Written by an AI coding agent (Claude, made by Anthropic), 2026-11-25, for the owner's reread. Version 2:
+the owner's answers to section 9 (2026-11-25) are folded in. Every wording below is this edition's own, a draft until
+the owner rereads it. The account is @snowmoon_party.
 
 The team proposes posts for the Snowmoon X account in one Discord channel, approves them with buttons, and the site
 posts them once enough people agree. The site can suggest posts too. Everything is logged.
@@ -18,8 +19,8 @@ posts them once enough people agree. The site can suggest posts too. Everything 
 - The site checks the post before the card appears, and says why if it refuses: X's own character count (a link counts
   as 23 characters, some characters count double; 280 at most), not empty, no `@` mention of an X account unless the
   proposer confirms it (an `@name` on X tags whoever owns that name there).
-- **The proposer's approval is counted automatically** when they propose (recommended; question 1). The card starts at
-  1 of 3.
+- **The proposer's approval is counted automatically** when they propose (owner, 2026-11-25). The card starts at 1 of 3:
+  3 distinct people, at least one of them Nate, Garance or Luis.
 
 ### The card
 
@@ -48,7 +49,7 @@ seen only by that person).
 - **Delete from X**: any one person who approved it (still on the team), and Nate, Garance and Luis always. After a
   confirmation. The card then says who deleted it and when.
 - **If the work a post links to is hidden on the site** (by its maker or a moderator), the site deletes the post from X
-  itself and says so on the card (recommended; question 5). This keeps the Privacy line in section 4 true without anyone
+  itself and says so on the card (owner, 2026-11-25). This keeps the Privacy line in section 4 true without anyone
   having to remember.
 
 ### Site suggestions
@@ -57,8 +58,8 @@ seen only by that person).
   snowmoon.party"**. First events: a new published take, a new remix challenge entry.
 - The suggestion's text comes from a fixed template (section 4), never from a model. No approval is counted for the
   site: it needs 3 people, one of them Nate, Garance or Luis.
-- Edit and Withdraw on a suggestion (recommended; question 2): anyone on the team can Edit it, and becomes its proposer
-  (their approval counts, the others reset); Nate, Garance and Luis can Withdraw it.
+- Edit and Withdraw on a suggestion (owner, 2026-11-25): anyone on the team can Edit it, and becomes its proposer
+  (their approval counts, the others reset); only Nate, Garance and Luis can Withdraw it.
 - At most 5 site suggestions a day, in the order things were published. Nothing paid enters which work is suggested.
 - If the work is hidden before it's posted, the site withdraws the suggestion.
 
@@ -75,7 +76,8 @@ post's ID and what X charged. The card shows the latest state; the full log is o
   `https://snowmoon.party/api/discord/interactions`, signed with the app's key; the site checks every signature and
   refuses anything unsigned. The site posts and updates cards through Discord's web API with the bot's token. No bot
   stays connected, so Vercel can run it. No reactions.
-- **X, through its API**, posting as the Snowmoon account with that account's own access token (question 6).
+- **X, through its API**, posting as @snowmoon_party with that account's own four fixed token values (owner,
+  2026-11-25: the developer app is created while signed in as @snowmoon_party; no sign-in flow).
 - **Commands are registered from the site**: a button on `/admin/x-posts`, owner-only, so no agent ever handles the
   bot token.
 - **Switches** in `src/lib/config.ts`: `X_POSTS.cards` (the channel works, nothing goes to X) and `X_POSTS.post` (posts
@@ -138,10 +140,13 @@ post's ID and what X charged. The card shows the latest state; the full log is o
 Names are written without `@`, so they never tag a stranger on X: a Farcaster or Lens name with its network, a Bluesky
 handle as it is, a wallet shortened.
 
-- A published take: "{character}'s line from chapter {n}, voiced by {name} on {network}, made with AI. Team pick on
-  snowmoon.party: {link}"
+- A published take (a published storyboard): "{character}'s line from chapter {n}, voiced by {name} on {network}, made
+  with AI, on snowmoon.party: {link}"
 - A challenge entry: "A new remix challenge entry: {character} by {name} on {network}, made with {model} ({maker}{,
-  closed model}). Team pick on snowmoon.party: {link}"
+  closed model}), on snowmoon.party: {link}"
+
+No "Team pick" or other label: it reads as a ranking (owner, 2026-11-25). If a work's page shows anything, it is
+"Shared on X", with the post's link (release 2).
 
 The link opens the work's page, which carries the recipe, the book's block ID for any quoted line, and the
 "not affiliated" line. A post quotes the book only word for word.
@@ -226,17 +231,20 @@ Not repeated:
 4. Owner's reread of the Privacy lines; merge `post` on with them, in the same release.
 5. First real post, then a delete, to check both and what X charged.
 
-## 9. Questions for the owner
+## 9. The owner's answers (2026-11-25)
 
-1. Does proposing count as the proposer's approval (recommended), or do they click Approve like everyone else?
-2. Site suggestions: anyone on the team can Edit (and becomes the proposer), only Nate, Garance and Luis can Withdraw
-   (recommended)?
-3. Principle 5: a post of someone's work from the project's account is a kind of pick. Label it "Team pick" in the post
-   (recommended), or another word?
-4. $20 a month on the site, $25 in X's console, 10 a day (recommended)?
-5. Delete from X automatically when the linked work is hidden (recommended), or only flag it on the card?
-6. Is the X developer account signed in as the Snowmoon X account itself? If not, posting needs a one-time sign-in
-   flow instead of the four values in section 6.
+1. Proposing counts as the proposer's approval: 3 distinct people, at least one of Nate, Garance or Luis. A site
+   suggestion has no proposer, so it needs 3 approvals.
+2. Anyone on the team can edit a site suggestion and becomes its proposer, which resets the approvals. Only Nate,
+   Garance and Luis can withdraw.
+3. No "Team pick" label: it reads as a ranking. If a work's page shows anything, it's "Shared on X".
+4. $20 a month enforced by the site, $25 in X's console with auto-recharge off, at most 10 posts a day.
+5. Delete the X post automatically when its work is hidden on the site. The owner rereads the §6 line that promises it.
+6. The account is @snowmoon_party. The owner creates the developer app signed in as @snowmoon_party, so the four fixed
+   token values post as that account. No sign-in flow.
+
+Next (owner, 2026-11-25): release 1, the cards with posting off, on branch `x-posts`. `NEXT_x_posts.sql` goes to the
+owner to test first; the setup steps come one at a time once the cards are ready to try.
 
 ## Principles
 
@@ -245,8 +253,9 @@ Not repeated:
 - **P2** (AI declared; the book never altered): pass if the templates keep "made with AI" / the model and maker, and
   book lines are quoted word for word.
 - **P4** (no model output published without a person's action): pass. Three people approve every post.
-- **P5** (nothing featured; picks labelled): **tension.** Sharing a person's work from the project's account features
-  it. Proposed: label it "Team pick" (question 3).
+- **P5** (nothing featured; picks labelled): concern, resolved by the owner (2026-11-25): no label in the post, since
+  "Team pick" reads as a ranking; at most "Shared on X" on the work's page. Open tension: posting still shares some works
+  and not others, which the site's own pages never do; nothing on the site ranks or orders by it.
 - **P6** (no third-party requests from pages): pass. Discord and X are called only by the server.
 - **P7** (payments never in ordering): pass. Suggestions follow publication order only.
 - **P3, P8**: not touched.
