@@ -113,6 +113,15 @@ const sharpPng = async () => (await import('sharp')).default({ create: { width: 
   const sp = JSON.parse(spokenEmbed('11111111-2222-4333-8444-555555555555'));
   check('E. /ephelion opens itself: launch_frame, "Record a speech" (fix 6, Nate 2026-11-24: the new address)', RECORD_BUTTON === 'Record a speech' && r.button.title === RECORD_BUTTON && r.button.action.type === 'launch_frame' && r.button.action.url.endsWith('/ephelion'));
   check('E. fix 6: /storyboard/record redirects permanently to /ephelion', /permanentRedirect\('\/ephelion'\)/.test(readFileSync(path.join(ROOT, 'src/app/storyboard/record/page.tsx'), 'utf8')) && !existsSync(path.join(ROOT, 'src/app/storyboard/record/not-found.tsx')) && existsSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx')));
+  {
+    // Signed out at /ephelion (Nate, 2026-11-24, reread): one line and the sign-in, in the page; a signed-in person the
+    // switch doesn't let in still gets the not-found.
+    const nf = readFileSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx'), 'utf8');
+    const si = readFileSync(path.join(ROOT, 'src/components/ephelion-sign-in.tsx'), 'utf8');
+    const vr = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+    const { EPHELION_SIGN_IN_LINE } = await import('../src/components/ephelion-sign-in');
+    check('E. signed out, /ephelion shows "Sign in to try the Lord Ephelion challenge." with the sign-in, in the page; signed in and not let in, the not-found', EPHELION_SIGN_IN_LINE === 'Sign in to try the Lord Ephelion challenge.' && /<SignInChoices\b/.test(si) && /signedOut=\{<EphelionSignIn \/>\}/.test(nf) && /fallback=\{<NotFound \/>\}/.test(nf) && vr.indexOf("auth.kind === 'signed-out' && signedOut") > 0 && vr.indexOf("auth.kind === 'signed-out' && signedOut") < vr.indexOf("if (!admin || status === 'none') return <>{fallback}</>;"));
+  }
   check('E. a published storyboard opens itself: launch_frame, "Watch this storyboard"', SPOKEN_BUTTON === 'Watch this storyboard' && sp.button.title === SPOKEN_BUTTON && sp.button.action.type === 'launch_frame' && sp.button.action.url.endsWith('/storyboard/spoken/11111111-2222-4333-8444-555555555555'));
   const layout = readFileSync(path.join(ROOT, 'src/app/ephelion/layout.tsx'), 'utf8');
   const spoken = readFileSync(path.join(ROOT, 'src/app/storyboard/spoken/[id]/page.tsx'), 'utf8');
