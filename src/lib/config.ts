@@ -848,6 +848,56 @@ export const CHALLENGE = {
 };
 
 /**
+ * Episode 1: the opening (owner, 2026-11-24; docs/proposals/episode-1-opening.md, branch episode1-opening): a card
+ * challenge. A person outlines Snowmoon's first episode in up to ten cards, each "what happens" over "what it does for the
+ * viewer", with a line where the first minute ends. The words are the person's own (P2): an AI may comment on the
+ * outline when asked, never write cards. No generating; a card may carry a picture already published on the site.
+ *
+ * - `public`: the owner's switch, as CHALLENGE.public. While off, its pages and APIs answer "not found" to everyone but
+ *   admins, and nothing can be submitted, whatever the clock says. check:principles P6ae refuses it on until Terms and
+ *   Privacy describe it (legal texts describe today).
+ * - `dates`: real instants (UTC) with their Pacific wall times; `closes` is the first instant that no longer counts.
+ *   Submit and Withdraw work only between them (and only with `public` on).
+ * - `sampleDeck`: the owner's sample deck (about five cards; owner, 2026-11-24: "I'll write the sample deck"). Empty
+ *   until the owner writes it: "Start from the sample deck" isn't offered while it is empty. Its words are shown as greyed
+ *   placeholders, and a card still holding a sample card's words can't be submitted.
+ * Drafts stay on the person's device until Submit; the table is studio.challenge_outlines (NEXT_episode_outlines.sql).
+ */
+export const EPISODE = {
+  id: 'episode-1',
+  public: false as boolean,
+  /** The owner's approval of the agent-drafted wording (src/lib/challenge/episode/wording.ts); until then pages show "Draft wording". */
+  wordingApproved: false as boolean,
+  dates: {
+    /** Opens Tue 1 Dec 2026, 00:00 Pacific (PST). */
+    opens: '2026-12-01T08:00:00Z',
+    /** Closes after Mon 14 Dec 2026, 23:59 Pacific: this is 00:00 Pacific on 15 Dec, the first instant that no longer counts. */
+    closes: '2026-12-15T08:00:00Z',
+  },
+  timeZone: 'America/Los_Angeles',
+  /** At most this many cards in an outline (the table's check holds the same). */
+  maxCards: 10,
+  /** The suggested length of each half of a card, shown in its counter; the hard stop is `cardMaxChars` (the table's check). */
+  cardChars: 100,
+  cardMaxChars: 120,
+  titleMaxChars: 80,
+  /** Blank cards to start with, and where the first-minute line starts (after this card). */
+  blankCards: 3,
+  blankMinuteAfter: 2,
+  /** Up to this many live outlines (submitted, not withdrawn; hidden ones still count) per person (owner, 2026-11-24). */
+  livePerPerson: 3,
+  /**
+   * The AI comment's reply check (owner, 2026-11-24: "the server blocks an AI comment that quotes new wording at
+   * length"): a reply holding a quoted passage of this many words or more that isn't in the outline is not shown.
+   */
+  commentQuoteWords: 6,
+  /** The owner's sample deck, to come: empty until the owner writes it (see above). */
+  sampleDeck: [] as readonly { happens: string; does: string }[],
+  /** Where the sample deck's first-minute line sits (after this card), once the owner writes it. */
+  sampleMinuteAfter: 2,
+};
+
+/**
  * The rehearsal switch (src/lib/challenge/rehearsal-switch.ts): CHALLENGE_REHEARSAL=on, on this machine only, never on
  * any Vercel deployment and only with a database on this machine. When on, the challenge is `rehearsal-<yyyymmdd>`,
  * opens at the start of today (Pacific; every date moved by the same amount) and is public on that server, and

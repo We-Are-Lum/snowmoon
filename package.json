@@ -95,6 +95,8 @@
     "test:challenge": "tsx --conditions=react-server scripts/test-challenge.ts && tsx --conditions=react-server scripts/test-challenge-moments.ts",
     "test:launch-publish": "tsx --conditions=react-server scripts/test-launch-publish.ts",
     "test:challenge-daily-sql": "tsx scripts/test-challenge-daily-sql.ts",
+    "test:episode": "tsx --conditions=react-server scripts/test-episode.ts",
+    "test:episode-sql": "tsx scripts/test-episode-outlines-sql.ts",
     "test:rehearsal": "tsx --conditions=react-server scripts/test-rehearsal.ts",
     "rehearsal:db": "tsx scripts/rehearsal-db.ts",
     "rehearsal": "tsx scripts/rehearsal.ts",

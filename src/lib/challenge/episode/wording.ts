@@ -1,0 +1,167 @@
+import { CHALLENGE, EPISODE } from '../../config';
+
+/**
+ * Episode 1: the opening, every word its pages and routes show (owner, 2026-11-24). The three goals and the example
+ * card are the owner's own words; everything else is DRAFT wording by the coding agent (Claude, by Anthropic), shown
+ * with the "Draft wording" mark until the owner approves it (EPISODE.wordingApproved; check:principles P6ae refuses
+ * EPISODE.public on before). No date is written here: they come from EPISODE.dates (scripts/test-episode.ts checks).
+ */
+const fmt = (iso: string, opts: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat('en-GB', { timeZone: EPISODE.timeZone, ...opts }).format(new Date(iso));
+/** The last day that counts: the day before the closing instant (which is 00:00 Pacific). */
+const lastDay = (closes: string = EPISODE.dates.closes) => new Date(Date.parse(closes) - 60_000).toISOString();
+/** "1 to 14 December", from a window's own dates. */
+const span = (d: { opens: string; closes: string }) => `${fmt(d.opens, { day: 'numeric' })} to ${fmt(lastDay(d.closes), { day: 'numeric', month: 'long' })}`;
+
+export const EPISODE_WORDING = {
+  title: 'Episode 1: the opening',
+  pitch: 'Outline the first episode of Snowmoon in ten cards or fewer. Your words, your order.',
+  window: () => span(EPISODE.dates),
+  closes: () => `Submissions close ${fmt(lastDay(), { weekday: 'short', day: 'numeric', month: 'short' })}, 23:59 PT.`,
+  opensOn: () => `Opens ${fmt(EPISODE.dates.opens, { weekday: 'short', day: 'numeric', month: 'short' })}, 00:00 PT.`,
+  closedNote: 'Submissions are closed. Every outline stays here to read.',
+  draftMark: 'Draft wording',
+  goalsHead: 'The goals',
+  // The owner's words (2026-11-24).
+  goals: [
+    { tag: '0:00–1:00', text: 'The first minute is dynamic and compelling.' },
+    { tag: 'Plot', text: 'Viewers get hooked on the plot.' },
+    { tag: 'By the end', text: 'They love a character.' },
+  ],
+  howCards: 'Each card is a pair: what happens, over what it does for the viewer. A line marks where the first minute ends.',
+  exampleLabel: 'Example card',
+  // The owner's example (2026-11-24).
+  example: { happens: 'Zei laughs off the drone', does: 'we like him straight away' },
+  startBlank: 'Start with blank cards',
+  startSample: 'Start from the sample deck',
+  continueDraft: 'Continue your draft',
+  noAiWrites: 'No AI writes cards here. You can ask an AI to comment on your outline; its comment is marked, and never published.',
+  everyOutline: "Everyone's outlines",
+  rules: 'Rules',
+  rulesBody: () => [
+    `Open to anyone signed in with Farcaster, Lens or Bluesky whose account passes the site's check, ${fmt(EPISODE.dates.opens, { day: 'numeric', month: 'long' })} to ${fmt(lastDay(), { day: 'numeric', month: 'long' })} (Pacific time).`,
+    `Up to ${EPISODE.maxCards} cards. Each half up to ${EPISODE.cardMaxChars} characters (about ${EPISODE.cardChars} is plenty).`,
+    'Every word is yours. No AI-written words, and no words from the sample deck.',
+    'A card may show a picture already published on this site, credited to its maker. Nothing is made for this challenge.',
+    `Up to ${EPISODE.livePerPerson} outlines each at a time. You can withdraw one until submissions close; it is then no longer shown.`,
+    'There is no prize. Outlines are listed newest first or shuffled, never ranked, and nothing is counted.',
+  ],
+  back: '← Episode 1',
+  backToList: "← Everyone's outlines",
+  backToChallenges: '← Challenges',
+  // The deck.
+  titlePlaceholder: 'Title (optional)',
+  titleLabel: 'Title',
+  cardsOf: (n: number) => `${n} of ${EPISODE.maxCards} cards`,
+  dragHint: 'Drag ⋮⋮ to reorder, or use ↑ ↓. Tap a card to edit it.',
+  happens: 'What happens',
+  does: 'What it does for the viewer',
+  happensEmpty: '[what happens]',
+  doesEmpty: '[what it does for the viewer]',
+  sampleHint: "Sample words, greyed out: write over them. A card still holding them can't be submitted.",
+  minuteLine: 'first minute ends',
+  minuteMove: 'Move the first-minute line',
+  minuteUp: 'Line up one card',
+  minuteDown: 'Line down one card',
+  dragCard: 'Drag to reorder',
+  moveUp: 'Move card up',
+  moveDown: 'Move card down',
+  addCard: (left: number) => `+ Add a card (${left} left)`,
+  deleteCard: 'Delete card',
+  done: 'Done',
+  editCard: (i: number, n: number) => `Card ${i} of ${n}`,
+  counter: (n: number) => `${n} / ${EPISODE.cardChars}`,
+  pictureHead: 'Picture (optional)',
+  choosePicture: 'Choose a picture from the site',
+  removePicture: 'Remove picture',
+  pictureNote: 'Only pictures already published here. Nothing is generated.',
+  savedHere: 'Saved on this device until you submit. Submitting publishes your outline with your name.',
+  startOver: 'Start over',
+  startOverConfirm: 'Clear this draft and start again?',
+  // The picker.
+  pickerTitle: 'Choose a picture',
+  pickerSources: { characters: 'Characters', challenge: 'Remix challenge', mine: 'Mine' } as Record<string, string>,
+  pickerNone: 'Nothing here yet.',
+  pickerSignIn: 'Sign in to see your own pictures.',
+  pickerUse: 'Use this picture',
+  pickerCancel: 'Cancel',
+  pictureBy: (by: string) => `by ${by}`,
+  pictureRecipe: 'How it was made',
+  pictureAlt: (by: string) => `A picture by ${by}, published on Snowmoon Party`,
+  aiTag: 'AI',
+  aiNote: 'Made with AI here; its page has the recipe.',
+  // The comment.
+  commentHead: 'A comment on your outline',
+  commentAbout: 'An AI reads your cards and comments against the goals. It never writes or changes cards, and nothing it says is kept or published. Each comment uses one of your assistant questions for the day.',
+  commentAsk: 'Ask AI to comment',
+  commentBusy: 'Reading your outline…',
+  commentLabel: (model: string, maker: string) => `AI · ${model}, by ${maker}`,
+  commentWithheld: 'The comment was held back because it suggested card wording, and the words here are yours. Ask again for a comment without suggestions.',
+  commentNeedsCards: 'Write at least one card first.',
+  commentSignIn: 'Sign in to ask for a comment.',
+  // Submit.
+  submit: 'Submit',
+  submitting: 'Submitting…',
+  preview: 'Preview',
+  editAgain: 'Back to editing',
+  signInToSubmit: 'Sign in with Farcaster, Lens or Bluesky to submit.',
+  walletCantSubmit: 'Wallet accounts can draft but not submit. Sign in with Farcaster, Lens or Bluesky to submit.',
+  submitted: 'Submitted. Your outline is public.',
+  shareHead: 'Share it',
+  shareNote: 'Your own app posts it. Sharing is optional.',
+  copyLink: 'Copy link',
+  copied: 'Link copied',
+  seeIt: 'See your outline',
+  left: (n: number) => (n === 1 ? 'You can submit 1 more outline.' : `You can submit ${n} more outlines.`),
+  // Server refusals.
+  closed: 'Submissions are not open.',
+  pictureGone: "One of the pictures can't be attached any more. Choose another.",
+  accountCantSubmit: 'Sign in with Farcaster, Lens or Bluesky to submit.',
+  checkNotPassed: "Your account didn't pass the site's check, so it can't submit for now.",
+  checkUnavailable: "The account check couldn't be reached. Try again in a minute.",
+  tooMany: (n: number) => `You have ${n} outlines up. Withdraw one to submit another.`,
+  notYours: 'Not found',
+  // An outline's page.
+  outlineFor: 'An outline for Episode 1: the opening',
+  untitled: 'Untitled outline',
+  wordsBy: (by: string) => `Words by ${by}; no AI wrote them.`,
+  submittedOn: (iso: string) => fmt(iso, { day: 'numeric', month: 'short' }),
+  cardsN: (n: number) => (n === 1 ? '1 card' : `${n} cards`),
+  more: (n: number) => `+ ${n} more`,
+  readOutline: 'Read the outline',
+  aimsFor: 'It aims for',
+  aims: 'A compelling first minute · a hooked viewer · a character they love.',
+  picturesHead: 'Pictures',
+  picturesNote: 'Each picture was already on the site; none was made for this outline.',
+  makeYours: 'Make your own outline',
+  withdraw: 'Withdraw',
+  withdrawConfirm: 'Withdraw this outline? It will no longer be shown.',
+  withdrawn: 'Withdrawn. It is no longer shown.',
+  hide: 'Hide (moderator)',
+  hideConfirm: 'Hide this outline from everyone?',
+  hidden: 'Hidden.',
+  adminLabel: 'Admin',
+  // Everyone's outlines.
+  listTitle: "Everyone's outlines",
+  newest: 'Newest',
+  shuffled: 'Shuffled',
+  orderLabel: 'Order',
+  listNone: 'No outlines yet.',
+  listNote: 'No likes, no counts, no ranking. Newest first or shuffled, your choice.',
+  // Share text (the person's own post).
+  shareText: 'My outline for Episode 1 of Snowmoon, on Snowmoon Party',
+  shareTextOthers: 'An outline for Episode 1 of Snowmoon, on Snowmoon Party',
+} as const;
+
+/** The list of challenges on /challenge once the remix challenge has closed (owner, 2026-11-24, answer 6). */
+export const CHALLENGES_WORDING = {
+  title: 'Challenges',
+  open: 'Open now',
+  past: 'Past challenges',
+  remixTitle: 'Remix challenge',
+  remixLine: 'Remix the cast of Snowmoon: pictures of its characters, made by everyone.',
+  remixWhen: () => span(CHALLENGE.dates),
+  episodeWhen: () => span(EPISODE.dates),
+  episodeLine: 'Outline the first episode in ten cards or fewer.',
+  closed: 'Closed',
+  draftMark: 'Draft wording',
+} as const;

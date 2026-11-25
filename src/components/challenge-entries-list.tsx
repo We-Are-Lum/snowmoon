@@ -12,8 +12,14 @@ import { RemixCardView, type RemixCardData, type RemixCardWords } from './challe
  */
 export type EntriesWords = { newest: string; shuffled: string; orderLabel: string; cards: Record<string, RemixCardWords>; pictures?: boolean };
 
-export function ChallengeEntriesList({ all, w }: { all: RemixCardData[]; w: EntriesWords }) {
-  const [shown, setShown] = useState<RemixCardData[] | null>(null);
+/**
+ * The Newest / Shuffled toggle over a challenge's whole list of entries (P5g, as the owner reworded it for reread on
+ * 2026-11-24: "Shuffled order is allowed in a challenge's list of entries, and nowhere else"). Shared by the remix
+ * challenge's entries and Episode 1's outlines (src/components/challenge-episode-list.tsx), so the one shuffle of
+ * entries stays here, on every entry shown.
+ */
+export function ShuffledEntries<T>({ all, w, children }: { all: T[]; w: { newest: string; shuffled: string; orderLabel: string }; children: (shown: T[], shuffled: boolean) => React.ReactNode }) {
+  const [shown, setShown] = useState<T[] | null>(null);
   return (
     <>
       <div className="ch-filter ch-order" role="group" aria-label={w.orderLabel}>
@@ -24,11 +30,21 @@ export function ChallengeEntriesList({ all, w }: { all: RemixCardData[]; w: Entr
           {w.shuffled}
         </button>
       </div>
-      <ul className={w.pictures ? 'ch-cards ch-entries-list ch-pics' : 'ch-cards ch-entries-list'} role="list" data-shuffled={shown ? 'true' : undefined}>
-        {(shown ?? all).map((r) => (
-          <RemixCardView key={r.versionId} r={r} w={w.cards[r.character] ?? { name: r.character, untitled: r.character, alt: '' }} />
-        ))}
-      </ul>
+      {children(shown ?? all, shown !== null)}
     </>
+  );
+}
+
+export function ChallengeEntriesList({ all, w }: { all: RemixCardData[]; w: EntriesWords }) {
+  return (
+    <ShuffledEntries all={all} w={w}>
+      {(shown, shuffled) => (
+        <ul className={w.pictures ? 'ch-cards ch-entries-list ch-pics' : 'ch-cards ch-entries-list'} role="list" data-shuffled={shuffled ? 'true' : undefined}>
+          {shown.map((r) => (
+            <RemixCardView key={r.versionId} r={r} w={w.cards[r.character] ?? { name: r.character, untitled: r.character, alt: '' }} />
+          ))}
+        </ul>
+      )}
+    </ShuffledEntries>
   );
 }

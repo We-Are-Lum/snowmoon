@@ -7,6 +7,8 @@ import { ChallengeBody } from '~/components/challenge-body';
 import { PAPER } from '~/lib/tokens';
 import { phase } from '~/lib/challenge/rules';
 import { POSTER } from '~/lib/challenge/poster';
+import { challengeItems, showChallengeList } from '~/lib/challenge/episode/challenges';
+import { ChallengeList } from '~/components/challenge-list';
 
 /**
  * The remix challenge's landing page, the short version (owner, 2026-11-04; docs/proposals/challenge-short-page.md;
@@ -24,6 +26,7 @@ export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   if (!CHALLENGE.public) return { robots: { index: false, follow: false } };
+  if (showChallengeList()) return { title: 'Challenges', description: 'Challenges on Snowmoon Party.' };
   const open = phase() === 'open';
   // Cast in Farcaster (pre-flight 2026-11-07): the button opens /challenge, not the home page (the site's card otherwise).
   const embed = JSON.stringify({
@@ -42,7 +45,13 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title, description, ...og, other: { 'fc:miniapp': embed, 'fc:frame': embed } };
 }
 
+/**
+ * Once the remix challenge has closed (owner, 2026-11-24, answer 6), /challenge is the list of challenges: open ones
+ * first, then past ones (src/lib/challenge/episode/challenges.ts). The remix challenge's home moves to /challenge/remix
+ * (./remix/page.tsx); its other pages keep their addresses.
+ */
 export default async function ChallengePage() {
   if (!CHALLENGE.public) notFound();
+  if (showChallengeList()) return <ChallengeList {...challengeItems()} />;
   return <ChallengeBody v={await challengeView(db())} />;
 }

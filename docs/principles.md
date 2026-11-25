@@ -536,6 +536,24 @@ A hide still wins everywhere, and with no database none shows (`npm run test:add
   random selection and "See all") show no remix, like or built-on count, and the feed (/challenge/remixes) has no "most
   remixed" or other sort: newest first, filterable by character. A viewer's "most remixed" sort may come back after
   entries close, by the owner's decision then. Its planted violation is a like count on a card.
+  Episode 1: the opening (branch episode1-opening, owner 2026-11-24): its outlines, the list (/challenge/episode-1/outlines)
+  and an outline's page show no like, view or any other count, and the list is newest first or the viewer's own
+  shuffle, nothing else. Its files are in P5i's list (scripts/lib/p5g.ts); scripts/test-episode.ts plants a like count
+  on an outline, which must fail.
+- `P5g`, the owner's new wording, FOR THE OWNER'S REREAD (owner, 2026-11-24): "Shuffled order is allowed in a
+  challenge's list of entries, and nowhere else." On branch episode1-opening, the one shuffle of entries is
+  `ShuffledEntries` in src/components/challenge-entries-list.tsx (`shuffleFresh(all)`, on every entry shown), used by
+  the remix challenge's entries and by Episode 1's outlines; the check's code is unchanged. **Tension, for the owner
+  to decide (not resolved on the branch):** uses already in main's code fall outside the new wording: a character's
+  several bases in a fresh order, and /challenge's tile showing one of them at random (`shuffleFresh(c.bases)`,
+  src/components/challenge-card.tsx); the Style row's "Random" (`drawStyle`, src/lib/challenge/make.ts); the closed
+  models' settings draw (`drawSetting`, src/lib/challenge/settings.ts); and "Surprise me"
+  (src/components/challenge-make.tsx, only while the moments are on, which they aren't). All but the bases' order draw
+  one item at random rather than order a list. Either the wording names them, or they change.
+  Until the owner says which, the existing rule above stands as written and the check is unchanged.
+- `P6ae` (branch episode1-opening, owner 2026-11-24): Episode 1 is public (EPISODE.public) only once Terms §6f, Privacy
+  §4 and Privacy §7's Groq line describe it (docs/legal/episode-1-draft.md, for the owner's reread) and the owner has
+  approved its drafted wording (EPISODE.wordingApproved). Its planted violation is the switch on with today's texts.
 - Review: does any default, badge or ordering reflect a person's choice without saying whose?
 
 **Status.** Pass. (Picks are built on branch phase2-admin and need 0030_admin_picks, applied 2026-10-31.)

@@ -149,7 +149,9 @@ export function p5gProblems(files: { file: string; text: string }[]): string[] {
  * else. Reads the card, the random selection, the feed page and the remixes' server code (comments aside). A viewer's
  * "most remixed" sort may come back after entries close, by the owner's decision then.
  */
-export const P5I_FILES = ['src/components/challenge-remix-card.tsx', 'src/components/challenge-card.tsx', 'src/app/challenge/remixes/page.tsx', 'src/lib/challenge/remixes.ts', 'src/lib/challenge/remixes-view.ts', 'src/components/challenge-remixes-body.tsx', 'src/app/challenge/entries/page.tsx', 'src/components/challenge-entries-list.tsx', 'src/components/posted-on.tsx'];
+export const P5I_FILES = ['src/components/challenge-remix-card.tsx', 'src/components/challenge-card.tsx', 'src/app/challenge/remixes/page.tsx', 'src/lib/challenge/remixes.ts', 'src/lib/challenge/remixes-view.ts', 'src/components/challenge-remixes-body.tsx', 'src/app/challenge/entries/page.tsx', 'src/components/challenge-entries-list.tsx', 'src/components/posted-on.tsx',
+  // Episode 1's outlines (owner, 2026-11-24): no like, view or any other count, and newest first or shuffled only.
+  'src/components/challenge-episode-list.tsx', 'src/components/challenge-episode-views.tsx', 'src/app/challenge/episode-1/outlines/page.tsx', 'src/app/challenge/episode-1/o/[id]/page.tsx'];
 const A_COUNT = /\bcount\s*\(|\b(likes?|like_?count|likeCount|built_?on|builtOn|remix_?count|remixCount|remixes_?count|versions|score|popular\w*|most[ _-]?remixed|mostRemixed|trending)\b/i;
 export function p5iProblems(files: { file: string; text: string }[]): string[] {
   const problems: string[] = [];

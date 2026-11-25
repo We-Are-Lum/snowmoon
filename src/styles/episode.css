@@ -1,0 +1,126 @@
+/* Episode 1: the opening (owner, 2026-11-24; mocks in docs/proposals/episode-1-opening/). Tokens from tokens.css only,
+   so both themes work. The first-minute line is in --veridia. */
+.ep-page { max-width: 1180px; margin: 0 auto; padding: 16px 20px 96px; box-sizing: border-box; }
+.ep-crumb { margin: 0 0 12px; font-family: var(--label); font-size: var(--text-label); }
+.ep-crumb a, .ep-link { color: var(--link, var(--veridia)); background: none; border: 0; padding: 0; font: inherit; cursor: pointer; text-decoration: underline; }
+.ep-title { font-family: var(--reading); font-weight: 400; font-size: 36px; line-height: 1.05; margin: 8px 0; }
+@media (min-width: 1024px) { .ep-landing .ep-title { font-size: 52px; } }
+.ep-head { display: flex; flex-direction: column; gap: 12px; }
+@media (min-width: 1024px) { .ep-head { flex-direction: row; justify-content: space-between; align-items: flex-end; gap: 32px; } .ep-when { text-align: right; } }
+.ep-pitch { margin: 0; font-size: 20px; line-height: 1.35; color: var(--body); }
+.ep-window { margin: 0; font-size: 20px; }
+.ep-closes, .ep-hint, .ep-small, .ep-by, .ep-for, .ep-words-by, .ep-more, .ep-count, .ep-num, .ep-field-label { font-family: var(--label); font-size: 12px; line-height: 1.45; color: var(--muted); }
+.ep-small, .ep-hint { margin: 8px 0; }
+.ep-draft { margin-left: 6px; }
+.ep-goals { margin: 18px 0 12px; }
+.ep-goals-head { margin: 0 0 6px; font-family: var(--label); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--veridia); }
+.ep-goal-list { list-style: none; margin: 0; padding: 0; background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); }
+.ep-goal-list li { display: flex; gap: 14px; padding: 11px 14px; border-top: 1px solid var(--rule); font-size: 18px; line-height: 1.25; }
+.ep-goal-list li:first-child { border-top: 0; }
+.ep-goal-tag { flex: 0 0 72px; font-family: var(--label); font-size: 12px; color: var(--muted); padding-top: 3px; }
+.ep-goals-compact .ep-goal-list { background: none; border: 0; }
+.ep-goals-compact .ep-goal-list li { padding: 8px 0; }
+.ep-how { color: var(--body); margin: 8px 0; }
+.ep-btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 12px 0; }
+.ep-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; box-sizing: border-box; border: 1.5px solid var(--ink); border-radius: var(--radius); background: transparent; color: var(--ink); font: inherit; font-size: 17px; text-decoration: none; cursor: pointer; }
+.ep-btn:hover { background: var(--soft); }
+.ep-btn:disabled { opacity: 0.45; cursor: default; }
+.ep-btn-solid { background: var(--btn); color: var(--btn-ink); }
+.ep-btn-solid:hover { background: var(--btn); }
+.ep-btn-warn { border-color: var(--warn); color: var(--warn); }
+.ep-btn:focus-visible, .ep-handle:focus-visible, .ep-card-tap:focus-visible, .ep-minute-grip:focus-visible, .ep-mini:focus-visible { outline: 2px solid var(--link, var(--veridia)); outline-offset: 2px; }
+.ep-note { margin: 6px 0; color: var(--warn); font-size: 15px; }
+.ep-rules { margin: 20px 0; border-top: 1px solid var(--rule); padding-top: 10px; }
+.ep-rules summary { cursor: pointer; font-size: 18px; }
+.ep-rules li { margin: 6px 0; color: var(--body); }
+
+/* Cards */
+.ep-deck { list-style: none; margin: 10px 0; padding: 0; }
+.ep-card { display: flex; align-items: stretch; margin: 0 0 8px; background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); }
+.ep-card-body { flex: 1; min-width: 0; padding: 9px 12px; }
+.ep-card-read .ep-num { flex: 0 0 28px; display: flex; align-items: center; justify-content: center; border-right: 1px solid var(--rule); }
+.ep-num-label { flex-basis: auto !important; padding: 0 10px; text-transform: uppercase; }
+.ep-happens { display: block; margin: 0 0 5px; font-size: 18px; line-height: 1.25; color: var(--ink); overflow-wrap: anywhere; }
+.ep-does { display: block; margin: 0; padding-top: 5px; border-top: 1px dashed var(--rule); font-size: 16px; font-style: italic; line-height: 1.25; color: var(--veridia); overflow-wrap: anywhere; }
+.ep-does::before { content: '→ '; font-style: normal; }
+.ep-empty { color: var(--muted); }
+.ep-pic { position: relative; flex: 0 0 68px; display: block; border-left: 1px solid var(--rule); overflow: hidden; }
+.ep-pic img { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 72px; }
+.ep-ai { position: absolute; left: 4px; bottom: 4px; padding: 1px 4px; font-family: var(--label); font-size: 10px; background: var(--paper); color: var(--ink); }
+.ep-minute { display: flex; align-items: center; gap: 8px; margin: 6px 0 14px; color: var(--veridia); font-family: var(--label); font-size: 12px; }
+.ep-minute::before, .ep-minute::after { content: ''; flex: 1; border-top: 2px solid var(--veridia); }
+.ep-minute-grip { padding: 3px 10px; border: 1.5px solid var(--veridia); border-radius: 14px; background: var(--paper); color: var(--veridia); font: inherit; }
+button.ep-minute-grip { cursor: grab; touch-action: none; min-height: 36px; }
+.ep-minute-moves { display: inline-flex; gap: 4px; order: 3; }
+.ep-minute-edit::after { order: 2; }
+.ep-dragging { opacity: 0.7; box-shadow: 0 6px 18px var(--scrim); }
+
+/* The deck being edited */
+.ep-make { display: grid; grid-template-columns: 1fr; gap: 24px; }
+@media (min-width: 1024px) { .ep-make { grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr); gap: 40px; } }
+.ep-title-field input { width: 100%; box-sizing: border-box; padding: 6px 0; border: 0; border-bottom: 1px solid var(--rule); background: transparent; color: var(--ink); font-family: var(--reading); font-size: 28px; }
+.ep-handle { flex: 0 0 32px; border: 0; border-right: 1px solid var(--rule); background: none; color: var(--muted); font-size: 16px; cursor: grab; touch-action: none; }
+.ep-card-edit .ep-card-body { display: flex; flex-direction: column; }
+.ep-card-tap { display: block; width: 100%; padding: 0; border: 0; background: none; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.ep-problem { border-color: var(--warn); }
+.ep-editing { outline: 2px solid var(--ink); }
+.ep-field { display: block; margin: 8px 0; }
+.ep-field textarea { display: block; width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--paper); color: var(--ink); font-family: var(--reading); font-size: 18px; line-height: 1.3; resize: vertical; }
+.ep-count { display: block; text-align: right; }
+.ep-over { color: var(--warn); }
+.ep-moves { display: inline-flex; gap: 4px; margin-left: 10px; }
+.ep-mini { min-width: 36px; min-height: 36px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--card); color: var(--ink); cursor: pointer; }
+.ep-mini:disabled { opacity: 0.4; cursor: default; }
+.ep-pic-row { display: flex; align-items: center; gap: 10px; }
+.ep-pic-row .ep-pic { flex: 0 0 64px; height: 80px; border: 1px solid var(--rule); }
+.ep-editor-end { justify-content: space-between; }
+.ep-add { display: block; width: 100%; min-height: 48px; margin: 4px 0 12px; border: 1.5px dashed var(--faint); border-radius: var(--radius); background: none; color: var(--muted); font: inherit; font-size: 17px; cursor: pointer; }
+.ep-sheet-backdrop { display: none; }
+@media (max-width: 1023px) {
+  /* A phone: the card being edited opens as a bottom sheet over a scrim (mock P3). */
+  .ep-editing .ep-sheet-backdrop { display: block; position: fixed; inset: 0; z-index: 40; background: var(--scrim); }
+  .ep-editing .ep-editor { position: fixed; left: 0; right: 0; bottom: 0; z-index: 41; max-height: 85vh; overflow-y: auto; padding: 14px 20px 24px; background: var(--card); border-top: 1px solid var(--ink); box-shadow: 0 -10px 30px var(--scrim); }
+}
+.ep-panel { margin: 0 0 16px; padding: 14px 16px; background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); }
+.ep-panel-title { margin: 0 0 6px; font-family: var(--reading); font-weight: 400; font-size: 21px; }
+.ep-ai-comment { margin-top: 10px; padding-left: 10px; border-left: 3px solid var(--faint); }
+.ep-ai-comment p { margin: 6px 0; font-size: 16px; line-height: 1.4; }
+.ep-ai-label { font-family: var(--label); font-size: 11px; color: var(--muted); }
+.ep-bar { display: none; }
+@media (max-width: 1023px) {
+  /* A phone: Goals, the comment and Submit in a bar at the bottom (mock P2); the side panel opens from Goals. */
+  .ep-bar { display: flex; gap: 8px; align-items: center; position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--paper); border-top: 1px solid var(--rule); }
+  .ep-bar .ep-btn { font-size: 15px; padding: 0 12px; }
+  .ep-grow { flex: 1; }
+  .ep-make-side { display: none; }
+  .ep-make-side.ep-goals-open { display: block; }
+  .ep-make-side .ep-submit-box { display: block; }
+}
+@media (min-width: 1024px) { .ep-make-side { position: sticky; top: 16px; align-self: start; } }
+
+/* The picker (mock P4) */
+.ep-picker-wrap { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; background: var(--scrim); }
+@media (min-width: 1024px) { .ep-picker-wrap { align-items: center; } }
+.ep-picker { width: 100%; max-width: 720px; max-height: 90vh; overflow-y: auto; box-sizing: border-box; padding: 16px 20px 24px; background: var(--paper); border-radius: var(--radius) var(--radius) 0 0; }
+.ep-picker-title { font-size: 28px; }
+.ep-picker-grid { list-style: none; margin: 12px 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+@media (min-width: 720px) { .ep-picker-grid { grid-template-columns: repeat(5, 1fr); } }
+.ep-pick { position: relative; display: block; width: 100%; aspect-ratio: 3 / 4; padding: 0; border: 0; background: var(--soft); cursor: pointer; overflow: hidden; }
+.ep-pick img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ep-picked { outline: 3px solid var(--ink); outline-offset: -3px; }
+
+/* An outline (mock D2) and the list (mock P5) */
+.ep-outline { display: grid; grid-template-columns: 1fr; gap: 24px; }
+@media (min-width: 1024px) { .ep-outline { grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr); gap: 40px; } }
+.ep-outline-title { font-family: var(--reading); font-weight: 400; font-size: 36px; line-height: 1.1; margin: 4px 0; }
+h2.ep-outline-title { font-size: 22px; }
+.ep-aims { margin: 0; font-size: 17px; line-height: 1.4; }
+.ep-pic-credits { margin: 0; padding-left: 18px; font-size: 15px; }
+.ep-list { list-style: none; margin: 12px 0; padding: 0; display: grid; gap: 14px; }
+@media (min-width: 1024px) { .ep-list { grid-template-columns: 1fr 1fr; } }
+.ep-summary { padding: 12px 14px; background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); }
+.ep-summary .ep-card { background: var(--paper); }
+.ep-admin { color: var(--muted); }
+.ep-challenge-list { list-style: none; margin: 8px 0 24px; padding: 0; }
+.ep-challenge { padding: 12px 0; border-top: 1px solid var(--rule); }
+.ep-challenge-title { margin: 0; font-family: var(--reading); font-weight: 400; font-size: 26px; }

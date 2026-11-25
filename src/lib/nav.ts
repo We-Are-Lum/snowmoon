@@ -13,7 +13,7 @@ export interface NavItem {
   children?: NavItem[];
 }
 
-import { ADAPTATIONS } from './config';
+import { ADAPTATIONS, CHALLENGE } from './config';
 
 /** `challenge`: show the remix challenge's item (CHALLENGE.public, or an admin signed in; owner, 2026-11-04: admin-only for now). */
 export function navItems(last: number, adaptations: number, challenge = false): NavItem[] {
@@ -45,8 +45,9 @@ export function navItems(last: number, adaptations: number, challenge = false): 
     },
     { key: 'assistant', label: 'Assistant', href: '/assistant' },
     // The remix challenge (owner, 2026-11-03: a /challenge link in the menu). Its page's own title; last, so the
-    // owner's order above is unchanged.
-    { key: 'challenge', label: 'Remix challenge', href: '/challenge' },
+    // owner's order above is unchanged. Once it has closed, /challenge is the list of challenges (owner, 2026-11-24,
+    // answer 6; Episode 1 among them), and the item is named for that.
+    { key: 'challenge', label: Date.now() >= Date.parse(CHALLENGE.dates.closes) ? 'Challenges' : 'Remix challenge', href: '/challenge' },
   ];
   // Adaptations are out of view for now (ADAPTATIONS.visible); the challenge until the owner opens it, but to admins.
   return items.filter((i) => (i.key !== 'adaptations' || ADAPTATIONS.visible) && (i.key !== 'challenge' || challenge));

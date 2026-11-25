@@ -25,7 +25,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
-import { ADMINS, AGENTS, ASSISTANT, CHALLENGE, CHAT, CLOSED_PROVIDERS, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, VOICE, imagesDailySpendCapUsd } from '../src/lib/config';
+import { ADMINS, AGENTS, ASSISTANT, CHALLENGE, CHAT, CLOSED_PROVIDERS, EPISODE, IMAGES, REPO_URL, SIGN_IN_METHODS, SOCIAL_SIGN_IN, VOICE, imagesDailySpendCapUsd } from '../src/lib/config';
 import { FLOW_FILE as VOICE_FLOW_FILE, ROUTE_FILE as VOICE_ROUTE_FILE, VOICE_PLANTS, voiceRun, voiceStatic } from './lib/voice-proof';
 import { challengeOpenNow, entriesOpen } from '../src/lib/challenge/rules';
 import { challengeVisibleTo } from '../src/lib/challenge/visibility';
@@ -39,6 +39,7 @@ import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/
 import { LETTERING_POLICY_FILE, letteringLine, p8jProblems, type LetteredPicture, type LetteringRecord } from '../src/lib/images/lettering';
 import { P8J_PLANTS, letteredPictures } from './lib/p8j';
 import { p4aProblems } from './lib/p4a';
+import { p6aeProblems } from './lib/episode';
 import { CHALLENGE_FILES as P5G_FILES, NOT_AN_ORDER, P5I_FILES, p5gProblems, p5iProblems } from './lib/p5g';
 import { P5B_PLANTS, P5J_PLANTS, p5bProblems, p5jProblems } from './lib/p5b';
 import { recipeProblems } from '../src/lib/chapter-pictures/shared';
@@ -2416,6 +2417,23 @@ add({
     c.on = true;
     for (const sec of c.terms) if (String(sec.n) === '6e') sec.body = ['During the challenge, anyone signed in may remix its characters\' sheets.'];
     for (const sec of c.privacy) if (String(sec.n) === '4') sec.body = ['If you take part in the remix challenge: for each version of a challenge character you publish, whether it can count as an entry.'];
+  },
+});
+
+// P6ae (branch episode1-opening, owner 2026-11-24): Episode 1 goes public only once Terms §6f, Privacy §4 and the
+// Groq line of Privacy §7 describe it, and the owner has approved its drafted wording (scripts/lib/episode.ts). The id
+// was free on main and every remote branch (2026-11-24).
+add({
+  id: 'P6ae',
+  principle: 6,
+  name: 'Episode 1 (EPISODE.public) is on only once Terms §6f, Privacy §4 and Privacy §7 describe it and the owner has approved its wording',
+  load: async () => ({ on: EPISODE.public as boolean, wordingApproved: EPISODE.wordingApproved as boolean, terms: clone(TERMS.sections), privacy: clone(PRIVACY.sections) }),
+  run: (c) => p6aeProblems(c),
+  plant: (c) => {
+    // On, with today's texts (which don't describe it yet) and the wording not approved.
+    c.on = true;
+    c.wordingApproved = false;
+    for (const sec of c.terms) if (String(sec.n) === '6f') sec.body = [];
   },
 });
 
