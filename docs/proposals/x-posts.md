@@ -200,7 +200,7 @@ Most posts will have a link, so plan on $0.20 each.
 
 Values go into Vercel (production only, marked Sensitive) by the owner. Never in chat.
 
-**X developer app** (signed in to X as the Snowmoon account, the account that posts)
+**X developer app** (signed in to X as @snowmoon_party, the account that posts)
 1. In the X Developer Console, create an app, `snowmoon-party-posts`. Choose pay-per-use, buy $25 of credits, set the
    spending limit to $25 and leave auto-recharge off.
 2. User authentication settings: App permissions **Read and write** (no Direct Messages). Type of app: Web App,
