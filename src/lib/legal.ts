@@ -50,8 +50,8 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: the day 30-day sign-ins (PR #230, Privacy words 1a8wumq, reread 2026-11-23) merge and go live, 2026-11-24
-  // (PT). If the merge moves, this moves with it. (Before: 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
+  // MERGE DAY: the day the guided storyboard's fixes (PR #235, Privacy words 79g0gm) merge and go live, 2026-11-24 (PT). If
+  // the merge moves, this moves with it. (Before: 2026-11-24, PR #230, 30-day sign-ins; 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
   // 2026-11-21, the Ephelion voice; 2026-11-21, PR #204; 2026-11-20, PR #196; 2026-11-19, PR #191.)
   effective: '2026-11-24',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
@@ -336,11 +336,11 @@ export const LEGAL: {
     // before then stop working."" §3's sentence replaces "your sign-in, which lasts about an hour (a day for a wallet,
     // Lens or Bluesky sign-in)"; the §4 line follows "That you agreed to the terms for publishing, …"; both word for
     // word. Terms unchanged. The words before were 1mbiyd1.
-    // NOT REREAD YET (branch guide-fixes, 2026-11-24): §7's storyboard item adds "(only its face, if you describe the
-    // clothes)" after "the published sheet of the character in it" (fix 2: a head crop of the sheet's front view;
-    // docs/legal/guide-fixes-draft.md). These words no longer match 1a8wumq, so P6k is red until Nate says "reread". An
-    // agent never sets this key.
-    privacy: { words: '1a8wumq', on: '2026-11-23', by: 'FID 6786' },
+    // 2026-11-24, owner's reread for #235 (guide-fixes), typed in his session: "#235: reread, both lines as written: 1.
+    // Privacy §7: "(only its face, if you describe the clothes)" …": §7's storyboard item adds it after "the published
+    // sheet of the character in it" (fix 2: a head crop of the sheet's front view; docs/legal/guide-fixes-draft.md). The
+    // words before were 1a8wumq.
+    privacy: { words: '79g0gm', on: '2026-11-24', by: 'FID 6786' },
   },
 };
 

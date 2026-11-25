@@ -22,6 +22,7 @@
 import path from 'node:path';
 import { createHash, randomBytes } from 'node:crypto';
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
+import { execSync } from 'node:child_process';
 import os from 'node:os';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
@@ -175,9 +176,11 @@ check('W. it is from the book, block c13-b64, with its own label "Book", and no 
 // The top of the page (Nate, 2026-11-22; reread word for word): the title, the intro, the picker's lines, Learn more.
 {
   const page = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  // The intro is drawn by EphelionIntro (src/components/ephelion-intro.tsx, 2026-11-24), word for word as reread.
+  const introFile = readFileSync(path.join(ROOT, 'src/components/ephelion-intro.tsx'), 'utf8');
   check('W. the page is "The Ephelion challenge", with no "Admin trial · Draft" and no label row or "Stand-in … speeches arrive"', page.includes('<h1>The Ephelion challenge</h1>') && !/Admin trial · Draft/.test(page) && !/vr-labels/.test(page) && !/until the team&rsquo;s speeches arrive/.test(page));
   const intro = 'Lord Ephelion is the Arctic Empire&apos;s consul to Veridia (<Cite b="c3-b5" />). In the book his messages reach Veridians everywhere: on a poster in a tunnel (<Cite b="c3-b4" />), in a live debate (<Cite b="c8-b17" />), on a restaurant screen that cuts into a Helisport game (<Cite b="c13-b62" />). As one character puts it, &quot;Ephelion&apos;s goal is to inspire people inside Veridia to join the Arctic cause.&quot; (<Cite b="c21-b76" />)';
-  check('W. the intro, word for word, each citation linked to its block', page.includes(intro) && page.includes('<p>Give one of his speeches a voice: perform it yourself, or start from a ready-made reading, then storyboard it.</p>'));
+  check('W. the intro, word for word, each citation linked to its block, drawn on the page', /<EphelionIntro \/>/.test(page) && introFile.includes(intro) && introFile.includes('<p>Give one of his speeches a voice: perform it yourself, or start from a ready-made reading, then storyboard it.</p>'));
   check('W. ... and its quotation is the book\'s, word for word (c21-b76)', readFileSync(path.join(ROOT, 'content/snowmoon/text/chapter-21.json'), 'utf8').includes("Ephelion's goal is to inspire people inside Veridia to join the Arctic cause."));
   check('W. each speech\'s one line, word for word', page.includes("`From the book, word for word (${x.label.block}). In the book it is a written message; reading it aloud is this edition's idea.`") && page.includes('`${x.label.text} · ${x.credit} · version ${x.version}`'));
   const { EPHELION_LEARN_MORE: E, WHERE_HE_SPEAKS_FROM: W } = await import('../src/lib/voice/learn-more');
@@ -189,6 +192,24 @@ check('W. it is from the book, block c13-b64, with its own label "Book", and no 
     const t = (c: number, b: number) => (JSON.parse(readFileSync(path.join(ROOT, `content/snowmoon/text/chapter-${c}.json`), 'utf8')) as { blocks: { idx: number; content: string }[] }).blocks.find((x) => x.idx === b)?.content ?? '';
     return /tunnel/.test(t(3, 3)) && /poster/.test(t(3, 4)) && /Live debate/.test(t(8, 17)) && /Helisport game cut out/.test(t(13, 62)) && /Lord Ephelion, Arctic consul to Veridia, was in Northglade/.test(t(20, 8));
   })());
+}
+// The citations as book icons (Nate, 2026-11-24): the intro and Learn more about Lord Ephelion show no block code; each
+// citation is a book icon linking to its block, named "In the book: chapter N"; the words are unchanged.
+{
+  const { execFileSync } = await import('node:child_process');
+  const { learnMoreView } = await import('../src/lib/challenge/learn-more-view');
+  const { EPHELION_LEARN_MORE } = await import('../src/lib/voice/learn-more');
+  const { introCiteProblems, learnMoreCiteProblems } = await import('./lib/book-cites');
+  const view = learnMoreView('ephelion', 'Lord Ephelion', EPHELION_LEARN_MORE);
+  const out = JSON.parse(execFileSync(process.execPath, [path.join(ROOT, 'node_modules/tsx/dist/cli.mjs'), path.join(ROOT, 'scripts/lib/render-learn-more.tsx')], { input: JSON.stringify({ views: { ephelion: view } }), encoding: 'utf8', cwd: ROOT, maxBuffer: 64 << 20 })) as { views: { ephelion: string }; intro: string };
+  const pi = introCiteProblems(out.intro);
+  check('W. the intro as drawn: no block code; five book icons, one per citation, each linking to its block ("In the book: chapter N"); its words the reread text minus the codes; its quotation cited', pi.length === 0, pi.join('; '));
+  check('W. ... e.g. c21-b76 after the quotation: /chapter/21#c21-b76, "In the book: chapter 21"', /&quot; \(<a class="book-cite" data-block="c21-b76" aria-label="In the book: chapter 21" title="In the book: chapter 21" href="\/chapter\/21#c21-b76"><svg/.test(out.intro), out.intro.slice(-400));
+  const pl = learnMoreCiteProblems(view, out.views.ephelion, 'Learn more about Lord Ephelion');
+  check('W. Learn more about Lord Ephelion as drawn: no block code; one book icon per citation (a range links to its first block); every quote cites its block; the words are the texts\' own', pl.length === 0 && out.views.ephelion.includes('data-block="c3-b3–b4"') && out.views.ephelion.includes('href="/chapter/3#c3-b3"'), pl.join('; '));
+  check('W. proof: the intro\'s quotation with no citation link fails', introCiteProblems(out.intro.replace(/<a class="book-cite"[^>]*data-block="c21-b76"[^]*?<\/a>/, '')).some((x) => /a quote with no citation link/.test(x)));
+  check('W. proof: the intro with a block code shown again fails', introCiteProblems(out.intro.replace(/(<a class="book-cite"[^>]*data-block="c3-b5"[^>]*>)<svg[^]*?<\/svg>/, '$1c3-b5')).some((x) => /block code is shown as text/.test(x)));
+  check('W. proof: the intro with one word changed fails', introCiteProblems(out.intro.replace('everywhere', 'anywhere')).some((x) => /the words changed/.test(x)));
 }
 check('W. numbers, case, punctuation and apostrophes compare as words', norm('4') === norm('four') && norm("That's") === norm('thats') && norm('Veridia.') === norm('veridia') && wordsOf('Dreadknot - but').length === 2);
 {
@@ -824,6 +845,19 @@ const todayAsks = (await sql`select count(*)::int n from studio.voice_asks where
 resetPurgeClock();
 await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
 check('$. voice_asks from before today are purged; today\'s stay', (await sql`select count(*)::int n from studio.voice_asks where (at at time zone 'utc')::date < (now() at time zone 'utc')::date`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_asks`)[0].n === todayAsks);
+{
+  // Testers (Nate, 2026-11-24): the voice pages as admins have them, on the admins' pool, and nothing else of an admin's.
+  const F = await import('../src/lib/voice/flag');
+  const C2 = await import('../src/lib/voice/costs');
+  const SP = await import('../src/lib/voice/shot-picture');
+  const { isAdmin } = await import('../src/lib/admins');
+  const testers = [...VOICE.testers];
+  check('T. the testers are Luis (6852) and Freymon (665530), neither an admin', testers.join(',') === '6852,665530' && testers.every((f) => !isAdmin(f)));
+  check('T. a tester may use the voice pages; someone else may not', testers.every((f) => F.voiceAllowed(f)) && !F.voiceAllowed(4242) && !F.voiceAllowed(null));
+  check('T. a tester\'s takes and pictures come from the admins\' pool', testers.every((f) => C2.fundedFor(f) === 'admin' && SP.realPicturesFor(f)) && C2.fundedFor(4242) === 'free' && !SP.realPicturesFor(4242));
+  const src = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
+  check('T. ... and nothing else of an admin\'s: only the voice code reads VOICE.testers', execSync("git grep -l 'VOICE.testers\\|isVoiceTester\\|voiceInsider' -- src", { cwd: ROOT, encoding: 'utf8' }).trim().split('\n').sort().join(',') === 'src/lib/voice/costs.ts,src/lib/voice/flag.ts,src/lib/voice/shot-picture.ts' && !/testers/.test(src('src/lib/admins.ts')));
+}
 check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credits a day for everyone\'s takes, its dollars at the plan\'s rate', VOICE.caps.dailyCredits === 6000 && Math.abs(VOICE.caps.dailyUsd - (6000 * 22) / 121000) < 0.02 && VOICE.caps.adminDailyCredits > 0 && VOICE.caps.perPersonConversions === 2 && VOICE.caps.overEstimate === 1.2);
 {
   // Ready-made readings don't count against everyone's budget (Nate, 2026-11-23): paid from the admins' pool.

@@ -1,4 +1,4 @@
-# The guided storyboard's fixes: one Privacy change (DRAFT, for Nate's reread)
+# The guided storyboard's fixes: one Privacy change (reread by Nate, 2026-11-24, as written)
 
 Branch `guide-fixes`, 2026-11-24. Drafted by the coding agent (Claude, a closed model by Anthropic); DRAFT until Nate's
 reread. In `src/lib/legal.ts` without its reread key (P6k is red until he says "reread"); it ships with the fixes (legal
