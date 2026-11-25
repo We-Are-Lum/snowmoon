@@ -5,7 +5,7 @@ import { VOICE } from '~/lib/config';
 import { noStore, voicePerson, voiceReady } from '~/lib/voice/server';
 import { offeredSpeeches, speeches } from '~/lib/voice/speech';
 import { presetChoices } from '~/lib/voice/presets';
-import { hasVoiceConsent, voiceConsentWording } from '~/lib/voice/consent';
+import { hasVoiceConsent, voiceConsentReread, voiceConsentWording } from '~/lib/voice/consent';
 import { fundedFor, purgeOldAsks, today } from '~/lib/voice/costs';
 import { latestReading, myDrafts } from '~/lib/voice/drafts';
 
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
       speeches: all.map(view),
       preview: { text: previewText, block: previewBlock },
       choices,
-      consent: { version: wording.version, line: wording.line, title: wording.title, text: wording.text, sha256: wording.sha256, agreed: sql ? await hasVoiceConsent(sql, who.fid) : false },
+      consent: { version: wording.version, reread: voiceConsentReread(), line: wording.line, title: wording.title, text: wording.text, sha256: wording.sha256, agreed: sql ? await hasVoiceConsent(sql, who.fid) : false },
       models: { ...VOICE.models, provider: VOICE.provider },
       limits: { maxTakeSeconds: VOICE.maxTakeSeconds, maxSentenceSeconds: VOICE.maxSentenceSeconds, maxTakeBytes: VOICE.maxTakeBytes, creditsPerMinute: VOICE.rates.convertCreditsPerMinute, readingCreditsPerChar: VOICE.rates.readingCreditsPerChar, transcribeCreditsPerSecond: VOICE.rates.transcribeCreditsPerSecond },
       today: t && {

@@ -42,7 +42,7 @@ interface Status {
   speech: Speech;
   speeches: Speech[];
   choices: Choice[];
-  consent: { version: string; line: string; title: string; text: string[]; sha256: string; agreed: boolean };
+  consent: { version: string; reread: string | null; line: string; title: string; text: string[]; sha256: string; agreed: boolean };
   models: { convert: string; transcribe: string; reading: string; design: string; provider: string };
   limits: { maxTakeSeconds: number; maxSentenceSeconds: number; maxTakeBytes: number; creditsPerMinute: number; readingCreditsPerChar: number; transcribeCreditsPerSecond: number };
   today: { funded: string; credits: number; capCredits: number; conversionsLeft: number } | null;
@@ -635,7 +635,8 @@ export function VoiceRecord({ fallback, signedOut, learn }: { fallback: React.Re
 
       {!s.consent.agreed && (
         <section className="vr-card vr-consent" aria-labelledby="vr-consent-h">
-          <p className="vr-kicker">Draft wording · {s.consent.version}</p>
+          {/* "Draft wording" only while the version shown has no reread on record (Nate, 2026-11-25). */}
+          <p className="vr-kicker">{s.consent.reread ? s.consent.version : `Draft wording · ${s.consent.version}`}</p>
           <h2 id="vr-consent-h">{s.consent.title}</h2>
           <ol>
             {s.consent.text.map((t) => (
