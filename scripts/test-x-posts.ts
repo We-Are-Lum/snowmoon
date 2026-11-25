@@ -5,6 +5,7 @@
  *
  *   npm run test:x-posts
  *
+ * - Delete and redraft: a new open team card with the same text, once per card, logged on both cards.
  * - A posted card is frozen (version 2): only posted to deleted, nothing else changed; a deleted card never changes.
  * - NEXT_x_posts.sql: who runs it; A is B word for word; A leaves everything as it was; B applies twice; C's read-back
  *   passes and keeps nothing; D undoes it; studio_writer's rights are exactly the site's (the log insert-only, no
@@ -162,6 +163,8 @@ for (const [name, plant] of [
   ['posted without an X post allowed', 'alter table studio.x_proposals drop constraint x_proposals_posted;'],
   ['a check that refuses every post', "alter table studio.x_proposals add constraint plant check (body = '');"],
   ['a link check that refuses every link', "alter table studio.x_proposals add constraint plant check (link is null);"],
+  ['two redrafts of one card allowed', 'drop index studio.x_proposals_one_redraft;'],
+  ['a redraft without its other card in the log', 'alter table studio.x_post_log drop constraint x_post_log_redraft;'],
   ['no freeze on posted cards', 'drop trigger x_proposals_freeze on studio.x_proposals;'],
   ['a freeze that also refuses the delete', `create or replace function studio.x_proposals_freeze() returns trigger language plpgsql as $f$ begin if old.status in ('posted', 'deleted') then raise exception 'plant: frozen' using errcode = 'check_violation'; end if; return new; end $f$;`],
   ['a freeze that lets a deleted card change', `create or replace function studio.x_proposals_freeze() returns trigger language plpgsql as $f$ begin if old.status = 'posted' and new.status <> 'deleted' then raise exception 'plant: frozen' using errcode = 'check_violation'; end if; if old.status = 'posted' and new.body is distinct from old.body then raise exception 'plant: frozen' using errcode = 'check_violation'; end if; if old.status = 'posted' and new.link is distinct from old.link then raise exception 'plant: frozen' using errcode = 'check_violation'; end if; return new; end $f$;`],

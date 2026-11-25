@@ -24,10 +24,12 @@
 --   studio.x_proposals_freeze): its only change is to 'deleted', setting deleted_at, with everything else unchanged; a
 --   deleted card never changes. The other states change as the site needs. (Version 2, 2026-11-25: the owner found on
 --   Postgres 16 that version 1 let studio_writer rewrite a posted card's text and link, or reopen it.)
+--   "Delete and redraft" (owner, 2026-11-25) deletes the post and starts a new open team card with the same text and link
+--   and the clicker as proposer; it points back with redraft_of, and a card can be redrafted once.
 -- - studio.x_approvals: who approves an open proposal now (Discord user ID and name). Taking an approval back or an edit
 --   deletes rows. studio_writer may select, insert and delete.
 -- - studio.x_post_log: every proposal, suggestion, edit, approval, approval taken back, withdrawal, hold, post, failed
---   post and delete, with who (none for what the site does itself), the text and link at that moment, X's post ID and
+--   post, delete and redraft (logged on both cards, each naming the other), with who (none for what the site does itself), the text and link at that moment, X's post ID and
 --   what it cost as priced. This month's spending and today's posts are read from it. studio_writer may select and
 --   insert only: it is append-only.
 -- Private: no policy or grant for anon or authenticated; only the server reads these tables.
@@ -48,6 +50,7 @@ create table if not exists studio.x_proposals (
   status text not null default 'open' check (status in ('open', 'posting', 'posted', 'failed', 'unknown', 'withdrawn', 'deleted')),
   discord_message_id text unique check (discord_message_id ~ '^[0-9]{17,20}$'),
   x_post_id text unique check (x_post_id ~ '^[0-9]{1,25}$'),
+  redraft_of bigint references studio.x_proposals (id),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   posted_at timestamptz,
@@ -55,10 +58,12 @@ create table if not exists studio.x_proposals (
   constraint x_proposals_proposer check ((proposer_discord_id is null) = (proposer_name is null) and (source = 'site' or proposer_discord_id is not null)),
   constraint x_proposals_subject check ((subject_kind is null) = (subject_id is null) and (source = 'team' or subject_kind is not null)),
   constraint x_proposals_posted check ((status in ('posted', 'deleted')) = (x_post_id is not null and posted_at is not null)),
-  constraint x_proposals_deleted check ((status = 'deleted') = (deleted_at is not null))
+  constraint x_proposals_deleted check ((status = 'deleted') = (deleted_at is not null)),
+  constraint x_proposals_redraft check (redraft_of is null or (source = 'team' and redraft_of <> id))
 );
 create unique index if not exists x_proposals_one_suggestion on studio.x_proposals (subject_kind, subject_id) where source = 'site';
 create index if not exists x_proposals_subject on studio.x_proposals (subject_kind, subject_id) where subject_kind is not null;
+create unique index if not exists x_proposals_one_redraft on studio.x_proposals (redraft_of) where redraft_of is not null;
 create index if not exists x_proposals_created on studio.x_proposals (source, created_at desc);
 -- Once posted, a card is frozen: its only change is to 'deleted' (with deleted_at), and a deleted card never changes.
 create or replace function studio.x_proposals_freeze() returns trigger language plpgsql set search_path = '' as $fn$
@@ -68,9 +73,9 @@ begin
   end if;
   if old.status = 'posted' and not (new.status = 'deleted' and new.deleted_at is not null
       and (new.id, new.source, new.proposer_discord_id, new.proposer_name, new.body, new.link, new.subject_kind, new.subject_id,
-        new.discord_message_id, new.x_post_id, new.created_at, new.posted_at)
+        new.discord_message_id, new.x_post_id, new.redraft_of, new.created_at, new.posted_at)
         is not distinct from (old.id, old.source, old.proposer_discord_id, old.proposer_name, old.body, old.link, old.subject_kind,
-        old.subject_id, old.discord_message_id, old.x_post_id, old.created_at, old.posted_at)) then
+        old.subject_id, old.discord_message_id, old.x_post_id, old.redraft_of, old.created_at, old.posted_at)) then
     raise exception 'x_proposals: a posted card can only be marked deleted' using errcode = 'check_violation';
   end if;
   return new;
@@ -90,19 +95,21 @@ create table if not exists studio.x_post_log (
   id bigint generated always as identity primary key,
   proposal_id bigint not null references studio.x_proposals (id),
   event text not null check (event in ('proposed', 'suggested', 'edited', 'approved', 'unapproved', 'withdrawn', 'auto_withdrawn',
-    'would_post', 'held', 'posted', 'post_failed', 'post_unknown', 'deleted', 'auto_deleted', 'delete_failed')),
+    'would_post', 'held', 'posted', 'post_failed', 'post_unknown', 'deleted', 'auto_deleted', 'delete_failed', 'redrafted_to', 'redrafted_from')),
   actor_discord_id text check (actor_discord_id ~ '^[0-9]{17,20}$'),
   actor_name text check (char_length(actor_name) between 1 and 100),
   body text check (char_length(body) between 1 and 4000),
   link text check (char_length(link) <= 2000),
   x_post_id text check (x_post_id ~ '^[0-9]{1,25}$'),
   cost_usd numeric(8, 4) check (cost_usd >= 0 and cost_usd <= 10),
+  other_proposal_id bigint references studio.x_proposals (id),
   detail text check (char_length(detail) <= 1000),
   at timestamptz not null default now(),
   constraint x_post_log_actor check ((actor_discord_id is null) = (actor_name is null)
-    and (event not in ('proposed', 'edited', 'approved', 'unapproved', 'withdrawn', 'deleted') or actor_discord_id is not null)
+    and (event not in ('proposed', 'edited', 'approved', 'unapproved', 'withdrawn', 'deleted', 'redrafted_to', 'redrafted_from') or actor_discord_id is not null)
     and (event not in ('suggested', 'auto_withdrawn', 'auto_deleted') or actor_discord_id is null)),
-  constraint x_post_log_body check (event not in ('proposed', 'suggested', 'edited') or body is not null),
+  constraint x_post_log_body check (event not in ('proposed', 'suggested', 'edited', 'redrafted_from') or body is not null),
+  constraint x_post_log_redraft check ((event in ('redrafted_to', 'redrafted_from')) = (other_proposal_id is not null)),
   constraint x_post_log_post check (event not in ('posted', 'deleted', 'auto_deleted') or x_post_id is not null),
   constraint x_post_log_cost check (cost_usd is null or event in ('posted', 'post_unknown', 'deleted', 'auto_deleted'))
 );
@@ -149,6 +156,7 @@ create table if not exists studio.x_proposals (
   status text not null default 'open' check (status in ('open', 'posting', 'posted', 'failed', 'unknown', 'withdrawn', 'deleted')),
   discord_message_id text unique check (discord_message_id ~ '^[0-9]{17,20}$'),
   x_post_id text unique check (x_post_id ~ '^[0-9]{1,25}$'),
+  redraft_of bigint references studio.x_proposals (id),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   posted_at timestamptz,
@@ -156,10 +164,12 @@ create table if not exists studio.x_proposals (
   constraint x_proposals_proposer check ((proposer_discord_id is null) = (proposer_name is null) and (source = 'site' or proposer_discord_id is not null)),
   constraint x_proposals_subject check ((subject_kind is null) = (subject_id is null) and (source = 'team' or subject_kind is not null)),
   constraint x_proposals_posted check ((status in ('posted', 'deleted')) = (x_post_id is not null and posted_at is not null)),
-  constraint x_proposals_deleted check ((status = 'deleted') = (deleted_at is not null))
+  constraint x_proposals_deleted check ((status = 'deleted') = (deleted_at is not null)),
+  constraint x_proposals_redraft check (redraft_of is null or (source = 'team' and redraft_of <> id))
 );
 create unique index if not exists x_proposals_one_suggestion on studio.x_proposals (subject_kind, subject_id) where source = 'site';
 create index if not exists x_proposals_subject on studio.x_proposals (subject_kind, subject_id) where subject_kind is not null;
+create unique index if not exists x_proposals_one_redraft on studio.x_proposals (redraft_of) where redraft_of is not null;
 create index if not exists x_proposals_created on studio.x_proposals (source, created_at desc);
 -- Once posted, a card is frozen: its only change is to 'deleted' (with deleted_at), and a deleted card never changes.
 create or replace function studio.x_proposals_freeze() returns trigger language plpgsql set search_path = '' as $fn$
@@ -169,9 +179,9 @@ begin
   end if;
   if old.status = 'posted' and not (new.status = 'deleted' and new.deleted_at is not null
       and (new.id, new.source, new.proposer_discord_id, new.proposer_name, new.body, new.link, new.subject_kind, new.subject_id,
-        new.discord_message_id, new.x_post_id, new.created_at, new.posted_at)
+        new.discord_message_id, new.x_post_id, new.redraft_of, new.created_at, new.posted_at)
         is not distinct from (old.id, old.source, old.proposer_discord_id, old.proposer_name, old.body, old.link, old.subject_kind,
-        old.subject_id, old.discord_message_id, old.x_post_id, old.created_at, old.posted_at)) then
+        old.subject_id, old.discord_message_id, old.x_post_id, old.redraft_of, old.created_at, old.posted_at)) then
     raise exception 'x_proposals: a posted card can only be marked deleted' using errcode = 'check_violation';
   end if;
   return new;
@@ -191,19 +201,21 @@ create table if not exists studio.x_post_log (
   id bigint generated always as identity primary key,
   proposal_id bigint not null references studio.x_proposals (id),
   event text not null check (event in ('proposed', 'suggested', 'edited', 'approved', 'unapproved', 'withdrawn', 'auto_withdrawn',
-    'would_post', 'held', 'posted', 'post_failed', 'post_unknown', 'deleted', 'auto_deleted', 'delete_failed')),
+    'would_post', 'held', 'posted', 'post_failed', 'post_unknown', 'deleted', 'auto_deleted', 'delete_failed', 'redrafted_to', 'redrafted_from')),
   actor_discord_id text check (actor_discord_id ~ '^[0-9]{17,20}$'),
   actor_name text check (char_length(actor_name) between 1 and 100),
   body text check (char_length(body) between 1 and 4000),
   link text check (char_length(link) <= 2000),
   x_post_id text check (x_post_id ~ '^[0-9]{1,25}$'),
   cost_usd numeric(8, 4) check (cost_usd >= 0 and cost_usd <= 10),
+  other_proposal_id bigint references studio.x_proposals (id),
   detail text check (char_length(detail) <= 1000),
   at timestamptz not null default now(),
   constraint x_post_log_actor check ((actor_discord_id is null) = (actor_name is null)
-    and (event not in ('proposed', 'edited', 'approved', 'unapproved', 'withdrawn', 'deleted') or actor_discord_id is not null)
+    and (event not in ('proposed', 'edited', 'approved', 'unapproved', 'withdrawn', 'deleted', 'redrafted_to', 'redrafted_from') or actor_discord_id is not null)
     and (event not in ('suggested', 'auto_withdrawn', 'auto_deleted') or actor_discord_id is null)),
-  constraint x_post_log_body check (event not in ('proposed', 'suggested', 'edited') or body is not null),
+  constraint x_post_log_body check (event not in ('proposed', 'suggested', 'edited', 'redrafted_from') or body is not null),
+  constraint x_post_log_redraft check ((event in ('redrafted_to', 'redrafted_from')) = (other_proposal_id is not null)),
   constraint x_post_log_post check (event not in ('posted', 'deleted', 'auto_deleted') or x_post_id is not null),
   constraint x_post_log_cost check (cost_usd is null or event in ('posted', 'post_unknown', 'deleted', 'auto_deleted'))
 );
@@ -254,6 +266,7 @@ commit;
 --   entry constant text := '72222222-2222-4222-8222-222222222222';
 --   team_id bigint;
 --   site_id bigint;
+--   redraft_id bigint;
 --   n int;
 --   spent numeric;
 --   refused boolean;
@@ -305,6 +318,21 @@ commit;
 --   if not refused then raise exception 'READ-BACK FAILED: a deleted post was changed'; end if;
 --   select count(*) into n from studio.x_proposals where id = team_id and status = 'deleted' and body = 'Chapter 4 is narrated now.' and x_post_id = '1993000000000000001';
 --   if n <> 1 then raise exception 'READ-BACK FAILED: posted to deleted did not keep the card as posted'; end if;
+--   -- Delete and redraft: a new open team card with the same text and link, the clicker as proposer, logged on both.
+--   insert into studio.x_proposals (source, proposer_discord_id, proposer_name, body, link, redraft_of)
+--     select 'team', second, 'garance', body, link, id from studio.x_proposals where id = team_id returning id into redraft_id;
+--   insert into studio.x_approvals (proposal_id, discord_user_id, discord_name) values (redraft_id, second, 'garance');
+--   insert into studio.x_post_log (proposal_id, event, actor_discord_id, actor_name, other_proposal_id) values (team_id, 'redrafted_to', second, 'garance', redraft_id);
+--   insert into studio.x_post_log (proposal_id, event, actor_discord_id, actor_name, body, link, other_proposal_id)
+--     values (redraft_id, 'redrafted_from', second, 'garance', 'Chapter 4 is narrated now.', 'https://snowmoon.party/read/4', team_id);
+--   select count(*) into n from studio.x_proposals where id = redraft_id and status = 'open' and body = 'Chapter 4 is narrated now.' and x_post_id is null;
+--   if n <> 1 then raise exception 'READ-BACK FAILED: the redraft is not an open card with the same text'; end if;
+--   begin insert into studio.x_proposals (source, proposer_discord_id, proposer_name, body, redraft_of) values ('team', lead, 'luisotravez', 'x', team_id); refused := false; exception when unique_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a second redraft of the same card was accepted'; end if;
+--   begin insert into studio.x_proposals (source, body, subject_kind, subject_id, redraft_of) values ('site', 'x', 'voice_publication', '73333333-3333-4333-8333-333333333333', team_id); refused := false; exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a redraft saved as a site suggestion was accepted'; end if;
+--   begin insert into studio.x_post_log (proposal_id, event, actor_discord_id, actor_name) values (team_id, 'redrafted_to', second, 'garance'); refused := false; exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a redraft log row without its other card was accepted'; end if;
 --   insert into studio.x_post_log (proposal_id, event, actor_discord_id, actor_name, x_post_id, cost_usd) values (team_id, 'deleted', second, 'garance', '1993000000000000001', 0.01);
 --
 --   -- A site suggestion: no proposer, a subject; hidden on the site, so withdrawn by the site.
@@ -342,14 +370,14 @@ commit;
 --   -- What the site reads back: this month's spending and today's posts.
 --   select coalesce(sum(cost_usd), 0) into spent from studio.x_post_log where proposal_id in (team_id, site_id) and at >= date_trunc('month', now());
 --   if spent <> 0.21 then raise exception 'READ-BACK FAILED: this month''s spending reads %, not 0.21', spent; end if;
---   select count(*) into n from studio.x_post_log where proposal_id in (team_id, site_id);
---   if n <> 7 then raise exception 'READ-BACK FAILED: % log rows, not 7', n; end if;
+--   select count(*) into n from studio.x_post_log where proposal_id in (team_id, site_id, redraft_id);
+--   if n <> 9 then raise exception 'READ-BACK FAILED: % log rows, not 9', n; end if;
 --
 --   -- Delete them (the transaction's rollback below also undoes everything).
---   delete from studio.x_post_log where proposal_id in (team_id, site_id);
---   delete from studio.x_approvals where proposal_id in (team_id, site_id);
---   delete from studio.x_proposals where id in (team_id, site_id);
---   if exists (select 1 from studio.x_proposals where id in (team_id, site_id)) or exists (select 1 from studio.x_post_log where proposal_id in (team_id, site_id))
+--   delete from studio.x_post_log where proposal_id in (team_id, site_id, redraft_id);
+--   delete from studio.x_approvals where proposal_id in (team_id, site_id, redraft_id);
+--   delete from studio.x_proposals where id in (team_id, site_id, redraft_id);
+--   if exists (select 1 from studio.x_proposals where id in (team_id, site_id, redraft_id)) or exists (select 1 from studio.x_post_log where proposal_id in (team_id, site_id, redraft_id))
 --     then raise exception 'READ-BACK FAILED: the test rows were not deleted'; end if;
 --   raise notice 'READ-BACK PASSED';
 -- end $$;

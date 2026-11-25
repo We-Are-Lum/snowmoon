@@ -51,6 +51,21 @@ seen only by that person).
 - **If the work a post links to is hidden on the site** (by its maker or a moderator), the site deletes the post from X
   itself and says so on the card (owner, 2026-11-25). This keeps the Privacy line in section 4 true without anyone
   having to remember.
+- **A posted card is frozen** (owner, 2026-11-25): its text, link and post never change, and it can't reopen. The
+  database refuses anything but marking it deleted, and a deleted card never changes.
+
+### Delete and redraft
+
+"Edit and try again" after a post is out (owner, 2026-11-25).
+- **Delete and redraft**, beside Delete from X, for the same people. After a confirmation it deletes the post from X,
+  then starts a new open card with the same text and link, ready to edit.
+- The new card is a team card with the clicker as its proposer, also when the old one was a site suggestion (a work has
+  at most one suggestion). It keeps the work it is about, so hiding that work still withdraws it or deletes its post.
+- It needs fresh approvals: 3 people, at least one of Nate, Garance or Luis. As with any proposal, the proposer's own
+  approval counts.
+- Each card points to the other, and the log has a row on both ("redrafted to", "redrafted from"). A card is redrafted
+  once at most; the database refuses a second.
+- If X doesn't delete the post, nothing is redrafted.
 
 ### Site suggestions
 
@@ -122,11 +137,16 @@ post's ID and what X charged. The card shows the latest state; the full log is o
 **Confirmations**
 - Withdraw: "Withdraw this proposal? It can't be undone." Button: "Withdraw"
 - Delete: "Delete this post from X? It can't be undone." Button: "Delete from X"
+- Delete and redraft: "Delete this post from X and start a new card with its text? The new card needs 3 approvals
+  again." Button: "Delete and redraft"
 
 **States**
 - Withdrawn: "Withdrawn by {name}, {date}."
-- Posted: "Posted on X, {date}: {link}. Approved by {names}." Button: "Delete from X"
+- Posted: "Posted on X, {date}: {link}. Approved by {names}." Buttons: "Delete from X" · "Delete and redraft"
 - Deleted: "Deleted from X by {name}, {date}."
+- Redrafted (old card): "Deleted from X by {name}, {date}, and redrafted: {link to the new card}."
+- Redraft (new card), under the title: "Redraft of {link to the old card}, by {name}."
+- Delete failed: "X didn't delete this post: {X's reason}. Nothing changed." Buttons stay.
 - Deleted on hide: "Deleted from X by snowmoon.party, {date}: the work it links to was hidden on the site."
 - Failed: "X refused this post: {X's reason}. Nothing was posted." Button: "Try again" (anyone who approved it)
 - No answer: "X didn't answer. Check @{account} before trying again." Button: "Try again"
@@ -242,6 +262,9 @@ Not repeated:
 5. Delete the X post automatically when its work is hidden on the site. The owner rereads the §6 line that promises it.
 6. The account is @snowmoon_party. The owner creates the developer app signed in as @snowmoon_party, so the four fixed
    token values post as that account. No sign-in flow.
+
+Later the same day (owner, 2026-11-25): a posted card is frozen in the database (only to deleted; deleted is final), and
+"Delete and redraft" is added (section 1). Both are in `NEXT_x_posts.sql`, version 2.
 
 Next (owner, 2026-11-25): release 1, the cards with posting off, on branch `x-posts`. `NEXT_x_posts.sql` goes to the
 owner to test first; the setup steps come one at a time once the cards are ready to try.
