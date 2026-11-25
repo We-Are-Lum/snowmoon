@@ -22,6 +22,7 @@
 import path from 'node:path';
 import { createHash, randomBytes } from 'node:crypto';
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
+import { execSync } from 'node:child_process';
 import os from 'node:os';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
@@ -800,6 +801,19 @@ const todayAsks = (await sql`select count(*)::int n from studio.voice_asks where
 resetPurgeClock();
 await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
 check('$. voice_asks from before today are purged; today\'s stay', (await sql`select count(*)::int n from studio.voice_asks where (at at time zone 'utc')::date < (now() at time zone 'utc')::date`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_asks`)[0].n === todayAsks);
+{
+  // Testers (Nate, 2026-11-24): the voice pages as admins have them, on the admins' pool, and nothing else of an admin's.
+  const F = await import('../src/lib/voice/flag');
+  const C2 = await import('../src/lib/voice/costs');
+  const SP = await import('../src/lib/voice/shot-picture');
+  const { isAdmin } = await import('../src/lib/admins');
+  const testers = [...VOICE.testers];
+  check('T. the testers are Luis (6852) and Freymon (665530), neither an admin', testers.join(',') === '6852,665530' && testers.every((f) => !isAdmin(f)));
+  check('T. a tester may use the voice pages; someone else may not', testers.every((f) => F.voiceAllowed(f)) && !F.voiceAllowed(4242) && !F.voiceAllowed(null));
+  check('T. a tester\'s takes and pictures come from the admins\' pool', testers.every((f) => C2.fundedFor(f) === 'admin' && SP.realPicturesFor(f)) && C2.fundedFor(4242) === 'free' && !SP.realPicturesFor(4242));
+  const src = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
+  check('T. ... and nothing else of an admin\'s: only the voice code reads VOICE.testers', execSync("git grep -l 'VOICE.testers\\|isVoiceTester\\|voiceInsider' -- src", { cwd: ROOT, encoding: 'utf8' }).trim().split('\n').sort().join(',') === 'src/lib/voice/costs.ts,src/lib/voice/flag.ts,src/lib/voice/shot-picture.ts' && !/testers/.test(src('src/lib/admins.ts')));
+}
 check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credits a day for everyone\'s takes, its dollars at the plan\'s rate', VOICE.caps.dailyCredits === 6000 && Math.abs(VOICE.caps.dailyUsd - (6000 * 22) / 121000) < 0.02 && VOICE.caps.adminDailyCredits > 0 && VOICE.caps.perPersonConversions === 2 && VOICE.caps.overEstimate === 1.2);
 {
   // Ready-made readings don't count against everyone's budget (Nate, 2026-11-23): paid from the admins' pool.
