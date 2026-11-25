@@ -1,0 +1,243 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+:root{--paper:#F4F2ED;--card:#FAF9F6;--ink:#1D1D1B;--muted:#6b6a64;--line:#d9d6ce;--green:#2f5d3a;--accent:#b5562a}
+*{box-sizing:border-box}
+body{margin:0;background:#cfccc4;font-family:"Crimson Pro",Georgia,serif;color:var(--ink);padding:24px;display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.mono{font-family:ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:.02em}
+.phone{width:390px;min-height:844px;background:var(--paper);border-radius:0;overflow:hidden;position:relative}
+.desk{width:1280px;min-height:820px;background:var(--paper);display:flex}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);font-size:22px}
+.bar .r{font-size:20px;color:#555}
+.pad{padding:16px 22px 28px}
+.crumb{font-size:13px;color:var(--green)}
+h1{font-weight:400;font-size:38px;line-height:1.05;margin:14px 0 6px}
+.desk h1{font-size:46px}
+.pitch{font-size:19px;color:#3b3a36;margin:0 0 10px;line-height:1.25}
+.when{font-size:13px;color:var(--muted);margin:6px 0 14px}
+.goals{list-style:none;padding:0;margin:12px 0 16px;border:1px solid var(--line);background:var(--card)}
+.goals li{display:flex;gap:12px;padding:11px 14px;border-top:1px solid var(--line);font-size:18px;line-height:1.2}
+.goals li:first-child{border-top:0}
+.goals .n{font-size:13px;color:var(--muted);padding-top:3px;min-width:58px}
+.goalhead{font-size:12px;color:var(--green);text-transform:uppercase;letter-spacing:.12em;margin-top:14px}
+.btn{display:inline-block;border:1.5px solid var(--ink);padding:9px 16px;font-size:18px;background:transparent;border-radius:3px}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.small{font-size:13px;color:var(--muted);line-height:1.35}
+.deck{list-style:none;margin:10px 0 0;padding:0}
+.c{background:var(--card);border:1px solid var(--line);margin:0 0 8px;display:flex;align-items:stretch}
+.c .h{width:24px;display:flex;align-items:center;justify-content:center;color:#a5a29a;font-size:15px;border-right:1px solid var(--line);cursor:grab}
+.c .body{flex:1;padding:9px 11px}
+.c .num{font-size:11px;color:var(--muted)}
+.c .hap{font-size:18px;line-height:1.2;margin:2px 0 5px}
+.c .does{font-size:15px;color:#4a5f4e;font-style:italic;line-height:1.2;border-top:1px dashed var(--line);padding-top:5px}
+.c .does:before{content:"→ ";font-style:normal;color:var(--green)}
+.c .pic{width:62px;background:#ddd center/cover;border-left:1px solid var(--line);position:relative}
+.ai{position:absolute;left:4px;bottom:4px;font-size:9px;background:#f4f2edcc;padding:1px 3px}
+.ph{color:#a9a69e}
+.minute{display:flex;align-items:center;gap:8px;margin:6px 0 14px;color:var(--accent);font-size:12px}
+.minute:before,.minute:after{content:"";flex:1;border-top:2px solid var(--accent)}
+.minute .grip{border:1.5px solid var(--accent);padding:2px 8px;border-radius:12px;background:var(--paper)}
+.add{border:1.5px dashed #b9b5ab;color:var(--muted);text-align:center;padding:10px;font-size:16px;margin:4px 0 12px}
+.foot{position:absolute;left:0;right:0;bottom:0;background:var(--paper);border-top:1px solid var(--line);padding:12px 22px;display:flex;gap:10px;align-items:center}
+.foot .grow{flex:1}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--ink);padding:16px 22px 22px;box-shadow:0 -10px 30px #0002}
+.dim{position:absolute;inset:0;background:#1d1d1b55}
+label{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.1em}
+.field{border:1px solid #bdb9af;background:#fff;padding:9px 10px;font-size:18px;line-height:1.25;min-height:58px}
+.count{text-align:right;font-size:11px;color:var(--muted);margin-top:3px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.chip{border:1px solid var(--ink);padding:5px 11px;font-size:15px;border-radius:14px}
+.chip.on{background:var(--ink);color:var(--paper)}
+.ol{border:1px solid var(--line);background:var(--card);padding:12px 14px;margin:0 0 12px}
+.ol .t{font-size:21px;margin:0}
+.ol .by{font-size:12px;color:var(--muted);margin:2px 0 8px}
+.ol .row{font-size:15px;line-height:1.25;margin:3px 0}
+.ol .row i{color:#4a5f4e}
+.ol .mm{font-size:11px;color:var(--accent);margin:6px 0}
+.note{font-size:11px;color:var(--muted);border:1px dashed #b5b2aa;padding:6px 8px;margin-top:10px}
+.rail{width:56px;border-right:1px solid var(--line);color:#777;padding:18px;font-size:14px}
+.main{flex:1;padding:22px 56px;display:flex;gap:40px}
+.left{flex:1.25}
+.right{flex:.85}
+.panel{border:1px solid var(--line);background:var(--card);padding:14px 16px;margin-bottom:16px}
+.panel h3{font-weight:400;font-size:21px;margin:0 0 6px}
+.cmt{font-size:15px;line-height:1.35;border-left:3px solid #b9b5ab;padding-left:10px;margin-top:8px}
+.tag{font-size:10px;background:#e7e4dc;padding:2px 5px;margin-right:6px}
+.cap{width:100%;font-size:13px;margin:0 0 -14px;color:#333}
+.mtitle{width:100%;font-size:18px;margin:10px 0 -16px;color:#222}
+.draft{font-size:11px;border:1px solid var(--accent);color:var(--accent);padding:1px 6px;margin-left:8px;vertical-align:middle}
+</style></head><body>
+
+<!-- PHONE 1: the challenge page, goals first -->
+<div class="phone" id="p1">
+  <div class="bar"><span>Snowmoon</span><span class="r">?&nbsp;&nbsp;☰</span></div>
+  <div class="pad">
+    <p class="crumb mono">← Challenges</p>
+    <h1>Episode 1: the opening</h1>
+    <p class="pitch">Outline the first episode of Snowmoon in ten cards or fewer. Your words, your order.</p>
+    <p class="when mono">[dates from config] · <span class="draft">DRAFT</span></p>
+    <div class="goalhead mono">The goals</div>
+    <ul class="goals">
+      <li><span class="n mono">0:00–1:00</span><span>The first minute is dynamic and compelling.</span></li>
+      <li><span class="n mono">Plot</span><span>Viewers get hooked on what happens next.</span></li>
+      <li><span class="n mono">By the end</span><span>They love a character.</span></li>
+    </ul>
+    <p class="small">Each card is a pair: what happens, over what it does for the viewer. A line marks where the first minute ends.</p>
+    <div class="c" style="margin-top:10px"><div class="h">⋮⋮</div><div class="body"><div class="num mono">EXAMPLE CARD</div><div class="hap">Zei laughs off the drone</div><div class="does">we like him straight away</div></div></div>
+    <div class="btns" style="margin-top:14px"><span class="btn solid">Start with blank cards</span><span class="btn">Start from the sample deck</span></div>
+    <p class="small">No AI writes cards here. You can ask it to comment on your outline, and it says so.</p>
+    <div class="btns"><span class="btn">Everyone's outlines</span><span class="btn">Rules</span></div>
+  </div>
+</div>
+
+<!-- PHONE 2: the deck -->
+<div class="phone" id="p2">
+  <div class="bar"><span>Snowmoon</span><span class="r">?&nbsp;&nbsp;☰</span></div>
+  <div class="pad" style="padding-bottom:90px">
+    <p class="crumb mono">← Episode 1</p>
+    <div class="field" style="min-height:0;font-size:20px;border-color:var(--line);background:transparent;padding:4px 0;border-width:0 0 1px">Title (optional)</div>
+    <p class="small mono" style="margin:8px 0 4px">5 of 10 cards · drag ⋮⋮ to reorder · tap to edit</p>
+    <ul class="deck">
+      <li class="c"><div class="h">⋮⋮</div><div class="body"><div class="num mono">1</div><div class="hap">Zei laughs off the drone</div><div class="does">we like him straight away</div></div><div class="pic" style="background-image:url(https://pictures.snowmoon.party/images/readers/88de0a4709d0579fb06d2e1352098b01.jpg)"><span class="ai mono">AI ⓘ</span></div></li>
+      <li class="c"><div class="h">⋮⋮</div><div class="body"><div class="num mono">2</div><div class="hap ph">[what happens]</div><div class="does ph">[what it does for the viewer]</div></div></li>
+      <li class="c"><div class="h">⋮⋮</div><div class="body"><div class="num mono">3</div><div class="hap ph">[what happens]</div><div class="does ph">[what it does for the viewer]</div></div></li>
+    </ul>
+    <div class="minute mono"><span class="grip">⇕ first minute ends</span></div>
+    <ul class="deck">
+      <li class="c"><div class="h">⋮⋮</div><div class="body"><div class="num mono">4</div><div class="hap ph">[what happens]</div><div class="does ph">[what it does for the viewer]</div></div></li>
+      <li class="c"><div class="h">⋮⋮</div><div class="body"><div class="num mono">5</div><div class="hap ph">[what happens]</div><div class="does ph">[what it does for the viewer]</div></div></li>
+    </ul>
+    <div class="add">+ Add a card</div>
+    <p class="small">Saved on this device until you submit.</p>
+  </div>
+  <div class="foot"><span class="btn" style="font-size:16px">Goals</span><span class="btn" style="font-size:16px">Ask AI to comment</span><span class="grow"></span><span class="btn solid" style="font-size:16px">Submit</span></div>
+</div>
+
+<!-- PHONE 3: editing a card -->
+<div class="phone" id="p3">
+  <div class="bar"><span>Snowmoon</span><span class="r">?&nbsp;&nbsp;☰</span></div>
+  <div class="pad">
+    <ul class="deck"><li class="c"><div class="h">⋮⋮</div><div class="body"><div class="num mono">1</div><div class="hap">Zei laughs off the drone</div><div class="does">we like him straight away</div></div></li>
+    <li class="c"><div class="h">⋮⋮</div><div class="body"><div class="num mono">2</div><div class="hap ph">[what happens]</div><div class="does ph">[what it does]</div></div></li></ul>
+  </div>
+  <div class="dim"></div>
+  <div class="sheet">
+    <div class="mono small">CARD 2 OF 5 · ↑ ↓ to move</div>
+    <label class="mono">What happens</label>
+    <div class="field">[the person's words]</div><div class="count mono">0 / 100</div>
+    <label class="mono">What it does for the viewer</label>
+    <div class="field">[the person's words]</div><div class="count mono">0 / 100</div>
+    <label class="mono">Picture (optional)</label>
+    <div class="btns" style="margin:4px 0"><span class="btn" style="font-size:16px">Choose a picture from the site</span></div>
+    <p class="small">Only pictures already published here. Nothing is generated.</p>
+    <div class="btns" style="justify-content:space-between;margin-top:14px"><span class="btn" style="font-size:16px;border-color:#9a3b2a;color:#9a3b2a">Delete card</span><span class="btn solid" style="font-size:16px">Done</span></div>
+  </div>
+</div>
+
+<!-- PHONE 4: picture picker -->
+<div class="phone" id="p4">
+  <div class="bar"><span>Snowmoon</span><span class="r">?&nbsp;&nbsp;☰</span></div>
+  <div class="pad">
+    <p class="crumb mono">← Card 1</p>
+    <h1 style="font-size:30px">Choose a picture</h1>
+    <div class="chips"><span class="chip on">Characters</span><span class="chip">Chapter pictures</span><span class="chip">Remixes</span><span class="chip">Mine</span></div>
+    <div class="field" style="min-height:0;font-size:16px;color:#999">Search by character or chapter</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px">
+      <div style="aspect-ratio:3/4;background:#ddd url(https://pictures.snowmoon.party/images/readers/88de0a4709d0579fb06d2e1352098b01.jpg) center/cover;outline:3px solid var(--ink);position:relative"><span class="ai mono">AI ⓘ</span></div>
+      <div style="aspect-ratio:3/4;background:#ddd url(https://pictures.snowmoon.party/images/readers/aff6f24f59e5a2147f25cad9492499c1.jpg) center/cover;position:relative"><span class="ai mono">AI ⓘ</span></div>
+      <div style="aspect-ratio:3/4;background:#ddd url(https://pictures.snowmoon.party/images/readers/01538922456b9bf61192ed291b8f2659.jpg) center/cover;position:relative"><span class="ai mono">AI ⓘ</span></div>
+      <div style="aspect-ratio:3/4;background:#ddd url(https://pictures.snowmoon.party/images/readers/3ef4825ca8f49aabf05ddcdaa8119e9b.jpg) center/cover;position:relative"><span class="ai mono">AI ⓘ</span></div>
+      <div style="aspect-ratio:3/4;background:#ddd url(https://pictures.snowmoon.party/images/readers/2b45d17da426df0304fc84ded0f3f0c4.jpg) center/cover;position:relative"><span class="ai mono">AI ⓘ</span></div>
+      <div style="aspect-ratio:3/4;background:#ddd url(https://pictures.snowmoon.party/images/readers/3e6ae696865441d24aa1dde262dac043.jpg) center/cover;position:relative"><span class="ai mono">AI ⓘ</span></div>
+    </div>
+    <p class="small" style="margin-top:12px">Zei · by @maker · Recipe. The card credits the picture's maker and links its recipe.</p>
+    <div class="btns"><span class="btn solid">Use this picture</span></div>
+  </div>
+</div>
+
+<!-- PHONE 5: everyone's outlines -->
+<div class="phone" id="p5">
+  <div class="bar"><span>Snowmoon</span><span class="r">?&nbsp;&nbsp;☰</span></div>
+  <div class="pad">
+    <p class="crumb mono">← Episode 1</p>
+    <h1 style="font-size:32px">Everyone's outlines</h1>
+    <div class="chips"><span class="chip on">Newest</span><span class="chip">Shuffled</span></div>
+    <div class="ol"><p class="t">[Title]</p><p class="by mono">@maker · 25 Nov · 7 cards</p>
+      <p class="row">1. [what happens] <i>→ [what it does]</i></p><p class="row">2. [what happens] <i>→ [what it does]</i></p><p class="row">3. [what happens] <i>→ [what it does]</i></p>
+      <p class="mm mono">— first minute ends —</p><p class="row small">+ 4 more · Read the outline</p></div>
+    <div class="ol"><p class="t">Untitled outline</p><p class="by mono">@maker · 24 Nov · 4 cards</p>
+      <p class="row">1. Zei laughs off the drone <i>→ we like him straight away</i></p><p class="row">2. [what happens] <i>→ [what it does]</i></p>
+      <p class="mm mono">— first minute ends —</p><p class="row small">+ 2 more · Read the outline</p></div>
+    <p class="small">No likes, no counts, no ranking. Newest first or shuffled, your choice.</p>
+  </div>
+</div>
+
+<!-- DESKTOP 1: editor -->
+<div class="desk" id="d1">
+  <div class="rail mono">»</div>
+  <div class="main">
+    <div class="left">
+      <p class="crumb mono">← Episode 1: the opening</p>
+      <div style="font-size:30px;border-bottom:1px solid var(--line);padding:6px 0;margin-bottom:8px">Title (optional)</div>
+      <p class="small mono">5 of 10 cards · drag ⋮⋮ to reorder, or use ↑ ↓ · tap a card to edit</p>
+      <ul class="deck">
+        <li class="c"><div class="h">⋮⋮</div><div class="body"><div class="num mono">1</div><div class="hap">Zei laughs off the drone</div><div class="does">we like him straight away</div></div><div class="pic" style="width:84px;background-image:url(https://pictures.snowmoon.party/images/readers/88de0a4709d0579fb06d2e1352098b01.jpg)"><span class="ai mono">AI ⓘ</span></div></li>
+        <li class="c" style="outline:2px solid var(--ink)"><div class="h">⋮⋮</div><div class="body"><div class="num mono">2 · EDITING</div><div class="field" style="min-height:0;margin:4px 0">[what happens]</div><div class="count mono">0 / 100</div><div class="field" style="min-height:0;font-style:italic;font-size:16px">[what it does for the viewer]</div><div class="count mono">0 / 100 · <u>Add a picture from the site</u></div></div></li>
+        <li class="c"><div class="h">⋮⋮</div><div class="body"><div class="num mono">3</div><div class="hap ph">[what happens]</div><div class="does ph">[what it does for the viewer]</div></div></li>
+      </ul>
+      <div class="minute mono"><span class="grip">⇕ first minute ends · drag to move</span></div>
+      <ul class="deck">
+        <li class="c"><div class="h">⋮⋮</div><div class="body"><div class="num mono">4</div><div class="hap ph">[what happens]</div><div class="does ph">[what it does for the viewer]</div></div></li>
+        <li class="c"><div class="h">⋮⋮</div><div class="body"><div class="num mono">5</div><div class="hap ph">[what happens]</div><div class="does ph">[what it does for the viewer]</div></div></li>
+      </ul>
+      <div class="add">+ Add a card (5 left)</div>
+    </div>
+    <div class="right">
+      <div class="panel">
+        <div class="goalhead mono" style="margin:0 0 6px">The goals</div>
+        <ul class="goals" style="margin:0;border:0;background:none">
+          <li style="padding:7px 0"><span class="n mono">0:00–1:00</span><span>The first minute is dynamic and compelling.</span></li>
+          <li style="padding:7px 0"><span class="n mono">Plot</span><span>Viewers get hooked on what happens next.</span></li>
+          <li style="padding:7px 0"><span class="n mono">By the end</span><span>They love a character.</span></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>A comment on your outline</h3>
+        <p class="small">An AI reads your cards and comments against the goals. It never writes or changes cards, and nothing it says is published.</p>
+        <div class="btns"><span class="btn">Ask AI to comment</span></div>
+        <div class="cmt"><span class="tag mono">AI · [model], by [maker]</span><br>[A comment appears here: e.g. which goal looks weakest, and a question to think about.]</div>
+      </div>
+      <p class="small">Saved on this device until you submit. Submitting publishes your outline with your name.</p>
+      <div class="btns"><span class="btn solid">Submit</span><span class="btn">Preview</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- DESKTOP 2: one published outline -->
+<div class="desk" id="d2">
+  <div class="rail mono">»</div>
+  <div class="main">
+    <div class="left">
+      <p class="crumb mono">← Everyone's outlines</p>
+      <h1>[Title]</h1>
+      <p class="small mono">An outline for Episode 1: the opening · by @maker · 25 Nov · Words by @maker; no AI wrote them.</p>
+      <ul class="deck" style="margin-top:14px">
+        <li class="c"><div class="h mono" style="font-size:12px;cursor:default">1</div><div class="body"><div class="hap">Zei laughs off the drone</div><div class="does">we like him straight away</div></div><div class="pic" style="width:84px;background-image:url(https://pictures.snowmoon.party/images/readers/88de0a4709d0579fb06d2e1352098b01.jpg)"><span class="ai mono">AI ⓘ</span></div></li>
+        <li class="c"><div class="h mono" style="font-size:12px;cursor:default">2</div><div class="body"><div class="hap ph">[what happens]</div><div class="does ph">[what it does for the viewer]</div></div></li>
+      </ul>
+      <div class="minute mono"><span class="grip">first minute ends</span></div>
+      <ul class="deck">
+        <li class="c"><div class="h mono" style="font-size:12px;cursor:default">3</div><div class="body"><div class="hap ph">[what happens]</div><div class="does ph">[what it does for the viewer]</div></div></li>
+        <li class="c"><div class="h mono" style="font-size:12px;cursor:default">4</div><div class="body"><div class="hap ph">[what happens]</div><div class="does ph">[what it does for the viewer]</div></div></li>
+      </ul>
+    </div>
+    <div class="right">
+      <div class="panel"><div class="goalhead mono" style="margin:0 0 6px">It aims for</div><p style="margin:0;font-size:17px;line-height:1.4">A compelling first minute · a hooked viewer · a character they love.</p></div>
+      <div class="panel"><h3>Share</h3><div class="btns"><span class="btn">Post on Farcaster</span><span class="btn">Bluesky</span><span class="btn">Lens</span><span class="btn">Copy link</span></div><p class="small">Your own app posts it. The card shows the title and the first three cards.</p></div>
+      <div class="panel"><h3>Pictures</h3><p class="small">Card 1: Zei, by @maker · Recipe. Pictures were already on the site; none was made for this outline.</p></div>
+      <div class="btns"><span class="btn">Make your own outline</span></div>
+    </div>
+  </div>
+</div>
+</body></html>
