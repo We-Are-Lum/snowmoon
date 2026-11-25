@@ -4,7 +4,8 @@ import { noStore, voicePerson } from '~/lib/voice/server';
 import { listDesigns } from '~/lib/images/designs';
 import { CAMERA_ANGLES, COVERAGE, SCENE, SHOT, applyCoverage, boardNotes, emptyScene, proposeCuts, shotsFromCuts, type Scene, type Shot } from '~/lib/voice/board';
 import { boardSource, keptPictures, latestBoard, livePublication, madeWithScene, saveBoard } from '~/lib/voice/board-store';
-import { readingEstimate } from '~/lib/voice/reading-timing';
+import { timeReadingNow } from '~/lib/voice/reading-timing';
+import { isImprovised, spokenSentences, takeLabel, type Spoken } from '~/lib/voice/spoken';
 import { deleteAudio } from '~/lib/voice/store';
 import { shotModels, triesMade } from '~/lib/voice/shot-picture';
 import { whereFrom } from '~/lib/images/countries';
@@ -12,6 +13,7 @@ import { VOICE } from '~/lib/config';
 import { settingQuote, speechById } from '~/lib/voice/speech';
 import { voiceTestOn } from '~/lib/voice/flag';
 import { CLOSING, emptyClosing, type Closing } from '~/lib/voice/closing';
+import { retimed, reusedProblems } from '~/lib/voice/three-ways';
 
 /**
  * A performance's storyboard (slice 2, DRAFT). GET ?draft=<id>: the strip (timeline), the latest saved board (or the
@@ -26,11 +28,18 @@ export async function GET(request: Request) {
   if (who instanceof NextResponse) return who;
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Not available right now' }, { status: 503 });
-  const draft = await boardSource(sql, who.fid, String(new URL(request.url).searchParams.get('draft') ?? ''));
+  const id = String(new URL(request.url).searchParams.get('draft') ?? '');
+  let draft = await boardSource(sql, who.fid, id);
   // Not found, or this person's board on it is published (the page then shows where, and the take-down).
   if (!draft || (await livePublication(sql, who.fid, draft.id))) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-  if (!draft.timeline && draft.kind === 'reading')
-    return NextResponse.json({ error: 'This reading has no word timings yet.', reason: 'needs-timing', estimateCredits: readingEstimate(draft.audio).credits, seconds: readingEstimate(draft.audio).seconds }, { status: 409, headers: noStore });
+  // A reading made before readings were timed when made: timed now, on its first open, with no button, from the
+  // admins' pool (Nate, 2026-11-24).
+  if (!draft.timeline && draft.kind === 'reading') {
+    const t = await timeReadingNow(sql, who.fid, draft.id).catch(() => ({ status: 502, json: { error: 'The reading could not be timed. Try again in a moment.' } }));
+    if (t.status !== 200) return NextResponse.json({ error: String(t.json.error ?? 'The reading could not be timed. Try again in a moment.') }, { status: t.status === 429 ? 429 : 503, headers: noStore });
+    draft = await boardSource(sql, who.fid, id);
+    if (!draft?.timeline) return NextResponse.json({ error: 'The reading could not be timed. Try again in a moment.' }, { status: 503, headers: noStore });
+  }
   if (!draft.timeline) return NextResponse.json({ error: 'This draft was kept before storyboards: record and accept it again to make one.' }, { status: 409 });
   const saved = await latestBoard(sql, draft.id, who.fid);
   const cuts = saved?.cuts ?? proposeCuts(draft.timeline);
@@ -43,12 +52,17 @@ export async function GET(request: Request) {
         kind: draft.kind,
         preset: draft.recipe.preset?.name ?? null,
         speech: draft.recipe.speech ?? null,
-        // The speech's own sentences (its text, never the transcription): shown under each shot and in the play-through.
-        sentences: (draft.recipe.speech ? (speechById(draft.recipe.speech.id)?.sentences ?? []) : []).map((x) => ({ n: x.n, text: x.text })),
+        // The spoken words by sentence, shown under each shot and in the play-through: the speech's own (word for word,
+        // never the transcription), or the person's, transcribed and as they corrected it (improvised; spoken.ts).
+        sentences: spokenSentences(draft.recipe as { spoken?: Spoken }),
+        take: { label: takeLabel(draft.recipe as { spoken?: Spoken }), improvised: isImprovised(draft.recipe as { spoken?: Spoken }) },
         audio: draft.audio,
         timeline: draft.timeline,
       },
-      board: { version: saved?.version ?? 0, cuts, shots, closing: saved?.closing ?? emptyClosing(), scene: saved?.scene ?? emptyScene(), proposed: proposeCuts(draft.timeline), fromProposal: !saved },
+      // source: the storyboard this one reuses (three ways in): its pictures stay as they are; only the timing changes.
+      board: { version: saved?.version ?? 0, cuts, shots, closing: saved?.closing ?? emptyClosing(), scene: saved?.scene ?? emptyScene(), source: saved?.source ?? null, proposed: proposeCuts(draft.timeline), fromProposal: !saved },
+      // Whose take it is, when it is someone else's published take (three ways in): credited to its performer.
+      takeBy: draft.kind === 'performance' && draft.owner !== who.fid ? draft.owner : null,
       pictures,
       notes: boardNotes(shots, saved?.scene ?? emptyScene(), madeWithScene(shots, pictures as unknown as { shotKey: string; sha256: string; recipe: unknown }[])),
       // Where the book shows this speech (c13-b63 for c13-b64), shown above the empty setting box; none for an invented speech.
@@ -95,6 +109,18 @@ export async function POST(request: Request) {
     sceneConfirmed: typeof s.sceneConfirmed === 'string' && /^[0-9a-f]{64}$/.test(s.sceneConfirmed) ? s.sceneConfirmed : null,
     guideFrom: typeof s.guideFrom === 'string' && /^[0-9a-f-]{36}$/.test(s.guideFrom) ? s.guideFrom : null,
   })));
+  const previous = await latestBoard(sql, draft.id, who.fid);
+  // A reused storyboard (three ways in, Nate 2026-11-24): only the timing changes. Its shots keep their pictures, words
+  // and cameras, its scene and closing card stay as reused, and every version carries where it came from.
+  if (previous?.source) {
+    const fitted = retimed(previous.shots, cuts, draft.timeline.seconds);
+    const problems = fitted ? reusedProblems(previous.shots, fitted) : [`a reused storyboard keeps its ${previous.shots.length} shots, each at least ${SHOT.min} seconds: only their timing changes`];
+    if (!fitted) return NextResponse.json({ error: problems[0], problems }, { status: 400 });
+    if (problems.length) return NextResponse.json({ error: problems[0], problems }, { status: 400 });
+    const version = await saveBoard(sql, who.fid, draft.id, cuts, fitted, previous.closing, previous.scene, previous.source);
+    const pictures = await keptPictures(sql, draft.id, who.fid);
+    return NextResponse.json({ version, cuts, shots: fitted, closing: previous.closing, scene: previous.scene, source: previous.source, notes: boardNotes(fitted, previous.scene, madeWithScene(fitted, pictures as unknown as { shotKey: string; sha256: string; recipe: unknown }[])) }, { headers: noStore });
+  }
   const withCameras = applyCoverage(shots);
   // The closing card's choices (slice 4): the person's own words for its look, a style, the kept background.
   const c = body.closing ?? {};

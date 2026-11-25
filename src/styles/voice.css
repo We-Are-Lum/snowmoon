@@ -156,7 +156,19 @@
 .vg-try.vg-on { border-color: currentColor; }
 .vg-try img, .vg-pic { width: 100%; height: auto; display: block; border-radius: 4px; }
 .vg-empty { aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; font-size: var(--text-small); }
-.vg-composer { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: var(--space-3); }
+.vg-composer { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: var(--space-3); position: sticky; bottom: 0; background: var(--bg, var(--paper)); padding: var(--space-2) 0; border-top: 1px solid var(--rule); z-index: 2; }
+/* The conversation (fix 5, Nate 2026-11-24): the guide's current turn holds its choices as cards. */
+.vg-turn { max-width: 100%; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: var(--space-2); }
+.vg-cardbox { display: flex; flex-direction: column; gap: var(--space-2); }
+.vg-choice { display: block; width: 100%; text-align: left; font: inherit; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface-2, rgba(127, 127, 127, 0.06)); color: inherit; cursor: pointer; min-height: 44px; box-sizing: border-box; }
+.vg-choice:disabled { opacity: 0.5; cursor: default; }
+.vg-choice.vg-primary { border-color: currentColor; font-weight: 600; }
+.vr-row .vg-choice { width: auto; display: inline-block; }
+.vb-look.vg-choice { width: auto; }
+.vg-progress { font-style: italic; }
+.vg-askfor { margin: 0; }
+.vg-examples { display: flex; flex-wrap: wrap; gap: 6px; }
+.vg-example { font: inherit; font-size: var(--text-small); padding: 4px 10px; border: 1px dashed var(--rule); border-radius: 14px; background: none; color: inherit; cursor: pointer; }
 .vg-composer > :first-child { width: 100%; }
 .vg-composer input { flex: 1; min-width: 0; font: inherit; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 18px; }
 
@@ -166,3 +178,27 @@
 /* The Ephelion challenge's top (Nate, 2026-11-22): the intro, and each speech's one line under its title. */
 .vr-intro p { margin: var(--space-2) 0; }
 .vr-speech-line { display: block; }
+
+/* Three ways in (Nate, 2026-11-24): three choices side by side on a wide screen, stacked on a phone; nothing scrolls sideways. */
+.vw-ways { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-2); margin: var(--space-2) 0; }
+.vw-way { display: grid; grid-template-columns: auto 1fr; column-gap: var(--space-2); row-gap: 2px; border: 1px solid var(--rule); border-radius: 8px; padding: var(--space-2) var(--space-3); cursor: pointer; min-width: 0; }
+.vw-way input { grid-row: span 3; margin-top: 4px; }
+.vw-way.vw-on { border-color: currentColor; }
+.vw-title { font-weight: 600; }
+.vw-line { overflow-wrap: anywhere; }
+.vw-way .vr-small { grid-column: 2; }
+.vw-items { list-style: none; padding: 0; margin: var(--space-2) 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.vw-items li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); justify-content: space-between; overflow-wrap: anywhere; }
+.vw-pick { display: flex; gap: var(--space-2); align-items: flex-start; cursor: pointer; min-width: 0; }
+.vw-next { border-top: 1px solid var(--rule); padding-top: var(--space-2); }
+.vf-shots { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--space-2); }
+.vf-shot { border: 1px solid var(--rule); border-radius: 8px; padding: var(--space-2); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.vf-shot .vb-picture { width: 100%; height: auto; }
+.vf-row { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Improvising (Nate, 2026-11-24): correcting one's own transcribed words. */
+.vr-correct { margin: var(--space-2) 0; }
+.vr-correct > summary { cursor: pointer; }
+.vr-correct-list { padding-left: 1.4em; display: flex; flex-direction: column; gap: var(--space-2); max-width: 100%; }
+.vr-correct-list textarea { width: 100%; box-sizing: border-box; }
+.vr-word-check > summary { cursor: pointer; }

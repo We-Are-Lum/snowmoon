@@ -1195,6 +1195,12 @@ export const VOICE = {
   // pool 'admin', CHAPTER_PICTURES.adminDailyCapUsd); everyone else stays off.
   realPictures: 'admins' as false | 'admins' | true,
   /**
+   * Team-made storyboards (three ways in, Nate 2026-11-24; branch voice-three-ways, DRAFT): the storyboards offered for
+   * "Your voice over a storyboard", each a board (its draft and its maker) Nate chooses. Empty until he does: the
+   * proposed ones are in docs/branch-reports/voice-three-ways.md. Published storyboards join them once VOICE.publish is on.
+   */
+  teamBoards: [] as readonly { draftId: string; fid: number; title: string }[],
+  /**
    * Publishing a storyboard (slice 4, 2026-11-21; DRAFT): off until Nate's word, the reread Privacy and Terms lines
    * for it, and a confirmed public bucket for storyboards/. While off, the publish route refuses and every
    * /storyboard/spoken/<id> page is "not found" (the local tests turn it on with VOICE_TEST_ON, stand-ins only).
@@ -1225,6 +1231,19 @@ export const VOICE = {
   readingSettings: { stability: 0.5, similarity_boost: 0.75, style: 0, use_speaker_boost: true },
   /** A whole take: at most 5 minutes (ElevenLabs' limit per request) and 4 MB (under Vercel's 4.5 MB request limit). */
   maxTakeSeconds: 300,
+  /**
+   * Improvising (Nate, 2026-11-24): "within 2 minutes a take, shown as a countdown that stops the recording". Every whole
+   * take, word for word or improvised, is at most takeMaxSeconds; the server refuses a longer one. DRAFT, for Nate: the
+   * book speech (c13-b64, 376 words) takes about 2:40 word for word at 140 words a minute, so it is allowed 3 minutes
+   * until he says otherwise (takeMaxSecondsFor).
+   */
+  takeMaxSeconds: 120,
+  takeMaxSecondsFor: { 'ephelion-c13-b64': 180 } as Readonly<Record<string, number>>,
+  /** An improvised take's transcript, split into sentences: at . ! ?, at a pause this long, or after this many words. */
+  sentencePauseSeconds: 0.8,
+  sentenceMaxWords: 30,
+  /** A corrected sentence: at most this many characters. */
+  sentenceMaxChars: 400,
   maxTakeBytes: 4_000_000,
   /** One redone sentence: at most 30 seconds. */
   maxSentenceSeconds: 30,

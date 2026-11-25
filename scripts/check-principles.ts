@@ -1125,6 +1125,59 @@ add({
   },
 });
 
+add({
+  id: 'P2v',
+  principle: 2,
+  name: "an improvised take's words are its performer's: transcribed from their take, corrected only by them (kept with the words before), and never written or edited by a model or the guide (DRAFT, for Nate's reread, 2026-11-24)",
+  load: async () => ({
+    correct: read('src/lib/voice/correct-words.ts'),
+    route: read('src/app/api/voice/drafts/[id]/words/route.ts'),
+    guide: read('src/lib/voice/guide.ts'),
+    guideServer: read('src/lib/voice/guide-server.ts'),
+  }),
+  run: (c) => {
+    const p: string[] = [];
+    const model = /from '[^']*(elevenlabs|chat\/|images\/fal|challenge\/models|guide-server|ai-gateway|batch-model)[^']*'|\bcomplete\(|speechToText\(|fetch\(/;
+    if (model.test(c.correct) || model.test(c.route)) p.push('correcting the words reaches a model or a service: only the person changes them');
+    if (!/corrections: \[\.\.\.spoken\.corrections, correction\]/.test(c.correct) || !/byFid: fid, sentences: spoken\.sentences/.test(c.correct)) p.push('a correction is not kept with the words before it and who made it');
+    if (!/speechWordsIn\(s, \[\.\.\.c\.sentences, \.\.\.\(c\.otherWords \?\? \[\]\)\]\)/.test(c.guide)) p.push("the guide's drafts aren't checked against the spoken words");
+    if (!/sentences: spokenSentences\(draft\.recipe/.test(c.guideServer)) p.push('the guide is not given the spoken words as the board\'s sentences');
+    return p;
+  },
+  plant: (c) => {
+    c.correct = `import { complete } from '../chat/model';\n${c.correct}`;
+  },
+});
+
+add({
+  id: 'P2w',
+  principle: 2,
+  name: "a storyboard reused on someone's own take (three ways in, Nate 2026-11-24) keeps each shot's picture, words and camera as its maker made them, only the timing fitted, and its credits name the maker",
+  load: async () => {
+    const { fitShots } = await import('../src/lib/voice/three-ways');
+    const { closingCredits } = await import('../src/lib/voice/closing');
+    const words = (ends: number[]) => ends.map((e, i) => ({ text: `w${i}`, start: e - 0.4, end: e }));
+    const from = { seconds: 30, words: words([5, 10, 15, 20, 29.5]), sentences: [{ n: 0, start: 0, end: 10 }, { n: 1, start: 10, end: 20 }, { n: 2, start: 20, end: 29.5 }] };
+    const to = { seconds: 40, words: words([7, 13, 20, 27, 39.5]), sentences: [{ n: 0, start: 0, end: 13 }, { n: 1, start: 13, end: 27 }, { n: 2, start: 27, end: 39.5 }] };
+    const shot = (key: string, start: number, end: number, description: string) => ({ key, start, end, description, angle: 'medium' as const, angleBy: 'person' as const, insert: false, styleId: null, characterIds: [], kept: key === 's1' ? 'a'.repeat(64) : key === 's2' ? 'b'.repeat(64) : 'c'.repeat(64) });
+    // The real fitting rule (three-ways-server.ts calls it), on the maker's own shots.
+    const saved = [shot('s1', 0, 10, "The maker's words for shot 1."), shot('s2', 10, 20, "The maker's words for shot 2."), shot('s3', 20, 30, "The maker's words for shot 3.")];
+    const fitted = fitShots(saved, from, to).shots;
+    const credits = closingCredits({ speech: { title: 'T', block: 'c13-b64' }, performer: 'performer', preset: 'Warm lecturer', voiceModel: { name: 'v', maker: 'ElevenLabs' }, transcribeModel: { name: 't', maker: 'ElevenLabs' }, pictures: [], shots: 3, reusedFrom: { by: 'maker', title: 'T' } });
+    return { saved: JSON.parse(JSON.stringify(saved)), fitted: JSON.parse(JSON.stringify(fitted)), credits: JSON.parse(JSON.stringify(credits)) as { who: string; text: string }[] };
+  },
+  run: async ({ saved, fitted, credits }) => {
+    const { reusedProblems } = await import('../src/lib/voice/three-ways');
+    return [
+      ...reusedProblems(saved, fitted).map((x) => `a reused storyboard: ${x}`),
+      ...(credits.some((l) => l.who === 'people' && l.text.startsWith('Storyboard by @maker')) ? [] : ["a reused storyboard's credits don't name its maker"]),
+    ];
+  },
+  plant: (c) => {
+    c.fitted[1].description = 'Words the site wrote';
+  },
+});
+
 // ---------------------------------------------------------------------------
 // P3. The allowlist records each model's license and whether its weights are
 //     open; every model in use is on it; closed models in use are reported.

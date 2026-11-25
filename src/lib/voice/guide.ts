@@ -9,8 +9,10 @@
  */
 import { angleById, planProblems, type PlanShot, type Shot, type Timeline } from './board';
 
-export type GuideStep = 'setting' | 'clothing' | 'plan' | 'shot' | 'fix';
-export const GUIDE_STEPS: readonly GuideStep[] = ['setting', 'clothing', 'plan', 'shot', 'fix'];
+// 'timing' (Nate, 2026-11-24, three ways in): on a storyboard fitted to a new voice, the guide only proposes making one
+// shot longer or shorter ("make shot 3 longer"); the person accepts it, and the site moves the cut (nudgeShot).
+export type GuideStep = 'setting' | 'clothing' | 'plan' | 'shot' | 'fix' | 'timing';
+export const GUIDE_STEPS: readonly GuideStep[] = ['setting', 'clothing', 'plan', 'shot', 'fix', 'timing'];
 
 export interface GuideRef {
   role: 'anchor-scene' | 'anchor-look' | 'continuity' | 'other';
@@ -22,7 +24,8 @@ export type GuideDraft =
   | { setting: string }
   | { clothing: string }
   | { plan: PlanShot[] }
-  | { shotKey: string; prompt: string; references: GuideRef[] };
+  | { shotKey: string; prompt: string; references: GuideRef[] }
+  | { timing: { shot: number; change: 'longer' | 'shorter'; seconds: number } };
 
 export interface GuideMessage {
   id: string;
@@ -66,6 +69,8 @@ const stringsOf = (x: unknown): string[] => (typeof x === 'string' ? [x] : Array
 export interface DraftContext {
   timeline: Timeline;
   sentences: { n: number; text: string }[];
+  /** More words the guide may not write (an improvised take's speech, beside the performer's words in `sentences`). */
+  otherWords?: { n: number; text: string }[];
   shots: Shot[];
   /** Pictures the guide may choose as references: 'scene', the look ids offered, the kept shots' keys. */
   refs: { scene: boolean; looks: string[]; keptShots: string[] };
@@ -102,6 +107,15 @@ export function readGuideReply(step: GuideStep, raw: string, c: DraftContext, sh
     const problems = planProblems(c.timeline, plan, c.maxShots);
     if (problems.length) return { error: `the plan: ${problems.join('; ')}` };
     draft = { plan };
+  } else if (step === 'timing') {
+    const o = ((d.timing ?? d) as Record<string, unknown>) ?? {};
+    const shot = Number(o.shot);
+    const change = o.change === 'longer' || o.change === 'shorter' ? o.change : null;
+    const seconds = o.seconds === undefined ? 1.5 : Number(o.seconds);
+    if (!Number.isInteger(shot) || shot < 1 || shot > c.shots.length) return { error: `the draft names no shot of this board (1 to ${c.shots.length})` };
+    if (!change) return { error: 'the draft says "longer" or "shorter"' };
+    if (!Number.isFinite(seconds) || seconds < 0.3 || seconds > 10) return { error: 'the change is 0.3 to 10 seconds' };
+    draft = { timing: { shot, change, seconds: Math.round(seconds * 10) / 10 } };
   } else {
     const key = shotKey ?? (typeof d.shotKey === 'string' ? d.shotKey : '');
     if (!c.shots.some((s) => s.key === key)) return { error: 'the draft names no shot of this board' };
@@ -124,7 +138,7 @@ export function readGuideReply(step: GuideStep, raw: string, c: DraftContext, sh
   }
   for (const s of [say, ...stringsOf(draft)]) {
     if (s.length > GUIDE.maxDraftChars) return { error: 'a draft is too long' };
-    const hit = speechWordsIn(s, c.sentences);
+    const hit = speechWordsIn(s, [...c.sentences, ...(c.otherWords ?? [])]);
     if (hit) return { error: `a draft repeats the speech's words ("${hit}…"): it must never write them` };
   }
   return { say, draft };
@@ -135,29 +149,41 @@ export interface GuideRecipe {
   guide: { model: string; host: string; open: boolean } | null;
   request: { text: string; messageId: string; at: string } | null;
   prompt: { text: string; by: 'guide' | 'person'; draft: string | null };
-  references: { role: GuideRef['role']; ref: string; chosenBy: 'guide' | 'person'; why: string }[];
+  references: { role: GuideRef['role']; ref: string; chosenBy: 'guide' | 'person' | 'site'; why: string }[];
   edits: { what: 'prompt' | 'references'; before: unknown; after: unknown }[];
+  /** References the person or the guide named that the site left out (a stale kept shot, another look), with why. */
+  siteRemoved?: { role: GuideRef['role']; ref: string; why: string }[];
 }
 export function guideRecipe(o: {
   guide: { model: string; host: string; open: boolean } | null;
   request: { text: string; id: string; madeAt: string } | null;
   drafted: { prompt: string; references: GuideRef[] } | null;
   sent: { prompt: string; references: { role: GuideRef['role']; ref: string }[] };
+  /** The references as the person sent them, before the site's changes (the person's edit is judged on these). */
+  asked?: { role: GuideRef['role']; ref: string }[];
+  /** References the site added (a shot in the scene's anchors, Nate 2026-11-24), with why. */
+  siteAdded?: { role: GuideRef['role']; ref: string; why: string }[];
+  /** References the site left out, with why. */
+  siteRemoved?: { role: GuideRef['role']; ref: string; why: string }[];
 }): GuideRecipe {
   const edits: GuideRecipe['edits'] = [];
   const d = o.drafted;
   if (d && d.prompt !== o.sent.prompt) edits.push({ what: 'prompt', before: d.prompt, after: o.sent.prompt });
   const key = (r: { role: string; ref: string }) => `${r.role}:${r.ref}`;
-  if (d && d.references.map(key).join() !== o.sent.references.map(key).join()) edits.push({ what: 'references', before: d.references.map(key), after: o.sent.references.map(key) });
+  const asked = o.asked ?? o.sent.references;
+  if (d && d.references.map(key).join() !== asked.map(key).join()) edits.push({ what: 'references', before: d.references.map(key), after: asked.map(key) });
   return {
     guide: d ? o.guide : null,
     request: o.request ? { text: o.request.text, messageId: o.request.id, at: o.request.madeAt } : null,
     prompt: { text: o.sent.prompt, by: d && d.prompt === o.sent.prompt ? 'guide' : 'person', draft: d ? d.prompt : null },
     references: o.sent.references.map((r) => {
-      const g = d?.references.find((x) => key(x) === key(r));
-      return { role: r.role, ref: r.ref, chosenBy: g ? 'guide' : 'person', why: g?.why ?? 'chosen by the person' };
+      // The site's addition comes first: the site adds a reference only when the person's list left it out.
+      const site = o.siteAdded?.find((x) => key(x) === key(r));
+      const g = site ? undefined : d?.references.find((x) => key(x) === key(r));
+      return { role: r.role, ref: r.ref, chosenBy: site ? 'site' : g ? 'guide' : 'person', why: site?.why ?? g?.why ?? 'chosen by the person' };
     }),
     edits,
+    ...(o.siteRemoved?.length ? { siteRemoved: o.siteRemoved } : {}),
   };
 }
 

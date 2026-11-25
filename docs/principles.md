@@ -77,6 +77,9 @@ coding agent and its helpers are in `docs/prompts/`.
 - `P2u` (reread by Nate 2026-11-23, as drafted): a storyboard picture the guide drafted keeps the person's request word for word, the
   guide's model, its draft and the prompt as sent, each reference with who chose it and why, and every edit; a planted
   recipe without the request must fail (`scripts/check-principles.ts`, `test:voice` section GU).
+- `P2w` (proposed, for Nate's reread; branch voice-three-ways; renamed from P2v, which voice-improv's check took): a storyboard reused on someone's own take keeps each shot's
+  picture, words and camera as its maker made them, only the timing fitted to the new voice, and its credits name the
+  maker; a planted change to a shot's words must fail (`scripts/check-principles.ts`, `test:voice` section 3W).
 - `P1i` (reread by Nate 2026-11-21; v3 reread 2026-11-22): the own-voice consent shown is `own-voice-v3`, and only by the voice pages and routes,
   only while `P1h` passes; `own-voice-v1` is used by nothing under `src/`; v2 stays on file, retired.
 - `npm run test:db`: after 0005, a recipe is public only if it made a
@@ -194,6 +197,11 @@ it is named, its writers are credited, and no agent or model on this site writes
 a version, its credit says so; each version records that, set by Nate. A recording is checked against, and tied to, the
 exact version it was made from. (The three speeches of 2026-11-22: `config/voice-speeches.json`, from the Google Doc
 "Lord Ephelion: three speeches v2 (DRAFT)", each version's `aiHelp` set by Nate; checked by `test:voice`, section I.)
+
+**Improvising (owner, 2026-11-24; DRAFT, for Nate's reread; branch `voice-improv`).** A performer may improvise around a
+speech's theme. Their spoken words are their own, transcribed from their take and credited to them; they may correct the
+transcript, and no agent or model writes or edits it. (`src/lib/voice/spoken.ts`, `src/lib/voice/correct-words.ts`;
+checked by `test:voice`, section IM, and `check:principles` P2v, with a planted fault.)
 
 **Storyboard pictures (owner, 2026-11-22; reread by the owner 2026-11-22).** Storyboard pictures: the person asks the
 guide in their own words; the guide may write each picture's prompt and choose its reference pictures, never the

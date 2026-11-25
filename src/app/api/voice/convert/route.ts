@@ -3,12 +3,16 @@ import { db } from '~/lib/db';
 import { VOICE } from '~/lib/config';
 import { flowDeps, noStore, voicePerson, voiceReady } from '~/lib/voice/server';
 import { speechById } from '~/lib/voice/speech';
+import { takeMaxSeconds } from '~/lib/voice/spoken';
+
+const mmssLimit = (s: number) => (s % 60 ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}` : `${s / 60} minute${s === 60 ? '' : 's'}`);
 import { voiceIdFor } from '~/lib/voice/presets';
 import { elevenLabsBase } from '~/lib/voice/flag';
 import { hasVoiceConsent, voiceConsentWording } from '~/lib/voice/consent';
 import { refusal, reserve } from '~/lib/voice/costs';
-import { convertTake, estimateConvertCredits, FlowError, type CostEntry, type Scope } from '~/lib/voice/take-flow';
+import { convertTake, CONVERTED_ALREADY, estimateConvertCredits, FlowError, type CostEntry, type Scope } from '~/lib/voice/take-flow';
 import { keepConvertedTake } from '~/lib/voice/keep-converted';
+import { convertedBefore } from '~/lib/voice/converted-before';
 
 export const maxDuration = 300;
 
@@ -44,20 +48,30 @@ export async function POST(request: Request) {
   if (scope.kind === 'sentence' && !speech.sentences.some((s) => s.n === scope.n)) return NextResponse.json({ error: 'No such sentence' }, { status: 400 });
   // The length the device reports, and never less than the file could hold at 320 kb/s, so a short claim can't dodge the cap.
   const seconds = Math.max(Number(form.get('seconds')) || 0, file.size / 40_000);
-  const max = scope.kind === 'whole' ? VOICE.maxTakeSeconds : VOICE.maxSentenceSeconds;
-  if (seconds > max) return NextResponse.json({ error: `A ${scope.kind === 'whole' ? 'take' : 'sentence'} can be at most ${max} seconds` }, { status: 413 });
+  // A whole take: at most 2 minutes (Nate, 2026-11-24; the book speech 3, takeMaxSeconds), with a second's grace for the
+  // recorder's stop; the page's countdown stops the recording at its limit.
+  const max = scope.kind === 'whole' ? takeMaxSeconds(speech.id) : VOICE.maxSentenceSeconds;
+  if (seconds > max + 1) return NextResponse.json({ error: `A ${scope.kind === 'whole' ? 'take' : 'sentence'} can be at most ${mmssLimit(max)}` }, { status: 413 });
   const wording = voiceConsentWording();
   if (!(await hasVoiceConsent(sql, who.fid))) return NextResponse.json({ error: 'Read and agree to the own-voice terms first' }, { status: 403 });
   if (form.get('agree') !== wording.sha256) return NextResponse.json({ error: 'Tick the box to send this recording to ElevenLabs' }, { status: 403 });
 
+  // "Convert again" (fix 7): sent by the page only after the person asks to convert a converted recording again.
+  const again = form.get('again') === '1';
   const estimatedCredits = estimateConvertCredits(seconds, VOICE.rates.convertCreditsPerMinute);
-  const no = await refusal(sql, who.fid, estimatedCredits, scope.kind === 'whole');
-  if (no) return NextResponse.json({ error: no }, { status: 429 });
-  const settle = await reserve(sql, who.fid, VOICE.models.convert, estimatedCredits, scope.kind === 'whole');
+  // The limits, the hold and the once-only rule are checked when the take's sha256 is known (in convertTake, before
+  // anything is sent), so a refused second conversion of the same recording counts nothing, not even a take.
+  let settle: Awaited<ReturnType<typeof reserve>> | null = null;
+  const admit = async (takeSha256: string) => {
+    if (scope.kind === 'whole' && !again && (await convertedBefore(sql, who.fid, takeSha256))) throw new FlowError(409, CONVERTED_ALREADY, 'converted');
+    const no = await refusal(sql, who.fid, estimatedCredits, scope.kind === 'whole');
+    if (no) throw new FlowError(429, no);
+    settle = await reserve(sql, who.fid, VOICE.models.convert, estimatedCredits, scope.kind === 'whole');
+  };
   let costed = false;
   const cost = async (e: CostEntry) => {
     costed = true;
-    await settle({ ...e, kind: 'convert' });
+    await settle?.({ ...e, kind: 'convert' });
   };
   // The conversion and the keeping run as one job the platform keeps alive past the reply (after), so a person who
   // leaves mid-conversion still has the draft (Nate, 2026-11-22). Nothing here listens to the request's abort.
@@ -73,6 +87,7 @@ export async function POST(request: Request) {
       voiceId,
       scope,
       consentSha256: wording.sha256,
+      admit,
     });
     if (scope.kind === 'sentence') return new Response(Buffer.from(audio), { headers: { 'content-type': 'audio/mpeg', 'x-voice-ticket': ticket, ...noStore } });
     // A whole take is kept as the person's private draft before the reply (Nate, 2026-11-22), so leaving the page
@@ -95,8 +110,9 @@ export async function POST(request: Request) {
   try {
     return await job;
   } catch (e) {
-    if (!costed) await settle(null).catch(() => {});
-    if (e instanceof FlowError) return NextResponse.json({ error: e.message }, { status: e.status });
+    const s = settle as Awaited<ReturnType<typeof reserve>> | null;
+    if (!costed && s) await s(null).catch(() => {});
+    if (e instanceof FlowError) return NextResponse.json({ error: e.message, ...(e.reason ? { reason: e.reason } : {}) }, { status: e.status });
     return NextResponse.json({ error: 'Something went wrong. Your recording was not kept.' }, { status: 500 });
   }
 }

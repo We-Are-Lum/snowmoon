@@ -12,6 +12,7 @@ import { applyCoverage, boardNotes, cutNear, emptyScene, pictureBlocked, SCENE, 
 import { joinAudio } from '~/lib/voice/join-audio';
 import { CLOSING, emptyClosing, type Closing, type CreditLine } from '~/lib/voice/closing';
 import { saveVideo, videoType } from '~/lib/voice/video';
+import { nudgeShot, retimed, WAYS_DRAFT, type BoardSource } from '~/lib/voice/three-ways';
 import '../styles/voice.css';
 
 /**
@@ -23,8 +24,9 @@ import '../styles/voice.css';
  */
 interface Sheet { id: string; title: string; entity: string; text: string; thumb: string | null; samples?: string[] }
 interface Data {
-  draft: { id: string; kind: 'performance' | 'reading'; preset: string | null; speech: { id: string; title: string; label?: { text: string } } | null; sentences: { n: number; text: string }[]; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
-  board: { version: number; cuts: number[]; shots: Shot[]; closing: Closing; scene?: Scene; proposed: number[]; fromProposal: boolean };
+  draft: { id: string; kind: 'performance' | 'reading'; preset: string | null; speech: { id: string; title: string; label?: { text: string } } | null; sentences: { n: number; text: string }[]; take?: { label: string; improvised: boolean }; audio: { n: number; role: string; sentence: number | null; replacesStart: number | null; replacesEnd: number | null }[]; timeline: Timeline };
+  board: { version: number; cuts: number[]; shots: Shot[]; closing: Closing; scene?: Scene; source?: BoardSource | null; proposed: number[]; fromProposal: boolean };
+  takeBy?: number | null;
   settingQuote?: { text: string; block: string } | null;
   pictures: { shotKey: string; sha256: string; recipe: Record<string, unknown> }[];
   sheets: { styles: Sheet[]; characters: Sheet[] };
@@ -55,6 +57,91 @@ function KeptPicture({ draftId, shot, sha, alt }: { draftId: string; shot: strin
   return url ? <img src={url} alt={alt} className="vb-picture" /> : <div className="vb-picture vb-empty">Loading the picture…</div>;
 }
 
+/**
+ * Your voice over an existing storyboard (three ways in, Nate 2026-11-24; DRAFT wording): each shot's picture as it is,
+ * its length, and Shorter / Longer; or ask the guide in your own words ("make shot 3 longer"): it only proposes which
+ * shot and how much, and you choose whether to use it. The site moves the cut to a word's end (nudgeShot).
+ */
+function VoiceFit(p: { draftId: string; source: BoardSource; shots: Shot[]; timeline: Timeline; busy: boolean; dirty: boolean; saved: number; onCuts: (c: number[]) => void; onSave: () => void; onMessage: (m: string | null) => void }) {
+  const [ask, setAsk] = useState('');
+  const [asking, setAsking] = useState(false);
+  const [proposal, setProposal] = useState<{ say: string; timing: { shot: number; change: 'longer' | 'shorter'; seconds: number }; model: string } | null>(null);
+  const move = (key: string, change: 'longer' | 'shorter', seconds?: number) => {
+    const c = nudgeShot(p.timeline, p.shots, key, change, seconds);
+    if (!c) return p.onMessage(`That shot can't be made ${change} there: each shot stays at least 2 seconds long.`);
+    p.onMessage(null);
+    p.onCuts(c);
+  };
+  async function askGuide() {
+    setAsking(true);
+    setProposal(null);
+    p.onMessage(null);
+    if (p.dirty) p.onSave();
+    const r = await authFetch('/api/voice/guide', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ draftId: p.draftId, step: 'timing', text: ask }) }).catch(() => null);
+    const j = (await r?.json().catch(() => ({}))) as { guide?: { say: string; draft: { timing?: { shot: number; change: 'longer' | 'shorter'; seconds: number } }; model: string }; error?: string } | undefined;
+    setAsking(false);
+    if (r?.ok && j?.guide?.draft.timing) setProposal({ say: j.guide.say, timing: j.guide.draft.timing, model: j.guide.model });
+    else p.onMessage(j?.error ?? 'The guide did not answer. Use the buttons instead.');
+  }
+  return (
+    <section className="vr-card vf" aria-labelledby="vf-h">
+      <h2 id="vf-h">
+        Fit the pictures to your voice <span className="vr-tag">{WAYS_DRAFT}</span>
+      </h2>
+      <p className="vr-note">
+        The pictures of &ldquo;{p.source.title}&rdquo;, the storyboard by {p.source.by ? `@${p.source.by}` : 'a reader'}, as they are. Make each one shorter or longer to fit your voice, here or by dragging a cut on the strip below.
+      </p>
+      <ol className="vf-shots">
+        {p.shots.map((s, i) => (
+          <li key={s.key} className="vf-shot">
+            {s.kept ? <KeptPicture draftId={p.draftId} shot={s.key} sha={s.kept} alt={`Shot ${i + 1}`} /> : <div className="vb-picture vb-empty">No picture</div>}
+            <span className="vr-small">
+              Shot {i + 1} · {(s.end - s.start).toFixed(1)} s
+            </span>
+            <span className="vf-row">
+              <button type="button" className="vr-btn vr-quiet vr-small-btn" disabled={p.busy} onClick={() => move(s.key, 'shorter')} aria-label={`Make shot ${i + 1} shorter`}>Shorter</button>
+              <button type="button" className="vr-btn vr-quiet vr-small-btn" disabled={p.busy} onClick={() => move(s.key, 'longer')} aria-label={`Make shot ${i + 1} longer`}>Longer</button>
+            </span>
+          </li>
+        ))}
+      </ol>
+      <form
+        className="vr-row"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (ask.trim()) void askGuide();
+        }}
+      >
+        <PublishedTextField id="vf-ask" label="Or ask the guide, in your own words" value={ask} onChange={setAsk} rows={1} maxLength={1000} placeholder="Make shot 3 longer" />
+        <button type="submit" className="vr-btn vr-small-btn" disabled={asking || p.busy || !ask.trim()}>{asking ? '…' : 'Ask'}</button>
+      </form>
+      {proposal && (
+        <div className="vg-msg vg-guide">
+          <p className="vg-by">Guide · {proposal.model}</p>
+          <p>{proposal.say}</p>
+          <p className="vf-row">
+            <button
+              type="button"
+              className="vr-btn vr-small-btn"
+              onClick={() => {
+                const s = p.shots[proposal.timing.shot - 1];
+                if (s) move(s.key, proposal.timing.change, proposal.timing.seconds);
+                setProposal(null);
+              }}
+            >
+              Use it
+            </button>
+            <button type="button" className="vr-btn vr-quiet vr-small-btn" onClick={() => setProposal(null)}>No, thanks</button>
+          </p>
+        </div>
+      )}
+      <div className="vr-row">
+        <button type="button" className="vr-btn vr-small-btn" onClick={p.onSave} disabled={p.busy || !p.dirty}>{p.dirty ? 'Save' : p.saved ? `Saved (version ${p.saved})` : 'Saved'}</button>
+      </div>
+    </section>
+  );
+}
+
 export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const auth = useAuth();
   // Who may use it is the server's to say (src/lib/voice/flag.ts): its routes answer 404 to anyone the switch doesn't
@@ -63,8 +150,6 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
   const params = useParams<{ draft: string }>();
   const draftId = String(params?.draft ?? '');
   const [data, setData] = useState<Data | null | 'none' | { error: string }>(null);
-  // A ready-made reading with no word timings yet: what one transcription of it is estimated at (2026-11-21).
-  const [needsTiming, setNeedsTiming] = useState<{ estimateCredits: number; seconds: number } | null>(null);
   const [cuts, setCuts] = useState<number[]>([]);
   const [shots, setShots] = useState<Shot[]>([]);
   const [current, setCurrent] = useState(0);
@@ -109,9 +194,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       return setData('none');
     }
     const j = (await r.json()) as Data & { error?: string; reason?: string; estimateCredits?: number; seconds?: number };
-    if (r.status === 409 && j.reason === 'needs-timing') return setNeedsTiming({ estimateCredits: j.estimateCredits ?? 0, seconds: j.seconds ?? 0 }), setData({ error: 'needs-timing' });
     if (!r.ok) return setData({ error: j.error ?? 'Not available' });
-    setNeedsTiming(null);
     setData(j);
     setCuts(j.board.cuts);
     // Every shot starts on Medium shot (Nate, 2026-11-21), boards saved before then included.
@@ -129,6 +212,8 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
 
   const d = dataOk;
   const t = d?.draft.timeline ?? null;
+  // Three ways in (2026-11-24): a storyboard reused on this take keeps its pictures; only the timing is edited here.
+  const reused = d?.board.source ?? null;
 
   // The audio for the play-through: the take with any redone sentences, joined in the browser.
   useEffect(() => {
@@ -210,35 +295,6 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       </main>
     );
   if (!admin || data === 'none') return <>{fallback}</>;
-  if (needsTiming)
-    return (
-      <main className="vr vb">
-        <p className="vr-kicker">Admin trial · Draft · Storyboard</p>
-        <h1>Time this reading first</h1>
-        <p className="vr-note">
-          This ready-made reading has no word timings yet, so its sentences can&rsquo;t be placed on a strip. One transcription of it ({needsTiming.seconds.toFixed(0)} s, about {needsTiming.estimateCredits} credits) times it once, for everyone who storyboards it. The transcript is deleted at ElevenLabs right after.
-        </p>
-        {message && <p className="vr-warn" role="alert">{message}</p>}
-        <button
-          type="button"
-          className="vr-btn"
-          disabled={busy !== null}
-          onClick={async () => {
-            setBusy('timing');
-            setMessage(null);
-            const r = await authFetch(`/api/voice/readings/${draftId}/timing`, { method: 'POST' }).catch(() => null);
-            setBusy(null);
-            if (r?.ok) {
-              setNeedsTiming(null);
-              setData(null);
-              void load();
-            } else setMessage(((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error ?? 'The timing failed. Try again.');
-          }}
-        >
-          {busy === 'timing' ? 'Timing…' : 'Time this reading'}
-        </button>
-      </main>
-    );
   if (data && 'error' in data) return <main className="vr"><p className="vr-warn">{data.error}</p></main>;
   if (!d || !t) return <main className="vr"><p className="vr-note">Loading…</p></main>;
 
@@ -251,6 +307,15 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
     setDirty(true);
   };
   const setAll = (c: number[], keep = shots) => {
+    // A reused storyboard (three ways in): the same shots in the same order; only where they start and end moves.
+    if (reused) {
+      const r = retimed(shots, c, t.seconds);
+      if (!r) return setMessage(`Each shot stays at least ${d!.limits.min} seconds long.`);
+      setCuts([...c].sort((a, b) => a - b));
+      setShots(r);
+      setDirty(true);
+      return;
+    }
     const next = apply(shotsFromCuts(t, c, keep));
     setCuts([...c].sort((a, b) => a - b));
     setShots(next);
@@ -262,7 +327,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
     return Math.max(0, Math.min(t.seconds, ((clientX - r.left) / r.width) * t.seconds));
   };
   const onStripClick = (e: React.MouseEvent) => {
-    if (drag.current !== null) return;
+    if (drag.current !== null || reused) return;
     const at = snapToWordEnd(t, xToTime(e.clientX));
     if (at <= 0.2 || at >= t.seconds - 0.2 || cuts.some((c) => Math.abs(c - at) < 0.3)) return;
     if (shots.length >= d!.making.limits.maxShots) return setMessage(`A storyboard has at most ${d!.making.limits.maxShots} shots: remove a cut first.`);
@@ -433,16 +498,33 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
       <p className="vr-kicker">Admin trial · Draft · Storyboard</p>
       <h1>{d.draft.speech?.title ?? 'Storyboard'}</h1>
       <p className="vr-labels">
-        {d.draft.kind === 'reading' ? <>The ready-made reading in {d.draft.preset ?? 'a preset voice'} (ElevenLabs, no performer)</> : <>Your performance in {d.draft.preset ?? 'a preset voice'}</>} · {fmt(t.seconds)} ·{' '}
+        {d.draft.kind === 'reading' ? <>The ready-made reading in {d.draft.preset ?? 'a preset voice'} (ElevenLabs, no performer)</> : d.takeBy ? <>A published take in {d.draft.preset ?? 'a preset voice'}, credited to its performer</> : <>Your performance in {d.draft.preset ?? 'a preset voice'}</>} · {fmt(t.seconds)} ·{' '}
+        {reused && <>Pictures from &ldquo;{reused.title}&rdquo;, the storyboard by {reused.by ? `@${reused.by}` : 'a reader'} ·{' '}</>}
         {d.making.standIn ? (
           <><span className="vr-tag">Stand-in</span> pictures are placeholder cards on this copy: no model, no cost ·{' '}</>
         ) : !d.making.real ? (
           <>Pictures aren&rsquo;t switched on yet ·{' '}</>
         ) : null}
-        <Link href="/storyboard/record">Back to recording</Link> · <Link href={`/storyboard/guide/${d.draft.id}`}>Storyboard it with the guide</Link>
+        <Link href="/ephelion">Back to recording</Link>{!reused && <> · <Link href={`/storyboard/guide/${d.draft.id}`}>Storyboard it with the guide</Link></>}
       </p>
       {message && <p className="vr-warn" role="alert">{message}</p>}
 
+      {reused && (
+        <VoiceFit
+          draftId={d.draft.id}
+          source={reused}
+          shots={shots}
+          timeline={t}
+          busy={busy !== null}
+          dirty={dirty}
+          saved={saved}
+          onCuts={(c) => setAll(c)}
+          onSave={() => void save()}
+          onMessage={setMessage}
+        />
+      )}
+
+      {!reused && (
       <section className="vr-card" aria-labelledby="vb-set-h">
         <h2 id="vb-set-h">Settings for every picture</h2>
         {/* Each style with its published samples, as the look cards (Nate, 2026-11-22). The row scrolls inside itself. */}
@@ -496,8 +578,10 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
         {m.chosen && m.meta(m.chosen) && <p className="vr-small">{m.meta(m.chosen)}</p>}
         {m.notice}
       </section>
+      )}
 
       {/* The scene (Nate, 2026-11-22): one place, one light, one set of clothes, made and kept first. */}
+      {!reused && (
       <section className="vr-card" aria-labelledby="vb-scene-h">
         <h2 id="vb-scene-h">1. The scene</h2>
         <p className="vr-note">One place, one light, one set of clothes: every shot is this scene, filmed from another camera. Make it first; each shot in the scene is then made with it and his look as references.</p>
@@ -545,12 +629,16 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
         {scene.kept && !(tries[SCENE.key] ?? []).some((tr) => tr.sha256 === scene.kept) && <KeptPicture draftId={d.draft.id} shot={SCENE.key} sha={scene.kept} alt="The scene, as kept" />}
         {scene.kept && <p className="vr-ok">The scene is kept. Changing it later marks the shots made with this one.</p>}
       </section>
+      )}
 
       <section className="vr-card" aria-labelledby="vb-strip-h">
         <h2 id="vb-strip-h">2. Cuts</h2>
         <p className="vr-note">
           The speech&rsquo;s sentences, in time. <span className="vr-tag">Automatic</span> Cuts were first placed at sentence ends about every {d.limits.target} seconds, by a rule (no AI model). Turn &ldquo;New shot starts here&rdquo; on or off between any two sentences, up to {d.making.limits.maxShots} shots. On a wide screen you can also drag a cut on the strip, tap the strip to add one at the nearest word&rsquo;s end, or tap × to remove it.
         </p>
+        {reused ? (
+          <p className="vr-note">Drag a cut on the strip to make the shot before it longer or shorter, or use the buttons above. The shots and their pictures stay as they are.</p>
+        ) : (
         <ol className="vb-cutlist" aria-label="The speech's sentences, and where each shot starts">
           {t.sentences.map((x, i) => {
             const b = boundaries[i];
@@ -572,6 +660,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             );
           })}
         </ol>
+        )}
         <div className="vb-strip-wrap">
           <div className="vb-strip" ref={strip} onClick={onStripClick} onPointerMove={onDrag} onPointerUp={endDrag} role="group" aria-label="Timeline">
             {t.sentences.map((s) => (
@@ -594,9 +683,9 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             ))}
             {cuts.map((c, i) => (
               <span key={`${i}-${c}`} className="vb-cut" style={{ left: `${(c / t.seconds) * 100}%` }} onPointerDown={startDrag(i)} onClick={(e) => e.stopPropagation()}>
-                <button type="button" className="vb-cut-x" aria-label={`Remove the cut at ${fmt(c)}`} onClick={(e) => { e.stopPropagation(); setAll(cuts.filter((_, k) => k !== i)); }}>
+                {!reused && <button type="button" className="vb-cut-x" aria-label={`Remove the cut at ${fmt(c)}`} onClick={(e) => { e.stopPropagation(); setAll(cuts.filter((_, k) => k !== i)); }}>
                   ×
-                </button>
+                </button>}
               </span>
             ))}
             {audioUrl && <span className="vb-playhead" style={{ left: `${(now / t.seconds) * 100}%` }} />}
@@ -608,7 +697,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
           </div>
         </div>
         <div className="vr-row">
-          <button type="button" className="vr-btn vr-quiet vr-small-btn" onClick={() => setAll(d.board.proposed, [])}>Use the automatic cuts again</button>
+          {!reused && <button type="button" className="vr-btn vr-quiet vr-small-btn" onClick={() => setAll(d.board.proposed, [])}>Use the automatic cuts again</button>}
           <button type="button" className="vr-btn vr-small-btn" onClick={save} disabled={busy !== null || !dirty}>{busy === 'save' ? 'Saving…' : dirty ? 'Save' : saved ? `Saved (version ${saved})` : 'Saved'}</button>
           <span className="vr-small">{shots.length} of at most {d.making.limits.maxShots} shots</span>
         </div>
@@ -629,13 +718,13 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
         </section>
       )}
 
-      {shot && (
+      {shot && !reused && (
         <section className="vr-card" aria-labelledby="vb-shot-h">
           <div className="vb-shot-head">
             <h2 id="vb-shot-h">3. Shot {current + 1} of {shots.length}{shot.insert ? ' · Insert, outside the scene' : ''}</h2>
             <span className="vr-small">{fmt(shot.start)} – {fmt(shot.end)} · {(shot.end - shot.start).toFixed(1)} s</span>
           </div>
-          <blockquote className="vb-words"><span className="vr-tag">{d.draft.speech?.label?.text ?? 'Book'}</span> {sentencesIn(t, shot).map(sentenceText).join(' ')}</blockquote>
+          <blockquote className="vb-words"><span className="vr-tag">{d.draft.take?.improvised ? 'Your words' : (d.draft.speech?.label?.text ?? 'Book')}</span> {sentencesIn(t, shot).map(sentenceText).join(' ')}</blockquote>
           <PublishedTextField id={`vb-desc-${shot.key}`} label="What the shot shows (your words)" value={shot.description} onChange={(v) => edit({ description: v })} rows={3} maxLength={600} />
           {/* In the scene or an insert (Nate, 2026-11-22): only the person makes an insert; a shot starts in the scene. */}
           <fieldset className="vb-insert">
@@ -746,7 +835,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             <div className="vb-picture vb-empty">{playing ? `Shot ${playingNo}: no picture kept yet.` : 'Press play.'}</div>
           )}
         </div>
-        <p className="vb-caption"><span className="vr-tag">{d.draft.speech?.label?.text ?? 'Book'}</span> {audioUrl && now > 0 ? sentenceText(sentenceAt(t, now)) : sentenceText(t.sentences[0]?.n ?? null)}</p>
+        <p className="vb-caption"><span className="vr-tag">{d.draft.take?.improvised ? 'Your words' : (d.draft.speech?.label?.text ?? 'Book')}</span> {audioUrl && now > 0 ? sentenceText(sentenceAt(t, now)) : sentenceText(t.sentences[0]?.n ?? null)}</p>
         {audioUrl ? <audio controls src={audioUrl} className="vr-audio" onTimeUpdate={(e) => setNow(e.currentTarget.currentTime)} /> : <p className="vr-small">Loading the audio…</p>}
         <div className="vr-row">
           {saving === null ? (
@@ -761,6 +850,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
         <p className="vr-small">The kept pictures held for each shot over your performance, then the closing card: stitched in this browser in real time and saved on this device, labelled a draft. No AI video, nothing uploaded.</p>
       </section>
 
+      {!reused && (
       <section className="vr-card" aria-labelledby="vb-closing-h">
         <h2 id="vb-closing-h">4. Closing card</h2>
         <p className="vr-note">
@@ -824,6 +914,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
           <button type="button" className="vr-btn vr-small-btn" onClick={async () => { if (await save()) setCardTick((x) => x + 1); }} disabled={busy !== null || !dirty}>{busy === 'save' ? 'Saving…' : dirty ? 'Save' : 'Saved'}</button>
         </div>
       </section>
+      )}
 
       <section className="vr-card" aria-labelledby="vb-publish-h">
         <h2 id="vb-publish-h">5. Publish</h2>
@@ -866,7 +957,7 @@ export function VoiceBoard({ fallback }: { fallback: React.ReactNode }) {
             setBusy('remove');
             const r = await authFetch(`/api/voice/boards?draft=${d.draft.id}`, { method: 'DELETE' }).catch(() => null);
             setBusy(null);
-            if (r?.ok) window.location.href = '/storyboard/record';
+            if (r?.ok) window.location.href = '/ephelion';
             else setMessage(((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error ?? 'It could not be removed. Try again.');
           }}
         />

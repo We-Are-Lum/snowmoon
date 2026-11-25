@@ -4,7 +4,7 @@ import { db } from '~/lib/db';
 import { publication } from '~/lib/voice/publish';
 import { publishOn } from '~/lib/voice/publish-deps';
 import { sentencesIn, type Timeline } from '~/lib/voice/board';
-import { speechById } from '~/lib/voice/speech';
+import { spokenSentences, takeLabel, type Spoken } from '~/lib/voice/spoken';
 import { CLOSING, type CreditLine } from '~/lib/voice/closing';
 import { VoiceSpoken, type SpokenFile } from '~/components/voice-spoken';
 import { embedMeta, spokenEmbed } from '~/lib/voice/embeds';
@@ -39,13 +39,14 @@ export default async function SpokenPage({ params }: { params: Promise<{ id: str
     publishedAt: string;
   };
   const title = r.speech?.title ?? 'A speech';
-  // The speech's own words (never the transcription's), by sentence.
-  const own = r.speech?.id ? (speechById(r.speech.id)?.sentences ?? []) : [];
+  // The spoken words, by sentence (Nate, 2026-11-24): the speech's own (word for word, never the transcription's), or
+  // the performer's, as transcribed and as they corrected them (improvised).
+  const own = spokenSentences(r as unknown as { spoken?: Spoken; speech?: { id?: string } });
   const sentenceText = (n: number) => own.find((x) => x.n === n)?.text ?? '';
   const standIns = r.shots.some((s) => s.picture?.standIn) || Boolean(r.closing.background?.standIn);
   return (
     <main className="vr vb">
-      <p className="vr-kicker">Storyboard · {r.speech?.label?.text ?? 'Book'} words · Invented pictures</p>
+      <p className="vr-kicker">Storyboard · {takeLabel(r as unknown as { spoken?: Spoken }) === 'word for word' ? `${r.speech?.label?.text ?? 'Book'} words` : `Words ${takeLabel(r as unknown as { spoken?: Spoken })}`} · Invented pictures</p>
       <h1>{title}</h1>
       <p className="vr-labels">
         {r.performer.name ? `${r.voice?.kind === 'reading' ? 'Storyboard by' : 'By'} @${r.performer.name}` : 'By a reader'}
