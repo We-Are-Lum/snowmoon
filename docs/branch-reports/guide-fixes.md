@@ -1,26 +1,43 @@
 # HANDOFF: branch guide-fixes, the guided storyboard's fixes for the testers (DRAFT)
 
-**Handoff, 2026-11-24, Nate's laptop closing; a cloud session carries on from here.** State at the last push:
-- All seven fixes are written, and the code of 1–7 is committed. **Not yet run:** tsc, test:voice and the other
-  checks (the shared lock was busy). Run them first; fix what fails.
-- **Left, in order:**
-  1. Run the checks below. Fix failures, which are most likely in test-voice's GU section (fix 1 changed which
-     references a guided shot sends).
-  2. **Fix 7's server side**: written (untested). The page sends its own fingerprint of the recording (`takeSha256`,
-     computed on the device) and `again=1` only after "Convert again". `/api/voice/convert` refuses a whole take
-     already converted into a draft with 409, `reason: 'converted'`, before anything is counted
-     (`src/lib/voice/converted-before.ts`). `convertTake` checks the real sha256 as a backstop, through a new
-     `deps.convertedBefore` that never sees the take (P1h). Tests: test:voice section $, "fix 7". The `again` and
-     `takeSha256` fields are new: check the P1h static scan still passes.
-  3. The 390 px recording of the whole flow: `/Users/nathan/ephelion-voice-screens/guide-fixes/flow.mts` (outside
-     the repo). Run it after a local production build, with the worktree's `.env.local` moved aside. Upload the
-     screenshots and video to R2 review/<random hex>/ with an index page; the R2 keys are in main's `.env.local`,
-     never printed.
-  4. Open the PR: "Guided storyboard fixes for the testers (not to merge yet: Nate's word)". Merge only on Nate's
-     word.
-- **Waiting for Nate:** the reread of the Privacy line in fix 2 (below; P6k is red until then). Fix 7's words are
-  reread (2026-11-24).
-
+**State, 2026-11-25 (cloud session `session_015MNLwvqWNRKiBmpphsR2Lj`, carrying on from the Mac's handoff):**
+- **Checks on this branch (cloud container, localhost):** tsc clean; test:voice 344 ok, all passed; test:challenge 565
+  passed, 268 moment checks; production build passed; check:principles: P6a (local-only, known), P6d (not run: no
+  Vercel CLI here) and P6k (the Privacy draft below, unreread) fail; P6g failed once when run with the rest ("fetch
+  failed" loading /privacy) and passes alone. check:ui: see the PR (this container's network refuses
+  media.snowmoon.party, so pages that show the site's pictures can't load them here).
+- **What the cloud session changed:**
+  - tsc: a duplicated `made` in shot-picture.ts.
+  - test:voice's 6 failures were tests written before fix 1. The board's look now goes with every shot in the scene, so:
+    a second test look is seeded; shot 2's expected references are the scene, the look, then shot 1; the admin's
+    real-pictures test gives the look's sheet picture.
+  - Two server fixes the tests found. A request naming two looks is still refused (400). More than 3 references are
+    refused, before and after the site adds the scene and the look, instead of being cut short without a word.
+  - The recipe: the person's edit of the guide's references is judged on what they sent, before the site's changes. A
+    reference the site put back is recorded as the site's (`chosenBy: 'site'`), and one it left out (a stale kept
+    shot, another look) is listed in `guided.siteRemoved` with why.
+  - **Fix 7's server side.** The Mac and the cloud both wrote one; they are merged into one mechanism:
+    - `convertTake` calls the route's `admit(takeSha256)` with the take's sha256 only (never the take), before anything
+      is sent.
+    - `admit` refuses (409, reason `converted`) a whole take already kept as one of the person's drafts, unless the
+      form has `again=1`. Then it checks the limits and takes the hold, so a refusal counts nothing, not even one of
+      the day's takes.
+    - The page sends `again=1` only from "Convert again" and reloads the drafts on a 409.
+    - Dropped from the Mac's version: the fingerprint the device sent, and the second check after the take was
+      counted.
+    - Tests in test:voice sections V and $.
+- **Left:**
+  1. The 390 px recording of the whole flow (`flow.mts` on the Mac) and its R2 review page: not done. The script is
+     on the Mac only, and this container has no R2 keys.
+  2. Merging waits for Nate's reread and word.
+- **Waiting for Nate:**
+  - The reread of the Privacy line in fix 2 (`docs/legal/guide-fixes-draft.md`; P6k is red until then).
+  - The 409's words (Draft wording, `CONVERTED_ALREADY` in `src/lib/voice/take-flow.ts`): "This recording is
+    converted already: your draft is below. To convert it once more, press Convert again (it uses one of today's
+    takes)."
+  - Fix 7's page words are reread (2026-11-24).
+- Not covered: two tabs converting the same recording at the same moment can both pass the check (the draft is kept
+  only when the conversion comes back). One tab's double tap is stopped by the page's guard.
 
 2026-11-24. Written by the coding agent (Claude, a closed model by Anthropic). Nate went through the guided storyboard
 on his phone on 24 Nov and asked for these fixes before the testers (Garance 193912, Luis 6852, Freymon 665530) try it.
