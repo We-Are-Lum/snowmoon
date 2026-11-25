@@ -200,7 +200,7 @@ async function pickedFrom(sql: Sql, raw: unknown, limit: number): Promise<{ refs
   const refs: PickedRef[] = [];
   for (const id of ids) {
     const r = await resolveReference(sql, id);
-    if (!r.ok) return no(r.reason === 'hidden' || r.reason === 'unpublished' || r.reason === 'not-shown' ? 409 : 400, r.error, { reason: r.reason, versionId: id });
+    if (!r.ok) return no(r.reason === 'hidden' || r.reason === 'unpublished' || r.reason === 'taken-off' ? 409 : 400, r.error, { reason: r.reason, versionId: id });
     refs.push(r.ref);
   }
   return { refs };
@@ -247,8 +247,8 @@ export async function hiddenSince(sql: Sql, v: Pick<PictureVersion, 'recipe'>): 
 }
 
 /**
- * The edition's chapter pictures a version was made after that their chapters no longer show (2026-11-24: taken off
- * or replaced since the draft): Keep is refused, as for a picture hidden since, and the draft stays a draft.
+ * The added chapter pictures a version was made after that were taken off their chapter since the draft (2026-11-24;
+ * a replaced one stays usable, owner on #233): Keep is refused, as for a picture hidden since, and the draft stays a draft.
  */
 export async function offSince(sql: Sql, v: Pick<PictureVersion, 'recipe'>): Promise<string[]> {
   const picked = v.recipe?.picked ?? [];

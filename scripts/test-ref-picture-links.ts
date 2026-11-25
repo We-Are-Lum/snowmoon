@@ -7,17 +7,18 @@
  *     view is refused; a kept chapter picture's address is a `chapter` reference credited to the admin who kept it; a
  *     committed picture's address is an `edition` reference while its chapter shows it;
  *  D. drafts: a draft's would-be address is found nowhere, its draft link and its id are refused as not published;
- *  H. hidden and taken off: a hidden reader's picture, a chapter picture whose job an admin hid, one replaced since,
- *     and a committed picture with a kept redo in its place are each refused with their own words;
- *  S. search finds the chapters' kept pictures by character, chapter and note words, never a draft, a replaced or a
- *     hidden one;
+ *  H. hidden, taken off, replaced: a hidden reader's picture, a chapter picture whose job an admin hid, and an added
+ *     picture taken off its chapter are each refused with their own words; a kept version a later keep replaced, and a
+ *     committed picture with a kept redo in its place, stay usable (owner on #233, 2026-11-24);
+ *  S. search finds the chapters' kept pictures (replaced ones too) by character, chapter and note words, never a draft,
+ *     a hidden or a taken-off one;
  *  M. Make: a chapter picture goes as the others do, by its kept file checked against its sha256 (a mismatch stops
  *     Make); the recipe names it, its job, its kind and its sha256; a redo can't pick its own picture again;
- *  K. Keep: the caption credits the admin ("after @garance’s chapter 6 picture"); a chapter picture replaced since the
- *     draft, or hidden since, stops Keep; one hidden after Keep reads "a picture since hidden" and the public recipe
+ *  K. Keep: the caption credits the admin ("after @garance’s chapter 6 picture"); a chapter picture taken off since the
+ *     draft, or hidden since, stops Keep; one replaced since doesn't; one hidden after Keep reads "a picture since hidden" and the public recipe
  *     drops its address and job;
- *  P. P5j (writes only in admin.ts), and planted faults: a looser host check, a resolver that accepts drafts or ignores
- *     what the chapter shows, a Keep without the taken-off check.
+ *  P. P5j (writes only in admin.ts), and planted faults: a looser host check, a resolver that accepts drafts, ignores
+ *     hides or take-offs, or refuses replaced ones; a Keep without the taken-off check.
  *
  *   npm run test:ref-picture-links
  *
@@ -136,7 +137,14 @@ r = await redo(DRONE);
 const drone = String(r.json.versionId);
 await keep(DRONE, drone);
 await sql`insert into studio.seeded_hidden ${sql({ image_id: DRONE, by_fid: GARANCE })}`;
-const [GLADIAS_SHA, DRAFT_SHA, MU1_SHA, MU2_SHA, DRONE_SHA] = await Promise.all([gladias, draft, mu1, mu2, drone].map(sha));
+// An added picture kept, then taken off its chapter (owner, 2026-11-19: "take it off the chapter").
+const addReq = new Request('http://localhost/api/you/illustrations/add', { method: 'POST' });
+const add = (picked: string[], note = 'Gladias at the window.') => addPicture(S, GARANCE, addReq, { chapter: 6, after: 10, start: 8, end: 10, note, model: OPEN, picked }, US, deps);
+r = await add([], 'The basement door, taken off later.');
+const offJob = String(r.json.jobId), off = String(r.json.versionId);
+await keep(offJob, off);
+check('setup: an added picture kept, then taken off its chapter', (await showPicture(S, GARANCE, { jobId: offJob, versionId: null }, deps)).status === 200 && !(await readReplacements(S)).has(offJob));
+const [GLADIAS_SHA, DRAFT_SHA, MU1_SHA, MU2_SHA, DRONE_SHA, OFF_SHA] = await Promise.all([gladias, draft, mu1, mu2, drone, off].map(sha));
 
 // L. Links.
 for (const [l, page, id] of [
@@ -193,10 +201,12 @@ a = await referenceFromLink(S, fileOf(HIDDEN_SHA));
 check('H. a hidden reader\'s picture\'s address is refused as hidden', !a.ok && a.reason === 'hidden');
 a = await referenceFromLink(S, fileOf(DRONE_SHA));
 check('H. a chapter picture whose job an admin hid is refused as hidden', !a.ok && a.reason === 'hidden' && a.error === REF_WORDING.hidden, JSON.stringify(a));
+a = await referenceFromLink(S, fileOf(OFF_SHA));
+check('H. an added picture taken off its chapter is refused as taken off', !a.ok && a.reason === 'taken-off' && a.error === REF_WORDING.takenOff, JSON.stringify(a));
 a = await referenceFromLink(S, fileOf(MU1_SHA));
-check('H. a chapter picture replaced since is refused as not shown', !a.ok && a.reason === 'not-shown' && a.error === REF_WORDING.notShown, JSON.stringify(a));
+check('H. a kept version a later keep replaced stays usable, credited to the admin who kept it', a.ok && a.ref.kind === 'chapter' && a.ref.versionId === mu1 && a.ref.by === '@garance' && a.ref.url === fileOf(MU1_SHA) && a.ref.sha256 === MU1_SHA, JSON.stringify(a));
 a = await referenceFromLink(S, seedOf(GLADIAS).url);
-check('H. a committed picture with a kept redo in its place is refused as not shown', !a.ok && a.reason === 'not-shown');
+check('H. a committed picture with a kept redo in its place stays usable', a.ok && a.ref.kind === 'edition' && a.ref.versionId === GLADIAS, JSON.stringify(a));
 a = await referenceFromLink(S, seedOf(DRONE).url);
 check('H. a committed picture an admin hid is refused as hidden', !a.ok && a.reason === 'hidden');
 
@@ -205,19 +215,19 @@ const ids = async (q: string) => (await searchReferences(S, q)).map((x) => x.ver
 let found = await ids('gladias');
 check('S. "gladias" finds Gladias\'s kept chapter picture (the job\'s cast), not the draft', found.includes(gladias) && !found.includes(draft), found.join(','));
 found = await ids('Mu');
-check('S. "Mu" finds the Mu picture shown now, not the one it replaced', found.includes(mu2) && !found.includes(mu1), found.join(','));
+check('S. "Mu" finds the Mu picture shown now first, then the one it replaced', found.indexOf(mu2) >= 0 && found.indexOf(mu1) > found.indexOf(mu2), found.join(','));
 found = await ids('chapter 4');
 check('S. "chapter 4" finds chapter 4\'s kept picture', found.includes(mu2) && !found.includes(gladias), found.join(','));
 found = await ids('bai changes');
 check('S. words from the admin\'s note find it', found.includes(mu2), found.join(','));
 found = await ids('chapter 1');
 check('S. a chapter picture whose job an admin hid is never a result', !found.includes(drone), found.join(','));
+found = await ids('basement door');
+check('S. a taken-off added picture is never a result', !found.includes(off), found.join(','));
 const results = await searchReferences(S, 'gladias');
 check('S. a result is listed as a chapter picture by its admin', results.some((x) => x.versionId === gladias && x.kind === 'chapter' && x.by === '@garance' && x.url === fileOf(GLADIAS_SHA)));
 
 // M. Make.
-const addReq = new Request('http://localhost/api/you/illustrations/add', { method: 'POST' });
-const add = (picked: string[], note = 'Gladias at the window.') => addPicture(S, GARANCE, addReq, { chapter: 6, after: 10, start: 8, end: 10, note, model: OPEN, picked }, US, deps);
 r = await add([gladias, ID.reader]);
 const c = calls.at(-1);
 check('M. a chapter picture goes with Make by its kept file, checked by sha256, in the order picked', r.status === 200 && c?.refs.length === 2 && hash(c.refs[0]) === GLADIAS_SHA && hash(c.refs[1]) === READER_SHA, JSON.stringify(r.json));
@@ -225,10 +235,15 @@ check('M. the prompt says what it is and names no admin', /Reference picture 1 i
 const addedJob = String(r.json.jobId), addedVersion = String(r.json.versionId);
 const [row] = await sql<{ recipe: { picked: Record<string, unknown>[] } }[]>`select recipe from studio.chapter_picture_versions where id = ${addedVersion}`;
 check('M. the recipe names it: version, kind, job, admin, file and sha256', row.recipe.picked[0].versionId === gladias && row.recipe.picked[0].kind === 'chapter' && row.recipe.picked[0].job === GLADIAS && row.recipe.picked[0].by === '@garance' && row.recipe.picked[0].sha256 === GLADIAS_SHA, JSON.stringify(row.recipe.picked[0]));
-for (const [id, reason] of [[draft, 'unpublished'], [mu1, 'not-shown'], [drone, 'hidden']] as const) {
+for (const [id, reason] of [[draft, 'unpublished'], [off, 'taken-off'], [drone, 'hidden']] as const) {
   const n = calls.length;
   r = await add([id]);
   check(`M. Make refuses a ${reason} chapter picture (409) and makes nothing`, r.status === 409 && r.json.reason === reason && calls.length === n, JSON.stringify(r.json));
+}
+{
+  const n = calls.length;
+  r = await add([mu1], 'Mu, as she was first drawn.');
+  check('M. a replaced chapter picture is sent at Make, by its kept file', r.status === 200 && calls.length === n + 1 && hash(calls.at(-1)!.refs[0]) === MU1_SHA, JSON.stringify(r.json));
 }
 r = await redo(GLADIAS, [gladias]);
 check('M. a redo can\'t pick the picture it starts from again', r.status === 400 && r.json.error === REF_WORDING.shownAlready);
@@ -250,8 +265,17 @@ const afterMu = String(r.json.versionId), afterMuJob = String(r.json.jobId);
 r = await redo(MU, [], 'Mu again, later.');
 await keep(MU, String(r.json.versionId));
 r = await keep(afterMuJob, afterMu);
-check('K. a chapter picture replaced since the draft stops Keep, naming it; the draft stays a draft', r.status === 409 && r.json.reason === 'reference-off' && r.json.error === REF_WORDING.keepOff(['@garance’s chapter 4 picture']) && !(await publicRecipe(S, afterMu)), JSON.stringify(r.json));
-check('K. its words', REF_WORDING.keepOff(['@garance’s chapter 4 picture']) === 'This draft can’t be kept: one of its references (@garance’s chapter 4 picture) is no longer shown in its chapter. Make another draft with other references.');
+check('K. a chapter picture replaced since the draft doesn\'t stop Keep; the caption still credits it', r.status === 200 && addedBy((await readReplacements(S)).get(afterMuJob)!) === 'Added by @garance, after @garance’s chapter 4 picture', JSON.stringify(r.json));
+// Taken off since the draft: an added picture kept, a draft made after it, then it is taken off.
+r = await add([], 'The stair, to be taken off.');
+const xJob = String(r.json.jobId), x = String(r.json.versionId);
+await keep(xJob, x);
+r = await add([x], 'Gladias on the stair.');
+const afterX = String(r.json.versionId), afterXJob = String(r.json.jobId);
+await showPicture(S, GARANCE, { jobId: xJob, versionId: null }, deps);
+r = await keep(afterXJob, afterX);
+check('K. a chapter picture taken off since the draft stops Keep, naming it; the draft stays a draft', r.status === 409 && r.json.reason === 'reference-off' && r.json.error === REF_WORDING.keepOff(['@garance’s chapter 6 picture']) && !(await publicRecipe(S, afterX)), JSON.stringify(r.json));
+check('K. its words', REF_WORDING.keepOff(['@garance’s chapter 6 picture']) === 'This draft can’t be kept: one of its references (@garance’s chapter 6 picture) has been taken off its chapter since. Make another draft with other references.');
 // Hidden since the draft: a draft after the committed picture, then its job is hidden.
 r = await add([SEED.id], 'The bridge, closer.');
 const afterSeed = String(r.json.versionId), afterSeedJob = String(r.json.jobId);
@@ -272,11 +296,32 @@ const src = (dir: string): { file: string; text: string }[] =>
 const files = src('src');
 check('P. P5j passes (writes only in admin.ts; references.ts only reads)', p5jProblems(files).length === 0, p5jProblems(files).join('; '));
 const refsText = readFileSync(path.join(ROOT, 'src/lib/chapter-pictures/references.ts'), 'utf8');
-const RULES = [/if \(!kept\?\.n\) return refuse\('unpublished'\);/, /if \(!shown \|\| shown\.versionId !== v\.id\) return refuse\('not-shown'\);/, /if \(\(await hiddenJobs\(sql, \[v\.job_id\]\)\)\.has\(v\.job_id\)\) return refuse\('hidden'\);/, /if \(\(await shownNow\(sql\)\)\.has\(s\.id\)\) return refuse\('not-shown'\);/];
-const resolverProblems = (t: string) => RULES.filter((re) => !re.test(t)).map(String);
-check('P. the chapter resolver refuses drafts, pictures not shown and hidden ones', resolverProblems(refsText).length === 0, resolverProblems(refsText).join(' '));
-check('P. planted: a resolver that accepts drafts is caught', resolverProblems(refsText.replace("if (!kept?.n) return refuse('unpublished');", '')).length > 0);
-check('P. planted: a resolver that ignores what the chapter shows is caught', resolverProblems(refsText.replace("if (!shown || shown.versionId !== v.id) return refuse('not-shown');", "if (!shown) return refuse('not-shown');")).length > 0);
+// The chapter resolver's rules, by its source: drafts, hides and take-offs refused; nothing that refuses a replaced one.
+const RULES = [/if \(!kept\) return refuse\('unpublished'\);/, /if \(\(await hiddenJobs\(sql, \[v\.job_id\]\)\)\.has\(v\.job_id\)\) return refuse\('hidden'\);/, /if \(\(await takenOffJobs\(sql, \[v\.job_id\]\)\)\.has\(v\.job_id\)\) return refuse\('taken-off'\);/, /if \(\(await hiddenJobs\(sql, \[s\.id\]\)\)\.has\(s\.id\)\) return refuse\('hidden'\);/];
+const body = (t: string, fn: string) => t.slice(t.indexOf(`async function ${fn}(`), t.indexOf('\n}\n', t.indexOf(`async function ${fn}(`)));
+const resolverProblems = (t: string) => [
+  ...RULES.filter((re) => !re.test(t)).map(String),
+  ...(/shownNow|versionId !==|readReplacements/.test(body(t, 'resolveChapterPicture') + body(t, 'resolveEdition')) ? ['a resolver refuses a replaced picture'] : []),
+];
+check('P. the chapter resolvers refuse drafts, hidden and taken-off pictures, and never a replaced one', resolverProblems(refsText).length === 0, resolverProblems(refsText).join(' '));
+check('P. planted: a resolver that accepts drafts is caught', resolverProblems(refsText.replace("if (!kept) return refuse('unpublished');", '')).length > 0);
+check('P. planted: a resolver that ignores hides is caught', resolverProblems(refsText.replace("if ((await hiddenJobs(sql, [v.job_id])).has(v.job_id)) return refuse('hidden');", '')).length > 0);
+check('P. planted: a resolver that ignores take-offs is caught', resolverProblems(refsText.replace("if ((await takenOffJobs(sql, [v.job_id])).has(v.job_id)) return refuse('taken-off');", '')).length > 0);
+check('P. planted: a resolver that refuses a replaced picture is caught', resolverProblems(refsText.replace("if (!SHA.test(v.sha256)) return refuse('not-found');", "if ((await shownNow(sql)).get(v.job_id)?.versionId !== v.id) return refuse('taken-off');\n  if (!SHA.test(v.sha256)) return refuse('not-found');")).length > 0);
+// The same rule at Keep, by behaviour: a planted status rule that calls a replaced one 'off' is caught.
+const { chapterRefStatuses } = await import('../src/lib/chapter-pictures/references');
+const statusProblems = async (f: typeof chapterRefStatuses) => {
+  const m = await f(S, [{ versionId: mu1, kind: 'chapter', job: MU }, { versionId: x, kind: 'chapter', job: xJob }, { versionId: gladias, kind: 'chapter', job: GLADIAS }, { versionId: SEED.id, kind: 'edition', job: SEED.id }, { versionId: GLADIAS, kind: 'edition', job: GLADIAS }]);
+  const want: [string, string][] = [[mu1, 'published'], [x, 'off'], [gladias, 'hidden'], [SEED.id, 'hidden'], [GLADIAS, 'hidden']];
+  return want.filter(([id, w]) => m.get(id.toLowerCase()) !== w).map(([id, w]) => `${id}: ${m.get(id.toLowerCase())} not ${w}`);
+};
+check('P. at Keep: replaced is usable, taken off is off, hidden is hidden', (await statusProblems(chapterRefStatuses)).length === 0, (await statusProblems(chapterRefStatuses)).join('; '));
+check('P. planted: a Keep rule that calls a replaced picture off is caught', (await statusProblems(async (sq, refs) => {
+  const m = await chapterRefStatuses(sq, refs);
+  const shownNow = await readReplacements(S);
+  for (const r of refs) if (r.kind === 'chapter' && m.get(r.versionId) === 'published' && shownNow.get(r.job!)?.versionId !== r.versionId) m.set(r.versionId, 'off');
+  return m;
+})).length > 0);
 const picturesText = readFileSync(path.join(ROOT, 'src/lib/chapter-pictures/pictures.ts'), 'utf8');
 const keepProblems = (t: string) => ((t.match(/if \(off\.length\) return no\(409, REF_WORDING\.keepOff\(off\)/g) ?? []).length === 2 ? [] : ['a Keep path without the taken-off check']);
 check('P. both Keep paths refuse a draft made after a chapter picture taken off since', keepProblems(picturesText).length === 0);

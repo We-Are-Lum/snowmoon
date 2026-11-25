@@ -11,8 +11,7 @@ import { callNameOf } from '../challenge/names';
 import { checkJob } from '../illustration-check/jobs';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { adminName, isChapterKind, namesAWork, parseRefLink, PICTURE_HOSTS, recipePath, type Look, type PickedRef, type ShownReplacement } from './shared';
-import { readReplacements } from './read';
+import { adminName, isAddedId, isChapterKind, namesAWork, parseRefLink, PICTURE_HOSTS, recipePath, type Look, type PickedRef } from './shared';
 
 /**
  * Other people's published pictures as references for the edition's chapter pictures, and any published style as the
@@ -36,9 +35,9 @@ import { readReplacements } from './read';
  * media.snowmoon.party for the edition's committed pictures) reads to what it is, and the edition's own chapter
  * pictures can be references: a redone or added picture an admin kept (kind `chapter`, credited to the admin the
  * chapter credits: "after @garance’s chapter 3 picture"), or a committed one (kind `edition`, "after the edition’s
- * chapter 1 picture"), each only while its chapter shows it: never a draft (its file is never on the public bucket and
- * its id is refused), never one taken off or replaced since, never one an admin hid (studio.seeded_hidden). Their
- * records are read here; nothing here writes (P5j).
+ * chapter 1 picture"). Never a draft (its file is never on the public bucket and its id is refused), never one an admin
+ * hid (studio.seeded_hidden), never an added picture taken off its chapter; a kept version a later keep replaced stays
+ * usable (owner on #233, 2026-11-24). Their records are read here; nothing here writes (P5j).
  */
 type Sql = postgres.Sql;
 
@@ -55,13 +54,13 @@ export const REF_WORDING = {
   tooMany: (n: number) => `Up to ${n} ${n === 1 ? 'picture' : 'pictures'} here: three references in all, counting the character sheets (a redo’s picture shown now counts as one).`,
   twice: 'That picture is already picked.',
   shortQuery: 'Type at least two letters.',
-  // DRAFT wording (coding agent, 2026-11-24): a chapter picture not shown now, a sheet's other view, a redo's own picture,
-  // and Keep after a chapter picture was taken off.
-  notShown: 'That chapter picture isn’t shown in its chapter now (it was taken off or replaced), so it can’t be a reference.',
+  // DRAFT wording (coding agent, 2026-11-24): an added picture taken off its chapter, a sheet's other view, a redo's own
+  // picture, and Keep after a chapter picture was taken off. A replaced one stays usable (owner on #233, 2026-11-24).
+  takenOff: 'That picture was taken off its chapter, so it can’t be a reference.',
   otherView: 'That is one of a sheet’s other views: only a sheet’s front view is sent. Paste the sheet’s page or its front view’s address.',
   shownAlready: 'That is the picture this redo starts from: it is already reference picture 1.',
   keepOff: (whats: string[]) =>
-    `This draft can’t be kept: ${COUNT[whats.length] ?? String(whats.length)} of its references (${whats.join(', ')}) ${whats.length === 1 ? 'is' : 'are'} no longer shown in ${whats.length === 1 ? 'its chapter' : 'their chapters'}. Make another draft with other references.`,
+    `This draft can’t be kept: ${COUNT[whats.length] ?? String(whats.length)} of its references (${whats.join(', ')}) ${whats.length === 1 ? 'has' : 'have'} been taken off ${whats.length === 1 ? 'its chapter' : 'their chapters'} since. Make another draft with other references.`,
   // Owner, 2026-11-21: "If a reference was hidden in the meantime, Keep is refused with a plain message and the admin can
   // try again with other references." The draft stays a draft. The owner's own words (2026-11-21): "This draft can't be
   // kept: one of its references (@name's Bai remix) has been hidden since. Make another draft with other references."
@@ -71,12 +70,12 @@ export const REF_WORDING = {
   lookHidden: (label: string) => `The saved look, “${label}”, has been hidden since it was saved. Choose another look first.`,
 } as const;
 
-export type RefRefusal = 'not-a-link' | 'not-found' | 'hidden' | 'unpublished' | 'no-picture' | 'style' | 'not-shown' | 'other-view';
+export type RefRefusal = 'not-a-link' | 'not-found' | 'hidden' | 'unpublished' | 'no-picture' | 'style' | 'taken-off' | 'other-view';
 export type Resolved = { ok: true; ref: PickedRef } | { ok: false; reason: RefRefusal; error: string };
 const refuse = (reason: RefRefusal): Resolved => ({
   ok: false,
   reason,
-  error: { 'not-a-link': REF_WORDING.notALink, 'not-found': REF_WORDING.notFound, hidden: REF_WORDING.hidden, unpublished: REF_WORDING.unpublished, 'no-picture': REF_WORDING.noPicture, style: REF_WORDING.style, 'not-shown': REF_WORDING.notShown, 'other-view': REF_WORDING.otherView }[reason],
+  error: { 'not-a-link': REF_WORDING.notALink, 'not-found': REF_WORDING.notFound, hidden: REF_WORDING.hidden, unpublished: REF_WORDING.unpublished, 'no-picture': REF_WORDING.noPicture, style: REF_WORDING.style, 'taken-off': REF_WORDING.takenOff, 'other-view': REF_WORDING.otherView }[reason],
 });
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const SHA = /^[0-9a-f]{64}$/;
@@ -131,8 +130,8 @@ export async function resolveReference(sql: Sql, id: unknown): Promise<Resolved>
 }
 
 /**
- * The edition's chapter pictures as references (2026-11-24). Which picture each job shows now is the latest decision
- * (readReplacements, as every page reads it); a job an admin hid is a row in studio.seeded_hidden (src/app/api/admin/hide).
+ * The edition's chapter pictures as references (2026-11-24). A job an admin hid is a row in studio.seeded_hidden
+ * (src/app/api/admin/hide); an added picture taken off its chapter has a latest decision with no version.
  */
 const EDITION_JOB = /^c\d{1,2}-b\d{1,4}-[a-z0-9-]{1,80}$/;
 const missingTable = (e: unknown) => (e as { code?: string })?.code === '42P01' || /does not exist/.test(String((e as Error)?.message ?? e));
@@ -148,12 +147,28 @@ export async function hiddenJobs(sql: Sql, jobs: string[]): Promise<Set<string>>
   return new Set(rows.map((r) => r.image_id));
 }
 
-/** The chapter pictures shown now, by job (none before 0042_chapter_picture_versions). */
-const shownNow = (sql: Sql): Promise<Map<string, ShownReplacement>> =>
-  readReplacements(sql).catch((e) => {
-    if (missingTable(e)) return new Map<string, ShownReplacement>();
+/**
+ * Which of these added pictures an admin took off its chapter (owner, 2026-11-19: "Undo for a new picture is 'take it
+ * off the chapter'"): its latest decision shows no version. A redo whose job shows another version, or the committed
+ * file again, was replaced, not taken off, and stays usable (owner on #233, 2026-11-24). None before 0042.
+ */
+export async function takenOffJobs(sql: Sql, jobs: string[]): Promise<Set<string>> {
+  const want = [...new Set(jobs.filter((j) => typeof j === 'string' && isAddedId(j)))];
+  if (!want.length) return new Set();
+  const rows = await sql<{ job_id: string; version_id: string | null }[]>`
+    select distinct on (job_id) job_id, version_id::text from studio.chapter_picture_decisions where job_id in ${sql(want)}
+    order by job_id, decided_at desc, id desc`.catch((e) => {
+    if (missingTable(e)) return [];
     throw e;
   });
+  return new Set(rows.filter((r) => r.version_id === null).map((r) => r.job_id));
+}
+
+/** A version's first keep: who kept it and its public file (null for a draft never kept). */
+type FirstKeep = { by_fid: string; by_handle: string | null; public_url: string };
+const firstKeepOf = async (sql: Sql, versionId: string): Promise<FirstKeep | null> =>
+  (await sql<FirstKeep[]>`select by_fid, by_handle, public_url from studio.chapter_picture_decisions
+    where version_id = ${versionId} and public_url is not null order by decided_at, id limit 1`)[0] ?? null;
 
 /** The edition's committed pictures (content/snowmoon/illustrations/published.json): job, chapter, address and sha256. */
 type Seed = { id: string; chapter: number; url: string; sha256: string };
@@ -174,10 +189,10 @@ const chapterWhat = (chapter: number) => `chapter ${chapter} picture`;
 export const EDITION_BY = 'the edition';
 
 /**
- * A chapter picture version an admin made (studio.chapter_picture_versions), by its id: only while it is the one its
- * chapter shows. A draft never kept is refused as not published; one taken off or replaced since as not shown; one
- * whose job an admin hid as hidden. Credited to the admin the chapter credits for it (its caption's "Redone by" or
- * "Added by"). Its file is the kept one on the readers' bucket, with the version's sha256.
+ * A chapter picture version an admin made (studio.chapter_picture_versions), by its id: any version an admin kept,
+ * whether its chapter shows it now or a later keep replaced it (owner on #233, 2026-11-24). A draft never kept is
+ * refused as not published; one whose job an admin hid as hidden; an added picture taken off its chapter as taken off.
+ * Credited to the admin who kept it; its file is the kept one on the readers' bucket, with the version's sha256.
  */
 async function resolveChapterPicture(sql: Sql, id: string): Promise<Resolved> {
   const [v] = await sql<{ id: string; job_id: string; chapter: number; sha256: string }[]>`
@@ -186,24 +201,26 @@ async function resolveChapterPicture(sql: Sql, id: string): Promise<Resolved> {
     throw e;
   });
   if (!v) return refuse('not-found');
-  const [kept] = await sql<{ n: number }[]>`select count(*)::int as n from studio.chapter_picture_decisions where version_id = ${v.id} and public_url is not null`;
-  if (!kept?.n) return refuse('unpublished');
+  const kept = await firstKeepOf(sql, v.id);
+  if (!kept) return refuse('unpublished');
   if ((await hiddenJobs(sql, [v.job_id])).has(v.job_id)) return refuse('hidden');
-  const shown = (await shownNow(sql)).get(v.job_id);
-  if (!shown || shown.versionId !== v.id) return refuse('not-shown');
-  if (!SHA.test(shown.sha256) || shown.sha256 !== v.sha256) return refuse('not-found');
+  if ((await takenOffJobs(sql, [v.job_id])).has(v.job_id)) return refuse('taken-off');
+  if (!SHA.test(v.sha256)) return refuse('not-found');
+  const byFid = Number(kept.by_fid);
   return {
     ok: true,
-    ref: { versionId: v.id, kind: 'chapter', what: chapterWhat(v.chapter), by: adminName(shown.byFid, shown.byHandle), byFid: shown.byFid, href: recipePath(v.id), url: shown.url, sha256: shown.sha256, job: v.job_id },
+    ref: { versionId: v.id, kind: 'chapter', what: chapterWhat(v.chapter), by: adminName(byFid, kept.by_handle), byFid, href: recipePath(v.id), url: kept.public_url, sha256: v.sha256, job: v.job_id },
   };
 }
 
-/** One of the edition's committed pictures, by its job's id: only while its chapter shows it (no kept redo in its place, not hidden). */
+/**
+ * One of the edition's committed pictures, by its job's id: refused only once an admin hid it (a committed picture
+ * can't be taken off; one a kept redo replaced stays usable, owner on #233, 2026-11-24).
+ */
 async function resolveEdition(sql: Sql, jobId: string): Promise<Resolved> {
   const s = seedPictures().find((x) => x.id === jobId);
   if (!s) return refuse('not-found');
   if ((await hiddenJobs(sql, [s.id])).has(s.id)) return refuse('hidden');
-  if ((await shownNow(sql)).has(s.id)) return refuse('not-shown');
   return { ok: true, ref: { versionId: s.id, kind: 'edition', what: chapterWhat(s.chapter), by: EDITION_BY, byFid: 0, href: `/chapter/${s.chapter}`, url: s.url, sha256: s.sha256, job: s.id } };
 }
 
@@ -285,46 +302,54 @@ export async function searchReferences(sql: Sql, raw: unknown): Promise<PickedRe
 }
 
 /**
- * The chapter pictures admins redid or added that their chapters show now (2026-11-24), matching the search: by
- * chapter ("chapter 3", "ch 3", "c3"), by a character the job's scene or its sheets name, or by a word that starts in
- * the admin's note or the job's id, or by the admin's handle; in book order, at most 12. A hidden one is left out here
- * and refused again by resolveReference.
+ * The chapter pictures admins redid or added and kept (2026-11-24), the ones replaced since included, since they can
+ * be picked (owner on #233), matching the search: by chapter ("chapter 3", "ch 3", "c3"), by a character the job's
+ * scene or its sheets name, or by a word that starts in the admin's note, the job's id or the keeper's handle. Never a
+ * draft, a hidden one or a taken-off one. In book order, the one each chapter shows now first, then newest; at most 12.
  */
 async function chapterMatches(sql: Sql, q: string, slugs: string[]): Promise<string[]> {
-  const shown = [...(await shownNow(sql)).values()];
-  if (!shown.length) return [];
-  const hidden = await hiddenJobs(sql, shown.map((r) => r.jobId));
+  type K = { id: string; job_id: string; chapter: number; note: string; refs: unknown; by_handle: string | null; kept_at: Date; shown: boolean };
+  const kept = await sql<K[]>`
+    with latest as (select distinct on (job_id) job_id, version_id from studio.chapter_picture_decisions order by job_id, decided_at desc, id desc)
+    select distinct on (v.id) v.id::text, v.job_id, v.chapter, v.note, v.recipe->'references' as refs, d.by_handle, d.decided_at as kept_at,
+      exists (select 1 from latest l where l.version_id = v.id) as shown
+    from studio.chapter_picture_versions v join studio.chapter_picture_decisions d on d.version_id = v.id and d.public_url is not null
+    order by v.id, d.decided_at, d.id`.catch((e) => {
+    if (missingTable(e)) return [] as K[];
+    throw e;
+  });
+  if (!kept.length) return [];
+  const jobs = kept.map((r) => r.job_id);
+  const [hidden, off] = await Promise.all([hiddenJobs(sql, jobs), takenOffJobs(sql, jobs)]);
   const ch = /^(?:chapter|ch\.?|c)\s*(\d{1,2})$/i.exec(q)?.[1];
   const escaped = q.replace(/[.*+?^$()|[\]{}\\]/g, (c) => `\\${c}`);
   const word = new RegExp(`(^|[^\\p{L}\\p{N}])${escaped}`, 'iu');
-  const castOf = (jobId: string) => {
-    const j = checkJob(jobId);
-    return j ? j.cast.map((c) => c.slug) : [];
-  };
-  return shown
-    .filter((r) => !hidden.has(r.jobId))
+  const castOf = (jobId: string) => checkJob(jobId)?.cast.map((c) => c.slug) ?? [];
+  const sheetsOf = (refs: unknown) => (Array.isArray(refs) ? refs.map((x) => String((x as { sheet?: unknown })?.sheet ?? '')).filter(Boolean) : []);
+  return kept
+    .filter((r) => !hidden.has(r.job_id) && !off.has(r.job_id))
     .filter((r) =>
-      ch ? r.chapter === Number(ch) : word.test(r.note) || word.test(r.jobId) || (r.byHandle ? word.test(r.byHandle) : false) || [...castOf(r.jobId), ...(r.sheets ?? [])].some((s) => slugs.includes(s)),
+      ch ? r.chapter === Number(ch) : word.test(r.note) || word.test(r.job_id) || (r.by_handle ? word.test(r.by_handle) : false) || [...castOf(r.job_id), ...sheetsOf(r.refs)].some((x) => slugs.includes(x)),
     )
-    .sort((a, b) => a.chapter - b.chapter || a.jobId.localeCompare(b.jobId))
+    .sort((a, b) => a.chapter - b.chapter || a.job_id.localeCompare(b.job_id) || Number(b.shown) - Number(a.shown) || new Date(b.kept_at).getTime() - new Date(a.kept_at).getTime())
     .slice(0, 12)
-    .map((r) => r.versionId);
+    .map((r) => r.id);
 }
 
 /**
- * Each picked chapter picture's state now (2026-11-24), by its versionId: 'published' while its chapter shows it,
- * 'hidden' once an admin hid its job, 'off' once it was taken off or replaced. For the check at Keep.
+ * Each picked chapter picture's state now (2026-11-24), by its versionId: 'hidden' once an admin hid its job, 'off'
+ * once an added picture was taken off its chapter, 'published' otherwise (replaced since included; owner on #233). For
+ * the check at Keep.
  */
 export async function chapterRefStatuses(sql: Sql, refs: Pick<PickedRef, 'versionId' | 'kind' | 'job'>[]): Promise<Map<string, 'published' | 'hidden' | 'off'>> {
   const mine = refs.filter((x) => isChapterKind(x.kind));
   const out = new Map<string, 'published' | 'hidden' | 'off'>();
   if (!mine.length) return out;
   const jobOf = (x: (typeof mine)[number]) => x.job ?? (x.kind === 'edition' ? x.versionId : '');
-  const [hidden, shown] = await Promise.all([hiddenJobs(sql, mine.map(jobOf)), shownNow(sql)]);
+  const [hidden, off] = await Promise.all([hiddenJobs(sql, mine.map(jobOf)), takenOffJobs(sql, mine.map(jobOf))]);
   for (const x of mine) {
     const job = jobOf(x);
-    const now = shown.get(job);
-    out.set(x.versionId.toLowerCase(), hidden.has(job) ? 'hidden' : (x.kind === 'edition' ? !now : now?.versionId === x.versionId.toLowerCase()) ? 'published' : 'off');
+    out.set(x.versionId.toLowerCase(), hidden.has(job) ? 'hidden' : off.has(job) ? 'off' : 'published');
   }
   return out;
 }
