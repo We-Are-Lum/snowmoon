@@ -1,7 +1,7 @@
 # X posts from Discord: plan
 
-**DRAFT.** Written by an AI coding agent (Claude, made by Anthropic), 2026-11-25, for the owner's reread. Version 2:
-the owner's answers to section 9 (2026-11-25) are folded in. Every wording below is this edition's own, a draft until
+**DRAFT.** Written by an AI coding agent (Claude, made by Anthropic), 2026-11-25, for the owner's reread. Version 3:
+the owner's answers to section 9 and his later changes (2026-11-25) are folded in. Every wording below is this edition's own, a draft until
 the owner rereads it. The account is @snowmoon_party.
 
 The team proposes posts for the Snowmoon X account in one Discord channel, approves them with buttons, and the site
@@ -264,7 +264,7 @@ Not repeated:
    token values post as that account. No sign-in flow.
 
 Later the same day (owner, 2026-11-25): a posted card is frozen in the database (only to deleted; deleted is final), and
-"Delete and redraft" is added (section 1). Both are in `NEXT_x_posts.sql`, version 2.
+"Delete and redraft" is added (section 1). Both are in `NEXT_x_posts.sql` (version 2, the freeze; version 3, the redraft).
 
 Next (owner, 2026-11-25): release 1, the cards with posting off, on branch `x-posts`. `NEXT_x_posts.sql` goes to the
 owner to test first; the setup steps come one at a time once the cards are ready to try.
