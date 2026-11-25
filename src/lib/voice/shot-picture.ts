@@ -2,7 +2,7 @@ import 'server-only';
 import { createHash } from 'node:crypto';
 import type postgres from 'postgres';
 import { IMAGES, VOICE } from '../config';
-import { isAdmin } from '../admins';
+import { voiceInsider } from './flag';
 import { challengeModel, modelRow, noticeProblem, reserveUsd, type ChallengeModel } from '../challenge/models';
 import { chapterDefaultModel } from '../chapter-pictures/default-model';
 import { designByVersion, listDesigns } from '../images/designs';
@@ -44,7 +44,8 @@ export interface ShotDeps {
 
 /** What the board page offers: the models for this visitor, the default, and the limits. */
 /** May this person make real pictures for a storyboard? (VOICE.realPictures: 'admins' lets admins only.) */
-export const realPicturesFor = (fid: number) => VOICE.realPictures === true || (VOICE.realPictures === 'admins' && isAdmin(fid));
+// 'admins' includes the testers (VOICE.testers, Nate 2026-11-24), on the admins' pool.
+export const realPicturesFor = (fid: number) => VOICE.realPictures === true || (VOICE.realPictures === 'admins' && voiceInsider(fid));
 export const shotModels = (where: Where, fid: number) => ({ models: modelRow(where), defaultModel: chapterDefaultModel(where), real: realPicturesFor(fid), limits: VOICE.board });
 
 export async function triesMade(sql: Sql, draftId: string, fid: number): Promise<Record<string, number>> {
@@ -185,7 +186,7 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   const worst = reserveUsd(m, { width: IMAGES.viewSize.width, height: IMAGES.viewSize.height * Math.max(1, refs.length) });
   const paid = await deps.paid(sql, fid, request, {
     checkText: prompt,
-    spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, ...(isAdmin(fid) ? { pool: 'admin' as const } : {}) },
+    spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, ...(voiceInsider(fid) ? { pool: 'admin' as const } : {}) },
     // A closed model's maker (OpenAI, Google): a refusal by its own check names it (branch refusal-reasons, owner
     // 2026-11-18; wording reread by the owner 2026-11-22).
     ...(m.open ? {} : { maker: m.maker }),

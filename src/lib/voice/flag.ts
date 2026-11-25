@@ -8,11 +8,16 @@ import { isAdmin } from '../admins';
 const onVercel = () => Boolean(process.env.VERCEL || process.env.VERCEL_ENV);
 export const voiceTestOn = () => !onVercel() && process.env.VOICE_TEST_ON === '1';
 
+/** A tester (VOICE.testers, Nate 2026-11-24): the voice pages as an admin has them, and nothing else of an admin's. */
+export const isVoiceTester = (fid: number) => VOICE.testers.includes(fid);
+/** An admin or a tester: who gets the admins' voice pages, and whose takes and pictures the admins' pool pays for. */
+export const voiceInsider = (fid: number) => isAdmin(fid) || isVoiceTester(fid);
+
 /** Whether this person may use the voice pages and routes. */
 export function voiceAllowed(fid: number | null): boolean {
   if (fid === null) return false;
   if (VOICE.open) return true;
-  return (VOICE.adminTrial || voiceTestOn()) && isAdmin(fid);
+  return (VOICE.adminTrial || voiceTestOn()) && voiceInsider(fid);
 }
 
 /**

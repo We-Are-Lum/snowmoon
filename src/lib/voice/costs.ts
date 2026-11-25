@@ -1,7 +1,7 @@
 import 'server-only';
 import type postgres from 'postgres';
 import { VOICE } from '../config';
-import { isAdmin } from '../admins';
+import { voiceInsider } from './flag';
 
 /**
  * Voice costs, as daily totals in studio.voice_costs (no person, no request id; 0044_ephelion_voice.sql), and the caps
@@ -11,7 +11,8 @@ import { isAdmin } from '../admins';
  */
 export type Funded = 'free' | 'admin';
 export type CostKind = 'convert' | 'transcribe' | 'reading';
-export const fundedFor = (fid: number): Funded => (isAdmin(fid) ? 'admin' : 'free');
+/** Admins and testers (VOICE.testers) are paid for from the admins' pool. */
+export const fundedFor = (fid: number): Funded => (voiceInsider(fid) ? 'admin' : 'free');
 export const usdFor = (credits: number) => (credits * VOICE.rates.usdPer1000Credits) / 1000;
 // Today as a UTC date. Timestamps are compared as UTC dates too ((at at time zone 'utc')::date): a bare date compared
 // with a timestamptz is read in the session's time zone, which made today's rows "yesterday's" west of UTC.
