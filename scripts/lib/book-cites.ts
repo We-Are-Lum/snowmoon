@@ -124,7 +124,8 @@ export function introCiteProblems(html: string): string[] {
   const { problems, blocks } = citeProblems(html, 'the Ephelion intro');
   const $ = cheerio.load(html, null, false);
   const got = $('.vr-intro > p').map((_, p) => $(p).text()).get();
-  const want = INTRO_WITH_CODES.map((p) => p.replace(new RegExp(CODE.source, 'g'), ''));
+  // Nate, 2026-11-24: no parentheses either, so each "(code)" goes, leaving the icon right after the words.
+  const want = INTRO_WITH_CODES.map((p) => p.replace(new RegExp(`\\(${CODE.source}\\)`, 'g'), ''));
   if (got.join('\n') !== want.join('\n')) problems.push(`the Ephelion intro: the words changed: "${got.join(' / ')}"`);
   if (blocks.join(' ') !== INTRO_BLOCKS.join(' ')) problems.push(`the Ephelion intro: the icons' blocks are ${blocks.join(' ')}, not ${INTRO_BLOCKS.join(' ')}`);
   return problems;

@@ -12,7 +12,7 @@ export function EphelionIntro() {
   return (
     <div className="vr-intro">
       <p>
-        Lord Ephelion is the Arctic Empire&apos;s consul to Veridia (<Cite b="c3-b5" />). In the book his messages reach Veridians everywhere: on a poster in a tunnel (<Cite b="c3-b4" />), in a live debate (<Cite b="c8-b17" />), on a restaurant screen that cuts into a Helisport game (<Cite b="c13-b62" />). As one character puts it, &quot;Ephelion&apos;s goal is to inspire people inside Veridia to join the Arctic cause.&quot; (<Cite b="c21-b76" />)
+        Lord Ephelion is the Arctic Empire&apos;s consul to Veridia <Cite b="c3-b5" />. In the book his messages reach Veridians everywhere: on a poster in a tunnel <Cite b="c3-b4" />, in a live debate <Cite b="c8-b17" />, on a restaurant screen that cuts into a Helisport game <Cite b="c13-b62" />. As one character puts it, &quot;Ephelion&apos;s goal is to inspire people inside Veridia to join the Arctic cause.&quot; <Cite b="c21-b76" />
       </p>
       <p>Give one of his speeches a voice: perform it yourself, or start from a ready-made reading, then storyboard it.</p>
     </div>
