@@ -9,7 +9,7 @@ import { EPHELION_LEARN_MORE } from '~/lib/voice/learn-more';
  * /ephelion (was /storyboard/record, which redirects here; Nate 2026-11-24): the Ephelion voice slice. It answers 200
  * (Nate, 2026-11-25: so link previews and Farcaster casts load), and draws, in the browser:
  * - signed out: one line and the sign-in (EphelionSignIn);
- * - signed in and let in by the switch (admins and VOICE.testers; GET /api/voice/status answers 404 to everyone else):
+ * - signed in and let in by the switch (admins and the testers; GET /api/voice/status answers 404 to everyone else):
  *   the challenge;
  * - signed in and not let in: the site's usual "not found" screen.
  * Its metadata (the miniapp embed, never indexed) is in ./layout.tsx.

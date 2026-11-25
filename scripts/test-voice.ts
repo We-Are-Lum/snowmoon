@@ -112,7 +112,7 @@ const sharpPng = async () => (await import('sharp')).default({ create: { width: 
   const r = JSON.parse(recordEmbed());
   const sp = JSON.parse(spokenEmbed('11111111-2222-4333-8444-555555555555'));
   check('E. /ephelion opens itself: launch_frame, "Record a speech" (fix 6, Nate 2026-11-24: the new address)', RECORD_BUTTON === 'Record a speech' && r.button.title === RECORD_BUTTON && r.button.action.type === 'launch_frame' && r.button.action.url.endsWith('/ephelion'));
-  check('E. fix 6: /storyboard/record redirects permanently to /ephelion', /permanentRedirect\('\/ephelion'\)/.test(readFileSync(path.join(ROOT, 'src/app/storyboard/record/page.tsx'), 'utf8')) && !existsSync(path.join(ROOT, 'src/app/storyboard/record/not-found.tsx')) && existsSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx')));
+  check('E. fix 6: /storyboard/record redirects permanently to /ephelion', /permanentRedirect\('\/ephelion'\)/.test(readFileSync(path.join(ROOT, 'src/app/storyboard/record/page.tsx'), 'utf8')) && !existsSync(path.join(ROOT, 'src/app/storyboard/record/not-found.tsx')) && existsSync(path.join(ROOT, 'src/app/ephelion/page.tsx')));
   {
     // The guide on a phone (Nate, 2026-11-24): the ask box is pinned to the bottom only on wide screens (on a phone it hid
     // the guide's card), and the looks are whole cards that wrap, never sliding sideways inside the card.
@@ -181,7 +181,7 @@ process.env.VOICE_TEST_ON = '';
 check('S. with the switch off, an admin isn\'t let in either', !voiceAllowed(NATE) && [401, 404].includes((await status.GET(as(NATE))).status));
 (VOICE as { adminTrial: boolean }).adminTrial = true;
 process.env.VOICE_TEST_ON = '1';
-for (const f of ['src/app/ephelion/page.tsx']) check(`S. ${f} is the site's usual not-found for everyone`, /notFound\(\);/.test(readFileSync(path.join(ROOT, f), 'utf8')));
+for (const f of ['src/app/ephelion/page.tsx']) check(`S. ${f} answers 200 for everyone (Nate, 2026-11-25), with the site's usual not-found screen drawn for anyone signed in and not let in`, ((t) => !/notFound\(\);/.test(t) && /fallback=\{<NotFound \/>\}/.test(t))(readFileSync(path.join(ROOT, f), 'utf8')));
 {
   const saved = process.env.ELEVENLABS_BASE_URL;
   delete process.env.ELEVENLABS_BASE_URL;
