@@ -2,6 +2,7 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import type { LearnMoreView, Rendered } from '~/lib/challenge/learn-more-view';
+import { BookCite } from '~/components/book-cite';
 
 /**
  * "Learn more about {name}" on a character's page: the <details> and its summary drawn as a button (the design pass,
@@ -40,7 +41,8 @@ export function LearnMore({ title, children }: { title: string; children: React.
 }
 
 /**
- * A "Learn more" text: plain words; citations as small links to the reader's block; glossary terms with a small ⓘ that
+ * A "Learn more" text: plain words; citations as small book icons linking to the reader's block, with no visible block
+ * code (Nate, 2026-11-24; src/components/book-cite.tsx); glossary terms with a small ⓘ that
  * opens the entry in a popover (no script: the browser's popover; where it isn't supported the note shows inline), the
  * glossary page linked inside. A term with no entry (none today) shows as plain words.
  */
@@ -51,9 +53,7 @@ function Segs({ segs, more }: { segs: Rendered[]; more: string }) {
         s.kind === 'text' ? (
           <span key={i}>{s.text}</span>
         ) : s.kind === 'cite' ? (
-          <Link key={i} className="chc-cite" href={s.href} prefetch={false}>
-            {s.label}
-          </Link>
+          <BookCite key={i} block={s.block} />
         ) : (
           <span key={i} className="chc-term">
             {s.term}
@@ -63,7 +63,7 @@ function Segs({ segs, more }: { segs: Rendered[]; more: string }) {
                   ⓘ
                 </button>
                 <span id={s.id} popover="auto" className="chc-term-note" role="note">
-                  <strong>{s.term}</strong> <q>{s.note.text}</q> <span className="chc-cite">{s.note.cite}</span>{' '}
+                  <strong>{s.term}</strong> <q>{s.note.text}</q> <BookCite block={s.note.cite} />{' '}
                   {s.href && (
                     <Link href={s.href} prefetch={false}>
                       {more}
@@ -120,7 +120,7 @@ export function LearnMoreParts({ learn }: { learn: LearnMoreView }) {
                       <span className="chc-fact-text">{f.text}</span>
                       <q className="chc-fact-quote">{f.quote}</q>
                       <span className="chc-fact-cite">
-                        {learn.chips[i]} · {f.block}
+                        {learn.chips[i]} <BookCite block={f.block} />
                       </span>
                     </li>
                   ))}

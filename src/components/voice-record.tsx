@@ -12,8 +12,8 @@ import { IMPROV_WORDING } from '~/lib/voice/improv-wording';
 import Link from 'next/link';
 import { LearnMore, LearnMoreParts } from '~/components/challenge-learn-more';
 import type { LearnMoreView } from '~/lib/challenge/learn-more-view';
-import { citeHref } from '~/lib/challenge/learn-more';
 import { CONVERT_AGAIN } from '~/lib/voice/convert-again';
+import { EphelionIntro } from '~/components/ephelion-intro';
 import '../styles/voice.css';
 
 /** The recorder's bitrate: about 2.9 MB for a 3:00 take (Nate's review, 2026-11-24). */
@@ -239,13 +239,6 @@ function SignedAudio({ path, label }: { path: string; label: string }) {
     </button>
   );
 }
-
-/** A citation, linked to its block in the reader (as the Learn more texts link theirs). */
-const Cite = ({ b }: { b: string }) => (
-  <Link className="chc-cite" href={citeHref(b)} prefetch={false}>
-    {b}
-  </Link>
-);
 
 export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; learn?: LearnMoreView }) {
   const auth = useAuth();
@@ -628,12 +621,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
     <main className="vr">
       {/* The top of the page (Nate, 2026-11-22; title, intro and the picker's lines reread word for word). */}
       <h1>The Ephelion challenge</h1>
-      <div className="vr-intro">
-        <p>
-          Lord Ephelion is the Arctic Empire&apos;s consul to Veridia (<Cite b="c3-b5" />). In the book his messages reach Veridians everywhere: on a poster in a tunnel (<Cite b="c3-b4" />), in a live debate (<Cite b="c8-b17" />), on a restaurant screen that cuts into a Helisport game (<Cite b="c13-b62" />). As one character puts it, &quot;Ephelion&apos;s goal is to inspire people inside Veridia to join the Arctic cause.&quot; (<Cite b="c21-b76" />)
-        </p>
-        <p>Give one of his speeches a voice: perform it yourself, or start from a ready-made reading, then storyboard it.</p>
-      </div>
+      <EphelionIntro />
       {learn && (
         <LearnMore title={learn.title}>
           <LearnMoreParts learn={learn} />
@@ -772,7 +760,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
                     <div className="vr-take">
                       <p className="vr-note">
                         Your recording, {mmss(take.seconds)}.{' '}
-                        {onDevice ? <span className="vr-ok">Saved on this device</span> : <>Only in this tab.</>} It stays here until you remove it or record again, and is sent to be converted only when you press Convert.
+                        {onDevice ? <span className="vr-ok">Saved on this device.</span> : <>Only in this tab.</>} It stays here until you remove it or record again, and is sent to be converted only when you press Convert.
                       </p>
                       {deviceNote && <p className="vr-warn">{deviceNote}</p>}
                       {keptFromTake && <p className="vr-ok">This recording was converted and kept as your draft ({new Date(keptFromTake.madeAt).toLocaleString()}). It is in your drafts below.</p>}
@@ -804,7 +792,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
                           Remove
                         </button>
                       </div>
-                      {s.today && <p className="vr-small">Today: {s.today.credits.toLocaleString()} of {s.today.capCredits.toLocaleString()} credits used; {s.today.conversionsLeft} whole takes left for you.</p>}
+                      {s.today && <p className="vr-small">Today: {s.today.credits.toLocaleString()} of {s.today.capCredits.toLocaleString()} credits used; {s.today.conversionsLeft} whole {s.today.conversionsLeft === 1 ? 'take' : 'takes'} left for you.</p>}
                     </div>
                   )}
                 </>

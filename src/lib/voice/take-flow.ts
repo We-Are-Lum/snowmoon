@@ -104,7 +104,7 @@ export interface ConvertInput {
   admit?: (takeSha256: string) => Promise<void>;
 }
 
-/** The refusal of a second conversion of the same recording (fix 7). Draft wording, for Nate's reread (not reread yet). */
+/** The refusal of a second conversion of the same recording (fix 7). Reread by Nate on 2026-11-24, as written. */
 export const CONVERTED_ALREADY = 'This recording is converted already: your draft is below. To convert it once more, press Convert again (it uses one of today’s takes).';
 
 export const estimateConvertCredits = (seconds: number, perMinute: number) => Math.ceil((Math.max(0, seconds) / 60) * perMinute);

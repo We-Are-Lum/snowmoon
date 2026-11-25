@@ -1185,6 +1185,12 @@ export function appUrl(): string {
  */
 export const VOICE = {
   adminTrial: true,
+  /**
+   * Testers (Nate, 2026-11-24, for the group call): these FIDs get the voice pages admins get today, and nothing else of
+   * an admin's. Their takes and storyboard pictures come from the admins' pool. Looked up on Farcaster, 2026-11-24:
+   * 6852 @luisotravez (Luis), 665530 @freymon.eth (Freymon). Garance (193912) is an admin already.
+   */
+  testers: [6852, 665530] as readonly number[],
   open: false,
   /**
    * Storyboard pictures (Nate, 2026-11-21): made with the challenge's picture code (GPT Image 2.5 Sunburst the default
