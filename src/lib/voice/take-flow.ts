@@ -80,7 +80,7 @@ export interface FlowDeps {
 }
 
 export class FlowError extends Error {
-  constructor(public status: number, message: string) {
+  constructor(public status: number, message: string, public reason?: string) {
     super(message);
   }
 }
@@ -96,7 +96,16 @@ export interface ConvertInput {
   voiceId: string;
   scope: Scope;
   consentSha256: string;
+  /**
+   * Called with the take's sha256 (never the take) before anything is sent: it may refuse by throwing a FlowError
+   * (fix 7, Nate 2026-11-24: a recording already converted is converted again only when asked), and it reserves the
+   * call's cost, so a refusal here counts nothing.
+   */
+  admit?: (takeSha256: string) => Promise<void>;
 }
+
+/** The refusal of a second conversion of the same recording (fix 7). Reread by Nate on 2026-11-24, as written. */
+export const CONVERTED_ALREADY = 'This recording is converted already: your draft is below. To convert it once more, press Convert again (it uses one of today’s takes).';
 
 export const estimateConvertCredits = (seconds: number, perMinute: number) => Math.ceil((Math.max(0, seconds) / 60) * perMinute);
 
@@ -105,6 +114,7 @@ export async function convertTake(deps: FlowDeps, input: ConvertInput): Promise<
   const { take } = input;
   try {
     const takeSha256 = deps.sha256(take);
+    if (input.admit) await input.admit(takeSha256);
     const estimatedCredits = estimateConvertCredits(input.seconds, deps.creditsPerMinute);
     let out: { audio: Uint8Array; historyItemId: string | null; credits: number | null };
     try {

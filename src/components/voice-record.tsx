@@ -9,6 +9,7 @@ import { loadTake, removeTake, saveTake, type DeviceTake } from '~/lib/voice/dev
 import { VoiceRemove } from '~/components/voice-remove';
 import { LearnMore, LearnMoreParts } from '~/components/challenge-learn-more';
 import type { LearnMoreView } from '~/lib/challenge/learn-more-view';
+import { CONVERT_AGAIN } from '~/lib/voice/convert-again';
 import { EphelionIntro } from '~/components/ephelion-intro';
 import '../styles/voice.css';
 
@@ -244,6 +245,11 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
   const [onDevice, setOnDevice] = useState<DeviceTake | null>(null);
   const [deviceNote, setDeviceNote] = useState<string | null>(null);
   const [agree, setAgree] = useState(false);
+  // Fix 7 (Nate, 2026-11-24: "it let me click convert again. Wasting a conversion"): one tap converts once (a guard that
+  // doesn't wait for a re-render), and a recording already converted offers "Convert again" only when asked for.
+  const converting = useRef(false);
+  const [convertedFor, setConvertedFor] = useState<string | null>(null);
+  const [again, setAgain] = useState<'ask' | 'yes' | 'kept'>('ask');
   const [converted, setConverted] = useState<Converted | null>(null);
   const [redos, setRedos] = useState<Redo[]>([]);
   const [redoing, setRedoing] = useState<number | null>(null);
@@ -400,7 +406,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
   }
 
   /** Send one recording to be converted (a whole take stays on the device whatever the answer). */
-  async function convert(blob: Blob, seconds: number, sentence: number | null, speechOfTake = s!.speech.id): Promise<Converted | null> {
+  async function convert(blob: Blob, seconds: number, sentence: number | null, speechOfTake = s!.speech.id, convertAgain = false): Promise<Converted | null> {
     const form = new FormData();
     form.set('take', blob, 'take');
     form.set('speechId', speechOfTake);
@@ -409,11 +415,15 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
     form.set('seconds', String(seconds));
     form.set('agree', s!.consent.sha256);
     if (sentence !== null) form.set('sentence', String(sentence));
+    // Fix 7: only after the person pressed "Convert again" on a recording already converted; the server refuses otherwise.
+    if (convertAgain) form.set('again', '1');
     log.note(`convert: sending ${blob.size} bytes (${blob.type || 'no type'}), ${seconds.toFixed(1)} s${sentence !== null ? `, sentence ${sentence + 1}` : ''}`);
     const r = await authFetch('/api/voice/convert', { method: 'POST', body: form }).catch((e) => (log.note(`convert: the request failed (${errText(e)})`), null));
     if (!r?.ok) {
       const err = ((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error;
       if (r) log.note(`convert: HTTP ${r.status}${err ? `: ${err}` : ''}`);
+      // Converted already (another tab or device): reload the drafts, so the page offers "Convert again" instead.
+      if (r?.status === 409) void load();
       setMessage(err ?? (sentence === null ? 'The conversion failed. Your recording is still on this device: tick the box and convert it again.' : 'The conversion failed. Your recording was not kept.'));
       return null;
     }
@@ -492,19 +502,27 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
     if (!blob || !take || !picked) return;
     // Never another speech's take (the take is shown and sent with its own speech only).
     if (take.speechId !== s!.speech.id) return setMessage('That recording is of another speech: pick that speech to convert it.');
+    if (converting.current) return;
+    converting.current = true;
     setBusy('convert');
     setMessage(null);
     const seconds = take.seconds;
     // Sent only now, when Convert is pressed; the take stays on this device until it is removed.
     setAgree(false);
-    const c = await convert(blob, seconds, null, take.speechId);
-    setBusy(null);
-    if (c) {
-      setConverted(c);
-      setPlayUrl(c.url);
-      // Already kept as a draft by the server.
-      setAccepted(c.draftId ?? null);
-      void load();
+    try {
+      const c = await convert(blob, seconds, null, take.speechId, again === 'yes');
+      if (c) {
+        setConverted(c);
+        setPlayUrl(c.url);
+        // Already kept as a draft by the server.
+        setAccepted(c.draftId ?? null);
+        setConvertedFor(take.url);
+        setAgain('ask');
+        void load();
+      }
+    } finally {
+      converting.current = false;
+      setBusy(null);
     }
   }
 
@@ -684,7 +702,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
               <h2 id="vr-rec-h">2. Record the whole speech</h2>
               {webClient ? (
                 <p className="vr-warn" role="note">
-                  Recording doesn&rsquo;t work in Farcaster on the web. Open this page in the Farcaster app on your phone, or in a browser at snowmoon.party/storyboard/record.
+                  Recording doesn&rsquo;t work in Farcaster on the web. Open this page in the Farcaster app on your phone, or in a browser at snowmoon.party/ephelion.
                 </p>
               ) : (
                 <>
@@ -724,24 +742,39 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
                     <div className="vr-take">
                       <p className="vr-note">
                         Your recording, {mmss(take.seconds)}.{' '}
-                        {onDevice ? <span className="vr-ok">Saved on this device</span> : <>Only in this tab.</>} It stays here until you remove it or record again, and is sent to be converted only when you press Convert.
+                        {onDevice ? <span className="vr-ok">Saved on this device.</span> : <>Only in this tab.</>} It stays here until you remove it or record again, and is sent to be converted only when you press Convert.
                       </p>
                       {deviceNote && <p className="vr-warn">{deviceNote}</p>}
                       {keptFromTake && <p className="vr-ok">This recording was converted and kept as your draft ({new Date(keptFromTake.madeAt).toLocaleString()}). It is in your drafts below.</p>}
                       <audio controls src={take.url} className="vr-audio" />
-                      <label className="vr-tick">
-                        <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
-                        <span>Send this recording to ElevenLabs, once, to convert it into {picked.name}. ElevenLabs may keep it under its own privacy policy, in the United States; we keep nothing of it.</span>
-                      </label>
+                      {/* Converted already (fix 7): the kept draft, and converting again only if they ask for it. */}
+                      {(keptFromTake || convertedFor === take.url) && again !== 'yes' ? (
+                        again === 'kept' ? (
+                          <p className="vr-small" data-slot="convert-again">Kept. Your draft is below.</p>
+                        ) : (
+                          <div className="vr-confirm" role="group" aria-label={CONVERT_AGAIN.line} data-slot="convert-again">
+                            <span className="vr-confirm-q">{CONVERT_AGAIN.line}</span>{' '}
+                            <button type="button" className="vr-btn vr-small-btn" disabled={busy !== null || (s.today?.conversionsLeft ?? 1) <= 0} onClick={() => setAgain('yes')}>{CONVERT_AGAIN.again}</button>{' '}
+                            <button type="button" className="vr-btn vr-quiet vr-small-btn" disabled={busy !== null} onClick={() => setAgain('kept')}>{CONVERT_AGAIN.keep}</button>
+                          </div>
+                        )
+                      ) : (
+                        <label className="vr-tick">
+                          <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
+                          <span>Send this recording to ElevenLabs, once, to convert it into {picked.name}. ElevenLabs may keep it under its own privacy policy, in the United States; we keep nothing of it.</span>
+                        </label>
+                      )}
                       <div className="vr-row">
-                        <button type="button" className="vr-btn" onClick={convertWhole} disabled={!agree || !s.ready || busy !== null}>
-                          {busy === 'convert' ? 'Converting…' : `Convert (≈ ${credits(take.seconds).toLocaleString()} credits)`}
-                        </button>
+                        {(!(keptFromTake || convertedFor === take.url) || again === 'yes') && (
+                          <button type="button" className="vr-btn" onClick={convertWhole} disabled={!agree || !s.ready || busy !== null}>
+                            {busy === 'convert' ? 'Converting…' : `${again === 'yes' ? 'Convert again' : 'Convert'} (≈ ${credits(take.seconds).toLocaleString()} credits)`}
+                          </button>
+                        )}
                         <button type="button" className="vr-btn vr-quiet" onClick={() => void removeHere()} disabled={busy !== null}>
                           Remove
                         </button>
                       </div>
-                      {s.today && <p className="vr-small">Today: {s.today.credits.toLocaleString()} of {s.today.capCredits.toLocaleString()} credits used; {s.today.conversionsLeft} whole takes left for you.</p>}
+                      {s.today && <p className="vr-small">Today: {s.today.credits.toLocaleString()} of {s.today.capCredits.toLocaleString()} credits used; {s.today.conversionsLeft} whole {s.today.conversionsLeft === 1 ? 'take' : 'takes'} left for you.</p>}
                     </div>
                   )}
                 </>
