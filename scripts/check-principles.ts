@@ -542,7 +542,7 @@ add({
 add({
   id: 'P1i',
   principle: 1,
-  name: 'the own-voice consent shown is own-voice-v3 (current; reread 2026-11-22), only by the voice slice, only while P1h passes; own-voice-v1 is used by nothing',
+  name: 'the own-voice consent shown is own-voice-v4 (current; reread 2026-11-24), only by the voice slice, only while P1h passes; own-voice-v1 is used by nothing',
   load: async () => ({
     users: walk('src', /\.(ts|tsx)$/).filter((f) => /consent-own-voice/.test(read(f))),
     file: json('config/consent-own-voice.json') as { draft?: string; current: string; versions: Record<string, unknown> },
@@ -552,7 +552,7 @@ add({
   run: async ({ users, file, v1Users, proof }) => {
     const p: string[] = [];
     for (const f of users as string[]) if (f !== 'src/lib/voice/consent.ts') p.push(`${f} reads the own-voice consent; only src/lib/voice/consent.ts may`);
-    if ((file.draft ?? file.current) !== 'own-voice-v3' || !file.versions['own-voice-v3']) p.push('the voice pages would not show own-voice-v3');
+    if (file.draft || file.current !== 'own-voice-v4' || !file.versions['own-voice-v4']) p.push('the voice pages would not show own-voice-v4, the reread current');
     for (const f of v1Users as string[]) p.push(`${f} uses own-voice-v1`);
     const fails = (proof as string[]).length ? (proof as string[]) : [...voiceStatic(read(VOICE_FLOW_FILE), read(VOICE_ROUTE_FILE)), ...(await voiceRun(ROOT))];
     if ((VOICE.adminTrial || VOICE.open) && fails.length) p.push(...fails.map((x) => `the voice slice is switched on while P1h fails: ${x}`));

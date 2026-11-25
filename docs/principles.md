@@ -77,7 +77,7 @@ coding agent and its helpers are in `docs/prompts/`.
 - `P2u` (reread by Nate 2026-11-23, as drafted): a storyboard picture the guide drafted keeps the person's request word for word, the
   guide's model, its draft and the prompt as sent, each reference with who chose it and why, and every edit; a planted
   recipe without the request must fail (`scripts/check-principles.ts`, `test:voice` section GU).
-- `P1i` (reread by Nate 2026-11-21; v3 reread 2026-11-22): the own-voice consent shown is `own-voice-v3`, and only by the voice pages and routes,
+- `P1i` (reread by Nate 2026-11-21; v3 reread 2026-11-22; v4 reread 2026-11-24): the own-voice consent shown is `own-voice-v4`, and only by the voice pages and routes,
   only while `P1h` passes; `own-voice-v1` is used by nothing under `src/`; v2 stays on file, retired.
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
@@ -114,7 +114,7 @@ them; they stay on my devices and my own encrypted storage") and its temporary M
 The Modal conversion code (`modal/chatterbox_vc.py`) stays in the repository and its proof (`check:modal-vc`) still
 runs, but no page uses it. Training: Nate turned off the account's "Improve the models for everyone" (2026-11-21), so
 the consent's line that ElevenLabs doesn't train on them stands without brackets.
-The performer agrees to `own-voice-v3` (`config/consent-own-voice.json`; reread 2026-11-22) first, for each recording sent. Every
+The performer agrees to `own-voice-v4` (`config/consent-own-voice.json`; reread 2026-11-24) first, for each recording sent. Every
 performer gets the same terms. Anyone can still re-run the conversion with
 their own voice or another reference clip; they cannot reproduce the exact
 converted line from the recipe alone, which is why the converted line itself
