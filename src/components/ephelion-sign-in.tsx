@@ -13,7 +13,7 @@ export function EphelionSignIn() {
   return (
     <main className="vr vr-signin">
       <p className="vr-note">{EPHELION_SIGN_IN_LINE}</p>
-      <SignInChoices size="small" wallet={auth.kind === 'signed-out' && !auth.inApp} />
+      <SignInChoices note={false} wallet={auth.kind === 'signed-out' && !auth.inApp} />
     </main>
   );
 }

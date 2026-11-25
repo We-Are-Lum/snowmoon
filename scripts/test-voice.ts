@@ -112,7 +112,7 @@ const sharpPng = async () => (await import('sharp')).default({ create: { width: 
   const r = JSON.parse(recordEmbed());
   const sp = JSON.parse(spokenEmbed('11111111-2222-4333-8444-555555555555'));
   check('E. /ephelion opens itself: launch_frame, "Record a speech" (fix 6, Nate 2026-11-24: the new address)', RECORD_BUTTON === 'Record a speech' && r.button.title === RECORD_BUTTON && r.button.action.type === 'launch_frame' && r.button.action.url.endsWith('/ephelion'));
-  check('E. fix 6: /storyboard/record redirects permanently to /ephelion', /permanentRedirect\('\/ephelion'\)/.test(readFileSync(path.join(ROOT, 'src/app/storyboard/record/page.tsx'), 'utf8')) && !existsSync(path.join(ROOT, 'src/app/storyboard/record/not-found.tsx')) && existsSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx')));
+  check('E. fix 6: /storyboard/record redirects permanently to /ephelion', /permanentRedirect\('\/ephelion'\)/.test(readFileSync(path.join(ROOT, 'src/app/storyboard/record/page.tsx'), 'utf8')) && !existsSync(path.join(ROOT, 'src/app/storyboard/record/not-found.tsx')) && existsSync(path.join(ROOT, 'src/app/ephelion/page.tsx')));
   {
     // The guide on a phone (Nate, 2026-11-24): the ask box is pinned to the bottom only on wide screens (on a phone it hid
     // the guide's card), and the looks are whole cards that wrap, never sliding sideways inside the card.
@@ -124,11 +124,20 @@ const sharpPng = async () => (await import('sharp')).default({ create: { width: 
   {
     // Signed out at /ephelion (Nate, 2026-11-24, reread): one line and the sign-in, in the page; a signed-in person the
     // switch doesn't let in still gets the not-found.
-    const nf = readFileSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx'), 'utf8');
+    const nf = readFileSync(path.join(ROOT, 'src/app/ephelion/page.tsx'), 'utf8');
     const si = readFileSync(path.join(ROOT, 'src/components/ephelion-sign-in.tsx'), 'utf8');
     const vr = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
     const { EPHELION_SIGN_IN_LINE } = await import('../src/lib/voice/ephelion-sign-in-line');
     check('E. signed out, /ephelion shows "Sign in to try the Lord Ephelion challenge." with the sign-in, in the page; signed in and not let in, the not-found', EPHELION_SIGN_IN_LINE === 'Sign in to try the Lord Ephelion challenge.' && /<SignInChoices\b/.test(si) && /EPHELION_SIGN_IN_LINE/.test(si) && /signedOut=\{<EphelionSignIn \/>\}/.test(nf) && /fallback=\{<NotFound \/>\}/.test(nf) && vr.indexOf("auth.kind === 'signed-out' && signedOut") > 0 && vr.indexOf("auth.kind === 'signed-out' && signedOut") < vr.indexOf("if (!admin || status === 'none') return <>{fallback}</>;"));
+    // Nate, 2026-11-25: /ephelion answers 200 (link previews and casts load), never the page-level notFound(); the four
+    // sign-in buttons carry the site's own sign-in style (the full size, menu-signin); "Draft wording" over the consent only
+    // while the version shown has no reread on record.
+    check('E. /ephelion answers 200: its page draws the voice page, with no notFound() and no not-found.tsx', !/notFound\(\)/.test(nf) && /<VoiceRecord fallback=\{<NotFound \/>\} signedOut=\{<EphelionSignIn \/>\}/.test(nf) && !existsSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx')));
+    check('E. ... its sign-in uses the full size, styled by the site (menu-signin)', /<SignInChoices note=\{false\} wallet=/.test(si) && !/size="small"/.test(si));
+    {
+      const own = JSON.parse(readFileSync(path.join(ROOT, 'config/consent-own-voice.json'), 'utf8'));
+      check('E. ... and "Draft wording" sits over the consent only while the version shown has no reread on record', own.reread?.['own-voice-v4'] === '2026-11-24' && vr.includes("s.consent.reread ? s.consent.version : `Draft wording · ${s.consent.version}`") && !vr.includes('<p className="vr-kicker">Draft wording · {s.consent.version}</p>'));
+    }
   }
   check('E. a published storyboard opens itself: launch_frame, "Watch this storyboard"', SPOKEN_BUTTON === 'Watch this storyboard' && sp.button.title === SPOKEN_BUTTON && sp.button.action.type === 'launch_frame' && sp.button.action.url.endsWith('/storyboard/spoken/11111111-2222-4333-8444-555555555555'));
   const layout = readFileSync(path.join(ROOT, 'src/app/ephelion/layout.tsx'), 'utf8');
@@ -172,7 +181,7 @@ process.env.VOICE_TEST_ON = '';
 check('S. with the switch off, an admin isn\'t let in either', !voiceAllowed(NATE) && [401, 404].includes((await status.GET(as(NATE))).status));
 (VOICE as { adminTrial: boolean }).adminTrial = true;
 process.env.VOICE_TEST_ON = '1';
-for (const f of ['src/app/ephelion/page.tsx']) check(`S. ${f} is the site's usual not-found for everyone`, /notFound\(\);/.test(readFileSync(path.join(ROOT, f), 'utf8')));
+for (const f of ['src/app/ephelion/page.tsx']) check(`S. ${f} answers 200 for everyone (Nate, 2026-11-25), with the site's usual not-found screen drawn for anyone signed in and not let in`, ((t) => !/notFound\(\);/.test(t) && /fallback=\{<NotFound \/>\}/.test(t))(readFileSync(path.join(ROOT, f), 'utf8')));
 {
   const saved = process.env.ELEVENLABS_BASE_URL;
   delete process.env.ELEVENLABS_BASE_URL;
