@@ -1,4 +1,4 @@
-# Improvising: the Privacy and consent drafts (DRAFT, for Nate's reread)
+# Improvising: the Privacy and consent texts (reread by Nate, 2026-11-24, with his two changes)
 
 Branch `voice-improv`, 2026-11-24. Drafted by the coding agent (Claude, a closed model by Anthropic); DRAFT until Nate's
 reread. In `src/lib/legal.ts` and `config/consent-own-voice.json` without any reread key or approval set: P6k and P1i
@@ -25,7 +25,9 @@ change proposed.
 
 > Groq, and Vercel AI Gateway when Groq is busy, receive assistant questions, the prompts for images you make, which are
 > checked against the published rules, and what you write to the storyboard guide, with the speech, the words of your
-> take as transcribed, and your storyboard's choices; never your recording or your pictures.
+> take as transcribed, and your storyboard's choices; never your recording.
+
+(Nate's reread, 2026-11-24: the Gateway carries pictures to the image models, so the item ends "; never your recording.")
 
 Source: `src/lib/voice/guide-server.ts` (`askGuide`: `sentences` are the spoken words, the performer's for an improvised
 take).
@@ -56,8 +58,9 @@ Source: `src/lib/voice/keep-converted.ts` (`recipe.timeline.words`, `recipe.spok
 4. **v3:** "The converted speech is then sent to ElevenLabs to be transcribed, so it can be checked word for word against
    the speech."
    **v4:** "The converted speech is then sent to ElevenLabs to be transcribed. A take read word for word is checked
-   against the speech; an improvised take's transcript becomes its storyboard's words, which you can correct, and is
-   kept with your draft."
+   against the speech; an improvised take's transcript becomes its storyboard's words, which you can correct. Either
+   way, the transcript is kept with your draft." (Nate's change at his reread, 2026-11-24: word-for-word transcripts are
+   kept too.)
 7. **v3:** "A converted speech can keep your timing, phrasing and delivery, though not your voice. You're credited as its
    performer by your name here, unless you ask not to be named."
    **v4:** "A converted speech can keep your timing, phrasing and delivery, though not your voice. You're credited as its

@@ -722,7 +722,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
                 </p>
               ) : (
                 <>
-                  <p className="vr-note">{IMPROV_WORDING.intro(mmss(s.speech.maxSeconds ?? s.limits.maxTakeSeconds))} <span className="vr-tag">{IMPROV_WORDING.draft}</span></p>
+                  <p className="vr-note">{IMPROV_WORDING.intro(mmss(s.speech.maxSeconds ?? s.limits.maxTakeSeconds))}</p>
                   <p className="vr-note">
                     About {totalWords} words, {mmss(estMinutes * 60)} at your pace word for word. The words scroll while you read; your recording stays on this device until you remove it or record again, and is sent to be converted only when you press Convert.
                   </p>
@@ -811,7 +811,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
                   <p className="vr-ok" data-slot="take-label">
                     {stillWrong.length ? IMPROV_WORDING.improvisedLabel(s.speech.title, s.speech.version) : IMPROV_WORDING.wordForWordLabel}
                   </p>
-                  {stillWrong.length > 0 && <p className="vr-note">{IMPROV_WORDING.improvisedNote} <span className="vr-tag">{IMPROV_WORDING.draft}</span></p>}
+                  {stillWrong.length > 0 && <p className="vr-note">{IMPROV_WORDING.improvisedNote}</p>}
                   <details className="vr-word-check" open={stillWrong.length > 0 && stillWrong.length <= Math.ceil(checks.length / 2)}>
                   <summary>{stillWrong.length ? `Meant it word for word? ${stillWrong.length} of ${checks.length} sentences don't match the speech: redo them.` : `All ${checks.length} sentences match the speech word for word.`}</summary>
                   <ol className="vr-checks">

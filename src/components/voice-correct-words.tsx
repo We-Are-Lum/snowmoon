@@ -17,7 +17,7 @@ export function CorrectWords({ draftId, sentences, busy, onSaved }: { draftId: s
   return (
     <details className="vr-correct" data-slot="correct-words">
       <summary>
-        {W.correct.summary} <span className="vr-tag">{W.draft}</span>
+        {W.correct.summary}
       </summary>
       <p className="vr-small">{W.correct.intro}</p>
       <ol className="vr-correct-list">

@@ -1227,9 +1227,9 @@ export const VOICE = {
   maxTakeSeconds: 300,
   /**
    * Improvising (Nate, 2026-11-24): "within 2 minutes a take, shown as a countdown that stops the recording". Every whole
-   * take, word for word or improvised, is at most takeMaxSeconds; the server refuses a longer one. DRAFT, for Nate: the
-   * book speech (c13-b64, 376 words) takes about 2:40 word for word at 140 words a minute, so it is allowed 3 minutes
-   * until he says otherwise (takeMaxSecondsFor).
+   * take, word for word or improvised, is at most takeMaxSeconds; the server refuses a longer one. Nate, 2026-11-24: the
+   * book speech (c13-b64, 376 words, about 2:40 word for word) gets 3:00 and every other speech keeps 2:00
+   * (takeMaxSecondsFor); the record page shows the chosen speech's limit.
    */
   takeMaxSeconds: 120,
   takeMaxSecondsFor: { 'ephelion-c13-b64': 180 } as Readonly<Record<string, number>>,
