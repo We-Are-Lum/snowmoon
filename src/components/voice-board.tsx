@@ -12,7 +12,7 @@ import { applyCoverage, boardNotes, cutNear, emptyScene, pictureBlocked, SCENE, 
 import { joinAudio } from '~/lib/voice/join-audio';
 import { CLOSING, emptyClosing, type Closing, type CreditLine } from '~/lib/voice/closing';
 import { saveVideo, videoType } from '~/lib/voice/video';
-import { nudgeShot, retimed, WAYS_DRAFT, type BoardSource } from '~/lib/voice/three-ways';
+import { nudgeShot, retimed, type BoardSource } from '~/lib/voice/three-ways';
 import '../styles/voice.css';
 
 /**
@@ -86,7 +86,7 @@ function VoiceFit(p: { draftId: string; source: BoardSource; shots: Shot[]; time
   return (
     <section className="vr-card vf" aria-labelledby="vf-h">
       <h2 id="vf-h">
-        Fit the pictures to your voice <span className="vr-tag">{WAYS_DRAFT}</span>
+        Fit the pictures to your voice
       </h2>
       <p className="vr-note">
         The pictures of &ldquo;{p.source.title}&rdquo;, the storyboard by {p.source.by ? `@${p.source.by}` : 'a reader'}, as they are. Make each one shorter or longer to fit your voice, here or by dragging a cut on the strip below.

@@ -92,20 +92,20 @@ Nate's word. Kept current after every step, so a cloud session can carry on from
 > Draft the three choices' words for my reread, and say which team-made storyboards we'd start with. Its own PR; merge
 > only on my word.
 
-## The three choices' words (for Nate's reread; "Draft wording" on the page)
+## The three choices' words (reread by Nate 2026-11-24, with his changes to way 1 and way 3's empty line)
 
 Heading: **Three ways in**
 
 | Way | Title | Line | Under it |
 |---|---|---|---|
-| 1 | Start from scratch | Record the speech yourself, or start from a ready-made reading, then make your own pictures. | Everything is yours: the voice, the cuts, the scene and every picture. |
+| 1 | Start from scratch | Record the speech yourself, then make your own pictures. | Everything is yours: the performance, the cuts, the scene and every picture. |
 | 2 | New pictures for a recording | Pick a recording that already exists and storyboard it with your own pictures. | Ready-made readings now; published takes once publishing opens, each credited to its performer. |
 | 3 | Your voice over a storyboard | Pick a storyboard, record your take, then make each picture shorter or longer to fit your voice. | Team-made storyboards now; published ones once publishing opens, each credited to its maker. |
 
 Other new lines on the pages (also Draft wording):
 - Way 2, nothing to choose: "No recording to choose yet."
 - Way 2, before publishing: "Published takes appear here once publishing opens."
-- Way 3, nothing to choose: "No storyboard to choose yet: the team's come first."
+- Way 3, nothing to choose: "No storyboard to choose yet."
 - Way 3, after picking a storyboard: "Record this speech below and keep your take. Then fit the storyboard to it: each picture stays as it is; you make it shorter or longer to fit your voice."
 - Way 3's button: "Fit "…" to your take of <date>".
 - The fit panel's heading: "Fit the pictures to your voice". Its note: "The pictures of "…", the storyboard by @…, as they are. Make each one shorter or longer to fit your voice, here or by dragging a cut on the strip below."

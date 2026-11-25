@@ -1,5 +1,5 @@
 /**
- * Three ways in (Nate, 2026-11-24; branch voice-three-ways; DRAFT): the first screen of the Ephelion challenge offers
+ * Three ways in (Nate, 2026-11-24; branch voice-three-ways; words reread 2026-11-24): the first screen of the Ephelion challenge offers
  * three ways to make a storyboard.
  *
  * - From scratch: your speech (recorded, or a ready-made reading) and your own pictures, as before.
@@ -17,13 +17,16 @@ import { SHOT, snapToWordEnd, type Shot, type Timeline } from './board';
 
 export type WayId = 'scratch' | 'pictures' | 'voice';
 
-/** The three choices' words, for Nate's reread: shown with "Draft wording" until then. */
+/**
+ * The three choices' words: reread by Nate on 2026-11-24, with his changes to way 1 ("Record the speech yourself, then
+ * make your own pictures."; "Everything is yours: the performance, the cuts, the scene and every picture.").
+ */
 export const WAYS: readonly { id: WayId; title: string; line: string; more: string }[] = [
   {
     id: 'scratch',
     title: 'Start from scratch',
-    line: 'Record the speech yourself, or start from a ready-made reading, then make your own pictures.',
-    more: 'Everything is yours: the voice, the cuts, the scene and every picture.',
+    line: 'Record the speech yourself, then make your own pictures.',
+    more: 'Everything is yours: the performance, the cuts, the scene and every picture.',
   },
   {
     id: 'pictures',
@@ -39,7 +42,6 @@ export const WAYS: readonly { id: WayId; title: string; line: string; more: stri
   },
 ];
 export const WAYS_HEADING = 'Three ways in';
-export const WAYS_DRAFT = 'Draft wording';
 
 /** Where a reused storyboard came from: kept with the new board (voice_boards.source) and shown in its credits. */
 export interface BoardSource {

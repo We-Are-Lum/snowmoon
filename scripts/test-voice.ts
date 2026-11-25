@@ -1113,10 +1113,10 @@ for (const id of Object.values(VOICE.models)) {
   const BS = await import('../src/lib/voice/board-store');
   const G = await import('../src/lib/voice/guide');
   const GS = await import('../src/lib/voice/guide-server');
-  check('3W. three choices on the first screen, with their words (Draft wording until Nate\'s reread)', W.WAYS.map((w) => w.title).join(' | ') === 'Start from scratch | New pictures for a recording | Your voice over a storyboard' && W.WAYS_DRAFT === 'Draft wording' && W.WAYS.every((w) => w.line.length > 20));
+  check('3W. three choices on the first screen, with their words as Nate reread them (2026-11-24)', W.WAYS.map((w) => w.title).join(' | ') === 'Start from scratch | New pictures for a recording | Your voice over a storyboard' && W.WAYS[0].line === 'Record the speech yourself, then make your own pictures.' && W.WAYS[0].more === 'Everything is yours: the performance, the cuts, the scene and every picture.' && W.WAYS.every((w) => w.line.length > 20) && !('WAYS_DRAFT' in W));
   const page = readFileSync(path.join(ROOT, 'src/components/voice-ways.tsx'), 'utf8');
   const rec = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
-  check('3W. ... they open the record page, each marked Draft wording', /<VoiceWays\b/.test(rec) && rec.indexOf('<VoiceWays') < rec.indexOf('vr-consent') && /\{WAYS_DRAFT\}/.test(page));
+  check('3W. ... they open the record page, no longer marked Draft wording; way 3 with nothing to pick says "No storyboard to choose yet."', /<VoiceWays\b/.test(rec) && rec.indexOf('<VoiceWays') < rec.indexOf('vr-consent') && !/WAYS_DRAFT|Draft wording/.test(page) && page.includes('No storyboard to choose yet.</p>'));
   // Fitting: two timelines of the same three sentences, the new take slower.
   const words = (ends: number[]) => ends.map((e, i) => ({ text: `w${i}`, start: e - 0.4, end: e }));
   const from: import('../src/lib/voice/board').Timeline = { seconds: 30, words: words([3, 6, 10, 14, 20, 25, 29.5]), sentences: [{ n: 0, start: 0, end: 10 }, { n: 1, start: 10, end: 20 }, { n: 2, start: 20, end: 29.5 }] };

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { authFetch } from '~/lib/client-auth';
-import { WAYS, WAYS_DRAFT, WAYS_HEADING, type WayId } from '~/lib/voice/three-ways';
+import { WAYS, WAYS_HEADING, type WayId } from '~/lib/voice/three-ways';
 
 /**
  * Three ways in (Nate, 2026-11-24; DRAFT wording until his reread): the first thing on the Ephelion challenge's page.
@@ -65,7 +65,7 @@ export function VoiceWays({ speeches, readings, drafts, presetName, onSpeech, di
   return (
     <section className="vr-card vw" aria-labelledby="vw-h" data-slot="three-ways">
       <h2 id="vw-h">
-        {WAYS_HEADING} <span className="vr-tag">{WAYS_DRAFT}</span>
+        {WAYS_HEADING}
       </h2>
       <div className="vw-ways" role="radiogroup" aria-labelledby="vw-h">
         {WAYS.map((w) => (
@@ -107,7 +107,7 @@ export function VoiceWays({ speeches, readings, drafts, presetName, onSpeech, di
       {way === 'voice' && (
         <div className="vw-list" aria-label="Storyboards to put your voice over">
           {!list && <p className="vr-note">Loading…</p>}
-          {list && list.boards.length === 0 && <p className="vr-note">No storyboard to choose yet: the team&rsquo;s come first.</p>}
+          {list && list.boards.length === 0 && <p className="vr-note">No storyboard to choose yet.</p>}
           <ul className="vw-items">
             {list?.boards.map((b) => (
               <li key={keyOf(b)}>
