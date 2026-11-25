@@ -551,7 +551,8 @@ A hide still wins everywhere, and with no database none shows (`npm run test:add
   (src/components/challenge-make.tsx, only while the moments are on, which they aren't). All but the bases' order draw
   one item at random rather than order a list. Either the wording names them, or they change.
   Until the owner says which, the existing rule above stands as written and the check is unchanged.
-- `P6ae` (branch episode1-opening, owner 2026-11-24): Episode 1 is public (EPISODE.public) only once Terms §6f, Privacy
+- `P6ae` (branch episode1-opening, owner 2026-11-24): Episode 1 is public (EPISODE.public) only once it has dates
+  (EPISODE.dates: none yet; over the Christmas holiday, the owner gives them), Terms §6f, Privacy
   §4 and Privacy §7's Groq line describe it (docs/legal/episode-1-draft.md, for the owner's reread) and the owner has
   approved its drafted wording (EPISODE.wordingApproved). Its planted violation is the switch on with today's texts.
 - Review: does any default, badge or ordering reflect a person's choice without saying whose?

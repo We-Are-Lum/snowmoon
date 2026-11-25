@@ -119,10 +119,10 @@ type Decide = typeof accountDecision;
  * submit; 'below' and 'unchecked' are refused and nothing is kept); then, under a lock for the person, at most
  * EPISODE.livePerPerson live outlines. A wallet account never gets here (the route refuses it).
  */
-export async function submitOutline(sql: Sql, fid: number, byName: string | null, outline: Outline, opts: { now?: Date; pub?: boolean; decide?: Decide; challenge?: string } = {}): Promise<Result<{ id: string; left: number }>> {
+export async function submitOutline(sql: Sql, fid: number, byName: string | null, outline: Outline, opts: { now?: Date; pub?: boolean; dates?: { opens: string; closes: string } | null; decide?: Decide; challenge?: string } = {}): Promise<Result<{ id: string; left: number }>> {
   const now = opts.now ?? new Date();
   const challenge = opts.challenge ?? EPISODE.id;
-  if (!submissionsOpen(now, opts.pub ?? EPISODE.public)) return { ok: false, why: W.closed, status: 403 };
+  if (!submissionsOpen(now, opts.pub ?? EPISODE.public, opts.dates === undefined ? EPISODE.dates : opts.dates)) return { ok: false, why: W.closed, status: 403 };
   const wanted = outline.cards.map((c) => c.picture).filter((p): p is string => Boolean(p));
   if (wanted.length) {
     const found = await picturesByVersion(sql, wanted);
@@ -146,10 +146,10 @@ export async function submitOutline(sql: Sql, fid: number, byName: string | null
 }
 
 /** Withdraw one's own live outline, while submissions are open. It stays on record, marked withdrawn. */
-export async function withdrawOutline(sql: Sql, fid: number, id: string, opts: { now?: Date; pub?: boolean; challenge?: string } = {}): Promise<Result<{ left: number }>> {
+export async function withdrawOutline(sql: Sql, fid: number, id: string, opts: { now?: Date; pub?: boolean; dates?: { opens: string; closes: string } | null; challenge?: string } = {}): Promise<Result<{ left: number }>> {
   const now = opts.now ?? new Date();
   const challenge = opts.challenge ?? EPISODE.id;
-  if (!submissionsOpen(now, opts.pub ?? EPISODE.public)) return { ok: false, why: W.closed, status: 403 };
+  if (!submissionsOpen(now, opts.pub ?? EPISODE.public, opts.dates === undefined ? EPISODE.dates : opts.dates)) return { ok: false, why: W.closed, status: 403 };
   if (!isOutlineId(id)) return { ok: false, why: 'Bad request', status: 400 };
   const r = await sql`update studio.challenge_outlines set withdrawn_at = ${now} where id = ${id} and challenge = ${challenge} and fid = ${fid} and withdrawn_at is null returning id`;
   if (!r.length) return { ok: false, why: W.notYours, status: 404 };

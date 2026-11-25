@@ -2426,13 +2426,14 @@ add({
 add({
   id: 'P6ae',
   principle: 6,
-  name: 'Episode 1 (EPISODE.public) is on only once Terms §6f, Privacy §4 and Privacy §7 describe it and the owner has approved its wording',
-  load: async () => ({ on: EPISODE.public as boolean, wordingApproved: EPISODE.wordingApproved as boolean, terms: clone(TERMS.sections), privacy: clone(PRIVACY.sections) }),
+  name: 'Episode 1 (EPISODE.public) is on only once it has dates, Terms §6f, Privacy §4 and Privacy §7 describe it and the owner has approved its wording',
+  load: async () => ({ on: EPISODE.public as boolean, wordingApproved: EPISODE.wordingApproved as boolean, hasDates: EPISODE.dates !== null, terms: clone(TERMS.sections), privacy: clone(PRIVACY.sections) }),
   run: (c) => p6aeProblems(c),
   plant: (c) => {
     // On, with today's texts (which don't describe it yet) and the wording not approved.
     c.on = true;
     c.wordingApproved = false;
+    c.hasDates = false;
     for (const sec of c.terms) if (String(sec.n) === '6f') sec.body = [];
   },
 });

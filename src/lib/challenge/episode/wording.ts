@@ -8,16 +8,16 @@ import { CHALLENGE, EPISODE } from '../../config';
  */
 const fmt = (iso: string, opts: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat('en-GB', { timeZone: EPISODE.timeZone, ...opts }).format(new Date(iso));
 /** The last day that counts: the day before the closing instant (which is 00:00 Pacific). */
-const lastDay = (closes: string = EPISODE.dates.closes) => new Date(Date.parse(closes) - 60_000).toISOString();
+const lastDay = (closes: string) => new Date(Date.parse(closes) - 60_000).toISOString();
 /** "1 to 14 December", from a window's own dates. */
 const span = (d: { opens: string; closes: string }) => `${fmt(d.opens, { day: 'numeric' })} to ${fmt(lastDay(d.closes), { day: 'numeric', month: 'long' })}`;
 
 export const EPISODE_WORDING = {
   title: 'Episode 1: the opening',
   pitch: 'Outline the first episode of Snowmoon in ten cards or fewer. Your words, your order.',
-  window: () => span(EPISODE.dates),
-  closes: () => `Submissions close ${fmt(lastDay(), { weekday: 'short', day: 'numeric', month: 'short' })}, 23:59 PT.`,
-  opensOn: () => `Opens ${fmt(EPISODE.dates.opens, { weekday: 'short', day: 'numeric', month: 'short' })}, 00:00 PT.`,
+  window: () => (EPISODE.dates ? span(EPISODE.dates) : 'Over the Christmas holiday'),
+  closes: () => (!EPISODE.dates ? 'Dates to come.' : `Submissions close ${fmt(lastDay(EPISODE.dates.closes), { weekday: 'short', day: 'numeric', month: 'short' })}, 23:59 PT.`),
+  opensOn: () => (EPISODE.dates ? `Opens ${fmt(EPISODE.dates.opens, { weekday: 'short', day: 'numeric', month: 'short' })}, 00:00 PT.` : 'Dates to come.'),
   closedNote: 'Submissions are closed. Every outline stays here to read.',
   draftMark: 'Draft wording',
   goalsHead: 'The goals',
@@ -38,7 +38,7 @@ export const EPISODE_WORDING = {
   everyOutline: "Everyone's outlines",
   rules: 'Rules',
   rulesBody: () => [
-    `Open to anyone signed in with Farcaster, Lens or Bluesky whose account passes the site's check, ${fmt(EPISODE.dates.opens, { day: 'numeric', month: 'long' })} to ${fmt(lastDay(), { day: 'numeric', month: 'long' })} (Pacific time).`,
+    `Open to anyone signed in with Farcaster, Lens or Bluesky whose account passes the site's check, ${EPISODE.dates ? `${fmt(EPISODE.dates.opens, { day: 'numeric', month: 'long' })} to ${fmt(lastDay(EPISODE.dates.closes), { day: 'numeric', month: 'long' })} (Pacific time)` : 'over the Christmas holiday (dates to come)'}.`,
     `Up to ${EPISODE.maxCards} cards. Each half up to ${EPISODE.cardMaxChars} characters (about ${EPISODE.cardChars} is plenty).`,
     'Every word is yours. No AI-written words, and no words from the sample deck.',
     'A card may show a picture already published on this site, credited to its maker. Nothing is made for this challenge.',
@@ -160,7 +160,7 @@ export const CHALLENGES_WORDING = {
   remixTitle: 'Remix challenge',
   remixLine: 'Remix the cast of Snowmoon: pictures of its characters, made by everyone.',
   remixWhen: () => span(CHALLENGE.dates),
-  episodeWhen: () => span(EPISODE.dates),
+  episodeWhen: () => (EPISODE.dates ? span(EPISODE.dates) : 'Over the Christmas holiday; dates to come'),
   episodeLine: 'Outline the first episode in ten cards or fewer.',
   closed: 'Closed',
   draftMark: 'Draft wording',

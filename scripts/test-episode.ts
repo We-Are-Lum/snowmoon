@@ -3,8 +3,9 @@
  *
  *   npm run test:episode
  *
- * - the dates: 1 Dec 00:00 Pacific in, 14 Dec 23:59 in, 15 Dec 00:00 out; nothing opens while EPISODE.public is off;
- *   no wording file writes a date itself;
+ * - the dates: none yet (the owner gives them; over the Christmas holiday), so nothing opens; the window's rules on
+ *   test dates (opening in, the closing instant out); nothing opens while EPISODE.public is off; no wording file writes
+ *   a date itself;
  * - readOutline: what Submit takes and what it refuses (counts, empty halves, lengths, the line, pictures, the sample
  *   deck's words, with a planted sample);
  * - the AI comment's reply check (owner, answer 5): quoted new wording of six words or more is held back; the person's own
@@ -39,15 +40,18 @@ const read = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
 
 // Dates.
 const wall = (iso: string) => new Intl.DateTimeFormat('en-GB', { timeZone: 'America/Los_Angeles', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date(iso));
-check('opens Tue 1 Dec 2026, 00:00 Pacific', wall(EPISODE.dates.opens) === '01/12/2026, 00:00', wall(EPISODE.dates.opens));
-check('closes after 14 Dec: 15 Dec 2026, 00:00 Pacific is the first instant out', wall(EPISODE.dates.closes) === '15/12/2026, 00:00', wall(EPISODE.dates.closes));
+check('no dates yet (owner, 2026-11-24: over the Christmas holiday, exact dates to come)', EPISODE.dates === null);
 const at = (s: string) => new Date(s);
-check('phase: 30 Nov 23:59 PT is before', episodePhase(at('2026-12-01T07:59:00Z')) === 'before');
-check('phase: 1 Dec 00:00 PT is open', episodePhase(at('2026-12-01T08:00:00Z')) === 'open');
-check('phase: 14 Dec 23:59 PT is open', episodePhase(at('2026-12-15T07:59:00Z')) === 'open');
-check('phase: 15 Dec 00:00 PT is closed', episodePhase(at('2026-12-15T08:00:00Z')) === 'closed');
-check('Submit is closed in the window while the switch is off', !submissionsOpen(at('2026-12-05T12:00:00Z'), false));
-check('Submit is open in the window with the switch on', submissionsOpen(at('2026-12-05T12:00:00Z'), true));
+check('with no dates, nothing opens, whatever the clock and the switch', episodePhase(at('2026-12-25T12:00:00Z')) === 'before' && !submissionsOpen(at('2026-12-25T12:00:00Z'), true));
+// The window's rules, on test dates (not the challenge's: it has none yet), 21-27 Dec Pacific.
+const T = { opens: '2026-12-21T08:00:00Z', closes: '2026-12-28T08:00:00Z' };
+check('test dates: 21 Dec 00:00 Pacific opens, 28 Dec 00:00 Pacific is the first instant out', wall(T.opens) === '21/12/2026, 00:00' && wall(T.closes) === '28/12/2026, 00:00');
+check('phase: a minute before opening is before', episodePhase(at('2026-12-21T07:59:00Z'), T) === 'before');
+check('phase: opening is open', episodePhase(at('2026-12-21T08:00:00Z'), T) === 'open');
+check('phase: 27 Dec 23:59 PT is open', episodePhase(at('2026-12-28T07:59:00Z'), T) === 'open');
+check('phase: 28 Dec 00:00 PT is closed', episodePhase(at('2026-12-28T08:00:00Z'), T) === 'closed');
+check('Submit is closed in the window while the switch is off', !submissionsOpen(at('2026-12-23T12:00:00Z'), false, T));
+check('Submit is open in the window with the switch on', submissionsOpen(at('2026-12-23T12:00:00Z'), true, T));
 check('the switch is off on this branch (the owner turns it on)', EPISODE.public === false);
 const DATE_WORDS = /\b(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b|\b20\d\d-\d\d-\d\d/;
 for (const f of ['src/lib/challenge/episode/wording.ts', 'src/components/challenge-episode-views.tsx', 'src/components/challenge-episode-make.tsx', 'src/components/challenge-list.tsx']) {
@@ -100,10 +104,9 @@ check('proof: a check that needs 99 words lets the quoted line through (so the t
 
 // The list of challenges.
 const items = challengeItems(at('2026-12-02T00:00:00Z'), { remix: true, episode: true });
-check('the list: Episode 1 open, the remix challenge past', items.open.map((i) => i.id).join() === 'episode-1' && items.past.map((i) => i.id).join() === CHALLENGE.id);
-const later = challengeItems(at('2026-12-20T00:00:00Z'), { remix: true, episode: true });
-check('the list after both: past, the latest closed first', later.open.length === 0 && later.past.map((i) => i.id).join() === `episode-1,${CHALLENGE.id}`);
+check('the list: Episode 1 (no dates yet: still to come) open, the remix challenge past', items.open.map((i) => i.id).join() === 'episode-1' && items.past.map((i) => i.id).join() === CHALLENGE.id);
 check('the list leaves out a challenge whose switch is off', challengeItems(at('2026-12-02T00:00:00Z'), { remix: true, episode: false }).open.length === 0);
+check('the list: Episode 1 without dates says when, not a date', items.open[0]?.when === 'Over the Christmas holiday; dates to come');
 check('/challenge stays the remix home until it closes, then the list', !showChallengeList(at('2026-11-30T07:59:00Z')) && showChallengeList(at('2026-11-30T08:00:00Z')));
 check('no challenge character is named "episode-1" or "remix" (their pages are static folders under /challenge)', !CHALLENGE.characters.some((c) => c === 'episode-1' || c === 'remix'));
 
@@ -125,8 +128,8 @@ check('proof: a like count on an outline fails P5i', p5iProblems(plantedCount).l
 // P6ae: public only once the legal texts describe it and the wording is approved.
 const clone = <T,>(x: T): T => JSON.parse(JSON.stringify(x));
 const legal = () => ({ terms: clone(TERMS.sections) as { n: number | string; body: (string | string[])[] }[], privacy: clone(PRIVACY.sections) as { n: number | string; body: (string | string[])[] }[] });
-check('P6ae: nothing to hold while EPISODE.public is off', p6aeProblems({ on: false, wordingApproved: false, ...legal() }).length === 0);
-const today = p6aeProblems({ on: true, wordingApproved: true, ...legal() });
+check('P6ae: nothing to hold while EPISODE.public is off', p6aeProblems({ on: false, wordingApproved: false, hasDates: false, ...legal() }).length === 0);
+const today = p6aeProblems({ on: true, wordingApproved: true, hasDates: true, ...legal() });
 check("P6ae: on with today's texts fails (they don't describe Episode 1 yet)", today.length === 3, today.join('; '));
 const drafted = legal();
 const draftDoc = read('docs/legal/episode-1-draft.md');
@@ -144,8 +147,9 @@ const quoted = (head: string) => {
 drafted.terms.push({ n: '6f', body: [quoted('## Terms §6f')] });
 drafted.privacy.find((x) => String(x.n) === '4')!.body.push(quoted('## Privacy §4'));
 drafted.privacy.find((x) => String(x.n) === '7')!.body.push(quoted('After:\n> Groq'));
-check('P6ae: on with the drafted lines in place and the wording approved passes', p6aeProblems({ on: true, wordingApproved: true, ...drafted }).length === 0, p6aeProblems({ on: true, wordingApproved: true, ...drafted }).join('; '));
-check('P6ae: the wording not approved still fails', p6aeProblems({ on: true, wordingApproved: false, ...drafted }).length === 1);
+check('P6ae: on with the drafted lines in place and the wording approved passes', p6aeProblems({ on: true, wordingApproved: true, hasDates: true, ...drafted }).length === 0, p6aeProblems({ on: true, wordingApproved: true, hasDates: true, ...drafted }).join('; '));
+check('P6ae: on without dates fails, even with the texts in place', p6aeProblems({ on: true, wordingApproved: true, hasDates: false, ...drafted }).length === 1);
+check('P6ae: the wording not approved still fails', p6aeProblems({ on: true, wordingApproved: false, hasDates: true, ...drafted }).length === 1);
 
 // The server code, on PGlite.
 const pg = new PGlite();
@@ -179,10 +183,10 @@ await sql`set role studio_writer`;
 const O = await import('../src/lib/challenge/episode/outlines');
 type Sql = Parameters<typeof O.listOutlines>[0];
 const S = sql as unknown as Sql;
-const OPEN = at('2026-12-05T20:00:00Z');
+const OPEN = at('2026-12-23T20:00:00Z');
 const passes = async () => ({ why: 'passed' as const, eligible: true, account: 'farcaster' as const });
 const good: Outline = { title: 'One', cards: [C('a', 'b', U(30)), C('c', 'd')], minuteAfter: 1 };
-const sub = (fid: number, o: Outline = good, opts: Partial<Parameters<typeof O.submitOutline>[4]> = {}) => O.submitOutline(S, fid, 'tester', o, { now: OPEN, pub: true, decide: passes, ...opts });
+const sub = (fid: number, o: Outline = good, opts: Partial<Parameters<typeof O.submitOutline>[4]> = {}) => O.submitOutline(S, fid, 'tester', o, { now: OPEN, pub: true, dates: T, decide: passes, ...opts });
 
 const pics = await O.picturesByVersion(S, [U(30), U(31), U(32), U(33), U(34)]);
 check('pictures: a published picture made here, and a sheet whose front has a recipe, can be attached', pics.has(U(30)) && pics.has(U(32)) && pics.get(U(32))!.href === `/references/designs/${U(32)}` && pics.get(U(30))!.href === `/image/${U(30)}`);
@@ -190,8 +194,9 @@ check("pictures: a hidden one, a brought-in one and a sheet without a recipe can
 const r1 = await sub(901);
 check('Submit: an outline is written', r1.ok && r1.left === 2, JSON.stringify(r1));
 check('Submit: refused while the switch is off', !(await sub(901, good, { pub: false })).ok);
-check('Submit: refused before the window', !(await sub(901, good, { now: at('2026-11-30T12:00:00Z') })).ok);
-check('Submit: refused after the window', !(await sub(901, good, { now: at('2026-12-15T08:00:00Z') })).ok);
+check('Submit: refused before the window', !(await sub(901, good, { now: at('2026-12-20T12:00:00Z') })).ok);
+check('Submit: refused after the window', !(await sub(901, good, { now: at('2026-12-28T08:00:00Z') })).ok);
+check('Submit: refused with no dates set (as now), switch on or not', !(await sub(901, good, { dates: null })).ok);
 const hiddenPic = await sub(901, { ...good, cards: [C('a', 'b', U(31))] });
 check('Submit: refused with a hidden picture', !hiddenPic.ok && hiddenPic.status === 400);
 const below = await sub(902, good, { decide: async () => ({ why: 'below' as const, eligible: false, account: 'farcaster' as const }) });
@@ -208,11 +213,11 @@ const fourth = await sub(901);
 check('Submit: a fourth live outline is refused', !fourth.ok && fourth.status === 409);
 const mine = await O.myOutlines(S, 901);
 check('mine: three live, none left', mine.ids.length === 3 && mine.left === 0);
-const w = await O.withdrawOutline(S, 901, mine.ids[0], { now: OPEN, pub: true });
+const w = await O.withdrawOutline(S, 901, mine.ids[0], { now: OPEN, pub: true, dates: T });
 check('Withdraw: one of mine, one left again', w.ok && w.left === 1);
 check('Withdraw: then another can be submitted', (await sub(901)).ok);
-check("Withdraw: someone else's is not found", !(await O.withdrawOutline(S, 902, mine.ids[1], { now: OPEN, pub: true })).ok);
-check('Withdraw: refused after the window', !(await O.withdrawOutline(S, 901, mine.ids[1], { now: at('2026-12-16T00:00:00Z'), pub: true })).ok);
+check("Withdraw: someone else's is not found", !(await O.withdrawOutline(S, 902, mine.ids[1], { now: OPEN, pub: true, dates: T })).ok);
+check('Withdraw: refused after the window', !(await O.withdrawOutline(S, 901, mine.ids[1], { now: at('2026-12-29T00:00:00Z'), pub: true, dates: T })).ok);
 const h = await O.hideOutline(S, 6786, mine.ids[1], OPEN);
 check('Hide: a moderator hides one', h.ok);
 const list = await O.listOutlines(S);

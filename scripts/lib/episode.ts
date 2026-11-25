@@ -7,9 +7,10 @@
 type Doc = { n: number | string; body: (string | string[])[] }[];
 const text = (doc: Doc, n: number | string) => (doc.find((s) => String(s.n) === String(n))?.body ?? []).flat().join(' ');
 
-export function p6aeProblems(c: { on: boolean; wordingApproved: boolean; terms: Doc; privacy: Doc }): string[] {
+export function p6aeProblems(c: { on: boolean; wordingApproved: boolean; hasDates: boolean; terms: Doc; privacy: Doc }): string[] {
   if (!c.on) return [];
   const out: string[] = [];
+  if (!c.hasDates) out.push('EPISODE.public is on, but Episode 1 has no dates yet (EPISODE.dates; the owner gives them)');
   if (!c.wordingApproved) out.push("EPISODE.public is on, but the owner hasn't approved Episode 1's drafted wording (EPISODE.wordingApproved)");
   if (!/Episode 1/.test(text(c.terms, '6f'))) out.push("EPISODE.public is on, but Terms §6f doesn't describe Episode 1: the opening");
   if (!/Episode 1/.test(text(c.privacy, 4)) || !/outline/i.test(text(c.privacy, 4))) out.push("EPISODE.public is on, but Privacy §4 doesn't describe the outlines you submit");

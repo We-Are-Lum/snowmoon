@@ -9,11 +9,13 @@ export type Card = { happens: string; does: string; picture: string | null };
 export type Draft = { title: string; cards: Card[]; minuteAfter: number };
 export type Outline = { title: string | null; cards: Card[]; minuteAfter: number };
 
-type Dates = { opens: string; closes: string };
+type Dates = { opens: string; closes: string } | null;
 const ms = (s: string) => Date.parse(s);
 
 /** Before the window, in it, or after (the window alone; whether it is public is EPISODE.public). */
+/** With no dates set (EPISODE.dates null: the owner hasn't given them yet), always 'before'. */
 export function episodePhase(now: Date = new Date(), dates: Dates = EPISODE.dates): 'before' | 'open' | 'closed' {
+  if (!dates) return 'before';
   const t = now.getTime();
   return t < ms(dates.opens) ? 'before' : t < ms(dates.closes) ? 'open' : 'closed';
 }

@@ -9,12 +9,13 @@ import { CHALLENGES_WORDING as C, EPISODE_WORDING as W } from './wording';
  * by closing date, the latest first: by the dates in config only, never by anything about entries (P5). A challenge whose switch
  * is off isn't listed.
  */
+const FAR = '9999-12-31T00:00:00Z';
 export type ChallengeItem = { id: string; title: string; line: string; when: string; href: string; state: 'open' | 'before' | 'closed'; closes: string };
 
 export function challengeItems(now: Date = new Date(), pub = { remix: CHALLENGE.public as boolean, episode: EPISODE.public as boolean }): { open: ChallengeItem[]; past: ChallengeItem[] } {
   const all: ChallengeItem[] = [];
   if (pub.remix) all.push({ id: CHALLENGE.id, title: C.remixTitle, line: C.remixLine, when: C.remixWhen(), href: '/challenge/remix', state: phase(now), closes: CHALLENGE.dates.closes });
-  if (pub.episode) all.push({ id: EPISODE.id, title: W.title, line: C.episodeLine, when: C.episodeWhen(), href: '/challenge/episode-1', state: episodePhase(now), closes: EPISODE.dates.closes });
+  if (pub.episode) all.push({ id: EPISODE.id, title: W.title, line: C.episodeLine, when: C.episodeWhen(), href: '/challenge/episode-1', state: episodePhase(now), closes: EPISODE.dates?.closes ?? FAR /* no dates yet: listed as still to come */ });
   // By its closing date, the latest first: time order, from config.
   const newestFirst = (a: ChallengeItem, b: ChallengeItem) => Date.parse(b.closes) - Date.parse(a.closes);
   return { open: all.filter((c) => c.state !== 'closed').sort(newestFirst), past: all.filter((c) => c.state === 'closed').sort(newestFirst) };

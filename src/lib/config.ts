@@ -856,8 +856,8 @@ export const CHALLENGE = {
  * - `public`: the owner's switch, as CHALLENGE.public. While off, its pages and APIs answer "not found" to everyone but
  *   admins, and nothing can be submitted, whatever the clock says. check:principles P6ae refuses it on until Terms and
  *   Privacy describe it (legal texts describe today).
- * - `dates`: real instants (UTC) with their Pacific wall times; `closes` is the first instant that no longer counts.
- *   Submit and Withdraw work only between them (and only with `public` on).
+ * - `dates`: none yet (the owner gives them; over the Christmas holiday). Submit and Withdraw work only between them,
+ *   and only with `public` on.
  * - `sampleDeck`: the owner's sample deck (about five cards; owner, 2026-11-24: "I'll write the sample deck"). Empty
  *   until the owner writes it: "Start from the sample deck" isn't offered while it is empty. Its words are shown as greyed
  *   placeholders, and a card still holding a sample card's words can't be submitted.
@@ -868,12 +868,13 @@ export const EPISODE = {
   public: false as boolean,
   /** The owner's approval of the agent-drafted wording (src/lib/challenge/episode/wording.ts); until then pages show "Draft wording". */
   wordingApproved: false as boolean,
-  dates: {
-    /** Opens Tue 1 Dec 2026, 00:00 Pacific (PST). */
-    opens: '2026-12-01T08:00:00Z',
-    /** Closes after Mon 14 Dec 2026, 23:59 Pacific: this is 00:00 Pacific on 15 Dec, the first instant that no longer counts. */
-    closes: '2026-12-15T08:00:00Z',
-  },
+  /**
+   * No dates yet (owner, 2026-11-24, later: "It opens over the Christmas holiday, with exact dates to come from me, and
+   * stays off until then"; the 1-14 Dec dates are withdrawn). While null, nothing opens (rules.ts episodePhase is
+   * 'before'), the pages say the dates are to come, and check:principles P6ae refuses EPISODE.public on. When the owner
+   * gives them: real instants (UTC) with their Pacific wall times; `closes` is the first instant that no longer counts.
+   */
+  dates: null as { opens: string; closes: string } | null,
   timeZone: 'America/Los_Angeles',
   /** At most this many cards in an outline (the table's check holds the same). */
   maxCards: 10,
