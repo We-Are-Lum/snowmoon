@@ -58,13 +58,16 @@ const metaOf = (html: string, name: string) => {
 };
 let spokenNote = '';
 {
-  const html = await (await fetch(`${BASE}/storyboard/record`, { redirect: 'manual' })).text();
+  // /ephelion since 2026-11-24 (Nate); /storyboard/record redirects to it (308).
+  const old = await fetch(`${BASE}/storyboard/record`, { redirect: 'manual' });
+  if (old.status !== 308 || !/\/ephelion$/.test(old.headers.get('location') ?? '')) fail(`/storyboard/record: answers ${old.status} to ${old.headers.get('location')}, not a 308 to /ephelion`);
+  const html = await (await fetch(`${BASE}/ephelion`, { redirect: 'manual' })).text();
   for (const name of ['fc:miniapp', 'fc:frame']) {
     const e = metaOf(html, name);
-    if (!e?.button?.action?.url?.endsWith('/storyboard/record') || e.button.action.type !== 'launch_frame') fail(`/storyboard/record: its ${name} embed does not open /storyboard/record (${e?.button?.action?.url})`);
-    if (e?.button?.title !== RECORD_BUTTON) fail(`/storyboard/record: its ${name} button reads "${e?.button?.title}", not "${RECORD_BUTTON}"`);
+    if (!e?.button?.action?.url?.endsWith('/ephelion') || e.button.action.type !== 'launch_frame') fail(`/ephelion: its ${name} embed does not open /ephelion (${e?.button?.action?.url})`);
+    if (e?.button?.title !== RECORD_BUTTON) fail(`/ephelion: its ${name} button reads "${e?.button?.title}", not "${RECORD_BUTTON}"`);
   }
-  if (!/<meta name="robots" content="noindex[^"]*"/.test(html)) fail('/storyboard/record: not marked noindex');
+  if (!/<meta name="robots" content="noindex[^"]*"/.test(html)) fail('/ephelion: not marked noindex');
   const id = arg('spoken');
   if (id) {
     const sh = await (await fetch(`${BASE}/storyboard/spoken/${id}`)).text();

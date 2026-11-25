@@ -16,7 +16,9 @@ function embed(title: string, url: string): string {
     button: { title, action: { type: 'launch_frame', name: APP_NAME, url, splashImageUrl: `${appUrl()}/splash.png`, splashBackgroundColor: PAPER } },
   });
 }
-export const recordEmbed = () => embed(RECORD_BUTTON, `${appUrl()}/storyboard/record`);
+/** /ephelion (Nate, 2026-11-24: a better address than /storyboard/record, which redirects to it). */
+export const RECORD_PATH = '/ephelion';
+export const recordEmbed = () => embed(RECORD_BUTTON, `${appUrl()}${RECORD_PATH}`);
 export const spokenEmbed = (id: string) => embed(SPOKEN_BUTTON, `${appUrl()}/storyboard/spoken/${id}`);
 /** Both meta names, as the root layout and /challenge set them. */
 export const embedMeta = (e: string) => ({ 'fc:miniapp': e, 'fc:frame': e });

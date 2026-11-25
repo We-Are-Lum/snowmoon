@@ -18,7 +18,8 @@ async function deps(): Promise<ShotDeps> {
     return {
       real: false,
       consented: async () => true,
-      reference: async () => Buffer.from('stand-in reference'),
+      // A plain picture the size of a sheet's front view, so the face crop (fix 2) works on stand-ins too.
+      reference: async () => (await import('sharp')).default({ create: { width: 400, height: 600, channels: 3, background: '#b8b4ac' } }).png().toBuffer(),
       // The daily limits aren't exercised for stand-ins: no model, no cost.
       paid: (async (_sql: unknown, _fid: unknown, _req: unknown, job: { make: () => Promise<import('~/lib/images/fal').Made> }) => ({ ok: true, made: await job.make(), left: 99 })) as unknown as ShotDeps['paid'],
       make: async (_m, _prompt, _refs, _req, _worst, shot) => ({

@@ -274,6 +274,29 @@ export function oldSceneShots(shots: Shot[], scene: Scene | null, madeWith: Reco
   return shots.flatMap((s, i) => (!s.insert && s.kept && madeWith[s.key] && madeWith[s.key] !== scene.kept && s.sceneConfirmed !== scene.kept ? [i] : []));
 }
 
+/** What a kept picture was made with, from its recipe: the scene picture's sha256 ('' with no scene) and the look. */
+export interface MadeWith { scene: string; look: string | null }
+export const madeWithOf = (recipe: unknown): MadeWith => {
+  const r = (recipe ?? {}) as { scene?: { sha256?: string | null } | null; characters?: { versionId?: string }[] };
+  return { scene: r.scene?.sha256 ?? '', look: r.characters?.[0]?.versionId ?? null };
+};
+/**
+ * Kept shots in the scene that no longer fit it (Nate, 2026-11-24: shot 1 kept on the storyboard page on 23 Nov, with
+ * another look and no scene, showed up as shot 1 in the guide the next day): a kept picture made with no scene or another
+ * scene, or with another look than the board's, unless the person confirmed it with this scene. Such a shot counts as
+ * not kept for references (never the continuity), for the guide, and on the guide page.
+ */
+export function staleShots(shots: Shot[], scene: Scene | null, look: string | null, made: Record<string, MadeWith | undefined>): string[] {
+  return shots.filter((s) => {
+    const m = s.kept ? made[s.key] : undefined;
+    if (s.insert || !m) return false;
+    if (scene?.kept && s.sceneConfirmed === scene.kept) return false;
+    return m.scene !== (scene?.kept ?? '') || (look !== null && m.look !== look);
+  }).map((s) => s.key);
+}
+/** The look of the scene: the one look every shot in the scene is made with (the board's, as saved). */
+export const boardLook = (shots: Shot[]) => shots.find((s) => !s.insert)?.characterIds[0] ?? null;
+
 /** Notes before spending: rule checks only (no AI model), and never a suggestion of what a shot should show. */
 export function boardNotes(shots: Shot[], scene: Scene | null = null, madeWith: Record<string, string | null> = {}): Note[] {
   const notes: Note[] = [];
@@ -297,12 +320,15 @@ export function boardNotes(shots: Shot[], scene: Scene | null = null, madeWith: 
  * A shot's picture prompt: the person's description, word for word, then the camera and the chosen sheets' own texts.
  * Every part is shown to the person before it is used, and it is the recipe's prompt.
  */
-export function shotPrompt(s: Pick<Shot, 'description' | 'angle'>, style: { title: string; text: string } | null, characters: { title: string; text: string }[], sameScene = false): string {
-  const parts = [s.description.trim()];
+export function shotPrompt(s: Pick<Shot, 'description' | 'angle'>, style: { title: string; text: string } | null, characters: { title: string; text: string }[], sameScene = false, clothing = ''): string {
+  // The clothes the person described come first (Nate, 2026-11-24: the look picture's coat won over "a dark sweater"),
+  // then the person's description, word for word; the look then gives the face only.
+  const wear = clothing.trim();
+  const parts = [...(wear ? [`Clothes: ${wear}`] : []), s.description.trim()];
   const a = angleById(s.angle);
   if (a) parts.push(`Camera: ${a.text}.`);
   if (sameScene) parts.push(SAME_SCENE_LINE);
-  if (characters.length) parts.push(`Characters: ${characters.map((c) => `${c.title}: ${c.text}`).join(' ')}`);
+  if (characters.length) parts.push(`${wear ? 'Characters (the face only; the clothes as above)' : 'Characters'}: ${characters.map((c) => `${c.title}: ${c.text}`).join(' ')}`);
   if (style) parts.push(`Style: ${style.text}`);
   return parts.join('\n');
 }
