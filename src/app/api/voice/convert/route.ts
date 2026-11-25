@@ -5,7 +5,6 @@ import { flowDeps, noStore, voicePerson, voiceReady } from '~/lib/voice/server';
 import { speechById } from '~/lib/voice/speech';
 import { takeMaxSeconds } from '~/lib/voice/spoken';
 
-const mmssLimit = (s: number) => (s % 60 ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}` : `${s / 60} minute${s === 60 ? '' : 's'}`);
 import { voiceIdFor } from '~/lib/voice/presets';
 import { elevenLabsBase } from '~/lib/voice/flag';
 import { hasVoiceConsent, voiceConsentWording } from '~/lib/voice/consent';
@@ -13,6 +12,8 @@ import { refusal, reserve } from '~/lib/voice/costs';
 import { convertTake, CONVERTED_ALREADY, estimateConvertCredits, FlowError, type CostEntry, type Scope } from '~/lib/voice/take-flow';
 import { keepConvertedTake } from '~/lib/voice/keep-converted';
 import { convertedBefore } from '~/lib/voice/converted-before';
+
+const mmssLimit = (s: number) => (s % 60 ? `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}` : `${s / 60} minute${s === 60 ? '' : 's'}`);
 
 export const maxDuration = 300;
 

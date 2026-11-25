@@ -1119,6 +1119,15 @@ for (const id of Object.values(VOICE.models)) {
   check('IM. ... a longer whole take is refused by the server (413), before any call to ElevenLabs', rr.status === 413 && /at most 2 minutes/.test(String(((await rr.json()) as { error: string }).error)) && stub.calls.length === callsBefore);
   const rec = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
   check('IM. ... and the page counts down on Stop and stops the recording at its limit', /rec\.start\(s!\.speech\.maxSeconds/.test(rec) && /IMPROV_WORDING\.left\(mmss\(Math\.max\(0, \(s\.speech\.maxSeconds/.test(rec) && /if \(t >= limitSeconds && r\.state === 'recording'\) r\.stop\(\)/.test(rec));
+  {
+    // Nate's review of #236 (2026-11-24): the bitrate, a too-large take said before it's sent, and a new take never "again".
+    const vr = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+    const rw = vr.slice(vr.indexOf('async function recordWhole'), vr.indexOf('async function recordWhole') + 400);
+    const cw = vr.slice(vr.indexOf('async function convertWhole'), vr.indexOf('async function convertWhole') + 900);
+    check('IM. the recorder runs at 128 kb/s, so a 3:00 take is about 2.9 MB, under the 4 MB limit', /TAKE_BITS_PER_SECOND = 128_000/.test(vr) && /new MediaRecorder\(s, \{ \.\.\.\(type \? \{ mimeType: type \} : \{\}\), audioBitsPerSecond: TAKE_BITS_PER_SECOND \}\)/.test(vr) && (180 * 128_000) / 8 < VOICE.maxTakeBytes);
+    check('IM. ... a take over the size limit is refused on the page, with its line, before anything is sent', cw.indexOf('blob.size > s!.limits.maxTakeBytes') > 0 && cw.indexOf('blob.size > s!.limits.maxTakeBytes') < cw.indexOf('await convert(') && /This recording is \$\{\(bytes \/ 1_000_000\)\.toFixed\(1\)\} MB, over the/.test(vr));
+    check('IM. ... and a new take resets "Convert again", so a fresh take never goes out with again=1', /setAgain\('ask'\)/.test(rw));
+  }
   // The transcript's sentences.
   const w = (t: string, a: number, b: number) => ({ text: t, start: a, end: b });
   const ts = SP.transcriptSentences([w('I', 0, 0.2), w('am', 0.3, 0.5), w('fine.', 0.6, 0.9), w('Really', 1, 1.2), w('truly', 1.3, 1.5), w('so', 2.6, 2.8)]);

@@ -16,6 +16,10 @@ import { citeHref } from '~/lib/challenge/learn-more';
 import { CONVERT_AGAIN } from '~/lib/voice/convert-again';
 import '../styles/voice.css';
 
+/** The recorder's bitrate: about 2.9 MB for a 3:00 take (Nate's review, 2026-11-24). */
+const TAKE_BITS_PER_SECOND = 128_000;
+/** A take over the size limit, said before it is sent. Draft wording, for Nate's reread. */
+const TOO_LARGE = (bytes: number, max: number) => `This recording is ${(bytes / 1_000_000).toFixed(1)} MB, over the ${Math.round(max / 1_000_000)} MB a take can be, so it can't be sent. Record it again, a little shorter.`;
 const REMOVE_DRAFT = 'Remove this draft? Its audio is deleted and it can’t be brought back.';
 
 /**
@@ -129,7 +133,9 @@ function useRecorder(note: Note) {
       const type = pickType();
       const supported = typeof MediaRecorder === 'undefined' ? 'none (no MediaRecorder)' : TYPES.filter((t) => MediaRecorder.isTypeSupported(t)).join(', ') || 'none of ours';
       note(`recording format: asked ${type || '(browser default)'}; supported: ${supported}`);
-      const r = new MediaRecorder(s, type ? { mimeType: type } : undefined);
+      // 128 kb/s (Nate's review, 2026-11-24): a 3:00 take is then about 2.9 MB, under the 4 MB a take may be. The browser's
+      // default can be 192 kb/s or more, about 4.3 MB for 3:00.
+      const r = new MediaRecorder(s, { ...(type ? { mimeType: type } : {}), audioBitsPerSecond: TAKE_BITS_PER_SECOND });
       r.onerror = (e) => note(`recorder error: ${errText((e as unknown as { error?: unknown }).error ?? e)}`);
       const parts: Blob[] = [];
       r.ondataavailable = (e) => e.data.size && parts.push(e.data);
@@ -397,6 +403,8 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
 
   async function recordWhole() {
     dropTake();
+    // A new take is a fresh recording: never sent as "Convert again" (Nate's review, 2026-11-24).
+    setAgain('ask');
     setConverted(null);
     setRedos([]);
     setAccepted(null);
@@ -513,6 +521,8 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
     if (!blob || !take || !picked) return;
     // Never another speech's take (the take is shown and sent with its own speech only).
     if (take.speechId !== s!.speech.id) return setMessage('That recording is of another speech: pick that speech to convert it.');
+    // Too large to send: said here, before anything is sent (the server refuses it too).
+    if (blob.size > s!.limits.maxTakeBytes) return setMessage(TOO_LARGE(blob.size, s!.limits.maxTakeBytes));
     if (converting.current) return;
     converting.current = true;
     setBusy('convert');
