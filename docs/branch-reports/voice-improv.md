@@ -1,4 +1,12 @@
-# Handoff: voice-improv (improvising, and timing without a button; DRAFT branch report)
+# Back to the Mac session: voice-improv (improvising, and timing without a button; DRAFT branch report)
+
+**Back to the Mac session (2026-11-25, from cloud session `session_015MNLwvqWNRKiBmpphsR2Lj`).** PR #236 is open;
+the cloud session pushes nothing more here.
+- **Done:** guide-fixes is merged in (step 1). tsc, test:voice (360), test:challenge, the build and check:principles
+  were run (expected failures only: P1i, P6k, and P6a/P6g, which fail on main here too). The PR carries the reread list.
+- **check:ui here:** it never got a full pass in this container. Every branch run broke at `/references` on a stalled prefetch of `/references/glossary`, and a probe reproduced the same stall on an unchanged main build (main's own run happened to pass). This container also can't reach media.snowmoon.party. check:ui doesn't cover the voice pages. **Left: one clean check:ui run on the Mac before merging.**
+- **Left:** check:ui on the Mac; the screenshots and their R2 page (step 3); Nate's reread; merging after #235, on
+  Nate's word.
 
 ## State, 2026-11-25 (cloud session `session_015MNLwvqWNRKiBmpphsR2Lj`, carrying on from the handoff below)
 
