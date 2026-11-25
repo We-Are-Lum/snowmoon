@@ -1,7 +1,7 @@
 # X posts from Discord: plan
 
 **DRAFT.** Written by an AI coding agent (Claude, made by Anthropic), 2026-11-25, for the owner's reread. Version 3:
-the owner's answers to section 9 and his later changes (2026-11-25) are folded in. Every wording below is this edition's own, a draft until
+the owner's answers to section 9 and later changes (2026-11-25) are folded in. Every wording below is this edition's own, a draft until
 the owner rereads it. The account is @snowmoon_party.
 
 The team proposes posts for the Snowmoon X account in one Discord channel, approves them with buttons, and the site
