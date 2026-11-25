@@ -113,6 +113,14 @@ const sharpPng = async () => (await import('sharp')).default({ create: { width: 
   const sp = JSON.parse(spokenEmbed('11111111-2222-4333-8444-555555555555'));
   check('E. /ephelion opens itself: launch_frame, "Record a speech" (fix 6, Nate 2026-11-24: the new address)', RECORD_BUTTON === 'Record a speech' && r.button.title === RECORD_BUTTON && r.button.action.type === 'launch_frame' && r.button.action.url.endsWith('/ephelion'));
   check('E. fix 6: /storyboard/record redirects permanently to /ephelion', /permanentRedirect\('\/ephelion'\)/.test(readFileSync(path.join(ROOT, 'src/app/storyboard/record/page.tsx'), 'utf8')) && !existsSync(path.join(ROOT, 'src/app/storyboard/record/not-found.tsx')) && existsSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx')));
+  {
+    // The guide on a phone (Nate, 2026-11-24): the ask box is pinned to the bottom only on wide screens (on a phone it hid
+    // the guide's card), and the looks are whole cards that wrap, never sliding sideways inside the card.
+    const css = readFileSync(path.join(ROOT, 'src/styles/voice.css'), 'utf8');
+    const composer = css.slice(css.indexOf('.vg-composer {'), css.indexOf('}', css.indexOf('.vg-composer {')));
+    check('E. on a phone the ask box isn\'t pinned over the guide\'s card; on a wide screen it is', !/position: sticky/.test(composer) && /@media \(min-width: 700px\) \{ \.vg-composer \{ position: sticky; bottom: 0; \} \}/.test(css));
+    check('E. ... and his looks are whole cards that wrap in the guide\'s card', /\.vb-look\.vg-choice \{ width: 104px; display: flex; flex-direction: column;/.test(css) && /\.vg-turn \.vb-look-row \{ flex-wrap: wrap; overflow: visible; flex-shrink: 0; \}/.test(css));
+  }
   check('E. a published storyboard opens itself: launch_frame, "Watch this storyboard"', SPOKEN_BUTTON === 'Watch this storyboard' && sp.button.title === SPOKEN_BUTTON && sp.button.action.type === 'launch_frame' && sp.button.action.url.endsWith('/storyboard/spoken/11111111-2222-4333-8444-555555555555'));
   const layout = readFileSync(path.join(ROOT, 'src/app/ephelion/layout.tsx'), 'utf8');
   const spoken = readFileSync(path.join(ROOT, 'src/app/storyboard/spoken/[id]/page.tsx'), 'utf8');
