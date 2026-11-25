@@ -18,8 +18,11 @@ import '../styles/voice.css';
 
 /** The recorder's bitrate: about 2.9 MB for a 3:00 take (Nate's review, 2026-11-24). */
 const TAKE_BITS_PER_SECOND = 128_000;
-/** A take over the size limit, said before it is sent. Draft wording, for Nate's reread. */
-const TOO_LARGE = (bytes: number, max: number) => `This recording is ${(bytes / 1_000_000).toFixed(1)} MB, over the ${Math.round(max / 1_000_000)} MB a take can be, so it can't be sent. Record it again, a little shorter.`;
+/**
+ * A take over the size limit, said before it is sent. Reread by Nate on 2026-11-24; its size rounded up to one decimal, so
+ * a 4.04 MB take reads "4.1 MB", never "4.0 MB, over the 4 MB".
+ */
+const TOO_LARGE = (bytes: number, max: number) => `This recording is ${(Math.ceil(bytes / 100_000) / 10).toFixed(1)} MB, over the ${Math.round(max / 1_000_000)} MB a take can be, so it can't be sent. Record it again, a little shorter.`;
 const REMOVE_DRAFT = 'Remove this draft? Its audio is deleted and it can’t be brought back.';
 
 /**

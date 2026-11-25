@@ -1125,7 +1125,7 @@ for (const id of Object.values(VOICE.models)) {
     const rw = vr.slice(vr.indexOf('async function recordWhole'), vr.indexOf('async function recordWhole') + 400);
     const cw = vr.slice(vr.indexOf('async function convertWhole'), vr.indexOf('async function convertWhole') + 900);
     check('IM. the recorder runs at 128 kb/s, so a 3:00 take is about 2.9 MB, under the 4 MB limit', /TAKE_BITS_PER_SECOND = 128_000/.test(vr) && /new MediaRecorder\(s, \{ \.\.\.\(type \? \{ mimeType: type \} : \{\}\), audioBitsPerSecond: TAKE_BITS_PER_SECOND \}\)/.test(vr) && (180 * 128_000) / 8 < VOICE.maxTakeBytes);
-    check('IM. ... a take over the size limit is refused on the page, with its line, before anything is sent', cw.indexOf('blob.size > s!.limits.maxTakeBytes') > 0 && cw.indexOf('blob.size > s!.limits.maxTakeBytes') < cw.indexOf('await convert(') && /This recording is \$\{\(bytes \/ 1_000_000\)\.toFixed\(1\)\} MB, over the/.test(vr));
+    check('IM. ... a take over the size limit is refused on the page, with its line, before anything is sent', cw.indexOf('blob.size > s!.limits.maxTakeBytes') > 0 && cw.indexOf('blob.size > s!.limits.maxTakeBytes') < cw.indexOf('await convert(') && /This recording is \$\{\(Math\.ceil\(bytes \/ 100_000\) \/ 10\)\.toFixed\(1\)\} MB, over the/.test(vr) && (Math.ceil(4_040_000 / 100_000) / 10).toFixed(1) === '4.1');
     check('IM. ... and a new take resets "Convert again", so a fresh take never goes out with again=1', /setAgain\('ask'\)/.test(rw));
   }
   // The transcript's sentences.
