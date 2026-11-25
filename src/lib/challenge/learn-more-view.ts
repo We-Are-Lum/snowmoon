@@ -4,7 +4,7 @@ import { firstLayerFacts } from './cards';
 import { callNameOf } from './names';
 import { LANDING_WORDING as L } from './landing-wording';
 import { loadChapter } from '../book';
-import { LATER_LABEL, LEARN_MORE, NOTE_PICKS, citeChapter, citeHref, learnMoreProblems, type LearnMoreText, type Segment } from './learn-more';
+import { LATER_LABEL, LEARN_MORE, NOTE_PICKS, citeChapter, learnMoreProblems, type LearnMoreText, type Segment } from './learn-more';
 
 /**
  * "Learn more about {Name}" as the page draws it (owner, 2026-11-12): one expander, replacing "Read where {Name} first
@@ -16,7 +16,7 @@ import { LATER_LABEL, LEARN_MORE, NOTE_PICKS, citeChapter, citeHref, learnMorePr
 export type Rendered =
   | { kind: 'text'; text: string }
   | { kind: 'term'; term: string; id: string; note: { text: string; cite: string; href: string } | null; href: string | null }
-  | { kind: 'cite'; label: string; href: string };
+  | { kind: 'cite'; block: string };
 
 export interface LearnMoreView {
   title: string;
@@ -59,7 +59,7 @@ function note(slug: string): { text: string; cite: string; href: string } | null
 
 function render(slug: string, part: string, segs: readonly Segment[]): Rendered[] {
   return segs.map((s, i): Rendered => {
-    if ('cite' in s) return { kind: 'cite', label: s.cite, href: citeHref(s.cite) };
+    if ('cite' in s) return { kind: 'cite', block: s.cite };
     if ('term' in s) return { kind: 'term', term: s.term, id: `lm-${slug}-${part}-${i}`, note: s.glossaryId ? note(s.glossaryId) : null, href: s.glossaryId ? `/glossary/${s.glossaryId}` : null };
     return { kind: 'text', text: s.text };
   });

@@ -2282,8 +2282,18 @@ async function checkChallengeLanding() {
           if (!/^His looks: every look on this site is this edition's invention\.$/.test(lastInvent)) fail(`/challenge/zei ${tag}: "Room to invent." doesn't end with the looks line (it ends "${lastInvent}")`);
           if (looksLines.length !== 1 || (await more.locator('.chc-looks').count())) fail(`/challenge/zei ${tag}: "Learn more" says the look is this edition's ${looksLines.length} times, not once (${looksLines.join(' | ')})`);
         }
-        const cite = more.locator('[data-part="start"] a.chc-cite').first();
-        if ((await cite.getAttribute('href')) !== '/chapter/2#c2-b98') fail(`/challenge/zei ${tag}: a citation doesn't link to the reader's block (${await cite.getAttribute('href')})`);
+        // Citations (Nate, 2026-11-24): a book icon each, linking to its block, named and titled "In the book: chapter N",
+        // the block in data-block; no block code shown as text anywhere in the panel; at least 24px to tap; not the ⓘ.
+        const cite = more.locator('[data-part="start"] > a.book-cite').first();
+        if ((await cite.getAttribute('href')) !== '/chapter/2#c2-b98' || (await cite.getAttribute('data-block')) !== 'c2-b98–b104') fail(`/challenge/zei ${tag}: a citation doesn't link to the reader's block (${await cite.getAttribute('href')}, ${await cite.getAttribute('data-block')})`);
+        {
+          const c = await more.locator('a.book-cite').evaluateAll((els) => els.map((e) => ({ block: e.getAttribute('data-block') ?? '', href: e.getAttribute('href') ?? '', label: e.getAttribute('aria-label') ?? '', title: e.getAttribute('title') ?? '', text: (e.textContent ?? '').trim(), svg: !!e.querySelector('svg'), w: e.getBoundingClientRect().width, h: e.getBoundingClientRect().height, shown: e.getBoundingClientRect().width > 0 })));
+          const bad = c.filter((x) => { const m = /^c(\d+)-b(\d+)/.exec(x.block); return !m || x.href !== `/chapter/${m[1]}#c${m[1]}-b${m[2]}` || x.label !== `In the book: chapter ${m[1]}` || x.title !== x.label || x.text !== '' || !x.svg || (x.shown && (x.w < 24 || x.h < 24)); });
+          if (c.length < 5 || bad.length) fail(`/challenge/zei ${tag}: ${c.length} citation icons; not a 24px book icon linking to its block, named "In the book: chapter N": ${JSON.stringify(bad.slice(0, 3))}`);
+          const shownText = (await more.textContent()) ?? '';
+          const code = /c\d+-b\d+/.exec(shownText);
+          if (code) fail(`/challenge/zei ${tag}: "Learn more" shows a block code as text (${code[0]})`);
+        }
         if (await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)) fail(`/challenge/zei ${tag}: scrolls sideways with "Learn more" open`);
         await more.scrollIntoViewIfNeeded();
         await snap('character-learn-more');
