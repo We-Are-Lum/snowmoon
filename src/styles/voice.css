@@ -156,7 +156,9 @@
 .vg-try.vg-on { border-color: currentColor; }
 .vg-try img, .vg-pic { width: 100%; height: auto; display: block; border-radius: 4px; }
 .vg-empty { aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; font-size: var(--text-small); }
-.vg-composer { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: var(--space-3); position: sticky; bottom: 0; background: var(--bg, var(--paper)); padding: var(--space-2) 0; border-top: 1px solid var(--rule); z-index: 2; }
+.vg-composer { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin-top: var(--space-3); background: var(--bg, var(--paper)); padding: var(--space-2) 0; border-top: 1px solid var(--rule); z-index: 2; }
+/* Kept in view at the bottom only on wide screens: on a phone it is too tall and hid the guide's card (Nate, 2026-11-24). */
+@media (min-width: 700px) { .vg-composer { position: sticky; bottom: 0; } }
 /* The conversation (fix 5, Nate 2026-11-24): the guide's current turn holds its choices as cards. */
 .vg-turn { max-width: 100%; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: var(--space-2); }
 .vg-cardbox { display: flex; flex-direction: column; gap: var(--space-2); }
@@ -164,7 +166,9 @@
 .vg-choice:disabled { opacity: 0.5; cursor: default; }
 .vg-choice.vg-primary { border-color: currentColor; font-weight: 600; }
 .vr-row .vg-choice { width: auto; display: inline-block; }
-.vb-look.vg-choice { width: auto; }
+.vb-look.vg-choice { width: 104px; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 4px; }
+/* In the guide's card (Nate's phone, 2026-11-24): the looks wrap onto lines, each whole, never sliding sideways inside the card. */
+.vg-turn .vb-look-row { flex-wrap: wrap; overflow: visible; flex-shrink: 0; }
 .vg-progress { font-style: italic; }
 .vg-askfor { margin: 0; }
 .vg-examples { display: flex; flex-wrap: wrap; gap: 6px; }
