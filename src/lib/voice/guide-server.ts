@@ -2,7 +2,7 @@ import 'server-only';
 import type postgres from 'postgres';
 import { CHAT } from '../config';
 import { voiceTestOn } from './flag';
-import { coverageAngles, sceneWords, sentencesIn, type Shot } from './board';
+import { boardLook, coverageAngles, madeWithOf, sceneWords, sentencesIn, staleShots, type Shot } from './board';
 import { boardSource, keptPictures, latestBoard } from './board-store';
 import { speechById } from './speech';
 import { GUIDE, GUIDE_STEPS, readGuideReply, type DraftContext, type GuideDraft, type GuideMessage, type GuideStep } from './guide';
@@ -57,7 +57,10 @@ export async function askGuide(sql: Sql, fid: number, raw: unknown, deps: GuideD
   const had = await guideMessages(sql, draft.id, fid);
   if (had.length + 2 > GUIDE.maxMessagesPerBoard) return { status: 429, json: { error: `This storyboard's dialogue is full (${GUIDE.maxMessagesPerBoard} messages).` } };
   const kept = await keptPictures(sql, draft.id, fid);
-  const keptShots = shots.filter((s) => s.kept && kept.some((p) => p.shotKey === s.key && p.sha256 === s.kept)).map((s) => s.key);
+  // A kept shot made with another scene or look isn't offered (staleShots, Nate 2026-11-24).
+  const made = Object.fromEntries(shots.map((s) => { const p = s.kept ? kept.find((x) => x.shotKey === s.key && x.sha256 === s.kept) : undefined; return [s.key, p ? madeWithOf(p.recipe) : undefined]; }));
+  const stale = staleShots(shots, board?.scene ?? null, boardLook(shots), made);
+  const keptShots = shots.filter((s) => s.kept && !stale.includes(s.key) && kept.some((p) => p.shotKey === s.key && p.sha256 === s.kept)).map((s) => s.key);
   const look = typeof b.look === 'object' && b.look ? (b.look as { id?: string; title?: string; text?: string }) : null;
   const c: DraftContext = {
     timeline: draft.timeline,
