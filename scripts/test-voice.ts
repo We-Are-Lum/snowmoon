@@ -640,7 +640,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
     await sql`delete from studio.image_costs where model = 'x-pool'`;
     // Admins stay on the admins' pool; everyone else goes to the storyboard pool (shot-picture.ts).
     const sp = readFileSync(path.join(ROOT, 'src/lib/voice/shot-picture.ts'), 'utf8');
-    check('B. admins stay on the admins\' pool; everyone else on the storyboard allowance', /pool: isAdmin\(fid\) \? \('admin' as const\) : \('storyboard' as const\)/.test(sp));
+    check('B. admins and the testers stay on the admins\' pool (voiceInsider, main); everyone else on the storyboard allowance', /pool: voiceInsider\(fid\) \? \('admin' as const\) : \('storyboard' as const\)/.test(sp));
     const { allowanceFor } = await import('../src/lib/voice/shot-picture');
     check('B. no allowance shown to admins, or to anyone while only admins make real pictures', (await allowanceFor(sql, NATE)).allowance === null && (await allowanceFor(sql, someone)).allowance === null);
     // The reset time is written by the browser, never the server (no hydration mismatch, the person's own zone).
@@ -1054,7 +1054,7 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
   const own = await C.refusal(sql, someone, 100, false);
   const reading = await C.refusal(sql, someone, 100, false, C.READINGS_FUNDED);
   await sql`delete from studio.voice_costs where model = 'x-free-full'`;
-  check('$. with everyone\'s budget used up, a take is refused but a reading\'s call is not (it is the admins\' pool)', C.fundedFor(someone) === 'free' && C.READINGS_FUNDED === 'admin' && /allowance/.test(own ?? '') && reading === null, `${own} / ${reading}`);
+  check('$. with everyone\'s budget used up, a take is refused but a reading\'s call is not (it is the admins\' pool)', C.fundedFor(someone) === 'free' && C.READINGS_FUNDED === 'admin' && own === (await import('../src/lib/voice/allowance-wording')).ALLOWANCE_WORDING.takesPool && reading === null, `${own} / ${reading}`);
   const src = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
   check('$. ... the reading and its timing both charge READINGS_FUNDED, at the gate and at the hold', ['src/app/api/voice/reading/route.ts', 'src/lib/voice/reading-timing.ts'].every((f) => (src(f).match(/READINGS_FUNDED\)/g) ?? []).length === 2));
 }
