@@ -84,6 +84,7 @@
     "check:voice-proof": "tsx scripts/check-voice-proof.ts",
     "test:voice": "tsx --conditions=react-server scripts/test-voice.ts",
     "test:voice-leave": "tsx scripts/test-voice-leave.ts",
+    "test:voice-takes-sql": "tsx scripts/test-voice-takes-sql.ts",
     "test:illustration-review": "tsx --conditions=react-server scripts/test-illustration-review.ts",
     "test:chapter-pictures": "tsx --conditions=react-server scripts/test-chapter-pictures.ts",
     "test:chapter-additions": "tsx --conditions=react-server scripts/test-chapter-additions.ts",
