@@ -1,6 +1,8 @@
 -- NEXT_paid_generations.sql: paid generations for the Ephelion challenge, paid from the prepaid balance (owner,
 -- 2026-11-25: "Use one system: the existing prepaid balance (Terms §6a), with a top-up inside the page"). Branch
--- ephelion-paid. NOT APPLIED. It takes the next free number at merge, checked against origin/main and production.
+-- ephelion-paid. APPLIED by the owner in production on 2026-11-25: A, B and C (B run again after the October table
+-- below; C's rights table as expected, no error). It takes the next free number at merge, checked against origin/main
+-- and production.
 -- Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory PGlite against main's
 -- migrations 0001-0051.
 -- Requires 0011 (wallet accounts, payments, debits), 0022 and 0027 (credits back) and 0044 (voice costs).
