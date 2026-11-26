@@ -1,7 +1,8 @@
 -- NEXT_x_posts.sql: posts for the Snowmoon X account (@snowmoon_party), proposed and approved by the team in Discord's
 -- #x-posts, and suggested by the site (owner, 2026-11-25; branch x-posts; plan docs/proposals/x-posts.md). Unnumbered
--- until merge: it takes the next free number then, checked against origin/main and production. NOT APPLIED until the
--- owner applies it; the branch merges only after he says "applied". Drafted by the coding agent (Claude, a closed model
+-- until merge: it takes the next free number then, checked against origin/main and production. APPLIED by the owner in
+-- production on 2026-11-25, version 4 (A ran with no error, B ran, C: the rights table as expected and no error, so the
+-- read-back passed). Drafted by the coding agent (Claude, a closed model
 -- by Anthropic). Tested on in-memory PGlite against main's 0001-0051 (npm run test:x-posts), version 2 included.
 -- Requires 0001_core (the studio schema and the studio_writer role). Nothing else.
 --

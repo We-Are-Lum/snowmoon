@@ -45,7 +45,7 @@ const readBack = uncomment(between('C. READ-BACK', 'D. UNDO'));
 const undo = uncomment(between('D. UNDO', null));
 const TABLES = ['x_proposals', 'x_approvals', 'x_post_log'];
 check('the file says who runs it (postgres, in the Supabase SQL Editor)', /MUST RUN AS postgres/.test(text) && /Supabase SQL Editor/.test(text));
-check('unnumbered on the branch (NEXT_), and says it is not applied', /^NEXT_/.test(path.basename(FILE)) && /NOT APPLIED/.test(text));
+check('unnumbered on the branch (NEXT_), and says it was applied and by whom', /^NEXT_/.test(path.basename(FILE)) && /APPLIED by the owner/.test(text));
 check('A ends in rollback, B in commit, C in a rolled-back read-back ending READ-BACK PASSED, then D', dry.startsWith('begin;') && dry.endsWith('rollback;') && mig.startsWith('begin;') && mig.endsWith('commit;') && readBack.startsWith('begin;') && readBack.trim().endsWith('rollback;') && /READ-BACK PASSED/.test(readBack) && /drop table/.test(undo));
 check('the dry run is the migration word for word', dry.slice(0, -'rollback;'.length) === mig.slice(0, -'commit;'.length));
 check('the read-back inserts and deletes realistic rows in every table', TABLES.every((t) => new RegExp(`insert into studio\\.${t}`).test(readBack) && new RegExp(`delete from studio\\.${t}`).test(readBack)));
