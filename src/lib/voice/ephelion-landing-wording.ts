@@ -21,6 +21,11 @@ export const EPHELION_LANDING = {
   aiReading: 'AI reading',
   noPerson: (voice: string) => `${voice} · no person performing`,
   readingSoon: 'AI reading coming soon',
+  // An admin's button on a card with no reading (Nate, 2026-11-26). DRAFT.
+  makeReading: (voice: string, credits: number) => `Make the AI reading in ${voice} (≈ ${credits.toLocaleString('en-US')} credits)`,
+  makingReading: 'Making the AI reading…',
+  adminOnly: 'Admins only. Testers see "AI reading coming soon".',
+  readingFailed: 'The reading failed. Try again.',
   noTakes: 'No takes yet. Be the first.',
   playing: 'Playing',
   play: 'Play',
