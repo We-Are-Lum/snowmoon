@@ -13,6 +13,12 @@ export const LANDING_BEFORE_OPEN = 'Pictures made before then are for trying it 
 
 export const LANDING_WORDING = {
   /** The sheet pages' copy of the line, starting at "Entries …" (owner, 2026-11-07: no "Pick a character.", then no "Tap a picture to remix it."). */
+  /**
+   * A challenge character's version that isn't one of its bases, while pictures are the entries (owner, 2026-11-26, from
+   * @garance's feedback: Remix jumped to /challenge with no word of why). The button goes to the character's card there.
+   */
+  chooseStart: 'Choose a starting point',
+  notStartingPoint: (name: string) => `This version isn’t a starting point. Choose one of ${name}’s on the challenge page.`,
   sheetLine: (now: ReturnType<typeof phase> = phase()) => LANDING_WORDING.line(now).replace(/^Pick a character\. Tap a picture to remix it\. /, ''),
   /**
    * The short page's one line (owner, 2026-11-04: "one line on what to do"): what to do, then when, from
