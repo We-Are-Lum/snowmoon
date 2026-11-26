@@ -1,6 +1,6 @@
 # X posts from Discord: plan
 
-**DRAFT.** Written by an AI coding agent (Claude, made by Anthropic), 2026-11-25, for the owner's reread. Version 4:
+**DRAFT.** Written by an AI coding agent (Claude, made by Anthropic), 2026-11-25, for the owner's reread. Version 5:
 the owner's answers to section 9 and later changes (2026-11-25) are folded in. Every wording below is this edition's own, a draft until
 the owner rereads it. The account is @snowmoon_party.
 
@@ -251,6 +251,38 @@ Not repeated:
    through to "Would post now".
 4. Owner's reread of the Privacy lines; merge `post` on with them, in the same release.
 5. First real post, then a delete, to check both and what X charged.
+
+## 8b. Release 1 as built (branch `x-posts`, 2026-11-25)
+
+- **On:** `/xpost`, the cards and every button (`X_POSTS.cards`). **Off:** posting to X (`X_POSTS.post`) and the site's
+  suggestions (`X_POSTS.suggest`). A card that reaches 3 approvals with a lead is logged "would post" and says
+  "Would post now (posting is off)".
+- **Site suggestions wait for release 2.** Turning them on sends a person's name and a link to their work to Discord,
+  which Privacy §7 must say first, so they ship with the Privacy lines. The automatic delete on hide is also release 2:
+  nothing is posted before then. The tables already hold both.
+- **The owner's two notes (2026-11-25), both tested:**
+  1. No handler updates a posted or deleted card's row. Every write locks the card and checks its state first; a late
+     Approve, Edit, Withdraw, edit box or Try again on a posted card is told "This is already posted on X, so it can't
+     change. Use Delete from X or Delete and redraft.", and drawing the card again writes nothing.
+  2. Delete and redraft requires the old card to be posted, with its X post, inside the same transaction that marks it
+     deleted and creates the new card. An open, withdrawn, refused or already redrafted card is refused with nothing
+     written; the test also shows the database alone would accept it.
+- **Built, tested against a stub, switched off:** posting once (open to posting in one step), X refusing (the card is
+  "failed": Try again, Edit or Withdraw), X not answering ("unknown", counted as charged), the $20 month and the 10 a day
+  (held, Try again by a lead), Delete from X, Delete and redraft.
+- **Choices made in the code, for the owner's review:**
+  - A card X refused can be edited; saving opens it again with approvals starting over.
+  - The edit box doesn't ask again about an @mention: only /xpost asks (`confirm`).
+  - X links a bare domain such as "snowmoon.party" by itself, so a post that names the site costs $0.20 like a link,
+    and counts 23 characters. The card shows the price.
+  - The month is the calendar month in UTC; the day is the Pacific day.
+  - The one new wording item: `/xpost`'s `confirm` option, "Yes, I mean the @ mention (it tags that X account)".
+- **P4a:** the Discord route can't require a site sign-in (Discord sends it). It passes as a checked exemption, the
+  owner's yes pending: the route hands the raw request to the handler and imports nothing else; the handler refuses
+  (401) anything without Discord's signature before it reads it, then requires the server and the team role; nothing it
+  reaches publishes or keeps anything on the site. Each part is proven to fail on a planted fault.
+- **The command** is registered from `/admin/x-posts` by the owner's account only (FID 6786), so no agent handles the
+  bot token. Admins see the log, this month's spending and today's posts there.
 
 ## 9. The owner's answers (2026-11-25)
 

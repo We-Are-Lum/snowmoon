@@ -6,6 +6,11 @@
  *   npm run test:x-posts
  *
  * - Delete and redraft: a new open team card with the same text, once per card, logged on both cards.
+ * - The site (scripts/lib/x-posts-site-test.ts): signed Discord requests through the real handler and store, as
+ *   studio_writer, against a local stub for Discord and X: who may call, proposing, approving with posting off and on,
+ *   editing, withdrawing, posting once, a posted or deleted card never touched by a late click (note 1), deleting, Delete
+ *   and redraft only of a posted card, checked in the same transaction (note 2), X refusing or not answering, the budget
+ *   and the day's limit, the admin page and the command, P4a's checked exemption.
  * - A posted card is frozen (version 2): only posted to deleted, nothing else changed; a deleted card never changes.
  * - NEXT_x_posts.sql: who runs it; A is B word for word; A leaves everything as it was; B applies twice; C's read-back
  *   passes and keeps nothing; D undoes it; studio_writer's rights are exactly the site's (the log insert-only, no
@@ -181,6 +186,26 @@ await pg.exec(undo);
 check('D removes the three tables and the trigger function', (await snapshot()) === before);
 await pg.exec(mig);
 check('B applies again after D', /x_proposals/.test(await snapshot()));
+
+// --- The site, as studio_writer -----------------------------------------------------------------------------------
+{
+  const { PGLiteSocketServer } = await import('@electric-sql/pglite-socket');
+  const postgres = (await import('postgres')).default;
+  const { gatePglite } = await import('./lib/pglite-gate');
+  const { siteTest } = await import('./lib/x-posts-site-test');
+  const gate = gatePglite(pg);
+  const server = new PGLiteSocketServer({ db: pg, port: 0, host: '127.0.0.1' });
+  await server.start();
+  const PORT = (server as unknown as { port: number }).port;
+  const sql = postgres(`postgres://postgres@127.0.0.1:${PORT}/postgres`, { prepare: false, max: 1, onnotice: () => {} });
+  await sql`set role studio_writer`;
+  const walk = (dir: string): string[] =>
+    readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap((d) => (d.isDirectory() ? walk(`${dir}/${d.name}`) : /\.(tsx?|sql)$/.test(d.name) ? [`${dir}/${d.name}`] : []));
+  await siteTest(pg, sql, check, proof, read, walk);
+  check('no protocol errors on the test database', gate.protocolErrors().length === 0);
+  await sql.end({ timeout: 1 });
+  await server.stop();
+}
 
 console.log(`\n${passed} passed, ${failures.length} failed`);
 if (failures.length) {
