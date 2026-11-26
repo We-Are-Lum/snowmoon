@@ -44,7 +44,8 @@ export const P4A_SOCIAL_SIGN_IN = new Set([
   'src/app/api/auth/bluesky/start/route.ts',
   'src/app/api/auth/bluesky/callback/route.ts',
 ]);
-// Checked exemption (branch x-posts, 2026-11-25; DRAFT, the owner's yes pending): Discord's Interactions Endpoint. Its
+// Checked exemption (branch x-posts, 2026-11-25; the owner's yes of 2026-11-26: "Yes to the P4a exemption for
+// /api/discord/interactions, with the conditions as checked"): Discord's Interactions Endpoint. Its
 // requests come from Discord, not a signed-in browser, so it can't require a site sign-in. It passes only if the route
 // hands the raw body and headers straight to handleInteraction and imports nothing else of ours, and the handler refuses
 // (401) any request without Discord's Ed25519 signature before it parses or reads anything, then requires the server

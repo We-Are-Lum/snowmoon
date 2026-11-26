@@ -1,6 +1,6 @@
 # X posts from Discord: plan
 
-**DRAFT.** Written by an AI coding agent (Claude, made by Anthropic), 2026-11-25, for the owner's reread. Version 5:
+**DRAFT.** Written by an AI coding agent (Claude, made by Anthropic), 2026-11-25, for the owner's reread. Version 6:
 the owner's answers to section 9 and later changes (2026-11-25) are folded in. Every wording below is this edition's own, a draft until
 the owner rereads it. The account is @snowmoon_party.
 
@@ -277,8 +277,8 @@ Not repeated:
     and counts 23 characters. The card shows the price.
   - The month is the calendar month in UTC; the day is the Pacific day.
   - The one new wording item: `/xpost`'s `confirm` option, "Yes, I mean the @ mention (it tags that X account)".
-- **P4a:** the Discord route can't require a site sign-in (Discord sends it). It passes as a checked exemption, the
-  owner's yes pending: the route hands the raw request to the handler and imports nothing else; the handler refuses
+- **P4a:** the Discord route can't require a site sign-in (Discord sends it). It passes as a checked exemption (the
+  owner's yes, 2026-11-26: "Yes to the P4a exemption for /api/discord/interactions, with the conditions as checked"): the route hands the raw request to the handler and imports nothing else; the handler refuses
   (401) anything without Discord's signature before it reads it, then requires the server and the team role; nothing it
   reaches publishes or keeps anything on the site. Each part is proven to fail on a planted fault.
 - **The command** is registered from `/admin/x-posts` by the owner's account only (FID 6786), so no agent handles the
@@ -300,6 +300,10 @@ Later the same day (owner, 2026-11-25): a posted card is frozen in the database 
 "Delete and redraft" is added (section 1). Both are in `NEXT_x_posts.sql` (version 2, the freeze; version 3, the redraft).
 Then: a site suggestion can also be about a recording-only Ephelion entry, kind `voice_take` with a uuid id
 (`NEXT_x_posts.sql` version 4).
+
+Then (owner, 2026-11-26): yes to the P4a exemption; the owner rereads the wording in PR #246; after the merge, the
+Discord setup steps one at a time (app and bot, role and channel, Vercel settings, redeploy, Interactions URL, Register
+commands). The X developer app waits: release 1 never posts.
 
 Next (owner, 2026-11-25): release 1, the cards with posting off, on branch `x-posts`. `NEXT_x_posts.sql` goes to the
 owner to test first; the setup steps come one at a time once the cards are ready to try.
