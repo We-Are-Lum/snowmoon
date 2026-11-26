@@ -26,9 +26,11 @@ export function ChallengeRemixLanding(p: {
   remixHref?: string;
   /** Before the open date, /challenge's own line in place of the Remix note (owner, 2026-11-07). */
   note?: string;
+  /** The button's words when not "Remix" (a version that isn't a starting point; owner, 2026-11-26). */
+  remixLabel?: string;
   posts: PostedOnItem[];
 }) {
-  const action = landingAction(p.versionId, p.phase, p.remixHref);
+  const action = landingAction(p.versionId, p.phase, p.remixHref, p.remixLabel);
   return (
     <section className="rl-landing" aria-label={L.previewTitle(p.name, p.title)}>
       <ChallengeArrival text={L.arrival(p.name, p.phase)} linkText={L.arrivalLink} />
