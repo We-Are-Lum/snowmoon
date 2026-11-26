@@ -101,5 +101,74 @@ check('the undo is refused once a paid charge is on record', refused);
 await pg.exec(`delete from studio.wallet_debits where item is not null;`);
 await pg.exec(undo);
 check('the undo puts back main\'s shape', (await shape()) === before);
+
+// Production's state on 2026-11-25: an empty table of the October draft's shape (0013_wallet_refunds.sql on branch
+// merge-thursday, applied there and never used), then the first B (commit 87543dab), which kept it. The new A and B
+// replace it, and C passes. With a row in it, B stops and changes nothing.
+const OCTOBER = `create table studio.wallet_refunds (
+  id bigint generated always as identity primary key,
+  debit_id bigint not null unique references studio.wallet_debits(id),
+  account_id bigint not null references studio.wallet_accounts(id),
+  usd numeric(12, 6) not null check (usd > 0),
+  reason text not null check (reason in ('check-unavailable', 'model-unavailable')),
+  at timestamptz not null default now()
+);
+create index wallet_refunds_account on studio.wallet_refunds (account_id);
+alter table studio.wallet_refunds enable row level security;
+create policy writer_insert on studio.wallet_refunds for insert to studio_writer with check (true);
+create policy writer_read on studio.wallet_refunds for select to studio_writer using (true);
+revoke all on studio.wallet_refunds from anon, authenticated;
+grant select, insert on studio.wallet_refunds to studio_writer;`;
+const { execFileSync } = await import('node:child_process');
+const firstB = (() => {
+  const t = execFileSync('git', ['show', '87543dab:supabase/migrations/NEXT_paid_generations.sql'], { cwd: ROOT, encoding: 'utf8' });
+  const a = t.indexOf('\n-- B. MIGRATION');
+  return strip(t.slice(t.indexOf('\n', a + 1) + 1, t.indexOf('\n-- C. READ-BACK')));
+})();
+for (const withRow of [false, true]) {
+  const p2 = new PGlite();
+  await p2.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
+  for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort()) await p2.exec(read(`supabase/migrations/${f}`));
+  await p2.exec(OCTOBER);
+  if (withRow) await p2.exec(`insert into studio.wallet_accounts (address) values ('0x${'5'.repeat(40)}'); insert into studio.wallet_debits (account_id, usd) values ((select max(id) from studio.wallet_accounts), 0.1);
+    insert into studio.wallet_refunds (debit_id, account_id, usd, reason) values ((select max(id) from studio.wallet_debits), (select max(id) from studio.wallet_accounts), 0.1, 'model-unavailable');`);
+  await p2.exec(firstB);
+  let cFailed = false;
+  try {
+    await p2.exec(readBack);
+  } catch (e) {
+    cFailed = /to_address/.test(String(e));
+    await p2.exec('rollback;').catch(() => {});
+  }
+  if (!withRow) check('production\'s state: C fails after the first B, on to_address (as it did)', cFailed);
+  const cols = async () => (await p2.query<{ c: string }>(`select string_agg(column_name, ',' order by column_name) as c from information_schema.columns where table_schema = 'studio' and table_name = 'wallet_refunds'`)).rows[0].c;
+  if (!withRow) {
+    await p2.exec(dry);
+    check('production\'s state: the new dry run changes nothing', !/to_address/.test(await cols()));
+    await p2.exec(mig);
+    await p2.exec(mig);
+    let ok = true, why = '';
+    try {
+      await p2.exec(readBack);
+    } catch (e) {
+      ok = false;
+      why = String((e as Error).message);
+      await p2.exec('rollback;').catch(() => {});
+    }
+    const grants = (await p2.query<{ g: string }>(`select string_agg(privilege_type, ',' order by privilege_type) as g from information_schema.role_table_grants where table_schema = 'studio' and table_name = 'wallet_refunds' and grantee = 'studio_writer'`)).rows[0].g;
+    const pols = (await p2.query<{ p: string }>(`select string_agg(polname, ',' order by polname) as p from pg_policy where polrelid = 'studio.wallet_refunds'::regclass`)).rows[0].p;
+    check('production\'s state: the new B replaces the October table, and C passes', ok && /to_address/.test(await cols()) && grants === 'SELECT' && pols === 'writer_read', why || `${grants} ${pols}`);
+  } else {
+    let stopped = false;
+    try {
+      await p2.exec(mig);
+    } catch (e) {
+      stopped = /STOP: studio\.wallet_refunds/.test(String(e));
+      await p2.exec('rollback;').catch(() => {});
+    }
+    const rows = (await p2.query<{ n: number }>(`select count(*)::int as n from studio.wallet_refunds`)).rows[0].n;
+    check('an October table holding a row: B stops, and the row and its shape stay', stopped && rows === 1 && /reason/.test(await cols()));
+  }
+}
 console.log(failed ? `${failed} FAILED` : 'all passed');
 process.exit(failed ? 1 : 0);

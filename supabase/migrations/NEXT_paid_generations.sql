@@ -31,6 +31,10 @@
 --    free and admin pools (image_costs has had 'prepaid' since 0011).
 -- Nothing is public: no rights for anon or authenticated.
 --
+-- Production, 2026-11-25: A ran clean; B ran, but an empty, unused studio.wallet_refunds of the October shape was
+-- already there, so B kept it (and took studio_writer's insert right on it) and C failed on its missing to_address.
+-- B now replaces that table when it is empty and has that shape (above); the repair block for production is B run again.
+--
 -- Safe with today's live code (main at 286891ec, 2026-11-25): the new columns are nullable and nothing reads
 -- wallet_refunds yet; the balance is still payments - debits + credits until the code that reads refunds ships, and
 -- with no refunds the two are the same.
@@ -43,6 +47,20 @@ alter table studio.wallet_debits add column if not exists ref text check (ref is
 alter table studio.wallet_debits drop constraint if exists wallet_debits_item_shape;
 alter table studio.wallet_debits add constraint wallet_debits_item_shape check ((item is null) = (person is null) and (ref is null or item is not null));
 create index if not exists wallet_debits_person_item on studio.wallet_debits (person, item, at) where item is not null;
+-- A table of this name from an unmerged October draft (0013_wallet_refunds.sql on branch merge-thursday: debit_id,
+-- account_id, usd, reason) was applied in production and never used. It is replaced only if it is empty and still has
+-- that shape; anything else stops the migration.
+do $g$ begin
+  if to_regclass('studio.wallet_refunds') is not null and not exists (select 1 from information_schema.columns
+       where table_schema = 'studio' and table_name = 'wallet_refunds' and column_name = 'to_address') then
+    if exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'wallet_refunds' and column_name = 'reason')
+       and not exists (select 1 from studio.wallet_refunds) then
+      drop table studio.wallet_refunds;
+    else
+      raise exception 'STOP: studio.wallet_refunds exists with another shape, or holds rows; nothing was changed';
+    end if;
+  end if;
+end $g$;
 create table if not exists studio.wallet_refunds (
   id bigint generated always as identity primary key,
   debit_id bigint not null unique references studio.wallet_debits(id),
@@ -103,6 +121,20 @@ alter table studio.wallet_debits add column if not exists ref text check (ref is
 alter table studio.wallet_debits drop constraint if exists wallet_debits_item_shape;
 alter table studio.wallet_debits add constraint wallet_debits_item_shape check ((item is null) = (person is null) and (ref is null or item is not null));
 create index if not exists wallet_debits_person_item on studio.wallet_debits (person, item, at) where item is not null;
+-- A table of this name from an unmerged October draft (0013_wallet_refunds.sql on branch merge-thursday: debit_id,
+-- account_id, usd, reason) was applied in production and never used. It is replaced only if it is empty and still has
+-- that shape; anything else stops the migration.
+do $g$ begin
+  if to_regclass('studio.wallet_refunds') is not null and not exists (select 1 from information_schema.columns
+       where table_schema = 'studio' and table_name = 'wallet_refunds' and column_name = 'to_address') then
+    if exists (select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'wallet_refunds' and column_name = 'reason')
+       and not exists (select 1 from studio.wallet_refunds) then
+      drop table studio.wallet_refunds;
+    else
+      raise exception 'STOP: studio.wallet_refunds exists with another shape, or holds rows; nothing was changed';
+    end if;
+  end if;
+end $g$;
 create table if not exists studio.wallet_refunds (
   id bigint generated always as identity primary key,
   debit_id bigint not null unique references studio.wallet_debits(id),
