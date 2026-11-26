@@ -165,6 +165,8 @@ for (const [name, plant] of [
   ['a link check that refuses every link', "alter table studio.x_proposals add constraint plant check (link is null);"],
   ['two redrafts of one card allowed', 'drop index studio.x_proposals_one_redraft;'],
   ['a redraft without its other card in the log', 'alter table studio.x_post_log drop constraint x_post_log_redraft;'],
+  ['no voice_take kind', "alter table studio.x_proposals drop constraint x_proposals_subject_kind_check; alter table studio.x_proposals add constraint x_proposals_subject_kind_check check (subject_kind in ('voice_publication', 'challenge_entry'));"],
+  ['any kind of work allowed', 'alter table studio.x_proposals drop constraint x_proposals_subject_kind_check;'],
   ['no freeze on posted cards', 'drop trigger x_proposals_freeze on studio.x_proposals;'],
   ['a freeze that also refuses the delete', `create or replace function studio.x_proposals_freeze() returns trigger language plpgsql as $f$ begin if old.status in ('posted', 'deleted') then raise exception 'plant: frozen' using errcode = 'check_violation'; end if; return new; end $f$;`],
   ['a freeze that lets a deleted card change', `create or replace function studio.x_proposals_freeze() returns trigger language plpgsql as $f$ begin if old.status = 'posted' and new.status <> 'deleted' then raise exception 'plant: frozen' using errcode = 'check_violation'; end if; if old.status = 'posted' and new.body is distinct from old.body then raise exception 'plant: frozen' using errcode = 'check_violation'; end if; if old.status = 'posted' and new.link is distinct from old.link then raise exception 'plant: frozen' using errcode = 'check_violation'; end if; return new; end $f$;`],

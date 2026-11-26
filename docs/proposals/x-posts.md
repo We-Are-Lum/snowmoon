@@ -1,6 +1,6 @@
 # X posts from Discord: plan
 
-**DRAFT.** Written by an AI coding agent (Claude, made by Anthropic), 2026-11-25, for the owner's reread. Version 3:
+**DRAFT.** Written by an AI coding agent (Claude, made by Anthropic), 2026-11-25, for the owner's reread. Version 4:
 the owner's answers to section 9 and later changes (2026-11-25) are folded in. Every wording below is this edition's own, a draft until
 the owner rereads it. The account is @snowmoon_party.
 
@@ -70,7 +70,8 @@ seen only by that person).
 ### Site suggestions
 
 - When something new is published that the team may want to share, the site posts a card **"Suggested by
-  snowmoon.party"**. First events: a new published take, a new remix challenge entry.
+  snowmoon.party"**. First events: a new published take, a new remix challenge entry. A recording-only Ephelion entry
+  (kind `voice_take`) can be suggested too (owner, 2026-11-25: its table, from `NEXT_voice_takes.sql`, uses a uuid id).
 - The suggestion's text comes from a fixed template (section 4), never from a model. No approval is counted for the
   site: it needs 3 people, one of them Nate, Garance or Luis.
 - Edit and Withdraw on a suggestion (owner, 2026-11-25): anyone on the team can Edit it, and becomes its proposer
@@ -265,6 +266,8 @@ Not repeated:
 
 Later the same day (owner, 2026-11-25): a posted card is frozen in the database (only to deleted; deleted is final), and
 "Delete and redraft" is added (section 1). Both are in `NEXT_x_posts.sql` (version 2, the freeze; version 3, the redraft).
+Then: a site suggestion can also be about a recording-only Ephelion entry, kind `voice_take` with a uuid id
+(`NEXT_x_posts.sql` version 4).
 
 Next (owner, 2026-11-25): release 1, the cards with posting off, on branch `x-posts`. `NEXT_x_posts.sql` goes to the
 owner to test first; the setup steps come one at a time once the cards are ready to try.

@@ -17,7 +17,9 @@
 -- other migration.
 -- - studio.x_proposals: one row per card in #x-posts. A team proposal (its proposer's Discord user ID and name) or a site
 --   suggestion (no proposer until someone on the team edits it; the work it is about: a published storyboard
---   'voice_publication' or a challenge entry 'challenge_entry', by id, at most one suggestion per work). The post's text
+--   'voice_publication', a challenge entry 'challenge_entry', or a recording-only Ephelion entry 'voice_take' (owner,
+--   2026-11-25: its table, from NEXT_voice_takes.sql, not yet written, uses a uuid id), by id, at most one suggestion per
+--   work). The post's text
 --   and link, the card's Discord message ID, and its state: open, posting (claimed by one click, so it posts at most
 --   once), posted (with X's post ID), failed, unknown (X didn't answer), withdrawn, deleted. studio_writer may select,
 --   insert and update; never delete, so the log always has its proposal. A posted card is frozen (trigger
@@ -45,7 +47,7 @@ create table if not exists studio.x_proposals (
   proposer_name text check (char_length(proposer_name) between 1 and 100),
   body text not null check (char_length(body) between 1 and 4000 and btrim(body) <> ''),
   link text check (link ~ '^https://[^[:space:]]+$' and char_length(link) <= 2000),
-  subject_kind text check (subject_kind in ('voice_publication', 'challenge_entry')),
+  subject_kind text check (subject_kind in ('voice_publication', 'challenge_entry', 'voice_take')),
   subject_id text check (subject_id ~ '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'),
   status text not null default 'open' check (status in ('open', 'posting', 'posted', 'failed', 'unknown', 'withdrawn', 'deleted')),
   discord_message_id text unique check (discord_message_id ~ '^[0-9]{17,20}$'),
@@ -151,7 +153,7 @@ create table if not exists studio.x_proposals (
   proposer_name text check (char_length(proposer_name) between 1 and 100),
   body text not null check (char_length(body) between 1 and 4000 and btrim(body) <> ''),
   link text check (link ~ '^https://[^[:space:]]+$' and char_length(link) <= 2000),
-  subject_kind text check (subject_kind in ('voice_publication', 'challenge_entry')),
+  subject_kind text check (subject_kind in ('voice_publication', 'challenge_entry', 'voice_take')),
   subject_id text check (subject_id ~ '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'),
   status text not null default 'open' check (status in ('open', 'posting', 'posted', 'failed', 'unknown', 'withdrawn', 'deleted')),
   discord_message_id text unique check (discord_message_id ~ '^[0-9]{17,20}$'),
@@ -345,6 +347,13 @@ commit;
 --   update studio.x_proposals set status = 'withdrawn', updated_at = now() where id = site_id;
 --   insert into studio.x_post_log (proposal_id, event, detail) values (site_id, 'auto_withdrawn', 'hidden on the site');
 --
+--   -- A recording-only Ephelion entry ('voice_take', a uuid) can be suggested too; a kind outside the three can't.
+--   insert into studio.x_proposals (source, body, link, subject_kind, subject_id)
+--     values ('site', 'Zei''s line from chapter 3, voiced by garance on Farcaster.', 'https://snowmoon.party/ephelion', 'voice_take', '74444444-4444-4444-8444-444444444444');
+--   begin insert into studio.x_proposals (source, body, subject_kind, subject_id) values ('site', 'x', 'voice_take', '4258'); refused := false; exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a voice take that is not a uuid was accepted'; end if;
+--   begin insert into studio.x_proposals (source, body, subject_kind, subject_id) values ('site', 'x', 'scene_version', '75555555-5555-4555-8555-555555555555'); refused := false; exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: an unknown kind of work was accepted'; end if;
 --   -- Bad rows are refused.
 --   begin insert into studio.x_proposals (source, proposer_discord_id, proposer_name, body) values ('team', 'naaate', 'naaate', 'x'); refused := false; exception when check_violation then refused := true; end;
 --   if not refused then raise exception 'READ-BACK FAILED: a Discord ID that is not a number was accepted'; end if;
@@ -377,7 +386,9 @@ commit;
 --   delete from studio.x_post_log where proposal_id in (team_id, site_id, redraft_id);
 --   delete from studio.x_approvals where proposal_id in (team_id, site_id, redraft_id);
 --   delete from studio.x_proposals where id in (team_id, site_id, redraft_id);
+--   delete from studio.x_proposals where subject_kind = 'voice_take' and subject_id = '74444444-4444-4444-8444-444444444444';
 --   if exists (select 1 from studio.x_proposals where id in (team_id, site_id, redraft_id)) or exists (select 1 from studio.x_post_log where proposal_id in (team_id, site_id, redraft_id))
+--     or exists (select 1 from studio.x_proposals where subject_kind = 'voice_take')
 --     then raise exception 'READ-BACK FAILED: the test rows were not deleted'; end if;
 --   raise notice 'READ-BACK PASSED';
 -- end $$;
