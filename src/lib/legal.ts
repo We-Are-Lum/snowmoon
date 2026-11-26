@@ -50,10 +50,10 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: the day the guided storyboard's fixes (PR #235, Privacy words 79g0gm) merge and go live, 2026-11-24 (PT). If
-  // the merge moves, this moves with it. (Before: 2026-11-24, PR #230, 30-day sign-ins; 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
+  // MERGE DAY: the day the four-step recorder (PR #249, Privacy words 1616na) merges and goes live, 2026-11-26 (PT). If
+  // the merge moves, this moves with it. (Before: 2026-11-24, PR #235, the guided storyboard's fixes; 2026-11-24, PR #230, 30-day sign-ins; 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
   // 2026-11-21, the Ephelion voice; 2026-11-21, PR #204; 2026-11-20, PR #196; 2026-11-19, PR #191.)
-  effective: '2026-11-24',
+  effective: '2026-11-26',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -345,7 +345,12 @@ export const LEGAL: {
     // Groq item adds "the words of your take as transcribed" and now ends "; never your recording."; §4's speeches item
     // adds "and the words of your take as transcribed, with any corrections you make to them" (docs/legal/voice-improv-draft.md).
     // The words before were 79g0gm.
-    privacy: { words: 'c9hpo6', on: '2026-11-24', by: 'FID 6786' },
+    // 2026-11-26, owner's reread for #249 (the four-step recorder), typed in his session: "Reread: the Privacy §3 sentence
+    // and the recorder's wording, both as written.": §3's speech item becomes "a speech you record, and its words if you
+    // edit them, until you remove them or record again, or your browser clears them (the recording is sent to us only to
+    // be converted, and we keep only its fingerprint, never the recording; words you edit are never sent)". The words
+    // before were c9hpo6.
+    privacy: { words: '1616na', on: '2026-11-26', by: 'FID 6786' },
   },
 };
 

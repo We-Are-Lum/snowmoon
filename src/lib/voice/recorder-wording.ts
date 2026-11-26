@@ -1,6 +1,6 @@
 /**
  * The four-step recorder's words (/ephelion/record; Nate, 2026-11-25 and 26; plan v3, "New wording", and his Recorder and
- * PhoneFlow files). DRAFT, for Nate's reread. The consent, the improvised labels and "Convert again" keep their own reread
+ * PhoneFlow files). Reread by Nate as written, 2026-11-26 ("the recorder's wording, both as written"). The consent, the improvised labels and "Convert again" keep their own reread
  * words (src/lib/voice/consent.ts, improv-wording.ts, convert-again.ts).
  */
 const quoted = (s: string) => `“${s}”`;
