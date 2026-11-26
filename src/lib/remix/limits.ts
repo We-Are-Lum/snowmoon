@@ -2,6 +2,7 @@ import 'server-only';
 import type postgres from 'postgres';
 import { IMAGES, REMIX, remixFreeOn } from '../config';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
+import { lockAccount } from '../wallet/lock';
 import { perDay as picturesPerDay } from '../images/limits';
 import { isSocialPerson, isWalletPerson } from '../people';
 import { freeFor } from '../social/free';
@@ -53,6 +54,8 @@ export async function reserve(sql: Sql, person: number, spend: Spend): Promise<{
     const t = tx as unknown as Sql;
     if (isWalletPerson(person)) {
       const price = priceUsd(spend.reserveUsd);
+      // The account lock around the balance check and the charge (owner, 2026-11-25; src/lib/wallet/lock.ts).
+      await lockAccount(t, -person);
       const balance = await balanceUsd(t, -person);
       if (balance < price) return { ok: false as const, refusal: 'balance' as const };
       const [paid] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.remix_costs where day = ${tx.unsafe(TODAY)} and funded = 'prepaid'`;

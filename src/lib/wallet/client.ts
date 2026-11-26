@@ -201,3 +201,26 @@ export async function claim(hash: `0x${string}`, tries = 20): Promise<{ added: n
   }
   throw new WalletError('server', IMAGE_WORDING.prepaid.claimLater);
 }
+
+/**
+ * Paid generations' top-up (owner, 2026-11-25; EPHELION_PAID, off): pay `usd` in USDC on Base from this browser's
+ * wallet, then add it. `verified`: a Farcaster person paying from a wallet verified on their account (it is added to
+ * that wallet's balance, /api/wallet/claim-verified); otherwise the signed-in wallet's own balance (claim).
+ */
+export async function payUsdc(opts: { usd: number; payTo: `0x${string}`; usdc: `0x${string}`; verified: boolean; onSent?: (hash: `0x${string}`) => void; onWaiting?: () => void }): Promise<{ added: number; balanceUsd: number }> {
+  const { account } = await connect();
+  const hash = await sendOnBase({ usd: opts.usd, token: 'USDC', to: opts.payTo, usdc: opts.usdc, onSent: opts.onSent, onWaiting: opts.onWaiting });
+  return opts.verified ? claimVerifiedPayment(hash, account) : claim(hash);
+}
+
+/** Ask our server to add a payment made from a wallet verified on the signed-in Farcaster account (retries while it confirms). */
+export async function claimVerifiedPayment(hash: `0x${string}`, address: string, tries = 20): Promise<{ added: number; balanceUsd: number }> {
+  for (let i = 0; i < tries; i++) {
+    const res = await authFetch('/api/wallet/claim-verified', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ txHash: hash, address }) }).catch(() => null);
+    const out = (await res?.json().catch(() => ({}))) as { added?: number; balanceUsd?: number; error?: string; retry?: boolean; reason?: string };
+    if (res?.ok && out.added !== undefined) return { added: out.added, balanceUsd: out.balanceUsd ?? 0 };
+    if (!out.retry) throw new WalletError('server', out.error, forgetsPending(out.reason));
+    await new Promise((r) => setTimeout(r, 3000));
+  }
+  throw new WalletError('server', IMAGE_WORDING.prepaid.claimLater);
+}
