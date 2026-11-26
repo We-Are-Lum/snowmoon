@@ -11,12 +11,14 @@
 .eph-up { text-transform: uppercase; margin: 0; }
 .eph-muted { color: var(--muted); font-size: var(--text-small); }
 .eph-note { margin: 2px 0 12px; }
-.eph-hero { display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: end; }
-.eph-image { display: block; width: 120px; aspect-ratio: 2 / 3; border-radius: 3px; overflow: hidden; background: var(--soft); }
+/* The phone's hero (PhoneLanding): the label and the title at the top, beside the image (Nate, 2026-11-26); the rest
+   under them, full width. The image spans the label's and the title's rows; the second row takes the extra height. */
+.eph-hero { display: grid; grid-template-columns: 120px 1fr; grid-template-rows: auto 1fr; column-gap: 16px; row-gap: 16px; align-items: start; }
+.eph-image { display: block; width: 120px; aspect-ratio: 2 / 3; border-radius: 3px; overflow: hidden; background: var(--soft); grid-row: 1 / span 2; }
 .eph-image img { width: 100%; height: 100%; object-fit: cover; object-position: 43% 0; display: block; }
 .eph-hero-text { display: contents; }
-.eph-hero-text > .eph-up, .eph-hero-text > h1 { grid-column: 2; }
-.eph-hero-text > .eph-up { align-self: end; margin-bottom: -8px; }
+.eph-hero-text > .eph-up { grid-column: 2; grid-row: 1; align-self: start; margin: 0; }
+.eph-hero-text > h1 { grid-column: 2; grid-row: 2; align-self: start; margin-top: -10px; }
 .eph-hero-text > :not(.eph-up):not(h1) { grid-column: 1 / -1; }
 .eph-intro p { margin: 0; color: var(--body); font-size: var(--text-read); line-height: var(--lh-read); }
 .eph-link { font: inherit; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--link); background: none; border: 0; padding: 6px 0; text-align: left; cursor: pointer; justify-self: start; }
@@ -25,8 +27,8 @@
 .eph-btn-quiet { background: transparent; color: var(--ink); border-color: var(--ink); }
 .eph-btn-small { min-height: 40px; font-size: 16px; padding: 0 12px; }
 .eph-wide { display: none; }
-.eph-under { margin: 0; font-size: var(--text-small); line-height: 1.45; color: var(--muted); }
-.eph-credit { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); }
+.eph-under { margin: 12px 0 0; font-size: var(--text-small); line-height: 1.45; color: var(--muted); }
+.eph-credit { margin: 6px 0 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); }
 .eph-credit a { color: var(--muted); }
 .eph-card { background: var(--card); border: 1px solid var(--rule); border-radius: 3px; padding: 12px 14px 10px; margin: 0 0 12px; }
 .eph-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
@@ -49,6 +51,7 @@
 @container page (min-width: 760px) {
   .eph { flex-direction: row; align-items: flex-start; gap: 28px; padding: 28px 24px; }
   .eph-left { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+  .eph-under, .eph-credit { margin-top: 0; }
   .eph-right { flex: 0 0 clamp(300px, 40%, 460px); min-width: 0; }
   .eph-hero { grid-template-columns: 150px 1fr; }
   .eph-image { width: 150px; }
@@ -63,8 +66,8 @@
   .eph { gap: 40px; padding: 40px; }
   .eph-left { --img: clamp(220px, 24cqw, 330px); }
   .eph-right { flex-basis: min(460px, 38%); }
-  .eph-hero { grid-template-columns: var(--img) minmax(0, 1fr); gap: 32px; align-items: stretch; }
-  .eph-image { width: var(--img); aspect-ratio: auto; align-self: stretch; min-height: calc(var(--img) * 1.5); }
+  .eph-hero { grid-template-columns: var(--img) minmax(0, 1fr); grid-template-rows: auto; gap: 32px; align-items: stretch; }
+  .eph-image { width: var(--img); aspect-ratio: auto; align-self: stretch; min-height: calc(var(--img) * 1.5); grid-row: auto; }
   .eph-hero-text { container: text / inline-size; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
   .eph-hero-text > .eph-up { align-self: auto; margin: 0; }
   .eph h1 { font-size: 38px; }
