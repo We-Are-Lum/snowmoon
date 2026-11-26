@@ -9,6 +9,7 @@ import { CONVERT_AGAIN } from '~/lib/voice/convert-again';
 import { IMPROV_WORDING } from '~/lib/voice/improv-wording';
 import { RECORDER as W } from '~/lib/voice/recorder-wording';
 import { loadWords, removeWords, saveWords, splitSentences } from '~/lib/voice/device-words';
+import { LocalTextField } from '~/components/local-text-field';
 import { SignedAudio, joined, mmss, useRecorder, useStepLog, wordCount, type Check, type Converted, type Redo } from '~/components/voice-recorder-core';
 import '../styles/ephelion-recorder.css';
 
@@ -679,8 +680,9 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
   );
   const editor = editing && speech && (
     <div className="er-edit">
-      <label htmlFor="er-words" className="er-kicker">{W.editText}</label>
-      <textarea id="er-words" value={draftWords} onChange={(e) => setDraftWords(e.target.value)} rows={12} />
+      {/* The site's "kept in this browser only" box (check:principles P1f; Nate, 2026-11-26): edited words stay on the
+          device, are never sent or published, and the box says so. */}
+      <LocalTextField id="er-words" label={<span className="er-kicker">{W.editText}</span>} value={draftWords} onChange={setDraftWords} rows={12} />
       <p className="er-note">{W.editKept}</p>
       <div className="er-row">
         <button
