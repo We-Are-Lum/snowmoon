@@ -19,10 +19,10 @@ import '../styles/ephelion.css';
  * - Phone: the small image beside the title, the intro, Learn more opening in place, two equal buttons, the cards. No
  *   fixed bar.
  */
-interface Speech { id: string; title: string; maxSeconds: number; label: { kind: 'book' | 'invented' }; sentences: { n: number; text: string }[] }
-interface Choice { presetId: string; name: string; saved: boolean }
+interface Speech { id: string; title: string; maxSeconds: number; characters: number; label: { kind: 'book' | 'invented' }; sentences: { n: number; text: string }[] }
+interface Choice { presetId: string; candidate: number; name: string; saved: boolean }
 interface Reading { speechId: string; presetId: string; id: string }
-interface Status { speeches: Speech[]; choices: Choice[]; readings: Reading[] }
+interface Status { speeches: Speech[]; choices: Choice[]; readings: Reading[]; canMakeReadings?: boolean; limits: { readingCreditsPerChar: number } }
 
 /** Garance's remix entry 70762e34 (Nate, 2026-11-25), shown alone; it switches to the profile's master front once approved. */
 export const EPHELION_IMAGE = {
@@ -59,7 +59,36 @@ function ReadingPlay({ id, voice }: { id: string; voice: string }) {
   );
 }
 
-function SpeechCard({ s, reading, voice }: { s: Speech; reading: Reading | null; voice: string | null }) {
+/** An admin's "Make the AI reading" for a speech with none (Nate, 2026-11-26), in the first saved voice. */
+function MakeReading({ s, choice, credits, onMade }: { s: Speech; choice: Choice; credits: number; onMade: () => void }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  return (
+    <div className="eph-row">
+      <span className="eph-play eph-play-empty" aria-hidden="true" />
+      <div className="eph-row-text">
+        <button
+          type="button"
+          className="eph-btn eph-btn-quiet eph-btn-small"
+          disabled={busy}
+          onClick={async () => {
+            setBusy(true);
+            setError(null);
+            const r = await authFetch('/api/voice/reading', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ speechId: s.id, presetId: choice.presetId, candidate: choice.candidate }) }).catch(() => null);
+            setBusy(false);
+            if (r?.ok) onMade();
+            else setError(((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error ?? W.readingFailed);
+          }}
+        >
+          {busy ? W.makingReading : W.makeReading(choice.name, credits)}
+        </button>
+        <div className="eph-meta">{error ?? W.adminOnly}</div>
+      </div>
+    </div>
+  );
+}
+
+function SpeechCard({ s, reading, voice, make }: { s: Speech; reading: Reading | null; voice: string | null; make: React.ReactNode }) {
   return (
     <article className="eph-card" data-speech={s.id}>
       <header className="eph-card-head">
@@ -68,6 +97,8 @@ function SpeechCard({ s, reading, voice }: { s: Speech; reading: Reading | null;
       </header>
       {reading && voice ? (
         <ReadingPlay id={reading.id} voice={voice} />
+      ) : make ? (
+        make
       ) : (
         <div className="eph-row">
           <span className="eph-play eph-play-empty" aria-hidden="true" />
@@ -92,12 +123,13 @@ export function EphelionLanding({ fallback, signedOut, learn }: { fallback: Reac
   const [status, setStatus] = useState<Status | 'none' | null>(null);
   const [learnOpen, setLearnOpen] = useState(false);
   const speechesRef = useRef<HTMLElement>(null);
+  const load = async () => {
+    const r = await authFetch('/api/voice/status', { cache: 'no-store' }).catch(() => null);
+    setStatus(r?.ok ? ((await r.json()) as Status) : 'none');
+  };
   useEffect(() => {
     if (auth.kind !== 'signed-in') return;
-    void (async () => {
-      const r = await authFetch('/api/voice/status', { cache: 'no-store' }).catch(() => null);
-      setStatus(r?.ok ? ((await r.json()) as Status) : 'none');
-    })();
+    void load();
   }, [auth.kind]);
   if (auth.kind === 'signed-out') return <>{signedOut}</>;
   if (status === 'none') return <>{fallback}</>;
@@ -171,7 +203,9 @@ export function EphelionLanding({ fallback, signedOut, learn }: { fallback: Reac
           <p className="eph-muted eph-note">{W.speechesNote}</p>
           {status.speeches.map((s) => {
             const r = readingFor(s.id);
-            return <SpeechCard key={s.id} s={s} reading={r} voice={r ? nameOf(r.presetId) : null} />;
+            const first = status.choices.find((c) => c.saved);
+            const make = !r && status.canMakeReadings && first ? <MakeReading s={s} choice={first} credits={Math.ceil(s.characters * status.limits.readingCreditsPerChar)} onMade={() => void load()} /> : null;
+            return <SpeechCard key={s.id} s={s} reading={r} voice={r ? nameOf(r.presetId) : null} make={make} />;
           })}
         </div>
       </aside>

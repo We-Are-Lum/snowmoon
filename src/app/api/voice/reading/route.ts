@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { db } from '~/lib/db';
 import { VOICE } from '~/lib/config';
 import { noStore, voicePerson, voiceReady } from '~/lib/voice/server';
+import { isAdmin } from '~/lib/admins';
 import { speechById } from '~/lib/voice/speech';
 import { presetRecipe, voiceIdFor } from '~/lib/voice/presets';
 import { elevenLabsBase } from '~/lib/voice/flag';
@@ -29,11 +30,13 @@ export async function GET(request: Request) {
 
 /**
  * POST: make the ready-made reading (ElevenLabs text-to-speech of the speech's written words, in one preset), for
- * people who don't record. Made once per speech and preset, then kept; `again` makes a new one.
+ * people who don't record. Made once per speech and preset, then kept; `again` makes a new one. Admins only (Nate,
+ * 2026-11-26: the button on the speech card is for admins); a tester gets 404, as if the route weren't there.
  */
 export async function POST(request: Request) {
   const who = await voicePerson(request);
   if (who instanceof NextResponse) return who;
+  if (!isAdmin(who.fid)) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   const sql = db();
   if (!sql || !voiceReady()) return NextResponse.json({ error: 'Not available right now' }, { status: 503 });
   const body = (await request.json().catch(() => ({}))) as { speechId?: string; presetId?: string; candidate?: number; again?: boolean };

@@ -71,7 +71,7 @@ Object.assign(process.env, {
   VOICE_TEST_STORE: STORE,
   STUDIO_DATABASE_URL: `postgres://studio_writer@127.0.0.1:${PG_PORT}/postgres`,
   VOICE_TEST_ON: '1',
-  VOICE_TEST_FID: `${NATE},${GARANCE},${STRANGER}`,
+  VOICE_TEST_FID: `${NATE},${GARANCE},${STRANGER},6852`, // 6852: the first tester (VOICE.testers; check T), signed in for the reading route's admins-only check
   ELEVENLABS_BASE_URL: `http://127.0.0.1:${STUB_PORT}`,
   VOICE_TICKET_SECRET: 'test-voice-ticket-secret-0123456789',
 });
@@ -834,6 +834,15 @@ check('R. the reading is made from the speech\'s written words, in the preset, w
 check('R. ... kept with its recipe', rd.recipe.model === 'eleven_multilingual_v2' && rd.recipe.preset.id === 'ephelion-warm-lecturer' && rd.recipe.textSha256 === sha(new TextEncoder().encode(speech.paragraphs.join('\n\n'))));
 r = await reading.POST(as(NATE, { method: 'POST', body: readingBody() }));
 check('R. made once per speech and voice (a second is refused unless asked)', r.status === 409);
+{
+  // Admins only (Nate, 2026-11-26): a tester asking to make a reading gets 404, and nothing is made.
+  const before = stub.calls.filter((c) => c.path.startsWith('/v1/text-to-speech/')).length;
+  const tr = await reading.POST(as(VOICE.testers[0], { method: 'POST', body: readingBody({ again: true }) }));
+  check('R. a tester can\'t make a reading: 404, and nothing is sent to ElevenLabs', tr.status === 404 && stub.calls.filter((c) => c.path.startsWith('/v1/text-to-speech/')).length === before);
+  const land = readFileSync(path.join(ROOT, 'src/components/ephelion-landing.tsx'), 'utf8');
+  const st = readFileSync(path.join(ROOT, 'src/app/api/voice/status/route.ts'), 'utf8');
+  check('R. ... the card offers "Make the AI reading" only when the status says so, and the status asks isAdmin', /canMakeReadings: isAdmin\(who\.fid\)/.test(st) && /!r && status\.canMakeReadings && first \?/.test(land));
+}
 r = await reading.GET(as(NATE, {}, `http://localhost/api/voice/reading?speech=${speech.id}&preset=ephelion-warm-lecturer`));
 check('R. anyone let in can play it', r.status === 200 && (await r.arrayBuffer()).byteLength > 1000);
 
