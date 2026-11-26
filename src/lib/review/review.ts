@@ -13,6 +13,8 @@ import { linkedTo } from '../wallet/credit';
 import { configLink } from '../wallet/links';
 import { onChain, type OnChain, type Reader } from './chain';
 import { hintsFor, linkedFiles, linkedPages, readRules, type LinkedPicture } from './rules';
+import { basescanAddress, blueskyProfile, farcasterProfile, lensProfile, poidhAccount, tokenUriHref } from './links';
+import { isSocialPerson, isWalletPerson, socialAccountOf, walletAccountOf } from '../people';
 import { isKind, isLabel, LABELS, type ClaimCard, type EntryCard, type Kind, type LabelKey, type Marks, type ReviewView } from './types';
 
 /**
@@ -133,10 +135,17 @@ export function claimCards(chainRead: OnChain, pictures: ChallengePicture[], fid
         id: c.id,
         title: c.name,
         description: c.description,
-        claimer: { address: c.issuer, name: fid ? byline(names.get(fid) ?? null, fid) : null },
+        claimer: {
+          address: c.issuer,
+          name: fid ? byline(names.get(fid) ?? null, fid) : null,
+          profile: fid ? farcasterProfile(fid, names.get(fid)) : null,
+          basescan: basescanAddress(c.issuer),
+          poidh: poidhAccount(c.issuer),
+        },
         createdAt,
         accepted: c.accepted,
         pictureHost: host,
+        pictureHref: tokenUriHref(c.uri, B.ipfsGateway),
         hasPicture: Boolean(c.uri),
         hints: hintsFor(rules, { description: c.description, createdAt }, { pages, pictures: linked }, { n: nth.get(c.id)!, of: seen.get(c.issuer)! }),
         linked,
@@ -146,8 +155,33 @@ export function claimCards(chainRead: OnChain, pictures: ChallengePicture[], fid
 }
 
 /** The challenge's entries (not the admin examples), newest first, each with its labels. */
+/** Where to see each maker: Farcaster for a FID, Basescan for a wallet account, Lens or Bluesky for theirs. */
+async function profilesOf(sql: Sql, makers: { person: number; byName: string | null }[]): Promise<Map<number, string | null>> {
+  const out = new Map<number, string | null>();
+  const wallets = [...new Set(makers.filter((m) => isWalletPerson(m.person)).map((m) => walletAccountOf(m.person)))];
+  const socials = [...new Set(makers.filter((m) => isSocialPerson(m.person)).map((m) => socialAccountOf(m.person)))];
+  const address = new Map<number, string>();
+  const social = new Map<number, { kind: string; subject: string; handle: string | null }>();
+  try {
+    if (wallets.length) for (const r of await sql<{ id: number; address: string }[]>`select id::int as id, address from studio.wallet_accounts where id in ${sql(wallets)}`) address.set(r.id, r.address);
+    if (socials.length) for (const r of await sql<{ id: number; kind: string; subject: string; handle: string | null }[]>`select id::int as id, kind, subject, handle from studio.social_accounts where id in ${sql(socials)}`) social.set(r.id, r);
+  } catch (e) {
+    if (!missing(e)) throw e;
+  }
+  for (const m of makers) {
+    if (m.person > 0) out.set(m.person, farcasterProfile(m.person, m.byName));
+    else if (isWalletPerson(m.person)) out.set(m.person, basescanAddress(address.get(walletAccountOf(m.person)) ?? ''));
+    else if (isSocialPerson(m.person)) {
+      const s = social.get(socialAccountOf(m.person));
+      out.set(m.person, !s ? null : s.kind === 'lens' ? lensProfile(s.handle) : blueskyProfile(s.handle, s.subject));
+    }
+  }
+  return out;
+}
+
 async function entryCards(sql: Sql, marks: Map<string, Marks>, names: Map<number, string>, entriesOf: EntriesOf): Promise<EntryCard[]> {
   const st = await entriesOf(sql);
+  const profiles = await profilesOf(sql, st.entries.map((e) => ({ person: e.maker, byName: e.byName })));
   const ids = st.entries.map((e) => e.versionId);
   const bodies = new Map<string, { body: unknown; asset_url: string | null }>();
   if (ids.length) for (const r of await sql<{ id: string; body: unknown; asset_url: string | null }[]>`select id::text, body, asset_url from studio.element_versions where id in ${sql(ids)}`) bodies.set(r.id, r);
@@ -161,6 +195,7 @@ async function entryCards(sql: Sql, marks: Map<string, Marks>, names: Map<number
       title: e.title || name,
       characterName: name,
       by: byline(e.byName, e.maker),
+      byHref: profiles.get(e.maker) ?? null,
       createdAt: e.createdAt,
       image: e.thumb ?? v?.asset_url ?? null,
       href: entryHref(e.versionId),

@@ -30,11 +30,14 @@ export interface ClaimCard {
   id: number;
   title: string;
   description: string;
-  claimer: { address: string; name: string | null };
+  /** The claimer: their site name when the site links the wallet; where to see them (Farcaster, Basescan, poidh). */
+  claimer: { address: string; name: string | null; profile: string | null; basescan: string | null; poidh: string | null };
   createdAt: string;
   accepted: boolean;
   /** Where its picture was named (the tokenURI's host), shown as text; the picture itself comes through the site. */
   pictureHost: string | null;
+  /** The claim's original picture (its tokenURI; ipfs:// through the public gateway), as a link; null if not http(s). */
+  pictureHref: string | null;
   hasPicture: boolean;
   hints: Hint[];
   linked: LinkedPicture[];
@@ -47,6 +50,8 @@ export interface EntryCard {
   title: string;
   characterName: string;
   by: string;
+  /** The maker's profile: Farcaster, Lens or Bluesky, or Basescan for a wallet account; null when there is none. */
+  byHref: string | null;
   createdAt: string;
   /** The entry's picture on this site. */
   image: string | null;
