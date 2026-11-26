@@ -7,6 +7,7 @@ import { authFetch, refreshWalletLink, saveWalletSession } from '../client-auth'
 import { IMAGES, SUPPORT, type SupportNetwork } from '../config';
 import { IMAGE_WORDING } from '../images/wording';
 import { forgetsPending } from './pending';
+import { topUpPlan, type TopUpQuote } from './top-up-plan';
 
 /**
  * The wallet in this browser (owner, 2026-10-13): an injected EIP-1193 provider (a wallet extension,
@@ -202,14 +203,29 @@ export async function claim(hash: `0x${string}`, tries = 20): Promise<{ added: n
   throw new WalletError('server', IMAGE_WORDING.prepaid.claimLater);
 }
 
+/** The wallet connected in this browser, for the top-up's quote (no signature; the wallet may ask to connect). */
+export async function connectedAddress(): Promise<`0x${string}`> {
+  return (await connect()).account;
+}
+
+/** The top-up's quote for the connected wallet: may this person pay from it, its balance, exactly what's missing. */
+export async function topUpQuote(item: string, address: string): Promise<TopUpQuote | null> {
+  const r = await authFetch(`/api/paid/quote?item=${encodeURIComponent(item)}&address=${encodeURIComponent(address)}`, { cache: 'no-store' }).catch(() => null);
+  return r?.ok ? ((await r.json()) as TopUpQuote) : null;
+}
+
 /**
- * Paid generations' top-up (owner, 2026-11-25; EPHELION_PAID, off): pay `usd` in USDC on Base from this browser's
- * wallet, then add it. `verified`: a Farcaster person paying from a wallet verified on their account (it is added to
- * that wallet's balance, /api/wallet/claim-verified); otherwise the signed-in wallet's own balance (claim).
+ * Paid generations' top-up (owner, 2026-11-25; EPHELION_PAID, off). First the server is asked about the wallet
+ * connected now (topUpQuote): a wallet this person can't pay from is refused here, and nothing is sent (topUpPlan).
+ * Then exactly what's missing (plus `extraUsd`, "for later") is sent in USDC on Base and added: `verified`, a
+ * Farcaster person's wallet verified on their account (/api/wallet/claim-verified); otherwise the signed-in wallet's
+ * own balance (claim).
  */
-export async function payUsdc(opts: { usd: number; payTo: `0x${string}`; usdc: `0x${string}`; verified: boolean; onSent?: (hash: `0x${string}`) => void; onWaiting?: () => void }): Promise<{ added: number; balanceUsd: number }> {
+export async function payUsdc(opts: { item: string; extraUsd: number; payTo: `0x${string}`; usdc: `0x${string}`; verified: boolean; onSent?: (hash: `0x${string}`) => void; onWaiting?: () => void }): Promise<{ added: number; balanceUsd: number }> {
   const { account } = await connect();
-  const hash = await sendOnBase({ usd: opts.usd, token: 'USDC', to: opts.payTo, usdc: opts.usdc, onSent: opts.onSent, onWaiting: opts.onWaiting });
+  const plan = topUpPlan(await topUpQuote(opts.item, account), opts.extraUsd);
+  if (!plan.send) throw new WalletError('server', plan.note, true);
+  const hash = await sendOnBase({ usd: plan.usd, token: 'USDC', to: opts.payTo, usdc: opts.usdc, onSent: opts.onSent, onWaiting: opts.onWaiting });
   return opts.verified ? claimVerifiedPayment(hash, account) : claim(hash);
 }
 

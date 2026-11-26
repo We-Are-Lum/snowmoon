@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { readPayment } from '~/lib/wallet/chain';
-import { autoLink } from '~/lib/wallet/links';
-import { claimVerified } from '~/lib/wallet/paid';
+import { claimVerified, neynarFids } from '~/lib/wallet/paid';
 
 /**
  * Add a payment made from a wallet verified on the signed-in Farcaster account to that wallet's balance (owner,
@@ -16,6 +15,6 @@ const NO_STORE = { 'Cache-Control': 'no-store' };
 export async function POST(request: Request) {
   const fid = await getPerson(request);
   const body = (await request.json().catch(() => ({}))) as { txHash?: unknown; address?: unknown };
-  const a = await claimVerified(db(), fid, body, { read: readPayment, autoLink });
+  const a = await claimVerified(db(), fid, body, { read: readPayment, fidsFor: neynarFids });
   return NextResponse.json(a.body, { status: a.status, headers: NO_STORE });
 }

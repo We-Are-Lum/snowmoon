@@ -960,7 +960,8 @@ export const IMAGES = {
     markup: 0.3,
     /** Suggested amounts in USD; any amount of at least minUsd is credited. */
     packsUsd: [1, 5, 20] as readonly number[],
-    minUsd: 0.5,
+    /** One USDC unit (owner, 2026-11-25: "lower minUsd so what's missing is exact"): any positive USDC payment is added. Was 0.5. */
+    minUsd: 0.000001,
     dailyCapUsd: 25,
     chainId: 8453,
     /** Base's own public endpoint unless BASE_RPC_URL is set. */

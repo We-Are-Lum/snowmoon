@@ -18,6 +18,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
+import { encodeAbiParameters, keccak256, pad, toHex, type PublicClient } from 'viem';
 import { EPHELION_PAID, IMAGES } from '../src/lib/config';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -68,7 +69,27 @@ const S = sql as unknown as Sql;
 const { accountFor, balanceUsd, credit, creditBack } = await import('../src/lib/wallet/credits');
 const { lockAccount } = await import('../src/lib/wallet/lock');
 const paidLib = await import('../src/lib/wallet/paid');
-const { charge, quote, recordRefund, claimVerified, addBack } = paidLib;
+const { charge, quote, recordRefund: recordRefundOn, claimVerified, addBack, isPaidItem } = paidLib;
+const { topUpPlan } = await import('../src/lib/wallet/top-up-plan');
+const noFids = async () => [] as number[];
+const fidsAre = (fids: number[] | null) => async () => fids;
+// Base, stood in for the refunds' own transactions: a receipt with USDC (or another token's) Transfer logs.
+const USDC = IMAGES.prepaid.usdc;
+const transferTopic = keccak256(toHex('Transfer(address,address,uint256)'));
+const tlog = (token: string, to: string, units: bigint) => ({ address: token, data: encodeAbiParameters([{ type: 'uint256' }], [units]), topics: [transferTopic, pad(hex('00', 40) as `0x${string}`), pad(to as `0x${string}`)] });
+const baseStub = (o: { logs?: unknown[]; status?: string; head?: bigint; missing?: boolean }) =>
+  ({
+    getTransactionReceipt: async () => {
+      if (o.missing) throw new Error('not found');
+      return { status: o.status ?? 'success', blockNumber: 100n, logs: o.logs ?? [] };
+    },
+    getBlockNumber: async () => o.head ?? 110n,
+  }) as unknown as PublicClient;
+/** A refund sent: $amount in USDC to the charge's wallet. */
+let refundTo = '';
+let refundUnits = 0n;
+const recordRefund = (s: Sql | null, fid: number | null, body: { debitId?: unknown; txHash?: unknown }, client?: PublicClient) =>
+  recordRefundOn(s, fid, body, client ?? baseStub({ logs: [tlog(USDC, refundTo, refundUnits)] }));
 const E = EPHELION_PAID as unknown as { enabled: boolean; dailyCapUsd: number };
 const hex = (s: string, n: number) => '0x' + Array.from({ length: n }, (_, i) => s[i % s.length]).join('');
 let txn = 0;
@@ -104,10 +125,10 @@ check('switch off: nothing is charged', (await charge(S, -w1, 'ephelion-entry', 
 E.enabled = true;
 const r0 = await charge(S, -w1, 'ephelion-entry', 'doing-fine');
 check('an empty balance: refused, with what is missing', !r0.ok && r0.refusal === 'balance' && r0.shortUsd === 1, JSON.stringify(r0));
-const q0 = await quote(S, -w1, 'ephelion-picture');
-check('the quote: price, balance, missing, and at least the smallest payment', q0.priceUsd === 0.2 && q0.balanceUsd === 0 && q0.shortUsd === 0.2 && q0.payUsd === IMAGES.prepaid.minUsd, JSON.stringify(q0));
+const q0 = await quote(S, -w1, 'ephelion-picture', hex('2b', 40), noFids);
+check('the quote for the paying wallet: price, balance, and exactly what is missing (the smallest payment is one USDC unit)', q0.payable && q0.priceUsd === 0.2 && q0.balanceUsd === 0 && q0.shortUsd === 0.2 && q0.payUsd === 0.2 && IMAGES.prepaid.minUsd === 0.000001, JSON.stringify(q0));
 await fund(w1, 0.35);
-const q1 = await quote(S, -w1, 'ephelion-entry');
+const q1 = await quote(S, -w1, 'ephelion-entry', hex('2b', 40), noFids);
 check('the quote after a top-up: $0.65 missing', Math.abs(q1.shortUsd - 0.65) < 1e-9 && q1.payUsd === 0.65, JSON.stringify(q1));
 await fund(w1, 0.65);
 const c1 = await charge(S, -w1, 'ephelion-entry', 'doing-fine');
@@ -130,6 +151,8 @@ const heldTotal = async (id: string) => {
 const w2 = await accountFor(S, hex('3c', 40));
 await fund(w2, 1);
 const c3 = await charge(S, -w2, 'ephelion-entry', 'the-last-five-years');
+refundTo = hex('3c', 40);
+refundUnits = 1_000_000n;
 const heldBefore = await heldTotal('wallet_owed');
 const holdingBefore = await heldTotal('wallet_holding');
 check('a refund is refused while the charge is spent', (await recordRefund(S, 6786, { debitId: c3.ok ? c3.debitId : 0, txHash: newTx() })).status === 409);
@@ -149,6 +172,8 @@ check('after the refund, the money can’t be charged again', (await charge(S, -
 const w3 = await accountFor(S, hex('4d', 40));
 await fund(w3, 0.2);
 const c4 = await charge(S, -w3, 'ephelion-picture', 'doing-fine');
+refundTo = hex('4d', 40);
+refundUnits = 200_000n;
 await creditBack(S, c4.ok ? c4.debitId : 0, 'dropped');
 const c5 = await charge(S, -w3, 'ephelion-picture', 'doing-fine');
 const rf2 = await recordRefund(S, 6786, { debitId: c4.ok ? c4.debitId : 0, txHash: newTx() });
@@ -192,19 +217,88 @@ check('a Lens or Bluesky account: connect a wallet first', ((await charge(S, -1_
 
 // Paying from a wallet verified on the Farcaster account.
 const usdcPaid = async () => ({ ok: true as const, token: 'USDC' as const, amount: 1_000_000n, usd: 1, blockNumber: 100n });
-const linkedTo = (fid: number | null) => async () => ({ linked: fid, why: 'stub' });
+const linkedTo = (fid: number | null) => fidsAre(fid === null ? [] : [fid]);
 const vAddr = hex('8b', 40);
-const v1 = await claimVerified(S, FID, { txHash: newTx(), address: vAddr }, { read: usdcPaid, autoLink: linkedTo(FID) });
+const v1 = await claimVerified(S, FID, { txHash: newTx(), address: vAddr }, { read: usdcPaid, fidsFor: linkedTo(FID) });
 const vAcct = await accountFor(S, vAddr);
 check('a payment from a wallet verified on the account is added to that wallet’s balance', v1.status === 200 && v1.body.added === 1 && (await balanceUsd(S, vAcct)) === 1, JSON.stringify(v1));
 const vTx = newTx();
-await claimVerified(S, FID, { txHash: vTx, address: vAddr }, { read: usdcPaid, autoLink: linkedTo(FID) });
-check('the same payment twice: added once', (await claimVerified(S, FID, { txHash: vTx, address: vAddr }, { read: usdcPaid, autoLink: linkedTo(FID) })).status === 409);
-check('a wallet verified on someone else’s account: refused, nothing added', (await claimVerified(S, 2147483645, { txHash: newTx(), address: hex('9c', 40) }, { read: usdcPaid, autoLink: linkedTo(42) })).status === 403);
-check('signed out: 401', (await claimVerified(S, null, { txHash: newTx(), address: vAddr }, { read: usdcPaid, autoLink: linkedTo(FID) })).status === 401);
+await claimVerified(S, FID, { txHash: vTx, address: vAddr }, { read: usdcPaid, fidsFor: linkedTo(FID) });
+check('the same payment twice: added once', (await claimVerified(S, FID, { txHash: vTx, address: vAddr }, { read: usdcPaid, fidsFor: linkedTo(FID) })).status === 409);
+check('a wallet verified on someone else’s account: refused, nothing added', (await claimVerified(S, 2147483645, { txHash: newTx(), address: hex('9c', 40) }, { read: usdcPaid, fidsFor: linkedTo(42) })).status === 403);
+check('signed out: 401', (await claimVerified(S, null, { txHash: newTx(), address: vAddr }, { read: usdcPaid, fidsFor: linkedTo(FID) })).status === 401);
 E.enabled = false;
-check('switch off: not found', (await claimVerified(S, FID, { txHash: newTx(), address: vAddr }, { read: usdcPaid, autoLink: linkedTo(FID) })).status === 404);
+check('switch off: not found', (await claimVerified(S, FID, { txHash: newTx(), address: vAddr }, { read: usdcPaid, fidsFor: linkedTo(FID) })).status === 404);
 E.enabled = true;
+
+// 1. The top-up checks the connected wallet before sending anything (owner, 2026-11-25).
+{
+  const stranger = hex('ab', 40);
+  const q = await quote(S, FID, 'ephelion-entry', stranger, fidsAre([42]));
+  check('a wallet not verified on this Farcaster account: the quote says it can’t pay', q.payable === false && q.why === 'not-yours' && q.payUsd === 0, JSON.stringify(q));
+  const plan = topUpPlan({ ...q, extraUsd: 5 }, 5);
+  check('…and the panel sends nothing, with words saying so', !plan.send && /nothing was sent/.test(plan.note), JSON.stringify(plan));
+  check('a wallet Neynar can’t check just now: nothing is sent either', topUpPlan({ ...(await quote(S, FID, 'ephelion-entry', stranger, fidsAre(null))), extraUsd: 0 }, 0).send === false);
+  check('a wallet account paying from another wallet: refused', (await quote(S, -w1, 'ephelion-entry', stranger, noFids)).payable === false);
+  check('a Lens or Bluesky account: refused', (await quote(S, -1_000_000_007, 'ephelion-entry', hex('2b', 40), noFids)).payable === false);
+  const unlinkedYet = hex('cd', 40);
+  const qv = await quote(S, FID, 'ephelion-picture', unlinkedYet, fidsAre([FID]));
+  check('a wallet verified on the account but not yet linked: it can pay, and nothing is written yet', qv.payable && qv.payUsd === 0.2 && Number((await sql`select count(*)::int as n from studio.wallet_accounts where address = ${unlinkedYet}`)[0].n) === 0, JSON.stringify(qv));
+  const client = read('src/lib/wallet/client.ts');
+  const body = client.slice(client.indexOf('export async function payUsdc'));
+  const plansFirst = (b: string) => /topUpQuote\(/.test(b) && b.indexOf('topUpPlan(') >= 0 && b.indexOf('topUpPlan(') < b.indexOf('sendOnBase(') && /if \(!plan\.send\) throw/.test(b);
+  check('payUsdc asks about the connected wallet and plans before it sends', plansFirst(body));
+  proof('a payUsdc that sends first and checks after is caught', !plansFirst("const hash = await sendOnBase(x); const plan = topUpPlan(await topUpQuote(i, a), 0); if (!plan.send) throw e;"));
+}
+// 2. The quote is for the wallet that will pay, not the best-balance wallet.
+{
+  const fid2 = 2147483640;
+  const a = await accountFor(S, hex('e1', 40));
+  const b = await accountFor(S, hex('e2', 40));
+  await sql`insert into studio.wallet_links (account_id, fid, how) values (${a}, ${fid2}, 'verified'), (${b}, ${fid2}, 'verified')`;
+  await fund(a, 0.9);
+  await fund(b, 0.1);
+  const qb = await quote(S, fid2, 'ephelion-entry', hex('e2', 40), noFids);
+  check('the quote uses the connected wallet’s own balance: $0.10 held, $0.90 missing', qb.payable && qb.balanceUsd === 0.1 && Math.abs(qb.shortUsd - 0.9) < 1e-9 && Math.abs(qb.payUsd - 0.9) < 1e-9, JSON.stringify(qb));
+  await fund(b, qb.payUsd);
+  const cb = await charge(S, fid2, 'ephelion-entry', 'doing-fine');
+  check('paying exactly that, the charge goes through', cb.ok, JSON.stringify(cb));
+  check('what’s missing is rounded up to one USDC unit', paidLib.usdcUp(0.1234561) === 0.123457 && paidLib.usdcUp(0.65) === 0.65 && paidLib.usdcUp(-1) === 0);
+}
+// 4. Only real items; no account row for a wallet that isn't the person's.
+check('only the priced items are items ("constructor" is not)', isPaidItem('ephelion-entry') && isPaidItem('ephelion-picture') && !isPaidItem('constructor') && !isPaidItem('toString') && !isPaidItem('__proto__'));
+proof('the old check let "constructor" through', 'constructor' in EPHELION_PAID.prices);
+check('the quote route checks the item with isPaidItem', /isPaidItem\(item\)/.test(read('src/app/api/paid/quote/route.ts')) && !/in EPHELION_PAID\.prices/.test(read('src/app/api/paid/quote/route.ts')));
+{
+  const nobody = hex('fa', 40);
+  const r = await claimVerified(S, FID, { txHash: newTx(), address: nobody }, { read: usdcPaid, fidsFor: fidsAre([42]) });
+  const made = Number((await sql`select count(*)::int as n from studio.wallet_accounts where address = ${nobody}`)[0].n);
+  check('a claim from a wallet that isn’t the person’s: refused, and no wallet account is made for it', r.status === 403 && made === 0, `${r.status} ${made}`);
+}
+// The refund's own transaction, read on Base: a confirmed USDC transfer to the balance's wallet for at least the charge.
+{
+  const wr = await accountFor(S, hex('5f', 40));
+  await fund(wr, 1);
+  const cr = await charge(S, -wr, 'ephelion-entry', 'doing-fine');
+  await creditBack(S, cr.ok ? cr.debitId : 0, 'failed');
+  const to = hex('5f', 40);
+  const tryRefund = (client: PublicClient) => recordRefundOn(S, 6786, { debitId: cr.ok ? cr.debitId : 0, txHash: newTx() }, client);
+  const wrong = await tryRefund(baseStub({ logs: [tlog(USDC, hex('99', 40), 1_000_000n)] }));
+  check('refund: USDC sent to another wallet is refused', wrong.status === 422 && wrong.body.reason === 'not-to-wallet', JSON.stringify(wrong));
+  const little = await tryRefund(baseStub({ logs: [tlog(USDC, to, 999_999n)] }));
+  check('refund: less than the charge is refused', little.status === 422 && little.body.reason === 'too-little', JSON.stringify(little));
+  const pending = await tryRefund(baseStub({ logs: [tlog(USDC, to, 1_000_000n)], head: 101n }));
+  check('refund: not yet confirmed is refused', pending.status === 409 && pending.body.reason === 'pending', JSON.stringify(pending));
+  const failed = await tryRefund(baseStub({ logs: [tlog(USDC, to, 1_000_000n)], status: 'reverted' }));
+  check('refund: a failed transaction is refused', failed.status === 422 && failed.body.reason === 'failed', JSON.stringify(failed));
+  const notUsdc = await tryRefund(baseStub({ logs: [tlog(hex('77', 40), to, 1_000_000n)] }));
+  check('refund: another token is refused', notUsdc.status === 422 && notUsdc.body.reason === 'not-usdc', JSON.stringify(notUsdc));
+  const missing = await tryRefund(baseStub({ missing: true }));
+  check('refund: a transaction not on Base is refused', missing.status === 409 && missing.body.reason === 'not-found', JSON.stringify(missing));
+  check('none of those was recorded', Number((await sql`select count(*)::int as n from studio.wallet_refunds where debit_id = ${cr.ok ? cr.debitId : 0}`)[0].n) === 0);
+  const split = await tryRefund(baseStub({ logs: [tlog(USDC, to, 600_000n), tlog(USDC, to, 400_000n)] }));
+  check('refund: a confirmed USDC transfer to the wallet for at least the charge (two logs adding up) is recorded', split.status === 200 && (await balanceUsd(S, wr)) === 0, JSON.stringify(split));
+}
 
 // Paid voice calls: their own pool; the free daily number of conversions doesn't stop a paid entry.
 const { refusal } = await import('../src/lib/voice/costs');

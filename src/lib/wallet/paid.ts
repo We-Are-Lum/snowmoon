@@ -1,10 +1,12 @@
 import 'server-only';
 import type postgres from 'postgres';
-import { EPHELION_PAID, IMAGES, type PaidItem } from '../config';
+import { decodeEventLog, parseAbi, type Hash, type PublicClient } from 'viem';
+import { EPHELION_PAID, IMAGES, WALLET_LINKS, type PaidItem } from '../config';
 import { isAdmin } from '../admins';
 import { isFarcasterPerson, isWalletPerson } from '../people';
-import { balanceUsd, creditBack, prepaidOpen, type CreditReason } from './credits';
-import { walletLinksOf } from './links';
+import { accountFor, balanceUsd, credit, creditBack, prepaidOpen, type CreditReason } from './credits';
+import { chain } from './chain';
+import { NEYNAR_BY_ADDRESS, fidsIn, isPayTo, link as linkWallet, readLink, soleFid, walletLinksOf } from './links';
 import { lockAccounts } from './lock';
 
 /**
@@ -25,6 +27,56 @@ const SPEND_LOCK = 'snowmoon.paid.spend';
 
 export const paidOpen = () => EPHELION_PAID.enabled && prepaidOpen();
 export const priceOf = (item: PaidItem) => EPHELION_PAID.prices[item];
+/** Only the items with a price (Object.hasOwn: not 'constructor', 'toString' or anything else an object inherits). */
+export const isPaidItem = (x: unknown): x is PaidItem => typeof x === 'string' && Object.hasOwn(EPHELION_PAID.prices, x);
+/** Up to the next whole USDC unit ($0.000001), so a payment of exactly that covers it. */
+export const usdcUp = (usd: number) => Math.max(0, Math.ceil(Math.round(usd * 1e9) / 1e3) / 1e6);
+
+/**
+ * PR C, not now (owner, 2026-11-25): once paid voice calls are wired to an entry, limit the whole conversions one paid
+ * entry may use. As written, the paid voice pool is only capped per day (EPHELION_PAID.dailyCapUsd), so one $1.00
+ * entry's calls could use the whole $25 paid voice day.
+ */
+
+/** The FIDs whose custody or verified address this is, asked of Neynar directly (no wallet account is made to cache it). Null when it can't be asked. */
+export type FidsFor = (address: string) => Promise<number[] | null>;
+export const neynarFids: FidsFor = async (address) => {
+  const key = process.env.NEYNAR_API_KEY;
+  if (!WALLET_LINKS.lookUp || !key) return null;
+  try {
+    const res = await fetch(`${NEYNAR_BY_ADDRESS.url}?addresses=${address}&address_types=${NEYNAR_BY_ADDRESS.types}`, { headers: { 'x-api-key': key }, signal: AbortSignal.timeout(NEYNAR_BY_ADDRESS.timeoutMs), redirect: 'error' });
+    if (res.status === 404) return [];
+    if (!res.ok) return null;
+    return fidsIn(await res.json(), address);
+  } catch {
+    return null;
+  }
+};
+
+/**
+ * May this person pay from this wallet address, so that the payment lands where they can spend it? Answered before
+ * anything is sent (owner, 2026-11-25: the top-up checks the wallet first). A wallet account: only its own address. A
+ * Farcaster person: a wallet already linked to them, or one Neynar says is theirs alone (verified or custody) that
+ * nobody else is linked to and that its person never unlinked. Lens and Bluesky: no (connect a wallet first). Makes no
+ * row: the wallet's account (if any) is only looked up.
+ */
+export type Payer = { yours: true; account: number | null } | { yours: false; why: 'no-address' | 'not-yours' | 'lookup' };
+export async function payerCheck(sql: Sql, person: number, address: unknown, fidsFor: FidsFor): Promise<Payer> {
+  const a = typeof address === 'string' ? address.trim().toLowerCase() : '';
+  if (!/^0x[0-9a-f]{40}$/.test(a) || isPayTo(a)) return { yours: false, why: 'no-address' };
+  const [row] = await sql`select id::int as id from studio.wallet_accounts where address = ${a}`;
+  const account: number | null = row ? row.id : null;
+  if (isWalletPerson(person)) return account === -person ? { yours: true, account } : { yours: false, why: 'not-yours' };
+  if (!isFarcasterPerson(person)) return { yours: false, why: 'not-yours' };
+  if (account !== null) {
+    if ((await walletLinksOf(sql, person)).some((l) => l.account === account)) return { yours: true, account };
+    const r = await readLink(sql, account);
+    if (r.active || r.personUnlinked) return { yours: false, why: 'not-yours' };
+  }
+  const fids = await fidsFor(a);
+  if (fids === null) return { yours: false, why: 'lookup' };
+  return soleFid(fids) === person ? { yours: true, account } : { yours: false, why: 'not-yours' };
+}
 
 /** The wallet accounts whose balance this person may spend, in a fixed order (the oldest link first). */
 export async function spendableAccounts(sql: Sql, person: number): Promise<number[]> {
@@ -36,18 +88,19 @@ export async function spendableAccounts(sql: Sql, person: number): Promise<numbe
 export type PaidRefusal = 'off' | 'no-wallet' | 'balance' | 'person-cap' | 'site-cap';
 export type Charge = { ok: true; debitId: number; account: number; usd: number } | { ok: false; refusal: PaidRefusal; shortUsd?: number };
 
-/** What the top-up panel shows before anyone pays: the price, the best balance, what's missing, and the smallest payment that covers it. */
-export async function quote(sql: Sql, person: number, item: PaidItem): Promise<{ priceUsd: number; balanceUsd: number; shortUsd: number; payUsd: number; account: number | null }> {
+/**
+ * What the top-up panel shows before anyone pays, for the wallet that will pay (the connected address): whether this
+ * person may pay from it, its balance, and exactly what's missing for one charge from it (a payment is credited to the
+ * wallet that pays, and a charge is taken from one wallet that holds the whole price). Rounded up to one USDC unit.
+ */
+export type Quote = { priceUsd: number; balanceUsd: number; shortUsd: number; payUsd: number; payable: boolean; why?: 'no-address' | 'not-yours' | 'lookup' };
+export async function quote(sql: Sql, person: number, item: PaidItem, address: unknown, fidsFor: FidsFor = neynarFids): Promise<Quote> {
   const price = priceOf(item);
-  const accounts = await spendableAccounts(sql, person);
-  let best = 0, account: number | null = null;
-  for (const a of accounts) {
-    const b = await balanceUsd(sql, a);
-    if (account === null || b > best) [best, account] = [b, a];
-  }
-  const short = Math.max(0, Math.round((price - best) * 1e6) / 1e6);
-  // A payment below the prepaid minimum isn't added, so the smallest top-up is at least that.
-  return { priceUsd: price, balanceUsd: best, shortUsd: short, payUsd: short > 0 ? Math.max(short, IMAGES.prepaid.minUsd) : 0, account };
+  const payer = await payerCheck(sql, person, address, fidsFor);
+  if (!payer.yours) return { priceUsd: price, balanceUsd: 0, shortUsd: price, payUsd: 0, payable: false, why: payer.why };
+  const balance = payer.account === null ? 0 : await balanceUsd(sql, payer.account);
+  const short = usdcUp(price - balance);
+  return { priceUsd: price, balanceUsd: balance, shortUsd: short, payUsd: short, payable: true };
 }
 
 /** Today's paid charges not added back: for one person and item, or across the site. */
@@ -95,14 +148,54 @@ export type RefundAnswer = { status: number; body: Record<string, unknown> };
  * function checks the charge was added back, the balance still holds it, the wallet (the balance's own), and that it
  * isn't a second refund; all under the account's lock. Admins only: everyone else 404, before anything is read.
  */
-export async function recordRefund(sql: Sql | null, fid: number | null, body: { debitId?: unknown; txHash?: unknown }): Promise<RefundAnswer> {
+/**
+ * The refund's own transaction, read on Base (owner, 2026-11-25: "a confirmed USDC transfer to the balance's wallet
+ * for at least the charge"): successful, with IMAGES.prepaid.confirmations, and USDC (IMAGES.prepaid.usdc) Transfer logs
+ * to that wallet adding up to at least the charge. Who sent it isn't checked.
+ */
+const TRANSFER = parseAbi(['event Transfer(address indexed from, address indexed to, uint256 value)']);
+export type RefundRead = 'ok' | 'not-found' | 'failed' | 'pending' | 'not-to-wallet' | 'not-usdc' | 'too-little';
+export async function readRefund(hash: Hash, to: string, units: bigint, client: PublicClient = chain()): Promise<RefundRead> {
+  const receipt = await client.getTransactionReceipt({ hash }).catch(() => null);
+  if (!receipt) return 'not-found';
+  if (receipt.status !== 'success') return 'failed';
+  const head = await client.getBlockNumber();
+  if (head - receipt.blockNumber + 1n < BigInt(IMAGES.prepaid.confirmations)) return 'pending';
+  const w = to.toLowerCase();
+  let usdc = 0n, other = false;
+  for (const log of receipt.logs) {
+    try {
+      const e = decodeEventLog({ abi: TRANSFER, data: log.data, topics: log.topics });
+      if (e.args.to.toLowerCase() !== w) continue;
+      if (log.address.toLowerCase() === IMAGES.prepaid.usdc.toLowerCase()) usdc += e.args.value;
+      else other = true;
+    } catch {
+      /* not a Transfer */
+    }
+  }
+  if (usdc === 0n) return other ? 'not-usdc' : 'not-to-wallet';
+  return usdc >= units ? 'ok' : 'too-little';
+}
+/** Admin-facing reasons a refund's transaction isn't recorded. */
+export const REFUND_READ_WORDING: Record<Exclude<RefundRead, 'ok'>, string> = {
+  'not-found': 'That transaction isn’t on Base (yet). Check the hash, or try again in a moment.',
+  failed: 'That transaction failed on Base, so nothing was sent.',
+  pending: `That transaction has fewer than ${IMAGES.prepaid.confirmations} confirmations. Try again in a moment.`,
+  'not-to-wallet': 'That transaction sent no USDC to this balance’s wallet.',
+  'not-usdc': 'That transaction sent a token to this balance’s wallet, but not USDC on Base.',
+  'too-little': 'That transaction sent less USDC to this balance’s wallet than the charge.',
+};
+
+export async function recordRefund(sql: Sql | null, fid: number | null, body: { debitId?: unknown; txHash?: unknown }, client?: PublicClient): Promise<RefundAnswer> {
   if (!isAdmin(fid)) return { status: 404, body: { error: 'Not found' } };
   if (!sql) return { status: 503, body: { error: 'No database' } };
   const debitId = Number(body.debitId);
   const tx = typeof body.txHash === 'string' ? body.txHash.trim().toLowerCase() : '';
   if (!Number.isInteger(debitId) || debitId <= 0 || !/^0x[0-9a-f]{64}$/.test(tx)) return { status: 400, body: { error: 'Give the charge and the refund’s transaction hash.' } };
-  const [d] = await sql`select d.account_id::int as account, a.address from studio.wallet_debits d join studio.wallet_accounts a on a.id = d.account_id where d.id = ${debitId}`;
+  const [d] = await sql`select d.account_id::int as account, a.address, d.usd::float8 as usd from studio.wallet_debits d join studio.wallet_accounts a on a.id = d.account_id where d.id = ${debitId}`;
   if (!d) return { status: 404, body: { error: 'No such charge.' } };
+  const read = await readRefund(tx as Hash, d.address, BigInt(Math.round(d.usd * 1e6)), client).catch(() => 'not-found' as const);
+  if (read !== 'ok') return { status: read === 'pending' || read === 'not-found' ? 409 : 422, body: { error: REFUND_READ_WORDING[read], reason: read } };
   try {
     const [r] = await sql`select studio.record_wallet_refund(${debitId}, ${d.address}, ${tx}, ${fid}) as id`;
     return { status: 200, body: { refunded: Number(r.id), to: d.address, balanceUsd: await balanceUsd(sql, d.account) } };
@@ -134,14 +227,15 @@ export async function ledger(sql: Sql, days = 30) {
 
 /**
  * A Farcaster person pays from a wallet verified on their account without signing in with it (owner, 2026-11-25:
- * "the signed-in wallet or a wallet verified on their Farcaster account"). The payment is read on Base as from that
- * address (USDC to payTo, 3 confirmations, never added before) and is credited to that wallet's own account, which is
- * linked to the person: an active link to this FID, or else the automatic link (Neynar: this FID, and only this FID,
- * has the address). A wallet linked to anyone else, or unlinked by its person, is refused. OFF with EPHELION_PAID.
+ * "the signed-in wallet or a wallet verified on their Farcaster account"). The wallet is checked first (payerCheck), so
+ * no account row is made for a wallet that isn't theirs; then the payment is read on Base as from that address (USDC
+ * to payTo, confirmations, never added before) and credited to that wallet's own account, linked to the person
+ * ('verified') if it wasn't yet. The panel asks the same question before sending anything (quote), so this refusal is
+ * the server's own backstop. OFF with EPHELION_PAID.
  */
 export type VerifiedDeps = {
   read: (hash: `0x${string}`, from: string) => Promise<{ ok: true; token: 'USDC' | 'ETH'; amount: bigint; usd: number; blockNumber: bigint } | { ok: false; why: string }>;
-  autoLink: (sql: Sql, account: number, address: string) => Promise<{ linked: number | null; why: string }>;
+  fidsFor: FidsFor;
 };
 export async function claimVerified(sql: Sql | null, fid: number | null, body: { txHash?: unknown; address?: unknown }, deps: VerifiedDeps): Promise<RefundAnswer> {
   if (fid === null) return { status: 401, body: { error: 'Sign in' } };
@@ -151,10 +245,13 @@ export async function claimVerified(sql: Sql | null, fid: number | null, body: {
   const tx = typeof body.txHash === 'string' ? body.txHash.trim() : '';
   const address = typeof body.address === 'string' ? body.address.trim().toLowerCase() : '';
   if (!/^0x[0-9a-fA-F]{64}$/.test(tx) || !/^0x[0-9a-f]{40}$/.test(address)) return { status: 400, body: { error: 'Bad request' } };
-  const { accountFor, credit } = await import('./credits');
-  const account = await accountFor(sql, address);
-  const linked = (await walletLinksOf(sql, fid)).some((l) => l.account === account) || (await deps.autoLink(sql, account, address)).linked === fid;
-  if (!linked) return { status: 403, body: { error: 'That wallet isn’t verified on your Farcaster account.', reason: 'not-verified' } };
+  const payer = await payerCheck(sql, fid, address, deps.fidsFor);
+  if (!payer.yours) return { status: 403, body: { error: 'That wallet isn’t verified on your Farcaster account.', reason: payer.why } };
+  const account = payer.account ?? (await accountFor(sql, address));
+  if (!(await walletLinksOf(sql, fid)).some((l) => l.account === account)) {
+    const l = await linkWallet(sql, account, address, fid, 'verified');
+    if (!l.ok) return { status: 403, body: { error: 'That wallet isn’t verified on your Farcaster account.', reason: l.why } };
+  }
   const p = await deps.read(tx as `0x${string}`, address);
   if (!p.ok) return { status: p.why === 'pending' || p.why === 'not-found' ? 409 : 422, body: { error: p.why, reason: p.why, retry: p.why === 'pending' || p.why === 'not-found' } };
   const added = await credit(sql, account, { txHash: tx, token: p.token, amount: p.amount, usd: p.usd, blockNumber: p.blockNumber });
