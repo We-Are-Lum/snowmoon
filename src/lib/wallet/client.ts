@@ -87,11 +87,11 @@ async function sendOnBase(opts: { usd: number; token: 'USDC' | 'ETH'; to: `0x${s
 }
 
 /**
- * Pay `usd` in USDC or ETH on Base to the project's address, wait for it to land, then ask our
- * server to add it (it reads the payment on Base and credits it once). Retries while it confirms.
+ * Pay `usd` in USDC on Base to the project's address, wait for it to land, then ask our server to add it (it reads
+ * the payment on Base and credits it once). Retries while it confirms. USDC only (owner, 2026-11-25, option A).
  */
-export async function pay(opts: { usd: number; token: 'USDC' | 'ETH'; payTo: `0x${string}`; usdc: `0x${string}`; onSent?: (hash: `0x${string}`) => void; onWaiting?: () => void }): Promise<{ added: number; balanceUsd: number }> {
-  return claim(await sendOnBase({ usd: opts.usd, token: opts.token, to: opts.payTo, usdc: opts.usdc, onSent: opts.onSent, onWaiting: opts.onWaiting }));
+export async function pay(opts: { usd: number; payTo: `0x${string}`; usdc: `0x${string}`; onSent?: (hash: `0x${string}`) => void; onWaiting?: () => void }): Promise<{ added: number; balanceUsd: number }> {
+  return claim(await sendOnBase({ usd: opts.usd, token: 'USDC', to: opts.payTo, usdc: opts.usdc, onSent: opts.onSent, onWaiting: opts.onWaiting }));
 }
 
 /**

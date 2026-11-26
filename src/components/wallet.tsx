@@ -79,7 +79,6 @@ export function LinkNote({ className = 'ic-note' }: { className?: string }) {
 export function WalletPanel({ onChange, linkHint = true }: { onChange?: () => void; linkHint?: boolean }) {
   const [b, setB] = useState<Balance | null>(null);
   const [adding, setAdding] = useState(false);
-  const [token, setToken] = useState<'USDC' | 'ETH'>('USDC');
   const [note, setNote] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [pasted, setPasted] = useState('');
@@ -138,7 +137,7 @@ export function WalletPanel({ onChange, linkHint = true }: { onChange?: () => vo
     setBusy(true);
     setNote(null);
     try {
-      done(await pay({ usd, token, payTo: b.payTo, usdc: b.usdc, onSent: keep, onWaiting: () => setNote(W.waiting) }));
+      done(await pay({ usd, payTo: b.payTo, usdc: b.usdc, onSent: keep, onWaiting: () => setNote(W.waiting) }));
     } catch (e) {
       fail(e);
     } finally {
@@ -201,17 +200,10 @@ export function WalletPanel({ onChange, linkHint = true }: { onChange?: () => vo
         <div className="wallet-add">
           <p className="ic-note">{W.inAdvance}</p>
           <p className="ic-note">{W.payWith}</p>
-          <div className="wallet-tokens" role="radiogroup" aria-label="Pay with">
-            {(['USDC', 'ETH'] as const).map((t) => (
-              <button key={t} type="button" role="radio" aria-checked={token === t} className={token === t ? 'ic-primary' : 'ic-secondary'} onClick={() => setToken(t)}>
-                {t}
-              </button>
-            ))}
-          </div>
           <div className="wallet-packs">
             {b.packsUsd.map((usd) => (
               <button key={usd} type="button" className="ic-secondary" disabled={busy} onClick={() => void buy(usd)}>
-                {W.pay(usd, token)}
+                {W.pay(usd)}
               </button>
             ))}
           </div>
