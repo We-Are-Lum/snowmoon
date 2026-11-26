@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
+import { isImprovised, spokenSentences, takeLabel, takeMaxSeconds, type Spoken } from '~/lib/voice/spoken';
 import { db } from '~/lib/db';
 import { VOICE } from '~/lib/config';
 import { noStore, voicePerson, voiceReady } from '~/lib/voice/server';
 import { offeredSpeeches, speeches } from '~/lib/voice/speech';
 import { presetChoices } from '~/lib/voice/presets';
-import { hasVoiceConsent, voiceConsentWording } from '~/lib/voice/consent';
+import { hasVoiceConsent, voiceConsentReread, voiceConsentWording } from '~/lib/voice/consent';
 import { fundedFor, purgeOldAsks, today } from '~/lib/voice/costs';
 import { latestReading, myDrafts } from '~/lib/voice/drafts';
 
@@ -30,7 +31,7 @@ export async function GET(request: Request) {
         .filter(([, , r]) => r)
         .map(([sid, p, r]) => ({ speechId: sid, presetId: p, id: r!.id, candidate: (r!.recipe as { preset?: { candidate?: number } }).preset?.candidate ?? null, madeAt: r!.made_at }))
     : [];
-  const view = (sp: (typeof all)[number]) => ({ id: sp.id, title: sp.title, character: sp.character, source: sp.source, label: sp.label, version: sp.version, aiHelp: sp.aiHelp, credit: sp.credit, standIn: sp.standIn, paragraphs: sp.paragraphs, sentences: sp.sentences.map(({ n, text }) => ({ n, text })), characters: sp.characters, names: sp.names });
+  const view = (sp: (typeof all)[number]) => ({ id: sp.id, maxSeconds: takeMaxSeconds(sp.id), title: sp.title, character: sp.character, source: sp.source, label: sp.label, version: sp.version, aiHelp: sp.aiHelp, credit: sp.credit, standIn: sp.standIn, paragraphs: sp.paragraphs, sentences: sp.sentences.map(({ n, text }) => ({ n, text })), characters: sp.characters, names: sp.names });
   return NextResponse.json(
     {
       ready: voiceReady(),
@@ -38,7 +39,7 @@ export async function GET(request: Request) {
       speeches: all.map(view),
       preview: { text: previewText, block: previewBlock },
       choices,
-      consent: { version: wording.version, line: wording.line, title: wording.title, text: wording.text, sha256: wording.sha256, agreed: sql ? await hasVoiceConsent(sql, who.fid) : false },
+      consent: { version: wording.version, reread: voiceConsentReread(), line: wording.line, title: wording.title, text: wording.text, sha256: wording.sha256, agreed: sql ? await hasVoiceConsent(sql, who.fid) : false },
       models: { ...VOICE.models, provider: VOICE.provider },
       limits: { maxTakeSeconds: VOICE.maxTakeSeconds, maxSentenceSeconds: VOICE.maxSentenceSeconds, maxTakeBytes: VOICE.maxTakeBytes, creditsPerMinute: VOICE.rates.convertCreditsPerMinute, readingCreditsPerChar: VOICE.rates.readingCreditsPerChar, transcribeCreditsPerSecond: VOICE.rates.transcribeCreditsPerSecond },
       today: t && {
@@ -47,7 +48,7 @@ export async function GET(request: Request) {
         capCredits: funded === 'admin' ? VOICE.caps.adminDailyCredits : VOICE.caps.dailyCredits,
         conversionsLeft: Math.max(0, VOICE.caps.perPersonConversions - t.conversionsByPerson),
       },
-      drafts: sql ? (await myDrafts(sql, who.fid)).map((d) => ({ id: d.id, kind: d.kind, speechId: d.speech_id, presetId: d.preset_id, madeAt: d.made_at, publishedAt: d.published_at, recipe: d.recipe, audio: d.audio })) : [],
+      drafts: sql ? (await myDrafts(sql, who.fid)).map((d) => ({ id: d.id, label: d.kind === 'performance' && (d.recipe as { check?: unknown }).check ? takeLabel(d.recipe as { spoken?: Spoken }) : null, improvised: isImprovised(d.recipe as { spoken?: Spoken }), sentences: isImprovised(d.recipe as { spoken?: Spoken }) ? spokenSentences(d.recipe as { spoken?: Spoken }) : null, kind: d.kind, speechId: d.speech_id, presetId: d.preset_id, madeAt: d.made_at, publishedAt: d.published_at, recipe: d.recipe, audio: d.audio })) : [],
       readings,
     },
     { headers: noStore },

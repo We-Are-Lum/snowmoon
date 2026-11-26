@@ -93,3 +93,18 @@ export async function timeReading(sql: Sql, fid: number, draftId: string, deps: 
     on conflict (draft_id) do nothing`;
   return { status: 200, json: { ok: true, credits: heard.credits, estimateCredits: est.credits, matched: check.matched, sentences: check.sentences, transcriptDeleted } };
 }
+
+/**
+ * No button (Nate, 2026-11-24: ""Time this reading" goes: a ready-made reading is timed when it's made, and one made
+ * before this is timed when first opened, with no button, from the admins' pool"): the reading route times a new
+ * reading right after keeping it, and the board route times an older one on its first open. Either way the call is
+ * paid from READINGS_FUNDED (the admins' pool), whoever set it off. Real deps unless given (the tests pass the stub's).
+ */
+export async function timeReadingNow(sql: Sql, fid: number, draftId: string, deps?: TimingDeps): Promise<Result> {
+  if (!deps) {
+    const { deleteTranscript, speechToText } = await import('./elevenlabs');
+    const { getAudio } = await import('./store');
+    deps = { getAudio, transcribe: (audio, keyterms) => speechToText(audio, keyterms), deleteTranscript, sleep: (ms) => new Promise((s) => setTimeout(s, ms)) };
+  }
+  return timeReading(sql, fid, draftId, deps);
+}

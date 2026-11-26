@@ -1,6 +1,8 @@
 {
   "about": "The wording a performer agrees to once, before their first take is converted into a character's voice (docs/proposals/own-voice-v1.md). Approved by the owner on 2026-10-22, with two points added: 'Record only your own voice, never someone else's recording' and the same 18+ rule as sign-in. Recorded with kind 'own_voice' and the sha256 of the line, title and text, as for own-words (src/lib/consent.ts, wordingSha256). Point 3's deletion on Modal is proven on modal/chatterbox_vc.py by npm run check:modal-vc and P1h in check:principles (no Modal, no spending; what it covers and what Modal keeps: docs/proposals/own-voice-v1.md, 'The Modal conversion'). Not shown anywhere yet: the recording page (/record) will use it, and P1i fails if anything under src/ uses it before /record exists or while the proof fails.",
-  "current": "own-voice-v3",
+  "current": "own-voice-v4",
+  "reread": { "own-voice-v2": "2026-11-21", "own-voice-v3": "2026-11-22", "own-voice-v4": "2026-11-24" },
+  "aboutReread": "When Nate reread each version (his word in the session that day). The voice pages show \"Draft wording\" over the consent only while the version shown has no reread here (Nate, 2026-11-25).",
   "versions": {
     "own-voice-v1": {
       "line": "Your converted voice is public and GPL-3.0. Your own recordings are never released.",
@@ -50,8 +52,26 @@
         "Record only your own voice, never someone else's recording.",
         "You must be at least 18 years old."
       ]
+    },
+    "own-voice-v4": {
+      "line": "Your converted voice is public and GPL-3.0. We never publish or keep your recording.",
+      "title": "Your performance, in a character's voice",
+      "text": [
+        "You record a speech, word for word or improvised around its theme in your own words. Your recording is converted into a character's voice, and only the converted speech can be published.",
+        "We never publish or keep your recording. It stays on your device, in this browser's storage, until you remove it or record again; your browser may also clear it. It is sent to be converted only when you press Convert.",
+        "To convert it, we send your recording to ElevenLabs, only if you agree for that recording. ElevenLabs stores what it receives in the United States and may keep it under its own privacy policy (elevenlabs.io/privacy-policy). We ask it to delete each conversion and its transcript right after, though its own logs may still keep it. Our account is set so it doesn't use them to train its models.",
+        "The converted speech is then sent to ElevenLabs to be transcribed. A take read word for word is checked against the speech; an improvised take's transcript becomes its storyboard's words, which you can correct. Either way, the transcript is kept with your draft.",
+        "We keep each converted speech as your draft as soon as it comes back, until you remove it. Once you publish it, it is public and permanent, licensed GPL-3.0 like everything in this edition. Anyone may copy, edit and adapt it, including converting it again into another voice.",
+        "Each converted speech's public recipe names the voice, the model, its settings, and a fingerprint (sha256) of your recording. The fingerprint shows which recording was used; your voice can't be recovered from it.",
+        "A converted speech can keep your timing, phrasing and delivery, though not your voice. You're credited as its performer by your name here, and for an improvised take as the author of its words, unless you ask not to be named.",
+        "You can hide a speech you published, like any other contribution. Copies others have already made may remain.",
+        "You must not perform a voice that imitates a real person.",
+        "Record only your own voice, never someone else's recording.",
+        "You must be at least 18 years old."
+      ]
     }
   },
   "aboutV2": "own-voice-v2 (Nate, 2026-11-19, branch ephelion-voice): drafted by the coding agent (Claude, a closed model by Anthropic); reread by Nate on 2026-11-21 (\"reread: … own-voice-v2 (make it current) …\"), with point 3's training sentence unbracketed (Nate turned ElevenLabs' training off, 2026-11-21). It replaces Modal with ElevenLabs (Nate's choice) for the Ephelion storyboard; own-voice-v1 is retired (it was never shown). Facts and their sources: docs/proposals/ephelion-voice.md.",
-  "aboutV3": "own-voice-v3 (Nate, 2026-11-22): own-voice-v2 with points 2 and 5 changed, reread by Nate on 2026-11-22 word for word: the recording stays on the device (this browser's storage) until removed or recorded again, and each converted speech is kept as a draft as soon as it comes back. v2 is retired (it was current from 2026-11-21); a person who agreed to v2 is asked again."
+  "aboutV3": "own-voice-v3 (Nate, 2026-11-22): own-voice-v2 with points 2 and 5 changed, reread by Nate on 2026-11-22 word for word: the recording stays on the device (this browser's storage) until removed or recorded again, and each converted speech is kept as a draft as soon as it comes back. v2 is retired (it was current from 2026-11-21); a person who agreed to v2 is asked again.",
+  "aboutV4": "own-voice-v4 (branch voice-improv, 2026-11-24): own-voice-v3 with points 1, 4 and 7 changed for improvising (Nate, 2026-11-24), drafted by the coding agent (Claude, a closed model by Anthropic); reread by Nate on 2026-11-24, with point 4 ending \"…which you can correct. Either way, the transcript is kept with your draft.\" (word-for-word transcripts are kept too, in the draft's recipe). v3 is retired (it was current from 2026-11-22); a person who agreed to v3 is asked again."
 }

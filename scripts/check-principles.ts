@@ -542,7 +542,7 @@ add({
 add({
   id: 'P1i',
   principle: 1,
-  name: 'the own-voice consent shown is own-voice-v3 (current; reread 2026-11-22), only by the voice slice, only while P1h passes; own-voice-v1 is used by nothing',
+  name: 'the own-voice consent shown is own-voice-v4 (current; reread 2026-11-24), only by the voice slice, only while P1h passes; own-voice-v1 is used by nothing',
   load: async () => ({
     users: walk('src', /\.(ts|tsx)$/).filter((f) => /consent-own-voice/.test(read(f))),
     file: json('config/consent-own-voice.json') as { draft?: string; current: string; versions: Record<string, unknown> },
@@ -552,7 +552,7 @@ add({
   run: async ({ users, file, v1Users, proof }) => {
     const p: string[] = [];
     for (const f of users as string[]) if (f !== 'src/lib/voice/consent.ts') p.push(`${f} reads the own-voice consent; only src/lib/voice/consent.ts may`);
-    if ((file.draft ?? file.current) !== 'own-voice-v3' || !file.versions['own-voice-v3']) p.push('the voice pages would not show own-voice-v3');
+    if (file.draft || file.current !== 'own-voice-v4' || !file.versions['own-voice-v4']) p.push('the voice pages would not show own-voice-v4, the reread current');
     for (const f of v1Users as string[]) p.push(`${f} uses own-voice-v1`);
     const fails = (proof as string[]).length ? (proof as string[]) : [...voiceStatic(read(VOICE_FLOW_FILE), read(VOICE_ROUTE_FILE)), ...(await voiceRun(ROOT))];
     if ((VOICE.adminTrial || VOICE.open) && fails.length) p.push(...fails.map((x) => `the voice slice is switched on while P1h fails: ${x}`));
@@ -1122,6 +1122,30 @@ add({
   },
   plant: (c) => {
     delete (c.recipe as { request?: unknown }).request;
+  },
+});
+
+add({
+  id: 'P2v',
+  principle: 2,
+  name: "an improvised take's words are its performer's: transcribed from their take, corrected only by them (kept with the words before), and never written or edited by a model or the guide (DRAFT, for Nate's reread, 2026-11-24)",
+  load: async () => ({
+    correct: read('src/lib/voice/correct-words.ts'),
+    route: read('src/app/api/voice/drafts/[id]/words/route.ts'),
+    guide: read('src/lib/voice/guide.ts'),
+    guideServer: read('src/lib/voice/guide-server.ts'),
+  }),
+  run: (c) => {
+    const p: string[] = [];
+    const model = /from '[^']*(elevenlabs|chat\/|images\/fal|challenge\/models|guide-server|ai-gateway|batch-model)[^']*'|\bcomplete\(|speechToText\(|fetch\(/;
+    if (model.test(c.correct) || model.test(c.route)) p.push('correcting the words reaches a model or a service: only the person changes them');
+    if (!/corrections: \[\.\.\.spoken\.corrections, correction\]/.test(c.correct) || !/byFid: fid, sentences: spoken\.sentences/.test(c.correct)) p.push('a correction is not kept with the words before it and who made it');
+    if (!/speechWordsIn\(s, \[\.\.\.c\.sentences, \.\.\.\(c\.otherWords \?\? \[\]\)\]\)/.test(c.guide)) p.push("the guide's drafts aren't checked against the spoken words");
+    if (!/sentences: spokenSentences\(draft\.recipe/.test(c.guideServer)) p.push('the guide is not given the spoken words as the board\'s sentences');
+    return p;
+  },
+  plant: (c) => {
+    c.correct = `import { complete } from '../chat/model';\n${c.correct}`;
   },
 });
 

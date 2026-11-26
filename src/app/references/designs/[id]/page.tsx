@@ -118,11 +118,14 @@ export default async function DesignPage({ params }: Props) {
   const isBase = picturesOpen && character ? basesOf(character.slug).some((b) => b === d.shown.versionId.toLowerCase() || b === String(d.elementId).toLowerCase()) : false;
   const landingPhase = challengeOpen || picturesOpen ? 'open' : phase() === 'closed' ? 'closed' : 'before';
   const remixHref = picturesOpen ? (isBase ? `/challenge/make?from=${d.shown.versionId}` : `/challenge#${character?.slug ?? ''}`) : undefined;
+  // Not a base (owner, 2026-11-26): its Remix said nothing and went to the character's card, which read as broken. A
+  // remix must start from a base to count, so the button says where it goes, and the note says why.
+  const notStart = picturesOpen && !isBase;
 
   const main = (
     <article className="dz-main">
       {landing && ch && (
-        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={byShown} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={landingPhase} remixHref={remixHref} note={picturesOpen && phase() === 'before' ? HUB.sheetLine('before') : undefined} posts={ch.posts} />
+        <ChallengeRemixLanding versionId={d.shown.versionId} name={callName} title={body.title} by={byShown} remix={Boolean(d.remixedFrom)} front={landingPicture(body)!} phase={landingPhase} remixHref={remixHref} remixLabel={notStart ? HUB.chooseStart : undefined} note={picturesOpen && phase() === 'before' ? HUB.sheetLine('before') : notStart ? HUB.notStartingPoint(callName) : undefined} posts={ch.posts} />
       )}
       {character && <BookQuotes name={character.name} quotes={character.quotes} />}
       <h1 className="dz-title">{title}</h1>

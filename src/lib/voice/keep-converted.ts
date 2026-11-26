@@ -7,6 +7,7 @@ import { checkSpeech } from './match';
 import { joinTimeline, type TimedWord } from './board';
 import { saveDraft, type DraftAudio } from './drafts';
 import { sha256Hex } from './ticket';
+import { improvisedTimeline, spokenFor, type Spoken } from './spoken';
 import { FlowError, type CheckTicket, type ConvertTicket } from './take-flow';
 
 /**
@@ -68,6 +69,7 @@ export async function keepPerformance(sql: postgres.Sql, fid: number, take: Conv
   if (total > 4_400_000) throw new FlowError(413, 'Too large to keep in one go');
   let check: Record<string, unknown> | null = null;
   let timeline: Record<string, unknown> | null = null;
+  let spoken: Spoken | null = null;
   if (c) {
     const unmatched = checks.filter((x) => !(redone.get(x.n) ?? x.ok)).map((x) => x.n);
     // The storyboard's strip (slice 2): the joined take's word timings, and each sentence's span in it.
@@ -85,6 +87,13 @@ export async function keepPerformance(sql: postgres.Sql, fid: number, take: Conv
       })),
     };
     check = { sentences: speech.sentences.length, matched: speech.sentences.length - unmatched.length, unmatched, bySound: checks.flatMap((x) => x.bySound.map((b) => ({ sentence: x.n, ...b }))), names: speech.names };
+    // Improvising (Nate, 2026-11-24): the word check only labels the take. Word for word: the strip is the speech's
+    // sentences, as above. Otherwise its spoken words are the transcript, and the strip is the transcript's sentences.
+    if (unmatched.length) {
+      const imp = improvisedTimeline(joined);
+      timeline = imp.timeline as unknown as Record<string, unknown>;
+      spoken = spokenFor(speech, false, imp.sentences, c.model ?? null);
+    } else spoken = spokenFor(speech, true, [], c.model ?? null);
   }
   const recipe = {
     provider: VOICE.provider,
@@ -101,6 +110,8 @@ export async function keepPerformance(sql: postgres.Sql, fid: number, take: Conv
     check,
     consent: { kind: 'voice_recording', sha256: t.consentSha256, perRecording: true },
     timeline,
+    // Word for word, or improvised with the person's words by sentence (src/lib/voice/spoken.ts); null with no check.
+    spoken,
     kept: redos.length ? 'used, with redone sentences' : 'automatically, when the conversion came back',
     madeWith: 'snowmoon.party voice (DRAFT)',
   };
