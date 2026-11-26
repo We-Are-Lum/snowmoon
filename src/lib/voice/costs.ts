@@ -1,6 +1,6 @@
 import 'server-only';
 import type postgres from 'postgres';
-import { VOICE } from '../config';
+import { EPHELION_PAID, VOICE } from '../config';
 import { voiceInsider } from './flag';
 
 /**
@@ -9,7 +9,8 @@ import { voiceInsider } from './flag';
  * standing rule (2026-11-20): once a day's measured credits are more than 20% over its estimates, every call is refused
  * until the next UTC day.
  */
-export type Funded = 'free' | 'admin';
+/** 'prepaid': a paid Ephelion entry's calls, paid from a balance (EPHELION_PAID; NEXT_paid_generations.sql lets voice_costs hold it). */
+export type Funded = 'free' | 'admin' | 'prepaid';
 export type CostKind = 'convert' | 'transcribe' | 'reading';
 /** Admins and testers (VOICE.testers) are paid for from the admins' pool. */
 export const fundedFor = (fid: number): Funded => (voiceInsider(fid) ? 'admin' : 'free');
@@ -64,10 +65,12 @@ export async function refusal(sql: postgres.Sql, fid: number, estimatedCredits: 
   const t = await today(sql, funded, fid);
   if (t.estimated > 0 && t.measured > VOICE.caps.overEstimate * t.estimated)
     return `Today's voice calls cost more than ${Math.round((VOICE.caps.overEstimate - 1) * 100)}% over their estimates (${t.measured} credits against ${t.estimated}). Calls are stopped until tomorrow (UTC) so an admin can look.`;
-  const capCredits = funded === 'admin' ? VOICE.caps.adminDailyCredits : VOICE.caps.dailyCredits;
-  const capUsd = funded === 'admin' ? VOICE.caps.adminDailyUsd : VOICE.caps.dailyUsd;
+  // Paid calls: the site-wide paid cap in dollars, and its credits at the plan's rate; the person's paid entries have
+  // their own cap (EPHELION_PAID.perPersonPerDay, counted at the charge), so the free daily number doesn't apply.
+  const capCredits = funded === 'admin' ? VOICE.caps.adminDailyCredits : funded === 'prepaid' ? (EPHELION_PAID.dailyCapUsd * 1000) / VOICE.rates.usdPer1000Credits : VOICE.caps.dailyCredits;
+  const capUsd = funded === 'admin' ? VOICE.caps.adminDailyUsd : funded === 'prepaid' ? EPHELION_PAID.dailyCapUsd : VOICE.caps.dailyUsd;
   if (t.credits + estimatedCredits > capCredits || t.usd + usdFor(estimatedCredits) > capUsd) return "Today's voice allowance is used up. It resets at midnight UTC.";
-  if (whole && t.conversionsByPerson >= VOICE.caps.perPersonConversions) return `You've converted ${VOICE.caps.perPersonConversions} whole takes today. Redo single sentences, or come back tomorrow.`;
+  if (whole && funded !== 'prepaid' && t.conversionsByPerson >= VOICE.caps.perPersonConversions) return `You've converted ${VOICE.caps.perPersonConversions} whole takes today. Redo single sentences, or come back tomorrow.`;
   return null;
 }
 

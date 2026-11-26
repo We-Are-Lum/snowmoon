@@ -119,7 +119,14 @@ check('ETH from another wallet is not mine', (await why(base({ value: 10n ** 16n
 check('a failed transaction pays nothing', (await why(base({ status: 'reverted' }))) === 'failed');
 check('a payment still confirming waits', (await why(base({ head: 101n, logs: [usdcLog(me.address, US, 5_000_000n)] }))) === 'pending');
 check('an old payment is not added here', (await why(base({ ageDays: 8, logs: [usdcLog(me.address, US, 5_000_000n)] }))) === 'old');
-check('a payment under the minimum is too small', (await why(base({ logs: [usdcLog(me.address, US, 100_000n)] }))) === 'too-small');
+// The smallest payment is one USDC unit (owner, 2026-11-25: was $0.50), so any positive USDC payment is added; only a
+// payment worth less than that (ETH of a few wei) is too small.
+{
+  const one = await readPayment(hash, me.address, base({ logs: [usdcLog(me.address, US, 1n)] }));
+  check('one USDC unit ($0.000001) is added', one.ok && one.usd === 0.000001, JSON.stringify(one, (_, v) => (typeof v === 'bigint' ? String(v) : v)));
+  check('$0.10 in USDC is added (it was under the old $0.50 minimum)', (await why(base({ logs: [usdcLog(me.address, US, 100_000n)] }))) === 'ok');
+  check('a payment worth less than one USDC unit is too small', (await why(base({ value: 1n }))) === 'too-small');
+}
 
 // Smart wallets: ETH arrives as an internal transfer (2026-10-18, the owner's first ETH payment).
 const EP7 = '0x0000000071727De22E5E9d8BAf0edAc6f37da032';

@@ -960,7 +960,8 @@ export const IMAGES = {
     markup: 0.3,
     /** Suggested amounts in USD; any amount of at least minUsd is credited. */
     packsUsd: [1, 5, 20] as readonly number[],
-    minUsd: 0.5,
+    /** One USDC unit (owner, 2026-11-25: "lower minUsd so what's missing is exact"): any positive USDC payment is added. Was 0.5. */
+    minUsd: 0.000001,
     dailyCapUsd: 25,
     chainId: 8453,
     /** Base's own public endpoint unless BASE_RPC_URL is set. */
@@ -1289,3 +1290,26 @@ export const VOICE = {
     overEstimate: 1.2,
   },
 } as const;
+
+/**
+ * Paid generations for the Ephelion challenge (owner, 2026-11-25; docs: "Snowmoon: Paid generations … v2"; branch
+ * ephelion-paid, PR A). One system: the prepaid balance (Terms §6a), topped up inside the page in USDC on Base. Every
+ * paid generation is a charge on the balance (studio.wallet_debits with person, item and ref; NEXT_paid_generations.sql,
+ * applied 2026-11-25), under the account's lock (src/lib/wallet/lock.ts). A charge for something not made is added
+ * back (free retry); if we can't make it, an admin refunds it in USDC to the balance's own wallet (studio.wallet_refunds).
+ * Payment buys generations, never standing (P7). OFF: nothing here is reachable until the owner turns it on, in the
+ * release whose Terms and Privacy describe it (PR B), and, for entries, after a lawyer has looked if the challenge has
+ * rewards.
+ */
+export const EPHELION_PAID = {
+  enabled: false as boolean,
+  /** The price of each thing, in US dollars (owner, 2026-11-25). */
+  prices: { 'ephelion-entry': 1.0, 'ephelion-picture': 0.2 } as const,
+  /** Per person (a FID, or minus a wallet account's number) per UTC day (owner, 2026-11-25). */
+  perPersonPerDay: { 'ephelion-entry': 5, 'ephelion-picture': 10 } as const,
+  /** Paid generations across the site per UTC day, counted at their prices net of charges added back (owner, 2026-11-25). */
+  dailyCapUsd: 25,
+  /** What the top-up panel offers beyond what's missing ("add more for later"). DRAFT. */
+  topUpExtraUsd: 5,
+} as const;
+export type PaidItem = keyof typeof EPHELION_PAID.prices;

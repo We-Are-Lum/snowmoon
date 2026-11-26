@@ -30,7 +30,25 @@ export async function balanceUsd(sql: Sql, account: number): Promise<number> {
     coalesce((select sum(usd) from studio.wallet_payments where account_id = ${account}), 0)::float8
     - coalesce((select sum(usd) from studio.wallet_debits where account_id = ${account}), 0)::float8 as usd`;
   const back = await creditedUsd(sql, account);
-  return Math.round(((r?.usd ?? 0) + back) * 1e6) / 1e6;
+  const refunded = await refundedUsd(sql, account);
+  return Math.round(((r?.usd ?? 0) + back - refunded) * 1e6) / 1e6;
+}
+
+/**
+ * What was refunded to this account's wallet in USDC (NEXT_paid_generations.sql, studio.wallet_refunds; owner,
+ * 2026-11-25): a charge first added back to the balance, then paid out, so it leaves the balance. Balance = payments -
+ * debits + credits - refunds. 0 where the table isn't there yet (a database without the migration).
+ */
+let refundsTable: boolean | null = null;
+export const resetRefundsTableForTests = () => void (refundsTable = null);
+export async function refundedUsd(sql: Sql, account: number): Promise<number> {
+  if (refundsTable === null || refundsTable === false) {
+    const [t] = await sql`select to_regclass('studio.wallet_refunds') is not null as there`;
+    refundsTable = Boolean(t?.there);
+    if (!refundsTable) return 0;
+  }
+  const [r] = await sql`select coalesce(sum(usd), 0)::float8 as usd from studio.wallet_refunds where account_id = ${account}`;
+  return r?.usd ?? 0;
 }
 
 /** What Generates that gave no picture gave back to this account (migration 0022). Read whether credit-back is on or off. */

@@ -3,6 +3,7 @@ import type postgres from 'postgres';
 import { CHALLENGE, CHAPTER_PICTURES, CLOSED_IMAGES, IMAGES, closedChoiceOn, imagesDailySpendCapUsd } from '../config';
 import { CLOSED_MODEL_IDS } from './sheet-models';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
+import { lockAccount } from '../wallet/lock';
 import { paysFor } from './price';
 import { countsRemixes, isWalletNumber, remixesLeft, remixRefusal, type RemixRefusal } from './remixes';
 import { isSocialPerson } from '../people';
@@ -186,6 +187,8 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
     if (isWalletNumber(fid)) {
       const t = tx as unknown as Sql;
       const price = priceUsd(spend.reserveUsd);
+      // The account lock around the balance check and the charge (owner, 2026-11-25; src/lib/wallet/lock.ts).
+      await lockAccount(t, -fid);
       const balance = await balanceUsd(t, -fid);
       if (balance < price) return { ok: false as const, refusal: 'balance' as const };
       const [paid] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'prepaid'`;
