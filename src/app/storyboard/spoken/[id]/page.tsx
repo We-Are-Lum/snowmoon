@@ -8,11 +8,13 @@ import { spokenSentences, takeLabel, type Spoken } from '~/lib/voice/spoken';
 import { CLOSING, type CreditLine } from '~/lib/voice/closing';
 import { VoiceSpoken, type SpokenFile } from '~/components/voice-spoken';
 import { embedMeta, spokenEmbed } from '~/lib/voice/embeds';
+import { VoiceHiddenForMaker, VoiceReport } from '~/components/voice-report';
 import '~/styles/voice.css';
 
 /**
  * /storyboard/spoken/<id>: a published spoken storyboard (Ephelion slice 4, DRAFT). "Not found" while VOICE.publish is
- * off (the local tests turn it on, stand-ins only) and once its person takes it down.
+ * off (the local tests turn it on, stand-ins only) and once its person takes it down. A hidden one shows only the
+ * notice (moderation, 2026-11-23); everyone signed in may report one.
  */
 export const dynamic = 'force-dynamic';
 // Its own miniapp embed for each published storyboard (Nate, 2026-11-22), so a shared one opens on itself; never indexed.
@@ -21,7 +23,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!publishOn()) return { robots };
   const sql = db();
   const pub = sql ? await publication(sql, (await params).id).catch(() => null) : null;
-  return pub ? { robots, other: embedMeta(spokenEmbed(pub.id)) } : { robots };
+  // A hidden one (moderation) has no embed: a cast of it opens nothing of it.
+  return pub && !pub.hidden ? { robots, other: embedMeta(spokenEmbed(pub.id)) } : { robots };
 }
 
 export default async function SpokenPage({ params }: { params: Promise<{ id: string }> }) {
@@ -29,6 +32,17 @@ export default async function SpokenPage({ params }: { params: Promise<{ id: str
   const sql = db();
   const pub = sql ? await publication(sql, (await params).id).catch(() => null) : null;
   if (!pub) notFound();
+  // Hidden by a moderator or a stated rule (Nate, 2026-11-23): the notice to everyone, no pictures and no audio; its
+  // maker also sees the reason (asked by their own browser, so an unnamed storyboard's maker is never in the page).
+  if (pub.hidden)
+    return (
+      <main className="vr vb">
+        <p className="vr-kicker">Storyboard</p>
+        <h1>Hidden</h1>
+        <p className="vr-note">This storyboard was hidden by a moderator.</p>
+        <VoiceHiddenForMaker id={pub.id} />
+      </main>
+    );
   const r = pub.recipe as {
     speech?: { id?: string; title?: string; label?: { text?: string } };
     voice?: { kind?: 'performance' | 'reading'; preset?: { name?: string } };
@@ -64,6 +78,7 @@ export default async function SpokenPage({ params }: { params: Promise<{ id: str
         closingSeconds={r.closing.seconds ?? CLOSING.seconds}
         fileName={`snowmoon-storyboard-${pub.id.slice(0, 8)}`}
       />
+      <VoiceReport id={pub.id} />
     </main>
   );
 }
