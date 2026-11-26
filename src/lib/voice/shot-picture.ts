@@ -8,7 +8,8 @@ import { chapterDefaultModel } from '../chapter-pictures/default-model';
 import { designByVersion, listDesigns } from '../images/designs';
 import type { Where } from '../images/countries';
 import type { Made } from '../images/fal';
-import type { paidPicture } from '../images/paid';
+import { nextUtcMidnight, type paidPicture } from '../images/paid';
+import { storyboardPicturesLeft, storyboardPoolReached } from '../images/limits';
 import { angleById, boardLook, COVERAGE, madeWithOf, SCENE, shotPrompt, shotReferences, staleShots, type Shot } from './board';
 import { boardSource, keptPictures, latestBoard, pictureBytes } from './board-store';
 import { signTicket } from './ticket';
@@ -48,6 +49,20 @@ export interface ShotDeps {
 // 'admins' includes the testers (VOICE.testers, Nate 2026-11-24), on the admins' pool.
 export const realPicturesFor = (fid: number) => VOICE.realPictures === true || (VOICE.realPictures === 'admins' && voiceInsider(fid));
 export const shotModels = (where: Where, fid: number) => ({ models: modelRow(where), defaultModel: chapterDefaultModel(where), real: realPicturesFor(fid), limits: VOICE.board });
+
+/**
+ * The storyboard allowance the board and guide pages show (Nate, 2026-11-23): pictures left today, out of
+ * VOICE.pictures.perPersonPerDay, whether the day's pool can't pay even the cheapest picture, and when both reset (an
+ * instant: the page writes it in the person's own time). Null for admins and the testers (the admins' pool) and while only admins
+ * make real pictures (VOICE.realPictures 'admins'), so nobody is shown a count that doesn't apply to them.
+ */
+export async function allowanceFor(sql: Sql, fid: number): Promise<{ allowance: { left: number; perDay: number; poolUsedUp: boolean; resetAt: string } | null }> {
+  if (voiceInsider(fid) || !realPicturesFor(fid)) return { allowance: null };
+  const [left, poolUsedUp] = await Promise.all([storyboardPicturesLeft(sql, fid), storyboardPoolReached(sql, CHEAPEST_PICTURE_USD)]);
+  return { allowance: { left, perDay: VOICE.pictures.perPersonPerDay, poolUsedUp, resetAt: nextUtcMidnight() } };
+}
+/** The least a storyboard picture can hold of the pool (FLUX, measured $0.016 to $0.022): below it, nothing fits. */
+const CHEAPEST_PICTURE_USD = 0.016;
 
 export async function triesMade(sql: Sql, draftId: string, fid: number): Promise<Record<string, number>> {
   const rows = await sql`select shot_key, count(*)::int as n from studio.voice_board_asks where draft_id = ${draftId} and fid = ${fid} group by shot_key`;
@@ -241,7 +256,9 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   const worst = reserveUsd(m, { width: IMAGES.viewSize.width, height: IMAGES.viewSize.height * Math.max(1, refs.length) });
   const paid = await deps.paid(sql, fid, request, {
     checkText: prompt,
-    spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, ...(voiceInsider(fid) ? { pool: 'admin' as const } : {}) },
+    // Admins and the testers on the admins' pool (voiceInsider); everyone else on the storyboard allowance and pool
+    // (VOICE.pictures, Nate 2026-11-23).
+    spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, pool: voiceInsider(fid) ? ('admin' as const) : ('storyboard' as const) },
     // A closed model's maker (OpenAI, Google): a refusal by its own check names it (branch refusal-reasons, owner
     // 2026-11-18; wording reread by the owner 2026-11-22).
     ...(m.open ? {} : { maker: m.maker }),
