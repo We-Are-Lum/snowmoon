@@ -437,6 +437,12 @@ starting view. Where no one has picked, the starting view is "Most liked", then 
 "starting point". Moderators (FIDs in `MODERATOR_FIDS`) who are not admins can hide and nothing else. Picks never
 order the feed, search, anyone's own pages, the agent tools or the read API.
 
+**Unhiding (reread by Nate 2026-11-23; branch voice-moderation).** "A moderator may unhide what was hidden; it puts back
+exactly what its maker published, and never publishes anything else." In practice: in the one moderator queue
+(/moderate), a hidden published storyboard can be unhidden; its own files come back, byte for byte, from their private
+copies, and its page is as its maker published it (`src/lib/voice/moderation.ts`, `unhideStoryboard`; checked by
+`P5b` and `test:voice` section M).
+
 **Ruling: the edition's own chapter pictures (owner, 2026-11-18; reread by the owner 2026-11-19;
 branch chapter-pictures-admin; widened by the ruling below, reread 2026-11-20).** "An admin may replace a picture in the site's own edition of a chapter. The change is
 public at once, shows who made it and when, and can be undone. This covers only the edition's own pictures, never the
@@ -480,6 +486,10 @@ A hide still wins everywhere, and with no database none shows (`npm run test:add
   decisions; and for the additions, a second file writing them and an addition moved in place; each must fail
   (`scripts/lib/p5b.ts`, `npm run test:chapter-pictures`, `npm run test:chapter-additions`).
 - `P5c`: a hidden image's file leaves the public bucket.
+- `P5k` (branch voice-moderation, 2026-11-23): a hidden published storyboard's page shows only the notice ("This
+  storyboard was hidden by a moderator."), names none of its files, and none of its files is still public; a planted
+  public file must fail. Hiding is reversible (the unhiding line above); every step is logged, and the log stays when
+  the storyboard is removed.
 - `P5d`: every component that shows a pick shows its label ("Picked by @…") and the switch with "Most liked",
   "Newest" and "Liked by me"; the switch keeps the reader's choice on their device (localStorage) and never sends it.
 - `P5e`: nothing outside the pick code reads `studio.admin_picks` (the feed, search, profiles, the agent tools and
