@@ -2,7 +2,7 @@ import 'server-only';
 import { createHash } from 'node:crypto';
 import type postgres from 'postgres';
 import { IMAGES, VOICE } from '../config';
-import { isAdmin } from '../admins';
+import { voiceInsider } from './flag';
 import { challengeModel, modelRow, noticeProblem, reserveUsd, type ChallengeModel } from '../challenge/models';
 import { chapterDefaultModel } from '../chapter-pictures/default-model';
 import { designByVersion, listDesigns } from '../images/designs';
@@ -10,13 +10,14 @@ import type { Where } from '../images/countries';
 import type { Made } from '../images/fal';
 import { nextUtcMidnight, type paidPicture } from '../images/paid';
 import { storyboardPicturesLeft, storyboardPoolReached } from '../images/limits';
-import { angleById, COVERAGE, SCENE, shotPrompt, shotReferences, type Shot } from './board';
-import { boardSource, latestBoard, pictureBytes } from './board-store';
+import { angleById, boardLook, COVERAGE, madeWithOf, SCENE, shotPrompt, shotReferences, staleShots, type Shot } from './board';
+import { boardSource, keptPictures, latestBoard, pictureBytes } from './board-store';
 import { signTicket } from './ticket';
 import { CLOSING } from './closing';
 import { CHAT } from '../config';
 import { guideRecipe, type GuideRef } from './guide';
 import { guideDraftById } from './guide-server';
+import { headCrop } from './head-crop';
 
 /**
  * A picture for one shot of a storyboard (Nate, 2026-11-21): the challenge's picture code, as the admins' chapter
@@ -45,17 +46,18 @@ export interface ShotDeps {
 
 /** What the board page offers: the models for this visitor, the default, and the limits. */
 /** May this person make real pictures for a storyboard? (VOICE.realPictures: 'admins' lets admins only.) */
-export const realPicturesFor = (fid: number) => VOICE.realPictures === true || (VOICE.realPictures === 'admins' && isAdmin(fid));
+// 'admins' includes the testers (VOICE.testers, Nate 2026-11-24), on the admins' pool.
+export const realPicturesFor = (fid: number) => VOICE.realPictures === true || (VOICE.realPictures === 'admins' && voiceInsider(fid));
 export const shotModels = (where: Where, fid: number) => ({ models: modelRow(where), defaultModel: chapterDefaultModel(where), real: realPicturesFor(fid), limits: VOICE.board });
 
 /**
  * The storyboard allowance the board and guide pages show (Nate, 2026-11-23): pictures left today, out of
  * VOICE.pictures.perPersonPerDay, whether the day's pool can't pay even the cheapest picture, and when both reset (an
- * instant: the page writes it in the person's own time). Null for admins (the admins' pool) and while only admins
+ * instant: the page writes it in the person's own time). Null for admins and the testers (the admins' pool) and while only admins
  * make real pictures (VOICE.realPictures 'admins'), so nobody is shown a count that doesn't apply to them.
  */
 export async function allowanceFor(sql: Sql, fid: number): Promise<{ allowance: { left: number; perDay: number; poolUsedUp: boolean; resetAt: string } | null }> {
-  if (isAdmin(fid) || !realPicturesFor(fid)) return { allowance: null };
+  if (voiceInsider(fid) || !realPicturesFor(fid)) return { allowance: null };
   const [left, poolUsedUp] = await Promise.all([storyboardPicturesLeft(sql, fid), storyboardPoolReached(sql, CHEAPEST_PICTURE_USD)]);
   return { allowance: { left, perDay: VOICE.pictures.perPersonPerDay, poolUsedUp, resetAt: nextUtcMidnight() } };
 }
@@ -105,18 +107,43 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   const [styles, characters] = await Promise.all([listDesigns(sql, 'style').catch(() => []), listDesigns(sql, 'character').catch(() => [])]);
   const style = typeof b.styleId === 'string' && b.styleId ? (styles.find((s) => s.versionId === b.styleId) ?? null) : null;
   if (typeof b.styleId === 'string' && b.styleId && !style) return no(400, 'That style is not a published sheet');
-  const wanted = closing ? [] : Array.isArray(b.characterIds) ? b.characterIds.filter((x): x is string => typeof x === 'string') : [];
+  // The scene and every shot in it are made with the board's one look, as saved (Nate, 2026-11-24: "make every shot use
+  // the chosen look and the kept scene"), whatever an older page state sends; an insert keeps its own.
+  const lookOfBoard = boardLook(shots);
+  const asked = closing ? [] : Array.isArray(b.characterIds) ? b.characterIds.filter((x): x is string => typeof x === 'string') : [];
+  const wanted = (sceneShot || inScene) && lookOfBoard ? [lookOfBoard] : asked;
   // One look a picture (the scene, a shot, an insert): the scene and the previous shot take the other two references.
-  if (wanted.length > 1) return no(400, 'One character’s look a picture');
+  // A request naming two looks is refused even where the board's look replaces it.
+  if (asked.length > 1 || wanted.length > 1) return no(400, 'One character’s look a picture');
   const chosen = wanted.map((id) => characters.find((c) => c.versionId === id));
   if (chosen.some((c) => !c)) return no(400, 'A character is not a published sheet');
   // The references, in order (proposal v2): a shot in the scene sends the kept scene and the look (the anchors, every
   // time), then the last kept shot in the scene before it (continuity; never an insert). The scene sends the look only;
   // an insert, the look only if one is chosen; the closing background, none.
   const refs: Buffer[] = [];
-  const references: { role: GuideRef['role']; name: string; versionId?: string; shotKey?: string; url?: string; sha256: string }[] = [];
+  const references: { role: GuideRef['role']; name: string; versionId?: string; shotKey?: string; url?: string; sha256: string; crop?: { kind: 'head'; from: string; box: { left: number; top: number; width: number; height: number } } }[] = [];
+  // Clothes described for the scene (fix 2, Nate 2026-11-24): the scene and its shots send the look's face only, a head
+  // crop of the sheet's front view, recorded with the box and the sheet picture it came from; the clothes lead the prompt.
+  const clothes = sceneShot || inScene ? (board?.scene?.clothing ?? '').trim() : '';
+  const lookPicture = async (c: { versionId: string; title: string }, front: { url: string; sha256: string }, bytes: Buffer, role: GuideRef['role']): Promise<string | null> => {
+    if (!clothes || c.versionId !== chosen[0]?.versionId) {
+      refs.push(bytes);
+      references.push({ role, name: c.title, versionId: c.versionId, url: front.url, sha256: front.sha256 });
+      return null;
+    }
+    const h = await headCrop(bytes).catch(() => null);
+    if (!h) return `${c.title}’s sheet picture could not be cut to his face. Try again in a moment.`;
+    refs.push(h.bytes);
+    references.push({ role, name: `${c.title} (the face only)`, versionId: c.versionId, url: front.url, sha256: h.sha256, crop: { kind: 'head', from: front.sha256, box: h.box } });
+    return null;
+  };
   const sceneKept = board?.scene?.kept ?? null;
-  const plan = inScene ? shotReferences(shots, String(b.shotKey)) : null;
+  // Kept shots made with another scene (or none) or another look are not this scene's: never a reference.
+  const keptRows = board ? ((await keptPictures(sql, draft.id, fid)) as unknown as { shotKey: string; sha256: string; recipe: unknown }[]) : [];
+  const madeWith = Object.fromEntries(shots.map((s) => [s.key, s.kept ? keptRows.find((p) => p.shotKey === s.key && p.sha256 === s.kept) : undefined]).map(([k, p]) => [k, p ? madeWithOf((p as { recipe: unknown }).recipe) : undefined]));
+  const stale = staleShots(shots, board?.scene ?? null, lookOfBoard, madeWith);
+  const fresh = shots.map((s) => (stale.includes(s.key) ? { ...s, kept: null } : s));
+  const plan = inScene ? shotReferences(fresh, String(b.shotKey)) : null;
   if (inScene && !sceneKept) return no(400, 'Make and keep the scene first: every shot in the scene uses it.', { reason: 'no-scene' });
   // The guide's draft this picture answers (P2's ruling, Nate 2026-11-22): its stored message, the person's request
   // before it, and the references as sent (the guide's, or the person's change to them).
@@ -138,9 +165,36 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
       drafted = { prompt: d.prompt, references: Array.isArray(d.references) ? (d.references as GuideRef[]) : [] };
     }
   }
-  const sentRefs: { role: GuideRef['role']; ref: string }[] | null = g && !sceneShot
+  let sentRefs: { role: GuideRef['role']; ref: string }[] | null = g && !sceneShot
     ? (Array.isArray(g.references) ? g.references : []).slice(0, IMAGES.maxReferences + 1).map((r) => ({ role: String((r as { role?: unknown }).role ?? '') as GuideRef['role'], ref: String((r as { ref?: unknown }).ref ?? '') }))
     : null;
+  // A shot in the scene always sends the kept scene and the board's look first (the anchors), whatever the guide's draft
+  // chose; a stale kept shot or another look is left out. What the site added is recorded as the site's choice.
+  const siteAdded: { role: GuideRef['role']; ref: string; why: string }[] = [];
+  const siteRemoved: { role: GuideRef['role']; ref: string; why: string }[] = [];
+  // What the person sent, before the site's changes: the person's edit of the guide's references is judged on this.
+  const askedRefs = sentRefs;
+  if (sentRefs && sentRefs.length > IMAGES.maxReferences) return no(400, `At most ${IMAGES.maxReferences} reference pictures`);
+  if (sentRefs && inScene) {
+    const lookId = chosen[0]?.versionId ?? null;
+    const isLook = (ref: string) => characters.some((c) => c.versionId === ref);
+    let list = sentRefs.filter((r) => {
+      const why = stale.includes(r.ref) ? 'a kept shot made with another look or before this scene' : isLook(r.ref) && r.ref !== lookId ? 'not the look chosen for the scene' : null;
+      if (why) siteRemoved.push({ role: r.role, ref: r.ref, why });
+      return !why;
+    });
+    if (!list.some((r) => r.ref === SCENE.key)) {
+      list = [{ role: 'anchor-scene', ref: SCENE.key }, ...list];
+      siteAdded.push({ role: 'anchor-scene', ref: SCENE.key, why: 'the kept scene: every shot in the scene is made with it' });
+    }
+    if (lookId && !list.some((r) => r.ref === lookId)) {
+      list = [list[0], { role: 'anchor-look', ref: lookId }, ...list.slice(1)];
+      siteAdded.push({ role: 'anchor-look', ref: lookId, why: 'the look chosen for the scene' });
+    }
+    // With the anchors added, more than the limit is refused rather than cut short (nothing the person chose is dropped
+    // silently).
+    sentRefs = list;
+  }
   if (sentRefs) {
     if (sentRefs.length > IMAGES.maxReferences) return no(400, `At most ${IMAGES.maxReferences} reference pictures`);
     // An insert never takes the scene or a shot of the scene (proposal v2, section 3b).
@@ -154,7 +208,7 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
         references.push({ role: r.role, name: 'the scene', shotKey: SCENE.key, sha256: sceneKept });
         continue;
       }
-      const shotRef = shots.find((s) => s.key === r.ref && s.kept);
+      const shotRef = fresh.find((s) => s.key === r.ref && s.kept);
       if (shotRef) {
         if (shotRef.key === b.shotKey) return no(400, 'A shot can\u2019t be its own reference.');
         const bytes = await pictureBytes(sql, draft.id, fid, shotRef.key, shotRef.kept!);
@@ -168,8 +222,8 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
       if (!c || !front?.url || !front.sha256) return no(400, `A reference isn\u2019t a picture of this storyboard (${r.ref}).`);
       const bytes = await deps.reference(front.url, front.sha256);
       if (!bytes) return no(503, `${c.title}\u2019s sheet picture could not be read. Try again in a moment.`);
-      refs.push(bytes);
-      references.push({ role: r.role, name: c.title, versionId: c.versionId, url: front.url, sha256: front.sha256 });
+      const cropProblem = await lookPicture(c, { url: front.url, sha256: front.sha256 }, bytes, r.role);
+      if (cropProblem) return no(503, cropProblem);
     }
   } else {
     if (inScene && sceneKept) {
@@ -183,8 +237,8 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
       if (!front?.url || !front.sha256) continue;
       const bytes = await deps.reference(front.url, front.sha256);
       if (!bytes) return no(503, `${c!.title}’s sheet picture could not be read. Try again in a moment.`);
-      refs.push(bytes);
-      references.push({ role: 'anchor-look', name: c!.title, versionId: c!.versionId, url: front.url, sha256: front.sha256 });
+      const cropProblem = await lookPicture(c!, { url: front.url, sha256: front.sha256 }, bytes, 'anchor-look');
+      if (cropProblem) return no(503, cropProblem);
     }
     if (plan?.continuity) {
       const prev = shots.find((s) => s.key === plan.continuity)!;
@@ -196,12 +250,15 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
   }
   if (refs.length > IMAGES.maxReferences) return no(400, `At most ${IMAGES.maxReferences} reference pictures`);
   if (sceneShot && drafted) drafted.references = references.map((r) => ({ role: r.role, ref: r.shotKey ?? r.versionId ?? '', why: 'his look, the scene picture’s one reference' }));
-  const prompt = `${shotPrompt({ description, angle: angle?.id ?? '' }, style, chosen as { title: string; text: string }[], inScene)}\n\n${IMAGES.suffix}`;
+  // The scene's description is the setting and the clothes (sceneWords); with the clothes first, they aren't repeated.
+  const promptWords = clothes && sceneShot && description.endsWith(clothes) ? description.slice(0, -clothes.length).trim() || description : description;
+  const prompt = `${shotPrompt({ description: promptWords, angle: angle?.id ?? '' }, style, chosen as { title: string; text: string }[], inScene, clothes)}\n\n${IMAGES.suffix}`;
   const worst = reserveUsd(m, { width: IMAGES.viewSize.width, height: IMAGES.viewSize.height * Math.max(1, refs.length) });
   const paid = await deps.paid(sql, fid, request, {
     checkText: prompt,
-    // Admins on the admins' pool; everyone else on the storyboard allowance and pool (VOICE.pictures, Nate 2026-11-23).
-    spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, pool: isAdmin(fid) ? ('admin' as const) : ('storyboard' as const) },
+    // Admins and the testers on the admins' pool (voiceInsider); everyone else on the storyboard allowance and pool
+    // (VOICE.pictures, Nate 2026-11-23).
+    spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, pool: voiceInsider(fid) ? ('admin' as const) : ('storyboard' as const) },
     // A closed model's maker (OpenAI, Google): a refusal by its own check names it (branch refusal-reasons, owner
     // 2026-11-18; wording reread by the owner 2026-11-22).
     ...(m.open ? {} : { maker: m.maker }),
@@ -231,6 +288,9 @@ export async function makeShotPicture(sql: Sql, fid: number, request: Request, r
       request: gd?.request ? { text: gd.request.text, id: gd.request.id, madeAt: gd.request.madeAt } : null,
       drafted,
       sent: { prompt: description, references: references.map((r) => ({ role: r.role, ref: r.shotKey ?? r.versionId ?? '' })) },
+      asked: askedRefs ?? undefined,
+      siteAdded,
+      siteRemoved,
     }),
     // The scene this picture belongs to (a shot in the scene), the camera and who set it, and whether it is an insert.
     ...(sceneShot ? { setting: { text: description, by: `written by FID ${fid}` } } : {}),

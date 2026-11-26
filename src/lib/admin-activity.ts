@@ -192,24 +192,27 @@ async function publicLists(tx: Sql, maker: number | null, here: Set<string>, byl
   return lists;
 }
 
-/** Each base (CHALLENGE.bases), with how many direct remixes it has and the newest ten. */
+/**
+ * Each base (CHALLENGE.bases), with how many direct remixes it has and the newest ten. A base is named by its element id
+ * or one version's id (the committed ones are version ids; 2026-11-26: they were looked up as element ids, so none showed).
+ */
 async function baseLists(tx: Sql): Promise<PublicList[]> {
   const ids = [...new Set(CHALLENGE.characters.flatMap((c) => basesOf(c)))];
   if (!ids.length) return [{ id: 'bases', title: 'Direct remixes of a base (no bases set yet)', rows: [] }];
   const out: PublicList[] = [];
   for (const id of ids) {
-    const [b] = await tx<{ version_id: string; title: string; entity: string; by_fid: string; by_name: string | null; role: string | null; created_at: string; n: number }[]>`
-      select v.id::text as version_id, coalesce(v.body->>'title', '') as title, en.name as entity, e.created_by_fid::text as by_fid, v.body->>'by_name' as by_name, v.body->>'role' as role, v.created_at,
+    const [b] = await tx<{ element_id: string; version_id: string; title: string; entity: string; by_fid: string; by_name: string | null; role: string | null; created_at: string; n: number }[]>`
+      select e.id::text as element_id, v.id::text as version_id, coalesce(v.body->>'title', '') as title, en.name as entity, e.created_by_fid::text as by_fid, v.body->>'by_name' as by_name, v.body->>'role' as role, v.created_at,
         (select count(distinct fv.element_id)::int from studio.links l join studio.element_versions fv on fv.id = l.from_version_id and fv.version_no = 1 join studio.element_versions tv on tv.id = l.to_version_id join studio.elements fe on fe.id = fv.element_id
           where l.kind = 'remixed_from' and tv.element_id = e.id and fe.status = 'published') as n
       from studio.elements e join studio.entities en on en.id = e.entity_id
       join lateral (select * from studio.element_versions v where v.element_id = e.id order by v.version_no desc limit 1) v on true
-      where e.id = ${id} and e.status = 'published'`;
+      where (e.id::text = ${id} or e.id = (select x.element_id from studio.element_versions x where x.id::text = ${id})) and e.status = 'published'`;
     if (!b) continue;
     const remixes = await tx<{ version_id: string; title: string; by_fid: string; by_name: string | null; created_at: string }[]>`
       select fv.id::text as version_id, coalesce(fv.body->>'title', '') as title, fe.created_by_fid::text as by_fid, fv.body->>'by_name' as by_name, fv.created_at
       from studio.links l join studio.element_versions fv on fv.id = l.from_version_id and fv.version_no = 1 join studio.element_versions tv on tv.id = l.to_version_id join studio.elements fe on fe.id = fv.element_id
-      where l.kind = 'remixed_from' and tv.element_id = ${id} and fe.status = 'published'
+      where l.kind = 'remixed_from' and tv.element_id = ${b.element_id}::uuid and fe.status = 'published'
       order by fv.created_at desc limit 10`;
     out.push({
       id: `base-${id}`, title: `Direct remixes of a base: ${b.title || b.entity}, by ${designByline(b.by_name, Number(b.by_fid), b.role)} (${b.n})`,

@@ -4,7 +4,7 @@ import { VOICE } from '../config';
 import type { Timeline } from './board';
 import { checkSpeech, type HeardWord } from './match';
 import { speechById } from './speech';
-import { refusal, reserve } from './costs';
+import { READINGS_FUNDED, refusal, reserve } from './costs';
 
 /**
  * A ready-made reading's word timings (Nate, 2026-11-21: "word timings for a reading … one transcription of the existing
@@ -59,11 +59,11 @@ export async function timeReading(sql: Sql, fid: number, draftId: string, deps: 
   const audio = await sql`select storage_key as key, bytes, seconds::float8 as seconds from studio.voice_draft_audio where draft_id = ${draftId} order by n limit 1`;
   if (!audio[0]) return { status: 404, json: { error: 'The reading has no audio' } };
   const est = readingEstimate(audio as unknown as { bytes: number; seconds: number | null }[]);
-  const no = await refusal(sql, fid, est.credits, false);
+  const no = await refusal(sql, fid, est.credits, false, READINGS_FUNDED);
   if (no) return { status: 429, json: { error: no } };
   const bytes = await deps.getAudio(audio[0].key as string);
   if (!bytes) return { status: 503, json: { error: 'The reading could not be read. Try again in a moment.' } };
-  const settle = await reserve(sql, fid, VOICE.models.transcribe, est.credits, false);
+  const settle = await reserve(sql, fid, VOICE.models.transcribe, est.credits, false, READINGS_FUNDED);
   let heard: Awaited<ReturnType<TimingDeps['transcribe']>>;
   try {
     heard = await deps.transcribe(bytes, speech.names);
@@ -92,4 +92,19 @@ export async function timeReading(sql: Sql, fid: number, draftId: string, deps: 
     values (${draftId}, ${fid}, ${VOICE.models.transcribe}, ${sql.json(timeline as unknown as postgres.JSONValue)}, ${sql.json(check)}, ${heard.credits}, ${transcriptDeleted})
     on conflict (draft_id) do nothing`;
   return { status: 200, json: { ok: true, credits: heard.credits, estimateCredits: est.credits, matched: check.matched, sentences: check.sentences, transcriptDeleted } };
+}
+
+/**
+ * No button (Nate, 2026-11-24: ""Time this reading" goes: a ready-made reading is timed when it's made, and one made
+ * before this is timed when first opened, with no button, from the admins' pool"): the reading route times a new
+ * reading right after keeping it, and the board route times an older one on its first open. Either way the call is
+ * paid from READINGS_FUNDED (the admins' pool), whoever set it off. Real deps unless given (the tests pass the stub's).
+ */
+export async function timeReadingNow(sql: Sql, fid: number, draftId: string, deps?: TimingDeps): Promise<Result> {
+  if (!deps) {
+    const { deleteTranscript, speechToText } = await import('./elevenlabs');
+    const { getAudio } = await import('./store');
+    deps = { getAudio, transcribe: (audio, keyterms) => speechToText(audio, keyterms), deleteTranscript, sleep: (ms) => new Promise((s) => setTimeout(s, ms)) };
+  }
+  return timeReading(sql, fid, draftId, deps);
 }

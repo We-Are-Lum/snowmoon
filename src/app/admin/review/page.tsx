@@ -19,6 +19,10 @@ export default function AdminReviewIndex() {
       <p className="you-kicker label">Admin</p>
       <h1 className="you-title">Review</h1>
       <p className="you-lede">Every image each moment or word can show, with Hide and Pick. For admins; the pages say so to anyone else.</p>
+      {/* Published storyboards' reports and hides are in the one moderator queue, with the images' (Nate, 2026-11-23). */}
+      <p className="you-note">
+        Reported images and storyboards: <Link href="/moderate">the moderator queue</Link>.
+      </p>
       <h2 className="you-section">Chapters</h2>
       <ul className="ar-index">
         {chapterNumbers().map((n) => (

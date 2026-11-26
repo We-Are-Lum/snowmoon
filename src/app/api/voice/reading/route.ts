@@ -6,7 +6,8 @@ import { speechById } from '~/lib/voice/speech';
 import { presetRecipe, voiceIdFor } from '~/lib/voice/presets';
 import { elevenLabsBase } from '~/lib/voice/flag';
 import { deleteHistoryItem, textToSpeech } from '~/lib/voice/elevenlabs';
-import { refusal, reserve } from '~/lib/voice/costs';
+import { READINGS_FUNDED, refusal, reserve } from '~/lib/voice/costs';
+import { timeReadingNow } from '~/lib/voice/reading-timing';
 import { latestReading, readingAudio, saveDraft } from '~/lib/voice/drafts';
 import { sha256Hex } from '~/lib/voice/ticket';
 
@@ -44,9 +45,9 @@ export async function POST(request: Request) {
   if (!body.again && (await latestReading(sql, speech.id, preset.id))) return NextResponse.json({ error: 'There is already a reading in this voice' }, { status: 409 });
   const text = speech.paragraphs.join('\n\n');
   const estimatedCredits = Math.ceil(text.length * VOICE.rates.readingCreditsPerChar);
-  const no = await refusal(sql, who.fid, estimatedCredits, false);
+  const no = await refusal(sql, who.fid, estimatedCredits, false, READINGS_FUNDED);
   if (no) return NextResponse.json({ error: no }, { status: 429 });
-  const settle = await reserve(sql, who.fid, VOICE.models.reading, estimatedCredits, false);
+  const settle = await reserve(sql, who.fid, VOICE.models.reading, estimatedCredits, false, READINGS_FUNDED);
   let out: Awaited<ReturnType<typeof textToSpeech>>;
   try {
     out = await textToSpeech(text, voiceId);
@@ -82,5 +83,7 @@ export async function POST(request: Request) {
     madeWith: 'snowmoon.party voice slice 1 (DRAFT)',
   };
   const id = await saveDraft(sql, { fid: who.fid, kind: 'reading', speechId: speech.id, presetId: preset.id, recipe, audio: [{ role: 'reading', sentence: null, replacesStart: null, replacesEnd: null, mp3: out.audio, sha256, seconds: null }] });
-  return NextResponse.json({ id, recipe }, { headers: noStore });
+  // Timed now, with no button (Nate, 2026-11-24), from the admins' pool; if it can't be timed now, its first open does it.
+  const timed = await timeReadingNow(sql, who.fid, id).catch(() => ({ status: 502, json: {} }));
+  return NextResponse.json({ id, recipe, timed: timed.status === 200 }, { headers: noStore });
 }

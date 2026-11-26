@@ -1,8 +1,8 @@
--- NEXT_storyboard_pictures.sql: storyboard pictures' own allowance and pool (Nate, 2026-11-23, branch
--- voice-picture-allowance: "20 storyboard pictures a person a day on any model, a GPT picture counting as 1, in their
--- own allowance, and a $20-a-day storyboard pool"). Not numbered until merge: it takes the next free number then,
--- checked against origin/main and production (main has 0050). NOT APPLIED until Nate applies it; the branch merges only
--- after he says "applied". Drafted by the coding agent (Claude, a closed model by Anthropic); tested in PGlite by the
+-- 0053_storyboard_pictures.sql (was NEXT_storyboard_pictures.sql; numbered at merge, 2026-11-26: the next free number
+-- after main's 0052, and no unmerged branch holds 0053): storyboard pictures' own allowance and pool (Nate, 2026-11-23,
+-- branch voice-picture-allowance: "20 storyboard pictures a person a day on any model, a GPT picture counting as 1, in
+-- their own allowance, and a $20-a-day storyboard pool"). APPLIED on production by Nate on 2026-11-24 (A, B and C at
+-- once: Success; checked read-only on 2026-11-26: image_asks_pool accepts 'storyboard'). Drafted by the coding agent (Claude, a closed model by Anthropic); tested in PGlite by the
 -- agent (npm run test:voice, every migration in order). Requires 0040_remix_model_choice.sql (studio.image_asks.pool)
 -- and 0042_chapter_picture_versions.sql (studio.image_costs.funded with 'admin').
 --

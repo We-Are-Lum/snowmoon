@@ -7,13 +7,22 @@ import { HOST_CHECK_MS, HOST_PROMPT_MS, withTimeout } from '~/lib/host-timeout';
 import { MIC_HELP, micPlace } from '~/lib/mic-help';
 import { loadTake, removeTake, saveTake, type DeviceTake } from '~/lib/voice/device-takes';
 import { VoiceRemove } from '~/components/voice-remove';
+import { CorrectWords } from '~/components/voice-correct-words';
+import { IMPROV_WORDING } from '~/lib/voice/improv-wording';
 import Link from 'next/link';
 import { LearnMore, LearnMoreParts } from '~/components/challenge-learn-more';
 import type { LearnMoreView } from '~/lib/challenge/learn-more-view';
-import { citeHref } from '~/lib/challenge/learn-more';
 import { withReset } from '~/lib/challenge/model-wording';
+import { CONVERT_AGAIN } from '~/lib/voice/convert-again';
+import { EphelionIntro } from '~/components/ephelion-intro';
+import { SignedAudio, errText, joined, mmss, raced, useRecorder, useStepLog, wordCount, type Check, type Converted, type Redo } from '~/components/voice-recorder-core';
 import '../styles/voice.css';
 
+/**
+ * A take over the size limit, said before it is sent. Reread by Nate on 2026-11-24; its size rounded up to one decimal, so
+ * a 4.04 MB take reads "4.1 MB", never "4.0 MB, over the 4 MB".
+ */
+const TOO_LARGE = (bytes: number, max: number) => `This recording is ${(Math.ceil(bytes / 100_000) / 10).toFixed(1)} MB, over the ${Math.round(max / 1_000_000)} MB a take can be, so it can't be sent. Record it again, a little shorter.`;
 const REMOVE_DRAFT = 'Remove this draft? Its audio is deleted and it can’t be brought back.';
 
 /**
@@ -27,216 +36,21 @@ const REMOVE_DRAFT = 'Remove this draft? Its audio is deleted and it can’t be 
  */
 
 interface Choice { presetId: string; name: string; description: string; candidate: number; generatedVoiceId: string; previewUrl: string; saved: boolean }
-interface Check { n: number; ok: boolean; bySound?: { expected: string; heard: string }[]; missing: string[]; extra: string[]; start: number | null; end: number | null }
 interface Status {
   ready: boolean;
   speech: Speech;
   speeches: Speech[];
   choices: Choice[];
-  consent: { version: string; line: string; title: string; text: string[]; sha256: string; agreed: boolean };
+  consent: { version: string; reread: string | null; line: string; title: string; text: string[]; sha256: string; agreed: boolean };
   models: { convert: string; transcribe: string; reading: string; design: string; provider: string };
   limits: { maxTakeSeconds: number; maxSentenceSeconds: number; maxTakeBytes: number; creditsPerMinute: number; readingCreditsPerChar: number; transcribeCreditsPerSecond: number };
   today: { funded: string; credits: number; capCredits: number; conversionsLeft: number } | null;
-  drafts: { id: string; kind: string; speechId: string; presetId: string; madeAt: string; publishedAt: string | null; recipe: Record<string, unknown>; audio: { n: number; role: string; sentence: number | null }[] }[];
+  drafts: { id: string; label: string | null; improvised: boolean; sentences: { n: number; text: string }[] | null; kind: string; speechId: string; presetId: string; madeAt: string; publishedAt: string | null; recipe: Record<string, unknown>; audio: { n: number; role: string; sentence: number | null }[] }[];
   readings: { speechId: string; presetId: string; id: string; candidate: number | null; madeAt: string }[];
 }
-interface Speech { id: string; title: string; character: string; source: { kind: string; block?: string }; label: { kind: 'book'; text: string; block: string } | { kind: 'invented'; text: string; writers: string[] }; version: number; standIn: boolean; paragraphs: string[]; sentences: { n: number; text: string }[]; characters: number; names: string[]; aiHelp: boolean | null; credit: string | null }
-interface Converted { blob: Blob; url: string; ticket: string; check?: string; checks?: Check[]; seconds: number; draftId?: string }
-interface Redo extends Converted { n: number }
+interface Speech { id: string; maxSeconds: number; title: string; character: string; source: { kind: string; block?: string }; label: { kind: 'book'; text: string; block: string } | { kind: 'invented'; text: string; writers: string[] }; version: number; standIn: boolean; paragraphs: string[]; sentences: { n: number; text: string }[]; characters: number; names: string[]; aiHelp: boolean | null; credit: string | null }
 
-const TYPES = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/webm', 'audio/mp4;codecs=mp4a.40.2', 'audio/ogg;codecs=opus'];
-const pickType = () => (typeof MediaRecorder === 'undefined' ? '' : (TYPES.find((t) => MediaRecorder.isTypeSupported(t)) ?? ''));
-const wordCount = (s: string) => s.split(/\s+/).filter(Boolean).length;
-const mmss = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
-
-/** A small recorder: the microphone (asked of the Farcaster app first when it offers it), MediaRecorder, a level. */
-/**
- * A plain step log for troubleshooting (Nate, 2026-11-21: Chrome and the Farcaster app fail where Safari works), shown
- * under the recorder as /admin/mic-test shows its own. Text only: what each step answered, never any audio.
- */
-type Note = (s: string) => void;
-function useStepLog() {
-  const [lines, setLines] = useState<string[]>([]);
-  const t0 = useRef(typeof performance === 'undefined' ? 0 : performance.now());
-  const note: Note = useCallback((s: string) => setLines((l) => [...l.slice(-80), `${((performance.now() - t0.current) / 1000).toFixed(1)}s ${s}`]), []);
-  return { lines, note };
-}
-const errText = (e: unknown) => (e instanceof Error ? `${e.name}: ${e.message}` : String(e));
-const raced = (what: string, r: { ok: boolean; why?: string; error?: string }, ok: string) =>
-  r.ok ? `${what}: ${ok}` : `${what}: ${r.why === 'timeout' ? 'no answer in time (timed out), treated as unknown' : `error (${r.error}), treated as unknown`}`;
-
-function useRecorder(note: Note) {
-  const [state, setState] = useState<'idle' | 'asking' | 'recording'>('idle');
-  const [level, setLevel] = useState(0);
-  const [elapsed, setElapsed] = useState(0);
-  const [error, setError] = useState<string | null>(null);
-  const rec = useRef<MediaRecorder | null>(null);
-  const stream = useRef<MediaStream | null>(null);
-  const started = useRef(0);
-  const done = useRef<((r: { blob: Blob; seconds: number } | null) => void) | null>(null);
-  const timer = useRef<number | null>(null);
-
-  const stopAll = () => {
-    stream.current?.getTracks().forEach((t) => t.stop());
-    stream.current = null;
-    if (timer.current) window.clearInterval(timer.current);
-    timer.current = null;
-  };
-  useEffect(() => stopAll, []);
-
-  const inApp = useRef<boolean | null>(null);
-  const start = async (limitSeconds: number): Promise<{ blob: Blob; seconds: number } | null> => {
-    setError(null);
-    setState('asking');
-    try {
-      // Never block Record on a host check (Nate, 2026-11-21): each is raced (2 s), and no answer is "unknown", treated
-      // as maybe the Farcaster app. There, the app is asked for the microphone when it says it can, or when that's
-      // unknown and the SDK has the action (10 s for its prompt); then getUserMedia either way.
-      note('Record pressed');
-      const app = await withTimeout(inMiniApp(), HOST_CHECK_MS);
-      inApp.current = app.ok ? app.value : null;
-      note(raced('host check: in the Farcaster app?', app, app.ok ? (app.value ? 'yes' : 'no') : ''));
-      if (inApp.current !== false) {
-        const caps = await withTimeout(() => sdk.getCapabilities(), HOST_CHECK_MS);
-        const has = caps.ok ? caps.value.includes('actions.requestCameraAndMicrophoneAccess') : null;
-        note(raced('host check: capabilities', caps, caps.ok ? `answered; microphone action ${has ? 'offered' : 'not offered'}` : ''));
-        if (has === true || (has === null && typeof sdk.actions?.requestCameraAndMicrophoneAccess === 'function')) {
-          note("asking the Farcaster app for the microphone");
-          const asked = await withTimeout(() => sdk.actions.requestCameraAndMicrophoneAccess(), HOST_PROMPT_MS);
-          note(raced("the app's microphone prompt", asked, 'answered'));
-        }
-      }
-      if (!navigator.mediaDevices?.getUserMedia) throw new Error('This browser has no microphone access (no getUserMedia).');
-      note('asking the browser for the microphone (getUserMedia)');
-      const s = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: true } });
-      note(`microphone granted: ${s.getAudioTracks().length} audio track(s)`);
-      stream.current = s;
-      const ac = new AudioContext();
-      const an = ac.createAnalyser();
-      ac.createMediaStreamSource(s).connect(an);
-      const buf = new Uint8Array(an.fftSize);
-      const tick = () => {
-        if (!stream.current) return void ac.close();
-        an.getByteTimeDomainData(buf);
-        let m = 0;
-        for (const v of buf) m = Math.max(m, Math.abs(v - 128));
-        setLevel(m / 128);
-        requestAnimationFrame(tick);
-      };
-      tick();
-      const type = pickType();
-      const supported = typeof MediaRecorder === 'undefined' ? 'none (no MediaRecorder)' : TYPES.filter((t) => MediaRecorder.isTypeSupported(t)).join(', ') || 'none of ours';
-      note(`recording format: asked ${type || '(browser default)'}; supported: ${supported}`);
-      const r = new MediaRecorder(s, type ? { mimeType: type } : undefined);
-      r.onerror = (e) => note(`recorder error: ${errText((e as unknown as { error?: unknown }).error ?? e)}`);
-      const parts: Blob[] = [];
-      r.ondataavailable = (e) => e.data.size && parts.push(e.data);
-      const result = new Promise<{ blob: Blob; seconds: number } | null>((res) => (done.current = res));
-      r.onstop = () => {
-        const seconds = (performance.now() - started.current) / 1000;
-        stopAll();
-        setState('idle');
-        const blob = new Blob(parts, { type: r.mimeType || type || 'audio/webm' });
-        parts.length = 0;
-        note(`recording stopped: ${seconds.toFixed(1)} s, ${blob.size} bytes, ${blob.type || 'no type'}`);
-        done.current?.(blob.size ? { blob, seconds } : null);
-      };
-      rec.current = r;
-      started.current = performance.now();
-      setElapsed(0);
-      timer.current = window.setInterval(() => {
-        const t = (performance.now() - started.current) / 1000;
-        setElapsed(t);
-        if (t >= limitSeconds && r.state === 'recording') r.stop();
-      }, 200);
-      r.start(1000);
-      note(`recording started (${r.mimeType || 'no type reported'})`);
-      setState('recording');
-      return result;
-    } catch (e) {
-      stopAll();
-      setState('idle');
-      note(`microphone or recorder failed: ${errText(e)}`);
-      // Refused: the line for this browser or the app (src/lib/mic-help.ts, reread 2026-11-21).
-      setError(e instanceof Error && /denied|NotAllowed/i.test(`${e.name} ${e.message}`) ? MIC_HELP[micPlace(navigator.userAgent, inApp.current === true)] : 'The microphone could not be opened here.');
-      return null;
-    }
-  };
-  const stop = () => rec.current?.state === 'recording' && rec.current.stop();
-  return { state, level, elapsed, error, start, stop };
-}
-
-/** Play the whole take with redone sentences spliced in: decoded and joined in the browser, played as a WAV. */
-async function joined(main: Blob, redos: Redo[], checks: Check[] | undefined): Promise<string> {
-  const ac = new AudioContext();
-  try {
-    const dec = async (b: Blob) => ac.decodeAudioData(await b.arrayBuffer());
-    const m = await dec(main);
-    const sr = m.sampleRate;
-    const pieces: Float32Array[] = [];
-    const ch0 = (b: AudioBuffer) => {
-      if (b.numberOfChannels === 1) return b.getChannelData(0);
-      const out = new Float32Array(b.length);
-      for (let c = 0; c < b.numberOfChannels; c++) b.getChannelData(c).forEach((v, i) => (out[i] += v / b.numberOfChannels));
-      return out;
-    };
-    const mainData = ch0(m);
-    let cursor = 0;
-    for (const r of [...redos].sort((a, b) => a.n - b.n)) {
-      const c = checks?.find((x) => x.n === r.n);
-      const start = Math.floor((c?.start ?? cursor / sr) * sr);
-      const end = Math.floor((c?.end ?? c?.start ?? cursor / sr) * sr);
-      if (start < cursor) continue;
-      pieces.push(mainData.subarray(cursor, start));
-      const clip = await dec(r.blob);
-      // Resampled to the take's rate by the browser's decoder when rates differ.
-      pieces.push(ch0(clip));
-      cursor = Math.max(start, end);
-    }
-    pieces.push(mainData.subarray(cursor));
-    const total = pieces.reduce((s, p) => s + p.length, 0);
-    const wav = new DataView(new ArrayBuffer(44 + total * 2));
-    const w = (o: number, s: string) => [...s].forEach((ch, i) => wav.setUint8(o + i, ch.charCodeAt(0)));
-    w(0, 'RIFF'); wav.setUint32(4, 36 + total * 2, true); w(8, 'WAVE'); w(12, 'fmt ');
-    wav.setUint32(16, 16, true); wav.setUint16(20, 1, true); wav.setUint16(22, 1, true); wav.setUint32(24, sr, true);
-    wav.setUint32(28, sr * 2, true); wav.setUint16(32, 2, true); wav.setUint16(34, 16, true); w(36, 'data'); wav.setUint32(40, total * 2, true);
-    let o = 44;
-    for (const p of pieces) for (const v of p) { wav.setInt16(o, Math.max(-1, Math.min(1, v)) * 0x7fff, true); o += 2; }
-    return URL.createObjectURL(new Blob([wav], { type: 'audio/wav' }));
-  } finally {
-    void ac.close();
-  }
-}
-
-/** Audio behind our sign-in (a bearer header, which an <audio> element can't send): fetched on demand, played from memory. */
-function SignedAudio({ path, label }: { path: string; label: string }) {
-  const [url, setUrl] = useState<string | null>(null);
-  const [failed, setFailed] = useState(false);
-  useEffect(() => () => void (url && URL.revokeObjectURL(url)), [url]);
-  if (url) return <audio controls autoPlay src={url} className="vr-audio" />;
-  return (
-    <button
-      type="button"
-      className="vr-btn vr-quiet vr-small-btn"
-      onClick={async () => {
-        const r = await authFetch(path).catch(() => null);
-        if (r?.ok) setUrl(URL.createObjectURL(await r.blob()));
-        else setFailed(true);
-      }}
-    >
-      {failed ? `${label}: not available` : `▶ ${label}`}
-    </button>
-  );
-}
-
-/** A citation, linked to its block in the reader (as the Learn more texts link theirs). */
-const Cite = ({ b }: { b: string }) => (
-  <Link className="chc-cite" href={citeHref(b)} prefetch={false}>
-    {b}
-  </Link>
-);
-
-export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; learn?: LearnMoreView }) {
+export function VoiceRecord({ fallback, signedOut, learn }: { fallback: React.ReactNode; signedOut?: React.ReactNode; learn?: LearnMoreView }) {
   const auth = useAuth();
   // Who may use it is the server's to say (src/lib/voice/flag.ts): its routes answer 404 to anyone the switch doesn't
   // let in, and the page then shows the site's usual not-found. So no admin list is checked here (P5b).
@@ -253,6 +67,11 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
   const [onDevice, setOnDevice] = useState<DeviceTake | null>(null);
   const [deviceNote, setDeviceNote] = useState<string | null>(null);
   const [agree, setAgree] = useState(false);
+  // Fix 7 (Nate, 2026-11-24: "it let me click convert again. Wasting a conversion"): one tap converts once (a guard that
+  // doesn't wait for a re-render), and a recording already converted offers "Convert again" only when asked for.
+  const converting = useRef(false);
+  const [convertedFor, setConvertedFor] = useState<string | null>(null);
+  const [again, setAgain] = useState<'ask' | 'yes' | 'kept'>('ask');
   const [converted, setConverted] = useState<Converted | null>(null);
   const [redos, setRedos] = useState<Redo[]>([]);
   const [redoing, setRedoing] = useState<number | null>(null);
@@ -351,6 +170,9 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
     li?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }, [current]);
 
+  // Signed out (Nate, 2026-11-24): one line and the sign-in, so a tester who opens the link first knows what to do. A
+  // signed-in person the switch doesn't let in still gets the site's usual not-found.
+  if (auth.kind === 'signed-out' && signedOut) return <>{signedOut}</>;
   if (!admin || status === 'none') return <>{fallback}</>;
   if (!s) return <main className="vr"><p className="vr-note">Loading…</p></main>;
 
@@ -390,12 +212,15 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
 
   async function recordWhole() {
     dropTake();
+    // A new take is a fresh recording: never sent as "Convert again" (Nate's review, 2026-11-24).
+    setAgain('ask');
     setConverted(null);
     setRedos([]);
     setAccepted(null);
     setPlayUrl(null);
     setMessage(null);
-    const out = await rec.start(s!.limits.maxTakeSeconds);
+    // At most 2 minutes a take (Nate, 2026-11-24; the book speech 3): the countdown stops the recording at 0.
+    const out = await rec.start(s!.speech.maxSeconds ?? s!.limits.maxTakeSeconds);
     if (out) {
       takeBlob.current = out.blob;
       setTake({ seconds: out.seconds, url: URL.createObjectURL(out.blob), speechId: s!.speech.id });
@@ -409,7 +234,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
   }
 
   /** Send one recording to be converted (a whole take stays on the device whatever the answer). */
-  async function convert(blob: Blob, seconds: number, sentence: number | null, speechOfTake = s!.speech.id): Promise<Converted | null> {
+  async function convert(blob: Blob, seconds: number, sentence: number | null, speechOfTake = s!.speech.id, convertAgain = false): Promise<Converted | null> {
     const form = new FormData();
     form.set('take', blob, 'take');
     form.set('speechId', speechOfTake);
@@ -418,11 +243,15 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
     form.set('seconds', String(seconds));
     form.set('agree', s!.consent.sha256);
     if (sentence !== null) form.set('sentence', String(sentence));
+    // Fix 7: only after the person pressed "Convert again" on a recording already converted; the server refuses otherwise.
+    if (convertAgain) form.set('again', '1');
     log.note(`convert: sending ${blob.size} bytes (${blob.type || 'no type'}), ${seconds.toFixed(1)} s${sentence !== null ? `, sentence ${sentence + 1}` : ''}`);
     const r = await authFetch('/api/voice/convert', { method: 'POST', body: form }).catch((e) => (log.note(`convert: the request failed (${errText(e)})`), null));
     if (!r?.ok) {
       const err = ((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error;
       if (r) log.note(`convert: HTTP ${r.status}${err ? `: ${err}` : ''}`);
+      // Converted already (another tab or device): reload the drafts, so the page offers "Convert again" instead.
+      if (r?.status === 409) void load();
       setMessage(err ?? (sentence === null ? 'The conversion failed. Your recording is still on this device: tick the box and convert it again.' : 'The conversion failed. Your recording was not kept.'));
       return null;
     }
@@ -501,19 +330,29 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
     if (!blob || !take || !picked) return;
     // Never another speech's take (the take is shown and sent with its own speech only).
     if (take.speechId !== s!.speech.id) return setMessage('That recording is of another speech: pick that speech to convert it.');
+    // Too large to send: said here, before anything is sent (the server refuses it too).
+    if (blob.size > s!.limits.maxTakeBytes) return setMessage(TOO_LARGE(blob.size, s!.limits.maxTakeBytes));
+    if (converting.current) return;
+    converting.current = true;
     setBusy('convert');
     setMessage(null);
     const seconds = take.seconds;
     // Sent only now, when Convert is pressed; the take stays on this device until it is removed.
     setAgree(false);
-    const c = await convert(blob, seconds, null, take.speechId);
-    setBusy(null);
-    if (c) {
-      setConverted(c);
-      setPlayUrl(c.url);
-      // Already kept as a draft by the server.
-      setAccepted(c.draftId ?? null);
-      void load();
+    try {
+      const c = await convert(blob, seconds, null, take.speechId, again === 'yes');
+      if (c) {
+        setConverted(c);
+        setPlayUrl(c.url);
+        // Already kept as a draft by the server.
+        setAccepted(c.draftId ?? null);
+        setConvertedFor(take.url);
+        setAgain('ask');
+        void load();
+      }
+    } finally {
+      converting.current = false;
+      setBusy(null);
     }
   }
 
@@ -595,12 +434,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
     <main className="vr">
       {/* The top of the page (Nate, 2026-11-22; title, intro and the picker's lines reread word for word). */}
       <h1>The Ephelion challenge</h1>
-      <div className="vr-intro">
-        <p>
-          Lord Ephelion is the Arctic Empire&apos;s consul to Veridia (<Cite b="c3-b5" />). In the book his messages reach Veridians everywhere: on a poster in a tunnel (<Cite b="c3-b4" />), in a live debate (<Cite b="c8-b17" />), on a restaurant screen that cuts into a Helisport game (<Cite b="c13-b62" />). As one character puts it, &quot;Ephelion&apos;s goal is to inspire people inside Veridia to join the Arctic cause.&quot; (<Cite b="c21-b76" />)
-        </p>
-        <p>Give one of his speeches a voice: perform it yourself, or start from a ready-made reading, then storyboard it.</p>
-      </div>
+      <EphelionIntro />
       {learn && (
         <LearnMore title={learn.title}>
           <LearnMoreParts learn={learn} />
@@ -616,7 +450,8 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
 
       {!s.consent.agreed && (
         <section className="vr-card vr-consent" aria-labelledby="vr-consent-h">
-          <p className="vr-kicker">Draft wording · {s.consent.version}</p>
+          {/* "Draft wording" only while the version shown has no reread on record (Nate, 2026-11-25). */}
+          <p className="vr-kicker">{s.consent.reread ? s.consent.version : `Draft wording · ${s.consent.version}`}</p>
           <h2 id="vr-consent-h">{s.consent.title}</h2>
           <ol>
             {s.consent.text.map((t) => (
@@ -700,15 +535,16 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
 
           {picked && (
             <section className="vr-card" aria-labelledby="vr-rec-h">
-              <h2 id="vr-rec-h">2. Record the whole speech</h2>
+              <h2 id="vr-rec-h">2. Record your take</h2>
               {webClient ? (
                 <p className="vr-warn" role="note">
-                  Recording doesn&rsquo;t work in Farcaster on the web. Open this page in the Farcaster app on your phone, or in a browser at snowmoon.party/storyboard/record.
+                  Recording doesn&rsquo;t work in Farcaster on the web. Open this page in the Farcaster app on your phone, or in a browser at snowmoon.party/ephelion.
                 </p>
               ) : (
                 <>
+                  <p className="vr-note">{IMPROV_WORDING.intro(mmss(s.speech.maxSeconds ?? s.limits.maxTakeSeconds))}</p>
                   <p className="vr-note">
-                    About {totalWords} words, {mmss(estMinutes * 60)} at your pace. The words scroll while you read; your recording stays on this device until you remove it or record again, and is sent to be converted only when you press Convert.
+                    About {totalWords} words, {mmss(estMinutes * 60)} at your pace word for word. The words scroll while you read; your recording stays on this device until you remove it or record again, and is sent to be converted only when you press Convert.
                   </p>
                   <label className="vr-pace">
                     Pace: {wpm} words a minute
@@ -728,7 +564,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
                       </button>
                     ) : (
                       <button type="button" className="vr-btn vr-stop" onClick={rec.stop}>
-                        Stop · {mmss(rec.elapsed)}
+                        Stop · {IMPROV_WORDING.left(mmss(Math.max(0, (s.speech.maxSeconds ?? s.limits.maxTakeSeconds) - rec.elapsed)))}
                       </button>
                     )}
                     {recording && redoing === null && <span className="vr-level" aria-hidden><span style={{ width: `${Math.min(100, rec.level * 300)}%` }} /></span>}
@@ -743,24 +579,39 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
                     <div className="vr-take">
                       <p className="vr-note">
                         Your recording, {mmss(take.seconds)}.{' '}
-                        {onDevice ? <span className="vr-ok">Saved on this device</span> : <>Only in this tab.</>} It stays here until you remove it or record again, and is sent to be converted only when you press Convert.
+                        {onDevice ? <span className="vr-ok">Saved on this device.</span> : <>Only in this tab.</>} It stays here until you remove it or record again, and is sent to be converted only when you press Convert.
                       </p>
                       {deviceNote && <p className="vr-warn">{deviceNote}</p>}
                       {keptFromTake && <p className="vr-ok">This recording was converted and kept as your draft ({new Date(keptFromTake.madeAt).toLocaleString()}). It is in your drafts below.</p>}
                       <audio controls src={take.url} className="vr-audio" />
-                      <label className="vr-tick">
-                        <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
-                        <span>Send this recording to ElevenLabs, once, to convert it into {picked.name}. ElevenLabs may keep it under its own privacy policy, in the United States; we keep nothing of it.</span>
-                      </label>
+                      {/* Converted already (fix 7): the kept draft, and converting again only if they ask for it. */}
+                      {(keptFromTake || convertedFor === take.url) && again !== 'yes' ? (
+                        again === 'kept' ? (
+                          <p className="vr-small" data-slot="convert-again">Kept. Your draft is below.</p>
+                        ) : (
+                          <div className="vr-confirm" role="group" aria-label={CONVERT_AGAIN.line} data-slot="convert-again">
+                            <span className="vr-confirm-q">{CONVERT_AGAIN.line}</span>{' '}
+                            <button type="button" className="vr-btn vr-small-btn" disabled={busy !== null || (s.today?.conversionsLeft ?? 1) <= 0} onClick={() => setAgain('yes')}>{CONVERT_AGAIN.again}</button>{' '}
+                            <button type="button" className="vr-btn vr-quiet vr-small-btn" disabled={busy !== null} onClick={() => setAgain('kept')}>{CONVERT_AGAIN.keep}</button>
+                          </div>
+                        )
+                      ) : (
+                        <label className="vr-tick">
+                          <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
+                          <span>Send this recording to ElevenLabs, once, to convert it into {picked.name}. ElevenLabs may keep it under its own privacy policy, in the United States; we keep nothing of it.</span>
+                        </label>
+                      )}
                       <div className="vr-row">
-                        <button type="button" className="vr-btn" onClick={convertWhole} disabled={!agree || !s.ready || busy !== null}>
-                          {busy === 'convert' ? 'Converting…' : `Convert (≈ ${credits(take.seconds).toLocaleString()} credits)`}
-                        </button>
+                        {(!(keptFromTake || convertedFor === take.url) || again === 'yes') && (
+                          <button type="button" className="vr-btn" onClick={convertWhole} disabled={!agree || !s.ready || busy !== null}>
+                            {busy === 'convert' ? 'Converting…' : `${again === 'yes' ? 'Convert again' : 'Convert'} (≈ ${credits(take.seconds).toLocaleString()} credits)`}
+                          </button>
+                        )}
                         <button type="button" className="vr-btn vr-quiet" onClick={() => void removeHere()} disabled={busy !== null}>
                           Remove
                         </button>
                       </div>
-                      {s.today && <p className="vr-small">Today: {s.today.credits.toLocaleString()} of {s.today.capCredits.toLocaleString()} credits used; {s.today.conversionsLeft} whole takes left for you.</p>}
+                      {s.today && <p className="vr-small">Today: {s.today.credits.toLocaleString()} of {s.today.capCredits.toLocaleString()} credits used; {s.today.conversionsLeft} whole {s.today.conversionsLeft === 1 ? 'take' : 'takes'} left for you.</p>}
                     </div>
                   )}
                 </>
@@ -777,11 +628,12 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
               {playUrl && <audio controls src={playUrl} className="vr-audio" />}
               {checks ? (
                 <>
-                  <p className={stillWrong.length ? 'vr-warn' : 'vr-ok'}>
-                    {stillWrong.length
-                      ? `${stillWrong.length} of ${checks.length} sentences don't match the speech word for word.`
-                      : `All ${checks.length} sentences match the speech word for word.`}
+                  <p className="vr-ok" data-slot="take-label">
+                    {stillWrong.length ? IMPROV_WORDING.improvisedLabel(s.speech.title, s.speech.version) : IMPROV_WORDING.wordForWordLabel}
                   </p>
+                  {stillWrong.length > 0 && <p className="vr-note">{IMPROV_WORDING.improvisedNote}</p>}
+                  <details className="vr-word-check" open={stillWrong.length > 0 && stillWrong.length <= Math.ceil(checks.length / 2)}>
+                  <summary>{stillWrong.length ? `Meant it word for word? ${stillWrong.length} of ${checks.length} sentences don't match the speech: redo them.` : `All ${checks.length} sentences match the speech word for word.`}</summary>
                   <ol className="vr-checks">
                     {checks.map((c) => {
                       const redo = redos.find((r) => r.n === c.n);
@@ -830,6 +682,7 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
                       );
                     })}
                   </ol>
+                  </details>
                 </>
               ) : busy === 'convert' || busy === 'check' ? (
                 <p className="vr-note">Checking the words…</p>
@@ -863,7 +716,9 @@ export function VoiceRecord({ fallback, learn }: { fallback: React.ReactNode; le
                   <li key={d.id}>
                     <p>
                       {d.kind === 'reading' ? 'Ready-made reading' : 'Your performance'} · {String((d.recipe.preset as { name?: string })?.name ?? d.presetId)} · {new Date(d.madeAt).toLocaleString()}
+                      {d.label && <> · <span className="vr-tag" data-slot="draft-label">{d.label}</span></>}
                     </p>
+                    {d.improvised && d.sentences && <CorrectWords draftId={d.id} sentences={d.sentences} busy={busy !== null} onSaved={(m) => (setMessage(m), void load())} />}
                     {d.audio.map((a) => (
                       <div key={a.n} className="vr-draft-audio">
                         <span className="vr-small">{a.role === 'redo' ? `Sentence ${Number(a.sentence) + 1}, redone` : a.role === 'take' ? 'Whole take' : 'Reading'}</span>

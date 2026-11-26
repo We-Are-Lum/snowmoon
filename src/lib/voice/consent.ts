@@ -5,8 +5,8 @@ import type postgres from 'postgres';
 import { wordingSha256, type ConsentWording } from '../consent';
 
 /**
- * The own-voice consent (config/consent-own-voice.json). The voice pages show `own-voice-v3`, the file's `current`
- * (reread by Nate, 2026-11-22); v2 and v1 are retired and used by nothing (P1i). Agreeing once to the screen is recorded in
+ * The own-voice consent (config/consent-own-voice.json). The voice pages show the file's `current` (own-voice-v4,
+ * reread by Nate, 2026-11-24); earlier versions are retired and used by nothing (P1i). Agreeing once to the screen is recorded in
  * studio.contributor_consents (kind 'voice_recording', the wording's sha256); each conversion then needs its own tick
  * ("only if you agree for that recording"), carried by the convert request and kept in the accepted draft's recipe.
  */
@@ -15,11 +15,20 @@ export function voiceConsentWording(): ConsentWording {
   const f = JSON.parse(readFileSync(path.join(process.cwd(), 'config', 'consent-own-voice.json'), 'utf8')) as {
     draft?: string;
     current: string;
+    reread?: Record<string, string>;
     versions: Record<string, { line: string; title: string; text: string[] }>;
   };
   const v = f.draft ?? f.current;
   const w = f.versions[v];
   return { version: v, ...w, sha256: wordingSha256(w) };
+}
+/**
+ * When Nate reread the version shown (the file's `reread`), or null: the page shows "Draft wording" over the consent
+ * only while this is null (Nate, 2026-11-25). Not part of the wording's sha256, so recording a reread asks no one again.
+ */
+export function voiceConsentReread(): string | null {
+  const f = JSON.parse(readFileSync(path.join(process.cwd(), 'config', 'consent-own-voice.json'), 'utf8')) as { draft?: string; current: string; reread?: Record<string, string> };
+  return f.reread?.[f.draft ?? f.current] ?? null;
 }
 export async function hasVoiceConsent(sql: postgres.Sql, fid: number): Promise<boolean> {
   const [r] = await sql`select 1 from studio.contributor_consents where fid = ${fid} and kind = ${OWN_VOICE} and consent_text_sha256 = ${voiceConsentWording().sha256} limit 1`;

@@ -1,4 +1,5 @@
 import 'server-only';
+import { improvisedCredit, isImprovised, takeLabel, type Spoken } from './spoken';
 import { createHash, randomUUID } from 'node:crypto';
 import type postgres from 'postgres';
 import { VOICE } from '../config';
@@ -6,6 +7,7 @@ import { boardSource, keptPictures, latestBoard, madeWithScene } from './board-s
 import { CLOSING, closingCredits, publishProblems, type Closing, type PictureModel } from './closing';
 import { closingCard } from './closing-card';
 import { publicUrl } from './public-store';
+import { hiddenKeyFor } from './store';
 import { oldSceneShots, SCENE, type Shot } from './board';
 
 /**
@@ -47,6 +49,7 @@ interface DraftRecipe {
   speech?: { id: string; title: string; version?: number; credit?: string | null; aiHelp?: boolean | null; source?: { kind: string; block?: string; by?: string }; label?: { kind?: string; writers?: string[] } };
   takes?: unknown[];
   check?: { sentences: number; matched: number; unmatched: number[]; bySound?: unknown[] };
+  spoken?: Spoken | null;
 }
 const pictureModel = (recipe: Record<string, unknown>): PictureModel => {
   const m = (recipe.model ?? {}) as { id?: string; name?: string; maker?: string; open?: boolean };
@@ -77,7 +80,8 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
   const problems = publishProblems({
     // A reading is ElevenLabs reading the speech's own written words, so the word-for-word rule is a performance's; a
     // reading's word check (its timings) is kept in the recipe instead.
-    unmatched: reading ? [] : (r.check?.unmatched ?? []),
+    // An improvised take (Nate, 2026-11-24) isn't held to the speech's words: the word check only labels it.
+    unmatched: reading || isImprovised(r) ? [] : (r.check?.unmatched ?? []),
     sentences: reading ? (draft.timing?.check.sentences ?? 0) : (r.check?.sentences ?? 0),
     shots,
     keptShots: kept,
@@ -99,6 +103,7 @@ export async function publishPreview(sql: Sql, fid: number, draftId: string, dep
       ...(invented ? { invented: { version: r.speech?.version ?? null, credit: r.speech?.credit ?? r.speech?.label?.writers?.[0] ?? null } } : {}),
     },
     performer,
+    ...(isImprovised(r) ? { improvised: improvisedCredit(performer, { title: r.speech?.title ?? 'A speech', credit: invented ? (r.speech?.credit ?? null) : null, block: r.speech?.source?.kind === 'book' ? (r.speech.source.block ?? null) : null }) } : {}),
     preset: r.preset?.name ?? 'a preset voice',
     voiceModel: elevenLabs(r.model),
     transcribeModel: elevenLabs(reading ? (draft.timing?.model ?? VOICE.models.transcribe) : (r.transcribeModel ?? VOICE.models.transcribe)),
@@ -164,6 +169,10 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
       performer: named ? { fid, name: performer } : { named: false },
       storyboardBy: named ? { fid, name: performer } : { named: false },
       speech: p.recipe.speech,
+      // The spoken words (Nate, 2026-11-24): word for word, or improvised with the performer's words (as transcribed and
+      // as they corrected them, with each correction), credited to them.
+      spoken: p.recipe.spoken ?? { kind: 'word-for-word' },
+      take: { label: takeLabel(p.recipe) },
       voice:
         p.draft.kind === 'reading'
           ? {
@@ -195,8 +204,8 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
       scene: p.scenePicture ? { setting: p.board.scene!.setting, settingBy: 'the storyboard’s maker', picture: strip(pictureRecipe(SCENE.key, p.scenePicture.sha256)) } : null,
       shots: p.board.shots.map((s, i) => ({ n: i + 1, key: s.key, start: s.start, end: s.end, description: s.description, angle: s.angle, angleBy: s.angleBy ?? 'person', insert: s.insert === true, styleId: s.styleId, characterIds: s.characterIds, picture: strip(pictureRecipe(s.key, s.kept!)) })),
       closing: { description: p.board.closing!.description, styleId: p.board.closing!.styleId, background: strip(pictureRecipe(CLOSING.key, bg.sha256)), credits: p.credits, cardSha256: cardSha, seconds: CLOSING.seconds, text: 'set by the site from this recipe and drawn over the picture' },
-      people: [...(p.draft.kind === 'reading' ? [] : ['the performance']), ...(p.scenePicture ? ['the scene’s setting', 'which shots are inserts'] : []), 'each shot’s description and camera', 'the cuts (moved from a rule’s proposal)', 'the closing card’s look', 'which pictures were kept'],
-      ai: p.draft.kind === 'reading' ? ['the reading (text-to-speech)', 'the word timings (transcription)', 'the pictures'] : ['the voice conversion', 'the word check (transcription)', 'the pictures'],
+      people: [...(p.draft.kind === 'reading' ? [] : isImprovised(p.recipe) ? ['the performance', 'the spoken words (improvised), and any corrections to their transcript'] : ['the performance']), ...(p.scenePicture ? ['the scene’s setting', 'which shots are inserts'] : []), 'each shot’s description and camera', 'the cuts (moved from a rule’s proposal)', 'the closing card’s look', 'which pictures were kept'],
+      ai: p.draft.kind === 'reading' ? ['the reading (text-to-speech)', 'the word timings (transcription)', 'the pictures'] : isImprovised(p.recipe) ? ['the voice conversion', 'the transcript of the spoken words (transcription)', 'the pictures'] : ['the voice conversion', 'the word check (transcription)', 'the pictures'],
       noAiVideo: true,
     };
     await sql`select studio.publish_voice_board(${id}::uuid, ${p.draft.id}::uuid, ${fid}::bigint, ${p.board.version}::int, ${named}, ${sql.json(recipe as unknown as postgres.JSONValue)}, ${sql.json(files as unknown as postgres.JSONValue)})`;
@@ -209,22 +218,28 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
   }
 }
 
-export async function takeDown(sql: Sql, fid: number, id: string, deps: Pick<PublishDeps, 'deletePublic'>): Promise<Result> {
+export async function takeDown(sql: Sql, fid: number, id: string, deps: Pick<PublishDeps, 'deletePublic'> & { deletePrivate?: (key: string) => Promise<void> }): Promise<Result> {
   if (!/^[0-9a-f-]{36}$/.test(id)) return { status: 404, json: { error: 'Not found' } };
   const keys = (await sql`select k from studio.take_down_voice_publication(${id}::uuid, ${fid}::bigint) as k`).map((r) => r.k as string);
   if (!keys.length) return { status: 404, json: { error: 'Not found' } };
   const failed: string[] = [];
   for (const k of keys) await deps.deletePublic(k).catch(() => failed.push(k));
+  // A hidden storyboard's files are kept privately while it is hidden (moderation): its maker's take-down deletes those too.
+  if (deps.deletePrivate) for (const k of keys) await deps.deletePrivate(hiddenKeyFor(k)).catch(() => {});
   return { status: 200, json: { ok: true, removed: keys.length - failed.length, failed: failed.length } };
 }
 
-/** A live publication, for its public page: the recipe and the files' public addresses. */
+/**
+ * A live publication, for its public page: the recipe and the files' public addresses. A hidden one (moderation) comes
+ * back with `hidden` and no files: its page shows only the notice (its maker asks for the reason themselves).
+ */
 export async function publication(sql: Sql, id: string) {
   if (!/^[0-9a-f-]{36}$/.test(id)) return null;
-  const [r] = await sql`select id, fid, named, published_at, recipe, files from studio.voice_publications where id = ${id} and taken_down_at is null`;
+  const [r] = await sql`select id, fid, named, published_at, recipe, files, hidden_at from studio.voice_publications where id = ${id} and taken_down_at is null`;
   if (!r) return null;
-  const files = (r.files as { role: string; key: string; sha256: string }[]).map((f) => ({ ...f, url: publicUrl(f.key) }));
-  return { id: r.id as string, fid: r.named ? (r.fid as number) : null, publishedAt: r.published_at, recipe: r.recipe as Record<string, unknown>, files };
+  const hidden = r.hidden_at ? {} : null;
+  const files = hidden ? [] : (r.files as { role: string; key: string; sha256: string }[]).map((f) => ({ ...f, url: publicUrl(f.key) }));
+  return { id: r.id as string, fid: r.named ? (r.fid as number) : null, publishedAt: r.published_at, recipe: r.recipe as Record<string, unknown>, files, hidden };
 }
 
 /** A person's own live publication of a draft, if any (the draft page links to it). */

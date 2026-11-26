@@ -9,7 +9,7 @@ import { paysFor } from '~/lib/images/price';
 
 /** A wallet account's balance, what an image costs, and where to pay. */
 export async function GET(request: Request) {
-  const w = getWallet(request);
+  const w = await getWallet(request);
   if (!w) return NextResponse.json({ error: 'Sign in with a wallet first' }, { status: 401 });
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Not set up on this deployment' }, { status: 503 });

@@ -36,6 +36,17 @@ export const SYSTEM_FID = 6786;
  */
 export const ADMINS: readonly number[] = [6786, 193912];
 
+/**
+ * Website sign-ins (owner, 2026-11-23; branch session-30d): every kind lasts the same, 30 days (Farcaster on the
+ * website, wallet, Lens, Bluesky), as the site's own signed session kept in localStorage and sent as the bearer header,
+ * never a cookie. Inside the Farcaster app, Quick Auth stays as it is (Farcaster's own token). "Sign out on every
+ * device" (the You page) ends every session issued before it (studio.session_ends; src/lib/session-ends.ts).
+ * Was: about an hour for Farcaster on the website (Farcaster's own token), a day for the others.
+ */
+export const SESSIONS = {
+  hours: 30 * 24,
+} as const;
+
 /** Saved quote cards per FID per day (spam limit; saving costs nothing). */
 export const CARD_SAVES_PER_DAY = 50;
 
@@ -465,8 +476,8 @@ export const signInOpen = (id: SignInMethod): boolean => SIGN_IN_METHODS.some((m
  * the DID, and never kept.
  */
 export const SOCIAL_SIGN_IN = {
-  /** A Lens or Bluesky sign-in lasts this long (like a wallet's). */
-  sessionHours: 24,
+  /** A Lens or Bluesky sign-in lasts this long (SESSIONS: the same for every sign-in). */
+  sessionHours: SESSIONS.hours,
   /**
    * Owner, 2026-11-04 (3a, with the 30-day sentence): "An account you unlink can be linked to a different account
    * only after 30 days." Linking it again to the same account is allowed at any time (src/lib/social/accounts.ts).
@@ -681,7 +692,9 @@ export const CHALLENGE = {
     gladias: ['68364375-0f33-46fd-9755-2fd2b551198a', '8a491b21-2d32-4673-946c-cff28728088b', 'd5b4c137-71d6-430d-84e1-9ec4044568dc'],
     bai: ['110d5973-31c2-4d96-9a88-5838d8a6d868', '9ef62849-538e-4c7c-af36-0e069c9541d9', 'fd583b12-62f7-47d7-a247-740bf87528d8'],
     seila: ['1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba', 'ca078691-677d-4efb-bfa7-50de6c83afd8', '2c597a57-949d-49f8-9c55-e84ad1b26d02'],
-    deluin: ['75a94420-df70-4f43-a3a6-4c2b571e72ab', 'a69718e0-89d9-465f-a783-d4b98aefbe85', '0a126522-d3d5-4e12-a674-18f49dbffbed'],
+    // Deluin's fourth and fifth (owner, 2026-11-26, from @garance's feedback): two of the owner's published Deluin versions,
+    // "Deluin on the ledge" and "Deluin at the game board" (Midjourney, brought in), by version id as publish-bases lists them.
+    deluin: ['75a94420-df70-4f43-a3a6-4c2b571e72ab', 'a69718e0-89d9-465f-a783-d4b98aefbe85', '0a126522-d3d5-4e12-a674-18f49dbffbed', 'ced288e6-1c3f-4d58-bb4c-839ef774bb71', '42588f48-6673-478e-ab54-8e30372743c0'],
     mu: ['15a9af1d-9eef-4e25-be57-738d9823dd74', 'cd616bd9-55bd-4fdd-9c27-56bd7dcc061c', '6f5cd043-39a4-4458-bd42-9a33518f01cf'],
     // Lord Ephelion's three (owner-approved 2026-11-11), published 2026-11-12: A, B, C.
     ephelion: ['589fd5cb-63a0-4c19-8e1d-5c7704d0262c', 'f913bec7-cbae-4ab5-9865-6c7e4ce9dc7f', '082be0d1-8864-4a76-a5ff-a750d3a6cdc4'],
@@ -708,10 +721,10 @@ export const CHALLENGE = {
     // Lord Ephelion: look A (picks-ephelion-2026-11-11.json, current_default), published 2026-11-12.
     ephelion: '589fd5cb-63a0-4c19-8e1d-5c7704d0262c',
   } as Record<string, string | null>,
-  /** How many bases each character has (owner, 2026-11-11): three for every character. */
-  baseCount: { zei: 3, gladias: 3, bai: 3, seila: 3, deluin: 3, mu: 3, ephelion: 3 } as Record<string, number>,
-  /** The most bases any character may have. */
-  maxBases: 3,
+  /** How many bases each character has (owner, 2026-11-11): three for every character; Deluin five (owner, 2026-11-26). */
+  baseCount: { zei: 3, gladias: 3, bai: 3, seila: 3, deluin: 5, mu: 3, ephelion: 3 } as Record<string, number>,
+  /** The most bases any character may have (five since 2026-11-26, for Deluin). */
+  maxBases: 5,
   /**
    * The owner's first remixes (owner, 2026-11-04): up to CHALLENGE.firstRemixesShown per character, shown on
    * /challenge under the heading "First remixes by @naaate", below its bases, in the order given here. They are not
@@ -722,13 +735,15 @@ export const CHALLENGE = {
    */
   // Published by the owner's run of scripts/import-first-remixes.ts --launch, 2026-11-06. Deluin: the two the owner picked
   // on 2026-11-04 (hood and mug, the game board). The ink ledge (ced288e6-1c3f-4d58-bb4c-839ef774bb71) is published on its
-  // own page but not listed: firstRemixesShown is 2, and firstRemixesProblems refuses a longer list.
+  // own page but not listed: firstRemixesShown is 2, and firstRemixesProblems refuses a longer list. 2026-11-26: the game
+  // board (42588f48-…) and the ink ledge became Deluin bases (owner), so the game board left this list: a base is never a
+  // first remix.
   firstRemixes: {
     zei: ['70c0a8c3-41a5-43ae-83f4-4b0ddfa9ed51'],
     gladias: ['f07a2f79-9787-4f9d-bb90-5b7ea94ad117', 'd4d8bf9f-0ca9-4a62-871b-0aa10a1fbc25'],
     bai: [],
     seila: ['399836db-6cd9-49e3-9302-77686b2a1161', 'b9983b8c-cde4-40c1-8601-f3f4702d1742'],
-    deluin: ['fb80b4b1-bd9f-4fd1-87ef-4e8003347aaf', '42588f48-6673-478e-ab54-8e30372743c0'],
+    deluin: ['fb80b4b1-bd9f-4fd1-87ef-4e8003347aaf'],
     mu: ['2f29b048-0e82-4d87-8193-9cfffedc9123', 'bb08afdb-f77f-4e07-b451-756460922714'],
     ephelion: [],
   } as Record<string, readonly string[]>,
@@ -960,8 +975,8 @@ export const IMAGES = {
     confirmations: 3,
     /** A payment older than this is not credited (ask the owner instead). */
     maxAgeDays: 7,
-    /** A wallet sign-in lasts this long. */
-    sessionHours: 24,
+    /** A wallet sign-in lasts this long (SESSIONS: the same for every sign-in). */
+    sessionHours: SESSIONS.hours,
     /**
      * Credit back every Generate that gives no picture (the check or the model didn't answer, the prompt was refused,
      * or the safety checker dropped the picture), to the balance only (owner, 2026-10-21: "credit the balance for
@@ -1174,6 +1189,12 @@ export function appUrl(): string {
  */
 export const VOICE = {
   adminTrial: true,
+  /**
+   * Testers (Nate, 2026-11-24, for the group call): these FIDs get the voice pages admins get today, and nothing else of
+   * an admin's. Their takes and storyboard pictures come from the admins' pool. Looked up on Farcaster, 2026-11-24:
+   * 6852 @luisotravez (Luis), 665530 @freymon.eth (Freymon). Garance (193912) is an admin already.
+   */
+  testers: [6852, 665530] as readonly number[],
   open: false,
   /**
    * Storyboard pictures (Nate, 2026-11-21): made with the challenge's picture code (GPT Image 2.5 Sunburst the default
@@ -1196,7 +1217,7 @@ export const VOICE = {
    * Storyboard pictures for everyone but admins (Nate, 2026-11-23): their own allowance, apart from the images' free
    * pictures, "20 storyboard pictures a person a day on any model, a GPT picture counting as 1, in their own allowance,
    * and a $20-a-day storyboard pool. Review both after the challenge's first three days." Counted in studio.image_asks
-   * under pool 'storyboard' and paid as funded 'storyboard' in studio.image_costs (NEXT_storyboard_pictures.sql), per UTC
+   * under pool 'storyboard' and paid as funded 'storyboard' in studio.image_costs (0053_storyboard_pictures.sql), per UTC
    * day; never in the images' 10 a day or their free cap, and images never in these. Admins stay on the admins' pool.
    * Used only once realPictures lets everyone in (it is 'admins' today).
    */
@@ -1223,6 +1244,19 @@ export const VOICE = {
   readingSettings: { stability: 0.5, similarity_boost: 0.75, style: 0, use_speaker_boost: true },
   /** A whole take: at most 5 minutes (ElevenLabs' limit per request) and 4 MB (under Vercel's 4.5 MB request limit). */
   maxTakeSeconds: 300,
+  /**
+   * Improvising (Nate, 2026-11-24): "within 2 minutes a take, shown as a countdown that stops the recording". Every whole
+   * take, word for word or improvised, is at most takeMaxSeconds; the server refuses a longer one. Nate, 2026-11-24: the
+   * book speech (c13-b64, 376 words, about 2:40 word for word) gets 3:00 and every other speech keeps 2:00
+   * (takeMaxSecondsFor); the record page shows the chosen speech's limit.
+   */
+  takeMaxSeconds: 120,
+  takeMaxSecondsFor: { 'ephelion-c13-b64': 180 } as Readonly<Record<string, number>>,
+  /** An improvised take's transcript, split into sentences: at . ! ?, at a pause this long, or after this many words. */
+  sentencePauseSeconds: 0.8,
+  sentenceMaxWords: 30,
+  /** A corrected sentence: at most this many characters. */
+  sentenceMaxChars: 400,
   maxTakeBytes: 4_000_000,
   /** One redone sentence: at most 30 seconds. */
   maxSentenceSeconds: 30,
@@ -1247,14 +1281,19 @@ export const VOICE = {
     transcribeCreditsPerSecond: 0.4,
   },
   caps: {
-    /** Everyone's calls together, per UTC day ('free'). Nate's number for now (2026-11-21); real numbers once the speeches' length is known. */
-    dailyCredits: 20_000,
-    dailyUsd: 4,
+    /**
+     * Everyone's takes together, per UTC day ('free'): Nate, 2026-11-23, "a site-wide budget of 6,000 credits a day for
+     * takes; ready-made readings don't count" (about 3 whole 2.5-minute takes with their word checks). The dollars match
+     * the credits at the plan's rate (6,000 × $22 / 121,000 = $1.09). Readings are paid from the admins' pool
+     * (READINGS_FUNDED in src/lib/voice/costs.ts). Was 20,000 and $4 (Nate's placeholder of 2026-11-21).
+     */
+    dailyCredits: 6_000,
+    dailyUsd: 1.1,
     /** Admins' own trials, counted apart ('admin'). PLACEHOLDER. */
     adminDailyCredits: 20_000,
     adminDailyUsd: 4,
-    /** Whole-take conversions per person per UTC day (redone sentences don't count). Nate's number for now (2026-11-21). */
-    perPersonConversions: 3,
+    /** Whole-take conversions per person per UTC day (redone sentences don't count). Nate, 2026-11-23: 2 (was 3). */
+    perPersonConversions: 2,
     /**
      * Owner's standing rule (2026-11-20): if a real call costs more than 20% over its estimate, stop before the next
      * one. When today's measured credits exceed 1.2 times today's estimates, every call is refused until the next UTC

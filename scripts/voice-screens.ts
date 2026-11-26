@@ -56,7 +56,7 @@ page.on('response', async (r) => {
   if (r.url().includes('/api/voice/') && r.status() >= 400) console.log('api', r.status(), r.url(), (await r.text().catch(() => '')).slice(0, 200));
 });
 
-await page.goto(`${url}/storyboard/record`);
+await page.goto(`${url}/ephelion/record`);
 await wait(page, '#vr-consent-h');
 await shoot('1-consent', '#vr-consent-h');
 await page.getByRole('button', { name: 'I agree' }).click();

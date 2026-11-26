@@ -77,7 +77,7 @@ coding agent and its helpers are in `docs/prompts/`.
 - `P2u` (reread by Nate 2026-11-23, as drafted): a storyboard picture the guide drafted keeps the person's request word for word, the
   guide's model, its draft and the prompt as sent, each reference with who chose it and why, and every edit; a planted
   recipe without the request must fail (`scripts/check-principles.ts`, `test:voice` section GU).
-- `P1i` (reread by Nate 2026-11-21; v3 reread 2026-11-22): the own-voice consent shown is `own-voice-v3`, and only by the voice pages and routes,
+- `P1i` (reread by Nate 2026-11-21; v3 reread 2026-11-22; v4 reread 2026-11-24): the own-voice consent shown is `own-voice-v4`, and only by the voice pages and routes,
   only while `P1h` passes; `own-voice-v1` is used by nothing under `src/`; v2 stays on file, retired.
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
@@ -114,7 +114,7 @@ them; they stay on my devices and my own encrypted storage") and its temporary M
 The Modal conversion code (`modal/chatterbox_vc.py`) stays in the repository and its proof (`check:modal-vc`) still
 runs, but no page uses it. Training: Nate turned off the account's "Improve the models for everyone" (2026-11-21), so
 the consent's line that ElevenLabs doesn't train on them stands without brackets.
-The performer agrees to `own-voice-v3` (`config/consent-own-voice.json`; reread 2026-11-22) first, for each recording sent. Every
+The performer agrees to `own-voice-v4` (`config/consent-own-voice.json`; reread 2026-11-24) first, for each recording sent. Every
 performer gets the same terms. Anyone can still re-run the conversion with
 their own voice or another reference clip; they cannot reproduce the exact
 converted line from the recipe alone, which is why the converted line itself
@@ -194,6 +194,11 @@ it is named, its writers are credited, and no agent or model on this site writes
 a version, its credit says so; each version records that, set by Nate. A recording is checked against, and tied to, the
 exact version it was made from. (The three speeches of 2026-11-22: `config/voice-speeches.json`, from the Google Doc
 "Lord Ephelion: three speeches v2 (DRAFT)", each version's `aiHelp` set by Nate; checked by `test:voice`, section I.)
+
+**Improvising (owner, 2026-11-24; reread by Nate 2026-11-24; branch `voice-improv`).** A performer may improvise around a
+speech's theme. Their spoken words are their own, transcribed from their take and credited to them; they may correct the
+transcript, and no agent or model writes or edits it. (`src/lib/voice/spoken.ts`, `src/lib/voice/correct-words.ts`;
+checked by `test:voice`, section IM, and `check:principles` P2v, with a planted fault.)
 
 **Storyboard pictures (owner, 2026-11-22; reread by the owner 2026-11-22).** Storyboard pictures: the person asks the
 guide in their own words; the guide may write each picture's prompt and choose its reference pictures, never the
@@ -432,6 +437,12 @@ starting view. Where no one has picked, the starting view is "Most liked", then 
 "starting point". Moderators (FIDs in `MODERATOR_FIDS`) who are not admins can hide and nothing else. Picks never
 order the feed, search, anyone's own pages, the agent tools or the read API.
 
+**Unhiding (reread by Nate 2026-11-23; branch voice-moderation).** "A moderator may unhide what was hidden; it puts back
+exactly what its maker published, and never publishes anything else." In practice: in the one moderator queue
+(/moderate), a hidden published storyboard can be unhidden; its own files come back, byte for byte, from their private
+copies, and its page is as its maker published it (`src/lib/voice/moderation.ts`, `unhideStoryboard`; checked by
+`P5b` and `test:voice` section M).
+
 **Ruling: the edition's own chapter pictures (owner, 2026-11-18; reread by the owner 2026-11-19;
 branch chapter-pictures-admin; widened by the ruling below, reread 2026-11-20).** "An admin may replace a picture in the site's own edition of a chapter. The change is
 public at once, shows who made it and when, and can be undone. This covers only the edition's own pictures, never the
@@ -475,6 +486,10 @@ A hide still wins everywhere, and with no database none shows (`npm run test:add
   decisions; and for the additions, a second file writing them and an addition moved in place; each must fail
   (`scripts/lib/p5b.ts`, `npm run test:chapter-pictures`, `npm run test:chapter-additions`).
 - `P5c`: a hidden image's file leaves the public bucket.
+- `P5k` (branch voice-moderation, 2026-11-23): a hidden published storyboard's page shows only the notice ("This
+  storyboard was hidden by a moderator."), names none of its files, and none of its files is still public; a planted
+  public file must fail. Hiding is reversible (the unhiding line above); every step is logged, and the log stays when
+  the storyboard is removed.
 - `P5d`: every component that shows a pick shows its label ("Picked by @…") and the switch with "Most liked",
   "Newest" and "Liked by me"; the switch keeps the reader's choice on their device (localStorage) and never sends it.
 - `P5e`: nothing outside the pick code reads `studio.admin_picks` (the feed, search, profiles, the agent tools and

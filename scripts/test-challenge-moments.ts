@@ -15,6 +15,7 @@
  */
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
@@ -133,11 +134,15 @@ check('config: a current default look per challenge character, each a design id 
   }));
   // "Later in the book." (owner, 2026-11-17): a plain part like the others, shown in full, after "At the start." and
   // before "What drives"; it was a nested fold, "Later in the book (spoilers)", closed by default.
-  const comp = read('src/components/challenge-character.tsx');
-  check('Learn more: "Later in the book." is a plain part, in full, between "At the start." and "What drives"', LM.LATER_LABEL === 'Later in the book.' && !/<details className="chc-later"/.test(comp) && /<p className="chc-learn-part" data-part="later">\s*<strong>\{P\.learn\.text\.later\.head\}<\/strong>/.test(comp) && comp.indexOf('data-part="start"') < comp.indexOf('data-part="later"') && comp.indexOf('data-part="later"') < comp.indexOf('data-part="drives"'));
+  // Since #219 (2026-11-23) the parts are drawn by LearnMoreParts (src/components/challenge-learn-more.tsx), which the
+  // character page and /storyboard/record share; the character page renders it with its own view.
+  const page = read('src/components/challenge-character.tsx');
+  const comp = read('src/components/challenge-learn-more.tsx');
+  check('Learn more: the character page draws its parts with the shared LearnMoreParts', /<LearnMoreParts learn=\{P\.learn\} \/>/.test(page) && !/data-part="later"|chc-looks/.test(page));
+  check('Learn more: "Later in the book." is a plain part, in full, between "At the start." and "What drives"', LM.LATER_LABEL === 'Later in the book.' && !/<details className="chc-later"/.test(comp) && /<p className="chc-learn-part" data-part="later">\s*<strong>\{learn\.text\.later\.head\}<\/strong>/.test(comp) && comp.indexOf('data-part="start"') < comp.indexOf('data-part="later"') && comp.indexOf('data-part="later"') < comp.indexOf('data-part="drives"'));
   // The looks line once (owner, 2026-11-16): "Room to invent." ends with its own looks line, so the page's looks line is
   // drawn only in the fallback (a character with no Learn more text).
-  check('Learn more: the looks line once: every text\'s "Room to invent." ends with its looks line, and the page draws its own only in the fallback', Object.values(LM.LEARN_MORE).every((x) => /\blooks\b/.test(x.invent.at(-1)?.map((s) => ('text' in s ? s.text : '')).join('') ?? '')) && (comp.match(/\{P\.learn\.looks\}/g) ?? []).length === 1 && comp.indexOf('{P.learn.looks}') > comp.indexOf('P.learn.facts.length') && !/<li className="chc-looks">/.test(comp));
+  check('Learn more: the looks line once: every text\'s "Room to invent." ends with its looks line, and the page draws its own only in the fallback', Object.values(LM.LEARN_MORE).every((x) => /\blooks\b/.test(x.invent.at(-1)?.map((s) => ('text' in s ? s.text : '')).join('') ?? '')) && (comp.match(/\{learn\.looks\}/g) ?? []).length === 1 && comp.indexOf('{learn.looks}') > comp.indexOf('learn.facts.length') && !/<li className="chc-looks">/.test(comp));
   check('Learn more: Zei\'s texts are the owner\'s (approved), and are shown', LM.LEARN_MORE.zei.approved && LM.learnMoreProblems('zei').length === 0);
   check('Learn more: every citation is a block that exists in the book', Object.entries(LM.LEARN_MORE).every(([, x]) => [x.who, x.start, x.later, x.drives, ...x.invent].flat().every((s) => !('cite' in s) || blocks.has(/^(c\d+-b\d+)/.exec(s.cite)![1]))));
 
@@ -158,6 +163,47 @@ check('config: a current default look per challenge character, each a design id 
   // character's pictures on the challenge pages, a base or any remix, including your own.
   const e6 = (TERMS.sections.find((s) => String(s.n) === '6e')?.body ?? []).flat().join(' ');
   check('Terms §6e: the owner\'s after-text, word for word, and no moment', e6.includes('and only if it is a picture of a challenge character, remixed from one of that character\'s pictures on the challenge pages (a base or any remix, including your own; not made from scratch), made on the Service during the challenge') && !/moment/i.test(e6));
+}
+
+// --- The citations as book icons (Nate, 2026-11-24): no visible block code in any Learn more panel -------------------
+{
+  const { learnMoreView } = await import('../src/lib/challenge/learn-more-view');
+  const LM = await import('../src/lib/challenge/learn-more');
+  const { citeProblems, learnMoreCiteProblems } = await import('./lib/book-cites');
+  type View = ReturnType<typeof learnMoreView>;
+  const views: Record<string, View> = {};
+  for (const slug of Object.keys(LM.LEARN_MORE)) views[slug] = learnMoreView(slug, LM.LEARN_MORE[slug].name);
+  // The fallback (no texts): the first layer's facts, each with its block.
+  for (const c of CARDS) views[`facts:${c.slug}`] = learnMoreView(c.slug, LM.LEARN_MORE[c.slug]?.name ?? c.slug, null as never);
+  // Planted: the citation after Zei's first quotation dropped from the data (a quote with no citation link).
+  const plantNoCite = clone(views.zei) as View;
+  {
+    const parts = [plantNoCite.text!.who, plantNoCite.text!.start, plantNoCite.text!.later, plantNoCite.text!.drives];
+    const part = parts.find((p) => p.segs.some((x, i) => x.kind === 'text' && /"[^"]+"/.test(x.text) && p.segs[i + 1]?.kind === 'cite'))!;
+    const at = part.segs.findIndex((x, i) => x.kind === 'text' && /"[^"]+"/.test(x.text) && part.segs[i + 1]?.kind === 'cite');
+    let n = 0;
+    while (part.segs[at + 1 + n]?.kind === 'cite') n++;
+    part.segs.splice(at + 1, n);
+  }
+  views['plant:no-cite'] = plantNoCite;
+  const out = JSON.parse(execFileSync(process.execPath, [path.join(ROOT, 'node_modules/tsx/dist/cli.mjs'), path.join(ROOT, 'scripts/lib/render-learn-more.tsx')], { input: JSON.stringify({ views }), encoding: 'utf8', cwd: ROOT, maxBuffer: 64 << 20 })) as { views: Record<string, string> };
+  const H = out.views;
+  for (const slug of Object.keys(LM.LEARN_MORE)) {
+    const p = learnMoreCiteProblems(views[slug], H[slug], `Learn more about ${slug}`);
+    check(`citations: ${slug}'s Learn more shows no block code; each citation is one book icon linking to its block ("In the book: chapter N"); every quote cites its block; the words are the texts' own`, p.length === 0 && views[slug].text !== null, p.slice(0, 4).join('; '));
+  }
+  const fb = CARDS.flatMap((c) => learnMoreCiteProblems(views[`facts:${c.slug}`], H[`facts:${c.slug}`], `facts:${c.slug}`));
+  check('citations: the fallback (first-layer facts) shows each fact\'s block as its book icon, with no code', fb.length === 0 && CARDS.every((c) => views[`facts:${c.slug}`].facts.length > 0), fb.slice(0, 4).join('; '));
+  check('citations: Zei\'s first "who" citations are adjacent icons, one each (c14-b31, c7-b61, c5-b69–b70)', /data-block="c14-b31"[^]*?<\/a><a[^>]*data-block="c7-b61"[^]*?<\/a><a[^>]*data-block="c5-b69–b70"/.test(H.zei) && H.zei.includes('href="/chapter/5#c5-b69"') && H.zei.includes('aria-label="In the book: chapter 5"'));
+  check('citations: the icon is not the glossary\'s ⓘ', (H.zei.match(/class="book-cite"[^>]*>(?:(?!<\/a>)[^])*<\/a>/g) ?? []).every((a) => !a.includes('ⓘ')) && /chc-term-i/.test(H.zei));
+  const z = (f: (h: string) => string) => learnMoreCiteProblems(views.zei, f(H.zei), 'zei (planted)');
+  proof('citations: a quote whose own citation is dropped fails (the data\'s citation after Zei\'s first quotation removed)', citeProblems(H['plant:no-cite'], 'planted').problems.some((x) => /a quote with no citation link|a quote whose words aren't in the block it cites/.test(x)));
+  proof('citations: a glossary note\'s quote with no citation link fails', z((h) => h.replace(/(<\/q> )<a class="book-cite"[^]*?<\/a>/, '$1')).some((x) => /a quote with no citation link/.test(x)));
+  proof('citations: a block code shown as text fails (the old link)', z((h) => h.replace(/<a class="book-cite" data-block="([^"]+)"[^>]*href="([^"]+)"[^>]*>[^]*?<\/a>/, '<a class="chc-cite" href="$2">$1</a>')).some((x) => /block code is shown as text/.test(x)));
+  proof('citations: adjacent citations drawn as one icon fails', z((h) => h.replace(/<a class="book-cite"[^>]*data-block="c7-b61"[^]*?<\/a>/, '')).some((x) => /not one per citation/.test(x)));
+  proof('citations: an icon whose link lacks its block fails', z((h) => h.replace('href="/chapter/14#c14-b31"', 'href="/chapter/14"')).some((x) => /links to/.test(x)));
+  proof('citations: an icon named otherwise fails', z((h) => h.replace('aria-label="In the book: chapter 14"', 'aria-label="c14-b31"')).some((x) => /is named/.test(x)));
+  proof('citations: one word changed fails', z((h) => h.replace('young ', 'old ')).some((x) => /the words changed/.test(x)));
 }
 
 // --- The hub's data (R1) --------------------------------------------------------------------------------------------
@@ -192,7 +238,7 @@ check('config: a current default look per challenge character, each a design id 
     check('design pass: every character page has "Make your own {name}", its line, the link to the remix choice (owner, 2026-11-16) and the two choices\' heads and lines', rows.every(({ v }) => { const p = v!.page; return p.makeHead === `Make your own ${v!.c.name}` && p.makeLine === 'Start from a picture, describe what to change, then publish and post it.' && p.fromBaseHead === 'Start from a base' && p.fromBaseLine === `${v!.c.name}’s starting looks.` && p.fromRemixHead === 'Start from someone’s remix' && p.fromRemixLine === 'Build on what others made. They’re credited.' && p.toRemix === 'or start from someone’s remix ↓' && !('remix' in p) && !('basesCount' in p); }));
     check('design pass: Zei\'s one line starts "A young Minpentai player" (no age)', rows.find((r) => r.slug === 'zei')!.v!.c.line.startsWith('A young Minpentai player') && !/eighteen/i.test(rows.find((r) => r.slug === 'zei')!.v!.c.line));
     const z = rows.find((r) => r.slug === 'zei')!.v!.page.learn;
-    check('Learn more: Zei\'s shows the owner\'s texts, no Draft mark, its "Later in the book." part, citations linking to the reader\'s first block', z.text !== null && z.draft === null && z.text.later.head === 'Later in the book.' && z.text.start.segs.some((s) => s.kind === 'cite' && s.label === 'c2-b98–b104' && s.href === '/chapter/2#c2-b98') && z.facts.length === 0);
+    check('Learn more: Zei\'s shows the owner\'s texts, no Draft mark, its "Later in the book." part, citations linking to the reader\'s first block', z.text !== null && z.draft === null && z.text.later.head === 'Later in the book.' && z.text.start.segs.some((s) => s.kind === 'cite' && s.block === 'c2-b98–b104') && z.facts.length === 0);
     check('Learn more: a term with a glossary entry opens it (a note from the book)', z.text!.who.segs.some((s) => s.kind === 'term' && s.term === 'Minpentai' && s.note !== null && s.href === '/glossary/minpentai'));
     // The four terms added to the glossary on 2026-11-16: the rule's pick for two, the owner's hand-pick for two (NOTE_PICKS).
     const terms = rows.flatMap(({ v }) => { const t = v!.page.learn.text; return t ? [t.who, t.start, t.later, t.drives].flatMap((p) => p.segs).concat(t.invent.items.flat()) : []; }).filter((s) => s.kind === 'term');

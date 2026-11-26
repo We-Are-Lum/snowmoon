@@ -27,7 +27,7 @@ const TODAY = `(now() at time zone 'utc')::date`;
 export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'no-free' | 'closed-limit' | 'closed-spend' | 'admin-spend' | 'storyboard-limit' | 'storyboard-spend' | RemixRefusal;
 /**
  * 'admin': an admin's chapter pictures (CHAPTER_PICTURES.adminDailyCapUsd), counted apart from the free cap (0042_chapter_picture_versions.sql).
- * 'storyboard': storyboard pictures for everyone but admins (VOICE.pictures, Nate 2026-11-23; NEXT_storyboard_pictures.sql).
+ * 'storyboard': storyboard pictures for everyone but admins (VOICE.pictures, Nate 2026-11-23; 0053_storyboard_pictures.sql).
  */
 export type Funded = 'free' | 'prepaid' | 'admin' | 'storyboard';
 /** Only a wallet account pays from a balance (not a Lens or Bluesky account, whose numbers are also below zero); Lens and Bluesky accounts use the free count when freeFor allows. */

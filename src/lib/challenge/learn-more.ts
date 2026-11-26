@@ -1811,13 +1811,8 @@ export const NOTE_PICKS: Readonly<Record<string, string>> = {
   'intervention-turn': 'c4-b110',
 };
 
-/** The chapter of a citation ("c14-b31" → 14; "c2-b98–b103" → 2). */
-export const citeChapter = (cite: string): number => Number(/^c(\d+)-b\d+/.exec(cite)?.[1] ?? NaN);
-/** Where a citation goes in the reader: its first block. */
-export const citeHref = (cite: string): string => {
-  const m = /^c(\d+)-b(\d+)/.exec(cite);
-  return m ? `/chapter/${m[1]}#c${m[1]}-b${m[2]}` : '/chapter/1';
-};
+/** A citation's chapter and its place in the reader (src/lib/book-cite.ts, shared with the citation icon). */
+export { citeChapter, citeHref } from '../book-cite';
 /** The "later" part's head (owner, 2026-11-17: a plain section; it was the fold "Later in the book (spoilers)"). */
 export const LATER_LABEL = 'Later in the book.';
 

@@ -542,7 +542,7 @@ add({
 add({
   id: 'P1i',
   principle: 1,
-  name: 'the own-voice consent shown is own-voice-v3 (current; reread 2026-11-22), only by the voice slice, only while P1h passes; own-voice-v1 is used by nothing',
+  name: 'the own-voice consent shown is own-voice-v4 (current; reread 2026-11-24), only by the voice slice, only while P1h passes; own-voice-v1 is used by nothing',
   load: async () => ({
     users: walk('src', /\.(ts|tsx)$/).filter((f) => /consent-own-voice/.test(read(f))),
     file: json('config/consent-own-voice.json') as { draft?: string; current: string; versions: Record<string, unknown> },
@@ -552,7 +552,7 @@ add({
   run: async ({ users, file, v1Users, proof }) => {
     const p: string[] = [];
     for (const f of users as string[]) if (f !== 'src/lib/voice/consent.ts') p.push(`${f} reads the own-voice consent; only src/lib/voice/consent.ts may`);
-    if ((file.draft ?? file.current) !== 'own-voice-v3' || !file.versions['own-voice-v3']) p.push('the voice pages would not show own-voice-v3');
+    if (file.draft || file.current !== 'own-voice-v4' || !file.versions['own-voice-v4']) p.push('the voice pages would not show own-voice-v4, the reread current');
     for (const f of v1Users as string[]) p.push(`${f} uses own-voice-v1`);
     const fails = (proof as string[]).length ? (proof as string[]) : [...voiceStatic(read(VOICE_FLOW_FILE), read(VOICE_ROUTE_FILE)), ...(await voiceRun(ROOT))];
     if ((VOICE.adminTrial || VOICE.open) && fails.length) p.push(...fails.map((x) => `the voice slice is switched on while P1h fails: ${x}`));
@@ -1125,6 +1125,30 @@ add({
   },
 });
 
+add({
+  id: 'P2v',
+  principle: 2,
+  name: "an improvised take's words are its performer's: transcribed from their take, corrected only by them (kept with the words before), and never written or edited by a model or the guide (DRAFT, for Nate's reread, 2026-11-24)",
+  load: async () => ({
+    correct: read('src/lib/voice/correct-words.ts'),
+    route: read('src/app/api/voice/drafts/[id]/words/route.ts'),
+    guide: read('src/lib/voice/guide.ts'),
+    guideServer: read('src/lib/voice/guide-server.ts'),
+  }),
+  run: (c) => {
+    const p: string[] = [];
+    const model = /from '[^']*(elevenlabs|chat\/|images\/fal|challenge\/models|guide-server|ai-gateway|batch-model)[^']*'|\bcomplete\(|speechToText\(|fetch\(/;
+    if (model.test(c.correct) || model.test(c.route)) p.push('correcting the words reaches a model or a service: only the person changes them');
+    if (!/corrections: \[\.\.\.spoken\.corrections, correction\]/.test(c.correct) || !/byFid: fid, sentences: spoken\.sentences/.test(c.correct)) p.push('a correction is not kept with the words before it and who made it');
+    if (!/speechWordsIn\(s, \[\.\.\.c\.sentences, \.\.\.\(c\.otherWords \?\? \[\]\)\]\)/.test(c.guide)) p.push("the guide's drafts aren't checked against the spoken words");
+    if (!/sentences: spokenSentences\(draft\.recipe/.test(c.guideServer)) p.push('the guide is not given the spoken words as the board\'s sentences');
+    return p;
+  },
+  plant: (c) => {
+    c.correct = `import { complete } from '../chat/model';\n${c.correct}`;
+  },
+});
+
 // ---------------------------------------------------------------------------
 // P3. The allowlist records each model's license and whether its weights are
 //     open; every model in use is on it; closed models in use are reported.
@@ -1673,6 +1697,48 @@ add({
   plant: (c) => {
     c.skipped = false;
     c.items.push({ id: 'planted', page: 200, file: 200 });
+  },
+});
+
+add({
+  id: 'P5k',
+  principle: 5,
+  name: "a hidden storyboard's page shows only the notice, and its files are not public (moderation, 2026-11-23)",
+  load: async () => {
+    const url = process.env.STUDIO_DATABASE_URL;
+    if (!url) return { skipped: true, items: [] as { id: string; page: number; notice: boolean; keysInPage: number; filesPublic: number }[] };
+    const sql = postgres(url, { prepare: false, max: 1 });
+    try {
+      const [col] = await sql`select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'voice_publications' and column_name = 'hidden_at'`;
+      if (!col) return { skipped: true, items: [] };
+      const rows = await sql<{ id: string; files: { key: string }[] }[]>`select id, files from studio.voice_publications where hidden_at is not null and taken_down_at is null limit 20`;
+      // The public bucket's address: production's, or the local test copy's route.
+      const local = /^http:\/\/(localhost|127\.0\.0\.1)/.test(BASE);
+      const base = (process.env.R2_IMAGES_PUBLIC_URL ?? (local ? `${BASE}/api/voice/public` : 'https://pictures.snowmoon.party')).replace(/\/$/, '');
+      const items = [];
+      for (const r of rows) {
+        const res = await fetch(`${BASE}/storyboard/spoken/${r.id}`);
+        const html = await res.text();
+        let filesPublic = 0;
+        for (const f of r.files) if ((await fetch(`${base}/${f.key}`, { method: 'HEAD' })).status === 200) filesPublic++;
+        items.push({ id: r.id, page: res.status, notice: /This storyboard was hidden by a moderator\./.test(html), keysInPage: r.files.filter((f) => html.includes(f.key)).length, filesPublic });
+      }
+      return { skipped: false, items };
+    } finally {
+      await sql.end();
+    }
+  },
+  run: ({ skipped, items }) => {
+    if (skipped) return ['skipped: no database, or the moderation migration is not applied there'];
+    return (items as { id: string; page: number; notice: boolean; keysInPage: number; filesPublic: number }[]).flatMap((i) => [
+      ...(i.page === 200 && i.notice ? [] : [`hidden storyboard ${i.id}: its page doesn't show the notice (${i.page})`]),
+      ...(i.keysInPage === 0 ? [] : [`hidden storyboard ${i.id}: its page still names ${i.keysInPage} of its files`]),
+      ...(i.filesPublic === 0 ? [] : [`hidden storyboard ${i.id}: ${i.filesPublic} of its files are still public`]),
+    ]);
+  },
+  plant: (c) => {
+    c.skipped = false;
+    c.items.push({ id: 'planted', page: 200, notice: true, keysInPage: 0, filesPublic: 1 });
   },
 });
 

@@ -77,8 +77,8 @@ export async function POST(request: Request) {
 
   // The byline (decision 12): the relay's name signed at website sign-in, else Farcaster's public API.
   // A wallet account's byline is its address, shortened (owner, 2026-10-13).
-  const wallet = fid < 0 ? getWallet(request) : null;
-  const by = wallet ? { name: shortAddress(wallet.address), source: 'wallet' as const } : (socialByline(request, fid) ?? (await bylineName(fid, body.nameProof)));
+  const wallet = fid < 0 ? await getWallet(request) : null;
+  const by = wallet ? { name: shortAddress(wallet.address), source: 'wallet' as const } : ((await socialByline(request, fid)) ?? (await bylineName(fid, body.nameProof)));
   // The passage: every reader's image has one, a remix challenge picture never (owner, 2026-11-10).
   const anchor = publishAnchor(t);
   if (!t.challenge && !anchor) return no('This draft has no passage. Generate it again.', 400);

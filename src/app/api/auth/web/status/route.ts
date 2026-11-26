@@ -3,13 +3,17 @@ import { createClient } from '@farcaster/quick-auth';
 import { domain } from '~/lib/auth';
 import { signName } from '~/lib/names';
 import { rememberName } from '~/lib/adaptation-pages';
+import { signFarcasterSession } from '~/lib/farcaster-session';
 
 /**
  * Sign in with Farcaster on the plain website, step 2: the page polls this with its channel
  * token. When the person has approved in their Farcaster app, our server sends the signed
  * message to Farcaster's sign-in server (auth.farcaster.xyz /verify-siwf), which checks it
- * and returns the same one-hour token Quick Auth issues in the miniapp. The message,
- * signature and addresses never reach the page and are not stored or logged here.
+ * and returns the one-hour token Quick Auth issues in the miniapp. Our server verifies that token once (its signature,
+ * our domain) and gives the page the site's own session instead (owner, 2026-11-23; branch session-30d;
+ * src/lib/farcaster-session.ts): 30 days, kept in localStorage and sent as the bearer header, never a cookie. Farcaster's
+ * token never reaches the page. The message, signature and addresses never reach the page and are not stored or
+ * logged here.
  */
 const RELAY = 'https://relay.farcaster.xyz';
 const quickAuth = createClient();
@@ -27,9 +31,15 @@ export async function GET(request: Request) {
   const s = (await res.json()) as { state: string; message?: string; signature?: `0x${string}`; username?: string };
   if (s.state !== 'completed' || !s.message || !s.signature) return NextResponse.json({ state: 'pending' }, { headers: { 'Cache-Control': 'no-store' } });
   try {
-    const { token } = await quickAuth.verifySiwf({ domain: domain(request), message: s.message, signature: s.signature });
+    const { token: farcasterToken } = await quickAuth.verifySiwf({ domain: domain(request), message: s.message, signature: s.signature });
+    // Verified once, here: Farcaster's signature on the token and that it is for our domain.
+    const fid = Number((await quickAuth.verifyJwt({ token: farcasterToken, domain: domain(request) })).sub);
+    const token = signFarcasterSession(fid);
+    if (!token) {
+      console.error('sign-in status: no session key (IMAGES_TICKET_SECRET)');
+      return NextResponse.json({ state: 'failed' }, { headers: { 'Cache-Control': 'no-store' } });
+    }
     // The relay's name for this person, signed by our server, so a page can't claim another name at Publish.
-    const fid = Number(JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString()).sub);
     const nameProof = signName(fid, s.username);
     void rememberName(fid, s.username);
     return NextResponse.json({ state: 'completed', token, username: s.username ?? null, nameProof }, { headers: { 'Cache-Control': 'no-store' } });

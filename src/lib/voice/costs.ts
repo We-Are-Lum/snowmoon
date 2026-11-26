@@ -1,8 +1,8 @@
 import 'server-only';
 import type postgres from 'postgres';
 import { VOICE } from '../config';
-import { isAdmin } from '../admins';
 import { ALLOWANCE_WORDING } from './allowance-wording';
+import { voiceInsider } from './flag';
 
 /**
  * Voice costs, as daily totals in studio.voice_costs (no person, no request id; 0044_ephelion_voice.sql), and the caps
@@ -12,7 +12,8 @@ import { ALLOWANCE_WORDING } from './allowance-wording';
  */
 export type Funded = 'free' | 'admin';
 export type CostKind = 'convert' | 'transcribe' | 'reading';
-export const fundedFor = (fid: number): Funded => (isAdmin(fid) ? 'admin' : 'free');
+/** Admins and testers (VOICE.testers) are paid for from the admins' pool. */
+export const fundedFor = (fid: number): Funded => (voiceInsider(fid) ? 'admin' : 'free');
 export const usdFor = (credits: number) => (credits * VOICE.rates.usdPer1000Credits) / 1000;
 // Today as a UTC date. Timestamps are compared as UTC dates too ((at at time zone 'utc')::date): a bare date compared
 // with a timestamptz is read in the session's time zone, which made today's rows "yesterday's" west of UTC.
@@ -49,10 +50,18 @@ export async function purgeOldAsks(sql: postgres.Sql, now = Date.now()): Promise
 }
 export const resetPurgeClock = () => void (lastPurge = -Infinity);
 
-/** Why a call can't run now, or null. `whole`: a whole-take conversion, which counts against the person's daily number. */
-export async function refusal(sql: postgres.Sql, fid: number, estimatedCredits: number, whole: boolean): Promise<string | null> {
+/**
+ * Ready-made readings (Nate, 2026-11-23: "ready-made readings don't count"): the reading itself and its one timing are
+ * paid from the admins' pool, whoever's first storyboard sets off the timing, so everyone's daily budget is for takes only.
+ */
+export const READINGS_FUNDED: Funded = 'admin';
+
+/**
+ * Why a call can't run now, or null. `whole`: a whole-take conversion, which counts against the person's daily number.
+ * `funded`: the pool it is paid from, if not the person's own (a ready-made reading's calls: READINGS_FUNDED).
+ */
+export async function refusal(sql: postgres.Sql, fid: number, estimatedCredits: number, whole: boolean, funded: Funded = fundedFor(fid)): Promise<string | null> {
   await purgeOldAsks(sql).catch(() => 0);
-  const funded = fundedFor(fid);
   const t = await today(sql, funded, fid);
   if (t.estimated > 0 && t.measured > VOICE.caps.overEstimate * t.estimated)
     return `Today's voice calls cost more than ${Math.round((VOICE.caps.overEstimate - 1) * 100)}% over their estimates (${t.measured} credits against ${t.estimated}). Calls are stopped until tomorrow (UTC) so an admin can look.`;
@@ -83,8 +92,7 @@ const upsert = (sql: postgres.Sql, row: { kind: string; model: string; funded: F
     estimated_credits = studio.voice_costs.estimated_credits + excluded.estimated_credits, cost_usd = studio.voice_costs.cost_usd + excluded.cost_usd`;
 
 /** Hold a call's worst case. Returns the settle function, to be called once with the call's outcome. */
-export async function reserve(sql: postgres.Sql, fid: number, model: string, estimatedCredits: number, whole: boolean) {
-  const funded = fundedFor(fid);
+export async function reserve(sql: postgres.Sql, fid: number, model: string, estimatedCredits: number, whole: boolean, funded: Funded = fundedFor(fid)) {
   await upsert(sql, { kind: 'reserved', model, funded, verdict: '', calls: 1, seconds: 0, characters: 0, credits: 0, estimated: estimatedCredits, usd: usdFor(estimatedCredits) });
   if (whole) await sql`insert into studio.voice_asks (fid) values (${fid})`;
   let settled = false;
