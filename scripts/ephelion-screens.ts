@@ -77,6 +77,7 @@ try {
     await page.waitForTimeout(800);
     const name = (s: string) => path.join(out, `${s}-${w}.png`);
     await page.screenshot({ path: name('01-landing'), fullPage: w === 390 });
+    if (w === 390) { await page.screenshot({ path: name('00-landing-first-screen') }); shots.push(name('00-landing-first-screen')); }
     shots.push(name('01-landing'));
     await page.locator('.eph-link').first().click();
     await page.waitForTimeout(400);
@@ -87,6 +88,8 @@ try {
     console.log(w, 'buttons', JSON.stringify(sizes), errors.length ? `page errors: ${errors.join(' | ')}` : 'no page errors');
     const panes = await page.evaluate(() => { const l = document.querySelector('.eph-left')!.getBoundingClientRect(); const r = document.querySelector('.eph-right')!.getBoundingClientRect(); return { page: Math.round(document.querySelector('.eph-wrap')!.getBoundingClientRect().width), twoPanes: Math.abs(l.top - r.top) < 2 && r.left > l.right - 1 }; });
     console.log(w, 'panes', JSON.stringify(panes));
+    const top = await page.evaluate(() => { const i = document.querySelector('.eph-image')!.getBoundingClientRect(); const k = document.querySelector('.eph-hero-text > .eph-up')!.getBoundingClientRect(); const h = document.querySelector('.eph-hero-text > h1')!.getBoundingClientRect(); return { imageTop: Math.round(i.top), labelTop: Math.round(k.top), titleBottom: Math.round(h.bottom), imageBottom: Math.round(i.bottom) }; });
+    console.log(w, 'hero', JSON.stringify(top));
     // The first card's AI reading plays (the drafts route serves a shared reading). Learn more shut first.
     await page.locator('.eph-link').first().click();
     await page.waitForTimeout(300);
