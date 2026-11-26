@@ -132,7 +132,16 @@ const sharpPng = async () => (await import('sharp')).default({ create: { width: 
     // Nate, 2026-11-25: /ephelion answers 200 (link previews and casts load), never the page-level notFound(); the four
     // sign-in buttons carry the site's own sign-in style (the full size, menu-signin); "Draft wording" over the consent only
     // while the version shown has no reread on record.
-    check('E. /ephelion answers 200: its page draws the voice page, with no notFound() and no not-found.tsx', !/notFound\(\)/.test(nf) && /<VoiceRecord fallback=\{<NotFound \/>\} signedOut=\{<EphelionSignIn \/>\}/.test(nf) && !existsSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx')));
+    check('E. /ephelion answers 200: its page draws the landing, with no notFound() and no not-found.tsx', !/notFound\(\)/.test(nf) && /<EphelionLanding fallback=\{<NotFound \/>\} signedOut=\{<EphelionSignIn \/>\}/.test(nf) && !existsSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx')));
+    // Nate, 2026-11-25 (recording only; plan v3, PR 1): the landing, and "Record your own" at /ephelion/record, behind the
+    // same gate. Nothing on the landing links the guided storyboard.
+    const rec = readFileSync(path.join(ROOT, 'src/app/ephelion/record/page.tsx'), 'utf8');
+    const land = readFileSync(path.join(ROOT, 'src/components/ephelion-landing.tsx'), 'utf8');
+    const landCss = readFileSync(path.join(ROOT, 'src/styles/ephelion.css'), 'utf8');
+    check('E. /ephelion/record draws the recorder behind the same gate and sign-in, answering 200', /<VoiceRecord fallback=\{<NotFound \/>\} signedOut=\{<EphelionSignIn \/>\}/.test(rec) && !/notFound\(\)/.test(rec));
+    check('E. the landing asks the gated status route, draws the not-found for anyone it doesn\'t let in, and links no storyboard', /authFetch\('\/api\/voice\/status'/.test(land) && /status === 'none'\) return <>\{fallback\}<\/>/.test(land) && !/storyboard/i.test(land.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')));
+    check('E. ... two equal buttons on one line each ("Record your own", "Listen to his speeches"), a card per speech with its own "Record your own" at step 2', /\.eph-two \{ display: grid; grid-template-columns: 1fr 1fr;/.test(landCss) && /white-space: nowrap/.test(landCss) && /status\.speeches\.map\(\(s\) =>/.test(land) && /\/ephelion\/record\?speech=\$\{encodeURIComponent\(s\.id\)\}/.test(land));
+    check('E. ... two panes only when the page itself is 840 px or wider (a container query, not the window)', /\.eph-wrap \{ container: page \/ inline-size; \}/.test(landCss) && /@container page \(min-width: 840px\) \{\s*\.eph \{/.test(landCss) && !/@media/.test(landCss));
     check('E. ... its sign-in uses the full size, styled by the site (menu-signin)', /<SignInChoices note=\{false\} wallet=/.test(si) && !/size="small"/.test(si));
     {
       const own = JSON.parse(readFileSync(path.join(ROOT, 'config/consent-own-voice.json'), 'utf8'));
