@@ -85,11 +85,17 @@ try {
     // The buttons: equal, on one line each.
     const sizes = await page.locator('.eph-two > *').evaluateAll((els) => els.map((e) => { const r = e.getBoundingClientRect(); return { w: Math.round(r.width), h: Math.round(r.height) }; }));
     console.log(w, 'buttons', JSON.stringify(sizes), errors.length ? `page errors: ${errors.join(' | ')}` : 'no page errors');
+    const panes = await page.evaluate(() => { const l = document.querySelector('.eph-left')!.getBoundingClientRect(); const r = document.querySelector('.eph-right')!.getBoundingClientRect(); return { page: Math.round(document.querySelector('.eph-wrap')!.getBoundingClientRect().width), twoPanes: Math.abs(l.top - r.top) < 2 && r.left > l.right - 1 }; });
+    console.log(w, 'panes', JSON.stringify(panes));
+    // The first card's AI reading plays (the drafts route serves a shared reading). Learn more shut first.
+    await page.locator('.eph-link').first().click();
+    await page.waitForTimeout(300);
+    const play = page.locator('.eph-card .eph-play:not(.eph-play-empty)').first();
+    if (await play.count()) { await play.click(); await page.locator('.eph-card audio').first().waitFor({ timeout: 15_000 }).then(() => console.log(w, 'reading plays: audio element shown'), () => console.log(w, 'reading did NOT load')); }
     // Desktop with the assistant panel closed: the page gets the room for two panes.
     const close = page.locator('button[aria-label="Close the assistant"]');
     if (w === 1440 && (await close.count())) {
       await close.first().click();
-      await page.locator('.eph-link').first().click(); // Learn more shut again
       await page.waitForTimeout(500);
       await page.screenshot({ path: name('03-landing-panel-closed') });
       shots.push(name('03-landing-panel-closed'));

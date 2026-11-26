@@ -42,13 +42,27 @@
 .eph-learn { background: var(--card); border: 1px solid var(--rule); border-radius: 3px; padding: 18px 20px; font-size: var(--text-small); color: var(--body); }
 .eph-learn-side { display: none; }
 
-/* Desktop: the image scales with the page (220 to 330 px wide, 2:3), the text column beside it grows as it needs, and the
-   two buttons sit at the bottom of that column, so they line up with the image's bottom when the text is shorter. The
-   long label "Listen to his speeches" shows only when the text column has the room to keep both buttons on one line. */
-@container page (min-width: 840px) {
-  .eph { flex-direction: row; align-items: flex-start; gap: 40px; padding: 40px; }
-  .eph-left { --img: clamp(220px, 24cqw, 330px); flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
-  .eph-right { flex: 0 0 min(460px, 38%); min-width: 0; }
+/* Two panes from 760 px of page (Nate, 2026-11-26: "fit the page at about 790 px", the 1440 screen with the assistant
+   panel open): the speeches (or Learn more) in the right column. Below 1100 px of page the left pane keeps the phone's
+   hero (the image beside the title, the intro under them, the two equal buttons under that): at about 790 px the left
+   pane is about 400 px, too narrow for the intro beside the image with the buttons at its bottom. */
+@container page (min-width: 760px) {
+  .eph { flex-direction: row; align-items: flex-start; gap: 28px; padding: 28px 24px; }
+  .eph-left { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+  .eph-right { flex: 0 0 clamp(300px, 40%, 460px); min-width: 0; }
+  .eph-hero { grid-template-columns: 150px 1fr; }
+  .eph-image { width: 150px; }
+  .eph-learn-inline { display: none; }
+  .eph-learn-side { display: block; }
+  .eph-hide-wide { display: none; }
+}
+/* From 1100 px of page, the full design: the image scales with the page (220 to 330 px wide, 2:3), the text column
+   beside it grows as it needs, and the two buttons sit at the bottom of that column, lined up with the image's bottom.
+   The long label "Listen to his speeches" shows only when the text column has the room to keep both buttons on one line. */
+@container page (min-width: 1100px) {
+  .eph { gap: 40px; padding: 40px; }
+  .eph-left { --img: clamp(220px, 24cqw, 330px); }
+  .eph-right { flex-basis: min(460px, 38%); }
   .eph-hero { grid-template-columns: var(--img) minmax(0, 1fr); gap: 32px; align-items: stretch; }
   .eph-image { width: var(--img); aspect-ratio: auto; align-self: stretch; min-height: calc(var(--img) * 1.5); }
   .eph-hero-text { container: text / inline-size; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
@@ -57,10 +71,6 @@
   .eph-intro p { font-size: 18px; line-height: 1.5; }
   .eph-two { margin-top: auto; gap: 10px; }
   .eph-under, .eph-credit { margin-left: calc(var(--img) + 32px); }
-  .eph-credit { margin-top: 0; }
-  .eph-learn-inline { display: none; }
-  .eph-learn-side { display: block; }
-  .eph-hide-wide { display: none; }
 }
 @container text (min-width: 440px) {
   .eph-wide { display: inline; }
