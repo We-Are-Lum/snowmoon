@@ -351,7 +351,8 @@ export const IMAGE_WORDING = {
     tryAgain: 'Try again',
     signOut: 'sign out',
     menuSignIn: 'Sign in with Farcaster',
-    payWith: 'Pay in USDC or ETH on Base. It’s added to your balance once the payment confirms.',
+    // USDC only for new payments (owner, 2026-11-25, option A). DRAFT wording for the owner's reread.
+    payWith: 'Pay in USDC on Base. It’s added to your balance once the payment confirms.',
     terms:
       'You’re paying for image generation on this site. Each Generate is charged when you press it, whatever comes back, including a blocked prompt or an image the safety checker drops. No refunds.',
     /** DRAFT, reading B (coding agent, 2026-10-22), for the owner's reread with Terms 6a (docs/legal/credits-draft.md).
@@ -360,7 +361,7 @@ export const IMAGE_WORDING = {
       'You’re paying for image generation on this site. Each Generate is charged the price shown when you press it. If it doesn’t give you a picture (a check or the image model didn’t answer, the prompt was blocked, or the safety checker dropped the image), the charge is added back to your balance. Payments aren’t refunded as money.',
     /** DRAFT (coding agent, 2026-10-22, reading B): after a Generate that gave no picture was credited back. */
     creditedBack: 'No picture came back, so the charge was added back to your balance.',
-    pay: (usd: number, token: 'USDC' | 'ETH') => `Pay $${usd} in ${token}`,
+    pay: (usd: number) => `Pay $${usd} in USDC`,
     waiting: 'Waiting for the payment to confirm…',
     added: (usd: string) => `Added $${usd} to your balance.`,
     notOpen: 'Paying for images isn’t open yet.',
@@ -374,8 +375,9 @@ export const IMAGE_WORDING = {
       'not-to-us': 'That transaction didn’t pay this project’s address.',
       'not-from-you': 'That payment came from a different wallet than the one signed in.',
       'too-small': 'That payment is below the smallest amount added.',
-      // Drafted by the coding agent (2026-10-18), for the owner.
-      'shared-block': 'Someone else paid this address in the same block, so this payment can’t be told apart. Ask the maintainer.',
+      // An ETH payment after the switch to USDC only (owner, 2026-11-25: end it with "Write to us and we'll send it
+      // back."). DRAFT wording for the owner's reread, with Terms 6a's matching sentence.
+      eth: 'That payment was in ETH. Only USDC on Base is added to your balance now, so it wasn’t added. It’s at this project’s address on Base. Write to us and we’ll send it back.',
       already: 'That payment was already added.',
     },
   },
@@ -398,7 +400,7 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
   ...Object.entries(IMAGE_WORDING.prepaid as Record<string, unknown>).flatMap(([k, v]): { screen: string; where: string; text: string }[] =>
     typeof v === 'string' ? [{ screen: 'Wallet and prepaid images', where: `src/lib/images/wording.ts (prepaid.${k})`, text: v }] : typeof v === 'object' ? Object.entries(v as Record<string, string>).map(([c, t]) => ({ screen: 'Wallet and prepaid images', where: `src/lib/images/wording.ts (prepaid.${k}.${c})`, text: t })) : [],
   ),
-  { screen: 'Wallet and prepaid images', where: 'src/components/wallet-panel.tsx', text: 'Balance ${usd} · about {n} images / ${usd} an image: the estimated cost plus 30% / Pay ${usd} in {USDC|ETH} / Added ${usd} to your balance.' },
+  { screen: 'Wallet and prepaid images', where: 'src/components/wallet-panel.tsx', text: 'Balance ${usd} · about {n} images / ${usd} an image: the estimated cost plus 30% / Pay ${usd} in USDC / Added ${usd} to your balance.' },
   { screen: 'Add an image · compose', where: 'src/components/image-composer.tsx (action bar, when a draft is kept)', text: IMAGE_WORDING.draft.back },
   { screen: 'Add an image · preview', where: 'src/components/image-composer.tsx (preview)', text: IMAGE_WORDING.preview.promptLabel },
   { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (caption; "Open in reader →" is the assistant’s approved row 23, reused)', text: 'AI image · by {byline} (button: opens the recipe sheet) / {date} · Chapter {n} · ¶ {a–b} · Open in reader →' },

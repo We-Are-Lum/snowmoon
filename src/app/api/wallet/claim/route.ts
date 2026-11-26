@@ -6,7 +6,7 @@ import { balanceUsd, credit, prepaidOpen } from '~/lib/wallet/credits';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 
 /**
- * Add a payment to the signed-in wallet's balance: { txHash } of a USDC or ETH payment on Base to
+ * Add a payment to the signed-in wallet's balance: { txHash } of a USDC payment on Base to
  * IMAGES.prepaid.payTo, from this wallet. Read onchain (src/lib/wallet/chain.ts) and credited once.
  */
 const W = IMAGE_WORDING.prepaid;

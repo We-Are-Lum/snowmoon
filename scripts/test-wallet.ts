@@ -9,7 +9,7 @@
  *   domain and Base is accepted; another domain, another chain, another signer or our nonce changed
  *   are refused. The session token reads back, a changed one doesn't, and only getPerson takes it
  *   (as minus the account number); getFid never does.
- * - Payments read from Base: USDC to us from this wallet; ETH priced at the block; from someone else,
+ * - Payments read from Base: USDC to us from this wallet; ETH recognised and never added (USDC only, 2026-11-25); from someone else,
  *   to someone else, failed, still confirming, too old, too small; nothing when payTo isn't set.
  * - The balance: a payment is credited once; a Generate is paid at the estimate plus the markup; an
  *   empty balance is refused; while credit-back is off, nothing comes back even when nothing is made; while on (since
@@ -108,7 +108,7 @@ P.payTo = US;
 const u = await readPayment(hash, me.address, base({ logs: [usdcLog(me.address, US, 5_000_000n)] }));
 check('USDC to us from this wallet is $5', u.ok && u.token === 'USDC' && u.usd === 5, JSON.stringify(u, (_, v) => (typeof v === 'bigint' ? String(v) : v)));
 const e = await readPayment(hash, me.address, base({ value: 2n * 10n ** 15n }));
-check('0.002 ETH at $2,500 is $5', e.ok && e.token === 'ETH' && e.usd === 5, JSON.stringify(e, (_, v) => (typeof v === 'bigint' ? String(v) : v)));
+check('ETH to us from this wallet is recognised as ETH and not added (USDC only, owner 2026-11-25)', !e.ok && e.why === 'eth', JSON.stringify(e, (_, v) => (typeof v === 'bigint' ? String(v) : v)));
 const why = async (c: PublicClient) => {
   const r = await readPayment(hash, me.address, c);
   return r.ok ? 'ok' : r.why;
@@ -131,14 +131,19 @@ const userOp = (sender: string, success: boolean, ep = EP7) => ({
 });
 const BUNDLER = '0x00000000000000000000000000000000000b0b1e';
 const sw = await readPayment(hash, me.address, base({ to: '0x0000000071727De22E5E9d8BAf0edAc6f37da032', from: BUNDLER, logs: [userOp(me.address, true)], rise: 2n * 10n ** 15n }));
-check('smart wallet (4337): ETH credited from payTo\'s rise, $5', sw.ok && sw.token === 'ETH' && sw.usd === 5 && sw.amount === 2n * 10n ** 15n, JSON.stringify(sw, (_, v) => (typeof v === 'bigint' ? String(v) : v)));
-check('smart wallet (4337, EntryPoint v0.6) too', (await why(base({ to: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789', from: BUNDLER, logs: [userOp(me.address, true, '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789')], rise: 2n * 10n ** 15n }))) === 'ok');
-check('smart wallet (7702, the wallet sends a batch to itself): credited', (await why(base({ to: me.address, from: me.address, rise: 2n * 10n ** 15n }))) === 'ok');
+check('smart wallet (4337): ETH is recognised from payTo\'s rise, and not added', !sw.ok && sw.why === 'eth', JSON.stringify(sw, (_, v) => (typeof v === 'bigint' ? String(v) : v)));
+check('smart wallet (4337, EntryPoint v0.6) too', (await why(base({ to: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789', from: BUNDLER, logs: [userOp(me.address, true, '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789')], rise: 2n * 10n ** 15n }))) === 'eth');
+check('smart wallet (7702, the wallet sends a batch to itself): ETH, not added', (await why(base({ to: me.address, from: me.address, rise: 2n * 10n ** 15n }))) === 'eth');
 check('a failed user operation pays nothing', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, false)], rise: 2n * 10n ** 15n }))) === 'not-to-us');
 check('another wallet\'s user operation is not mine', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(other.address, true)], rise: 2n * 10n ** 15n }))) === 'not-to-us');
-check('someone else also paid payTo in that block: refused', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, true)], rise: 4n * 10n ** 15n, blockTxs: [{ hash, to: EP7 }, { hash: keccak256(toHex('other')), to: US }] }))) === 'shared-block');
+check('a block with someone else\'s payment too: still only ETH, never added', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, true)], rise: 4n * 10n ** 15n, blockTxs: [{ hash, to: EP7 }, { hash: keccak256(toHex('other')), to: US }] }))) === 'eth');
+check('a sweep out of payTo in the same block (its balance fell): nothing added', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, true)], rise: -(10n ** 15n) }))) === 'not-to-us');
+check('USDC from a smart wallet in a block where payTo swept its ETH: added in full', await (async () => {
+  const r = await readPayment(hash, me.address, base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, true), usdcLog(me.address, US, 1_000_000n)], rise: -(10n ** 15n) }));
+  return r.ok && r.usd === 1;
+})());
 check('no rise in payTo\'s balance: nothing paid', (await why(base({ to: EP7, from: BUNDLER, logs: [userOp(me.address, true)], rise: 0n }))) === 'not-to-us');
-check('an ordinary wallet\'s plain ETH payment still works without a balance read', (await why(base({ value: 2n * 10n ** 15n }))) === 'ok');
+check('an ordinary wallet\'s plain ETH payment: ETH, not added, without a balance read', (await why(base({ value: 2n * 10n ** 15n }))) === 'eth');
 
 // --- A payment's hash, as pasted (owner, 2026-10-15) ------------------------------------
 {
@@ -181,6 +186,13 @@ const r1 = await reserve(S, -acct);
 check('a Generate is paid from the balance', r1.ok && Math.abs((await balanceUsd(S, acct)) - (1 - price)) < 1e-6);
 await settle(S, { guard: { costUsd: 0.0001, provider: 'groq', verdict: 'ok' } }, undefined, 'prepaid');
 check('settling the real costs never changes what was charged (only a credit-back adds to the balance)', Math.abs((await balanceUsd(S, acct)) - (1 - price)) < 1e-6);
+// ETH already in a balance stays spendable after the switch to USDC only (owner, 2026-11-25).
+{
+  const ethAcct = await accountFor(S, '0x' + 'e7'.repeat(20));
+  await credit(S, ethAcct, { txHash: keccak256(toHex('eth paid before the switch')), token: 'ETH', amount: 4n * 10n ** 14n, usd: 1, blockNumber: 90n });
+  const r = await reserve(S, -ethAcct);
+  check('a balance paid in ETH before the switch still pays for a Generate', r.ok && Math.abs((await balanceUsd(S, ethAcct)) - (1 - price)) < 1e-6);
+}
 // --- Credit back a failed Generate (owner, 2026-10-21; migration 0022, IMAGES.prepaid.creditBack) ---------------
 {
   const { creditBack } = await import('../src/lib/wallet/credits');
@@ -630,8 +642,8 @@ await sql.end();
   useChainForTests(base({ to: EP6, from: BUNDLER, logs: [userOp(me.address, true, EP6)], rise: 413487687184325n }));
   const later = await as(mine, me.address, { txHash: firstEth });
   const lj2 = await later.json();
-  check('…and the kept hash, tried again with the fixed reader, is added once', later.ok && lj2.added > 1 && lj2.added < 1.1 && (await balanceUsd(S, mine)) > beforeEth, JSON.stringify(lj2));
-  check('only "already", "failed" and "old" let the device forget a payment', ['already', 'failed', 'old'].every((r) => forgetsPending(r)) && ['not-to-us', 'not-from-you', 'too-small', 'shared-block', undefined].every((r) => !forgetsPending(r)));
+  check('…and since USDC only (2026-11-25), the kept hash, tried again, is answered "eth" and not added', later.status === 422 && lj2.reason === 'eth' && (await balanceUsd(S, mine)) === beforeEth, JSON.stringify(lj2));
+  check('only "already", "failed", "old" and "eth" let the device forget a payment', ['already', 'failed', 'old', 'eth'].every((r) => forgetsPending(r)) && ['not-to-us', 'not-from-you', 'too-small', undefined].every((r) => !forgetsPending(r)));
   const panel = readFileSync('src/components/wallet.tsx', 'utf8');
   {
     // The 30-day note (owner, 2026-10-22), in the owner's words, gone on its own after WALLET_LINKS.announceUntil.

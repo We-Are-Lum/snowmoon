@@ -949,7 +949,8 @@ export const IMAGES = {
   /**
    * Wallet sign-in and prepaid generations (owner, 2026-10-13). A wallet account has no free daily
    * count and no Neynar gate: each Generate is paid from its balance at the estimated cost (the
-   * worst case reserved for it) plus `markup`. Paid in USDC or ETH on Base to `payTo`; the app reads
+   * worst case reserved for it) plus `markup`. Paid in USDC on Base to `payTo` (USDC only since 2026-11-25: owner, option A;
+   * ETH already in a balance stays spendable); the app reads
    * the payment onchain and credits it once. Prepaid spend has its own daily cap, apart from the free one.
    * Off until `payTo` is set.
    */
