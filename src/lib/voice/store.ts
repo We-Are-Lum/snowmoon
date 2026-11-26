@@ -13,9 +13,11 @@ import { voiceTestOn } from './flag';
  * temporary folder).
  */
 export const PREFIX = 'voice-drafts/';
+/** A voice sample (the four-step recorder, 2026-11-26): voice-samples/<speech>/<preset>-<sha256 of the line read>.mp3. */
+export const sampleKeyFor = (speechId: string, presetId: string, textSha256: string) => `voice-samples/${speechId}/${presetId}-${textSha256}.mp3`;
 export const keyFor = (draftId: string, n: number, sha256: string) => `${PREFIX}${draftId}/${n}-${sha256}.mp3`;
 const valid = (key: string) =>
-  /^voice-drafts\/[0-9a-f-]{36}\/[0-9]{1,2}-[0-9a-f]{64}\.mp3$/.test(key) || /^voice-boards\/[0-9a-f-]{36}\/([0-9]{1,20}\/)?[a-z0-9]{1,16}-[0-9a-f]{64}\.(png|jpg)$/.test(key);
+  /^voice-drafts\/[0-9a-f-]{36}\/[0-9]{1,2}-[0-9a-f]{64}\.mp3$/.test(key) || /^voice-samples\/[a-z0-9-]{1,80}\/[a-z0-9-]{1,80}-[0-9a-f]{64}\.mp3$/.test(key) || /^voice-boards\/[0-9a-f-]{36}\/([0-9]{1,20}\/)?[a-z0-9]{1,16}-[0-9a-f]{64}\.(png|jpg)$/.test(key);
 /**
  * A kept storyboard picture's key, in the same private bucket: voice-boards/<draft id>/<board owner's FID>/<shot key>-
  * <sha256>.png (a board has its own owner: a shared reading carries many people's boards, 2026-11-21). Pictures kept
