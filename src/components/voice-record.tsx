@@ -12,6 +12,7 @@ import { IMPROV_WORDING } from '~/lib/voice/improv-wording';
 import Link from 'next/link';
 import { LearnMore, LearnMoreParts } from '~/components/challenge-learn-more';
 import type { LearnMoreView } from '~/lib/challenge/learn-more-view';
+import { withReset } from '~/lib/challenge/model-wording';
 import { CONVERT_AGAIN } from '~/lib/voice/convert-again';
 import { EphelionIntro } from '~/components/ephelion-intro';
 import { SignedAudio, errText, joined, mmss, raced, useRecorder, useStepLog, wordCount, type Check, type Converted, type Redo } from '~/components/voice-recorder-core';
@@ -440,7 +441,12 @@ export function VoiceRecord({ fallback, signedOut, learn }: { fallback: React.Re
         </LearnMore>
       )}
       {!s.ready && <p className="vr-warn" role="status">Not ready: the voice service isn&rsquo;t set up on this server.</p>}
-      {message && <p className="vr-warn" role="alert">{message}</p>}
+      {/* {reset} (a take refusal) in the person's own time; the message only ever appears after an action, never on the server. */}
+      {message && (
+        <p className="vr-warn" role="alert">
+          {withReset(message, null)}
+        </p>
+      )}
 
       {!s.consent.agreed && (
         <section className="vr-card vr-consent" aria-labelledby="vr-consent-h">

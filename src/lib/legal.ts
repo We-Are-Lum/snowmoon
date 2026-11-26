@@ -50,8 +50,8 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: the day storyboard moderation (PR #225) merges and goes live, 2026-11-26 (PT). If the merge moves, this
-  // moves with it. (Before: 2026-11-26, PR #249, the four-step recorder; 2026-11-24, PR #235, the guided storyboard's fixes; 2026-11-24, PR #230, 30-day sign-ins; 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
+  // MERGE DAY: the day the storyboard pictures' allowance (PR #229) merges and goes live, 2026-11-26 (PT). If the merge
+  // moves, this moves with it. (Before: 2026-11-26, PR #225, storyboard moderation; 2026-11-26, PR #249, the four-step recorder; 2026-11-24, PR #235, the guided storyboard's fixes; 2026-11-24, PR #230, 30-day sign-ins; 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
   // 2026-11-21, the Ephelion voice; 2026-11-21, PR #204; 2026-11-20, PR #196; 2026-11-19, PR #191.)
   effective: '2026-11-26',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
@@ -361,7 +361,11 @@ export const LEGAL: {
     // the owner (main's through #249 on 2026-11-26; #225's ntfy item on 2026-11-23), and the combined Privacy holds both
     // unchanged, so the combined words are recorded as reread (as at the 2026-11-24 merge above). The words before were
     // 1616na (main) and 1ou05nb (this branch).
-    privacy: { words: '1gxwc0z', on: '2026-11-26', by: 'FID 6786' },
+    // 2026-11-24, owner's reread for #229 (branch voice-picture-allowance), typed in his session: "reread too: Privacy §4's
+    // daily-count item with "storyboard pictures" added, as drafted" (docs/legal/storyboard-pictures-draft.md). Merged
+    // with main on 2026-11-26: every other line is main's, all reread, so the combined words are recorded as reread. The
+    // words before were 1gxwc0z (main).
+    privacy: { words: '1tzkmtl', on: '2026-11-26', by: 'FID 6786' },
   },
 };
 
@@ -417,7 +421,7 @@ export const PRIVACY: LegalDoc = {
           'Speeches you record: each converted speech, in the character\'s voice, kept as your draft as soon as it comes back, until you remove it or publish it, with its recipe (the voice, the model, its settings, a fingerprint of your recording, and the words of your take as transcribed, with any corrections you make to them). Never your recording. You can remove a draft you haven\'t published; it is deleted, audio and all.',
           'Your conversation with the storyboard guide: what you asked and what it drafted, kept with your storyboard until you remove it. When you publish the storyboard, each picture\'s request and the prompt it was made with are published with it.',
           'The styles and character sheets you choose to use in your pictures ("My picks"), kept until you clear them and seen only by you. An image you publish shows the ones it used, in its recipe.',
-          'How many images, sheet remixes, Remix frames and voice conversions you make each day, to count the daily limits, and the reports you make. The count of voice conversions is deleted the next day.',
+          'How many images, sheet remixes, Remix frames, storyboard pictures and voice conversions you make each day, to count the daily limits, and the reports you make. The count of voice conversions is deleted the next day.',
           'Whether your Farcaster account passed the check for making images and asking the assistant (its Neynar score against the score needed), when that was decided, and the score needed then; never the score itself. A pass is kept for 90 days and a fail for a day. A pass is removed sooner if your account is reported or one of your pictures is hidden by a moderator.',
           'Whether your Lens account passed the check for making images and asking the assistant (its Lens score against the score needed), when that was decided, and the score needed then; never the score itself. A pass is kept for 90 days and a fail for a day. A pass is removed sooner if your account is reported or one of your pictures is hidden by a moderator.',
           'Whether your Bluesky account passed the check for making images and asking the assistant (section 7), and when that was decided; never its age or its post count. A pass is kept for 90 days and a fail for a day. A pass is removed sooner if your account is reported or one of your pictures is hidden by a moderator.',
