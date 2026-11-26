@@ -136,7 +136,7 @@ try {
   page.on('pageerror', (e) => errors.push(String(e)));
   await page.goto(url);
   await page.evaluate(() => localStorage.setItem('snowmoon.intro-seen', 'v2'));
-  await page.goto(`${url}/ephelion`);
+  await page.goto(`${url}/ephelion/record`);
   await as(page, NATE);
   const ready = async () => {
     await page.locator('#vr-pick-h').first().waitFor({ timeout: 30_000 });
@@ -195,7 +195,7 @@ try {
   check('L3. the draft was kept after the page had gone', kept.length === 1 && kept[0].recipe.kept === 'automatically, when the conversion came back');
   page = await ctx.newPage();
   page.on('pageerror', (e) => errors.push(String(e)));
-  await page.goto(`${url}/ephelion`);
+  await page.goto(`${url}/ephelion/record`);
   await ready();
   await page.locator('.vr-take').waitFor({ timeout: 15_000 });
   check('L3. coming back: the take is still on the device, and says it became a draft', await page.locator('.vr-take', { hasText: 'converted and kept as your draft' }).count() === 1);
