@@ -103,13 +103,16 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
   const items = navItems(last, adaptations, CHALLENGE.public || (auth.kind === 'signed-in' && isAdmin(auth.fid)));
   const onMp = path === '/minpentai' || path.startsWith('/minpentai/');
   const onChallenge = isChallengePath(path);
-  const showPanel = (onMp ? mpPanel : onChallenge ? chPanel : panel) && !path.startsWith('/assistant');
+  // The four-step recorder (Nate, 2026-11-26: "the site's side menus are hidden; a slim top bar has Exit"): no rail, top
+  // bar or assistant panel on /ephelion/record; the page draws its own Exit bar.
+  const bare = path === '/ephelion/record';
+  const showPanel = (onMp ? mpPanel : onChallenge ? chPanel : panel) && !path.startsWith('/assistant') && !bare;
   const railCollapsed = onChallenge ? !chRail : collapsed;
   const openPanel = () => (onMp ? setMpPanel(true) : onChallenge ? (setChPanel(true), remember(CHALLENGE_PANEL_KEY, 'open')) : (setPanel(true), remember('snowmoon.panel', null)));
   const closePanel = () => (onMp ? setMpPanel(false) : onChallenge ? (setChPanel(false), remember(CHALLENGE_PANEL_KEY, null)) : (setPanel(false), remember('snowmoon.panel', 'closed')));
 
   return (
-    <div className={`shell${railCollapsed ? ' rail-collapsed' : ''}${showPanel ? ' with-panel' : ''}${onChallenge ? ' on-challenge' : ''}`}>
+    <div className={`shell${railCollapsed ? ' rail-collapsed' : ''}${showPanel ? ' with-panel' : ''}${onChallenge ? ' on-challenge' : ''}${bare ? ' shell-bare' : ''}`}>
       <ImageZoom />
       <header className="topbar">
         {path.startsWith('/assistant') ? (
@@ -222,7 +225,7 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
           </div>
         </aside>
       ) : (
-        !path.startsWith('/assistant') && (
+        !path.startsWith('/assistant') && !bare && (
           <button type="button" className="panel-reopen" onClick={openPanel}>
             Assistant ⟩
           </button>

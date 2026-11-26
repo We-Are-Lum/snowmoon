@@ -1,0 +1,104 @@
+/* The four-step recorder (/ephelion/record, src/components/ephelion-recorder.tsx), from Nate's Recorder and PhoneFlow
+   files: the site's tokens only, so light and dark follow the theme. The component measures the page (not the window):
+   .er-wide-page from 760 px, two panes; .er-phone below, one screen at a time with the top and the step's controls
+   pinned. The site's rail, top bar and assistant panel are hidden on this page (shell.css, .shell-bare). */
+.er-wrap { color: var(--ink); font-family: var(--reading); min-height: 100vh; display: flex; flex-direction: column; background: var(--paper); }
+.er-pad { margin: 12px 16px; }
+.er-top { position: sticky; top: 0; z-index: 20; height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 12px 0 6px; border-bottom: 1px solid var(--rule); background: var(--paper); }
+.er-exit { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--ink); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; padding: 0 10px; }
+.er-title { font-size: 18px; }
+.er-stepof { min-width: 60px; text-align: right; }
+.er-pin { position: sticky; top: 52px; z-index: 19; background: var(--paper); border-bottom: 1px solid var(--rule); padding: 10px 14px; }
+.er-steps ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.er-step { width: 100%; min-height: 52px; border: 1px dashed var(--rule); border-radius: 3px; background: transparent; color: var(--faint); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font: inherit; cursor: pointer; padding: 4px; }
+.er-step:disabled { cursor: default; }
+.er-step-done { border: 1px solid var(--ink); background: var(--card); color: var(--ink); }
+.er-step-on { border: 1px solid var(--ink); background: var(--ink); color: var(--paper); }
+.er-step-n { font-size: 15px; line-height: 1; }
+.er-step-l, .er-kicker { font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: inherit; }
+.er-kicker { color: var(--muted); margin: 0; }
+.er-step-on .er-step-l, .er-step-done .er-step-l { color: inherit; }
+.er { flex: 1; display: flex; flex-direction: column; }
+.er-main { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.er h2 { font-size: 26px; line-height: 1.1; font-weight: 400; margin: 0; }
+.er h3 { font-size: 20px; font-weight: 400; margin: 0 0 6px; }
+.er-h1 { font-size: 30px !important; }
+.er-note { font-size: var(--text-small); color: var(--body); line-height: 1.45; margin: 0; }
+.er-warn { color: var(--warn); background: var(--flag-bg); border-radius: 3px; padding: 10px 12px; font-size: var(--text-small); margin: 0; }
+.er-ok { color: var(--veridia); font-size: var(--text-small); margin: 0; }
+.er-strong { font-weight: 600; }
+.er-card { background: var(--card); border: 1px solid var(--rule); border-radius: 3px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.er-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.er-two > * { flex: 1 1 0; }
+.er-btn { font: inherit; font-size: 17px; min-height: 48px; padding: 0 16px; border: 1px solid var(--btn); border-radius: 3px; background: var(--btn); color: var(--btn-ink); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+.er-btn:disabled { opacity: 0.45; cursor: default; }
+.er-quiet { background: transparent; color: var(--ink); border-color: var(--ink); }
+.er-small { min-height: 40px; font-size: 16px; padding: 0 12px; }
+.er-wide { width: 100%; }
+.er-big { min-height: 56px; font-size: 20px; }
+.er-hint { background: var(--soft); border-color: var(--soft); color: var(--muted); opacity: 1 !important; }
+.er-self { align-self: flex-start; }
+.er-link { font: inherit; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--link); background: none; border: 0; padding: 6px 0; cursor: pointer; text-align: left; align-self: flex-start; }
+.er-list { display: flex; flex-direction: column; gap: 8px; }
+.er-opt { font: inherit; text-align: left; display: flex; flex-direction: column; gap: 2px; width: 100%; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 3px; background: transparent; color: var(--ink); cursor: pointer; }
+.er-opt.er-sel { border: 2px solid var(--ink); background: var(--card); padding: 9px 11px; }
+.er-opt-title { font-size: 19px; line-height: 1.3; display: block; }
+.er-opt-line { font-size: 16px; color: var(--body); line-height: 1.4; display: block; }
+.er-voice { flex-direction: row; align-items: center; gap: 12px; }
+.er-play { flex: 0 0 44px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--ink); background: transparent; color: var(--ink); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; }
+.er-play:disabled { border-style: dashed; border-color: var(--faint); color: var(--faint); cursor: default; }
+.er-speech-text p { margin: 0 0 10px; font-size: var(--text-read); line-height: var(--lh-read); }
+.er-speech-text .er-kicker { margin: 0 0 6px; font-size: var(--text-label); line-height: 1.4; }
+.er-meta-line { margin-top: 16px !important; padding-top: 10px; border-top: 1px solid var(--rule); text-transform: none !important; }
+.er-confirm { border: 2px solid var(--ink); border-radius: 3px; padding: 12px; background: var(--card); }
+.er-confirm p { margin: 0 0 8px; }
+.er-sample { flex-direction: row; align-items: center; gap: 14px; }
+.er-sample-line { margin: 0; font-size: 18px; }
+.er-strip .er-link { white-space: nowrap; }
+.er-check-list summary { cursor: pointer; font-size: 16px; color: var(--body); margin-bottom: 8px; }
+.er-strip { margin: -16px -16px 0; padding: 8px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--card); border-bottom: 1px solid var(--rule); font-size: 15px; color: var(--body); }
+.er-script { overflow-y: auto; max-height: 52vh; position: relative; padding: 4px 2px; scroll-behavior: smooth; outline: none; }
+.er-sent { margin: 0; padding: 4px 10px; border-radius: 3px; line-height: 1.45; }
+.er-past { color: var(--muted); }
+.er-now { background: var(--soft); box-shadow: inset 3px 0 0 var(--ink); border-top: 1px dashed var(--faint); border-bottom: 1px dashed var(--faint); }
+.er-live .er-sent { cursor: pointer; }
+.er-edit { display: flex; flex-direction: column; gap: 8px; }
+.er-edit textarea { font: inherit; font-size: 18px; line-height: 1.5; width: 100%; border: 1px solid var(--rule); border-radius: 3px; background: var(--card); color: var(--ink); padding: 10px 12px; }
+.er-reader { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.er-switch { display: inline-flex; align-items: center; gap: 8px; font-size: 17px; cursor: pointer; }
+.er-switch input { width: 20px; height: 20px; }
+.er-sizes { display: inline-flex; gap: 6px; }
+.er-size { font: inherit; width: 44px; min-height: 40px; border: 1px solid var(--rule); border-radius: 3px; background: transparent; color: var(--ink); font-size: 15px; cursor: pointer; }
+.er-size-big { font-size: 21px; }
+.er-recbox { display: flex; align-items: center; gap: 14px; }
+.er-rec { flex: 0 0 64px; width: 64px; height: 64px; border-radius: 50%; border: 2px solid var(--ink); background: var(--card); display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; }
+.er-rec:disabled { cursor: default; }
+.er-rec-dot { width: 24px; height: 24px; border-radius: 50%; background: var(--warn); }
+.er-rec-wait .er-rec-dot { opacity: 0.4; }
+.er-rec-square { width: 20px; height: 20px; border-radius: 3px; background: var(--warn); }
+.er-rec-title { font-size: 21px; line-height: 1.2; }
+.er-badge-slot { margin-left: auto; }
+.er-badge { display: inline-block; border-radius: 3px; padding: 2px 10px; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; align-self: flex-start; }
+.er-badge-count { background: #F0E3C0; color: var(--ink); }
+.er-badge-rec { background: var(--warn); color: #fff; }
+.er-badge-stop { background: #DCE5D6; color: var(--ink); }
+.er-paused { margin: 0; padding: 8px 10px; border: 1px dashed var(--faint); border-radius: 3px; font-size: 16px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.er-tick { display: flex; gap: 10px; align-items: flex-start; font-size: 16px; line-height: 1.4; color: var(--body); }
+.er-tick input { margin-top: 3px; width: 18px; height: 18px; flex: 0 0 auto; }
+.er-audio { width: 100%; height: 36px; }
+.er-checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; font-size: 16px; }
+.er-checks li { display: grid; grid-template-columns: 22px 1fr; gap: 4px 8px; align-items: start; }
+.er-checks li > button, .er-checks li > .er-redo { grid-column: 2; justify-self: start; }
+.er-pass .er-mark { color: var(--veridia); }
+.er-fail .er-mark { color: var(--warn); }
+.er-teaser { margin: 0; padding: 12px 14px; border: 1px dashed var(--faint); border-radius: 3px; font-size: var(--text-small); color: var(--muted); }
+.er-foot { position: sticky; bottom: 0; z-index: 18; background: var(--paper); border-top: 1px solid var(--rule); padding: 12px 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+
+/* Two panes: the steps and the step's controls on the left, what it shows on the right. */
+.er-wide-page .er { flex-direction: row; align-items: stretch; }
+.er-wide-page .er-side { flex: 0 0 clamp(300px, 38%, 440px); background: var(--chrome); border-right: 1px solid var(--rule); padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.er-wide-page .er-step { min-height: 44px; flex-direction: row; gap: 4px; }
+.er-wide-page .er-step-n::after { content: '.'; }
+.er-wide-page .er-main { flex: 1; min-width: 0; padding: 32px 40px; max-width: 860px; }
+.er-wide-page .er-h1 { font-size: 38px !important; }
+.er-wide-page .er-script { max-height: calc(100vh - 160px); border-top: 2px solid var(--ink); padding-top: 16px; }

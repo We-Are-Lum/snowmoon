@@ -50,10 +50,10 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: the day the guided storyboard's fixes (PR #235, Privacy words 79g0gm) merge and go live, 2026-11-24 (PT). If
-  // the merge moves, this moves with it. (Before: 2026-11-24, PR #230, 30-day sign-ins; 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
+  // MERGE DAY: the day the four-step recorder (PR #249, Privacy words 1616na) merges and goes live, 2026-11-26 (PT). If
+  // the merge moves, this moves with it. (Before: 2026-11-24, PR #235, the guided storyboard's fixes; 2026-11-24, PR #230, 30-day sign-ins; 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
   // 2026-11-21, the Ephelion voice; 2026-11-21, PR #204; 2026-11-20, PR #196; 2026-11-19, PR #191.)
-  effective: '2026-11-24',
+  effective: '2026-11-26',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -345,7 +345,12 @@ export const LEGAL: {
     // Groq item adds "the words of your take as transcribed" and now ends "; never your recording."; §4's speeches item
     // adds "and the words of your take as transcribed, with any corrections you make to them" (docs/legal/voice-improv-draft.md).
     // The words before were 79g0gm.
-    privacy: { words: 'c9hpo6', on: '2026-11-24', by: 'FID 6786' },
+    // 2026-11-26, owner's reread for #249 (the four-step recorder), typed in his session: "Reread: the Privacy §3 sentence
+    // and the recorder's wording, both as written.": §3's speech item becomes "a speech you record, and its words if you
+    // edit them, until you remove them or record again, or your browser clears them (the recording is sent to us only to
+    // be converted, and we keep only its fingerprint, never the recording; words you edit are never sent)". The words
+    // before were c9hpo6.
+    privacy: { words: '1616na', on: '2026-11-26', by: 'FID 6786' },
   },
 };
 
@@ -379,7 +384,7 @@ export const PRIVACY: LegalDoc = {
   sections: [
     { n: 1, head: 'Who we are.', body: ['Lum LLC, a Wyoming limited liability company, operates Snowmoon Party.'] },
     { n: 2, head: 'The short version.', body: ['You can read and listen without an account, and we keep nothing about you when you do. We use no advertising or analytics trackers and set no cookies. We do not sell data.'] },
-    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a speech you record, until you remove it or record again, or your browser clears it (it is sent to us only to be converted, and we keep only its fingerprint, never the recording), a few other settings of yours, and, on the website, your sign-in, which lasts 30 days unless you sign out, a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, the Bluesky handle you last signed in with, to fill it in next time, and a payment you have sent but not yet seen credited. If you choose a closed model for a challenge picture, it also stores that you confirmed you are 18 or older, and which makers\' notices you asked not to be shown again; with each such picture we receive only that you confirmed, and don\'t keep it. These stay on your device, except that the assistant sends the chapter you\'re reading, as a number, with each question, so it can answer “where was I”; it isn\'t kept. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
+    { n: 3, head: 'Kept on your device only.', body: ['Your browser stores a few things so the site works: whether you have seen the introduction, your light or dark setting, where you stopped listening, the furthest chapter you have opened, your questions to the assistant and its answers, drafts of images you make until you publish them, a speech you record, and its words if you edit them, until you remove them or record again, or your browser clears them (the recording is sent to us only to be converted, and we keep only its fingerprint, never the recording; words you edit are never sent), a few other settings of yours, and, on the website, your sign-in, which lasts 30 days unless you sign out, a note of a Bluesky sign-in under way, kept in that tab for at most ten minutes, the Bluesky handle you last signed in with, to fill it in next time, and a payment you have sent but not yet seen credited. If you choose a closed model for a challenge picture, it also stores that you confirmed you are 18 or older, and which makers\' notices you asked not to be shown again; with each such picture we receive only that you confirmed, and don\'t keep it. These stay on your device, except that the assistant sends the chapter you\'re reading, as a number, with each question, so it can answer “where was I”; it isn\'t kept. Clearing your browser\'s site data removes them. Frames you make in Remix are not drafts: they are saved by us as soon as they are made (section 4). So are the frames and video tests your agent makes when you approve them, but privately: only you can see them (section 4).'] },
     {
       n: 4,
       head: 'Kept by us when you sign in.',

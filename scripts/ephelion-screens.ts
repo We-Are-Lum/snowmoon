@@ -59,8 +59,10 @@ try {
   await api('consent', { method: 'POST', body: JSON.stringify({ sha256: st.consent.sha256 }) });
   const made = await api('reading', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ speechId: st.speeches[0].id, presetId: st.choices[0].presetId, candidate: st.choices[0].candidate }) });
   console.log('reading for the first speech:', made.status);
+  const sm = await api('samples', { method: 'POST' });
+  console.log('voice samples made:', sm.status, JSON.stringify(((await sm.json()) as { made?: number }).made));
 
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const shots: string[] = [];
   for (const [w, h] of [[390, 844], [1440, 900]] as const) {
     const ctx = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: w, height: h } });
@@ -111,6 +113,67 @@ try {
       const btn = await page.locator('.eph-two').evaluate((e) => Math.round(e.getBoundingClientRect().bottom));
       console.log('panel closed: buttons', JSON.stringify(two), 'image bottom', img, 'buttons bottom', btn);
     }
+    await ctx.close();
+  }
+
+  // The four-step recorder (PR 2): every step, phone and desktop (the site's menus and the assistant are hidden there).
+  for (const [w, h] of [[390, 844], [1440, 900]] as const) {
+    const ctx = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: w, height: h }, permissions: ['microphone'] });
+    await ctx.addInitScript((fid) => {
+      localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `voice-test-${fid}`, fid, username: 'naaate', exp: Math.floor(Date.now() / 1000) + 86400 }));
+      localStorage.setItem('snowmoon.intro-seen', 'v2');
+    }, NATE);
+    await ctx.route('**/api/chat/status', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '{"ready":false}' }));
+    const page = await ctx.newPage();
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(String(e)));
+    const name = (s: string) => path.join(out, `${s}-${w}.png`);
+    const shot = async (s: string, full = false) => {
+      await page.waitForTimeout(400);
+      await page.screenshot({ path: name(s), fullPage: full });
+      shots.push(name(s));
+    };
+    await page.goto(`${url}/ephelion/record`);
+    await page.locator('button[data-step="1"]').waitFor({ timeout: 30_000 });
+    await shot('10-rec-speech-list');
+    await page.locator('button[data-speech]').nth(1).click();
+    await shot('11-rec-speech-detail');
+    await page.getByRole('button', { name: 'Use this speech' }).click();
+    await page.locator('[data-voice]').first().click();
+    await shot('12-rec-voice');
+    await page.getByRole('button', { name: 'Next: record' }).click();
+    const agree = page.getByRole('button', { name: 'I agree' });
+    if (await agree.count()) {
+      await shot('13-rec-consent', w === 390);
+      await agree.click();
+    }
+    await page.getByRole('button', { name: 'Start recording' }).waitFor({ timeout: 30_000 });
+    await shot('14-rec-record-ready');
+    await page.getByRole('button', { name: 'Start recording' }).click();
+    await page.locator('.er-badge-count').waitFor({ timeout: 5_000 });
+    await shot('15-rec-countdown');
+    await page.locator('.er-badge-rec').waitFor({ timeout: 10_000 });
+    await page.waitForTimeout(2600);
+    await shot('16-rec-recording');
+    await page.locator('.er-script').dispatchEvent('wheel');
+    await shot('17-rec-paused');
+    await page.getByRole('button', { name: 'Resume' }).click();
+    await page.getByRole('button', { name: 'Stop' }).first().click();
+    await page.getByRole('button', { name: 'Next: listen' }).waitFor({ timeout: 30_000 });
+    await page.getByText(/saved on this|Saved on this/).first().waitFor({ timeout: 10_000 }).catch(() => {});
+    await shot('18-rec-stopped');
+    await page.getByRole('button', { name: 'Next: listen' }).click();
+    await page.locator('.er-take').waitFor({ timeout: 15_000 });
+    await shot('19-rec-listen', w === 390);
+    await page.locator('.er-tick input[type="checkbox"]').check();
+    await page.getByRole('button', { name: /^Make it his voice/ }).click();
+    await page.locator('.er-converted').waitFor({ timeout: 60_000 });
+    await page.locator('[data-slot="take-label"]').first().waitFor({ timeout: 30_000 }).catch(() => {});
+    await shot('20-rec-converted', w === 390);
+    await page.locator('button[data-step="3"]').click();
+    await page.getByRole('button', { name: /^Edit (the )?text$/ }).first().click();
+    await shot('21-rec-edit-text');
+    console.log(w, 'recorder', errors.length ? `page errors: ${errors.join(' | ')}` : 'no page errors');
     await ctx.close();
   }
   await browser.close();
