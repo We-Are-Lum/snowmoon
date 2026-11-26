@@ -52,12 +52,15 @@ const shape = async (pg: PGlite, tables: string[]) =>
 for (const [file, tables, plant] of [
   ['supabase/migrations/NEXT_voice_takes.sql', ['voice_publications'], [
     ['studio_writer may insert publications', 'grant insert on studio.voice_publications to studio_writer;', 'revoke insert on studio.voice_publications from studio_writer;'],
-    ['anon may enter a take', 'grant execute on function studio.publish_voice_take(uuid, uuid, bigint, boolean, jsonb, jsonb, jsonb) to anon;', 'revoke execute on function studio.publish_voice_take(uuid, uuid, bigint, boolean, jsonb, jsonb, jsonb) from anon;'],
+    ['anon may enter a take', 'grant execute on function studio.publish_voice_take(uuid, uuid, bigint, boolean, jsonb, jsonb, jsonb, boolean) to anon;', 'revoke execute on function studio.publish_voice_take(uuid, uuid, bigint, boolean, jsonb, jsonb, jsonb, boolean) from anon;'],
     ['one live take per speech is gone', 'drop index studio.voice_publications_live_take;', `create unique index voice_publications_live_take on studio.voice_publications (fid, speech_id) where kind = 'take' and taken_down_at is null;`],
+    ['the Ephelion check accepts any picture', `create or replace function studio.picture_is_of(p_version uuid, p_character text) returns boolean language sql stable security definer set search_path = studio, pg_temp as $f$ select true $f$;`, ''],
+    ['hiding a picture no longer hides its takes', `create or replace function studio.hide_takes_using_picture(p_version uuid, p_by bigint, p_role text) returns table (publication_id uuid, key text) language plpgsql security definer set search_path = studio, pg_temp as $f$ begin return; end $f$;`, ''],
   ]],
   ['supabase/migrations/NEXT_ephelion_scene.sql', ['ephelion_scene_pictures'], [
     ['studio_writer may delete', 'grant delete on studio.ephelion_scene_pictures to studio_writer;', 'revoke delete on studio.ephelion_scene_pictures from studio_writer;'],
     ['one per account is gone', 'alter table studio.ephelion_scene_pictures drop constraint ephelion_scene_pictures_pkey;', 'alter table studio.ephelion_scene_pictures add primary key (person);'],
+    ['a claim lets a second request in', `create or replace function studio.claim_free_scene(p_person bigint) returns boolean language plpgsql security definer set search_path = studio, pg_temp as $f$ begin insert into studio.ephelion_scene_pictures (person) values (p_person) on conflict (person) do nothing; return true; end $f$;`, ''],
   ]],
 ] as const) {
   const f = parts(file);
@@ -88,7 +91,7 @@ for (const [file, tables, plant] of [
   for (const [label, fault, heal] of plant) {
     await pg.exec(fault);
     const r = await tryExec(pg, f.readBack);
-    await pg.exec(heal);
+    await pg.exec(heal || f.mig);
     check(`${name}: proof: the read-back catches it when ${label}`, !r.ok);
   }
   // The undo: refused once a take (a free picture) exists; otherwise the shape before.
@@ -96,12 +99,12 @@ for (const [file, tables, plant] of [
     await pg.exec(`insert into studio.voice_drafts (id, fid, kind, speech_id, preset_id, recipe) values ('22222222-2222-4222-8222-222222222222', 6786, 'performance', 'doing-fine-v2', 'ephelion-warm-lecturer', '{"provider":"elevenlabs","model":"m","takes":[{"takeSha256":"c"}]}');`);
     const id = '33333333-3333-4333-8333-333333333333';
     const a = 'a'.repeat(64), b = 'b'.repeat(64);
-    await pg.exec(`select studio.publish_voice_take('${id}', '22222222-2222-4222-8222-222222222222', 6786, true, '{"voice":{},"speech":{"id":"doing-fine-v2"},"spoken":{}}', '{"source":"preset","scene":"study","key":"takes/${id}/picture-${b}.jpg","sha256":"${b}"}', '[{"key":"takes/${id}/speech-${a}.mp3","sha256":"${a}"},{"key":"takes/${id}/picture-${b}.jpg","sha256":"${b}"}]');`);
+    await pg.exec(`select studio.publish_voice_take('${id}', '22222222-2222-4222-8222-222222222222', 6786, true, '{"voice":{},"speech":{"id":"doing-fine-v2"},"spoken":{}}', '{"source":"preset","scene":"study","key":"takes/${id}/picture-${b}.jpg","sha256":"${b}"}', '[{"key":"takes/${id}/speech-${a}.mp3","sha256":"${a}"},{"key":"takes/${id}/picture-${b}.jpg","sha256":"${b}"}]', false);`);
     const refused = !(await tryExec(pg, f.undo)).ok;
     check(`${name}: the undo is refused once a take has been entered`, refused);
     await pg.exec(`delete from studio.voice_publications where kind = 'take';`);
   } else {
-    await pg.exec(`insert into studio.ephelion_scene_pictures (person, picture_sha256) values (6786, '${'c'.repeat(64)}');`);
+    await pg.exec(`insert into studio.ephelion_scene_pictures (person, made_at, picture_sha256) values (6786, now(), '${'c'.repeat(64)}');`);
     check(`${name}: the undo is refused once a free picture has been made`, !(await tryExec(pg, f.undo)).ok);
     await pg.exec(`delete from studio.ephelion_scene_pictures;`);
   }
