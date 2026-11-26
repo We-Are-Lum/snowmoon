@@ -170,6 +170,21 @@ try {
     await page.locator('.er-converted').waitFor({ timeout: 60_000 });
     await page.locator('[data-slot="take-label"]').first().waitFor({ timeout: 30_000 }).catch(() => {});
     await shot('20-rec-converted', w === 390);
+    // "Choose his scene" (PR 3): the three presets, marked placeholders; pick one, play the preview.
+    await page.locator('[data-slot="scenes"] [data-scene]').nth(1).click();
+    await page.locator('.es-playbtn').first().click();
+    await page.waitForTimeout(1500);
+    await shot('22-rec-scene-picked', w === 390);
+    const sc = await page.evaluate(() => ({
+      cards: [...document.querySelectorAll('[data-slot="scenes"] [data-scene]')].map((e) => e.getAttribute('data-scene')),
+      placeholders: document.querySelectorAll('[data-slot="scenes"] [data-placeholder="true"]').length,
+      picked: document.querySelector('[data-slot="scenes"] [aria-checked="true"]')?.getAttribute('data-scene'),
+      stage: document.querySelector('.es-stage [data-placeholder="true"]')?.textContent,
+      kept: localStorage.getItem('snowmoon.ephelion.scene'),
+      describeOwn: /Describe your own/.test(document.body.innerText),
+      time: document.querySelector('.es-time')?.textContent,
+    }));
+    console.log(w, 'scenes', JSON.stringify(sc));
     await page.locator('button[data-step="3"]').click();
     await page.getByRole('button', { name: /^Edit (the )?text$/ }).first().click();
     await shot('21-rec-edit-text');

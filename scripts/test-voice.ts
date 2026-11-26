@@ -154,7 +154,22 @@ const sharpPng = async () => (await import('sharp')).default({ create: { width: 
     check('E. ... the highlight is timed (no speech recognition): on or off, the size, Back a line / Forward a line, tap a sentence, scrolling pauses it with Resume', !/SpeechRecognition|webkitSpeechRecognition/.test(er) && /onWheel=\{byHand\}/.test(er) && /onTouchMove=\{byHand\}/.test(er) && /W\.paused/.test(er) && /W\.resume/.test(er) && /W\.backLine/.test(er) && /W\.forwardLine/.test(er) && /onClick=\{\(\) => recording && hl && moveTo\(i\)\}/.test(er) && /W\.smaller/.test(er) && /W\.bigger/.test(er));
     check('E. ... a 3-second countdown, then Countdown, Recording and Stopped as their own labelled states; stopping keeps the take on the device', /const COUNTDOWN = 3;/.test(er) && /er-badge-count/.test(er) && /er-badge-rec/.test(er) && /er-badge-stop/.test(er) && /await saveTake\(fid, speech\.id, out\.blob, out\.seconds\)/.test(er));
     check('E. ... both saves: your recording from the device\'s own copy, the converted take from your draft', /saveBlob\(take\.blob,/.test(er) && /saveBlob\(converted\.blob,/.test(er) && /\/api\/voice\/drafts\/\$\{keptFromTake\.id\}\/0/.test(er));
-    check('E. ... no Enter, Share, scene or payment on the recorder', !/Enter the challenge|>Share<|Choose his scene|USDC/.test(erCode));
+    check('E. ... no Enter, Share or payment on the recorder', !/Enter the challenge|>Share<|USDC/.test(erCode));
+    {
+      // "Choose his scene" (Nate, 2026-11-26; PR 3): the three presets only, placeholders marked as such until the set is
+      // approved, their pictures from one config entry each; no "Describe your own", free picture or paying; the preview's
+      // take only once converted; the choice a setting on this device.
+      const { SCENES, SCENE_KEY } = await import('../src/lib/voice/scenes');
+      const sc = readFileSync(path.join(ROOT, 'src/components/ephelion-scenes.tsx'), 'utf8');
+      const scCode = sc.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/\/\/.*$/gm, '');
+      const allWords = JSON.stringify(RECORDER);
+      check('E. scenes: the three presets only, in order, each with its picture null (a placeholder) until the approved set is dropped in', SCENES.map((s) => s.title).join('|') === 'In his study, in a nice sweater, sipping tea|In formal wear, on a TV commercial|Giving a speech in front of a crowd' && SCENES.every((s) => s.picture === null));
+      check('E. ... a placeholder is marked as one (data-placeholder, "Picture to come"), never an image', /data-placeholder="true"/.test(sc) && RECORDER.scenePlaceholder === 'Picture to come' && /if \(scene\.picture\)/.test(sc));
+      check('E. ... the cards come from SCENES only: no "Describe your own", free picture or paying on the page', /SCENES\.map\(/.test(scCode) && !/Describe your own|free one|free picture|USDC|\$\d/.test(scCode + erCode) && !/Describe your own|free one/.test(allWords));
+      check('E. ... "Choose his scene" shows once the take is in his voice, and the preview plays the converted take only', /const scenes = converted && <ScenePicker/.test(er) && /const previewUrl = converted \? playUrl : null;/.test(er) && /\{url \? W\.previewLine : W\.previewBefore\}/.test(sc) && RECORDER.previewLine === 'Your take in his voice, with Lord Ephelion in the scene you picked.' && RECORDER.previewBefore === 'Make it his voice to watch it here.');
+      check('E. ... the chosen scene is a setting kept on this device only (localStorage), never sent', SCENE_KEY === 'snowmoon.ephelion.scene' && /localStorage\.setItem\(SCENE_KEY, next\)/.test(sc) && !/authFetch|fetch\(/.test(scCode));
+      check('E. ... the teaser stays on the Listen step', /\{teaser\}/.test(er) && RECORDER.teaser.startsWith('Coming with the storyboard challenge'));
+    }
     check('E. ... the site\'s rail, top bar and assistant panel are hidden on /ephelion/record (shell-bare)', /const bare = path === '\/ephelion\/record';/.test(shell) && /\$\{bare \? ' shell-bare' : ''\}/.test(shell) && /\.shell-bare > \.topbar, \.shell-bare > \.rail/.test(shellCss));
     check('E. ... voice samples: gated like every voice route; only an admin makes them (testers: not found); kept in the private store', /voicePerson\(request\)/.test(samplesRoute) && /if \(!isAdmin\(who\.fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/.test(samplesRoute) && /voice-samples\//.test(readFileSync(path.join(ROOT, 'src/lib/voice/store.ts'), 'utf8')));
     {

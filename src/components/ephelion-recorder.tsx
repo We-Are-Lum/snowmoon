@@ -10,6 +10,7 @@ import { IMPROV_WORDING } from '~/lib/voice/improv-wording';
 import { RECORDER as W } from '~/lib/voice/recorder-wording';
 import { loadWords, removeWords, saveWords, splitSentences } from '~/lib/voice/device-words';
 import { SignedAudio, joined, mmss, useRecorder, useStepLog, wordCount, type Check, type Converted, type Redo } from '~/components/voice-recorder-core';
+import { ScenePicker, ScenePreview, useScene } from '~/components/ephelion-scenes';
 import '../styles/ephelion-recorder.css';
 
 /**
@@ -210,6 +211,8 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
   const [onDevice, setOnDevice] = useState<DeviceTake | null>(null);
   const [deviceNote, setDeviceNote] = useState<string | null>(null);
   const [converted, setConverted] = useState<(Converted & { presetId: string }) | null>(null);
+  // The scene chosen on the Listen step: a setting on this device, for every speech (PR 3).
+  const [scene, pickScene] = useScene();
   const [convertedFor, setConvertedFor] = useState<string | null>(null);
   const [again, setAgain] = useState<'ask' | 'yes' | 'kept'>('ask');
   const [agree, setAgree] = useState(false);
@@ -977,16 +980,22 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
         {convertPart}
       </>
     );
+    // "Choose his scene" once the take is in his voice; the preview shows the chosen scene with it playing (PR 3).
+    const previewUrl = converted ? playUrl : null;
+    const preview = <ScenePreview scene={scene} url={previewUrl} />;
+    const scenes = converted && <ScenePicker scene={scene} onPick={pickScene} cols={2} />;
     if (wide) {
       side = (
         <>
           <h2>{W.listen}</h2>
           {parts}
+          {scenes}
           {recordNew}
         </>
       );
       main = (
         <>
+          {preview}
           {checkPart}
           {teaser}
         </>
@@ -994,8 +1003,10 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
     } else {
       main = (
         <>
+          {preview}
           <h2>{W.listen}</h2>
           {parts}
+          {scenes}
           {checkPart}
           {recordNew}
           {teaser}
