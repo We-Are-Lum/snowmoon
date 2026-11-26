@@ -375,9 +375,9 @@ export const IMAGE_WORDING = {
       'not-to-us': 'That transaction didn’t pay this project’s address.',
       'not-from-you': 'That payment came from a different wallet than the one signed in.',
       'too-small': 'That payment is below the smallest amount added.',
-      // An ETH payment after the switch to USDC only (owner, 2026-11-25). DRAFT wording for the owner's reread; what
-      // happens to such a payment (refund, manual credit or neither) is the owner's to decide, so it says neither.
-      eth: 'That payment was in ETH. Only USDC on Base is added to your balance now, so it wasn’t added. It’s at this project’s address on Base.',
+      // An ETH payment after the switch to USDC only (owner, 2026-11-25: end it with "Write to us and we'll send it
+      // back."). DRAFT wording for the owner's reread, with Terms 6a's matching sentence.
+      eth: 'That payment was in ETH. Only USDC on Base is added to your balance now, so it wasn’t added. It’s at this project’s address on Base. Write to us and we’ll send it back.',
       already: 'That payment was already added.',
     },
   },
