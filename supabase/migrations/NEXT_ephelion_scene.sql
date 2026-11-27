@@ -1,7 +1,8 @@
 -- NEXT_ephelion_scene.sql: the free picture of one's own scene in the Ephelion challenge, one per account (Nate,
 -- 2026-11-26: "One free picture per account"; "A refused or failed picture doesn't use up the free one"; "a picture that
--- just came out wrong isn't redone for free"). Branch ephelion-takes. NOT APPLIED. It takes the next free number at
--- merge. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory PGlite (npm run
+-- just came out wrong isn't redone for free"). Branch ephelion-takes. APPLIED by Nate in production on 2026-11-26/27, as at
+-- 0484ec54 (A, B and C: C's rights table as expected, no error). It keeps its NEXT_ name until merge, then takes the next
+-- free number after 0053 (after NEXT_voice_takes.sql's). Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory PGlite (npm run
 -- test:voice-takes-sql). Requires 0001 only.
 --
 -- MUST RUN AS postgres, in the Supabase SQL Editor. A. the dry run (ending in `rollback;`), B. the migration (ending in
