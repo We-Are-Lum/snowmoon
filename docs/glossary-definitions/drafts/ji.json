@@ -1,0 +1,28 @@
+{
+  "slug": "ji",
+  "term": "ji",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "In Dzegoban, \"ji\" is "
+      },
+      {
+        "quote": "the separator",
+        "cite": "c9-b33"
+      },
+      {
+        "text": " that makes a compound less ambiguous, as in "
+      },
+      {
+        "quote": "jia dzu ji lie",
+        "cite": "c9-b33"
+      },
+      {
+        "text": ", though it cannot remove ambiguity completely."
+      }
+    ]
+  ]
+}

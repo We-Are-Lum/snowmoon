@@ -1,0 +1,29 @@
+{
+  "slug": "sadzu-du",
+  "term": "Sadzu Du",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Sadzu Du is a place in Dzego, as in the dateline "
+      },
+      {
+        "quote": "Sadzu Du, Dzego",
+        "cite": "c12-b1"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "It hosts the Minpentai championship games, with a Minpentai museum inside a mountain pyramid."
+      },
+      {
+        "cite": "c12-b89"
+      }
+    ]
+  ]
+}

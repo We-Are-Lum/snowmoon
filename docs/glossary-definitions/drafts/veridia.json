@@ -1,0 +1,35 @@
+{
+  "slug": "veridia",
+  "term": "Veridia",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Veridia is a country whose capital city is Meldan."
+      },
+      {
+        "cite": "c1-b3"
+      }
+    ],
+    [
+      {
+        "text": "In Veridia, "
+      },
+      {
+        "quote": "very few things are strictly banned",
+        "cite": "c1-b56"
+      },
+      {
+        "text": "; instead the Order of Steering maintains taxes and subsidies."
+      }
+    ],
+    [
+      {
+        "quote": "Veridia is a democracy.",
+        "cite": "c26-b173"
+      }
+    ]
+  ]
+}

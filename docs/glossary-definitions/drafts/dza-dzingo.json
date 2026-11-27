@@ -1,0 +1,23 @@
+{
+  "slug": "dza-dzingo",
+  "term": "Dza Dzingo",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Dza Dzingo is on team Ja with Pan Munbau in the first quarter-final round of the eighteenth year of the Minpentai tournaments, facing Zei Leimin and Bai Jahen."
+      },
+      {
+        "cite": "c4-b88"
+      },
+      {
+        "cite": "c4-b89"
+      },
+      {
+        "cite": "c4-b90"
+      }
+    ]
+  ]
+}

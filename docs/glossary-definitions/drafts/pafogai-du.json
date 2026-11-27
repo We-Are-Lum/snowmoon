@@ -1,0 +1,32 @@
+{
+  "slug": "pafogai-du",
+  "term": "Pafogai Du",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Pafogai Du is a city in Dzego, "
+      },
+      {
+        "quote": "a sprawling series of low-rise buildings interspersed with trees",
+        "cite": "c4-b53"
+      },
+      {
+        "text": ", laid out on a regular grid of streets."
+      },
+      {
+        "cite": "c2-b1"
+      }
+    ],
+    [
+      {
+        "text": "A half-kilometer-tall mountain pyramid stands at its southern edge."
+      },
+      {
+        "cite": "c4-b48"
+      }
+    ]
+  ]
+}

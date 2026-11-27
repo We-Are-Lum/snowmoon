@@ -1,0 +1,42 @@
+{
+  "slug": "iptak",
+  "term": "Iptak",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Iptak is one of the cluster of Ondak, Iptak, Mantak and Belpaki that Veridians call "
+      },
+      {
+        "quote": "the aks",
+        "cite": "c8-b5"
+      },
+      {
+        "text": ", where the architecture is "
+      },
+      {
+        "quote": "more brick and wood",
+        "cite": "c8-b5"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "It is in the diagram of the United Cities' co-governance system, and Seila travels there and sends photos."
+      },
+      {
+        "cite": "c5-b46"
+      },
+      {
+        "cite": "c8-b5"
+      },
+      {
+        "cite": "c8-b105"
+      }
+    ]
+  ]
+}

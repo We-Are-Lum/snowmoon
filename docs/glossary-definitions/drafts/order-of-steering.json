@@ -1,0 +1,37 @@
+{
+  "slug": "order-of-steering",
+  "term": "Order of Steering",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The Order of Steering is "
+      },
+      {
+        "quote": "a government-linked but decentralized collective",
+        "cite": "c1-b56"
+      },
+      {
+        "text": " that maintains Veridia's systems of taxes and subsidies."
+      }
+    ],
+    [
+      {
+        "text": "Its Keepers vote on tax rubrics, its Sentinels audit individual businesses, and Acolytes are members in training."
+      },
+      {
+        "cite": "c1-b57"
+      }
+    ],
+    [
+      {
+        "text": "Its security rests on the privacy of its members, who may not reveal their assigned task."
+      },
+      {
+        "cite": "c1-b76"
+      }
+    ]
+  ]
+}

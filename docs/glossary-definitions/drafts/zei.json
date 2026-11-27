@@ -1,0 +1,12 @@
+{
+  "slug": "zei",
+  "term": "Zei",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [{ "text": "Zei is " }, { "quote": "Zei Leimin from Pafogai Du", "cite": "c12-b146" }, { "text": ", a city in Dzego, and a Minpentai player." }, { "cite": "c2-b1" }, { "cite": "c5-b70" }],
+    [{ "text": "He and Bai Jahen are the two finalists of the Minpentai tournament in Pafogai Du, a game Bai resigns." }, { "cite": "c7-b62" }, { "cite": "c7-b120" }],
+    [{ "text": "He is one of the top four players in the qualifiers, winning " }, { "quote": "five of six", "cite": "c14-b31" }, { "text": "." }]
+  ]
+}

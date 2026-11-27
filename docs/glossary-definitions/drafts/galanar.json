@@ -1,0 +1,25 @@
+{
+  "slug": "galanar",
+  "term": "Galanar",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Galanar Square is a square on the border of Kalimar where one speaker at an assembly always goes to drink tea, eat and look at the birds and trees."
+      },
+      {
+        "cite": "c6-b87"
+      }
+    ],
+    [
+      {
+        "text": "A speaker finds it livelier than Tapaia Square and wonders whether its playground is why."
+      },
+      {
+        "cite": "c6-b102"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "slug": "gallowar",
+  "term": "Gallowar",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Gallowar commands "
+      },
+      {
+        "quote": "Group North",
+        "cite": "c29-b23"
+      },
+      {
+        "text": " in the Veridian drone attack on the Arctics in Northshore."
+      },
+      {
+        "cite": "c29-b22"
+      }
+    ],
+    [
+      {
+        "text": "His strategy is "
+      },
+      {
+        "quote": "delay in the north, fight in the east",
+        "cite": "c29-b67"
+      },
+      {
+        "text": ", and his forces break through between the Arctic flanks."
+      },
+      {
+        "cite": "c29-b73"
+      }
+    ]
+  ]
+}

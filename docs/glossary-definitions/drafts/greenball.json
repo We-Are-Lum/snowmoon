@@ -1,0 +1,31 @@
+{
+  "slug": "greenball",
+  "term": "Greenball",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "A greenball is a Helisport ball that hits players and "
+      },
+      {
+        "quote": "splatted its paint over him",
+        "cite": "c16-b64"
+      },
+      {
+        "text": "; teams score "
+      },
+      {
+        "quote": "Greenball player hits",
+        "cite": "c16-b62"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c16-b54"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "slug": "caeron",
+  "term": "Caeron",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Caeron is one of the five judges Gladias meets in a booth to propose a case against the Veridian military leadership."
+      },
+      {
+        "cite": "c26-b162"
+      },
+      {
+        "cite": "c26-b165"
+      },
+      {
+        "cite": "c26-b167"
+      }
+    ],
+    [
+      {
+        "text": "He holds that the military is "
+      },
+      {
+        "quote": "doing the best job they can in a difficult time",
+        "cite": "c26-b166"
+      },
+      {
+        "text": ", and that judges should not read the daily news."
+      },
+      {
+        "cite": "c26-b168"
+      }
+    ]
+  ]
+}

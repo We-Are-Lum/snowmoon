@@ -23,3 +23,4 @@ a different thing and live in `/prompts`, starting with Milestone 2.
 | `007-last-0001-edit.md` | Brief v4d: `replace` widened, 0001 frozen, `veridia/vote` template |
 | `008-narration-and-images.md` | Kokoro narration of all 32 chapters, pronunciation table, read-aloud drafts, first FLUX.2 klein image tests |
 | `008a-agent-prompts.md` | The prompts the coding agent gave its helper agents in 008 |
+| `013-glossary-definitions.md` | Glossary definition drafts (DRAFT, 2026-11-24/25): the owner's prompt and the prompts the coding agent gave its helper agents |

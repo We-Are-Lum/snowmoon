@@ -1,0 +1,21 @@
+{
+  "slug": "grasstime",
+  "term": "Grasstime",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Grasstime is part of dates in the book's datelines, as in "
+      },
+      {
+        "quote": "3724 Grasstime 22",
+        "cite": "c12-b1"
+      },
+      {
+        "text": "; the book does not explain it further."
+      }
+    ]
+  ]
+}

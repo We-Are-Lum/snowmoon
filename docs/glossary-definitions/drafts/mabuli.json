@@ -1,0 +1,29 @@
+{
+  "slug": "mabuli",
+  "term": "Mabuli",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Mabuli is a place in the United Cities that, with Silverbeach, is farther from Redshire than Freetown is."
+      },
+      {
+        "cite": "c15-b25"
+      }
+    ],
+    [
+      {
+        "text": "Seila suggests it for a possible trip: "
+      },
+      {
+        "quote": "Maybe Mabuli",
+        "cite": "c21-b22"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "slug": "veridian",
+  "term": "Veridian",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Veridian describes people and things of Veridia, as in "
+      },
+      {
+        "quote": "a Veridian citizen",
+        "cite": "c1-b38"
+      },
+      {
+        "text": " or "
+      },
+      {
+        "quote": "the Veridian civics lessons",
+        "cite": "c1-b20"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "Veridians are the people of Veridia."
+      },
+      {
+        "cite": "c1-b91"
+      },
+      {
+        "cite": "c8-b5"
+      }
+    ]
+  ]
+}

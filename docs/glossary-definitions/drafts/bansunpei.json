@@ -1,0 +1,46 @@
+{
+  "slug": "bansunpei",
+  "term": "Bansunpei",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The Bansunpei is a Dzego organization of priests that develops the Dzegoban language, including "
+      },
+      {
+        "quote": "the conception of Dzegoban version nine",
+        "cite": "c4-b27"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c4-b44"
+      },
+      {
+        "cite": "c9-b34"
+      }
+    ],
+    [
+      {
+        "text": "It also reformed the timing system to a hundred ticks a minute, a hundred minutes a longhour and ten longhours a day."
+      },
+      {
+        "cite": "c9-b37"
+      }
+    ],
+    [
+      {
+        "text": "After Redshire is attacked, it puts version nine on hold and releases privacy and security recommendations instead."
+      },
+      {
+        "cite": "c18-b117"
+      },
+      {
+        "cite": "c18-b122"
+      }
+    ]
+  ]
+}

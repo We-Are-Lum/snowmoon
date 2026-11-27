@@ -1,0 +1,40 @@
+{
+  "slug": "privacy-robe",
+  "term": "privacy robe",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The Veridian Privacy Robe is "
+      },
+      {
+        "quote": "a loose-fitting dark purple dress that covered the full body",
+        "cite": "c1-b45"
+      },
+      {
+        "text": ", from a hood down to the ankles, worn with dark purple shoes."
+      }
+    ],
+    [
+      {
+        "text": "A strap on its front face cover tightens a belt between the areas above and below the nose, for virus protection."
+      },
+      {
+        "cite": "c1-b49"
+      },
+      {
+        "cite": "c11-b122"
+      }
+    ],
+    [
+      {
+        "text": "Others cannot tell whether wearers are male or female, young or old."
+      },
+      {
+        "cite": "c1-b89"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "petersvil",
+  "term": "Petersvil",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Petersvil appears only as a label on a diagram, alongside Freetown, Redshire, Devanvil and other places."
+      },
+      {
+        "cite": "c5-b46"
+      }
+    ]
+  ]
+}

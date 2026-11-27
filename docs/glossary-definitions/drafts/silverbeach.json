@@ -1,0 +1,17 @@
+{
+  "slug": "silverbeach",
+  "term": "Silverbeach",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Silverbeach is in the United Cities; with Mabuli, it is farther from Redshire than Freetown is."
+      },
+      {
+        "cite": "c15-b25"
+      }
+    ]
+  ]
+}

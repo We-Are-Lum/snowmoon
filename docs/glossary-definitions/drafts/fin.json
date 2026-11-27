@@ -1,0 +1,42 @@
+{
+  "slug": "fin",
+  "term": "Fin",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Fin is Zei's companion in Pafogai Du, who goes with him to DU, the "
+      },
+      {
+        "quote": "Decentralized University",
+        "cite": "c2-b21"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c2-b2"
+      },
+      {
+        "cite": "c2-b1"
+      }
+    ],
+    [
+      {
+        "text": "He trains in linguistics with the Bansunpei and carries its booklet on "
+      },
+      {
+        "quote": "Dzegoban version nine",
+        "cite": "c4-b27"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c7-b11"
+      }
+    ]
+  ]
+}

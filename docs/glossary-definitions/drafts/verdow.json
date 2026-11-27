@@ -1,0 +1,31 @@
+{
+  "slug": "verdow",
+  "term": "Verdow",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Verdow is a senator in the Veridian Parliament who questions Gladias at a hearing and later meets him."
+      },
+      {
+        "cite": "c8-b50"
+      },
+      {
+        "cite": "c17-b9"
+      },
+      {
+        "cite": "c17-b11"
+      }
+    ],
+    [
+      {
+        "text": "Gladias has almost daily calls with him to think through how to convince the Veridian military to cooperate with the Kungaupei."
+      },
+      {
+        "cite": "c24-b21"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "slug": "ichara",
+  "term": "Ichara",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Ichara is "
+      },
+      {
+        "quote": "one of the now famous Freetown defense companies",
+        "cite": "c31-b70"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

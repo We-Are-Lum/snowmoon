@@ -1,0 +1,28 @@
+{
+  "slug": "vnu",
+  "term": "VNU",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "VNU is Veridia National University, whose president is Professor Sylka."
+      },
+      {
+        "cite": "c8-b17"
+      }
+    ],
+    [
+      {
+        "text": "Its Materials Science Lab and Aeronautics Lab appear in a chart of funded projects, and it is working out how to inspect new cameras from Dzego."
+      },
+      {
+        "cite": "c17-b73"
+      },
+      {
+        "cite": "c32-b33"
+      }
+    ]
+  ]
+}

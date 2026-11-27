@@ -1,0 +1,31 @@
+{
+  "slug": "zven",
+  "term": "Zven",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Zven is Gladias and Seila's younger son."
+      },
+      {
+        "cite": "c1-b110"
+      },
+      {
+        "cite": "c1-b125"
+      }
+    ],
+    [
+      {
+        "text": "He plays Helisport on team yellow."
+      },
+      {
+        "cite": "c11-b24"
+      },
+      {
+        "cite": "c11-b57"
+      }
+    ]
+  ]
+}

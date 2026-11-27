@@ -1,0 +1,28 @@
+{
+  "slug": "rainmoon",
+  "term": "Rainmoon",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Rainmoon is a name that appears in chapter datelines followed by a number, such as "
+      },
+      {
+        "quote": "3724 Rainmoon 11",
+        "cite": "c5-b1"
+      },
+      {
+        "text": " and "
+      },
+      {
+        "quote": "3725 Rainmoon 2",
+        "cite": "c31-b1"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "slug": "imerry",
+  "term": "Imerry",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Imerry appears in a Graph Funding diagram of individual projects, in the label "
+      },
+      {
+        "quote": "Pov and Imerry",
+        "cite": "c17-b73"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c17-b72"
+      }
+    ]
+  ]
+}

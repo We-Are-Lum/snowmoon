@@ -1,0 +1,29 @@
+{
+  "slug": "heralds",
+  "term": "Heralds",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Heralds are Order members, Keepers or Sentinels, "
+      },
+      {
+        "quote": "randomly selected each year to retire",
+        "cite": "c6-b73"
+      },
+      {
+        "text": " and act as ambassadors between the Order and the public."
+      }
+    ],
+    [
+      {
+        "text": "They are open about how they thought and worked, but only once they no longer have any power."
+      },
+      {
+        "cite": "c6-b74"
+      }
+    ]
+  ]
+}

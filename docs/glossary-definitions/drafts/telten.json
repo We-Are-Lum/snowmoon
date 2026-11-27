@@ -1,0 +1,21 @@
+{
+  "slug": "telten",
+  "term": "Telten",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Telten is in "
+      },
+      {
+        "quote": "Arctic core territory",
+        "cite": "c29-b104"
+      },
+      {
+        "text": ", hundreds of kilometers east of Northglade, where seaborne drones land ground craft."
+      }
+    ]
+  ]
+}

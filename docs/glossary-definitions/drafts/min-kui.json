@@ -1,0 +1,21 @@
+{
+  "slug": "min-kui",
+  "term": "MIN KUI",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "MIN KUI is the sign on "
+      },
+      {
+        "quote": "a store selling compute boxes",
+        "cite": "c18-b20"
+      },
+      {
+        "text": " in Dzego."
+      }
+    ]
+  ]
+}

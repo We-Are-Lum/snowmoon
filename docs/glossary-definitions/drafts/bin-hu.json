@@ -1,0 +1,40 @@
+{
+  "slug": "bin-hu",
+  "term": "bin hu",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "In Dzegoban, bin hu means "
+      },
+      {
+        "quote": "No head",
+        "cite": "c7-b40"
+      },
+      {
+        "text": ", the end of the saying 'gie fe kiu kai ci bin hu': "
+      },
+      {
+        "quote": "grow roots, no head",
+        "cite": "c2-b128"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "The saying names Dzego's strategy of using cryptography to coordinate decisions anonymously, "
+      },
+      {
+        "quote": "without needing any exposed individual leaders at the helm",
+        "cite": "c2-b128"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

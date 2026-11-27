@@ -1,0 +1,21 @@
+{
+  "slug": "colorball",
+  "term": "Colorball",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Colorball is a game played by children in school, "
+      },
+      {
+        "quote": "The school game that Helisport ended up being based on",
+        "cite": "c8-b64"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

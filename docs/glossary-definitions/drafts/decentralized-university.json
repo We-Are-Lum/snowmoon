@@ -1,0 +1,48 @@
+{
+  "slug": "decentralized-university",
+  "term": "Decentralized University",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "DU, the "
+      },
+      {
+        "quote": "Decentralized University",
+        "cite": "c2-b21"
+      },
+      {
+        "text": ", or "
+      },
+      {
+        "quote": "dzu hu sun du",
+        "cite": "c2-b21"
+      },
+      {
+        "text": " in Dzegoban, is where Zei and Fin are heading for a class."
+      },
+      {
+        "cite": "c2-b20"
+      },
+      {
+        "cite": "c2-b22"
+      }
+    ],
+    [
+      {
+        "text": "It uses cryptography to coordinate decisions anonymously, without exposed leaders, and its classrooms change location, with each location decrypted and broadcast shortly before a lesson."
+      },
+      {
+        "cite": "c2-b128"
+      },
+      {
+        "cite": "c2-b104"
+      },
+      {
+        "cite": "c2-b22"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "slug": "quadratic-funding",
+  "term": "Quadratic Funding",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Quadratic Funding is a "
+      },
+      {
+        "quote": "Veridian national",
+        "cite": "c1-b55"
+      },
+      {
+        "text": " source of funds that pays for things such as Greater Plum Harbor's public work and Helisport games."
+      },
+      {
+        "cite": "c3-b53"
+      },
+      {
+        "cite": "c8-b89"
+      }
+    ],
+    [
+      {
+        "text": "In one round people were paid to donate ten zipcoins and got back twenty, a scheme an insider revealed was Bluewhale's doing; the Arctics later made "
+      },
+      {
+        "quote": "the same attack on Quadratic Funding",
+        "cite": "c17-b56"
+      },
+      {
+        "text": " at ten times the scale."
+      },
+      {
+        "cite": "c11-b113"
+      }
+    ]
+  ]
+}

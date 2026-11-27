@@ -1,0 +1,36 @@
+{
+  "slug": "fau",
+  "term": "fau",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "fau is a word that "
+      },
+      {
+        "quote": "just means 'again'",
+        "cite": "c10-b34"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "When Seila jokes "
+      },
+      {
+        "quote": "Veridia ba 'fun' gie!",
+        "cite": "c10-b33"
+      },
+      {
+        "text": ", she is reminded that it is \"gie\" that should be replaced."
+      },
+      {
+        "cite": "c10-b34"
+      }
+    ]
+  ]
+}

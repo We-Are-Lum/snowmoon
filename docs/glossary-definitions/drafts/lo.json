@@ -1,0 +1,21 @@
+{
+  "slug": "lo",
+  "term": "lo",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "In Dzegoban grammar, 'lo' and 'zo' are "
+      },
+      {
+        "quote": "the opening and closing brackets",
+        "cite": "c9-b32"
+      },
+      {
+        "text": ", and colloquially 'lo' can be left out."
+      }
+    ]
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "slug": "vil",
+  "term": "Vil",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Vil, "
+      },
+      {
+        "quote": "Uncle Vil",
+        "cite": "c1-b125"
+      },
+      {
+        "text": " to Gladias and Seila's children, is with Aunt Daia their co-family, and is Febric's father: "
+      },
+      {
+        "quote": "For me Vil is Dad!",
+        "cite": "c1-b130"
+      }
+    ],
+    [
+      {
+        "text": "He and Daia take care of all four children for half of the year."
+      },
+      {
+        "cite": "c1-b125"
+      }
+    ],
+    [
+      {
+        "text": "He promises Lily a trip to Northglade if she gets above seventy-five on her next civics test."
+      },
+      {
+        "cite": "c8-b120"
+      },
+      {
+        "cite": "c8-b116"
+      }
+    ]
+  ]
+}

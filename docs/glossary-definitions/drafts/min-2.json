@@ -1,0 +1,27 @@
+{
+  "slug": "min-2",
+  "term": "min",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "In Dzegoban, min means machine: reading a watch, Gladias reasons that "
+      },
+      {
+        "quote": "'min' is machine, 'jan' is person",
+        "cite": "c19-b18"
+      },
+      {
+        "text": ", so together they mean robot, and is told he is right."
+      },
+      {
+        "cite": "c19-b15"
+      },
+      {
+        "cite": "c19-b19"
+      }
+    ]
+  ]
+}

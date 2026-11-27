@@ -1,0 +1,28 @@
+{
+  "slug": "belpakian",
+  "term": "Belpakian",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Belpakian appears only as "
+      },
+      {
+        "quote": "Old Belpakian",
+        "cite": "c6-b103"
+      },
+      {
+        "text": ", one of the foreign languages of the books in Tapaia's library that "
+      },
+      {
+        "quote": "nobody understands",
+        "cite": "c6-b103"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

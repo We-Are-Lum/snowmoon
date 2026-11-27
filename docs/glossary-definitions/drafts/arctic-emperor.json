@@ -1,0 +1,40 @@
+{
+  "slug": "arctic-emperor",
+  "term": "Arctic Emperor",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "In Veridia, a band could have its songs shouting "
+      },
+      {
+        "quote": "Hail the Arctic Emperor",
+        "cite": "c1-b56"
+      },
+      {
+        "text": " and never be shut down."
+      }
+    ],
+    [
+      {
+        "text": "In the last chapter, a character says "
+      },
+      {
+        "quote": "The Arctic Emperor is upset",
+        "cite": "c32-b88"
+      },
+      {
+        "text": " and that "
+      },
+      {
+        "quote": "he's definitely scheming",
+        "cite": "c32-b88"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

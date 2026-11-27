@@ -1,0 +1,44 @@
+{
+  "slug": "united-cities",
+  "term": "United Cities",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The United Cities are cities, Freetown among them, joined by a co-governance system in which each city elects a percentage of the other's parliament."
+      },
+      {
+        "cite": "c5-b1"
+      },
+      {
+        "cite": "c5-b47"
+      }
+    ],
+    [
+      {
+        "text": "They have stayed independent from each other "
+      },
+      {
+        "quote": "for centuries",
+        "cite": "c10-b143"
+      },
+      {
+        "text": ", which one character credits to the many mountains and peninsulas on their continent."
+      }
+    ],
+    [
+      {
+        "text": "On military tech, Dzego and the United Cities are "
+      },
+      {
+        "quote": "furthest behind",
+        "cite": "c10-b145"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

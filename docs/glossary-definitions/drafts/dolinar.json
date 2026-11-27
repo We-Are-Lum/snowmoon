@@ -1,0 +1,21 @@
+{
+  "slug": "dolinar",
+  "term": "Dolinar",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Dolinar is where drones touch down "
+      },
+      {
+        "quote": "at a large shopping complex",
+        "cite": "c26-b144"
+      },
+      {
+        "text": " as the Arctics close in on them."
+      }
+    ]
+  ]
+}

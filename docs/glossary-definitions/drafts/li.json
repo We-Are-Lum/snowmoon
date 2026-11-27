@@ -1,0 +1,35 @@
+{
+  "slug": "li",
+  "term": "li",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "In Dzegoban grammar, li is "
+      },
+      {
+        "quote": "the separator between subject and verb",
+        "cite": "c9-b31"
+      },
+      {
+        "text": ", as in "
+      },
+      {
+        "quote": "giu jan li mo fe jia dzu lie",
+        "cite": "c9-b31"
+      },
+      {
+        "text": ", "
+      },
+      {
+        "quote": "The man eats the avocado",
+        "cite": "c9-b31"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

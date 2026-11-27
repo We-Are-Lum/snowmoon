@@ -1,0 +1,30 @@
+{
+  "slug": "vakaria",
+  "term": "Vakaria",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Vakaria is "
+      },
+      {
+        "quote": "leading Group Naval",
+        "cite": "c29-b29"
+      },
+      {
+        "text": ", attacking Northshore with seaborne drones, and later takes control of part of Mu's drone fleet to regain Northglade."
+      },
+      {
+        "cite": "c30-b71"
+      },
+      {
+        "cite": "c29-b28"
+      },
+      {
+        "cite": "c29-b30"
+      }
+    ]
+  ]
+}

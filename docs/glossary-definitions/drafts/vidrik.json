@@ -1,0 +1,23 @@
+{
+  "slug": "vidrik",
+  "term": "Vidrik",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Vidrik is one of the names in the diagram of individual projects in the air quality portfolio that a Graph Funding steward shows Gladias."
+      },
+      {
+        "cite": "c17-b38"
+      },
+      {
+        "cite": "c17-b72"
+      },
+      {
+        "cite": "c17-b73"
+      }
+    ]
+  ]
+}

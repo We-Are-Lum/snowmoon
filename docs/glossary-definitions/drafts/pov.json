@@ -1,0 +1,27 @@
+{
+  "slug": "pov",
+  "term": "Pov",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Pov appears once, in the label "
+      },
+      {
+        "quote": "Pov and Imerry",
+        "cite": "c17-b73"
+      },
+      {
+        "text": " among the individual projects in a Graph Funding chart of an air quality portfolio."
+      },
+      {
+        "cite": "c17-b72"
+      },
+      {
+        "cite": "c17-b74"
+      }
+    ]
+  ]
+}

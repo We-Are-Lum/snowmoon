@@ -1,0 +1,24 @@
+{
+  "slug": "melana",
+  "term": "Melana",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Melana is named with Kudlin on a Graph Funding diagram of individual projects, under "
+      },
+      {
+        "quote": "Kudlin and Melana: effects on household chemicals",
+        "cite": "c17-b73"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c17-b72"
+      }
+    ]
+  ]
+}

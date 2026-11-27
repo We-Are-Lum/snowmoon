@@ -1,0 +1,20 @@
+{
+  "slug": "gei-zen",
+  "term": "gei zen",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "\"gei zen\" appears only in the line \"sho hei dai - 827 gei zen\" at the bottom of a download screen, shown while Zei downloads files to his hand device in a library."
+      },
+      {
+        "cite": "c19-b100"
+      },
+      {
+        "cite": "c19-b101"
+      }
+    ]
+  ]
+}

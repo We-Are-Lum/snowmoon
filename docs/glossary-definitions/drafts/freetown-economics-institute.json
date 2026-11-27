@@ -1,0 +1,24 @@
+{
+  "slug": "freetown-economics-institute",
+  "term": "Freetown Economics Institute",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The Freetown Economics Institute is where Jahn "
+      },
+      {
+        "quote": "worked as a researcher",
+        "cite": "c10-b2"
+      },
+      {
+        "text": "; he pays to pass its turnstile and goes to its restaurant."
+      },
+      {
+        "cite": "c15-b2"
+      }
+    ]
+  ]
+}

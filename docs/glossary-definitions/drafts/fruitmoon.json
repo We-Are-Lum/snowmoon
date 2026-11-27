@@ -1,0 +1,21 @@
+{
+  "slug": "fruitmoon",
+  "term": "Fruitmoon",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Fruitmoon appears in the book's datelines, as in "
+      },
+      {
+        "quote": "3724 Fruitmoon 11",
+        "cite": "c17-b1"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

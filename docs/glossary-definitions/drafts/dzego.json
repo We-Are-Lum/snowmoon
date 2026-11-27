@@ -1,0 +1,36 @@
+{
+  "slug": "dzego",
+  "term": "Dzego",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Dzego is a nation known for "
+      },
+      {
+        "quote": "Minpentai, the Dzegoban language, the people's strong will to see the nation rise",
+        "cite": "c5-b87"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "For half a century it has followed "
+      },
+      {
+        "quote": "Grow roots, no head",
+        "cite": "c2-b8"
+      },
+      {
+        "text": ": distributed manufacturing and anonymous cryptographic coordination instead of exposed leaders."
+      },
+      {
+        "cite": "c2-b128"
+      }
+    ]
+  ]
+}

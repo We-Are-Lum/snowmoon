@@ -1,0 +1,24 @@
+{
+  "slug": "egardo",
+  "term": "Egardo",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Egardo is one of the kids in a redball game, whose catch scores the "
+      },
+      {
+        "quote": "Fifth point for team purple",
+        "cite": "c11-b69"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c11-b58"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "slug": "autobus",
+  "term": "autobus",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "An autobus is a road vehicle: from a sky bridge Gladias sees "
+      },
+      {
+        "quote": "many cars and autobuses and a few autonomous delivery vehicles",
+        "cite": "c1-b11"
+      },
+      {
+        "text": " passing beneath him."
+      }
+    ],
+    [
+      {
+        "text": "He rides a local autobus home, and autobuses stop at points with a sign listing their numbers."
+      },
+      {
+        "cite": "c1-b87"
+      },
+      {
+        "cite": "c1-b100"
+      },
+      {
+        "cite": "c8-b10"
+      }
+    ]
+  ]
+}

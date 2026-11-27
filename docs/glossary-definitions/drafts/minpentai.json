@@ -1,0 +1,51 @@
+{
+  "slug": "minpentai",
+  "term": "Minpentai",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Minpentai is a game with yearly tournaments and priests, played on a board where players place symbols, walls and gliders, and whose rules can change."
+      },
+      {
+        "cite": "c4-b88"
+      },
+      {
+        "cite": "c9-b52"
+      },
+      {
+        "cite": "c4-b93"
+      },
+      {
+        "cite": "c4-b95"
+      },
+      {
+        "cite": "c4-b7"
+      }
+    ],
+    [
+      {
+        "text": "Secretly, "
+      },
+      {
+        "quote": "Minpentai isn't just a sport",
+        "cite": "c10-b192"
+      },
+      {
+        "text": "; its whole point is to raise "
+      },
+      {
+        "quote": "the next generation of defenders",
+        "cite": "c10-b195"
+      },
+      {
+        "text": ", and it is safe only because it pretends to be a game."
+      },
+      {
+        "cite": "c10-b202"
+      }
+    ]
+  ]
+}

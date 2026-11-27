@@ -1,0 +1,21 @@
+{
+  "slug": "seiza",
+  "term": "Seiza",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Kau Seiza, from Geijaken, is one of the top four players in the qualifiers, having "
+      },
+      {
+        "quote": "won five of six with an average win time of 6,740 turns",
+        "cite": "c14-b31"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

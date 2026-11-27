@@ -1,0 +1,27 @@
+{
+  "slug": "fai-hie",
+  "term": "fai hie",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "fai hie is the label on each of the nine boxes in a diagram titled "
+      },
+      {
+        "quote": "Conception of a hash algorithm",
+        "cite": "c12-b51"
+      },
+      {
+        "text": " in the cryptography textbook Zei reads."
+      },
+      {
+        "cite": "c12-b48"
+      },
+      {
+        "cite": "c12-b50"
+      }
+    ]
+  ]
+}

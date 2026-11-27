@@ -1,0 +1,51 @@
+{
+  "slug": "keepers",
+  "term": "Keepers",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Keepers are the part of the Order of Steering that "
+      },
+      {
+        "quote": "voted on tax rubrics that determined what the taxes are",
+        "cite": "c1-b57"
+      },
+      {
+        "text": ", while Sentinels audit individual businesses."
+      },
+      {
+        "cite": "c1-b56"
+      }
+    ],
+    [
+      {
+        "text": "Each rubric is decided by Keepers in "
+      },
+      {
+        "quote": "three groups of seven",
+        "cite": "c6-b41"
+      },
+      {
+        "text": ", who adjust the global rules rather than judge single businesses."
+      },
+      {
+        "cite": "c3-b114"
+      }
+    ],
+    [
+      {
+        "text": "Keepers stay "
+      },
+      {
+        "quote": "very private to protect themselves from manipulation",
+        "cite": "c6-b74"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

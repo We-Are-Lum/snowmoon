@@ -1,0 +1,21 @@
+{
+  "slug": "zo",
+  "term": "zo",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "In Dzegoban, zo is the closing bracket paired with the opening lo: "
+      },
+      {
+        "quote": "'lo' and 'zo' are the opening and closing brackets",
+        "cite": "c9-b32"
+      },
+      {
+        "text": ", and colloquially the lo can be left out."
+      }
+    ]
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "slug": "lightfoot",
+  "term": "lightfoot",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The lightfoot is a unit of length: "
+      },
+      {
+        "quote": "at some point we want to replace the meter with the lightfoot",
+        "cite": "c9-b39"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "quote": "Light travels at one billion lightfeet per tick",
+        "cite": "c9-b39"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

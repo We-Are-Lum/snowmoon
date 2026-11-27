@@ -1,0 +1,21 @@
+{
+  "slug": "dzego-man",
+  "term": "Dzego-man",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Dzego-man is used once, dismissively, about "
+      },
+      {
+        "quote": "a bunch of Dzego-man whiz kids",
+        "cite": "c26-b190"
+      },
+      {
+        "text": " who rescued a prince."
+      }
+    ]
+  ]
+}

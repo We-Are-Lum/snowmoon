@@ -1,0 +1,39 @@
+{
+  "slug": "graph-funding",
+  "term": "Graph Funding",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Graph Funding is a Veridian mechanism for allocating public funding that splits each decision into "
+      },
+      {
+        "quote": "more manageable pieces",
+        "cite": "c17-b60"
+      },
+      {
+        "text": ": first health, then airborne diseases within health, and so on."
+      },
+      {
+        "cite": "c3-b5"
+      }
+    ],
+    [
+      {
+        "text": "For each node of the graph, "
+      },
+      {
+        "quote": "the cryptographic network randomly selects a committee",
+        "cite": "c17-b55"
+      },
+      {
+        "text": " that divides the funding going to that node among its children."
+      },
+      {
+        "cite": "c17-b62"
+      }
+    ]
+  ]
+}

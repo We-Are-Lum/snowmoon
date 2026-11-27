@@ -1,0 +1,44 @@
+{
+  "slug": "den",
+  "term": "Den",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Den is a "
+      },
+      {
+        "quote": "High Council member of the Kungaupei",
+        "cite": "c9-b56"
+      },
+      {
+        "text": ", which Zei learns is a secret society for defense in Dzego."
+      },
+      {
+        "cite": "c9-b57"
+      },
+      {
+        "cite": "c9-b58"
+      }
+    ],
+    [
+      {
+        "text": "He recruits Zei for tasks, quizzes him on chip verification, takes him in a black car to a chip fab, and recommends him a cryptography textbook."
+      },
+      {
+        "cite": "c9-b80"
+      },
+      {
+        "cite": "c9-b81"
+      },
+      {
+        "cite": "c12-b20"
+      },
+      {
+        "cite": "c12-b48"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "slug": "kau",
+  "term": "Kau",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Kau Seiza, from Geijaken, is one of the top four players in the qualifiers."
+      },
+      {
+        "cite": "c14-b31"
+      }
+    ],
+    [
+      {
+        "text": "Against Deluin, his eternal glider factories prove of limited use, and "
+      },
+      {
+        "quote": "Kau was reduced to hiding behind the southern shrine",
+        "cite": "c14-b93"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c14-b91"
+      }
+    ]
+  ]
+}

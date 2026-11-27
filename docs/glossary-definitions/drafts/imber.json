@@ -1,0 +1,23 @@
+{
+  "slug": "imber",
+  "term": "Imber",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Imber is one of the cities in a diagram of the United Cities' co-governance, and is named as one that is not taking the Arctic drone threat seriously."
+      },
+      {
+        "cite": "c5-b45"
+      },
+      {
+        "cite": "c5-b46"
+      },
+      {
+        "cite": "c10-b21"
+      }
+    ]
+  ]
+}

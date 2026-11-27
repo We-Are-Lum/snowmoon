@@ -1,0 +1,29 @@
+{
+  "slug": "longhour",
+  "term": "longhour",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "A longhour is a unit of time: the timing system has "
+      },
+      {
+        "quote": "a hundred ticks a minute, a hundred minutes a longhour and ten longhours a day",
+        "cite": "c9-b37"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "The Bansunpei reformed the timing system this way and got it adopted across the whole world, even by the Arctics."
+      },
+      {
+        "cite": "c9-b37"
+      }
+    ]
+  ]
+}

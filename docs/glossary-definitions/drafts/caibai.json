@@ -1,0 +1,29 @@
+{
+  "slug": "caibai",
+  "term": "Caibai",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Gun Caibai, from Dzundei, is one of the top four players in the Minpentai qualifiers, having "
+      },
+      {
+        "quote": "won five of six with an average win time of 5,699 turns",
+        "cite": "c14-b31"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "Caibai faces Zei Leimin in a semi-final match."
+      },
+      {
+        "cite": "c14-b32"
+      }
+    ]
+  ]
+}

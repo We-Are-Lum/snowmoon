@@ -1,0 +1,40 @@
+{
+  "slug": "fe",
+  "term": "fe",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "In Dzegoban grammar, fe is "
+      },
+      {
+        "quote": "the separator between verb and object",
+        "cite": "c9-b31"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "It also appears in the motto "
+      },
+      {
+        "quote": "gie fe kiu kai ci bin hu",
+        "cite": "c2-b128"
+      },
+      {
+        "text": ", rendered as "
+      },
+      {
+        "quote": "grow roots, no head",
+        "cite": "c2-b128"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

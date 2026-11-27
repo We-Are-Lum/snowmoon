@@ -1,0 +1,24 @@
+{
+  "slug": "mistime",
+  "term": "Mistime",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Mistime appears in the book's datelines, as in "
+      },
+      {
+        "quote": "3724 Mistime 10",
+        "cite": "c20-b1"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c24-b1"
+      }
+    ]
+  ]
+}

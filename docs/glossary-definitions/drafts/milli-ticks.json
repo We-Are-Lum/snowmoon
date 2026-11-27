@@ -1,0 +1,21 @@
+{
+  "slug": "milli-ticks",
+  "term": "milli-ticks",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Milli-ticks measure very short times: a drone flyby, its authentication and the confirmation finish "
+      },
+      {
+        "quote": "within hundreds of milli-ticks",
+        "cite": "c2-b10"
+      },
+      {
+        "text": ", so quickly that Fin and Zei barely notice."
+      }
+    ]
+  ]
+}

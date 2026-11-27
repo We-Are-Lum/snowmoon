@@ -1,0 +1,21 @@
+{
+  "slug": "windmoon",
+  "term": "Windmoon",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Windmoon appears in the book's datelines, as in "
+      },
+      {
+        "quote": "3724 Windmoon 24",
+        "cite": "c10-b1"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

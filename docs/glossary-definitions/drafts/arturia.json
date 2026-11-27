@@ -1,0 +1,47 @@
+{
+  "slug": "arturia",
+  "term": "Arturia",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Arturia is a society that describes its values as "
+      },
+      {
+        "quote": "peace and quiet, research and learning",
+        "cite": "c22-b53"
+      },
+      {
+        "text": ", and filters people by conscientiousness and test scores."
+      }
+    ],
+    [
+      {
+        "text": "Today it is "
+      },
+      {
+        "quote": "sort of like a big university",
+        "cite": "c22-b53"
+      },
+      {
+        "text": ", and those who go against the system too much are pushed to leave for Freetown."
+      },
+      {
+        "cite": "c22-b53"
+      }
+    ],
+    [
+      {
+        "text": "Tafindel ends up safe in Arturia."
+      },
+      {
+        "cite": "c26-b151"
+      },
+      {
+        "cite": "c26-b158"
+      }
+    ]
+  ]
+}

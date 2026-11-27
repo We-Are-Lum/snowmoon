@@ -1,0 +1,11 @@
+{
+  "slug": "acolyte",
+  "term": "Acolyte",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [{ "text": "In the Order of Steering, an Acolyte is " }, { "quote": "an Order member in training", "cite": "c1-b57" }, { "text": "." }],
+    [{ "text": "A share of an Acolyte's audits is repeated by Sentinels, and their score is how well those votes predicted the Sentinels' judgements; Gladias needs to stay above ninety to become a Sentinel or a Keeper." }, { "cite": "c1-b68" }]
+  ]
+}

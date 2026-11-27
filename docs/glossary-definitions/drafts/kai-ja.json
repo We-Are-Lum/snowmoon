@@ -1,0 +1,24 @@
+{
+  "slug": "kai-ja",
+  "term": "kai ja",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "In Dzegoban, kai ja is tea: "
+      },
+      {
+        "quote": "Literally 'plant water'",
+        "cite": "c17-b20"
+      },
+      {
+        "text": ", from 'ja', water."
+      },
+      {
+        "cite": "c17-b19"
+      }
+    ]
+  ]
+}

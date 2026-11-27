@@ -1,0 +1,40 @@
+{
+  "slug": "gun",
+  "term": "Gun",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Gun Caibai is a Minpentai player from Dzundei who won five of six qualifying games with an average win time of 5,699 turns."
+      },
+      {
+        "cite": "c14-b31"
+      }
+    ],
+    [
+      {
+        "text": "He plays Zei in the semi-final."
+      },
+      {
+        "cite": "c14-b32"
+      },
+      {
+        "cite": "c19-b124"
+      }
+    ],
+    [
+      {
+        "text": "Bai counts him among the players who are "
+      },
+      {
+        "quote": "way too impatient",
+        "cite": "c14-b22"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

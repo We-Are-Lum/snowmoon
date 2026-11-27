@@ -1,0 +1,41 @@
+{
+  "slug": "dzegoban",
+  "term": "Dzegoban",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Dzegoban is the language of Dzego."
+      },
+      {
+        "cite": "c5-b87"
+      }
+    ],
+    [
+      {
+        "text": "It has "
+      },
+      {
+        "quote": "only 256 roots",
+        "cite": "c14-b118"
+      },
+      {
+        "text": ", so it can be learned in less than a month."
+      }
+    ],
+    [
+      {
+        "text": "A booklet bearing the Bansunpei logo is titled "
+      },
+      {
+        "quote": "the conception of Dzegoban version nine",
+        "cite": "c4-b27"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

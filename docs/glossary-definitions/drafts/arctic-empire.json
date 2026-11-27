@@ -1,0 +1,49 @@
+{
+  "slug": "arctic-empire",
+  "term": "Arctic Empire",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The Arctic Empire is the power whose technology is "
+      },
+      {
+        "quote": "the most advanced",
+        "cite": "c10-b145"
+      },
+      {
+        "text": "; Dzego fought a war against it a hundred years ago."
+      },
+      {
+        "cite": "c19-b111"
+      }
+    ],
+    [
+      {
+        "text": "It invades Redshire"
+      },
+      {
+        "cite": "c15-b8"
+      },
+      {
+        "text": ", and its enemies fear it wants to "
+      },
+      {
+        "quote": "knock out Veridia completely",
+        "cite": "c28-b33"
+      },
+      {
+        "text": ", but in the end "
+      },
+      {
+        "quote": "the Arctic Empire has been defeated",
+        "cite": "c32-b28"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

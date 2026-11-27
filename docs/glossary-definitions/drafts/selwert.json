@@ -1,0 +1,29 @@
+{
+  "slug": "selwert",
+  "term": "Selwert",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Selwert (also spelled Sewlert) is a judge who is told, at a court hearing, "
+      },
+      {
+        "quote": "you know as well as I do that the parliament is corrupt",
+        "cite": "c26-b174"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "Three of the other four judges nod along to what Selwert says."
+      },
+      {
+        "cite": "c26-b193"
+      }
+    ]
+  ]
+}

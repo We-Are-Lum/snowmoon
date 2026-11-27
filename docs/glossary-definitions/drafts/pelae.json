@@ -1,0 +1,41 @@
+{
+  "slug": "pelae",
+  "term": "Pelae",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Pelae is an older teenage girl who sits beside Gladias at an assembly on improving Veridia's public spaces."
+      },
+      {
+        "cite": "c6-b61"
+      },
+      {
+        "cite": "c6-b62"
+      },
+      {
+        "cite": "c6-b68"
+      }
+    ],
+    [
+      {
+        "text": "She asks Gladias what Heralds do, and asks the Herald Alagael "
+      },
+      {
+        "quote": "how do the results of these assemblies actually turn into outcomes?",
+        "cite": "c6-b93"
+      },
+      {
+        "cite": "c6-b70"
+      },
+      {
+        "cite": "c6-b71"
+      },
+      {
+        "cite": "c6-b68"
+      }
+    ]
+  ]
+}

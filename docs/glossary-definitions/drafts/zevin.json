@@ -1,0 +1,21 @@
+{
+  "slug": "zevin",
+  "term": "Zevin",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Zevin is a judge who, unlike three of the others, seems sympathetic to Gladias, partly because he "
+      },
+      {
+        "quote": "also had a son stuck in Northglade",
+        "cite": "c26-b193"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "pan-munbau",
+  "term": "Pan Munbau",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Pan Munbau is a player on "
+      },
+      {
+        "quote": "team Ja",
+        "cite": "c4-b89"
+      },
+      {
+        "text": ", with Dza Dzingo, in the first quarter-final round of the Minpentai tournaments, against Zei and Bai."
+      },
+      {
+        "cite": "c4-b88"
+      },
+      {
+        "cite": "c4-b90"
+      }
+    ]
+  ]
+}

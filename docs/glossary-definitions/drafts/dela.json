@@ -1,0 +1,26 @@
+{
+  "slug": "dela",
+  "term": "Dela",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Dela is a child on team yellow in a Helisport game, where catching a redball and bringing it back scores a point."
+      },
+      {
+        "cite": "c11-b26"
+      },
+      {
+        "cite": "c11-b64"
+      },
+      {
+        "cite": "c11-b70"
+      },
+      {
+        "cite": "c11-b24"
+      }
+    ]
+  ]
+}

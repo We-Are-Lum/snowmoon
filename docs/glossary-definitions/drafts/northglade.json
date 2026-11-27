@@ -1,0 +1,35 @@
+{
+  "slug": "northglade",
+  "term": "Northglade",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Northglade is "
+      },
+      {
+        "quote": "over two hundred kilometers inland",
+        "cite": "c17-b101"
+      },
+      {
+        "text": ", where Hreda and Febric go on an exchange trip."
+      },
+      {
+        "cite": "c17-b99"
+      },
+      {
+        "cite": "c17-b98"
+      }
+    ],
+    [
+      {
+        "text": "Arctic forces invade the province of Northshore and are stationed in Northglade within two longhours, leaving only the Greater Plum Harbor inside it untouched."
+      },
+      {
+        "cite": "c20-b8"
+      }
+    ]
+  ]
+}

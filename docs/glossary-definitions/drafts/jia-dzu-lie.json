@@ -1,0 +1,36 @@
+{
+  "slug": "jia-dzu-lie",
+  "term": "jia dzu lie",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "jia dzu lie is Dzegoban for avocado, literally "
+      },
+      {
+        "quote": "black center fruit",
+        "cite": "c9-b33"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c9-b31"
+      }
+    ],
+    [
+      {
+        "text": "It is an example of ambiguity in Dzegoban: it could mean "
+      },
+      {
+        "quote": "a fruit with a black center",
+        "cite": "c9-b33"
+      },
+      {
+        "text": " or a fruit that is both black and central."
+      }
+    ]
+  ]
+}

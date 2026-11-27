@@ -1,0 +1,46 @@
+{
+  "slug": "ephelion",
+  "term": "Ephelion",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Lord Ephelion is the "
+      },
+      {
+        "quote": "Arctic ambassador to Veridia",
+        "cite": "c8-b17"
+      },
+      {
+        "text": ", whose sermons Veridians "
+      },
+      {
+        "quote": "have to listen to",
+        "cite": "c11-b109"
+      },
+      {
+        "text": " all the time."
+      }
+    ],
+    [
+      {
+        "text": "In an argument with Gladias, Ephelion is called a propagandist whose goal is "
+      },
+      {
+        "quote": "to inspire people inside Veridia to join the Arctic cause",
+        "cite": "c21-b76"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c21-b74"
+      },
+      {
+        "cite": "c21-b75"
+      }
+    ]
+  ]
+}

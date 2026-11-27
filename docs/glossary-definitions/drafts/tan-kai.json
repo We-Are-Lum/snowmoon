@@ -1,0 +1,27 @@
+{
+  "slug": "tan-kai",
+  "term": "Tan Kai",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Tan Kai is the street of Gladias's hotel in Pafogai Du, at "
+      },
+      {
+        "quote": "1565 Tan Kai",
+        "cite": "c18-b55"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c18-b54"
+      },
+      {
+        "cite": "c18-b82"
+      }
+    ]
+  ]
+}

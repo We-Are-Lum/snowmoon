@@ -1,0 +1,21 @@
+{
+  "slug": "ja-2",
+  "term": "ja",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "ja is Dzegoban for water, and "
+      },
+      {
+        "quote": "if you want tea, that's 'kai ja'. Literally 'plant water'",
+        "cite": "c17-b20"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

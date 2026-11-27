@@ -1,0 +1,24 @@
+{
+  "slug": "poppe",
+  "term": "Poppe",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Poppe appears in a Graph Funding diagram of individual projects, in the label "
+      },
+      {
+        "quote": "Poppe and Mawart",
+        "cite": "c17-b73"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c17-b72"
+      }
+    ]
+  ]
+}

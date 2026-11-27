@@ -1,0 +1,29 @@
+{
+  "slug": "the-aks",
+  "term": "the aks",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "\"The aks\" is what Veridians call "
+      },
+      {
+        "quote": "the cluster of Ondak, Iptak, Mantak and Belpaki",
+        "cite": "c8-b5"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "Their architecture uses more brick and wood, in redder and browner colors than Gladias is used to."
+      },
+      {
+        "cite": "c8-b5"
+      }
+    ]
+  ]
+}

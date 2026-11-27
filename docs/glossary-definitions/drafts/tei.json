@@ -1,0 +1,31 @@
+{
+  "slug": "tei",
+  "term": "TEI",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "TEI appears once, in the notification Zei's watch shows "
+      },
+      {
+        "quote": "TEI 70000",
+        "cite": "c2-b24"
+      },
+      {
+        "text": ", just after Zei notes "
+      },
+      {
+        "quote": "Time just hit sixty-nine thousand",
+        "cite": "c2-b22"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c2-b23"
+      }
+    ]
+  ]
+}

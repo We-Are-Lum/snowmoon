@@ -1,0 +1,21 @@
+{
+  "slug": "bloomtime",
+  "term": "Bloomtime",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Bloomtime is a name that appears once, in a chapter dateline: "
+      },
+      {
+        "quote": "3724 Bloomtime 15",
+        "cite": "c11-b1"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

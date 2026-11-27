@@ -1,0 +1,50 @@
+{
+  "slug": "gi-dai",
+  "term": "gi dai",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "gi dai is untranslated Dzegoban text heading a list on Zei's watch after drones fly into a cafeteria."
+      },
+      {
+        "cite": "c19-b5"
+      },
+      {
+        "cite": "c19-b14"
+      },
+      {
+        "cite": "c19-b2"
+      },
+      {
+        "cite": "c19-b11"
+      }
+    ],
+    [
+      {
+        "text": "Gladias works out other words on that list, guessing that its "
+      },
+      {
+        "quote": "kun gau min jan",
+        "cite": "c19-b14"
+      },
+      {
+        "text": " are security robots."
+      },
+      {
+        "cite": "c19-b22"
+      },
+      {
+        "cite": "c19-b24"
+      },
+      {
+        "cite": "c19-b15"
+      },
+      {
+        "cite": "c19-b21"
+      }
+    ]
+  ]
+}

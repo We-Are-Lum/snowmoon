@@ -1,0 +1,37 @@
+{
+  "slug": "helisport",
+  "term": "Helisport",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Helisport is a team game, based on the school game Colorball, in which players fly in copters to catch balls such as redballs and bring them back for points."
+      },
+      {
+        "cite": "c8-b64"
+      },
+      {
+        "cite": "c11-b26"
+      },
+      {
+        "cite": "c11-b80"
+      }
+    ],
+    [
+      {
+        "text": "It is played by children and professionals, and Papli says that the Quadratic Funding funds Helisport games."
+      },
+      {
+        "cite": "c11-b5"
+      },
+      {
+        "cite": "c13-b61"
+      },
+      {
+        "cite": "c8-b89"
+      }
+    ]
+  ]
+}

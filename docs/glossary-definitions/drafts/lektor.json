@@ -1,0 +1,44 @@
+{
+  "slug": "lektor",
+  "term": "Lektor",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Lektor is one of the generals, who visits Zei, Bai, Den and Mu to ask what they are thinking with their case to fire the military leadership."
+      },
+      {
+        "cite": "c28-b2"
+      },
+      {
+        "cite": "c28-b7"
+      },
+      {
+        "cite": "c28-b14"
+      },
+      {
+        "cite": "c28-b18"
+      },
+      {
+        "cite": "c28-b19"
+      }
+    ],
+    [
+      {
+        "text": "After he presents evidence against the top general, "
+      },
+      {
+        "quote": "Lektor is the head general now",
+        "cite": "c28-b96"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c28-b94"
+      }
+    ]
+  ]
+}

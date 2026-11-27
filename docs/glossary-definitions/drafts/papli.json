@@ -1,0 +1,41 @@
+{
+  "slug": "papli",
+  "term": "Papli",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Papli is one of the senators on the Parliament committee at Gladias's selection hearing for the Order of Steering."
+      },
+      {
+        "cite": "c8-b41"
+      },
+      {
+        "cite": "c8-b43"
+      },
+      {
+        "cite": "c8-b47"
+      },
+      {
+        "cite": "c8-b58"
+      }
+    ],
+    [
+      {
+        "text": "Papli asks Gladias's favorite band, and says they should "
+      },
+      {
+        "quote": "make a negative version of Quadratic Funding",
+        "cite": "c8-b89"
+      },
+      {
+        "text": " to calculate big businesses' taxes."
+      },
+      {
+        "cite": "c8-b59"
+      }
+    ]
+  ]
+}

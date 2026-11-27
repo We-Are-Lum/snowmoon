@@ -1,0 +1,39 @@
+{
+  "slug": "hexgrid",
+  "term": "hexgrid",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The hexgrid version of Minpentai is played on a "
+      },
+      {
+        "quote": "hexagonal grid",
+        "cite": "c12-b150"
+      },
+      {
+        "text": ", with its own rock formations and gliders that Zei has to work out during a match."
+      },
+      {
+        "cite": "c12-b152"
+      },
+      {
+        "cite": "c12-b157"
+      }
+    ],
+    [
+      {
+        "text": "Zei interacts with the hexgrid rules "
+      },
+      {
+        "quote": "for the first time in his life",
+        "cite": "c12-b166"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "snowmoon",
+  "term": "Snowmoon",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Snowmoon is part of dates in the book's datelines: the first chapter is dated "
+      },
+      {
+        "quote": "3724 Snowmoon 3",
+        "cite": "c1-b1"
+      },
+      {
+        "text": ", and chapters near the end are dated Snowmoon of the next year, 3725."
+      },
+      {
+        "cite": "c29-b1"
+      },
+      {
+        "cite": "c30-b1"
+      }
+    ]
+  ]
+}

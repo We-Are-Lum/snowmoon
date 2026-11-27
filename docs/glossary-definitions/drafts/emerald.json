@@ -1,0 +1,38 @@
+{
+  "slug": "emerald",
+  "term": "Emerald",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Emerald is "
+      },
+      {
+        "quote": "the local AI running from Gladias's hand device",
+        "cite": "c1-b9"
+      },
+      {
+        "text": ", which he speaks to silently through his neck band."
+      },
+      {
+        "cite": "c1-b12"
+      }
+    ],
+    [
+      {
+        "text": "It summarizes, listens and routes messages for him, but where it lacks data it is unreliable, and he must judge when to defer to it."
+      },
+      {
+        "cite": "c1-b18"
+      },
+      {
+        "cite": "c1-b61"
+      },
+      {
+        "cite": "c8-b8"
+      }
+    ]
+  ]
+}

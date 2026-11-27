@@ -1,0 +1,44 @@
+{
+  "slug": "freetown",
+  "term": "Freetown",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Freetown is a city in the United Cities."
+      },
+      {
+        "cite": "c5-b1"
+      },
+      {
+        "cite": "c15-b25"
+      }
+    ],
+    [
+      {
+        "text": "Under the United Cities' co-governance, "
+      },
+      {
+        "quote": "Freetown gets five percent votes in Devanvil",
+        "cite": "c2-b16"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "It is "
+      },
+      {
+        "quote": "about as far from Redshire as you can get in the United Cities",
+        "cite": "c15-b25"
+      },
+      {
+        "text": ", except for Silverbeach and Mabuli."
+      }
+    ]
+  ]
+}

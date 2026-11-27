@@ -1,0 +1,30 @@
+{
+  "slug": "jahn",
+  "term": "Jahn",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Jahn is Seila's "
+      },
+      {
+        "quote": "friend",
+        "cite": "c5-b58"
+      },
+      {
+        "text": ", a local of Freetown who works as a researcher at the Freetown Economics Institute."
+      },
+      {
+        "cite": "c5-b1"
+      },
+      {
+        "cite": "c5-b62"
+      },
+      {
+        "cite": "c10-b2"
+      }
+    ]
+  ]
+}

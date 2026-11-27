@@ -1,0 +1,21 @@
+{
+  "slug": "dzundei",
+  "term": "Dzundei",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Dzundei is the home of "
+      },
+      {
+        "quote": "Gun Caibai from Dzundei",
+        "cite": "c14-b31"
+      },
+      {
+        "text": ", one of the top four players in the qualifiers."
+      }
+    ]
+  ]
+}

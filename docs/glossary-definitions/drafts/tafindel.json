@@ -1,0 +1,31 @@
+{
+  "slug": "tafindel",
+  "term": "Tafindel",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Tafindel is the son of Redshire's President Albor and is believed to be in Arctic captivity after the invasion."
+      },
+      {
+        "cite": "c15-b10"
+      }
+    ],
+    [
+      {
+        "text": "The Kungaupei rescue him from the presidential residence by drone, and he is taken to safety in Arturia."
+      },
+      {
+        "cite": "c26-b88"
+      },
+      {
+        "cite": "c26-b132"
+      },
+      {
+        "cite": "c26-b158"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "slug": "alagael",
+  "term": "Alagael",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Alagael has been "
+      },
+      {
+        "quote": "a Herald for seven years",
+        "cite": "c6-b68"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "Alagael leads a Veridian assembly session on "
+      },
+      {
+        "quote": "how we can improve Veridia's public spaces to support better in-person social interaction",
+        "cite": "c6-b68"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

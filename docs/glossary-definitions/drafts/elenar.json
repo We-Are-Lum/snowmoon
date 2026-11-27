@@ -1,0 +1,27 @@
+{
+  "slug": "elenar",
+  "term": "Elenar",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Elenar Forest is a forest in Veridia where Veridian drone groups fight the Arctics, leaving "
+      },
+      {
+        "quote": "Piles of their military equipment scattered around Elenar Forest",
+        "cite": "c31-b48"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c29-b1"
+      },
+      {
+        "cite": "c29-b25"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "slug": "kun-gau",
+  "term": "kun gau",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "kun gau is Dzegoban for security: Gladias guesses it, Zei confirms, and "
+      },
+      {
+        "quote": "min jan",
+        "cite": "c19-b14"
+      },
+      {
+        "text": " with it reads as security robots."
+      },
+      {
+        "cite": "c19-b22"
+      },
+      {
+        "cite": "c19-b23"
+      },
+      {
+        "cite": "c19-b24"
+      }
+    ],
+    [
+      {
+        "text": "It is connected to the name of the Kungaupei."
+      },
+      {
+        "cite": "c19-b20"
+      },
+      {
+        "cite": "c19-b21"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "slug": "belpaki",
+  "term": "Belpaki",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Belpaki is one of the cluster of places, with Ondak, Iptak and Mantak, that Veridians call "
+      },
+      {
+        "quote": "the aks",
+        "cite": "c8-b5"
+      },
+      {
+        "text": "."
+      }
+    ],
+    [
+      {
+        "text": "Utaku is from Belpaki, and Utaku's parents think Freetown is safer than Belpaki because it takes defense more seriously than the other United Cities."
+      },
+      {
+        "cite": "c10-b9"
+      },
+      {
+        "cite": "c22-b34"
+      },
+      {
+        "cite": "c22-b33"
+      }
+    ]
+  ]
+}

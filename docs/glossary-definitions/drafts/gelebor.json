@@ -1,0 +1,33 @@
+{
+  "slug": "gelebor",
+  "term": "Gelebor",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The Gelebor mountains are pointed out in an announcement on the aeroplane carrying Zei, Bai, Gladias and Den to Meldan; beyond them lies Meldan, "
+      },
+      {
+        "quote": "the capital city of Veridia",
+        "cite": "c26-b18"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c26-b2"
+      },
+      {
+        "cite": "c26-b3"
+      },
+      {
+        "cite": "c26-b7"
+      },
+      {
+        "cite": "c26-b16"
+      }
+    ]
+  ]
+}

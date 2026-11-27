@@ -1,0 +1,47 @@
+{
+  "slug": "arctics",
+  "term": "Arctics",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "The Arctics are the people of the Arctic Empire, whose technology is "
+      },
+      {
+        "quote": "the most advanced",
+        "cite": "c10-b145"
+      },
+      {
+        "text": "."
+      },
+      {
+        "cite": "c3-b6"
+      }
+    ],
+    [
+      {
+        "text": "Dzego lost a war against them last century, and in the story they invade and annex Redshire."
+      },
+      {
+        "cite": "c9-b29"
+      },
+      {
+        "cite": "c15-b6"
+      }
+    ],
+    [
+      {
+        "text": "One character says that "
+      },
+      {
+        "quote": "If you make a perfect goal-executing machine, the Arctics are what you get",
+        "cite": "c32-b51"
+      },
+      {
+        "text": "."
+      }
+    ]
+  ]
+}

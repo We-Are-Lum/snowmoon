@@ -1,0 +1,20 @@
+{
+  "slug": "sen-hu",
+  "term": "sen hu",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "sen hu is a Dzegoban term shown on Zei's watch with a question mark and a count of 0."
+      },
+      {
+        "cite": "c19-b11"
+      },
+      {
+        "cite": "c19-b12"
+      }
+    ]
+  ]
+}

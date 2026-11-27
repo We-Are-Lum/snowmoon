@@ -1,0 +1,35 @@
+{
+  "slug": "ancus",
+  "term": "Ancus",
+  "status": "draft",
+  "approved": false,
+  "aiHelp": "drafted with AI help (Claude, by Anthropic)",
+  "sentences": [
+    [
+      {
+        "text": "Ancus is one of the Senators on the Parliament committee that holds Gladias's selection hearing."
+      },
+      {
+        "cite": "c8-b43"
+      },
+      {
+        "cite": "c8-b77"
+      }
+    ],
+    [
+      {
+        "text": "He asks Gladias what he last voted on for the aesthetics tax, then turns to Papli to ask whether "
+      },
+      {
+        "quote": "families enjoying the outdoor environment, good public transit, and fun",
+        "cite": "c8-b84"
+      },
+      {
+        "text": " are things Veridians value."
+      },
+      {
+        "cite": "c8-b78"
+      }
+    ]
+  ]
+}
