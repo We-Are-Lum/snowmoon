@@ -1,4 +1,5 @@
 import { after, NextResponse } from 'next/server';
+import { hideReachesTakes } from '~/lib/voice/take-hide';
 import { revalidatePath } from 'next/cache';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
@@ -51,6 +52,7 @@ export async function POST(request: Request, { params }: Ctx) {
     revalidatePath('/images');
     revalidatePath(el.type === 'image' ? `/image/${id}` : '/images/designs', el.type === 'image' ? undefined : 'layout');
     await hideReachesChapterPictures(sql, el.elementId);
+    await hideReachesTakes(sql, el.elementId, 0, 'rule').catch((e) => console.error('report: hiding the takes failed', (e as Error).name));
   }
   // The moderator's push ("Snowmoon: N reports waiting", nothing else), after the answer; never fails the report.
   after(() => alertReports(sql).then(() => undefined, () => undefined));

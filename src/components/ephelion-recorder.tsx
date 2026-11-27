@@ -11,6 +11,7 @@ import { RECORDER as W } from '~/lib/voice/recorder-wording';
 import { withReset } from '~/lib/challenge/model-wording';
 import { loadWords, removeWords, saveWords, splitSentences } from '~/lib/voice/device-words';
 import { LocalTextField } from '~/components/local-text-field';
+import { EphelionEntry } from '~/components/ephelion-entry';
 import { SignedAudio, joined, mmss, useRecorder, useStepLog, wordCount, type Check, type Converted, type Redo } from '~/components/voice-recorder-core';
 import '../styles/ephelion-recorder.css';
 
@@ -850,6 +851,9 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
       )}
     </section>
   );
+  // Entering the take (PR 6, 2026-11-26): the converted take as checked; with redone sentences, once "Use this one" kept them.
+  const entryDraft = converted && (converted.check || stillWrong.length === 0 || checks) ? (redos.length ? (accepted && accepted !== converted.draftId ? accepted : null) : converted.draftId) : null;
+  const entryPart = entryDraft && fid !== null && speech && picked ? <EphelionEntry key={entryDraft} fid={fid} draftId={entryDraft} speechTitle={speech.title} voiceName={picked.name} wide={wide} /> : null;
   const teaser = <p className="er-teaser">{W.teaser}</p>;
   const recordNew = (
     <button type="button" className="er-link" onClick={() => setStep(3)}>{W.recordNew}</button>
@@ -994,6 +998,7 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
       main = (
         <>
           {checkPart}
+          {entryPart}
           {teaser}
         </>
       );
@@ -1003,6 +1008,7 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
           <h2>{W.listen}</h2>
           {parts}
           {checkPart}
+          {entryPart}
           {recordNew}
           {teaser}
         </>

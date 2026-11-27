@@ -8,11 +8,13 @@ import { PAPER } from '../tokens';
  */
 export const RECORD_BUTTON = 'Record a speech';
 export const SPOKEN_BUTTON = 'Watch this storyboard';
+/** A take's Share card (PR 6, 2026-11-26; the drawings' "Listen"). DRAFT for Nate's reread. */
+export const TAKE_BUTTON = 'Listen';
 
-function embed(title: string, url: string): string {
+function embed(title: string, url: string, imageUrl?: string): string {
   return JSON.stringify({
     version: '1',
-    imageUrl: `${appUrl()}/embed.png`,
+    imageUrl: imageUrl ?? `${appUrl()}/embed.png`,
     button: { title, action: { type: 'launch_frame', name: APP_NAME, url, splashImageUrl: `${appUrl()}/splash.png`, splashBackgroundColor: PAPER } },
   });
 }
@@ -20,5 +22,7 @@ function embed(title: string, url: string): string {
 export const RECORD_PATH = '/ephelion';
 export const recordEmbed = () => embed(RECORD_BUTTON, `${appUrl()}${RECORD_PATH}`);
 export const spokenEmbed = (id: string) => embed(SPOKEN_BUTTON, `${appUrl()}/storyboard/spoken/${id}`);
+/** A take's own embed: its picture, and a button that opens its page. */
+export const takeEmbed = (id: string, picture: string | null) => embed(TAKE_BUTTON, `${appUrl()}/ephelion/take/${id}`, picture ?? undefined);
 /** Both meta names, as the root layout and /challenge set them. */
 export const embedMeta = (e: string) => ({ 'fc:miniapp': e, 'fc:frame': e });

@@ -22,7 +22,8 @@ import '../styles/ephelion.css';
 interface Speech { id: string; title: string; maxSeconds: number; characters: number; label: { kind: 'book' | 'invented' }; sentences: { n: number; text: string }[] }
 interface Choice { presetId: string; candidate: number; name: string; saved: boolean }
 interface Reading { speechId: string; presetId: string; id: string }
-interface Status { speeches: Speech[]; choices: Choice[]; readings: Reading[]; canMakeReadings?: boolean; limits: { readingCreditsPerChar: number } }
+interface Take { id: string; performer: string | null; voice: string | null; label: string | null }
+interface Status { speeches: Speech[]; choices: Choice[]; readings: Reading[]; canMakeReadings?: boolean; limits: { readingCreditsPerChar: number }; takes?: Record<string, Take[]> }
 
 /** Garance's remix entry 70762e34 (Nate, 2026-11-25), shown alone; it switches to the profile's master front once approved. */
 export const EPHELION_IMAGE = {
@@ -88,7 +89,23 @@ function MakeReading({ s, choice, credits, onMade }: { s: Speech; choice: Choice
   );
 }
 
-function SpeechCard({ s, reading, voice, make }: { s: Speech; reading: Reading | null; voice: string | null; make: React.ReactNode }) {
+/** A person's take on a card: links to its page (P7: at most one a person, newest first; nothing paid or popular orders it). */
+function TakeRow({ t, latest }: { t: Take; latest: boolean }) {
+  return (
+    <Link className="eph-row eph-take-row" href={`/ephelion/take/${t.id}`}>
+      <span className="eph-play eph-play-filled" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor" /></svg>
+      </span>
+      <span className="eph-row-text">
+        <span className="eph-row-title">{latest ? W.latestTake(t.performer) : (t.performer ?? W.someone)}</span>
+        <span className="eph-meta">{[t.voice, t.label].filter(Boolean).join(' · ')}</span>
+      </span>
+    </Link>
+  );
+}
+
+function SpeechCard({ s, reading, voice, make, takes }: { s: Speech; reading: Reading | null; voice: string | null; make: React.ReactNode; takes: Take[] }) {
+  const [more, setMore] = useState(false);
   return (
     <article className="eph-card" data-speech={s.id}>
       <header className="eph-card-head">
@@ -105,11 +122,23 @@ function SpeechCard({ s, reading, voice, make }: { s: Speech; reading: Reading |
           <div className="eph-row-text eph-meta">{W.readingSoon}</div>
         </div>
       )}
-      <div className="eph-row eph-row-empty">
-        <span className="eph-play eph-play-empty" aria-hidden="true" />
-        <div className="eph-row-text eph-muted">{W.noTakes}</div>
-      </div>
+      {takes.length ? (
+        <>
+          <TakeRow t={takes[0]} latest />
+          {more && takes.slice(1).map((t) => <TakeRow key={t.id} t={t} latest={false} />)}
+        </>
+      ) : (
+        <div className="eph-row eph-row-empty">
+          <span className="eph-play eph-play-empty" aria-hidden="true" />
+          <div className="eph-row-text eph-muted">{W.noTakes}</div>
+        </div>
+      )}
       <footer className="eph-card-foot">
+        {takes.length > 1 && (
+          <button type="button" className="eph-link eph-more" aria-expanded={more} onClick={() => setMore((m) => !m)}>
+            {more ? W.fewer : W.more}
+          </button>
+        )}
         <Link className="eph-btn eph-btn-small" href={`/ephelion/record?speech=${encodeURIComponent(s.id)}`}>
           {W.record}
         </Link>
@@ -205,7 +234,7 @@ export function EphelionLanding({ fallback, signedOut, learn }: { fallback: Reac
             const r = readingFor(s.id);
             const first = status.choices.find((c) => c.saved);
             const make = !r && status.canMakeReadings && first ? <MakeReading s={s} choice={first} credits={Math.ceil(s.characters * status.limits.readingCreditsPerChar)} onMade={() => void load()} /> : null;
-            return <SpeechCard key={s.id} s={s} reading={r} voice={r ? nameOf(r.presetId) : null} make={make} />;
+            return <SpeechCard key={s.id} s={s} reading={r} voice={r ? nameOf(r.presetId) : null} make={make} takes={status.takes?.[s.id] ?? []} />;
           })}
         </div>
       </aside>

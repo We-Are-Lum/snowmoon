@@ -9,6 +9,8 @@ import type { ModerationDeps } from './moderation';
 
 /** Publishing is on with Nate's word (VOICE.publish), or on a local test copy (VOICE_TEST_ON, never on Vercel). */
 export const publishOn = () => VOICE.publish || voiceTestOn();
+/** Entering takes (Nate, 2026-11-26): VOICE.publishTakes, for those the voice switch lets in; or a local test copy. */
+export const takesOn = () => VOICE.publishTakes || voiceTestOn();
 
 export function publishDeps(): PublishDeps {
   return {
