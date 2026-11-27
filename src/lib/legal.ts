@@ -379,9 +379,11 @@ export const LEGAL: {
     // docs/legal/voice-takes-draft.md). Terms: a new §6f, "The Ephelion challenge.". Privacy: §4's two new items (a take
     // entered, the free picture), §6's added sentences, §7's ntfy item ("an image, a storyboard or a take") and the free
     // picture's OpenAI line, word for word. The words before were 1tjanx5 (terms) and 1tzkmtl (privacy).
-    // NOT YET REREAD: Privacy §3's free-picture item (2026-11-27, "the picture of your own scene ... until you enter it or
-    // remove it") awaits Nate's reread; the key stays at his reread of PR 6's lines, so P6k and the reread tests flag it.
-    privacy: { words: '1iu09p9', on: '2026-11-27', by: 'FID 6786' },
+    // 2026-11-27, owner's reread of Privacy §3's free-picture item, typed in his session: "Reread: the Privacy §3 line ("the
+    // picture of your own scene for the Ephelion challenge, with its signed record, until you enter it or remove it") and
+    // the remove question, both as written." §3's list adds that item after the recorded speech's. The words before were
+    // 1iu09p9 (his reread of PR 6's lines, the same day).
+    privacy: { words: '19q34ww', on: '2026-11-27', by: 'FID 6786' },
   },
 };
 

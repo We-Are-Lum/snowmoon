@@ -1,4 +1,4 @@
-/** The admins' reset of a person's free Ephelion picture (Nate, 2026-11-27). DRAFT wording (the agent's), admins only. */
+/** The admins' reset of a person's free Ephelion picture (Nate, 2026-11-27). The agent's wording, approved by Nate as drafted (2026-11-27: "since only admins see them"). */
 export const RESET_WORDING = {
   heading: 'Ephelion: reset a free picture',
   intro: 'For someone who lost their free picture of their own scene. They can make one again; the reset is logged with who and when.',

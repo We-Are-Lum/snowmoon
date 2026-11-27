@@ -75,6 +75,7 @@ export const TAKES_WORDING = {
   keptHere: 'Kept on this device only until you enter it.',
   // DRAFT (the agent's), for Nate's reread: removing the free picture from this device (Privacy §3 "or remove it").
   removeHere: 'Remove from this device',
+  // Reread by Nate as written, 2026-11-27.
   removeAsk: 'Remove your picture from this device? It can’t be made again: your free picture stays used.',
   removeYes: 'Remove it',
   removeNo: 'Keep it',
