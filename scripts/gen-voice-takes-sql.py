@@ -408,7 +408,8 @@ create or replace function studio.claim_free_scene(p_person bigint) returns bool
 language plpgsql security definer set search_path = studio, pg_temp as $fn$
 begin
   if p_person = 0 then raise exception 'no one' using errcode = '22023'; end if;
-  perform pg_advisory_xact_lock(hashtext('snowmoon.ephelion.scene'), p_person::int);
+  -- A 64-bit lock key from the person number: a Lens or Bluesky person number is outside int's range (0051).
+  perform pg_advisory_xact_lock(hashtextextended('snowmoon.ephelion.scene:' || p_person::text, 0));
   delete from studio.ephelion_scene_pictures where person = p_person and made_at is null and started_at < now() - interval '10 minutes';
   insert into studio.ephelion_scene_pictures (person) values (p_person) on conflict (person) do nothing;
   return found;
@@ -455,7 +456,11 @@ begin
   insert into studio.ephelion_scene_pictures (person, started_at) values (p, now() - interval '11 minutes');
   if not studio.claim_free_scene(p) then raise exception 'READ-BACK FAILED: a stale claim kept the free picture'; end if;
   delete from studio.ephelion_scene_pictures where person = p;
-  if exists (select 1 from studio.ephelion_scene_pictures where person = p) then raise exception 'READ-BACK FAILED: the test row was not deleted'; end if;
+  -- A Lens or Bluesky person number (outside int's range, 0051) and a wallet account's claim too.
+  if not studio.claim_free_scene(-3147483646) or not studio.claim_free_scene(-2147483646) then raise exception 'READ-BACK FAILED: a Lens, Bluesky or wallet account could not claim'; end if;
+  if studio.claim_free_scene(-3147483646) then raise exception 'READ-BACK FAILED: a second claim for a Lens or Bluesky account was let in'; end if;
+  delete from studio.ephelion_scene_pictures where person in (p, -3147483646, -2147483646);
+  if exists (select 1 from studio.ephelion_scene_pictures where person in (p, -3147483646, -2147483646)) then raise exception 'READ-BACK FAILED: the test row was not deleted'; end if;
   raise notice 'READ-BACK PASSED';
 end $$;
 rollback;"""
