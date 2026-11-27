@@ -8,7 +8,7 @@ import { RESET_WORDING as W } from '~/lib/voice/free-scene-reset';
 /**
  * An admin resets a person's free Ephelion picture, for someone who loses theirs (Nate, 2026-11-27). Admins only, decided
  * here on the server (401 signed out, 404 to everyone else, as the other admin answers); studio.reset_free_scene removes the person's row,
- * made or not, and logs who reset it and when (NEXT_ephelion_scene_reset.sql). The person is a number: a FID, minus a
+ * made or not, and logs who reset it and when (0056_ephelion_scene_reset.sql). The person is a number: a FID, minus a
  * wallet account's number, or a Lens or Bluesky account's person number.
  */
 export async function POST(request: Request) {

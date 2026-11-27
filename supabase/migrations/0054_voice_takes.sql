@@ -1,8 +1,8 @@
--- NEXT_voice_takes.sql: entering a take in the Ephelion challenge, with its picture, and hiding it (Nate, 2026-11-26:
+-- 0054_voice_takes.sql: entering a take in the Ephelion challenge, with its picture, and hiding it (Nate, 2026-11-26:
 -- "people should enter and share takes in this round"; "entering a take includes its picture"; report and hide for
 -- takes folded into PR 6). Branch ephelion-takes. APPLIED by Nate in production on 2026-11-26/27, as at 480f2f3c (A, B and
--- C: C's rights table as expected, no error). It keeps its NEXT_ name until merge, then takes the next free number after
--- 0053, checked against origin/main and production. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory
+-- C: C's rights table as expected, no error). Numbered at merge on 2026-11-27 (was NEXT_voice_takes.sql): the next free
+-- number after main's 0053, checked against origin/main and every branch. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory
 -- PGlite against the branch's migrations 0001-0052 (npm run test:voice-takes-sql). Requires 0046 (voice publications),
 -- 0049 and 0052 (#225, moderation).
 --

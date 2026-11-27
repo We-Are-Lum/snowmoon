@@ -10,6 +10,6 @@ export const RESET_WORDING = {
   done: (n: string) => `Reset: ${n} can make their free picture again.`,
   nothing: (n: string) => `Nothing to reset: ${n} hasn’t made or started one.`,
   badNumber: 'A person’s number: digits, with a minus for a wallet, Lens or Bluesky account; not 0.',
-  failed: 'The reset didn’t go through (it needs NEXT_ephelion_scene_reset.sql). Nothing changed.',
+  failed: 'The reset didn’t go through (it needs 0056_ephelion_scene_reset.sql). Nothing changed.',
   notHere: 'Not available here.',
 } as const;

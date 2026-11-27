@@ -1,4 +1,4 @@
-# Writes NEXT_voice_takes.sql, NEXT_ephelion_scene.sql and NEXT_ephelion_scene_reset.sql (A and B from one body, so the dry run is the migration word
+# Writes 0054_voice_takes.sql, 0055_ephelion_scene.sql and 0056_ephelion_scene_reset.sql (A and B from one body, so the dry run is the migration word
 # for word). Drafted by the coding agent (Claude, a closed model by Anthropic).
 import os
 os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
@@ -331,11 +331,11 @@ alter table studio.voice_publications alter column board_version set not null;
 alter table studio.voice_publications drop column if exists picture, drop column if exists speech_id, drop column if exists kind;
 commit;"""
 
-HEAD = """-- NEXT_voice_takes.sql: entering a take in the Ephelion challenge, with its picture, and hiding it (Nate, 2026-11-26:
+HEAD = """-- 0054_voice_takes.sql: entering a take in the Ephelion challenge, with its picture, and hiding it (Nate, 2026-11-26:
 -- "people should enter and share takes in this round"; "entering a take includes its picture"; report and hide for
 -- takes folded into PR 6). Branch ephelion-takes. APPLIED by Nate in production on 2026-11-26/27, as at 480f2f3c (A, B and
--- C: C's rights table as expected, no error). It keeps its NEXT_ name until merge, then takes the next free number after
--- 0053, checked against origin/main and production. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory
+-- C: C's rights table as expected, no error). Numbered at merge on 2026-11-27 (was NEXT_voice_takes.sql): the next free
+-- number after main's 0053, checked against origin/main and every branch. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory
 -- PGlite against the branch's migrations 0001-0052 (npm run test:voice-takes-sql). Requires 0046 (voice publications),
 -- 0049 and 0052 (#225, moderation).
 --
@@ -386,7 +386,7 @@ sql = (HEAD + '-- A. DRY RUN: the migration below, ending in rollback; nothing i
        + "--    read with has_table_privilege and has_function_privilege; the rows are written as postgres, as the site writes them.\n"
        + "--    Everything is inside one transaction that ends in rollback. FID 2147483646 belongs to no one. Ends \"READ-BACK PASSED\".\n--\n"
        + comment(READBACK) + "\n\n-- D. UNDO, only if the release is withdrawn. Refused once any take has been entered. Paste without the \"-- \".\n" + comment(UNDO) + '\n')
-open('supabase/migrations/NEXT_voice_takes.sql', 'w').write(sql)
+open('supabase/migrations/0054_voice_takes.sql', 'w').write(sql)
 
 # The free picture of one's own scene, one per account.
 SBODY = r"""create table if not exists studio.ephelion_scene_pictures (
@@ -474,11 +474,11 @@ drop function if exists studio.finish_free_scene(bigint, text);
 drop function if exists studio.release_free_scene(bigint);
 drop table if exists studio.ephelion_scene_pictures;
 commit;"""
-SHEAD = """-- NEXT_ephelion_scene.sql: the free picture of one's own scene in the Ephelion challenge, one per account (Nate,
+SHEAD = """-- 0055_ephelion_scene.sql: the free picture of one's own scene in the Ephelion challenge, one per account (Nate,
 -- 2026-11-26: "One free picture per account"; "A refused or failed picture doesn't use up the free one"; "a picture that
 -- just came out wrong isn't redone for free"). Branch ephelion-takes. APPLIED by Nate in production on 2026-11-26/27, as at
--- 0484ec54 (A, B and C: C's rights table as expected, no error). It keeps its NEXT_ name until merge, then takes the next
--- free number after 0053 (after NEXT_voice_takes.sql's). Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory PGlite (npm run
+-- 0484ec54 (A, B and C: C's rights table as expected, no error). Numbered at merge on 2026-11-27 (was
+-- NEXT_ephelion_scene.sql), after 0054_voice_takes.sql. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory PGlite (npm run
 -- test:voice-takes-sql). Requires 0001 only.
 --
 -- MUST RUN AS postgres, in the Supabase SQL Editor. A. the dry run (ending in `rollback;`), B. the migration (ending in
@@ -501,7 +501,7 @@ SHEAD = """-- NEXT_ephelion_scene.sql: the free picture of one's own scene in th
 s2 = (SHEAD + '-- A. DRY RUN: the migration below, ending in rollback; nothing is kept. Expect no error.\n' + wrap(SBODY, 'rollback;') + '\n-- B. MIGRATION.\n' + wrap(SBODY, 'commit;')
       + '\n-- C. READ-BACK (after B), as postgres. Paste the lines below without their "-- ". FID 2147483646 belongs to no one.\n--\n' + comment(SREAD)
       + '\n\n-- D. UNDO, only if the release is withdrawn. Refused once any free picture has been made. Paste without the "-- ".\n' + comment(SUNDO) + '\n')
-open('supabase/migrations/NEXT_ephelion_scene.sql', 'w').write(s2)
+open('supabase/migrations/0055_ephelion_scene.sql', 'w').write(s2)
 # An admin's reset of a person's free picture (Nate, 2026-11-27: for someone who loses theirs).
 RBODY = r"""create table if not exists studio.ephelion_scene_resets (
   id bigint generated always as identity primary key,
@@ -585,12 +585,12 @@ end $$;
 drop function if exists studio.reset_free_scene(bigint, bigint);
 drop table if exists studio.ephelion_scene_resets;
 commit;"""
-RHEAD = """-- NEXT_ephelion_scene_reset.sql: an admin resets a person's free picture in the Ephelion challenge, for someone who loses
+RHEAD = """-- 0056_ephelion_scene_reset.sql: an admin resets a person's free picture in the Ephelion challenge, for someone who loses
 -- theirs (Nate, 2026-11-27: "an admin action that resets a person's free-picture claim ... admins only, decided on the
--- server ... logged with who and when"). Branch ephelion-takes. NOT YET APPLIED: for Nate to run. It keeps its NEXT_ name
--- until merge, then takes the next free number after NEXT_voice_takes.sql's and NEXT_ephelion_scene.sql's, checked against
--- origin/main and production. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory
--- PGlite (npm run test:voice-takes-sql). Requires NEXT_ephelion_scene.sql (applied).
+-- server ... logged with who and when"). Branch ephelion-takes. APPLIED by Nate in production on 2026-11-27, as at
+-- 411fa16b (A, B and C: C's rights table as expected, no error). Numbered at merge on 2026-11-27 (was
+-- NEXT_ephelion_scene_reset.sql), after 0055_ephelion_scene.sql. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory
+-- PGlite (npm run test:voice-takes-sql). Requires 0055_ephelion_scene.sql (applied).
 --
 -- MUST RUN AS postgres, in the Supabase SQL Editor. A. the dry run (ending in `rollback;`), B. the migration (ending in
 -- `commit;`), C. the read-back (rights by has_*_privilege; a made picture reset and claimed again, a claim reset, nothing
@@ -612,6 +612,6 @@ RHEAD = """-- NEXT_ephelion_scene_reset.sql: an admin resets a person's free pic
 s3 = (RHEAD + '-- A. DRY RUN: the migration below, ending in rollback; nothing is kept. Expect no error.\n' + wrap(RBODY, 'rollback;') + '\n-- B. MIGRATION.\n' + wrap(RBODY, 'commit;')
       + '\n-- C. READ-BACK (after B), as postgres. Paste the lines below without their "-- ". FIDs 2147483646 and 2147483645 belong to no one.\n--\n' + comment(RREAD)
       + '\n\n-- D. UNDO, only if the release is withdrawn. Refused once anything has been reset. Paste without the "-- ".\n' + comment(RUNDO) + '\n')
-open('supabase/migrations/NEXT_ephelion_scene_reset.sql', 'w').write(s3)
+open('supabase/migrations/0056_ephelion_scene_reset.sql', 'w').write(s3)
 
 print('ok')

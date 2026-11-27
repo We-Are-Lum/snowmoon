@@ -1,9 +1,9 @@
--- NEXT_ephelion_scene_reset.sql: an admin resets a person's free picture in the Ephelion challenge, for someone who loses
+-- 0056_ephelion_scene_reset.sql: an admin resets a person's free picture in the Ephelion challenge, for someone who loses
 -- theirs (Nate, 2026-11-27: "an admin action that resets a person's free-picture claim ... admins only, decided on the
--- server ... logged with who and when"). Branch ephelion-takes. NOT YET APPLIED: for Nate to run. It keeps its NEXT_ name
--- until merge, then takes the next free number after NEXT_voice_takes.sql's and NEXT_ephelion_scene.sql's, checked against
--- origin/main and production. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory
--- PGlite (npm run test:voice-takes-sql). Requires NEXT_ephelion_scene.sql (applied).
+-- server ... logged with who and when"). Branch ephelion-takes. APPLIED by Nate in production on 2026-11-27, as at
+-- 411fa16b (A, B and C: C's rights table as expected, no error). Numbered at merge on 2026-11-27 (was
+-- NEXT_ephelion_scene_reset.sql), after 0055_ephelion_scene.sql. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory
+-- PGlite (npm run test:voice-takes-sql). Requires 0055_ephelion_scene.sql (applied).
 --
 -- MUST RUN AS postgres, in the Supabase SQL Editor. A. the dry run (ending in `rollback;`), B. the migration (ending in
 -- `commit;`), C. the read-back (rights by has_*_privilege; a made picture reset and claimed again, a claim reset, nothing

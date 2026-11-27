@@ -6,7 +6,7 @@ import { moderationDeps } from './publish-deps';
 import type { ModerationDeps } from './moderation';
 
 /**
- * A picture hidden by moderation reaches the takes that copied it (Nate, 2026-11-26; NEXT_voice_takes.sql): each live
+ * A picture hidden by moderation reaches the takes that copied it (Nate, 2026-11-26; 0054_voice_takes.sql): each live
  * take whose picture is one of the element's versions is hidden with it (studio.hide_takes_using_picture), and its files
  * move to the private bucket as any hidden publication's do. Unhiding the picture brings back only the takes hidden
  * because of it (studio.unhide_takes_using_picture: not those hidden or reported for themselves), each file put back

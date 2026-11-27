@@ -63,7 +63,7 @@ export async function POST(request: Request) {
     // The maker is checked again at their next Generate or publish (owner, 2026-11-04).
     await recheckMaker(sql, el.byFid);
     await hideReachesChapterPictures(sql, el.elementId);
-    // The takes that copied this picture are hidden with it (NEXT_voice_takes.sql; Nate, 2026-11-26).
+    // The takes that copied this picture are hidden with it (0054_voice_takes.sql; Nate, 2026-11-26).
     await hideReachesTakes(sql, el.elementId, fid, 'moderator').catch((e) => console.error('moderate: hiding the takes failed', (e as Error).name));
   } else if (action === 'dismiss') {
     await sql`insert into studio.removal_log ${sql({ element_id: el.elementId, step: 'dismissed', by_fid: fid, role: 'moderator' })}`;

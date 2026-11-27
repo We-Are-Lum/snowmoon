@@ -10,7 +10,7 @@ import { TAKES_WORDING as W } from './takes-wording';
 
 /**
  * Entering a take in the Ephelion challenge (Nate, 2026-11-26; PR 6). The person's own converted take (a performance
- * draft) and the picture they chose become a publication of kind 'take' (NEXT_voice_takes.sql, applied): its files are
+ * draft) and the picture they chose become a publication of kind 'take' (0054_voice_takes.sql, applied): its files are
  * copied under takes/<id>/ in the public bucket, its recipe says who performed it, in which voice, the words as spoken,
  * and the picture's source, labels and credit; the raw recording is never kept or published. studio.publish_voice_take
  * checks it in the database (their own draft, a picture of Lord Ephelion, one live take per speech, replacing in the
