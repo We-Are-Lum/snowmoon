@@ -1,8 +1,12 @@
 # Entering a take in the Ephelion challenge, with its picture, report and hide, and the free picture: legal lines (DRAFT)
 
-For Nate's reread. Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-26, v2 (with Nate's answers
-of 2026-11-26: report and hide folded into PR 6; the free picture uses GPT Image). Nothing here is in `src/lib/legal.ts`
-yet: each line ships in the PR that makes it true, after the reread.
+Drafted by the coding agent (Claude, a closed model by Anthropic), 2026-11-26, v2 (with Nate's answers of 2026-11-26:
+report and hide folded into PR 6; the free picture uses GPT Image).
+
+**Reread by Nate on 2026-11-26**, in his words: "Reread: PR 6's legal lines as you sent them at 3691c362, with that §6
+change." The §6 change: its hide sentence ends "…the takes that use it are hidden with it, and shown again if it's
+restored." So every line below is reread as written here. `src/lib/legal.ts` changes in PR 6's code (and the
+free-picture lines in the free-picture PR), each in the PR that makes it true; the reread record there is set then.
 
 Already said, and not repeated:
 - Terms §5: "If you record a speech, record only your own voice, and don't imitate a real person. Your recording is
@@ -31,7 +35,7 @@ Already said, and not repeated:
 > A take you enter in the Ephelion challenge is public, shown with your name and its picture, with that picture's labels
 > and credit, on its own page, in its Share card and under its speech on the challenge page, until you take it down. A
 > picture of yours used in a take is shown with it, credited to you. If a picture is hidden after a report, the takes
-> that use it are hidden with it.
+> that use it are hidden with it, and shown again if it's restored.
 
 ## Privacy §7 (who receives what)
 

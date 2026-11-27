@@ -8,7 +8,7 @@
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:
 -- A. the dry run (the migration's own SQL, ending in `rollback;`: it changes nothing), B. the migration (ending in
 -- `commit;`), C. the read-back (after B: rights read with has_table_privilege and has_function_privilege, then realistic
--- rows entered, refused, replaced, hidden with their picture, taken down and deleted (the test pictures and sheets,
+-- rows entered, refused, replaced, hidden and unhidden with their picture, taken down and deleted (the test pictures and sheets,
 -- append-only, go with the rollback), all inside a transaction that ends in `rollback;`; it ends "READ-BACK PASSED"),
 -- and D. the undo, refused once any take has been entered. Safe to run twice.
 --
@@ -33,10 +33,12 @@
 --    same call (Nate, 2026-11-26), so a failed entry leaves the old one live; without it, a second is refused.
 -- 6. studio.hide_takes_using_picture: when a picture is hidden, every live take that copied it is hidden with it
 --    (reversibly, logged "its picture was hidden"), and its files' keys are returned for the site to move, as for any
---    hide. Unhiding the picture doesn't unhide them; a moderator looks at each.
+--    hide. studio.unhide_takes_using_picture: when the picture is unhidden, the takes hidden only because of it come
+--    back (their latest hide is the picture's, and no report of their own is open); a take hidden or reported for
+--    itself stays hidden (Nate, 2026-11-26).
 -- 7. voice_publications_live_take: one live take per person per speech (a hidden take is still live);
 --    voice_publications_take_picture: the takes by the picture they copied.
--- studio_writer's rights on the table are unchanged (select); it may execute the three functions. Nothing for anon.
+-- studio_writer's rights on the table are unchanged (select); it may execute the four functions. Nothing for anon.
 --
 -- Safe with today's live code: every existing row is a storyboard; the new columns are empty on them; publishing is off.
 
@@ -156,6 +158,33 @@ begin
 end $fn$;
 revoke all on function studio.hide_takes_using_picture(uuid, bigint, text) from public, anon, authenticated;
 grant execute on function studio.hide_takes_using_picture(uuid, bigint, text) to studio_writer;
+
+-- When the picture is unhidden (Nate, 2026-11-26), the takes hidden only because of it come back: those hidden with
+-- their picture ("its picture was hidden"), with no hide of their own since they were last unhidden, and no report of
+-- their own still open (a report after the latest dismissal). A take a moderator or a rule hid for itself, or reported for itself, stays hidden. Returns each
+-- restored take and its files' keys, for the site to move back, as for any unhide.
+create or replace function studio.unhide_takes_using_picture(p_version uuid, p_by bigint, p_role text) returns table (publication_id uuid, key text)
+language plpgsql security definer set search_path = studio, pg_temp as $fn$
+declare t uuid;
+begin
+  if p_role not in ('moderator', 'maintainer') then raise exception 'not an unhiding role' using errcode = '22023'; end if;
+  for t in
+    select p.id from studio.voice_publications p
+    where p.kind = 'take' and p.picture->>'version' = p_version::text and p.taken_down_at is null and p.hidden_at is not null
+      and exists (select 1 from studio.voice_publication_log g where g.publication_id = p.id and g.step = 'hidden' and g.note = 'its picture was hidden')
+      -- no hide of its own since it was last unhidden (a tie keeps it hidden)
+      and not exists (select 1 from studio.voice_publication_log h where h.publication_id = p.id and h.step = 'hidden' and h.note is distinct from 'its picture was hidden'
+        and h.at >= coalesce((select max(u.at) from studio.voice_publication_log u where u.publication_id = p.id and u.step = 'unhidden'), '-infinity'))
+      and not exists (select 1 from studio.voice_publication_log r where r.publication_id = p.id and r.step = 'reported'
+        and r.at > coalesce((select max(x.at) from studio.voice_publication_log x where x.publication_id = p.id and x.step = 'dismissed'), '-infinity'))
+  loop
+    update studio.voice_publications set hidden_at = null, hidden_by = null, hidden_role = null where id = t;
+    insert into studio.voice_publication_log (publication_id, step, by_fid, role, note) values (t, 'unhidden', p_by, p_role, 'its picture was restored');
+    return query select t, f->>'key' from studio.voice_publications, jsonb_array_elements(files) f where id = t;
+  end loop;
+end $fn$;
+revoke all on function studio.unhide_takes_using_picture(uuid, bigint, text) from public, anon, authenticated;
+grant execute on function studio.unhide_takes_using_picture(uuid, bigint, text) to studio_writer;
 rollback;
 
 -- B. MIGRATION.
@@ -274,6 +303,33 @@ begin
 end $fn$;
 revoke all on function studio.hide_takes_using_picture(uuid, bigint, text) from public, anon, authenticated;
 grant execute on function studio.hide_takes_using_picture(uuid, bigint, text) to studio_writer;
+
+-- When the picture is unhidden (Nate, 2026-11-26), the takes hidden only because of it come back: those hidden with
+-- their picture ("its picture was hidden"), with no hide of their own since they were last unhidden, and no report of
+-- their own still open (a report after the latest dismissal). A take a moderator or a rule hid for itself, or reported for itself, stays hidden. Returns each
+-- restored take and its files' keys, for the site to move back, as for any unhide.
+create or replace function studio.unhide_takes_using_picture(p_version uuid, p_by bigint, p_role text) returns table (publication_id uuid, key text)
+language plpgsql security definer set search_path = studio, pg_temp as $fn$
+declare t uuid;
+begin
+  if p_role not in ('moderator', 'maintainer') then raise exception 'not an unhiding role' using errcode = '22023'; end if;
+  for t in
+    select p.id from studio.voice_publications p
+    where p.kind = 'take' and p.picture->>'version' = p_version::text and p.taken_down_at is null and p.hidden_at is not null
+      and exists (select 1 from studio.voice_publication_log g where g.publication_id = p.id and g.step = 'hidden' and g.note = 'its picture was hidden')
+      -- no hide of its own since it was last unhidden (a tie keeps it hidden)
+      and not exists (select 1 from studio.voice_publication_log h where h.publication_id = p.id and h.step = 'hidden' and h.note is distinct from 'its picture was hidden'
+        and h.at >= coalesce((select max(u.at) from studio.voice_publication_log u where u.publication_id = p.id and u.step = 'unhidden'), '-infinity'))
+      and not exists (select 1 from studio.voice_publication_log r where r.publication_id = p.id and r.step = 'reported'
+        and r.at > coalesce((select max(x.at) from studio.voice_publication_log x where x.publication_id = p.id and x.step = 'dismissed'), '-infinity'))
+  loop
+    update studio.voice_publications set hidden_at = null, hidden_by = null, hidden_role = null where id = t;
+    insert into studio.voice_publication_log (publication_id, step, by_fid, role, note) values (t, 'unhidden', p_by, p_role, 'its picture was restored');
+    return query select t, f->>'key' from studio.voice_publications, jsonb_array_elements(files) f where id = t;
+  end loop;
+end $fn$;
+revoke all on function studio.unhide_takes_using_picture(uuid, bigint, text) from public, anon, authenticated;
+grant execute on function studio.unhide_takes_using_picture(uuid, bigint, text) to studio_writer;
 commit;
 
 -- C. READ-BACK (after B), as postgres. Paste the lines below without their "-- ". It sets no role: studio_writer's rights are
@@ -285,7 +341,9 @@ commit;
 -- from unnest(array['select', 'insert', 'update', 'delete']) p order by 1;
 -- do $$
 -- declare
---   dr uuid; dr2 uuid; dr3 uuid;
+--   dr uuid; dr2 uuid; dr3 uuid; dr4 uuid;
+--   pub4 uuid := 'aaaaaaaa-0000-4000-8000-000000000004';
+--   rec2 constant jsonb := '{"voice":{"preset":"ephelion-warm-lecturer"},"speech":{"id":"natural-way-v2"},"spoken":{"kind":"as-written"},"credits":["@readback"]}';
 --   eph uuid; other uuid;
 --   sheet uuid; sheetv uuid; osheet uuid; osheetv uuid;
 --   img uuid; imgv uuid; img2 uuid; img2v uuid; oimg uuid; oimgv uuid;
@@ -307,6 +365,8 @@ commit;
 --     or has_function_privilege('anon', 'studio.publish_voice_take(uuid, uuid, bigint, boolean, jsonb, jsonb, jsonb, boolean)', 'execute')
 --     or not has_function_privilege('studio_writer', 'studio.hide_takes_using_picture(uuid, bigint, text)', 'execute')
 --     or has_function_privilege('anon', 'studio.hide_takes_using_picture(uuid, bigint, text)', 'execute')
+--     or not has_function_privilege('studio_writer', 'studio.unhide_takes_using_picture(uuid, bigint, text)', 'execute')
+--     or has_function_privilege('anon', 'studio.unhide_takes_using_picture(uuid, bigint, text)', 'execute')
 --     then raise exception 'READ-BACK FAILED: who may enter or hide a take'; end if;
 --   if to_regclass('studio.voice_publications_live_take') is null then raise exception 'READ-BACK FAILED: the index for one live take per speech is missing'; end if;
 --   -- Lord Ephelion's sheet and another character's (made here if this database has none), a picture of him remixed once,
@@ -331,6 +391,7 @@ commit;
 --   insert into studio.voice_drafts (fid, kind, speech_id, preset_id, recipe) values (fid, 'performance', 'doing-fine-v2', 'ephelion-warm-lecturer', drec) returning id into dr;
 --   insert into studio.voice_drafts (fid, kind, speech_id, preset_id, recipe) values (fid, 'performance', 'doing-fine-v2', 'ephelion-warm-lecturer', drec) returning id into dr2;
 --   insert into studio.voice_drafts (fid, kind, speech_id, preset_id, recipe) values (fid, 'performance', 'doing-fine-v2', 'ephelion-warm-lecturer', drec) returning id into dr3;
+--   insert into studio.voice_drafts (fid, kind, speech_id, preset_id, recipe) values (fid, 'performance', 'natural-way-v2', 'ephelion-warm-lecturer', drec) returning id into dr4;
 --   -- 1. Enter a take with the person's own picture of him (a remix of an approved one).
 --   perform studio.publish_voice_take(pub, dr, fid, true, rec,
 --     jsonb_build_object('source', 'own', 'version', img2v::text, 'key', 'takes/' || pub || '/picture-' || b64 || '.jpg', 'sha256', b64),
@@ -385,25 +446,41 @@ commit;
 --     refused := false;
 --   exception when check_violation then refused := true; end;
 --   if not refused then raise exception 'READ-BACK FAILED: a take whose recipe holds a recording was accepted'; end if;
---   -- 7. The approved picture is hidden: the take that copied it is hidden with it, logged, and its files returned.
+--   -- 7. A take of another speech with the same approved picture, reported for itself.
+--   perform studio.publish_voice_take(pub4, dr4, fid, true, rec2, jsonb_build_object('source', 'set', 'version', imgv::text, 'key', 'takes/' || pub4 || '/picture-' || b64 || '.jpg', 'sha256', b64),
+--     jsonb_build_array(jsonb_build_object('key', 'takes/' || pub4 || '/speech-' || a64 || '.mp3', 'sha256', a64), jsonb_build_object('key', 'takes/' || pub4 || '/picture-' || b64 || '.jpg', 'sha256', b64)), false);
+--   insert into studio.voice_publication_log (publication_id, step, by_fid, role, reason) values (pub4, 'reported', 2147483645, 'reader', 'spam');
+--   -- 8. The approved picture is hidden: both takes that copied it are hidden with it, logged, and their files returned.
 --   select count(*) into n from studio.hide_takes_using_picture(imgv, 6786, 'moderator');
---   if n <> 2 or (select hidden_at from studio.voice_publications where id = pub2) is null
+--   if n <> 4 or (select hidden_at from studio.voice_publications where id = pub2) is null or (select hidden_at from studio.voice_publications where id = pub4) is null
 --     or not exists (select 1 from studio.voice_publication_log where publication_id = pub2 and step = 'hidden' and note = 'its picture was hidden')
---     then raise exception 'READ-BACK FAILED: hiding a picture did not hide the take that copied it'; end if;
---   -- 8. The existing take-down (0046) works for a take.
+--     then raise exception 'READ-BACK FAILED: hiding a picture did not hide the takes that copied it'; end if;
+--   -- 9. The picture is unhidden: the take hidden only because of it comes back, its files returned; the take with its
+--   --    own open report stays hidden.
+--   select count(*) into n from studio.unhide_takes_using_picture(imgv, 6786, 'moderator');
+--   if n <> 2 or (select hidden_at from studio.voice_publications where id = pub2) is not null
+--     or not exists (select 1 from studio.voice_publication_log where publication_id = pub2 and step = 'unhidden' and note = 'its picture was restored')
+--     then raise exception 'READ-BACK FAILED: unhiding the picture did not bring back the take hidden only because of it'; end if;
+--   if (select hidden_at from studio.voice_publications where id = pub4) is null then raise exception 'READ-BACK FAILED: unhiding the picture brought back a take with its own report'; end if;
+--   -- 10. A take a moderator hid for itself stays hidden when the picture is hidden and unhidden again.
+--   perform studio.hide_voice_publication(pub2, 6786, 'moderator', 'spam', null);
+--   perform studio.hide_takes_using_picture(imgv, 6786, 'moderator');
+--   perform studio.unhide_takes_using_picture(imgv, 6786, 'moderator');
+--   if (select hidden_at from studio.voice_publications where id = pub2) is null then raise exception 'READ-BACK FAILED: unhiding the picture brought back a take a moderator hid for itself'; end if;
+--   -- 11. The existing take-down (0046) works for a take.
 --   perform studio.take_down_voice_publication(pub2, fid);
 --   if (select taken_down_at from studio.voice_publications where id = pub2) is null then raise exception 'READ-BACK FAILED: a take could not be taken down'; end if;
---   -- 9. A storyboard with a take's fields is refused.
+--   -- 12. A storyboard with a take's fields is refused.
 --   begin
 --     insert into studio.voice_publications (draft_id, fid, board_version, speech_id, recipe, files) values (dr3, fid, 1, 'doing-fine-v2', '{"voice":{},"shots":[],"closing":{}}',
 --       jsonb_build_array(jsonb_build_object('key', 'storyboards/x/a', 'sha256', a64), jsonb_build_object('key', 'storyboards/x/b', 'sha256', b64)));
 --     refused := false;
 --   exception when check_violation then refused := true; end;
 --   if not refused then raise exception 'READ-BACK FAILED: a storyboard with a speech was accepted'; end if;
---   delete from studio.voice_publication_log where publication_id in (pub, pub2, pub3);
---   delete from studio.voice_publications where id in (pub, pub2, pub3);
---   delete from studio.voice_drafts where id in (dr, dr2, dr3);
---   if exists (select 1 from studio.voice_publications where id in (pub, pub2, pub3)) then raise exception 'READ-BACK FAILED: the test rows were not deleted'; end if;
+--   delete from studio.voice_publication_log where publication_id in (pub, pub2, pub3, pub4);
+--   delete from studio.voice_publications where id in (pub, pub2, pub3, pub4);
+--   delete from studio.voice_drafts where id in (dr, dr2, dr3, dr4);
+--   if exists (select 1 from studio.voice_publications where id in (pub, pub2, pub3, pub4)) then raise exception 'READ-BACK FAILED: the test rows were not deleted'; end if;
 --   raise notice 'READ-BACK PASSED';
 -- end $$;
 -- rollback;
@@ -413,6 +490,7 @@ commit;
 -- do $$ begin
 --   if exists (select 1 from studio.voice_publications where kind = 'take') then raise exception 'UNDO REFUSED: takes have been entered'; end if;
 -- end $$;
+-- drop function if exists studio.unhide_takes_using_picture(uuid, bigint, text);
 -- drop function if exists studio.hide_takes_using_picture(uuid, bigint, text);
 -- drop function if exists studio.publish_voice_take(uuid, uuid, bigint, boolean, jsonb, jsonb, jsonb, boolean);
 -- drop function if exists studio.picture_is_of(uuid, text);
