@@ -298,8 +298,15 @@ const p45 = await D.myPicks(S, 45);
 check('a pick of a hidden design is marked and not offered', p45[0].available === false && D.composerPicks(p45).styles.length === 0);
 await sql`update studio.elements set status = 'published' where id = ${a.elementId}`;
 const mod = read('src/app/api/moderate/route.ts');
-const dismiss = mod.slice(mod.indexOf("action === 'dismiss'"), mod.indexOf("else return NextResponse.json({ error: 'Hide or dismiss only' }"));
-check('Dismiss only logs; it never changes a status', /removal_log/.test(dismiss) && !/update studio\.elements/.test(dismiss));
+// The images' Dismiss branch, found by its own text: since #225 the route also has a storyboard branch with its own
+// `action === 'dismiss'` (dismissStoryboard), which comes first, so the first match is not the images' one.
+const IMAGES_DISMISS = "} else if (action === 'dismiss') {";
+const dismissAt = mod.indexOf(IMAGES_DISMISS);
+const dismissEnd = mod.indexOf("else return NextResponse.json({ error: 'Hide or dismiss only' }", dismissAt);
+const dismiss = dismissAt >= 0 && dismissEnd > dismissAt ? mod.slice(dismissAt, dismissEnd) : '';
+check('the images\' Dismiss branch is found by name, once', dismissAt >= 0 && dismissEnd > dismissAt && mod.indexOf(IMAGES_DISMISS, dismissAt + 1) === -1);
+check('Dismiss only logs; it never changes a status', /insert into studio\.removal_log/.test(dismiss) && /step: 'dismissed'/.test(dismiss) && !/update studio\.elements/.test(dismiss));
+check('... and a storyboard\'s Dismiss goes to its own function, not the images\' log', /action === 'dismiss'\) return \(await dismissStoryboard\(/.test(mod));
 check('the moderator route can\'t publish or order', !/status\s*=\s*'published'|order by|\.sort\(/i.test(mod));
 
 // Decision 12: a style may not take a book character's name.
