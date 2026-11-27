@@ -1210,6 +1210,12 @@ export const VOICE = {
    * /storyboard/spoken/<id> page is "not found" (the local tests turn it on with VOICE_TEST_ON, stand-ins only).
    */
   publish: false,
+  /**
+   * Entering takes in the Ephelion challenge (Nate, 2026-11-26: "people should enter and share takes in this round"):
+   * publishing on for takes only, for those the voice switch lets in (admins and the testers, voiceAllowed); storyboards
+   * stay off (publish, above). The SQL is applied (0054_voice_takes.sql, 2026-11-26/27) and the legal lines reread.
+   */
+  publishTakes: true,
   /** The team's invented speeches (Nate, 2026-11-22): admins only, and not to be published until Nate says. */
   publishInvented: false,
   board: { maxShots: 12, maxTriesPerShot: 3, descriptionMaxChars: 600 },

@@ -17,12 +17,15 @@ export const PREFIX = 'voice-drafts/';
 export const sampleKeyFor = (speechId: string, presetId: string, textSha256: string) => `voice-samples/${speechId}/${presetId}-${textSha256}.mp3`;
 export const keyFor = (draftId: string, n: number, sha256: string) => `${PREFIX}${draftId}/${n}-${sha256}.mp3`;
 const valid = (key: string) =>
-  /^voice-drafts\/[0-9a-f-]{36}\/[0-9]{1,2}-[0-9a-f]{64}\.mp3$/.test(key) || /^voice-samples\/[a-z0-9-]{1,80}\/[a-z0-9-]{1,80}-[0-9a-f]{64}\.mp3$/.test(key) || /^voice-boards\/[0-9a-f-]{36}\/([0-9]{1,20}\/)?[a-z0-9]{1,16}-[0-9a-f]{64}\.(png|jpg)$/.test(key) || HIDDEN_KEY.test(key);
+  /^voice-drafts\/[0-9a-f-]{36}\/[0-9]{1,2}-[0-9a-f]{64}\.mp3$/.test(key) || /^voice-samples\/[a-z0-9-]{1,80}\/[a-z0-9-]{1,80}-[0-9a-f]{64}\.mp3$/.test(key) || /^voice-boards\/[0-9a-f-]{36}\/([0-9]{1,20}\/)?[a-z0-9]{1,16}-[0-9a-f]{64}\.(png|jpg)$/.test(key) || HIDDEN_KEY.test(key) || SCENE_KEY.test(key);
 /**
  * A hidden storyboard's files (moderation, Nate 2026-11-23): while a moderator or a stated rule hides a publication, its
  * public files are kept here, in the private bucket, under voice-hidden/ and their public key, and put back on unhide.
  */
-export const HIDDEN_KEY = /^voice-hidden\/storyboards\/[0-9a-f-]{36}\/[a-z0-9-]{1,40}-[0-9a-f]{64}\.(mp3|png|jpg)$/;
+export const HIDDEN_KEY = /^voice-hidden\/(storyboards|takes)\/[0-9a-f-]{36}\/[a-z0-9-]{1,40}-[0-9a-f]{64}\.(mp3|png|jpg)$/;
+/** The free picture of one's own scene (Nate, 2026-11-26), kept privately until a take uses it: voice-scenes/<person>/<sha256>.<ext>. */
+export const SCENE_KEY = /^voice-scenes\/-?[0-9]{1,20}\/[0-9a-f]{64}\.(png|jpg)$/;
+export const sceneKeyFor = (person: number, sha256: string, ext: 'png' | 'jpg') => `voice-scenes/${person}/${sha256}.${ext}`;
 export const hiddenKeyFor = (publicKey: string) => `voice-hidden/${publicKey}`;
 /**
  * A kept storyboard picture's key, in the same private bucket: voice-boards/<draft id>/<board owner's FID>/<shot key>-

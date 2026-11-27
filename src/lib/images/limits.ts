@@ -159,7 +159,12 @@ export interface Spend {
    * (VOICE.pictures.perPersonPerDay, any model, each counting 1) and its own daily pool (VOICE.pictures.dailyPoolUsd),
    * funded 'storyboard'; never in the images' count or free cap.
    */
-  pool?: 'open' | 'closed' | 'admin' | 'storyboard';
+  /**
+   * 'scene': the Ephelion challenge's free picture of one's own scene (Nate, 2026-11-27): counted only in the site's free
+   * daily image budget (funded 'free', under imagesDailySpendCapUsd), never in the person's own daily count; its one-per-
+   * account limit is studio.claim_free_scene's. Any account the voice gate lets in, wallet or social, gets it free.
+   */
+  pool?: 'open' | 'closed' | 'admin' | 'storyboard' | 'scene';
 }
 
 /** The start of today (UTC), as the other daily counts read it. */
@@ -194,6 +199,16 @@ const DEFAULT_SPEND: Spend = { model: IMAGES.model, reserveUsd: IMAGES.reserveUs
  * sample and a sheet's view are Generates too (step 4): the same count, the same caps.
  */
 export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEND): Promise<{ ok: true; left: number; debitId?: number } | { ok: false; refusal: Refusal }> {
+  // The Ephelion free picture: the site's free cap only (its one per account is claim_free_scene's, under its own lock).
+  if (spend.pool === 'scene') {
+    return sql.begin(async (tx) => {
+      await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.spend'))`;
+      const [today] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'free'`;
+      if (today.usd + spend.reserveUsd > imagesDailySpendCapUsd()) return { ok: false as const, refusal: 'spend' as const };
+      await addCost(tx as unknown as Sql, 'free', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
+      return { ok: true as const, left: 0 };
+    });
+  }
   // A Lens or Bluesky account without free generations (src/lib/social/free.ts) gets none, whichever route asks.
   if (isSocialPerson(fid) && !(await freeFor(sql, fid)).free) return { ok: false, refusal: 'no-free' };
   return sql.begin(async (tx) => {

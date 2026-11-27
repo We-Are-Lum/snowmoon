@@ -27,6 +27,11 @@ export const EPHELION_LANDING = {
   adminOnly: 'Admins only. Testers see "AI reading coming soon".',
   readingFailed: 'The reading failed. Try again.',
   noTakes: 'No takes yet. Be the first.',
+  // People's takes on the cards (PR 6, 2026-11-26; plan v3's lines).
+  latestTake: (who: string | null) => `Latest take · ${who ?? 'someone'}`,
+  someone: 'Someone who asked not to be named',
+  more: 'More recordings',
+  fewer: 'Fewer recordings',
   playing: 'Playing',
   play: 'Play',
   notAvailable: 'Not available right now',

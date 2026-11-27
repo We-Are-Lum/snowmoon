@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { authFetch, useAuth } from '~/lib/client-auth';
 import { isAdmin } from '~/lib/admins';
 import type { ActivityView } from '~/lib/admin-activity';
+import { AdminFreeSceneReset } from '~/components/admin-free-scene-reset';
 import '../styles/admin-activity.css';
 
 /**
@@ -79,6 +80,7 @@ export function AdminActivity({ fallback }: { fallback: React.ReactNode }) {
           </ul>
         </section>
       ))}
+      {!view.who && <AdminFreeSceneReset />}
       {view.notHere.length > 0 && <p className="aa-note">Not on this database yet: {view.notHere.join(', ')}.</p>}
       <p className="aa-note">Read {view.generatedAt.slice(0, 16).replace('T', ' ')} UTC.</p>
     </main>

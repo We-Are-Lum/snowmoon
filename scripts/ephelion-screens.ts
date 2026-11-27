@@ -28,7 +28,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const pg = new PGlite();
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
-for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort()) await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
+for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^(\d{4}|NEXT)_.*\.sql$/.test(f)).sort()) await pg.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 const pgServer = new PGLiteSocketServer({ db: pg, port: 54387, host: '127.0.0.1' });
 await pgServer.start();
 const stub = await startStub(54397, { bytesPerSecond: 16500 });
@@ -39,6 +39,8 @@ const env = {
   NODE_ENV: 'production',
   STUDIO_DATABASE_URL: 'postgres://studio_writer@127.0.0.1:54387/postgres',
   VOICE_TEST_ON: '1',
+  // GPT Image for the free picture (a stand-in card here): a country OpenAI serves, as the local runs set it.
+  CLOSED_MODELS_TEST_COUNTRY: 'FR',
   VOICE_TEST_FID: String(NATE),
   VOICE_TEST_STORE: STORE,
   ELEVENLABS_BASE_URL: 'http://127.0.0.1:54397',
@@ -170,9 +172,51 @@ try {
     await page.locator('.er-converted').waitFor({ timeout: 60_000 });
     await page.locator('[data-slot="take-label"]').first().waitFor({ timeout: 30_000 }).catch(() => {});
     await shot('20-rec-converted', w === 390);
-    await page.locator('button[data-step="3"]').click();
-    await page.getByRole('button', { name: /^Edit (the )?text$/ }).first().click();
-    await shot('21-rec-edit-text');
+    // Entering the take (PR 6): choose a ready picture, make the free one, enter, the take's page and its Share card.
+    await page.locator('.er-entry').scrollIntoViewIfNeeded();
+    await shot('22-entry-choose', w === 390);
+    await page.locator('.er-pic', { hasText: 'In his study' }).first().click();
+    await shot('23-entry-chosen', w === 390);
+    await page.getByRole('tab', { name: 'Describe your own' }).click();
+    if (await page.locator('#er-scene').count()) {
+      await page.locator('#er-scene').fill('A grey overcoat, on a windy rooftop at night');
+      await page.getByRole('button', { name: /^Make the picture/ }).click();
+      await page.getByText(/^Made\. It’s in the preview/).waitFor({ timeout: 30_000 }).catch(() => {});
+    }
+    await shot('24-entry-describe-own', w === 390);
+    await page.getByRole('tab', { name: 'Choose a ready picture' }).click();
+    await page.locator('.er-pic', { hasText: 'Giving a speech' }).first().click();
+    await page.getByRole('button', { name: 'Enter the challenge' }).click();
+    const askOrDone = await Promise.race([
+      page.getByRole('button', { name: 'Enter this one instead' }).waitFor({ timeout: 20_000 }).then(() => 'ask'),
+      page.locator('.er-entered').waitFor({ timeout: 20_000 }).then(() => 'done'),
+    ]).catch(() => 'none');
+    if (askOrDone === 'ask') {
+      await shot('25-entry-ask-replace', w === 390);
+      await page.getByRole('button', { name: 'Enter this one instead' }).click();
+    }
+    await page.locator('.er-entered').waitFor({ timeout: 20_000 });
+    await shot('26-entered', w === 390);
+    const href = await page.getByRole('link', { name: 'Share it' }).getAttribute('href');
+    await page.goto(`${url}${href}`);
+    await page.locator('.eph-take').waitFor({ timeout: 20_000 });
+    await shot('27-take-page', w === 390);
+    const embed = await page.locator('meta[name="fc:miniapp"]').getAttribute('content');
+    if (w === 1440 && embed) {
+      const e = JSON.parse(embed) as { imageUrl: string; button: { title: string } };
+      const card = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 });
+      await card.setContent(`<body style="margin:0;background:#F4F2ED;display:flex;justify-content:center;padding:40px;font-family:Georgia,serif"><div style="width:600px;border:1px solid #DAD6CC;border-radius:8px;overflow:hidden;background:#FBFAF6"><img src="${e.imageUrl.startsWith('/') ? url + e.imageUrl : e.imageUrl}" style="width:100%;aspect-ratio:3/2;object-fit:cover;display:block"><div style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center"><span style="font:12px monospace;color:#6A675F">A cast of this take, as Farcaster shows its embed</span><span style="background:#1D1D1B;color:#F4F2ED;padding:8px 14px;border-radius:3px">${e.button.title}</span></div></div></body>`);
+      await card.waitForTimeout(800);
+      await card.screenshot({ path: name('28-share-card') });
+      shots.push(name('28-share-card'));
+      await card.close();
+    }
+    await page.goto(`${url}/ephelion`);
+    await page.locator('.eph-take-row').first().waitFor({ timeout: 20_000 }).catch(() => {});
+    await shot('29-landing-with-take', w === 390);
+    await page.goto(`${url}/ephelion/record`);
+    await page.locator('button[data-step="1"]').waitFor({ timeout: 30_000 });
+    console.log(w, 'entry', errors.length ? `page errors: ${errors.join(' | ')}` : 'no page errors');
     console.log(w, 'recorder', errors.length ? `page errors: ${errors.join(' | ')}` : 'no page errors');
     await ctx.close();
   }

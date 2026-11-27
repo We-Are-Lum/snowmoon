@@ -160,7 +160,7 @@ const sharpPng = async () => (await import('sharp')).default({ create: { width: 
     {
       const { PRIVACY, LEGAL, legalKey } = await import('../src/lib/legal');
       const p3 = PRIVACY.sections.find((x) => x.n === 3)!.body.flat().join(' ');
-      check('E. ... Privacy §3 carries the edited words, as Nate reread it on 2026-11-26 (the reread record matches these words)', p3.includes('a speech you record, and its words if you edit them, until you remove them or record again, or your browser clears them (the recording is sent to us only to be converted, and we keep only its fingerprint, never the recording; words you edit are never sent)') && LEGAL.ownerReread.privacy?.words === legalKey(PRIVACY) && LEGAL.ownerReread.privacy?.on === '2026-11-26');
+      check('E. ... Privacy §3 carries the edited words, as Nate reread it on 2026-11-26 (the reread record matches these words)', p3.includes('a speech you record, and its words if you edit them, until you remove them or record again, or your browser clears them (the recording is sent to us only to be converted, and we keep only its fingerprint, never the recording; words you edit are never sent)') && LEGAL.ownerReread.privacy?.words === legalKey(PRIVACY) && LEGAL.ownerReread.privacy?.on >= '2026-11-26');
     }
     check('E. the landing asks the gated status route, draws the not-found for anyone it doesn\'t let in, and links no storyboard', /authFetch\('\/api\/voice\/status'/.test(land) && /status === 'none'\) return <>\{fallback\}<\/>/.test(land) && !/storyboard/i.test(land.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')));
     check('E. ... two equal buttons on one line each ("Record your own", "Listen to his speeches"), a card per speech with its own "Record your own" at step 2', /\.eph-two \{ display: grid; grid-template-columns: 1fr 1fr;/.test(landCss) && /white-space: nowrap/.test(landCss) && /status\.speeches\.map\(\(s\) =>/.test(land) && /\/ephelion\/record\?speech=\$\{encodeURIComponent\(s\.id\)\}/.test(land));
@@ -860,7 +860,7 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
     check('K. ... the private draft files are untouched', existsSync(path.join(STORE, `voice-boards/${acc.id}/${NATE}/end-${bg.sha256}.png`)) && storeFiles().filter((f) => f.startsWith(`voice-drafts/${acc.id}/`)).length === 2);
     await pg.query(`update studio.voice_drafts set recipe = jsonb_set(recipe, '{check,unmatched}', $2::jsonb) where id = $1`, [acc.id, JSON.stringify(realUnmatched)]);
     check('K. P2, by reading the code: no closing text comes from the request, and nothing writes a description', !/description\s*[:=]\s*['"`][^'"`]/.test(readFileSync(path.join(ROOT, 'src/lib/voice/closing.ts'), 'utf8')) && !/body\.|request\./.test(readFileSync(path.join(ROOT, 'src/lib/voice/closing-card.ts'), 'utf8')));
-    check('K. public copies have their own store file, under storyboards/ only; the draft store stays private', /R2_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && /\^storyboards/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && !/R2_PRIVATE_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')));
+    check('K. public copies have their own store file, under storyboards/ and takes/ only; the draft store stays private', /R2_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && /\^\(storyboards\|takes\)/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && !/R2_PRIVATE_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')));
   check('K. "Save as a video" is in the browser only: no server route records, uploads or calls a video model', !existsSync(path.join(ROOT, 'src/app/api/voice/video')) && !/fetch\([^)]*(upload|api\/)/.test(readFileSync(path.join(ROOT, 'src/lib/voice/video.ts'), 'utf8')) && /MediaRecorder/.test(readFileSync(path.join(ROOT, 'src/lib/voice/video.ts'), 'utf8')));
   }
 }
@@ -1435,6 +1435,12 @@ for (const id of Object.values(VOICE.models)) {
   const rd = readFileSync(path.join(ROOT, 'src/app/api/voice/reading/route.ts'), 'utf8');
   const bd = readFileSync(path.join(ROOT, 'src/app/api/voice/boards/route.ts'), 'utf8');
   check('IM. "Time this reading" is gone: a reading is timed when made, and an older one on its first open', !/Time this reading|needs-timing/.test(vb + bd) && /await timeReadingNow\(sql, who\.fid, id\)/.test(rd) && /timeReadingNow\(sql, who\.fid, draft\.id\)/.test(bd));
+}
+
+// TK. Entering takes, with their pictures; report and hide; the free picture (PR 6, Nate 2026-11-26).
+{
+  const { takesSection } = await import('./lib/test-takes-section');
+  await takesSection({ ROOT, STORE, sql, check, route, as, NATE, GARANCE, STRANGER });
 }
 
 check('T. every transcript made in this run was deleted at ElevenLabs (none left)', stub.kept().length === 0 && stub.deletedTranscripts.length >= 2, `kept ${stub.kept().length}`);

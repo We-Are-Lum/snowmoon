@@ -471,7 +471,7 @@ A hide still wins everywhere, and with no database none shows (`npm run test:add
 - `P5a`: no migration adds a canon/official/featured/pinned field, and no UI
   string uses those words except to deny them. (The pick table is named for what it is, a pick.)
 - `P5b`: code that checks `MODERATOR_FIDS` or `ADMINS` does not publish, order or sort, with one exception:
-  admin code may write `studio.admin_picks`, and nothing else; and, from /admin/bounty only, its private review tables (studio.review_labels, studio.review_notes, studio.review_log), which no public page, feed or tool reads. **Exception for admin-only pages (owner, 2026-11-05;
+  admin code may write `studio.admin_picks`, and nothing else; and, from /admin/bounty only, its private review tables (studio.review_labels, studio.review_notes, studio.review_log), which no public page, feed or tool reads; and (owner, 2026-11-27) an admin can give back a person's free Ephelion picture (studio.reset_free_scene, from /admin/activity), which is logged (studio.ephelion_scene_resets) and never publishes or sorts anything. **Exception for admin-only pages (owner, 2026-11-05;
   approved by the owner 2026-11-05, coordinator-reviewed, with the narrowed "publishes" test below):** "P5 is about public steering." A page or route that only admins can open, gated by the
   existing admin check and answering 404 to everyone else (`if (!isAdmin(…)) return …404…` in the same file), may
   sort by time or by counts, because no one else sees what it sorts. It still may not publish. A public page that

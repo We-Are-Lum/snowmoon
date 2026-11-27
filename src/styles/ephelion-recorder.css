@@ -102,3 +102,20 @@
 .er-wide-page .er-main { flex: 1; min-width: 0; padding: 32px 40px; max-width: 860px; }
 .er-wide-page .er-h1 { font-size: 38px !important; }
 .er-wide-page .er-script { max-height: calc(100vh - 160px); border-top: 2px solid var(--ink); padding-top: 16px; }
+
+/* The entry step (PR 6, 2026-11-26). */
+.er-entry { display: flex; flex-direction: column; gap: 10px; }
+.er-tabs { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--ink); border-radius: 3px; overflow: hidden; }
+.er-tabs button { font: inherit; font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; padding: 10px 8px; border: 0; background: transparent; color: var(--ink); cursor: pointer; }
+.er-tabs button.er-on { background: var(--ink); color: var(--paper); }
+.er-pick { display: flex; flex-direction: column; gap: 8px; }
+.er-pics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.er-pic { font: inherit; display: flex; flex-direction: column; gap: 4px; text-align: left; padding: 6px; border: 1px solid var(--rule); border-radius: 3px; background: transparent; color: var(--ink); cursor: pointer; }
+.er-pic.er-on { border: 2px solid var(--ink); background: var(--card); }
+.er-pic img, .er-pic-empty { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 3px; background: var(--night); }
+.er-pic-empty { display: flex; align-items: center; justify-content: center; color: var(--night-muted); font-family: var(--label); font-size: var(--text-label); text-align: center; padding: 6px; }
+.er-pic-title { font-size: 15px; line-height: 1.3; }
+.er-preview-fig { margin: 0; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; background: var(--card); }
+.er-preview-fig img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; background: var(--night); }
+.er-preview-fig figcaption { padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; }
+.er-ask { border: 1px solid var(--ink); border-radius: 3px; padding: 10px 12px; }
