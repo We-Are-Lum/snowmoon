@@ -142,9 +142,9 @@ revoke all on function studio.publish_voice_take(uuid, uuid, bigint, boolean, js
 grant execute on function studio.publish_voice_take(uuid, uuid, bigint, boolean, jsonb, jsonb, jsonb, boolean) to studio_writer;
 
 -- When a picture is hidden (a moderator, or a rule after reports), every live take that copied it is hidden with it, by
--- the same reversible hide as storyboards (0052), logged with a note. Unhiding the picture doesn't unhide them: a
--- moderator looks at each take (they are in the queue as hidden). Returns each hidden take and its files' keys, for the
--- site to move them to the private bucket, as for any hide.
+-- the same reversible hide as storyboards (0052), logged with a note. Unhiding the picture brings back the ones hidden
+-- only because of it (below). Returns each hidden take and its files' keys, for the site to move them to the private
+-- bucket, as for any hide.
 create or replace function studio.hide_takes_using_picture(p_version uuid, p_by bigint, p_role text) returns table (publication_id uuid, key text)
 language plpgsql security definer set search_path = studio, pg_temp as $fn$
 declare t uuid;
@@ -161,8 +161,8 @@ grant execute on function studio.hide_takes_using_picture(uuid, bigint, text) to
 
 -- When the picture is unhidden (Nate, 2026-11-26), the takes hidden only because of it come back: those hidden with
 -- their picture ("its picture was hidden"), with no hide of their own since they were last unhidden, and no report of
--- their own still open (a report after the latest dismissal). A take a moderator or a rule hid for itself, or reported for itself, stays hidden. Returns each
--- restored take and its files' keys, for the site to move back, as for any unhide.
+-- their own still open (a report after the latest dismissal). A take a moderator or a rule hid for itself, or
+-- reported for itself, stays hidden. Returns each restored take and its files' keys, for the site to move back.
 create or replace function studio.unhide_takes_using_picture(p_version uuid, p_by bigint, p_role text) returns table (publication_id uuid, key text)
 language plpgsql security definer set search_path = studio, pg_temp as $fn$
 declare t uuid;
@@ -287,9 +287,9 @@ revoke all on function studio.publish_voice_take(uuid, uuid, bigint, boolean, js
 grant execute on function studio.publish_voice_take(uuid, uuid, bigint, boolean, jsonb, jsonb, jsonb, boolean) to studio_writer;
 
 -- When a picture is hidden (a moderator, or a rule after reports), every live take that copied it is hidden with it, by
--- the same reversible hide as storyboards (0052), logged with a note. Unhiding the picture doesn't unhide them: a
--- moderator looks at each take (they are in the queue as hidden). Returns each hidden take and its files' keys, for the
--- site to move them to the private bucket, as for any hide.
+-- the same reversible hide as storyboards (0052), logged with a note. Unhiding the picture brings back the ones hidden
+-- only because of it (below). Returns each hidden take and its files' keys, for the site to move them to the private
+-- bucket, as for any hide.
 create or replace function studio.hide_takes_using_picture(p_version uuid, p_by bigint, p_role text) returns table (publication_id uuid, key text)
 language plpgsql security definer set search_path = studio, pg_temp as $fn$
 declare t uuid;
@@ -306,8 +306,8 @@ grant execute on function studio.hide_takes_using_picture(uuid, bigint, text) to
 
 -- When the picture is unhidden (Nate, 2026-11-26), the takes hidden only because of it come back: those hidden with
 -- their picture ("its picture was hidden"), with no hide of their own since they were last unhidden, and no report of
--- their own still open (a report after the latest dismissal). A take a moderator or a rule hid for itself, or reported for itself, stays hidden. Returns each
--- restored take and its files' keys, for the site to move back, as for any unhide.
+-- their own still open (a report after the latest dismissal). A take a moderator or a rule hid for itself, or
+-- reported for itself, stays hidden. Returns each restored take and its files' keys, for the site to move back.
 create or replace function studio.unhide_takes_using_picture(p_version uuid, p_by bigint, p_role text) returns table (publication_id uuid, key text)
 language plpgsql security definer set search_path = studio, pg_temp as $fn$
 declare t uuid;
