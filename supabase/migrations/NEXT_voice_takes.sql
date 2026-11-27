@@ -64,8 +64,8 @@ alter table studio.voice_publications add constraint voice_publications_kind_sha
   or (kind = 'take' and board_version is null and speech_id ~ '^[a-z0-9-]{1,80}$' and jsonb_typeof(picture) = 'object'
       and picture->>'source' in ('set', 'own', 'preset', 'own-scene')
       and picture->>'key' ~ '^takes/[0-9a-f-]{36}/[a-z0-9-]{1,40}-[0-9a-f]{64}\.(png|jpg)$' and picture->>'sha256' ~ '^[0-9a-f]{64}$'
-      and ((picture->>'source' in ('set', 'own')) = (picture->>'version' ~ '^[0-9a-f-]{36}$'))
-      and ((picture->>'source' = 'preset') = (picture->>'scene' ~ '^[a-z0-9-]{1,80}$'))));
+      and ((picture->>'source' in ('set', 'own')) = coalesce(picture->>'version' ~ '^[0-9a-f-]{36}$', false))
+      and ((picture->>'source' = 'preset') = coalesce(picture->>'scene' ~ '^[a-z0-9-]{1,80}$', false))));
 -- One live take per person per speech (plan v3); a hidden take is still live.
 create unique index if not exists voice_publications_live_take on studio.voice_publications (fid, speech_id) where kind = 'take' and taken_down_at is null;
 -- The takes that copied a given picture (a 'set' or 'own' picture, by its version), for hiding them with it.
@@ -209,8 +209,8 @@ alter table studio.voice_publications add constraint voice_publications_kind_sha
   or (kind = 'take' and board_version is null and speech_id ~ '^[a-z0-9-]{1,80}$' and jsonb_typeof(picture) = 'object'
       and picture->>'source' in ('set', 'own', 'preset', 'own-scene')
       and picture->>'key' ~ '^takes/[0-9a-f-]{36}/[a-z0-9-]{1,40}-[0-9a-f]{64}\.(png|jpg)$' and picture->>'sha256' ~ '^[0-9a-f]{64}$'
-      and ((picture->>'source' in ('set', 'own')) = (picture->>'version' ~ '^[0-9a-f-]{36}$'))
-      and ((picture->>'source' = 'preset') = (picture->>'scene' ~ '^[a-z0-9-]{1,80}$'))));
+      and ((picture->>'source' in ('set', 'own')) = coalesce(picture->>'version' ~ '^[0-9a-f-]{36}$', false))
+      and ((picture->>'source' = 'preset') = coalesce(picture->>'scene' ~ '^[a-z0-9-]{1,80}$', false))));
 -- One live take per person per speech (plan v3); a hidden take is still live.
 create unique index if not exists voice_publications_live_take on studio.voice_publications (fid, speech_id) where kind = 'take' and taken_down_at is null;
 -- The takes that copied a given picture (a 'set' or 'own' picture, by its version), for hiding them with it.
@@ -446,6 +446,20 @@ commit;
 --     refused := false;
 --   exception when check_violation then refused := true; end;
 --   if not refused then raise exception 'READ-BACK FAILED: a take whose recipe holds a recording was accepted'; end if;
+--   -- 6b. The shape refuses a picture missing its id, by the constraint itself (Nate, 2026-11-26: a missing key made the
+--   -- equality null, and a null check passes): a preset with no scene, and an approved picture with no version.
+--   begin
+--     insert into studio.voice_publications (id, draft_id, fid, kind, speech_id, picture, recipe, files) values (pub3, dr3, fid, 'take', 'doing-fine-v3', jsonb_build_object('source', 'preset', 'key', 'takes/' || pub3 || '/picture-' || b64 || '.jpg', 'sha256', b64), rec,
+--       jsonb_build_array(jsonb_build_object('key', 'takes/' || pub3 || '/speech-' || a64 || '.mp3', 'sha256', a64), jsonb_build_object('key', 'takes/' || pub3 || '/picture-' || b64 || '.jpg', 'sha256', b64)));
+--     refused := false;
+--   exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a preset picture with no scene was accepted'; end if;
+--   begin
+--     insert into studio.voice_publications (id, draft_id, fid, kind, speech_id, picture, recipe, files) values (pub3, dr3, fid, 'take', 'doing-fine-v3', jsonb_build_object('source', 'set', 'key', 'takes/' || pub3 || '/picture-' || b64 || '.jpg', 'sha256', b64), rec,
+--       jsonb_build_array(jsonb_build_object('key', 'takes/' || pub3 || '/speech-' || a64 || '.mp3', 'sha256', a64), jsonb_build_object('key', 'takes/' || pub3 || '/picture-' || b64 || '.jpg', 'sha256', b64)));
+--     refused := false;
+--   exception when check_violation then refused := true; end;
+--   if not refused then raise exception 'READ-BACK FAILED: a set picture with no version was accepted'; end if;
 --   -- 7. A take of another speech with the same approved picture, reported for itself.
 --   perform studio.publish_voice_take(pub4, dr4, fid, true, rec2, jsonb_build_object('source', 'set', 'version', imgv::text, 'key', 'takes/' || pub4 || '/picture-' || b64 || '.jpg', 'sha256', b64),
 --     jsonb_build_array(jsonb_build_object('key', 'takes/' || pub4 || '/speech-' || a64 || '.mp3', 'sha256', a64), jsonb_build_object('key', 'takes/' || pub4 || '/picture-' || b64 || '.jpg', 'sha256', b64)), false);
