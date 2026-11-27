@@ -71,7 +71,7 @@ Object.assign(process.env, {
   VOICE_TEST_STORE: STORE,
   STUDIO_DATABASE_URL: `postgres://studio_writer@127.0.0.1:${PG_PORT}/postgres`,
   VOICE_TEST_ON: '1',
-  VOICE_TEST_FID: `${NATE},${GARANCE},${STRANGER}`,
+  VOICE_TEST_FID: `${NATE},${GARANCE},${STRANGER},6852`, // 6852: the first tester (VOICE.testers; check T), signed in for the reading route's admins-only check
   ELEVENLABS_BASE_URL: `http://127.0.0.1:${STUB_PORT}`,
   VOICE_TICKET_SECRET: 'test-voice-ticket-secret-0123456789',
 });
@@ -605,6 +605,51 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
     check('B. ... an admin reaches the paid step, on the admins\' pool (its daily cap)', made && pool === 'admin' && admin.status === 429, `${admin.status} ${pool}`);
   }
   {
+    // Storyboard pictures' own allowance and pool (Nate, 2026-11-23: 20 a person a day on any model, a GPT picture
+    // counting 1, apart from the images' 10; a $20-a-day pool). One person who is not an admin, on today's counts.
+    const L = await import('../src/lib/images/limits');
+    const P = await import('../src/lib/images/paid');
+    const { ALLOWANCE_WORDING: AW } = await import('../src/lib/voice/allowance-wording');
+    const someone = 4243;
+    const gpt = { model: { id: 'gpt-image-2.5-sunburst', host: 'vercel-ai-gateway' }, reserveUsd: 0.083, pool: 'storyboard' as const };
+    const flux = { model: { id: 'flux2-klein-4b-edit', host: 'fal.ai' }, reserveUsd: 0.022, pool: 'storyboard' as const };
+    check('B. the allowance in config: 20 a person a day, a $20 pool', VOICE.pictures.perPersonPerDay === 20 && VOICE.pictures.dailyPoolUsd === 20);
+    const imagesBefore = await L.generationsLeft(sql, someone);
+    const first = await L.reserve(sql, someone, gpt);
+    check('B. a GPT storyboard picture counts 1 of the 20 (not 3)', first.ok && first.left === 19 && (await L.storyboardPicturesLeft(sql, someone)) === 19, JSON.stringify(first));
+    check('B. ... and none of the images\' 10', (await L.generationsLeft(sql, someone)) === imagesBefore && imagesBefore === 10, String(imagesBefore));
+    await sql`insert into studio.image_asks (fid) values (${someone})`;
+    check('B. an image counts none of the 20', (await L.storyboardPicturesLeft(sql, someone)) === 19 && (await L.generationsLeft(sql, someone)) === 9);
+    for (let i = 0; i < 19; i++) await L.reserve(sql, someone, i % 2 ? gpt : flux);
+    const over = await L.reserve(sql, someone, flux);
+    check('B. the 21st storyboard picture of the day is refused (storyboard-limit)', !over.ok && over.refusal === 'storyboard-limit' && (await L.storyboardPicturesLeft(sql, someone)) === 0, JSON.stringify(over));
+    const [costs] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = (now() at time zone 'utc')::date and funded = 'storyboard'`;
+    const [free] = await sql`select count(*)::int as n from studio.image_costs where day = (now() at time zone 'utc')::date and funded = 'free' and model in ('gpt-image-2.5-sunburst', 'flux2-klein-4b-edit')`;
+    check('B. ... its money is in the storyboard pool, never the images\' free totals', Math.abs(costs.usd - (10 * 0.083 + 10 * 0.022)) < 1e-6 && free.n === 0, `${costs.usd} ${free.n}`);
+    // The pool: another person, once the day's storyboard spend is at $20.
+    await sql`insert into studio.image_costs (funded, kind, model, provider, verdict, calls, cost_usd) values ('storyboard', 'image', 'x-pool', 'test', 'ok', 1, ${VOICE.pictures.dailyPoolUsd})`;
+    const pooled = await L.reserve(sql, someone + 1, flux);
+    check('B. past the $20 pool, a storyboard picture is refused (storyboard-spend), the person\'s 20 untouched', !pooled.ok && pooled.refusal === 'storyboard-spend' && (await L.storyboardPicturesLeft(sql, someone + 1)) === 20, JSON.stringify(pooled));
+    // paidPicture: the drafted lines, word for word, with the reset instant (the browser writes it in local time).
+    const lim = await P.paidPicture(sql, someone, new Request('http://localhost/x'), { checkText: 'x', spend: flux, make: async () => { throw new Error('not reached'); } });
+    const pol = await P.paidPicture(sql, someone + 1, new Request('http://localhost/x'), { checkText: 'x', spend: flux, make: async () => { throw new Error('not reached'); } });
+    check('B. the drafted lines, word for word, each with its reason and reset instant', !lim.ok && !pol.ok
+      && lim.error === AW.limit && AW.limit === "You've made today's 20 storyboard pictures. Your storyboard is saved: make the rest from {reset}." && lim.extra.reason === 'storyboard-limit' && /T00:00:00\.000Z$/.test(String(lim.extra.resetAt))
+      && pol.error === AW.pool && AW.pool === "Today's storyboard pictures for everyone are used up. Your storyboard is saved: make the rest from {reset}." && pol.extra.reason === 'storyboard-spend' && typeof pol.extra.resetAt === 'string'
+      && AW.left(14) === '14 storyboard pictures left today' && AW.left(1) === '1 storyboard picture left today', JSON.stringify([lim, pol]));
+    await sql`delete from studio.image_costs where model = 'x-pool'`;
+    // Admins stay on the admins' pool; everyone else goes to the storyboard pool (shot-picture.ts).
+    const sp = readFileSync(path.join(ROOT, 'src/lib/voice/shot-picture.ts'), 'utf8');
+    check('B. admins and the testers stay on the admins\' pool (voiceInsider, main); everyone else on the storyboard allowance', /pool: voiceInsider\(fid\) \? \('admin' as const\) : \('storyboard' as const\)/.test(sp));
+    const { allowanceFor } = await import('../src/lib/voice/shot-picture');
+    check('B. no allowance shown to admins, or to anyone while only admins make real pictures', (await allowanceFor(sql, NATE)).allowance === null && (await allowanceFor(sql, someone)).allowance === null);
+    // The reset time is written by the browser, never the server (no hydration mismatch, the person's own zone).
+    const va = readFileSync(path.join(ROOT, 'src/components/voice-allowance.tsx'), 'utf8');
+    const servers = ['src/lib/images/paid.ts', 'src/lib/images/limits.ts', 'src/lib/voice/shot-picture.ts', 'src/lib/voice/costs.ts', 'src/lib/voice/allowance-wording.ts'].map((f) => readFileSync(path.join(ROOT, f), 'utf8'));
+    check('B. the allowance\'s time is written in the browser, after loading; no server file writes a local time', /useEffect\(\(\) => \{[\s\S]*withReset\(ALLOWANCE_WORDING\.(pool|limit)/.test(va) && servers.every((t) => !/toLocaleTimeString|toLocaleString|resetLocal\(/.test(t)) && [AW.limit, AW.pool, AW.takes, AW.takesPool].every((x) => x.includes('{reset}')));
+    check('B. ... and no prepaid line until prepaid storyboard pictures exist', !Object.values(AW).some((x) => /prepaid|\$0\./i.test(typeof x === 'function' ? x(2) : x)));
+  }
+  {
     const many = Array.from({ length: 12 }, (_, i) => Math.round((tl.seconds / 13) * (i + 1) * 100) / 100);
     r = await save(many, s2.shots);
     check('B. at most 12 shots: a 13th is refused when saving', r.status === 400);
@@ -910,6 +955,15 @@ check('R. the reading is made from the speech\'s written words, in the preset, w
 check('R. ... kept with its recipe', rd.recipe.model === 'eleven_multilingual_v2' && rd.recipe.preset.id === 'ephelion-warm-lecturer' && rd.recipe.textSha256 === sha(new TextEncoder().encode(speech.paragraphs.join('\n\n'))));
 r = await reading.POST(as(NATE, { method: 'POST', body: readingBody() }));
 check('R. made once per speech and voice (a second is refused unless asked)', r.status === 409);
+{
+  // Admins only (Nate, 2026-11-26): a tester asking to make a reading gets 404, and nothing is made.
+  const before = stub.calls.filter((c) => c.path.startsWith('/v1/text-to-speech/')).length;
+  const tr = await reading.POST(as(VOICE.testers[0], { method: 'POST', body: readingBody({ again: true }) }));
+  check('R. a tester can\'t make a reading: 404, and nothing is sent to ElevenLabs', tr.status === 404 && stub.calls.filter((c) => c.path.startsWith('/v1/text-to-speech/')).length === before);
+  const land = readFileSync(path.join(ROOT, 'src/components/ephelion-landing.tsx'), 'utf8');
+  const st = readFileSync(path.join(ROOT, 'src/app/api/voice/status/route.ts'), 'utf8');
+  check('R. ... the card offers "Make the AI reading" only when the status says so, and the status asks isAdmin', /canMakeReadings: isAdmin\(who\.fid\)/.test(st) && /!r && status\.canMakeReadings && first \?/.test(land));
+}
 r = await reading.GET(as(NATE, {}, `http://localhost/api/voice/reading?speech=${speech.id}&preset=ephelion-warm-lecturer`));
 check('R. anyone let in can play it', r.status === 200 && (await r.arrayBuffer()).byteLength > 1000);
 
@@ -925,12 +979,16 @@ const asks = (await sql`select count(*)::int n from studio.voice_asks where fid 
 check('$. one ask counted per whole-take conversion, none for a sentence', asks === 1, String(asks));
 await sql`insert into studio.voice_asks (fid) values (${NATE})`;
 r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(8000)) }));
-check('$. a third whole take in a day is refused (429; 2 a day, Nate 2026-11-23)', r.status === 429 && /2 whole takes/.test(String(((await r.json()) as { error: string }).error)));
-// Fix 7: "Convert again" passes the once-only rule (here it then meets the day's take limit); without it, the rule refuses first.
-r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take), { again: '1' }) }));
-const againLimit = r.status === 429 && /2 whole takes/.test(String(((await r.json()) as { error: string }).error));
-r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take)) }));
-check('V. fix 7: with "Convert again" the same recording passes the once-only rule (and meets the day\'s limit here); without it, 409', againLimit && r.status === 409);
+{
+  const j = (await r.json()) as { error: string; reason?: string; resetAt?: string };
+  const { ALLOWANCE_WORDING: AW } = await import('../src/lib/voice/allowance-wording');
+  check('$. a whole take past the day\'s number is refused (429), in the reread line, with its reason and reset instant (Nate, 2026-11-23)', r.status === 429 && j.error === AW.takes && AW.takes === `You've converted today's ${VOICE.caps.perPersonConversions} takes. Your drafts are kept, and your recording stays on this device: convert it again from {reset}.` && j.reason === 'takes' && typeof j.resetAt === 'string' && /T00:00:00\.000Z$/.test(j.resetAt), JSON.stringify(j));
+  // Fix 7: "Convert again" passes the once-only rule (here it then meets the day's take limit); without it, the rule refuses first.
+  r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take), { again: '1' }) }));
+  const againLimit = r.status === 429 && ((await r.json()) as { error: string }).error === AW.takes;
+  r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take)) }));
+  check('V. fix 7: with "Convert again" the same recording passes the once-only rule (and meets the day\'s limit here); without it, 409', againLimit && r.status === 409);
+}
 r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
 check('$. ... while a sentence can still be redone', r.status === 200);
 // The 20%-over-estimate stop (Garance agrees to the screen first: without it, convert stops at the consent).
@@ -942,7 +1000,11 @@ await sql`delete from studio.voice_costs where model = 'x-over'`;
 // The daily cap.
 await sql`insert into studio.voice_costs (kind, model, funded, verdict, calls, credits, estimated_credits, cost_usd) values ('convert', 'x-cap', 'admin', 'ok', 1, ${VOICE.caps.adminDailyCredits}, ${VOICE.caps.adminDailyCredits}, 0)`;
 r = await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
-check('$. past the day\'s credits, calls are refused until midnight UTC', r.status === 429 && /allowance/.test(String(((await r.json()) as { error: string }).error)));
+{
+  const j = (await r.json()) as { error: string; reason?: string; resetAt?: string };
+  const { ALLOWANCE_WORDING: AW } = await import('../src/lib/voice/allowance-wording');
+  check('$. past the day\'s credits, calls are refused until midnight UTC, in the reread line', r.status === 429 && j.error === AW.takesPool && AW.takesPool === "Today's voice conversions for everyone are used up. Your recording stays on this device: convert it from {reset}." && j.reason === 'takes-pool' && typeof j.resetAt === 'string', JSON.stringify(j));
+}
 await sql`delete from studio.voice_costs where model = 'x-cap'`;
 // Fix 7 (Nate, 2026-11-24: "it let me click convert again. Wasting a conversion"): the same recording converted twice
 // is refused, before anything is counted, unless the page sends "Convert again".
@@ -1001,7 +1063,7 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
   const own = await C.refusal(sql, someone, 100, false);
   const reading = await C.refusal(sql, someone, 100, false, C.READINGS_FUNDED);
   await sql`delete from studio.voice_costs where model = 'x-free-full'`;
-  check('$. with everyone\'s budget used up, a take is refused but a reading\'s call is not (it is the admins\' pool)', C.fundedFor(someone) === 'free' && C.READINGS_FUNDED === 'admin' && /allowance/.test(own ?? '') && reading === null, `${own} / ${reading}`);
+  check('$. with everyone\'s budget used up, a take is refused but a reading\'s call is not (it is the admins\' pool)', C.fundedFor(someone) === 'free' && C.READINGS_FUNDED === 'admin' && own === (await import('../src/lib/voice/allowance-wording')).ALLOWANCE_WORDING.takesPool && reading === null, `${own} / ${reading}`);
   const src = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
   check('$. ... the reading and its timing both charge READINGS_FUNDED, at the gate and at the hold', ['src/app/api/voice/reading/route.ts', 'src/lib/voice/reading-timing.ts'].every((f) => (src(f).match(/READINGS_FUNDED\)/g) ?? []).length === 2));
 }

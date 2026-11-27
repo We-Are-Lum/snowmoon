@@ -1,6 +1,7 @@
 import 'server-only';
 import type postgres from 'postgres';
 import { VOICE } from '../config';
+import { ALLOWANCE_WORDING } from './allowance-wording';
 import { voiceInsider } from './flag';
 
 /**
@@ -66,9 +67,20 @@ export async function refusal(sql: postgres.Sql, fid: number, estimatedCredits: 
     return `Today's voice calls cost more than ${Math.round((VOICE.caps.overEstimate - 1) * 100)}% over their estimates (${t.measured} credits against ${t.estimated}). Calls are stopped until tomorrow (UTC) so an admin can look.`;
   const capCredits = funded === 'admin' ? VOICE.caps.adminDailyCredits : VOICE.caps.dailyCredits;
   const capUsd = funded === 'admin' ? VOICE.caps.adminDailyUsd : VOICE.caps.dailyUsd;
-  if (t.credits + estimatedCredits > capCredits || t.usd + usdFor(estimatedCredits) > capUsd) return "Today's voice allowance is used up. It resets at midnight UTC.";
-  if (whole && t.conversionsByPerson >= VOICE.caps.perPersonConversions) return `You've converted ${VOICE.caps.perPersonConversions} whole takes today. Redo single sentences, or come back tomorrow.`;
+  if (t.credits + estimatedCredits > capCredits || t.usd + usdFor(estimatedCredits) > capUsd) return ALLOWANCE_WORDING.takesPool;
+  if (whole && t.conversionsByPerson >= VOICE.caps.perPersonConversions) return ALLOWANCE_WORDING.takes;
   return null;
+}
+
+/**
+ * A refusal's reason code and the instant it resets (00:00 UTC), for the answer (Nate, 2026-11-23): the page writes
+ * {reset} in the person's own time. Nothing for the other refusals.
+ */
+const nextUtcMidnight = (now: Date = new Date()) => new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1)).toISOString();
+export function refusalExtra(no: string): { reason?: 'takes' | 'takes-pool'; resetAt?: string } {
+  if (no === ALLOWANCE_WORDING.takes) return { reason: 'takes', resetAt: nextUtcMidnight() };
+  if (no === ALLOWANCE_WORDING.takesPool) return { reason: 'takes-pool', resetAt: nextUtcMidnight() };
+  return {};
 }
 
 const upsert = (sql: postgres.Sql, row: { kind: string; model: string; funded: Funded; verdict: string; calls: number; seconds: number; characters: number; credits: number; estimated: number; usd: number }) => sql`

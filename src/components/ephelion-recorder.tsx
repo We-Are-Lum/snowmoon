@@ -8,7 +8,9 @@ import { loadTake, removeTake, saveTake, type DeviceTake } from '~/lib/voice/dev
 import { CONVERT_AGAIN } from '~/lib/voice/convert-again';
 import { IMPROV_WORDING } from '~/lib/voice/improv-wording';
 import { RECORDER as W } from '~/lib/voice/recorder-wording';
+import { withReset } from '~/lib/challenge/model-wording';
 import { loadWords, removeWords, saveWords, splitSentences } from '~/lib/voice/device-words';
+import { LocalTextField } from '~/components/local-text-field';
 import { SignedAudio, joined, mmss, useRecorder, useStepLog, wordCount, type Check, type Converted, type Redo } from '~/components/voice-recorder-core';
 import '../styles/ephelion-recorder.css';
 
@@ -409,9 +411,12 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
     if (convertAgain) form.set('again', '1');
     const r = await authFetch('/api/voice/convert', { method: 'POST', body: form }).catch(() => null);
     if (!r?.ok) {
-      const err = ((await r?.json().catch(() => ({}))) as { error?: string } | undefined)?.error;
+      // A day's limit (429) answers with #229's reread take lines (src/lib/voice/allowance-wording.ts: "You've converted
+      // today's N takes. …" / "Today's voice conversions for everyone are used up. …") and the reset instant; {reset} is
+      // written here, in the person's own time (withReset), never by the server.
+      const j = ((await r?.json().catch(() => ({}))) ?? {}) as { error?: string; resetAt?: string };
       if (r?.status === 409) void load();
-      setMessage(err ?? W.convertFailed);
+      setMessage(j.error ? withReset(j.error, j.resetAt) : W.convertFailed);
       return null;
     }
     if (sentence === null) {
@@ -679,8 +684,9 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
   );
   const editor = editing && speech && (
     <div className="er-edit">
-      <label htmlFor="er-words" className="er-kicker">{W.editText}</label>
-      <textarea id="er-words" value={draftWords} onChange={(e) => setDraftWords(e.target.value)} rows={12} />
+      {/* The site's "kept in this browser only" box (check:principles P1f; Nate, 2026-11-26): edited words stay on the
+          device, are never sent or published, and the box says so. */}
+      <LocalTextField id="er-words" label={<span className="er-kicker">{W.editText}</span>} value={draftWords} onChange={setDraftWords} rows={12} />
       <p className="er-note">{W.editKept}</p>
       <div className="er-row">
         <button
