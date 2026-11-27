@@ -71,6 +71,13 @@ export const TAKES_WORDING = {
   labelDescribed: 'described by the performer',
   ownTitle: 'Their picture of Lord Ephelion',
   ownSceneTitle: 'Their own scene',
+  // Nate's line (2026-11-27), under the free picture: Privacy §3 lists it as kept on the device.
+  keptHere: 'Kept on this device only until you enter it.',
+  // DRAFT (the agent's), for Nate's reread: removing the free picture from this device (Privacy §3 "or remove it").
+  removeHere: 'Remove from this device',
+  removeAsk: 'Remove your picture from this device? It can’t be made again: your free picture stays used.',
+  removeYes: 'Remove it',
+  removeNo: 'Keep it',
   // Refusals (routes).
   noSuchPicture: 'That picture isn’t one you can use here.',
   notOfHim: 'That picture isn’t a published picture of Lord Ephelion.',
@@ -80,7 +87,7 @@ export const TAKES_WORDING = {
   alreadyEntered: 'This take is already in the challenge.',
   notChecked: 'Make it his voice first.',
   tooManyRedos: 'This take has too many redone sentences to enter. Record it again.',
-  // DRAFT (the agent's), for Nate's reread: GPT Image isn't offered where the person is.
+  // Approved by Nate (2026-11-27): GPT Image isn't offered where the person is.
   notHere: 'The picture can’t be made where you are: its model isn’t available here.',
   notEntered: 'It couldn’t be entered; nothing was made public. Try again in a moment.',
 } as const;

@@ -464,6 +464,15 @@ add({
         if (/<textarea\b/.test(text)) problems.push(`${file}: the reference search box must be a single-line input`);
         continue;
       }
+      if (file.endsWith('components/person-number-field.tsx')) {
+        // An admin's box for a person's number (the Ephelion free picture's reset, Nate 2026-11-27): sent to our server,
+        // kept in the reset's log, never published.
+        for (const [what, re] of [['sent to us to reset their free picture', /Sent to us to reset their free picture/], ['kept in the log', /kept in the reset&rsquo;s log with who did it/], ['never published', /Never published\./], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the person number box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the person number box must not send its text anywhere itself`);
+        if (/<textarea\b/.test(text)) problems.push(`${file}: the person number box must be a single-line input`);
+        continue;
+      }
       if (file.endsWith('components/tx-hash-field.tsx')) {
         // The balance screen's payment hash (owner, 2026-10-15): sent to our server to look up on Base, never published by us.
         for (const [what, re] of [['sent to us to look up on Base', /Sent to us to look up on Base/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)

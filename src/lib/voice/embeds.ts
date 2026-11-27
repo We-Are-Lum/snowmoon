@@ -8,7 +8,7 @@ import { PAPER } from '../tokens';
  */
 export const RECORD_BUTTON = 'Record a speech';
 export const SPOKEN_BUTTON = 'Watch this storyboard';
-/** A take's Share card (PR 6, 2026-11-26; the drawings' "Listen"). DRAFT for Nate's reread. */
+/** A take's Share card (PR 6, 2026-11-26; the drawings' "Listen"). Approved by Nate, 2026-11-27. */
 export const TAKE_BUTTON = 'Listen';
 
 function embed(title: string, url: string, imageUrl?: string): string {

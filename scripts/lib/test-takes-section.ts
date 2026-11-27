@@ -161,6 +161,44 @@ export async function takesSection(o: {
   const fs = await import('node:fs');
   const free = fs.readFileSync(path.join(ROOT, 'src/lib/voice/free-scene.ts'), 'utf8');
   const entry = fs.readFileSync(path.join(ROOT, 'src/components/ephelion-entry.tsx'), 'utf8');
-  check('TK. the free picture is paid as a free picture (no pool: funded free, under the free daily cap), GPT Image only', /spend: \{ model: \{ id: m\.allowlistId, host: m\.call\.host \}, reserveUsd: worst \}/.test(free) && /export const GPT_IMAGE = 'gpt-image-2\.5-sunburst'/.test(free) && !/pool:/.test(free.replace(/\/\/.*$/gm, '')));
-  check('TK. the entry step shows Nate\'s lines and labels the description box (LocalTextField)', /W\.underButton/.test(entry) && /W\.used/.test(entry) && /<LocalTextField id="er-scene"/.test(entry) && W.underButton === 'One free picture per account. If it’s refused or doesn’t come back, it isn’t used. If it comes out differently than you hoped, it is.');
+  check('TK. the free picture is paid in the scene pool, GPT Image only', /reserveUsd: worst, pool: 'scene' \}/.test(free) && /export const GPT_IMAGE = 'gpt-image-2\.5-sunburst'/.test(free));
+  // Nate, 2026-11-27: only the site's free daily image budget, never the person's own daily count.
+  const L = await import(path.join(ROOT, 'src/lib/images/limits.ts'));
+  const { imagesDailySpendCapUsd } = await import(path.join(ROOT, 'src/lib/config.ts'));
+  const freeToday = async () => Number((await sql`select coalesce(sum(cost_usd), 0)::float8 usd from studio.image_costs where day = (now() at time zone 'utc')::date and funded = 'free'`)[0].usd);
+  const sceneSpend = (usd: number) => ({ model: { id: 'gpt-image-2.5-sunburst', host: 'ai-gateway.vercel.sh' }, reserveUsd: usd, pool: 'scene' as const });
+  const someone = 424242;
+  const leftBefore = await L.generationsLeft(sql, someone);
+  const asksBefore = (await sql`select count(*)::int n from studio.image_asks where fid = ${someone}`)[0].n;
+  const usdBefore = await freeToday();
+  const res = await L.reserve(sql, someone, sceneSpend(0.25));
+  check('TK. the free picture counts in the site\'s free daily budget (funded free, reserved)', res.ok && Math.abs((await freeToday()) - usdBefore - 0.25) < 1e-9);
+  check('TK. ... and not in the person\'s own daily count', (await L.generationsLeft(sql, someone)) === leftBefore && (await sql`select count(*)::int n from studio.image_asks where fid = ${someone}`)[0].n === asksBefore, `${leftBefore}`);
+  await L.settle(sql, {}, sceneSpend(0.25), 'free');
+  for (let i = 0; i < leftBefore; i++) await sql`insert into studio.image_asks (fid) values (${someone})`;
+  check('TK. ... someone who has used today\'s free pictures still gets it', (await L.generationsLeft(sql, someone)) === 0 && (await L.reserve(sql, someone, sceneSpend(0.25))).ok);
+  await L.settle(sql, {}, sceneSpend(0.25), 'free');
+  const over = await L.reserve(sql, someone, sceneSpend(imagesDailySpendCapUsd() + 1));
+  check('TK. ... refused when the site\'s free daily budget would be passed', !over.ok && over.refusal === 'spend' && Math.abs((await freeToday()) - usdBefore) < 1e-9);
+  check('TK. the entry step shows Nate\'s lines and the description box shows the publication line (PublishedTextField: the description is sent to make the picture and published in the take\'s recipe)', /W\.underButton/.test(entry) && /W\.used/.test(entry) && /<PublishedTextField id="er-scene"/.test(entry) && !/LocalTextField/.test(entry) && W.underButton === 'One free picture per account. If it’s refused or doesn’t come back, it isn’t used. If it comes out differently than you hoped, it is.');
+  // Privacy §3 (Nate, 2026-11-27): the free picture is kept on the device until it's entered or removed, and says so.
+  const legal = fs.readFileSync(path.join(ROOT, 'src/lib/legal.ts'), 'utf8');
+  check('TK. Privacy §3 lists the free picture kept on the device, until it is entered or removed', legal.includes('the picture of your own scene for the Ephelion challenge, with its signed record, until you enter it or remove it'));
+  check('TK. the entry step says "Kept on this device only until you enter it." under the picture, and can remove it (picture and record)', W.keptHere === 'Kept on this device only until you enter it.' && /W\.keptHere/.test(entry) && /const removeScene = async/.test(entry) && /removeTake\(fid, SCENE_SLOT\)[\s\S]{0,120}localStorage\.removeItem\(ticketKey\(fid\)\)/.test(entry.slice(entry.indexOf('const removeScene'))));
+  // The admins' reset (Nate, 2026-11-27): admins only, on the server; the person can make one again; logged.
+  const reset = await import(path.join(ROOT, 'src/app/api/voice/free-scene-reset/route.ts'));
+  const resetAs = (fid: number | null, person: unknown) => reset.POST(as(fid, { method: 'POST', body: JSON.stringify({ person }) }));
+  r = await resetAs(STRANGER, String(NATE));
+  check('TK. reset: someone who isn\'t an admin gets a 404, and nothing is reset', r.status === 404 && (await row(NATE))?.made_at != null);
+  r = await resetAs(null, String(NATE));
+  check('TK. ... signed out: 401', r.status === 401);
+  r = await resetAs(NATE, '0');
+  const r2 = await resetAs(NATE, '12a');
+  check('TK. ... a number that isn\'t a person is refused', r.status === 400 && r2.status === 400);
+  r = await resetAs(NATE, String(NATE));
+  check('TK. ... an admin resets a made free picture: the row goes, logged with who and when', r.status === 200 && (await r.json()).done === 'reset' && !(await row(NATE)) && (await sql`select count(*)::int n from studio.ephelion_scene_resets where person = ${NATE} and by_fid = ${NATE} and was_made and at > now() - interval '1 minute'`)[0].n === 1);
+  r = await make(NATE, 'A dark coat, in a hall of mirrors');
+  check('TK. ... and they can make one again', r.status === 200 && (await row(NATE))?.made_at != null);
+  r = await resetAs(NATE, String(STRANGER));
+  check('TK. ... nothing to reset: said so, nothing logged', r.status === 200 && (await r.json()).done === 'nothing' && (await sql`select count(*)::int n from studio.ephelion_scene_resets where person = ${STRANGER}`)[0].n === 0);
 }

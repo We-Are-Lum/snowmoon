@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { authFetch } from '~/lib/client-auth';
-import { LocalTextField } from '~/components/local-text-field';
+import { PublishedTextField } from '~/components/publish-words';
 import { loadTake, removeTake, saveTake } from '~/lib/voice/device-takes';
 import { TAKES_WORDING as W } from '~/lib/voice/takes-wording';
 
@@ -28,6 +28,7 @@ export function EphelionEntry({ fid, draftId, speechTitle, voiceName, wide }: { 
   const [note, setNote] = useState<string | null>(null);
   const [made, setMade] = useState<{ url: string; ticket: string; image: string } | null>(null);
   const [ask, setAsk] = useState(false);
+  const [askRemove, setAskRemove] = useState(false);
   const [entered, setEntered] = useState<{ id: string; url: string } | null>(null);
 
   useEffect(() => {
@@ -58,6 +59,16 @@ export function EphelionEntry({ fid, draftId, speechTitle, voiceName, wide }: { 
     setChoice({ source: 'own-scene', id: 'own-scene', url: m.url, title: W.ownSceneTitle, labels: [W.labelAi, W.labelDescribed] });
     setNote(wide ? W.madeDesktop : W.madePhone);
     setOpts((o) => (o ? { ...o, freeSceneMade: true } : o));
+  };
+
+  /** Removes the free picture and its signed record from this device (Privacy §3: kept "until you enter it or remove it"). */
+  const removeScene = async () => {
+    await removeTake(fid, SCENE_SLOT).catch(() => undefined);
+    try { localStorage.removeItem(ticketKey(fid)); } catch { /* nothing kept */ }
+    if (made) URL.revokeObjectURL(made.url);
+    setMade(null);
+    setAskRemove(false);
+    setChoice((c) => (c?.source === 'own-scene' ? null : c));
   };
 
   const enter = async (replace: boolean) => {
@@ -131,13 +142,25 @@ export function EphelionEntry({ fid, draftId, speechTitle, voiceName, wide }: { 
                 <img src={made.url} alt="" />
                 <span className="er-pic-title">{W.ownSceneTitle}</span>
               </button>
+              <p className="er-note" data-slot="kept-here">{W.keptHere}</p>
+              {askRemove ? (
+                <div className="er-ask" role="alert">
+                  <p>{W.removeAsk}</p>
+                  <div className="er-row">
+                    <button type="button" className="er-btn" onClick={() => void removeScene()}>{W.removeYes}</button>
+                    <button type="button" className="er-btn er-quiet" onClick={() => setAskRemove(false)}>{W.removeNo}</button>
+                  </div>
+                </div>
+              ) : (
+                <button type="button" className="er-link" onClick={() => setAskRemove(true)} disabled={busy !== null}>{W.removeHere}</button>
+              )}
               <p className="er-note">{W.used}</p>
             </>
           ) : opts.freeSceneMade ? (
             <p className="er-note">{W.used}</p>
           ) : (
             <>
-              <LocalTextField id="er-scene" label={W.describeLabel} value={desc} onChange={setDesc} rows={3} />
+              <PublishedTextField id="er-scene" label={W.describeLabel} value={desc} onChange={setDesc} rows={3} maxLength={400} />
               <button type="button" className="er-btn er-wide" onClick={() => void makeScene()} disabled={busy !== null || !desc.trim()}>{busy === 'make' ? W.making : W.makeButton}</button>
             </>
           )}
@@ -152,7 +175,7 @@ export function EphelionEntry({ fid, draftId, speechTitle, voiceName, wide }: { 
           <figure className="er-preview-fig">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={choice.url} alt="" />
-            <figcaption><span>{choice.title}</span> <span className="er-kicker">{choice.labels.join(' · ')}</span></figcaption>
+            <figcaption><span>{choice.title}</span> <span className="er-kicker">{choice.labels.join(' · ')}</span>{choice.source === 'own-scene' && <span className="er-note">{W.keptHere}</span>}</figcaption>
           </figure>
         ) : (
           <p className="er-note">{W.chooseFirst}</p>

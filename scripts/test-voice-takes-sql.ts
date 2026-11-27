@@ -1,5 +1,5 @@
 /**
- * NEXT_voice_takes.sql and NEXT_ephelion_scene.sql on an in-memory Postgres (PGlite) with every numbered migration on this
+ * NEXT_voice_takes.sql, NEXT_ephelion_scene.sql and NEXT_ephelion_scene_reset.sql on an in-memory Postgres (PGlite) with every numbered migration on this
  * branch applied first (0001-0052). No network, no production database. For each file: A (the dry run) is B word for word
  * and changes nothing; B applies, and applies again; C (the read-back) passes and keeps nothing; planted faults C must
  * catch; D (the undo) is refused once a take (a free picture) exists, and puts back the shape when there is none.
@@ -65,6 +65,14 @@ for (const [file, tables, plant] of [
     ['one per account is gone', 'alter table studio.ephelion_scene_pictures drop constraint ephelion_scene_pictures_pkey;', 'alter table studio.ephelion_scene_pictures add primary key (person);'],
     ['a claim lets a second request in', `create or replace function studio.claim_free_scene(p_person bigint) returns boolean language plpgsql security definer set search_path = studio, pg_temp as $f$ begin insert into studio.ephelion_scene_pictures (person) values (p_person) on conflict (person) do nothing; return true; end $f$;`, ''],
   ]],
+  ['supabase/migrations/NEXT_ephelion_scene_reset.sql', ['ephelion_scene_resets'], [
+    ['studio_writer may write the log itself', 'grant insert on studio.ephelion_scene_resets to studio_writer;', 'revoke insert on studio.ephelion_scene_resets from studio_writer;'],
+    ['anon may reset', 'grant execute on function studio.reset_free_scene(bigint, bigint) to anon;', 'revoke execute on function studio.reset_free_scene(bigint, bigint) from anon;'],
+    ['the reset is not logged', `create or replace function studio.reset_free_scene(p_person bigint, p_by bigint) returns boolean language plpgsql security definer set search_path = studio, pg_temp as $f$ begin if p_person = 0 or p_by is null or p_by <= 0 then raise exception 'no one' using errcode = '22023'; end if; delete from studio.ephelion_scene_pictures where person = p_person; return found; end $f$;`, ''],
+    ['the reset leaves a made picture (only a claim goes, as release does)', `create or replace function studio.reset_free_scene(p_person bigint, p_by bigint) returns boolean language plpgsql security definer set search_path = studio, pg_temp as $f$ declare r record; begin if p_person = 0 or p_by is null or p_by <= 0 then raise exception 'no one' using errcode = '22023'; end if; delete from studio.ephelion_scene_pictures where person = p_person and made_at is null returning made_at, picture_sha256 into r; if not found then return false; end if; insert into studio.ephelion_scene_resets (person, by_fid, was_made, picture_sha256) values (p_person, p_by, false, null); return true; end $f$;`, ''],
+    ['the log forgets who reset it', `create or replace function studio.reset_free_scene(p_person bigint, p_by bigint) returns boolean language plpgsql security definer set search_path = studio, pg_temp as $f$ declare r record; begin if p_person = 0 or p_by is null or p_by <= 0 then raise exception 'no one' using errcode = '22023'; end if; delete from studio.ephelion_scene_pictures where person = p_person returning made_at, picture_sha256 into r; if not found then return false; end if; insert into studio.ephelion_scene_resets (person, by_fid, was_made, picture_sha256) values (p_person, 1, r.made_at is not null, r.picture_sha256); return true; end $f$;`, ''],
+    ['studio_writer may delete free pictures directly', 'grant delete on studio.ephelion_scene_pictures to studio_writer;', 'revoke delete on studio.ephelion_scene_pictures from studio_writer;'],
+  ]],
 ] as const) {
   const f = parts(file);
   const name = path.basename(file);
@@ -72,6 +80,8 @@ for (const [file, tables, plant] of [
   check(`${name}: the dry run is the migration word for word`, f.dry.slice(0, -'rollback;'.length) === f.mig.slice(0, -'commit;'.length));
   check(`${name}: the read-back inserts and deletes realistic rows, and sets no role`, /insert into studio\./.test(f.readBack) && /delete from studio\./.test(f.readBack) && !/set role/i.test(f.readBack));
   const pg = await fresh();
+  // The reset needs the free picture's table (NEXT_ephelion_scene.sql, applied in production).
+  if (name === 'NEXT_ephelion_scene_reset.sql') await pg.exec(parts('supabase/migrations/NEXT_ephelion_scene.sql').mig);
   // An existing storyboard publication, as production may hold by then.
   if (name === 'NEXT_voice_takes.sql') {
     await pg.exec(`insert into studio.voice_drafts (id, fid, kind, speech_id, preset_id, recipe) values ('11111111-1111-4111-8111-111111111111', 6786, 'reading', 'doing-fine-v2', 'ephelion-warm-lecturer', '{"provider":"elevenlabs","model":"m"}');
@@ -87,7 +97,7 @@ for (const [file, tables, plant] of [
     const old = (await pg.query<{ kind: string; n: number }>(`select kind, count(*)::int n from studio.voice_publications group by kind`)).rows;
     check(`${name}: the existing storyboard is a storyboard, untouched`, old.length === 1 && old[0].kind === 'storyboard' && old[0].n === 1);
   }
-  const count = async () => JSON.stringify((await pg.query(`select (select count(*) from studio.voice_publications)::int p, (select count(*) from studio.voice_drafts)::int d${tables[0] === 'ephelion_scene_pictures' ? ', (select count(*) from studio.ephelion_scene_pictures)::int s' : ''}`)).rows[0]);
+  const count = async () => JSON.stringify((await pg.query(`select (select count(*) from studio.voice_publications)::int p, (select count(*) from studio.voice_drafts)::int d${tables[0] !== 'voice_publications' ? ', (select count(*) from studio.ephelion_scene_pictures)::int s' : ''}${tables[0] === 'ephelion_scene_resets' ? ', (select count(*) from studio.ephelion_scene_resets)::int r' : ''}`)).rows[0]);
   const c0 = await count();
   const rb = await tryExec(pg, f.readBack);
   check(`${name}: the read-back passes and keeps nothing`, rb.ok && (await count()) === c0, rb.why || `${c0} -> ${await count()}`);
@@ -106,6 +116,10 @@ for (const [file, tables, plant] of [
     const refused = !(await tryExec(pg, f.undo)).ok;
     check(`${name}: the undo is refused once a take has been entered`, refused);
     await pg.exec(`delete from studio.voice_publications where kind = 'take';`);
+  } else if (name === 'NEXT_ephelion_scene_reset.sql') {
+    await pg.exec(`insert into studio.ephelion_scene_pictures (person, made_at, picture_sha256) values (6786, now(), '${'c'.repeat(64)}'); select studio.reset_free_scene(6786, 6786);`);
+    check(`${name}: the undo is refused once a free picture has been reset`, !(await tryExec(pg, f.undo)).ok);
+    await pg.exec(`delete from studio.ephelion_scene_resets;`);
   } else {
     await pg.exec(`insert into studio.ephelion_scene_pictures (person, made_at, picture_sha256) values (6786, now(), '${'c'.repeat(64)}');`);
     check(`${name}: the undo is refused once a free picture has been made`, !(await tryExec(pg, f.undo)).ok);

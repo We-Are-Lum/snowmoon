@@ -96,7 +96,7 @@ export async function paidPicture(
   },
 ): Promise<Paid> {
   const spend = job.spend;
-  const funded = spend?.pool === 'admin' ? ('admin' as const) : spend?.pool === 'storyboard' ? ('storyboard' as const) : fundedBy(fid);
+  const funded = spend?.pool === 'admin' ? ('admin' as const) : spend?.pool === 'storyboard' ? ('storyboard' as const) : spend?.pool === 'scene' ? ('free' as const) : fundedBy(fid);
   const r = await reserve(sql, fid, spend);
   // A closed-cap refusal carries the instant the cap resets (00:00 UTC); the browser writes it in the visitor's own time.
   if (!r.ok) return { ok: false, status: 429, error: say(r.refusal, fid), extra: { reason: r.refusal, ...(WITH_RESET.has(r.refusal) ? { resetAt: nextUtcMidnight() } : {}) } };

@@ -72,8 +72,8 @@ export async function makeFreeScene(sql: Sql, fid: number, request: Request, raw
     }
     const prompt = `${description}\n\nThe man in the reference picture is Lord Ephelion: keep his face and build; what he wears and where he is come from the words above.\n\n${IMAGES.suffix}`;
     const worst = reserveUsd(m, { width: IMAGES.viewSize.width, height: IMAGES.viewSize.height });
-    // The free pool (funded by the person's own account: 'free' for a Farcaster or invited account), as every free picture.
-    const paid = await deps.paid(sql, fid, request, { checkText: prompt, spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst }, maker: m.maker, make: () => deps.make(m, prompt, [ref], request, worst, description) });
+    // Only the site's free daily image budget (Nate, 2026-11-27): never the person's own daily count (pool 'scene').
+    const paid = await deps.paid(sql, fid, request, { checkText: prompt, spend: { model: { id: m.allowlistId, host: m.call.host }, reserveUsd: worst, pool: 'scene' }, maker: m.maker, make: () => deps.make(m, prompt, [ref], request, worst, description) });
     if (!paid.ok) {
       await release();
       const refused = paid.status === 422 || /refus|block|rule/i.test(String((paid.extra as { reason?: unknown } | undefined)?.reason ?? ''));
