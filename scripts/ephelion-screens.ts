@@ -118,6 +118,43 @@ try {
     await ctx.close();
   }
 
+  // Full screen (Nate, 2026-11-26): desktop only. At 1440, off and on; at 390, absent.
+  for (const [w, h] of [[390, 844], [1440, 900]] as const) {
+    const ctx = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: w, height: h } });
+    await ctx.addInitScript((fid) => {
+      localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `voice-test-${fid}`, fid, username: 'naaate', exp: Math.floor(Date.now() / 1000) + 86400 }));
+      localStorage.setItem('snowmoon.intro-seen', 'v2');
+    }, NATE);
+    await ctx.route('**/api/chat/status', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '{"ready":false}' }));
+    const page = await ctx.newPage();
+    const name = (s: string) => path.join(out, `${s}-${w}.png`);
+    await page.goto(`${url}/ephelion`);
+    await page.locator('.eph-card').first().waitFor({ timeout: 30_000 });
+    await page.waitForTimeout(500);
+    const visible = await page.locator('.focus-toggle').isVisible();
+    if (w === 390) {
+      console.log('390 full-screen icon visible:', visible);
+      await page.screenshot({ path: name('30-no-fullscreen-icon-on-phone') });
+      shots.push(name('30-no-fullscreen-icon-on-phone'));
+    } else {
+      await page.screenshot({ path: name('30-fullscreen-off') });
+      shots.push(name('30-fullscreen-off'));
+      await page.locator('.focus-toggle').click();
+      await page.waitForTimeout(600);
+      const st = await page.evaluate(() => ({ rail: document.querySelector('.shell')!.classList.contains('rail-collapsed'), panel: !!document.querySelector('.panel'), stored: localStorage.getItem('snowmoon.focus') }));
+      await page.screenshot({ path: name('31-fullscreen-on') });
+      shots.push(name('31-fullscreen-on'));
+      await page.reload();
+      await page.locator('.eph-card').first().waitFor({ timeout: 30_000 });
+      const after = await page.evaluate(() => ({ rail: document.querySelector('.shell')!.classList.contains('rail-collapsed'), panel: !!document.querySelector('.panel') }));
+      await page.locator('.focus-toggle').click();
+      await page.waitForTimeout(400);
+      const back = await page.evaluate(() => ({ rail: document.querySelector('.shell')!.classList.contains('rail-collapsed'), panel: !!document.querySelector('.panel'), stored: localStorage.getItem('snowmoon.focus') }));
+      console.log('1440 full screen: on', JSON.stringify(st), 'after reload', JSON.stringify(after), 'off again', JSON.stringify(back));
+    }
+    await ctx.close();
+  }
+
   // The four-step recorder (PR 2): every step, phone and desktop (the site's menus and the assistant are hidden there).
   for (const [w, h] of [[390, 844], [1440, 900]] as const) {
     const ctx = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: w, height: h }, permissions: ['microphone'] });

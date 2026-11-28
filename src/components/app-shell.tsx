@@ -33,6 +33,10 @@ import '../app/assistant/assistant.css';
  *   Under 1200px there is no panel (the assistant is its own page), so nothing changes there.
  * Tells the Farcaster host the app is ready (once).
  */
+/** Full screen, desktop only (Nate, 2026-11-26), remembered on this device. DRAFT words, for Nate's reread. */
+export const FOCUS_KEY = 'snowmoon.focus';
+export const FOCUS_WORDS = { on: 'Full screen', off: 'Leave full screen' } as const;
+
 export function AppShell({ chapters, adaptations, intro, children }: { chapters: number; adaptations: number; intro: Intro; children: React.ReactNode }) {
   const path = usePathname() ?? '/';
   const auth = useAuth();
@@ -47,6 +51,11 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
   const [chPanel, setChPanel] = useState(false);
   // The rail on challenge pages (owner, 2026-11-11): collapsed unless opened there before on this device.
   const [chRail, setChRail] = useState(false);
+  // Full screen (Nate, 2026-11-26), desktop only: the rail collapsed and the assistant closed, remembered on this device
+  // like the closed panel (Privacy §3, "a few other settings of yours"). It doesn't touch the remembered rail and panel
+  // choices, so turning it off brings both back as they were. The browser's own full screen comes with the click where it
+  // is supported; Esc leaves the browser's full screen only, and the page stays as the viewer chose until they click again.
+  const [focus, setFocus] = useState(false);
   const [last, setLast] = useState(1);
   const [opened, setOpened] = useState<Set<number>>(new Set());
 
@@ -59,6 +68,7 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
       setPanel(localStorage.getItem('snowmoon.panel') !== 'closed');
       setChPanel(challengePanelOpen(localStorage.getItem(CHALLENGE_PANEL_KEY)));
       setChRail(challengeRailOpen(localStorage.getItem(CHALLENGE_RAIL_KEY)));
+      setFocus(localStorage.getItem(FOCUS_KEY) === 'on');
     } catch {
       /* defaults */
     }
@@ -106,14 +116,33 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
   // The four-step recorder (Nate, 2026-11-26: "the site's side menus are hidden; a slim top bar has Exit"): no rail, top
   // bar or assistant panel on /ephelion/record; the page draws its own Exit bar.
   const bare = path === '/ephelion/record';
-  const showPanel = (onMp ? mpPanel : onChallenge ? chPanel : panel) && !path.startsWith('/assistant') && !bare;
-  const railCollapsed = onChallenge ? !chRail : collapsed;
+  const showPanel = (onMp ? mpPanel : onChallenge ? chPanel : panel) && !path.startsWith('/assistant') && !bare && !focus;
+  const railCollapsed = focus || (onChallenge ? !chRail : collapsed);
+  const toggleFocus = () => {
+    const on = !focus;
+    setFocus(on);
+    remember(FOCUS_KEY, on ? 'on' : null);
+    try {
+      const d = document as Document & { fullscreenEnabled?: boolean };
+      if (on && d.fullscreenEnabled && !d.fullscreenElement && typeof d.documentElement.requestFullscreen === 'function') void d.documentElement.requestFullscreen().catch(() => {});
+      if (!on && d.fullscreenElement && typeof d.exitFullscreen === 'function') void d.exitFullscreen().catch(() => {});
+    } catch {
+      /* the browser has no full screen: the menus alone */
+    }
+  };
   const openPanel = () => (onMp ? setMpPanel(true) : onChallenge ? (setChPanel(true), remember(CHALLENGE_PANEL_KEY, 'open')) : (setPanel(true), remember('snowmoon.panel', null)));
   const closePanel = () => (onMp ? setMpPanel(false) : onChallenge ? (setChPanel(false), remember(CHALLENGE_PANEL_KEY, null)) : (setPanel(false), remember('snowmoon.panel', 'closed')));
 
   return (
-    <div className={`shell${railCollapsed ? ' rail-collapsed' : ''}${showPanel ? ' with-panel' : ''}${onChallenge ? ' on-challenge' : ''}${bare ? ' shell-bare' : ''}`}>
+    <div className={`shell${railCollapsed ? ' rail-collapsed' : ''}${showPanel ? ' with-panel' : ''}${onChallenge ? ' on-challenge' : ''}${bare ? ' shell-bare' : ''}${focus ? ' is-focus' : ''}`}>
       <ImageZoom />
+      {!bare && (
+        <button type="button" className="focus-toggle" aria-pressed={focus} aria-label={focus ? FOCUS_WORDS.off : FOCUS_WORDS.on} title={focus ? FOCUS_WORDS.off : FOCUS_WORDS.on} onClick={toggleFocus}>
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.5">
+            {focus ? <path d="M6 1v5H1M10 1v5h5M6 15v-5H1M10 15v-5h5" /> : <path d="M1 6V1h5M15 6V1h-5M1 10v5h5M15 10v5h-5" />}
+          </svg>
+        </button>
+      )}
       <header className="topbar">
         {path.startsWith('/assistant') ? (
           <Link href={`/chapter/${last}`} className="topbar-icon" aria-label={`Back to Chapter ${last}`}>
