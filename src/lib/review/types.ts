@@ -102,3 +102,43 @@ export interface ReviewView {
   /** The tables aren't on this database yet: labels can't be saved. */
   labelsReady: boolean;
 }
+
+/**
+ * A post or profile read live for /admin/bounty (owner, 2026-11-27; branch bounty-inline): read from the post's own
+ * network when an admin opens the page, kept in memory for 5 minutes, never stored. No like, recast, reply or follower
+ * count is ever read into these. Pictures are signed addresses of the admin media route (/api/admin/bounty/media),
+ * never the network's own address.
+ */
+export type InlineNetwork = 'farcaster' | 'bluesky' | 'lens';
+export interface ProfileView {
+  network: InlineNetwork;
+  /** The display name, if the account has one. */
+  name: string | null;
+  /** The handle (Farcaster username, Bluesky handle, Lens username). */
+  handle: string | null;
+  bio: string | null;
+  /** A media route address for the profile picture, or null. */
+  picture: string | null;
+  /** The profile on its network. */
+  url: string | null;
+}
+export interface PostView {
+  network: InlineNetwork;
+  /** The post on its network (rebuilt from its checked parts). */
+  url: string;
+  at: string;
+  text: string;
+  /** Media route addresses for its pictures, at most four. */
+  pictures: string[];
+  author: ProfileView | null;
+}
+export type PostSlot = { ok: true; post: PostView } | { ok: false; why: string; url: string | null };
+export interface InlineView {
+  /** By claim subject ("560:<id>"): the claimer's Farcaster profile (by their address) and the posts their description links. */
+  claims: Record<string, { profile: ProfileView | null; posts: PostSlot[] }>;
+  /** By entry (version id): the posts its maker added (the submitted one first). */
+  entries: Record<string, { posts: PostSlot[] }>;
+  /** Why Farcaster couldn't be read here (no Neynar key on this deployment), when that is so. */
+  farcasterNote: string | null;
+  readAt: string;
+}

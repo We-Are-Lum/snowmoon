@@ -93,13 +93,14 @@ export const CHALLENGE_WORDING = {
   exampleSubmitHead: 'Then submit it as an example',
   exampleSubmitted: 'Submitted as an example. It isn’t an entry.',
   /**
-   * "Published, not entered yet" on /challenge/entries, below the entries (2026-11-27). DRAFT wording, drafted by the
-   * coding agent (Claude, a closed model by Anthropic) for the owner's reread: the heading (the owner's own words, kept
-   * as given) and its one line. "Enter it" is the owner's. Shown with the "Draft wording" mark until he rereads them.
+   * "Published, not entered yet" on /challenge/entries, below the entries (2026-11-27). Reread by the owner on
+   * 2026-11-28 ("Reread: the heading "Published, not entered yet", "Enter it", and the line with one sentence added"):
+   * the heading and "Enter it" are his words; the line was drafted by the coding agent (Claude, a closed model by
+   * Anthropic), and its last sentence is his.
    */
   notEnteredHead: 'Published, not entered yet',
-  notEnteredLine: 'These were published during the challenge but haven’t been submitted yet. Only submitted pictures are entries.',
-  notEnteredDraft: true as boolean,
+  notEnteredLine: 'These were published during the challenge but haven’t been submitted yet. Only submitted pictures are entries. Their makers can still enter them until entries close.',
+  notEnteredDraft: false as boolean,
   enterIt: 'Enter it',
   // Submit (owner, 2026-11-04). Draft wording.
   submitHead: 'Submit as an entry',

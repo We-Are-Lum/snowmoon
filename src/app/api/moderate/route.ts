@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { hideReachesTakes } from '~/lib/voice/take-hide';
+import { hiddenImages, unhideImage } from '~/lib/images/unhide';
 import { revalidatePath } from 'next/cache';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
@@ -27,9 +28,9 @@ export async function GET(request: Request) {
   if (fid === null) return NextResponse.json({ error: 'Sign in' }, { status: 401 });
   if (!MODERATOR_FIDS.includes(fid)) return NextResponse.json({ error: 'Moderators only' }, { status: 403 });
   const sql = db();
-  if (!sql) return NextResponse.json({ items: [], storyboards: [], hiddenStoryboards: [] });
-  const [rows, storyboards, hidden] = await Promise.all([fullQueue(sql), storyboardQueue(sql), hiddenStoryboards(sql)]);
-  return NextResponse.json({ items: rows, storyboards, hiddenStoryboards: hidden }, { headers: { 'Cache-Control': 'no-store' } });
+  if (!sql) return NextResponse.json({ items: [], storyboards: [], hiddenStoryboards: [], hiddenImages: [] });
+  const [rows, storyboards, hidden, images] = await Promise.all([fullQueue(sql), storyboardQueue(sql), hiddenStoryboards(sql), hiddenImages(sql)]);
+  return NextResponse.json({ items: rows, storyboards, hiddenStoryboards: hidden, hiddenImages: images }, { headers: { 'Cache-Control': 'no-store' } });
 }
 
 export async function POST(request: Request) {
@@ -67,7 +68,14 @@ export async function POST(request: Request) {
     await hideReachesTakes(sql, el.elementId, fid, 'moderator').catch((e) => console.error('moderate: hiding the takes failed', (e as Error).name));
   } else if (action === 'dismiss') {
     await sql`insert into studio.removal_log ${sql({ element_id: el.elementId, step: 'dismissed', by_fid: fid, role: 'moderator' })}`;
-  } else return NextResponse.json({ error: 'Hide or dismiss only' }, { status: 400 });
+  } else if (action === 'unhide') {
+    // A picture a moderator or a rule hid, put back byte for byte, with the takes hidden only because of it (Nate,
+    // 2026-11-27: the follow-up to #255; principle 5). Never a maker's own hide: that one is theirs to undo.
+    const r = await unhideImage(sql, el, fid);
+    if (!r.ok) return NextResponse.json({ error: r.error }, { status: r.status });
+    revalidatePath('/references');
+    return NextResponse.json({ done: 'unhide', takes: r.takes });
+  } else return NextResponse.json({ error: 'Hide, unhide or dismiss only' }, { status: 400 });
   revalidatePath('/references');
   if (el.type === 'design') revalidatePath('/references/designs', 'layout');
   return NextResponse.json({ done: action });

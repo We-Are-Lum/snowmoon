@@ -10,6 +10,7 @@ import { moveToPrivate, restorePublic } from '~/lib/images/store';
 import { recheckMaker } from '~/lib/checks/decisions';
 import { CHECKS } from '~/lib/config';
 import { hideReachesChapterPictures } from '~/lib/chapter-pictures/after-hide';
+import { hideReachesTakes, unhideReachesTakes } from '~/lib/voice/take-hide';
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -44,6 +45,8 @@ export async function POST(request: Request, { params }: Ctx) {
       await sql`insert into studio.removal_log ${sql({ element_id: el.elementId, step: 'moved_private', by_fid: fid, role: 'author' })}`;
       // A maker's own hide withdraws their pass only if the owner turns it on (CHECKS.recheckOnOwnHide).
       if (CHECKS.recheckOnOwnHide) await recheckMaker(sql, el.byFid);
+      // The takes that copied this picture, anyone's, are hidden with it (Nate, 2026-11-27: the follow-up to #255).
+      if (el.type === 'image') await hideReachesTakes(sql, el.elementId, fid, 'author').catch((e) => console.error('image hide: hiding the takes failed', (e as Error).name));
     } else {
       if (el.status !== 'hidden') return NextResponse.json({ hidden: false });
       const [last] = await sql`select role from studio.removal_log where element_id = ${el.elementId} and step in ('hidden', 'unhidden') order by at desc limit 1`;
@@ -54,6 +57,8 @@ export async function POST(request: Request, { params }: Ctx) {
         await tx`insert into studio.removal_log ${tx({ element_id: el.elementId, step: 'restored_public', by_fid: fid, role: 'author' })}`;
         await tx`insert into studio.removal_log ${tx({ element_id: el.elementId, step: 'unhidden', by_fid: fid, role: 'author' })}`;
       });
+      // The takes their own hide hid come back with it (not those hidden or reported for themselves, nor a moderator's).
+      if (el.type === 'image') await unhideReachesTakes(sql, el.elementId, fid, 'author').catch((e) => console.error('image unhide: bringing the takes back failed', (e as Error).name));
     }
     // A hide changes what is waiting: the moderator's push, after the answer, at most one an hour.
     if (hide !== false) after(() => alertReports(sql).then(() => undefined, () => undefined));

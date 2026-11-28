@@ -15,7 +15,8 @@ import { onChain, type OnChain, type Reader } from './chain';
 import { hintsFor, linkedFiles, linkedPages, readRules, type LinkedPicture } from './rules';
 import { basescanAddress, blueskyProfile, farcasterProfile, lensProfile, poidhAccount, tokenUriHref } from './links';
 import { isSocialPerson, isWalletPerson, socialAccountOf, walletAccountOf } from '../people';
-import { isKind, isLabel, LABELS, type ClaimCard, type EntryCard, type Kind, type NotEnteredCard, type LabelKey, type Marks, type ReviewView } from './types';
+import { isKind, isLabel, LABELS, type ClaimCard, type EntryCard, type InlineView, type Kind, type LabelKey, type Marks, type NotEnteredCard, type PostSlot, type ReviewView } from './types';
+import { postRefsIn, postView, profilesByAddress, storedRef } from './inline';
 
 /**
  * /admin/bounty's answers (owner, 2026-11-23; branch bounty-review). Admins only: everyone else gets 404 before
@@ -334,4 +335,66 @@ export async function claimPictureFor(fid: number | null, claimParam: string | n
   if (!claim.uri) return { status: 404, error: 'This claim names no picture' };
   const pic = await deps.picture(claim.uri);
   return pic ? { status: 200, jpeg: pic.jpeg } : { status: 502, error: 'Picture not readable' };
+}
+
+/** Run `fn` over `items`, a few at a time (the networks are asked politely). */
+async function inBatches<T, R>(items: T[], n: number, fn: (item: T) => Promise<R>): Promise<R[]> {
+  const out: R[] = new Array(items.length);
+  let next = 0;
+  await Promise.all(Array.from({ length: Math.min(n, items.length) }, async () => {
+    while (next < items.length) {
+      const i = next++;
+      out[i] = await fn(items[i]);
+    }
+  }));
+  return out;
+}
+
+/**
+ * The live part of the page (owner, 2026-11-27; the principle 6 exception for /admin/bounty): each claimer's Farcaster
+ * profile (by their address), the posts each claim's description links, and the posts each entry's maker added, read
+ * from their networks now (src/lib/review/inline.ts; 5 minutes in memory, never stored). 404 unless an admin, before
+ * anything is read.
+ */
+export async function inlineView(sql: Sql | null, fid: number | null, opts: { reader?: Reader; entriesOf?: EntriesOf; fetcher?: typeof fetch } = {}): Promise<Answer<InlineView>> {
+  if (!isAdmin(fid)) return { status: 404, body: { error: 'Not found' } };
+  if (!sql) return { status: 503, body: { error: 'Not available here' } };
+  const f = opts.fetcher ?? fetch;
+  let chainRead: OnChain | null = null;
+  try {
+    chainRead = await onChain({ reader: opts.reader });
+  } catch {
+    chainRead = null;
+  }
+  const claims: InlineView['claims'] = {};
+  let farcasterNote: string | null = null;
+  if (chainRead) {
+    const { profiles, note } = await profilesByAddress(chainRead.claims.map((c) => c.issuer), f);
+    farcasterNote = note;
+    const posts = await inBatches(chainRead.claims, 4, async (c) => inBatches(postRefsIn(c.description), 2, (ref) => postView(ref, f)));
+    chainRead.claims.forEach((c, i) => {
+      claims[claimSubject(c.id, chainRead!.bounty.id)] = { profile: profiles.get(c.issuer) ?? null, posts: posts[i] };
+    });
+  }
+  const st = await (opts.entriesOf ?? standing)(sql);
+  const ids = st.entries.map((e) => e.versionId);
+  type Stored = { version_id: string; network: string; post_id: string; url: string };
+  let rows: Stored[] = [];
+  if (ids.length) {
+    try {
+      rows = [...(await sql<Stored[]>`select version_id::text, network, post_id, url from studio.version_posts where version_id in ${sql(ids)} order by added_at, id`)];
+    } catch (e) {
+      if (!missing(e)) throw e;
+    }
+  }
+  const entries: InlineView['entries'] = {};
+  const byVersion = new Map<string, Stored[]>();
+  for (const r of rows) byVersion.set(r.version_id, [...(byVersion.get(r.version_id) ?? []), r]);
+  const entryPosts = await inBatches(ids, 4, async (v) => {
+    const refs = (byVersion.get(v) ?? []).slice(0, 3).map((r) => storedRef(r.network, r.post_id, r.url)).filter((r): r is NonNullable<typeof r> => Boolean(r));
+    return inBatches(refs, 2, (ref) => postView(ref, f)) as Promise<PostSlot[]>;
+  });
+  ids.forEach((v, i) => (entries[v] = { posts: entryPosts[i] }));
+  if (!farcasterNote && [...Object.values(entries), ...Object.values(claims)].some((x) => x.posts.some((p) => !p.ok && /Neynar key/.test(p.why)))) farcasterNote = 'Farcaster posts and profiles can’t be read on this deployment (no Neynar key).';
+  return { status: 200, body: { claims, entries, farcasterNote, readAt: new Date().toISOString() } };
 }

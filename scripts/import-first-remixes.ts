@@ -8,6 +8,8 @@
  * With --launch (2026-11-06, lane B): the owner's ten publishable first remixes from the drafts' recipes
  * (first-remixes/recipes.json, branch challenge-styles), dry run by default, --apply --confirm-owner-go to publish;
  * see scripts/lib/launch-first-remixes.ts for its gates.
+ * To add more of the owner's Midjourney pictures as bases while the challenge runs (2026-11-27), from a folder of these
+ * recipes: scripts/add-starting-points.ts --dir=<folder> (dry run; --apply --confirm-owner-go publishes).
  *
  *   npx tsx --conditions=react-server scripts/import-first-remixes.ts --dir=<folder>
  *
@@ -101,7 +103,7 @@ if (import.meta.url === `file://${process.argv[1]}` && process.argv.includes('--
 } else if (import.meta.url === `file://${process.argv[1]}`) {
   const dir = process.argv.slice(2).find((a) => a.startsWith('--dir='))?.slice(6);
   if (process.argv.includes('--apply')) {
-    console.log('Refused: --apply publishes only with --launch (the launch picks; scripts/lib/launch-first-remixes.ts). See docs/proposals/challenge-first-remixes.md for the gates.');
+    console.log('Refused: --apply publishes only with --launch (the launch picks; scripts/lib/launch-first-remixes.ts), or from a folder with scripts/add-starting-points.ts. See docs/proposals/challenge-first-remixes.md for the gates.');
     process.exit(1);
   }
   if (!dir || !existsSync(dir)) {
