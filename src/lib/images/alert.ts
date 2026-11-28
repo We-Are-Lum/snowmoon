@@ -1,9 +1,10 @@
 import 'server-only';
 import type postgres from 'postgres';
 import { IMAGES } from '../config';
+import { storyboardReportsWaiting } from '../voice/moderation';
 
 /**
- * Report alerts (owner, 2026-10-09): when an image is reported or hidden, an ntfy push to
+ * Report alerts (owner, 2026-10-09): when an image (or, since 2026-11-23, a published storyboard) is reported or hidden, an ntfy push to
  * SNOWMOON_ALERT_URL saying only "Snowmoon: N reports waiting". No image, prompt, FID, name, URL
  * or reason; no header but Content-Type. At most one per IMAGES.alertEveryMinutes across every
  * server: the send time is claimed in studio.alert_state (migration 0010) in one statement, so two
@@ -24,7 +25,8 @@ export async function reportsWaiting(sql: Sql): Promise<number> {
     select count(*)::int as n from studio.removal_log l join queued q on q.element_id = l.element_id
     where l.step = 'reported' and l.at > coalesce(
       (select max(d.at) from studio.removal_log d where d.element_id = l.element_id and d.step = 'dismissed'), '-infinity')`;
-  return r?.n ?? 0;
+  // Published storyboards' reports wait in the same count (Nate, 2026-11-23); the push still says only the number.
+  return (r?.n ?? 0) + (await storyboardReportsWaiting(sql));
 }
 
 export const alertBody = (n: number) => `Snowmoon: ${n} reports waiting`;

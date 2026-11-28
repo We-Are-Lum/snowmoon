@@ -1,5 +1,5 @@
 import 'server-only';
-import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { local } from './store';
@@ -11,7 +11,8 @@ import { local } from './store';
  * /api/voice/public/<key> (VOICE_TEST_ON only). Which bucket, and whether the readers' key may write under
  * storyboards/, is Nate's to confirm before publishing is switched on (VOICE.publish).
  */
-export const PUBLIC_KEY = /^storyboards\/[0-9a-f-]{36}\/[a-z0-9-]{1,40}-[0-9a-f]{64}\.(mp3|png|jpg)$/;
+// Takes (Nate, 2026-11-26) under takes/<publication id>/, as storyboards are.
+export const PUBLIC_KEY = /^(storyboards|takes)\/[0-9a-f-]{36}\/[a-z0-9-]{1,40}-[0-9a-f]{64}\.(mp3|png|jpg)$/;
 const PUBLIC_NEED = ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET', 'R2_IMAGES_PUBLIC_URL'];
 const contentType = (key: string) => (key.endsWith('.mp3') ? 'audio/mpeg' : key.endsWith('.png') ? 'image/png' : 'image/jpeg');
 export const publicStoreReady = () => Boolean(local()) || PUBLIC_NEED.every((k) => process.env[k]);
@@ -31,6 +32,25 @@ export async function putPublic(key: string, bytes: Uint8Array): Promise<void> {
     return;
   }
   await r2().send(new PutObjectCommand({ Bucket: process.env.R2_BUCKET!, Key: key, Body: bytes, ContentType: contentType(key), CacheControl: 'public, max-age=300' }));
+}
+
+/** A public file's bytes (to keep a hidden storyboard's files privately), or null if it isn't there. */
+export async function getPublic(key: string): Promise<Uint8Array | null> {
+  if (!PUBLIC_KEY.test(key)) return null;
+  const dir = local();
+  if (dir) {
+    try {
+      return new Uint8Array(readFileSync(path.join(dir, 'public', key)));
+    } catch {
+      return null;
+    }
+  }
+  try {
+    const out = await r2().send(new GetObjectCommand({ Bucket: process.env.R2_BUCKET!, Key: key }));
+    return out.Body ? new Uint8Array(await out.Body.transformToByteArray()) : null;
+  } catch {
+    return null;
+  }
 }
 
 export async function deletePublic(key: string): Promise<void> {

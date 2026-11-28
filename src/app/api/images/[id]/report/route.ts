@@ -1,4 +1,5 @@
 import { after, NextResponse } from 'next/server';
+import { hideReachesTakes } from '~/lib/voice/take-hide';
 import { revalidatePath } from 'next/cache';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
@@ -9,6 +10,7 @@ import { REASONS } from '~/lib/images/reasons';
 import { moveToPrivate } from '~/lib/images/store';
 import { recheckMaker } from '~/lib/checks/decisions';
 import { hideReachesChapterPictures } from '~/lib/chapter-pictures/after-hide';
+import { reportsToday } from '~/lib/voice/moderation';
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -34,8 +36,8 @@ export async function POST(request: Request, { params }: Ctx) {
   const text = typeof note === 'string' ? note.trim().slice(0, 280) : '';
   const [mine] = await sql`select 1 from studio.removal_log where element_id = ${el.elementId} and by_fid = ${fid} and step = 'reported' limit 1`;
   if (mine) return NextResponse.json({ reported: true });
-  const [day] = await sql`select count(*)::int as n from studio.removal_log where by_fid = ${fid} and step = 'reported' and at > now() - interval '1 day'`;
-  if (day.n >= IMAGES.reportsPerDay) return NextResponse.json({ error: `You can report ${IMAGES.reportsPerDay} images a day` }, { status: 429 });
+  // One daily limit for images and published storyboards together (Nate, 2026-11-23).
+  if ((await reportsToday(sql, fid)) >= IMAGES.reportsPerDay) return NextResponse.json({ error: `You can report ${IMAGES.reportsPerDay} images a day` }, { status: 429 });
   await sql`insert into studio.removal_log ${sql({ element_id: el.elementId, step: 'reported', by_fid: fid, role: 'reader', reason, note: text || null })}`;
   // A reported account is checked again at its next Generate or publish (owner, 2026-11-04).
   await recheckMaker(sql, el.byFid);
@@ -50,6 +52,7 @@ export async function POST(request: Request, { params }: Ctx) {
     revalidatePath('/images');
     revalidatePath(el.type === 'image' ? `/image/${id}` : '/images/designs', el.type === 'image' ? undefined : 'layout');
     await hideReachesChapterPictures(sql, el.elementId);
+    await hideReachesTakes(sql, el.elementId, 0, 'rule').catch((e) => console.error('report: hiding the takes failed', (e as Error).name));
   }
   // The moderator's push ("Snowmoon: N reports waiting", nothing else), after the answer; never fails the report.
   after(() => alertReports(sql).then(() => undefined, () => undefined));

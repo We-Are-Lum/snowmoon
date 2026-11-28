@@ -8,6 +8,9 @@ import { presetChoices } from '~/lib/voice/presets';
 import { hasVoiceConsent, voiceConsentReread, voiceConsentWording } from '~/lib/voice/consent';
 import { fundedFor, purgeOldAsks, today } from '~/lib/voice/costs';
 import { latestReading, myDrafts } from '~/lib/voice/drafts';
+import { isAdmin } from '~/lib/admins';
+import { cardTakes } from '~/lib/voice/takes';
+import { takesOn } from '~/lib/voice/publish-deps';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,6 +53,10 @@ export async function GET(request: Request) {
       },
       drafts: sql ? (await myDrafts(sql, who.fid)).map((d) => ({ id: d.id, label: d.kind === 'performance' && (d.recipe as { check?: unknown }).check ? takeLabel(d.recipe as { spoken?: Spoken }) : null, improvised: isImprovised(d.recipe as { spoken?: Spoken }), sentences: isImprovised(d.recipe as { spoken?: Spoken }) ? spokenSentences(d.recipe as { spoken?: Spoken }) : null, kind: d.kind, speechId: d.speech_id, presetId: d.preset_id, madeAt: d.made_at, publishedAt: d.published_at, recipe: d.recipe, audio: d.audio })) : [],
       readings,
+      // The speech card's "Make the AI reading" (admins only, Nate 2026-11-26); the reading route decides it again.
+      canMakeReadings: isAdmin(who.fid),
+      // People's takes on the challenge cards (PR 6): one a person a speech, newest first.
+      takes: sql && takesOn() ? await cardTakes(sql).catch(() => ({})) : {},
     },
     { headers: noStore },
   );

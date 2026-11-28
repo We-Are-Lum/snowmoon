@@ -464,6 +464,15 @@ add({
         if (/<textarea\b/.test(text)) problems.push(`${file}: the reference search box must be a single-line input`);
         continue;
       }
+      if (file.endsWith('components/person-number-field.tsx')) {
+        // An admin's box for a person's number (the Ephelion free picture's reset, Nate 2026-11-27): sent to our server,
+        // kept in the reset's log, never published.
+        for (const [what, re] of [['sent to us to reset their free picture', /Sent to us to reset their free picture/], ['kept in the log', /kept in the reset&rsquo;s log with who did it/], ['never published', /Never published\./], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the person number box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the person number box must not send its text anywhere itself`);
+        if (/<textarea\b/.test(text)) problems.push(`${file}: the person number box must be a single-line input`);
+        continue;
+      }
       if (file.endsWith('components/tx-hash-field.tsx')) {
         // The balance screen's payment hash (owner, 2026-10-15): sent to our server to look up on Base, never published by us.
         for (const [what, re] of [['sent to us to look up on Base', /Sent to us to look up on Base/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
@@ -1697,6 +1706,48 @@ add({
   plant: (c) => {
     c.skipped = false;
     c.items.push({ id: 'planted', page: 200, file: 200 });
+  },
+});
+
+add({
+  id: 'P5k',
+  principle: 5,
+  name: "a hidden storyboard's page shows only the notice, and its files are not public (moderation, 2026-11-23)",
+  load: async () => {
+    const url = process.env.STUDIO_DATABASE_URL;
+    if (!url) return { skipped: true, items: [] as { id: string; page: number; notice: boolean; keysInPage: number; filesPublic: number }[] };
+    const sql = postgres(url, { prepare: false, max: 1 });
+    try {
+      const [col] = await sql`select 1 from information_schema.columns where table_schema = 'studio' and table_name = 'voice_publications' and column_name = 'hidden_at'`;
+      if (!col) return { skipped: true, items: [] };
+      const rows = await sql<{ id: string; files: { key: string }[] }[]>`select id, files from studio.voice_publications where hidden_at is not null and taken_down_at is null limit 20`;
+      // The public bucket's address: production's, or the local test copy's route.
+      const local = /^http:\/\/(localhost|127\.0\.0\.1)/.test(BASE);
+      const base = (process.env.R2_IMAGES_PUBLIC_URL ?? (local ? `${BASE}/api/voice/public` : 'https://pictures.snowmoon.party')).replace(/\/$/, '');
+      const items = [];
+      for (const r of rows) {
+        const res = await fetch(`${BASE}/storyboard/spoken/${r.id}`);
+        const html = await res.text();
+        let filesPublic = 0;
+        for (const f of r.files) if ((await fetch(`${base}/${f.key}`, { method: 'HEAD' })).status === 200) filesPublic++;
+        items.push({ id: r.id, page: res.status, notice: /This storyboard was hidden by a moderator\./.test(html), keysInPage: r.files.filter((f) => html.includes(f.key)).length, filesPublic });
+      }
+      return { skipped: false, items };
+    } finally {
+      await sql.end();
+    }
+  },
+  run: ({ skipped, items }) => {
+    if (skipped) return ['skipped: no database, or the moderation migration is not applied there'];
+    return (items as { id: string; page: number; notice: boolean; keysInPage: number; filesPublic: number }[]).flatMap((i) => [
+      ...(i.page === 200 && i.notice ? [] : [`hidden storyboard ${i.id}: its page doesn't show the notice (${i.page})`]),
+      ...(i.keysInPage === 0 ? [] : [`hidden storyboard ${i.id}: its page still names ${i.keysInPage} of its files`]),
+      ...(i.filesPublic === 0 ? [] : [`hidden storyboard ${i.id}: ${i.filesPublic} of its files are still public`]),
+    ]);
+  },
+  plant: (c) => {
+    c.skipped = false;
+    c.items.push({ id: 'planted', page: 200, notice: true, keysInPage: 0, filesPublic: 1 });
   },
 });
 

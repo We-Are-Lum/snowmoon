@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { hideReachesTakes } from '~/lib/voice/take-hide';
 import { revalidatePath } from 'next/cache';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
@@ -55,6 +56,7 @@ export async function POST(request: Request) {
     // The maker is checked again at their next Generate or publish (owner, 2026-11-04).
     await recheckMaker(sql, el.byFid);
     await hideReachesChapterPictures(sql, el.elementId);
+    await hideReachesTakes(sql, el.elementId, fid, 'moderator').catch((e) => console.error('admin hide: hiding the takes failed', (e as Error).name));
     revalidatePath('/references', 'layout');
     revalidatePath(`/image/${b.id}`);
     return NextResponse.json({ done: 'hidden' });

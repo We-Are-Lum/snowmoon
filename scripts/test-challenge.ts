@@ -37,6 +37,7 @@ import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { execFileSync } from 'node:child_process';
 import { ADMINS, CHALLENGE, IMAGES } from '../src/lib/config';
+import { LANDING_WORDING as LW } from '../src/lib/challenge/landing-wording';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -131,6 +132,7 @@ CHALLENGE.pictureEntries = false;
   check('committed default looks: each character\'s first base (its current default)', CHALLENGE.characters.every((c) => D[c] === (B[c][0] ?? null)), JSON.stringify(D));
   check('committed first remixes: version ids, never a base', CHALLENGE.characters.every((c) => F[c].every((id) => uuid.test(id) && !B[c].includes(id))), JSON.stringify(F));
   check('committed first remixes: within the limit (firstRemixesProblems finds nothing)', R.firstRemixesProblems().length === 0, R.firstRemixesProblems().join('; '));
+  check('Deluin\'s five bases include the ledge and the game board, and neither is a first remix', ['ced288e6-1c3f-4d58-bb4c-839ef774bb71', '42588f48-6673-478e-ab54-8e30372743c0'].every((id) => B.deluin.includes(id) && !F.deluin.includes(id)) && B.deluin.length === 5);
   for (const c of CHALLENGE.characters) { B[c] = []; F[c] = []; D[c] = null; }
 }
 // The tests below are the challenge once the owner has opened it.
@@ -312,10 +314,18 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
 }
 
 // --- The bases (owner, 2026-11-03: three; 2026-11-04 after the restart: one per character) -----------------------
+// Garance's feedback (owner, 2026-11-26): a version that isn't a starting point says so on its Remix, and the admins'
+// activity page finds bases named by a version id (the committed ones are).
+{
+  const page = read('src/app/references/designs/[id]/page.tsx');
+  check('a version that isn\'t a base: its button reads "Choose a starting point" and its note says why', /remixLabel=\{notStart \? HUB\.chooseStart : undefined\}/.test(page) && /notStart \? HUB\.notStartingPoint\(callName\)/.test(page) && /const notStart = picturesOpen && !isBase;/.test(page));
+  check('the note names the character', LW.notStartingPoint('Deluin') === 'This version isn’t a starting point. Choose one of Deluin’s on the challenge page.' && LW.chooseStart === 'Choose a starting point');
+  check('admin activity: a base is found by its element id or a version\'s id', /e\.id::text = \$\{id\} or e\.id = \(select x\.element_id from studio\.element_versions x where x\.id::text = \$\{id\}\)/.test(read('src/lib/admin-activity.ts')));
+}
 {
   const committedMax = CHALLENGE.maxBases;
-  check('committed: three bases for every character (owner, 2026-11-11), three at most', committedMax === 3 && CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join() === 'zei:3,gladias:3,bai:3,seila:3,deluin:3,mu:3,ephelion:3', CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join());
-  check('committed: at most three bases are used for Zei, as for Deluin', R.basesOf('zei', { zei: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 3 && R.basesOf('deluin', { deluin: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 3);
+  check('committed: three bases for every character (owner, 2026-11-11), five for Deluin (owner, 2026-11-26), five at most', committedMax === 5 && CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join() === 'zei:3,gladias:3,bai:3,seila:3,deluin:5,mu:3,ephelion:3', CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join());
+  check('committed: at most three bases are used for Zei, five for Deluin (owner, 2026-11-26)', R.basesOf('zei', { zei: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 3 && R.basesOf('deluin', { deluin: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444', '55555555-5555-4555-8555-555555555555', '66666666-6666-4666-8666-666666666666'] }).length === 5);
   proof('a fourth base for a character is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), mu: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 1);
   check('no look is called canonical or official (the word is "current default")', !/\b(canonical|official)\b/i.test(read('src/lib/config.ts')) && !/\b(canonical|official)\b/i.test(read('src/lib/challenge/landing-wording.ts')));
   // The rule itself works for any number; the checks below exercise it with three.
@@ -1598,7 +1608,7 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
     const NOTE = 'Pictures made before then are for trying it out, and can’t be entered.';
     check('F8 before the open date, /challenge\'s line ends with the owner\'s note; on the open date it is gone', LW.LANDING_BEFORE_OPEN === NOTE && LW.LANDING_WORDING.line('before').endsWith(`and close ${R.shortDateText('closes')}. ${NOTE}`) && !LW.LANDING_WORDING.line('open').includes(NOTE) && !LW.LANDING_WORDING.line('closed').includes(NOTE));
     proof('F8 a note that stays after the open date is caught', ((ph: 'before' | 'open') => `${LW.LANDING_WORDING.line(ph)} ${NOTE}`)('open').includes(NOTE) && !LW.LANDING_WORDING.line('open').includes(NOTE));
-    check('F8 the sheet landing says what /challenge says before the open date, starting at "Entries open" (owner, 2026-11-07)', read('src/app/references/designs/[id]/page.tsx').includes("note={picturesOpen && phase() === 'before' ? HUB.sheetLine('before') : undefined}") && read('src/components/challenge-remix-landing.tsx').includes('{p.note ?? L.remixNote(p.name)}') && LW.LANDING_WORDING.sheetLine('before') === `Entries open ${R.shortDateText('opens')} and close ${R.shortDateText('closes')}. ${NOTE}` && LW.LANDING_WORDING.line('before').startsWith('Pick a character. '));
+    check('F8 the sheet landing says what /challenge says before the open date, starting at "Entries open" (owner, 2026-11-07)', read('src/app/references/designs/[id]/page.tsx').includes("note={picturesOpen && phase() === 'before' ? HUB.sheetLine('before') : notStart ? HUB.notStartingPoint(callName) : undefined}") && read('src/components/challenge-remix-landing.tsx').includes('{p.note ?? L.remixNote(p.name)}') && LW.LANDING_WORDING.sheetLine('before') === `Entries open ${R.shortDateText('opens')} and close ${R.shortDateText('closes')}. ${NOTE}` && LW.LANDING_WORDING.line('before').startsWith('Pick a character. '));
     check('F8 Submit\'s line (from the open date) for a picture published before it, for its maker, with "Remix it" to its remix screen', `${PW.beforeOpen.text}${PW.beforeOpen.link}${PW.beforeOpen.after}` === 'This picture was made before entries opened, so it can’t be entered. Remix it to make a new one.' && /beforeOpen: CHALLENGE\.pictureEntries && phase\(now\) === 'open' && Date\.parse\(p\.createdAt\) < Date\.parse\(CHALLENGE\.dates\.opens\)/.test(read('src/lib/challenge/picture-view.ts')) && E.SUBMIT_WORDING.beforeOpen === `${PW.beforeOpen.text}${PW.beforeOpen.link}${PW.beforeOpen.after}` && /known && mine && v\.beforeOpen && \(/.test(pic));
     check('F8 a maker can remix their own picture (the make route refuses no one for being its maker)', !/src\.byFid === fid|byFid === fid/.test(read('src/app/api/challenge/make/route.ts')));
     check('F9 no "· Trial" on a challenge character\'s sheet page; other sheets keep it (owner, 2026-11-07)', read('src/app/references/designs/[id]/page.tsx').includes("{!(d.kind === 'character' && isChallengeCharacter(d.entity)) && <> · {IMAGES.label}</>}"));

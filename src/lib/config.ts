@@ -692,7 +692,9 @@ export const CHALLENGE = {
     gladias: ['68364375-0f33-46fd-9755-2fd2b551198a', '8a491b21-2d32-4673-946c-cff28728088b', 'd5b4c137-71d6-430d-84e1-9ec4044568dc'],
     bai: ['110d5973-31c2-4d96-9a88-5838d8a6d868', '9ef62849-538e-4c7c-af36-0e069c9541d9', 'fd583b12-62f7-47d7-a247-740bf87528d8'],
     seila: ['1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba', 'ca078691-677d-4efb-bfa7-50de6c83afd8', '2c597a57-949d-49f8-9c55-e84ad1b26d02'],
-    deluin: ['75a94420-df70-4f43-a3a6-4c2b571e72ab', 'a69718e0-89d9-465f-a783-d4b98aefbe85', '0a126522-d3d5-4e12-a674-18f49dbffbed'],
+    // Deluin's fourth and fifth (owner, 2026-11-26, from @garance's feedback): two of the owner's published Deluin versions,
+    // "Deluin on the ledge" and "Deluin at the game board" (Midjourney, brought in), by version id as publish-bases lists them.
+    deluin: ['75a94420-df70-4f43-a3a6-4c2b571e72ab', 'a69718e0-89d9-465f-a783-d4b98aefbe85', '0a126522-d3d5-4e12-a674-18f49dbffbed', 'ced288e6-1c3f-4d58-bb4c-839ef774bb71', '42588f48-6673-478e-ab54-8e30372743c0'],
     mu: ['15a9af1d-9eef-4e25-be57-738d9823dd74', 'cd616bd9-55bd-4fdd-9c27-56bd7dcc061c', '6f5cd043-39a4-4458-bd42-9a33518f01cf'],
     // Lord Ephelion's three (owner-approved 2026-11-11), published 2026-11-12: A, B, C.
     ephelion: ['589fd5cb-63a0-4c19-8e1d-5c7704d0262c', 'f913bec7-cbae-4ab5-9865-6c7e4ce9dc7f', '082be0d1-8864-4a76-a5ff-a750d3a6cdc4'],
@@ -719,10 +721,10 @@ export const CHALLENGE = {
     // Lord Ephelion: look A (picks-ephelion-2026-11-11.json, current_default), published 2026-11-12.
     ephelion: '589fd5cb-63a0-4c19-8e1d-5c7704d0262c',
   } as Record<string, string | null>,
-  /** How many bases each character has (owner, 2026-11-11): three for every character. */
-  baseCount: { zei: 3, gladias: 3, bai: 3, seila: 3, deluin: 3, mu: 3, ephelion: 3 } as Record<string, number>,
-  /** The most bases any character may have. */
-  maxBases: 3,
+  /** How many bases each character has (owner, 2026-11-11): three for every character; Deluin five (owner, 2026-11-26). */
+  baseCount: { zei: 3, gladias: 3, bai: 3, seila: 3, deluin: 5, mu: 3, ephelion: 3 } as Record<string, number>,
+  /** The most bases any character may have (five since 2026-11-26, for Deluin). */
+  maxBases: 5,
   /**
    * The owner's first remixes (owner, 2026-11-04): up to CHALLENGE.firstRemixesShown per character, shown on
    * /challenge under the heading "First remixes by @naaate", below its bases, in the order given here. They are not
@@ -733,13 +735,15 @@ export const CHALLENGE = {
    */
   // Published by the owner's run of scripts/import-first-remixes.ts --launch, 2026-11-06. Deluin: the two the owner picked
   // on 2026-11-04 (hood and mug, the game board). The ink ledge (ced288e6-1c3f-4d58-bb4c-839ef774bb71) is published on its
-  // own page but not listed: firstRemixesShown is 2, and firstRemixesProblems refuses a longer list.
+  // own page but not listed: firstRemixesShown is 2, and firstRemixesProblems refuses a longer list. 2026-11-26: the game
+  // board (42588f48-…) and the ink ledge became Deluin bases (owner), so the game board left this list: a base is never a
+  // first remix.
   firstRemixes: {
     zei: ['70c0a8c3-41a5-43ae-83f4-4b0ddfa9ed51'],
     gladias: ['f07a2f79-9787-4f9d-bb90-5b7ea94ad117', 'd4d8bf9f-0ca9-4a62-871b-0aa10a1fbc25'],
     bai: [],
     seila: ['399836db-6cd9-49e3-9302-77686b2a1161', 'b9983b8c-cde4-40c1-8601-f3f4702d1742'],
-    deluin: ['fb80b4b1-bd9f-4fd1-87ef-4e8003347aaf', '42588f48-6673-478e-ab54-8e30372743c0'],
+    deluin: ['fb80b4b1-bd9f-4fd1-87ef-4e8003347aaf'],
     mu: ['2f29b048-0e82-4d87-8193-9cfffedc9123', 'bb08afdb-f77f-4e07-b451-756460922714'],
     ephelion: [],
   } as Record<string, readonly string[]>,
@@ -1206,9 +1210,24 @@ export const VOICE = {
    * /storyboard/spoken/<id> page is "not found" (the local tests turn it on with VOICE_TEST_ON, stand-ins only).
    */
   publish: false,
+  /**
+   * Entering takes in the Ephelion challenge (Nate, 2026-11-26: "people should enter and share takes in this round"):
+   * publishing on for takes only, for those the voice switch lets in (admins and the testers, voiceAllowed); storyboards
+   * stay off (publish, above). The SQL is applied (0054_voice_takes.sql, 2026-11-26/27) and the legal lines reread.
+   */
+  publishTakes: true,
   /** The team's invented speeches (Nate, 2026-11-22): admins only, and not to be published until Nate says. */
   publishInvented: false,
   board: { maxShots: 12, maxTriesPerShot: 3, descriptionMaxChars: 600 },
+  /**
+   * Storyboard pictures for everyone but admins (Nate, 2026-11-23): their own allowance, apart from the images' free
+   * pictures, "20 storyboard pictures a person a day on any model, a GPT picture counting as 1, in their own allowance,
+   * and a $20-a-day storyboard pool. Review both after the challenge's first three days." Counted in studio.image_asks
+   * under pool 'storyboard' and paid as funded 'storyboard' in studio.image_costs (0053_storyboard_pictures.sql), per UTC
+   * day; never in the images' 10 a day or their free cap, and images never in these. Admins stay on the admins' pool.
+   * Used only once realPictures lets everyone in (it is 'admins' today).
+   */
+  pictures: { perPersonPerDay: 20, dailyPoolUsd: 20 },
   provider: 'ElevenLabs',
   models: {
     /** Speech-to-speech ("Voice Changer"). */

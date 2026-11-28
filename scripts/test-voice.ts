@@ -20,8 +20,8 @@
  * (scripts/lib/elevenlabs-stub.ts). No network, no spending.
  */
 import path from 'node:path';
-import { createHash, randomBytes } from 'node:crypto';
-import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
+import { createHash, randomBytes, randomUUID } from 'node:crypto';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import os from 'node:os';
 import { PGlite } from '@electric-sql/pglite';
@@ -71,7 +71,7 @@ Object.assign(process.env, {
   VOICE_TEST_STORE: STORE,
   STUDIO_DATABASE_URL: `postgres://studio_writer@127.0.0.1:${PG_PORT}/postgres`,
   VOICE_TEST_ON: '1',
-  VOICE_TEST_FID: `${NATE},${GARANCE},${STRANGER}`,
+  VOICE_TEST_FID: `${NATE},${GARANCE},${STRANGER},6852`, // 6852: the first tester (VOICE.testers; check T), signed in for the reading route's admins-only check
   ELEVENLABS_BASE_URL: `http://127.0.0.1:${STUB_PORT}`,
   VOICE_TICKET_SECRET: 'test-voice-ticket-secret-0123456789',
 });
@@ -79,7 +79,7 @@ delete process.env.VERCEL;
 delete process.env.VERCEL_ENV;
 delete process.env.ELEVENLABS_API_KEY;
 
-const { VOICE } = await import('../src/lib/config');
+const { IMAGES, VOICE } = await import('../src/lib/config');
 const { voiceAllowed, voiceTestOn, elevenLabsBase } = await import('../src/lib/voice/flag');
 type Shot = import('../src/lib/voice/board').Shot;
 const { speeches, speechById } = await import('../src/lib/voice/speech');
@@ -126,13 +126,45 @@ const sharpPng = async () => (await import('sharp')).default({ create: { width: 
     // switch doesn't let in still gets the not-found.
     const nf = readFileSync(path.join(ROOT, 'src/app/ephelion/page.tsx'), 'utf8');
     const si = readFileSync(path.join(ROOT, 'src/components/ephelion-sign-in.tsx'), 'utf8');
-    const vr = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+    const vr = (readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8') + readFileSync(path.join(ROOT, 'src/components/voice-recorder-core.tsx'), 'utf8'));
     const { EPHELION_SIGN_IN_LINE } = await import('../src/lib/voice/ephelion-sign-in-line');
     check('E. signed out, /ephelion shows "Sign in to try the Lord Ephelion challenge." with the sign-in, in the page; signed in and not let in, the not-found', EPHELION_SIGN_IN_LINE === 'Sign in to try the Lord Ephelion challenge.' && /<SignInChoices\b/.test(si) && /EPHELION_SIGN_IN_LINE/.test(si) && /signedOut=\{<EphelionSignIn \/>\}/.test(nf) && /fallback=\{<NotFound \/>\}/.test(nf) && vr.indexOf("auth.kind === 'signed-out' && signedOut") > 0 && vr.indexOf("auth.kind === 'signed-out' && signedOut") < vr.indexOf("if (!admin || status === 'none') return <>{fallback}</>;"));
     // Nate, 2026-11-25: /ephelion answers 200 (link previews and casts load), never the page-level notFound(); the four
     // sign-in buttons carry the site's own sign-in style (the full size, menu-signin); "Draft wording" over the consent only
     // while the version shown has no reread on record.
-    check('E. /ephelion answers 200: its page draws the voice page, with no notFound() and no not-found.tsx', !/notFound\(\)/.test(nf) && /<VoiceRecord fallback=\{<NotFound \/>\} signedOut=\{<EphelionSignIn \/>\}/.test(nf) && !existsSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx')));
+    check('E. /ephelion answers 200: its page draws the landing, with no notFound() and no not-found.tsx', !/notFound\(\)/.test(nf) && /<EphelionLanding fallback=\{<NotFound \/>\} signedOut=\{<EphelionSignIn \/>\}/.test(nf) && !existsSync(path.join(ROOT, 'src/app/ephelion/not-found.tsx')));
+    // Nate, 2026-11-25 (recording only; plan v3, PR 1): the landing, and "Record your own" at /ephelion/record, behind the
+    // same gate. Nothing on the landing links the guided storyboard.
+    const rec = readFileSync(path.join(ROOT, 'src/app/ephelion/record/page.tsx'), 'utf8');
+    const land = readFileSync(path.join(ROOT, 'src/components/ephelion-landing.tsx'), 'utf8');
+    const landCss = readFileSync(path.join(ROOT, 'src/styles/ephelion.css'), 'utf8');
+    check('E. /ephelion/record draws the four-step recorder behind the same gate and sign-in, answering 200', /<EphelionRecorder fallback=\{<NotFound \/>\} signedOut=\{<EphelionSignIn \/>\}/.test(rec) && !/notFound\(\)/.test(rec));
+    // The four-step recorder (Nate, 2026-11-26; plan v3, PR 2).
+    const er = readFileSync(path.join(ROOT, 'src/components/ephelion-recorder.tsx'), 'utf8');
+    const erCode = er.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+    const words = readFileSync(path.join(ROOT, 'src/lib/voice/device-words.ts'), 'utf8');
+    const shell = readFileSync(path.join(ROOT, 'src/components/app-shell.tsx'), 'utf8');
+    const shellCss = readFileSync(path.join(ROOT, 'src/styles/shell.css'), 'utf8');
+    const samplesRoute = readFileSync(path.join(ROOT, 'src/app/api/voice/samples/route.ts'), 'utf8');
+    const { RECORDER } = await import('../src/lib/voice/recorder-wording');
+    check('E. recorder: steps 1 Speech, 2 Voice, 3 Record, 4 Listen, each a button greyed until reached (2: a speech; 3: and a voice; 4: and a take)', RECORDER.steps.join() === 'Speech,Voice,Record,Listen' && /const reached = \[true, Boolean\(speech\), Boolean\(speech && picked\), Boolean\(speech && picked && take\)\];/.test(er) && /disabled=\{!can\}/.test(er) && /const can = reached\[i\]/.test(er));
+    check('E. ... ?speech= picks that speech and opens step 2 (step 3 when this device kept a voice for it)', /get\('speech'\)/.test(er) && /setSpeechId\(id\);\s*setViewing\(id\);\s*const v = keptVoice\(id\);\s*if \(v\) setVoiceKey\(v\);\s*setStep\(v \? 3 : 2\);/.test(er));
+    check('E. ... changing the speech with a take asks first, then removes the take from the device; another voice keeps it', RECORDER.changeSpeech('X') === 'Change the speech? Your take of “X” is removed from this device.' && /if \(speechId && id !== speechId && take\) return setConfirmSpeech\(id\);/.test(er) && /await removeTake\(fid, speechId\)/.test(er) && /\/\/ Another voice keeps the take/.test(er));
+    check('E. ... edited words are kept in this browser (localStorage, under the person and the speech) and no request carries them', /localStorage\.setItem\(key\(fid, speechId\)/.test(words) && /snowmoon\.ephelion\.words\.\$\{fid\}\.\$\{speechId\}/.test(words) && !erCode.split('\n').some((l) => /(authFetch|FormData|form\.set|f\.set|f\.append|JSON\.stringify)/.test(l) && /(editedWords|draftWords)/.test(l)));
+    check('E. ... the highlight is timed (no speech recognition): on or off, the size, Back a line / Forward a line, tap a sentence, scrolling pauses it with Resume', !/SpeechRecognition|webkitSpeechRecognition/.test(er) && /onWheel=\{byHand\}/.test(er) && /onTouchMove=\{byHand\}/.test(er) && /W\.paused/.test(er) && /W\.resume/.test(er) && /W\.backLine/.test(er) && /W\.forwardLine/.test(er) && /onClick=\{\(\) => recording && hl && moveTo\(i\)\}/.test(er) && /W\.smaller/.test(er) && /W\.bigger/.test(er));
+    check('E. ... a 3-second countdown, then Countdown, Recording and Stopped as their own labelled states; stopping keeps the take on the device', /const COUNTDOWN = 3;/.test(er) && /er-badge-count/.test(er) && /er-badge-rec/.test(er) && /er-badge-stop/.test(er) && /await saveTake\(fid, speech\.id, out\.blob, out\.seconds\)/.test(er));
+    check('E. ... both saves: your recording from the device\'s own copy, the converted take from your draft', /saveBlob\(take\.blob,/.test(er) && /saveBlob\(converted\.blob,/.test(er) && /\/api\/voice\/drafts\/\$\{keptFromTake\.id\}\/0/.test(er));
+    check('E. ... no Enter, Share, scene or payment on the recorder', !/Enter the challenge|>Share<|Choose his scene|USDC/.test(erCode));
+    check('E. ... the site\'s rail, top bar and assistant panel are hidden on /ephelion/record (shell-bare)', /const bare = path === '\/ephelion\/record';/.test(shell) && /\$\{bare \? ' shell-bare' : ''\}/.test(shell) && /\.shell-bare > \.topbar, \.shell-bare > \.rail/.test(shellCss));
+    check('E. ... voice samples: gated like every voice route; only an admin makes them (testers: not found); kept in the private store', /voicePerson\(request\)/.test(samplesRoute) && /if \(!isAdmin\(who\.fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404 \}\);/.test(samplesRoute) && /voice-samples\//.test(readFileSync(path.join(ROOT, 'src/lib/voice/store.ts'), 'utf8')));
+    {
+      const { PRIVACY, LEGAL, legalKey } = await import('../src/lib/legal');
+      const p3 = PRIVACY.sections.find((x) => x.n === 3)!.body.flat().join(' ');
+      check('E. ... Privacy §3 carries the edited words, as Nate reread it on 2026-11-26 (the reread record matches these words)', p3.includes('a speech you record, and its words if you edit them, until you remove them or record again, or your browser clears them (the recording is sent to us only to be converted, and we keep only its fingerprint, never the recording; words you edit are never sent)') && LEGAL.ownerReread.privacy?.words === legalKey(PRIVACY) && LEGAL.ownerReread.privacy?.on >= '2026-11-26');
+    }
+    check('E. the landing asks the gated status route, draws the not-found for anyone it doesn\'t let in, and links no storyboard', /authFetch\('\/api\/voice\/status'/.test(land) && /status === 'none'\) return <>\{fallback\}<\/>/.test(land) && !/storyboard/i.test(land.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')));
+    check('E. ... two equal buttons on one line each ("Record your own", "Listen to his speeches"), a card per speech with its own "Record your own" at step 2', /\.eph-two \{ display: grid; grid-template-columns: 1fr 1fr;/.test(landCss) && /white-space: nowrap/.test(landCss) && /status\.speeches\.map\(\(s\) =>/.test(land) && /\/ephelion\/record\?speech=\$\{encodeURIComponent\(s\.id\)\}/.test(land));
+    check('E. ... two panes from 760 px of page (Nate, 2026-11-26: the 1440 screen with the assistant panel open), by container query, not the window', /\.eph-wrap \{ container: page \/ inline-size; \}/.test(landCss) && /@container page \(min-width: 760px\) \{\s*\.eph \{ flex-direction: row;/.test(landCss) && /@container page \(min-width: 1100px\)/.test(landCss) && !/@media/.test(landCss));
     check('E. ... its sign-in uses the full size, styled by the site (menu-signin)', /<SignInChoices note=\{false\} wallet=/.test(si) && !/size="small"/.test(si));
     {
       const own = JSON.parse(readFileSync(path.join(ROOT, 'config/consent-own-voice.json'), 'utf8'));
@@ -142,7 +174,7 @@ const sharpPng = async () => (await import('sharp')).default({ create: { width: 
   check('E. a published storyboard opens itself: launch_frame, "Watch this storyboard"', SPOKEN_BUTTON === 'Watch this storyboard' && sp.button.title === SPOKEN_BUTTON && sp.button.action.type === 'launch_frame' && sp.button.action.url.endsWith('/storyboard/spoken/11111111-2222-4333-8444-555555555555'));
   const layout = readFileSync(path.join(ROOT, 'src/app/ephelion/layout.tsx'), 'utf8');
   const spoken = readFileSync(path.join(ROOT, 'src/app/storyboard/spoken/[id]/page.tsx'), 'utf8');
-  check('E. both stay noindex, and the spoken embed is set only for a live publication', /robots: \{ index: false, follow: false \}, other: embedMeta\(recordEmbed\(\)\)/.test(layout) && /return pub \? \{ robots, other: embedMeta\(spokenEmbed\(pub\.id\)\) \} : \{ robots \}/.test(spoken) && /if \(!publishOn\(\)\) return \{ robots \}/.test(spoken));
+  check('E. both stay noindex, and the spoken embed is set only for a live publication, never a hidden one', /robots: \{ index: false, follow: false \}, other: embedMeta\(recordEmbed\(\)\)/.test(layout) && /return pub && !pub\.hidden \? \{ robots, other: embedMeta\(spokenEmbed\(pub\.id\)\) \} : \{ robots \}/.test(spoken) && /if \(!publishOn\(\)\) return \{ robots \}/.test(spoken));
   {
     // React #418 (2026-11-23): the published page read MediaRecorder while rendering, so the server (none) wrote "This
     // browser can't record a video." and the browser didn't. The capability is read only after the page has loaded.
@@ -201,7 +233,7 @@ check('W. its sentences hold all its words, in order', speech.sentences.flatMap(
 check('W. it is from the book, block c13-b64, with its own label "Book", and no longer a stand-in (Nate, 2026-11-22)', !speech.standIn && speech.source.kind === 'book' && (speech.source as { block: string }).block === 'c13-b64' && speech.label.kind === 'book' && speech.label.text === 'Book');
 // The top of the page (Nate, 2026-11-22; reread word for word): the title, the intro, the picker's lines, Learn more.
 {
-  const page = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  const page = (readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8') + readFileSync(path.join(ROOT, 'src/components/voice-recorder-core.tsx'), 'utf8'));
   // The intro is drawn by EphelionIntro (src/components/ephelion-intro.tsx, 2026-11-24), word for word as reread.
   const introFile = readFileSync(path.join(ROOT, 'src/components/ephelion-intro.tsx'), 'utf8');
   check('W. the page is "The Ephelion challenge", with no "Admin trial · Draft" and no label row or "Stand-in … speeches arrive"', page.includes('<h1>The Ephelion challenge</h1>') && !/Admin trial · Draft/.test(page) && !/vr-labels/.test(page) && !/until the team&rsquo;s speeches arrive/.test(page));
@@ -273,7 +305,7 @@ check('W. numbers, case, punctuation and apostrophes compare as words', norm('4'
   check('I. each is labelled "Invented, not from the book", versioned (v2; the last five years also v3), from its source doc', inv.every((x) => x.label.text === 'Invented, not from the book' && x.version === (x.id === 'last-five-years-v3' ? 3 : 2) && x.source.kind === 'edition' && x.source.doc === file.source.googleDocId && x.label.kind === 'invented'));
   check('I. each version\'s aiHelp is set in the file (true for v2, set by Nate) and its credit follows from it, word for word', (file as unknown as { speeches: { aiHelp: unknown }[] }).speeches.every((x) => x.aiHelp === true) && inv.every((x) => x.aiHelp === true && x.credit === 'Words by the Snowmoon team, drafted with AI help (Claude, by Anthropic)' && x.label.kind === 'invented' && x.label.writers[0] === x.credit));
   check('I. ... the credit for a version without AI help is "Words by the Snowmoon team"', (JSON.parse(readFileSync(path.join(ROOT, 'config/voice-speeches.json'), 'utf8')) as { credits: { noAiHelp: string } }).credits.noAiHelp === 'Words by the Snowmoon team');
-  check('I. the picker shows each invented speech\'s credit beside "Invented, not from the book", with its version', /\$\{x\.label\.text\} · \$\{x\.credit\} · version \$\{x\.version\}/.test(readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8')));
+  check('I. the picker shows each invented speech\'s credit beside "Invented, not from the book", with its version', /\$\{x\.label\.text\} · \$\{x\.credit\} · version \$\{x\.version\}/.test((readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8') + readFileSync(path.join(ROOT, 'src/components/voice-recorder-core.tsx'), 'utf8'))));
   check('I. the spoken text is the paragraphs only: ending "With regards.", no title, no notes', inv.every((x) => x.paragraphs.at(-1) === 'With regards.' && x.sentences.at(-1)!.text === 'With regards.' && !x.paragraphs.some((p) => p === x.title || /Still open|\(worth\)|\(death\)|\(stagnation\)/.test(p))));
   check('I. the speeches are word for word the file\'s (sentence by sentence)', inv.every((x) => x.sentences.map((y) => y.text).join(' ') === file.speeches.find((f) => f.id === x.id)!.paragraphs.join(' ')));
   check('I. each has its own names: "Veridia" for the last five years, none for the other two', inv.filter((x) => x.id.startsWith('last-five-years')).every((x) => x.names.join() === 'Veridia') && inv.filter((x) => !x.id.startsWith('last-five-years')).every((x) => x.names.length === 0));
@@ -348,7 +380,7 @@ check('V. the kept draft plays the converted speech for its person', converted.l
   const jj = (await rr.json()) as { error?: string };
   const held = (await sql`select coalesce(sum(calls),0)::int n from studio.voice_costs where kind = 'reserved'`)[0].n;
   check('V. fix 7: converting the same recording again without "Convert again" is refused (409), before anything is sent or counted', rr.status === 409 && jj.error === CONVERTED_ALREADY && stub.calls.filter((c) => c.path.startsWith('/v1/speech-to-speech')).length === calls0 && (await sql`select count(*)::int n from studio.voice_asks where fid = ${NATE}`)[0].n === asks0 && held === 0, `${rr.status} ${jj.error} held ${held}`);
-  const src = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  const src = (readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8') + readFileSync(path.join(ROOT, 'src/components/voice-recorder-core.tsx'), 'utf8'));
   check('V. fix 7: the page sends again=1 only from "Convert again"', /if \(convertAgain\) form\.set\('again', '1'\);/.test(src) && /convert\(blob, seconds, null, take\.speechId, again === 'yes'\)/.test(src) && (src.match(/form\.set\('again'/g) ?? []).length === 1);
 }
 {
@@ -573,6 +605,51 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
     check('B. ... an admin reaches the paid step, on the admins\' pool (its daily cap)', made && pool === 'admin' && admin.status === 429, `${admin.status} ${pool}`);
   }
   {
+    // Storyboard pictures' own allowance and pool (Nate, 2026-11-23: 20 a person a day on any model, a GPT picture
+    // counting 1, apart from the images' 10; a $20-a-day pool). One person who is not an admin, on today's counts.
+    const L = await import('../src/lib/images/limits');
+    const P = await import('../src/lib/images/paid');
+    const { ALLOWANCE_WORDING: AW } = await import('../src/lib/voice/allowance-wording');
+    const someone = 4243;
+    const gpt = { model: { id: 'gpt-image-2.5-sunburst', host: 'vercel-ai-gateway' }, reserveUsd: 0.083, pool: 'storyboard' as const };
+    const flux = { model: { id: 'flux2-klein-4b-edit', host: 'fal.ai' }, reserveUsd: 0.022, pool: 'storyboard' as const };
+    check('B. the allowance in config: 20 a person a day, a $20 pool', VOICE.pictures.perPersonPerDay === 20 && VOICE.pictures.dailyPoolUsd === 20);
+    const imagesBefore = await L.generationsLeft(sql, someone);
+    const first = await L.reserve(sql, someone, gpt);
+    check('B. a GPT storyboard picture counts 1 of the 20 (not 3)', first.ok && first.left === 19 && (await L.storyboardPicturesLeft(sql, someone)) === 19, JSON.stringify(first));
+    check('B. ... and none of the images\' 10', (await L.generationsLeft(sql, someone)) === imagesBefore && imagesBefore === 10, String(imagesBefore));
+    await sql`insert into studio.image_asks (fid) values (${someone})`;
+    check('B. an image counts none of the 20', (await L.storyboardPicturesLeft(sql, someone)) === 19 && (await L.generationsLeft(sql, someone)) === 9);
+    for (let i = 0; i < 19; i++) await L.reserve(sql, someone, i % 2 ? gpt : flux);
+    const over = await L.reserve(sql, someone, flux);
+    check('B. the 21st storyboard picture of the day is refused (storyboard-limit)', !over.ok && over.refusal === 'storyboard-limit' && (await L.storyboardPicturesLeft(sql, someone)) === 0, JSON.stringify(over));
+    const [costs] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = (now() at time zone 'utc')::date and funded = 'storyboard'`;
+    const [free] = await sql`select count(*)::int as n from studio.image_costs where day = (now() at time zone 'utc')::date and funded = 'free' and model in ('gpt-image-2.5-sunburst', 'flux2-klein-4b-edit')`;
+    check('B. ... its money is in the storyboard pool, never the images\' free totals', Math.abs(costs.usd - (10 * 0.083 + 10 * 0.022)) < 1e-6 && free.n === 0, `${costs.usd} ${free.n}`);
+    // The pool: another person, once the day's storyboard spend is at $20.
+    await sql`insert into studio.image_costs (funded, kind, model, provider, verdict, calls, cost_usd) values ('storyboard', 'image', 'x-pool', 'test', 'ok', 1, ${VOICE.pictures.dailyPoolUsd})`;
+    const pooled = await L.reserve(sql, someone + 1, flux);
+    check('B. past the $20 pool, a storyboard picture is refused (storyboard-spend), the person\'s 20 untouched', !pooled.ok && pooled.refusal === 'storyboard-spend' && (await L.storyboardPicturesLeft(sql, someone + 1)) === 20, JSON.stringify(pooled));
+    // paidPicture: the drafted lines, word for word, with the reset instant (the browser writes it in local time).
+    const lim = await P.paidPicture(sql, someone, new Request('http://localhost/x'), { checkText: 'x', spend: flux, make: async () => { throw new Error('not reached'); } });
+    const pol = await P.paidPicture(sql, someone + 1, new Request('http://localhost/x'), { checkText: 'x', spend: flux, make: async () => { throw new Error('not reached'); } });
+    check('B. the drafted lines, word for word, each with its reason and reset instant', !lim.ok && !pol.ok
+      && lim.error === AW.limit && AW.limit === "You've made today's 20 storyboard pictures. Your storyboard is saved: make the rest from {reset}." && lim.extra.reason === 'storyboard-limit' && /T00:00:00\.000Z$/.test(String(lim.extra.resetAt))
+      && pol.error === AW.pool && AW.pool === "Today's storyboard pictures for everyone are used up. Your storyboard is saved: make the rest from {reset}." && pol.extra.reason === 'storyboard-spend' && typeof pol.extra.resetAt === 'string'
+      && AW.left(14) === '14 storyboard pictures left today' && AW.left(1) === '1 storyboard picture left today', JSON.stringify([lim, pol]));
+    await sql`delete from studio.image_costs where model = 'x-pool'`;
+    // Admins stay on the admins' pool; everyone else goes to the storyboard pool (shot-picture.ts).
+    const sp = readFileSync(path.join(ROOT, 'src/lib/voice/shot-picture.ts'), 'utf8');
+    check('B. admins and the testers stay on the admins\' pool (voiceInsider, main); everyone else on the storyboard allowance', /pool: voiceInsider\(fid\) \? \('admin' as const\) : \('storyboard' as const\)/.test(sp));
+    const { allowanceFor } = await import('../src/lib/voice/shot-picture');
+    check('B. no allowance shown to admins, or to anyone while only admins make real pictures', (await allowanceFor(sql, NATE)).allowance === null && (await allowanceFor(sql, someone)).allowance === null);
+    // The reset time is written by the browser, never the server (no hydration mismatch, the person's own zone).
+    const va = readFileSync(path.join(ROOT, 'src/components/voice-allowance.tsx'), 'utf8');
+    const servers = ['src/lib/images/paid.ts', 'src/lib/images/limits.ts', 'src/lib/voice/shot-picture.ts', 'src/lib/voice/costs.ts', 'src/lib/voice/allowance-wording.ts'].map((f) => readFileSync(path.join(ROOT, f), 'utf8'));
+    check('B. the allowance\'s time is written in the browser, after loading; no server file writes a local time', /useEffect\(\(\) => \{[\s\S]*withReset\(ALLOWANCE_WORDING\.(pool|limit)/.test(va) && servers.every((t) => !/toLocaleTimeString|toLocaleString|resetLocal\(/.test(t)) && [AW.limit, AW.pool, AW.takes, AW.takesPool].every((x) => x.includes('{reset}')));
+    check('B. ... and no prepaid line until prepaid storyboard pictures exist', !Object.values(AW).some((x) => /prepaid|\$0\./i.test(typeof x === 'function' ? x(2) : x)));
+  }
+  {
     const many = Array.from({ length: 12 }, (_, i) => Math.round((tl.seconds / 13) * (i + 1) * 100) / 100);
     r = await save(many, s2.shots);
     check('B. at most 12 shots: a 13th is refused when saving', r.status === 400);
@@ -706,12 +783,84 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
     check('K. a published draft is no longer a draft: its board reads as missing, and the check gives the link', (await boards.GET(as(NATE, {}, `http://localhost/api/voice/boards?draft=${acc.id}`))).status === 404 && ((await (await preview()).json()) as { published?: { url: string } }).published?.url === pub.url);
     check('K. ... it can\'t be removed while published, nor published twice', (await draftRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: acc.id }) })).status === 404 && (await publishRoute.POST(as(NATE, { method: 'POST', body: JSON.stringify({ draftId: acc.id, version, named: false }) }))).status === 404);
     check('K. someone else can\'t take it down', (await takeDownRoute.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: pub.id }) })).status === 404 && existsSync(path.join(STORE, 'public', one.key)));
+    // M. Reporting and hiding a published storyboard (Nate, 2026-11-23): the images' rules; a reversible hide.
+    {
+      const M = await import('../src/lib/voice/moderation');
+      const { moderationDeps } = await import('../src/lib/voice/publish-deps');
+      const deps = moderationDeps();
+      const reportRoute = await route('publications/[id]/report');
+      const modQueue = (await import(path.join(ROOT, 'src/app/api/moderate/route.ts'))) as { GET: (r: Request) => Promise<Response> };
+      const rep = (fid: number | null, body: unknown) => reportRoute.POST(as(fid, { method: 'POST', body: JSON.stringify(body) }), { params: Promise.resolve({ id: pub.id }) });
+      const mine = async (fid: number) => (await (await reportRoute.GET(as(fid, {}), { params: Promise.resolve({ id: pub.id }) })).json()) as { mine: boolean; hiddenReason?: string | null };
+      const publicN = () => storeFiles().filter((f) => f.startsWith(`public/storyboards/${pub.id}/`)).length;
+      const privateN = () => storeFiles().filter((f) => f.startsWith(`voice-hidden/storyboards/${pub.id}/`)).length;
+      const logOf = async () => (await sql`select step, role, reason, by_fid from studio.voice_publication_log where publication_id = ${pub.id} order by at, step`).map((x) => `${x.step}:${x.role}`);
+      check('M. reporting: 401 signed out, 400 for its own maker, 400 without a known reason', (await rep(null, { reason: 'spam' })).status === 401 && (await rep(NATE, { reason: 'spam' })).status === 400 && (await rep(GARANCE, { reason: 'nope' })).status === 400);
+      check('M. ... its maker learns it is theirs from the server; nobody else does (an unnamed storyboard stays unnamed)', (await mine(NATE)).mine === true && (await mine(GARANCE)).mine === false);
+      let r = await rep(GARANCE, { reason: 'spam', note: 'Looks like spam to me.' });
+      let j = (await r.json()) as { reported?: boolean; hidden?: boolean };
+      check('M. a report is kept with its reason and note; the storyboard stays up', r.status === 200 && j.reported === true && j.hidden === false && publicN() === pf.length && (await publication(sql, pub.id))?.hidden === null);
+      check('M. ... once per person', (await rep(GARANCE, { reason: 'other' })).status === 200 && (await sql`select count(*)::int n from studio.voice_publication_log where publication_id = ${pub.id} and step = 'reported' and by_fid = ${GARANCE}`)[0].n === 1);
+      let q = await M.storyboardQueue(sql);
+      const item = q.find((x) => x.id === pub.id);
+      check('M. the admins\' queue: its reasons with counts, how many reported, the notes, never who', Boolean(item) && item!.reporters === 1 && item!.reasons[0]?.reason === 'spam' && item!.notes[0] === 'Looks like spam to me.' && !JSON.stringify(q).includes(String(GARANCE)) && item!.maker === null, JSON.stringify(item));
+      check('M. ... it is counted in the moderators\' push', (await M.storyboardReportsWaiting(sql)) >= 1);
+      check('M. ... it is in the one moderator queue (/moderate, with the images\'), closed to anyone else', (await modQueue.GET(as(STRANGER, {}))).status !== 200 && (await modQueue.GET(as(null, {}))).status === 401 && /storyboardQueue\(sql\)/.test(readFileSync(path.join(ROOT, 'src/app/api/moderate/route.ts'), 'utf8')) && /<ModerateStoryboards \/>/.test(readFileSync(path.join(ROOT, 'src/app/moderate/page.tsx'), 'utf8')) && !existsSync(path.join(ROOT, 'src/app/api/admin/storyboards')) && !/storyboard/.test(readFileSync(path.join(ROOT, 'src/app/api/admin/hide/route.ts'), 'utf8')));
+      // A second publication on the same draft (someone else's, made here by hand), for the limit and the "minor" rule.
+      const other = randomUUID();
+      await pg.query(`insert into studio.voice_publications (id, draft_id, fid, board_version, recipe, files) values ($1, $2, 555, 1, '{"voice":{},"shots":[],"closing":{}}', $3::jsonb)`, [other, acc.id, JSON.stringify([{ key: `storyboards/${other}/a-${'1'.repeat(64)}.mp3`, sha256: '1'.repeat(64) }, { key: `storyboards/${other}/b-${'2'.repeat(64)}.png`, sha256: '2'.repeat(64) }])]);
+      for (let i = 0; i < IMAGES.reportsPerDay; i++) await pg.query(`insert into studio.voice_publication_log (publication_id, step, by_fid, role, reason) values ($1, 'reported', 901, 'reader', 'spam')`, [other]);
+      const capped = await M.reportStoryboard(sql, 901, pub.id, { reason: 'spam' }, deps);
+      check('M. the daily report limit is shared with images (20 a day)', capped.status === 429 && (await M.reportsToday(sql, 901)) === IMAGES.reportsPerDay);
+      const minor = await M.reportStoryboard(sql, 905, other, { reason: 'minor' }, deps);
+      const [oh] = await sql`select hidden_role from studio.voice_publications where id = ${other}`;
+      check('M. one "minor" report hides it at once (a stated rule), with no other report', minor.json.hidden === true && oh.hidden_role === 'rule');
+      // Three different reporters hide it at once: the second reporter leaves it up, the third hides it.
+      const second = await M.reportStoryboard(sql, 902, pub.id, { reason: 'other' }, deps);
+      check('M. two reporters: still up', second.json.hidden === false && (await publication(sql, pub.id))?.hidden === null && publicN() === pf.length);
+      r = await rep(STRANGER, { reason: 'violence' });
+      j = (await r.json()) as { reported?: boolean; hidden?: boolean };
+      const hid = await publication(sql, pub.id);
+      check('M. a third reporter hides it at once: the page has no files', j.hidden === true && Boolean(hid?.hidden) && hid!.files.length === 0);
+      check('M. ... every public file is gone from the public store, each kept privately byte for byte', publicN() === 0 && privateN() === pf.length && pf.every((f) => sha(readFileSync(path.join(STORE, 'voice-hidden', f.key))) === f.sha256));
+      check('M. ... its maker sees why; the page\'s own data never names them', (await mine(NATE)).hiddenReason === 'violence' && hid!.fid === null && !('makerFid' in hid!));
+      check('M. ... logged: the reports, the rule\'s hide, the move (rows in one instant may share a time, so as a set)', JSON.stringify((await logOf()).sort()) === JSON.stringify(['reported:reader', 'reported:reader', 'reported:reader', 'hidden:rule', 'moved_private:rule'].sort()), JSON.stringify(await logOf()));
+      check('M. ... a rule\'s hide stays in the queue until a moderator looks; the hidden list says who hid it', (await M.storyboardQueue(sql)).some((x) => x.id === pub.id && x.hidden?.role === 'rule') && (await M.hiddenStoryboards(sql)).some((x) => x.id === pub.id && x.hiddenBy === 'a stated rule' && x.reason === 'violence'));
+      // A moderator unhides it (the reports were wrong): every file back in public, byte for byte.
+      const u = await M.unhideStoryboard(sql, pub.id, GARANCE, 'moderator', deps);
+      check('M. unhide: shown again, every file back in the public store byte for byte, the private copies removed', u.shown && u.restored === pf.length && u.failed === 0 && publicN() === pf.length && privateN() === 0 && pf.every((f) => sha(readFileSync(path.join(STORE, 'public', f.key))) === f.sha256) && (await publication(sql, pub.id))!.files.length === pf.length);
+      check('M. ... and it leaves the queue', !(await M.storyboardQueue(sql)).some((x) => x.id === pub.id));
+      check('M. dismiss: logged, it stays out of the queue, and stays as it is', (await M.dismissStoryboard(sql, pub.id, GARANCE)) && !(await M.storyboardQueue(sql)).some((x) => x.id === pub.id) && publicN() === pf.length && (await logOf()).at(-1) === 'dismissed:moderator');
+      // Reporters are counted since the last dismissal (Nate, 2026-11-23; storyboards only): two new ones leave it up.
+      await new Promise((res) => setTimeout(res, 20));
+      const n1 = await M.reportStoryboard(sql, 906, pub.id, { reason: 'spam' }, deps);
+      const n2 = await M.reportStoryboard(sql, 907, pub.id, { reason: 'spam' }, deps);
+      check('M. after a dismissal, earlier reporters don\'t count: two new reporters leave it up', n1.json.hidden === false && n2.json.hidden === false && (await publication(sql, pub.id))?.hidden === null && (await M.storyboardQueue(sql)).find((x) => x.id === pub.id)?.reporters === 2);
+      const n3 = await M.reportStoryboard(sql, 908, pub.id, { reason: 'other' }, deps);
+      check('M. ... a third new reporter hides it', n3.json.hidden === true && publicN() === 0);
+      // Unhide puts back exactly what its maker published: a changed private copy is not put back.
+      const victim = pf.find((f) => f.role === 'shot')!;
+      const asPublished = readFileSync(path.join(STORE, 'voice-hidden', victim.key));
+      writeFileSync(path.join(STORE, 'voice-hidden', victim.key), randomBytes(64));
+      const bad = await M.unhideStoryboard(sql, pub.id, GARANCE, 'moderator', deps);
+      check('M. unhide puts back exactly what its maker published: a changed private copy is refused, the rest restored', bad.shown && bad.failed === 1 && bad.restored === pf.length - 1 && !existsSync(path.join(STORE, 'public', victim.key)));
+      // (Put the test's own file back, as published, for the steps below.)
+      writeFileSync(path.join(STORE, 'public', victim.key), asPublished);
+      rmSync(path.join(STORE, 'voice-hidden', victim.key), { force: true });
+      await M.dismissStoryboard(sql, pub.id, GARANCE);
+      // A moderator's own hide, then its maker takes it down: the private copies go too.
+      const h = await M.hideStoryboard(sql, pub.id, GARANCE, 'moderator', null, null, deps);
+      check('M. a moderator\'s hide: hidden, files moved; a second hide changes nothing', h.hidden && h.moved === pf.length && !(await M.hideStoryboard(sql, pub.id, GARANCE, 'moderator', null, null, deps)).hidden && privateN() === pf.length);
+      await pg.query(`delete from studio.voice_publication_log where publication_id = $1`, [other]);
+      await pg.query(`delete from studio.voice_publications where id = $1`, [other]);
+    }
     r = await takeDownRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: pub.id }) });
     check('K. its person takes it down: every public file is deleted, the page is gone, it is a draft again', r.status === 200 && storeFiles().every((f) => !f.startsWith(`public/storyboards/${pub.id}/`)) && (await publication(sql, pub.id)) === null && (await boards.GET(as(NATE, {}, `http://localhost/api/voice/boards?draft=${acc.id}`))).status === 200);
+    check('M. ... a hidden storyboard taken down by its maker: its private copies are deleted too', storeFiles().every((f) => !f.startsWith(`voice-hidden/storyboards/${pub.id}/`)));
     check('K. ... the private draft files are untouched', existsSync(path.join(STORE, `voice-boards/${acc.id}/${NATE}/end-${bg.sha256}.png`)) && storeFiles().filter((f) => f.startsWith(`voice-drafts/${acc.id}/`)).length === 2);
     await pg.query(`update studio.voice_drafts set recipe = jsonb_set(recipe, '{check,unmatched}', $2::jsonb) where id = $1`, [acc.id, JSON.stringify(realUnmatched)]);
     check('K. P2, by reading the code: no closing text comes from the request, and nothing writes a description', !/description\s*[:=]\s*['"`][^'"`]/.test(readFileSync(path.join(ROOT, 'src/lib/voice/closing.ts'), 'utf8')) && !/body\.|request\./.test(readFileSync(path.join(ROOT, 'src/lib/voice/closing-card.ts'), 'utf8')));
-    check('K. public copies have their own store file, under storyboards/ only; the draft store stays private', /R2_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && /\^storyboards/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && !/R2_PRIVATE_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')));
+    check('K. public copies have their own store file, under storyboards/ and takes/ only; the draft store stays private', /R2_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && /\^\(storyboards\|takes\)/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')) && !/R2_PRIVATE_BUCKET/.test(readFileSync(path.join(ROOT, 'src/lib/voice/public-store.ts'), 'utf8')));
   check('K. "Save as a video" is in the browser only: no server route records, uploads or calls a video model', !existsSync(path.join(ROOT, 'src/app/api/voice/video')) && !/fetch\([^)]*(upload|api\/)/.test(readFileSync(path.join(ROOT, 'src/lib/voice/video.ts'), 'utf8')) && /MediaRecorder/.test(readFileSync(path.join(ROOT, 'src/lib/voice/video.ts'), 'utf8')));
   }
 }
@@ -782,8 +931,12 @@ check('D. the status lists the draft for its person only', st.drafts.some((x) =>
   r2 = await draftRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: pubId }) });
   check('X. a published draft can\'t be removed (404)', r2.status === 404 && (await sql`select count(*)::int n from studio.voice_drafts where id = ${pubId}`)[0].n === 1);
   await sql`delete from studio.voice_drafts where id = ${pubId}`;
+  const logBefore = (await sql`select count(*)::int n from studio.voice_publication_log`)[0].n;
+  const orphansBefore = (await sql`select count(*)::int n from studio.voice_publication_log l where not exists (select 1 from studio.voice_publications p where p.id = l.publication_id)`)[0].n;
+  const takenDownLog = (await sql`select count(*)::int n from studio.voice_publication_log l join studio.voice_publications p on p.id = l.publication_id where p.draft_id = ${acc.id}`)[0].n;
   r2 = await draftRoute.DELETE(as(NATE, { method: 'DELETE' }), { params: Promise.resolve({ id: acc.id }) });
   const left = storeFiles().filter((f) => f.startsWith(`voice-drafts/${acc.id}/`));
+  check('X. removing a taken-down storyboard\'s draft leaves its moderation log in place (Nate, 2026-11-23: removing it can\'t erase a hide)', takenDownLog > 0 && (await sql`select count(*)::int n from studio.voice_publication_log`)[0].n === logBefore && (await sql`select count(*)::int n from studio.voice_publication_log l where not exists (select 1 from studio.voice_publications p where p.id = l.publication_id)`)[0].n === orphansBefore + takenDownLog, `${takenDownLog}`);
   check('X. its person removes it: the rows and both audio files are gone', r2.status === 200 && left.length === 0 && (await sql`select count(*)::int n from studio.voice_drafts where id = ${acc.id}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_draft_audio where draft_id = ${acc.id}`)[0].n === 0);
   check('X. ... and so are its storyboard\'s versions, its kept picture and that file', storeFiles().every((f) => !f.startsWith(`voice-boards/${acc.id}/`)) && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${acc.id}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_board_pictures where draft_id = ${acc.id}`)[0].n === 0);
   r2 = await draftAudioRoute.GET(as(NATE), { params: Promise.resolve({ id: acc.id, n: '0' }) });
@@ -802,6 +955,15 @@ check('R. the reading is made from the speech\'s written words, in the preset, w
 check('R. ... kept with its recipe', rd.recipe.model === 'eleven_multilingual_v2' && rd.recipe.preset.id === 'ephelion-warm-lecturer' && rd.recipe.textSha256 === sha(new TextEncoder().encode(speech.paragraphs.join('\n\n'))));
 r = await reading.POST(as(NATE, { method: 'POST', body: readingBody() }));
 check('R. made once per speech and voice (a second is refused unless asked)', r.status === 409);
+{
+  // Admins only (Nate, 2026-11-26): a tester asking to make a reading gets 404, and nothing is made.
+  const before = stub.calls.filter((c) => c.path.startsWith('/v1/text-to-speech/')).length;
+  const tr = await reading.POST(as(VOICE.testers[0], { method: 'POST', body: readingBody({ again: true }) }));
+  check('R. a tester can\'t make a reading: 404, and nothing is sent to ElevenLabs', tr.status === 404 && stub.calls.filter((c) => c.path.startsWith('/v1/text-to-speech/')).length === before);
+  const land = readFileSync(path.join(ROOT, 'src/components/ephelion-landing.tsx'), 'utf8');
+  const st = readFileSync(path.join(ROOT, 'src/app/api/voice/status/route.ts'), 'utf8');
+  check('R. ... the card offers "Make the AI reading" only when the status says so, and the status asks isAdmin', /canMakeReadings: isAdmin\(who\.fid\)/.test(st) && /!r && status\.canMakeReadings && first \?/.test(land));
+}
 r = await reading.GET(as(NATE, {}, `http://localhost/api/voice/reading?speech=${speech.id}&preset=ephelion-warm-lecturer`));
 check('R. anyone let in can play it', r.status === 200 && (await r.arrayBuffer()).byteLength > 1000);
 
@@ -817,12 +979,16 @@ const asks = (await sql`select count(*)::int n from studio.voice_asks where fid 
 check('$. one ask counted per whole-take conversion, none for a sentence', asks === 1, String(asks));
 await sql`insert into studio.voice_asks (fid) values (${NATE})`;
 r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(8000)) }));
-check('$. a third whole take in a day is refused (429; 2 a day, Nate 2026-11-23)', r.status === 429 && /2 whole takes/.test(String(((await r.json()) as { error: string }).error)));
-// Fix 7: "Convert again" passes the once-only rule (here it then meets the day's take limit); without it, the rule refuses first.
-r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take), { again: '1' }) }));
-const againLimit = r.status === 429 && /2 whole takes/.test(String(((await r.json()) as { error: string }).error));
-r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take)) }));
-check('V. fix 7: with "Convert again" the same recording passes the once-only rule (and meets the day\'s limit here); without it, 409', againLimit && r.status === 409);
+{
+  const j = (await r.json()) as { error: string; reason?: string; resetAt?: string };
+  const { ALLOWANCE_WORDING: AW } = await import('../src/lib/voice/allowance-wording');
+  check('$. a whole take past the day\'s number is refused (429), in the reread line, with its reason and reset instant (Nate, 2026-11-23)', r.status === 429 && j.error === AW.takes && AW.takes === `You've converted today's ${VOICE.caps.perPersonConversions} takes. Your drafts are kept, and your recording stays on this device: convert it again from {reset}.` && j.reason === 'takes' && typeof j.resetAt === 'string' && /T00:00:00\.000Z$/.test(j.resetAt), JSON.stringify(j));
+  // Fix 7: "Convert again" passes the once-only rule (here it then meets the day's take limit); without it, the rule refuses first.
+  r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take), { again: '1' }) }));
+  const againLimit = r.status === 429 && ((await r.json()) as { error: string }).error === AW.takes;
+  r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(new Uint8Array(take)) }));
+  check('V. fix 7: with "Convert again" the same recording passes the once-only rule (and meets the day\'s limit here); without it, 409', againLimit && r.status === 409);
+}
 r = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
 check('$. ... while a sentence can still be redone', r.status === 200);
 // The 20%-over-estimate stop (Garance agrees to the screen first: without it, convert stops at the consent).
@@ -834,7 +1000,11 @@ await sql`delete from studio.voice_costs where model = 'x-over'`;
 // The daily cap.
 await sql`insert into studio.voice_costs (kind, model, funded, verdict, calls, credits, estimated_credits, cost_usd) values ('convert', 'x-cap', 'admin', 'ok', 1, ${VOICE.caps.adminDailyCredits}, ${VOICE.caps.adminDailyCredits}, 0)`;
 r = await convert.POST(as(GARANCE, { method: 'POST', body: takeForm(randomBytes(8000), { sentence: '5', seconds: '5' }) }));
-check('$. past the day\'s credits, calls are refused until midnight UTC', r.status === 429 && /allowance/.test(String(((await r.json()) as { error: string }).error)));
+{
+  const j = (await r.json()) as { error: string; reason?: string; resetAt?: string };
+  const { ALLOWANCE_WORDING: AW } = await import('../src/lib/voice/allowance-wording');
+  check('$. past the day\'s credits, calls are refused until midnight UTC, in the reread line', r.status === 429 && j.error === AW.takesPool && AW.takesPool === "Today's voice conversions for everyone are used up. Your recording stays on this device: convert it from {reset}." && j.reason === 'takes-pool' && typeof j.resetAt === 'string', JSON.stringify(j));
+}
 await sql`delete from studio.voice_costs where model = 'x-cap'`;
 // Fix 7 (Nate, 2026-11-24: "it let me click convert again. Wasting a conversion"): the same recording converted twice
 // is refused, before anything is counted, unless the page sends "Convert again".
@@ -893,7 +1063,7 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
   const own = await C.refusal(sql, someone, 100, false);
   const reading = await C.refusal(sql, someone, 100, false, C.READINGS_FUNDED);
   await sql`delete from studio.voice_costs where model = 'x-free-full'`;
-  check('$. with everyone\'s budget used up, a take is refused but a reading\'s call is not (it is the admins\' pool)', C.fundedFor(someone) === 'free' && C.READINGS_FUNDED === 'admin' && /allowance/.test(own ?? '') && reading === null, `${own} / ${reading}`);
+  check('$. with everyone\'s budget used up, a take is refused but a reading\'s call is not (it is the admins\' pool)', C.fundedFor(someone) === 'free' && C.READINGS_FUNDED === 'admin' && own === (await import('../src/lib/voice/allowance-wording')).ALLOWANCE_WORDING.takesPool && reading === null, `${own} / ${reading}`);
   const src = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
   check('$. ... the reading and its timing both charge READINGS_FUNDED, at the gate and at the hold', ['src/app/api/voice/reading/route.ts', 'src/lib/voice/reading-timing.ts'].every((f) => (src(f).match(/READINGS_FUNDED\)/g) ?? []).length === 2));
 }
@@ -955,13 +1125,19 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
   // Removing: the reading's maker can't while someone else has a board on it; each person removes their own board.
   r = await draftRoute.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: rdId }) });
   check('G. the reading can\'t be removed while someone else has a board on it, and none of its files is touched', r.status === 404 && (await sql`select count(*)::int n from studio.voice_drafts where id = ${rdId}`)[0].n === 1 && storeFiles().some((f) => f.startsWith(`voice-drafts/${rdId}/`)) && storeFiles().some((f) => f.startsWith(`voice-boards/${rdId}/${GARANCE}/`)));
+  // A taken-down publication of Nate's board on the reading, with a moderation log row: removing the board takes the
+  // publication and leaves the log (Nate, 2026-11-23).
+  const tdPub = randomUUID();
+  await pg.query(`insert into studio.voice_publications (id, draft_id, fid, board_version, recipe, files, taken_down_at) values ($1, $2, $3, 1, '{"voice":{},"shots":[],"closing":{}}', $4::jsonb, now())`, [tdPub, rdId, NATE, JSON.stringify([{ key: `storyboards/${tdPub}/a-${'3'.repeat(64)}.mp3`, sha256: '3'.repeat(64) }, { key: `storyboards/${tdPub}/b-${'4'.repeat(64)}.png`, sha256: '4'.repeat(64) }])]);
+  await pg.query(`insert into studio.voice_publication_log (publication_id, step, by_fid, role, reason) values ($1, 'reported', 909, 'reader', 'spam'), ($1, 'hidden', 0, 'rule', 'spam')`, [tdPub]);
   r = await boards.DELETE(as(NATE, { method: 'DELETE' }, `http://localhost/api/voice/boards?draft=${rdId}`));
   check('G. a person removes their own board on it, and only theirs', r.status === 200 && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${rdId} and fid = ${NATE}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_boards where draft_id = ${rdId} and fid = ${GARANCE}`)[0].n === 1);
+  check('G. ... its taken-down publication goes with the board, and its moderation log stays', (await sql`select count(*)::int n from studio.voice_publications where id = ${tdPub}`)[0].n === 0 && (await sql`select count(*)::int n from studio.voice_publication_log where publication_id = ${tdPub}`)[0].n === 2);
   {
     // Asked in the page, not window.confirm (Nate, 2026-11-23): removing one's own storyboard and removing a draft.
     const rm = readFileSync(path.join(ROOT, 'src/components/voice-remove.tsx'), 'utf8');
     const vb = readFileSync(path.join(ROOT, 'src/components/voice-board.tsx'), 'utf8');
-    const vr = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+    const vr = (readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8') + readFileSync(path.join(ROOT, 'src/components/voice-recorder-core.tsx'), 'utf8'));
     check('G. removing a storyboard or a draft asks in the page, "Remove it" or "Keep it", never window.confirm', />\s*Remove it\s*</.test(rm) && />\s*Keep it\s*</.test(rm) && !/window\.confirm/.test(vb + vr) && /<VoiceRemove\s+label="Remove my storyboard"/.test(vb) && (vr.match(/<VoiceRemove /g) ?? []).length === 2);
   }
   r = await boards.DELETE(as(GARANCE, { method: 'DELETE' }, `http://localhost/api/voice/boards?draft=${rdId}`));
@@ -1006,7 +1182,7 @@ check('$. the caps (Nate, 2026-11-23): 2 whole takes a person a day, 6,000 credi
 // GF. The guided storyboard's fixes for the testers (Nate, 2026-11-24), read from the pages' code.
 {
   const vg = readFileSync(path.join(ROOT, 'src/components/voice-guide.tsx'), 'utf8');
-  const vr = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  const vr = (readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8') + readFileSync(path.join(ROOT, 'src/components/voice-recorder-core.tsx'), 'utf8'));
   check('GF. fix 3: "Make it" until a picture is made on this page, then "Try again"; the leftover count of tries never decides it', /madeHere \? 'Try again' : 'Make it'/.test(vg) && /const madeHere = \(tries\[key\] \?\? \[\]\)\.length > 0/.test(vg) && !/triesMade\[[^\]]+\] \?\? 0\) \? 'Try again'/.test(vg));
   check('GF. fix 3: while it works, "Making shot 2… about N seconds"; if it fails, it says so where it was asked', /Making \{label\}… \{about\(\)\}/.test(vg) && /role="status">Making/.test(vg) && /failed\?\.key === key && <p className="vr-warn" role="alert">/.test(vg) && /The picture could not be made: /.test(vg) && /makeButton\(shot\.key, `shot \$\{current \+ 1\}`/.test(vg));
   check('GF. fix 4: the guide can be asked at every step (Send waits only for words and a free moment), says what it is for, with examples', /disabled=\{!ask\.trim\(\) \|\| busy !== null\}>/.test(vg) && !/stage === 'scene'\}>/.test(vg) && /'make him lean in'/.test(vg) && /'a close-up on his hands'/.test(vg) && (vg.match(/^    (setting|clothing|plan|shot|fix): 'Tell the guide/gm) ?? []).length === 5 && /className="vg-example"/.test(vg));
@@ -1158,7 +1334,7 @@ for (const id of Object.values(VOICE.models)) {
 
 // H. The recording page never blocks Record on a host check (Nate, 2026-11-21).
 {
-  const page = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  const page = (readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8') + readFileSync(path.join(ROOT, 'src/components/voice-recorder-core.tsx'), 'utf8'));
   const code = page.replace(/\/\/.*$/gm, '');
   check('H. every host call on the recording page is raced (withTimeout): inMiniApp, context, capabilities, the app\'s prompt', /withTimeout\(inMiniApp\(\), HOST_CHECK_MS\)/.test(code) && /withTimeout\(sdk\.context, HOST_CHECK_MS\)/.test(code) && /withTimeout\(\(\) => sdk\.getCapabilities\(\), HOST_CHECK_MS\)/.test(code) && /withTimeout\(\(\) => sdk\.actions\.requestCameraAndMicrophoneAccess\(\), HOST_PROMPT_MS\)/.test(code));
   check('H. ... and none is awaited bare', !/await\s+(inMiniApp\(\)|sdk\.(context|getCapabilities|actions))/.test(code));
@@ -1177,11 +1353,11 @@ for (const id of Object.values(VOICE.models)) {
   const callsBefore = stub.calls.length;
   let rr = await convert.POST(as(NATE, { method: 'POST', body: takeForm(randomBytes(8000), { speechId: 'doing-fine-v2', seconds: '125' }) }));
   check('IM. ... a longer whole take is refused by the server (413), before any call to ElevenLabs', rr.status === 413 && /at most 2 minutes/.test(String(((await rr.json()) as { error: string }).error)) && stub.calls.length === callsBefore);
-  const rec = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+  const rec = (readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8') + readFileSync(path.join(ROOT, 'src/components/voice-recorder-core.tsx'), 'utf8'));
   check('IM. ... and the page counts down on Stop and stops the recording at its limit', /rec\.start\(s!\.speech\.maxSeconds/.test(rec) && /IMPROV_WORDING\.left\(mmss\(Math\.max\(0, \(s\.speech\.maxSeconds/.test(rec) && /if \(t >= limitSeconds && r\.state === 'recording'\) r\.stop\(\)/.test(rec));
   {
     // Nate's review of #236 (2026-11-24): the bitrate, a too-large take said before it's sent, and a new take never "again".
-    const vr = readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8');
+    const vr = (readFileSync(path.join(ROOT, 'src/components/voice-record.tsx'), 'utf8') + readFileSync(path.join(ROOT, 'src/components/voice-recorder-core.tsx'), 'utf8'));
     const rw = vr.slice(vr.indexOf('async function recordWhole'), vr.indexOf('async function recordWhole') + 400);
     const cw = vr.slice(vr.indexOf('async function convertWhole'), vr.indexOf('async function convertWhole') + 900);
     check('IM. the recorder runs at 128 kb/s, so a 3:00 take is about 2.9 MB, under the 4 MB limit', /TAKE_BITS_PER_SECOND = 128_000/.test(vr) && /new MediaRecorder\(s, \{ \.\.\.\(type \? \{ mimeType: type \} : \{\}\), audioBitsPerSecond: TAKE_BITS_PER_SECOND \}\)/.test(vr) && (180 * 128_000) / 8 < VOICE.maxTakeBytes);
@@ -1259,6 +1435,12 @@ for (const id of Object.values(VOICE.models)) {
   const rd = readFileSync(path.join(ROOT, 'src/app/api/voice/reading/route.ts'), 'utf8');
   const bd = readFileSync(path.join(ROOT, 'src/app/api/voice/boards/route.ts'), 'utf8');
   check('IM. "Time this reading" is gone: a reading is timed when made, and an older one on its first open', !/Time this reading|needs-timing/.test(vb + bd) && /await timeReadingNow\(sql, who\.fid, id\)/.test(rd) && /timeReadingNow\(sql, who\.fid, draft\.id\)/.test(bd));
+}
+
+// TK. Entering takes, with their pictures; report and hide; the free picture (PR 6, Nate 2026-11-26).
+{
+  const { takesSection } = await import('./lib/test-takes-section');
+  await takesSection({ ROOT, STORE, sql, check, route, as, NATE, GARANCE, STRANGER });
 }
 
 check('T. every transcript made in this run was deleted at ElevenLabs (none left)', stub.kept().length === 0 && stub.deletedTranscripts.length >= 2, `kept ${stub.kept().length}`);
