@@ -6,7 +6,7 @@ import { authFetch, useAuth } from '~/lib/client-auth';
  * Hidden readers' images on /moderate (Nate, 2026-11-27: the follow-up to #255): the ones a moderator or a stated rule
  * hid, with who and when, and Unhide, asked in the page first. Unhide puts back exactly the picture its maker published
  * (byte for byte) and the takes hidden only because of it (principle 5). A maker's own hide isn't listed: it's theirs to
- * undo. Wording drafted by the coding agent.
+ * undo. Wording drafted by the coding agent; reread by Nate as listed in #257 (2026-11-27).
  */
 type Hidden = { versionId: string; hiddenAt: string; hiddenBy: string };
 const W = {

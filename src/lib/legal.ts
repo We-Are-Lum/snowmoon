@@ -383,10 +383,11 @@ export const LEGAL: {
     // picture of your own scene for the Ephelion challenge, with its signed record, until you enter it or remove it") and
     // the remove question, both as written." §3's list adds that item after the recorded speech's. The words before were
     // 1iu09p9 (his reread of PR 6's lines, the same day).
-    // NOT YET REREAD (the follow-up to #255, 2026-11-27): Privacy §6's hide sentence becomes "If a picture is hidden, by its
-    // maker or after a report, the takes that use it are hidden with it, and shown again if it's restored." (was "…hidden
-    // after a report, …"). The key stays at Nate's last reread until he rereads it, so P6k and the reread tests flag it.
-    privacy: { words: '19q34ww', on: '2026-11-27', by: 'FID 6786' },
+    // 2026-11-27, owner's reread for #257 (takes follow the picture), typed in his session: "Reread: the Privacy §6 line
+    // ("If a picture is hidden, by its maker or after a report, the takes that use it are hidden with it, and shown again
+    // if it's restored.") and the moderator wording as listed in the PR." (was "If a picture is hidden after a report, …").
+    // The words before were 19q34ww.
+    privacy: { words: 'sv1gxg', on: '2026-11-27', by: 'FID 6786' },
   },
 };
 
