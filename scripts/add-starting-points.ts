@@ -85,7 +85,7 @@ if (!files.length) refusals.push(`no <name>.json recipe in ${DIR}`);
 for (const f of files) {
   say();
   say(`-- ${f}`);
-  let r: Partial<FirstRemixRecipe> & { title?: unknown; new_sheet?: unknown; text?: unknown };
+  let r: Partial<FirstRemixRecipe> & { title?: unknown; new_sheet?: unknown; text?: unknown; edit?: { from_sha256?: unknown; what?: unknown; by?: unknown }; style_input?: { sha256?: unknown; what?: unknown; version_id?: unknown; link?: unknown } };
   try { r = JSON.parse(readFileSync(path.join(DIR, f), 'utf8')); } catch (e) { say(`  PROBLEM: not JSON (${(e as Error).message})`); refusals.push(`${f}: not JSON`); continue; }
   // A new sheet (owner, 2026-11-27): a picture made from no base (its inputs say what it was given, e.g. a style
   // reference) is published as a new sheet of its character, not as a remix: "base": null and "new_sheet": true, with
@@ -94,6 +94,9 @@ for (const f of files) {
   if (r.new_sheet !== undefined && !isNew) { say('  PROBLEM: new_sheet: true needs "base": null'); refusals.push(`${f}: new_sheet needs base null`); continue; }
   const probs = recipeProblems(r).filter((p) => !(isNew && p.startsWith('base:')));
   if (isNew && (typeof r.text !== 'string' || !r.text.trim() || r.text.length > 600)) probs.push('text: a new sheet needs its text (at most 600 characters)');
+  if (r.edit !== undefined && (!/^[0-9a-f]{64}$/.test(String(r.edit?.from_sha256 ?? '')) || typeof r.edit?.what !== 'string' || !r.edit.what.trim() || typeof r.edit?.by !== 'string' || !r.edit.by.trim())) probs.push('edit: from_sha256 (the tool\'s export), what was changed and by whom are all needed');
+  if (r.style_input !== undefined && (!/^[0-9a-f]{64}$/.test(String(r.style_input?.sha256 ?? '')) || typeof r.style_input?.what !== 'string' || !(r.style_input.version_id === null || /^[0-9a-f-]{36}$/.test(String(r.style_input.version_id))))) probs.push('style_input: its sha256, what it is, and its published version id (or null)');
+  if (r.style_input && Array.isArray(r.inputs) && !r.inputs.some((i) => String(i?.sha256 ?? '').toLowerCase() === String(r.style_input!.sha256).toLowerCase())) probs.push('style_input: its sha256 must also be among the inputs');
   if (!isNew && r.text !== undefined) probs.push('text: only a new sheet carries its own text (a remix keeps its base\'s)');
   let bytes: Buffer | null = null;
   const file = typeof r.file === 'string' ? path.join(DIR, path.basename(r.file)) : null;
@@ -122,7 +125,8 @@ for (const f of files) {
       base = { versionId: row.id, text: row.body?.text ?? '' };
     }
   }
-  const original = String(r.sha256 ?? '').toLowerCase();
+  // The key that marks a picture as published: the tool's export (before any edit), as the recipe's original records it.
+  const original = String((r.edit?.from_sha256 as string | undefined) ?? r.sha256 ?? '').toLowerCase();
   const skip = /^[0-9a-f]{64}$/.test(original) ? await already(original) : null;
   if (skip) { say(`  SKIP: already published by ${MAINTAINER_FID}, version ${skip}`); skipped.push({ file: f, character: String(r.character), versionId: skip }); continue; }
   for (const x of probs) { say(`  PROBLEM: ${x}`); refusals.push(`${f}: ${x}`); }

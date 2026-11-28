@@ -193,6 +193,35 @@ const dryAgain = await add(good);
   check('a new sheet: published as Bai\'s sheet by 6786, no remixed_from link, its own text, no base in its recipe, the style reference listed', na.status === 0 && ok(row) && st?.label === MIDJOURNEY_LABEL, `${na.out.slice(-500)} ${JSON.stringify(row?.body).slice(0, 500)}`);
   check('planted: the new-sheet check fails one that claims a base', !!row && !ok({ ...row, forks: 1 }));
 }
+
+// An edited picture (owner, 2026-11-27: a fake signature cropped out) with a style input: both in its recipe.
+{
+  const mjExport = await sharp({ create: { width: 50, height: 50, channels: 3, background: { r: 120, g: 40, b: 160 } } }).png().toBuffer();
+  const cropped = await sharp(mjExport).extract({ left: 1, top: 0, width: 48, height: 48 }).png().toBuffer();
+  const STYLE = 'a'.repeat(64);
+  const SV = '12345678-1234-4123-8123-123456789abc';
+  const er = { ...recipe({ file: 'seila-cropped.png', sha256: sha(cropped), character: 'seila' }), base: null, new_sheet: true, text: 'a woman with round glasses',
+    inputs: [{ sha256: STYLE, what: 'style reference (--sref)' }], style_input: { sha256: STYLE, what: 'the owner\'s Deluin tea picture', version_id: SV, link: 'https://s.mj.run/x' },
+    edit: { from_sha256: sha(mjExport), what: 'cropped 1 px off the left and 2 px off the bottom', by: 'the coding agent, with sharp; no model' } };
+  const eDir = folder('edited', [{ json: er, file: ['seila-cropped.png', cropped] }]);
+  const badStyle = folder('edited-bad-style', [{ json: { ...er, inputs: [{ sha256: 'b'.repeat(64), what: 'something else' }] }, file: ['seila-cropped.png', cropped] }]);
+  const badEdit = folder('edited-bad-edit', [{ json: { ...er, edit: { what: 'cropped' } }, file: ['seila-cropped.png', cropped] }]);
+  const b1 = await counts();
+  const bs = await add(badStyle, APPLY);
+  check('planted: a style input that isn\'t among the inputs is refused, nothing written', bs.status === 3 && /style_input: its sha256 must also be among the inputs/.test(bs.out) && (await counts()) === b1, bs.out.slice(-500));
+  const be = await add(badEdit, APPLY);
+  check('planted: an edit without the tool\'s export sha256 is refused, nothing written', be.status === 3 && /edit: from_sha256/.test(be.out) && (await counts()) === b1, be.out.slice(-500));
+  const ea = await add(eDir, APPLY);
+  const [row] = await q((s) => s`select v.body, (select count(*)::int from studio.links l where l.from_version_id = v.id) as links from studio.element_versions v
+    where v.body->'views'->'front'->'recipe'->'settings'->'original'->>'sha256' = ${sha(mjExport)}`);
+  const st = row?.body?.views?.front?.recipe?.settings;
+  const okE = (x: typeof st, links: number) => !!x && links === 0 && x.original?.sha256 === sha(mjExport) && x.edited?.from_sha256 === sha(mjExport) && x.edited?.sha256 === sha(cropped) && /cropped/.test(x.edited?.what) && x.converted?.sha256 === sha(cropped)
+    && x.style_input?.sha256 === STYLE && x.style_input?.version_id === SV && /not a link/.test(x.style_input?.role);
+  check('an edited picture: its recipe keeps the tool\'s export as the original, the edit (what, by, both sha256s) and the style input with its version; no link of any kind', ea.status === 0 && okE(st, Number(row?.links ?? -1)), `${ea.out.slice(-400)} ${JSON.stringify(st).slice(0, 600)}`);
+  check('planted: the edit check fails one with a link, or with the cropped file as its original', !!st && !okE(st, 1) && !okE({ ...st, original: { ...st.original, sha256: sha(cropped) } }, 0));
+  const again = await add(eDir, APPLY);
+  check('an edited picture is skipped on a second run, by the tool\'s export sha256', again.status === 0 && /SKIP: already published by 6786/.test(again.out) && (await counts()) === (await counts()));
+}
 check('a dry run after publishing says both are already published', dryAgain.status === 0 && /Would publish 0; 2 already published\./.test(dryAgain.out));
 
 await server.stop();

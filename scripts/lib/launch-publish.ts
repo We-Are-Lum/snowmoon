@@ -252,8 +252,13 @@ export function applyGate(o: { apply: boolean; confirmed: boolean; isPublic: boo
  * the settings as submitted, the job, both sha256s, the base it remixes, no cost, checks not run), from a recipe in the
  * FirstRemixRecipe shape (docs/proposals/challenge-first-remix-recipe.template.json) instead of the launch's recipes.json.
  */
+/** An edit made after the tool, before the import (owner, 2026-11-27: a fake signature cropped out), recorded in the recipe. */
+export interface AddedEdit { from_sha256: string; what: string; by: string }
+/** A style reference given to the tool (owner, 2026-11-27): recorded as a style input, never as a link to its sheet. */
+export interface StyleInput { sha256: string; what: string; version_id: string | null; link: string | null }
+
 export function addedRecipe(
-  r: FirstRemixRecipe,
+  r: FirstRemixRecipe & { edit?: AddedEdit; style_input?: StyleInput },
   converted: { sha256: string; width: number; height: number; from: string; originalSize: [number, number] | null },
   base: { versionId: string; frontSha256: string | null } | null,
 ): Recipe {
@@ -278,7 +283,9 @@ export function addedRecipe(
       references_reported: { inputs: r.inputs },
       remixes_base: base ? { version_id: base.versionId, front_sha256: base.frontSha256, note: 'which base it remixes: named in its recipe by its maker, one of the character\'s CHALLENGE.bases' } : null,
       ...(base ? {} : { new_sheet: 'made from no base: a new sheet of its character; what its maker gave the tool is in references' }),
-      original: { file: r.file, sha256: r.sha256.toLowerCase(), size: converted.originalSize },
+      original: r.edit ? { file: r.file, sha256: r.edit.from_sha256.toLowerCase(), size: null, note: 'the tool\'s export, before the edit below' } : { file: r.file, sha256: r.sha256.toLowerCase(), size: converted.originalSize },
+      ...(r.edit ? { edited: { from_sha256: r.edit.from_sha256.toLowerCase(), sha256: r.sha256.toLowerCase(), size: converted.originalSize, what: r.edit.what, by: r.edit.by } } : {}),
+      ...(r.style_input ? { style_input: { role: 'style reference (a style input, not a link to its sheet)', sha256: r.style_input.sha256.toLowerCase(), what: r.style_input.what, version_id: r.style_input.version_id, link: r.style_input.link } } : {}),
       converted: { from: converted.from, sha256: r.sha256.toLowerCase(), to: 'jpeg', quality: 92, note: 'converted for the site; no model', jpeg_sha256: converted.sha256 },
       cost: 'made on the owner\'s paid Midjourney plan; no per-picture cost reported',
     },
