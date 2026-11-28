@@ -50,13 +50,14 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: the day #258 (/admin/bounty's live posts and profiles, privacy 1wtc8ta) merges and goes live, 2026-11-27 (PT).
+  // MERGE DAY: the day #258 (/admin/bounty's live posts and profiles, with #257's line: privacy 1rtkpxm) merges and goes
+  // live, 2026-11-28 (PT).
   // Before it: the day PR 6 (entering takes, terms cfj30e, privacy 1iu09p9) merges and goes live; set to 2026-11-27 (PT), moved
   // to the real merge day at merge. (Before: 2026-11-26, PR #229, the storyboard pictures' allowance.)
   // MERGE DAY: the day the storyboard pictures' allowance (PR #229) merges and goes live, 2026-11-26 (PT). If the merge
   // moves, this moves with it. (Before: 2026-11-26, PR #225, storyboard moderation; 2026-11-26, PR #249, the four-step recorder; 2026-11-24, PR #235, the guided storyboard's fixes; 2026-11-24, PR #230, 30-day sign-ins; 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
   // 2026-11-21, the Ephelion voice; 2026-11-21, PR #204; 2026-11-20, PR #196; 2026-11-19, PR #191.)
-  effective: '2026-11-27',
+  effective: '2026-11-28',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
