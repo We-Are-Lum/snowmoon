@@ -33,7 +33,7 @@ import '../app/assistant/assistant.css';
  *   Under 1200px there is no panel (the assistant is its own page), so nothing changes there.
  * Tells the Farcaster host the app is ready (once).
  */
-/** Full screen, desktop only (Nate, 2026-11-26), remembered on this device. DRAFT words, for Nate's reread. */
+/** Full screen, desktop only (Nate, 2026-11-26), remembered on this device. Words reread by Nate as listed in #256 (2026-11-27). */
 export const FOCUS_KEY = 'snowmoon.focus';
 export const FOCUS_WORDS = { on: 'Full screen', off: 'Leave full screen' } as const;
 

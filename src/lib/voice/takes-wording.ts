@@ -21,7 +21,7 @@ export const TAKES_WORDING = {
   making: 'Making the picture…',
   checkedNote: 'Checked against the site’s rules; no real people, no words in quotation marks. His face comes from his character profile.',
   preview: 'Preview',
-  // #250's preview, folded in (Nate, 2026-11-27). DRAFT, for Nate's reread.
+  // #250's preview, folded in (Nate, 2026-11-27). Reread by Nate as listed in #256 (2026-11-27).
   previewLine: 'Your take in his voice, with Lord Ephelion in the picture you chose.',
   previewPlay: 'Play your take over the picture',
   enter: 'Enter the challenge',
