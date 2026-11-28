@@ -9,6 +9,7 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import type { FirstRemixRecipe } from '../import-first-remixes';
 
 export const MAINTAINER_FID = 6786;
 export const SLOTS = ['front', 'side', 'back'] as const;
@@ -243,4 +244,51 @@ export function applyGate(o: { apply: boolean; confirmed: boolean; isPublic: boo
   }
   out.push(...o.refusals);
   return out;
+}
+
+/**
+ * The recipe of a picture the owner adds as a starting point while the challenge runs (owner, 2026-11-27;
+ * scripts/add-starting-points.ts): the same recipe fields as remixRecipe (the approved Midjourney label, self-reported,
+ * the settings as submitted, the job, both sha256s, the base it remixes, no cost, checks not run), from a recipe in the
+ * FirstRemixRecipe shape (docs/proposals/challenge-first-remix-recipe.template.json) instead of the launch's recipes.json.
+ */
+export function addedRecipe(
+  r: FirstRemixRecipe,
+  converted: { sha256: string; width: number; height: number; from: string; originalSize: [number, number] | null },
+  base: { versionId: string; frontSha256: string | null },
+): Recipe {
+  const version = r.tool.version.trim().replace(/^v/i, '');
+  const seedRaw = (r.settings as Record<string, unknown>).seed;
+  const seed = typeof seedRaw === 'number' ? seedRaw : typeof seedRaw === 'string' && /^\d+$/.test(seedRaw.trim()) ? Number(seedRaw.trim()) : null;
+  return {
+    prompt: r.prompt,
+    model: MIDJOURNEY_MODEL,
+    endpoint: `Midjourney v${version}, outside the site`,
+    host: 'Midjourney (outside the site, the owner\'s own account)',
+    settings: {
+      label: MIDJOURNEY_LABEL,
+      self_reported: true,
+      parameters: r.settings,
+      version,
+      tool: r.tool,
+      job_id: r.job.id,
+      job_cell: r.job.cell,
+      plan: r.plan,
+      made_by: 'the owner (@naaate), by hand, with Midjourney (a closed model by Midjourney), outside the site',
+      references_reported: { inputs: r.inputs },
+      remixes_base: { version_id: base.versionId, front_sha256: base.frontSha256, note: 'which base it remixes: named in its recipe by its maker, one of the character\'s CHALLENGE.bases' },
+      original: { file: r.file, sha256: r.sha256.toLowerCase(), size: converted.originalSize },
+      converted: { from: converted.from, sha256: r.sha256.toLowerCase(), to: 'jpeg', quality: 92, note: 'converted for the site; no model', jpeg_sha256: converted.sha256 },
+      cost: 'made on the owner\'s paid Midjourney plan; no per-picture cost reported',
+    },
+    seed,
+    request_id: r.job.id,
+    cost_usd: 0,
+    made_at: `${r.made_on}T00:00:00.000Z`,
+    width: converted.width,
+    height: converted.height,
+    references: r.inputs.map((i) => ({ sha256: i.sha256.toLowerCase(), what: i.what })),
+    checks: { prompt: { model: 'none', verdict: 'not run' }, host_safety_checker: 'not run' },
+    assist: null,
+  };
 }

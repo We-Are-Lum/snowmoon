@@ -95,6 +95,7 @@
     "test:deploy-guard": "node scripts/test-deploy-guard.mjs",
     "test:challenge": "tsx --conditions=react-server scripts/test-challenge.ts && tsx --conditions=react-server scripts/test-challenge-moments.ts",
     "test:launch-publish": "tsx --conditions=react-server scripts/test-launch-publish.ts",
+    "test:add-starting-points": "tsx --conditions=react-server scripts/test-add-starting-points.ts",
     "test:challenge-daily-sql": "tsx scripts/test-challenge-daily-sql.ts",
     "test:rehearsal": "tsx --conditions=react-server scripts/test-rehearsal.ts",
     "rehearsal:db": "tsx scripts/rehearsal-db.ts",
