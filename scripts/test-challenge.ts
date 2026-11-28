@@ -190,8 +190,9 @@ check('dateText builds the deadline from the config', R.dateText('closes', { tim
   proof('spend cap: a cap that waits for the open date with the switch on is caught', ((t: Date) => (CHALLENGE.public && t.getTime() >= Date.parse(D0.opens) && t.getTime() < Date.parse(D0.closes) ? 25 : 2))(at(D0.opens, -1)) !== C.imagesDailySpendCapUsd(at(D0.opens, -1)));
   check('the base caps are unchanged ($2 outside; IMAGES.invited unchanged)', IMAGES.dailySpendCapUsd === 2 && CHALLENGE.dailySpendCapUsd === 25 && IMAGES.invited.join() === '6786,6852');
   const limits = read('src/lib/images/limits.ts');
-  // Three reads: a picture's, a remix's view (owner, 2026-11-04: the cap unchanged for remixes) and the words check's.
-  check('the spend check reads the cap through imagesDailySpendCapUsd()', (limits.match(/imagesDailySpendCapUsd\(\)/g) ?? []).length === 3 && !/IMAGES\.dailySpendCapUsd/.test(limits));
+  // Four reads: a picture's, a remix's view (owner, 2026-11-04: the cap unchanged for remixes), the words check's, and the
+  // Ephelion free picture's (#255; Nate, 2026-11-27: "The free picture counts only in the site's daily free image budget").
+  check('the spend check reads the cap through imagesDailySpendCapUsd()', (limits.match(/imagesDailySpendCapUsd\(\)/g) ?? []).length === 4 && !/IMAGES\.dailySpendCapUsd/.test(limits));
   proof('a cap read straight from IMAGES (never $25) is caught', /IMAGES\.dailySpendCapUsd/.test(limits.replace('imagesDailySpendCapUsd()', 'IMAGES.dailySpendCapUsd')));
   proof('a cap that stays at $25 after the close is caught', ((t: Date) => (t.getTime() >= Date.parse(D0.opens) ? 25 : 2))(at(D0.closes, 0)) !== C.imagesDailySpendCapUsd(at(D0.closes, 0)));
 }
