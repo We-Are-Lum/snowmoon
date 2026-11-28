@@ -112,7 +112,8 @@ export function ChallengePicture({ id }: { id: string }) {
             </section>
           )}
           {v.submit && (
-            <section className="sf-submit" aria-label={v.w.thenSubmit}>
+            // id="submit": "Enter it" on /challenge/entries links here (2026-11-27).
+            <section id="submit" className="sf-submit" aria-label={v.w.thenSubmit}>
               <ChallengeSubmit
                 versionId={v.versionId}
                 byFid={v.byFid}

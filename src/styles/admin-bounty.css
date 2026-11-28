@@ -48,3 +48,17 @@
 .ab-nav button { font: inherit; font-size: 18px; min-height: 56px; border: 1px solid var(--ink); background: transparent; color: var(--ink); border-radius: 10px; }
 .ab-nav button:disabled { opacity: 0.35; border-color: var(--rule); }
 .ab-url { overflow-wrap: anywhere; word-break: break-all; }
+/* "Published, not entered" (2026-11-27): a plain list under the review, its count at the top. */
+.ab-not-entered { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.ab-count { font-size: 16px; opacity: 0.65; font-variant-numeric: tabular-nums; margin-left: 6px; }
+.ab-ne-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.ab-ne-row { display: grid; grid-template-columns: 112px 1fr; gap: 10px; align-items: start; padding-bottom: 10px; border-bottom: 1px solid var(--rule); min-width: 0; }
+.ab-ne-pic-link { display: block; min-height: 44px; }
+.ab-ne-pic { display: block; width: 112px; aspect-ratio: 16 / 9; object-fit: contain; border-radius: 6px; background: color-mix(in srgb, var(--ink) 5%, transparent); font-size: 12px; }
+.ab-ne-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.ab-ne-title { font-size: 16px; line-height: 1.3; overflow-wrap: anywhere; }
+.ab-ne-elig { font-size: 13.5px; line-height: 1.4; }
+.ab-ne-elig[data-eligible='yes'] { color: #2e7d32; }
+.ab-ne-tag { font-size: 12.5px; line-height: 1.4; opacity: 0.8; }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .ab-ne-elig[data-eligible='yes'] { color: #81c784; } }
+:root[data-theme='dark'] .ab-ne-elig[data-eligible='yes'] { color: #81c784; }

@@ -365,6 +365,12 @@ button.ch-chip { background: none; cursor: pointer; }
 @media (min-width: 640px) { .cc-row-pics { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .cc-tile-img.cc-tile-pic { aspect-ratio: 16 / 9; object-fit: contain; }
 .ch-pics .ch-card-img { aspect-ratio: 16 / 9; object-fit: contain; }
+/* "Published, not entered yet" under the entries (2026-11-27): its own section, no badge, "Enter it" for its maker only. */
+.ch-not-entered { margin: 40px 0 0; padding-top: 20px; border-top: 1px solid var(--rule); }
+.ch-page h2.ch-not-entered-h { margin: 0 0 4px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.ch-not-entered-line { margin: 0 0 8px; max-width: 40em; }
+.ch-not-entered .ch-enter-it { margin-top: 4px; font-size: 15px; padding: 0 12px; }
+#submit { scroll-margin-top: 72px; }
 /* Withdraw asks once: the question, then its line, then the buttons (owner, 2026-11-07). */
 .ch-withdraw-ask > span { display: block; }
 .ch-withdraw-note { margin: 2px 0 8px; }

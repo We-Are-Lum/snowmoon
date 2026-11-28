@@ -5,11 +5,12 @@ import { refusedBases } from './bases';
 import { baseStyleOrder, basesOf, isFirstRemix, remixOfBase } from './rules';
 import { CHALLENGE, WORK_ID } from '../config';
 import { challengeVisibleTo } from './visibility';
+import { CHALLENGE_LISTS } from './who';
 import { bookCharacter } from '../images/designs';
 import { isSocialPerson } from '../people';
 import { chooseEntries, distinctSubmissions, entrantCounts, fromDecision, type Decision, inWindow, newestFirst, phase, shortDateText, submitRefusal, submittedToday, type Candidate, type Eligibility, type Submission } from './rules';
 import type { Post } from './post-links';
-import { challengePictures, picturesCount } from './pictures';
+import { challengePictures, picturesCount, type ChallengePicture } from './pictures';
 import { shownMoment } from './moment-switch';
 
 /**
@@ -76,7 +77,11 @@ export async function windowVersions(sql: Sql): Promise<ChallengeVersion[]> {
 
 /** The challenge's pictures made inside the window, as entry candidates (one version each), newest first. */
 export async function windowPictures(sql: Sql): Promise<ChallengeVersion[]> {
-  const pics = (await challengePictures(sql)).filter((p) => inWindow(p.createdAt) && !isFirstRemix(p));
+  return pictureVersions(sql, (await challengePictures(sql)).filter((p) => inWindow(p.createdAt) && !isFirstRemix(p)));
+}
+
+/** Challenge pictures as entry candidates (one version each), each with whether it counts as a remix, newest first. */
+async function pictureVersions(sql: Sql, pics: ChallengePicture[]): Promise<ChallengeVersion[]> {
   const counts = await picturesCount(sql, pics);
   return pics
     .map((p) => ({
@@ -186,6 +191,63 @@ export async function standing(sql: Sql): Promise<Standing> {
  */
 export function entriesWithExamples(st: Pick<Standing, 'entries' | 'examples'>): (ChallengeVersion & { example: boolean })[] {
   return [...st.entries.map((v) => ({ ...v, example: false })), ...st.examples.map((v) => ({ ...v, example: true }))].sort(newestFirst);
+}
+
+/**
+ * "Published, not entered" (2026-11-27, for the owner): every challenge picture published inside the window
+ * (inWindow over CHALLENGE.dates) that doesn't stand as an entry now: never submitted, or submitted and withdrawn.
+ * The entries themselves are standing's, unchanged: nothing here changes what counts as an entry, the entries list,
+ * any count or Submit. Newest first (P5g). Each row carries what only admins see (the admins' review page): the eligibility
+ * decided at publish (eligibilityOf), whether it is one of the owner's first remixes, an admin example, withdrawn, and
+ * whether it counts as a remix at all (`forked`). The public section (notEnteredShown) keeps none of that.
+ */
+export interface NotEntered extends ChallengeVersion {
+  eligibility: Eligibility;
+  firstRemix: boolean;
+  /** An admin's picture submitted with its post (exampleIds): shown with the entries as an example, never an entry. */
+  example: boolean;
+  /** Submitted, then withdrawn (studio.challenge_marks.withdrawn_at): no longer an entry. */
+  withdrawn: boolean;
+}
+
+/** Of these versions, the ids with a withdrawn submission on record. Empty without the table or its column. */
+export async function withdrawnIds(sql: Sql, ids: string[]): Promise<Set<string>> {
+  if (!ids.length) return new Set();
+  try {
+    const rows = await sql<{ version_id: string }[]>`
+      select distinct version_id::text from studio.challenge_marks where challenge = ${CHALLENGE.id} and withdrawn_at is not null and version_id in ${sql(ids)}`;
+    return new Set(rows.map((r) => String(r.version_id)));
+  } catch (e) {
+    if (!missing(e) && !noColumn(e)) console.error('challenge: withdrawn not read', (e as { code?: string }).code ?? (e as Error).name);
+    return new Set();
+  }
+}
+
+/** Every challenge picture published in the window that isn't an entry now, with the admins' facts. Pictures only. */
+export async function notEnteredAll(sql: Sql, entries?: Pick<Standing, 'entries'>): Promise<NotEntered[]> {
+  if (!CHALLENGE.pictureEntries) return [];
+  const entered = new Set((entries ?? (await standing(sql))).entries.map((v) => v.versionId));
+  const rest = (await pictureVersions(sql, (await challengePictures(sql)).filter((p) => inWindow(p.createdAt)))).filter((v) => !entered.has(v.versionId));
+  const elig = await eligibilityOf(sql, rest);
+  const examples = await exampleIds(sql, rest, elig);
+  const withdrawn = await withdrawnIds(sql, rest.map((v) => v.versionId));
+  return rest.map((v) => ({ ...v, eligibility: elig.get(v.versionId)!, firstRemix: isFirstRemix(v), example: examples.has(v.versionId), withdrawn: withdrawn.has(v.versionId) }));
+}
+
+/** What the public section shows of one picture: nothing about its maker's account. */
+export type NotEnteredShown = Pick<ChallengeVersion, 'versionId' | 'character' | 'title' | 'byName' | 'maker' | 'thumb' | 'createdAt'>;
+
+/**
+ * The public section, "Published, not entered yet", on /challenge/entries: the same pictures, less those that can
+ * never be entries whoever looks (admins' pictures, the owner's first remixes, and pictures that aren't remixes of a
+ * base). Never filtered by the maker's eligibility, which would show by omission whose account failed the check.
+ * Newest first, as every challenge list (P5g); no count.
+ */
+export function notEnteredShown(rows: NotEntered[], admins: readonly number[] = CHALLENGE_LISTS.admins): NotEnteredShown[] {
+  return rows
+    .filter((r) => r.forked && !r.firstRemix && !admins.includes(r.maker) && r.eligibility.why !== 'admin')
+    .map((r) => ({ versionId: r.versionId, character: r.character, title: r.title, byName: r.byName, maker: r.maker, thumb: r.thumb, createdAt: r.createdAt }))
+    .sort(newestFirst);
 }
 
 export type VersionStanding = { kind: 'entry'; character: string } | { kind: 'admin'; example: boolean } | { kind: 'candidate'; character: string } | null;

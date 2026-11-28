@@ -92,6 +92,15 @@ export const CHALLENGE_WORDING = {
   exampleInfo: 'Not an entry in the challenge.',
   exampleSubmitHead: 'Then submit it as an example',
   exampleSubmitted: 'Submitted as an example. It isn’t an entry.',
+  /**
+   * "Published, not entered yet" on /challenge/entries, below the entries (2026-11-27). DRAFT wording, drafted by the
+   * coding agent (Claude, a closed model by Anthropic) for the owner's reread: the heading (the owner's own words, kept
+   * as given) and its one line. "Enter it" is the owner's. Shown with the "Draft wording" mark until he rereads them.
+   */
+  notEnteredHead: 'Published, not entered yet',
+  notEnteredLine: 'These were published during the challenge but haven’t been submitted yet. Only submitted pictures are entries.',
+  notEnteredDraft: true as boolean,
+  enterIt: 'Enter it',
   // Submit (owner, 2026-11-04). Draft wording.
   submitHead: 'Submit as an entry',
   submitNote: () => 'A remix becomes an entry only when you submit it, with the link to your post about it on Farcaster, Bluesky or Lens; the post must be yours and link to this page. You can submit one remix a day (Pacific time).',

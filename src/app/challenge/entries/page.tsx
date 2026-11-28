@@ -4,7 +4,10 @@ import { notFound } from 'next/navigation';
 import { CHALLENGE } from '~/lib/config';
 import { db } from '~/lib/db';
 import { bookCharacter } from '~/lib/images/designs';
-import { entriesWithExamples, entryHref, standing } from '~/lib/challenge/entries';
+import { entriesWithExamples, entryHref, notEnteredAll, notEnteredShown, standing } from '~/lib/challenge/entries';
+import { entriesOpen } from '~/lib/challenge/rules';
+import { enterItHref } from '~/lib/challenge/enter-it';
+import { ChallengeNotEntered } from '~/components/challenge-not-entered';
 import { CHALLENGE_WORDING as CW } from '~/lib/challenge/wording';
 import { LANDING_WORDING as L } from '~/lib/challenge/landing-wording';
 import { ChallengeEntriesList } from '~/components/challenge-entries-list';
@@ -16,7 +19,10 @@ import { callNameOf } from '~/lib/challenge/names';
  * marked "Admin example" with its ⓘ, never counted), newest first, filterable by character
  * (?character=<slug>, one of CHALLENGE.characters), with the viewer's own "Shuffled" order (drawn in the browser on
  * each tap). Never sorted by counts, and no like, recast or reply count on any card (P5i). A withdrawn submission is
- * not here. Read per request. Readable signed out once the owner opens the challenge (CHALLENGE.public); until then
+ * not here. Below them, while entries are open, "Published, not entered yet" (2026-11-27): the challenge pictures
+ * published in the window that aren't entries, less those that can never be (admins', the owner's first remixes),
+ * newest first, no badge and no count, each with "Enter it" for its own maker only, drawn in the browser
+ * (src/components/challenge-enter-it.tsx); the entries above and every count are unchanged. Read per request. Readable signed out once the owner opens the challenge (CHALLENGE.public); until then
  * "not found" to everyone, admins included (./not-found.tsx is the plain one).
  */
 export const dynamic = 'force-dynamic';
@@ -40,6 +46,8 @@ export default async function ChallengeEntries({ searchParams }: Props) {
   const all = (st ? entriesWithExamples(st) : []).filter((e) => !character || e.character === character);
   const example = { label: CW.exampleLabel, info: CW.exampleInfo };
   const cards: Record<string, RemixCardWords> = Object.fromEntries(chars.map((c) => [c.slug, { name: names[c.slug], untitled: L.untitled(names[c.slug]), alt: CHALLENGE.pictureEntries ? L.pictureAltMoment(names[c.slug]) : L.pictureAlt(names[c.slug]) }]));
+  // "Published, not entered yet" (2026-11-27): shown only, never counted; the same character filter, newest first.
+  const later = st && entriesOpen() ? notEnteredShown(await notEnteredAll(sql!, st).catch(() => [])).filter((e) => !character || e.character === character) : [];
   const href = (c: string | null) => `/challenge/entries${c ? `?character=${c}` : ''}`;
   return (
     <div className="page prose ch-page ch-feed-page ch-entries-page">
@@ -62,6 +70,10 @@ export default async function ChallengeEntries({ searchParams }: Props) {
       ) : (
         <p className="dz-muted ch-feed-none">{character ? L.entriesNoneFor(names[character]) : L.entriesNone}</p>
       )}
+      <ChallengeNotEntered
+        all={later.map((e) => ({ versionId: e.versionId, character: e.character, title: e.title, byName: e.byName, byFid: e.maker, thumb: e.thumb, href: entryHref(e.versionId), enterHref: enterItHref(e.versionId) }))}
+        w={{ head: CW.notEnteredHead, line: CW.notEnteredLine, draft: CW.notEnteredDraft ? CW.draftShort : null, enterIt: CW.enterIt, cards }}
+      />
     </div>
   );
 }
