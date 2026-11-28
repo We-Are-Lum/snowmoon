@@ -571,6 +571,16 @@ party script. Who rated or liked what is private; the public sees totals
 only, through `studio.rating_totals`, `studio.like_totals` and
 `studio.take_like_totals` (migration 0004).
 
+**Exception: /admin/bounty (owner, 2026-11-27, approved as drafted with "challenge entry" widened to "challenge entry or
+poidh claim", and reread with "and the Farcaster profile of the address that made each claim" added).** "On /admin/bounty only, which answers "not found" to everyone but admins: when an admin opens it, the
+server reads each challenge entry's or poidh claim's linked post and its writer's public profile, and the Farcaster
+profile of the address that made each claim, from the post's own network (Neynar for Farcaster, Bluesky's public API, Lens's API), and the pictures they name, to show them to the admin.
+The admin's browser still loads only from this site, and pictures come through the site. Nothing read is stored, and no
+like, recast, reply or follower count is shown. Every other page still asks no network anything when it is viewed."
+In practice: `src/lib/review/inline.ts` (5 minutes in memory), `/api/admin/bounty/inline` and `/api/admin/bounty/media`;
+`npm run test:challenge` names it as the one exception to "viewing asks no one", with a planted fault (a public page
+making the same lookup must fail).
+
 **Checked by.**
 - `P6a`: a real browser loads the production pages in its list (including a chapter,
   the cards gallery, an adaptation, a share page, the glossary and a glossary word) and fails on any request

@@ -302,7 +302,8 @@ const mod = read('src/app/api/moderate/route.ts');
 // `action === 'dismiss'` (dismissStoryboard), which comes first, so the first match is not the images' one.
 const IMAGES_DISMISS = "} else if (action === 'dismiss') {";
 const dismissAt = mod.indexOf(IMAGES_DISMISS);
-const dismissEnd = mod.indexOf("else return NextResponse.json({ error: 'Hide or dismiss only' }", dismissAt);
+// The branch ends where the images' Unhide begins (the follow-up to #255, 2026-11-27).
+const dismissEnd = mod.indexOf("} else if (action === 'unhide') {", dismissAt);
 const dismiss = dismissAt >= 0 && dismissEnd > dismissAt ? mod.slice(dismissAt, dismissEnd) : '';
 check('the images\' Dismiss branch is found by name, once', dismissAt >= 0 && dismissEnd > dismissAt && mod.indexOf(IMAGES_DISMISS, dismissAt + 1) === -1);
 check('Dismiss only logs; it never changes a status', /insert into studio\.removal_log/.test(dismiss) && /step: 'dismissed'/.test(dismiss) && !/update studio\.elements/.test(dismiss));

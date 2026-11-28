@@ -128,11 +128,12 @@ CHALLENGE.pictureEntries = false;
   const D = CHALLENGE.defaultLooks as Record<string, string | null>;
   // Lord Ephelion joins (owner, 2026-11-11) before his bases are published (publish-bases refuses a character the challenge
   // doesn't have): his list stays empty until the config PR after the owner's run; every other list is full.
-  check('committed bases: one per base slot for each character, each a version id', CHALLENGE.characters.every((c) => B[c].length === CHALLENGE.baseCount[c] && B[c].every((id) => uuid.test(id))), JSON.stringify(B));
+  check('committed bases: version ids, none over its limit; 4 each, Gladias 5 and Deluin 6 (owner, 2026-11-27: limits 6 and 7, one slot each open for the first passes)', CHALLENGE.characters.every((c) => B[c].length <= CHALLENGE.baseCount[c] && B[c].every((id) => uuid.test(id))) && CHALLENGE.characters.map((c) => `${c}:${B[c].length}`).join() === 'zei:4,gladias:5,bai:4,seila:4,deluin:6,mu:4,ephelion:4', JSON.stringify(B));
+  check('committed bases: the owner\'s eight Midjourney sheets of 2026-11-27, each on its own character', [['zei', '69026c8f-5843-45b1-84a2-763d68a4bf15'], ['gladias', '99d19ff8-496f-4f6c-a6ca-b5065fa9e953'], ['gladias', 'c1db9f38-ea43-4e29-b5d1-c49ac230266f'], ['bai', 'a360632a-abcb-4a51-a352-7ead0c201d29'], ['seila', '8297dcbb-05eb-4070-a4a1-7ec1277186b1'], ['deluin', '50cef5cb-327e-4f8b-b482-c8ede34b0f96'], ['mu', 'c224688e-2bb9-4617-a41b-8626402c12e4'], ['ephelion', 'deb30fee-5adc-4df8-9c0e-f8db12b50467']].every(([c, id]) => B[c].includes(id) && CHALLENGE.characters.every((o) => o === c || !B[o].includes(id))));
   check('committed default looks: each character\'s first base (its current default)', CHALLENGE.characters.every((c) => D[c] === (B[c][0] ?? null)), JSON.stringify(D));
   check('committed first remixes: version ids, never a base', CHALLENGE.characters.every((c) => F[c].every((id) => uuid.test(id) && !B[c].includes(id))), JSON.stringify(F));
   check('committed first remixes: within the limit (firstRemixesProblems finds nothing)', R.firstRemixesProblems().length === 0, R.firstRemixesProblems().join('; '));
-  check('Deluin\'s five bases include the ledge and the game board, and neither is a first remix', ['ced288e6-1c3f-4d58-bb4c-839ef774bb71', '42588f48-6673-478e-ab54-8e30372743c0'].every((id) => B.deluin.includes(id) && !F.deluin.includes(id)) && B.deluin.length === 5);
+  check('Deluin\'s five bases include the ledge and the game board, and neither is a first remix', ['ced288e6-1c3f-4d58-bb4c-839ef774bb71', '42588f48-6673-478e-ab54-8e30372743c0'].every((id) => B.deluin.includes(id) && !F.deluin.includes(id)) && B.deluin.length === 6);
   for (const c of CHALLENGE.characters) { B[c] = []; F[c] = []; D[c] = null; }
 }
 // The tests below are the challenge once the owner has opened it.
@@ -324,9 +325,9 @@ proof('S4 a share counted per submission is caught', [...one, ...people].length 
 }
 {
   const committedMax = CHALLENGE.maxBases;
-  check('committed: three bases for every character (owner, 2026-11-11), five for Deluin (owner, 2026-11-26), five at most', committedMax === 5 && CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join() === 'zei:3,gladias:3,bai:3,seila:3,deluin:5,mu:3,ephelion:3', CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join());
-  check('committed: at most three bases are used for Zei, five for Deluin (owner, 2026-11-26)', R.basesOf('zei', { zei: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 3 && R.basesOf('deluin', { deluin: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444', '55555555-5555-4555-8555-555555555555', '66666666-6666-4666-8666-666666666666'] }).length === 5);
-  proof('a fourth base for a character is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), mu: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444'] }).length === 1);
+  check('committed limits (owner, 2026-11-27): Deluin 7, Gladias 6, the others 4, seven at most', committedMax === 7 && CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join() === 'zei:4,gladias:6,bai:4,seila:4,deluin:7,mu:4,ephelion:4', CHALLENGE.characters.map((c) => `${c}:${R.baseCountOf(c)}`).join());
+  check('committed: at most four bases are used for Zei, seven for Deluin (owner, 2026-11-27)', R.basesOf('zei', { zei: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444', '55555555-5555-4555-8555-555555555555'] }).length === 4 && R.basesOf('deluin', { deluin: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444', '55555555-5555-4555-8555-555555555555', '66666666-6666-4666-8666-666666666666', '77777777-7777-4777-8777-777777777777', '88888888-8888-4888-8888-888888888888'] }).length === 7);
+  proof('a fifth base for Mu (over its four) is caught', R.basesProblems({ ...Object.fromEntries(CHALLENGE.characters.map((c) => [c, []])), mu: ['11111111-1111-4111-8111-111111111111', '22222222-2222-4222-8222-222222222222', '33333333-3333-4333-8333-333333333333', '44444444-4444-4444-8444-444444444444', '55555555-5555-4555-8555-555555555555'] }).length === 1);
   check('no look is called canonical or official (the word is "current default")', !/\b(canonical|official)\b/i.test(read('src/lib/config.ts')) && !/\b(canonical|official)\b/i.test(read('src/lib/challenge/landing-wording.ts')));
   // The rule itself works for any number; the checks below exercise it with three.
   CHALLENGE.maxBases = 3;
@@ -1048,6 +1049,28 @@ check('the version page: Entry once submitted, Submit offered on an unsubmitted 
 }
 await E.startingSheets(S, 'bai');
 check('viewing pages (the challenge, version pages, starting sheets) made no outside call at all', calls.length === 0, calls.join(' '));
+{
+  // The one named exception (owner, 2026-11-27; docs/principles.md, principle 6, "Exception: /admin/bounty"): on
+  // /admin/bounty only, which answers "not found" to everyone but admins, the server reads entries' and claims' linked
+  // posts and their writers' profiles when an admin opens it. Only the review's live lookup (src/lib/review/inline.ts)
+  // may do that on view, only src/lib/review/review.ts and the admin inline route may use it, and only behind the admin
+  // 404 gate. Every other page still asks no network anything when it is viewed.
+  const ALLOWED = new Set(['src/lib/review/review.ts', 'src/app/api/admin/bounty/inline/route.ts', 'src/lib/review/inline.ts']);
+  const LIVE = /from ['"](?:~\/lib\/review\/inline|\.\/inline|\.\.\/review\/inline)['"]|\b(postView|profilesByAddress)\(/;
+  const walkSrc = (dir: string): string[] => readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap((d) => (d.isDirectory() ? walkSrc(`${dir}/${d.name}`) : /\.tsx?$/.test(d.name) ? [`${dir}/${d.name}`] : []));
+  const liveProblems = (files: { file: string; text: string }[]) => {
+    const p: string[] = [];
+    for (const f of files) if (!ALLOWED.has(f.file) && LIVE.test(f.text)) p.push(`${f.file} reads posts or profiles live (only /admin/bounty may)`);
+    const lib = files.find((f) => f.file === 'src/lib/review/review.ts');
+    const body = lib ? lib.text.slice(lib.text.indexOf('export async function inlineView('), lib.text.indexOf('export async function inlineView(') + 600) : '';
+    if (!/^export async function inlineView\([^]*?\{\n  if \(!isAdmin\(fid\)\) return \{ status: 404/.test(body)) p.push('inlineView does not answer 404 to non-admins before anything is read');
+    return p;
+  };
+  const files = walkSrc('src').map((f) => ({ file: f, text: read(f) }));
+  check('the one exception to "viewing asks no one": only /admin/bounty reads posts and profiles live, behind its admin 404 gate', liveProblems(files).length === 0, liveProblems(files).join('; '));
+  proof('a public page reading a post live on view is caught', liveProblems([...files, { file: 'src/app/challenge/entries/page.tsx', text: "import { postView } from '~/lib/review/inline';\nawait postView(ref);" }]).length > 0);
+  proof('the live lookup without its admin gate is caught', liveProblems(files.map((f) => (f.file === 'src/lib/review/review.ts' ? { ...f, text: f.text.replace(/(export async function inlineView\([^]*?\{\n)  if \(!isAdmin\(fid\)\) return \{ status: 404[^\n]*\n/, '$1') } : f))).length > 0);
+}
 {
   const Ny = await import('../src/lib/images/neynar');
   await Ny.checkNeynar(S, 777, 0.7);
