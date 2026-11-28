@@ -3012,6 +3012,20 @@ const PREVIEW_HOST = /^snowmoon-[a-z0-9-]+-nates-projects-d1780cff\.vercel\.app$
     globalThis.fetch = (u, init = {}) => (new URL(String(u instanceof Request ? u.url : u)).origin === origin ? plain(u, { ...init, headers: { ...(init.headers as Record<string, string> | undefined), ...header } }) : plain(u, init));
   }
 }
+// A local target only (localhost or 127.0.0.1; owner, 2026-11-24): GET /api/eth-usd, the ETH price our server reads on
+// Base, is stood in at $2,500 in every browser context, shaped like the route's answer. A local build has no way out to
+// Base, so the request can stay open and /support never goes quiet. Production and previews are untouched: there the
+// route answers from Base as always. A page's own route (checkSupport's) still comes first.
+if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
+  const newContext = browser.newContext.bind(browser);
+  browser.newContext = async (o) => {
+    const ctx = await newContext(o);
+    await ctx.route('**/api/eth-usd', (r) => r.fulfill({ json: { usd: 2500, updatedAt: Math.floor(Date.now() / 1000) }, headers: { 'Cache-Control': 'no-store' } }));
+    return ctx;
+  };
+  browser.newPage = async (o) => (await browser.newContext(o)).newPage();
+  console.log('check:ui: local target, so GET /api/eth-usd is stood in at $2,500 (no way out to Base here)');
+}
 try {
   await checkAiLabels();
   await checkRemixLanding();
