@@ -402,7 +402,11 @@ export const LEGAL: {
     // (through Neynar for a Farcaster post), and the Farcaster profile of the address that made each claim, through
     // Neynar, to show them to the admin, and doesn't keep them." The words before were 1nx9bw3 (never live).
     // Both rereads together (#257 merged first; #258 merged main in, no word changed): the words of both, 1rtkpxm.
-    privacy: { words: '1rtkpxm', on: '2026-11-27', by: 'FID 6786' },
+    // 2026-11-28, owner's reread for #261 (recording a passage), typed in his session: "Reread: the two Privacy §4 changes
+    // and the passage wording, as listed." §4's drafts item ends "…with any corrections you make to them, and, for a
+    // passage, which sentences you recorded)"; the takes item reads "…the speech (or the passage of it you recorded), …".
+    // The words before were 1rtkpxm.
+    privacy: { words: '1smcn0p', on: '2026-11-28', by: 'FID 6786' },
   },
 };
 

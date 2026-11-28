@@ -109,7 +109,7 @@ export const RECORDER = {
   loading: 'Loading…',
   notReady: 'Not ready: the voice service isn’t set up on this server.',
   convertFailed: 'The conversion failed. Your recording is still on this device: try again.',
-  // A passage (2026-11-27). DRAFT: not yet reread by Nate.
+  // A passage (2026-11-27). Reread by Nate as listed in #261 (2026-11-28).
   wholeSpeech: 'The whole speech',
   aPassage: 'A passage',
   passageFrom: 'From sentence',
