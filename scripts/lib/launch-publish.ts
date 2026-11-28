@@ -255,7 +255,7 @@ export function applyGate(o: { apply: boolean; confirmed: boolean; isPublic: boo
 export function addedRecipe(
   r: FirstRemixRecipe,
   converted: { sha256: string; width: number; height: number; from: string; originalSize: [number, number] | null },
-  base: { versionId: string; frontSha256: string | null },
+  base: { versionId: string; frontSha256: string | null } | null,
 ): Recipe {
   const version = r.tool.version.trim().replace(/^v/i, '');
   const seedRaw = (r.settings as Record<string, unknown>).seed;
@@ -276,7 +276,8 @@ export function addedRecipe(
       plan: r.plan,
       made_by: 'the owner (@naaate), by hand, with Midjourney (a closed model by Midjourney), outside the site',
       references_reported: { inputs: r.inputs },
-      remixes_base: { version_id: base.versionId, front_sha256: base.frontSha256, note: 'which base it remixes: named in its recipe by its maker, one of the character\'s CHALLENGE.bases' },
+      remixes_base: base ? { version_id: base.versionId, front_sha256: base.frontSha256, note: 'which base it remixes: named in its recipe by its maker, one of the character\'s CHALLENGE.bases' } : null,
+      ...(base ? {} : { new_sheet: 'made from no base: a new sheet of its character; what its maker gave the tool is in references' }),
       original: { file: r.file, sha256: r.sha256.toLowerCase(), size: converted.originalSize },
       converted: { from: converted.from, sha256: r.sha256.toLowerCase(), to: 'jpeg', quality: 92, note: 'converted for the site; no model', jpeg_sha256: converted.sha256 },
       cost: 'made on the owner\'s paid Midjourney plan; no per-picture cost reported',

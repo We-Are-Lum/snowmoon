@@ -76,7 +76,7 @@ const modelId = (name: string) => name.trim().toLowerCase().replace(/[^a-z0-9.]+
 
 say(`add-starting-points: ${APPLY ? 'APPLY' : 'DRY RUN (reads only; nothing written, nothing uploaded)'}`);
 say(`database: ${new URL(url).hostname}; folder: ${DIR}; label: "${MIDJOURNEY_LABEL}"; CHALLENGE.public: ${CHALLENGE.public ? 'on (allowed)' : 'off'}`);
-type Plan = { name: string; title: string; character: string; base: { versionId: string; text: string }; jpeg: Buffer; jpegSha: string; original: string; recipe: ReturnType<typeof addedRecipe> };
+type Plan = { name: string; title: string; character: string; base: { versionId: string; text: string } | null; text: string; jpeg: Buffer; jpegSha: string; original: string; recipe: ReturnType<typeof addedRecipe> };
 const plans: Plan[] = [];
 const refusals: string[] = [];
 const skipped: { file: string; character: string; versionId: string }[] = [];
@@ -85,9 +85,16 @@ if (!files.length) refusals.push(`no <name>.json recipe in ${DIR}`);
 for (const f of files) {
   say();
   say(`-- ${f}`);
-  let r: Partial<FirstRemixRecipe> & { title?: unknown };
+  let r: Partial<FirstRemixRecipe> & { title?: unknown; new_sheet?: unknown; text?: unknown };
   try { r = JSON.parse(readFileSync(path.join(DIR, f), 'utf8')); } catch (e) { say(`  PROBLEM: not JSON (${(e as Error).message})`); refusals.push(`${f}: not JSON`); continue; }
-  const probs = recipeProblems(r);
+  // A new sheet (owner, 2026-11-27): a picture made from no base (its inputs say what it was given, e.g. a style
+  // reference) is published as a new sheet of its character, not as a remix: "base": null and "new_sheet": true, with
+  // the sheet's "text" (its maker's own words). Its lineage then claims no base it didn't come from.
+  const isNew = r.new_sheet === true && r.base === null;
+  if (r.new_sheet !== undefined && !isNew) { say('  PROBLEM: new_sheet: true needs "base": null'); refusals.push(`${f}: new_sheet needs base null`); continue; }
+  const probs = recipeProblems(r).filter((p) => !(isNew && p.startsWith('base:')));
+  if (isNew && (typeof r.text !== 'string' || !r.text.trim() || r.text.length > 600)) probs.push('text: a new sheet needs its text (at most 600 characters)');
+  if (!isNew && r.text !== undefined) probs.push('text: only a new sheet carries its own text (a remix keeps its base\'s)');
   let bytes: Buffer | null = null;
   const file = typeof r.file === 'string' ? path.join(DIR, path.basename(r.file)) : null;
   if (!file || !existsSync(file)) probs.push('file: not found in the folder');
@@ -103,7 +110,7 @@ for (const f of files) {
     else if (id !== MIDJOURNEY_MODEL || !m.closed || m.maker !== 'Midjourney') probs.push(`model "${id}": this path brings in Midjourney pictures only (closed, by Midjourney; the label names Midjourney)`);
   }
   if (r.title !== undefined && (typeof r.title !== 'string' || !r.title.trim() || r.title.length > 120)) probs.push('title: when given, a name of at most 120 characters');
-  let base: Plan['base'] | null = null;
+  let base: Plan['base'] = null;
   let frontSha: string | null = null;
   if (typeof r.base === 'string' && typeof r.character === 'string' && !probs.some((p) => p.startsWith('base:') || p.startsWith('character:'))) {
     const row = await baseRow(r.base.toLowerCase());
@@ -119,17 +126,17 @@ for (const f of files) {
   const skip = /^[0-9a-f]{64}$/.test(original) ? await already(original) : null;
   if (skip) { say(`  SKIP: already published by ${MAINTAINER_FID}, version ${skip}`); skipped.push({ file: f, character: String(r.character), versionId: skip }); continue; }
   for (const x of probs) { say(`  PROBLEM: ${x}`); refusals.push(`${f}: ${x}`); }
-  if (probs.length || !bytes || !base) continue;
+  if (probs.length || !bytes || (!base && !isNew)) continue;
   const rec = r as FirstRemixRecipe;
   const meta = await sharp(bytes).metadata();
   const { data, info } = await sharp(bytes).flatten({ background: '#ffffff' }).jpeg({ quality: 92, mozjpeg: true }).toBuffer({ resolveWithObject: true });
   const jpegSha = sha(data);
-  const recipe = addedRecipe(rec, { sha256: jpegSha, width: info.width, height: info.height, from: meta.format === 'png' ? 'image/png' : 'image/jpeg', originalSize: meta.width && meta.height ? [meta.width, meta.height] : null }, { versionId: base.versionId, frontSha256: frontSha });
+  const recipe = addedRecipe(rec, { sha256: jpegSha, width: info.width, height: info.height, from: meta.format === 'png' ? 'image/png' : 'image/jpeg', originalSize: meta.width && meta.height ? [meta.width, meta.height] : null }, base ? { versionId: base.versionId, frontSha256: frontSha } : null);
   const title = typeof r.title === 'string' ? r.title.trim() : `${bookCharacter(rec.character)?.name ?? rec.character}, from Midjourney (${path.basename(rec.file).replace(/\.[^.]+$/, '')})`;
-  say(`  "${title}": ${rec.character}, a remix of base ${base.versionId}`);
+  say(base ? `  "${title}": ${rec.character}, a remix of base ${base.versionId}` : `  "${title}": ${rec.character}, a new sheet (made from no base)`);
   say(`  front ${keyFor(jpegSha)}  sha256 ${jpegSha} (JPEG of ${original})  ${info.width} x ${info.height}`);
   say(`  recipe: ${JSON.stringify(recipe)}`);
-  plans.push({ name: f, title, character: rec.character, base, jpeg: data, jpegSha, original, recipe });
+  plans.push({ name: f, title, character: rec.character, base, text: base ? base.text : String(r.text).trim(), jpeg: data, jpegSha, original, recipe });
 }
 say();
 if (!APPLY) {
@@ -161,14 +168,20 @@ for (const p of plans) {
   if (ex) { say(`${p.name}: exists, skipped (version ${ex})`); skipped.push({ file: p.name, character: p.character, versionId: ex }); continue; }
   const u = await put(p.jpegSha, p.jpeg);
   const body = {
-    title: p.title, text: p.base.text, samples: [], views: { front: { url: u, sha256: p.jpegSha, recipe: p.recipe } },
+    title: p.title, text: p.text, samples: [], views: { front: { url: u, sha256: p.jpegSha, recipe: p.recipe } },
     by_name: BY_NAME, by_name_source: null, role: 'maintainer' as const,
-    assist: { model: 'claude-coding-agent', drafted: ['the sheet\'s text, kept from its base'], source: 'the base it remixes' },
+    assist: p.base
+      ? { model: 'claude-coding-agent', drafted: ['the sheet\'s text, kept from its base'], source: 'the base it remixes' }
+      : { model: 'claude-coding-agent', drafted: ['the sheet\'s text: the character\'s words taken from its maker\'s own prompt'], source: 'its prompt' },
     style: null,
   };
-  const out = await makeDesign(sql as unknown as Sql, { fid: MAINTAINER_FID, mode: 'fork', kind: 'character', fromVersionId: p.base.versionId, body: body as never });
-  done.push({ file: p.name, title: p.title, character: p.character, versionId: out.versionId, base: p.base.versionId });
-  say(`${p.name}: published, version ${out.versionId}, a remix of ${p.base.versionId}`);
+  const ch = bookCharacter(p.character);
+  if (!p.base && !ch) { say(`${p.name}: no book character "${p.character}"; skipped`); continue; }
+  const out = p.base
+    ? await makeDesign(sql as unknown as Sql, { fid: MAINTAINER_FID, mode: 'fork', kind: 'character', fromVersionId: p.base.versionId, body: body as never })
+    : await makeDesign(sql as unknown as Sql, { fid: MAINTAINER_FID, mode: 'create', kind: 'character', character: ch!, body: body as never });
+  done.push({ file: p.name, title: p.title, character: p.character, versionId: out.versionId, base: p.base?.versionId ?? 'new sheet' });
+  say(`${p.name}: published, version ${out.versionId}, ${p.base ? `a remix of ${p.base.versionId}` : 'a new sheet'}`);
 }
 say();
 say('New version ids, per character, to add to CHALLENGE.bases (with baseCount; this script changes no config):');

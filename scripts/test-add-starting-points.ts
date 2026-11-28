@@ -168,6 +168,31 @@ const files2 = stored().length;
 const again = await add(good, APPLY);
 check('a second --apply skips both by their original sha256 and writes nothing', again.status === 0 && (again.out.match(/SKIP: already published by 6786/g) ?? []).length === 2 && /\(none new\)/.test(again.out) && (await counts()) === before && stored().length === files2, again.out.slice(-600));
 const dryAgain = await add(good);
+
+// A new sheet (owner, 2026-11-27): a picture made from no base is published as a new sheet of its character, not a fork.
+{
+  const npng = await sharp({ create: { width: 40, height: 40, channels: 3, background: { r: 10, g: 200, b: 90 } } }).png().toBuffer();
+  const STYLE_IN = 'f'.repeat(64);
+  const nr = { ...recipe({ file: 'bai-new.png', sha256: sha(npng), character: 'bai' }), base: null, new_sheet: true, text: 'a thin wiry young woman with a tall magenta ponytail', inputs: [{ sha256: STYLE_IN, what: 'style reference: the owner\'s Deluin tea picture' }] };
+  const newDir = folder('new-sheet', [{ json: nr, file: ['bai-new.png', npng] }]);
+  const noText = folder('new-no-text', [{ json: { ...nr, text: undefined }, file: ['bai-new.png', npng] }]);
+  const halfNew = folder('new-half', [{ json: { ...nr, base: ZEI_BASE }, file: ['bai-new.png', npng] }]);
+  const b0 = await counts();
+  const nt = await add(noText, APPLY);
+  check('planted: a new sheet without its text is refused, nothing written', nt.status === 3 && /text: a new sheet needs its text/.test(nt.out) && (await counts()) === b0, nt.out.slice(-600));
+  const hn = await add(halfNew, APPLY);
+  check('planted: new_sheet with a base named is refused, nothing written', hn.status === 3 && /new_sheet needs base null/.test(hn.out) && (await counts()) === b0, hn.out.slice(-600));
+  const nd = await add(newDir);
+  check('a new sheet: the dry run plans it as a new sheet, writes nothing', nd.status === 0 && /a new sheet \(made from no base\)/.test(nd.out) && (await counts()) === b0, nd.out.slice(-600));
+  const na = await add(newDir, APPLY);
+  const [row] = await q((s) => s`select v.id::text as id, v.body, e.created_by_fid, en.name, (select count(*)::int from studio.links l where l.from_version_id = v.id and l.kind = 'remixed_from') as forks
+    from studio.element_versions v join studio.elements e on e.id = v.element_id join studio.entities en on en.id = e.entity_id
+    where v.body->'views'->'front'->'recipe'->'settings'->'original'->>'sha256' = ${sha(npng)}`);
+  const st = row?.body?.views?.front?.recipe?.settings;
+  const ok = (r: typeof row) => !!r && r.name === 'Bai Jahen' && Number(r.created_by_fid) === 6786 && r.forks === 0 && r.body.text === nr.text && r.body.views.front.recipe.settings.remixes_base === null && /new sheet/.test(String(r.body.views.front.recipe.settings.new_sheet)) && r.body.views.front.recipe.references?.[0]?.sha256 === STYLE_IN;
+  check('a new sheet: published as Bai\'s sheet by 6786, no remixed_from link, its own text, no base in its recipe, the style reference listed', na.status === 0 && ok(row) && st?.label === MIDJOURNEY_LABEL, `${na.out.slice(-500)} ${JSON.stringify(row?.body).slice(0, 500)}`);
+  check('planted: the new-sheet check fails one that claims a base', !!row && !ok({ ...row, forks: 1 }));
+}
 check('a dry run after publishing says both are already published', dryAgain.status === 0 && /Would publish 0; 2 already published\./.test(dryAgain.out));
 
 await server.stop();
