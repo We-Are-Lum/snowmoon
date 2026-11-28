@@ -5,7 +5,7 @@ import { authFetch, useAuth } from '~/lib/client-auth';
 import { isAdmin } from '~/lib/admins';
 import { AdminNoteField } from './admin-note-field';
 import { LINK_REL, linkParts } from '~/lib/review/links';
-import { FILTERS, LABELS, type ClaimCard, type EntryCard, type Filter, type Kind, type LabelKey, type ReviewView } from '~/lib/review/types';
+import { FILTERS, LABELS, type ClaimCard, type EntryCard, type Filter, type InlineView, type Kind, type LabelKey, type PostSlot, type ProfileView, type ReviewView } from '~/lib/review/types';
 import '../styles/admin-bounty.css';
 
 /**
@@ -25,6 +25,8 @@ export function AdminBountyReview({ fallback }: { fallback: React.ReactNode }) {
   const auth = useAuth();
   const admin = auth.kind === 'signed-in' && isAdmin(auth.fid);
   const [view, setView] = useState<ReviewView | null>(null);
+  // The live part (owner, 2026-11-27): posts and profiles read from their networks when the page opens.
+  const [inline, setInline] = useState<InlineView | 'loading' | 'failed'>('loading');
   const [tab, setTab] = useState<Kind>('bounty_claim');
   const [filter, setFilter] = useState<Filter>('all');
   // The list for this tab and filter, fixed when the filter is chosen, so a claim labelled under "Unlabelled" stays on
@@ -53,6 +55,10 @@ export function AdminBountyReview({ fallback }: { fallback: React.ReactNode }) {
       if (s?.subject) restoreTo.current = s.subject;
     } catch {}
     void load();
+    void authFetch('/api/admin/bounty/inline', { cache: 'no-store' })
+      .then(async (r) => (r.ok ? ((await r.json()) as InlineView) : 'failed'))
+      .then((v) => setInline(v))
+      .catch(() => setInline('failed'));
   }, [admin, load]);
 
   const cards: Card[] = useMemo(() => (view ? (tab === 'bounty_claim' ? view.claims : view.entries) : []), [view, tab]);
@@ -122,7 +128,7 @@ export function AdminBountyReview({ fallback }: { fallback: React.ReactNode }) {
       {card && (
         <>
           <p className="ab-pos">{Math.min(at, ids.length - 1) + 1} of {ids.length}{filter !== 'all' ? ` · ${FILTER_NAMES[filter]}` : ''}</p>
-          {card.kind === 'bounty_claim' ? <Claim c={card} /> : <Entry c={card} />}
+          {card.kind === 'bounty_claim' ? <Claim c={card} inline={inline} /> : <Entry c={card} inline={inline} />}
           <section className="ab-labels" aria-label="Labels (private)">
             {LABELS.map((l) => {
               const on = card.marks.labels.find((x) => x.label === l.key);
@@ -161,6 +167,11 @@ function BountyRules({ view, onReload }: { view: ReviewView; onReload: () => voi
 }
 
 function ClaimPicture({ id }: { id: number }) {
+  return <AuthImage src={`/api/admin/bounty/image?claim=${id}`} className="ab-pic" alt="The claim's picture" />;
+}
+
+/** A picture from an admin route (it needs the sign-in, so it is fetched, then shown from memory). */
+function AuthImage({ src: from, className, alt, small = false }: { src: string; className: string; alt: string; small?: boolean }) {
   const [src, setSrc] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
   useEffect(() => {
@@ -168,7 +179,7 @@ function ClaimPicture({ id }: { id: number }) {
     let alive = true;
     setSrc(null);
     setFailed(false);
-    void authFetch(`/api/admin/bounty/image?claim=${id}`)
+    void authFetch(from)
       .then(async (r) => (r.ok ? r.blob() : null))
       .then((b) => {
         if (!alive) return;
@@ -181,11 +192,49 @@ function ClaimPicture({ id }: { id: number }) {
       alive = false;
       if (url) URL.revokeObjectURL(url);
     };
-  }, [id]);
-  if (failed) return <div className="ab-pic ab-pic-none">Picture not readable</div>;
-  if (!src) return <div className="ab-pic ab-pic-none">Loading the picture…</div>;
+  }, [from]);
+  if (failed) return small ? <span className={`${className} ab-pic-none`} /> : <div className={`${className} ab-pic-none`}>Picture not readable</div>;
+  if (!src) return small ? <span className={`${className} ab-pic-none`} /> : <div className={`${className} ab-pic-none`}>Loading the picture…</div>;
   // eslint-disable-next-line @next/next/no-img-element
-  return <img className="ab-pic" src={src} alt="The claim's picture" />;
+  return <img className={className} src={src} alt={alt} />;
+}
+
+const NETWORK: Record<ProfileView['network'], string> = { farcaster: 'Farcaster', bluesky: 'Bluesky', lens: 'Lens' };
+
+/** A profile read live: picture, name, handle and bio (no counts are ever read). */
+function Profile({ p, label }: { p: ProfileView; label: string }) {
+  const name = p.name ?? (p.handle ? `@${p.handle}` : NETWORK[p.network]);
+  return (
+    <div className="ab-profile">
+      {p.picture ? <AuthImage src={p.picture} className="ab-avatar" alt="" small /> : <span className="ab-avatar ab-pic-none" />}
+      <div>
+        <p className="ab-live-label">{label}</p>
+        <p className="ab-profile-name">{p.url ? <Out href={p.url}>{name}</Out> : name}{p.handle && p.name ? <span className="ab-note"> @{p.handle}</span> : null}</p>
+        {p.bio && <p className="ab-profile-bio">{linkParts(p.bio).map((x, k) => ('href' in x ? <Out key={k} href={x.href} className="ab-url">{x.text}</Out> : <span key={k}>{x.text}</span>))}</p>}
+      </div>
+    </div>
+  );
+}
+
+/** A post read live: its writer, words, pictures and date, and a link to it on its network. */
+function Post({ slot }: { slot: PostSlot }) {
+  if (!slot.ok) return <p className="ab-note ab-live">{slot.why}</p>;
+  const p = slot.post;
+  return (
+    <div className="ab-live ab-post">
+      {p.author && <Profile p={p.author} label={`Posted on ${NETWORK[p.network]}`} />}
+      {p.text && <LinkedText text={p.text} />}
+      {p.pictures.length > 0 && <div className="ab-post-pics">{p.pictures.map((m) => <AuthImage key={m} src={m} className="ab-post-pic" alt="A picture in the post" />)}</div>}
+      <p className="ab-note">{when(p.at)} PT · <Out href={p.url}>Open the post</Out></p>
+    </div>
+  );
+}
+
+/** The live block's state: reading, failed, or what was read. */
+function Live({ inline, children }: { inline: InlineView | 'loading' | 'failed'; children: (v: InlineView) => React.ReactNode }) {
+  if (inline === 'loading') return <p className="ab-note ab-live">Reading the linked posts and profiles…</p>;
+  if (inline === 'failed') return <p className="ab-note ab-live">The linked posts and profiles couldn’t be read just now.</p>;
+  return <>{children(inline)}</>;
 }
 
 /** A link out, in a new tab (owner, 2026-11-26): rel noopener noreferrer nofollow. */
@@ -204,7 +253,7 @@ function LinkedText({ text }: { text: string }) {
   );
 }
 
-function Claim({ c }: { c: ClaimCard }) {
+function Claim({ c, inline }: { c: ClaimCard; inline: InlineView | 'loading' | 'failed' }) {
   return (
     <article className="ab-card">
       {c.hasPicture ? <ClaimPicture id={c.id} /> : <div className="ab-pic ab-pic-none">No picture named</div>}
@@ -217,6 +266,17 @@ function Claim({ c }: { c: ClaimCard }) {
         {c.claimer.poidh ? <> · <Out href={c.claimer.poidh}>on poidh</Out></> : null}
         {c.pictureHost ? <><br />Picture from {c.pictureHost}{c.pictureHref ? <> · <Out href={c.pictureHref}>original</Out></> : null}</> : null}
       </p>
+      <Live inline={inline}>
+        {(v) => {
+          const x = v.claims[c.subject];
+          return (
+            <>
+              {x?.profile ? <Profile p={x.profile} label="Farcaster profile (by the claimer's address)" /> : v.farcasterNote ? <p className="ab-note ab-live">{v.farcasterNote}</p> : null}
+              {(x?.posts ?? []).map((slot, i) => <Post key={i} slot={slot} />)}
+            </>
+          );
+        }}
+      </Live>
       <ul className="ab-hints" aria-label="Hints (not labels)">
         {c.hints.map((h) => (
           <li key={h.key} data-state={h.state}>
@@ -240,7 +300,7 @@ function Claim({ c }: { c: ClaimCard }) {
   );
 }
 
-function Entry({ c }: { c: EntryCard }) {
+function Entry({ c, inline }: { c: EntryCard; inline: InlineView | 'loading' | 'failed' }) {
   return (
     <article className="ab-card">
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -248,6 +308,12 @@ function Entry({ c }: { c: EntryCard }) {
       <h2>{c.title}</h2>
       <p className="ab-meta">{c.characterName} · by {c.byHref ? <Out href={c.byHref}>{c.by}</Out> : c.by} · {when(c.createdAt)} PT · <Out href={c.href}>Open its page</Out></p>
       {c.backstory ? <LinkedText text={c.backstory} /> : <p className="ab-note">No backstory on this entry.</p>}
+      <Live inline={inline}>
+        {(v) => {
+          const posts = v.entries[c.subject]?.posts ?? [];
+          return posts.length ? posts.map((slot, i) => <Post key={i} slot={slot} />) : <p className="ab-note ab-live">No post added to this entry.</p>;
+        }}
+      </Live>
     </article>
   );
 }

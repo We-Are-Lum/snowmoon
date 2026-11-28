@@ -1049,6 +1049,28 @@ check('the version page: Entry once submitted, Submit offered on an unsubmitted 
 await E.startingSheets(S, 'bai');
 check('viewing pages (the challenge, version pages, starting sheets) made no outside call at all', calls.length === 0, calls.join(' '));
 {
+  // The one named exception (owner, 2026-11-27; docs/principles.md, principle 6, "Exception: /admin/bounty"): on
+  // /admin/bounty only, which answers "not found" to everyone but admins, the server reads entries' and claims' linked
+  // posts and their writers' profiles when an admin opens it. Only the review's live lookup (src/lib/review/inline.ts)
+  // may do that on view, only src/lib/review/review.ts and the admin inline route may use it, and only behind the admin
+  // 404 gate. Every other page still asks no network anything when it is viewed.
+  const ALLOWED = new Set(['src/lib/review/review.ts', 'src/app/api/admin/bounty/inline/route.ts', 'src/lib/review/inline.ts']);
+  const LIVE = /from ['"](?:~\/lib\/review\/inline|\.\/inline|\.\.\/review\/inline)['"]|\b(postView|profilesByAddress)\(/;
+  const walkSrc = (dir: string): string[] => readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap((d) => (d.isDirectory() ? walkSrc(`${dir}/${d.name}`) : /\.tsx?$/.test(d.name) ? [`${dir}/${d.name}`] : []));
+  const liveProblems = (files: { file: string; text: string }[]) => {
+    const p: string[] = [];
+    for (const f of files) if (!ALLOWED.has(f.file) && LIVE.test(f.text)) p.push(`${f.file} reads posts or profiles live (only /admin/bounty may)`);
+    const lib = files.find((f) => f.file === 'src/lib/review/review.ts');
+    const body = lib ? lib.text.slice(lib.text.indexOf('export async function inlineView('), lib.text.indexOf('export async function inlineView(') + 600) : '';
+    if (!/^export async function inlineView\([^]*?\{\n  if \(!isAdmin\(fid\)\) return \{ status: 404/.test(body)) p.push('inlineView does not answer 404 to non-admins before anything is read');
+    return p;
+  };
+  const files = walkSrc('src').map((f) => ({ file: f, text: read(f) }));
+  check('the one exception to "viewing asks no one": only /admin/bounty reads posts and profiles live, behind its admin 404 gate', liveProblems(files).length === 0, liveProblems(files).join('; '));
+  proof('a public page reading a post live on view is caught', liveProblems([...files, { file: 'src/app/challenge/entries/page.tsx', text: "import { postView } from '~/lib/review/inline';\nawait postView(ref);" }]).length > 0);
+  proof('the live lookup without its admin gate is caught', liveProblems(files.map((f) => (f.file === 'src/lib/review/review.ts' ? { ...f, text: f.text.replace(/(export async function inlineView\([^]*?\{\n)  if \(!isAdmin\(fid\)\) return \{ status: 404[^\n]*\n/, '$1') } : f))).length > 0);
+}
+{
   const Ny = await import('../src/lib/images/neynar');
   await Ny.checkNeynar(S, 777, 0.7);
   proof('a Neynar lookup during a page view would be caught', calls.some((u) => u.includes('api.neynar.com')));
