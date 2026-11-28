@@ -96,3 +96,5 @@
 .eph-take-row .eph-row-text { display: flex; flex-direction: column; }
 .eph-play-filled { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .eph-card-foot .eph-more { margin-right: auto; }
+/* An admin's "Make the AI reading" (#253) wraps inside the card instead of running past it. */
+.eph-row-text .eph-btn { white-space: normal; text-align: left; height: auto; padding: 8px 12px; }

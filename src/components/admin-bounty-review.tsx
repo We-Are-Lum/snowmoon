@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { authFetch, useAuth } from '~/lib/client-auth';
 import { isAdmin } from '~/lib/admins';
 import { AdminNoteField } from './admin-note-field';
+import { LINK_REL, linkParts } from '~/lib/review/links';
 import { FILTERS, LABELS, type ClaimCard, type EntryCard, type Filter, type Kind, type LabelKey, type ReviewView } from '~/lib/review/types';
 import '../styles/admin-bounty.css';
 
@@ -150,7 +151,7 @@ function BountyRules({ view, onReload }: { view: ReviewView; onReload: () => voi
   return (
     <details className="ab-rules">
       <summary>The bounty’s rules, as it states them</summary>
-      <p className="ab-note">From “{b.name}” on Base, read {when(b.readAt)} PT through {b.rpc}. {b.amountEth} ETH{b.settled ? ' · settled on poidh' : ''}. Hints below are checked against these words; they are never labels. The winner is picked on <a href={b.poidhUrl} target="_blank" rel="noreferrer">poidh</a>.</p>
+      <p className="ab-note">From “{b.name}” on Base, read {when(b.readAt)} PT through {b.rpc}. {b.amountEth} ETH{b.settled ? ' · settled on poidh' : ''}. Hints below are checked against these words; they are never labels. The winner is picked on <Out href={b.poidhUrl}>poidh</Out>.</p>
       <ol className="ab-quote">{b.steps.map((s) => <li key={s}>{s.replace(/^\d+\.\s*/, '')}</li>)}</ol>
       <p className="ab-note">The rules:</p>
       <ul className="ab-quote">{b.rules.map((r) => <li key={r}>{r}</li>)}</ul>
@@ -187,6 +188,22 @@ function ClaimPicture({ id }: { id: number }) {
   return <img className="ab-pic" src={src} alt="The claim's picture" />;
 }
 
+/** A link out, in a new tab (owner, 2026-11-26): rel noopener noreferrer nofollow. */
+function Out({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) {
+  return <a href={href} target="_blank" rel={LINK_REL} className={className}>{children}</a>;
+}
+
+/** Text with every http(s) URL as a link showing the URL in full; nothing else becomes a link. Paragraphs kept. */
+function LinkedText({ text }: { text: string }) {
+  return (
+    <div className="ab-text">
+      {text.split(/\n\s*\n/).map((p, i) => (
+        <p key={i}>{linkParts(p).map((part, k) => ('href' in part ? <Out key={k} href={part.href} className="ab-url">{part.text}</Out> : <span key={k}>{part.text}</span>))}</p>
+      ))}
+    </div>
+  );
+}
+
 function Claim({ c }: { c: ClaimCard }) {
   return (
     <article className="ab-card">
@@ -195,8 +212,10 @@ function Claim({ c }: { c: ClaimCard }) {
       <p className="ab-meta">
         Claim {c.id} · {when(c.createdAt)} PT{c.accepted ? ' · accepted' : ''}
         <br />
-        By {c.claimer.name ? <><strong>{c.claimer.name}</strong> · </> : null}<span className="ab-addr" title={c.claimer.address}>{short(c.claimer.address)}</span>
-        {c.pictureHost ? <><br />Picture from {c.pictureHost}</> : null}
+        By {c.claimer.name ? <><strong>{c.claimer.profile ? <Out href={c.claimer.profile}>{c.claimer.name}</Out> : c.claimer.name}</strong> · </> : null}
+        {c.claimer.basescan ? <Out href={c.claimer.basescan} className="ab-addr">{short(c.claimer.address)}</Out> : <span className="ab-addr" title={c.claimer.address}>{short(c.claimer.address)}</span>}
+        {c.claimer.poidh ? <> · <Out href={c.claimer.poidh}>on poidh</Out></> : null}
+        {c.pictureHost ? <><br />Picture from {c.pictureHost}{c.pictureHref ? <> · <Out href={c.pictureHref}>original</Out></> : null}</> : null}
       </p>
       <ul className="ab-hints" aria-label="Hints (not labels)">
         {c.hints.map((h) => (
@@ -212,11 +231,11 @@ function Claim({ c }: { c: ClaimCard }) {
       {c.linked.length > 0 && (
         <p className="ab-meta">
           {c.linked.map((p) => (
-            <a key={p.versionId} href={p.href} target="_blank" rel="noreferrer">{p.characterName} by {p.byName ? `@${p.byName}` : `FID ${p.byFid}`}</a>
+            <Out key={p.versionId} href={p.href}>{p.characterName} by {p.byName ? `@${p.byName}` : `FID ${p.byFid}`}</Out>
           )).reduce<React.ReactNode[]>((a, x, i) => (i ? [...a, ' · ', x] : [x]), [])}
         </p>
       )}
-      <div className="ab-text">{c.description.split(/\n\s*\n/).map((p, i) => <p key={i}>{p}</p>)}</div>
+      <LinkedText text={c.description} />
     </article>
   );
 }
@@ -227,8 +246,8 @@ function Entry({ c }: { c: EntryCard }) {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       {c.image ? <img className="ab-pic" src={c.image} alt={`${c.characterName}, the entry's picture`} /> : <div className="ab-pic ab-pic-none">No picture</div>}
       <h2>{c.title}</h2>
-      <p className="ab-meta">{c.characterName} · by {c.by} · {when(c.createdAt)} PT · <a href={c.href} target="_blank" rel="noreferrer">Open its page</a></p>
-      {c.backstory ? <div className="ab-text">{c.backstory.split(/\n\s*\n/).map((p, i) => <p key={i}>{p}</p>)}</div> : <p className="ab-note">No backstory on this entry.</p>}
+      <p className="ab-meta">{c.characterName} · by {c.byHref ? <Out href={c.byHref}>{c.by}</Out> : c.by} · {when(c.createdAt)} PT · <Out href={c.href}>Open its page</Out></p>
+      {c.backstory ? <LinkedText text={c.backstory} /> : <p className="ab-note">No backstory on this entry.</p>}
     </article>
   );
 }

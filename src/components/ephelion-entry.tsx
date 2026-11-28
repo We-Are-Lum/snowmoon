@@ -19,7 +19,7 @@ type Choice = { source: 'set' | 'own' | 'preset' | 'own-scene'; id: string; url:
 const SCENE_SLOT = 'ephelion-own-scene';
 const ticketKey = (fid: number) => `snowmoon.ephelion.scene.${fid}`;
 
-export function EphelionEntry({ fid, draftId, speechTitle, voiceName, wide }: { fid: number; draftId: string; speechTitle: string; voiceName: string; wide: boolean }) {
+export function EphelionEntry({ fid, draftId, speechTitle, voiceName, wide, takeUrl = null }: { fid: number; draftId: string; speechTitle: string; voiceName: string; wide: boolean; takeUrl?: string | null }) {
   const [opts, setOpts] = useState<Options | null>(null);
   const [tab, setTab] = useState<'choose' | 'describe'>('choose');
   const [choice, setChoice] = useState<Choice>(null);
@@ -171,10 +171,13 @@ export function EphelionEntry({ fid, draftId, speechTitle, voiceName, wide }: { 
       {note && <p className="er-ok" role="status">{note}</p>}
       <div className="er-preview">
         <p className="er-kicker">{W.preview}</p>
+        {choice && takeUrl && <p className="er-note">{W.previewLine}</p>}
         {choice ? (
           <figure className="er-preview-fig">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={choice.url} alt="" />
+            {/* #250's preview, folded in (Nate, 2026-11-27): the take playing over the picture chosen. */}
+            {takeUrl && <audio controls src={takeUrl} className="er-preview-audio" aria-label={W.previewPlay} />}
             <figcaption><span>{choice.title}</span> <span className="er-kicker">{choice.labels.join(' · ')}</span>{choice.source === 'own-scene' && <span className="er-note">{W.keptHere}</span>}</figcaption>
           </figure>
         ) : (

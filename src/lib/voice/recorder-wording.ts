@@ -38,6 +38,12 @@ export const RECORDER = {
   recordNote: (max: string) => `Read it as written, improvise around it, or edit the words first. Make him yours. A take is at most ${max}.`,
   recordNotePhone: (max: string) => `Read it, improvise, or edit the words. Up to ${max}.`,
   editText: 'Edit the text',
+  // Garance's points (Nate, 2026-11-26). Reread by Nate as listed in #256, the download file's lines included (2026-11-27).
+  changeHint: 'Change a few words or improvise if it helps you play him.',
+  download: 'Download the text',
+  downloadBook: (block: string) => `From Snowmoon by Vitalik Buterin (GPL-3.0), word for word: ${block}. This edition is not affiliated with the author.`,
+  downloadInvented: (credit: string | null, version: number) => `Invented, not from the book${credit ? `. ${credit}` : ''}. Version ${version}.`,
+  downloadFrom: 'snowmoon.party/ephelion',
   editTextShort: 'Edit text',
   editDone: 'Done',
   editReset: 'Back to the speech as written',
