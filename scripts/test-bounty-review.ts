@@ -509,6 +509,12 @@ check('nothing was asked of Base but reads', writes.length === 0);
   const mreq = (t: string | null) => new Request(`http://localhost/api/admin/bounty/media?m=${encodeURIComponent(tok)}`, { headers: t ? { authorization: `Bearer ${t}` } : {} });
   check('the media route answers 404 when signed out', (await media.GET(mreq(null))).status === 404);
   check('the inline and media routes answer private, never shared-cached', /private, no-store/.test(read('src/app/api/admin/bounty/inline/route.ts')) && /if \(!isAdmin\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404/.test(read('src/app/api/admin/bounty/media/route.ts')) && /readMedia\(/.test(read('src/app/api/admin/bounty/media/route.ts')) && /claimPicture\(url/.test(read('src/app/api/admin/bounty/media/route.ts')));
+  {
+    const { PRIVACY, LEGAL, legalKey } = await import('../src/lib/legal');
+    const privacy = PRIVACY.sections.flatMap((x) => x.body.flat()).join('\n');
+    check('Privacy §7 carries the owner’s reread line (2026-11-27), with the address lookup, word for word; the reread key matches', privacy.includes('When an admin reviews the challenge\'s entries, the site reads each entry\'s or claim\'s linked post and its writer\'s public profile again from the post\'s network (through Neynar for a Farcaster post), and the Farcaster profile of the address that made each claim, through Neynar, to show them to the admin, and doesn\'t keep them.') && LEGAL.ownerReread.privacy?.words === legalKey(PRIVACY));
+    check('principles.md carries the principle 6 exception, with the address lookup, word for word', read('docs/principles.md').replace(/\n/g, ' ').includes('server reads each challenge entry\'s or poidh claim\'s linked post and its writer\'s public profile, and the Farcaster profile of the address that made each claim, from the post\'s own network (Neynar for Farcaster, Bluesky\'s public API, Lens\'s API), and the pictures they name, to show them to the admin.'));
+  }
   const comp = read('src/components/admin-bounty-review.tsx');
   check('the page never loads a network’s picture itself: every live picture goes through AuthImage (the media route)', !/<img[^>]+src=\{(p|x|slot)\./.test(comp) && /<AuthImage key=\{m\} src=\{m\}/.test(comp) && /<AuthImage src=\{p\.picture\}/.test(comp));
 }

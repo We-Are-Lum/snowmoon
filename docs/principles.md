@@ -572,9 +572,9 @@ only, through `studio.rating_totals`, `studio.like_totals` and
 `studio.take_like_totals` (migration 0004).
 
 **Exception: /admin/bounty (owner, 2026-11-27, approved as drafted with "challenge entry" widened to "challenge entry or
-poidh claim").** "On /admin/bounty only, which answers "not found" to everyone but admins: when an admin opens it, the
-server reads each challenge entry's or poidh claim's linked post and its writer's public profile from the post's own
-network (Neynar for Farcaster, Bluesky's public API, Lens's API), and the pictures they name, to show them to the admin.
+poidh claim", and reread with "and the Farcaster profile of the address that made each claim" added).** "On /admin/bounty only, which answers "not found" to everyone but admins: when an admin opens it, the
+server reads each challenge entry's or poidh claim's linked post and its writer's public profile, and the Farcaster
+profile of the address that made each claim, from the post's own network (Neynar for Farcaster, Bluesky's public API, Lens's API), and the pictures they name, to show them to the admin.
 The admin's browser still loads only from this site, and pictures come through the site. Nothing read is stored, and no
 like, recast, reply or follower count is shown. Every other page still asks no network anything when it is viewed."
 In practice: `src/lib/review/inline.ts` (5 minutes in memory), `/api/admin/bounty/inline` and `/api/admin/bounty/media`;
