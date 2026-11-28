@@ -1314,3 +1314,37 @@ export const VOICE = {
     overEstimate: 1.2,
   },
 } as const;
+
+/**
+ * X posts from Discord (owner, 2026-11-25; branch x-posts; plan docs/proposals/x-posts.md): the team proposes posts for
+ * @snowmoon_party in Discord's #x-posts and approves them with buttons; a post goes out once 3 people with the team role
+ * approve, at least one of them a lead (Nate, Garance or Luis, by Discord user ID: DISCORD_X_LEADS). Tables: migration
+ * NEXT_x_posts.sql (applied 2026-11-25). Keys, IDs and the bot token are Vercel settings the owner adds (DISCORD_*, X_*).
+ */
+export const X_POSTS = {
+  /** The channel works: /xpost, the cards and their buttons. Nothing goes to X. Release 1. */
+  cards: true as boolean,
+  /**
+   * Posts for real, through X's API as @snowmoon_party. OFF in release 1: a card that reaches its approvals says "Would
+   * post now (posting is off)". Goes on only in the release that carries the Privacy §6 and §7 lines, after the owner's
+   * reread (plan, section 4).
+   */
+  post: false as boolean,
+  /**
+   * The site's own suggestions ("Suggested by snowmoon.party"). OFF: they send a person's name and a link to their work
+   * to Discord, which Privacy §7 must say first (plan, section 4). Built with release 2.
+   */
+  suggest: false as boolean,
+  /** 3 distinct people with the team role, at least one of them a lead; the proposer's own approval counts. */
+  approvals: 3,
+  /** What the site lets X charge in a calendar month (UTC), as priced below; X's own console limit is $25. */
+  monthlyUsd: 20,
+  /** At most this many posts a day (Pacific). */
+  perDay: 10,
+  /** X's pay-per-use prices (docs.x.com pricing page, 2026-11-25; X's console is the authority). */
+  priceUsd: { post: 0.015, postWithLink: 0.2, delete: 0.01 },
+  /** X's limit for a post, in its own weighted count. */
+  maxWeighted: 280,
+  /** Only the owner registers the slash command (it uses the bot token, which no agent handles). */
+  registerBy: [6786] as readonly number[],
+} as const;

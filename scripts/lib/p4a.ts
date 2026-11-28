@@ -44,6 +44,36 @@ export const P4A_SOCIAL_SIGN_IN = new Set([
   'src/app/api/auth/bluesky/start/route.ts',
   'src/app/api/auth/bluesky/callback/route.ts',
 ]);
+// Checked exemption (branch x-posts, 2026-11-25; the owner's yes of 2026-11-26: "Yes to the P4a exemption for
+// /api/discord/interactions, with the conditions as checked"): Discord's Interactions Endpoint. Its
+// requests come from Discord, not a signed-in browser, so it can't require a site sign-in. It passes only if the route
+// hands the raw body and headers straight to handleInteraction and imports nothing else of ours, and the handler refuses
+// (401) any request without Discord's Ed25519 signature before it parses or reads anything, then requires the server
+// and the X posts team role. Nothing it reaches publishes or keeps anything on the site (PUBLISH_OR_KEEP over the
+// route, the handler and its store); a post reaches X only with 3 people's approvals, one of them a lead.
+export const P4A_DISCORD = new Set(['src/app/api/discord/interactions/route.ts']);
+const DISCORD_ROUTE_IMPORTS = new Set(['next/server', '~/lib/db', '~/lib/x-posts/apis', '~/lib/x-posts/interactions']);
+const DISCORD_MODULES = ['src/lib/x-posts/interactions.ts', 'src/lib/x-posts/store.ts'];
+
+/** Problems with the Discord route (P4A_DISCORD), or with the handler it uses. */
+export function discordRouteProblems(r: Src, read: (rel: string) => string): string[] {
+  const out: string[] = [];
+  const code = stripComments(r.src);
+  for (const imp of importsOf(r.src)) if (!DISCORD_ROUTE_IMPORTS.has(imp.from)) out.push(`${r.file}: imports ${imp.from}, not the X posts handler`);
+  if (!/const raw = await request\.text\(\);\s*const a = await handleInteraction\(raw, request\.headers,/.test(code)) out.push(`${r.file}: doesn't hand the raw request straight to handleInteraction`);
+  if (/\bsql`|getFid|getPerson/.test(code)) out.push(`${r.file}: does more than hand the request on`);
+  if (PUBLISH_OR_KEEP.test(code)) out.push(`${r.file}: can publish or keep`);
+  const h = stripComments(read('src/lib/x-posts/interactions.ts'));
+  const body = h.slice(h.indexOf('export async function handleInteraction('));
+  const verify = body.search(/if \(!verifyDiscord\(env\.publicKey, headers\.get\('x-signature-ed25519'\), headers\.get\('x-signature-timestamp'\), raw, deps\.now\)\) return json\(\{ error: 'invalid request signature' \}, 401\);/);
+  const parse = body.indexOf('JSON.parse(');
+  const firstSql = body.search(/\b(propose|toggleApproval|edit|withdraw|getProposal|checkDelete|approvalsOf)\(sql/);
+  if (verify < 0) out.push('src/lib/x-posts/interactions.ts: handleInteraction does not refuse an unsigned request with 401');
+  else if ((parse >= 0 && parse < verify) || (firstSql >= 0 && firstSql < verify)) out.push('src/lib/x-posts/interactions.ts: handleInteraction reads the request before checking its signature');
+  if (!/\.includes\(env\.roleId\)\) return only\(REPLY\.notTeam\)/.test(body)) out.push('src/lib/x-posts/interactions.ts: handleInteraction does not require the team role');
+  for (const f of DISCORD_MODULES) if (PUBLISH_OR_KEEP.test(stripComments(read(f)))) out.push(`${f}: can publish or keep`);
+  return [...new Set(out)];
+}
 export const P4A_EXEMPT = new Set(['src/app/api/auth/web/start/route.ts', 'src/app/api/wallet/sign-in/route.ts']);
 const SOCIAL_ROUTE_IMPORTS = new Set(['next/server', '~/lib/config', '~/lib/social/lens', '~/lib/social/atproto', '~/lib/social/session', '~/lib/social/sign-in']);
 /** The sign-in modules those routes reach, which must not touch the database (sign-in.ts is read separately). */
@@ -193,6 +223,7 @@ export function p4aProblems(routes: Src[], read: (rel: string) => string): strin
     if (P4A_SOCIAL_SIGN_IN.has(r.file)) { problems.push(...socialSignInProblems(r, read)); continue; }
     if (P4A_READ_ONLY.has(r.file) && !/\bdb\(|sql`|from '~\/lib\/db'/.test(r.src) && !/readOnlyHint: false/.test(r.src)) continue;
     if (P4A_AGENT_SIGN_IN.has(r.file)) { problems.push(...signInProblems(r, read)); continue; }
+    if (P4A_DISCORD.has(r.file)) { problems.push(...discordRouteProblems(r, read)); continue; }
     // Any route an agent can reach is judged as an agent's route, even if it also checks a person.
     if (agentReachable(r.src)) { problems.push(...agentRouteProblems(r, read)); continue; }
     if (/(getFid|getPerson|getWallet)\(/.test(r.src) && /status: 401/.test(r.src)) continue;
