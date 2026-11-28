@@ -11,6 +11,10 @@ import type { ModerationDeps } from './moderation';
  * move to the private bucket as any hidden publication's do. Unhiding the picture brings back only the takes hidden
  * because of it (studio.unhide_takes_using_picture: not those hidden or reported for themselves), each file put back
  * only if its private copy is byte for byte the published file (principle 5).
+ *
+ * A picture's maker hiding or bringing back their own picture (role 'author', the image's own Hide; NEXT_takes_hide_owner.sql)
+ * goes through the owner's functions, which check in the database that this person made the picture (or their linked
+ * wallet did), and bring back only the takes their own hide hid.
  */
 type Sql = postgres.Sql;
 
@@ -18,10 +22,13 @@ async function versionsOf(sql: Sql, elementId: string): Promise<string[]> {
   return (await sql<{ id: string }[]>`select id::text from studio.element_versions where element_id = ${elementId}`).map((r) => r.id);
 }
 
-export async function hideReachesTakes(sql: Sql, elementId: string, by: number, role: 'moderator' | 'maintainer' | 'rule', deps: ModerationDeps = moderationDeps()) {
+export async function hideReachesTakes(sql: Sql, elementId: string, by: number, role: 'moderator' | 'maintainer' | 'rule' | 'author', deps: ModerationDeps = moderationDeps()) {
   let takes = 0;
   for (const v of await versionsOf(sql, elementId)) {
-    const rows = await sql<{ publication_id: string; key: string }[]>`select publication_id::text, key from studio.hide_takes_using_picture(${v}::uuid, ${by}::bigint, ${role})`;
+    const rows =
+      role === 'author'
+        ? await sql<{ publication_id: string; key: string }[]>`select publication_id::text, key from studio.hide_takes_using_own_picture(${v}::uuid, ${by}::bigint)`
+        : await sql<{ publication_id: string; key: string }[]>`select publication_id::text, key from studio.hide_takes_using_picture(${v}::uuid, ${by}::bigint, ${role})`;
     const byTake = new Map<string, string[]>();
     for (const r of rows) byTake.set(r.publication_id, [...(byTake.get(r.publication_id) ?? []), r.key]);
     for (const [id, keys] of byTake) {
@@ -42,10 +49,13 @@ export async function hideReachesTakes(sql: Sql, elementId: string, by: number, 
   return { takes };
 }
 
-export async function unhideReachesTakes(sql: Sql, elementId: string, by: number, role: 'moderator' | 'maintainer', deps: ModerationDeps = moderationDeps()) {
+export async function unhideReachesTakes(sql: Sql, elementId: string, by: number, role: 'moderator' | 'maintainer' | 'author', deps: ModerationDeps = moderationDeps()) {
   let takes = 0;
   for (const v of await versionsOf(sql, elementId)) {
-    const rows = await sql<{ publication_id: string; key: string }[]>`select publication_id::text, key from studio.unhide_takes_using_picture(${v}::uuid, ${by}::bigint, ${role})`;
+    const rows =
+      role === 'author'
+        ? await sql<{ publication_id: string; key: string }[]>`select publication_id::text, key from studio.unhide_takes_using_own_picture(${v}::uuid, ${by}::bigint)`
+        : await sql<{ publication_id: string; key: string }[]>`select publication_id::text, key from studio.unhide_takes_using_picture(${v}::uuid, ${by}::bigint, ${role})`;
     const byTake = new Map<string, string[]>();
     for (const r of rows) byTake.set(r.publication_id, [...(byTake.get(r.publication_id) ?? []), r.key]);
     for (const [id, keys] of byTake) {

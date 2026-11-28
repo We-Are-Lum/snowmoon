@@ -1,5 +1,6 @@
 import { ModerateQueue } from '~/components/moderate-queue';
 import { ModerateStoryboards } from '~/components/moderate-storyboards';
+import { ModerateHiddenImages } from '~/components/moderate-hidden-images';
 import { StorageCheck } from '~/components/storage-check';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 
@@ -13,9 +14,10 @@ export default function Moderate() {
   return (
     <div className="page prose moderate">
       <h1>Reports</h1>
-      <p>Reported images and storyboards, with each reason, its count and the reporters&apos; notes. Who reported is never shown. Moderators can hide one or dismiss its reports, and unhide a hidden storyboard, which puts back exactly what its maker published; nothing else.</p>
+      <p>Reported images and storyboards, with each reason, its count and the reporters&apos; notes. Who reported is never shown. Moderators can hide one or dismiss its reports, and unhide a hidden storyboard or picture, which puts back exactly what its maker published; nothing else.</p>
       <ModerateQueue />
       <ModerateStoryboards />
+      <ModerateHiddenImages />
       <StorageCheck />
       <p className="as-draft ic-draftline">{W.draftLine}</p>
     </div>
