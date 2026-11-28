@@ -31,6 +31,7 @@ import type { EntriesOf } from '../src/lib/review/review';
 
 process.env.FARCASTER_API_URL = 'http://127.0.0.1:9';
 delete process.env.BASE_RPC_URL;
+process.env.IMAGES_TICKET_SECRET ||= 'test-secret-'.padEnd(48, 'x');
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
 let passed = 0;
@@ -432,9 +433,95 @@ check('nothing was asked of Base but reads', writes.length === 0);
   check('ipfs:// goes through the configured gateway', I.toHttps('ipfs://QmA') === `${BOUNTY_REVIEW.ipfsGateway}QmA`);
 }
 
+// --- The live part (owner, 2026-11-27): posts and profiles read from their networks when an admin opens the page --
+{
+  const IN = await import('../src/lib/review/inline');
+  const MD = await import('../src/lib/review/media');
+  const CAST = '0x' + 'c'.repeat(40);
+  const DID = 'did:plc:' + 'q'.repeat(24);
+  const asked: string[] = [];
+  const counts = { follower_count: 9999, following_count: 1, reactions: { likes_count: 77, recasts_count: 5 }, replies: { count: 3 }, followersCount: 55, likeCount: 4, repostCount: 2, replyCount: 1 };
+  const json = (b: unknown, status = 200) => new Response(JSON.stringify(b), { status, headers: { 'content-type': 'application/json' } });
+  const stubFetch = (async (u: string | URL) => {
+    const url = String(u);
+    asked.push(url);
+    const h = new URL(url);
+    if (h.hostname === 'api.neynar.com' && h.pathname.endsWith('/user/bulk-by-address')) {
+      return json({ [LINKED]: [{ fid: 900001, username: 'zeimaker', display_name: 'Zei Maker', pfp_url: 'https://img.example/zei.png', profile: { bio: { text: 'I draw Zei. https://snowmoon.party' } }, ...counts }] });
+    }
+    if (h.hostname === 'api.neynar.com') {
+      return json({ cast: { hash: CAST, text: 'My Bai entry https://snowmoon.party/challenge/p/72222222-2222-4222-8222-222222222222', timestamp: '2026-11-20T10:00:00Z', author: { fid: 900001, username: 'zeimaker', display_name: 'Zei Maker', pfp_url: 'https://img.example/zei.png', profile: { bio: { text: 'I draw Zei.' } }, ...counts }, embeds: [{ url: 'https://img.example/post.jpg', metadata: { content_type: 'image/jpeg' } }, { url: 'https://snowmoon.party/challenge/p/x' }], ...counts } });
+    }
+    if (h.hostname === 'public.api.bsky.app' && h.pathname.endsWith('getPosts')) {
+      return json({ posts: [{ uri: `at://${DID}/app.bsky.feed.post/3kabc`, author: { did: DID, handle: 'seila.bsky.social', labels: [] }, record: { text: 'Seila, as I see her', createdAt: '2026-11-21T09:00:00Z' }, indexedAt: '2026-11-21T09:00:01Z', labels: [], embed: { $type: 'app.bsky.embed.images#view', images: [{ fullsize: 'https://cdn.bsky.example/img/a.jpg' }] }, ...counts }] });
+    }
+    if (h.hostname === 'public.api.bsky.app' && h.pathname.endsWith('getProfiles')) {
+      return json({ profiles: [{ did: DID, handle: 'seila.bsky.social', displayName: 'Seila fan', description: 'Bluesky bio', avatar: 'https://cdn.bsky.example/av.jpg', labels: [], ...counts }] });
+    }
+    if (h.hostname === 'public.api.bsky.app' && h.pathname.endsWith('resolveHandle')) return json({ did: DID });
+    return new Response('not stubbed', { status: 599 });
+  }) as typeof fetch;
+  const N = process.env.NEYNAR_API_KEY;
+  process.env.NEYNAR_API_KEY = 'test-key-not-real';
+  IN.forgetInline();
+  // A claim whose description links a Bluesky post (and some non-post addresses); an entry with a stored cast.
+  CLAIMS.find((c) => c.id === 4258)!.description = 'One.\n\nhttps://bsky.app/profile/seila.bsky.social/post/3kabc and https://evil.example/x';
+  await pg.exec(`reset role; insert into studio.version_posts (version_id, network, post_id, handle, posted_at, url, fid) values ('${ENTRY}', 'farcaster', '${CAST}', 'zeimaker', '2026-11-20T10:00:00Z', 'https://farcaster.xyz/zeimaker/${CAST.slice(0, 10)}', 900001); set role studio_writer;`);
+  const { onChain } = await import('../src/lib/review/chain');
+  await onChain({ fresh: true, reader: stub }).catch(() => null);
+  let reads = 0;
+  const spy = new Proxy(S as object, { get: (tt, k) => ((reads++, Reflect.get(tt, k))) }) as NonNullable<Sql>;
+  asked.length = 0;
+  check('the live part: 404 to signed out and a non-admin, and nothing asked of any network', (await R.inlineView(spy, null, { reader: stub, entriesOf: oneEntry, fetcher: stubFetch })).status === 404 && (await R.inlineView(spy, 501, { reader: stub, entriesOf: oneEntry, fetcher: stubFetch })).status === 404 && asked.length === 0 && reads === 0);
+  const a = await R.inlineView(S, admin, { reader: stub, entriesOf: oneEntry, fetcher: stubFetch });
+  const live = (a as { body: import('../src/lib/review/types').InlineView }).body;
+  check('the live part: 200 for an admin', a.status === 200);
+  const prof = live.claims['560:4255']?.profile;
+  check('a claimer’s Farcaster profile, found by their address: name, handle, bio, picture, link', prof?.name === 'Zei Maker' && prof.handle === 'zeimaker' && prof.bio === 'I draw Zei. https://snowmoon.party' && prof.url === 'https://farcaster.xyz/zeimaker' && /^\/api\/admin\/bounty\/media\?m=m1\./.test(prof.picture ?? ''), JSON.stringify(prof));
+  check('one Neynar call for every claimer’s address (23 addresses would be one call too)', asked.filter((u) => u.includes('bulk-by-address')).length === 1);
+  const bpost = live.claims['560:4258']?.posts?.[0];
+  check('a Bluesky post linked in a claim: its words, picture, date and writer (name, handle, bio, picture)', bpost?.ok === true && bpost.post.text === 'Seila, as I see her' && bpost.post.pictures.length === 1 && bpost.post.at === '2026-11-21T09:00:00.000Z' && bpost.post.author?.name === 'Seila fan' && bpost.post.author.bio === 'Bluesky bio' && bpost.post.author.handle === 'seila.bsky.social', JSON.stringify(bpost));
+  check('the claim’s other addresses are not posts and are not read', live.claims['560:4258'].posts.length === 1 && !asked.some((u) => u.includes('evil.example')));
+  const epost = live.entries[ENTRY]?.posts?.[0];
+  check('an entry’s stored cast: words, its one picture (not the link), date, and the writer', epost?.ok === true && epost.post.network === 'farcaster' && epost.post.text.startsWith('My Bai entry') && epost.post.pictures.length === 1 && epost.post.author?.handle === 'zeimaker' && epost.post.url === `https://farcaster.xyz/zeimaker/${CAST.slice(0, 10)}`, JSON.stringify(epost));
+  const all = JSON.stringify(live);
+  check('no like, recast, reply or follower count anywhere in the answer', !/follower|following|likes?_?count|recast|repost|repl(y|ies)_?count|"count"|9999|\b77\b/i.test(all), all.slice(0, 200));
+  check('every request went to Neynar, Bluesky’s public API or Lens’s API, and the pasted address was never fetched', asked.every((u) => ['api.neynar.com', 'public.api.bsky.app', 'api.lens.xyz'].includes(new URL(u).hostname)) && !asked.some((u) => u.startsWith('https://bsky.app/')));
+  check('pictures are signed addresses of the admin media route, never the network’s own', !/img\.example|cdn\.bsky\.example/.test(all) && /\/api\/admin\/bounty\/media\?m=m1\./.test(all));
+  const before = asked.length;
+  await R.inlineView(S, admin, { reader: stub, entriesOf: oneEntry, fetcher: stubFetch });
+  check('opened again within 5 minutes: nothing asked again (kept in memory, never stored)', asked.length === before);
+  check('nothing stored: no table holds posts’ words or profiles', !/\btext\b|bio|pfp|avatar/i.test(JSON.stringify((await pg.query(`select column_name from information_schema.columns where table_schema = 'studio' and table_name = 'version_posts'`)).rows)));
+  // Without a Neynar key: Farcaster says so; Bluesky still reads.
+  IN.forgetInline();
+  delete process.env.NEYNAR_API_KEY;
+  const nk = ((await R.inlineView(S, admin, { reader: stub, entriesOf: oneEntry, fetcher: stubFetch })) as { body: import('../src/lib/review/types').InlineView }).body;
+  check('without a Neynar key: Farcaster posts and profiles say why, Bluesky still reads', /Neynar key/.test(nk.farcasterNote ?? '') && nk.entries[ENTRY].posts[0]?.ok === false && nk.claims['560:4258'].posts[0]?.ok === true);
+  process.env.NEYNAR_API_KEY = N ?? '';
+  if (!N) delete process.env.NEYNAR_API_KEY;
+  // The media route: admins only; it fetches only an address our server signed, within 30 minutes.
+  const media = await import('../src/app/api/admin/bounty/media/route');
+  const m = MD.signMedia('https://img.example/zei.png')!;
+  const tok = new URL(`http://x${m}`).searchParams.get('m')!;
+  check('a media token reads back to the address it signed', MD.readMedia(tok) === 'https://img.example/zei.png');
+  check('a forged or changed media token is refused', MD.readMedia(tok.replace(/\.[^.]+$/, '.AAAA')) === null && MD.readMedia(`m1.${Buffer.from(JSON.stringify({ u: 'https://169.254.169.254/', exp: 9999999999 })).toString('base64url')}.x`) === null);
+  check('only https addresses are ever signed (no javascript:, data:, http:)', MD.signMedia('javascript:alert(1)') === null && MD.signMedia('data:image/png;base64,AA') === null && MD.signMedia('http://img.example/a.png') === null);
+  const mreq = (t: string | null) => new Request(`http://localhost/api/admin/bounty/media?m=${encodeURIComponent(tok)}`, { headers: t ? { authorization: `Bearer ${t}` } : {} });
+  check('the media route answers 404 when signed out', (await media.GET(mreq(null))).status === 404);
+  check('the inline and media routes answer private, never shared-cached', /private, no-store/.test(read('src/app/api/admin/bounty/inline/route.ts')) && /if \(!isAdmin\(fid\)\) return NextResponse\.json\(\{ error: 'Not found' \}, \{ status: 404/.test(read('src/app/api/admin/bounty/media/route.ts')) && /readMedia\(/.test(read('src/app/api/admin/bounty/media/route.ts')) && /claimPicture\(url/.test(read('src/app/api/admin/bounty/media/route.ts')));
+  {
+    const { PRIVACY, LEGAL, legalKey } = await import('../src/lib/legal');
+    const privacy = PRIVACY.sections.flatMap((x) => x.body.flat()).join('\n');
+    check('Privacy §7 carries the owner’s reread line (2026-11-27), with the address lookup, word for word; the reread key matches', privacy.includes('When an admin reviews the challenge\'s entries, the site reads each entry\'s or claim\'s linked post and its writer\'s public profile again from the post\'s network (through Neynar for a Farcaster post), and the Farcaster profile of the address that made each claim, through Neynar, to show them to the admin, and doesn\'t keep them.') && LEGAL.ownerReread.privacy?.words === legalKey(PRIVACY));
+    check('principles.md carries the principle 6 exception, with the address lookup, word for word', read('docs/principles.md').replace(/\n/g, ' ').includes('server reads each challenge entry\'s or poidh claim\'s linked post and its writer\'s public profile, and the Farcaster profile of the address that made each claim, from the post\'s own network (Neynar for Farcaster, Bluesky\'s public API, Lens\'s API), and the pictures they name, to show them to the admin.'));
+  }
+  const comp = read('src/components/admin-bounty-review.tsx');
+  check('the page never loads a network’s picture itself: every live picture goes through AuthImage (the media route)', !/<img[^>]+src=\{(p|x|slot)\./.test(comp) && /<AuthImage key=\{m\} src=\{m\}/.test(comp) && /<AuthImage src=\{p\.picture\}/.test(comp));
+}
+
 // --- P5: the labels are private --------------------------------------------------------------------------------
 {
-  const OWN = new Set(['src/lib/review/review.ts', 'src/lib/review/types.ts', 'src/lib/review/rules.ts', 'src/lib/review/chain.ts', 'src/lib/review/remote-image.ts', 'src/app/api/admin/bounty/route.ts', 'src/app/api/admin/bounty/marks/route.ts', 'src/app/api/admin/bounty/image/route.ts', 'src/app/admin/bounty/page.tsx', 'src/app/admin/bounty/not-found.tsx', 'src/components/admin-bounty-review.tsx', 'src/styles/admin-bounty.css']);
+  const OWN = new Set(['src/lib/review/inline.ts', 'src/lib/review/media.ts', 'src/app/api/admin/bounty/inline/route.ts', 'src/app/api/admin/bounty/media/route.ts', 'src/lib/review/review.ts', 'src/lib/review/types.ts', 'src/lib/review/rules.ts', 'src/lib/review/chain.ts', 'src/lib/review/remote-image.ts', 'src/app/api/admin/bounty/route.ts', 'src/app/api/admin/bounty/marks/route.ts', 'src/app/api/admin/bounty/image/route.ts', 'src/app/admin/bounty/page.tsx', 'src/app/admin/bounty/not-found.tsx', 'src/components/admin-bounty-review.tsx', 'src/styles/admin-bounty.css']);
   const files = walk('src').map((f) => ({ file: f, text: read(f) }));
   const TABLES = /\breview_(labels|notes|log)\b/;
   const CODE = /from ['"](~\/lib\/review\/|\.\.?\/(\.\.\/)*review\/|\.\/review\/)|lib\/review\//;

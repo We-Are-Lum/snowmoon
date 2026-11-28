@@ -50,12 +50,14 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: the day PR 6 (entering takes, terms cfj30e, privacy 1iu09p9) merges and goes live; set to 2026-11-27 (PT), moved
+  // MERGE DAY: the day #258 (/admin/bounty's live posts and profiles, with #257's line: privacy 1rtkpxm) merges and goes
+  // live, 2026-11-28 (PT).
+  // Before it: the day PR 6 (entering takes, terms cfj30e, privacy 1iu09p9) merges and goes live; set to 2026-11-27 (PT), moved
   // to the real merge day at merge. (Before: 2026-11-26, PR #229, the storyboard pictures' allowance.)
   // MERGE DAY: the day the storyboard pictures' allowance (PR #229) merges and goes live, 2026-11-26 (PT). If the merge
   // moves, this moves with it. (Before: 2026-11-26, PR #225, storyboard moderation; 2026-11-26, PR #249, the four-step recorder; 2026-11-24, PR #235, the guided storyboard's fixes; 2026-11-24, PR #230, 30-day sign-ins; 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
   // 2026-11-21, the Ephelion voice; 2026-11-21, PR #204; 2026-11-20, PR #196; 2026-11-19, PR #191.)
-  effective: '2026-11-27',
+  effective: '2026-11-28',
   // The owner said "Reread" on 2026-10-10 (words 3iuvyo, 1r2aajz), and on 2026-10-18 of the drafted
   // changes ("I've read the drafted Terms and Privacy changes and approve them: this is my 'reread'"),
   // covering both pages at these words.
@@ -387,7 +389,20 @@ export const LEGAL: {
     // ("If a picture is hidden, by its maker or after a report, the takes that use it are hidden with it, and shown again
     // if it's restored.") and the moderator wording as listed in the PR." (was "If a picture is hidden after a report, …").
     // The words before were 19q34ww.
-    privacy: { words: 'sv1gxg', on: '2026-11-27', by: 'FID 6786' },
+    // 2026-11-27, the owner's reread for /admin/bounty's live posts and profiles (branch bounty-inline), typed in his
+    // session: "Reread: the Privacy §7 line as you wrote it, without X, with "each entry's" widened to "each entry's or
+    // claim's"." §7 adds, after the item on posts added to a version's page, word for word: "When an admin reviews the
+    // challenge's entries, the site reads each entry's or claim's linked post and its writer's public profile again from
+    // the post's network (through Neynar for a Farcaster post), to show them to the admin, and doesn't keep them."
+    // Terms unchanged. The words before were 19q34ww.
+    // 2026-11-27, the owner's second reread for the same line (#258), typed in his session: "Reread: the principle 6
+    // exception and the Privacy §7 line with "and the Farcaster profile of the address that made each claim" (Privacy:
+    // "…, through Neynar,") added." The line now reads, word for word: "When an admin reviews the challenge's entries, the
+    // site reads each entry's or claim's linked post and its writer's public profile again from the post's network
+    // (through Neynar for a Farcaster post), and the Farcaster profile of the address that made each claim, through
+    // Neynar, to show them to the admin, and doesn't keep them." The words before were 1nx9bw3 (never live).
+    // Both rereads together (#257 merged first; #258 merged main in, no word changed): the words of both, 1rtkpxm.
+    privacy: { words: '1rtkpxm', on: '2026-11-27', by: 'FID 6786' },
   },
 };
 
@@ -485,6 +500,7 @@ export const PRIVACY: LegalDoc = {
           'Neynar receives your Farcaster ID when you make or publish an image or a character sheet, or ask the assistant, and your account has no current check, to look up its account score, which decides whether you can make images and ask the assistant. We don\'t keep the score: we keep only whether your account passed and when, for up to 90 days (a day if it didn\'t pass), and we check again sooner if your account is reported, one of your pictures is hidden by a moderator, or the score needed changes. During the remix challenge, that check also decides, once, when you publish a picture of a challenge character, whether it can count as an entry. Neynar is never asked about you when someone views a page. When someone adds a Farcaster post to a version\'s page, Neynar receives that post\'s address or id, to read it. When you sign in with a wallet, Neynar also receives the wallet\'s address, to find the Farcaster account whose custody address it is or that has verified it; if exactly one account has it, your wallet is linked to that account (section 4). We keep the answer for a day. A linked wallet is looked up again at most once a day, and its link ends if that account no longer has it; a wallet you unlinked isn\'t looked up again. When you play Minpentai inside a Farcaster cast, your Farcaster app signs each tap, and we ask Neynar\'s Farcaster hub which signing keys your Farcaster ID has, to check the signature: Neynar receives your Farcaster ID, and we keep its answer in memory for five minutes.',
           'If you sign in with Bluesky and your Bluesky account isn\'t linked to a Farcaster or Lens account: when you make an image or a frame, ask the assistant, or publish a remix during the remix challenge, and your account has no current check, our server sends your Bluesky account\'s identifier (its DID, not your handle) to Bluesky\'s public AppView (public.api.bsky.app), to read when your account was made and its latest posts. This check decides whether you can make images and frames for free, whether you can ask the assistant, and whether a remix can count as an entry. We keep only whether your account passed (at least 30 days old, with at least 5 posts in the last 30 days, when we check) and when, for up to 90 days (a day if it didn\'t pass); never the dates or posts we read. We check again sooner if your account is reported or one of your pictures is hidden by a moderator. Bluesky is never asked about you when someone views a page.',
           'Bluesky and Lens receive the details of a post someone adds to a version\'s page (Bluesky: its writer\'s handle or account id and the post\'s id; Lens: the post\'s id), so our server can read the post and check it links there. They receive nothing about you or the person who added it, and your browser never contacts them for this.',
+          'When an admin reviews the challenge\'s entries, the site reads each entry\'s or claim\'s linked post and its writer\'s public profile again from the post\'s network (through Neynar for a Farcaster post), and the Farcaster profile of the address that made each claim, through Neynar, to show them to the admin, and doesn\'t keep them.',
           'ntfy delivers a short alert to us when an image, a storyboard or a take is reported. It carries no content and nothing about you.',
           'If you listen as a podcast, your podcast app fetches the audio from our media host; Spotify serves its own copy.',
           'If you prepay: Base\'s public network endpoint receives the transaction we look up to confirm your payment.',
