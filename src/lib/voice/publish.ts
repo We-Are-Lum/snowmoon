@@ -6,6 +6,7 @@ import { VOICE } from '../config';
 import { boardSource, keptPictures, latestBoard, madeWithScene } from './board-store';
 import { CLOSING, closingCredits, publishProblems, type Closing, type PictureModel } from './closing';
 import { closingCard } from './closing-card';
+import { recipePassageLabel } from './passage';
 import { publicUrl } from './public-store';
 import { hiddenKeyFor } from './store';
 import { oldSceneShots, SCENE, type Shot } from './board';
@@ -172,7 +173,7 @@ export async function publishBoard(sql: Sql, fid: number, raw: unknown, deps: Pu
       // The spoken words (Nate, 2026-11-24): word for word, or improvised with the performer's words (as transcribed and
       // as they corrected them, with each correction), credited to them.
       spoken: p.recipe.spoken ?? { kind: 'word-for-word' },
-      take: { label: takeLabel(p.recipe) },
+      take: { label: takeLabel(p.recipe), passage: recipePassageLabel(p.recipe.speech) },
       voice:
         p.draft.kind === 'reading'
           ? {

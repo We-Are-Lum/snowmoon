@@ -22,7 +22,7 @@ import '../styles/ephelion.css';
 interface Speech { id: string; title: string; maxSeconds: number; characters: number; label: { kind: 'book' | 'invented' }; sentences: { n: number; text: string }[] }
 interface Choice { presetId: string; candidate: number; name: string; saved: boolean }
 interface Reading { speechId: string; presetId: string; id: string }
-interface Take { id: string; performer: string | null; voice: string | null; label: string | null }
+interface Take { id: string; performer: string | null; voice: string | null; label: string | null; passage?: string | null }
 interface Status { speeches: Speech[]; choices: Choice[]; readings: Reading[]; canMakeReadings?: boolean; limits: { readingCreditsPerChar: number }; takes?: Record<string, Take[]> }
 
 /** Garance's remix entry 70762e34 (Nate, 2026-11-25), shown alone; it switches to the profile's master front once approved. */
@@ -98,7 +98,7 @@ function TakeRow({ t, latest }: { t: Take; latest: boolean }) {
       </span>
       <span className="eph-row-text">
         <span className="eph-row-title">{latest ? W.latestTake(t.performer) : (t.performer ?? W.someone)}</span>
-        <span className="eph-meta">{[t.voice, t.label].filter(Boolean).join(' · ')}</span>
+        <span className="eph-meta">{[t.voice, t.label, t.passage].filter(Boolean).join(' · ')}</span>
       </span>
     </Link>
   );

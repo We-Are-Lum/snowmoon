@@ -1,5 +1,6 @@
 import { VOICE } from '../config';
 import { speechById, type Speech } from './speech';
+import { passageSentences, recipePassage } from './passage';
 import type { TimedWord, Timeline } from './board';
 
 /**
@@ -73,10 +74,11 @@ export function improvisedTimeline(joined: { words: TimedWord[]; seconds: number
 }
 
 /** The draft's spoken words, by sentence: the person's (improvised, as corrected) or the speech's (word for word). */
-export function spokenSentences(recipe: { spoken?: Spoken | null; speech?: { id?: string } | null }): SpokenSentence[] {
+export function spokenSentences(recipe: { spoken?: Spoken | null; speech?: { id?: string; passage?: unknown } | null }): SpokenSentence[] {
   if (recipe.spoken?.kind === 'improvised') return recipe.spoken.sentences;
   const sp = recipe.speech?.id ? speechById(recipe.speech.id) : null;
-  return (sp?.sentences ?? []).map((x) => ({ n: x.n, text: x.text }));
+  // A passage's take: only its sentences (passage.ts).
+  return passageSentences(sp?.sentences ?? [], recipePassage(recipe.speech)).map((x) => ({ n: x.n, text: x.text }));
 }
 
 /** Improvised: the performer's own words (not the speech's, word for word): labelled, credited and published so. */

@@ -19,7 +19,7 @@ type Choice = { source: 'set' | 'own' | 'preset' | 'own-scene'; id: string; url:
 const SCENE_SLOT = 'ephelion-own-scene';
 const ticketKey = (fid: number) => `snowmoon.ephelion.scene.${fid}`;
 
-export function EphelionEntry({ fid, draftId, speechTitle, voiceName, wide, takeUrl = null }: { fid: number; draftId: string; speechTitle: string; voiceName: string; wide: boolean; takeUrl?: string | null }) {
+export function EphelionEntry({ fid, draftId, speechTitle, voiceName, wide, takeUrl = null, passage = null }: { fid: number; draftId: string; speechTitle: string; voiceName: string; wide: boolean; takeUrl?: string | null; passage?: string | null }) {
   const [opts, setOpts] = useState<Options | null>(null);
   const [tab, setTab] = useState<'choose' | 'describe'>('choose');
   const [choice, setChoice] = useState<Choice>(null);
@@ -94,6 +94,7 @@ export function EphelionEntry({ fid, draftId, speechTitle, voiceName, wide, take
       <section className="er-card er-entered" aria-labelledby="er-entered-h">
         <p className="er-kicker">{W.entered}</p>
         <h3 id="er-entered-h">{W.enteredTitle(speechTitle)}</h3>
+        {passage && <p className="er-kicker" data-slot="passage-label">{passage}</p>}
         <p className="er-note">{W.enteredNote(voiceName)}</p>
         <div className="er-row">
           <Link className="er-btn er-quiet" href={entered.url}>{W.shareIt}</Link>
@@ -117,6 +118,7 @@ export function EphelionEntry({ fid, draftId, speechTitle, voiceName, wide, take
   return (
     <section className="er-card er-entry" aria-labelledby="er-entry-h">
       <h3 id="er-entry-h">{W.heading}</h3>
+      {passage && <p className="er-kicker" data-slot="passage-label">{passage}</p>}
       <p className="er-note">{W.intro}</p>
       <div className="er-tabs" role="tablist">
         <button type="button" role="tab" aria-selected={tab === 'choose'} className={tab === 'choose' ? 'er-on' : ''} onClick={() => setTab('choose')}>{W.tabChoose}</button>

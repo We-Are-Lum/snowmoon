@@ -170,7 +170,7 @@ const sharpPng = async () => (await import('sharp')).default({ create: { width: 
     check('E. ... changing the speech with a take asks first, then removes the take from the device; another voice keeps it', RECORDER.changeSpeech('X') === 'Change the speech? Your take of “X” is removed from this device.' && /if \(speechId && id !== speechId && take\) return setConfirmSpeech\(id\);/.test(er) && /await removeTake\(fid, speechId\)/.test(er) && /\/\/ Another voice keeps the take/.test(er));
     check('E. ... edited words are kept in this browser (localStorage, under the person and the speech) and no request carries them', /localStorage\.setItem\(key\(fid, speechId\)/.test(words) && /snowmoon\.ephelion\.words\.\$\{fid\}\.\$\{speechId\}/.test(words) && !erCode.split('\n').some((l) => /(authFetch|FormData|form\.set|f\.set|f\.append|JSON\.stringify)/.test(l) && /(editedWords|draftWords)/.test(l)));
     check('E. ... the highlight is timed (no speech recognition): on or off, the size, Back a line / Forward a line, tap a sentence, scrolling pauses it with Resume', !/SpeechRecognition|webkitSpeechRecognition/.test(er) && /onWheel=\{byHand\}/.test(er) && /onTouchMove=\{byHand\}/.test(er) && /W\.paused/.test(er) && /W\.resume/.test(er) && /W\.backLine/.test(er) && /W\.forwardLine/.test(er) && /onClick=\{\(\) => recording && hl && moveTo\(i\)\}/.test(er) && /W\.smaller/.test(er) && /W\.bigger/.test(er));
-    check('E. ... a 3-second countdown, then Countdown, Recording and Stopped as their own labelled states; stopping keeps the take on the device', /const COUNTDOWN = 3;/.test(er) && /er-badge-count/.test(er) && /er-badge-rec/.test(er) && /er-badge-stop/.test(er) && /await saveTake\(fid, speech\.id, out\.blob, out\.seconds\)/.test(er));
+    check('E. ... a 3-second countdown, then Countdown, Recording and Stopped as their own labelled states; stopping keeps the take on the device', /const COUNTDOWN = 3;/.test(er) && /er-badge-count/.test(er) && /er-badge-rec/.test(er) && /er-badge-stop/.test(er) && /await saveTake\(fid, speech\.id, out\.blob, out\.seconds(, passage)?\)/.test(er));
     check('E. ... both saves: your recording from the device\'s own copy, the converted take from your draft', /saveBlob\(take\.blob,/.test(er) && /saveBlob\(converted\.blob,/.test(er) && /\/api\/voice\/drafts\/\$\{keptFromTake\.id\}\/0/.test(er));
     check('E. ... no Enter, Share, scene or payment on the recorder', !/Enter the challenge|>Share<|Choose his scene|USDC/.test(erCode));
     check('E. ... the site\'s rail, top bar and assistant panel are hidden on /ephelion/record (shell-bare)', /const bare = path === '\/ephelion\/record';/.test(shell) && /\$\{bare \? ' shell-bare' : ''\}/.test(shell) && /\.shell-bare > \.topbar, \.shell-bare > \.rail/.test(shellCss));
@@ -1459,6 +1459,12 @@ for (const id of Object.values(VOICE.models)) {
 {
   const { takesSection } = await import('./lib/test-takes-section');
   await takesSection({ ROOT, STORE, sql, check, route, as, NATE, GARANCE, STRANGER });
+}
+
+// PA. Recording a passage of a speech (Nate, 2026-11-27).
+{
+  const { passageSection } = await import('./lib/test-passage-section');
+  await passageSection({ ROOT, STORE, sql, check, route, as, takeForm, stubCalls: () => stub.calls.length, GARANCE });
 }
 
 check('T. every transcript made in this run was deleted at ElevenLabs (none left)', stub.kept().length === 0 && stub.deletedTranscripts.length >= 2, `kept ${stub.kept().length}`);

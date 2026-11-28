@@ -13,6 +13,7 @@ import { loadWords, removeWords, saveWords, splitSentences } from '~/lib/voice/d
 import { LocalTextField } from '~/components/local-text-field';
 import { speechAsText, speechFileName } from '~/lib/voice/speech-text';
 import { EphelionEntry } from '~/components/ephelion-entry';
+import { PASSAGE_MIN, passageLabel, passageMaxSeconds, passageSentences, wordsIn, type Passage } from '~/lib/voice/passage';
 import { SignedAudio, joined, mmss, useRecorder, useStepLog, wordCount, type Check, type Converted, type Redo } from '~/components/voice-recorder-core';
 import '../styles/ephelion-recorder.css';
 
@@ -230,16 +231,23 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
   const [redoAgree, setRedoAgree] = useState(false);
   const [playUrl, setPlayUrl] = useState<string | null>(null);
   const [accepted, setAccepted] = useState<string | null>(null);
+  // What is recorded (Nate, 2026-11-27): the whole speech (null) or a passage of at least PASSAGE_MIN sentences, kept
+  // with the take on this device. Changing it with a take here asks first, as changing the speech does.
+  const [passage, setPassage] = useState<Passage | null>(null);
+  const [confirmPassage, setConfirmPassage] = useState<{ to: Passage | null } | null>(null);
   const converting = useRef(false);
   useEffect(() => {
     if (fid === null || !speechId) return;
     let alive = true;
     setTake((old) => (old && URL.revokeObjectURL(old.url), null));
     setOnDevice(null);
+    setPassage(null);
+    setConfirmPassage(null);
     void loadTake(fid, speechId)
       .then((t) => {
         if (!alive || !t) return;
         setOnDevice(t);
+        setPassage(t.passage ?? null);
         setTake({ seconds: t.seconds, url: URL.createObjectURL(t.blob), speechId: t.speechId, blob: t.blob });
       })
       .catch((e) => alive && setDeviceNote(`This browser couldn't read its saved recordings (${e instanceof Error ? e.message : String(e)}).`));
@@ -256,7 +264,9 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
     setEditing(false);
     setEditedWords(fid !== null && speechId ? loadWords(fid, speechId) : null);
   }, [fid, speechId]);
-  const sentences = useMemo(() => (editedWords !== null ? splitSentences(editedWords) : (speech?.sentences.map((x) => x.text) ?? [])), [editedWords, speech]);
+  const allSentences = useMemo(() => (editedWords !== null ? splitSentences(editedWords) : (speech?.sentences.map((x) => x.text) ?? [])), [editedWords, speech]);
+  // A passage: only its sentences are shown, highlighted and timed (edited words: the same sentence numbers).
+  const sentences = useMemo(() => (passage ? allSentences.slice(passage.from, passage.to + 1) : allSentences), [allSentences, passage]);
   const words = useMemo(() => sentences.map(wordCount), [sentences]);
   const totalWords = words.reduce((a, b) => a + b, 0);
   const startOf = useCallback((i: number) => (words.slice(0, Math.max(0, i)).reduce((a, b) => a + b, 0) / WPM) * 60, [words]);
@@ -327,7 +337,11 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
   if (status === 'none') return <>{fallback}</>;
   if (!signedIn || !s) return <div className="er-wrap" ref={wrap}><p className="er-note er-pad">{W.loading}</p></div>;
 
-  const max = speech ? (speech.maxSeconds ?? s.limits.maxTakeSeconds) : s.limits.maxTakeSeconds;
+  const speechMax = speech ? (speech.maxSeconds ?? s.limits.maxTakeSeconds) : s.limits.maxTakeSeconds;
+  // A passage's limit: the speech's, scaled to its words (as the server counts them), never more (passage.ts).
+  const wordsOf = (xs: { text: string }[]) => xs.reduce((a, x) => a + wordsIn(x.text), 0);
+  const max = speech && passage ? passageMaxSeconds(speechMax, wordsOf(passageSentences(speech.sentences, passage)), wordsOf(speech.sentences)) : speechMax;
+  const passageText = passage ? passageLabel(passage) : null;
   const reached = [true, Boolean(speech), Boolean(speech && picked), Boolean(speech && picked && take)];
   const keptFromTake = onDevice ? s.drafts.find((d) => ((d.recipe as { takes?: { takeSha256?: string }[] }).takes ?? [])[0]?.takeSha256 === onDevice.sha256) : undefined;
   const convertedBefore = Boolean(take && (keptFromTake || convertedFor === take.url));
@@ -368,6 +382,17 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
     setSpeechId(to);
     setStep(2);
   };
+  const choosePassage = (to: Passage | null) => {
+    if ((to?.from ?? -1) === (passage?.from ?? -1) && (to?.to ?? -1) === (passage?.to ?? -1)) return;
+    if (take) return setConfirmPassage({ to });
+    setPassage(to);
+  };
+  const changePassage = async () => {
+    const to = confirmPassage?.to ?? null;
+    setConfirmPassage(null);
+    await removeHere();
+    setPassage(to);
+  };
   const chooseVoice = (k: string) => {
     if (k === voiceKey) return;
     setVoiceKey(k);
@@ -403,7 +428,7 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
     setStoppedAt(out.seconds);
     setDeviceNote(null);
     if (fid !== null)
-      await saveTake(fid, speech.id, out.blob, out.seconds)
+      await saveTake(fid, speech.id, out.blob, out.seconds, passage)
         .then((t) => setOnDevice(t))
         .catch(() => (setOnDevice(null), setDeviceNote(W.onlyInTab)));
   }
@@ -418,6 +443,10 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
     form.set('seconds', String(seconds));
     form.set('agree', s!.consent.sha256);
     if (sentence !== null) form.set('sentence', String(sentence));
+    else if (passage) {
+      form.set('passageFrom', String(passage.from));
+      form.set('passageTo', String(passage.to));
+    }
     if (convertAgain) form.set('again', '1');
     const r = await authFetch('/api/voice/convert', { method: 'POST', body: form }).catch(() => null);
     if (!r?.ok) {
@@ -738,6 +767,47 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
     setDraftWords(editedWords ?? speech?.paragraphs.join('\n\n') ?? '');
     setEditing(true);
   };
+  // The whole speech or a passage: at least PASSAGE_MIN sentences in a row, numbered from 1 as people count.
+  const count = speech?.sentences.length ?? 0;
+  const lockedChoice = recording || countdown !== null || editing || busy !== null;
+  const passageBox = speech && count > PASSAGE_MIN && (
+    <div className="er-passage" data-slot="passage">
+      <label className="er-tick">
+        <input type="radio" name="er-passage" checked={!passage} disabled={lockedChoice} onChange={() => choosePassage(null)} />
+        <span>{W.wholeSpeech}</span>
+      </label>
+      <label className="er-tick">
+        <input type="radio" name="er-passage" checked={Boolean(passage)} disabled={lockedChoice} onChange={() => choosePassage({ from: 0, to: PASSAGE_MIN - 1 })} />
+        <span>{W.aPassage}</span>
+      </label>
+      {passage && (
+        <div className="er-row er-passage-range">
+          <label>
+            {W.passageFrom}{' '}
+            <select value={passage.from} disabled={lockedChoice} onChange={(e) => { const f = Number(e.target.value); choosePassage({ from: f, to: Math.max(passage.to, f + PASSAGE_MIN - 1) }); }}>
+              {Array.from({ length: count - PASSAGE_MIN + 1 }, (_, i) => <option key={i} value={i}>{i + 1}</option>)}
+            </select>
+          </label>
+          <label>
+            {W.passageTo}{' '}
+            <select value={passage.to} disabled={lockedChoice} onChange={(e) => choosePassage({ from: passage.from, to: Number(e.target.value) })}>
+              {Array.from({ length: count - (passage.from + PASSAGE_MIN - 1) }, (_, i) => passage.from + PASSAGE_MIN - 1 + i).map((n) => <option key={n} value={n}>{n + 1}</option>)}
+            </select>
+          </label>
+        </div>
+      )}
+      {passage && <p className="er-note">{W.passageMin}</p>}
+      {confirmPassage && (
+        <div className="er-confirm" role="alertdialog" aria-label={W.changePassage}>
+          <p>{W.changePassage}</p>
+          <div className="er-row">
+            <button type="button" className="er-btn" onClick={() => void changePassage()}>{W.changePassageYes}</button>
+            <button type="button" className="er-btn er-quiet" onClick={() => setConfirmPassage(null)}>{W.changeNo}</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
   const scriptView = speech && (
     <div
       className={`er-script${hl && recording ? ' er-live' : ''}`}
@@ -750,6 +820,7 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
       aria-label={speech.title}
     >
       {editedWords !== null && <p className="er-kicker">{W.editedMark}</p>}
+      {passageText && <p className="er-kicker" data-slot="passage-label">{passageText}</p>}
       {sentences.map((t, i) => (
         <p
           key={i}
@@ -765,7 +836,7 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
 
   const takeBox = take && (
     <div className="er-card er-take">
-      <p className="er-kicker">{W.yourRecording(mmss(take.seconds))}</p>
+      <p className="er-kicker">{W.yourRecording(mmss(take.seconds))}{passageText ? ` · ${passageText}` : ''}</p>
       <div className="er-row">
         <Play url={take.url} label={W.yourRecording(mmss(take.seconds))} />
         <button type="button" className="er-btn er-quiet er-small" onClick={() => saveBlob(take.blob, `ephelion-${slug(speech?.title ?? 'speech')}-my-recording.${extOf(take.blob.type)}`)}>{saveLabel}</button>
@@ -823,7 +894,7 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
       <h3 id="er-check-h">{W.checkTitle}</h3>
       {checks ? (
         <>
-          <p className="er-ok" data-slot="take-label">{stillWrong.length ? IMPROV_WORDING.improvisedLabel(speech.title, speech.version) : IMPROV_WORDING.wordForWordLabel}</p>
+          <p className="er-ok" data-slot="take-label">{stillWrong.length ? IMPROV_WORDING.improvisedLabel(speech.title, speech.version) : IMPROV_WORDING.wordForWordLabel}{passageText ? ` · ${passageText}` : ''}</p>
           <details className="er-check-list" open={stillWrong.length > 0 && stillWrong.length <= Math.ceil(checks.length / 2)}>
           <summary>{stillWrong.length ? W.checkSome(stillWrong.length, checks.length) : W.checkAll(checks.length)}</summary>
           <ol className="er-checks">
@@ -876,7 +947,7 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
   );
   // Entering the take (PR 6, 2026-11-26): the converted take as checked; with redone sentences, once "Use this one" kept them.
   const entryDraft = converted && (converted.check || stillWrong.length === 0 || checks) ? (redos.length ? (accepted && accepted !== converted.draftId ? accepted : null) : converted.draftId) : null;
-  const entryPart = entryDraft && fid !== null && speech && picked ? <EphelionEntry key={entryDraft} fid={fid} draftId={entryDraft} speechTitle={speech.title} voiceName={picked.name} wide={wide} takeUrl={playUrl} /> : null;
+  const entryPart = entryDraft && fid !== null && speech && picked ? <EphelionEntry key={entryDraft} fid={fid} draftId={entryDraft} speechTitle={speech.title} voiceName={picked.name} wide={wide} takeUrl={playUrl} passage={passageText} /> : null;
   const teaser = <p className="er-teaser">{W.teaser}</p>;
   const recordNew = (
     <button type="button" className="er-link" onClick={() => setStep(3)}>{W.recordNew}</button>
@@ -960,7 +1031,8 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
       side = (
         <>
           <h2>{W.record}</h2>
-          <p className="er-card er-note">{W.recordNote(mmss(max))}</p>
+          <p className="er-card er-note">{passage ? W.passageNote(mmss(max)) : W.recordNote(mmss(max))}</p>
+          {passageBox}
           <button type="button" className="er-btn er-quiet er-small er-self" onClick={openEditor} disabled={recording || countdown !== null || editing}>{W.editText}</button>
           <p className="er-note er-change-hint">{W.changeHint}</p>
           {downloadButton(speech)}
@@ -976,7 +1048,7 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
       );
       main = (
         <>
-          <p className="er-kicker">{speech.title} · {recording ? (hl ? W.highlightOn : W.highlightOff) : picked.name}</p>
+          <p className="er-kicker">{speech.title}{passageText ? ` · ${passageText}` : ''} · {recording ? (hl ? W.highlightOn : W.highlightOff) : picked.name}</p>
           {editor || scriptView}
         </>
       );
@@ -984,11 +1056,12 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
       main = (
         <>
           <div className="er-strip">
-            <span>{W.recordNotePhone(mmss(max))}</span>
+            <span>{passage ? W.passageNote(mmss(max)) : W.recordNotePhone(mmss(max))}</span>
             <button type="button" className="er-link" onClick={openEditor} disabled={recording || countdown !== null || editing}>{W.editTextShort}</button>
           </div>
           <p className="er-note er-change-hint">{W.changeHint}</p>
-          <p className="er-kicker">{speech.title} · {picked.name}</p>
+          {!recording && countdown === null && passageBox}
+          <p className="er-kicker">{speech.title}{passageText ? ` · ${passageText}` : ''} · {picked.name}</p>
           {editor || scriptView}
           {webClient && <p className="er-warn">{W.webClient}</p>}
         </>

@@ -4,6 +4,7 @@ import { VOICE } from '../config';
 import { speechById } from './speech';
 import { presetRecipe } from './presets';
 import { checkSpeech } from './match';
+import { withPassage } from './passage';
 import { joinTimeline, type TimedWord } from './board';
 import { saveDraft, type DraftAudio } from './drafts';
 import { sha256Hex } from './ticket';
@@ -33,9 +34,12 @@ export async function keepPerformance(sql: postgres.Sql, fid: number, take: Conv
   if (sha256Hex(take.audio) !== t.convertedSha256 || t.convertedSha256 === t.takeSha256) throw new FlowError(400, 'That is not the converted speech we made');
   const c = take.check;
   if (c && c.convertedSha256 !== t.convertedSha256) throw new FlowError(400, 'That check is for another take');
-  const speech = speechById(t.speechId);
+  const whole = speechById(t.speechId);
   const preset = presetRecipe(t.presetId, t.candidate ?? 0);
-  if (!speech || !preset) throw new FlowError(400, 'No such speech or voice');
+  if (!whole || !preset) throw new FlowError(400, 'No such speech or voice');
+  // A passage (passage.ts): the check, the strip and the words cover only its sentences, numbered as in the speech.
+  const passage = t.passage ?? null;
+  const speech = withPassage(whole, passage);
   const checks = c ? checkSpeech(speech.sentences, c.words, speech.names) : [];
 
   let total = take.audio.length;
@@ -53,12 +57,15 @@ export async function keepPerformance(sql: postgres.Sql, fid: number, take: Conv
     if (!rc || rc.convertedSha256 !== rt.convertedSha256) throw new FlowError(400, "A redone sentence's check is for another file");
     const n = rt.scope.n;
     if (redone.has(n)) throw new FlowError(400, `Sentence ${n + 1} is redone twice: keep one`);
-    const sentence = speech.sentences.find((s) => s.n === n)!;
+    const sentence = speech.sentences.find((s) => s.n === n);
+    if (!sentence) throw new FlowError(400, `Sentence ${n + 1} is not in this passage`);
     redone.set(n, checkSpeech([sentence], rc.words, speech.names)[0].ok);
     // Where the sentence is in the whole take: from its words' times, or between its neighbours' if none were heard.
-    const at = checks[n];
-    const before = checks.slice(0, n).reverse().find((x) => x.end !== null)?.end ?? 0;
-    const after = checks.slice(n + 1).find((x) => x.start !== null)?.start ?? t.seconds;
+    // (By position in the checks, which follow the take's sentences: a passage's first is not the speech's first.)
+    const i = checks.findIndex((x) => x.n === n);
+    const at = i >= 0 ? checks[i] : { start: null, end: null };
+    const before = i >= 0 ? (checks.slice(0, i).reverse().find((x) => x.end !== null)?.end ?? 0) : 0;
+    const after = i >= 0 ? (checks.slice(i + 1).find((x) => x.start !== null)?.start ?? t.seconds) : t.seconds;
     const start = at.start ?? before;
     const end = at.end ?? after;
     spliced.push({ start, end: Math.max(start, end), seconds: rt.seconds, words: rc.words });
@@ -104,7 +111,7 @@ export async function keepPerformance(sql: postgres.Sql, fid: number, take: Conv
     transcribeModel: c?.model ?? null,
     preset,
     // The exact text it was checked against: the speech's id and version, and its sha256 (Nate, 2026-11-22).
-    speech: { id: speech.id, version: speech.version, aiHelp: speech.aiHelp, credit: speech.credit, title: speech.title, source: speech.source, label: speech.label, standIn: speech.standIn, textSha256: sha256Hex(new TextEncoder().encode(speech.paragraphs.join('\n'))) },
+    speech: { id: speech.id, version: speech.version, aiHelp: speech.aiHelp, credit: speech.credit, title: speech.title, source: speech.source, label: speech.label, standIn: speech.standIn, textSha256: sha256Hex(new TextEncoder().encode(speech.paragraphs.join('\n'))), ...(passage ? { passage } : {}) },
     takes,
     // Null when the word check couldn't be made: the take is kept anyway, and says so.
     check,
@@ -131,7 +138,8 @@ export async function keepConvertedTake(sql: postgres.Sql, fid: number, converte
   const { verifyTicket } = await import('./ticket');
   const deps = { verify: (s: string) => verifyTicket<never>(s), now: () => Date.now() };
   const ticket = readConvertTicket(deps, converted.ticket, fid);
-  const speech = speechById(ticket.speechId);
+  const found = speechById(ticket.speechId);
+  const speech = found ? withPassage(found, ticket.passage ?? null) : null;
   const estimate = Math.ceil(ticket.seconds * VOICE.rates.transcribeCreditsPerSecond);
   let check: CheckTicket | null = null;
   let checkTicket: string | null = null;

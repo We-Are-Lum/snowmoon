@@ -52,6 +52,9 @@
 .er-meta-line { margin-top: 16px !important; padding-top: 10px; border-top: 1px solid var(--rule); text-transform: none !important; }
 .er-confirm { border: 2px solid var(--ink); border-radius: 3px; padding: 12px; background: var(--card); }
 .er-confirm p { margin: 0 0 8px; }
+.er-passage { display: grid; gap: 8px; }
+.er-passage-range { gap: 12px; font-size: 16px; color: var(--body); }
+.er-passage-range select { font: inherit; padding: 4px 6px; }
 .er-sample { flex-direction: row; align-items: center; gap: 14px; }
 .er-sample-line { margin: 0; font-size: 18px; }
 .er-strip .er-link { white-space: nowrap; }

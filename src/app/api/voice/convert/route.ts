@@ -4,6 +4,7 @@ import { VOICE } from '~/lib/config';
 import { flowDeps, noStore, voicePerson, voiceReady } from '~/lib/voice/server';
 import { speechById } from '~/lib/voice/speech';
 import { takeMaxSeconds } from '~/lib/voice/spoken';
+import { passageMaxSeconds, passageSentences, readPassage, wordsIn } from '~/lib/voice/passage';
 
 import { voiceIdFor } from '~/lib/voice/presets';
 import { elevenLabsBase } from '~/lib/voice/flag';
@@ -47,11 +48,17 @@ export async function POST(request: Request) {
   const sentence = form.get('sentence');
   const scope: Scope = sentence === null || sentence === '' ? { kind: 'whole' } : { kind: 'sentence', n: Number(sentence) };
   if (scope.kind === 'sentence' && !speech.sentences.some((s) => s.n === scope.n)) return NextResponse.json({ error: 'No such sentence' }, { status: 400 });
+  // A passage (Nate, 2026-11-27): a run of at least 3 of the speech's sentences, for a whole take only; checked here.
+  const passage = readPassage(form.get('passageFrom'), form.get('passageTo'), speech.sentences.length);
+  if (passage === 'bad') return NextResponse.json({ error: 'A passage is a run of at least 3 of the speech’s sentences.' }, { status: 400 });
+  if (passage && scope.kind !== 'whole') return NextResponse.json({ error: 'A redone sentence is not a passage' }, { status: 400 });
   // The length the device reports, and never less than the file could hold at 320 kb/s, so a short claim can't dodge the cap.
   const seconds = Math.max(Number(form.get('seconds')) || 0, file.size / 40_000);
   // A whole take: at most 2 minutes (Nate, 2026-11-24; the book speech 3, takeMaxSeconds), with a second's grace for the
-  // recorder's stop; the page's countdown stops the recording at its limit.
-  const max = scope.kind === 'whole' ? takeMaxSeconds(speech.id) : VOICE.maxSentenceSeconds;
+  // recorder's stop; the page's countdown stops the recording at its limit. A passage: that, scaled to its words.
+  const wholeMax = takeMaxSeconds(speech.id);
+  const words = (xs: { text: string }[]) => xs.reduce((a, x) => a + wordsIn(x.text), 0);
+  const max = scope.kind === 'whole' ? (passage ? passageMaxSeconds(wholeMax, words(passageSentences(speech.sentences, passage)), words(speech.sentences)) : wholeMax) : VOICE.maxSentenceSeconds;
   if (seconds > max + 1) return NextResponse.json({ error: `A ${scope.kind === 'whole' ? 'take' : 'sentence'} can be at most ${mmssLimit(max)}` }, { status: 413 });
   const wording = voiceConsentWording();
   if (!(await hasVoiceConsent(sql, who.fid))) return NextResponse.json({ error: 'Read and agree to the own-voice terms first' }, { status: 403 });
@@ -87,6 +94,7 @@ export async function POST(request: Request) {
       candidate,
       voiceId,
       scope,
+      passage,
       consentSha256: wording.sha256,
       admit,
     });

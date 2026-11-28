@@ -402,7 +402,11 @@ export const LEGAL: {
     // (through Neynar for a Farcaster post), and the Farcaster profile of the address that made each claim, through
     // Neynar, to show them to the admin, and doesn't keep them." The words before were 1nx9bw3 (never live).
     // Both rereads together (#257 merged first; #258 merged main in, no word changed): the words of both, 1rtkpxm.
-    privacy: { words: '1rtkpxm', on: '2026-11-27', by: 'FID 6786' },
+    // 2026-11-28, owner's reread for #261 (recording a passage), typed in his session: "Reread: the two Privacy §4 changes
+    // and the passage wording, as listed." §4's drafts item ends "…with any corrections you make to them, and, for a
+    // passage, which sentences you recorded)"; the takes item reads "…the speech (or the passage of it you recorded), …".
+    // The words before were 1rtkpxm.
+    privacy: { words: '1smcn0p', on: '2026-11-28', by: 'FID 6786' },
   },
 };
 
@@ -456,8 +460,8 @@ export const PRIVACY: LegalDoc = {
           'If you add where a version was posted: the post\'s network, its id there, its writer\'s handle, when it was posted, its address, and who added it and when. The network, handle, date and a link to the post are shown on the version\'s page; who added it isn\'t. You can remove a post you added; a moderator can remove any of them, on its writer\'s request or under the Terms.',
           'Frames you make in Remix, each with your words, the full prompt sent, the camera and people you set, the pictures sent with it, what it cost and your name. Anyone with a frame\'s link can see it, with your words and name. You can hide your own frames at any time.',
           'Storyboards you save: the frames in order, how long each is shown and the voice takes you chose. Anyone with a storyboard\'s link can see it, with your name. You can hide it.',
-          'Speeches you record: each converted speech, in the character\'s voice, kept as your draft as soon as it comes back, until you remove it or publish it, with its recipe (the voice, the model, its settings, a fingerprint of your recording, and the words of your take as transcribed, with any corrections you make to them). Never your recording. You can remove a draft you haven\'t published; it is deleted, audio and all.',
-          'If you enter a take in the Ephelion challenge: the converted speech, with your name, the speech, the voice, the words of your take as transcribed (with any corrections), and its picture: a ready-made picture of Lord Ephelion (an approved one or a ready-made scene), one of your own published pictures of him, or the one you described, with its labels, credit and recipe. These are public until you take the take down. Never your recording.',
+          'Speeches you record: each converted speech, in the character\'s voice, kept as your draft as soon as it comes back, until you remove it or publish it, with its recipe (the voice, the model, its settings, a fingerprint of your recording, and the words of your take as transcribed, with any corrections you make to them, and, for a passage, which sentences you recorded). Never your recording. You can remove a draft you haven\'t published; it is deleted, audio and all.',
+          'If you enter a take in the Ephelion challenge: the converted speech, with your name, the speech (or the passage of it you recorded), the voice, the words of your take as transcribed (with any corrections), and its picture: a ready-made picture of Lord Ephelion (an approved one or a ready-made scene), one of your own published pictures of him, or the one you described, with its labels, credit and recipe. These are public until you take the take down. Never your recording.',
           'If you describe your own scene for the Ephelion challenge, your description is checked against the published rules and sent, with Lord Ephelion\'s published sheet, to the model that makes the picture. Each account can make one free picture; we keep that you made it. A refused or failed one doesn\'t count.',
           'Your conversation with the storyboard guide: what you asked and what it drafted, kept with your storyboard until you remove it. When you publish the storyboard, each picture\'s request and the prompt it was made with are published with it.',
           'The styles and character sheets you choose to use in your pictures ("My picks"), kept until you clear them and seen only by you. An image you publish shows the ones it used, in its recipe.',

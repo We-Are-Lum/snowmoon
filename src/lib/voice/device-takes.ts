@@ -5,6 +5,8 @@
  * converts it. One take per person and speech; recording again replaces it. The browser may clear it on its own.
  * Browser only.
  */
+import type { Passage } from './passage';
+
 export interface DeviceTake {
   key: string;
   fid: number;
@@ -15,6 +17,8 @@ export interface DeviceTake {
   savedAt: number;
   /** The take's sha256, to find the draft its conversion became (the recipe keeps only this). */
   sha256: string;
+  /** The passage recorded (passage.ts), or null/absent for the whole speech. */
+  passage?: Passage | null;
 }
 
 const DB = 'snowmoon-voice-takes';
@@ -51,8 +55,8 @@ export async function sha256Of(blob: Blob): Promise<string> {
 }
 
 /** Keep (or replace) this person's take of this speech on the device. */
-export async function saveTake(fid: number, speechId: string, blob: Blob, seconds: number): Promise<DeviceTake> {
-  const t: DeviceTake = { key: takeKey(fid, speechId), fid, speechId, blob, seconds, type: blob.type, savedAt: Date.now(), sha256: await sha256Of(blob) };
+export async function saveTake(fid: number, speechId: string, blob: Blob, seconds: number, passage: Passage | null = null): Promise<DeviceTake> {
+  const t: DeviceTake = { key: takeKey(fid, speechId), fid, speechId, blob, seconds, type: blob.type, savedAt: Date.now(), sha256: await sha256Of(blob), passage };
   await tx('readwrite', (s) => s.put(t));
   return t;
 }
