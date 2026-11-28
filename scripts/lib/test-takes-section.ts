@@ -150,6 +150,62 @@ export async function takesSection(o: {
   await unhideReachesTakes(sql, ownPic.element, NATE, 'moderator', moderationDeps());
   check('TK. unhiding the picture brings back the take hidden only because of it, files back; the one with its own report stays hidden', (await pubOf(t6)).hidden_at === null && before.every((f) => existsSync(path.join(STORE, 'public', f.key))) && (await pubOf(t3)).hidden_at !== null);
 
+  // TH. Takes follow the picture (the follow-up to #255, 2026-11-27): a maker's own hide and unhide, and a moderator's
+  // image unhide (0057_takes_hide_owner.sql; src/lib/images/unhide.ts).
+  {
+    const { unhideImage } = await import(path.join(ROOT, 'src/lib/images/unhide.ts'));
+    const { keyFor } = await import(path.join(ROOT, 'src/lib/images/store.ts'));
+    // NATE's take of the book's speech with GARANCE's picture (the approved one, by its version), and t6 (GARANCE's own
+    // take with it) reported for itself.
+    const d7 = await draft(NATE, 'ephelion-c13-b64');
+    const t7 = String(((await (await enter(NATE, d7, { source: 'set', id: 'garance-remix' })).json()) as { id: string }).id);
+    await report.POST(as(NATE, { method: 'POST', body: JSON.stringify({ reason: 'spam' }) }), { params: Promise.resolve({ id: t6 }) });
+    let refused = false;
+    try {
+      await hideReachesTakes(sql, setPic.element, NATE, 'author', moderationDeps());
+    } catch {
+      refused = true;
+    }
+    check('TH. someone who didn\'t make the picture can\'t hide its takes as its maker', refused && (await pubOf(t7)).hidden_at === null);
+    const t7files = (await pubOf(t7)).files as { key: string }[];
+    await hideReachesTakes(sql, setPic.element, GARANCE, 'author', moderationDeps());
+    check('TH. the maker\'s own hide hides every take that copied the picture, another person\'s too, files to the private bucket',
+      (await pubOf(t7)).hidden_at !== null && (await pubOf(t6)).hidden_at !== null && t7files.every((f) => !existsSync(path.join(STORE, 'public', f.key)) && existsSync(path.join(STORE, 'voice-hidden', f.key))));
+    const [log] = await sql`select role, by_fid::int as by from studio.voice_publication_log where publication_id = ${t7} and step = 'hidden' order by at desc limit 1`;
+    check('TH. ... logged as the author\'s, with their number', log?.role === 'author' && log?.by === GARANCE, JSON.stringify(log));
+    await unhideReachesTakes(sql, setPic.element, GARANCE, 'author', moderationDeps());
+    check('TH. the maker\'s unhide brings back the take hidden only because of it, files back; the one with its own report stays hidden',
+      (await pubOf(t7)).hidden_at === null && t7files.every((f) => existsSync(path.join(STORE, 'public', f.key))) && (await pubOf(t6)).hidden_at !== null);
+    // A moderator's image unhide: the picture hidden by a moderator (and its takes with it), then put back byte for byte.
+    await sql`update studio.elements set status = 'hidden' where id = ${setPic.element}`;
+    await sql`insert into studio.removal_log ${sql({ element_id: setPic.element, step: 'hidden', by_fid: NATE, role: 'moderator' })}`;
+    await hideReachesTakes(sql, setPic.element, NATE, 'moderator', moderationDeps());
+    const el = { elementId: setPic.element, type: 'image' as const, status: 'hidden', byFid: GARANCE, files: [sha(pics['set.jpg'])] };
+    const restored: string[] = [];
+    const wrong = await unhideImage(sql, el, NATE, { getPrivate: async () => Buffer.from('not the picture'), restorePublic: async (x: string) => void restored.push(x) });
+    check('TH. a moderator\'s unhide refuses a kept copy that isn\'t the published picture, and changes nothing',
+      !wrong.ok && wrong.status === 409 && restored.length === 0 && (await sql`select status from studio.elements where id = ${setPic.element}`)[0].status === 'hidden' && (await pubOf(t7)).hidden_at !== null);
+    const seen: string[] = [];
+    const ok = await unhideImage(sql, el, NATE, { getPrivate: async (k: string) => (seen.push(k), pics['set.jpg']), restorePublic: async (x: string) => void restored.push(x) });
+    check('TH. a moderator\'s unhide puts the picture back byte for byte, publishes it again, and brings back the take hidden only because of it',
+      ok.ok && seen[0] === keyFor(sha(pics['set.jpg'])) && restored[0] === sha(pics['set.jpg']) && (await sql`select status from studio.elements where id = ${setPic.element}`)[0].status === 'published' && (await pubOf(t7)).hidden_at === null && (await pubOf(t6)).hidden_at !== null);
+    const [ul] = await sql`select role from studio.removal_log where element_id = ${setPic.element} and step = 'unhidden' order by at desc limit 1`;
+    check('TH. ... logged as the moderator\'s unhide', ul?.role === 'moderator');
+    // A maker's own hide is theirs to undo: a moderator can't unhide it.
+    await sql`update studio.elements set status = 'hidden' where id = ${ownPic.element}`;
+    await sql`insert into studio.removal_log ${sql({ element_id: ownPic.element, step: 'hidden', by_fid: NATE, role: 'author' })}`;
+    const own = await unhideImage(sql, { elementId: ownPic.element, type: 'image', status: 'hidden', byFid: NATE, files: [sha(pics['own.jpg'])] }, GARANCE, { getPrivate: async () => pics['own.jpg'], restorePublic: async () => undefined });
+    check('TH. a moderator can\'t unhide a picture its maker hid', !own.ok && own.status === 403 && (await sql`select status from studio.elements where id = ${ownPic.element}`)[0].status === 'hidden');
+    await sql`update studio.elements set status = 'published' where id = ${ownPic.element}`;
+    await sql`insert into studio.removal_log ${sql({ element_id: ownPic.element, step: 'unhidden', by_fid: NATE, role: 'author' })}`;
+    // The code: the image's own Hide reaches the takes; /moderate offers Unhide for a picture, for moderators only.
+    const { readFileSync } = await import('node:fs');
+    const hideRoute = readFileSync(path.join(ROOT, 'src/app/api/images/[id]/hide/route.ts'), 'utf8');
+    const modRoute = readFileSync(path.join(ROOT, 'src/app/api/moderate/route.ts'), 'utf8');
+    check('TH. the image\'s own Hide and Unhide reach the takes, as its maker', /hideReachesTakes\(sql, el\.elementId, fid, 'author'\)/.test(hideRoute) && /unhideReachesTakes\(sql, el\.elementId, fid, 'author'\)/.test(hideRoute));
+    check('TH. /moderate\'s image Unhide is for moderators only and goes through unhideImage', /if \(!MODERATOR_FIDS\.includes\(fid\)\) return NextResponse\.json\(\{ error: 'Moderators only' \}, \{ status: 403 \}\);[\s\S]*action === 'unhide'\) \{[\s\S]*unhideImage\(sql, el, fid\)/.test(modRoute));
+  }
+
   // Take-down.
   r = await take.DELETE(as(GARANCE, { method: 'DELETE' }), { params: Promise.resolve({ id: t2 }) });
   check('TK. someone else can\'t take a take down', r.status === 404 && (await pubOf(t2)).taken_down_at === null);
