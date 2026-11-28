@@ -36,12 +36,29 @@ proven('T2 on a challenge page the panel starts closed, and open only when the p
 const wiring = (src: string) => [
   ...need(/const \[chPanel, setChPanel\] = useState\(false\);/.test(src), 'the challenge panel does not start closed'),
   ...need(/setChPanel\(challengePanelOpen\(localStorage\.getItem\(CHALLENGE_PANEL_KEY\)\)\)/.test(src), 'the device\'s memory is not read'),
-  ...need(/const showPanel = \(onMp \? mpPanel : onChallenge \? chPanel : panel\) && !path\.startsWith\('\/assistant'\);/.test(src), 'the challenge pages don\'t use their own state'),
+  ...need(/const showPanel = \(onMp \? mpPanel : onChallenge \? chPanel : panel\) && !path\.startsWith\('\/assistant'\)/.test(src), 'the challenge pages don\'t use their own state'),
   ...need(/onChallenge \? \(setChPanel\(true\), remember\(CHALLENGE_PANEL_KEY, 'open'\)\)/.test(src) && /onChallenge \? \(setChPanel\(false\), remember\(CHALLENGE_PANEL_KEY, null\)\)/.test(src), 'opening there isn\'t remembered, or closing there doesn\'t forget'),
   ...need(/const \[mpPanel, setMpPanel\] = useState\(false\);/.test(src) && /const \[panel, setPanel\] = useState\(true\);/.test(src) && /setPanel\(localStorage\.getItem\('snowmoon\.panel'\) !== 'closed'\);/.test(src), 'Minpentai or the other pages changed'),
   ...need(CHALLENGE_PANEL_KEY === 'snowmoon.panel.challenge', 'the key'),
 ];
 proven('T3 the shell: closed by default on the challenge\'s pages, opening there remembered, closing there forgets; Minpentai and every other page unchanged', wiring(shell), wiring(shell.replace('const [chPanel, setChPanel] = useState(false);', 'const [chPanel, setChPanel] = useState(true);')));
+
+// T4: full screen, desktop only (Nate, 2026-11-26): one click collapses the rail and closes the assistant, again restores
+// both as they were (the remembered rail and panel aren't touched), remembered on this device; the browser's full screen
+// only where it is supported.
+const css = readFileSync(path.join(ROOT, 'src/styles/shell.css'), 'utf8');
+const focusWiring = (src: string, style: string) => [
+  ...need(/const \[focus, setFocus\] = useState\(false\);/.test(src), 'full screen does not start off'),
+  ...need(/setFocus\(localStorage\.getItem\(FOCUS_KEY\) === 'on'\)/.test(src) && /export const FOCUS_KEY = 'snowmoon\.focus';/.test(src), 'the device\'s memory is not read'),
+  ...need(/&& !bare && !focus;/.test(src), 'the assistant is not closed in full screen'),
+  ...need(/const railCollapsed = focus \|\| \(onChallenge \? !chRail : collapsed\);/.test(src), 'the rail is not collapsed in full screen, or the remembered rail is overwritten'),
+  ...need(/remember\(FOCUS_KEY, on \? 'on' : null\)/.test(src), 'the choice is not remembered'),
+  ...need(!/toggleFocus[\s\S]{0,600}(setCollapsed|setPanel\(|remember\('snowmoon\.(rail|panel)')/.test(src), 'full screen changes the remembered rail or panel, so turning it off would not restore them'),
+  ...need(/d\.fullscreenEnabled && !d\.fullscreenElement && typeof d\.documentElement\.requestFullscreen === 'function'/.test(src), 'the browser\'s full screen is asked for where it isn\'t supported'),
+  ...need(/\.focus-toggle \{ display: none; \}/.test(style) && /@media \(min-width: 1200px\) \{\s*\.focus-toggle \{\s*display: inline-flex;/.test(style), 'the icon is not desktop only'),
+  ...need(/\{!bare && \(\s*<button type="button" className="focus-toggle"/.test(src), 'the icon shows on the bare recorder page'),
+];
+proven('T4 full screen: desktop only; collapses the rail and closes the assistant; turning it off restores both as they were; remembered; the browser\'s full screen only where supported', focusWiring(shell, css), focusWiring(shell.replace('&& !bare && !focus;', '&& !bare;'), css));
 
 console.log(`\ntest:panel: ${passed} passed, ${failed.length} failed`);
 if (failed.length) {
