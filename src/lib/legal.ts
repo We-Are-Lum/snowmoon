@@ -50,7 +50,8 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  // MERGE DAY: the day PR 6 (entering takes, terms cfj30e, privacy 1iu09p9) merges and goes live; set to 2026-11-27 (PT), moved
+  // MERGE DAY: the day #258 (/admin/bounty's live posts and profiles, privacy 1wtc8ta) merges and goes live, 2026-11-27 (PT).
+  // Before it: the day PR 6 (entering takes, terms cfj30e, privacy 1iu09p9) merges and goes live; set to 2026-11-27 (PT), moved
   // to the real merge day at merge. (Before: 2026-11-26, PR #229, the storyboard pictures' allowance.)
   // MERGE DAY: the day the storyboard pictures' allowance (PR #229) merges and goes live, 2026-11-26 (PT). If the merge
   // moves, this moves with it. (Before: 2026-11-26, PR #225, storyboard moderation; 2026-11-26, PR #249, the four-step recorder; 2026-11-24, PR #235, the guided storyboard's fixes; 2026-11-24, PR #230, 30-day sign-ins; 2026-11-23, PR #224, the storyboard guide; 2026-11-22, PR #215;
