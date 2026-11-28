@@ -77,10 +77,15 @@ check('planted: recipeProblems refuses a base that is another character\'s', rec
 {
   const r = addedRecipe(recipe({}), { sha256: 'a'.repeat(64), width: 48, height: 64, from: 'image/png', originalSize: [48, 64] }, { versionId: ZEI_BASE, frontSha256: BASE_FRONT });
   const s = r.settings as Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
-  check('addedRecipe: model midjourney, the label, self-reported, both sha256s, the base, seed, job, checks not run, no cost', r.model === 'midjourney' && s.label === MIDJOURNEY_LABEL && s.self_reported === true && s.original.sha256 === sha(png) && s.converted.jpeg_sha256 === 'a'.repeat(64) && s.remixes_base.version_id === ZEI_BASE && r.seed === 6062 && r.request_id === 'job-1' && r.endpoint === 'Midjourney v7, outside the site' && r.checks.prompt.verdict === 'not run' && r.cost_usd === 0 && r.made_at === '2026-11-26T00:00:00.000Z', JSON.stringify(r));
+  check('addedRecipe: model midjourney, the label, self-reported, both sha256s, the base, seed, job, checks not run, no cost', r.model === 'midjourney' && s.label === MIDJOURNEY_LABEL && s.self_reported === true && s.original.sha256 === sha(png) && s.converted.jpeg_sha256 === 'a'.repeat(64) && s.remixes_base.version_id === ZEI_BASE && r.seed === 6062 && r.request_id === 'job-1' && r.endpoint === 'Midjourney v7, outside the site' && r.checks.prompt.verdict === 'not run' && r.cost_usd === 0 && r.made_at === '2026-11-26T08:00:00.000Z', JSON.stringify(r));
 }
 
 // ---- The database ----
+{
+  const { pacificMidnight } = await import('./lib/launch-publish');
+  check('made_at: the maker\'s date at Pacific midnight (PST and PDT)', pacificMidnight('2026-11-27') === '2026-11-27T08:00:00.000Z' && pacificMidnight('2026-07-04') === '2026-07-04T07:00:00.000Z');
+  check('planted: a UTC midnight is caught', pacificMidnight('2026-11-27') !== '2026-11-27T00:00:00.000Z');
+}
 const db = new PGlite();
 await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
 for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort()) await db.exec(readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
@@ -202,7 +207,7 @@ const dryAgain = await add(good);
   const SV = '12345678-1234-4123-8123-123456789abc';
   const er = { ...recipe({ file: 'seila-cropped.png', sha256: sha(cropped), character: 'seila' }), base: null, new_sheet: true, text: 'a woman with round glasses',
     inputs: [{ sha256: STYLE, what: 'style reference (--sref)' }], style_input: { sha256: STYLE, what: 'the owner\'s Deluin tea picture', version_id: SV, link: 'https://s.mj.run/x' },
-    edit: { from_sha256: sha(mjExport), what: 'cropped 1 px off the left and 2 px off the bottom', by: 'the coding agent, with sharp; no model' } };
+    edit: { from_sha256: sha(mjExport), from_file: 'seila-export.png', what: 'cropped 1 px off the left and 2 px off the bottom', by: 'the coding agent, with sharp; no model' } };
   const eDir = folder('edited', [{ json: er, file: ['seila-cropped.png', cropped] }]);
   const badStyle = folder('edited-bad-style', [{ json: { ...er, inputs: [{ sha256: 'b'.repeat(64), what: 'something else' }] }, file: ['seila-cropped.png', cropped] }]);
   const badEdit = folder('edited-bad-edit', [{ json: { ...er, edit: { what: 'cropped' } }, file: ['seila-cropped.png', cropped] }]);
@@ -215,7 +220,7 @@ const dryAgain = await add(good);
   const [row] = await q((s) => s`select v.body, (select count(*)::int from studio.links l where l.from_version_id = v.id) as links from studio.element_versions v
     where v.body->'views'->'front'->'recipe'->'settings'->'original'->>'sha256' = ${sha(mjExport)}`);
   const st = row?.body?.views?.front?.recipe?.settings;
-  const okE = (x: typeof st, links: number) => !!x && links === 0 && x.original?.sha256 === sha(mjExport) && x.edited?.from_sha256 === sha(mjExport) && x.edited?.sha256 === sha(cropped) && /cropped/.test(x.edited?.what) && x.converted?.sha256 === sha(cropped)
+  const okE = (x: typeof st, links: number) => !!x && links === 0 && x.original?.sha256 === sha(mjExport) && x.original?.file === 'seila-export.png' && x.edited?.file === 'seila-cropped.png' && x.edited?.from_sha256 === sha(mjExport) && x.edited?.sha256 === sha(cropped) && /cropped/.test(x.edited?.what) && x.converted?.sha256 === sha(cropped)
     && x.style_input?.sha256 === STYLE && x.style_input?.version_id === SV && /not a link/.test(x.style_input?.role);
   check('an edited picture: its recipe keeps the tool\'s export as the original, the edit (what, by, both sha256s) and the style input with its version; no link of any kind', ea.status === 0 && okE(st, Number(row?.links ?? -1)), `${ea.out.slice(-400)} ${JSON.stringify(st).slice(0, 600)}`);
   check('planted: the edit check fails one with a link, or with the cropped file as its original', !!st && !okE(st, 1) && !okE({ ...st, original: { ...st.original, sha256: sha(cropped) } }, 0));
