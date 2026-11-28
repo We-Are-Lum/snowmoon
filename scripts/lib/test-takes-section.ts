@@ -166,7 +166,13 @@ export async function takesSection(o: {
     } catch {
       refused = true;
     }
-    check('TH. someone who didn\'t make the picture can\'t hide its takes as its maker', refused && (await pubOf(t7)).hidden_at === null);
+    // The refusal is a Postgres error on the harness's one shared PGlite session; the first query after it can come back
+    // empty there (seen after #259, 2026-11-28: pubOf(t7) undefined while the row was in the table; a run of throwaway
+    // queries showed exactly one empty answer, then correct ones). One throwaway query with a parameter (the extended
+    // protocol, as pubOf uses; a bare `select 1` didn't absorb it) lets the session settle before the check reads. The site
+    // runs on real Postgres, where this doesn't happen.
+    await sql`select ${1}::int as settle`;
+    check('TH. someone who didn\'t make the picture can\'t hide its takes as its maker', refused && (await pubOf(t7))?.hidden_at === null);
     const t7files = (await pubOf(t7)).files as { key: string }[];
     await hideReachesTakes(sql, setPic.element, GARANCE, 'author', moderationDeps());
     check('TH. the maker\'s own hide hides every take that copied the picture, another person\'s too, files to the private bucket',
