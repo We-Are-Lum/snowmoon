@@ -1494,6 +1494,12 @@ CHALLENGE.postsPerPersonPerDay = keepLimit;
     const EI = await import('../src/lib/challenge/enter-it');
     check('NE "Enter it": its maker (Farcaster) sees it; another person, signed out, and a person 0 don\'t', EI.enterItShown({ fid: 500, person: null }, 500) && !EI.enterItShown({ fid: 501, person: null }, 500) && !EI.enterItShown({ fid: null, person: null }, 500) && !EI.enterItShown({ fid: null, person: null }, 0));
     check('NE "Enter it": a Lens or Bluesky maker by the person number the server answers', EI.enterItShown({ fid: null, person: -1_000_000_005 }, -1_000_000_005) && !EI.enterItShown({ fid: null, person: -1_000_000_006 }, -1_000_000_005));
+    {
+      const ei = read('src/components/challenge-enter-it.tsx');
+      const keyed = (src: string) => /if \(personAsk\?\.token !== token\)/.test(src) && /\}, \[token\]\);/.test(src) && /setPerson\(null\);/.test(src);
+      check('NE "Enter it": the maker lookup is asked again for each signed-in session, so a switched account never reuses the last one\'s answer (Vercel review, 2026-11-28)', keyed(ei));
+      proof('NE a lookup cached once per page load is caught', !keyed(ei.replace('if (personAsk?.token !== token)', 'if (!personAsk)')));
+    }
     proof('NE an "Enter it" shown to anyone signed in is caught', ((v: { fid: number | null }) => v.fid !== null)({ fid: 501 }) !== EI.enterItShown({ fid: 501, person: null }, 500));
     check('NE "Enter it" leads to the picture\'s Submit section, which has that anchor', EI.enterItHref(unsubmitted.versionId) === `/challenge/p/${unsubmitted.versionId}#submit` && /<section id="submit" className="sf-submit"/.test(read('src/components/challenge-picture.tsx')));
     const CWN = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
