@@ -3,6 +3,7 @@ import type postgres from 'postgres';
 import { removeDraft, saveDraft, type DraftAudio } from './drafts';
 import { getAudio } from './store';
 import { speechById } from './speech';
+import { recipePassage, withPassage } from './passage';
 import { correctionProblems, matchesSpeech, type Spoken } from './spoken';
 import { sha256Hex } from './ticket';
 
@@ -34,7 +35,8 @@ export async function correctWords(sql: Sql, fid: number, draftId: string, raw: 
   if (problems.length) return { status: 400, json: { error: problems[0], problems } };
   const after = (sentences as string[]).map((t, i) => ({ n: spoken.sentences[i].n, text: t.replace(/\s+/g, ' ').trim() }));
   if (after.every((s, i) => s.text === spoken.sentences[i].text)) return { status: 400, json: { error: 'Nothing was changed.' } };
-  const speech = speechById(d.speech_id as string);
+  const found = speechById(d.speech_id as string);
+  const speech = found ? withPassage(found, recipePassage(recipe.speech)) : null;
   if (!speech) return { status: 400, json: { error: 'No such speech' } };
 
   const rows = await sql`select n, role, sentence, replaces_start::float8 as "replacesStart", replaces_end::float8 as "replacesEnd", storage_key, sha256, seconds::float8 as seconds from studio.voice_draft_audio where draft_id = ${draftId} order by n`;

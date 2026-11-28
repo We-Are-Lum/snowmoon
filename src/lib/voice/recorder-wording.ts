@@ -109,5 +109,14 @@ export const RECORDER = {
   loading: 'Loading…',
   notReady: 'Not ready: the voice service isn’t set up on this server.',
   convertFailed: 'The conversion failed. Your recording is still on this device: try again.',
+  // A passage (2026-11-27). DRAFT: not yet reread by Nate.
+  wholeSpeech: 'The whole speech',
+  aPassage: 'A passage',
+  passageFrom: 'From sentence',
+  passageTo: 'to',
+  passageMin: 'At least 3 sentences. It counts as your one take of this speech, judged the same as a whole take.',
+  changePassage: 'Change what you record? Your recording is removed from this device.',
+  changePassageYes: 'Change it',
+  passageNote: (max: string) => `Read only these sentences. Up to ${max}.`,
   today: (used: number, cap: number, left: number) => `Today: ${used.toLocaleString('en-US')} of ${cap.toLocaleString('en-US')} credits used; ${left} whole ${left === 1 ? 'take' : 'takes'} left for you.`,
 } as const;

@@ -1,3 +1,4 @@
+import { passageSentences } from '~/lib/voice/passage';
 import { NextResponse } from 'next/server';
 import { db } from '~/lib/db';
 import { VOICE } from '~/lib/config';
@@ -44,7 +45,7 @@ export async function POST(request: Request) {
     const speech = speechById(convert.speechId);
     if (!speech) return NextResponse.json({ error: 'No such speech' }, { status: 400 });
     const scope = convert.scope;
-    const sentences = scope.kind === 'whole' ? speech.sentences : speech.sentences.filter((s) => s.n === scope.n);
+    const sentences = scope.kind === 'whole' ? passageSentences(speech.sentences, convert.passage ?? null) : speech.sentences.filter((s) => s.n === scope.n);
     return NextResponse.json({ scope, words, checks: checkSpeech(sentences, words, speech.names), check }, { headers: noStore });
   } catch (e) {
     // Refused before any call (not converted audio, not this person's): the hold is given back, nothing is counted.

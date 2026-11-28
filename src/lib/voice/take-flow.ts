@@ -12,6 +12,7 @@
  *   and has no list of them to sweep: seen 2026-11-21);
  * - a cost is recorded with numbers only (no audio, no hash).
  */
+import type { Passage } from './passage';
 import type { HeardWord } from './match';
 
 export type Scope = { kind: 'whole' } | { kind: 'sentence'; n: number };
@@ -29,6 +30,8 @@ export interface ConvertTicket {
   settings: Record<string, unknown>;
   outputFormat: string;
   scope: Scope;
+  /** A whole take of a passage (passage.ts); absent or null for the whole speech. */
+  passage?: Passage | null;
   consentSha256: string;
   takeSha256: string;
   convertedSha256: string;
@@ -95,6 +98,7 @@ export interface ConvertInput {
   candidate: number | null;
   voiceId: string;
   scope: Scope;
+  passage?: Passage | null;
   consentSha256: string;
   /**
    * Called with the take's sha256 (never the take) before anything is sent: it may refuse by throwing a FlowError
@@ -156,6 +160,7 @@ export async function convertTake(deps: FlowDeps, input: ConvertInput): Promise<
       settings: deps.settings,
       outputFormat: deps.outputFormat,
       scope: input.scope,
+      ...(input.scope.kind === 'whole' && input.passage ? { passage: input.passage } : {}),
       consentSha256: input.consentSha256,
       takeSha256,
       convertedSha256,

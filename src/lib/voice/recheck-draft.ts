@@ -4,6 +4,7 @@ import { VOICE } from '../config';
 import { joinTimeline } from './board';
 import { checkSpeech, type HeardWord } from './match';
 import { speechById } from './speech';
+import { recipePassage, withPassage } from './passage';
 import { refusal, reserve } from './costs';
 import { removeDraft, saveDraft } from './drafts';
 import { sha256Hex, signTicket } from './ticket';
@@ -45,7 +46,9 @@ export async function recheckDraft(sql: Sql, fid: number, draftId: string, deps:
   const rows = await sql`select n, role, storage_key, sha256, seconds::float8 as seconds from studio.voice_draft_audio where draft_id = ${draftId} order by n`;
   const take = recipe.takes?.[0];
   if (rows.length !== 1 || rows[0].role !== 'take' || !take || rows[0].sha256 !== take.convertedSha256) return { status: 409, json: { error: 'This draft can\'t be checked again: record and convert it again.' } };
-  const speech = speechById(d.speech_id as string);
+  const found = speechById(d.speech_id as string);
+  // A passage's draft is checked again against its passage only (passage.ts).
+  const speech = found ? withPassage(found, recipePassage(recipe.speech)) : null;
   if (!speech) return { status: 400, json: { error: 'No such speech' } };
   const seconds = Number(rows[0].seconds ?? take.seconds ?? 0);
   const estimate = Math.ceil(seconds * VOICE.rates.transcribeCreditsPerSecond);

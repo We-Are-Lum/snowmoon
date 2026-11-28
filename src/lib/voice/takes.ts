@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import type postgres from 'postgres';
 import { VOICE } from '../config';
 import { isImprovised, takeLabel, type Spoken } from './spoken';
+import { recipePassageLabel } from './passage';
 import { publicUrl } from './public-store';
 import { sha256Hex, verifyTicket } from './ticket';
 import { TAKE_PICTURES, sceneById, scenePlaceholder, setById } from './take-pictures';
@@ -142,7 +143,8 @@ export async function enterTake(sql: Sql, fid: number, raw: unknown, deps: TakeD
       performer: named ? { fid, name: performer } : { named: false },
       speech: r.speech,
       spoken: r.spoken ?? { kind: 'word-for-word' },
-      take: { label: takeLabel(r) },
+      // A passage's label always shows with the take (passage.ts); it is judged the same as a whole take.
+      take: { label: takeLabel(r), passage: recipePassageLabel(r.speech) },
       voice: { kind: 'performance', provider: VOICE.provider, closedModel: true, model: r.model, settings: r.settings, transcribeModel: r.transcribeModel, preset: r.preset, takes: r.takes, check: r.check },
       picture,
       people: [isImprovised(r) ? 'the performance and the spoken words (improvised)' : 'the performance', 'the choice of picture', ...(pic.source === 'own-scene' ? ['the scene’s description'] : [])],
@@ -183,13 +185,13 @@ export async function cardTakes(sql: Sql, limitPerSpeech = 6) {
       from studio.voice_publications where kind = 'take' and taken_down_at is null and hidden_at is null
       order by speech_id, fid, published_at desc) t
     order by published_at desc`;
-  const out: Record<string, { id: string; at: string; performer: string | null; voice: string | null; label: string | null; picture: string | null }[]> = {};
+  const out: Record<string, { id: string; at: string; performer: string | null; voice: string | null; label: string | null; passage: string | null; picture: string | null }[]> = {};
   for (const r of rows) {
     const list = (out[r.speechId] ??= []);
     if (list.length >= limitPerSpeech) continue;
-    const rec = r.recipe as { performer?: { name?: string | null }; voice?: { preset?: { name?: string } }; take?: { label?: string } };
+    const rec = r.recipe as { performer?: { name?: string | null }; voice?: { preset?: { name?: string } }; take?: { label?: string }; speech?: unknown };
     const pic = r.files.find((f) => f.role === 'picture');
-    list.push({ id: r.id, at: r.at, performer: rec.performer?.name ?? null, voice: rec.voice?.preset?.name ?? null, label: rec.take?.label ?? null, picture: pic ? publicUrl(pic.key) : null });
+    list.push({ id: r.id, at: r.at, performer: rec.performer?.name ?? null, voice: rec.voice?.preset?.name ?? null, label: rec.take?.label ?? null, passage: recipePassageLabel(rec.speech), picture: pic ? publicUrl(pic.key) : null });
   }
   return out;
 }

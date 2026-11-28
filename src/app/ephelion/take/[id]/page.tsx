@@ -7,6 +7,7 @@ import { takesOn } from '~/lib/voice/publish-deps';
 import { embedMeta, takeEmbed } from '~/lib/voice/embeds';
 import { TAKES_WORDING as W } from '~/lib/voice/takes-wording';
 import { spokenSentences, type Spoken } from '~/lib/voice/spoken';
+import { recipePassageLabel } from '~/lib/voice/passage';
 import { VoiceHiddenForMaker, VoiceReport } from '~/components/voice-report';
 import { TakeActions, TakePlayer } from '~/components/ephelion-take';
 import '~/styles/ephelion.css';
@@ -24,7 +25,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const sql = db();
   const t = takesOn() && sql ? await takePublication(sql, (await params).id).catch(() => null) : null;
   if (!t || t.hidden) return { robots };
-  const title = String((t.recipe.speech as { title?: string } | undefined)?.title ?? 'A take');
+  const speech = t.recipe.speech as { title?: string } | undefined;
+  // A passage's take: its label is in the title the Share card shows (passage.ts).
+  const title = [String(speech?.title ?? 'A take'), recipePassageLabel(speech)].filter(Boolean).join(', ');
   const pic = t.files.find((f) => f.role === 'picture');
   return { robots, title: `${title}: a take · Snowmoon`, openGraph: pic ? { images: [pic.url] } : undefined, other: embedMeta(takeEmbed(t.id, pic?.url ?? null)) };
 }
@@ -34,7 +37,7 @@ export default async function TakePage({ params }: { params: Promise<{ id: strin
   const sql = db();
   const t = sql ? await takePublication(sql, (await params).id).catch(() => null) : null;
   if (!t) notFound();
-  const r = t.recipe as { speech?: { title?: string }; performer?: { name?: string | null }; voice?: { preset?: { name?: string } }; take?: { label?: string }; spoken?: Spoken; picture?: Pic };
+  const r = t.recipe as { speech?: { title?: string; passage?: unknown }; performer?: { name?: string | null }; voice?: { preset?: { name?: string } }; take?: { label?: string }; spoken?: Spoken; picture?: Pic };
   const title = r.speech?.title ?? 'A take';
   if (t.hidden)
     return (
@@ -47,11 +50,13 @@ export default async function TakePage({ params }: { params: Promise<{ id: strin
     );
   const who = r.performer?.name ?? null;
   const voice = r.voice?.preset?.name ?? 'his voice';
-  const label = r.take?.label ?? 'word for word';
+  const passage = recipePassageLabel(r.speech);
+  // "Passage: sentences N–M" always shows beside the take's label (Nate, 2026-11-27).
+  const label = [r.take?.label ?? 'word for word', passage].filter(Boolean).join(' · ');
   const date = new Date(t.publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   const pic = t.files.find((f) => f.role === 'picture');
   const audio = t.files.filter((f) => f.role === 'audio').map((f) => ({ url: f.url, part: f.part ?? 'take', replaces: f.replaces ?? null }));
-  const words = spokenSentences({ spoken: r.spoken ?? null, speech: { id: t.speechId } }).map((x) => x.text);
+  const words = spokenSentences({ spoken: r.spoken ?? null, speech: { id: t.speechId, passage: r.speech?.passage } }).map((x) => x.text);
   const p = r.picture ?? {};
   return (
     <main className="eph-take">
@@ -64,7 +69,7 @@ export default async function TakePage({ params }: { params: Promise<{ id: strin
         {W.madeLine(who)} <a href={`/api/voice/takes/${t.id}`}>{W.recipe} ›</a>
       </p>
       <div className="eph-take-actions">
-        <TakeActions id={t.id} title={title} />
+        <TakeActions id={t.id} title={passage ? `${title}, ${passage}` : title} />
         <Link className="eph-btn" href="/ephelion/record">{W.recordOwn}</Link>
       </div>
       <VoiceReport id={t.id} />

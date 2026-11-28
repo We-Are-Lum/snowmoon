@@ -19,6 +19,9 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (n: string) => process.argv.find((a) => a.startsWith(`--${n}=`))?.split('=').slice(1).join('=');
 const url = arg('url');
 const out = arg('out');
+// --only=passage: only the passage flow (2026-11-27), so its two conversions fit the day's limit.
+const only = arg('only');
+const SIZES = [[390, 844], [1440, 900]] as const;
 if (!url || !out || !/^http:\/\/127\.0\.0\.1:\d+$/.test(url)) throw new Error('--url=http://127.0.0.1:<port> and --out are required');
 if (existsSync(path.join(ROOT, '.env.local'))) throw new Error('move .env.local aside first: the server must not read production settings');
 mkdirSync(out, { recursive: true });
@@ -66,7 +69,7 @@ try {
 
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const shots: string[] = [];
-  for (const [w, h] of [[390, 844], [1440, 900]] as const) {
+  for (const [w, h] of (only === 'passage' ? [] : SIZES)) {
     const ctx = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: w, height: h } });
     await ctx.addInitScript((fid) => {
       localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `voice-test-${fid}`, fid, username: 'naaate', exp: Math.floor(Date.now() / 1000) + 86400 }));
@@ -119,7 +122,7 @@ try {
   }
 
   // Full screen (Nate, 2026-11-26): desktop only. At 1440, off and on; at 390, absent.
-  for (const [w, h] of [[390, 844], [1440, 900]] as const) {
+  for (const [w, h] of (only === 'passage' ? [] : SIZES)) {
     const ctx = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: w, height: h } });
     await ctx.addInitScript((fid) => {
       localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `voice-test-${fid}`, fid, username: 'naaate', exp: Math.floor(Date.now() / 1000) + 86400 }));
@@ -156,7 +159,7 @@ try {
   }
 
   // The four-step recorder (PR 2): every step, phone and desktop (the site's menus and the assistant are hidden there).
-  for (const [w, h] of [[390, 844], [1440, 900]] as const) {
+  for (const [w, h] of (only === 'passage' ? [] : SIZES)) {
     const ctx = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: w, height: h }, permissions: ['microphone'] });
     await ctx.addInitScript((fid) => {
       localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `voice-test-${fid}`, fid, username: 'naaate', exp: Math.floor(Date.now() / 1000) + 86400 }));
@@ -255,6 +258,75 @@ try {
     await page.locator('button[data-step="1"]').waitFor({ timeout: 30_000 });
     console.log(w, 'entry', errors.length ? `page errors: ${errors.join(' | ')}` : 'no page errors');
     console.log(w, 'recorder', errors.length ? `page errors: ${errors.join(' | ')}` : 'no page errors');
+    await ctx.close();
+  }
+  // Recording a passage (Nate, 2026-11-27): choosing one, recording it with the highlight, the take's page and its card.
+  for (const [w, h] of (only === 'passage' ? SIZES : [])) {
+    const ctx = await browser.newContext({ deviceScaleFactor: 2, viewport: { width: w, height: h }, permissions: ['microphone'] });
+    await ctx.addInitScript((fid) => {
+      localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `voice-test-${fid}`, fid, username: 'naaate', exp: Math.floor(Date.now() / 1000) + 86400 }));
+      localStorage.setItem('snowmoon.intro-seen', 'v2');
+    }, NATE);
+    await ctx.route('**/api/chat/status', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: '{"ready":false}' }));
+    const page = await ctx.newPage();
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(String(e)));
+    const name = (s: string) => path.join(out, `${s}-${w}.png`);
+    const shot = async (s: string, full = false) => {
+      await page.waitForTimeout(400);
+      await page.screenshot({ path: name(s), fullPage: full });
+      shots.push(name(s));
+    };
+    await page.goto(`${url}/ephelion/record`);
+    await page.locator('button[data-step="1"]').waitFor({ timeout: 30_000 });
+    await page.locator('button[data-speech]').nth(1).click();
+    await page.getByRole('button', { name: 'Use this speech' }).click();
+    await page.locator('[data-voice]').first().click();
+    await page.getByRole('button', { name: 'Next: record' }).click();
+    const agree = page.getByRole('button', { name: 'I agree' });
+    if (await agree.count()) await agree.click();
+    await page.getByRole('button', { name: 'Start recording' }).waitFor({ timeout: 30_000 });
+    await page.getByLabel('A passage').check();
+    await page.locator('.er-passage-range select').nth(0).selectOption({ value: '1' });
+    await page.locator('.er-passage-range select').nth(1).selectOption({ value: '4' });
+    await shot('40-passage-choose', w === 390);
+    const shown = await page.locator('.er-sent').count();
+    await page.getByRole('button', { name: 'Start recording' }).click();
+    await page.locator('.er-badge-rec').waitFor({ timeout: 10_000 });
+    await page.waitForTimeout(2600);
+    await shot('41-passage-recording');
+    await page.getByRole('button', { name: 'Stop' }).first().click();
+    await page.getByRole('button', { name: 'Next: listen' }).waitFor({ timeout: 30_000 });
+    await page.getByRole('button', { name: 'Next: listen' }).click();
+    await page.locator('.er-take').waitFor({ timeout: 15_000 });
+    await page.locator('.er-tick input[type="checkbox"]').check();
+    await page.getByRole('button', { name: /^Make it his voice/ }).click();
+    await page.locator('.er-converted').waitFor({ timeout: 60_000 });
+    await page.locator('[data-slot="take-label"]').first().waitFor({ timeout: 30_000 }).catch(() => {});
+    await shot('42-passage-converted', w === 390);
+    await page.locator('.er-entry').scrollIntoViewIfNeeded();
+    await page.locator('.er-pic', { hasText: 'Giving a speech' }).first().click();
+    await page.getByRole('button', { name: 'Enter the challenge' }).click();
+    const ask = await page.getByRole('button', { name: 'Enter this one instead' }).waitFor({ timeout: 15_000 }).then(() => true, () => false);
+    if (ask) await page.getByRole('button', { name: 'Enter this one instead' }).click();
+    await page.locator('.er-entered').waitFor({ timeout: 20_000 });
+    await shot('43-passage-entered', w === 390);
+    const href = await page.getByRole('link', { name: 'Share it' }).getAttribute('href');
+    await page.goto(`${url}${href}`);
+    await page.locator('.eph-take').waitFor({ timeout: 20_000 });
+    await shot('44-passage-take-page', w === 390);
+    const title = await page.title();
+    await page.goto(`${url}/ephelion`);
+    const row = page.locator('.eph-take-row', { hasText: 'Passage: sentences' }).first();
+    await row.waitFor({ timeout: 20_000 }).catch(() => {});
+    const card = page.locator('.eph-card', { has: row });
+    if (await card.count()) {
+      await card.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(400);
+      await card.screenshot({ path: name('45-passage-card') });
+      shots.push(name('45-passage-card'));
+    }
+    console.log(w, 'passage: sentences shown', shown, '| page title', JSON.stringify(title), '| card row', await row.textContent().catch(() => null), errors.length ? `| page errors: ${errors.join(' | ')}` : '| no page errors');
     await ctx.close();
   }
   await browser.close();
