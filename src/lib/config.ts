@@ -688,16 +688,18 @@ export const CHALLENGE = {
    */
   // Published by the owner's runs of scripts/publish-bases.ts, 2026-11-06 and 2026-11-12 (version ids; the current default first).
   bases: {
-    zei: ['bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d', 'bda27851-647f-4461-865a-edf9baf35108', 'b0fee329-7996-4a67-af37-923c7ef72dbd'],
-    gladias: ['68364375-0f33-46fd-9755-2fd2b551198a', '8a491b21-2d32-4673-946c-cff28728088b', 'd5b4c137-71d6-430d-84e1-9ec4044568dc'],
-    bai: ['110d5973-31c2-4d96-9a88-5838d8a6d868', '9ef62849-538e-4c7c-af36-0e069c9541d9', 'fd583b12-62f7-47d7-a247-740bf87528d8'],
-    seila: ['1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba', 'ca078691-677d-4efb-bfa7-50de6c83afd8', '2c597a57-949d-49f8-9c55-e84ad1b26d02'],
+    // 2026-11-27 (owner): one sheet each from the owner's Midjourney set (two for Gladias), published by his run of
+    // scripts/add-starting-points.ts as new sheets (made from no base; style reference: Deluin on the ledge).
+    zei: ['bffc7b6a-edc7-4fd7-8922-bcab5f8c4c2d', 'bda27851-647f-4461-865a-edf9baf35108', 'b0fee329-7996-4a67-af37-923c7ef72dbd', '69026c8f-5843-45b1-84a2-763d68a4bf15'],
+    gladias: ['68364375-0f33-46fd-9755-2fd2b551198a', '8a491b21-2d32-4673-946c-cff28728088b', 'd5b4c137-71d6-430d-84e1-9ec4044568dc', '99d19ff8-496f-4f6c-a6ca-b5065fa9e953', 'c1db9f38-ea43-4e29-b5d1-c49ac230266f'],
+    bai: ['110d5973-31c2-4d96-9a88-5838d8a6d868', '9ef62849-538e-4c7c-af36-0e069c9541d9', 'fd583b12-62f7-47d7-a247-740bf87528d8', 'a360632a-abcb-4a51-a352-7ead0c201d29'],
+    seila: ['1f64f9f4-ede5-42a4-8f56-a8ecb7f29aba', 'ca078691-677d-4efb-bfa7-50de6c83afd8', '2c597a57-949d-49f8-9c55-e84ad1b26d02', '8297dcbb-05eb-4070-a4a1-7ec1277186b1'],
     // Deluin's fourth and fifth (owner, 2026-11-26, from @garance's feedback): two of the owner's published Deluin versions,
     // "Deluin on the ledge" and "Deluin at the game board" (Midjourney, brought in), by version id as publish-bases lists them.
-    deluin: ['75a94420-df70-4f43-a3a6-4c2b571e72ab', 'a69718e0-89d9-465f-a783-d4b98aefbe85', '0a126522-d3d5-4e12-a674-18f49dbffbed', 'ced288e6-1c3f-4d58-bb4c-839ef774bb71', '42588f48-6673-478e-ab54-8e30372743c0'],
-    mu: ['15a9af1d-9eef-4e25-be57-738d9823dd74', 'cd616bd9-55bd-4fdd-9c27-56bd7dcc061c', '6f5cd043-39a4-4458-bd42-9a33518f01cf'],
+    deluin: ['75a94420-df70-4f43-a3a6-4c2b571e72ab', 'a69718e0-89d9-465f-a783-d4b98aefbe85', '0a126522-d3d5-4e12-a674-18f49dbffbed', 'ced288e6-1c3f-4d58-bb4c-839ef774bb71', '42588f48-6673-478e-ab54-8e30372743c0', '50cef5cb-327e-4f8b-b482-c8ede34b0f96'],
+    mu: ['15a9af1d-9eef-4e25-be57-738d9823dd74', 'cd616bd9-55bd-4fdd-9c27-56bd7dcc061c', '6f5cd043-39a4-4458-bd42-9a33518f01cf', 'c224688e-2bb9-4617-a41b-8626402c12e4'],
     // Lord Ephelion's three (owner-approved 2026-11-11), published 2026-11-12: A, B, C.
-    ephelion: ['589fd5cb-63a0-4c19-8e1d-5c7704d0262c', 'f913bec7-cbae-4ab5-9865-6c7e4ce9dc7f', '082be0d1-8864-4a76-a5ff-a750d3a6cdc4'],
+    ephelion: ['589fd5cb-63a0-4c19-8e1d-5c7704d0262c', 'f913bec7-cbae-4ab5-9865-6c7e4ce9dc7f', '082be0d1-8864-4a76-a5ff-a750d3a6cdc4', 'deb30fee-5adc-4df8-9c0e-f8db12b50467'],
   } as Record<string, readonly string[]>,
   /**
    * Each character's current default look (owner, 2026-11-05, answer 10; the accounts session's note of that evening):
@@ -721,10 +723,14 @@ export const CHALLENGE = {
     // Lord Ephelion: look A (picks-ephelion-2026-11-11.json, current_default), published 2026-11-12.
     ephelion: '589fd5cb-63a0-4c19-8e1d-5c7704d0262c',
   } as Record<string, string | null>,
-  /** How many bases each character has (owner, 2026-11-11): three for every character; Deluin five (owner, 2026-11-26). */
-  baseCount: { zei: 3, gladias: 3, bai: 3, seila: 3, deluin: 5, mu: 3, ephelion: 3 } as Record<string, number>,
-  /** The most bases any character may have (five since 2026-11-26, for Deluin). */
-  maxBases: 5,
+  /**
+   * How many bases each character may have (owner, 2026-11-11: three each; 2026-11-26: Deluin five; 2026-11-27: Deluin
+   * 7, Gladias 6, the others 4). A limit, not a count: Deluin and Gladias each have one slot open for the first passes
+   * of the owner's Midjourney set, which wait for their recipes.
+   */
+  baseCount: { zei: 4, gladias: 6, bai: 4, seila: 4, deluin: 7, mu: 4, ephelion: 4 } as Record<string, number>,
+  /** The most bases any character may have (seven since 2026-11-27, for Deluin). */
+  maxBases: 7,
   /**
    * The owner's first remixes (owner, 2026-11-04): up to CHALLENGE.firstRemixesShown per character, shown on
    * /challenge under the heading "First remixes by @naaate", below its bases, in the order given here. They are not

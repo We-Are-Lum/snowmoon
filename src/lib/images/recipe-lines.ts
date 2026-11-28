@@ -113,6 +113,10 @@ export function madeFromLine(r: RecipeForLines, frontSha256: string | null, isFr
     else parts.push(...refs.map((x) => `Made from ${x.what ?? 'a reference picture'} (sha256 ${x.sha256.slice(0, 12)}…).`)); // the owner's wording (approved 2026-11-02)
   }
   const s = r.settings ?? {};
+  // An edit made after the tool, before it was brought in (owner, 2026-11-27: a fake signature cropped out of a
+  // Midjourney picture, "say so in its recipe"): what was changed and by whom, from the tool's export to the edited file.
+  const ed = s.edited as { from_sha256?: string; sha256?: string; what?: string; by?: string } | undefined;
+  if (ed?.from_sha256 && ed.sha256 && ed.what) parts.push(`Edited before it was brought in: ${ed.what.replace(/\.?$/, '')}${ed.by ? `, by ${ed.by}` : ''} (sha256 ${ed.from_sha256.slice(0, 12)}… to ${ed.sha256.slice(0, 12)}…).`);
   const conv = s.converted as { from?: string; sha256?: string; to?: string } | undefined;
   if (conv?.sha256) parts.push(`Converted from ${String(conv.from ?? '').toUpperCase()} (sha256 ${conv.sha256.slice(0, 12)}…) to ${String(conv.to ?? '').toUpperCase()} for the site; no model.`); // the owner's wording (approved 2026-11-02)
   if (typeof s.derived === 'string') parts.push(`${s.derived.replace(/\.?$/, '.')}`);
