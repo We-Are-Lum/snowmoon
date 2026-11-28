@@ -74,12 +74,14 @@ export const P = {
   refsLegend: 'Other published pictures to send along (optional)',
   refsLede: (max: number, redo: boolean) =>
     max > 0
-      ? `Up to ${max} more: three pictures in all${redo ? ', the picture shown now first' : ', counting the character sheets'}. Remixes, readers’ pictures, bases and sheets; never a hidden one. Each maker is credited in the caption and the recipe.`
+      ? `Up to ${max} more: three pictures in all${redo ? ', the picture shown now first' : ', counting the character sheets'}. Remixes, readers’ pictures, bases, sheets and the chapters’ pictures; never a hidden one. Each maker is credited in the caption and the recipe.`
       : `That’s three pictures in all${redo ? ', the picture shown now first' : ', counting the character sheets'}.`,
-  refsSearch: 'Search by maker, character or words',
+  // DRAFT wording (coding agent, 2026-11-24; Garance's request): refsLede's "and the chapters’ pictures", refsSearch's
+  // "or chapter", refsLink's "or the picture’s own address", and refsKind's chapter and edition.
+  refsSearch: 'Search by maker, character, words or chapter',
   refsSearchButton: 'Search',
   refsSearching: 'Searching…',
-  refsLink: 'Or paste a link to its page on snowmoon.party',
+  refsLink: 'Or paste a link to its page on snowmoon.party, or the picture’s own address',
   refsLinkButton: 'Use this link',
   refsNone: 'No published picture matches.',
   refsPick: 'Pick',
@@ -87,7 +89,7 @@ export const P = {
   refsRemove: 'Remove',
   refsChosen: 'Picked references, in the order they go',
   refsItem: (r: { what: string; by: string }) => `${r.what} by ${r.by}`,
-  refsKind: { remix: 'remix', picture: 'picture', base: 'base', sheet: 'sheet' } as Record<RefKind, string>,
+  refsKind: { remix: 'remix', picture: 'picture', base: 'base', sheet: 'sheet', chapter: 'chapter picture', edition: 'the edition’s picture' } as Record<RefKind, string>,
   refsCaption: (line: string) => `The caption will add: “${line}”, and the recipe each one’s version, maker and sha256.`,
   // Owner, 2026-11-21: one line under the Model row when neither closed model is offered here; reread by the owner 2026-11-21.
   closedNotOffered: 'GPT Image and Gemini aren’t offered where you are.',
@@ -187,8 +189,8 @@ export function SheetPicker({ chapter, start, end, chosen, setChosen, max = 3 }:
 }
 
 /**
- * Others' published pictures as references (owner's request via Garance, 2026-11-21): search (maker, character, words)
- * or paste a snowmoon.party link; the server resolves either to a version and refuses anything hidden, not published or
+ * Others' published pictures as references (owner's request via Garance, 2026-11-21): search (maker, character, words;
+ * the chapters' pictures by chapter too, 2026-11-24) or paste a snowmoon.party link or a picture's own address; the server resolves either to a version and refuses anything hidden, not published or
  * not found, with the reason. At most `max` (three pictures in all, counting the sheets, or the picture shown now in a
  * redo). Only the version ids are sent with Make, where the server checks each again.
  */

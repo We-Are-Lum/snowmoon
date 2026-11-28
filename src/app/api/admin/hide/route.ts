@@ -12,7 +12,7 @@ import { recheckMaker } from '~/lib/checks/decisions';
 import { readAddition } from '~/lib/chapter-pictures/read';
 import { isAddedId } from '~/lib/chapter-pictures/shared';
 import { pathsFor } from '~/lib/chapter-pictures/where';
-import { hideReachesChapterPictures } from '~/lib/chapter-pictures/after-hide';
+import { hideReachesChapterPictures, jobHideReachesChapterPictures } from '~/lib/chapter-pictures/after-hide';
 
 /**
  * An admin's Hide in the reader (owner, 2026-10-29: "an admin Hide in the reader for seeded and readers' images").
@@ -41,6 +41,8 @@ export async function POST(request: Request) {
     // Everywhere a seeded image can show (owner, 2026-10-30): the chapter and its player, References and the sheets,
     // the introduction (home, About and every page's "What is this?"), and quote cards and their share pages.
     forgetHidden();
+    // A chapter picture picked as a reference (2026-11-24): the captions of pictures made after it say "a picture since hidden".
+    await jobHideReachesChapterPictures(sql, im.id);
     if (added) for (const p of pathsFor(added.jobId, added.chapter)) revalidatePath(p.path, p.type);
     else revalidatePath('/', 'layout');
     return NextResponse.json({ done: 'hidden' });

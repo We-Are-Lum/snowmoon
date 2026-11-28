@@ -24,7 +24,7 @@ import { randomBytes } from 'node:crypto';
 import { saveAddition, saveDecision, saveLook, saveVersion } from './admin';
 import { additionsReady, firstKeep, latestLooks, lookFor, pictureBytes, pictureVersion, picturesReady, readAddition, readReplacements } from './read';
 import { addPrompt, addedJobId, isAddedId, namesAWork, pickLimit, redoPrompt, type Addition, type Look, type PickedRef, type PictureRecipe, type PictureVersion } from './shared';
-import { REF_WORDING, lookUsable, referenceStatuses, resolveReference, styleChoices } from './references';
+import { REF_WORDING, chapterRefStatuses, lookUsable, referenceStatuses, resolveReference, styleChoices } from './references';
 import { closingLine, LETTERING_WORDING, parseQuotes } from '../images/lettering';
 import { letteringPolicy, letteringReady, readBack, readText, sourcesOf, type ReadText } from '../images/readback';
 import { letteringWords } from '../challenge/make';
@@ -200,7 +200,7 @@ async function pickedFrom(sql: Sql, raw: unknown, limit: number): Promise<{ refs
   const refs: PickedRef[] = [];
   for (const id of ids) {
     const r = await resolveReference(sql, id);
-    if (!r.ok) return no(r.reason === 'hidden' || r.reason === 'unpublished' ? 409 : 400, r.error, { reason: r.reason, versionId: id });
+    if (!r.ok) return no(r.reason === 'hidden' || r.reason === 'unpublished' || r.reason === 'taken-off' ? 409 : 400, r.error, { reason: r.reason, versionId: id });
     refs.push(r.ref);
   }
   return { refs };
@@ -236,12 +236,24 @@ export async function hiddenSince(sql: Sql, v: Pick<PictureVersion, 'recipe'>): 
   const picked = v.recipe?.picked ?? [];
   const sheets = v.recipe?.references ?? [];
   const status = await referenceStatuses(sql, [...picked.map((x) => x.versionId), ...sheets.map((x) => x.versionId)]);
+  // The edition's own chapter pictures (2026-11-24): hidden once an admin hid their job.
+  const chapters = await chapterRefStatuses(sql, picked);
   // Hidden or unpublished now; a version with no row is only ever a test's stand-in (elements are never deleted).
-  const gone = (id: string) => !['published', 'missing'].includes(status.get(id.toLowerCase()) ?? 'missing');
+  const gone = (id: string) => (chapters.has(id.toLowerCase()) ? chapters.get(id.toLowerCase()) === 'hidden' : !['published', 'missing'].includes(status.get(id.toLowerCase()) ?? 'missing'));
   return [
     ...sheets.filter((x) => gone(x.versionId)).map((x) => (x.by ? `${x.by}’s ${x.name} sheet` : `${x.name}’s sheet`)),
     ...picked.filter((x) => gone(x.versionId)).map((x) => `${x.by}’s ${x.what}`),
   ];
+}
+
+/**
+ * The added chapter pictures a version was made after that were taken off their chapter since the draft (2026-11-24;
+ * a replaced one stays usable, owner on #233): Keep is refused, as for a picture hidden since, and the draft stays a draft.
+ */
+export async function offSince(sql: Sql, v: Pick<PictureVersion, 'recipe'>): Promise<string[]> {
+  const picked = v.recipe?.picked ?? [];
+  const chapters = await chapterRefStatuses(sql, picked);
+  return picked.filter((x) => chapters.get(x.versionId.toLowerCase()) === 'off').map((x) => `${x.by}’s ${x.what}`);
 }
 
 /** A redo: one draft, private, from the picture shown now, the admin's note, the chapter's look and the model chosen. */
@@ -269,6 +281,8 @@ export async function redoPicture(sql: Sql, fid: number, request: Request, raw: 
   if ('status' in picks) return picks;
   const shown = await shownNow(sql, job);
   if (!shown) return no(400, 'This job has no picture to redo.');
+  // The picture this redo starts from is already reference picture 1 (a chapter picture picked by its own address, 2026-11-24).
+  if (picks.refs.some((x) => x.sha256 === shown.sha256)) return no(400, REF_WORDING.shownAlready, { reason: 'twice' });
   const ref = await deps.reference(shown.url, shown.sha256);
   if (!ref) return no(503, 'The picture shown now could not be read. Try again in a moment.');
   const extra = await pickedBytes(deps, picks.refs);
@@ -347,6 +361,8 @@ export async function showPicture(sql: Sql, fid: number, raw: unknown, deps: Dep
   const gone = await hiddenSince(sql, v);
   // A reference hidden since the draft was made (P5f at Keep; owner, 2026-11-21: refused, never kept anyway).
   if (gone.length) return no(409, REF_WORDING.keepHidden(gone), { reason: 'reference-hidden', hidden: gone });
+  const off = await offSince(sql, v);
+  if (off.length) return no(409, REF_WORDING.keepOff(off), { reason: 'reference-off', off });
   const before = await firstKeep(sql, v.id);
   let url = before?.publicUrl ?? null;
   if (!url) {
@@ -421,6 +437,8 @@ async function showAdded(sql: Sql, fid: number, jobId: string, rawVersion: unkno
   // A reference hidden since the draft was made (P5f at Keep; owner, 2026-11-21): refused; the draft stays a draft.
   const gone = await hiddenSince(sql, v);
   if (gone.length) return no(409, REF_WORDING.keepHidden(gone), { reason: 'reference-hidden', hidden: gone });
+  const off = await offSince(sql, v);
+  if (off.length) return no(409, REF_WORDING.keepOff(off), { reason: 'reference-off', off });
   const pub = await publicUrlOf(sql, v, deps);
   if ('status' in pub) return pub;
   await saveDecision(sql, fid, { jobId, chapter: a.chapter, versionId: v.id, action: pub.before ? 'restore' : 'keep', publicUrl: pub.url, byHandle });
