@@ -60,6 +60,27 @@ export interface EntryCard {
   marks: Marks;
 }
 
+/**
+ * "Published, not entered" (2026-11-27): a challenge picture published in the window that isn't an entry now (never
+ * submitted, or withdrawn), with what only admins see: the eligibility decided at publish, as words.
+ */
+export interface NotEnteredCard {
+  versionId: string;
+  title: string;
+  characterName: string;
+  by: string;
+  byHref: string | null;
+  createdAt: string;
+  image: string | null;
+  href: string;
+  /** Whether its maker's picture could be entered, as decided at publish (admins and first remixes never). */
+  eligible: boolean;
+  /** The eligibility in words ("Eligible: passed the check at publish", "Admin: never an entry", …). */
+  eligibility: string;
+  /** Other facts: withdrawn, an admin example, not a remix of a base. */
+  tags: string[];
+}
+
 export interface ReviewView {
   bounty: {
     name: string;
@@ -76,6 +97,8 @@ export interface ReviewView {
   bountyError: string | null;
   claims: ClaimCard[];
   entries: EntryCard[];
+  /** "Published, not entered", newest first; its length is the count shown at the top of the list. */
+  notEntered: NotEnteredCard[];
   /** The tables aren't on this database yet: labels can't be saved. */
   labelsReady: boolean;
 }

@@ -13,7 +13,7 @@ export type RemixCardData = { versionId: string; character: string; title: strin
 /** A character's words for its cards: its call name, the title of an untitled remix, the picture's alt text. */
 export type RemixCardWords = { name: string; untitled: string; alt: string };
 
-export function RemixCardView({ r, w }: { r: RemixCardData; w: RemixCardWords }) {
+export function RemixCardView({ r, w, children }: { r: RemixCardData; w: RemixCardWords; /** Below the card ("Enter it" on "Published, not entered yet"). */ children?: React.ReactNode }) {
   const title = r.title.trim() || w.untitled;
   return (
     <li className="ch-card" data-character={r.character} data-version={r.versionId} data-example={r.example ? 'admin' : undefined}>
@@ -34,6 +34,7 @@ export function RemixCardView({ r, w }: { r: RemixCardData; w: RemixCardWords })
           <AiTag what="Views" />
         </span>
       )}
+      {children}
     </li>
   );
 }

@@ -7,7 +7,7 @@ import { bookCharacter } from '../images/designs';
 import { byline } from '../images/byline';
 import { callNameOf } from '../challenge/names';
 import { challengePictures, type ChallengePicture } from '../challenge/pictures';
-import { entryHref, standing, type Standing } from '../challenge/entries';
+import { entryHref, notEnteredAll, standing, type NotEntered, type Standing } from '../challenge/entries';
 import { backstoryOf } from '../challenge/backstories';
 import { linkedTo } from '../wallet/credit';
 import { configLink } from '../wallet/links';
@@ -15,7 +15,7 @@ import { onChain, type OnChain, type Reader } from './chain';
 import { hintsFor, linkedFiles, linkedPages, readRules, type LinkedPicture } from './rules';
 import { basescanAddress, blueskyProfile, farcasterProfile, lensProfile, poidhAccount, tokenUriHref } from './links';
 import { isSocialPerson, isWalletPerson, socialAccountOf, walletAccountOf } from '../people';
-import { isKind, isLabel, LABELS, type ClaimCard, type EntryCard, type InlineView, type Kind, type LabelKey, type Marks, type PostSlot, type ReviewView } from './types';
+import { isKind, isLabel, LABELS, type ClaimCard, type EntryCard, type InlineView, type Kind, type LabelKey, type Marks, type NotEnteredCard, type PostSlot, type ReviewView } from './types';
 import { postRefsIn, postView, profilesByAddress, storedRef } from './inline';
 
 /**
@@ -206,6 +206,29 @@ async function entryCards(sql: Sql, marks: Map<string, Marks>, names: Map<number
   });
 }
 
+/** A not-entered picture's eligibility, in words, for admins only. */
+export function eligibilityWords(r: Pick<NotEntered, 'eligibility' | 'firstRemix'>): { eligible: boolean; words: string } {
+  if (r.firstRemix) return { eligible: false, words: 'The owner’s first remix: never an entry' };
+  const e = r.eligibility;
+  if (e.eligible) return { eligible: true, words: e.why === 'invited' ? 'Eligible: invited' : 'Eligible: passed the check at publish' };
+  if (e.why === 'admin') return { eligible: false, words: 'Admin: never an entry' };
+  if (e.why === 'below') return { eligible: false, words: 'Not eligible: didn’t pass the check at publish' };
+  if (e.why === 'not-a-farcaster-account') return { eligible: false, words: 'Not eligible: a wallet account' };
+  return { eligible: false, words: 'Not eligible: not checked at publish (no answer, or no decision stored)' };
+}
+
+async function notEnteredCards(sql: Sql, entries: Pick<Standing, 'entries'>): Promise<NotEnteredCard[]> {
+  const rows = await notEnteredAll(sql, entries);
+  const profiles = await profilesOf(sql, rows.map((r) => ({ person: r.maker, byName: r.byName })));
+  return rows.map((r) => {
+    const c = bookCharacter(r.character);
+    const name = callNameOf(c?.name ?? r.character);
+    const e = eligibilityWords(r);
+    const tags = [r.withdrawn ? 'Submitted, then withdrawn' : null, r.example ? 'Admin example (shown with the entries)' : null, r.forked ? null : 'Not a remix of a base: can’t be entered'].filter((t): t is string => Boolean(t));
+    return { versionId: r.versionId, title: r.title || name, characterName: name, by: byline(r.byName, r.maker), byHref: profiles.get(r.maker) ?? null, createdAt: r.createdAt, image: r.thumb, href: entryHref(r.versionId), eligible: e.eligible, eligibility: e.words, tags };
+  });
+}
+
 /** Everything the page shows. 404 unless an admin, before anything is read. */
 export async function reviewView(sql: Sql | null, fid: number | null, opts: { reader?: Reader; fresh?: boolean; entriesOf?: EntriesOf } = {}): Promise<Answer<ReviewView>> {
   if (!isAdmin(fid)) return { status: 404, body: { error: 'Not found' } };
@@ -222,6 +245,7 @@ export async function reviewView(sql: Sql | null, fid: number | null, opts: { re
   const fidOf = chainRead ? await fidsOfAddresses(sql, chainRead.claims.map((c) => c.issuer)) : new Map<string, number>();
   const names = await namesOf(sql, [...fidOf.values(), ...claimMarks.fids, ...entryMarks.fids]);
   const rules = chainRead ? readRules(chainRead.bounty.description, chainRead.bounty.createdAt) : null;
+  const st = await (opts.entriesOf ?? standing)(sql);
   return {
     status: 200,
     body: {
@@ -231,7 +255,8 @@ export async function reviewView(sql: Sql | null, fid: number | null, opts: { re
       } : null,
       bountyError,
       claims: chainRead ? claimCards(chainRead, pictures, fidOf, names, claimMarks.marks) : [],
-      entries: await entryCards(sql, entryMarks.marks, names, opts.entriesOf ?? standing),
+      entries: await entryCards(sql, entryMarks.marks, names, () => Promise.resolve(st)),
+      notEntered: await notEnteredCards(sql, st),
       labelsReady: claimMarks.ready && entryMarks.ready,
     },
   };

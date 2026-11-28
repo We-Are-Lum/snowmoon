@@ -115,7 +115,7 @@ CHALLENGE.pictureEntries = false;
   const { navItems } = await import('../src/lib/nav');
   check('switch: the menu has no challenge item unless told to show it', !navItems(1, 0).some((i) => i.href === '/challenge') && navItems(1, 0, true).some((i) => i.href === '/challenge'));
   // Scripts everyone is served carry no challenge words: the share buttons, "Posted on", Submit, the fork form.
-  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-submit.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx', 'src/components/challenge-card.tsx', 'src/components/challenge-remix-card.tsx', 'src/components/challenge-entries-list.tsx', 'src/components/challenge-rules-body.tsx', 'src/components/challenge-remixes-body.tsx'];
+  const clientFiles = ['src/components/challenge-share.tsx', 'src/components/posted-on.tsx', 'src/components/challenge-submit.tsx', 'src/components/design-form.tsx', 'src/components/challenge-admin.tsx', 'src/components/challenge-admin-sheet.tsx', 'src/components/challenge-body.tsx', 'src/components/challenge-lines.tsx', 'src/components/challenge-card.tsx', 'src/components/challenge-remix-card.tsx', 'src/components/challenge-entries-list.tsx', 'src/components/challenge-rules-body.tsx', 'src/components/challenge-remixes-body.tsx', 'src/components/challenge-enter-it.tsx', 'src/components/challenge-not-entered.tsx'];
   const wordy = clientFiles.filter((f) => /challenge\/(landing-)?wording'/.test(read(f)));
   check('switch: no script served to everyone imports the challenge\'s words', wordy.length === 0, wordy.join());
 }
@@ -1381,6 +1381,153 @@ CHALLENGE.postsPerPersonPerDay = keepLimit;
   await sql`alter table studio.sheet_remix_asks_away rename to sheet_remix_asks`;
 }
 
+// --- "Published, not entered" (2026-11-27): /admin/bounty's list and /challenge/entries' section --------------------
+// Pictures as the entries (as committed), in their own PGlite: a picture published in the window and never submitted is
+// on both lists; a submitted one on neither; a withdrawn one on both; an admin's picture and one of the owner's first
+// remixes on the admin list only; one made before the window on neither. The entries, their counts and Submit are
+// unchanged. Each rule is also run on its planted violation. Here, before the tables are dropped below (the entries
+// module remembers a missing table for a minute).
+{
+  const { randomUUID } = await import('node:crypto');
+  const keep = { pictures: CHALLENGE.pictureEntries, moments: CHALLENGE.moments, entries: CHALLENGE.entries, pub: CHALLENGE.public, bases: CHALLENGE.bases, firsts: CHALLENGE.firstRemixes, dates: { ...CHALLENGE.dates } };
+  const ndb = new PGlite();
+  await ndb.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
+  for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => f.endsWith('.sql')).sort()) await ndb.exec(read(`supabase/migrations/${f}`));
+  await ndb.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
+  const NPORT = 54391;
+  const nserver = new PGLiteSocketServer({ db: ndb, port: NPORT, host: '127.0.0.1' });
+  await nserver.start();
+  const nsql = postgres(`postgres://postgres@127.0.0.1:${NPORT}/postgres`, { prepare: false, max: 1, onnotice: () => {} });
+  const NS = nsql as unknown as postgres.Sql;
+  try {
+    CHALLENGE.pictureEntries = true;
+    CHALLENGE.moments = false;
+    CHALLENGE.entries = true;
+    CHALLENGE.public = true;
+    CHALLENGE.dates.opens = new Date(Date.now() - 3_600_000).toISOString();
+    CHALLENGE.dates.closes = new Date(Date.now() + 3_600_000).toISOString();
+    const DS = await import('../src/lib/images/designs');
+    const pic = (n: number) => ({ url: `https://pictures.example/${n}.jpg`, sha256: String(n).repeat(64).slice(0, 64), recipe: { prompt: 'p', model: 'flux2-klein-4b-edit', endpoint: 'e', host: 'fal.ai', settings: {}, seed: 1, request_id: 'r', cost_usd: 0.003, made_at: new Date().toISOString(), width: 576, height: 768, checks: { prompt: { model: 'g', verdict: 'ok' as const }, host_safety_checker: 'passed' as const }, assist: null } });
+    const base = await DS.makeDesign(NS as never, { fid: 6786, mode: 'create', kind: 'character', character: DS.bookCharacter('bai')!, body: { title: '', text: 'Bai base', samples: [], views: { front: pic(1) }, by_name: 'x', by_name_source: 'relay' as const, assist: null, role: null, style: null } });
+    CHALLENGE.bases = { ...CHALLENGE.bases, bai: [base.versionId] };
+    await nsql`insert into studio.check_decisions (network, account, threshold, passed) values ('farcaster', '500', 'neynar-score>=0.7', true), ('farcaster', '501', 'neynar-score>=0.7', true), ('farcaster', '502', 'neynar-score>=0.7', true), ('farcaster', '503', 'neynar-score>=0.7', true), ('farcaster', '504', 'neynar-score>=0.7', false)`;
+    const Rec = await import('../src/lib/challenge/record');
+    let n = 900;
+    // A picture as /api/images/publish writes one (recipe with params.challenge, element, version, anchor, its 'uses' link).
+    const picture = async (fid: number, at: string | null = null) => {
+      const recipeId = randomUUID(), elementId = randomUUID(), versionId = randomUUID(), sha = String(++n).padStart(64, '0');
+      const when = at ? { created_at: at } : {};
+      await nsql.begin(async (tx) => {
+        await tx`insert into studio.recipes ${tx({ id: recipeId, source: 'in_app', provider: 'fal.ai', model: 'flux2-klein-4b-edit', model_version: 'e', prompt: 'p', params: tx.json({ user_prompt: `by ${fid}`, by_name: `p${fid}`, anchor: { chapter: 2, start: 2, end: 2 }, challenge: { character: 'bai', from: base.versionId, fromKind: 'sheet', model: 'flux2-klein-4b-edit' } } as never), seed: 1, assist: null, cost_usd: 0.009, created_by_fid: fid, ...when })}`;
+        await tx`insert into studio.elements ${tx({ id: elementId, work_id: 'snowmoon', element_type: 'image', created_by_fid: fid, ...when })}`;
+        await tx`insert into studio.element_versions ${tx({ id: versionId, element_id: elementId, version_no: 1, body: tx.json({ lettering: [] } as never), asset_url: `https://media.example/${sha}.jpg`, asset_sha256: sha, recipe_id: recipeId, ...when })}`;
+        await tx`insert into studio.anchors ${tx({ version_id: versionId, work_id: 'snowmoon', chapter: 2, start_idx: 2, end_idx: 2 })}`;
+        await tx`insert into studio.links ${tx({ from_version_id: versionId, to_version_id: base.versionId, kind: 'uses' })}`;
+      });
+      await Rec.recordEligibility(nsql, versionId, fid);
+      await new Promise((r) => setTimeout(r, 5)); // distinct created_at, so newest first is well defined
+      return { versionId, elementId };
+    };
+    const before = await picture(500, new Date(Date.parse(CHALLENGE.dates.opens) - 86_400_000).toISOString());
+    const unsubmitted = await picture(500);
+    const submitted = await picture(501);
+    const withdrawn = await picture(502);
+    const firstRemix = await picture(503);
+    const byAdmin = await picture(6786);
+    const below = await picture(504);
+    CHALLENGE.firstRemixes = { ...CHALLENGE.firstRemixes, bai: [firstRemix.elementId] };
+    const NE = await import('../src/lib/challenge/entries');
+    const post = (fid: number, v: string, k: string) => ({ network: 'farcaster' as const, id: `0x${k.padEnd(40, '0')}`, handle: `p${fid}`, at: new Date().toISOString(), url: `https://farcaster.xyz/p${fid}/0x${k.padEnd(8, '0')}`, links: [`https://snowmoon.party/challenge/p/${v}`], writer: { fid } });
+    const s1 = await NE.submitEntry(NS, 501, submitted.versionId, post(501, submitted.versionId, 'a1') as never);
+    const s2 = await NE.submitEntry(NS, 502, withdrawn.versionId, post(502, withdrawn.versionId, 'a2') as never);
+    const w2 = await NE.withdrawEntry(NS, 502, withdrawn.versionId);
+    check('NE fixture: two Submits and one withdraw went through', s1.ok && s2.ok && w2.ok, JSON.stringify([s1, s2, w2]));
+    const marks = async () => Number((await nsql<{ n: number }[]>`select count(*)::int as n from studio.challenge_marks`)[0].n);
+    const st0 = await NE.standing(NS);
+    const m0 = await marks();
+    const all = await NE.notEnteredAll(NS);
+    const shown = NE.notEnteredShown(all);
+    const has = (xs: { versionId: string }[], v: { versionId: string }) => xs.some((x) => x.versionId === v.versionId);
+    const both = (v: { versionId: string }) => has(all, v) && has(shown, v);
+    const neither = (v: { versionId: string }) => !has(all, v) && !has(shown, v);
+    check('NE a published, unsubmitted picture is on both lists', both(unsubmitted));
+    check('NE a submitted picture is on neither', neither(submitted));
+    check('NE a withdrawn picture is on both, marked withdrawn on the admin list', both(withdrawn) && all.find((x) => x.versionId === withdrawn.versionId)?.withdrawn === true);
+    check('NE an admin\'s picture is on the admin list only, as an admin\'s', has(all, byAdmin) && !has(shown, byAdmin) && all.find((x) => x.versionId === byAdmin.versionId)?.eligibility.why === 'admin');
+    check('NE one of the owner\'s first remixes is on the admin list only, marked so', has(all, firstRemix) && !has(shown, firstRemix) && all.find((x) => x.versionId === firstRemix.versionId)?.firstRemix === true);
+    check('NE a picture made before the window is on neither', neither(before));
+    check('NE the public list doesn\'t filter by eligibility: a maker who failed the check is listed', has(shown, below) && all.find((x) => x.versionId === below.versionId)?.eligibility.why === 'below');
+    check('NE the public list carries nothing about the maker\'s account', shown.every((x) => Object.keys(x).sort().join() === 'byName,character,createdAt,maker,thumb,title,versionId'));
+    check('NE both lists are newest first (P5g)', [all, shown].every((xs) => xs.every((x, i) => i === 0 || R.newestFirst(xs[i - 1], x) <= 0)) && shown.map((x) => x.versionId).join() === [below, withdrawn, unsubmitted].map((x) => x.versionId).join());
+    check('NE exactly the expected pictures (admin 5, public 3)', all.length === 5 && shown.length === 3, `${all.length}/${shown.length}`);
+    // The entries, their counts and Submit are unchanged: the same list as before, and nothing written.
+    const st1 = await NE.standing(NS);
+    check('NE the entries and counts are unchanged (one entry, Bai: one entrant), and reading the lists writes nothing', st1.entries.map((x) => x.versionId).join() === submitted.versionId && st1.entries.map((x) => x.versionId).join() === st0.entries.map((x) => x.versionId).join() && [...st1.entrants].join() === [...st0.entrants].join() && st1.entrants.get('bai') === 1 && (await marks()) === m0);
+    check('NE "Every entry" lists the submitted picture only', NE.entriesWithExamples(st1).map((x) => x.versionId).join() === submitted.versionId);
+    check('NE Submit still works on a listed picture, and it then leaves both lists', (await NE.submitEntry(NS, 500, unsubmitted.versionId, post(500, unsubmitted.versionId, 'a3') as never)).ok && !has(await NE.notEnteredAll(NS), unsubmitted));
+    await nsql`delete from studio.challenge_marks where version_id = ${unsubmitted.versionId}`;
+    // Planted violations.
+    proof('NE a public list filtered by eligibility (hides the maker who failed the check) is caught', !has(all.filter((x) => x.eligibility.eligible).map((x) => x), below));
+    const enteredWithWithdrawn = new Set((await nsql<{ version_id: string }[]>`select version_id::text from studio.challenge_marks`).map((r) => r.version_id));
+    proof('NE a list that counts a withdrawn submission as entered is caught', !all.filter((x) => !enteredWithWithdrawn.has(x.versionId)).some((x) => x.versionId === withdrawn.versionId));
+    proof('NE a public list that keeps admins\' pictures is caught', has(NE.notEnteredShown(all.map((x) => ({ ...x, eligibility: x.eligibility.why === 'admin' ? { eligible: false as const, person: x.maker, why: 'unchecked' as const } : x.eligibility })), []), byAdmin));
+    proof('NE a public list that keeps first remixes is caught', has(all.map((x) => ({ ...x, firstRemix: false })).filter((x) => !x.firstRemix && x.forked && x.eligibility.why !== 'admin'), firstRemix));
+    {
+      const opens = CHALLENGE.dates.opens;
+      CHALLENGE.dates.opens = new Date(Date.parse(opens) - 2 * 86_400_000).toISOString();
+      proof('NE a window that lets in a picture made before it is caught', has(await NE.notEnteredAll(NS), before));
+      CHALLENGE.dates.opens = opens;
+    }
+    // The admin list (/admin/bounty): the same rows, the count at the top its length, eligibility in words.
+    const RV = await import('../src/lib/review/review');
+    const noChain = { readContract: async () => { throw new Error('no network in tests'); }, multicall: async () => { throw new Error('no network in tests'); } };
+    const av = await RV.reviewView(NS, 6786, { reader: noChain as never });
+    const body = av.status === 200 ? av.body : null;
+    check('NE /admin/bounty lists them, newest first, the same rows as the lib', body !== null && body.notEntered.map((c) => c.versionId).join() === all.map((x) => x.versionId).join(), JSON.stringify(av.status));
+    check('NE /admin/bounty: the count at the top is the list\'s length (5)', body?.notEntered.length === 5 && /<h2 id="ab-not-entered-h">Published, not entered <span className="ab-count">\{all\.length\}<\/span><\/h2>/.test(read('src/components/admin-bounty-review.tsx')));
+    proof('NE a count that counts only the eligible makers is caught', body!.notEntered.filter((c) => c.eligible).length !== body!.notEntered.length);
+    const row = (v: { versionId: string }) => body!.notEntered.find((c) => c.versionId === v.versionId)!;
+    check('NE /admin/bounty rows: the picture\'s page, its maker\'s profile, its character, its date', row(unsubmitted).href === `/challenge/p/${unsubmitted.versionId}` && row(unsubmitted).byHref === (await import('../src/lib/review/links')).farcasterProfile(500, 'p500') && row(unsubmitted).characterName === 'Bai' && row(unsubmitted).createdAt === all.find((x) => x.versionId === unsubmitted.versionId)!.createdAt, JSON.stringify(row(unsubmitted)));
+    check('NE /admin/bounty rows: eligibility as decided at publish, admins and first remixes as such', row(unsubmitted).eligibility === 'Eligible: passed the check at publish' && row(below).eligibility === 'Not eligible: didn’t pass the check at publish' && row(byAdmin).eligibility === 'Admin: never an entry' && row(firstRemix).eligibility === 'The owner’s first remix: never an entry' && row(withdrawn).tags.includes('Submitted, then withdrawn'), JSON.stringify(body!.notEntered.map((c) => [c.eligibility, c.tags])));
+    check('NE non-admins get 404 from the admin list before anything is read', (await RV.reviewView(NS, 500, { reader: noChain as never })).status === 404);
+    // "Enter it": only the picture's maker, decided in the browser; the server's HTML (a cached page) has it for no one.
+    const EI = await import('../src/lib/challenge/enter-it');
+    check('NE "Enter it": its maker (Farcaster) sees it; another person, signed out, and a person 0 don\'t', EI.enterItShown({ fid: 500, person: null }, 500) && !EI.enterItShown({ fid: 501, person: null }, 500) && !EI.enterItShown({ fid: null, person: null }, 500) && !EI.enterItShown({ fid: null, person: null }, 0));
+    check('NE "Enter it": a Lens or Bluesky maker by the person number the server answers', EI.enterItShown({ fid: null, person: -1_000_000_005 }, -1_000_000_005) && !EI.enterItShown({ fid: null, person: -1_000_000_006 }, -1_000_000_005));
+    {
+      const ei = read('src/components/challenge-enter-it.tsx');
+      const keyed = (src: string) => /if \(personAsk\?\.token !== token\)/.test(src) && /\}, \[token\]\);/.test(src) && /setPerson\(null\);/.test(src);
+      check('NE "Enter it": the maker lookup is asked again for each signed-in session, so a switched account never reuses the last one\'s answer (Vercel review, 2026-11-28)', keyed(ei));
+      proof('NE a lookup cached once per page load is caught', !keyed(ei.replace('if (personAsk?.token !== token)', 'if (!personAsk)')));
+    }
+    proof('NE an "Enter it" shown to anyone signed in is caught', ((v: { fid: number | null }) => v.fid !== null)({ fid: 501 }) !== EI.enterItShown({ fid: 501, person: null }, 500));
+    check('NE "Enter it" leads to the picture\'s Submit section, which has that anchor', EI.enterItHref(unsubmitted.versionId) === `/challenge/p/${unsubmitted.versionId}#submit` && /<section id="submit" className="sf-submit"/.test(read('src/components/challenge-picture.tsx')));
+    const CWN = (await import('../src/lib/challenge/wording')).CHALLENGE_WORDING;
+    const cardsW = { bai: { name: 'Bai', untitled: 'Bai', alt: 'Bai' } };
+    const input = { all: shown.map((x) => ({ versionId: x.versionId, character: x.character, title: x.title, byName: x.byName, byFid: x.maker, thumb: x.thumb, href: NE.entryHref(x.versionId), enterHref: EI.enterItHref(x.versionId) })), w: { head: CWN.notEnteredHead, line: CWN.notEnteredLine, draft: CWN.notEnteredDraft ? CWN.draftShort : null, enterIt: CWN.enterIt, cards: cardsW } };
+    const out = JSON.parse(execFileSync(process.execPath, [path.join(ROOT, 'node_modules/tsx/dist/cli.mjs'), path.join(ROOT, 'scripts/lib/render-not-entered.ts')], { input: JSON.stringify(input), encoding: 'utf8', cwd: ROOT })) as { html: string };
+    check('NE the section as the server draws it: the heading, no "Draft wording" mark (reread 2026-11-28), the line, every picture linked to its page', out.html.includes(`>${CWN.notEnteredHead}<`) && !out.html.includes('Draft wording') && out.html.includes(CWN.notEnteredLine) && shown.every((x) => out.html.includes(`href="/challenge/p/${x.versionId}"`)));
+    check('NE the server\'s HTML (what a cached page holds) has "Enter it" for no one, no Entry badge and no count', !out.html.includes(CWN.enterIt) && !out.html.includes('#submit') && !/ch-badge|ch-example/.test(out.html) && !/\b3\b/.test(out.html.replace(/<[^>]+>/g, ' ').replace(/[0-9a-f-]{36}/g, '')));
+    proof('NE an "Enter it" drawn on the server is caught', `${out.html}<a href="/challenge/p/x#submit">${CWN.enterIt}</a>`.includes(CWN.enterIt));
+    check('NE the wording as the owner reread it (2026-11-28): no draft mark, the heading, the line with his sentence, "Enter it"', CWN.notEnteredDraft === false && /Reread by the owner on\s+\* 2026-11-28/.test(read('src/lib/challenge/wording.ts')) && CWN.notEnteredHead === 'Published, not entered yet' && CWN.notEnteredLine === 'These were published during the challenge but haven’t been submitted yet. Only submitted pictures are entries. Their makers can still enter them until entries close.' && CWN.enterIt === 'Enter it');
+    check('NE the entries page draws the section below the entries, while entries are open, filtered by the same character', /entriesOpen\(\) \? notEnteredShown\(await notEnteredAll\(sql!, st\)/.test(read('src/app/challenge/entries/page.tsx')) && read('src/app/challenge/entries/page.tsx').indexOf('<ChallengeNotEntered') > read('src/app/challenge/entries/page.tsx').indexOf('<ChallengeEntriesList'));
+    // P5g: the section is newest first and never shuffled; P5i: no count on the entries page.
+    const { p5gProblems: p5g, p5iProblems: p5i, CHALLENGE_FILES: CF, P5I_FILES: PF } = await import('./lib/p5g');
+    const cfiles = walk('src').filter((f) => CF.test(f)).map((f) => ({ file: f, text: read(f) }));
+    check('NE P5g passes with the section', p5g(cfiles).length === 0, p5g(cfiles).join('; '));
+    proof('NE the section sorted by likes fails P5g', p5g(cfiles.map((x) => (x.file === 'src/lib/challenge/entries.ts' ? { ...x, text: x.text.replace("    .sort(newestFirst);\n}\n\nexport type VersionStanding", "    .sort((a, b) => b.likes - a.likes);\n}\n\nexport type VersionStanding") } : x))).length > 0);
+    proof('NE the section shuffled fails P5g', p5g(cfiles.map((x) => (x.file === 'src/components/challenge-not-entered.tsx' ? { ...x, text: x.text.replace('{all.map((r) =>', '{shuffleFresh(all).map((r) =>') } : x))).length > 0);
+    const pfiles = PF.map((f) => ({ file: f, text: read(f) }));
+    check('NE P5i still passes on the entries page and its cards', p5i(pfiles).length === 0, p5i(pfiles).join('; '));
+  } finally {
+    Object.assign(CHALLENGE, { pictureEntries: keep.pictures, moments: keep.moments, entries: keep.entries, public: keep.pub, bases: keep.bases, firstRemixes: keep.firsts });
+    Object.assign(CHALLENGE.dates, keep.dates);
+    await nsql.end();
+    await nserver.stop();
+    await ndb.close();
+  }
+}
+
 // Without the tables (before the owner applies the migration): nothing breaks.
 await sql`drop table studio.challenge_eligibility`;
 await reconnect();
@@ -1635,7 +1782,9 @@ check('as committed, CHALLENGE.entries, posts and openSheets are on (owner\'s re
     check('F8 Submit\'s line (from the open date) for a picture published before it, for its maker, with "Remix it" to its remix screen', `${PW.beforeOpen.text}${PW.beforeOpen.link}${PW.beforeOpen.after}` === 'This picture was made before entries opened, so it can’t be entered. Remix it to make a new one.' && /beforeOpen: CHALLENGE\.pictureEntries && phase\(now\) === 'open' && Date\.parse\(p\.createdAt\) < Date\.parse\(CHALLENGE\.dates\.opens\)/.test(read('src/lib/challenge/picture-view.ts')) && E.SUBMIT_WORDING.beforeOpen === `${PW.beforeOpen.text}${PW.beforeOpen.link}${PW.beforeOpen.after}` && /known && mine && v\.beforeOpen && \(/.test(pic));
     check('F8 a maker can remix their own picture (the make route refuses no one for being its maker)', !/src\.byFid === fid|byFid === fid/.test(read('src/app/api/challenge/make/route.ts')));
     check('F9 no "· Trial" on a challenge character\'s sheet page; other sheets keep it (owner, 2026-11-07)', read('src/app/references/designs/[id]/page.tsx').includes("{!(d.kind === 'character' && isChallengeCharacter(d.entity)) && <> · {IMAGES.label}</>}"));
-    check('F9 Every entry and Every remix show no "Draft wording" and no "Newest first." note (owner, 2026-11-07)', !read('src/app/challenge/entries/page.tsx').includes('draftShort') && !/v\.draft|v\.note/.test(read('src/components/challenge-remixes-body.tsx')));
+    // The one exception (2026-11-27): "Published, not entered yet" below the entries carries the mark on its own new,
+    // unreread lines until the owner rereads them; the entries' own lines stay unmarked.
+    check('F9 Every entry and Every remix show no "Draft wording" and no "Newest first." note (owner, 2026-11-07)', !read('src/app/challenge/entries/page.tsx').replace(/<ChallengeNotEntered[\s\S]*?\/>/, '').includes('draftShort') && !/v\.draft|v\.note/.test(read('src/components/challenge-remixes-body.tsx')));
     check('F10 the challenge picture links are not prefetched: the remix cards (Every remix, Every entry), the tiles on /challenge and a character\'s page, and the names (owner, 2026-11-08)', read('src/components/challenge-remix-card.tsx').includes('className="ch-card-link" prefetch={false}') && read('src/components/challenge-card.tsx').includes('data-version={t.versionId} prefetch={false}') && read('src/components/challenge-card.tsx').includes('className="cc-name-link" prefetch={false}'));
     const RR = await import('../src/lib/challenge/rules');
     check('F8 remixing works from the flip until the close; entries from the open date', RR.remixingOpenNow(new Date(Date.parse(CHALLENGE.dates.opens) - 1), true) && !RR.remixingOpenNow(new Date(Date.parse(CHALLENGE.dates.opens) - 1), false) && !RR.remixingOpenNow(new Date(CHALLENGE.dates.closes), true) && !RR.challengeOpenNow(new Date(Date.parse(CHALLENGE.dates.opens) - 1), true));

@@ -5,7 +5,7 @@ import { authFetch, useAuth } from '~/lib/client-auth';
 import { isAdmin } from '~/lib/admins';
 import { AdminNoteField } from './admin-note-field';
 import { LINK_REL, linkParts } from '~/lib/review/links';
-import { FILTERS, LABELS, type ClaimCard, type EntryCard, type Filter, type InlineView, type Kind, type LabelKey, type PostSlot, type ProfileView, type ReviewView } from '~/lib/review/types';
+import { FILTERS, LABELS, type ClaimCard, type EntryCard, type Filter, type InlineView, type Kind, type LabelKey, type NotEnteredCard, type PostSlot, type ProfileView, type ReviewView } from '~/lib/review/types';
 import '../styles/admin-bounty.css';
 
 /**
@@ -147,6 +147,7 @@ export function AdminBountyReview({ fallback }: { fallback: React.ReactNode }) {
           </nav>
         </>
       )}
+      <NotEnteredList all={view.notEntered ?? []} />
     </main>
   );
 }
@@ -328,6 +329,43 @@ function Note({ c, disabled, onSave }: { c: Card; disabled: boolean; onSave: (no
         <span className="ab-note">{c.marks.note ? `${c.marks.note.by} · ${when(c.marks.note.at)}` : `${text.length}/280`}</span>
         <button type="button" disabled={disabled || text.trim() === saved} onClick={() => onSave(text)}>{text.trim() || !saved ? 'Save note' : 'Clear note'}</button>
       </div>
+    </section>
+  );
+}
+
+/**
+ * "Published, not entered" (2026-11-27): every challenge picture published in the window that isn't an entry now, newest
+ * first, with its count at the top. Admins only: each maker's eligibility as decided at publish shows here and nowhere
+ * public. Only Submit makes an entry; this list changes nothing.
+ */
+function NotEnteredList({ all }: { all: NotEnteredCard[] }) {
+  const eligible = all.filter((c) => c.eligible).length;
+  return (
+    <section className="ab-not-entered" aria-labelledby="ab-not-entered-h" data-slot="not-entered">
+      <h2 id="ab-not-entered-h">Published, not entered <span className="ab-count">{all.length}</span></h2>
+      <p className="ab-note">
+        {all.length} challenge {all.length === 1 ? 'picture' : 'pictures'} published in the window and not an entry now (never submitted, or withdrawn); {eligible} by makers eligible at publish. Newest first. Private to admins: eligibility shows only here.
+      </p>
+      {all.length > 0 && (
+        <ul className="ab-ne-list" role="list">
+          {all.map((c) => (
+            <li key={c.versionId} className="ab-ne-row" data-version={c.versionId} data-eligible={c.eligible ? 'yes' : 'no'}>
+              <Out href={c.href} className="ab-ne-pic-link">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                {c.image ? <img className="ab-ne-pic" src={c.image} alt={`${c.characterName}, the picture`} loading="lazy" /> : <span className="ab-ne-pic ab-pic-none">No picture</span>}
+              </Out>
+              <div className="ab-ne-text">
+                <Out href={c.href} className="ab-ne-title">{c.title}</Out>
+                <span className="ab-meta">
+                  {c.characterName} · by {c.byHref ? <Out href={c.byHref}>{c.by}</Out> : c.by} · {when(c.createdAt)} PT
+                </span>
+                <span className="ab-ne-elig" data-eligible={c.eligible ? 'yes' : 'no'}>{c.eligibility}</span>
+                {c.tags.map((t) => <span key={t} className="ab-ne-tag">{t}</span>)}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }
