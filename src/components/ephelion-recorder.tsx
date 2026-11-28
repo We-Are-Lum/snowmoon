@@ -11,9 +11,18 @@ import { RECORDER as W } from '~/lib/voice/recorder-wording';
 import { withReset } from '~/lib/challenge/model-wording';
 import { loadWords, removeWords, saveWords, splitSentences } from '~/lib/voice/device-words';
 import { LocalTextField } from '~/components/local-text-field';
+import { speechAsText, speechFileName } from '~/lib/voice/speech-text';
 import { EphelionEntry } from '~/components/ephelion-entry';
 import { SignedAudio, joined, mmss, useRecorder, useStepLog, wordCount, type Check, type Converted, type Redo } from '~/components/voice-recorder-core';
 import '../styles/ephelion-recorder.css';
+
+/** A speech's first two sentences, for the list (Garance, via Nate 2026-11-26), without its title (the book's letter
+ * starts with its title, which the sentence split runs into the first sentence). */
+export const firstLines = (x: { title: string; sentences: { text: string }[] }) => {
+  let t = x.sentences.slice(0, 3).map((y) => y.text).join(' ');
+  if (t.startsWith(x.title)) t = t.slice(x.title.length).trim();
+  return t.split(/(?<=[.!?…”"])\s+/).slice(0, 2).join(' ');
+};
 
 /**
  * /ephelion/record, the four-step recorder (Nate, 2026-11-25 and 26; his Recorder and PhoneFlow files, plan v3, PR 2):
@@ -551,6 +560,18 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
     </nav>
   );
 
+  // The speech as plain text, downloaded from the browser (src/lib/voice/speech-text.ts); nothing is sent.
+  const downloadText = (sp: Speech) => {
+    const url = URL.createObjectURL(new Blob([speechAsText(sp)], { type: 'text/plain;charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = speechFileName(sp.title);
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+  const downloadButton = (sp: Speech) => (
+    <button type="button" className="er-btn er-quiet er-small er-self" onClick={() => downloadText(sp)} data-download={sp.id}>{W.download}</button>
+  );
   const speechText = (sp: Speech) => (
     <div className="er-speech-text">
       <p className="er-kicker">{sp.label.kind === 'book' ? `${W.bookLabel} · ${sp.label.block}` : `${W.inventedLabel}${sp.credit ? ` · ${sp.credit}` : ''} · version ${sp.version}`}</p>
@@ -559,6 +580,7 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
         <p key={i}>{p}</p>
       ))}
       <p className="er-kicker er-meta-line">{W.speechMeta(sp.sentences.reduce((a, x) => a + wordCount(x.text), 0), mmss((sp.sentences.reduce((a, x) => a + wordCount(x.text), 0) / WPM) * 60))}</p>
+      {downloadButton(sp)}
     </div>
   );
   const confirmBox = confirmSpeech && speech && (
@@ -583,7 +605,8 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
           data-speech={x.id}
         >
           <span className="er-opt-title">{x.title}</span>
-          {phone && <span className="er-opt-line">{x.sentences[0]?.text.slice(0, 90)}…</span>}
+          {/* The first two lines, so people see the words before choosing (Garance, via Nate 2026-11-26). */}
+          <span className="er-opt-line">{firstLines(x)}</span>
           <span className="er-kicker">{x.label.kind === 'book' ? 'Book' : 'Invented'} · about {mmss((x.sentences.reduce((a, y) => a + wordCount(y.text), 0) / WPM) * 60)}</span>
         </button>
       ))}
@@ -853,7 +876,7 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
   );
   // Entering the take (PR 6, 2026-11-26): the converted take as checked; with redone sentences, once "Use this one" kept them.
   const entryDraft = converted && (converted.check || stillWrong.length === 0 || checks) ? (redos.length ? (accepted && accepted !== converted.draftId ? accepted : null) : converted.draftId) : null;
-  const entryPart = entryDraft && fid !== null && speech && picked ? <EphelionEntry key={entryDraft} fid={fid} draftId={entryDraft} speechTitle={speech.title} voiceName={picked.name} wide={wide} /> : null;
+  const entryPart = entryDraft && fid !== null && speech && picked ? <EphelionEntry key={entryDraft} fid={fid} draftId={entryDraft} speechTitle={speech.title} voiceName={picked.name} wide={wide} takeUrl={playUrl} /> : null;
   const teaser = <p className="er-teaser">{W.teaser}</p>;
   const recordNew = (
     <button type="button" className="er-link" onClick={() => setStep(3)}>{W.recordNew}</button>
@@ -939,6 +962,8 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
           <h2>{W.record}</h2>
           <p className="er-card er-note">{W.recordNote(mmss(max))}</p>
           <button type="button" className="er-btn er-quiet er-small er-self" onClick={openEditor} disabled={recording || countdown !== null || editing}>{W.editText}</button>
+          <p className="er-note er-change-hint">{W.changeHint}</p>
+          {downloadButton(speech)}
           {badge}
           {webClient && <p className="er-warn">{W.webClient}</p>}
           {recButton}
@@ -962,6 +987,7 @@ export function EphelionRecorder({ fallback, signedOut }: { fallback: React.Reac
             <span>{W.recordNotePhone(mmss(max))}</span>
             <button type="button" className="er-link" onClick={openEditor} disabled={recording || countdown !== null || editing}>{W.editTextShort}</button>
           </div>
+          <p className="er-note er-change-hint">{W.changeHint}</p>
           <p className="er-kicker">{speech.title} · {picked.name}</p>
           {editor || scriptView}
           {webClient && <p className="er-warn">{W.webClient}</p>}

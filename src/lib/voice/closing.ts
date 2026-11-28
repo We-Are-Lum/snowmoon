@@ -72,7 +72,7 @@ export function closingCredits(c: CreditsInput): CreditLine[] {
       ? { who: 'people', text: `${c.improvised}.` }
       : c.speech.invented
       ? // The team's speech (Nate, 2026-11-22): "Invented, not from the book" with its version's credit, and no block.
-        { who: 'invented', text: `Speech: “${c.speech.title}”${c.speech.invented.version ? ` (version ${c.speech.invented.version})` : ''}. Invented, not from the book. ${c.speech.invented.credit ?? 'Words by the Snowmoon team'}.` }
+        { who: 'invented', text: `Speech: “${c.speech.title}”${c.speech.invented.version ? ` (version ${c.speech.invented.version})` : ''}. Invented, not from the book. ${c.speech.invented.credit ?? 'Words by @naaate'}.` }
       : { who: 'book', text: `Words: ${c.speech.title}, from Snowmoon by Vitalik Buterin${c.speech.block ? ` (${c.speech.block})` : ''}, word for word.` },
     ...(reading ? [] : [{ who: 'people' as const, text: `Performed by ${by}, in the voice “${c.preset}”.` }]),
     c.scene
