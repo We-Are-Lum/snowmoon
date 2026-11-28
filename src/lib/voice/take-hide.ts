@@ -12,7 +12,7 @@ import type { ModerationDeps } from './moderation';
  * because of it (studio.unhide_takes_using_picture: not those hidden or reported for themselves), each file put back
  * only if its private copy is byte for byte the published file (principle 5).
  *
- * A picture's maker hiding or bringing back their own picture (role 'author', the image's own Hide; NEXT_takes_hide_owner.sql)
+ * A picture's maker hiding or bringing back their own picture (role 'author', the image's own Hide; 0057_takes_hide_owner.sql)
  * goes through the owner's functions, which check in the database that this person made the picture (or their linked
  * wallet did), and bring back only the takes their own hide hid.
  */

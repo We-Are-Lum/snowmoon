@@ -151,7 +151,7 @@ export async function takesSection(o: {
   check('TK. unhiding the picture brings back the take hidden only because of it, files back; the one with its own report stays hidden', (await pubOf(t6)).hidden_at === null && before.every((f) => existsSync(path.join(STORE, 'public', f.key))) && (await pubOf(t3)).hidden_at !== null);
 
   // TH. Takes follow the picture (the follow-up to #255, 2026-11-27): a maker's own hide and unhide, and a moderator's
-  // image unhide (NEXT_takes_hide_owner.sql; src/lib/images/unhide.ts).
+  // image unhide (0057_takes_hide_owner.sql; src/lib/images/unhide.ts).
   {
     const { unhideImage } = await import(path.join(ROOT, 'src/lib/images/unhide.ts'));
     const { keyFor } = await import(path.join(ROOT, 'src/lib/images/store.ts'));

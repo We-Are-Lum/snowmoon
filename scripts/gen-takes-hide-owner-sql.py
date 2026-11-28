@@ -1,4 +1,4 @@
-# Writes NEXT_takes_hide_owner.sql (A and B from one body, so the dry run is the migration word for word).
+# Writes 0057_takes_hide_owner.sql (A and B from one body, so the dry run is the migration word for word).
 # Drafted by the coding agent (Claude, a closed model by Anthropic).
 BODY = r"""-- The takes log accepts a picture's maker (role 'author') hiding or bringing back the takes that copied their picture,
 -- with their own person number (a wallet, Lens or Bluesky person number is negative); everyone else's rows as before.
@@ -164,11 +164,11 @@ alter table studio.voice_publication_log drop constraint if exists voice_publica
 alter table studio.voice_publication_log add constraint voice_publication_log_role_check check (role in ('reader', 'moderator', 'maintainer', 'rule'));
 commit;"""
 
-HEAD = """-- NEXT_takes_hide_owner.sql: a picture's maker hiding it hides the takes that copied it, and bringing it back brings
+HEAD = """-- 0057_takes_hide_owner.sql: a picture's maker hiding it hides the takes that copied it, and bringing it back brings
 -- them back (Nate, 2026-11-27: "the follow-up PR for the two hiding gaps, before the challenge opens to everyone").
--- Branch takes-hide-followup. NOT APPLIED. 0052's check on who hid a publication is widened for the author too.
--- It takes the next free number at merge, after 0056, checked against
--- origin/main and production. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory
+-- Branch takes-hide-followup. APPLIED by Nate in production on 2026-11-27, as at a665091c (A, B and C: C's rights table as
+-- expected, no error). 0052's check on who hid a publication is widened for the author too. Numbered at merge on
+-- 2026-11-27 (was NEXT_takes_hide_owner.sql), after main's 0056. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory
 -- PGlite against migrations 0001-0056 (npm run test:takes-hide-owner-sql). Requires 0052 (the takes log) and 0054.
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:
@@ -196,5 +196,5 @@ sql = (HEAD + "\n-- A. DRY RUN: the migration below, ending in rollback; nothing
        + "\n-- B. MIGRATION.\nbegin;\n" + BODY + "commit;\n"
        + "\n-- C. READ-BACK (after B), as postgres. Paste the lines below without their \"-- \". It sets no role. FIDs 2147483646,\n--    2147483645 and 2147483644 and the wallet 0x…c0ffee03 belong to no one. Ends \"READ-BACK PASSED\".\n--\n" + comment(READ) + "\n"
        + "\n-- D. UNDO, only if the release is withdrawn. Paste without the \"-- \".\n" + comment(UNDO) + "\n")
-open('supabase/migrations/NEXT_takes_hide_owner.sql', 'w').write(sql)
-print('wrote NEXT_takes_hide_owner.sql')
+open('supabase/migrations/0057_takes_hide_owner.sql', 'w').write(sql)
+print('wrote 0057_takes_hide_owner.sql')

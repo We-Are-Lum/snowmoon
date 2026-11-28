@@ -1,5 +1,5 @@
 /**
- * NEXT_takes_hide_owner.sql on an in-memory Postgres (PGlite) with every numbered migration applied first (0001-0056).
+ * 0057_takes_hide_owner.sql on an in-memory Postgres (PGlite) with every numbered migration applied first (0001-0056).
  * No network, no production database. Checks: A (the dry run) is B word for word and changes nothing; B applies, and
  * applies again; C (the read-back) passes and keeps nothing; planted faults C must catch; D (the undo) is refused once a
  * maker's hide is on record, and puts back the shape before otherwise. Drafted by the coding agent (Claude, a closed
@@ -10,7 +10,7 @@ import path from 'node:path';
 import { PGlite } from '@electric-sql/pglite';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const FILE = 'supabase/migrations/NEXT_takes_hide_owner.sql';
+const FILE = 'supabase/migrations/0057_takes_hide_owner.sql';
 let failed = 0;
 const check = (label: string, ok: boolean, why = '') => {
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${label}${ok || !why ? '' : ` (${why})`}`);
@@ -37,7 +37,8 @@ check('the read-back inserts and deletes realistic rows, and sets no role', /ins
 
 const pg = new PGlite();
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
-for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f)).sort()) await pg.exec(read(`supabase/migrations/${f}`));
+// Every migration before the one under test (numbered 0057 at merge, 2026-11-27): it is applied here as new.
+for (const f of readdirSync(path.join(ROOT, 'supabase/migrations')).filter((f) => /^\d{4}_.*\.sql$/.test(f) && f < '0057').sort()) await pg.exec(read(`supabase/migrations/${f}`));
 await pg.exec(`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`);
 const tryExec = async (sql: string) => {
   try {

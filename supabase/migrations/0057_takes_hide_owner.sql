@@ -1,8 +1,8 @@
--- NEXT_takes_hide_owner.sql: a picture's maker hiding it hides the takes that copied it, and bringing it back brings
+-- 0057_takes_hide_owner.sql: a picture's maker hiding it hides the takes that copied it, and bringing it back brings
 -- them back (Nate, 2026-11-27: "the follow-up PR for the two hiding gaps, before the challenge opens to everyone").
--- Branch takes-hide-followup. NOT APPLIED. 0052's check on who hid a publication is widened for the author too.
--- It takes the next free number at merge, after 0056, checked against
--- origin/main and production. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory
+-- Branch takes-hide-followup. APPLIED by Nate in production on 2026-11-27, as at a665091c (A, B and C: C's rights table as
+-- expected, no error). 0052's check on who hid a publication is widened for the author too. Numbered at merge on
+-- 2026-11-27 (was NEXT_takes_hide_owner.sql), after main's 0056. Drafted by the coding agent (Claude, a closed model by Anthropic). Tested on in-memory
 -- PGlite against migrations 0001-0056 (npm run test:takes-hide-owner-sql). Requires 0052 (the takes log) and 0054.
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the Supabase SQL Editor. Four parts, in order:
