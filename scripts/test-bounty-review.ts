@@ -448,7 +448,7 @@ check('nothing was asked of Base but reads', writes.length === 0);
   proof('P5b catches a route outside src/lib/review writing studio.review_labels', p5bProblems([P5B_PLANTS.reviewWriteElsewhere]).some((x) => /writes the private review tables/.test(x)));
   proof('P5b catches a feed reading studio.review_labels', p5bProblems([P5B_PLANTS.reviewReadInFeed]).some((x) => /reads the private review tables/.test(x)));
   check('P5b lets src/lib/review write them', p5bProblems([{ file: 'src/lib/review/review.ts', text: "await tx`insert into studio.review_labels (kind) values ('x')`;" }]).filter((x) => /private review tables/.test(x)).length === 0);
-  check('principles.md carries the owner\'s P5b line word for word', read('docs/principles.md').includes('admin code may write `studio.admin_picks`, and nothing else; and, from /admin/bounty only, its private review tables (studio.review_labels, studio.review_notes, studio.review_log), which no public page, feed or tool reads.'));
+  check('principles.md carries the owner\'s P5b line word for word (later clauses may follow it)', read('docs/principles.md').includes('admin code may write `studio.admin_picks`, and nothing else; and, from /admin/bounty only, its private review tables (studio.review_labels, studio.review_notes, studio.review_log), which no public page, feed or tool reads'));
   const mine = files.filter((f) => OWN.has(f.file));
   check('P5b passes on the new files (the review sorts behind its own 404 gate)', p5bProblems(mine).length === 0, p5bProblems(mine).join('; '));
   const lib = mine.find((f) => f.file === 'src/lib/review/review.ts')!;
