@@ -254,6 +254,37 @@ check('hint: 00:00:30 Pacific on 30 Nov is after the close', hint(4300, 'onTime'
 check("hint: an address's fourth claim is over the three per person", hint(4300, 'perPerson').state === 'no' && /4th claim of 4/.test(hint(4300, 'perPerson').text) && hint(4258, 'perPerson').state === 'yes');
 check('every hint quotes the bounty’s own words when the bounty says it', view.claims.every((c) => c.hints.every((h) => h.rule === null || BOUNTY_TEXT.includes(h.rule))));
 
+// Links (owner, 2026-11-26): every http(s) URL in a description or backstory is a link showing the URL in full; nothing
+// else becomes a link; profiles, Basescan, poidh and the original picture.
+{
+  const L = await import('../src/lib/review/links');
+  const hrefs = (s: string) => L.linkParts(s).filter((p): p is { href: string; text: string } => 'href' in p);
+  const one = hrefs('Picture made on snowmoon.party: https://snowmoon.party/challenge/p/4c2d8ac1-207b-4704-bc68-9811ea8cbfb9\n\nMu was…');
+  check('a URL in a description becomes a link, its text the full URL', one.length === 1 && one[0].text === 'https://snowmoon.party/challenge/p/4c2d8ac1-207b-4704-bc68-9811ea8cbfb9' && one[0].href === one[0].text);
+  check('the text around it stays as written', L.linkParts('See https://a.example/x now.').map((p) => p.text).join('') === 'See https://a.example/x now.');
+  check('a sentence’s full stop, a closing bracket and markdown bold are not part of the URL', hrefs('(see https://a.example/x).')[0]?.text === 'https://a.example/x' && hrefs('**https://a.example/y**')[0]?.text === 'https://a.example/y' && hrefs('[here](https://a.example/z)')[0]?.text === 'https://a.example/z');
+  check('a URL with brackets of its own keeps them', hrefs('https://en.wikipedia.org/wiki/Go_(game) is old')[0]?.text === 'https://en.wikipedia.org/wiki/Go_(game)');
+  check('http and https both link; two URLs make two links', hrefs('http://a.example/1 and https://b.example/2').length === 2);
+  for (const bad of ['javascript:alert(1)', 'JaVaScRiPt:alert(document.cookie)', 'data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==', 'data:image/svg+xml,<svg onload=alert(1)>', 'vbscript:msgbox', 'ipfs://QmX', 'mailto:a@b.c', 'file:///etc/passwd', '//evil.example/x']) {
+    const parts = L.linkParts(`click ${bad} here`);
+    check(`stays plain text: ${bad.slice(0, 40)}`, parts.every((p) => !('href' in p)) && parts.map((p) => p.text).join('') === `click ${bad} here`);
+  }
+  proof('a javascript: link hidden after an http-looking prefix stays text', hrefs('xhttps:javascript:alert(1)').length === 0 && hrefs('https:javascript:alert(1)').length === 0);
+  check('safeHttp refuses every scheme but http and https', L.safeHttp('javascript:alert(1)') === null && L.safeHttp('data:,x') === null && L.safeHttp('https://a.example/') === 'https://a.example/');
+  check('Farcaster profile: by username, or by FID (~/profiles/<FID>) with none', L.farcasterProfile(6786, 'naaate') === 'https://farcaster.xyz/naaate' && L.farcasterProfile(6786, null) === 'https://farcaster.xyz/~/profiles/6786' && L.farcasterProfile(6786, 'bad name/../x') === 'https://farcaster.xyz/~/profiles/6786');
+  check('Basescan and poidh account links for an address; none for anything else', L.basescanAddress('0x' + 'Ab'.repeat(20)) === `https://basescan.org/address/0x${'ab'.repeat(20)}` && L.poidhAccount('0x' + 'ab'.repeat(20)) === `https://poidh.xyz/account/0x${'ab'.repeat(20)}` && L.basescanAddress('javascript:x') === null);
+  check('Lens (hey.xyz/u/<name>) and Bluesky (bsky.app/profile/<handle or DID>)', L.lensProfile('lens/stani') === 'https://hey.xyz/u/stani' && L.lensProfile(null) === null && L.blueskyProfile('a.bsky.social', 'did:plc:' + 'a'.repeat(24)) === 'https://bsky.app/profile/a.bsky.social' && L.blueskyProfile(null, 'did:plc:' + 'a'.repeat(24)) === `https://bsky.app/profile/did:plc:${'a'.repeat(24)}`);
+  check('the original picture: https as it is, ipfs:// through the gateway, anything else no link', L.tokenUriHref('https://x.example/p.jpg', BOUNTY_REVIEW.ipfsGateway) === 'https://x.example/p.jpg' && L.tokenUriHref('ipfs://QmA', BOUNTY_REVIEW.ipfsGateway) === `${BOUNTY_REVIEW.ipfsGateway}QmA` && L.tokenUriHref('javascript:alert(1)', BOUNTY_REVIEW.ipfsGateway) === null && L.tokenUriHref('data:image/png;base64,AA', BOUNTY_REVIEW.ipfsGateway) === null);
+  const comp = read('src/components/admin-bounty-review.tsx');
+  const anchors = [...comp.matchAll(/<a\s[^>]*>/g)].map((m) => m[0]);
+  check('every link on the page opens in a new tab with rel="noopener noreferrer nofollow" (one Out component)', anchors.length === 1 && /target="_blank"/.test(anchors[0]) && /rel=\{LINK_REL\}/.test(anchors[0]) && L.LINK_REL === 'noopener noreferrer nofollow', anchors.join(' | '));
+  check('descriptions and backstories go through LinkedText (never raw text with a link of its own)', (comp.match(/<LinkedText text=\{c\.(description|backstory)\} \/>/g) ?? []).length === 2 && !/dangerouslySetInnerHTML/.test(comp));
+  const c = view.claims.find((x) => x.id === 4255)!;
+  check('a claimer the site links: their name links to Farcaster, the address to Basescan, and their poidh page', c.claimer.profile === 'https://farcaster.xyz/zeimaker' && c.claimer.basescan === `https://basescan.org/address/${LINKED}` && c.claimer.poidh === `https://poidh.xyz/account/${LINKED}`);
+  const s = view.claims.find((x) => x.id === 4258)!;
+  check('a stranger: no profile, but Basescan and poidh; the ipfs:// picture links through the gateway', s.claimer.profile === null && s.claimer.basescan !== null && s.pictureHref === `${BOUNTY_REVIEW.ipfsGateway}QmX`);
+}
+
 // Rules read from the text; a text without them gives "unknown".
 {
   const Ru = await import('../src/lib/review/rules');
@@ -284,6 +315,23 @@ check('a challenge entry: "Good"', (await ch(admin, { kind: 'challenge_entry', s
 const v2 = ((await R.reviewView(S, admin, { reader: stub, entriesOf: oneEntry })) as { body: import('../src/lib/review/types').ReviewView }).body;
 const m = v2.claims.find((c) => c.id === 4255)!.marks;
 check('the claim reads back: "Followed directions" by the admin, "Top" gone, the note trimmed with who', m.labels.length === 1 && m.labels[0].label === 'followed_directions' && /^(@|FID )/.test(m.labels[0].by) && m.note?.text === 'Strong hook; check the Su line.', JSON.stringify(m));
+check('the entry’s maker links to their Farcaster profile (owner, 2026-11-26)', v2.entries[0]?.byHref === 'https://farcaster.xyz/zeimaker');
+{
+  // Entries by a wallet account, a Lens account and a Bluesky account: Basescan, Hey and Bluesky (owner, 2026-11-26).
+  await pg.exec(`reset role;
+    insert into studio.wallet_accounts (address) values ('0x${'9a'.repeat(20)}');
+    insert into studio.social_accounts (kind, subject, handle) values ('lens', '0x${'7b'.repeat(20)}', 'lens/zei-fan'), ('bluesky', 'did:plc:${'b'.repeat(24)}', null);
+    set role studio_writer;`);
+  const w = Number((await pg.query<{ id: number }>(`select id::int as id from studio.wallet_accounts where address = '0x${'9a'.repeat(20)}'`)).rows[0].id);
+  const ids = (await pg.query<{ id: number; kind: string }>(`select id::int as id, kind from studio.social_accounts order by id`)).rows;
+  const P = await import('../src/lib/people');
+  const base = (await oneEntry(S)).entries[0];
+  const makers = [-w, P.socialPerson(ids.find((r) => r.kind === 'lens')!.id), P.socialPerson(ids.find((r) => r.kind === 'bluesky')!.id)];
+  const three: EntriesOf = async () => ({ entries: makers.map((m, i) => ({ ...base, versionId: `7222222${i}-2222-4222-8222-222222222222`, maker: m, person: m, byName: null })) });
+  const v = ((await R.reviewView(S, admin, { reader: stub, entriesOf: three })) as { body: import('../src/lib/review/types').ReviewView }).body;
+  const by = v.entries.map((e) => e.byHref);
+  check('an entry by a wallet account links to Basescan; by Lens to Hey; by Bluesky (no handle) to its DID on Bluesky', by[0] === `https://basescan.org/address/0x${'9a'.repeat(20)}` && by[1] === 'https://hey.xyz/u/zei-fan' && by[2] === `https://bsky.app/profile/did:plc:${'b'.repeat(24)}`, by.join(' | '));
+}
 check('the entry tab lists the entry with its label', v2.entries.length === 1 && v2.entries[0].marks.labels[0]?.label === 'good' && v2.entries[0].characterName === 'Bai');
 check('clearing the note', (await ch(admin, { kind: 'bounty_claim', subject: '560:4255', note: '' })).status === 200 && Number((await pg.query<{ n: number }>(`select count(*)::int as n from studio.review_notes`)).rows[0].n) === 0);
 const log = (await pg.query<{ change: string; label: string | null; by_fid: string }>(`select change, label, by_fid::text from studio.review_log order by id`)).rows;
@@ -400,7 +448,7 @@ check('nothing was asked of Base but reads', writes.length === 0);
   proof('P5b catches a route outside src/lib/review writing studio.review_labels', p5bProblems([P5B_PLANTS.reviewWriteElsewhere]).some((x) => /writes the private review tables/.test(x)));
   proof('P5b catches a feed reading studio.review_labels', p5bProblems([P5B_PLANTS.reviewReadInFeed]).some((x) => /reads the private review tables/.test(x)));
   check('P5b lets src/lib/review write them', p5bProblems([{ file: 'src/lib/review/review.ts', text: "await tx`insert into studio.review_labels (kind) values ('x')`;" }]).filter((x) => /private review tables/.test(x)).length === 0);
-  check('principles.md carries the owner\'s P5b line word for word', read('docs/principles.md').includes('admin code may write `studio.admin_picks`, and nothing else; and, from /admin/bounty only, its private review tables (studio.review_labels, studio.review_notes, studio.review_log), which no public page, feed or tool reads.'));
+  check('principles.md carries the owner\'s P5b line word for word (later clauses may follow it)', read('docs/principles.md').includes('admin code may write `studio.admin_picks`, and nothing else; and, from /admin/bounty only, its private review tables (studio.review_labels, studio.review_notes, studio.review_log), which no public page, feed or tool reads'));
   const mine = files.filter((f) => OWN.has(f.file));
   check('P5b passes on the new files (the review sorts behind its own 404 gate)', p5bProblems(mine).length === 0, p5bProblems(mine).join('; '));
   const lib = mine.find((f) => f.file === 'src/lib/review/review.ts')!;
