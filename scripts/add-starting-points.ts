@@ -138,7 +138,7 @@ for (const f of files) {
   const recipe = addedRecipe(rec, { sha256: jpegSha, width: info.width, height: info.height, from: meta.format === 'png' ? 'image/png' : 'image/jpeg', originalSize: meta.width && meta.height ? [meta.width, meta.height] : null }, base ? { versionId: base.versionId, frontSha256: frontSha } : null);
   const title = typeof r.title === 'string' ? r.title.trim() : `${bookCharacter(rec.character)?.name ?? rec.character}, from Midjourney (${path.basename(rec.file).replace(/\.[^.]+$/, '')})`;
   say(base ? `  "${title}": ${rec.character}, a remix of base ${base.versionId}` : `  "${title}": ${rec.character}, a new sheet (made from no base)`);
-  say(`  front ${keyFor(jpegSha)}  sha256 ${jpegSha} (JPEG of ${original})  ${info.width} x ${info.height}`);
+  say(`  front ${keyFor(jpegSha)}  sha256 ${jpegSha} (JPEG of ${String(r.sha256).toLowerCase()}${r.edit ? `, the edited file; the tool's export was ${original}` : ''})  ${info.width} x ${info.height}`);
   say(`  recipe: ${JSON.stringify(recipe)}`);
   plans.push({ name: f, title, character: rec.character, base, text: base ? base.text : String(r.text).trim(), jpeg: data, jpegSha, original, recipe });
 }
