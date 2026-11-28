@@ -353,12 +353,17 @@ export async function inlineView(sql: Sql | null, fid: number | null, opts: { re
   }
   const st = await (opts.entriesOf ?? standing)(sql);
   const ids = st.entries.map((e) => e.versionId);
-  const rows = ids.length
-    ? await sql<{ version_id: string; network: string; post_id: string; url: string }[]>`
-        select version_id::text, network, post_id, url from studio.version_posts where version_id in ${sql(ids)} order by added_at, id`.catch((e) => (missing(e) ? [] : Promise.reject(e)))
-    : [];
+  type Stored = { version_id: string; network: string; post_id: string; url: string };
+  let rows: Stored[] = [];
+  if (ids.length) {
+    try {
+      rows = [...(await sql<Stored[]>`select version_id::text, network, post_id, url from studio.version_posts where version_id in ${sql(ids)} order by added_at, id`)];
+    } catch (e) {
+      if (!missing(e)) throw e;
+    }
+  }
   const entries: InlineView['entries'] = {};
-  const byVersion = new Map<string, typeof rows>();
+  const byVersion = new Map<string, Stored[]>();
   for (const r of rows) byVersion.set(r.version_id, [...(byVersion.get(r.version_id) ?? []), r]);
   const entryPosts = await inBatches(ids, 4, async (v) => {
     const refs = (byVersion.get(v) ?? []).slice(0, 3).map((r) => storedRef(r.network, r.post_id, r.url)).filter((r): r is NonNullable<typeof r> => Boolean(r));
