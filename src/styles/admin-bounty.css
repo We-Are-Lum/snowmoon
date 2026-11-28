@@ -47,3 +47,4 @@
 .ab-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); background: var(--paper, Canvas); border-top: 1px solid var(--rule); max-width: 640px; margin: 0 auto; }
 .ab-nav button { font: inherit; font-size: 18px; min-height: 56px; border: 1px solid var(--ink); background: transparent; color: var(--ink); border-radius: 10px; }
 .ab-nav button:disabled { opacity: 0.35; border-color: var(--rule); }
+.ab-url { overflow-wrap: anywhere; word-break: break-all; }
